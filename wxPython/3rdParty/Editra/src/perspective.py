@@ -63,7 +63,7 @@ class PerspectiveManager(object):
         self._base = os.path.join(base, DATA_FILE)  # Path to config
         self._viewset = dict()                      # Set of Views
         self.LoadPerspectives()
-        self._menu = ed_menu.ED_Menu()              # Control menu
+        self._menu = ed_menu.EdMenu()              # Control menu
         self._currview = None                       # Currently used view
 
         # Setup Menu

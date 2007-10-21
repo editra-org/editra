@@ -150,10 +150,10 @@ class Shelf(plugin.Plugin):
 
     def _GetMenu(self):
         """Return the menu of this object
-        @return: ed_menu.ED_Menu()
+        @return: ed_menu.EdMenu()
 
         """
-        menu = ed_menu.ED_Menu()
+        menu = ed_menu.EdMenu()
         menu.Append(ed_glob.ID_SHOW_SHELF, _("Show Shelf") + "\tCtrl+Alt+S", 
                     _("Show the Shelf"))
         menu.AppendSeparator()
@@ -169,7 +169,7 @@ class Shelf(plugin.Plugin):
                 self._log("[shelf][err] %s" % str(msg))
         menu_items.sort()
 
-        genmenu = ed_menu.ED_Menu()
+        genmenu = ed_menu.EdMenu()
         combo = 0
         for item in menu_items:
             combo += 1
