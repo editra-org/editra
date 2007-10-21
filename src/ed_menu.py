@@ -33,7 +33,7 @@ _ = wx.GetTranslation
 
 #--------------------------------------------------------------------------#
 
-class ED_Menu(wx.Menu):
+class EdMenu(wx.Menu):
     """Overides the default wxMenu class to make it easier to
     customize and access items.
 
@@ -209,12 +209,12 @@ class EdMenuBar(wx.MenuBar):
 
         """
         wx.MenuBar.__init__(self, style)
-        self._filehistorymenu = ED_Menu()
+        self._filehistorymenu = EdMenu()
         self._filemenu = self.GenFileMenu()
-        self._whitespaceformatmenu = ED_Menu()
-        self._lineformatmenu = ED_Menu()
+        self._whitespaceformatmenu = EdMenu()
+        self._lineformatmenu = EdMenu()
         self._editmenu = self.GenEditMenu()
-        self._vieweditmenu = ED_Menu()
+        self._vieweditmenu = EdMenu()
         self._viewmenu = self.GenViewMenu()
         self._formatmenu = self.GenFormatMenu()
         self._settingsmenu = self.GenSettingsMenu()
@@ -229,7 +229,7 @@ class EdMenuBar(wx.MenuBar):
         @return: the default file menu
 
         """
-        filemenu = ED_Menu()
+        filemenu = EdMenu()
         filehist = self._filehistorymenu
         filemenu.Append(ed_glob.ID_NEW, _("New Tab") + u"\tCtrl+N", 
                         _("Start a new file in a new tab"))
@@ -256,7 +256,7 @@ class EdMenuBar(wx.MenuBar):
         filemenu.Append(ed_glob.ID_SAVEALL, _("Save All"), \
                         _("Save all open pages")) 
         filemenu.AppendSeparator()
-        pmenu = ED_Menu()
+        pmenu = EdMenu()
         pmenu.Append(ed_glob.ID_SAVE_PROFILE, _("Save Profile"), 
                      _("Save Current Settings to a New Profile"))
         pmenu.Append(ed_glob.ID_LOAD_PROFILE, _("Load Profile"), 
@@ -281,7 +281,7 @@ class EdMenuBar(wx.MenuBar):
         @return: the default edit menu
 
         """
-        editmenu = ED_Menu()
+        editmenu = EdMenu()
         editmenu.Append(ed_glob.ID_UNDO, _("Undo") + "\tCtrl+Z", 
                         _("Undo Last Action"))
         editmenu.Append(ed_glob.ID_REDO, _("Redo") + "\tCtrl+Shift+Z", 
@@ -297,7 +297,7 @@ class EdMenuBar(wx.MenuBar):
         editmenu.Append(ed_glob.ID_SELECTALL, _("Select All") + "\tCtrl+A", 
                         _("Select All Text in Document"))
         editmenu.AppendSeparator()
-        linemenu = ED_Menu()
+        linemenu = EdMenu()
         linemenu.Append(ed_glob.ID_LINE_AFTER, _("New Line After") + "\tCtrl+L",
                          _("Add a new line after the current line"))
         linemenu.Append(ed_glob.ID_LINE_BEFORE, 
@@ -315,7 +315,7 @@ class EdMenuBar(wx.MenuBar):
                         _("Transpose the current line with the previous one"))
         editmenu.AppendMenu(ed_glob.ID_LINE_EDIT, _("Line Edit"), linemenu,
                             _("Commands that affect an entire line"))
-        bookmenu = ED_Menu()
+        bookmenu = EdMenu()
         bookmenu.Append(ed_glob.ID_ADD_BM, _("Add Bookmark") + u"\tCtrl+B",
                         _("Add a bookmark to the current line"))
         bookmenu.Append(ed_glob.ID_DEL_BM, _("Remove Bookmark") + \
@@ -343,7 +343,7 @@ class EdMenuBar(wx.MenuBar):
         @return: the default view menu
 
         """
-        viewmenu = ED_Menu()
+        viewmenu = EdMenu()
         viewmenu.Append(ed_glob.ID_ZOOM_OUT, _("Zoom Out") + "\tCtrl+-", 
                         _("Zoom Out"))
         viewmenu.Append(ed_glob.ID_ZOOM_IN, _("Zoom In") + "\tCtrl++", 
@@ -382,7 +382,7 @@ class EdMenuBar(wx.MenuBar):
         @return: the default format menu
 
         """
-        formatmenu = ED_Menu()
+        formatmenu = EdMenu()
         formatmenu.Append(ed_glob.ID_FONT, _("Font"), _("Change Font Settings"))
         formatmenu.AppendSeparator()
         formatmenu.Append(ed_glob.ID_COMMENT, _("Comment Lines") + u"\tCtrl+1", 
@@ -432,7 +432,7 @@ class EdMenuBar(wx.MenuBar):
         @return: the default settings menu
 
         """
-        settingsmenu = ED_Menu()
+        settingsmenu = EdMenu()
         settingsmenu.Append(ed_glob.ID_AUTOCOMP, _("Auto-Completion"),
                             _("Use Auto Completion when available"), wx.ITEM_CHECK)
         settingsmenu.Append(ed_glob.ID_AUTOINDENT, _("Auto-Indent"),
@@ -453,7 +453,7 @@ class EdMenuBar(wx.MenuBar):
         @return: default tools menu
 
         """
-        toolsmenu = ED_Menu()
+        toolsmenu = EdMenu()
         toolsmenu.Append(ed_glob.ID_COMMAND, _("Editor Command") + u'\tCtrl+E',
                          _("Goto command buffer"))
         toolsmenu.Append(ed_glob.ID_KWHELPER, _("Keyword Helper") + u'\tCtrl+K', 
@@ -477,7 +477,7 @@ class EdMenuBar(wx.MenuBar):
         @return: default help menu
 
         """
-        helpmenu = ED_Menu()
+        helpmenu = EdMenu()
         helpmenu.Append(ed_glob.ID_ABOUT, _("&About") + u"...", \
                         _("About") + u"...")
         helpmenu.Append(ed_glob.ID_HOMEPAGE, _("Project Homepage"), 

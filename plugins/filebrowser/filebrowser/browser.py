@@ -52,9 +52,9 @@ class BrowserMenuBar(wx.Panel):
                                       bmp, style=wx.NO_BORDER)
         tt = wx.ToolTip(_("Pathmarks"))
         self._menub.SetToolTip(tt)
-        self._menu = ed_menu.ED_Menu()
-        self._saved = ed_menu.ED_Menu()
-        self._rmpath = ed_menu.ED_Menu()
+        self._menu = ed_menu.EdMenu()
+        self._saved = ed_menu.EdMenu()
+        self._rmpath = ed_menu.EdMenu()
         self._ids = list()  # List of ids of menu items
         self._rids = list() # List of remove menu item ids
 

@@ -105,7 +105,7 @@ class Generator(plugin.Plugin):
             except Exception, msg:
                 log("[generator][err] %s" % str(msg))
         menu_items.sort()
-        genmenu = ed_menu.ED_Menu()
+        genmenu = ed_menu.EdMenu()
         for item in menu_items:
             genmenu.AppendItem(item[1])
         menu.AppendMenu(ed_glob.ID_GENERATOR, _("Generator"), genmenu,
