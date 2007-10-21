@@ -35,10 +35,10 @@ from extern import flatnotebook as FNB
 from profiler import Profile_Get
 import ed_menu
 import ed_glob
-import util
 
 #--------------------------------------------------------------------------#
 PGNUM_PAT = re.compile(' - [0-9]+')
+_ = wx.GetTranslation
 
 #--------------------------------------------------------------------------#
 
@@ -71,7 +71,7 @@ class MainWindowI(plugin.Interface):
         @return: list [(ID_FOO, foo.OnFoo), (ID_BAR, bar.OnBar)]
 
         """
-        raise NotImplementedError
+        pass
 
     def GetUIHandlers(self):
         """Get update ui event handlers/id pairs. This function should return a
@@ -83,7 +83,7 @@ class MainWindowI(plugin.Interface):
         @return: list [(ID_FOO, foo.OnFoo), (ID_BAR, bar.OnBar)]
 
         """
-        raise NotImplementedError
+        pass
 
 #-----------------------------------------------------------------------------#
 
@@ -130,13 +130,14 @@ class ShelfI(plugin.Interface):
 
         """
 
+#-----------------------------------------------------------------------------#
+SHELF_NAME = u'Shelf'
 class Shelf(plugin.Plugin):
     """Plugin that creates a notebook for holding the various Shelf items
     implemented by L{ShelfI}.
 
     """
     observers = plugin.ExtensionPoint(ShelfI)
-    __name__ = u"Shelf"
 
     def __init__(self, pmgr):
         """Create the Shelf
@@ -169,7 +170,6 @@ class Shelf(plugin.Plugin):
                 self._log("[shelf][err] %s" % str(msg))
         menu_items.sort()
 
-        genmenu = ed_menu.EdMenu()
         combo = 0
         for item in menu_items:
             combo += 1
@@ -185,7 +185,7 @@ class Shelf(plugin.Plugin):
         # First check if the parent has an instance already
         self._parent = parent
         mgr = parent.GetFrameManager()
-        if mgr.GetPane(self.__name__).IsOk():
+        if mgr.GetPane(SHELF_NAME).IsOk():
             return
 
         self._shelf = FNB.FlatNotebook(parent, 
@@ -193,13 +193,13 @@ class Shelf(plugin.Plugin):
                                              FNB.FNB_X_ON_TAB | \
                                              FNB.FNB_BACKGROUND_GRADIENT | \
                                              FNB.FNB_NODRAG)
-        mgr.AddPane(self._shelf, wx.aui.AuiPaneInfo().Name(self.__name__).\
+        mgr.AddPane(self._shelf, wx.aui.AuiPaneInfo().Name(SHELF_NAME).\
                             Caption("Shelf").Bottom().Layer(0).\
                             CloseButton(True).MaximizeButton(False).\
                             BestSize(wx.Size(500,250)))
 
         # Hide the pane and let the perspective manager take care of it
-        mgr.GetPane(self.__name__).Hide()
+        mgr.GetPane(SHELF_NAME).Hide()
         mgr.Update()
 
         # Install Menu and bind event handler
@@ -210,7 +210,8 @@ class Shelf(plugin.Plugin):
             mitem = view.FindItemByPosition(pos)
             if mitem.GetId() == ed_glob.ID_PERSPECTIVES:
                 break
-        view.InsertMenu(pos + 1, ed_glob.ID_SHELF, self.__name__, 
+
+        view.InsertMenu(pos + 1, ed_glob.ID_SHELF, SHELF_NAME, 
                         menu, _("Put an item on the Shelf"))
         for item in menu.GetMenuItems():
             if item.IsSeparator():
@@ -230,8 +231,9 @@ class Shelf(plugin.Plugin):
         """
         if not hasattr(self._parent, 'GetFrameManager'):
             return
+
         mgr = self._parent.GetFrameManager()
-        pane = mgr.GetPane(self.__name__)
+        pane = mgr.GetPane(SHELF_NAME)
         if not pane.IsShown():
             pane.Show()
             mgr.Update()
@@ -245,6 +247,7 @@ class Shelf(plugin.Plugin):
         count = 0
         if self._shelf is None:
             return count
+
         for page in xrange(self._shelf.GetPageCount()):
             if item_name == re.sub(PGNUM_PAT, u'', 
                                   self._shelf.GetPageText(page), 1):
@@ -270,6 +273,7 @@ class Shelf(plugin.Plugin):
         rval = list()
         if self._shelf is None:
             return rval
+
         for page in xrange(self._shelf.GetPageCount()):
             rval.append(re.sub(PGNUM_PAT, u'', 
                         self._shelf.GetPageText(page), 1))
@@ -282,8 +286,9 @@ class Shelf(plugin.Plugin):
         """
         if not hasattr(self._parent, 'GetFrameManager'):
             return
+
         mgr = self._parent.GetFrameManager()
-        pane = mgr.GetPane(self.__name__)
+        pane = mgr.GetPane(SHELF_NAME)
         if pane.IsOk():
             pane.Hide()
             mgr.Update()
@@ -295,8 +300,9 @@ class Shelf(plugin.Plugin):
         """
         if not hasattr(self._parent, 'GetFrameManager'):
             return
+
         mgr = self._parent.GetFrameManager()
-        pane = mgr.GetPane(self.__name__)
+        pane = mgr.GetPane(SHELF_NAME)
         if pane.IsOk():
             return pane.IsShown()
         else:
@@ -330,21 +336,23 @@ class Shelf(plugin.Plugin):
         @param shelfid: id of the ShelfItem to open
 
         """
-        found = False
+        item = None
         for shelfi in self.observers:
             if shelfi.GetId() == shelfid:
-                found = True
+                item = shelfi
                 break
-        if not found:
+
+        if item is None:
             return
-        name = shelfi.GetName()
+
+        name = item.GetName()
         if self.ItemIsOnShelf(name) and \
-            not shelfi.AllowMultiple() or \
+            not item.AllowMultiple() or \
             self._shelf is None:
             return
         else:
             self.EnsureShelfVisible()
-            self._shelf.AddPage(shelfi.CreateItem(self._shelf), 
+            self._shelf.AddPage(item.CreateItem(self._shelf), 
                                 u"%s - %d" % (name, self._open.get(name, 0)))
             self._open[name] = self._open.get(name, 0) + 1
 
@@ -356,6 +364,7 @@ class Shelf(plugin.Plugin):
         """
         if self._shelf is None:
             return False
+
         for page in xrange(self._shelf.GetPageCount()):
             if item_name in self._shelf.GetPageText(page):
                 return True
@@ -371,4 +380,5 @@ class Shelf(plugin.Plugin):
             itemid = self.GetItemId(item)
             if itemid:
                 self.PutItemOnShelf(itemid)
+
 #--------------------------------------------------------------------------#
