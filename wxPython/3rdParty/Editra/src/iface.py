@@ -318,8 +318,15 @@ class Shelf(plugin.Plugin):
         if e_id == ed_glob.ID_SHOW_SHELF:
             if self.IsShown():
                 self.Hide()
+                self._parent.GetNotebook().GetCurrentCtrl().SetFocus()
             else:
                 self.EnsureShelfVisible()
+                mgr = self._parent.GetFrameManager()
+                pane = mgr.GetPane(SHELF_NAME)
+                if pane is not None:
+                    page = pane.window.GetCurrentPage()
+                    if hasattr(page, 'SetFocus'):
+                        page.SetFocus()
         else:
             self.PutItemOnShelf(evt.GetId())
 
