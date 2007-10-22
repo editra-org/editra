@@ -54,7 +54,7 @@ CLASSIFIERS = [
             'Intended Audience :: Developers',
             'Intended Audience :: Information Technology',
             'Intended Audience :: End Users/Desktop',
-            'License :: OSI Approved :: GNU General Public License (GPL)',
+            'License :: OSI Approved :: wxWindows',
             'Natural Language :: English',
             'Natural Language :: Japanese',
             'Natural Language :: Spanish',
@@ -78,7 +78,7 @@ DATA_FILES = [("include/python2.5",
                glob.glob("include/python2.5/%s/*" % __platform__)),
               ("pixmaps", ["pixmaps/editra.png", "pixmaps/editra.ico",
                            "pixmaps/editra.icns", "pixmaps/editra_doc.icns",
-                           "pixmaps/editra_doc.png", "pixmaps/blk_btn.png"]),
+                           "pixmaps/editra_doc.png"]),
               ("pixmaps/theme/Default", ["pixmaps/theme/Default/README"]),
                ("pixmaps/theme/Tango",["pixmaps/theme/Tango/AUTHORS",
                                       "pixmaps/theme/Tango/COPYING"]),
@@ -152,7 +152,7 @@ INCLUDES = ['syntax.*']
 if not sys.platform.startswith('win'):
     INCLUDES.extend(['pty', 'tty'])
 
-LICENSE = "GPLv2"
+LICENSE = "wxWindows"
 
 NAME = "Editra"
 
