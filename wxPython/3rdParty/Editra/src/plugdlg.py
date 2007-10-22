@@ -10,16 +10,12 @@
 """
 #--------------------------------------------------------------------------#
 # FILE:	plugdlg.py                                                         #
-# @author: Cody Precord                                                    #
+# AUTHOR: Cody Precord                                                     #
 # LANGUAGE: Python                                                         #
-# @summary:                                                                #
+# SUMMARY:                                                                 #
 #     Provides a dialog for downloading, installing and configuring        #
 # plugins for Editra.                                                      #
 #                                                                          #
-# METHODS:                                                                 #
-#
-#
-#
 #--------------------------------------------------------------------------#
 """
 
@@ -105,15 +101,14 @@ class PluginDialog(wx.Frame):
             self.SetExtraStyle(wx.FRAME_EX_METAL)
 
         # Attributes
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
-        self._sb = DownloadStatusBar(self)
-        self.SetStatusBar(self._sb)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        self.SetStatusBar(DownloadStatusBar(self))
         self._nb = PluginPages(self)
         
         # Layout Dialog
-        self._sizer.Add(self._nb, 1, wx.EXPAND)
+        sizer.Add(self._nb, 1, wx.EXPAND)
         self._title = title
-        self.SetSizer(self._sizer)
+        self.SetSizer(sizer)
         self.SetAutoLayout(True)
 
         # Event Handlers
@@ -153,9 +148,9 @@ class PluginDialog(wx.Frame):
 
         """
         if busy:
-            self._sb.StartBusy()
+            self.GetStatusBar().StartBusy()
         else:
-            self._sb.StopBusy()
+            self.GetStatusBar().StopBusy()
 
 #--------------------------------------------------------------------------#
 
@@ -234,7 +229,7 @@ class DownloadStatusBar(wx.StatusBar):
         """
         rect = self.GetFieldRect(1)
         self.prog.SetPosition((rect.x + 2, rect.y + 2))
-        self.prog.SetSize((rect.width - 4, rect.height - 4))
+        self.prog.SetSize((rect.width - 8, rect.height - 4))
         self._changed = False
 
     def StartBusy(self):
@@ -261,9 +256,9 @@ class PluginPages(wx.Toolbook):
     One for installing, and one for configuration.
 
     """
-    def __init__(self, parent, id_=wx.ID_ANY, style=wx.TB_TOP):
+    def __init__(self, parent, style=wx.TB_TOP):
         """Creates the Toolbook"""
-        wx.Toolbook.__init__(self, parent, id=id_, style=style)
+        wx.Toolbook.__init__(self, parent, wx.ID_ANY, style=style)
 
         # Create Pages
         self._imglst = wx.ImageList(32, 32)
@@ -317,8 +312,8 @@ class PluginPages(wx.Toolbook):
                         " | " + self.GetPageText(cur_pg))
         if cur_pg == CONFIG_PG:
             self._config.PopulateCtrl()
-            self.GetParent().SetStatusText(_("Changes will take affect once the"
-                                             " program has been restarted"), 0)
+            parent.SetStatusText(_("Changes will take affect once the"
+                                   " program has been restarted"), 0)
         elif cur_pg == DOWNLOAD_PG:
             self._download.UpdateList()
         elif cur_pg == INSTALL_PG:
@@ -328,21 +323,25 @@ class PluginPages(wx.Toolbook):
 
         evt.Skip()
 
+#-----------------------------------------------------------------------------#
+
 class ConfigPanel(wx.Panel):
     """Creates a panel for configuring plugins."""
-    def __init__(self, parent, id_=wx.ID_ANY, style=wx.NO_BORDER):
+    def __init__(self, parent, style=wx.NO_BORDER):
         """Build config panel"""
-        wx.Panel.__init__(self, parent, id_, style=style)
+        wx.Panel.__init__(self, parent, style=style)
+
+        # Attrtibutes
         self._list = PluginListCtrl(self)
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
         
         # Layout Panel
-        self._sizer.Add(wx.StaticText(self, wx.ID_ANY, 
-                       _("To enable a plugin check the box next to its label")),
-                        0, wx.ALIGN_CENTER_HORIZONTAL)
-        self._sizer.Add(wx.Size(10, 10))
-        self._sizer.Add(self._list, 1, wx.EXPAND)
-        self.SetSizer(self._sizer)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(wx.StaticText(self, wx.ID_ANY, 
+                   _("To enable a plugin check the box next to its label")),
+                   0, wx.ALIGN_CENTER_HORIZONTAL)
+        sizer.Add((10, 10))
+        sizer.Add(self._list, 1, wx.EXPAND)
+        self.SetSizer(sizer)
 
         # Event handlers
         self.Bind(ed_event.EVT_NOTIFY, self.OnNotify)
@@ -412,18 +411,10 @@ class ConfigPanel(wx.Panel):
             mod = sys.modules.get(item)
             pin = PluginData()
             pin.SetName(item)
-            try:
-                pin.SetDescription(str(mod.__doc__))
-            except (NameError, TypeError):
-                pin.SetDescription(_("No Description Available"))
-            try:
-                pin.SetAuthor(str(mod.__author__))
-            except (NameError, TypeError):
-                pin.SetAuthor(_("Unknown"))
-            try:
-                pin.SetVersion(str(mod.__version__))
-            except (NameError, TypeError):
-                pin.SetVersion(_("Unknown"))
+            pin.SetDescription(getattr(mod, '__doc__', 
+                                       _("No Description Available")))
+            pin.SetAuthor(getattr(mod, '__author__', _("Unknown")))
+            pin.SetVersion(str(getattr(mod, '__version__', _("Unknown"))))
 
             self._list.InsertPluginItem(pin)
             self._list.Thaw()
@@ -441,6 +432,8 @@ class ConfigPanel(wx.Panel):
             self._list.SendSizeEvent()
         return self._list.GetItemCount()
 
+#-----------------------------------------------------------------------------#
+
 class DownloadPanel(wx.Panel):
     """Creates a panel with controls for downloading plugins."""
     ID_DOWNLOAD = wx.NewId()
@@ -449,12 +442,11 @@ class DownloadPanel(wx.Panel):
     re.VERBOSE | re.IGNORECASE
     ).match
 
-    def __init__(self, parent, pid=wx.ID_ANY, style=wx.NO_BORDER):
+    def __init__(self, parent, style=wx.NO_BORDER):
         """Initializes the panel"""
-        wx.Panel.__init__(self, parent, pid, style=style)
+        wx.Panel.__init__(self, parent, style=style)
 
         # Attributes
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
         self._p_list = dict()           # list of available plugins/meta
         self._dl_list = dict()          # List of download urls
         self._eggcount = 0              # Number of plugins to download
@@ -464,59 +456,22 @@ class DownloadPanel(wx.Panel):
         self._downlb.Disable()
 
         # Layout Panel
-        self._sizer.Add(wx.StaticText(self, wx.ID_ANY,
-                       _("Select the desired plugins and then Click Download")),
-                        0, wx.ALIGN_CENTER)
-        self._sizer.Add(self._list, 1, wx.EXPAND)
-        self._sizer.Add(wx.Size(5, 5))
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(wx.StaticText(self, wx.ID_ANY,
+                  _("Select the desired plugins and then Click Download")),
+                  0, wx.ALIGN_CENTER)
+        sizer.Add(self._list, 1, wx.EXPAND)
+        sizer.Add((5, 5))
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
         bsizer.Add(self._downlb, 0, wx.ALIGN_RIGHT)
-        bsizer.Add(wx.Size(5, 5))
-        self._sizer.Add(bsizer, 0, wx.ALIGN_RIGHT)
-        self._sizer.Add(wx.Size(5, 5))
-        self.SetSizer(self._sizer)
+        bsizer.Add((5, 5))
+        sizer.Add(bsizer, 0, wx.ALIGN_RIGHT)
+        sizer.Add((5, 5))
+        self.SetSizer(sizer)
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(ed_event.EVT_NOTIFY, self.OnNotify)
-
-    def _DownloadPlugin(self, *args):
-        """Downloads the plugin at the given url.
-        @note: *args is really a string that has been exploded
-        @return: name, completed, egg data
-        @rtype: tuple
-
-        """
-        url = "".join(args)
-        egg = None
-        try:
-            h_file = urllib.urlopen(url)
-            egg = h_file.read()
-            h_file.close()
-        except (IOError, OSError), msg:
-            util.Log("[plugdlg][err] %s" % str(msg))
-        finally:
-            return (url.split("/")[-1], True, egg)
-
-    # The obtained meta data must be served as a file that is formated
-    # as follows. Each meta data item must be on a single line with
-    # each set of meta data for different plugins separated by three
-    # hash marks '###'.
-    def _GetPluginListData(self, url=PLUGIN_REPO):
-        """Gets the list of plugins and their related meta data
-        as a string and returns it.
-        @return: list of data of available plugins from website
-        
-        """
-        text = u''
-        try:
-            h_file = urllib.urlopen(url)
-            text = h_file.read()
-            h_file.close()
-        except (IOError, OSError), msg:
-            util.Log("[plugdlg][err] %s" % str(msg))
-        finally:
-            return text.split("###")
 
     def _ResultCatcher(self, delayedResult):
         """Catches the results from the download worker threads"""
@@ -546,9 +501,10 @@ class DownloadPanel(wx.Panel):
                 self._p_list = self.FormatPluginList(result)
                 self.PopulateList()
                 frame.SetStatusText(_("Select plugins to download"), 0)
-                wx.CallAfter(frame.Busy, False)
         except Exception, msg:
+            util.Log("[plugdlg][err] Download failed " + str(msg))
             frame.SetStatusText(_("Unable to retrieve plugin list"), 0)
+        wx.CallAfter(frame.Busy, False)
 
     def FormatPluginList(self, data):
         """Formats a list of plugin data served by the server into
@@ -564,21 +520,25 @@ class DownloadPanel(wx.Panel):
 
         for meta in plugins:
             data = meta.split("\n")
+
             if len(data) < 4:
                 continue
+
             tmpdat = PluginData()
             for attr in data:
                 tmp = attr.split("=")
                 if len(tmp) != 2:
                     continue
+
                 set_map = {'author' : tmpdat.SetAuthor,
                            'version' : tmpdat.SetVersion,
                            'name' : tmpdat.SetName,
-                           'url' : tmpdat.SetUrl,
-                           'description' : tmpdat.SetDescription}
+                           'description' : tmpdat.SetDescription,
+                           'url' : tmpdat.SetUrl}
                 funct = set_map.get(tmp[0].lower(), None)
                 if funct:
                     funct(tmp[1].strip())
+
             if tmpdat.GetName() != u'':
                 p_list[tmpdat.GetName()] = tmpdat
 
@@ -586,13 +546,13 @@ class DownloadPanel(wx.Panel):
         config_pg = self.GetParent().GetPage(CONFIG_PG)
         to_clean = list()
         for pin in p_list:
-            ver = p_list[pin].GetVersion()
-            pin_id = p_list[pin].GetName() + ver
             cfg_id = config_pg.GetItemIdentifier(pin.lower())
-            if cfg_id is not None and cfg_id[1] >= ver:
+            if cfg_id is not None and cfg_id[1] >= p_list[pin].GetVersion():
                 to_clean.append(pin)
+
         for item in to_clean:
             del p_list[item]
+
         return p_list
 
     def GetDownloadedData(self):
@@ -628,14 +588,13 @@ class DownloadPanel(wx.Panel):
                 if self._dl_list[item] and item in self._p_list:
                     urls.append(BASE_URL + self._p_list[item].GetUrl())
             self._eggcount = len(urls)
-            
+
             # Start a separate thread to download each selection
             for egg in range(len(urls)):
                 self.GetGrandParent().SetStatusText(_("Downloading") + "...", 0)
                 self.GetGrandParent().Busy(True)
-                delayedresult.startWorker(self._ResultCatcher, 
-                                          self._DownloadPlugin,
-                                          wargs = (urls[egg]), jobID = egg)
+                delayedresult.startWorker(self._ResultCatcher, _DownloadPlugin,
+                                          wargs=(urls[egg]), jobID=egg)
         else:
             evt.Skip()
 
@@ -649,9 +608,9 @@ class DownloadPanel(wx.Panel):
         index = evt.GetId()
         flag = evt.GetValue()
         pin = self._list.GetItemText(index)
+        self._dl_list[pin] = flag
         if flag:
             self._downlb.Enable()
-            self._dl_list[pin] = flag
         else:
             for item in self._dl_list:
                 if self._dl_list[item]:
@@ -659,6 +618,7 @@ class DownloadPanel(wx.Panel):
                     break
             else:
                 self._downlb.Disable()
+
             if self._dl_list.has_key(pin):
                 del self._dl_list[pin]
 
@@ -714,9 +674,51 @@ class DownloadPanel(wx.Panel):
         frame =  self.GetGrandParent()
         frame.SetStatusText(_("Retrieving Plugin List") + "...", 0)
         frame.Busy(True)
-        delayedresult.startWorker(self._UpdateCatcher,
-                                  self._GetPluginListData,
+        delayedresult.startWorker(self._UpdateCatcher, _GetPluginListData,
                                   wkwargs={'url' : url}, jobID='update')
+
+#-----------------------------------------------------------------------------#
+# Download utility functions
+
+# The obtained meta data must be served as a file that is formated
+# as follows. Each meta data item must be on a single line with
+# each set of meta data for different plugins separated by three
+# hash marks '###'.
+def _GetPluginListData(url=PLUGIN_REPO):
+    """Gets the list of plugins and their related meta data
+    as a string and returns it.
+    @return: list of data of available plugins from website
+    
+    """
+    text = u''
+    try:
+        h_file = urllib.urlopen(url)
+        text = h_file.read()
+        h_file.close()
+    except (IOError, OSError), msg:
+        util.Log("[plugdlg][err] %s" % str(msg))
+    finally:
+        return text.split("###")
+
+def _DownloadPlugin(*args):
+    """Downloads the plugin at the given url.
+    @note: *args is really a string that has been exploded
+    @return: name, completed, egg data
+    @rtype: tuple
+
+    """
+    url = "".join(args)
+    egg = None
+    try:
+        h_file = urllib.urlopen(url)
+        egg = h_file.read()
+        h_file.close()
+    except (IOError, OSError), msg:
+        util.Log("[plugdlg][err] %s" % str(msg))
+    finally:
+        return (url.split("/")[-1], True, egg)
+
+#-----------------------------------------------------------------------------#
 
 class InstallPanel(wx.Panel):
     """Creates a panel for installing plugins."""
@@ -725,12 +727,11 @@ class InstallPanel(wx.Panel):
     ID_SYS = wx.NewId()
     ID_REMOVE_ITEM = wx.NewId()
 
-    def __init__(self, parent, id_=wx.ID_ANY, style=wx.NO_BORDER):
+    def __init__(self, parent, style=wx.NO_BORDER):
         """Initializes the panel"""
-        wx.Panel.__init__(self, parent, id_, style=style)
+        wx.Panel.__init__(self, parent, style=style)
 
         # Attributes
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
         lbl = wx.StaticText(self, wx.ID_ANY,
                             _("Click on Install to install the plugins "
                               "in the list"))
@@ -755,20 +756,19 @@ class InstallPanel(wx.Panel):
             self._syscb.Disable()
 
         # Layout Panel
-        self._sizer.Add(lbl, 0, wx.ALIGN_CENTER)
-        self._sizer.Add(self._install, 1, wx.EXPAND)
-        self._sizer.Add(wx.Size(5, 5))
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.AddMany([(lbl, 0, wx.ALIGN_CENTER), 
+                       (self._install, 1, wx.EXPAND),
+                       ((5, 5))])
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
-        bsizer.Add(wx.Size(5, 5))
-        bsizer.Add(self._usercb, 0, wx.ALIGN_LEFT)
-        bsizer.Add(wx.Size(5, 5))
-        bsizer.Add(self._syscb, 0, wx.ALIGN_LEFT)
+        bsizer.AddMany([((5, 5)), (self._usercb, 0, wx.ALIGN_LEFT),
+                        ((5, 5)), (self._syscb, 0, wx.ALIGN_LEFT)])
         bsizer.AddStretchSpacer()
         bsizer.Add(self._instb, 0, wx.ALIGN_RIGHT)
-        bsizer.Add(wx.Size(5, 5))
-        self._sizer.Add(bsizer, 0, wx.EXPAND)
-        self._sizer.Add(wx.Size(5, 5))
-        self.SetSizer(self._sizer)
+        bsizer.Add((5, 5))
+        sizer.Add(bsizer, 0, wx.EXPAND)
+        sizer.Add((5, 5))
+        self.SetSizer(sizer)
         self.SendSizeEvent()
 
         # Event Handlers
@@ -805,7 +805,7 @@ class InstallPanel(wx.Panel):
                 writer = file(inst_loc + egg_name, "wb")
                 writer.write(egg)
                 writer.close()
-            except IOError:
+            except (IOError, OSError):
                 continue
             else:
                 # If successfully installed remove from list
@@ -859,8 +859,7 @@ class InstallPanel(wx.Panel):
         @type evt: wx.EVT_BUTTON
 
         """
-        e_id = evt.GetId()
-        if e_id == self.ID_INSTALL:
+        if evt.GetId() == self.ID_INSTALL:
             self._Install()
         else:
             evt.Skip()
@@ -879,15 +878,10 @@ class InstallPanel(wx.Panel):
         if e_id == self.ID_USER:
             if not s_cb.IsEnabled():
                 u_cb.SetValue(True)
-            elif val:
-                s_cb.SetValue(False)
             else:
-                s_cb.SetValue(True)
+                s_cb.SetValue(not val)
         elif e_id == self.ID_SYS:
-            if val:
-                u_cb.SetValue(False)
-            else:
-                u_cb.SetValue(True)
+            u_cb.SetValue(not val)
         else:
             pass
         evt.Skip()
@@ -900,11 +894,11 @@ class InstallPanel(wx.Panel):
                        the eggs in the list.
         """
         # Filter out any files that are not eggs
-        good = list()
-        for fname in files:
-            if fname.split(u'.')[-1] == u'egg':
-                good.append(fname)
-        self._install.AppendItems(good)
+        good = [ fname for fname in files if fname.split(u'.')[-1] == u'egg' ]
+        for item in good:
+            if self._install.FindString(item) == wx.NOT_FOUND:
+                self._install.Append(item)
+
         if self._install.GetCount():
             self._instb.Enable()
 
@@ -919,6 +913,10 @@ class InstallPanel(wx.Panel):
             item = self._install.GetSelection()
             if item != wx.NOT_FOUND:
                 self._install.Delete(item)
+
+            if not self._install.GetCount():
+                self._instb.Disable()
+
         evt.Skip()
 
 #--------------------------------------------------------------------------#
@@ -981,27 +979,21 @@ class PluginListCtrl(wx.ListCtrl,
         @postcondition: plugin is inserted alphabetically into list
 
         """
-        items = self.GetItemCount()
-        names = list()
-        for item in range(items):
-            names.append(self.GetItem(item).GetText())
-        before = u''
-        for name in names:
-            if pi_data.GetName() > name:
-                before = name
+        pname = pi_data.GetName()
+        for item in xrange(self.GetItemCount()):
+            if pname < self.GetItemText(item):
+                self.InsertStringItem(item, pi_data.GetName())
+                self.SetStringItem(item, 1, pi_data.GetDescription())
+                self.SetStringItem(item, 2, pi_data.GetAuthor())
+                self.SetStringItem(item, 3, pi_data.GetVersion())
+                self.CheckItem(item, check)
                 break
-        if before not in names:
-            index = 0
         else:
-            index = names.index(before) - 1
-        if index == -1:
-            index = 0
-        self.InsertStringItem(index, pi_data.GetName())
-        self.SetStringItem(index, 1, pi_data.GetDescription())
-        self.SetStringItem(index, 2, pi_data.GetAuthor())
-        self.SetStringItem(index, 3, pi_data.GetVersion())
-        self.CheckItem(index, check)
+            self.Append((pi_data.GetName(), pi_data.GetDescription(), 
+                         pi_data.GetAuthor(), pi_data.GetVersion()))
+            self.CheckItem(self.GetItemCount()-1, check)
 
+#-----------------------------------------------------------------------------#
 class PluginData(plugin.PluginData):
     """Plugin Metadata storage class used to store data
     about plugins and where to download them from
@@ -1010,6 +1002,11 @@ class PluginData(plugin.PluginData):
     """
     def __init__(self, name=u'', descript=u'', author=u'', \
                  ver=u'', url=u''):
+        """Extends PluginData to include information about url
+        to get it from.
+        @param url: url to download plugin from
+
+        """
         plugin.PluginData.__init__(self, name, descript, author, ver)
         self._url = url
 
