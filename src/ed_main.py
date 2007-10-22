@@ -822,7 +822,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                     "Written in 100%% Python.",
                     "Homepage: " + HOME_PAGE + "\n",
                     "Platform Info: (%s,%s)", 
-                    "License: GPL v2 (see COPYING.txt for full license)"]
+                    "License: wxWindows (see COPYING.txt for full license)"]
             desc = "\n".join(desc)
             py_version = sys.platform + ", python " + sys.version.split()[0]
             platform = list(wx.PlatformInfo[1:])
