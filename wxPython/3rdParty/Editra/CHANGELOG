@@ -59,6 +59,8 @@ characters in them.
 +Fixed flickering of toolbar when changing icon themes
 +Don't send clipboard events to text control when it is not the control with the
 capture.
++Fixed flickering when opening new pages in the notebook, this was most noticable
+on Windows and GTK.
 
 #-----------------------------------------------------------------------------#
 

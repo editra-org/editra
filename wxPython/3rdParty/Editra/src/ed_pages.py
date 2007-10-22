@@ -181,11 +181,13 @@ class EdPages(FNB.FlatNotebook):
         @postcondition: a new page with an untitled document is opened
 
         """
+        self.GetTopLevelParent().Freeze()
         self.pg_num += 1
         self.control = ed_stc.EditraStc(self, wx.ID_ANY)
         self.LOG("[nb_evt] Page Creation ID: %d" % self.control.GetId())
         self.AddPage(self.control, u"Untitled - %d" % self.pg_num)
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
+        self.GetTopLevelParent().Thaw()
 
     def OpenPage(self, path, filename):
         """Open a File Inside of a New Page
@@ -200,6 +202,7 @@ class EdPages(FNB.FlatNotebook):
             return
 
         # Create new control to place text on if necessary
+        self.GetTopLevelParent().Freeze()
         new_pg = True
         if self.GetPageCount():
             if self.control.GetModify() or self.control.GetLength() or \
@@ -233,6 +236,8 @@ class EdPages(FNB.FlatNotebook):
 
                 if new_pg:
                     control.Destroy()
+
+                self.GetTopLevelParent().Thaw()
                 return
 
         # Put control into page an place page in notebook
@@ -266,6 +271,7 @@ class EdPages(FNB.FlatNotebook):
 
         # Refocus on selected page
         self.GoCurrentPage()
+        self.GetTopLevelParent().Thaw()
 
     def GoCurrentPage(self):
         """Move Focus to Currently Selected Page.
