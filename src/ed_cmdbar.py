@@ -230,13 +230,13 @@ class CommandBar(wx.Panel):
         v_sizer = wx.BoxSizer(wx.VERTICAL)
         t_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        v_sizer.Add((5, 5))
-        ssize = wx.Size(180, 20)
+        spacer = (6, 6)
         if wx.Platform == '__WXGTK__':
-            ssize.SetHeight(24)
+            spacer = (4, 4)
+        v_sizer.Add(spacer)
         search = ed_search.EdSearchCtrl(self, ID_SEARCH_CTRL, 
-                                         menulen=5, size=ssize)
-        v_sizer.Add(search)
+                                         menulen=5, size=(180, -1))
+        v_sizer.Add(search, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
         f_lbl = wx.StaticText(self, ID_FIND_LBL, _("Find") + u": ")
         ctrl_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -253,25 +253,22 @@ class CommandBar(wx.Panel):
         match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
         match_case.SetValue(search.IsMatchCase())
         if wx.Platform == '__WXMAC__':
-            f_lbl.SetFont(wx.SMALL_FONT)
-            match_case.SetFont(wx.SMALL_FONT)
-            nlbl.SetFont(wx.SMALL_FONT)
-            plbl.SetFont(wx.SMALL_FONT)
+            t_sizer.Add((5, 5))
+            for win in [f_lbl, match_case, nlbl, plbl]:
+                win.SetFont(wx.SMALL_FONT)
 
-        ctrl_sizer.AddMany([(10, 10), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
+        ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
                             ((3, 3)), (nlbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                            ((10, 10)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
+                            ((10, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
                             ((3, 3)), (plbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                            ((10, 10)), 
+                            ((10, 0)), 
                             (match_case, 0, wx.ALIGN_CENTER_VERTICAL)])
 
-        t_sizer.Add((7, 7))
-        t_sizer.Add(ctrl_sizer)
-        t_sizer.Add((4, 4))
+        t_sizer.Add(ctrl_sizer, 0, wx.ALIGN_CENTER_VERTICAL)
 
         h_sizer.AddMany([(f_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                         ((5, 5)), (v_sizer), 
-                         (ctrl_sizer, 0, wx.ALIGN_CENTER_VERTICAL)])
+                         ((5, 5)), (v_sizer, 0, wx.ALIGN_CENTER_VERTICAL), 
+                         (t_sizer, 0, wx.ALIGN_CENTER_VERTICAL)])
         self._sizers['search'] = h_sizer
         self._sizers['h_sizer'].Add(h_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)
         self._sizers['h_sizer'].Layout()

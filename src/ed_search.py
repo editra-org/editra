@@ -12,13 +12,9 @@
 # AUTHOR: Cody Precord                                                     #
 # LANGUAGE: Python                                                         #
 # SUMMARY:                                                                 #
-#     Provides various search controls and searching services for finding
-#  text in a document.
-#
-# METHODS:
-#
-#
-#
+#     Provides various search controls and searching services for finding  #
+#  text in a document.                                                     #
+#                                                                          #
 #--------------------------------------------------------------------------#
 """
 
@@ -314,7 +310,6 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         # Bind Events
         if wx.Platform == '__WXMSW__':
-            self.ShowCancelButton(False)
             for child in self.GetChildren():
                 if isinstance(child, wx.TextCtrl):
                     child.Bind(wx.EVT_KEY_UP, self.ProcessEvent)
@@ -471,7 +466,7 @@ class EdSearchCtrl(wx.SearchCtrl):
                          wx.WXK_UP, wx.WXK_DOWN]:
                 return
 
-            if wx.Platform != '__WXMSW__' and len(self.GetValue()) > 0:
+            if len(self.GetValue()) > 0:
                 self.ShowCancelButton(True)
             else:
                 self.ShowCancelButton(False)
