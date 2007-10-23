@@ -24,9 +24,10 @@ The old ones are incompatible with Editra 0.2.0 and could cause it to fail to st
 when trying to load them. I have fixed both the script on the website and the code
 for preventing broken plugins from crashing the editor.
 
-I have also decided that this will be the last release version that will require
-a profile reset. From this release onwards updating to the new version will no
-longer require you to reconfigure Editra after wards.
+From this release onwards updating to the new version of Editra will no longer 
+require you to reconfigure all of your preferences as profiles are now incrementally
+updated so only settings that need to be changed or added are while not affecting
+all the other saved settings.
 
 
 NEW: [features/improvements]
