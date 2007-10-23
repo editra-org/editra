@@ -347,21 +347,16 @@ class FileBrowser(wx.GenericDirCtrl):
         if Profile_Get('ICONS', 'str', 'default').lower() != u'default':
             bmp1 = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FOLDER), wx.ART_MENU)
             fbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FILE), wx.ART_MENU)
-            self._imglst = wx.ImageList(bmp1.GetWidth(), bmp1.GetHeight())
-            self._imglst.Add(bmp1) # Folder Normal
-            self._imglst.Add(wx.ArtProvider.GetBitmap(str(ed_glob.ID_OPEN), wx.ART_MENU)) # Folder Open
-            self._imglst.Add(wx.ArtProvider.GetBitmap(str(ed_glob.ID_COMPUTER), wx.ART_MENU))  # Computer
-            self._imglst.Add(wx.ArtProvider.GetBitmap(str(ed_glob.ID_HARDDISK), wx.ART_MENU)) # Root drive icon
-            self._imglst.Add(wx.ArtProvider.GetBitmap(str(ed_glob.ID_CDROM), wx.ART_MENU))  # CD
-            self._imglst.Add(wx.ArtProvider.GetBitmap(str(ed_glob.ID_FLOPPY), wx.ART_MENU))  # Floppy
-            self._imglst.Add(wx.ArtProvider.GetBitmap(str(ed_glob.ID_USB), wx.ART_MENU))  # Removable
-            self._imglst.Add(fbmp)  # Regular Files
-            self._imglst.Add(wx.ArtProvider.GetBitmap(str(ed_glob.ID_BIN_FILE), wx.ART_MENU))  # Binary Files
-            self._imglst.Add(fbmp)  # msw cmd Files
-            self._imglst.Add(fbmp)  # msw py Files
-            if wx.Platform == '__WXMSW__':
-                for x in xrange(6):
-                    self._imglst.Add(fbmp)
+            self._imglst = self._tree.GetImageList() #wx.ImageList(bmp1.GetWidth(), bmp1.GetHeight())
+            self._imglst.Replace(0, bmp1) # Folder Normal
+            self._imglst.Replace(1, wx.ArtProvider.GetBitmap(str(ed_glob.ID_OPEN), wx.ART_MENU)) # Folder Open
+            self._imglst.Replace(2, wx.ArtProvider.GetBitmap(str(ed_glob.ID_COMPUTER), wx.ART_MENU))  # Computer
+            self._imglst.Replace(3, wx.ArtProvider.GetBitmap(str(ed_glob.ID_HARDDISK), wx.ART_MENU)) # Root drive icon
+            self._imglst.Replace(4, wx.ArtProvider.GetBitmap(str(ed_glob.ID_CDROM), wx.ART_MENU))  # CD
+            self._imglst.Replace(5, wx.ArtProvider.GetBitmap(str(ed_glob.ID_FLOPPY), wx.ART_MENU))  # Floppy
+            self._imglst.Replace(6, wx.ArtProvider.GetBitmap(str(ed_glob.ID_USB), wx.ART_MENU))  # Removable
+            self._imglst.Replace(7, fbmp)  # Regular Files
+            self._imglst.Replace(8, wx.ArtProvider.GetBitmap(str(ed_glob.ID_BIN_FILE), wx.ART_MENU))  # Binary Files
             self._tree.SetImageList(self._imglst)
 
         # Event Handlers
@@ -391,8 +386,17 @@ class FileBrowser(wx.GenericDirCtrl):
             if wx.Platform == '__WXMSW__':
                 r_txt = u''
             else:
-                if path[0] != "/":
-                    path.pop(0)
+                if wx.Platform == '__WXGTK__':
+                    if path[0].lower() == 'home directory':
+                        path[0] = wx.GetHomeDir()
+                    elif path[0].lower() == 'desktop':
+                        path.insert(0, wx.GetHomeDir())
+                    else:
+                        pass
+
+                if wx.Platform == '__WXMAC__':
+                    if path[0] != "/":
+                        path.pop(0)
                 r_txt = os.path.sep
 
             ret_val.append(r_txt + util.GetPathChar().join(path))
