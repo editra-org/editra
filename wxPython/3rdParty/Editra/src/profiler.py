@@ -203,13 +203,12 @@ class Profile(dict):
         if fmt is None:
             self.__setitem__(index, val)
         else:
-            tmp = _FromObject(val, fmt)
-            self.__setitem__(index, tmp)
+            self.__setitem__(index, _FromObject(val, fmt))
 
     def Write(self, path):
         """Write the dataset of this profile as a pickle
         @param path: path to where to write the pickle
-        @return: True on success/ False on failure
+        @return: True on success / False on failure
 
         """
         try:
@@ -224,19 +223,36 @@ class Profile(dict):
         else:
             return True
 
+    def Update(self, update=None):
+        """Update the profile using data from provided dictionary
+        or the default set if none is given.
+        @keyword update: dictionary of values to update from or None
+        @postcondition: All profile values from the update set are set
+                        in this profile. If update is None then the current
+                        set is only updated to include values from the
+                        DEFAULTS that are not currently present.
+
+        """
+        if update is None:
+            for key, val in _DEFAULTS.iteritems():
+                if not self.has_key(key):
+                    self.Set(key, val)            
+        else:
+            self.update(update)
+
     #---- End Public Members ----#
 
-# Profile convinience functions
+#-----------------------------------------------------------------------------#
+# Profile convenience functions
 def Profile_Del(item):
     """Removes an item from the profile
-    
-    @param item: items name
+    @param item: items key name
 
     """
     Profile().DeleteItem(item)
 
 def Profile_Get(index, fmt=None, default=None):
-    """Convinience for Profile().Get()
+    """Convenience for Profile().Get()
     @param index: profile index to retrieve
     @keyword fmt: format to get value as
     @keyword default: default value to return if not found
@@ -245,7 +261,7 @@ def Profile_Get(index, fmt=None, default=None):
     return Profile().Get(index, fmt, default)
 
 def Profile_Set(index, val, fmt=None):
-    """Convinience for Profile().Set()
+    """Convenience for Profile().Set()
     @param index: profile index to set
     @param val: value to set index to
     @keyword fmt: format to convert object from
@@ -338,7 +354,10 @@ def CalcVersionValue(ver_str="0.0.0"):
     return float(major) + float(minor) + micro
 
 def GetLoader():
-    """Finds the loader to use"""
+    """Finds the loader to use
+    @return: path to profile loader
+
+    """
     user_home = wx.GetHomeDir() + util.GetPathChar()
     rel_prof_path = ("." + PROG_NAME + util.GetPathChar() + 
                      "profiles" + util.GetPathChar() + ".loader2")
@@ -425,4 +444,3 @@ def UpdateProfileLoader():
     writer.write(u"\nVERSION\t" + VERSION)
     writer.close()
     return 0
-

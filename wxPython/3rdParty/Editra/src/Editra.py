@@ -17,10 +17,6 @@
 #   This module defines the Editra Application object and the Main method  #
 # for running Editra.                                                      #
 #                                                                          #
-# METHODS:                                                                 #
-#   L{Editra} Application core object                                      #
-#   L{Main} Main runtime procedure                                         #
-#                                                                          #
 #--------------------------------------------------------------------------#
 """
 
@@ -50,6 +46,7 @@ import extern.events as events
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
+
 class Editra(wx.App, events.AppEventHandlerMixin):
     """The Editra Application Object
     @see: L{wx.App}
@@ -381,26 +378,39 @@ def InitConfig():
             # upgrade earlier profiles to current 
             if len(pstr) > 3 and pstr[-2:] == "pp":
                 pstr = pstr + u'b'
-            profiler.Profile().LoadDefaults()
+
+            # Load and update profile
+            profiler.Profile().Load(pstr)
+            profiler.Profile().Update()
             if wx.Platform == '__WXGTK__':
                 Profile_Set('ICONS', 'Default')
-            profiler.Profile().Write(pstr)  # Write out defaults
-            profiler.Profile().Load(pstr)   # Test reload profile
+
+            # NOTE: currently turned off by default due to performance issues
+            if wx.Platform == '__WXMAC__':
+                Profile_Set('WRAP', False)
+
+            # Write out updated profile
+            profiler.Profile().Write(pstr)
+
             # When upgrading from an older version make sure all
             # config directories are available.
             for cfg in ["cache", "styles", "plugins", "profiles"]:
                 if not util.HasConfigDir(cfg):
                     util.MakeConfigDir(cfg)
+
             profile_updated = True
     else:
         util.CreateConfigDir()
+
     if 'DEBUG' in Profile_Get('MODE'):
         ed_glob.DEBUG = True
+
+    # Resolve resource locations
     ed_glob.CONFIG['CONFIG_DIR'] = util.ResolvConfigDir("")
     ed_glob.CONFIG['PIXMAPS_DIR'] = util.ResolvConfigDir("pixmaps")
     ed_glob.CONFIG['SYSPIX_DIR'] = util.ResolvConfigDir("pixmaps", True)
     ed_glob.CONFIG['PLUGIN_DIR'] = util.ResolvConfigDir("plugins")
-    ed_glob.CONFIG['THEME_DIR'] = util.ResolvConfigDir(os.path.join("pixmaps", \
+    ed_glob.CONFIG['THEME_DIR'] = util.ResolvConfigDir(os.path.join("pixmaps",
                                                                     "theme"))
     ed_glob.CONFIG['LANG_DIR'] = util.ResolvConfigDir("locale", True)
     ed_glob.CONFIG['STYLES_DIR'] = util.ResolvConfigDir("styles")
@@ -410,6 +420,7 @@ def InitConfig():
     if not util.HasConfigDir("cache"):
         util.MakeConfigDir("cache")
     ed_glob.CONFIG['CACHE_DIR'] = util.ResolvConfigDir("cache")
+
     return profile_updated
 
 #--------------------------------------------------------------------------#
@@ -435,6 +446,7 @@ def Main():
             oldpath = opts[0][1]
             os.chdir(oldpath)
             opts.pop(0)
+
         if True in [x[0] in ['-h', '--help'] for x in opts]:
             print ("Editra - %s - Developers Text Editor\n"
                    "Cody Precord (2005-2007)\n\n"
@@ -450,6 +462,7 @@ def Main():
                    "  --version  Print version number and exit\n"
                   ) % ed_glob.VERSION
             exit(0)
+
         if True in [x[0] in ['-v', '--version'] for x in opts]:
             print "%s - v%s - Developers Editor" % (ed_glob.PROG_NAME, \
                                                     ed_glob.VERSION)
@@ -503,7 +516,7 @@ def Main():
     # Load Session Data
     # But not if there are command line args for files to open
     if Profile_Get('SAVE_SESSION', 'bool', False) and not len(args):
-        frame.nb.LoadSessionFiles()
+        frame.GetNotebook().LoadSessionFiles()
 
     frame.Show(True)
     wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
@@ -526,4 +539,3 @@ def Main():
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
     Main()
-
