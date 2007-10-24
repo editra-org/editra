@@ -124,6 +124,10 @@ ID_LANG_XML  = wx.NewId()
 LANG_XML = u'XML'
 ID_LANG_SGML = wx.NewId()
 
+# Use LEX_INNOSETUP
+ID_LANG_INNO = wx.NewId()
+LANG_INNO = u'Inno Setup Script'
+
 # Use LEX_LISP
 ID_LANG_LISP = wx.NewId()
 LANG_LISP = u'Lisp'
@@ -237,6 +241,7 @@ EXT_MAP = {
            'f90 f95 f2k fpp'    : LANG_F95,
            'hs'                 : LANG_HASKELL,
            'htm html shtm shtml xhtml' : LANG_HTML,
+           'iss'                : LANG_INNO,
            'java'               : LANG_JAVA,
            'js'                 : LANG_JS,
            'ksh'                : LANG_KSH,
@@ -290,6 +295,7 @@ LANG_MAP = {LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
             LANG_FLAGSHIP: (ID_LANG_FLAGSHIP, stc.STC_LEX_FLAGSHIP, 'flagship'),
             LANG_HASKELL : (ID_LANG_HASKELL, stc.STC_LEX_HASKELL, 'haskell'),
             LANG_HTML   : (ID_LANG_HTML,   stc.STC_LEX_HTML,     'html'),
+            LANG_INNO   : (ID_LANG_INNO,   stc.STC_LEX_INNOSETUP, 'inno'),
             LANG_JAVA   : (ID_LANG_JAVA,   stc.STC_LEX_CPP,      'java'),
             LANG_JS     : (ID_LANG_JS,     stc.STC_LEX_CPP,      'javascript'), 
             LANG_KSH    : (ID_LANG_KSH,    stc.STC_LEX_BASH,     'sh'),
@@ -336,7 +342,8 @@ ID_MAP = {ID_LANG_68K    : LANG_68K,    ID_LANG_ADA   : LANG_ADA,
           ID_LANG_ERLANG : LANG_ERLANG, ID_LANG_ESS    : LANG_ESS,
           ID_LANG_F77    : LANG_F77,    ID_LANG_F95   : LANG_F95,
           ID_LANG_FLAGSHIP : LANG_FLAGSHIP, ID_LANG_HASKELL : LANG_HASKELL,
-          ID_LANG_HTML   : LANG_HTML,   ID_LANG_JAVA  : LANG_JAVA, 
+          ID_LANG_HTML   : LANG_HTML,   ID_LANG_INNO : LANG_INNO,
+          ID_LANG_JAVA  : LANG_JAVA, 
           ID_LANG_JS     : LANG_JS,     ID_LANG_KSH   : LANG_KSH,
           ID_LANG_LATEX  : LANG_LATEX,  ID_LANG_LISP  : LANG_LISP, 
           ID_LANG_LOUT   : LANG_LOUT,   ID_LANG_LUA   : LANG_LUA,
