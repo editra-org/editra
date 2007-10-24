@@ -305,14 +305,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                 ''.join(syntax.GenFileFilters()), 
                                 wx.OPEN | wx.MULTIPLE)
             dlg.SetFilterIndex(_PGET('FFILTER', 'int', 0))
-            result = dlg.ShowModal()
-            _PSET('FFILTER', dlg.GetFilterIndex())
-            paths = dlg.GetPaths()
-            dlg.Destroy()
 
-            if result != wx.ID_OK:
+            if dlg.ShowModal() != wx.ID_OK:
                 self.LOG('[mainw][info] Canceled Opening File')
             else:
+                _PSET('FFILTER', dlg.GetFilterIndex())
+                paths = dlg.GetPaths()
                 for path in paths:
                     if _PGET('OPEN_NW', default=False):
                         wx.GetApp().OpenNewWindow(path)
@@ -321,6 +319,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         filename = util.GetFileName(path)
                         self.nb.OpenPage(dirname, filename)   
                         self.nb.GoCurrentPage()
+
+            dlg.Destroy()
         else:
             self.LOG("[mainw][info] CMD Open File: %s" % fname)
             filename = util.GetFileName(fname)
