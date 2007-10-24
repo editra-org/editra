@@ -35,6 +35,7 @@ NEW: [features/improvements]
 installed through the plugin manager using python eggs.
 +New icon theme based on Humility icons available through plugin manager.
 +Improved highlighting for python (decorators are now supported)
++Support for highlighting (Inno Setup Scripts, Verilog)
 
 BUG FIXES:
 +Fixed a performance related bug that was most notable Editra was running on OSX.
@@ -62,6 +63,9 @@ characters in them.
 capture.
 +Fixed flickering when opening new pages in the notebook, this was most noticable
 on Windows and GTK.
++FileBrowser plugin can now properly open files under the "Home directory" and
+"Desktop" nodes.
++Fixed bug in CPP auto-commenting (patch from Rob McMullen)
 
 #-----------------------------------------------------------------------------#
 

@@ -194,6 +194,10 @@ LANG_LATEX = u'LaTeX'
 ID_LANG_VB = wx.NewId()
 LANG_VB = u'Visual Basic'
 
+# Use LEX_VERILOG
+ID_LANG_VERILOG = wx.NewId()
+LANG_VERILOG = u'Verilog'
+
 # Use LEX_VHDL
 ID_LANG_VHDL = wx.NewId()
 LANG_VHDL = u'VHDL'
@@ -268,6 +272,7 @@ EXT_MAP = {
            'itcl tcl tk'        : LANG_TCL,
            'txt'                : LANG_TXT,
            'bas cls ctl frm vb' : LANG_VB,
+           'v'                  : LANG_VERILOG,
            'vh vhdl'            : LANG_VHDL,
            'axl dtd plist rdf svg xml xrc xsd xsl xslt xul' : LANG_XML,
            'yaml yml'           : LANG_YAML,
@@ -322,6 +327,7 @@ LANG_MAP = {LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
             LANG_TCL    : (ID_LANG_TCL,    stc.STC_LEX_TCL,      'tcl'),
             LANG_TXT    : (ID_LANG_TXT,    stc.STC_LEX_NULL,     None),
             LANG_VB     : (ID_LANG_VB,     stc.STC_LEX_VB,       'visualbasic'),
+            LANG_VERILOG: (ID_LANG_VERILOG, stc.STC_LEX_VERILOG, 'verilog'),
             LANG_VHDL   : (ID_LANG_VHDL,   stc.STC_LEX_VHDL,     'vhdl'),
             LANG_XML    : (ID_LANG_XML,    stc.STC_LEX_XML,      'xml'),
             LANG_YAML   : (ID_LANG_YAML,   stc.STC_LEX_YAML,     'yaml')
@@ -352,11 +358,11 @@ ID_MAP = {ID_LANG_68K    : LANG_68K,    ID_LANG_ADA   : LANG_ADA,
           ID_LANG_NASM  : LANG_MASM,    ID_LANG_NSIS   : LANG_NSIS,   
           ID_LANG_OCTAVE : LANG_OCTAVE, ID_LANG_PASCAL : LANG_PASCAL, 
           ID_LANG_PERL   : LANG_PERL,   ID_LANG_PHP    : LANG_PHP,
-          ID_LANG_PROPS  : LANG_PROPS,
-          ID_LANG_PS     : LANG_PS,     ID_LANG_PYTHON : LANG_PYTHON,
-          ID_LANG_RUBY   : LANG_RUBY,   ID_LANG_SQL    : LANG_SQL,
-          ID_LANG_ST     : LANG_ST,     ID_LANG_VB     : LANG_VB,
-          ID_LANG_VHDL   : LANG_VHDL,   ID_LANG_TCL    : LANG_TCL,
+          ID_LANG_PROPS  : LANG_PROPS,  ID_LANG_PS     : LANG_PS,
+          ID_LANG_PYTHON : LANG_PYTHON, ID_LANG_RUBY   : LANG_RUBY,
+          ID_LANG_SQL    : LANG_SQL,    ID_LANG_ST     : LANG_ST,
+          ID_LANG_VB     : LANG_VB,     ID_LANG_VERILOG : LANG_VERILOG,
+          ID_LANG_VHDL   : LANG_VHDL,   ID_LANG_TCL    : LANG_TCL, 
           ID_LANG_TXT    : LANG_TXT,    ID_LANG_XML    : LANG_XML,
           ID_LANG_YAML   : LANG_YAML
 }
