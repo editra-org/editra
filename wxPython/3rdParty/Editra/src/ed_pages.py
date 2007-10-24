@@ -487,7 +487,7 @@ class EdPages(FNB.FlatNotebook):
             
     def ClosePage(self):
         """Closes Currently Selected Page
-        @postcondtion: currently selected page is closed
+        @postcondition: currently selected page is closed
 
         """
         self.GoCurrentPage()
@@ -534,7 +534,7 @@ class EdPages(FNB.FlatNotebook):
 
     def UpdatePageImage(self):
         """Updates the page tab image
-        @postcondtion: page image is updated to reflect any changes in ctrl
+        @postcondition: page image is updated to reflect any changes in ctrl
 
         """
         pg_num = self.GetSelection()

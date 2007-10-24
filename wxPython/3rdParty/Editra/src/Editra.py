@@ -196,7 +196,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """Macintosh Specific code for opening files that are associated
         with the editor and double clicked on after the editor is already
         running.
-        @param: file path string
+        @param filename: file path string
         @postcondition: if L{MainWindow} is open file will be opened in notebook
         
         """
