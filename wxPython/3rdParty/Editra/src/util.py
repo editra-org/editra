@@ -34,7 +34,6 @@ __revision__ = "$Revision$"
 import os
 import sys
 import shutil
-import stat
 import codecs
 import mimetypes
 import wx
@@ -59,13 +58,10 @@ class DropTargetFT(wx.PyDropTarget):
         """
         wx.PyDropTarget.__init__(self)
         self.window = window
-        self.data = None
-        self.file_data_obj = None
-        self.text_data_obj = None
+        self._data = dict(data=None, fdata=None, tdata=None, 
+                          tcallb=textcallback, fcallb=filecallback)
         self._tmp = None
         self._lastp = None
-        self._tcallb = textcallback
-        self._fcallb = filecallback
         self.InitObjects()
 
     def CreateDragString(self, txt):
@@ -76,6 +72,7 @@ class DropTargetFT(wx.PyDropTarget):
         """
         if not issubclass(self.window.__class__, wx.stc.StyledTextCtrl):
             return
+
         stc = self.window
         txt = txt.split(stc.GetEOLChar())
         longest = (0, 0)
@@ -83,11 +80,11 @@ class DropTargetFT(wx.PyDropTarget):
             ext = stc.GetTextExtent(line)
             if ext[0] > longest[0]:
                 longest = ext
-        cords = list()
-        for x in xrange(len(txt)):
-            cords.append((0, x * longest[1]))
+
+        cords = [ (0, x * longest[1]) for x in xrange(len(txt)) ]
         mdc = wx.MemoryDC(wx.EmptyBitmap(longest[0] + 5, 
-                                         longest[1] * len(txt)))
+                                         longest[1] * len(txt), 32))
+        mdc.SetBackgroundMode(wx.TRANSPARENT)
         mdc.SetTextForeground(stc.GetDefaultForeColour())
         mdc.SetFont(stc.GetDefaultFont())
         mdc.DrawTextList(txt, cords)
@@ -98,12 +95,12 @@ class DropTargetFT(wx.PyDropTarget):
         @postcondition: all data objects are initialized
 
         """
-        self.data = wx.DataObjectComposite()
-        self.text_data_obj = wx.TextDataObject()
-        self.file_data_obj = wx.FileDataObject()
-        self.data.Add(self.text_data_obj, True)
-        self.data.Add(self.file_data_obj, False)
-        self.SetDataObject(self.data)
+        self._data['data'] = wx.DataObjectComposite()
+        self._data['tdata'] = wx.TextDataObject()
+        self._data['fdata'] = wx.FileDataObject()
+        self._data['data'].Add(self._data['tdata'], True)
+        self._data['data'].Add(self._data['fdata'], False)
+        self.SetDataObject(self._data['data'])
 
     def OnEnter(self, x_cord, y_cord, drag_result):
         """Called when a drag starts
@@ -112,8 +109,8 @@ class DropTargetFT(wx.PyDropTarget):
         """
         try:
             if self.GetData():
-                files = self.file_data_obj.GetFilenames()
-                text = self.text_data_obj.GetText()
+                files = self._data['fdata'].GetFilenames()
+                text = self._data['tdata'].GetText()
             else:
                 return drag_result
         except wx.PyAssertionError:
@@ -175,13 +172,13 @@ class DropTargetFT(wx.PyDropTarget):
                                              _("Unable to open dropped file or "
                                                "text")))
             data = False
-            drag_result = wx.DragError
+            drag_result = wx.DragCancel
 
         if data:
-            files = self.file_data_obj.GetFilenames()
-            text = self.text_data_obj.GetText()
-            if len(files) > 0 and self._fcallb is not None:
-                self._fcallb(files)
+            files = self._data['fdata'].GetFilenames()
+            text = self._data['tdata'].GetText()
+            if len(files) > 0 and self._data['fcallb'] is not None:
+                self._data['fcallb'](files)
             elif(len(text) > 0):
                 if SetClipboardText(text):
                     win = self.window
@@ -251,47 +248,40 @@ def GetDecodedText(fname):
     encoding it was decoded from.
     @param fname: name of file to open and get text from
     @return: tuple of (text, encoding string)
+    @note: must allow exceptions to be raised (side effect)
 
     """
-    try:
-        f_handle = file(fname, 'rb')
-        txt = f_handle.read()
-        f_handle.close()
-    except IOError, msg:
-        raise IOError, msg
-    except OSError, msg:
-        raise OSError, msg
-    else:
-        decoded = None
+    f_handle = file(fname, 'rb')
+    txt = f_handle.read()
+    f_handle.close()
 
-        # First look for a bom byte
-        bbyte = None
-        for e, b in BOM.iteritems():
-            if txt.startswith(b) and e not in ['ascii', 'latin-1']:
-                bbyte = e
+    # First try looking for a bom byte
+    tenc = ENC
+    for enc, bom in BOM.iteritems():
+        if txt.startswith(bom) and enc not in ['ascii', 'latin-1']:
+            if enc in tenc:
+                tenc.remove(enc)
+            tenc.insert(0, enc)
+            break
 
-        tenc = ENC
-        if bbyte:
-            if bbyte in tenc:
-                tenc.remove(bbyte)
-            tenc.insert(0, bbyte)
-
-        for enc in ENC:
-            try:
-                decoded = txt.decode(enc)
-            except (UnicodeDecodeError, UnicodeWarning):
-                continue
-            else:
-                break
-
-        if 'enc' not in locals():
-            enc = u''
-        if decoded:
-            dev_tool.DEBUGP("[txtdecoder] Decoded text as %s" % enc)
-            return decoded, enc
+    decoded = None
+    for enc in tenc:
+        try:
+            decoded = txt.decode(enc)
+        except (UnicodeDecodeError, UnicodeWarning):
+            continue
         else:
-            dev_tool.DEBUGP("[txtdecoder][err] Decode Failed")
-            return txt, enc
+            break
+
+    if 'enc' not in locals():
+        enc = u''
+
+    if decoded:
+        dev_tool.DEBUGP("[txtdecoder] Decoded text as %s" % enc)
+        return decoded, enc
+    else:
+        dev_tool.DEBUGP("[txtdecoder][err] Decode Failed")
+        return txt, enc
 
 def FilterFiles(file_list):
     """Filters a list of paths and returns a list of paths
@@ -450,15 +440,6 @@ def GetExtension(file_str):
     extension = pieces[-1]
     return extension
 
-def GetIds(obj_lst):
-    """Gets a list of IDs from a list of objects
-    @param obj_lst: list of objects to get ids from
-    @return: list of ids
-    @note: I believe this is no longer used anywhere and may be removed soon
-
-    """
-    return [obj.GetId() for obj in obj_lst]
-
 def ResolvAbsPath(rel_path):
     """Takes a relative path and converts it to an
     absolute path.
@@ -506,7 +487,7 @@ def MakeConfigDir(name):
     config_dir = wx.GetHomeDir() + GetPathChar() + u"." + ed_glob.PROG_NAME
     try:
         os.mkdir(config_dir + GetPathChar() + name)
-    finally:
+    except (OSError, IOError):
         pass
 
 def CreateConfigDir():
@@ -528,8 +509,10 @@ def CreateConfigDir():
     #---- Create Directories ----#
     if not os.path.exists(config_dir):
         os.mkdir(config_dir)
+
     if not os.path.exists(profile_dir):
         os.mkdir(profile_dir)
+
     for cfg in ext_cfg:
         if not HasConfigDir(cfg):
             MakeConfigDir(cfg)
@@ -552,6 +535,8 @@ def ResolvConfigDir(config_dir, sys_only=False):
     string.
     @param config_dir: name of config directory to resolve
     @keyword sys_only: only get paths of system config directory or user one
+    @note: This method is probably much more complex than it needs to be but
+           the code has proven itself.
 
     """
     path_char = GetPathChar()
@@ -573,8 +558,7 @@ def ResolvConfigDir(config_dir, sys_only=False):
         return path
 
     # If we get here we need to do some platform dependant lookup
-    # to find everything. This is probably much more of a mess than
-    # need be.
+    # to find everything.
     path = sys.argv[0]
 
     # If it is a link get the real path
@@ -615,8 +599,8 @@ def ResolvConfigDir(config_dir, sys_only=False):
                                              config_dir, path_char)
     else:
         pro_path = pro_path + path_char + config_dir + path_char
-    pro_path = os.path.normpath(pro_path) + path_char
-    return pro_path
+
+    return os.path.normpath(pro_path) + path_char
 
 def GetResources(resource):
     """Returns a list of resource directories from a given toplevel config dir
@@ -625,12 +609,9 @@ def GetResources(resource):
 
     """
     rec_dir = ResolvConfigDir(resource)
-    rec_lst = []
     if os.path.exists(rec_dir):
-        recs = os.listdir(rec_dir)
-        for rec in recs:
-            if os.path.isdir(rec_dir + rec) and rec[0] != u".":
-                rec_lst.append(rec.title())
+        rec_lst = [ rec.title() for rec in os.listdir(rec_dir)
+                    if os.path.isdir(rec_dir + rec) and rec[0] != u"." ]
         return rec_lst
     else:
         return -1
@@ -659,6 +640,7 @@ def GetResourceFiles(resource, trim=True, get_all=False):
         recs = os.listdir(rec_dir)
         if get_all and os.path.exists(rec_dir2):
             recs.extend(os.listdir(rec_dir2))
+
         for rec in recs:
             if os.path.isfile(rec_dir + rec) or \
               (get_all and os.path.isfile(rec_dir2 + rec)):
@@ -675,7 +657,7 @@ def Log(msg):
     """
     wx.GetApp().GetLog()(msg)
 
-# GUI helper functions
+#---- GUI helper functions ----#
 def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     """ Brighten/Darken input colour by percent and adjust alpha
     channel if needed. Returns the modified color.
@@ -731,36 +713,7 @@ def SetWindowIcon(window):
     finally:
         pass
 
-# String Manupulation/Conversion Utilities
-def StrToTuple(tu_str):
-    """Takes a tuple of ints that has been converted to a string format and
-    reformats it back to a tuple value.
-    @param tu_str: a string of a tuple of ints i.e '(1, 4)'
-    @return: string turned into the tuple it represents
-
-    """
-    if tu_str[0] != u"(":
-        return ""
-
-    tu_str = tu_str.strip(u'(,)')
-    tu_str = tu_str.replace(u',', u'')
-    tu_str = tu_str.split()
-    neg = False
-    
-    ret_tu = list()
-    for val in tu_str:
-        # workaround of negative numbers
-        if val[0] == u'-':
-            neg = True
-
-        if val.isdigit() or neg:
-            if neg:
-                neg = False
-                ret_tu.append(int(val)*-1)
-            else:
-                ret_tu.append(int(val))
-
-    return tuple(ret_tu)
+#-----------------------------------------------------------------------------#
 
 class IntValidator(wx.PyValidator):
     """A Generic integer validator"""
@@ -789,8 +742,7 @@ class IntValidator(wx.PyValidator):
         @param win: window to validate
 
         """
-        ctrl = self.GetWindow()
-        val = ctrl.GetValue()      
+        val = win.GetValue()      
         return val.isdigit()
 
     def OnChar(self, event):
@@ -799,11 +751,8 @@ class IntValidator(wx.PyValidator):
 
         """
         key = event.GetKeyCode()
-        if key < wx.WXK_SPACE or key == wx.WXK_DELETE or key > 255:
-            event.Skip()
-            return
-
-        if chr(key) in '0123456789':
+        if key < wx.WXK_SPACE or key == wx.WXK_DELETE or \
+           key > 255 or chr(key) in '0123456789':
             event.Skip()
             return
 
