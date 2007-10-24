@@ -425,7 +425,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
     def SetSearchFlag(self, flags):
         """Sets the search data flags
-        @param flag: search flag to add
+        @param flags: search flag to add
 
         """
         self._flags |= flags

@@ -116,7 +116,7 @@ class DocPositionMgr(object):
 
     def WriteBook(self):
         """Writes the collection of files=pos to the config file
-        @postcondtion: in memory doc data is written out to disk
+        @postcondition: in memory doc data is written out to disk
 
         """
         writer = util.GetFileWriter(self.GetBook())

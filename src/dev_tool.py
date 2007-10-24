@@ -36,18 +36,18 @@ def DEBUGP(statement, mode="std"):
            not currently used but will be in the future for organizing the
            debug levels.
 
-    1. Formatting
-       - [object/module name][msg_type] msg
+      1. Formatting
+         - [object/module name][msg_type] msg
 
-    2. Modes of operation:
-       - std = stdout
-       - log = writes to log file
+      2. Modes of operation:
+         - std = stdout
+         - log = writes to log file
     
-    3. Message Type:
-       - [err]  : Notes an exception or error condition
-       - [warn] : Notes a error that is not severe
-       - [info] : General information message
-       - [evt]  : Some sort of event related message
+      3. Message Type:
+         - [err]  : Notes an exception or error condition
+         - [warn] : Notes a error that is not severe
+         - [info] : General information message
+         - [evt]  : Some sort of event related message
 
     Example: [ed_main][err] File failed to open
 
