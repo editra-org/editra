@@ -23,7 +23,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Dependencies
-
+import synglob
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Specifications ----#
@@ -87,28 +87,41 @@ def Keywords(lang_id=0):
     @param lang_id: used to select specific subset of keywords
 
     """
-    return [JAVA_KEYWORDS, JAVA_TYPES, DOC_KEYWORDS]
+    if lang_id == synglob.ID_LANG_JAVA:
+        return [JAVA_KEYWORDS, JAVA_TYPES, DOC_KEYWORDS]
+    else:
+        return list()
 
 def SyntaxSpec(lang_id=0):
     """Syntax Specifications
     @param lang_id: used for selecting a specific subset of syntax specs
 
     """
-    return SYNTAX_ITEMS
+    if lang_id == synglob.ID_LANG_JAVA:
+        return SYNTAX_ITEMS
+    else:
+        return list()
 
 def Properties(lang_id=0):
     """Returns a list of Extra Properties to set
     @param lang_id: used to select a specific set of properties
 
     """
-    return [FOLD, FOLD_PRE]
+    if lang_id == synglob.ID_LANG_JAVA:
+        return [FOLD, FOLD_PRE]
+    else:
+        return list()
 
 def CommentPattern(lang_id=0):
     """Returns a list of characters used to comment a block of code
     @param lang_id: used to select a specific subset of comment pattern(s)
 
     """
-    return [ u'//' ]
+    if lang_id == synglob.ID_LANG_JAVA:
+        return [ u'//' ]
+    else:
+        return list()
+
 #---- End Required Functions ----#
 
 #---- Syntax Modules Internal Functions ----#
