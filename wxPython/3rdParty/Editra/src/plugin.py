@@ -135,7 +135,7 @@ class PluginMeta(type):
     _plugins = list()
     _registry = dict()
     def __new__(mcs, name, bases, d):
-        """@return a new metaclass object"""
+        """@return: a new metaclass object"""
         d['_implements'] = _implements[:]
         del _implements[:]
         new_obj = type.__new__(mcs, name, bases, d)
@@ -377,8 +377,8 @@ class PluginManager(object):
     def EnablePlugin(self, plugin):
         """Enables a named plugin.
         @precondition: plugin must be managed by this manager instance
-        @postcondtion: plugin is added to activate list for activation on
-                       next program start.
+        @postcondition: plugin is added to activate list for activation on
+                        next program start.
 
         """
         self._config[plugin] = True

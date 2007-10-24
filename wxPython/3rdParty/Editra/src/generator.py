@@ -156,7 +156,7 @@ class Html(plugin.Plugin):
 
     def __str__(self):
         """Returns the string of html
-        @return string version of html object
+        @return: string version of html object
 
         """
         style = "<style type=\"text/css\">\n%s</style>"
