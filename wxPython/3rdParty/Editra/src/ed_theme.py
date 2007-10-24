@@ -226,12 +226,14 @@ MIME_ART = { synglob.ID_LANG_BASH : u'shell.png',
 #-----------------------------------------------------------------------------#
 
 class TangoTheme(plugin.Plugin):
-    """Represents the Nuovo Icon theme for Editra"""
+    """Represents the Tango Icon theme for Editra"""
     plugin.Implements(ThemeI)
 
     def __GetArtPath(self, client, mime=False):
         """Gets the path of the resource directory to get
         the bitmaps from.
+        @param client: wx.ART_MENU/wx.ART_TOOLBAR
+        @keyword mime: is this a filetype icon lookup
         @return: path of art resource
         @rtype: string
 
@@ -256,9 +258,17 @@ class TangoTheme(plugin.Plugin):
             return None
 
     def GetName(self):
+        """Get the name of this theme
+        @return: string
+
+        """
         return u'Tango'
 
     def GetMenuBitmap(self, bmp_id):
+        """Get a menu bitmap
+        @param bmp_id: Id of bitmap to look for
+
+        """
         if ART.has_key(bmp_id):
             path = self.__GetArtPath(wx.ART_MENU, mime=False)
             if path is not None:
@@ -271,6 +281,11 @@ class TangoTheme(plugin.Plugin):
         return wx.NullBitmap
 
     def GetFileBitmap(self, bmp_id):
+        """Get a mime type bitmap from the theme
+        @param bmp_id: Id of filetype bitmap to look up
+        @see: L{syntax.synglob}
+
+        """
         path = self.__GetArtPath(wx.ART_MENU, mime=True)
         if path is not None and bmp_id in SyntaxIds():
             if MIME_ART.has_key(bmp_id):
@@ -286,6 +301,11 @@ class TangoTheme(plugin.Plugin):
         return wx.NullBitmap
 
     def GetToolbarBitmap(self, bmp_id):
+        """Get a toolbar bitmap
+        @param bmp_id: Id of bitmap to look for
+        @return: wx.NullBitmap or a 32x32 bitmap
+
+        """
         if ART.has_key(bmp_id):
             path = self.__GetArtPath(wx.ART_TOOLBAR, mime=False)
             if path is not None:
