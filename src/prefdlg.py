@@ -125,7 +125,6 @@ class PreferencesDialog(wx.Frame):
         """Initialises the preference dialog
         @param parent: The parent window of this window
         @param id_: The id of this window
-        @param title: The title of the dialog
 
         """
         wx.Frame.__init__(self, parent, id_, _("Preferences - Editra"), style=style)

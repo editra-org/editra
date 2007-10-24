@@ -628,7 +628,7 @@ class StyleEditor(wx.Dialog):
     def UpdateStyleSet(self, id_):
         """Updates the value of the style tag to reflect any changes
         made in the settings controls.
-        @param id: identifier of the style tag in the list
+        @param id_: identifier of the style tag in the list
 
         """
         # Get the tag that has been modified
