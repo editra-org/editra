@@ -258,7 +258,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
 
     def Abort(self):
         """Overides the UpdateService abort function
-        @postcondtion: any download actions in the L{UpdateService} are aborted
+        @postcondition: any download actions in the L{UpdateService} are aborted
 
         """
         self.LOG("[updateprog][info] Aborting action, stopping progress bar")
@@ -427,7 +427,6 @@ class UpdateProgress(wx.Gauge, UpdateService):
         """Processes the download and checks that the file has been downloaded
         properly. Then returns either True if the download was succesfull or
         False if it failed in some way.
-        @param *args: where to download file from
         @return: success status of download
         
         """
@@ -643,7 +642,7 @@ class DownloadDialog(wx.Frame):
 
     def Show(self):
         """Shows the Dialog and starts downloading the updates
-        @postcondtion: window is registered with mainloop and shown on screen
+        @postcondition: window is registered with mainloop and shown on screen
         @todo: Allow setting of download location to be set when shown
 
         """

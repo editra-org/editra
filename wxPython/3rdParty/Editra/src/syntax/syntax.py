@@ -260,7 +260,7 @@ class ExtensionRegister(dict):
     def __str__(self):
         """Converts the Register to a string that is formatted
         for output to a config file.
-        @return the register as a string
+        @return: the register as a string
 
         """
         keys = self.keys()
@@ -450,7 +450,7 @@ def SyntaxIds():
 
 def GetExtFromId(ext_id):
     """Takes a language ID and fetches an appropriate file extension string
-    @param extId: language id to get extension for
+    @param ext_id: language id to get extension for
     @return: file extension
     @rtype: string
 
