@@ -276,7 +276,7 @@ class PerspectiveManager(object):
 
     def SetPerspectiveById(self, per_id):
         """Sets the perspective using the given control id
-        @param perId: id of requested perspective
+        @param per_id: id of requested perspective
         @return: whether perspective was set or not
         @rtype: bool
 

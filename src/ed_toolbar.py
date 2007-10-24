@@ -47,7 +47,6 @@ class EdToolBar(wx.ToolBar):
     def __init__(self, parent):
         """Initializes the toolbar
         @param parent: parent window of this toolbar
-        @param toolId: toolbar id
 
         """
         sstyle = wx.TB_HORIZONTAL | wx.NO_BORDER
@@ -113,7 +112,7 @@ class EdToolBar(wx.ToolBar):
 
     def ReInit(self):
         """Re-Initializes the tools in the toolbar
-        @postcondtion: all tool icons are changed to match current theme
+        @postcondition: all tool icons are changed to match current theme
 
         """
         self._theme = Profile_Get('ICONS')

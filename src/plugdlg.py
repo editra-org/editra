@@ -890,8 +890,8 @@ class InstallPanel(wx.Panel):
         """Get Drop files and place paths in control
         @status: should also check entry points in addition to filetype
         @param files: list of file paths
-        @postcondtion: all non egg files are filtered only placing
-                       the eggs in the list.
+        @postcondition: all non egg files are filtered only placing
+                        the eggs in the list.
         """
         # Filter out any files that are not eggs
         good = [ fname for fname in files if fname.split(u'.')[-1] == u'egg' ]
