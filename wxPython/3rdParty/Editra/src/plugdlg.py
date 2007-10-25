@@ -982,15 +982,19 @@ class PluginListCtrl(wx.ListCtrl,
         pname = pi_data.GetName()
         for item in xrange(self.GetItemCount()):
             if pname < self.GetItemText(item):
-                self.InsertStringItem(item, pi_data.GetName())
-                self.SetStringItem(item, 1, pi_data.GetDescription())
-                self.SetStringItem(item, 2, pi_data.GetAuthor())
-                self.SetStringItem(item, 3, pi_data.GetVersion())
+                self.InsertStringItem(item, pi_data.GetName().strip())
+                self.SetStringItem(item, 1, pi_data.GetDescription().strip())
+                self.SetStringItem(item, 2, re.sub(r"\<+.*\>", '', 
+                                                   pi_data.GetAuthor().strip()))
+                self.SetStringItem(item, 3, pi_data.GetVersion().strip())
                 self.CheckItem(item, check)
                 break
         else:
-            self.Append((pi_data.GetName(), pi_data.GetDescription(), 
-                         pi_data.GetAuthor(), pi_data.GetVersion()))
+            self.Append((pi_data.GetName().strip(), 
+                         pi_data.GetDescription().strip(), 
+                         re.sub(r"\<+.*\>", '', pi_data.GetAuthor().strip()), 
+                         pi_data.GetVersion().strip()))
+
             self.CheckItem(self.GetItemCount()-1, check)
 
 #-----------------------------------------------------------------------------#
