@@ -120,14 +120,20 @@ def SyntaxSpec(lang_id=0):
     @param lang_id: used for selecting a specific subset of syntax specs
 
     """
-    return SYNTAX_ITEMS
+    if lang_id in [ synglob.ID_LANG_C, synglob.ID_LANG_CPP ]:
+        return SYNTAX_ITEMS
+    else:
+        return list()
 
 def Properties(lang_id=0):
     """Returns a list of Extra Properties to set
     @param lang_id: used to select a specific set of properties
 
     """
-    return [FOLD, FOLD_PRE]
+    if lang_id in [ synglob.ID_LANG_C, synglob.ID_LANG_CPP ]:
+        return [FOLD, FOLD_PRE]
+    else:
+        return list()
 
 def CommentPattern(lang_id=0):
     """Returns a list of characters used to comment a block of code
