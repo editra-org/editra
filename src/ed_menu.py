@@ -464,11 +464,13 @@ class EdMenuBar(wx.MenuBar):
         toolsmenu.Append(ed_glob.ID_STYLE_EDIT, _("Style Editor"), 
                          _("Edit the way syntax is highlighted"))
         toolsmenu.AppendSeparator()
-#         toolsmenu.Append(ed_glob.ID_MACRO_START, _("Record Macro"),
+#         macro = EdMenu()
+#         macro.Append(ed_glob.ID_MACRO_START, _("Record Macro"),
 #                          _("Start macro recording"))
-#         toolsmenu.Append(ed_glob.ID_MACRO_STOP, _("Stop Recording"),
+#         macro.Append(ed_glob.ID_MACRO_STOP, _("Stop Recording"),
 #                          _("Stop macro recording"))
-#         toolsmenu.Append(ed_glob.ID_MACRO_PLAY, "Play Macro", "Play Macro")
+#         macro.Append(ed_glob.ID_MACRO_PLAY, "Play Macro", "Play Macro")
+#         toolsmenu.AppendMenu(wx.NewId(), _("Macros"), macro, _("Macro Tools"))
         self.Append(toolsmenu, _("Tools"))
         return toolsmenu
 

@@ -13,11 +13,6 @@
 # LANGUAGE: Python							                               #
 # SUMMARY:                                                                 #
 #
-#
-# METHODS:
-#
-#
-#
 #--------------------------------------------------------------------------#
 """
 
@@ -30,6 +25,7 @@ __revision__ = "$Revision$"
 import wx
 import ed_glob
 import plugin
+import iface
 
 #--------------------------------------------------------------------------#
 
@@ -75,7 +71,9 @@ class ScriptProcessor(plugin.Plugin):
                 res = ob.ExecuteScript(script)
                 break
         return res
-    
+
+#-----------------------------------------------------------------------------#
+
 class ScriptBase(list):
     """Represents a series of commands to have the editor execute.
     This is a base class that specific script implementations should
@@ -126,6 +124,7 @@ class ScriptCache(object):
 
     """
     
+#-----------------------------------------------------------------------------#
 
 class ScriptDaemon(object):
     """A daemon like object that runs in the main application
@@ -166,3 +165,58 @@ class ScriptDaemon(object):
 
         """
         
+#-----------------------------------------------------------------------------#
+
+ID_MACRO_MAN = wx.NewId()
+class MacroManager(plugin.Plugin):
+    """Manage macros"""
+    plugin.Implements([iface.ShelfI])
+
+    def AllowMultiple(self):
+        """This method is used to check if multiple instances of this
+        item are allowed to be open at one time.
+        @return: True/False
+        @rtype: boolean
+
+        """
+        return False
+
+    def CreateItem(self, parent):
+        """This is them method used to open the item in the L{Shelf}
+        It should return an object that is a Panel or subclass of a Panel.
+        @param parent: The would be parent window of this panel
+        @return: wx.Panel
+
+        """
+
+    def GetId(self):
+        """Return the id that identifies this item (same as the menuid)
+        @return: Item ID
+        @rtype: int
+
+        """
+        return ID_MACRO_MAN
+
+    def GetMenuEntry(self, menu):
+        """Returns the menu entry for the Macro Manager
+        @param menu: The menu this entry will be added to
+        @return: wx.MenuItem
+
+        """
+        return wx.MenuItem(menu, ID_MACRO_MAN,  _("Macro Manager"),
+                           _("View and Edit Macros"))
+
+    def GetName(self):
+        """Return the name of this shelf item. This should be the
+        same as the MenuEntry's label.
+        @return: name of item
+        @rtype: string
+
+        """
+        return _(u"Macro Manager")
+
+
+class MacroPanel(wx.Panel):
+    """UI for viewing saved macros"""
+    def __init__(self, parent, *args, **kwargs):
+        """Create the panel"""
