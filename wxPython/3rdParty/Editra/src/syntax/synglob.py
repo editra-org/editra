@@ -76,6 +76,8 @@ ID_LANG_CPP  = wx.NewId()
 LANG_CPP = u'CPP'
 ID_LANG_D = wx.NewId()
 LANG_D = u'D'
+ID_LANG_DOT = wx.NewId()
+LANG_DOT = u'DOT'
 ID_LANG_JAVA = wx.NewId()
 LANG_JAVA = u'Java'
 
@@ -236,6 +238,7 @@ EXT_MAP = {
            'csh'                : LANG_CSH,
            'css'                : LANG_CSS,
            'd'                  : LANG_D,
+           'dot'                : LANG_DOT,
            'patch diff'         : LANG_DIFF,
            'e'                  : LANG_EIFFEL,
            'erl'                : LANG_ERLANG,
@@ -292,6 +295,7 @@ LANG_MAP = {LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
             LANG_CSS    : (ID_LANG_CSS,    stc.STC_LEX_CSS,      'css'),
             LANG_D      : (ID_LANG_D,      stc.STC_LEX_CPP,      'd'),
             LANG_DIFF   : (ID_LANG_DIFF,   stc.STC_LEX_DIFF,     'diff'),
+            LANG_DOT    : (ID_LANG_DOT,    stc.STC_LEX_CPP,      'dot'),
             LANG_EIFFEL : (ID_LANG_EIFFEL, stc.STC_LEX_EIFFEL,   'eiffel'),
             LANG_ERLANG : (ID_LANG_ERLANG, stc.STC_LEX_ERLANG,   'erlang'),
             LANG_ESS    : (ID_LANG_ESS,    stc.STC_LEX_CSS,      'editra_ss'),
@@ -344,12 +348,12 @@ ID_MAP = {ID_LANG_68K    : LANG_68K,    ID_LANG_ADA   : LANG_ADA,
           ID_LANG_COLDFUSION : LANG_COLDFUSION,
           ID_LANG_CPP    : LANG_CPP,    ID_LANG_CSH   : LANG_CSH, 
           ID_LANG_CSS    : LANG_CSS,    ID_LANG_D     : LANG_D,
-          ID_LANG_DIFF   : LANG_DIFF,   ID_LANG_EIFFEL : LANG_EIFFEL, 
-          ID_LANG_ERLANG : LANG_ERLANG, ID_LANG_ESS    : LANG_ESS,
-          ID_LANG_F77    : LANG_F77,    ID_LANG_F95   : LANG_F95,
-          ID_LANG_FLAGSHIP : LANG_FLAGSHIP, ID_LANG_HASKELL : LANG_HASKELL,
-          ID_LANG_HTML   : LANG_HTML,   ID_LANG_INNO : LANG_INNO,
-          ID_LANG_JAVA  : LANG_JAVA, 
+          ID_LANG_DIFF   : LANG_DIFF,   ID_LANG_DOT    : LANG_DOT,
+          ID_LANG_EIFFEL : LANG_EIFFEL, ID_LANG_ERLANG : LANG_ERLANG,
+          ID_LANG_ESS    : LANG_ESS,    ID_LANG_F77    : LANG_F77,
+          ID_LANG_F95   : LANG_F95,     ID_LANG_FLAGSHIP : LANG_FLAGSHIP,
+          ID_LANG_HASKELL : LANG_HASKELL, ID_LANG_HTML   : LANG_HTML,
+          ID_LANG_INNO : LANG_INNO,     ID_LANG_JAVA  : LANG_JAVA,
           ID_LANG_JS     : LANG_JS,     ID_LANG_KSH   : LANG_KSH,
           ID_LANG_LATEX  : LANG_LATEX,  ID_LANG_LISP  : LANG_LISP, 
           ID_LANG_LOUT   : LANG_LOUT,   ID_LANG_LUA   : LANG_LUA,
