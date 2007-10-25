@@ -885,7 +885,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if set_ext != u'':
             ext = set_ext.lower()
         else:
-            ext = util.GetExtension(self._finfo['filename']).lower()
+            fname = util.GetFileName(self._finfo['filename'])
+            ext = util.GetExtension(fname).lower()
         self.ClearDocumentStyle()
 
         # Configure Lexer from File Extension
