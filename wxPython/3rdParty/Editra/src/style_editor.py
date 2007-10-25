@@ -411,7 +411,7 @@ class StyleEditor(wx.Dialog):
 
     def GenerateStyleSheet(self):
         """Generates a style sheet from the dialogs style data
-        @return: The dictionary of L{StyleItems} in self.styles_new transformed
+        @return: The dictionary of L{StyleItem} in self.styles_new transformed
                  into a string that is in Editra Style Sheet format.
 
         """

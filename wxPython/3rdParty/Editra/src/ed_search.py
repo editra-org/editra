@@ -276,7 +276,7 @@ class TextFinder(object):
 class EdSearchCtrl(wx.SearchCtrl):
     """Creates a simple search control for use in the toolbar
     or a statusbar and the such. Supports incremental search,
-    and uses L{FindService} to do the actual searching of the
+    and uses L{TextFinder} to do the actual searching of the
     document.
 
     """

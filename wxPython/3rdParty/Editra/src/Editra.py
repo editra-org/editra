@@ -161,7 +161,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
     def GetPluginManager(self):
         """Returns the plugin manager used by this application
         @return: Apps plugin manager
-        @see: L{plugin.py}
+        @see: L{plugin}
 
         """
         return self._pluginmgr

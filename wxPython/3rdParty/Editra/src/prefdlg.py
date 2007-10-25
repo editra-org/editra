@@ -338,7 +338,7 @@ class GeneralPanel(PrefPanelBase):
 
     def _DoLayout(self):
         """Add the controls and do the layout
-        @note: Controls are layed out using L{wx.GridBagSizer}
+        @note: do not call this after __init__
 
         """
         # Startup Section
@@ -469,7 +469,7 @@ class DocumentPanel(PrefPanelBase):
 
     def _DoLayout(self):
         """Do the layout of the panel
-        @note: Controls are layed out using L{wx.GridBagSizer}
+        @note: Do not call this after __init__
 
         """
         sizer = wx.GridBagSizer()
@@ -507,7 +507,7 @@ class DocGenPanel(wx.Panel):
 
     def _DoLayout(self):
         """Layout the controls
-        @note: Controls are layed out using L{wx.GridBagSizer}
+        @note: Do not call this after __init__
 
         """
         # Format Section
@@ -635,7 +635,7 @@ class DocCodePanel(wx.Panel):
 
     def _DoLayout(self):
         """Layout the page
-        @note: Controls are layed out using L{wx.GridBagSizer}
+        @note: Do not call this after __init__
 
         """
         # Visual Helpers Section
@@ -743,12 +743,11 @@ class DocSyntaxPanel(wx.Panel):
 
     def _DoLayout(self):
         """Layout all the controls
-        @note: Controls are layed out using L{wx.GridBagSizer}
+        @note: Do not call this after __init__
 
         """
         sizer = wx.BoxSizer(wx.VERTICAL)
         
-
         # Syntax Settings
         syn_cb = wx.CheckBox(self, ed_glob.ID_SYNTAX, _("Syntax Highlighting"))
         syn_cb.SetValue(Profile_Get('SYNTAX'))
@@ -846,7 +845,7 @@ class AppearancePanel(PrefPanelBase):
 
     def _DoLayout(self):
         """Add and layout the widgets
-        @note: Controls are layed out using L{wx.GridBagSizer}
+        @note: Do not call this after __init__
 
         """
         # Icons Section
@@ -1010,7 +1009,7 @@ class UpdatePanel(PrefPanelBase):
 
     def _DoLayout(self):
         """Do the layout of the panel
-        @note: Controls are layed out using L{wx.GridBagSizer}
+        @note: Do not call this after __init__
 
         """
         # Status text and bar

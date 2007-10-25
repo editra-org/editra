@@ -15,9 +15,9 @@
 # SUMMARY:                                                                 #
 # Provides a system for managing styles in the text control by parsing and #
 # managing data from Editra Style Sheets and translating it to be usable   #
-# with Editra's Styled Text Ctrl. By default style sheets are only         #
-# loaded and parsed once per program execution to maximize performance and #
-# file loading times.                                                      #
+# with Editra's StyledTextCtrl. By default style sheets are only loaded    #
+# and parsed once per program execution to maximize performance and file   #
+# loading times.                                                           #
 #                                                                          #
 #--------------------------------------------------------------------------#
 """
@@ -51,10 +51,10 @@ class StyleItem(object):
                        face=wx.EmptyString, size=wx.EmptyString):
         """Initiliazes the Style Object.
 
-        @param fore: Specifies the forground color (hex string)
-        @param face: Specifies the font face (string face name)
-        @param back: Specifies the background color (hex string)
-        @param size: Specifies font point size (int/formatted string)
+        @keyword fore: Specifies the forground color (hex string)
+        @keyword face: Specifies the font face (string face name)
+        @keyword back: Specifies the background color (hex string)
+        @keyword size: Specifies font point size (int/formatted string)
 
         SPECIFICATION:
           DATA FORMATS:
@@ -171,7 +171,7 @@ class StyleItem(object):
 
     def SetFace(self, face, ex=wx.EmptyString):
         """Sets the Face Value
-        @param back: font name string
+        @param face: font name string
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
@@ -182,7 +182,7 @@ class StyleItem(object):
 
     def SetFore(self, fore, ex=wx.EmptyString):
         """Sets the Foreground Value
-        @param back: hex color string
+        @param fore: hex color string
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
@@ -193,8 +193,8 @@ class StyleItem(object):
 
     def SetSize(self, size, ex=wx.EmptyString):
         """Sets the Font Size Value
-        @param back: font point size
-        @type back: string or int
+        @param size: font point size
+        @type size: string or int
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
@@ -572,7 +572,7 @@ class StyleMgr(object):
         # Validate leaf values and format into stylestring
         for style_def in style_dict:
             if not style_def[0][0].isalpha():
-                self.LOG("[styles] [syntax_error] The style def %s is not a "
+                self.LOG("[styles][syntax_error] The style def %s is not a "
                          "valid name" % style_def[0])
                 if strict:
                     raise SyntaxError, "%s is an invalid name" % style_def[0]
@@ -759,7 +759,7 @@ def DefaultStyleDictionary():
 def MergeFonts(style_dict, font_dict):
     """Does any string substitution that the style dictionary
     may need to have fonts and their sizes set.
-    @param style_dict: dictionary of L{StyleItems}
+    @param style_dict: dictionary of L{StyleItem}
     @param font_dict: dictionary of font data
     @return: style dictionary with all font format strings substituded in
 

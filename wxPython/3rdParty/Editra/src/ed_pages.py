@@ -577,6 +577,7 @@ class EdPages(FNB.FlatNotebook):
 #---- Utility Function Definitions ----#
 def PromptToReSave(win, cfile):
     """Show a dialog prompting to resave the current file
+    @param win: Window to prompt dialog on top of
     @param cfile: the file in question
 
     """
@@ -596,6 +597,7 @@ def PromptToReSave(win, cfile):
 
 def AskToReload(win, cfile):
     """Show a dialog asking if the file should be reloaded
+    @param win: Window to prompt dialog on top of
     @param cfile: the file to prompt for a reload of
 
     """
