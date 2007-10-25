@@ -63,7 +63,7 @@ def DEBUGP(statement, mode="std"):
 
     # Format Statement
     statement = unicode(statement)
-    s_lst = statement.split(u"\n")
+    s_lst = [msg.strip() for msg in statement.split(u"\n") if len(msg.strip())]
     
     if mode == "std":
         for line in s_lst:
