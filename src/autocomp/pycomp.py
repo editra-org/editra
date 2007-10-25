@@ -14,8 +14,6 @@
 # SUMMARY:                                                                 #
 #    Provides completion and calltip support for python documents          #
 #                                                                          #
-# METHODS:
-#
 #--------------------------------------------------------------------------#
 """
 
@@ -99,11 +97,13 @@ class Completer(object):
             text = self._buffer.GetLine(line)
             if text not in self._collector and 'import ' in text:
                 self._collector.append(text)
+
         tmp = list()
         for item in self._collector:
             pieces = item.split()
             if pieces[0] not in "import from":
                 tmp.append(item)
+
         for item in tmp:
             self._collector.remove(item)
         return
@@ -211,6 +211,7 @@ class Completer(object):
         dirname, filename = os.path.split(self._buffer.GetFileName())
         if dirname not in self._syspath:
             self._syspath.insert(0, dirname)
+
         syspath = sys.path
         sys.path = self._syspath
         text = text.replace('\r\n', '\n')
@@ -223,6 +224,7 @@ class Completer(object):
                 code = compile(text, name, 'exec')
             except SyntaxError:
                 return False
+
             try:
                 exec code in newspace
             except Exception:

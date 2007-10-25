@@ -58,7 +58,7 @@ class GeneratorI(plugin.Interface):
         an associated file extention to use for setting highlighting
         if available and the second item is the string of the new document.
         @param stc: reference to an an stc defined in ed_stc.py
-        @see: L{ed_stc.py}
+        @see: L{ed_stc}
 
         """
         pass
@@ -329,7 +329,7 @@ class CssItem(object):
         @param class_tag: StyleItem tag name
         @param style_item: style item to convert to css
         @type style_item: ed_style.StyleItem
-        @see: L{ed_style.py}
+        @see: L{ed_style}
 
         """
         object.__init__(self)

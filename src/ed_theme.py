@@ -46,8 +46,8 @@ class ThemeI(plugin.Interface):
     are descriptive of the object they represent, for reference however
     see the implementation of the two main themes (Tango and Nuovo).
 
-    @see: L{ed_glob.py}
-    @see: L{syntax.synglob.py}
+    @see: L{ed_glob}
+    @see: L{syntax.synglob}
 
     """
     def GetName(self):
@@ -136,7 +136,7 @@ class BitmapProvider(plugin.Plugin):
 
         @param bmp_id: id of bitmap to lookup
         @param client: wxART_MENU, ART_MIME, wxART_TOOLBAR
-        @see: L{ed_glob.py}
+        @see: L{ed_glob}
 
         """
         prov = self.__GetCurrentProvider()

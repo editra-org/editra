@@ -63,7 +63,7 @@ def GetLocaleDict(loc_list, opt=OPT_NO_OP):
     the key. Supplying the Option OPT_DESCRIPT will return a dictionary
     of language id's with languages description as the key.
     @param loc_list: list of locals
-    @param opt: option for configuring return data
+    @keyword opt: option for configuring return data
     @return: dict of locales mapped to wx.LANGUAGE_*** values
 
     """

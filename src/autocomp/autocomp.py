@@ -20,10 +20,6 @@
 # interface into the various language specific autocomplete services, and  #
 # makes the calls to the other support objects/functions in this library.  #
 #                                                                          #
-# METHODS:                                                                 #
-#
-#
-#
 #--------------------------------------------------------------------------#
 """
 
@@ -63,7 +59,7 @@ class AutoCompService(object):
         else:
             return list()
 
-    def GetAutoCompList(self, command, namespace = None):
+    def GetAutoCompList(self, command, namespace=None):
         """Retrieves the sorted autocomplete list for a command
         @param command: command string to do lookup on
         @keyword namespace: namespace to use
@@ -85,7 +81,7 @@ class AutoCompService(object):
         else:
             return u''
 
-    def GetCallTip(self, command, namespace = None):
+    def GetCallTip(self, command, namespace=None):
         """Returns the calltip string for a command
         @param command: command to get callip for
         @keyword namespace: namespace to do lookup in
@@ -127,14 +123,13 @@ class AutoCompService(object):
         else:
             pass
 
-    def UpdateNamespace(self, opt = None):
+    def UpdateNamespace(self, opt=None):
         """Tells the completer to update its namespace
         @keyword opt: specific option to pass to completer for updating the
                       namespace.
 
         """
-        if self._completer != None and hasattr(self._completer, \
-                                               'UpdateNamespace'):
+        if hasattr(self._completer, 'UpdateNamespace'):
             if opt == None:
                 self._completer.UpdateNamespace()
             else:

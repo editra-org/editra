@@ -416,7 +416,7 @@ class PluginManager(object):
         """Initializes the plugins that are contained in the given
         enviroment. After calling this the list of available plugins
         can be obtained by calling GetAvailPlugins.
-        @note: plugins must emit the L{ENTRY_POINT} defined in this file
+        @note: plugins must emit the ENTRY_POINT defined in this file
         @postcondition: all plugins in the environment are initialized
 
         """
