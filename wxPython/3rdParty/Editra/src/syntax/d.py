@@ -24,8 +24,10 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
+#-----------------------------------------------------------------------------#
 import synglob
 #-----------------------------------------------------------------------------#
+
 #---- Keyword Definitions ----#
 D_KEYWORDS = (0, "abstract alias align asm assert auto body break case cast "
                  "catch cent class continue debug default delegate delete "

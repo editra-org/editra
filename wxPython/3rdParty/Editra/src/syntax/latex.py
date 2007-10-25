@@ -95,14 +95,21 @@ def Properties(lang_id=0):
     @param lang_id: used to select a specific set of properties
 
     """
-    return list()
+    if lang_id == synglob.ID_LANG_TEX:
+        return list()
+    else:
+        return list()
 
 def CommentPattern(lang_id=0):
     """Returns a list of characters used to comment a block of code
     @param lang_id: used to select a specific subset of comment pattern(s)
 
     """
-    return [u'%']
+    if lang_id == synglob.ID_LANG_TEX:
+        return [u'%']
+    else:
+        return list()
+
 #---- End Required Module Functions ----#
 
 #---- Syntax Modules Internal Functions ----#
@@ -114,5 +121,3 @@ def KeywordString(option=0):
     return None
 
 #---- End Syntax Modules Internal Functions ----#
-
-#-----------------------------------------------------------------------------#
