@@ -14,10 +14,11 @@
 #                                                                             #
 # SUMMARY:                                                                    #
 #  This is the main component of the editor that manages all the information  #
-# of the on disk file that it represents in memory. It works with the style   #
-# manager and syntax manager to provide an editing pane that auto detects and #
-# configures itself for type of file that is in buffer to do highlighting and #
-# other language specific options such as commenting code.                    #
+# of the on disk file that it represents in memory. It works with the         #
+# L{ed_style.StyleManager} and L{syntax.syntax.SyntaxManager} to provide an   #
+# editing pane that auto detects and configures itself for type of file that  #
+# is in buffer to do highlighting and other language specific options such as #
+# commenting code.                                                            #
 #                                                                             #
 #-----------------------------------------------------------------------------#
 """
@@ -150,7 +151,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         ### Folder Marker Styles
         self.DefineMarkers()
 
-#         self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
+        #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
         self.Bind(wx.EVT_CHAR, self.OnChar)
@@ -170,34 +171,39 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @status: in limbo
 
         """
-        return
-#         if not len(self._macro):
-#             return
+        if not len(self._macro):
+            return
 
-#         # Get command mappings
-#         cmds = list()
-#         for x in dir(wx.stc):
-#             if x.startswith('STC_CMD_'):
-#                 cmds.append(x)
-#         cmdvals = [getattr(wx.stc, x) for x in cmds]
-#         cmds = [x.replace('STC_CMD_', u'') for x in cmds]
-#         # Get the commands names used in the macro
-#         named = list()
-#         for x in self._macro:
-#             if x[0] in cmdvals:
-#                 named.append(cmds[cmdvals.index(x[0])])
-#         code = list()
-#         stc_dict = wx.stc.StyledTextCtrl.__dict__
-#         for cmd in named:
-#             for attr in stc_dict:
-#                 if attr.upper() == cmd:
-#                     code.append(attr)
-#                     break
-#         code_txt = u''
-#         for fun in code:
-#             code_txt += "    self.%s()\n" % fun
-#         code_txt += "    print \"Executed\""    #TEST
-#         code_txt = "def macro(self):\n" + code_txt
+        # Get command mappings
+        cmds = list()
+        for x in dir(wx.stc):
+            if x.startswith('STC_CMD_'):
+                cmds.append(x)
+        cmdvals = [getattr(wx.stc, x) for x in cmds]
+        cmds = [x.replace('STC_CMD_', u'') for x in cmds]
+
+        # Get the commands names used in the macro
+        named = list()
+        for x in self._macro:
+            if x[0] in cmdvals:
+                named.append(cmds[cmdvals.index(x[0])])
+        code = list()
+
+        stc_dict = wx.stc.StyledTextCtrl.__dict__
+        for cmd in named:
+            for attr in stc_dict:
+                if attr.upper() == cmd:
+                    code.append(attr)
+                    break
+
+        code_txt = u''
+        for fun in code:
+            code_txt += "    ctrl.%s()\n" % fun
+        code_txt += "    print \"Executed\""    #TEST
+        code_txt = "def macro(ctrl):\n" + code_txt
+        self.GetParent().NewPage()
+        self.GetParent().GetCurrentPage().SetText(code_txt)
+        self.GetParent().GetCurrentPage().FindLexer('py')
 #         code = compile(code_txt, self.__module__, 'exec')
 #         exec code in self.__dict__ # Inject new code into this namespace
 
@@ -1080,7 +1086,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def GetEOLChar(self):
         """Gets the eol character used in document
-        @returns the character used for eol in this document
+        @return: the character used for eol in this document
 
         """
         m_id = self.GetEOLModeId()
@@ -1956,19 +1962,19 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         try:
             synspec = syn_data[syntax.SYNSPEC]
         except KeyError:
-            self.LOG("[stc] [exception] Failed to get Syntax Specifications")
+            self.LOG("[stc][err] Failed to get Syntax Specifications")
             synspec = []
 
         try:
             props = syn_data[syntax.PROPERTIES]
         except KeyError:
-            self.LOG("[stc] [exception] No Extra Properties to Set")
+            self.LOG("[stc][err] No Extra Properties to Set")
             props = []
 
         try:
             comment = syn_data[syntax.COMMENT]
         except KeyError:
-            self.LOG("[stc] [exception] No Comment Pattern to set")
+            self.LOG("[stc][err] No Comment Pattern to set")
             comment = []
 
         # Set Lexer
@@ -2085,7 +2091,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def UpdateBaseStyles(self):
         """Updates the base styles of editor to the current settings
-        @postcondtion: base style info is updated
+        @postcondition: base style info is updated
 
         """
         self.StyleDefault()
@@ -2112,7 +2118,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def UpdateAllStyles(self, spec_style=None):
         """Refreshes all the styles and attributes of the control
         @param spec_style: style scheme name
-        @postcondtion: style scheme is set to specified style
+        @postcondition: style scheme is set to specified style
 
         """
         if spec_style != self.style_set:
