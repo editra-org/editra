@@ -1,0 +1,24 @@
+include *.py *.cfg
+include AUTHORS
+include CHANGELOG
+include COPYING
+include Editra
+include FAQ
+include INSTALL
+include MANIFEST
+include NEWS
+include README
+include THANKS
+include TODO
+include docs/*.txt
+include plugins/*.egg
+include profiles/.loader2
+include profiles/default.ppb
+recursive-include include *.h
+recursive-include locale *.mo
+recursive-include pixmaps *.png [A-Z]
+recursive-include scripts *.sh *.po *.py
+recursive-include src *.py [A-Z]
+recursive-include styles *.ess
+recursive-include templates *
+recursive-include tests *
