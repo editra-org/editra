@@ -567,18 +567,14 @@ class StyleEditor(wx.Dialog):
         @param file_lbl: name of file to open in test data directory
 
         """
-        fname = file_lbl.replace(u" ", u"_").lower()
-        fname = fname.replace(u"/", u"_")
-        if fname != u"makefile":
-            try:
-                fname = glob.glob(ed_glob.CONFIG['TEST_DIR'] + fname + ".*")[0]
-            except IndexError:
-                self.LOG('[style_editor][err] File %s Does not exist' % fname)
-                return False
-        else:
-            fname = ed_glob.CONFIG['TEST_DIR'] + fname
+        fname = file_lbl.replace(u" ", u"_").replace(u"/", u"_").lower()
+        try:
+            fname = glob.glob(ed_glob.CONFIG['TEST_DIR'] + fname + ".*")[0]
+        except IndexError:
+            self.LOG('[style_editor][err] File %s Does not exist' % fname)
+            return False
 
-        if fname == '' or fname == None:
+        if not fname:
             return False
 
         self.preview.SetFileName(fname)
