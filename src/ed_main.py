@@ -863,12 +863,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type evt: wxMenuEvent
 
         """
-        if not self.IsActive():
+        e_id = evt.GetId()
+        if not self.IsActive() and e_id != ID_KWHELPER:
             return
 
-        e_id = evt.GetId()
         ctrl = self.nb.GetCurrentCtrl()
-        active_only = [ ID_KWHELPER, ID_ZOOM_IN, ID_ZOOM_OUT, ID_ZOOM_NORMAL,
+        active_only = [ ID_ZOOM_IN, ID_ZOOM_OUT, ID_ZOOM_NORMAL,
                         ID_JOIN_LINES, ID_CUT_LINE, ID_COPY_LINE, ID_INDENT, 
                         ID_UNINDENT, ID_TRANSPOSE, ID_COMMENT, ID_UNCOMMENT,
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY, 
@@ -886,7 +886,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                          ID_SHOW_LN,  ID_AUTOINDENT, ID_TAB_TO_SPACE, 
                          ID_SPACE_TO_TAB, ID_TRIM_WS, ID_SHOW_EDGE, 
                          ID_MACRO_START, ID_MACRO_STOP, ID_MACRO_PLAY, 
-                         ID_TO_LOWER, ID_TO_UPPER
+                         ID_TO_LOWER, ID_TO_UPPER, ID_KWHELPER
                          ])
         menu_ids.extend(active_only)
 
