@@ -230,6 +230,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         e_id = -1
         if evt:
             e_id = evt.GetId()
+
         if e_id == ed_glob.ID_EXIT:
             # First loop is to ensure current top window is
             # closed first
@@ -270,6 +271,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         if caller:
             pos = caller.GetPosition()
             frame.SetPosition((pos.x + 22, pos.y + 22))
+
         self.RegisterWindow(repr(frame), frame, True)
         self.SetTopWindow(frame)
         if isinstance(fname, basestring) and fname != u'':
@@ -324,6 +326,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             if not len(self._windows):
                 self._log("[app][info] No more open windows shutting down")
                 self.Exit()
+
             if name == repr(cur_top):
                 found = False
                 for key in self._windows:
@@ -335,6 +338,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                             continue
                         found = True
                         break
+
                 if not found:
                     self._log("[app][info] No more top windows exiting app")
                     self.UnLock()
@@ -402,6 +406,7 @@ def InitConfig():
     else:
         util.CreateConfigDir()
 
+    # Set debug mode
     if 'DEBUG' in Profile_Get('MODE'):
         ed_glob.DEBUG = True
 
@@ -431,10 +436,9 @@ def Main():
               an instance of Editra and starts the main loop.
 
     """
-    shortopts = "dhv"
-    longopts = ['debug', 'help', 'oldPath=', 'version']
     try:
-        opts, args = getopt.getopt(sys.argv[1:], shortopts, longopts)
+        opts, args = getopt.getopt(sys.argv[1:], "dhv", 
+                                   ['debug', 'help', 'oldPath=', 'version'])
     except getopt.GetoptError, msg:
         dev_tool.DEBUGP("[main][err] %s" % str(msg))
         opts = list()
@@ -467,6 +471,7 @@ def Main():
             print "%s - v%s - Developers Editor" % (ed_glob.PROG_NAME, \
                                                     ed_glob.VERSION)
             exit(0)
+
         if True in [x[0] in ['-d', '--debug'] for x in opts]:
             ed_glob.DEBUG = True
 
@@ -475,14 +480,10 @@ def Main():
 
     # 1. Create Application
     dev_tool.DEBUGP("[main_info] Initializing Application...")
-    if Profile_Get('MODE') == u"GUI_DEBUG":
-        editra_app = Editra(True)
-    else:
-        editra_app = Editra(False)
+    editra_app = Editra(Profile_Get('MODE') == u"GUI_DEBUG")
 
     # 2. Initialize the Language Settings
-    langid = ed_i18n.GetLangId(Profile_Get('LANG'))
-    the_locale = wx.Locale(langid)
+    the_locale = wx.Locale(ed_i18n.GetLangId(Profile_Get('LANG')))
     the_locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
     the_locale.AddCatalog(ed_glob.PROG_NAME)
     language = gettext.translation(ed_glob.PROG_NAME, 
@@ -526,8 +527,7 @@ def Main():
 
     for arg in args:
         try:
-            if not os.path.isabs(arg):
-                arg = os.path.abspath(arg)
+            arg = os.path.abspath(arg)
             frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, util.DecodeString(arg))
         except IndexError:
             dev_tool.DEBUGP("[main][err] IndexError on commandline args")
