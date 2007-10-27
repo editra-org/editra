@@ -78,6 +78,8 @@ ID_LANG_D = wx.NewId()
 LANG_D = u'D'
 ID_LANG_DOT = wx.NewId()
 LANG_DOT = u'DOT'
+ID_LANG_EDJE = wx.NewId()
+LANG_EDJE = u'Edje'
 ID_LANG_JAVA = wx.NewId()
 LANG_JAVA = u'Java'
 
@@ -240,6 +242,7 @@ EXT_MAP = {
            'd'                  : LANG_D,
            'dot'                : LANG_DOT,
            'patch diff'         : LANG_DIFF,
+           'edc'                : LANG_EDJE,
            'e'                  : LANG_EIFFEL,
            'erl'                : LANG_ERLANG,
            'ess'                : LANG_ESS,
@@ -296,6 +299,7 @@ LANG_MAP = {LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
             LANG_D      : (ID_LANG_D,      stc.STC_LEX_CPP,      'd'),
             LANG_DIFF   : (ID_LANG_DIFF,   stc.STC_LEX_DIFF,     'diff'),
             LANG_DOT    : (ID_LANG_DOT,    stc.STC_LEX_CPP,      'dot'),
+            LANG_EDJE   : (ID_LANG_EDJE,   stc.STC_LEX_CPP,      'edje'),
             LANG_EIFFEL : (ID_LANG_EIFFEL, stc.STC_LEX_EIFFEL,   'eiffel'),
             LANG_ERLANG : (ID_LANG_ERLANG, stc.STC_LEX_ERLANG,   'erlang'),
             LANG_ESS    : (ID_LANG_ESS,    stc.STC_LEX_CSS,      'editra_ss'),
@@ -349,6 +353,7 @@ ID_MAP = {ID_LANG_68K    : LANG_68K,    ID_LANG_ADA   : LANG_ADA,
           ID_LANG_CPP    : LANG_CPP,    ID_LANG_CSH   : LANG_CSH, 
           ID_LANG_CSS    : LANG_CSS,    ID_LANG_D     : LANG_D,
           ID_LANG_DIFF   : LANG_DIFF,   ID_LANG_DOT    : LANG_DOT,
+          ID_LANG_EDJE   : LANG_EDJE,
           ID_LANG_EIFFEL : LANG_EIFFEL, ID_LANG_ERLANG : LANG_ERLANG,
           ID_LANG_ESS    : LANG_ESS,    ID_LANG_F77    : LANG_F77,
           ID_LANG_F95   : LANG_F95,     ID_LANG_FLAGSHIP : LANG_FLAGSHIP,
