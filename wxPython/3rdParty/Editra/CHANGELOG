@@ -35,7 +35,7 @@ NEW: [features/improvements]
 installed through the plugin manager using python eggs.
 +New icon theme based on Humility icons available through plugin manager.
 +Improved highlighting for python (decorators are now supported)
-+Support for highlighting (Inno Setup Scripts, Verilog)
++Support for highlighting (Edje EDC files, Inno Setup Scripts, Verilog)
 +Support for highlighting DOT files (contributed by Rob McMullen)
 
 BUG FIXES:
