@@ -109,6 +109,10 @@ LANG_F77 = u'Fortran 77'
 ID_LANG_F95 = wx.NewId()
 LANG_F95 = u'Fortran 95'
 
+# Use LEX_GUI4CLI
+ID_LANG_GUI4CLI = wx.NewId()
+LANG_GUI4CLI = u'Gui4Cli'
+
 # Use LEX_HASKELL
 ID_LANG_HASKELL = wx.NewId()
 LANG_HASKELL = u'Haskell'
@@ -249,6 +253,7 @@ EXT_MAP = {
            'prg'                : LANG_FLAGSHIP,
            'f for'              : LANG_F77,
            'f90 f95 f2k fpp'    : LANG_F95,
+           'gc gui'             : LANG_GUI4CLI,
            'hs'                 : LANG_HASKELL,
            'htm html shtm shtml xhtml' : LANG_HTML,
            'iss'                : LANG_INNO,
@@ -306,6 +311,7 @@ LANG_MAP = {LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
             LANG_F77    : (ID_LANG_F77,    stc.STC_LEX_F77,      'fortran'),
             LANG_F95    : (ID_LANG_F95,    stc.STC_LEX_FORTRAN,  'fortran'),
             LANG_FLAGSHIP: (ID_LANG_FLAGSHIP, stc.STC_LEX_FLAGSHIP, 'flagship'),
+            LANG_GUI4CLI : (ID_LANG_GUI4CLI, stc.STC_LEX_GUI4CLI, 'gui4cli'),
             LANG_HASKELL : (ID_LANG_HASKELL, stc.STC_LEX_HASKELL, 'haskell'),
             LANG_HTML   : (ID_LANG_HTML,   stc.STC_LEX_HTML,     'html'),
             LANG_INNO   : (ID_LANG_INNO,   stc.STC_LEX_INNOSETUP, 'inno'),
@@ -353,10 +359,10 @@ ID_MAP = {ID_LANG_68K    : LANG_68K,    ID_LANG_ADA   : LANG_ADA,
           ID_LANG_CPP    : LANG_CPP,    ID_LANG_CSH   : LANG_CSH, 
           ID_LANG_CSS    : LANG_CSS,    ID_LANG_D     : LANG_D,
           ID_LANG_DIFF   : LANG_DIFF,   ID_LANG_DOT    : LANG_DOT,
-          ID_LANG_EDJE   : LANG_EDJE,
-          ID_LANG_EIFFEL : LANG_EIFFEL, ID_LANG_ERLANG : LANG_ERLANG,
-          ID_LANG_ESS    : LANG_ESS,    ID_LANG_F77    : LANG_F77,
-          ID_LANG_F95   : LANG_F95,     ID_LANG_FLAGSHIP : LANG_FLAGSHIP,
+          ID_LANG_EDJE   : LANG_EDJE,   ID_LANG_EIFFEL : LANG_EIFFEL,
+          ID_LANG_ERLANG : LANG_ERLANG, ID_LANG_ESS    : LANG_ESS,
+          ID_LANG_F77    : LANG_F77,    ID_LANG_F95   : LANG_F95,
+          ID_LANG_FLAGSHIP : LANG_FLAGSHIP, ID_LANG_GUI4CLI : LANG_GUI4CLI,
           ID_LANG_HASKELL : LANG_HASKELL, ID_LANG_HTML   : LANG_HTML,
           ID_LANG_INNO : LANG_INNO,     ID_LANG_JAVA  : LANG_JAVA,
           ID_LANG_JS     : LANG_JS,     ID_LANG_KSH   : LANG_KSH,
