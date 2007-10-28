@@ -136,6 +136,10 @@ ID_LANG_SGML = wx.NewId()
 ID_LANG_INNO = wx.NewId()
 LANG_INNO = u'Inno Setup Script'
 
+# Use LEX_KIX
+ID_LANG_KIX = wx.NewId()
+LANG_KIX = u'Kix'
+
 # Use LEX_LISP
 ID_LANG_LISP = wx.NewId()
 LANG_LISP = u'Lisp'
@@ -259,6 +263,7 @@ EXT_MAP = {
            'iss'                : LANG_INNO,
            'java'               : LANG_JAVA,
            'js'                 : LANG_JS,
+           'kix'                : LANG_KIX,
            'ksh'                : LANG_KSH,
            'aux tex sty'        : LANG_LATEX,
            'cl lisp lsp'        : LANG_LISP,
@@ -316,7 +321,8 @@ LANG_MAP = {LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
             LANG_HTML   : (ID_LANG_HTML,   stc.STC_LEX_HTML,     'html'),
             LANG_INNO   : (ID_LANG_INNO,   stc.STC_LEX_INNOSETUP, 'inno'),
             LANG_JAVA   : (ID_LANG_JAVA,   stc.STC_LEX_CPP,      'java'),
-            LANG_JS     : (ID_LANG_JS,     stc.STC_LEX_CPP,      'javascript'), 
+            LANG_JS     : (ID_LANG_JS,     stc.STC_LEX_CPP,      'javascript'),
+            LANG_KIX    : (ID_LANG_KIX,    stc.STC_LEX_KIX,      'kix'),
             LANG_KSH    : (ID_LANG_KSH,    stc.STC_LEX_BASH,     'sh'),
             LANG_LATEX  : (ID_LANG_LATEX,  stc.STC_LEX_LATEX,    'latex'),
             LANG_LISP   : (ID_LANG_LISP,   stc.STC_LEX_LISP,     'lisp'),
@@ -364,8 +370,9 @@ ID_MAP = {ID_LANG_68K    : LANG_68K,    ID_LANG_ADA   : LANG_ADA,
           ID_LANG_F77    : LANG_F77,    ID_LANG_F95   : LANG_F95,
           ID_LANG_FLAGSHIP : LANG_FLAGSHIP, ID_LANG_GUI4CLI : LANG_GUI4CLI,
           ID_LANG_HASKELL : LANG_HASKELL, ID_LANG_HTML   : LANG_HTML,
-          ID_LANG_INNO : LANG_INNO,     ID_LANG_JAVA  : LANG_JAVA,
-          ID_LANG_JS     : LANG_JS,     ID_LANG_KSH   : LANG_KSH,
+          ID_LANG_INNO   : LANG_INNO,   ID_LANG_JAVA  : LANG_JAVA,
+          ID_LANG_JS     : LANG_JS,     ID_LANG_KIX   : LANG_KIX,
+          ID_LANG_KSH    : LANG_KSH,
           ID_LANG_LATEX  : LANG_LATEX,  ID_LANG_LISP  : LANG_LISP, 
           ID_LANG_LOUT   : LANG_LOUT,   ID_LANG_LUA   : LANG_LUA,
           ID_LANG_MAKE   : LANG_MAKE,   ID_LANG_MASM  : LANG_MASM,
