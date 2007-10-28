@@ -724,7 +724,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def ShowKeywordHelp(self):
         """Displays the keyword helper
-        @postcondition: shows keyword helper list control
+        @postcondition: keyword helper list is shown if it currently is not
+                        otherwise it is hidden.
 
         """
         if self.AutoCompActive():
@@ -2112,6 +2113,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         calltip = self.GetItemByName('calltip')
         self.CallTipSetBackground(calltip.GetBack())
         self.CallTipSetForeground(calltip.GetFore())
+        self.SetSelBackground(True, wx.SystemSettings.\
+                                       GetColour(wx.SYS_COLOUR_HIGHLIGHT))
         self.SetCaretForeground(self.GetDefaultForeColour())
         self.DefineMarkers()
         self.Colourise(0, -1)
