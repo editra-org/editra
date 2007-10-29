@@ -347,17 +347,15 @@ class FileBrowser(wx.GenericDirCtrl):
         if Profile_Get('ICONS', 'str', 'default').lower() != u'default':
             bmp1 = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FOLDER), wx.ART_MENU)
             fbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FILE), wx.ART_MENU)
-            self._imglst = self._tree.GetImageList() #wx.ImageList(bmp1.GetWidth(), bmp1.GetHeight())
-            self._imglst.Replace(0, bmp1) # Folder Normal
-            self._imglst.Replace(1, wx.ArtProvider.GetBitmap(str(ed_glob.ID_OPEN), wx.ART_MENU)) # Folder Open
-            self._imglst.Replace(2, wx.ArtProvider.GetBitmap(str(ed_glob.ID_COMPUTER), wx.ART_MENU))  # Computer
-            self._imglst.Replace(3, wx.ArtProvider.GetBitmap(str(ed_glob.ID_HARDDISK), wx.ART_MENU)) # Root drive icon
-            self._imglst.Replace(4, wx.ArtProvider.GetBitmap(str(ed_glob.ID_CDROM), wx.ART_MENU))  # CD
-            self._imglst.Replace(5, wx.ArtProvider.GetBitmap(str(ed_glob.ID_FLOPPY), wx.ART_MENU))  # Floppy
-            self._imglst.Replace(6, wx.ArtProvider.GetBitmap(str(ed_glob.ID_USB), wx.ART_MENU))  # Removable
-            self._imglst.Replace(7, fbmp)  # Regular Files
-            self._imglst.Replace(8, wx.ArtProvider.GetBitmap(str(ed_glob.ID_BIN_FILE), wx.ART_MENU))  # Binary Files
-            self._tree.SetImageList(self._imglst)
+            self._imglst = self._tree.GetImageList()
+            ids = [ed_glob.ID_FOLDER, ed_glob.ID_OPEN, ed_glob.ID_COMPUTER, 
+                   ed_glob.ID_HARDDISK, ed_glob.ID_CDROM, ed_glob.ID_FLOPPY, 
+                   ed_glob.ID_USB, ed_glob.ID_FILE, ed_glob.ID_BIN_FILE]
+
+            for art in ids:
+                bmp = wx.ArtProvider.GetBitmap(str(art), wx.ART_MENU)
+                if bmp.IsOk():
+                    self._imglst.Replace(ids.index(art), bmp)
 
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnOpen)
