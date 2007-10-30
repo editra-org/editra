@@ -596,8 +596,8 @@ class StyleMgr(object):
                             v1ok = True
                     elif len(values) and attrib[0] in "face size": 
                         # TODO these regular expressions need work
-                        match1 = re.compile("\%\([a-zA-Z0-9]*\)")
-                        match2 = re.compile("[a-zA-Z0-9]*")
+                        match1 = re.compile("\%\([a-zA-Z0-9]+\)")
+                        match2 = re.compile("[a-zA-Z0-9]+")
                         if match1.match(values[0]) or match2.match(values[0]):
                             v1ok = True
                         else:
