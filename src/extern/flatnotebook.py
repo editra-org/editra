@@ -4035,7 +4035,8 @@ class PageContainer(wx.Panel):
             if self._iActivePage != tabIdx:
                 
                 # In case the tab is disabled, we dont allow to choose it
-                if self._pagesInfoVec[tabIdx].GetEnabled():
+                if len(self._pagesInfoVec) > tabIdx and \
+                   self._pagesInfoVec[tabIdx].GetEnabled():
                     self.FireEvent(tabIdx)
 
 
@@ -4596,7 +4597,8 @@ class PageContainer(wx.Panel):
         """ Handles the drop action from a DND operation. """
 
         # Disable drag'n'drop for disabled tab
-        if not wnd_oldContainer._pagesInfoVec[nTabPage].GetEnabled():
+        if len(wnd_oldContainer._pagesInfoVec) > nTabPage and \
+           not wnd_oldContainer._pagesInfoVec[nTabPage].GetEnabled():
             return wx.DragCancel
 
         self._isdragging = True
