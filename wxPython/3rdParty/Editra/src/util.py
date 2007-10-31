@@ -33,7 +33,6 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
-import shutil
 import codecs
 import mimetypes
 import wx
@@ -501,8 +500,6 @@ def CreateConfigDir():
     prof_dir = ed_glob.CONFIG['PROFILE_DIR']
     config_dir = u"%s%s.%s" % (wx.GetHomeDir(), pchar, ed_glob.PROG_NAME)
     profile_dir = u"%s%sprofiles" % (config_dir, pchar)
-    config_file = u"%sdefault.ppb" % prof_dir
-    loader =  u"%s.loader2" % prof_dir
     dest_file = u"%s%sdefault.ppb" % (profile_dir, pchar)
     ext_cfg = ["cache", "styles", "plugins"]
 
@@ -517,12 +514,8 @@ def CreateConfigDir():
         if not HasConfigDir(cfg):
             MakeConfigDir(cfg)
 
-    #---- Copy Default Config Files ----#
-    shutil.copyfile(config_file, dest_file)
-    shutil.copyfile(loader, profile_dir + pchar + u".loader2")
-
     import profiler
-    profiler.Profile().Load(dest_file)
+    profiler.Profile().LoadDefaults()
     profiler.Profile_Set("MYPROFILE", dest_file)
     profiler.UpdateProfileLoader()
 

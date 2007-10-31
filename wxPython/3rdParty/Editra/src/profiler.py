@@ -165,7 +165,7 @@ class Profile(dict):
                 val = cPickle.load(fhandle)
                 fhandle.close()
             except (IOError, SystemError, OSError, 
-                    cPickle.UnpicklingError), msg:
+                    cPickle.UnpicklingError, EOFError), msg:
                 dev_tool.DEBUGP("[profile][err] %s" % str(msg))
             else:
                 if isinstance(val, dict):
@@ -360,17 +360,14 @@ def CalcVersionValue(ver_str="0.0.0"):
 def GetLoader():
     """Finds the loader to use
     @return: path to profile loader
+    @note: path may not exist, only returns the path to where the loader
+           should be.
 
     """
     user_home = wx.GetHomeDir() + util.GetPathChar()
     rel_prof_path = ("." + PROG_NAME + util.GetPathChar() + 
                      "profiles" + util.GetPathChar() + ".loader2")
-
-    if os.path.exists(user_home + rel_prof_path):
-        loader = user_home + rel_prof_path
-    else:
-        loader = CONFIG['PROFILE_DIR'] + ".loader2"
-
+    loader = user_home + rel_prof_path
     return loader
 
 def GetProfileStr():

@@ -410,7 +410,9 @@ def InitConfig():
 
             profile_updated = True
     else:
+        # Fresh install
         util.CreateConfigDir()
+        profiler.Profile().LoadDefaults()
 
     # Set debug mode
     if 'DEBUG' in Profile_Get('MODE'):
