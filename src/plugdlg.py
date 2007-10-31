@@ -640,7 +640,7 @@ class DownloadPanel(wx.Panel):
 
         if self._list.GetItemCount():
             self._list.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-            self._list.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+            self._list.SetColumnWidth(1, self.GetTextExtent("0" * 35)[0])
             self._list.SetColumnWidth(2, wx.LIST_AUTOSIZE)
             self._list.SetColumnWidth(3, wx.LIST_AUTOSIZE)
             self._list.SendSizeEvent()
