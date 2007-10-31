@@ -115,6 +115,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         for window in self._windows:
             if not hasattr(self._windows[window][0], '__name__'):
                 continue
+
             if self._windows[window][0].__name__ == "MainWindow":
                 return self._windows[window][0]
         return None
@@ -201,11 +202,12 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         
         """
         window = self.GetTopWindow()
-        if window != None and window.__name__ == "MainWindow":
+        if getattr(window, '__name__', '') == "MainWindow":
             try:
                 window.DoOpen(wx.ID_ANY, util.DecodeString(filename))
                 self._log("[app][info] MacOpenFile Fired")
-            finally:
+            except Exception, msg:
+                self._log("[app][err] Failed to open drop file: %s" % str(msg))
                 pass
         else:
             pass
