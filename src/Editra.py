@@ -386,8 +386,12 @@ def InitConfig():
             # Load and update profile
             profiler.Profile().Load(pstr)
             profiler.Profile().Update()
+
+            ## Force some default values to be set on upgrade
             if wx.Platform == '__WXGTK__':
                 Profile_Set('ICONS', 'Default')
+            else:
+                Profile_Set('ICONS', 'Tango')
 
             # NOTE: currently turned off by default due to performance issues
             if wx.Platform == '__WXMAC__':
