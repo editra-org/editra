@@ -9,7 +9,6 @@
 """
 #--------------------------------------------------------------------------#
 # FILE: ed_glob.py                                                         #
-#                                                                          #
 # @author: Cody Precord                                                    #
 #                                                                          #
 # @summary:                                                                #
@@ -18,8 +17,6 @@
 #   globally accessable access point for all common variables in the       #
 #   project.                                                               #
 #                                                                          #
-# METHODS:                                                                 #
-#    None                                                                  #
 #--------------------------------------------------------------------------#
 """
 
@@ -52,7 +49,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'SB_ROWCOL', 'VERSION', 'PROG_NAME',
 
 #---- Project Info ----#
 AUTHOR = u'Cody Precord'
-VERSION = u'0.2.0'
+VERSION = u'0.2.15'
 PROG_NAME = u'Editra'
 HOME_PAGE = u"http://editra.org"
 CONTACT_MAIL = u"staff@editra.org"

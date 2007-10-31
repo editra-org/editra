@@ -8,8 +8,8 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.2.xx
-DATE xx/xx/2007
+VERSION 0.2.15
+DATE 10/30/2007
 7th Alpha Release
 
 NEWS:
@@ -18,22 +18,28 @@ editor. Most notably are a correction to some performance issues on Mac OSX,
 a number of UI related issues on Linux, and a fair number of fixes to the
 Style Editor.
 
-There was also a bug in the scripts on the website for sending plugins to the
-Plugin Manager that caused old outdated ones to get sent instead of the new ones.
-The old ones are incompatible with Editra 0.2.0 and could cause it to fail to start
-when trying to load them. I have fixed both the script on the website and the code
-for preventing broken plugins from crashing the editor.
-
 From this release onwards updating to the new version of Editra will no longer 
 require you to reconfigure all of your preferences as profiles are now incrementally
 updated so only settings that need to be changed or added are while not affecting
 all the other saved settings.
 
+There is also a number of new plugins available with this release, most notably
+it is the first public release of the Projects plugin.  The Projects plugin 
+transparently works with your file system and source control.  When you add a 
+project (i.e., a directory) to the plugin, you can open files in the editor 
+simply by double-clicking them in the tree view.  Files that are selected in 
+the editor will automatically display in the tree view if that file exists in 
+one of your registered projects.  In addition, the Projects plugin tracks files 
+under source control (CVS, Subversion, and GIT).  The status of the file is 
+displayed in the file's icon, and most source control operations are available 
+from the right-click menu.  For more information on the plugin and it's 
+configuration options see <http://code.google.com/p/editra-plugins/wiki/ProjectsPlugin>.
 
 NEW: [features/improvements]
++Projects management plugin available through PluginManager.
 +Icon themes are now part of the plugin system so themes can be created and
 installed through the plugin manager using python eggs.
-+New icon theme based on Humility icons available through plugin manager.
++New icon themes based on the Humility and Oxygen icon sets available through plugin manager.
 +Improved highlighting for python (decorators are now supported)
 +Support for highlighting (Edje EDC files, Gui4Cli, Inno Setup Scripts, KIX, Verilog)
 +Support for highlighting DOT files (contributed by Rob McMullen)
@@ -62,7 +68,7 @@ characters in them.
 +Fixed flickering of toolbar when changing icon themes
 +Don't send clipboard events to text control when it is not the control with the
 capture.
-+Fixed flickering when opening new pages in the notebook, this was most noticable
++Fixed flickering when opening new pages in the notebook, this was most noticeable
 on Windows and GTK.
 +FileBrowser plugin can now properly open files under the "Home directory" and
 "Desktop" nodes.
