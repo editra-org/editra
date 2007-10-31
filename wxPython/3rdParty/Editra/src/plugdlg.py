@@ -426,9 +426,9 @@ class ConfigPanel(wx.Panel):
 
         if self._list.GetItemCount():
             self._list.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-            self._list.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+            self._list.SetColumnWidth(1, self.GetTextExtent("0" * 35)[0])
             self._list.SetColumnWidth(2, wx.LIST_AUTOSIZE)
-            self._list.SetColumnWidth(3, wx.LIST_AUTOSIZE)
+            self._list.SetColumnWidth(3, wx.LIST_AUTOSIZE_USEHEADER)
             self._list.SendSizeEvent()
         return self._list.GetItemCount()
 
@@ -976,7 +976,8 @@ class PluginListCtrl(wx.ListCtrl,
         """Does a smart add to the list that will insert the given
         a PluginData item alphabetically into the table based on
         the name value.
-        @postcondition: plugin is inserted alphabetically into list
+        @param pi_data: PluginData object
+        @keyword check: Should the checkbox be checked
 
         """
         pname = pi_data.GetName()
