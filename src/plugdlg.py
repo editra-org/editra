@@ -692,11 +692,12 @@ def _GetPluginListData(url=PLUGIN_REPO):
     """
     text = u''
     try:
-        h_file = urllib.urlopen(url)
-        text = h_file.read()
-        h_file.close()
-    except (IOError, OSError), msg:
-        util.Log("[plugdlg][err] %s" % str(msg))
+        try:
+            h_file = urllib.urlopen(url)
+            text = h_file.read()
+            h_file.close()
+        except (IOError, OSError), msg:
+            util.Log("[plugdlg][err] %s" % str(msg))
     finally:
         return text.split("###")
 
@@ -710,11 +711,12 @@ def _DownloadPlugin(*args):
     url = "".join(args)
     egg = None
     try:
-        h_file = urllib.urlopen(url)
-        egg = h_file.read()
-        h_file.close()
-    except (IOError, OSError), msg:
-        util.Log("[plugdlg][err] %s" % str(msg))
+        try:
+            h_file = urllib.urlopen(url)
+            egg = h_file.read()
+            h_file.close()
+        except (IOError, OSError), msg:
+            util.Log("[plugdlg][err] %s" % str(msg))
     finally:
         return (url.split("/")[-1], True, egg)
 
