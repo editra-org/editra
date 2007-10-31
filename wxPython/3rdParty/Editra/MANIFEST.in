@@ -12,7 +12,6 @@ include THANKS
 include TODO
 include docs/*.txt
 include plugins/*.egg
-include profiles
 recursive-include include *.h
 recursive-include locale *.mo
 recursive-include pixmaps *.png [A-Z]
