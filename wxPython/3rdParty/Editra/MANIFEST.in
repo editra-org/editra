@@ -12,8 +12,7 @@ include THANKS
 include TODO
 include docs/*.txt
 include plugins/*.egg
-include profiles/.loader2
-include profiles/default.ppb
+include profiles
 recursive-include include *.h
 recursive-include locale *.mo
 recursive-include pixmaps *.png [A-Z]
