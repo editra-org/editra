@@ -90,8 +90,7 @@ DATA_FILES = [("include/python2.5",
                glob.glob("pixmaps/theme/Tango/mime/*.png")),
               ("plugins", glob.glob("plugins/*.egg")),
               ("templates", glob.glob("templates/*")),
-              ("profiles", ["profiles/default.ppb",
-                            "profiles/.loader2"]), 
+              ("profiles", []), 
               ("locale/en_US/LC_MESSAGES", 
                ["locale/en_US/LC_MESSAGES/Editra.mo"]),
               ("locale/ja_JP/LC_MESSAGES", 
@@ -110,12 +109,11 @@ DATA = [ "src/*.py", "src/syntax/*.py", "src/autocomp/*.py", "docs/*.txt",
          "pixmaps/*.icns", "pixmaps/theme/Default/README",
          "pixmaps/theme/Tango/AUTHOR", "pixmaps/theme/Tango/COPYING", 
          "pixmaps/theme/Tango/toolbar/*.png", "pixmaps/theme/Tango/menu/*.png",
-         "pixmaps/theme/Tango/mime/*.png",
-         "pixmaps/theme/Default/README", "profiles/default.ppb",
-         "profiles/.loader2", "locale/en_US/LC_MESSAGES/Editra.mo",
+         "pixmaps/theme/Tango/mime/*.png", "pixmaps/theme/Default/README", 
+         "locale/en_US/LC_MESSAGES/Editra.mo", 
          "locale/ja_JP/LC_MESSAGES/Editra.mo", 
          "locale/es_ES/LC_MESSAGES/Editra.mo", "styles/*.ess", "tests/*", 
-         "AUTHORS", "CHANGELOG","COPYING", "FAQ", "INSTALL", "NEWS", "README",
+         "AUTHORS", "CHANGELOG","COPYING", "FAQ", "INSTALL", "NEWS", "README", 
          "THANKS", "TODO", "setup.cfg", "plugins/*.egg"
 ]
 
@@ -148,7 +146,7 @@ ICON = { 'Win' : "pixmaps/editra.ico",
 
 # Excplicitly include some libraries that are either loaded dynamically
 # or otherwise not able to be found by py2app/exe
-INCLUDES = ['syntax.*']
+INCLUDES = ['syntax.*', 'shutil']
 if not sys.platform.startswith('win'):
     INCLUDES.extend(['pty', 'tty'])
 
