@@ -828,6 +828,9 @@ class InstallPanel(wx.Panel):
             result = dlg.ShowModal()
             dlg.Destroy()
             if result == wx.ID_YES:
+                # Note: need to do this because Setselection doesn't fire a
+                #       page change.
+                wx.GetApp().GetPluginManager().ReInit()
                 self.GetParent().SetSelection(CONFIG_PG)
             self._instb.Disable()
         else:
