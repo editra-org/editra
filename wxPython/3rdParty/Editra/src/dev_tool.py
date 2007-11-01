@@ -142,7 +142,7 @@ def ExceptionHook(exctype, value, trace):
     # If abort has been set and we get here again do a more forcefull shutdown
     global ABORT
     if ABORT:
-        exit()
+        os._exit(1)
 
     # Prevent multiple reporter dialogs from opening at once
     if not REPORTER_ACTIVE and not ABORT:
