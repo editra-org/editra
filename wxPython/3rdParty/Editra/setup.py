@@ -54,7 +54,7 @@ CLASSIFIERS = [
             'Intended Audience :: Developers',
             'Intended Audience :: Information Technology',
             'Intended Audience :: End Users/Desktop',
-            'License :: OSI Approved :: wxWindows',
+            'License :: OSI Approved',
             'Natural Language :: English',
             'Natural Language :: Japanese',
             'Natural Language :: Spanish',
@@ -126,7 +126,7 @@ Overview
 Editra is a multi-platform text editor with an implementation that focuses on 
 creating an easy to use interface and features that aid in code development. 
 Currently it supports syntax highlighting and variety of other useful features 
-for over 40 programing languages. For a more complete list of features and
+for over 50 programing languages. For a more complete list of features and
 screenshots visit the projects homepage at `Editra.org
 <http://www.editra.org/>`_.
 
@@ -143,7 +143,7 @@ ICON = { 'Win' : "pixmaps/editra.ico",
          'Mac' : "pixmaps/Editra.icns"
 }
 
-# Excplicitly include some libraries that are either loaded dynamically
+# Explicitly include some libraries that are either loaded dynamically
 # or otherwise not able to be found by py2app/exe
 INCLUDES = ['syntax.*', 'shutil']
 if not sys.platform.startswith('win'):
