@@ -472,12 +472,12 @@ def Main():
                    "  --oldPath  Don't use this!!\n"
                    "  --version  Print version number and exit\n"
                   ) % ed_glob.VERSION
-            exit(0)
+            os._exit(0)
 
         if True in [x[0] in ['-v', '--version'] for x in opts]:
             print "%s - v%s - Developers Editor" % (ed_glob.PROG_NAME, \
                                                     ed_glob.VERSION)
-            exit(0)
+            os._exit(0)
 
         if True in [x[0] in ['-d', '--debug'] for x in opts]:
             ed_glob.DEBUG = True
