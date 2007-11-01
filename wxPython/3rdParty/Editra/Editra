@@ -41,7 +41,7 @@ except ImportError:
                "you have wxPython installed.")
         print "ERROR MSG: "
         print str(msg)
-        exit()
+        os._exit(1)
 
 #--------------------------------------------------------------------------#
 # XXX plugins need to have the import paths of the libraries they use taken
@@ -74,4 +74,4 @@ if __name__ == '__main__':
         if len(sys.argv) > 1:
             ARGS = " ".join(sys.argv[1:])
         RES = os.system("python Editra.py --oldPath=\"" + CWD + "\" " + ARGS)
-        exit(RES)
+        os._exit(RES)
