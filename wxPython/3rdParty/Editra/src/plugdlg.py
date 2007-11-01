@@ -45,7 +45,6 @@ CONFIG_PG = 0
 DOWNLOAD_PG = 1
 INSTALL_PG = 2
 PY_VER = str(sys.version_info[0]) + str(sys.version_info[1])
-BASE_URL = "http://editra.org/"
 PLUGIN_REPO = "http://editra.org/plugins.php?list=True&py=" + PY_VER
 
 _ = wx.GetTranslation
@@ -586,7 +585,7 @@ class DownloadPanel(wx.Panel):
             urls = list()
             for item in self._dl_list:
                 if self._dl_list[item] and item in self._p_list:
-                    urls.append(BASE_URL + self._p_list[item].GetUrl())
+                    urls.append(self._p_list[item].GetUrl())
             self._eggcount = len(urls)
 
             # Start a separate thread to download each selection
