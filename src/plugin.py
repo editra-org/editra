@@ -283,7 +283,7 @@ class PluginManager(object):
     also provides an interface into loading and unloading plugins.
     @status: Allows for dynamic loading of plugins but they can not
              be called/used until the editor has been restarted.
-    @todo: complete functions for allowing dynamic loading and unloading of
+    @todo: Complete functions for allowing dynamic loading and unloading of
            of plugins. As well as allowing loaded but inactive plugins to be
            initiated without needing to restart the editor.
 
@@ -355,6 +355,8 @@ class PluginManager(object):
 
         """
         if pkg_resources != None:
+            path = [ pname.decode(sys.getfilesystemencoding()) 
+                     for pname in path ]
             env = pkg_resources.Environment(path)
         else:
             self.LOG("[pluginmgr][warn] setup tools is not installed")
