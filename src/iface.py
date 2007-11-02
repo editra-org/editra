@@ -45,7 +45,7 @@ _ = wx.GetTranslation
 class MainWindowI(plugin.Interface):
     """The MainWindow Interface is intended as a simple general purpose
     interface for adding functionality to the main window. It does little
-    managing of how object the implementing it is handled, most is left up to
+    managing of how objects that implement it are handled, most is left up to
     the plugin. Some examples of plugins using this interface are the
     FileBrowser and Calculator plugins.
 
