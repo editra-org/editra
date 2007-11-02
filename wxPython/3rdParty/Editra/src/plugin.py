@@ -40,7 +40,7 @@
 """
 #--------------------------------------------------------------------------#
 # FILE: plugin.py
-# @author: Cody Precord
+# AUTHOR: Cody Precord
 # LANGUAGE: Python
 # @summary:
 #    This module provides the core functionality of the plugin system for
@@ -116,7 +116,9 @@ class ExtensionPoint(property):
         return '<ExtensionPoint %s>' % self.interface.__name__
 
     def Extensions(self, component):
-        """@return: a list of plugins that declare to impliment the
+        """The exensions that extend this extention point
+        @param component: The component to get the exensions for
+        @return: a list of plugins that declare to impliment the
         given extension point.
 
         """
@@ -134,21 +136,31 @@ class PluginMeta(type):
     """
     _plugins = list()
     _registry = dict()
+
     def __new__(mcs, name, bases, d):
-        """@return: a new metaclass object"""
+        """Initialize the MetaClass
+        @param mcs: Class instance
+        @param name: Name of object
+        @param bases: Plugin base classes
+        @param d: Items dictionary
+
+        """
         d['_implements'] = _implements[:]
         del _implements[:]
         new_obj = type.__new__(mcs, name, bases, d)
         if name == 'Plugin':
             return new_obj
+
         init = d.get("__init__")
         if not init:
             for init in [b.__init__._original for b in new_obj.mro()
                          if issubclass(b, Plugin) and '__init__' in b.__dict__]:
                 break
+
         PluginMeta._plugins.append(new_obj)
         for interface in d.get('_implements', []):
             PluginMeta._registry.setdefault(interface, []).append(new_obj)
+
         for base in [base for base in bases if hasattr(base, '_implements')]:
             for interface in base._implements:
                 PluginMeta._registry.setdefault(interface, []).append(new_obj)
@@ -169,6 +181,7 @@ class Plugin(object):
                  exists.
 
         """
+        # Case for a pluginmanager being managed by a plugin manager
         if issubclass(cls, PluginManager):
             self = super(Plugin, cls).__new__(cls)
             self._pluginmgr = self
@@ -190,11 +203,12 @@ class PluginData(object):
     """
     def __init__(self, name=u'', descript=u'', author=u'', ver=u''):
         """Create the plugin data object
-        @param name: Name of the plugin
-        @param descript: Short description of plugin
-        @param author: Who made the plugin
-        @param ver: Version of the plugin
+        @keyword name: Name of the plugin
+        @keyword descript: Short description of plugin
+        @keyword author: Who made the plugin
+        @keyword ver: Version of the plugin
         @type ver: string
+
         """
         object.__init__(self)
         self._name = name
@@ -203,19 +217,19 @@ class PluginData(object):
         self._version = ver
 
     def GetName(self):
-        """@returns: Plugin's name string"""
+        """@return: Plugin's name string"""
         return self._name
 
     def GetDescription(self):
-        """@returns: Plugins description string"""
+        """@return: Plugins description string"""
         return self._description
 
     def GetAuthor(self):
-        """@returns: Author of the plugin"""
+        """@return: Author of the plugin"""
         return self._author
 
     def GetVersion(self):
-        """@returns: Plugin's version string"""
+        """@return: Plugin's version string"""
         return self._version
 
     def SetName(self, name):
@@ -232,7 +246,7 @@ class PluginData(object):
         self._name = name
 
     def SetDescription(self, descript):
-        """@returns: Plugins description string"""
+        """@return: Plugins description string"""
         if not isinstance(descript, basestring):
             try:
                 descript = str(descript)
@@ -281,11 +295,10 @@ def Implements(*interfaces):
 class PluginManager(object):
     """The PluginManger keeps track of the active plugins. It
     also provides an interface into loading and unloading plugins.
-    @status: Allows for dynamic loading of plugins but they can not
+    @status: Allows for dynamic loading of plugins but most can not
              be called/used until the editor has been restarted.
-    @todo: Complete functions for allowing dynamic loading and unloading of
-           of plugins. As well as allowing loaded but inactive plugins to be
-           initiated without needing to restart the editor.
+    @todo: Allow loaded but inactive plugins to be initiated without 
+           needing to restart the editor.
 
     """
     def __init__(self):
@@ -304,6 +317,7 @@ class PluginManager(object):
         self._enabled = dict()      # Set of enabled plugins
         self.InitPlugins(self._env)
         self.RefreshConfig()
+
         # Enable/Disable plugins based on config data
         self.UpdateConfig()
 
@@ -325,10 +339,13 @@ class PluginManager(object):
         nspace = cls.__module__ + "." + cls.__name__
         if nspace in ed_glob.DEFAULT_PLUGINS:
             self._enabled[cls] = True
+
         if cls not in self._enabled:
             self._enabled[cls] = False # If its a new plugin disable by default
+
         if not self._enabled[cls]:
             return None
+
         plugin = self._plugins.get(cls)
         if not plugin:
             if cls not in PluginMeta._plugins:
@@ -340,8 +357,28 @@ class PluginManager(object):
                 self.LOG("[pluginmgr][err] %s" % str(msg))
         return plugin
 
+    #---- End Private Members ----#
+
+    #---- Public Class Functions ----#
+    def AppendPath(self, path):
+        """Append a path to the environment path for the plugin manager 
+        to look for plugins on. The path is only added to the environment
+        in order for it to be used you must call RefreshEnvironment afterwards
+        to re-initialize the running environment.
+
+        @param path: path to append to environment
+        @return: True if path was successfully added or False otherwise
+
+        """
+        if os.path.exists(path):
+            if path not in self._pi_path:
+                self._pi_path.append(path)
+            return True
+        else:
+            return False
+
     def CallPluginOnce(self, plugin):
-        """Makes a call to a given plugin
+        """Makes a call to initialize a given plugin
         @status: currently not implemented
 
         """
@@ -364,30 +401,30 @@ class PluginManager(object):
         return env
 
     def DisablePlugin(self, plugin):
-        """Disables a named plugin.
+        """Disables a named plugin. Is a convenience function for
+        EnablePlugin(plugin, False).
+
+        @param plugin: plugin to disable
         @precondition: plugin must be managed by this manager instance
         @postcondition: plugin is disabled and will not be activated on 
                         next reload.
 
         """
-        self._config[plugin] = False
-        for cls in self._enabled:
-            pmod = cls.__module__
-            if pmod == plugin:
-                self._enabled[cls] = False
+        self.EnablePlugin(plugin, False)
 
-    def EnablePlugin(self, plugin):
+    def EnablePlugin(self, plugin, enable=True):
         """Enables a named plugin.
+        @param plugin: plugin to enable/disable
+        @param enable: should plugin be enabled or disabled
         @precondition: plugin must be managed by this manager instance
         @postcondition: plugin is added to activate list for activation on
                         next program start.
 
         """
-        self._config[plugin] = True
+        self._config[plugin] = enable
         for cls in self._enabled:
-            pmod = cls.__module__
-            if pmod == plugin:
-                self._enabled[cls] = True
+            if cls.__module__ == plugin:
+                self._enabled[cls] = enable
         
     def GetConfig(self):
         """Returns a dictionary of plugins and there configuration
@@ -400,8 +437,8 @@ class PluginManager(object):
         return self._config
 
     def GetEnvironment(self):
-        """Returns the evironment that the plugin manager was 
-        initiated in.
+        """Returns the evironment that the plugin manager is currently
+        running with.
         @return: the managers environment
 
         """
@@ -411,19 +448,22 @@ class PluginManager(object):
         """Returns a the dictionary of plugins managed by this manager
         @return: all plugins managed by this manger
         @rtype: dict
+
         """
         return self._plugins
 
     def InitPlugins(self, env):
         """Initializes the plugins that are contained in the given
-        enviroment. After calling this the list of available plugins
-        can be obtained by calling GetAvailPlugins.
-        @note: plugins must emit the ENTRY_POINT defined in this file
+        environment. After calling this the list of available plugins
+        can be obtained by calling GetPlugins.
+        @note: plugins must emit the ENTRY_POINT defined in this file in order
+               to be recognized and initialized.
         @postcondition: all plugins in the environment are initialized
 
         """
         if pkg_resources == None:
             return
+
         pkg_env = env
         for name in pkg_env:
             egg = pkg_env[name][0]  # egg is of type Distrobution
@@ -457,6 +497,7 @@ class PluginManager(object):
         @status: currently not implemented
 
         """
+        pass
         
     def LoadPluginConfig(self):
         """Loads the plugin config file for the current user if
@@ -473,22 +514,17 @@ class PluginManager(object):
             return config
 
         reading = True
-        while reading:
-            data = reader.readline()
-            if data == u"":
-                reading = False
-            data = data.strip()
+        for line in reader.readlines():
+            data = line.strip()
             if len(data) and data[0] == u"#":
                 continue
+
             data = data.split(u"=")
             if len(data) == 2:
-                if data[1].lower() == u"true":
-                    data[1] = True
-                else:
-                    data[1] = False
-                config[data[0]] = data[1]
+                config[data[0].strip()] = data[1].strip().lower() == u"true"
             else:
                 continue
+
         reader.close()
         return config
 
@@ -500,9 +536,8 @@ class PluginManager(object):
                         exist any longer are removed from the config
 
         """
-        plugins = list()
-        for plugin in self._plugins:
-            plugins.append(plugin.__module__)
+        plugins = [ plugin.__module__ for plugin in self._plugins ]
+
         config = dict()
         for item in self._config:
             if item in plugins:
@@ -535,6 +570,7 @@ class PluginManager(object):
         @status: currently not implemented
 
         """
+        pass
         
     def UpdateConfig(self):
         """Updates the in memory config data to recognize
@@ -561,6 +597,7 @@ class PluginManager(object):
         if writer == -1:
             self.LOG("[plugin_mgr][exception] Failed to write plugin config")
             return
+
         writer.write("# Editra %s Plugin Config\n#\n" % ed_glob.VERSION)
         for item in self._config:
             writer.write("%s=%s\n" % (item, str(self._config[item])))
