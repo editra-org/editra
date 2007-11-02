@@ -62,8 +62,7 @@ import wx
 # Values set when main loads
 CONFIG = {
           'CACHE_DIR'   : "",   # Holds temp data about documents
-          'PROFILE_DIR' : "",   # User Profile Direcotry
-          'PIXMAPS_DIR' : "",   # Graphics Directory
+          'PROFILE_DIR' : "",   # User Profile Directory
           'PLUGIN_DIR'  : "",   # User Plugin Dir
           'SYSPIX_DIR'  : "",   # Editras non user graphics
           'THEME_DIR'   : "",   # Theme Directory
