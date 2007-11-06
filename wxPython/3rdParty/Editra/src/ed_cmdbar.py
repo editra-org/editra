@@ -29,11 +29,13 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import glob
 import re
 import wx
 import util
 import ed_glob
 import ed_search
+import ed_event
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -410,10 +412,11 @@ class CommandExecuter(wx.SearchCtrl):
     RE_GO_WIN = re.compile('[0-9]*n[wW]{1,1}')
     RE_WGO_BUFFER = re.compile('w[0-9]*[nN]')
     RE_NGO_LINE = re.compile('[+-][0-9]+')
+
     def __init__(self, parent, id_, size=wx.DefaultSize):
         """Initializes the CommandExecuter"""
         wx.SearchCtrl.__init__(self, parent, id_, size=size, 
-                               style=wx.TE_PROCESS_ENTER)
+                               style=wx.TE_PROCESS_ENTER|wx.WANTS_CHARS)
 
         # Attributes
         self._cmdstack = ['']
@@ -422,6 +425,7 @@ class CommandExecuter(wx.SearchCtrl):
         self._bpath = None
         if not hasattr(sys, 'frozen'):
             self._curdir = os.path.abspath(os.curdir) + os.sep
+        self._popup = PopupList(self)
 
         # Hide the search button and text
         self.ShowSearchButton(False)
@@ -439,8 +443,11 @@ class CommandExecuter(wx.SearchCtrl):
         else:
             self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
             self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+
         self.Bind(wx.EVT_TEXT_ENTER, self.OnEnter)
-        self.Bind(wx.EVT_SIZE, self.OnKeyUp)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+        self.Bind(ed_event.EVT_NOTIFY, self.OnPopupNotify)
 
     def _AdjustSize(self):
         """Checks width of text as its added and dynamically resizes
@@ -451,13 +458,24 @@ class CommandExecuter(wx.SearchCtrl):
         curr_w, curr_h = self.GetClientSizeTuple()
         if ext > curr_w * .85:
             max_w = self.GetParent().GetClientSize().GetWidth() * .75
-            nwidth = min(ext * 1.15, max_w)
+            nwidth = min(ext * 1.18, max_w)
             self.SetClientSize((nwidth, curr_h))
-        elif ((curr_w > ext * 1.15) and curr_w > 150):
-            nwidth = max(ext * 1.15, 150)
+        elif ((curr_w > ext * 1.18) and curr_w > 150):
+            nwidth = max(ext * 1.18, 150)
             self.SetClientSize((nwidth, curr_h))
         else:
             pass
+
+    def _AdjustValue(self, val):
+        """Adjust value of input string as autocomp provides new values
+        @param val: val to use as base for adjustment
+
+        """
+        cval = self.GetValue().split(' ', 1)
+        if val.startswith(cval[-1]) or val.startswith('~'):
+            self.AppendText(val.replace(cval[-1], '', 1))
+        else:
+            self.SetValue(" ".join([cval[0], val]))
 
     def ChangeDir(self, cmd):
         """Change to a directory based on cd command
@@ -468,6 +486,8 @@ class CommandExecuter(wx.SearchCtrl):
         if not os.path.isabs(path):
             if path.startswith('..'):
                 path = os.path.abspath(path)
+            elif path.startswith('~'):
+                path = path.replace('~', wx.GetHomeDir(), 1)
             else:
                 path = os.path.join(self._curdir, path)
 
@@ -536,7 +556,7 @@ class CommandExecuter(wx.SearchCtrl):
             else:
                 line = int(cmd) - 1
             ctrl.GotoLine(line)
-        elif cmd.startswith('cd'):
+        elif cmd.startswith('cd '):
             self.ChangeDir(cmd)
         elif cmd == 'q':
             self.Quit()
@@ -625,84 +645,73 @@ class CommandExecuter(wx.SearchCtrl):
         wins[widx].Raise()
         wx.CallAfter(wins[widx].nb.GetCurrentCtrl().SetFocus)
 
-    def GetNextDir(self):
-        """Get the next directory path from the current cmd path
-        @note: used for tab completion of cd, completion is based off cwd
-        @todo: finish working on this by starting over
-        @note: not currently used
+    def GetPaths(self, path, files=False):
+        """Get a list of paths that are part of the given path by
+        default it will only return directories.
+        @keyword files: Get list of files too
 
         """
-        cmd = self.GetValue()
-        if not cmd.startswith('cd '):
-            return
-
-        cmd = cmd.replace('cd ', u'', 1).strip()
-        if not os.path.exists(self._curdir):
-            self._curdir = wx.GetHomeDir()
-
-        if len(cmd) and (cmd[0].isalnum() or cmd.startswith('.')):
-            path = self._curdir
-            cmd = os.path.join(path, cmd)
+        replace = 0
+        if path.startswith("~/") or path.startswith("~\\"):
+            prefix = wx.GetHomeDir()
+            replace = len(prefix) + 1
+            path = os.path.join(prefix, path[2:])
+        elif not path.startswith(os.sep):
+            prefix = self._curdir
+            replace = len(prefix)
+            path = os.path.join(prefix, path)
         else:
-            path = os.path.abspath(cmd)
-            if (len(cmd) and cmd[-1] == os.sep) or not len(cmd):
-                path = path + os.sep
+            pass
 
-        if not os.path.exists(path):
-            path = self._curdir
+        paths = []
+        for atom in glob.glob(path + "*"):
+            if os.path.isdir(atom) or files:
+                if replace > 0:
+                    atom = atom[replace:]
+                if os.path.isdir(atom) and atom[-1] != os.sep:
+                    atom += os.sep
+                paths.append(atom)
 
-        # Filter Directories
-        if path[-1] != os.sep:
-            path = os.path.join(*os.path.split(path)[:-1]) + os.sep
-            if not path.startswith(os.sep):
-                path = os.sep + path
-        dirs = [ os.path.join(path, x) \
-                 for x in os.listdir(path) \
-                 if os.path.isdir(os.path.join(path, x)) ]
-        dirs.sort()
-        if not len(dirs):
-            return
-
-        if len(cmd):
-            npath = None
-            for next in dirs:
-                if next.startswith(cmd):
-                    if cmd[-1] != os.path.sep and next == cmd:
-                        idx = dirs.index(next) + 1
-                    else:
-                        idx = dirs.index(next)
-                    
-                    if idx < len(dirs):
-                        npath = dirs[idx] #.replace(path, u'', 1)
-                    break
-            if npath:
-                return npath
-        else:
-            return dirs[0]
+        return sorted(list(set(paths)))
 
     def ListDir(self):
         """List the next directory from the current cmd path
-        @note: used for tab completion of cd, completion is based off cwd
 
         """
-        path = self.GetNextDir()
-        if path:
-            self.SetValue('cd ' + path)
-
-    def ListFile(self):
-        """List the next file in the current cmd path
-        @note: used for tab completion of e, completion is based off cwd
-
-        """
+        cmd = self.GetValue()
+        if cmd.startswith('cd '):
+            cstr = 'cd '
+        elif cmd.startswith('e '):
+            cstr = 'e '
+        else:
+            return
+            
+        cmd = cmd.replace(cstr, u'', 1).strip()
+        paths = self.GetPaths(cmd, cstr == 'e ')
+        self._popup.SetChoices(paths)
+        if len(paths):
+            pos = self.GetScreenPosition().Get()
+            extent = self.GetTextExtent(cstr)
+            self._popup.SetPosition((pos[0] + extent[0], pos[1] + extent[1]))
+            self._popup.SetBestSelection(cmd)
+            if not self._popup.IsShown():
+                self._popup.Show()
+        else:
+            self._popup.Hide()
 
     def OnEnter(self, evt):
         """Get the currently entered command string and execute it.
         @postcondition: ctrl is cleared and command is executed
         
         """
-        cmd = self.GetValue()
-        self.Clear()
-        self.ExecuteCommand(cmd)
+        if self._popup.IsShown():
+            self._AdjustValue(self._popup.GetSelection())
+        else:
+            cmd = self.GetValue()
+            self.Clear()
+            self.ExecuteCommand(cmd)
+            if self._popup.IsShown():
+                self._popup.Hide()
 
     def OnKeyDown(self, evt):
         """Records the key sequence that has been entered and
@@ -713,17 +722,26 @@ class CommandExecuter(wx.SearchCtrl):
         e_key = evt.GetKeyCode()
         cmd = self.GetValue()
         if e_key == wx.WXK_UP:
-            self.GetHistCommand(pre=True)
+            if self._popup.IsShown():
+                self._popup.AdvanceSelection(False)
+            else:
+                self.GetHistCommand(pre=True)
         elif e_key == wx.WXK_DOWN:
-            self.GetHistCommand(pre=False)
+            if self._popup.IsShown():
+                self._popup.AdvanceSelection(True)
+            else:
+                self.GetHistCommand(pre=False)
         elif e_key == wx.WXK_SPACE and not len(cmd):
             # Swallow space key when command is empty
             pass
         elif e_key == wx.WXK_TAB:
             # Provide Tab Completion or swallow key
-            if cmd.startswith('e '):
-                self.ListFile()
-            elif cmd.startswith('cd '):
+            if cmd.startswith('cd ') or cmd.startswith('e '):
+                if self._popup.IsShown() and \
+                   (cmd.endswith(os.sep) or 
+                    len(self._popup.GetChoices()) == 1 or
+                    cmd.startswith('e ')):
+                    self._AdjustValue(self._popup.GetSelection())
                 self.ListDir()
             else:
                 pass
@@ -738,8 +756,47 @@ class CommandExecuter(wx.SearchCtrl):
         @param evt: event that called this handler
 
         """
+        val = self.GetValue()
+        if self._popup.IsShown() and \
+           evt.GetKeyCode() not in [wx.WXK_DOWN, wx.WXK_UP]:
+            if not len(val):
+                self._popup.Hide()
+            else:
+                wx.CallAfter(self.UpdateAutoComp)
         self._AdjustSize()
         evt.Skip()
+
+    def OnPopupNotify(self, evt):
+        """Recieve the selections from the popup list
+        @param evt: event that called this handler
+
+        """
+        val = evt.GetValue()
+        self._AdjustValue(val)
+
+    def OnKillFocus(self, evt):
+        """Hide the popup when we look focus
+        @param evt: event that called this handler
+
+        """
+        self._popup.Hide()
+        evt.Skip()
+
+    def OnSetFocus(self, evt):
+        """Ensure caret is at end when focus is reset
+        @param evt: event that called this handler
+
+        """
+        self.SetInsertionPoint(self.GetLastPosition())
+        evt.Skip()
+
+    def RestoreFocus(self):
+        """Restore focus and cursor postion
+        @postcondition: ctrl has focus and cursor is moved to last position
+
+        """
+        self.SetInsertionPoint(self.GetLastPosition())
+        self.SetFocus()
 
     def Quit(self):
         """Tell the editor to exit
@@ -748,6 +805,20 @@ class CommandExecuter(wx.SearchCtrl):
         """
         wx.PostEvent(self.GetTopLevelParent(), 
                      wx.CloseEvent(wx.wxEVT_CLOSE_WINDOW))
+
+    def SetValue(self, value):
+        """Overrides the controls default function to allow for automatic
+        resizing of the control when text is added.
+        @param val: string to set value of control to
+
+        """
+        wx.SearchCtrl.SetValue(self, value)
+        self._AdjustSize()
+
+    def UpdateAutoComp(self):
+        self.ListDir()
+        val = self.GetValue().split(' ', 1)[-1]
+        self._popup.SetBestSelection(val)
 
     def WriteCommand(self, cstr):
         """Perform a file write related command
@@ -815,3 +886,180 @@ class LineCtrl(wx.SearchCtrl):
         self.GetParent().Hide()
 
 #-----------------------------------------------------------------------------#
+class PopupList(wx.Frame):
+    def __init__(self, parent, choices=list(), pos=wx.DefaultPosition):
+
+        style = wx.FRAME_NO_TASKBAR | wx.FRAME_FLOAT_ON_PARENT
+        if wx.Platform == '__WXMAC__':
+            style = style | wx.BORDER_NONE | wx.POPUP_WINDOW
+        else:
+            style = style | wx.SIMPLE_BORDER
+
+        wx.Frame.__init__(self, parent, pos=pos, style=style)
+
+        # Attributes
+        self._list = wx.ListBox(self, choices=choices, 
+                                style=wx.LC_REPORT | wx.LC_SINGLE_SEL | 
+                                      wx.LC_NO_HEADER | wx.NO_BORDER)
+        
+        # Layout
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(self._list, 1, wx.EXPAND)
+        self.SetSizer(sizer)
+        txt_h = self.GetTextExtent('/')[1]
+        self.SetMaxSize((-1, txt_h * 6))
+        self.SetAutoLayout(True)
+
+        # Event Handlers
+        self.Bind(wx.EVT_SET_FOCUS, self.OnFocus)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnSelection)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self._list.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+
+        self._list.SetFocus()
+        self.Hide()
+
+    def __PostEvent(self):
+        """Post notification of selection to parent
+        @postcondition: selected string is posted to parent
+
+        """
+        val = self._list.GetStringSelection()
+        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY, 
+                                          self.GetId(), val, self._list)
+        wx.PostEvent(self.GetParent(), evt)
+        self.ActivateParent()
+
+    def ActivateParent(self):
+        """Activate the parent window
+        @postcondition: parent window is raised
+
+        """
+        parent = self.GetParent()
+        parent.Raise()
+        parent.SetFocus()
+
+    def AdvanceSelection(self, down=True):
+        """Advance the selection in the list
+        @keyword down: move selection down or up
+
+        """
+        csel = self._list.GetSelection()
+        if csel != wx.NOT_FOUND:
+            if down:
+                csel += 1
+            else:
+                csel -= 1
+                csel = max(csel, 0)
+
+            if csel < len(self._list.GetItems()):
+                self._list.SetSelection(csel)
+
+    def GetChoices(self):
+        """Get the items as a list
+        @return: list of strings
+
+        """
+        return self._list.GetStrings()
+
+    def GetListCtrl(self):
+        return self._list
+
+    def GetSelection(self):
+        """Get the string that is currently selected in the list
+        @return: string selection
+
+        """
+        return self._list.GetStringSelection()
+
+    def OnFocus(self, evt):
+        """Raise and reset the focus to the parent window whenever
+        we get focus.
+        @param evt: event that called this handler
+
+        """
+        self.ActivateParent()
+        self.GetParent().SetFocus()
+        evt.Skip()
+
+    def OnKeyUp(self, evt):
+        """Process key upevents in the control
+        @param evt: event that called this handler
+
+        """
+        if evt.GetKeyCode() == wx.WXK_RETURN:
+            self.__PostEvent()
+        else:
+            evt.Skip()
+
+    def OnSelection(self, evt):
+        """Handle a selection in list by posting the result to
+        the parent.
+        @param evt: Event that called this handler
+        
+        """
+        print "ACTIVATED"
+        self.__PostEvent()
+
+    def OnSize(self, evt):
+        csz = self.GetClientSize()
+        csz.SetWidth(csz.x + wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X))
+        self._list.SetSize(csz)
+        evt.Skip()
+
+    def Show(self, show=True):
+        """Adjust size of popup and then show it
+        @keyword show: Should the window be shown or not
+
+        """
+        res = wx.Frame.Show(self, show)
+
+        if res and show:
+            self.ActivateParent()
+
+        if wx.Platform == '__WXMAC__':
+            self.GetParent().Refresh(False)
+
+        return res
+
+    def SetChoices(self, choices):
+        """Set the available choices that are shown in the list
+        @param choices: list of strings
+
+        """
+        self._list.SetItems(choices)
+
+    def SetSelection(self, index):
+        """Set the selection in the list by index
+        @param index: zero based index to set selection by
+
+        """
+        self._list.SetSelection(index)
+
+    def SetStringSelection(self, text):
+        """Set the list selection by using a string value
+        @param text: string to select in list
+
+        """
+        self._list.SetStringSelection(text)
+
+    def SetBestSelection(self, prefix):
+        """Set the selection to the one that bests matches the
+        given string.
+        @param prefix: prefix to set selection of
+        @note: searches for a match recursively, if no partial match is found
+               then the first item in the list is selected.
+
+        """
+        if not len(prefix):
+            if len(self._list.GetStrings()):
+                self._list.SetSelection(0)
+                self.ActivateParent()
+        else:
+            matches = [item for item in self._list.GetItems() 
+                       if item.startswith(prefix) ]
+            if len(matches):
+                self._list.SetStringSelection(sorted(matches)[0])
+                self.ActivateParent()
+            else:
+                self.SetBestSelection(prefix[:-1])
