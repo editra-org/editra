@@ -8,6 +8,20 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.2.xx
+DATE xx/xx/2007
+8th Alpha Release
+
+NEWS:
+
+NEW: [features/improvements]
++Tab completion for command buffer Edit and Change Directory commands
+
+BUG FIXES:
++Fixed a number of python2.4 compatibility issues
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.2.15
 DATE 10/30/2007
 7th Alpha Release
