@@ -419,12 +419,11 @@ class CommandExecuter(wx.SearchCtrl):
                                style=wx.TE_PROCESS_ENTER|wx.WANTS_CHARS)
 
         # Attributes
-        self._cmdstack = ['']
-        self._histidx = -1
-        self._curdir = wx.GetHomeDir() + os.sep
-        self._bpath = None
+        self._history = dict(cmds=[''], index=-1, lastval='')
         if not hasattr(sys, 'frozen'):
             self._curdir = os.path.abspath(os.curdir) + os.sep
+        else:
+            self._curdir = wx.GetHomeDir() + os.sep
         self._popup = PopupList(self)
 
         # Hide the search button and text
@@ -452,6 +451,8 @@ class CommandExecuter(wx.SearchCtrl):
     def _AdjustSize(self):
         """Checks width of text as its added and dynamically resizes
         the control as needed.
+        @postcondition: control is resized to fit the text in it upto a max
+                        width of 75 percent of the client space available.
 
         """
         ext = self.GetTextExtent(self.GetValue())[0]
@@ -500,14 +501,22 @@ class CommandExecuter(wx.SearchCtrl):
             
     def CommandPush(self, cmd):
         """Push a command to the stack popping as necessary to
-        keep stack size less than MAX.
+        keep stack size less than MAX (currently 25 commands).
         @param cmd: command string to push
         @todo: redo this to be more like the code in my terminal project
 
         """
-        self._cmdstack.insert(0, cmd)
-        if len(self._cmdstack) > 25:
-            self._cmdstack.pop()
+        cmd = cmd.strip()
+        if not len(cmd):
+            return
+
+        if len(self._history['cmds']) > 25:
+            self._history['cmds'].pop()
+
+        if cmd != self._history['cmds'][0]:
+            self._history['cmds'].insert(0, cmd)
+
+        self._history['index'] = -1
 
     def EditCommand(self, cmd):
         """Perform an edit related command
@@ -574,19 +583,29 @@ class CommandExecuter(wx.SearchCtrl):
         @note: pre moves right in stack, next moves left in stack
 
         """
-        hist_l = len(self._cmdstack) - 1
+        val = self.GetValue().strip()
+        if val not in self._history['cmds']:
+            self._history['lastval'] = val
+
+        print self._history['lastval']
         if pre:
-            self._histidx += 1
-            if self._histidx >= hist_l + 1:
-                self._histidx = hist_l
-            cmd = self._cmdstack[self._histidx]
+            if self._history['index'] < len(self._history['cmds']) - 1\
+               and self._history['index'] < 25:
+                self._history['index'] += 1
+
+            index = self._history['index']
+            cmd = self._history['cmds'][index]
         else:
-            self._histidx -= 1
-            if self._histidx < 0:
-                cmd = ''
-                self._histidx = -1
+            if self._history['index'] > -1:
+                self._history['index'] -= 1
+
+            index = self._history['index']
+            if index == -1:
+                print "LAST VAL"
+                cmd = self._history['lastval']
             else:
-                cmd = self._cmdstack[self._histidx]
+                cmd = self._history['cmds'][index]
+
         self.SetValue(cmd)
         self.SelectAll()
 
@@ -705,13 +724,16 @@ class CommandExecuter(wx.SearchCtrl):
         
         """
         if self._popup.IsShown():
-            self._AdjustValue(self._popup.GetSelection())
-        else:
-            cmd = self.GetValue()
-            self.Clear()
-            self.ExecuteCommand(cmd)
-            if self._popup.IsShown():
-                self._popup.Hide()
+            psel = self._popup.GetSelection()
+            if self.GetValue().split(' ', 1)[-1].strip() != psel:
+                self._AdjustValue(psel)
+                return
+
+        cmd = self.GetValue()
+        self.Clear()
+        self.ExecuteCommand(cmd)
+        if self._popup.IsShown():
+            self._popup.Hide()
 
     def OnKeyDown(self, evt):
         """Records the key sequence that has been entered and
@@ -737,10 +759,7 @@ class CommandExecuter(wx.SearchCtrl):
         elif e_key == wx.WXK_TAB:
             # Provide Tab Completion or swallow key
             if cmd.startswith('cd ') or cmd.startswith('e '):
-                if self._popup.IsShown() and \
-                   (cmd.endswith(os.sep) or 
-                    len(self._popup.GetChoices()) == 1 or
-                    cmd.startswith('e ')):
+                if self._popup.IsShown():
                     self._AdjustValue(self._popup.GetSelection())
                 self.ListDir()
             else:
