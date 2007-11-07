@@ -502,3 +502,33 @@ class EdMenuBar(wx.MenuBar):
             return getattr(self, menu)
         else:
             return None
+
+    def ResetIcons(self):
+        """Walk through each menu item in all of the bars menu and
+        reapply icons where possible.
+        @status: Dont use, sort of works on mac, does nothing on gtk, and causes
+                 graphical glitches on msw.
+
+        """
+        for menu in self.GetMenus():
+            WalkAndSetBitmaps(menu[0])
+
+#-----------------------------------------------------------------------------#
+# Utility Functions
+
+def WalkAndSetBitmaps(menu):
+    """Recursively walk a menu and its submenus setting bitmaps
+    as necessary/available, using the the current theme.
+
+    """
+    for item in menu.GetMenuItems():
+        if item.IsSubMenu():
+            WalkAndSetBitmaps(item.GetSubMenu())
+        else:
+            bmp = wx.ArtProvider.GetBitmap(str(item.GetId()), wx.ART_MENU)
+            if bmp.IsOk():
+                item.SetBitmap(bmp)
+            elif not item.GetBitmap().IsNull():
+                item.SetBitmap(wx.NullBitmap)
+            else:
+                continue
