@@ -1,0 +1,171 @@
+default_style {
+		fore:#FFEEDD;
+		back:#000A87;
+		face:%(primary)s;
+		size:%(size)d;
+}
+
+number_style {
+		fore:#ED0088;
+}
+
+number2_style {
+		fore:#ED0088 bold;
+}
+
+stringeol_style {
+		fore:#000A87 bold;
+		back:#00CDCD eol;
+}
+
+comment_style {
+		fore:#9B9BA7;
+}
+
+keyword_style {
+		fore:#FFCF20;
+}
+
+keyword3_style {
+		fore:#E94F0B;
+}
+
+keyword4_style {
+		fore:#0062AF bold;
+}
+
+ideol_style {
+		fore:#FFDDEE;
+		back:#00F8FF eol;
+}
+
+array_style {
+		fore:#CC1313;
+}
+
+global_style {
+		fore:#00D00F bold;
+}
+
+line_num {
+		fore:#FFEEDD;
+		back:#242787;
+		size:%(size3)d;
+}
+
+pre2_style {
+		fore:#EE5507;
+}
+
+string_style {
+        fore:#00CDCD;
+}
+
+class_style {
+		fore:#F33C33 bold;
+}
+
+ctrl_char {
+		fore:#000000;
+}
+
+marker_style {
+		fore:#000000;
+		back:#FFFFFF;
+}
+
+keyword2_style {
+		fore:#00F639 bold;
+}
+
+class2_style {
+		fore:#F33C33;
+}
+
+unknown_style {
+		fore:#000000;
+		back:#FF0000;
+}
+
+calltip {
+		fore:#4D4D4D;
+		back:#009FFF;
+}
+
+select_style {
+        back:#067B40;
+}
+
+scalar_style {
+		fore:#B037FF bold;
+}
+
+operator_style {
+		fore:#FFEEDD bold;
+}
+
+here_style {
+		fore:#ED0088;
+		back:#121A97;
+}
+
+regex_style {
+		fore:#00BFFF italic;
+		back:#000A87 bold;
+}
+
+folder_style {
+		fore:#FFEEDD;
+}
+
+pre_style {
+		fore:#EE5507 bold;
+}
+
+decor_style {
+		fore:#00A709 italic;
+}
+
+scalar2_style {
+		fore:#B037FF;
+}
+
+funct_style {
+		fore:#DF5900 italic;
+}
+
+brace_good {
+		fore:#EEFFDD;
+		back:#0093FF;
+}
+
+error_style {
+		fore:#000A87;
+		back:#FF0000;
+}
+
+directive_style {
+		fore:#00FFA2;
+}
+
+btick_style {
+		fore:#008AC1;
+}
+
+char_style {
+        fore:#00CDCD;
+}
+
+margin_style {
+		fore:#000000;
+		back:#FFFFFF;
+}
+
+brace_bad {
+		fore:#000A87;
+		back:#FF0024;
+}
+
+dockey_style {
+		fore:#80007B;
+}
