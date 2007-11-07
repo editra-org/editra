@@ -66,6 +66,7 @@ class StyleItem(object):
             %(size)s      = Format string to be swapped at runtime
         """
         object.__init__(self)
+        self.null = False
         if fore != wx.EmptyString:
             self.fore = fore        # Foreground color hex code
         if face != wx.EmptyString:
@@ -94,13 +95,13 @@ class StyleItem(object):
         """
         style_str = wx.EmptyString
         if hasattr(self, u'fore'):
-            style_str = u"fore:%s," % self.fore
+            style_str = u"fore: %s," % self.fore
         if hasattr(self, u'back'):
-            style_str += u"back:%s," % self.back
+            style_str += u"back: %s," % self.back
         if hasattr(self, u'face'):
-            style_str += u"face:%s," % self.face
+            style_str += u"face: %s," % self.face
         if hasattr(self, u'size'):
-            style_str += u"size:%s," % str(self.size)
+            style_str += u"size: %s," % str(self.size)
         if len(style_str) and style_str[-1] == u',':
             style_str = style_str[0:-1]
         return style_str
@@ -133,6 +134,21 @@ class StyleItem(object):
 
         """
         return getattr(self, 'size', wx.EmptyString)
+
+    def IsNull(self):
+        """Return whether the item is null or not
+        @return: bool
+
+        """
+        return self.null
+
+    def IsOk(self):
+        """Check if the style item is ok or not, if it has any of its
+        attributes set it is percieved as ok.
+        @return: bool
+
+        """
+        return len(self.__str__())
 
     #---- Set Functions ----#
     def SetAttrFromStr(self, style_str):
@@ -362,8 +378,10 @@ class StyleMgr(object):
         fore = self.GetItemByName('default_style').GetFore()
         if fore == wx.EmptyString:
             fore = u"#000000"
+
         if not as_hex:
-            fore = wx.ColourRGB(int(fore[1:], 16))
+            rgb = util.HexToRGB(fore[1:])
+            fore = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
         return fore
 
     def GetDefaultBackColour(self, as_hex=False):
@@ -379,8 +397,10 @@ class StyleMgr(object):
         back = self.GetItemByName('default_style').GetBack()
         if back == wx.EmptyString:
             back = u"#FFFFFF"
+
         if not as_hex:
-            back = wx.ColourRGB(int(back[1:], 16))
+            rgb = util.HexToRGB(back[1:])
+            back = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
         return back
 
     def GetItemByName(self, name):
@@ -484,6 +504,8 @@ class StyleMgr(object):
         if isinstance(style_set, dict) and style_set.has_key('default_style'):
             default = style_set['default_style']
             for tag in style_set:
+                if style_set[tag].IsNull():
+                    continue
                 if style_set[tag].GetFace() == wx.EmptyString:
                     style_set[tag].SetFace(default.GetFace())
                 if style_set[tag].GetFore() == wx.EmptyString:
@@ -749,6 +771,7 @@ def DefaultStyleDictionary():
          'regex_style' : StyleItem("#008B8B"),
          'scalar_style' : StyleItem("#AB37F2,bold", face="%(secondary)s"),
          'scalar2_style' : StyleItem("#AB37F2", face="%(secondary)s"),
+         'select_style' : NullStyleItem(), # Use system default colour
          'string_style' : StyleItem("#FF3AFF,bold"),
          'stringeol_style' : StyleItem("#000000,bold", "#EEC0EE,eol", \
                                        "%(secondary)s"),
@@ -782,3 +805,12 @@ def MergeStyles(styles1, styles2):
     for style in styles2:
         styles1[style] = styles2[style]
     return styles1
+
+def NullStyleItem():
+    """Create a null style item
+    @return: empty style item that cannot be merged
+
+    """
+    item = StyleItem()
+    item.null = True
+    return item

@@ -414,6 +414,9 @@ class StyleEditor(wx.Dialog):
         """
         sty_sheet = list()
         for tag in self.styles_new:
+            if self.styles_new[tag].IsNull():
+                continue
+
             sty_sheet.append(tag + u" {\n")
             sdat = unicode(self.styles_new[tag]).split(u",")
             stage1 = wx.EmptyString
@@ -506,6 +509,8 @@ class StyleEditor(wx.Dialog):
         selection in the style tags list to the style tag of the area
         the cursor has moved into.
         @param evt: event that called this handler
+        @todo: optimizations, find out why UpdateBaseStyles is called 8 times
+               everytime this is fired.
 
         """
         style_id = self.preview.GetStyleAt(self.preview.GetCurrentPos())
@@ -815,5 +820,7 @@ def DuplicateStyleDict(style_dict):
     new_dict = dict()
     for tag in style_dict:
         new_dict[tag] = StyleItem()
-        new_dict[tag].SetAttrFromStr(unicode(style_dict[tag]))
+        ok = new_dict[tag].SetAttrFromStr(unicode(style_dict[tag]))
+        if not ok:
+            new_dict[tag].null = True
     return new_dict
