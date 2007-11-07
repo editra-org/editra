@@ -135,6 +135,10 @@ scalar2_style {
 		face: %(secondary)s;
 }
 
+select_style {
+        back: #03087D;
+}
+
 string_style {
 		fore: #FF3AFF bold;
 }
