@@ -587,7 +587,6 @@ class CommandExecuter(wx.SearchCtrl):
         if val not in self._history['cmds']:
             self._history['lastval'] = val
 
-        print self._history['lastval']
         if pre:
             if self._history['index'] < len(self._history['cmds']) - 1\
                and self._history['index'] < 25:
@@ -601,7 +600,6 @@ class CommandExecuter(wx.SearchCtrl):
 
             index = self._history['index']
             if index == -1:
-                print "LAST VAL"
                 cmd = self._history['lastval']
             else:
                 cmd = self._history['cmds'][index]
@@ -1017,7 +1015,6 @@ class PopupList(wx.Frame):
         @param evt: Event that called this handler
         
         """
-        print "ACTIVATED"
         self.__PostEvent()
 
     def OnSize(self, evt):
