@@ -90,18 +90,20 @@ class StyleItem(object):
 
     def __str__(self):
         """Converts StyleItem to a string
+        @note: this return string is in a format that can be accepted by
+               Scintilla. Thus no spaces after the ':'
         @return: string representation of the StyleItem
 
         """
         style_str = wx.EmptyString
         if hasattr(self, u'fore'):
-            style_str = u"fore: %s," % self.fore
+            style_str = u"fore:%s," % self.fore
         if hasattr(self, u'back'):
-            style_str += u"back: %s," % self.back
+            style_str += u"back:%s," % self.back
         if hasattr(self, u'face'):
-            style_str += u"face: %s," % self.face
+            style_str += u"face:%s," % self.face
         if hasattr(self, u'size'):
-            style_str += u"size: %s," % str(self.size)
+            style_str += u"size:%s," % str(self.size)
         if len(style_str) and style_str[-1] == u',':
             style_str = style_str[0:-1]
         return style_str
