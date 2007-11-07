@@ -16,9 +16,12 @@ NEWS:
 
 NEW: [features/improvements]
 +Tab completion for command buffer Edit and Change Directory commands
++Text selection style is now configurable throught style settings
++New Blue color scheme for syntax highlighting can be enabled in preferences
 
 BUG FIXES:
 +Fixed a number of python2.4 compatibility issues
++Fixed bug in styling of code folding margin
 
 #-----------------------------------------------------------------------------#
 
