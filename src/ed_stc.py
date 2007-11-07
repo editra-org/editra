@@ -2113,8 +2113,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         calltip = self.GetItemByName('calltip')
         self.CallTipSetBackground(calltip.GetBack())
         self.CallTipSetForeground(calltip.GetFore())
-        self.SetSelBackground(True, wx.SystemSettings.\
-                                       GetColour(wx.SYS_COLOUR_HIGHLIGHT))
+        sback = self.GetItemByName('select_style')
+        if not sback.IsNull():
+            sback = sback.GetBack()
+        else:
+            sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        self.SetSelBackground(True, sback)
         self.SetCaretForeground(self.GetDefaultForeColour())
         self.DefineMarkers()
         self.Colourise(0, -1)
