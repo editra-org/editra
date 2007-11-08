@@ -600,6 +600,15 @@ class DocGenPanel(wx.Panel):
         @param evt: Event that called this handler
 
         """
+        # XXX why is happening in this dialog on windows this and other
+        #     imports randomly become None. I have been unable to reproduce
+        #     this behavior myself but have recieved enough error reports about
+        #     it to beleive it. If they were actually NoneTypes the dialog would
+        #     not be able to be shown so this is very strange!!
+        global ed_glob
+        if not ed_glob:
+            import ed_glob
+
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
         if e_id in [ed_glob.ID_PREF_TABS, ed_glob.ID_PREF_TABW,
