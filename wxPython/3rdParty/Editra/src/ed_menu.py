@@ -271,7 +271,7 @@ class EdMenuBar(wx.MenuBar):
         filemenu.Append(ed_glob.ID_PRINT, _("Print") + "\tCtrl+P", 
                         _("Print Current File"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_EXIT, _("Exit") + "\tAlt+Q", 
+        filemenu.Append(ed_glob.ID_EXIT, _("Exit") + "\tCtrl+Q", 
                         _("Exit the Program"))
         self.Append(filemenu, _("File"))
         return filemenu
