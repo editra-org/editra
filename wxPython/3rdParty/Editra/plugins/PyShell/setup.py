@@ -18,16 +18,16 @@ except ImportError:
 if setup != None:
     setup(
         name='PyShell',
-        version='0.4',
+        version='0.5',
         description=__doc__,
         author=__author__,
         author_email="cprecord@editra.org",
         license="wxWindows",
         url="http://editra.org",
         platforms=["Linux", "OS X", "Windows"],
-        packages=['pyshell'],
+        packages=['PyShell'],
         entry_points='''
         [Editra.plugins]
-        PyShell = pyshell:PyShell
+        PyShell = PyShell:PyShell
         '''
         )
