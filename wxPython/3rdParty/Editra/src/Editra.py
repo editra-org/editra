@@ -54,7 +54,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
     """
     def __init__(self, *args, **kargs):
         """Initialize that main app and its attributes
-        @postcondition: application is created and ready to be run in mainloop"
+        @postcondition: application is created and ready to be run in mainloop
 
         """
         wx.App.__init__(self, *args, **kargs)
