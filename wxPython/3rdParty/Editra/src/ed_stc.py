@@ -158,9 +158,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
         frame = self.GetTopLevelParent()
-        if hasattr(frame, 'OnKeyUp'):
-            self.Bind(wx.EVT_KEY_UP, self.GetTopLevelParent().OnKeyUp)
-            self.Bind(wx.EVT_LEFT_UP, self.GetTopLevelParent().OnKeyUp)
+        if hasattr(frame, 'OnSTCUpdateUI'):
+            self.Bind(wx.stc.EVT_STC_UPDATEUI, frame.OnSTCUpdateUI)
+            
        #---- End Init ----#
 
     __name__ = u"EditraTextCtrl"

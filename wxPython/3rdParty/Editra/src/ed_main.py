@@ -897,15 +897,20 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Skip()
         return
 
-    def OnKeyUp(self, evt):
-        """Update Line/Column indicator based on position.
-        @param evt: Key Event
-        @type evt: wx.KeyEvent(EVT_KEY_UP)
+    def OnSTCUpdateUI(self, evt):
+        """Update Line/Column indicator based on position.  Also update
+        toolbar tool status until that gets switched to using EVT_UPDATE_UI.
+        @param evt: STC Event
+        @type evt: wx.stc.StyledTextEvent(wx.stc.EVT_STC_UPDATEUI)
 
         """
-        self.SetStatusText(_("Line: %d  Column: %d") % \
-                           self.nb.GetCurrentCtrl().GetPos(), SB_ROWCOL)
-        evt.Skip()
+        def DoUpdate(self):
+            self.SetStatusText(_("Line: %d  Column: %d") % \
+                               self.nb.GetCurrentCtrl().GetPos(), SB_ROWCOL)
+            self.UpdateToolBar()
+        # we use a CallAfter to avoid CG warnings in wxMac
+        wx.CallAfter(DoUpdate, self)
+
 
     def OnMenuHighlight(self, evt):
         """HACK for GTK, submenus dont seem to fire a EVT_MENU_OPEN
@@ -1037,9 +1042,18 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if not hasattr(toolbar, 'IsShown') or not toolbar.IsShown():
             return -1
         ctrl = self.nb.GetCurrentCtrl()
-        toolbar.EnableTool(ID_UNDO, ctrl.CanUndo())
-        toolbar.EnableTool(ID_REDO, ctrl.CanRedo())
-        toolbar.EnableTool(ID_PASTE, ctrl.CanPaste())
+
+        def CheckAndSet(ID, func):
+            val = func()
+            if toolbar.GetToolEnabled(ID) != val:
+                toolbar.EnableTool(ID, val)
+                
+        CheckAndSet(ID_UNDO, ctrl.CanUndo)
+        CheckAndSet(ID_REDO, ctrl.CanRedo)
+        CheckAndSet(ID_PASTE, ctrl.CanPaste)
+        CheckAndSet(ID_COPY, lambda : ctrl.GetSelectionStart() != ctrl.GetSelectionEnd())
+        CheckAndSet(ID_CUT,  lambda : ctrl.GetSelectionStart() != ctrl.GetSelectionEnd())
+
 
     def ModifySave(self):
         """Called when document has been modified prompting
