@@ -214,7 +214,7 @@ class Profile(dict):
         try:
             self.Set('MYPROFILE', path)
             fhandle = open(path, 'wb')
-            cPickle.dump(self, fhandle, cPickle.HIGHEST_PROTOCOL)
+            cPickle.dump(self.copy(), fhandle, cPickle.HIGHEST_PROTOCOL)
             fhandle.close()
             UpdateProfileLoader()
         except (IOError, cPickle.PickleError), msg:
