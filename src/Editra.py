@@ -444,7 +444,7 @@ def Main():
     """
     try:
         opts, args = getopt.getopt(sys.argv[1:], "dhv", 
-                                   ['debug', 'help', 'oldPath=', 'version'])
+                                   ['debug', 'help', 'version'])
     except getopt.GetoptError, msg:
         dev_tool.DEBUGP("[main][err] %s" % str(msg))
         opts = list()
@@ -452,11 +452,6 @@ def Main():
 
     # Process command line options
     if len(opts):
-        if opts[0][0] == "--oldPath":
-            oldpath = opts[0][1]
-            os.chdir(oldpath)
-            opts.pop(0)
-
         if True in [x[0] in ['-h', '--help'] for x in opts]:
             print ("Editra - %s - Developers Text Editor\n"
                    "Cody Precord (2005-2007)\n\n"
@@ -468,7 +463,6 @@ def Main():
                    "\nLong Arguments:\n"
                    "  --debug    Turn on console debugging\n"
                    "  --help     Show this help message\n"
-                   "  --oldPath  Don't use this!!\n"
                    "  --version  Print version number and exit\n"
                   ) % ed_glob.VERSION
             os._exit(0)
