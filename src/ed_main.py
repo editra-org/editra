@@ -905,12 +905,15 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         def DoUpdate(self):
-            self.SetStatusText(_("Line: %d  Column: %d") % \
-                               self.nb.GetCurrentCtrl().GetPos(), SB_ROWCOL)
-            self.UpdateToolBar()
+            try:
+                self.SetStatusText(_("Line: %d  Column: %d") % \
+                                   self.nb.GetCurrentCtrl().GetPos(), SB_ROWCOL)
+                self.UpdateToolBar()
+            except wx.PyDeadObjectError:
+                pass
+
         # we use a CallAfter to avoid CG warnings in wxMac
         wx.CallAfter(DoUpdate, self)
-
 
     def OnMenuHighlight(self, evt):
         """HACK for GTK, submenus dont seem to fire a EVT_MENU_OPEN
