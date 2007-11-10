@@ -4945,8 +4945,10 @@ class PageContainer(wx.Panel):
 
     def GetPageText(self, page):
         """ Returns the tab caption of the page. """
-
-        return self._pagesInfoVec[page].GetCaption() 
+        if page < len(self._pagesInfoVec):
+            return self._pagesInfoVec[page].GetCaption()
+        else:
+            return u''
 
 
     def SetPageText(self, page, text):
