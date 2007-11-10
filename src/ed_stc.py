@@ -590,7 +590,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if self._config['autocomp']:
                 if self.CallTipActive():
                     self.CallTipCancel()
-                self._code['compsvc'].UpdateNamespace(True)
         else:
             evt.Skip()
 
@@ -1925,7 +1924,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self._code['compsvc'].LoadCompProvider(self.GetLexer())
         self.AutoCompSetIgnoreCase(self._code['compsvc'].GetIgnoreCase())
         self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
-        self._code['compsvc'].UpdateNamespace(True)
 
     def ConfigureLexer(self, file_ext):
         """Sets Lexer and Lexer Keywords for the specifed file extension

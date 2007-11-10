@@ -59,14 +59,13 @@ class AutoCompService(object):
         else:
             return list()
 
-    def GetAutoCompList(self, command, namespace=None):
+    def GetAutoCompList(self, command):
         """Retrieves the sorted autocomplete list for a command
         @param command: command string to do lookup on
-        @keyword namespace: namespace to use
 
         """
         if self._completer != None:
-            return self._completer.GetAutoCompList(command, namespace)
+            return self._completer.GetAutoCompList(command)
         else:
             return list()
  
@@ -81,14 +80,13 @@ class AutoCompService(object):
         else:
             return u''
 
-    def GetCallTip(self, command, namespace=None):
+    def GetCallTip(self, command):
         """Returns the calltip string for a command
         @param command: command to get callip for
-        @keyword namespace: namespace to do lookup in
 
         """
         if self._completer != None:
-            return self._completer.GetCallTip(command, namespace)
+            return self._completer.GetCallTip(command)
         else:
             return u''
 
@@ -120,19 +118,5 @@ class AutoCompService(object):
         if lex_value == stc.STC_LEX_PYTHON:
             import pycomp
             self._completer = pycomp.Completer(self._buffer)
-        else:
-            pass
-
-    def UpdateNamespace(self, opt=None):
-        """Tells the completer to update its namespace
-        @keyword opt: specific option to pass to completer for updating the
-                      namespace.
-
-        """
-        if hasattr(self._completer, 'UpdateNamespace'):
-            if opt == None:
-                self._completer.UpdateNamespace()
-            else:
-                self._completer.UpdateNamespace(opt)
         else:
             pass
