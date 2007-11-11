@@ -154,17 +154,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
-        self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_CHAR, self.OnChar)
+        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+        self.Bind(wx.EVT_LEFT_UP, self.OnKeyUp)
 
-        frame = self.GetTopLevelParent()
-        if hasattr(frame, 'OnSTCUpdateUI'):
-            self.Bind(wx.stc.EVT_STC_UPDATEUI, frame.OnSTCUpdateUI)
-            
        #---- End Init ----#
 
     __name__ = u"EditraTextCtrl"
 
+    #---- Protected Member Functions ----#
     def _BuildMacro(self):
         """Constructs a macro script from items in the macro
         record list.
@@ -207,6 +206,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 #         code = compile(code_txt, self.__module__, 'exec')
 #         exec code in self.__dict__ # Inject new code into this namespace
 
+    #---- Public Member Functions ----#
     def PlayMacro(self):
         """Send the list of built up macro messages to the editor
         to be played back.
@@ -627,6 +627,17 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             evt.Skip()
         return
+
+    def OnKeyUp(self, evt):
+        """Update status bar of window
+        @param evt: wxEVT_KEY_UP / wxEVT_LEFT_UP
+
+        """
+        evt.Skip()
+        msg = _("Line: %d  Column: %d") % self.GetPos()
+        nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(), 
+                                    msg, ed_glob.SB_ROWCOL)
+        wx.PostEvent(self.GetTopLevelParent(), nevt)
 
     def OnRecordMacro(self, evt):
         """Records macro events
