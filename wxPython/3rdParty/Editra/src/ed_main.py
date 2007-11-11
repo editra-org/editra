@@ -151,12 +151,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self.SetMenuBar(menbar)
 
         #---- Actions to take on menu events ----#
-        self.Bind(wx.EVT_MENU_OPEN, self.UpdateMenu)
-        if wx.Platform == '__WXGTK__':
-            self.Bind(wx.EVT_MENU_HIGHLIGHT, \
-                      self.OnMenuHighlight, id=ID_LEXER)
-            self.Bind(wx.EVT_MENU_HIGHLIGHT, \
-                      self.OnMenuHighlight, id=ID_EOL_MODE)
 
         # Collect Menu Event handler pairs
         self._handlers['menu'].extend([# File Menu
@@ -204,12 +198,45 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._handlers['menu'].extend([(l_id, self.DispatchToControl) 
                                        for l_id in syntax.SyntaxIds()])
 
-        # Extra menu handlers (need to work these into above system yet
+        # Extra menu handlers (need to work these into above system yet)
         self.Bind(wx.EVT_MENU, self.DispatchToControl)
         self.Bind(wx.EVT_MENU, self.OnGenerate)
         self.Bind(wx.EVT_MENU_RANGE, self.OnFileHistory, 
                   id=wx.ID_FILE1, id2=wx.ID_FILE9)
 
+        # Update UI Handlers
+        self._handlers['ui'].extend([# Edit Menu
+                                     (ID_COPY, self.OnUpdateClipboardUI),
+                                     (ID_CUT, self.OnUpdateClipboardUI),
+                                     (ID_PASTE, self.OnUpdateClipboardUI),
+                                     (ID_UNDO, self.OnUpdateClipboardUI),
+                                     (ID_REDO, self.OnUpdateClipboardUI),
+                                     # Format Menu
+                                     (ID_WORD_WRAP, self.OnUpdateFormatUI),
+                                     (ID_EOL_MAC, self.OnUpdateFormatUI),
+                                     (ID_EOL_WIN, self.OnUpdateFormatUI),
+                                     (ID_EOL_UNIX, self.OnUpdateFormatUI),
+                                     # Settings Menu
+                                     (ID_AUTOCOMP, self.OnUpdateSettingsUI),
+                                     (ID_AUTOINDENT, self.OnUpdateSettingsUI),
+                                     (ID_SYNTAX, self.OnUpdateSettingsUI),
+                                     (ID_FOLDING, self.OnUpdateSettingsUI),
+                                     (ID_BRACKETHL, self.OnUpdateSettingsUI),
+                                     # View Menu
+                                     (ID_ZOOM_NORMAL, self.OnUpdateViewUI),
+                                     (ID_ZOOM_IN, self.OnUpdateViewUI),
+                                     (ID_ZOOM_OUT, self.OnUpdateViewUI),
+                                     (ID_VIEW_TOOL, self.OnUpdateViewUI),
+                                     (ID_SHOW_WS, self.OnUpdateViewUI),
+                                     (ID_SHOW_EDGE, self.OnUpdateViewUI),
+                                     (ID_SHOW_EOL, self.OnUpdateViewUI),
+                                     (ID_SHOW_LN, self.OnUpdateViewUI),
+                                     (ID_INDENT_GUIDES, self.OnUpdateViewUI)
+                                    ])
+
+        # Lexer Menu
+        self._handlers['ui'].extend([(l_id, self.OnUpdateLexerUI) 
+                                     for l_id in syntax.SyntaxIds()])
         #---- End Menu Setup ----#
 
         #---- Other Event Handlers ----#
@@ -230,7 +257,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         #---- Final Setup Calls ----#
         self._exiting = False
         self.LoadFileHistory(_PGET('FHIST_LVL', fmt='int'))
-        self.UpdateToolBar()
 
         # Call add on plugins
         self.LOG("[main][info] Loading MainWindow Plugins ")
@@ -261,12 +287,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         app = wx.GetApp()
         if evt.GetActive():
+            self.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
             for handler in self._handlers['menu']:
                 app.AddHandlerForID(*handler)
 
             for handler in self._handlers['ui']:
                 app.AddUIHandlerForID(*handler)
         else:
+            self.SetExtraStyle(self.GetExtraStyle() - wx.WS_EX_PROCESS_UI_UPDATES)
             for handler in self._handlers['menu']:
                 app.RemoveHandlerForID(handler[0])
 
@@ -374,7 +402,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if evt.GetId() == ID_NEW:
             self.nb.NewPage()
             self.nb.GoCurrentPage()
-            self.UpdateToolBar()
         else:
             evt.Skip()
 
@@ -386,7 +413,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         if evt.GetId() == ID_OPEN:
             self.DoOpen(evt)
-            self.UpdateToolBar()
         else:
             evt.Skip()
 
@@ -469,7 +495,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 ret_val = self.OnSaveAs(ID_SAVEAS, ctrl[0], ctrl[1])
                 if ret_val:
                     self.AddFileToHistory(ctrl[1].GetFileName())
-        self.UpdateToolBar()
 
     def OnSaveAs(self, evt, title=u'', page=None):
         """Save File Using a new/different name
@@ -715,7 +740,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 toolbar.Show()
                 if wx.Platform != '__WXMAC__':
                     self.SetSize((size[0], size[1] + toolbar.GetSize()[1]))
-                self.UpdateToolBar()
 
             self.SendSizeEvent()
             self.Refresh()
@@ -892,41 +916,124 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         if evt.GetId() in menu_ids:
             ctrl.ControlDispatch(evt)
-            self.UpdateToolBar()
         else:
             evt.Skip()
         return
 
-    def OnSTCUpdateUI(self, evt):
-        """Update Line/Column indicator based on position.  Also update
-        toolbar tool status until that gets switched to using EVT_UPDATE_UI.
-        @param evt: STC Event
-        @type evt: wx.stc.StyledTextEvent(wx.stc.EVT_STC_UPDATEUI)
+    # Menu Update Handlers
+    def OnUpdateClipboardUI(self, evt):
+        """Update clipboard related menu/toolbar items
+        @param evt: EVT_UPDATE_UI
 
         """
-        def DoUpdate(self):
-            try:
-                self.SetStatusText(_("Line: %d  Column: %d") % \
-                                   self.nb.GetCurrentCtrl().GetPos(), SB_ROWCOL)
-                self.UpdateToolBar()
-            except wx.PyDeadObjectError:
-                pass
+        if not self.IsActive():
+            return
 
-        # we use a CallAfter to avoid CG warnings in wxMac
-        wx.CallAfter(DoUpdate, self)
+        e_id = evt.GetId()
+        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        # Slow the update interval to reduce overhead
+        evt.SetUpdateInterval(250)
+        ctrl = self.nb.GetCurrentCtrl()
+        if e_id == ID_UNDO:
+            evt.Enable(ctrl.CanUndo())
+        elif e_id == ID_REDO:
+            evt.Enable(ctrl.CanRedo())
+        elif e_id == ID_PASTE:
+            evt.Enable(ctrl.CanPaste())
+        elif e_id in [ID_COPY, ID_CUT]:
+            evt.Enable(ctrl.GetSelectionStart() != ctrl.GetSelectionEnd())
+        else:
+            evt.Skip()
 
-    def OnMenuHighlight(self, evt):
-        """HACK for GTK, submenus dont seem to fire a EVT_MENU_OPEN
-        but do fire a MENU_HIGHLIGHT
-        @note: Only used on GTK
-        @param evt: Event fired that called this handler
-        @type evt: wx.MenuEvent(EVT_MENU_HIGHLIGHT)
+    def OnUpdateFormatUI(self, evt):
+        """Update status of format menu items
+        @param evt: wxEVT_UPDATE_UI
 
         """
-        if evt.GetId() == ID_LEXER:
-            self.UpdateMenu(self._menus['language'])
-        elif evt.GetId() == ID_EOL_MODE:
-            self.UpdateMenu(self._menus['lineformat'])
+        if not self.IsActive():
+            return
+
+        e_id = evt.GetId()
+        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        ctrl = self.nb.GetCurrentCtrl()
+        eol = ctrl.GetEOLModeId()
+        if e_id == ID_WORD_WRAP:
+            evt.Check(bool(ctrl.GetWrapMode()))
+        elif e_id in [ID_EOL_MAC, ID_EOL_WIN, ID_EOL_UNIX]:
+            evt.Check(eol == e_id)
+        else:
+            evt.Skip()
+
+    def OnUpdateLexerUI(self, evt):
+        """Update status of lexer menu
+        @param evt: wxEVT_UPDATE_UI
+
+        """
+        if not self.IsActive():
+            return
+
+        e_id = evt.GetId()
+        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        if e_id in syntax.SyntaxIds():
+            lang = self.nb.GetCurrentCtrl().GetLangId()
+            evt.Check(lang == evt.GetId())
+        else:
+            evt.Skip()
+
+    def OnUpdateSettingsUI(self, evt):
+        """Update settings menu items
+        @param evt: wxEVT_UPDATE_UI
+
+        """
+        if not self.IsActive():
+            return
+
+        e_id = evt.GetId()
+        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        ctrl = self.nb.GetCurrentCtrl()
+        if e_id == ID_AUTOCOMP:
+            evt.Check(ctrl.GetAutoComplete())
+        elif e_id == ID_AUTOINDENT:
+            evt.Check(ctrl.GetAutoIndent())
+        elif e_id == ID_SYNTAX:
+            evt.Check(ctrl.IsHighlightingOn())
+        elif e_id == ID_FOLDING:
+            evt.Check(ctrl.IsFoldingOn())
+        elif e_id == ID_BRACKETHL:
+            evt.Check(ctrl.IsBracketHlOn())
+        else:
+            evt.Skip()
+
+    def OnUpdateViewUI(self, evt):
+        """Update status of view menu items
+        @param evt: wxEVT_UPDATE_UI
+
+        """
+        if not self.IsActive():
+            return
+
+        e_id = evt.GetId()
+        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        ctrl = self.nb.GetCurrentCtrl()
+        zoom = ctrl.GetZoom()
+        if e_id == ID_ZOOM_NORMAL:
+            evt.Enable(zoom)
+        elif e_id == ID_ZOOM_IN:
+            evt.Enable(zoom < 18)
+        elif e_id == ID_ZOOM_OUT:
+            evt.Enable(zoom > -8)
+        elif e_id == ID_VIEW_TOOL:
+            evt.Check(self.GetToolBar().IsShown())
+        elif e_id == ID_SHOW_WS:
+            evt.Check(bool(ctrl.GetViewWhiteSpace()))
+        elif e_id == ID_SHOW_EDGE:
+            evt.Check(bool(ctrl.GetEdgeMode()))
+        elif e_id == ID_SHOW_EOL:
+            evt.Check(bool(ctrl.GetViewEOL()))
+        elif e_id == ID_SHOW_LN:
+            evt.Check(bool(ctrl.GetMarginWidth(1)))
+        elif e_id == ID_INDENT_GUIDES:
+            evt.Check(bool(ctrl.GetIndentationGuides()))
         else:
             evt.Skip()
 
@@ -954,109 +1061,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         self._cmdbar.Show(ed_cmdbar.ID_CMD_CTRL)
         self.sizer.Layout()
-
-    # Menu Helper Functions
-    #TODO this is fairly stupid, write a more general solution
-    def UpdateMenu(self, evt):
-        """Update Status of a Given Menu.
-        @status: very ugly (hopefully temporary) hack that I hope I
-                 can get rid of as soon as I can find a better way
-                 to handle updating menuitem status.
-        @param evt: Event fired that called this handler
-        @type evt: wxMenuEvent
-
-        """
-        ctrl = self.nb.GetCurrentCtrl()
-        menu2 = None
-        if evt.GetClassName() == "wxMenuEvent":
-            menu = evt.GetMenu()
-            # HACK MSW GetMenu returns None on submenu open events
-            if menu is None:
-                menu = self._menus['language']
-                menu2 = self._menus['lineformat']
-        else:
-            menu = evt
-
-        if menu == self._menus['language']:
-            self.LOG("[main_evt] Updating Settings/Lexer Menu")
-            lang_id = ctrl.GetLangId()
-            for menu_item in menu.GetMenuItems():
-                item_id = menu_item.GetId()
-                if menu.IsChecked(item_id):
-                    menu.Check(item_id, False)
-                if item_id == lang_id or \
-                   (menu_item.GetLabel() == 'Plain Text' and lang_id == 0):
-                    menu.Check(item_id, True)
-            # HACK needed for MSW
-            if menu2 != None:
-                self.LOG("[menu_evt] Updating EOL Mode Menu")
-                eol = ctrl.GetEOLModeId()
-                for menu_id in [ID_EOL_MAC, ID_EOL_UNIX, ID_EOL_WIN]:
-                    menu2.Check(menu_id, eol == menu_id)
-                menu = self._menus['viewedit']
-        if menu == self._menus['edit']:
-            self.LOG("[main_evt] Updating Edit Menu")
-            menu.Enable(ID_UNDO, ctrl.CanUndo())
-            menu.Enable(ID_REDO, ctrl.CanRedo())
-            menu.Enable(ID_PASTE, ctrl.CanPaste())
-            sel1, sel2 = ctrl.GetSelection()
-            menu.Enable(ID_COPY, sel1 != sel2)
-            menu.Enable(ID_CUT, sel1 != sel2)
-            menu.Enable(ID_FIND, True)
-            menu.Enable(ID_FIND_REPLACE, True)
-        elif menu == self._menus['settings']:
-            self.LOG("[menu_evt] Updating Settings Menu")
-            menu.Check(ID_AUTOCOMP, ctrl.GetAutoComplete())
-            menu.Check(ID_AUTOINDENT, ctrl.GetAutoIndent())
-            menu.Check(ID_SYNTAX, ctrl.IsHighlightingOn())
-            menu.Check(ID_FOLDING, ctrl.IsFoldingOn())
-            menu.Check(ID_BRACKETHL, ctrl.IsBracketHlOn())
-        elif menu == self._menus['view']:
-            zoom = ctrl.GetZoom()
-            self.LOG("[menu_evt] Updating View Menu: zoom = %d" % zoom)
-            self._menus['view'].Enable(ID_ZOOM_NORMAL, zoom)
-            self._menus['view'].Enable(ID_ZOOM_IN, zoom < 18)
-            self._menus['view'].Enable(ID_ZOOM_OUT, zoom > -8)
-            menu.Check(ID_VIEW_TOOL, self.GetToolBar().IsShown())
-        elif menu == self._menus['viewedit']:
-            menu.Check(ID_SHOW_WS, bool(ctrl.GetViewWhiteSpace()))
-            menu.Check(ID_SHOW_EDGE, bool(ctrl.GetEdgeMode()))
-            menu.Check(ID_SHOW_EOL, bool(ctrl.GetViewEOL()))
-            menu.Check(ID_SHOW_LN, bool(ctrl.GetMarginWidth(1)))
-            menu.Check(ID_INDENT_GUIDES, bool(ctrl.GetIndentationGuides()))
-        elif menu == self._menus['format']:
-            self.LOG("[menu_evt] Updating Format Menu")
-            menu.Check(ID_WORD_WRAP, bool(ctrl.GetWrapMode()))
-        elif menu == self._menus['lineformat']:
-            self.LOG("[menu_evt] Updating EOL Mode Menu")
-            eol = ctrl.GetEOLModeId()
-            for menu_id in [ID_EOL_MAC, ID_EOL_UNIX, ID_EOL_WIN]:
-                menu.Check(menu_id, eol == menu_id)
-        else:
-            pass
-        return 0
-
-    def UpdateToolBar(self):
-        """Update Tool Status
-        @status: Temporary fix for toolbar status updating
-
-        """
-        toolbar = self.GetToolBar()
-        if not hasattr(toolbar, 'IsShown') or not toolbar.IsShown():
-            return -1
-        ctrl = self.nb.GetCurrentCtrl()
-
-        def CheckAndSet(ID, func):
-            val = func()
-            if toolbar.GetToolEnabled(ID) != val:
-                toolbar.EnableTool(ID, val)
-                
-        CheckAndSet(ID_UNDO, ctrl.CanUndo)
-        CheckAndSet(ID_REDO, ctrl.CanRedo)
-        CheckAndSet(ID_PASTE, ctrl.CanPaste)
-        CheckAndSet(ID_COPY, lambda : ctrl.GetSelectionStart() != ctrl.GetSelectionEnd())
-        CheckAndSet(ID_CUT,  lambda : ctrl.GetSelectionStart() != ctrl.GetSelectionEnd())
-
 
     def ModifySave(self):
         """Called when document has been modified prompting
@@ -1099,7 +1103,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
 #-----------------------------------------------------------------------------#
 # Plugin interface's to the MainWindow
-# For backwards compatibility soon to be moved
+# For backwards compatibility soon to be removed
 MainWindowI = iface.MainWindowI
 
 class MainWindowAddOn(plugin.Plugin):

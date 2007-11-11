@@ -449,7 +449,6 @@ class EdPages(FNB.FlatNotebook):
                   "[nb_info] It has file named: %s" % (evt.GetOldSelection(), 
                                                        evt.GetSelection(), 
                                                        self.control.GetFileName())))
-        self.frame.UpdateToolBar()
         evt.Skip()
 
     def OnPageClosing(self, evt):

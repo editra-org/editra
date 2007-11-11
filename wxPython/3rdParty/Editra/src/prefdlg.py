@@ -963,10 +963,8 @@ class AppearancePanel(PrefPanelBase):
                    (toolbar.GetToolTheme() != Profile_Get('ICONS')) \
                    or (toolbar.GetToolBitmapSize() != Profile_Get('ICON_SZ')):
                     toolbar.ReInit()
-                mainw.UpdateToolBar()
 
-                # Update Search Bar
-                # TODO for some reason this doesnt work with 2.8.5
+                # Update Commandbar icons
                 sbar = mainw.FindWindowById(ed_glob.ID_COMMAND_BAR)
                 if sbar:
                     sbar.UpdateIcons()
