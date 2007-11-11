@@ -15,6 +15,7 @@ DATE xx/xx/2007
 NEWS:
 
 NEW: [features/improvements]
++Major improvements to python autocompletion
 +Tab completion for command buffer Edit and Change Directory commands
 +Text selection style is now configurable throught style settings
 +New Blue color scheme for syntax highlighting can be enabled in preferences
@@ -22,6 +23,7 @@ NEW: [features/improvements]
 BUG FIXES:
 +Fixed a number of python2.4 compatibility issues
 +Fixed bug in styling of code folding margin
++Fixed bugs in updating toolbar/menus
 
 #-----------------------------------------------------------------------------#
 
