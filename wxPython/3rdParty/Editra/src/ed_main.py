@@ -115,31 +115,21 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         #---- Setup Toolbar ----#
         self.SetToolBar(ed_toolbar.EdToolBar(self))
-        if not _PGET('TOOLBAR'):
-            self.GetToolBar().Hide()
+        self.GetToolBar().Show(_PGET('TOOLBAR'))
         #---- End Toolbar Setup ----#
 
         #---- Menus ----#
         menbar = ed_menu.EdMenuBar()
-        self._menus = dict(file=menbar.GetMenuByName("file"),
-                           edit=menbar.GetMenuByName("edit"),
-                           view=menbar.GetMenuByName("view"),
-                           viewedit=menbar.GetMenuByName("viewedit"),
-                           format=menbar.GetMenuByName("format"),
-                           settings=menbar.GetMenuByName("settings"),
-                           tools=menbar.GetMenuByName("tools"),
-                           lineformat=menbar.GetMenuByName("lineformat"),
-                           language=syntax.GenLexerMenu())
 
         # Todo this should not be hard coded
-        self._menus['view'].InsertMenu(5, ID_PERSPECTIVES, _("Perspectives"), 
-                                       self.GetPerspectiveControls())
+        menbar.GetMenuByName("view").InsertMenu(5, ID_PERSPECTIVES,
+                             _("Perspectives"), self.GetPerspectiveControls())
 
         ## Setup additional menu items
         self.filehistory.UseMenu(menbar.GetMenuByName("filehistory"))
-        self._menus['settings'].AppendMenu(ID_LEXER, _("Lexers"), 
-                                           self._menus['language'],
-                                           _("Manually Set a Lexer/Syntax"))
+        menbar.GetMenuByName("settings").AppendMenu(ID_LEXER, _("Lexers"), 
+                                                    syntax.GenLexerMenu(),
+                                              _("Manually Set a Lexer/Syntax"))
 
         # On mac, do this to make help menu appear in correct location
         # Note it must be done before setting the menu bar and after the
@@ -175,7 +165,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_FIND_REPLACE, 
                                         self.nb.FindService.OnShowFindDlg),
                                        (ID_QUICK_FIND, self.OnCommandBar),
-                                       (ID_PREF, self.OnPreferences),
+                                       (ID_PREF, OnPreferences),
 
                                        # View Menu
                                        (ID_GOTO_LINE, self.OnCommandBar),
@@ -190,10 +180,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_PLUGMGR, self.OnPluginMgr),
 
                                        # Help Menu
-                                       (ID_ABOUT, self.OnAbout),
-                                       (ID_HOMEPAGE, self.OnHelp),
-                                       (ID_DOCUMENTATION, self.OnHelp),
-                                       (ID_CONTACT, self.OnHelp)])
+                                       (ID_ABOUT, OnAbout),
+                                       (ID_HOMEPAGE, OnHelp),
+                                       (ID_DOCUMENTATION, OnHelp),
+                                       (ID_CONTACT, OnHelp)])
 
         self._handlers['menu'].extend([(l_id, self.DispatchToControl) 
                                        for l_id in syntax.SyntaxIds()])
@@ -268,7 +258,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._shelf = iface.Shelf(plgmgr)
         self._shelf.Init(self)
         self.LOG("[main][info] Loading Generator plugins")
-        generator.Generator(plgmgr).InstallMenu(self._menus['tools'])
+        generator.Generator(plgmgr).InstallMenu(menbar.GetMenuByName("tools"))
 
         # Set Perspective
         self.SetPerspective(_PGET('DEFAULT_VIEW'))
@@ -322,7 +312,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type fname: string
 
         """
-        result = wx.ID_CANCEL
         try:
             e_id = evt.GetId()
         except AttributeError:
@@ -695,28 +684,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     #---- End File Menu Functions ----#
 
-    #---- Edit Menu Functions ----#
-    def OnPreferences(self, evt):
-        """Open the Preference Panel
-        @note: The dialogs module is not imported until this is 
-               first called so the first open may lag a little.
-        @param evt: Event fired that called this handler
-        @type evt: wxMenuEvent
-
-        """
-        if evt.GetId() == ID_PREF:
-            import prefdlg
-            win = wx.GetApp().GetWindowInstance(prefdlg.PreferencesDialog)
-            if win is not None:
-                win.Raise()
-                return
-            dlg = prefdlg.PreferencesDialog(None)
-            dlg.CenterOnParent()
-            dlg.Show()
-        else:
-            evt.Skip()
-    #---- End Edit Menu Functions ----#
-
     #---- View Menu Functions ----#
     def OnViewTb(self, evt):
         """Toggles visibility of toolbar
@@ -831,53 +798,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             ctrl.FindLexer(doc[0])
         else:
             evt.Skip()
-
-    #---- Help Menu Functions ----#
-    def OnAbout(self, evt):
-        """Show the About Dialog
-        @param evt: Event fired that called this handler
-        @type evt: wxMenuEvent
-
-        """
-        if evt.GetId() == ID_ABOUT:
-            info = wx.AboutDialogInfo()
-            year = time.localtime()
-            desc = ["Editra is a programmers text editor.",
-                    "Written in 100%% Python.",
-                    "Homepage: " + HOME_PAGE + "\n",
-                    "Platform Info: (%s,%s)", 
-                    "License: wxWindows (see COPYING.txt for full license)"]
-            desc = "\n".join(desc)
-            py_version = sys.platform + ", python " + sys.version.split()[0]
-            platform = list(wx.PlatformInfo[1:])
-            platform[0] += (" " + wx.VERSION_STRING)
-            wx_info = ", ".join(platform)
-            info.SetCopyright("Copyright(C) 2005-%d Cody Precord" % year[0])
-            info.SetName(PROG_NAME.title())
-            info.SetDescription(desc % (py_version, wx_info))
-            info.SetVersion(VERSION)
-            wx.AboutBox(info)
-        else:
-            evt.Skip()
-
-    def OnHelp(self, evt):
-        """Handles help related menu events
-        @param evt: Event fired that called this handler
-        @type evt: wxMenuEvent
-
-        """
-        import webbrowser
-        e_id = evt.GetId()
-        if e_id == ID_HOMEPAGE:
-            webbrowser.open(HOME_PAGE, 1)
-        elif e_id == ID_DOCUMENTATION:
-            webbrowser.open_new_tab(HOME_PAGE + "/?page=doc")
-        elif e_id == ID_CONTACT:
-            webbrowser.open(u'mailto:%s' % CONTACT_MAIL)
-        else:
-            evt.Skip()
-
-    #---- End Help Menu Functions ----#
 
     #---- Misc Function Definitions ----#
     def DispatchToControl(self, evt):
@@ -1099,7 +1019,73 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             name = u' - ' + name
         wx.Frame.SetTitle(self, title + name)
 
-    #---- End Misc Functions ----#
+
+#-----------------------------------------------------------------------------#
+# Event handlers that don't need to be part of the class
+
+def OnAbout(evt):
+    """Show the About Dialog
+    @param evt: Event fired that called this handler
+    @type evt: wxMenuEvent
+
+    """
+    if evt.GetId() == ID_ABOUT:
+        info = wx.AboutDialogInfo()
+        year = time.localtime()
+        desc = ["Editra is a programmers text editor.",
+                "Written in 100%% Python.",
+                "Homepage: " + HOME_PAGE + "\n",
+                "Platform Info: (%s,%s)", 
+                "License: wxWindows (see COPYING.txt for full license)"]
+        desc = "\n".join(desc)
+        py_version = sys.platform + ", python " + sys.version.split()[0]
+        platform = list(wx.PlatformInfo[1:])
+        platform[0] += (" " + wx.VERSION_STRING)
+        wx_info = ", ".join(platform)
+        info.SetCopyright("Copyright(C) 2005-%d Cody Precord" % year[0])
+        info.SetName(PROG_NAME.title())
+        info.SetDescription(desc % (py_version, wx_info))
+        info.SetVersion(VERSION)
+        wx.AboutBox(info)
+    else:
+        evt.Skip()
+
+def OnHelp(evt):
+    """Handles help related menu events
+    @param evt: Event fired that called this handler
+    @type evt: wxMenuEvent
+
+    """
+    import webbrowser
+    e_id = evt.GetId()
+    if e_id == ID_HOMEPAGE:
+        webbrowser.open(HOME_PAGE, 1)
+    elif e_id == ID_DOCUMENTATION:
+        webbrowser.open_new_tab(HOME_PAGE + "/?page=doc")
+    elif e_id == ID_CONTACT:
+        webbrowser.open(u'mailto:%s' % CONTACT_MAIL)
+    else:
+        evt.Skip()
+
+def OnPreferences(evt):
+    """Open the Preference Panel
+    @note: The dialogs module is not imported until this is 
+           first called so the first open may lag a little.
+    @param evt: Event fired that called this handler
+    @type evt: wxMenuEvent
+
+    """
+    if evt.GetId() == ID_PREF:
+        import prefdlg
+        win = wx.GetApp().GetWindowInstance(prefdlg.PreferencesDialog)
+        if win is not None:
+            win.Raise()
+            return
+        dlg = prefdlg.PreferencesDialog(None)
+        dlg.CenterOnParent()
+        dlg.Show()
+    else:
+        evt.Skip()
 
 #-----------------------------------------------------------------------------#
 # Plugin interface's to the MainWindow

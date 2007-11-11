@@ -24,27 +24,27 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = [ 'CONFIG', 'SB_INFO', 'SB_ROWCOL', 'VERSION', 'PROG_NAME',
-            'ID_NEW', 'ID_OPEN', 'ID_CLOSE', 'ID_CLOSEALL', 'ID_SAVE',
-            'ID_SAVEAS', 'ID_SAVEALL', 'ID_SAVE_PROFILE', 'ID_LOAD_PROFILE',
-            'ID_PRINT', 'ID_PRINT_PRE', 'ID_PRINT_SU', 'ID_EXIT', 'ID_UNDO',
-            'ID_REDO', 'ID_CUT', 'ID_COPY', 'ID_PASTE', 'ID_SELECTALL',
-            'ID_ADD_BM', 'ID_DEL_BM',  'ID_DEL_ALL_BM', 'ID_LINE_AFTER',
-            'ID_LINE_BEFORE', 'ID_CUT_LINE', 'ID_COPY_LINE', 'ID_JOIN_LINES',
-            'ID_TRANSPOSE', 'ID_FIND', 'ID_FIND_REPLACE', 'ID_QUICK_FIND',
-            'ID_PREF', 'ID_ZOOM_OUT', 'HOME_PAGE', 'CONTACT_MAIL',
-            'ID_ZOOM_IN', 'ID_ZOOM_NORMAL', 'ID_SHOW_EDGE', 'ID_SHOW_EOL',
-            'ID_SHOW_LN', 'ID_SHOW_WS', 'ID_PERSPECTIVES', 'ID_INDENT_GUIDES', 
-            'ID_VIEW_TOOL', 'ID_GOTO_LINE', 'ID_NEXT_MARK', 'ID_PRE_MARK', 
-            'ID_FONT', 'ID_EOL_MODE', 'ID_EOL_MAC', 'ID_EOL_UNIX', 'ID_EOL_WIN',
-            'ID_WORD_WRAP', 'ID_INDENT',  'ID_UNINDENT', 'ID_TO_UPPER', 
-            'ID_TO_LOWER', 'ID_SPACE_TO_TAB', 'ID_TAB_TO_SPACE', 'ID_TRIM_WS', 
-            'ID_COMMENT', 'ID_UNCOMMENT', 'ID_AUTOCOMP', 'ID_AUTOINDENT', 
-            'ID_SYNTAX', 'ID_FOLDING', 'ID_BRACKETHL', 'ID_LEXER', 
-            'ID_KWHELPER', 'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 
-            'ID_MACRO_STOP', 'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 
-            'ID_CONTACT', 'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
-            'ID_CLOSE_WINDOW' 
+__all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN', 
+            'ID_CLOSE', 'ID_CLOSEALL', 'ID_SAVE', 'ID_SAVEAS', 'ID_SAVEALL', 
+            'ID_SAVE_PROFILE', 'ID_LOAD_PROFILE', 'ID_PRINT', 'ID_PRINT_PRE', 
+            'ID_PRINT_SU', 'ID_EXIT', 'ID_UNDO', 'ID_REDO', 'ID_CUT', 
+            'ID_COPY', 'ID_PASTE', 'ID_SELECTALL', 'ID_ADD_BM', 'ID_DEL_BM',
+            'ID_DEL_ALL_BM', 'ID_LINE_AFTER', 'ID_LINE_BEFORE', 'ID_CUT_LINE',
+            'ID_COPY_LINE', 'ID_JOIN_LINES', 'ID_TRANSPOSE', 'ID_FIND',
+            'ID_FIND_REPLACE', 'ID_QUICK_FIND', 'ID_PREF', 'ID_ZOOM_OUT',
+            'HOME_PAGE', 'CONTACT_MAIL', 'ID_ZOOM_IN', 'ID_ZOOM_NORMAL',
+            'ID_SHOW_EDGE', 'ID_SHOW_EOL', 'ID_SHOW_LN', 'ID_SHOW_WS',
+            'ID_PERSPECTIVES', 'ID_INDENT_GUIDES', 'ID_VIEW_TOOL',
+            'ID_GOTO_LINE', 'ID_NEXT_MARK', 'ID_PRE_MARK', 'ID_FONT',
+            'ID_EOL_MAC', 'ID_EOL_UNIX', 'ID_EOL_WIN', 'ID_WORD_WRAP',
+            'ID_INDENT', 'ID_UNINDENT', 'ID_TO_UPPER', 'ID_TO_LOWER',
+            'ID_SPACE_TO_TAB', 'ID_TAB_TO_SPACE', 'ID_TRIM_WS', 'ID_COMMENT',
+            'ID_UNCOMMENT', 'ID_AUTOCOMP', 'ID_AUTOINDENT', 'ID_SYNTAX',
+            'ID_FOLDING', 'ID_BRACKETHL', 'ID_LEXER', 'ID_KWHELPER',
+            'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 'ID_MACRO_STOP',
+            'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
+            'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
+            'ID_CLOSE_WINDOW'
 ]
 
 #---- Project Info ----#
