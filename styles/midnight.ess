@@ -15,8 +15,8 @@ btick_style {
 }
 
 calltip { 
-           fore: #FFE200;
-           back: #09026A;
+        fore: #FFE200;
+        back: #09026A;
 }
 
 char_style {
@@ -117,8 +117,8 @@ pre_style {
 }
 
 pre2_style {
-	 fore: #AB39F2 bold;
-                back: #666666
+        fore: #AB39F2 bold;
+        back: #101010;
 }
 
 regex_style {
