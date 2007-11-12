@@ -777,7 +777,8 @@ def DefaultStyleDictionary():
          'string_style' : StyleItem("#FF3AFF,bold"),
          'stringeol_style' : StyleItem("#000000,bold", "#EEC0EE,eol", \
                                        "%(secondary)s"),
-         'unknown_style' : StyleItem("#FFFFFF,bold", "#DD0101,eol")
+         'unknown_style' : StyleItem("#FFFFFF,bold", "#DD0101,eol"),
+         'whitespace_style' : StyleItem('#838383')
          }
     return def_dict
 

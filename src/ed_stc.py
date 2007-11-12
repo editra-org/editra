@@ -2119,14 +2119,22 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           self.GetStyleByName('brace_good'))
         self.StyleSetSpec(wx.stc.STC_STYLE_BRACEBAD, \
                           self.GetStyleByName('brace_bad'))
+
         calltip = self.GetItemByName('calltip')
         self.CallTipSetBackground(calltip.GetBack())
         self.CallTipSetForeground(calltip.GetFore())
+
         sback = self.GetItemByName('select_style')
         if not sback.IsNull():
             sback = sback.GetBack()
         else:
             sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+
+        wspace = self.GetItemByName('whitespace_style')
+        if not wspace.IsNull():
+            self.SetWhitespaceBackground(True, wspace.GetBack())
+            self.SetWhitespaceForeground(True, wspace.GetFore())
+
         self.SetSelBackground(True, sback)
         self.SetCaretForeground(self.GetDefaultForeColour())
         self.DefineMarkers()
