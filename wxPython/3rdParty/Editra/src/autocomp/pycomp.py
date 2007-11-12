@@ -179,6 +179,7 @@ class PyCompleter(object):
 
         """
         def _ctor(obj):
+            """Get the constructor for an object"""
             try:
                 return obj.__init__.im_func
             except AttributeError:
@@ -523,8 +524,12 @@ class PyParser:
     """Python parsing class"""
     def __init__(self):
         """Initialize and create the PyParser"""
+        # Attributes
         self.top = Scope('global', 0)
         self.scope = self.top
+        self.gen = None  # Token Generator
+        self.curline = 0 # Current parse line
+        self.currentscope = None # Current scope in parse
 
     def _parsedotname(self, pre=None):
         """Parse a dotted name string
@@ -533,7 +538,7 @@ class PyParser:
         """
         name = []
         if pre == None:
-            tokentype, token, indent = self.next()
+            tokentype, token = self.next()[:2]
             if tokentype != NAME and token != '*':
                 return ('', token)
         else:
@@ -541,11 +546,11 @@ class PyParser:
 
         name.append(token)
         while True:
-            tokentype, token, indent = self.next()
+            tokentype, token = self.next()[:2]
             if token != '.':
                 break
 
-            tokentype, token, indent = self.next()
+            tokentype, token = self.next()[:2]
             if tokentype != NAME:
                 break
             name.append(token)
@@ -568,7 +573,7 @@ class PyParser:
 
             imports.append((name, name2))
             while token != "," and "\n" not in token:
-                tokentype, token, indent = self.next()
+                token = self.next()[1]
 
             if token != ",":
                 break
@@ -584,7 +589,7 @@ class PyParser:
         names = []
         level = 1
         while True:
-            tokentype, token, indent = self.next()
+            token = self.next()[1]
             if token in (')', ',') and level == 1:
                 names.append(name)
                 name = ''
@@ -609,16 +614,16 @@ class PyParser:
 
         """
         self.scope = self.scope.pop(indent)
-        tokentype, fname, ind = self.next()
+        tokentype, fname, indent = self.next()
         if tokentype != NAME:
             return None
 
-        tokentype, open_paren, ind = self.next()
+        tokentype, open_paren, indent = self.next()
         if open_paren != '(':
             return None
 
         params = self._parenparse()
-        tokentype, colon, ind = self.next()
+        tokentype, colon, indent = self.next()
         if colon != ':':
             return None
 
@@ -658,14 +663,29 @@ class PyParser:
         assign = ''
         tokentype, token = self.next()[:-1]
         tokens = { 
-                   '{' : '{}', 'dict' : '{}',             # Dict
-                   'open' : 'file', 'file' : 'file',      # File
-                   '[' : '[]', 'list' : '[]',             # List
-                   'None' : '_PyCmplNoType()',            # NoneType
-                   tokenize.NUMBER : '0',                 # Number
-                   tokenize.STRING : '""', 'str' : '""',  # String
-                   'type' : 'type(_PyCmplNoType)',        # Type
-                   '(' : '()', 'tuple' : '()',            # Tuple
+                   # Dict
+                   '{' : '{}', 'dict' : '{}',
+                   'locals' : '{}', 'globals' : '{}',
+                   # File
+                   'open' : 'file', 'file' : 'file',
+                   # List
+                   '[' : '[]', 'list' : '[]',
+                   'dir' : '[]', 'zip' : '[]', 'map' : '[]',
+                   'sorted' : '[]', 'range' : '[]',
+                   # NoneType
+                   'None' : '_PyCmplNoType()',
+                   # Number
+                   tokenize.NUMBER : '0', 'ord' : '0', 'id' : '0',
+                   'abs' : '0', 'sum' : '0', 'pow' : '0', 'len' : '0',
+                   'hash' : '0',
+                   # String
+                   tokenize.STRING : '""', 'str' : '""',
+                   'repr' : '""', 'chr' : '""', 'unichr' : '""',
+                   'hex' : '""', 'oct' : '""',
+                   # Type
+                   'type' : 'type(_PyCmplNoType)',
+                   # Tuple
+                   '(' : '()', 'tuple' : '()', 'coerce' : '()'
                  }
 
         if tokentype == tokenize.STRING or tokentype == tokenize.NUMBER:
@@ -705,7 +725,7 @@ class PyParser:
         @return: tuple of (type, token, indent)
 
         """
-        ttype, token, (lineno, indent), end, self.parserline = self.gen.next()
+        ttype, token, (lineno, indent) = self.gen.next()[:3]
         if lineno == self.curline:
             self.currentscope = self.scope
         return (ttype, token, indent)
@@ -819,8 +839,8 @@ class PyParser:
         except StopIteration: #thrown on EOF
             pass
         except:
-            dbg("[pycomp][err] Pyparser.parse: %s, %s @ %s" %
-                (sys.exc_info()[0], sys.exc_info()[1], self.parserline))
+            dbg("[pycomp][err] Pyparser.parse: %s, %s" %
+                (sys.exc_info()[0], sys.exc_info()[1]))
         return self._adjustvisibility()
 
 #-----------------------------------------------------------------------------#
