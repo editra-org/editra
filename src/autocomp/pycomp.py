@@ -27,20 +27,20 @@ __revision__ = "$Revision$"
 # Dependancies
 import sys, tokenize, cStringIO, types
 from token import NAME, DEDENT, NEWLINE, STRING
+import wx
 from wx.py import introspect
 
 #--------------------------------------------------------------------------#
 
 class Completer(object):
-    """Code completer provider
-
-    """
+    """Code completer provider"""
     def __init__(self, stc_buffer):
         """Initiliazes the completer
         @param stc_buffer: buffer that contains code
 
         """
         object.__init__(self)
+        self._log = wx.GetApp().GetLog()
         self._buffer = stc_buffer
         self._autocomp_keys = [ord('.')]
         self._autocomp_stop = ' .,;:([)]}\'"\\<>%^&+-=*/|`'
@@ -57,16 +57,16 @@ class Completer(object):
             cmpl.evalsource(self._buffer.GetText(),
                             self._buffer.GetCurrentLine())
             if calltip:
-                return cmpl.get_completions(command + '(', 0, calltip)
+                return cmpl.get_completions(command + '(', '', calltip)
             else:
                 # Get Autocompletion List
-                complst = cmpl.get_completions(command, 0)
+                complst = cmpl.get_completions(command)
                 sigs = [ sig['word'].rstrip('(.') for sig in complst ]
                 sigs.sort(lambda x, y: cmp(x.upper(), y.upper()))
                 return sigs
 
         except Exception, msg:
-            print "ERROR: ", msg
+            self._log("[pycomp][err] %s" % str(msg))
             return ''
 
     def GetAutoCompKeys(self):
@@ -138,13 +138,7 @@ class Completer(object):
 # This code below is a modified and adapted version of the pythoncomplete 
 # Omni completion script for vim. The original vimscript can be found at the 
 # following address: http://www.vim.org/scripts/script.php?script_id=1542
-def dbg(stmt):
-    """Debug printing for Python parser
-    @param stmt: Statement to print out
-
-    """
-    #print stmt
-    pass
+dbg = wx.GetApp().GetLog()
 
 class PyCompleter(object):
     """Python code completion provider"""
@@ -158,20 +152,19 @@ class PyCompleter(object):
         @keyword line: current line of cursor
 
         """
-        sc = self.parser.parse(text, line)
-        src = sc.get_code()
-        dbg("source: %s" % src)
+        scope = self.parser.parse(text.replace('\r\n', '\n'), line)
+        src = scope.get_code()
+        dbg("[pycomp] Generated source: %s" % src)
         try: 
             exec src in self.compldict
-        except: 
-            dbg("parser: %s, %s" % (sys.exc_info()[0], sys.exc_info()[1]))
+        except Exception, msg:
+            dbg("[pycomp][exec err]: src exec: %s" % msg)
 
-        for loc in sc.locals:
+        for loc in scope.locals:
             try: 
                 exec loc in self.compldict
-            except:
-                dbg("locals: %s, %s [%s]" % (sys.exc_info()[0], 
-                                             sys.exc_info()[1], loc))
+            except Exception, msg:
+                dbg("[pycomp][local err]: local exec %s [%s]" % (msg, loc))
 
     def _cleanstr(self, doc):
         """Clean up a docstring by removing quotes
@@ -209,18 +202,17 @@ class PyCompleter(object):
                 cd = func_obj.func_code
                 real_args = cd.co_varnames[arg_offset:cd.co_argcount]
                 defaults = func_obj.func_defaults or ''
-                defaults = map(lambda name: "=%s" % name, defaults)
+                defaults = [ "=%s" % name for name in defaults ]
                 defaults = [""] * (len(real_args) - len(defaults)) + defaults
-                items = map(lambda a, d: a + d, real_args, defaults)
+                items = [ arg + default for arg, default in zip(real_args, defaults) ]
                 if func_obj.func_code.co_flags & 0x4:
                     items.append("...")
                 if func_obj.func_code.co_flags & 0x8:
                     items.append("***")
                 arg_text = (','.join(items)) + ')'
 
-            except:
-                dbg("arg completion: %s: %s" % (sys.exc_info()[0], 
-                                                sys.exc_info()[1]))
+            except Exception, msg:
+                dbg("[pycomp][err] get_arguments: %s" % msg)
 
         if len(arg_text) == 0:
             # The doc string sometimes contains the function signature
@@ -242,20 +234,16 @@ class PyCompleter(object):
 
         return arg_text
 
-    def get_completions(self, context, match, ctip=False):
+    def get_completions(self, context, match='', ctip=False):
         """Get the completions for the given context
         @param context: command string to get completions for
-        @param match: Todo
+        @keyword match: for matching a partical command string
         @keyword ctip: Get a calltip for the context instead of completion list
+        @return: list of dictionaries
 
         """
-        dbg("get_completions('%s','%s')" % (context, match))
-        stmt = ''
-        if context:
-            stmt += str(context)
-
-        if match:
-            stmt += str(match)
+        dbg("[pycomp] get_completions('%s','%s')" % (context, match))
+        stmt = context + match
 
         try:
             result = None
@@ -263,17 +251,17 @@ class PyCompleter(object):
             ridx = stmt.rfind('.')
             if len(stmt) > 0 and stmt[-1] == '(':
                 if ctip:
+                    # Use introspect for calltips for now until some
+                    # issues are sorted out with the main parser
                     return introspect.getCallTip(_sanitize(stmt), 
                                                  self.compldict)[2]
                 else:
                     result = eval(_sanitize(stmt[:-1]), self.compldict)
-                doc = result.__doc__
-                if doc == None:
-                    doc = ''
+
+                doc = getattr(result, '__doc__', '')
                 args = self.get_arguments(result)
                 return [{'word':self._cleanstr(args), 
                          'info':self._cleanstr(doc)}]
-
             elif ridx == -1:
                 match = stmt
                 compdict = self.compldict
@@ -283,27 +271,30 @@ class PyCompleter(object):
                 result = eval(stmt, self.compldict)
                 compdict = dir(result)
 
-            dbg("completing: stmt:%s" % stmt)
+            dbg("[pycomp] completing: stmt:%s" % stmt)
             completions = []
             maindoc = getattr(result, '__doc__', ' ')
+            if maindoc is None:
+                maindoc = ' '
 
             for meth in compdict:
                 if meth == "_PyCmplNoType":
                     continue #this is internal
 
                 try:
-                    dbg('possible completion: %s' % meth)
+#                     dbg('[pycomp] possible completion: %s' % meth)
                     if meth.find(match) == 0:
                         if result == None:
-                            inst = compdict[meth]
+                            # NOTE: when result is none compdict is a list
+                            inst = meth #compdict[meth]
                         else:
                             inst = getattr(result, meth)
 
                         doc = getattr(inst, '__doc__', maindoc)
-                        typestr = str(inst)
-                        if doc == None or doc == '':
+                        if doc is None:
                             doc = maindoc
 
+                        typestr = str(inst)
                         wrd = meth[len(match):]
                         c = {'word' : wrd,
                              'abbr' : meth,
@@ -321,15 +312,17 @@ class PyCompleter(object):
                             c['word'] += '('
                             c['abbr'] += '('
                         completions.append(c)
-                except:
-                    info = sys.exc_info()
-                    dbg("inner completion: %s,%s [stmt='%s']" % (info[0], 
-                                                                 info[1], stmt))
+                except Exception, msg:
+                    dbg("[pycomp][err] inner completion: %s [stmt='%s']:" % \
+                        (msg, stmt))
+
             return completions
-        except:
-            info = sys.exc_info()
-            dbg("completion: %s,%s [stmt='%s']" % (info[0], info[1], stmt))
+        except Exception, msg:
+            dbg("[pycomp][err] get_completions: %s [stmt='%s']" % (msg, stmt))
             return []
+
+#-----------------------------------------------------------------------------#
+# Code objects
 
 class Scope(object):
     """Base class for representing code objects"""
@@ -356,8 +349,8 @@ class Scope(object):
         return sub
 
     def doc(self, docstr):
-        """Clean up a docstring
-        @param docstr: Docstring to cleanup
+        """Clean up and format a docstring
+        @param docstr: Docstring to format
 
         """
         dstr = docstr.replace('\n',' ')
@@ -373,8 +366,8 @@ class Scope(object):
     def local(self, loc):
         """Add an object to the scopes locals
         @param loc: local object to add to locals
-        """
 
+        """
         self._checkexisting(loc)
         self.locals.append(loc)
 
@@ -488,7 +481,6 @@ class Class(Scope):
             cstr += '%spass\n' % self.childindent()
         return cstr
 
-
 class Function(Scope):
     """Create a function object for representing a python function
     definition in the parser.
@@ -523,6 +515,9 @@ class Function(Scope):
             cstr += self.childindent() + '"""' + self.docstr + '"""\n'
         cstr += "%spass\n" % self.childindent()
         return cstr
+
+#-----------------------------------------------------------------------------#
+# Main Parser
 
 class PyParser:
     """Python parsing class"""
@@ -577,6 +572,7 @@ class PyParser:
 
             if token != ",":
                 break
+
         return imports
 
     def _parenparse(self):
@@ -602,6 +598,7 @@ class PyParser:
                 pass
             else:
                 name += str(token)
+
         return names
 
     def _parsefunction(self, indent):
@@ -648,6 +645,10 @@ class PyParser:
 
         return Class(cname, super_cls, indent)
 
+    # TODO this returns invalid tokens for some assignment statements.
+    #      In order to avoid this from breaking the eval the statements
+    #      are currently compiled to check syntax and filter accordingly. 
+    #      Need to find why the parse is failing on valid code sometimes.
     def _parseassignment(self):
         """Parse a variable assignment to resolve the variables type
         for introspection.
@@ -666,12 +667,14 @@ class PyParser:
                    'type' : 'type(_PyCmplNoType)',        # Type
                    '(' : '()', 'tuple' : '()',            # Tuple
                  }
+
         if tokentype == tokenize.STRING or tokentype == tokenize.NUMBER:
             token = tokentype
 
         if tokens.has_key(token):
             return tokens[token]
         else:
+            # NOTE: This part of the parse is where the problem is happening
             assign += token
             level = 0
             while True:
@@ -686,7 +689,16 @@ class PyParser:
                     if token in (';', '\n'):
                         break
                     assign += token
-        return assign
+
+        # Check syntax to filter out bad tokens
+        # NOTE: temporary till parser is improved more
+        try:
+            compile(assign, '_pycomp', 'eval')
+        except:
+            dbg("[pycomp][err] parseassignment bad token: %s" % assign)
+            return None
+        else:
+            return assign
 
     def next(self):
         """Get tokens of next line in parse
@@ -727,7 +739,7 @@ class PyParser:
                         newscope.local('%s = _PyCmplNoType()' % param)
                     else:
                         newscope.local('%s = %s' % (param[:ind], 
-                                                    _sanitize(param[ind+1])))
+                                                    _sanitize(param[ind+1:])))
 
             for sub in scp.subscopes:
                 newscope.add(sub.copy_decl(0))
@@ -746,8 +758,8 @@ class PyParser:
         @keyword curline: current line of cursor for context
 
         """
-        self.curline = int(curline)
-        buf = cStringIO.StringIO(''.join(text) + '\n')
+        self.curline = curline
+        buf = cStringIO.StringIO(text)
         self.gen = tokenize.generate_tokens(buf.readline)
         self.currentscope = self.scope
 
@@ -800,14 +812,14 @@ class PyParser:
                     name, token = self._parsedotname(token) 
                     if token == '=':
                         stmt = self._parseassignment()
-                        dbg("parseassignment: %s = %s" % (name, stmt))
+                        dbg("[pycomp] parseassignment: %s = %s" % (name, stmt))
                         if stmt != None:
                             self.scope.local("%s = %s" % (name, stmt))
                     freshscope = False
         except StopIteration: #thrown on EOF
             pass
         except:
-            dbg("parse error: %s, %s @ %s" %
+            dbg("[pycomp][err] Pyparser.parse: %s, %s @ %s" %
                 (sys.exc_info()[0], sys.exc_info()[1], self.parserline))
         return self._adjustvisibility()
 
