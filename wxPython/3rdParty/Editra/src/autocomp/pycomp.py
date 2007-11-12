@@ -30,6 +30,10 @@ from token import NAME, DEDENT, NEWLINE, STRING
 import wx
 from wx.py import introspect
 
+# Needed for introspect to run
+sys.ps1 = '>>>'
+sys.ps2 = '...'
+
 #--------------------------------------------------------------------------#
 
 class Completer(object):
