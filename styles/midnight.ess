@@ -155,3 +155,6 @@ unknown_style {
 		back: #DD0101 eol;
 }
 
+whitespace_style {
+        fore: #626262;
+}

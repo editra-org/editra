@@ -167,3 +167,7 @@ unknown_style {
         fore: #FFFFFF bold; 
         back: #DD0101 eol; 
 }
+
+whitespace_style {
+        fore: #838383;
+}

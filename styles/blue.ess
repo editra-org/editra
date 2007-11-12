@@ -169,3 +169,7 @@ brace_bad {
 dockey_style {
 		fore:#80007B;
 }
+
+whitespace_style {
+        fore: #DDCCBB;
+}
