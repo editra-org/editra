@@ -34,8 +34,6 @@ import wx
 import wx.aui
 from ed_glob import *
 import util
-from profiler import Profile_Get as _PGET
-from profiler import Profile_Set as _PSET
 import profiler
 import ed_toolbar
 import ed_event
@@ -51,6 +49,9 @@ import iface
 
 # Function Aliases
 _ = wx.GetTranslation
+_PGET = profiler.Profile_Get
+_PSET = profiler.Profile_Set
+
 #--------------------------------------------------------------------------#
 
 class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
