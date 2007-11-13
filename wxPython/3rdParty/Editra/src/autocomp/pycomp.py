@@ -30,10 +30,6 @@ from token import NAME, DEDENT, STRING #, NEWLINE
 import wx
 from wx.py import introspect
 
-# Needed for introspect to run
-sys.ps1 = '>>>'
-sys.ps2 = '...'
-
 #--------------------------------------------------------------------------#
 
 class Completer(object):
@@ -50,6 +46,17 @@ class Completer(object):
         self._autocomp_stop = ' .,;:([)]}\'"\\<>%^&+-=*/|`'
         self._calltip_keys = [ord('(')]
         self._case_sensitive = False
+
+        # Needed for introspect to run
+        try:
+            sys.ps1
+        except AttributeError:
+            sys.ps1 = '>>>'
+
+        try:
+            sys.ps2
+        except AttributeError:
+            sys.ps2 = '...'
 
     def _GetCompletionInfo(self, command, calltip=False):
         """Get Completion list or Calltip
