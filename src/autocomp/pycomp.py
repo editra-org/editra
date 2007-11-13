@@ -26,7 +26,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import sys, tokenize, cStringIO, types
-from token import NAME, DEDENT, NEWLINE, STRING
+from token import NAME, DEDENT, STRING #, NEWLINE
 import wx
 from wx.py import introspect
 
@@ -170,13 +170,6 @@ class PyCompleter(object):
             except Exception, msg:
                 dbg("[pycomp][local err]: local exec %s [%s]" % (msg, loc))
 
-    def _cleanstr(self, doc):
-        """Clean up a docstring by removing quotes
-        @param doc: docstring to clean up
-
-        """
-        return doc.replace('"', ' ').replace("'", ' ')
-
     def get_arguments(self, func_obj):
         """Get the arguments of a given function obj
         @param func_obj: function object to get parameters for
@@ -204,15 +197,16 @@ class PyCompleter(object):
         arg_text = ''
         if type(func_obj) in [types.FunctionType, types.LambdaType]:
             try:
-                cd = func_obj.func_code
-                real_args = cd.co_varnames[arg_offset:cd.co_argcount]
+                fcode = func_obj.func_code
+                real_args = fcode.co_varnames[arg_offset:fcode.co_argcount]
                 defaults = func_obj.func_defaults or ''
                 defaults = [ "=%s" % name for name in defaults ]
                 defaults = [""] * (len(real_args) - len(defaults)) + defaults
-                items = [ arg + default for arg, default in zip(real_args, defaults) ]
-                if func_obj.func_code.co_flags & 0x4:
+                items = [ arg + default 
+                          for arg, default in zip(real_args, defaults) ]
+                if fcode.co_flags & 0x4:
                     items.append("...")
-                if func_obj.func_code.co_flags & 0x8:
+                if fcode.co_flags & 0x8:
                     items.append("***")
                 arg_text = (','.join(items)) + ')'
 
@@ -223,8 +217,9 @@ class PyCompleter(object):
             # The doc string sometimes contains the function signature
             #  this works for alot of C modules that are part of the
             #  standard library
-            doc = func_obj.__doc__
+            doc = getattr(func_obj, '__doc__', False)
             if doc:
+                doc = str(doc)
                 doc = doc.lstrip()
                 pos = doc.find('\n')
                 if pos > 0:
@@ -242,7 +237,7 @@ class PyCompleter(object):
     def get_completions(self, context, match='', ctip=False):
         """Get the completions for the given context
         @param context: command string to get completions for
-        @keyword match: for matching a partical command string
+        @keyword match: for matching an incomplete command string
         @keyword ctip: Get a calltip for the context instead of completion list
         @return: list of dictionaries
 
@@ -263,10 +258,9 @@ class PyCompleter(object):
                 else:
                     result = eval(_sanitize(stmt[:-1]), self.compldict)
 
-                doc = getattr(result, '__doc__', '')
-                args = self.get_arguments(result)
-                return [{'word':self._cleanstr(args), 
-                         'info':self._cleanstr(doc)}]
+                doc = max(getattr(result, '__doc__', ''), ' ')
+                return [{'word' : _cleanstr(self.get_arguments(result)), 
+                         'info' : _cleanstr(doc)}]
             elif ridx == -1:
                 match = stmt
                 compdict = self.compldict
@@ -278,10 +272,6 @@ class PyCompleter(object):
 
             dbg("[pycomp] completing: stmt:%s" % stmt)
             completions = []
-            maindoc = getattr(result, '__doc__', ' ')
-            if maindoc is None:
-                maindoc = ' '
-
             for meth in compdict:
                 if meth == "_PyCmplNoType":
                     continue #this is internal
@@ -289,34 +279,33 @@ class PyCompleter(object):
                 try:
 #                     dbg('[pycomp] possible completion: %s' % meth)
                     if meth.find(match) == 0:
-                        if result == None:
+                        if result is None:
                             # NOTE: when result is none compdict is a list
                             inst = meth #compdict[meth]
                         else:
                             inst = getattr(result, meth)
 
-                        doc = getattr(inst, '__doc__', maindoc)
+                        doc = getattr(inst, '__doc__', None)
                         if doc is None:
-                            doc = maindoc
+                            doc = max(getattr(result, '__doc__', ' '), ' ')
+
+                        comp = {'word' : meth[len(match):],
+                                'abbr' : meth,
+                                'info' : _cleanstr(str(doc))}
 
                         typestr = str(inst)
-                        wrd = meth[len(match):]
-                        c = {'word' : wrd,
-                             'abbr' : meth,
-                             'info' : self._cleanstr(doc)}
-
                         if "function" in typestr:
-                            c['word'] += '('
-                            c['abbr'] += '(' + self._cleanstr(self.get_arguments(inst))
+                            comp['word'] += '('
+                            comp['abbr'] += '(' + _cleanstr(self.get_arguments(inst))
                         elif "method" in typestr:
-                            c['word'] += '('
-                            c['abbr'] += '(' + self._cleanstr(self.get_arguments(inst))
+                            comp['word'] += '('
+                            comp['abbr'] += '(' + _cleanstr(self.get_arguments(inst))
                         elif "module" in typestr:
-                            c['word'] += '.'
+                            comp['word'] += '.'
                         elif "class" in typestr:
-                            c['word'] += '('
-                            c['abbr'] += '('
-                        completions.append(c)
+                            comp['word'] += '('
+                            comp['abbr'] += '('
+                        completions.append(comp)
                 except Exception, msg:
                     dbg("[pycomp][err] inner completion: %s [stmt='%s']:" % \
                         (msg, stmt))
@@ -354,8 +343,8 @@ class Scope(object):
         return sub
 
     def doc(self, docstr):
-        """Clean up and format a docstring
-        @param docstr: Docstring to format
+        """Format and set the doc string for this scope
+        @param docstr: Docstring to format and set
 
         """
         dstr = docstr.replace('\n',' ')
@@ -849,6 +838,12 @@ class PyParser:
 
 #-----------------------------------------------------------------------------#
 # Utility Functions
+def _cleanstr(doc):
+    """Clean up a docstring by removing quotes
+    @param doc: docstring to clean up
+
+    """
+    return doc.replace('"', ' ').replace("'", ' ')
 
 def _sanitize(cstr):
     """Sanitize a command string for namespace lookup
