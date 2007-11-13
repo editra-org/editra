@@ -590,6 +590,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if self._config['autocomp']:
                 if self.CallTipActive():
                     self.CallTipCancel()
+
+                if self.AutoCompActive():
+                    self.AutoCompCancel()
+
         else:
             evt.Skip()
 
@@ -613,7 +617,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         elif key_code in self._code['compsvc'].GetAutoCompKeys():
             if self.AutoCompActive():
                 self.AutoCompCancel()
-            command = self.GetCommandStr() + chr(key_code)
+            command = self.GetCommandStr() + unichr(key_code)
             self.AddText(unichr(key_code))
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
@@ -621,7 +625,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if self.AutoCompActive():
                 self.AutoCompCancel()
             command = self.GetCommandStr()
-            self.AddText(chr(key_code))
+            self.AddText(unichr(key_code))
             if self._config['autocomp']:
                 self.ShowCallTip(command)
         else:
@@ -715,8 +719,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         lst = self._code['compsvc'].GetAutoCompList(command)
         if len(lst):
-            options = u' '.join(lst)
-            self.AutoCompShow(0, options)
+            self.AutoCompShow(0, u' '.join(lst))
+            self.SetFocus()
 
     def ShowCallTip(self, command):
         """Shows call tip for given command
@@ -725,6 +729,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         if self.CallTipActive():
             self.CallTipCancel()
+
         tip = self._code['compsvc'].GetCallTip(command)
         if len(tip):
             curr_pos = self.GetCurrentPos()
@@ -971,7 +976,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     ed_glob.ID_ADD_BM    : self.Bookmark,
                     ed_glob.ID_DEL_BM    : self.Bookmark,
                     ed_glob.ID_DEL_ALL_BM : self.Bookmark}
-                    
+
+        if self.CallTipActive():
+            self.CallTipCancel()
+
+        if self.AutoCompActive():
+            self.AutoCompCancel()
+
         if e_obj.GetClassName() == "wxToolBar" or e_map.has_key(e_id):
             if e_map.has_key(e_id):
                 e_map[e_id]()
