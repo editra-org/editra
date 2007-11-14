@@ -85,3 +85,6 @@ class PyShell(plugin.Plugin):
 
     def GetName(self):
         return self.__name__
+
+    def IsStockable(self):
+        return True

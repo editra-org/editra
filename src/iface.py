@@ -130,6 +130,16 @@ class ShelfI(plugin.Interface):
 
         """
 
+    def IsStockable(self):
+        """Return whether this item type is stockable. The shelf saves
+        what pages it had open the last time the program was run and then
+        reloads the pages the next time the program starts. If this
+        item can be reloaded between sessions return True otherwise return
+        False.
+
+        """
+        
+
 #-----------------------------------------------------------------------------#
 SHELF_NAME = u'Shelf'
 class Shelf(plugin.Plugin):
@@ -176,6 +186,33 @@ class Shelf(plugin.Plugin):
             item[1].SetText(item[1].GetText() + "\tCtrl+Alt+" + str(combo))
             menu.AppendItem(item[1])
         return menu
+
+    def AddItem(self, item, name):
+        """Add an item to the shelfs notebook. This is usefull for interacting
+        with the Shelf from outside its interface. It may be necessary to
+        call L{EnsureShelfVisible} before or after adding an item if you wish
+        the shelf to be shown when the item is added.
+        @param item: A panel like instance to add to the shelfs notebook
+        @param name: Items name used for page text in notebook
+
+        """
+        self._shelf.AddPage(item, u"%s - %d" % (name, self._open.get(name, 0)))
+        self._open[name] = self._open.get(name, 0) + 1
+
+    def CanStockItem(self, item_name):
+        """See if a named item can be stocked or not, meaning if it
+        can be saved and opened in the next session or not.
+        @param item_name: name of item to check
+        @return: bool whether item can be stocked or not
+
+        """
+        for item in self.observers:
+            if item_name == item.GetName():
+                if hasattr(item, 'IsStockable'):
+                    return item.IsStockable()
+                else:
+                    break
+        return False
 
     def Init(self, parent):
         """Mixes the shelf into the parent window
@@ -250,7 +287,7 @@ class Shelf(plugin.Plugin):
 
         for page in xrange(self._shelf.GetPageCount()):
             if item_name == re.sub(PGNUM_PAT, u'', 
-                                  self._shelf.GetPageText(page), 1):
+                                   self._shelf.GetPageText(page), 1):
                 count = count + 1
         return count
 
@@ -278,6 +315,13 @@ class Shelf(plugin.Plugin):
             rval.append(re.sub(PGNUM_PAT, u'', 
                         self._shelf.GetPageText(page), 1))
         return rval
+
+    def GetWindow(self):
+        """Return reference to the Shelfs window component
+        @return: FlatnoteBook
+
+        """
+        return self._shelf
 
     def Hide(self):
         """Hide the shelf
@@ -333,13 +377,17 @@ class Shelf(plugin.Plugin):
     def OnPutShelfItemAway(self, evt):
         """Handles when an item is closed
         @param evt: event that called this handler
+        @todo: is this needed?
 
         """
         print "OnPutShelfItemAway Not implemented"
         evt.Skip()
 
     def PutItemOnShelf(self, shelfid):
-        """Put an item on the shelf
+        """Put an item on the shelf by using its unique shelf id.
+        This is only for use with loading items implementing the
+        L{ShelfI} interface. See L{AddItem} if you wish to pass
+        a panel to the shelf to add.
         @param shelfid: id of the ShelfItem to open
 
         """
@@ -359,9 +407,7 @@ class Shelf(plugin.Plugin):
             return
         else:
             self.EnsureShelfVisible()
-            self._shelf.AddPage(item.CreateItem(self._shelf), 
-                                u"%s - %d" % (name, self._open.get(name, 0)))
-            self._open[name] = self._open.get(name, 0) + 1
+            self.AddItem(item.CreateItem(self._shelf), name)
 
     def ItemIsOnShelf(self, item_name):
         """Check if at least one instance of a given item
@@ -373,7 +419,7 @@ class Shelf(plugin.Plugin):
             return False
 
         for page in xrange(self._shelf.GetPageCount()):
-            if item_name in self._shelf.GetPageText(page):
+            if self._shelf.GetPageText(page).startswith(item_name):
                 return True
         return False
 
@@ -384,8 +430,9 @@ class Shelf(plugin.Plugin):
 
         """
         for item in i_list:
-            itemid = self.GetItemId(item)
-            if itemid:
-                self.PutItemOnShelf(itemid)
+            if self.CanStockItem(item):
+                itemid = self.GetItemId(item)
+                if itemid:
+                    self.PutItemOnShelf(itemid)
 
 #--------------------------------------------------------------------------#
