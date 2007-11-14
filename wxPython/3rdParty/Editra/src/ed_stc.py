@@ -733,7 +733,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         tip = self._code['compsvc'].GetCallTip(command)
         if len(tip):
             curr_pos = self.GetCurrentPos()
-            tip_pos = curr_pos - (len(command) + 1)
+            tip_pos = curr_pos - (len(command.split('.')[-1]) + 1)
             fail_safe = curr_pos - self.GetColumn(curr_pos)
             self.CallTipShow(max(tip_pos, fail_safe), tip)
 
