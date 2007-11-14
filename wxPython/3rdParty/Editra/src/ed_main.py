@@ -1072,7 +1072,7 @@ def OnHelp(evt):
     if e_id == ID_HOMEPAGE:
         webbrowser.open(HOME_PAGE, 1)
     elif e_id == ID_DOCUMENTATION:
-        webbrowser.open_new_tab(HOME_PAGE + "/?page=doc")
+        webbrowser.open(HOME_PAGE + "/?page=doc")
     elif e_id == ID_CONTACT:
         webbrowser.open(u'mailto:%s' % CONTACT_MAIL)
     else:
