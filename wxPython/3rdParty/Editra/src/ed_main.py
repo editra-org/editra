@@ -359,6 +359,16 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         return self.nb
 
+    def GetShelf(self):
+        """Get this windows Shelf
+        @return: reference to L{iface.Shelf} instance
+        @note: returns the plugin instance not the actual notebook, if
+               a reference to the notebook is needed for parenting call
+               GetWindow on the object returned by this function.
+
+        """
+        return self._shelf
+
     def IsExiting(self):
         """Returns whether the windows is in the process of exiting
         or not.
