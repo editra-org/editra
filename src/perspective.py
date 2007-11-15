@@ -69,7 +69,7 @@ class PerspectiveManager(object):
         self._viewset = dict()                      # Set of Views
         self.LoadPerspectives()
         self._menu = ed_menu.EdMenu()               # Control menu
-        self._currview = None                       # Currently used view
+        self._currview = Profile_Get('DEFAULT_VIEW')    # Currently used view
 
         # Setup Menu
         self._menu.Append(ID_SAVE_PERSPECTIVE, _("Save Current View"),
@@ -274,6 +274,7 @@ class PerspectiveManager(object):
         """
         writer = util.GetFileWriter(self._base)
         if writer == -1:
+            util.Log("[perspectives][err] Failed to save %s" % self._base)
             return False
 
         try:
@@ -282,6 +283,7 @@ class PerspectiveManager(object):
                 writer.write(u"%s=%s\n" % (perspect, self._viewset[perspect]))
             del self._viewset[LAST_KEY]
         except (IOError, OSError):
+            util.Log("[perspectives][err] Write error: %s" % self._base)
             return False
         else:
             return True
@@ -295,12 +297,14 @@ class PerspectiveManager(object):
 
         """
         if self._viewset.has_key(name):
+
             if name == AUTO_PERSPECTIVE:
-                self._viewset[AUTO_PERSPECTIVE] = self._mgr.SavePerspective()
+                self._viewset[name] = self._viewset[self._currview]
+            else:
+                self._mgr.LoadPerspective(self._viewset[name])
+                self._mgr.Update()
 
             self._currview = name
-            self._mgr.LoadPerspective(self._viewset[name])
-            self._mgr.Update()
             self.SavePerspectives()
             return True
         else:
