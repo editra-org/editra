@@ -75,6 +75,10 @@ COMMENT    = 5    # Gets the comment characters pattern
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
+from synextreg import ExtensionRegister, GetFileExtensions
+
+#-----------------------------------------------------------------------------#
+
 class SyntaxMgr(object):
     """Class Object for managing loaded syntax data. The manager
     is only created once as a singleton and shared amongst all
@@ -207,166 +211,6 @@ class SyntaxMgr(object):
         syn_data[COMMENT] = mod.CommentPattern(lex_cfg[LANG_ID])
         return syn_data
 
-#-----------------------------------------------------------------------------#
-
-class ExtensionRegister(dict):
-    """A data storage class for managing mappings of
-    file types to file extentions. The register is created
-    as a singleton.
-    @status: initial implimentation
-
-    """
-    instance = None
-    first = True
-    config = u'synmap'
-    def __init__(self):
-        """Initializes the register"""
-        if self.first:
-            self.first = False
-            self.LoadDefault()
-
-    def __new__(cls, *args, **kargs):
-        """Maintain only a single instance of this object
-        @return: instance of this class
-
-        """
-        if not cls.instance:
-            cls.instance = dict.__new__(cls, *args, **kargs)
-        return cls.instance
-
-    def __missing__(self, key):
-        """Return the default value if an item is not found
-        @return: txt extension for plain text
-
-        """
-        return u'txt'
-
-    def __setitem__(self, i, y):
-        """Ensures that only one filetype is associated with an extension
-        at one time. The behavior is that more recent settings override
-        and remove associations from older settings.
-        @param i: key to set
-        @param y: value to set
-
-        """
-        if not isinstance(y, list):
-            raise TypeError, "Extension Register Expects a List"
-        for key, val in self.iteritems():
-            for item in y:
-                if item in val:
-                    val.pop(val.index(item))
-        y.sort()
-        dict.__setitem__(self, i, [x.strip() for x in y])
-
-    def __str__(self):
-        """Converts the Register to a string that is formatted
-        for output to a config file.
-        @return: the register as a string
-
-        """
-        keys = self.keys()
-        keys.sort()
-        tmp = list()
-        for key in keys:
-            tmp.append("%s=%s" % (key, u':'.join(self.__getitem__(key))))
-        return os.linesep.join(tmp)
-
-    def Associate(self, ftype, ext):
-        """Associate a given file type with the given file extension(s).
-        The ext parameter can be a string of space separated extensions
-        to allow for multiple associations at once.
-        @param ftype: file type description string
-        @param ext: file extension to associate
-        
-        """
-        assoc = self.get(ftype, None)
-        exts = ext.strip().split()
-        if assoc:
-            for x in exts:
-                if x not in assoc:
-                    assoc.append(x)
-        else:
-            assoc = list(set(exts))
-        assoc.sort()
-        self.__setitem__(ftype, assoc)
-
-    def Disassociate(self, ftype, ext):
-        """Disassociate a file type with a given extension or space
-        separated list of extensions.
-        @param ftype: filetype description string
-        @param ext: extension to disassociate
-
-        """
-        to_drop = ext.strip().split()
-        assoc = self.get(ftype, None)
-        if assoc:
-            for item in to_drop:
-                if item in assoc:
-                    assoc.pop([assoc.index(item)])
-            self.__setitem__(ftype, assoc)
-        else:
-            pass
-
-    def FileTypeFromExt(self, ext):
-        """Returns the file type that is associated with
-        the extension. If no association is found Plain Text
-        will be returned by default.
-        @param ext: extension to lookup
-
-        """
-        for key, val in self.iteritems():
-            if ext in val:
-                return key
-        return synglob.LANG_TXT
-
-    def GetAllExtensions(self):
-        """Returns a sorted list of all extensions registered
-        @return: list of all registered extensions
-
-        """
-        ext = list()
-        for extension in self.values():
-            ext.extend(extension) 
-        ext.sort()
-        return ext
-
-    def LoadDefault(self):
-        """Loads the default settings
-        @postcondition: sets dictionary back to default installation state
-
-        """
-        self.clear()
-        for key in synglob.EXT_MAP:
-            self.__setitem__(synglob.EXT_MAP[key], key.split())
-
-    def LoadFromConfig(self, config):
-        """Load the extention register with values from a config file
-        @param config: path to config file to load settings from
-
-        """
-        path = os.path.join(config, self.config)
-        if not os.path.exists(path):
-            self.LoadDefault()
-        else:
-            file_h = file(path, "rb")
-            lines = file_h.readlines()
-            file_h.close()
-            for line in lines:
-                tmp = line.split(u'=')
-                if len(tmp) != 2:
-                    continue
-                ftype = tmp[0].strip()
-                exts = tmp[1].split(u':')
-                self.__setitem__(ftype, exts)
-
-    def SetAssociation(self, ftype, ext):
-        """Like Associate but overrides any current settings instead of
-        just adding to them.
-        @param ftype: File type description string
-        @param ext: file extension to set
-
-        """
-        self.__setitem__(ftype, list(set(ext.split())))
 
 #-----------------------------------------------------------------------------#
 
@@ -409,15 +253,6 @@ def GenFileFilters():
     filters.insert(0, u"All Files (*.*)|*.*|")
     filters[-1] = filters[-1][:-1] # IMPORTANT trim last '|' from item in list
     return filters
-
-def GetFileExtensions():
-    """Gets a sorted list of all file extensions the editor is configured
-    to handle.
-    @return: all registered file extensions
-
-    """
-    extreg = ExtensionRegister()
-    return extreg.GetAllExtensions()
 
 def GetLexerList():
     """Gets a list of unique file lexer configurations available

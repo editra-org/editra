@@ -34,8 +34,8 @@ __revision__ = "$Revision$"
 import os
 import sys
 import glob
-import src.ed_glob as ed_glob
-import src.syntax.syntax as syntax # So we can get file extensions
+import src.info as info
+import src.syntax.synextreg as synextreg # So we can get file extensions
 
 #---- System Platform ----#
 __platform__ = os.sys.platform
@@ -155,7 +155,7 @@ NAME = "Editra"
 
 URL = "http://editra.org"
 
-VERSION = ed_glob.VERSION
+VERSION = info.VERSION
 
 MANIFEST_TEMPLATE = '''
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -224,13 +224,13 @@ elif __platform__ == "darwin" and 'py2app' in sys.argv:
     ez_setup.use_setuptools()
     from setuptools import setup
 
-    PLIST = dict(CFBundleName = ed_glob.PROG_NAME,
+    PLIST = dict(CFBundleName = info.PROG_NAME,
              CFBundleIconFile = 'Editra.icns',
-             CFBundleShortVersionString = ed_glob.VERSION,
-             CFBundleGetInfoString = ed_glob.PROG_NAME + " " + ed_glob.VERSION,
-             CFBundleExecutable = ed_glob.PROG_NAME,
-             CFBundleIdentifier = "org.editra.%s" % ed_glob.PROG_NAME.title(),
-             CFBundleDocumentTypes = [dict(CFBundleTypeExtensions=syntax.GetFileExtensions(),
+             CFBundleShortVersionString = info.VERSION,
+             CFBundleGetInfoString = info.PROG_NAME + " " + info.VERSION,
+             CFBundleExecutable = info.PROG_NAME,
+             CFBundleIdentifier = "org.editra.%s" % info.PROG_NAME.title(),
+             CFBundleDocumentTypes = [dict(CFBundleTypeExtensions=synextreg.GetFileExtensions(),
                                            CFBundleTypeIconFile='editra_doc',
                                            CFBundleTypeRole="Editor"
                                           ),
