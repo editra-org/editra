@@ -392,7 +392,7 @@ class PluginManager(object):
 
         """
         if pkg_resources != None:
-            path = [ pname.decode(sys.getfilesystemencoding()) 
+            path = [ pname.encode(sys.getfilesystemencoding()) 
                      for pname in path ]
             env = pkg_resources.Environment(path)
         else:
