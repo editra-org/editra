@@ -52,7 +52,7 @@ _DEFAULTS = {
            'CHECKMOD'   : True,             # Auto check file for file mod
            'CODE_FOLD'  : True,             # Use code folding
            'DEFAULT'    : False,            # No longer used I believe
-           'DEFAULT_VIEW' : 'Default',      # Default Perspective
+           'DEFAULT_VIEW' : 'Automatic',      # Default Perspective
            'EDGE'       : 80,               # Edge guide column
            'EOL'        : 'Unix (\\n)',     # EOL mode
            'FHIST'      : list(),           # List of history files
