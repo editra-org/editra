@@ -662,6 +662,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         _PSET('SHELF_ITEMS', self._shelf.GetItemStack())
 
         # Save Window Size/Position for next launch
+        self.UpdateAutoPerspective()
+
         # XXX On wxMac the window size doesnt seem to take the toolbar
         #     into account so destroy it so that the window size is accurate.
         if wx.Platform == '__WXMAC__' and self.GetToolBar():
