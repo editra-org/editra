@@ -48,11 +48,12 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
 ]
 
 #---- Project Info ----#
-AUTHOR = u'Cody Precord'
-VERSION = u'0.2.15'
-PROG_NAME = u'Editra'
-HOME_PAGE = u"http://editra.org"
-CONTACT_MAIL = u"staff@editra.org"
+# The project info was moved to another module so it could be accessed
+# externally without needing to import anything else.  It's imported
+# here with a * until there isn't anyplace left that expects to find
+# these values in this module.
+from info import *
+
 #---- End Project Info ----#
 
 #---- Imported Libs/Objects ----#
