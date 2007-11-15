@@ -79,10 +79,10 @@ class EdToolBar(wx.ToolBar):
         self.AddSimpleTool(ed_glob.ID_UNDO, _("Undo"), _("Undo Last Action"))
         self.AddSimpleTool(ed_glob.ID_REDO, _("Redo"), _("Redo Last Undo"))
         self.AddSeparator()
-        self.AddSimpleTool(ed_glob.ID_COPY, _("Copy"), 
-                           _("Copy Selected Text to Clipboard"))
         self.AddSimpleTool(ed_glob.ID_CUT, _("Cut"), 
                            _("Cut Selected Text from File"))
+        self.AddSimpleTool(ed_glob.ID_COPY, _("Copy"), 
+                           _("Copy Selected Text to Clipboard"))
         self.AddSimpleTool(ed_glob.ID_PASTE, _("Paste"), 
                            _("Paste Text from Clipboard to File"))
         self.AddSeparator()
