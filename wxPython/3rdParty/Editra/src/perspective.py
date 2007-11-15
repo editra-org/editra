@@ -160,10 +160,7 @@ class PerspectiveManager(object):
         @return: list of all managed perspectives
 
         """
-        views = self._viewset.keys()
-        if AUTO_PERSPECTIVE in views:
-            list.remove(AUTO_PERSPECTIVE)
-        return sorted(views)
+        return sorted(self._viewset.keys())
 
     def HasPerspective(self, name):
         """Returns True if there is a perspective by the given name
