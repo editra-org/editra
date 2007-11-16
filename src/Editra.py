@@ -484,13 +484,16 @@ def Main():
 
     # 2. Initialize the Language Settings
     the_locale = wx.Locale(ed_i18n.GetLangId(Profile_Get('LANG')))
-    the_locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
-    the_locale.AddCatalog(ed_glob.PROG_NAME)
-    language = gettext.translation(ed_glob.PROG_NAME, 
-                                   ed_glob.CONFIG['LANG_DIR'],
-                                   [the_locale.GetCanonicalName()], 
-                                   fallback=True)
-    language.install()
+    if the_locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
+        the_locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
+        the_locale.AddCatalog(ed_glob.PROG_NAME)
+        language = gettext.translation(ed_glob.PROG_NAME, 
+                                       ed_glob.CONFIG['LANG_DIR'],
+                                       [the_locale.GetCanonicalName()], 
+                                       fallback=True)
+        language.install()
+    else:
+        del the_locale
 
     if profile_updated:
         # Make sure window iniliazes to default position
