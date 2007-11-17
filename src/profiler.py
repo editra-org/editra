@@ -58,7 +58,7 @@ _DEFAULTS = {
            'FHIST'      : list(),           # List of history files
            'FHIST_LVL'  : 9,                # Filehistory length (9 is max)
            'FFILTER'    : 0,                # Last file filter used
-           'GUIDES'     : True,             # Use Indentation guides
+           'GUIDES'     : False,            # Use Indentation guides
            'ICONS'      : 'Tango',          # Icon Theme
            'ICON_SZ'    : (24, 24),         # Toolbar Icon Size
            'LANG'       : 'Default',        # UI language
@@ -82,7 +82,7 @@ _DEFAULTS = {
            'TOOLBAR'    : True,             # Show Toolbar
            'USETABS'    : True,             # Use tabs instead of spaces
            'VI_EMU'     : False,            # Use Vi emulation mode 
-           'WRAP'       : False,             # Use Wordwrap
+           'WRAP'       : False,            # Use Wordwrap
            'WSIZE'      : (700, 450)        # Mainwindow size
           #FONT1 created at runtime by ed_styles as primary font           
           #FONT2 created at runtime by ed_styles as secondary font
