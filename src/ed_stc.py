@@ -2130,7 +2130,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           self.GetStyleByName('brace_good'))
         self.StyleSetSpec(wx.stc.STC_STYLE_BRACEBAD, \
                           self.GetStyleByName('brace_bad'))
+        self.StyleSetSpec(wx.stc.STC_STYLE_INDENTGUIDE, \
+                          self.GetStyleByName('guide_style'))
 
+        # wx.stc.STC_STYLE_CALLTIP doesnt seem to do anything
         calltip = self.GetItemByName('calltip')
         self.CallTipSetBackground(calltip.GetBack())
         self.CallTipSetForeground(calltip.GetFore())

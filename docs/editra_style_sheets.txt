@@ -61,12 +61,14 @@ STANDARD TAGS:
         - class2_style: Currently unused
         - clear: Sets foreground to black, background to white
         - comment_style: Style of code comment blocs
+        - decor_style: Style for decorators
         - directive_style: Style of directives
         - dockey_style: Style of documentation keywords
         - error_style: Style of errors
         - folder_style: Style of code folding markers
         - funct_style: Style of Functions
         - global_style: Style of global variables
+        - guide_style: indentation guide style
         - here_style: Used to highlight HERE statements
         - ideol_style: Id End of Line (used in Makefiles)
         - keyword_style: Style of Primary Keywords
@@ -86,6 +88,7 @@ STANDARD TAGS:
         - string_style: Style of Strings (i.e "hello")
         - stringeol_style: Style of unclosed strings (i.e "hello )
         - unknown_style: Style of unknown statements
+        - whitespace_style: Style of whitespace indicators
 
 STANDARD ATTRIBUTES:
         - back: Defines the style of the background for the tags text area. The
@@ -147,6 +150,7 @@ SPECIAL TAGS:
         - select_style: When defined only the Background attribute is used. If
                         this style is not defined then the default system colour
                         for selection highlight is used in its place.
+        - whitespace_style: Only Foreground and Background attributes are used
 
 EXAMPLES:
 

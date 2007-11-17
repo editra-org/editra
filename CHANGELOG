@@ -18,7 +18,8 @@ NEW: [features/improvements]
 +Major improvements to python autocompletion
 +Tab completion for command buffer Edit and Change Directory commands
 +Automatic perspective mode for saving window state on exit
-+Text selection and whitespace style are now configurable through style settings
++Styles are more configurable with custom settings for text selection, 
+whitespace, and indentation guides now being configurable.
 +New Blue color scheme for syntax highlighting can be enabled in preferences
 
 BUG FIXES:
