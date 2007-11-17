@@ -87,6 +87,10 @@ global_style {
         face: %(secondary)s; 
 }
 
+guide_style {
+        fore: #838383;
+}
+
 here_style { 
         fore: #CA61CA bold; 
         face: %(secondary)s; 
