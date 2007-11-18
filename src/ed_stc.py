@@ -1050,6 +1050,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if tmp != eol:
                 mixed = True
                 break
+
         if mixed or diff:
             if mixed:
                 self.SetViewEOL(True)
@@ -2106,7 +2107,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: style is reset to default
 
         """
-        self.StyleResetDefault()
         self.StyleClearAll()
         self.SetCaretForeground(wx.NamedColor("black"))
         self.Colourise(0, -1)
