@@ -380,24 +380,21 @@ def InitConfig():
             profiler.Profile().Load(profiler.GetProfileStr())
         else:
             dev_tool.DEBUGP("[main_info] Updating Profile to current version")
-            pstr = profiler.GetProfileStr()
-            # upgrade earlier profiles to current 
-            if len(pstr) > 3 and pstr[-2:] == "pp":
-                pstr = pstr + u'b'
 
             # Load and update profile
+            pstr = profiler.GetProfileStr()
             profiler.Profile().Load(pstr)
             profiler.Profile().Update()
 
-            ## Force some default values to be set on upgrade
+            ## Force some default values to be set on an upgrade
             if wx.Platform == '__WXGTK__':
                 Profile_Set('ICONS', 'Default')
             else:
                 Profile_Set('ICONS', 'Tango')
 
-            # NOTE: currently turned off by default due to performance issues
-            if wx.Platform == '__WXMAC__':
-                Profile_Set('WRAP', False)
+            # Set default eol for windows TEMP for after 0.2.15 only
+            if wx.Platform == '__WXMSW__':
+                Profile_Set('EOL', 'Windows (\\r\\n)')
 
             # Write out updated profile
             profiler.Profile().Write(pstr)
@@ -412,6 +409,10 @@ def InitConfig():
     else:
         # Fresh install
         util.CreateConfigDir()
+
+        # Set default eol for windows
+        if wx.Platform == '__WXMSW__':
+            Profile_Set('EOL', 'Windows (\\r\\n)')
 
     # Set debug mode
     if 'DEBUG' in Profile_Get('MODE'):
