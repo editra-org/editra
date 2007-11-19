@@ -376,7 +376,7 @@ class StyleEditor(wx.Dialog):
 
         if result == wx.ID_OK:
             sheet_path = dlg.GetPath()
-            if u'ess' != sheet_path.split(u'.')[-1]:
+            if sheet_path.split(u'.')[-1] != u'ess':
                 sheet_path += u".ess"
 
             try:
@@ -413,21 +413,29 @@ class StyleEditor(wx.Dialog):
 
         """
         sty_sheet = list()
-        for tag in self.styles_new:
-            if self.styles_new[tag].IsNull():
+        ditem = self.styles_new.get('default_style', StyleItem())
+        dvals = ';\n\t\t'.join([item.replace(',', ' ') 
+                                for item in ditem.GetAsList() ]) + ';'
+        sty_sheet.append(''.join(['default_style {\n\t\t', dvals, '\n\n}\n\n']))
+        for tag, item in self.styles_new.iteritems():
+            if item.IsNull() or tag == 'default_style':
                 continue
 
-            sty_sheet.append(tag + u" {\n")
-            sdat = unicode(self.styles_new[tag]).split(u",")
             stage1 = wx.EmptyString
-            for atom in sdat:
-                if atom in "bold eol italic underline":
-                    stage1 = stage1[0:-1] + u" " + atom + u";"
-                else:
-                    stage1 = stage1 + atom + u";"
-            stage2 = u"\t\t" + stage1[0:-1].replace(u";", u";\n\t\t") + u";"
-            sty_sheet.append(stage2)
-            sty_sheet.append(u"\n}\n\n")
+            for attr in ('fore', 'back', 'face', 'size'):
+                ival = item.GetNamedAttr(attr)
+                if ival is None or ival == ditem.GetNamedAttr(attr):
+                    continue
+
+                stage1 = ''.join((stage1, attr, u':', 
+                                  ival.replace(',', ' '), u';'))
+
+            if len(stage1):
+                sty_sheet.append(tag + u" {\n")
+                stage2 = u"\t\t" + stage1[0:-1].replace(u";", u";\n\t\t") + u";"
+                sty_sheet.append(stage2)
+                sty_sheet.append(u"\n}\n\n")
+
         return u"".join(sty_sheet)
 
     def OnCancel(self, evt):
