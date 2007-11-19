@@ -67,14 +67,10 @@ class StyleItem(object):
         """
         object.__init__(self)
         self.null = False
-        if fore != wx.EmptyString:
-            self.fore = fore        # Foreground color hex code
-        if face != wx.EmptyString:
-            self.face = face        # Font face name
-        if back != wx.EmptyString:
-            self.back = back        # Background color hex code
-        if size != wx.EmptyString:
-            self.size = size        # Font point size
+        self.fore = fore        # Foreground color hex code
+        self.face = face        # Font face name
+        self.back = back        # Background color hex code
+        self.size = size        # Font point size
 
     def __eq__(self, si2):
         """Defines the == operator for the StyleItem Class
@@ -96,47 +92,69 @@ class StyleItem(object):
 
         """
         style_str = wx.EmptyString
-        if hasattr(self, u'fore'):
+        if self.fore:
             style_str = u"fore:%s," % self.fore
-        if hasattr(self, u'back'):
+        if self.back:
             style_str += u"back:%s," % self.back
-        if hasattr(self, u'face'):
+        if self.face:
             style_str += u"face:%s," % self.face
-        if hasattr(self, u'size'):
+        if self.size:
             style_str += u"size:%s," % str(self.size)
+
         if len(style_str) and style_str[-1] == u',':
             style_str = style_str[0:-1]
         return style_str
 
     #---- Get Functions ----#
+    def GetAsList(self):
+        """Returns a list of attr:value strings
+        this style item.
+        @return: list attribute values usable for building stc or ess values
+
+        """
+        retval = list()
+        for attr in ('fore', 'back', 'face', 'size'):
+            val = getattr(self, attr, None)
+            if val not in ( None, wx.EmptyString ):
+                retval.append(attr + ':' + val)
+        return retval
+
     def GetBack(self):
         """Returns the value of the back attribute
         @return: style items background attribute
 
         """
-        return getattr(self, 'back', wx.EmptyString)
+        return self.back
 
     def GetFace(self):
         """Returns the value of the face attribute
         @return: style items font face attribute
 
         """
-        return getattr(self, 'face', wx.EmptyString)
+        return self.face
 
     def GetFore(self):
         """Returns the value of the fore attribute
         @return: style items foreground attribute
 
         """
-        return getattr(self, 'fore', wx.EmptyString)
+        return self.fore
 
     def GetSize(self):
         """Returns the value of the size attribute as a string
         @return: style items font size attribute
 
         """
-        return getattr(self, 'size', wx.EmptyString)
+        return self.size
 
+    def GetNamedAttr(self, attr):
+        """Get the value of the named attribute
+        @param attr: named attribute to get value of
+
+        """
+        return getattr(self, attr, None)
+
+    #---- Utilities ----#
     def IsNull(self):
         """Return whether the item is null or not
         @return: bool
@@ -178,45 +196,45 @@ class StyleItem(object):
 
     def SetBack(self, back, ex=wx.EmptyString):
         """Sets the Background Value
-        @param back: hex color string
+        @param back: hex color string, or None to clear attribute
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
-        if ex == wx.EmptyString:
+        if back is None or ex == wx.EmptyString:
             self.back = back
         else:
             self.back = u"%s,%s" % (back, ex)
 
     def SetFace(self, face, ex=wx.EmptyString):
         """Sets the Face Value
-        @param face: font name string
+        @param face: font name string, or None to clear attribute
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
-        if ex == wx.EmptyString:
+        if face is None or ex == wx.EmptyString:
             self.face = face
         else:
             self.face = u"%s,%s" % (face, ex)
 
     def SetFore(self, fore, ex=wx.EmptyString):
         """Sets the Foreground Value
-        @param fore: hex color string
+        @param fore: hex color string, or None to clear attribute
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
-        if ex == wx.EmptyString:
+        if fore is None or ex == wx.EmptyString:
             self.fore = fore
         else:
             self.fore = u"%s,%s" % (fore, ex)
 
     def SetSize(self, size, ex=wx.EmptyString):
         """Sets the Font Size Value
-        @param size: font point size
+        @param size: font point size, or None to clear attribute
         @type size: string or int
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
-        if ex == wx.EmptyString:
+        if size is None or ex == wx.EmptyString:
             self.size = size
         else:
             self.size = u"%s,%s" % (str(size), ex)
@@ -258,8 +276,8 @@ class StyleItem(object):
         @param value: value to set the attribute to contain
 
         """
-        if hasattr(self, attr):
-            cur_val = getattr(self, attr)
+        cur_val = getattr(self, attr)
+        if cur_val is not None:
             if u"," in cur_val:
                 tmp = cur_val.split(u",")
                 tmp[0] = value
@@ -588,7 +606,7 @@ class StyleMgr(object):
             style_dict[tag] = value
 
         # Trim the leafless branches from the dictionary
-        tmp = style_dict
+        tmp = style_dict.copy()
         for style_def in tmp:
             if len(tmp[style_def]) == 0:
                 style_dict.pop(style_def)
@@ -650,9 +668,10 @@ class StyleMgr(object):
                     style_dict[style_def] = style_str.strip(u",")
 
         # Build a StyleItem Dictionary
-        for key in style_dict:
+        for key, value in style_dict.iteritems():
             new_item = StyleItem()
-            new_item.SetAttrFromStr(style_dict[key])
+            if isinstance(value, basestring):
+                new_item.SetAttrFromStr(value)
             style_dict[key] = new_item
 
         return style_dict
