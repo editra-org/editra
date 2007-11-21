@@ -502,7 +502,7 @@ def Main():
         wx.MessageBox(_("Your profile has been updated to the latest "
                         "version") + u"\n" + \
                       _("Please check the preferences dialog to reset "
-                        "you preferences"),
+                        "your preferences"),
                       _("Profile Updated"))
 
     # Splash a warning if version is not a final version
