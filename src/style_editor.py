@@ -388,7 +388,7 @@ class StyleEditor(wx.Dialog):
                 self.LOG('[style_editor][err] %s' % str(msg))
             else:
                 # Update Style Sheet Control
-                sheet = os.path.basename(sheet_path).split(u'.')[0]
+                sheet = ".".join(os.path.basename(sheet_path).split(u'.')[:-1])
                 ss_c = self.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
                 ss_c.SetItems(util.GetResourceFiles(u'styles', get_all=True))
                 ss_c.SetStringSelection(sheet)
@@ -397,7 +397,7 @@ class StyleEditor(wx.Dialog):
 
                 if sheet_path.startswith(ed_glob.CONFIG['STYLES_DIR']) or \
                    sheet_path.startswith(ed_glob.CONFIG['SYS_STYLES_DIR']):
-                    # Update editor windows to use new style sheet
+                    # Update editor windows/buffer to use new style sheet
                     Profile_Set('SYNTHEME', sheet)
                     for mainw in wx.GetApp().GetMainWindows():
                         mainw.nb.UpdateTextControls()
