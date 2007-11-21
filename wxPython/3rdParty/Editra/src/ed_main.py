@@ -228,6 +228,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # Lexer Menu
         self._handlers['ui'].extend([(l_id, self.OnUpdateLexerUI) 
                                      for l_id in syntax.SyntaxIds()])
+
+        # Perspectives
+        self._handlers['ui'].extend(self.GetPersectiveHandlers())
+
         #---- End Menu Setup ----#
 
         #---- Other Event Handlers ----#
@@ -888,6 +892,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         e_id = evt.GetId()
         evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        evt.SetUpdateInterval(350)
         ctrl = self.nb.GetCurrentCtrl()
         eol = ctrl.GetEOLModeId()
         if e_id == ID_WORD_WRAP:
@@ -907,6 +912,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         e_id = evt.GetId()
         evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        evt.SetUpdateInterval(400)
         if e_id in syntax.SyntaxIds():
             lang = self.nb.GetCurrentCtrl().GetLangId()
             evt.Check(lang == evt.GetId())
@@ -923,6 +929,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         e_id = evt.GetId()
         evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        evt.SetUpdateInterval(300)
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_AUTOCOMP:
             evt.Check(ctrl.GetAutoComplete())
@@ -947,6 +954,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         e_id = evt.GetId()
         evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        evt.SetUpdateInterval(300)
         ctrl = self.nb.GetCurrentCtrl()
         zoom = ctrl.GetZoom()
         if e_id == ID_ZOOM_NORMAL:
@@ -1074,7 +1082,7 @@ def OnHelp(evt):
     if e_id == ID_HOMEPAGE:
         webbrowser.open(HOME_PAGE, 1)
     elif e_id == ID_DOCUMENTATION:
-        webbrowser.open(HOME_PAGE + "/?page=doc")
+        webbrowser.open(HOME_PAGE + "/?page=doc", 1)
     elif e_id == ID_CONTACT:
         webbrowser.open(u'mailto:%s' % CONTACT_MAIL)
     else:
@@ -1093,15 +1101,15 @@ def OnPreferences(evt):
         win = wx.GetApp().GetWindowInstance(prefdlg.PreferencesDialog)
         if win is not None:
             win.Raise()
-            return
-        dlg = prefdlg.PreferencesDialog(None)
-        dlg.CenterOnParent()
-        dlg.Show()
+        else:
+            dlg = prefdlg.PreferencesDialog(None)
+            dlg.CenterOnParent()
+            dlg.Show()
     else:
         evt.Skip()
 
 #-----------------------------------------------------------------------------#
-# Plugin interface's to the MainWindow
+# Plugin interface to the MainWindow
 # For backwards compatibility soon to be removed
 MainWindowI = iface.MainWindowI
 

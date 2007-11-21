@@ -76,8 +76,9 @@ class PerspectiveManager(object):
                     _("Save the current window layout"))
         self._menu.Append(ID_DELETE_PERSPECTIVE, _("Delete Saved View"))
         self._menu.AppendSeparator()
-        self._menu.Append(ID_AUTO_PERSPECTIVE, _(AUTO_PERSPECTIVE), 
-                          _("Automatically save window state on exit"))
+        self._menu.Append(ID_AUTO_PERSPECTIVE, _(AUTO_PERSPECTIVE),
+                          _("Automatically save/use window state from last session"), 
+                          wx.ITEM_CHECK)
         self._menu.AppendSeparator()
         for name in self._viewset:
             self.AddPerspectiveMenuEntry(name)
@@ -130,7 +131,7 @@ class PerspectiveManager(object):
         per_id = wx.NewId()
         self._ids.append(per_id)
         self._menu.InsertAlpha(per_id, name, _("Change view to \"%s\"") % name, 
-                               after=ID_AUTO_PERSPECTIVE)
+                               kind=wx.ITEM_CHECK, after=ID_AUTO_PERSPECTIVE)
 
     def GetPerspectiveControls(self):
         """Returns the control menu for the manager
@@ -152,7 +153,15 @@ class PerspectiveManager(object):
 
         """
         return self._viewset.get(name, None)
-            
+
+    def GetPersectiveHandlers(self):
+        """Gets a list of ID to UIHandlers for the perspective Menu
+        @return: list of [(ID, HandlerFunction)]
+
+        """
+        handlers = [(m_id, self.OnUpdatePerspectiveMenu) for m_id in self._ids]
+        return handlers + [(ID_AUTO_PERSPECTIVE, self.OnUpdatePerspectiveMenu)]
+
     def GetPerspectiveList(self):
         """Returns a list of all the loaded perspectives. The
         returned list only provides the names of the perspectives
@@ -242,6 +251,19 @@ class PerspectiveManager(object):
                 self.SetAutoPerspective()
             else:
                 self.SetPerspectiveById(e_id)
+        else:
+            evt.Skip()
+
+    def OnUpdatePerspectiveMenu(self, evt):
+        """Update the perspective menu's check mark states
+        @param evt: UpdateUI event that called this handler
+
+        """
+        e_id = evt.GetId()
+        if e_id in self._ids + [ID_AUTO_PERSPECTIVE]:
+            evt.Check(self._menu.GetLabel(e_id) == self._currview)
+            evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+            evt.SetUpdateInterval(500)
         else:
             evt.Skip()
 
