@@ -278,7 +278,7 @@ class StyleEditor(wx.Dialog):
         ss_lst = util.GetResourceFiles(u'styles', get_all=True)
         ss_choice = wx.Choice(self.ctrl_pane, ed_glob.ID_PREF_SYNTHEME,
                               choices=sorted(ss_lst))
-        ss_choice.SetToolTip(wx.ToolTip(_("Base new theme of existing one")))
+        ss_choice.SetToolTip(wx.ToolTip(_("Base new theme on existing one")))
         ss_choice.SetStringSelection(Profile_Get('SYNTHEME', 'str'))
         ss_new = wx.CheckBox(self.ctrl_pane, wx.ID_NEW, _("New"))
         ss_new.SetToolTip(wx.ToolTip(_("Start a blank new style")))
@@ -459,11 +459,14 @@ class StyleEditor(wx.Dialog):
             choice = self.ctrl_pane.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
             choice.Enable(not val)
             if val:
-                self.preview.StyleDefault()
                 self.styles_orig = self.preview.BlankStyleDictionary()
                 self.styles_new = DuplicateStyleDict(self.styles_orig)
                 self.preview.SetStyles('preview', self.styles_new, nomerge=True)
-                self.preview.DefineMarkers()
+                self.preview.UpdateBaseStyles()
+
+                # For some reason this causes the text display to refresh
+                # properly when nothing else would work.
+                self.OnTextRegion()
             else:
                 scheme = choice.GetStringSelection().lower()
                 self.preview.UpdateAllStyles(scheme)
@@ -512,7 +515,7 @@ class StyleEditor(wx.Dialog):
         # Update The Style data for current tag
         self.UpdateStyleSet(evt.GetId())
 
-    def OnTextRegion(self, evt):
+    def OnTextRegion(self, evt=None):
         """Processes clicks in the preview control and sets the style
         selection in the style tags list to the style tag of the area
         the cursor has moved into.
@@ -521,6 +524,9 @@ class StyleEditor(wx.Dialog):
                everytime this is fired.
 
         """
+        if evt is not None:
+            evt.Skip()
+
         style_id = self.preview.GetStyleAt(self.preview.GetCurrentPos())
         tag_lst = self.FindWindowById(ID_STYLES)
         data = self.preview.FindTagById(style_id)
@@ -530,7 +536,6 @@ class StyleEditor(wx.Dialog):
                 tag_lst.SetFirstItemStr(data)
             self.UpdateSettingsPane(self.styles_new[data])
             self.EnableSettings()
-        evt.Skip()
 
     def OnListBox(self, evt):
         """Catches the selection of a style tag in the listbox
@@ -606,6 +611,9 @@ class StyleEditor(wx.Dialog):
                     ID_FONT       : syntax_data.GetFace(),
                     ID_FONT_SIZE  : syntax_data.GetSize()
                   }
+
+        # Fall back to defaults for color values
+        # that we may not be able to understand
         if u"#" not in val_map[ID_FORE_COLOR]:
             val_map[ID_FORE_COLOR] = self.preview.GetDefaultForeColour(as_hex=True)
         if u"#" not in val_map[ID_BACK_COLOR]:
