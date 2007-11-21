@@ -296,7 +296,14 @@ class EdPages(FNB.FlatNotebook):
         @return: the tabs text
 
         """
-        txt = FNB.FlatNotebook.GetPageText(self, pg_num)
+        # Often times this raises an index error in the flatnotebook code
+        # even though the pg_num here is one that is obtained by calling
+        # GetSelection which should return a valid index.
+        try:
+            txt = FNB.FlatNotebook.GetPageText(self, pg_num)
+        except IndexError:
+            txt = ''
+
         if not txt or txt[0] != u"*":
             return txt
         return txt[1:]
