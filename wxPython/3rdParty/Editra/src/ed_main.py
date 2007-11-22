@@ -869,7 +869,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         e_id = evt.GetId()
         evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
         # Slow the update interval to reduce overhead
-        evt.SetUpdateInterval(250)
+        evt.SetUpdateInterval(200)
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_UNDO:
             evt.Enable(ctrl.CanUndo())
