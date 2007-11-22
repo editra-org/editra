@@ -17,15 +17,20 @@ NEWS:
 NEW: [features/improvements]
 +Major improvements to python autocompletion
 +Tab completion for command buffer Edit and Change Directory commands
++Style Editor now exports optimized stylesheets
 +Automatic perspective mode for saving window state on exit
-+Styles are more configurable with custom settings for text selection, 
++Styles are more configurable with custom settings for text selection,
 whitespace, and indentation guides now being configurable.
 +New Blue color scheme for syntax highlighting can be enabled in preferences
++Russian translation of editor (contributed by Sergei Zivukov)
 
 BUG FIXES:
 +Fixed a number of python2.4 compatibility issues
 +Fixed bug in styling of code folding margin
-+Fixed bugs in updating toolbar/menus
++Fixed bugs in updating toolbar/menu items
++Only activate localization for locales that have translations available
++Default to crlf on windows for initial installs
++Fixed bug in management of search history items
 
 #-----------------------------------------------------------------------------#
 
