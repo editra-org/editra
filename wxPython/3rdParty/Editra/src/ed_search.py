@@ -352,7 +352,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             return
 
         # Make sure menu only has unique items
-        m_items = self.rmenu.GetMenuItems()
+        m_items = list(self.rmenu.GetMenuItems())
         for menu_i in m_items:
             if value == menu_i.GetLabel():
                 self.rmenu.RemoveItem(menu_i)
