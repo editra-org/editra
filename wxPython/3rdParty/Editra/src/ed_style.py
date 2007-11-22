@@ -170,6 +170,15 @@ class StyleItem(object):
         """
         return len(self.__str__())
 
+    def Nullify(self):
+        """Clear all values and set item as Null
+        @postcondition: item is turned into a NullStyleItem
+
+        """
+        self.null = True
+        for attr in ('fore', 'face', 'back', 'size'):
+            setattr(self, attr, '')
+
     #---- Set Functions ----#
     def SetAttrFromStr(self, style_str):
         """Takes style string and sets the objects attributes
@@ -180,6 +189,7 @@ class StyleItem(object):
         @type style_str: string
 
         """
+        self.null = False
         last_set = wx.EmptyString
         for atom in style_str.split(u','):
             attrib = atom.split(u':')
@@ -200,6 +210,7 @@ class StyleItem(object):
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
+        self.null = False
         if back is None or ex == wx.EmptyString:
             self.back = back
         else:
@@ -222,6 +233,7 @@ class StyleItem(object):
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
+        self.null = False
         if fore is None or ex == wx.EmptyString:
             self.fore = fore
         else:
@@ -234,6 +246,7 @@ class StyleItem(object):
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
+        self.null = False
         if size is None or ex == wx.EmptyString:
             self.size = size
         else:
@@ -250,6 +263,7 @@ class StyleItem(object):
 
         """
         # Get currently set attributes
+        self.null = False
         cur_str = self.__str__()
         if not add:
             cur_str = cur_str.replace(u',' + ex_attr, wx.EmptyString)
@@ -276,6 +290,7 @@ class StyleItem(object):
         @param value: value to set the attribute to contain
 
         """
+        self.null = False
         cur_val = getattr(self, attr)
         if cur_val is not None:
             if u"," in cur_val:
@@ -326,14 +341,18 @@ class StyleMgr(object):
         """
         sty_dict = dict()
         for key in self.GetStyleSet().keys():
-            sty_dict[key] = StyleItem("#000000", "#FFFFFF", 
-                                      "%(primary)s", "%(size)d")
+            if key in ('select_style', 'whitespace_style'):
+                sty_dict[key] = NullStyleItem()
+            else:
+                sty_dict[key] = StyleItem("#000000", "#FFFFFF", 
+                                          "%(primary)s", "%(size)d")
         return sty_dict
 
     def GetFontDictionary(self, default=True):
         """Does a system lookup to build a default set of fonts using
-        ten point fonts as the standards size.
-        @keyword default: return default dictionary or custom
+        ten point fonts as the standard size.
+        @keyword default: return the default dictionary of fonts, else return
+                          the current running dictionary of fonts if it exists.
         @type default: bool
         @return: font dictionary (primary, secondary) + (size, size2)
 
