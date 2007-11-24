@@ -146,7 +146,9 @@ ICON = { 'Win' : "pixmaps/editra.ico",
 # Explicitly include some libraries that are either loaded dynamically
 # or otherwise not able to be found by py2app/exe
 INCLUDES = ['syntax.*', 'shutil', 'subprocess']
-if not sys.platform.startswith('win'):
+if sys.platform.startswith('win'):
+    INCLUDES.extend(['ctypes'])
+else:
     INCLUDES.extend(['pty', 'tty'])
 
 LICENSE = "wxWindows"
