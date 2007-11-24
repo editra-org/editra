@@ -424,7 +424,13 @@ class CommandExecuter(wx.SearchCtrl):
             self._curdir = os.path.abspath(os.curdir) + os.sep
         else:
             self._curdir = wx.GetHomeDir() + os.sep
-        self._popup = PopupList(self)
+
+        if wx.Platform == '__WXMAC__':
+            self._popup = PopupList(self)
+            self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+            self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+        else:
+            self._popup = PopupWinList(self)
 
         # Hide the search button and text
         self.ShowSearchButton(False)
@@ -432,8 +438,9 @@ class CommandExecuter(wx.SearchCtrl):
         self.SetDescriptiveText(wx.EmptyString)
 
         # Event Handlers
-        # HACK, needed on Windows to get key events
-        if wx.Platform == '__WXMSW__':
+        # HACK, needed on Windows to get any key events and for
+        # GTK to get key down events
+        if wx.Platform in ['__WXGTK__', '__WXMSW__']:
             for child in self.GetChildren():
                 if isinstance(child, wx.TextCtrl):
                     child.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
@@ -444,8 +451,6 @@ class CommandExecuter(wx.SearchCtrl):
             self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
 
         self.Bind(wx.EVT_TEXT_ENTER, self.OnEnter)
-        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
-        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
         self.Bind(ed_event.EVT_NOTIFY, self.OnPopupNotify)
 
     def _AdjustSize(self):
@@ -903,6 +908,8 @@ class LineCtrl(wx.SearchCtrl):
         self.GetParent().Hide()
 
 #-----------------------------------------------------------------------------#
+# TODO: merge the common parts of these two classes into a single base class
+
 class PopupList(wx.Frame):
     def __init__(self, parent, choices=list(), pos=wx.DefaultPosition):
 
@@ -1079,3 +1086,98 @@ class PopupList(wx.Frame):
                 self.ActivateParent()
             else:
                 self.SetBestSelection(prefix[:-1])
+
+
+class PopupWinList(wx.PopupWindow):
+    """Popuplist for Windows/GTK"""
+    def __init__(self, parent, choices=list(), pos=wx.DefaultPosition):
+        """Create the popup window and its list control"""
+        wx.PopupWindow.__init__(self, parent)
+
+        # Attributes
+        self._list = wx.ListBox(self, choices=choices, pos=(0, 0),
+                                style=wx.LC_REPORT | wx.LC_SINGLE_SEL | 
+                                      wx.LC_NO_HEADER | wx.NO_BORDER)
+        
+        # Layout
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(self._list, 0, wx.EXPAND)
+        self.SetSizer(sizer)
+        txt_h = self.GetTextExtent('/')[1]
+        self.SetMaxSize((-1, txt_h * 6))
+        self.SetAutoLayout(True)
+
+        # Event Handlers
+#         self.Bind(wx.EVT_SET_FOCUS, self.OnFocus)
+#         self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnSelection)
+#         self.Bind(wx.EVT_SIZE, self.OnSize)
+#         self._list.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+
+#         self._list.SetFocus()
+#         self.Hide()
+
+    def AdvanceSelection(self, down=True):
+        """Advance the selection in the list
+        @keyword down: move selection down or up
+
+        """
+        csel = self._list.GetSelection()
+        if csel != wx.NOT_FOUND:
+            if down:
+                csel += 1
+            else:
+                csel -= 1
+                csel = max(csel, 0)
+
+            if csel < len(self._list.GetItems()):
+                self._list.SetSelection(csel)
+                self._list.EnsureVisible(csel)
+
+    def GetSelection(self):
+        """Get the string that is currently selected in the list
+        @return: string selection
+
+        """
+        return self._list.GetStringSelection()
+
+    def SetBestSelection(self, prefix):
+        """Set the selection to the one that bests matches the
+        given string.
+        @param prefix: prefix to set selection of
+        @note: searches for a match recursively, if no partial match is found
+               then the first item in the list is selected.
+
+        """
+        if not len(prefix):
+            if len(self._list.GetStrings()):
+                self._list.SetSelection(0)
+        else:
+            matches = [item for item in self._list.GetItems() 
+                       if item.startswith(prefix) ]
+            if len(matches):
+                self._list.SetStringSelection(sorted(matches)[0])
+            else:
+                self.SetBestSelection(prefix[:-1])
+
+        self._list.SetInitialSize()
+        self.SetInitialSize()
+
+    def SetChoices(self, choices):
+        """Set the available choices that are shown in the list
+        @param choices: list of strings
+
+        """
+        self._list.SetItems(choices)
+
+    def Show(self, show=True):
+        """Adjust size of popup and then show it
+        @keyword show: Should the window be shown or not
+
+        """
+        res = wx.PopupWindow.Show(self, show)
+
+        self._list.Show()
+        self._list.SetInitialSize()
+        self.SetInitialSize()
+
+        return res
