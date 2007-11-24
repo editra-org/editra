@@ -788,7 +788,7 @@ class InstallPanel(wx.Panel):
             inst_loc = ed_glob.CONFIG['SYS_PLUGIN_DIR']
 
         for item in items:
-            egg_name = item.split("/")[-1]
+            egg_name = item.split(os.sep)[-1]
             if os.path.isabs(item):
                 try:
                     reader = file(item, "rb")
