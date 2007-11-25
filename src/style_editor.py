@@ -82,6 +82,12 @@ class StyleEditor(wx.Dialog):
         self.styles_new = DuplicateStyleDict(self.styles_orig)
         self.preview.SetStyles('preview', self.styles_new, True)
         self.OpenPreviewFile('cpp')
+        # XXX On Windows the settings pane must be made before the
+        #     sizer it is to be put in or it becomes unable to recieve
+        #     focus. But is the exact opposite on mac/gtk. This is really
+        #     a pain or possibly a bug?
+        if wx.Platform == '__WXMSW__':
+            self._settings = SettingsPanel(self)
 
         # Main Sizer
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -91,6 +97,12 @@ class StyleEditor(wx.Dialog):
         ctrl_sizer = wx.BoxSizer(wx.HORIZONTAL)  # Main Control Sizer
         left_colum = wx.BoxSizer(wx.VERTICAL)    # Left Column
         right_colum = wx.BoxSizer(wx.VERTICAL)   # Right Column
+
+        # XXX On Mac/GTK if panel is created before sizer all controls in
+        #     it become unable to recieve focus from clicks, but it is the
+        #     exact opposite on windows!
+        if wx.Platform != '__WXMSW__':
+            self._settings = SettingsPanel(self)
 
         # Control Panel Left Column
         left_colum.AddMany([((10, 10), 0), 
@@ -109,7 +121,7 @@ class StyleEditor(wx.Dialog):
         ctrl_sizer.Add((5, 5), 0)
 
         # Control Panel Right Column
-        right_colum.Add(self.__Settings(), 1, wx.ALIGN_LEFT | wx.EXPAND)
+        right_colum.Add(self._settings, 1, wx.ALIGN_LEFT | wx.EXPAND)
         ctrl_sizer.AddMany([(right_colum, 1, wx.ALIGN_RIGHT | wx.EXPAND),
                             ((5, 5), 0)])
 
@@ -171,100 +183,6 @@ class StyleEditor(wx.Dialog):
                            ((5, 0)), (lexer_lst, 1, wx.ALIGN_CENTER_VERTICAL),
                            ((10, 10))])
         return lex_sizer
-
-    def __Settings(self):
-        """Returns a sizer object holding all the settings controls
-        @return: main panel of configuration controls
-        @todo: this needs to be reworked, it also doesn't look as nice on 
-               msw/gtk as it does on wxmac.
-
-        """
-        setting_sizer = wx.BoxSizer(wx.VERTICAL)
-        setting_top = wx.BoxSizer(wx.HORIZONTAL)
-
-        # Settings top
-        setting_sizer.Add((10, 10))
-        cbox_sizer = wx.StaticBoxSizer(wx.StaticBox(self.ctrl_pane, 
-                                          label=_("Color") + u":"), wx.VERTICAL)
-
-        # Foreground
-        fground_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        fground_lbl = wx.StaticText(self.ctrl_pane, 
-                                    label=_("Foreground") + u": ")
-        fground_sel = ColourSetter(self.ctrl_pane, ID_FORE_COLOR, "#000000")
-        fground_sizer.AddMany([((5, 5)), 
-                               (fground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                               ((2, 2), 1, wx.EXPAND),
-                               (fground_sel, 0, wx.ALIGN_CENTER_VERTICAL), 
-                               ((5, 5))])
-        cbox_sizer.AddMany([(fground_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND),
-                            ((10, 10))])
-
-        # Background
-        bground_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        bground_lbl = wx.StaticText(self.ctrl_pane, 
-                                    label=_("Background") + u": ")
-        bground_sel = ColourSetter(self.ctrl_pane, ID_BACK_COLOR, "#FFFFFF")
-        bground_sizer.AddMany([((5, 5)), 
-                               (bground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                               ((2, 2), 1, wx.EXPAND),
-                               (bground_sel, 0, wx.ALIGN_CENTER_VERTICAL), 
-                               ((5, 5))])
-        cbox_sizer.Add(bground_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND)
-        setting_top.AddMany([(cbox_sizer, 0, wx.ALIGN_TOP), ((10, 10))])
-
-        # Attrib Box
-        attrib_box = wx.StaticBox(self.ctrl_pane, label=_("Attributes") + u":")
-        abox_sizer = wx.StaticBoxSizer(attrib_box, wx.VERTICAL)
-
-        # Attributes
-        bold_cb = wx.CheckBox(self.ctrl_pane, ID_BOLD, _("bold"))
-        eol_cb = wx.CheckBox(self.ctrl_pane, ID_EOL, _("eol"))
-        ital_cb = wx.CheckBox(self.ctrl_pane, ID_ITALIC, _("italic"))
-        uline_cb = wx.CheckBox(self.ctrl_pane, ID_ULINE, _("underline"))
-        abox_sizer.AddMany([(bold_cb, 0, wx.ALIGN_CENTER_VERTICAL),
-                            (eol_cb, 0, wx.ALIGN_CENTER_VERTICAL),
-                            (ital_cb, 0, wx.ALIGN_CENTER_VERTICAL),
-                            (uline_cb, 0, wx.ALIGN_CENTER_VERTICAL)])
-        setting_top.Add(abox_sizer, 0, wx.ALIGN_TOP)
-
-        # Font
-        fh_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        font_box = wx.StaticBox(self.ctrl_pane, label=_("Font Settings") + u":")
-        fbox_sizer = wx.StaticBoxSizer(font_box, wx.VERTICAL)
-
-        # Font Face Name
-        fsizer = wx.BoxSizer(wx.HORIZONTAL)
-        flbl = wx.StaticText(self.ctrl_pane, wx.ID_ANY, _("Font") + u": ")
-        fontenum = wx.FontEnumerator()
-        fontenum.EnumerateFacenames(fixedWidthOnly=True)
-        font_lst = ["%(primary)s", "%(secondary)s"]
-        font_lst.extend(sorted(fontenum.GetFacenames()))
-        fchoice = wx.Choice(self.ctrl_pane, ID_FONT, choices=font_lst)
-        fsizer.AddMany([((5, 5), 0), (flbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                        (fchoice, 0, wx.ALIGN_CENTER_VERTICAL), ((5, 5))])
-        fbox_sizer.Add(fsizer, 0, wx.ALIGN_LEFT)
-
-        # Font Size
-        fsize_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        fsize_lbl = wx.StaticText(self.ctrl_pane, wx.ID_ANY, _("Size") + u": ")
-        fsizes = ['%(size)d', '%(size2)d']
-        fsizes.extend([ str(x) for x in xrange(4, 21) ])
-        fs_choice = wx.Choice(self.ctrl_pane, ID_FONT_SIZE, choices=fsizes)
-        fsize_sizer.AddMany([((5, 5), 0), 
-                             (fsize_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                             (fs_choice, 1, wx.EXPAND | wx.ALIGN_RIGHT), 
-                             ((5, 5), 0)])
-        fbox_sizer.AddMany([((5, 5)), 
-                            (fsize_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND)])
-        fh_sizer.AddMany([(fbox_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL),
-                          ((10, 10))])
-
-        # Build Section
-        setting_sizer.AddMany([(setting_top, 0, wx.ALIGN_CENTER_HORIZONTAL),
-                               ((10, 10), 1, wx.EXPAND),
-                               (fh_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)])
-        return setting_sizer
 
     def __StyleSheets(self):
         """Returns a sizer item that contains a choice control with
@@ -347,9 +265,8 @@ class StyleEditor(wx.Dialog):
         @keyword enable: whether to enable/disable settings controls
 
         """
-        for sid in SETTINGS_IDS:
-            ctrl = self.FindWindowById(sid)
-            ctrl.Enable(enable)
+        for child in self._settings.GetChildren():
+            child.Enable(enable)
 
     def ExportStyleSheet(self):
         """Writes the style sheet data out to a style sheet
@@ -678,6 +595,110 @@ class StyleEditor(wx.Dialog):
         # Update the Preview Area
         self.preview.SetStyleTag(tag, self.styles_new[tag])
         self.preview.RefreshStyles()
+
+#-----------------------------------------------------------------------------#
+
+class SettingsPanel(wx.Panel):
+    """Panel holding all settings controls for changing the font,
+    colors, styles, ect.. in the style set.
+
+    """
+    def __init__(self, parent):
+        """Create the settings panel"""
+        wx.Panel.__init__(self, parent)
+
+        # Attributes
+        
+        # Layout
+        self.__DoLayout()
+
+    def __DoLayout(self):
+        """Layout the controls in the panel"""
+        setting_sizer = wx.BoxSizer(wx.VERTICAL)
+        setting_top = wx.BoxSizer(wx.HORIZONTAL)
+
+        # Settings top
+        setting_sizer.Add((10, 10))
+        cbox_sizer = wx.StaticBoxSizer(wx.StaticBox(self, 
+                                          label=_("Color") + u":"), wx.VERTICAL)
+
+        # Foreground
+        fground_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        fground_lbl = wx.StaticText(self, label=_("Foreground") + u": ")
+        fground_sel = ColourSetter(self, ID_FORE_COLOR, "#000000")
+        fground_sizer.AddMany([((5, 5)), 
+                               (fground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                               ((2, 2), 1, wx.EXPAND),
+                               (fground_sel, 0, wx.ALIGN_CENTER_VERTICAL), 
+                               ((5, 5))])
+        cbox_sizer.AddMany([(fground_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND),
+                            ((10, 10))])
+
+        # Background
+        bground_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        bground_lbl = wx.StaticText(self, label=_("Background") + u": ")
+        bground_sel = ColourSetter(self, ID_BACK_COLOR, "#FFFFFF")
+        bground_sizer.AddMany([((5, 5)), 
+                               (bground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                               ((2, 2), 1, wx.EXPAND),
+                               (bground_sel, 0, wx.ALIGN_CENTER_VERTICAL), 
+                               ((5, 5))])
+        cbox_sizer.Add(bground_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND)
+        setting_top.AddMany([(cbox_sizer, 0, wx.ALIGN_TOP), ((10, 10))])
+
+        # Attrib Box
+        attrib_box = wx.StaticBox(self, label=_("Attributes") + u":")
+        abox_sizer = wx.StaticBoxSizer(attrib_box, wx.VERTICAL)
+
+        # Attributes
+        bold_cb = wx.CheckBox(self, ID_BOLD, _("bold"))
+        eol_cb = wx.CheckBox(self, ID_EOL, _("eol"))
+        ital_cb = wx.CheckBox(self, ID_ITALIC, _("italic"))
+        uline_cb = wx.CheckBox(self, ID_ULINE, _("underline"))
+        abox_sizer.AddMany([(bold_cb, 0, wx.ALIGN_CENTER_VERTICAL),
+                            (eol_cb, 0, wx.ALIGN_CENTER_VERTICAL),
+                            (ital_cb, 0, wx.ALIGN_CENTER_VERTICAL),
+                            (uline_cb, 0, wx.ALIGN_CENTER_VERTICAL)])
+        setting_top.Add(abox_sizer, 0, wx.ALIGN_TOP)
+
+        # Font
+        fh_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        font_box = wx.StaticBox(self, label=_("Font Settings") + u":")
+        fbox_sizer = wx.StaticBoxSizer(font_box, wx.VERTICAL)
+
+        # Font Face Name
+        fsizer = wx.BoxSizer(wx.HORIZONTAL)
+        flbl = wx.StaticText(self, label=_("Font") + u": ")
+        fontenum = wx.FontEnumerator()
+        fontenum.EnumerateFacenames(fixedWidthOnly=True)
+        font_lst = ["%(primary)s", "%(secondary)s"]
+        font_lst.extend(sorted(fontenum.GetFacenames()))
+        fchoice = wx.Choice(self, ID_FONT, choices=font_lst)
+        fsizer.AddMany([((5, 5), 0), (flbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                        (fchoice, 0, wx.ALIGN_CENTER_VERTICAL), ((5, 5))])
+        fbox_sizer.Add(fsizer, 0, wx.ALIGN_LEFT)
+
+        # Font Size
+        fsize_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        fsize_lbl = wx.StaticText(self, label=_("Size") + u": ")
+        fsizes = ['%(size)d', '%(size2)d']
+        fsizes.extend([ str(x) for x in xrange(4, 21) ])
+        fs_choice = wx.Choice(self, ID_FONT_SIZE, choices=fsizes)
+        fsize_sizer.AddMany([((5, 5), 0), 
+                             (fsize_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                             (fs_choice, 1, wx.EXPAND | wx.ALIGN_RIGHT), 
+                             ((5, 5), 0)])
+        fbox_sizer.AddMany([((5, 5)), 
+                            (fsize_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND)])
+        fh_sizer.AddMany([(fbox_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL),
+                          ((10, 10))])
+
+        # Build Section
+        setting_sizer.AddMany([(setting_top, 0, wx.ALIGN_CENTER_HORIZONTAL),
+                               ((10, 10), 1, wx.EXPAND),
+                               (fh_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)])
+        self.SetSizer(setting_sizer)
+        self.SetAutoLayout(True)
 
 #-----------------------------------------------------------------------------#
 class ColourSetter(wx.Panel):
