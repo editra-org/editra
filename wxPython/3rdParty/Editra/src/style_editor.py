@@ -817,6 +817,9 @@ class ColourSetter(wx.Panel):
             return
 
         key = unichr(code)
+        if key.isdigit() and evt.ShiftDown():
+            return
+
         if key in "0123456789ABCDEFabcdef#" and \
            (len(self._txt.GetValue().lstrip("#")) < 6 or \
             self._txt.GetStringSelection()):
