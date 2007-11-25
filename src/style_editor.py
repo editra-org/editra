@@ -817,7 +817,8 @@ class ColourSetter(wx.Panel):
             return
 
         key = unichr(code)
-        if key.isdigit() and evt.ShiftDown():
+        if (key.isdigit() and evt.ShiftDown()) or \
+           evt.AltDown() or evt.MetaDown():
             return
 
         if key in "0123456789ABCDEFabcdef#" and \
