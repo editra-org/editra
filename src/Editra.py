@@ -539,6 +539,7 @@ def Main():
     # 3. Start Applications Main Loop
     dev_tool.DEBUGP("[main_info] Starting MainLoop...")
     editra_app.MainLoop()
+    os._exit(0)
 
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
