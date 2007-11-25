@@ -387,6 +387,8 @@ class StyleEditor(wx.Dialog):
             else:
                 scheme = choice.GetStringSelection().lower()
                 self.preview.UpdateAllStyles(scheme)
+                self.styles_orig = self.preview.GetStyleSet()
+                self.styles_new = DuplicateStyleDict(self.styles_orig)
         elif e_id in [ID_BOLD, ID_EOL, ID_ULINE, ID_ITALIC]:
             self.UpdateStyleSet(e_id)
         else:
