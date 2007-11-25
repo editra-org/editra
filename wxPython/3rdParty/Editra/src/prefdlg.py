@@ -49,7 +49,7 @@ ID_LATE_BOX     = wx.NewId()
 _ = wx.GetTranslation
 #----------------------------------------------------------------------------#
 # Class Globals
-from wx import ImageFromStream, BitmapFromImage, EmptyIcon
+from wx import ImageFromStream, BitmapFromImage
 import cStringIO, zlib
 
 def getData():
@@ -155,7 +155,10 @@ class PreferencesDialog(wx.Frame):
         @param evt: Event that called this handler
 
         """
-        wx.GetApp().UnRegisterWindow(repr(self))
+        # XXX More strange wx is None errors have been reported here
+        #     really need to find the cause of this!
+        if wx is not None:
+            wx.GetApp().UnRegisterWindow(repr(self))
         evt.Skip()
 
     def OnShow(self, evt):
@@ -606,7 +609,7 @@ class DocGenPanel(wx.Panel):
         #     it to beleive it. If they were actually NoneTypes the dialog would
         #     not be able to be shown so this is very strange!!
         global ed_glob
-        if not ed_glob:
+        if ed_glob is None:
             import ed_glob
 
         e_id = evt.GetId()
