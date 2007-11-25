@@ -550,7 +550,7 @@ class DownloadDialog(wx.Frame):
         self.SetInitialSize()
 
         self.SetStatusWidths([-1, 100])
-        self.SetStatusText(_("Downloading..."), self.SB_INFO)
+        self.SetStatusText(_("Downloading") + u"...", self.SB_INFO)
 
         #---- Bind Events ----#
         self.Bind(wx.EVT_BUTTON, self.OnButton)
@@ -619,13 +619,13 @@ class DownloadDialog(wx.Frame):
             self._proghist.append(prog[0])
             speed = self.CalcDownRate()
             if self._progress.IsDownloading():
-                self.SetStatusText(_("Downloaded: ") + str(prog[0]) + \
+                self.SetStatusText(_("Downloaded") + ": " + str(prog[0]) + \
                                     u"/" + str(prog[1]) + u" | " + \
                                     _("Rate: %.2f Kb/s") % speed, 
                                     self.SB_DOWNLOADED)
             else:
                 self.LOG("[download-dlg][evt] Download finished")
-                self.SetStatusText(_("Downloaded: ") + str(prog[0]) + \
+                self.SetStatusText(_("Downloaded") + ": " + str(prog[0]) + \
                                     u"/" + str(prog[1]), self.SB_DOWNLOADED)
                 if self._progress.GetDownloadResult():
                     self.LOG("[download-dlg][info] Download Successful")
