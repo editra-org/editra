@@ -31,8 +31,7 @@ import re
 import urllib
 import wx
 import wx.lib.delayedresult as delayedresult
-# import wx.lib.mixins.listctrl as listmix
-import extern.listctrl as listmix
+import wx.lib.mixins.listctrl as listmix
 import ed_glob
 from profiler import Profile_Get, Profile_Set
 import ed_event
