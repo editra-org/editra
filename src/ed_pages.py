@@ -538,6 +538,23 @@ class EdPages(FNB.FlatNotebook):
                                               GetBitmap(lang_id, wx.ART_MENU))
         FNB.FlatNotebook.SetPageImage(self, pg_num, self._index[lang_id])
 
+    def UpdateAllImages(self):
+        """Reload and Reset all images in the notebook pages and
+        the corresponding imagelist to match those of the current theme
+        @postcondition: all images in control are updated
+
+        """
+        imglst = self.GetImageList()
+        for lang, index in self._index.iteritems():
+            bmp = wx.ArtProvider.GetBitmap(str(lang), wx.ART_MENU)
+            if bmp.IsNull():
+                self._index.setdefault(lang, \
+                                       self._index[synglob.ID_LANG_TXT])
+            else:
+                imglst.Replace(index, bmp)
+
+        self.Refresh()
+
     def UpdatePageImage(self):
         """Updates the page tab image
         @postcondition: page image is updated to reflect any changes in ctrl
