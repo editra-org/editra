@@ -972,6 +972,9 @@ class AppearancePanel(PrefPanelBase):
                 if sbar:
                     sbar.UpdateIcons()
 
+                # Update Notebook Images
+                mainw.GetNotebook().UpdateAllImages()
+
         elif e_id == ed_glob.ID_PERSPECTIVES:
             Profile_Set('DEFAULT_VIEW', e_obj.GetValue())
             for main_win in wx.GetApp().GetMainWindows():
