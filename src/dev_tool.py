@@ -44,10 +44,10 @@ def DEBUGP(statement, mode="std"):
             - log = writes to log file
     
         3. Message Type:
-            - [err]  : Notes an exception or error condition
-            - [warn] : Notes a error that is not severe
-            - [info] : General information message
-            - [evt]  : Some sort of event related message
+            - [err]  : Notes an exception or error condition (high priority)
+            - [warn] : Notes a error that is not severe (medium priority)
+            - [info] : General information message (normal priority)
+            - [evt]  : Some sort of event related message (normal priority)
 
     @example: [ed_main][err] File failed to open
 
@@ -75,16 +75,22 @@ def DEBUGP(statement, mode="std"):
             print u"EDITRA_LOG enviroment variable not set!!!"
             print u"Outputting log information to default log editra_tmp.log"
             logfile = 'editra_tmp.log'
-        file_handle = file(logfile, mode="ab")
-        writer = codecs.lookup('utf-8')[3](file_handle)
-        if log_lvl != "none":
-            writer.write(u"%s: %s\n" % (log_lvl, statement))
-        else:
-            writer.write(u"MSG: %s\n" % statement)
-        file_handle.close()
+        try:
+            file_handle = file(logfile, mode="ab")
+            writer = codecs.lookup('utf-8')[3](file_handle)
+            for line in s_lst:
+                try:
+                    writer.write(u"%s %s\n" % (now, line))
+                except (IOError, OSError):
+                    continue
+            file_handle.close()
+        except (IOError, OSError):
+            pass
     else:
         print u"Improper DEBUG MODE: Defaulting to stdout"
         print statement
+
+#-----------------------------------------------------------------------------#
 
 def EnvironmentInfo():
     """Returns a string of the systems information
