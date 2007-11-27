@@ -1,6 +1,7 @@
 Project Name: Editra
 Author: Cody Precord
 Email: cprecord@editra.org
+Licence: wxWindows (see COPYING)
 
 #----------------------------------------------------------------------------#
 
@@ -17,7 +18,7 @@ Tested on Gentoo, Suse, and Unbuntu
 Recieves testing when ever my vm doesn't eat my install
 
 Macintosh OS X:
-Primary development is on OS X so it recieves the most direct testing
+Primary development is on OS X so it recieves the most direct testing.
 
 Windows XP
 Recieves regression testing for before each release
