@@ -292,6 +292,27 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if mark != -1:
             self.GotoLine(mark)
 
+    def BraceBadLight(self, pos):
+        """Highlight the character at the given position
+        @param pos: position of character to highlight with STC_STYLE_BRACEBAD
+
+        """
+        # Check if we are still alive or not, as this may be called
+        # after we have been deleted.
+        if isinstance(self, wx.stc.StyledTextCtrl):
+            wx.stc.StyledTextCtrl.BraceBadLight(self, pos)
+
+    def BraceHighlight(self, pos1, pos2):
+        """Highlight characters at pos1 and pos2
+        @param pos1: position of char 1
+        @param pos2: position of char 2
+
+        """
+        # Check if we are still alive or not, as this may be called
+        # after we have been deleted.
+        if isinstance(self, wx.stc.StyledTextCtrl):
+            wx.stc.StyledTextCtrl.BraceHighlight(self, pos1, pos2)
+
     def GetBookmarks(self):
         """Gets a list of all lines containing bookmarks
         @return: list of line numbers
@@ -787,11 +808,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if brace_at_caret >= 0:
             brace_opposite = self.BraceMatch(brace_at_caret)
 
+        # CallAfter necessary to reduce CG warnings on Mac
         if brace_at_caret != -1  and brace_opposite == -1:
-            self.BraceBadLight(brace_at_caret)
+            wx.CallAfter(self.BraceBadLight, brace_at_caret)
         else:
-            self.BraceHighlight(brace_at_caret, brace_opposite)
-        evt.Skip()
+            wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
 
     def OnMarginClick(self, evt):
         """Open and Close Folders as Needed
