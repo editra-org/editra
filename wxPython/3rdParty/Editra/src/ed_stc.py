@@ -600,20 +600,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             return
         elif k_code == wx.WXK_RETURN:
 
-            if self._config['autoindent']:
+            if self._config['autoindent'] and not self.AutoCompActive():
                 if self.GetSelectedText():
                     self.CmdKeyExecute(wx.stc.STC_CMD_NEWLINE)
-                    return
-                self.AutoIndent()
+                else:
+                    self.AutoIndent()
             else:
                 evt.Skip()
 
-            if self._config['autocomp']:
-                if self.CallTipActive():
-                    self.CallTipCancel()
-
-                if self.AutoCompActive():
-                    self.AutoCompCancel()
+            if self.CallTipActive():
+                self.CallTipCancel()
 
         else:
             evt.Skip()
