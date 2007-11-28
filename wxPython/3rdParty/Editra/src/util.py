@@ -185,6 +185,8 @@ class DropTargetFT(wx.PyDropTarget):
                     if pos != wx.stc.STC_INVALID_POSITION:
                         win.SetSelection(pos, pos)
                         win.Paste()
+                    else:
+                        drag_result = wx.DragCancel
         self.InitObjects()
         return drag_result
 
