@@ -21,6 +21,8 @@ most situations, including the local scope. It is still not perfect however so
 may not be able to provide tips under certain conditions but it is still a major
 enhancement over the previous system.
 
+Editra is also now distributed with wxPython as of version 2.8.7. So if you are
+running the source versions, installing wxPython will also install Editra.
 
 NEW: [features/improvements]
 +Major improvements to python autocompletion
