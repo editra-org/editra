@@ -158,13 +158,15 @@ class TextFinder(object):
             pool.SetSearchFlags(flag_map[s_flags - wx.FR_DOWN] | \
                                 wx.stc.STC_FIND_REGEXP)
             replaced = 0
+            pool.BeginUndoAction()
             while pool.SearchInTarget(query) > 0:
                 pool.SetSelection(pool.GetTargetStart(), pool.GetTargetEnd())
                 pool.ReplaceSelection(replacestring)
-                pool.SetTargetStart(pool.GetTargetEnd() - (len(query) - \
-                                    len(replacestring)))
-                pool.SetTargetEnd(pool.GetLength())
                 replaced += 1
+                pool.SetTargetStart(pool.GetTargetStart() + len(replacestring))
+                pool.SetTargetEnd(pool.GetLength())
+            pool.EndUndoAction()
+
             pool.ScrollToLine(self._posinfo['scroll'])
             pool.SetCurrentPos(self._posinfo['start']) # Move cursor to start
             pool.SetSelection(self._posinfo['start'], self._posinfo['start'])
@@ -196,6 +198,16 @@ class TextFinder(object):
 
         """
         return self._data.GetFlags()
+
+    def GetStart(self):
+        """Get the value of the start position that was last set by a call
+        to L{SetStart}.
+        @return: integer position value
+        @note: usually the returned value is the cursors position from the
+               begining of the last search operation.
+
+        """
+        return self._poinfo['start']
 
     def OnFindClose(self, evt):
         """Destroy Find Dialog After Cancel is clicked in it
