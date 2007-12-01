@@ -9,10 +9,18 @@ Change Log:
 Changes since last release:
 
 VERSION 0.2.29
-DATE xx/xx/2007
+DATE 12/01/2007
 8th Alpha Release
 
 NEWS:
+
+This release contains a number of important bug fixes and and improvements to
+existing features. Most notably is the major improvements that have been made to
+the python autocompletion. Editra is now able to provide autocompletion tips for
+most situations, including the local scope. It is still not perfect however so 
+may not be able to provide tips under certain conditions but it is still a major
+enhancement over the previous system.
+
 
 NEW: [features/improvements]
 +Major improvements to python autocompletion
