@@ -95,9 +95,6 @@ class PluginDialog(wx.Frame):
         wx.Frame.__init__(self, parent, fid, title, pos, size, style)
         util.SetWindowIcon(self)
 
-        if wx.Platform == '__WXMAC__' and Profile_Get('METAL', 'bool', False):
-            self.SetExtraStyle(wx.FRAME_EX_METAL)
-
         # Attributes
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.SetStatusBar(DownloadStatusBar(self))

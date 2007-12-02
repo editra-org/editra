@@ -240,8 +240,7 @@ class TextFinder(object):
         else:
             evt.Skip()
             return
-        if wx.Platform == '__WXMAC__' and Profile_Get('METAL', 'bool', False):
-            self._find_dlg.SetExtraStyle(wx.DIALOG_EX_METAL)
+
         self._find_dlg.CenterOnParent()
         try:
             self._find_dlg.Show()

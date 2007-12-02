@@ -71,9 +71,6 @@ class StyleEditor(wx.Dialog):
         """
         wx.Dialog.__init__(self, parent, id_, title, style=style)
 
-        if wx.Platform == '__WXMAC__' and Profile_Get('METAL', 'bool', False):
-            self.SetExtraStyle(wx.DIALOG_EX_METAL)
-
         # Attributes
         self.LOG = wx.GetApp().GetLog()
         self.preview = ed_stc.EditraStc(self, wx.ID_ANY, size=(-1, 200),
