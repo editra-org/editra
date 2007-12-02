@@ -57,6 +57,7 @@ CLASSIFIERS = [
             'License :: OSI Approved',
             'Natural Language :: English',
             'Natural Language :: Japanese',
+            'Natural Language :: Russian',
             'Natural Language :: Spanish',
             'Operating System :: MacOS :: MacOS X',
             'Operating System :: Microsoft :: Windows',
