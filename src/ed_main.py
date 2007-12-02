@@ -284,11 +284,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             for handler in self._handlers['ui']:
                 app.AddUIHandlerForID(*handler)
         else:
-            ex_style = self.GetExtraStyle()
-            if ex_style:
-                ex_style -= wx.WS_EX_PROCESS_UI_UPDATES
-            self.SetExtraStyle(ex_style)
-
+            self.SetExtraStyle(0)
             for handler in self._handlers['menu']:
                 app.RemoveHandlerForID(handler[0])
 
