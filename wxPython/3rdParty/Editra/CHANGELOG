@@ -24,6 +24,9 @@ OTHER:
 
 BUG FIXES:
 +Fixed bug where potential infinite loop could happen when doing a replace all
++Fixed bug in handling Enter key in Quick Find bar on Windows
++Fixed graphical bug that occured on osx after maximizing a window when multiple
+windows are open.
 
 #-----------------------------------------------------------------------------#
 
