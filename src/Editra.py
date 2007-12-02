@@ -282,7 +282,8 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         
         # Ensure frame gets an Activate event when shown
         # this doesn't happen automatically on windows
-        wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
+        if wx.Platform == '__WXMSW__':
+            wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
 
     def RegisterWindow(self, name, window, can_lock=False):
         """Registers winows with the app. The name should be the
@@ -524,7 +525,11 @@ def Main():
         frame.GetNotebook().LoadSessionFiles()
 
     frame.Show(True)
-    wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
+    # Unlike wxMac/wxGTK Windows doesn't post an activate event when a window
+    # is first shown, so do it manually to make sure all event handlers get
+    # pushed.
+    if wx.Platform == '__WXMSW__':
+        wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
 
     if 'splash' in locals():
         splash.Destroy()
