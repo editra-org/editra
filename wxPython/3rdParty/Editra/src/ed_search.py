@@ -294,7 +294,7 @@ class EdSearchCtrl(wx.SearchCtrl):
     """
     def __init__(self, parent, id_, value="", menulen=0, \
                  pos=wx.DefaultPosition, size=wx.DefaultSize, \
-                 style=wx.TE_RICH2):
+                 style=wx.TE_RICH2|wx.TE_PROCESS_ENTER):
         """Initializes the Search Control
         @param menulen: max length of history menu
 
