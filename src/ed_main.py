@@ -826,6 +826,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         e_id = evt.GetId()
         if not self.IsActive() and e_id != ID_KWHELPER:
+            evt.Skip()
             return
 
         ctrl = self.nb.GetCurrentCtrl()
