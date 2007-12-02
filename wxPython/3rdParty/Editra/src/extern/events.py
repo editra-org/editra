@@ -96,7 +96,7 @@ class AppEventHandlerMixin:
         self.Unbind(wx.EVT_UPDATE_UI, id=eventID)
         self.uihandlers[eventID] = None
 
-        if eventID in self.pushed_handlers:
+        if eventID in self.pushed_uihandlers:
             self.uihandlers[eventID] = self.pushed_uihandlers[eventID]
 
     def HandleEvent(self, event):
