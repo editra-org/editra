@@ -132,8 +132,6 @@ class PreferencesDialog(wx.Frame):
 
         # Extra Styles
         self.SetTransparent(Profile_Get('ALPHA', 'int', 255))
-        if wx.Platform == '__WXMAC__' and Profile_Get('METAL', 'bool', False):
-            self.SetExtraStyle(wx.DIALOG_EX_METAL)
 
         # Attributes
         self._tbook = PrefTools(self)
@@ -904,15 +902,6 @@ class AppearancePanel(PrefPanelBase):
         tsizer = wx.BoxSizer(wx.HORIZONTAL)
         tsizer.AddMany([(trans_lbl, 0), ((5, 5), 0), (trans, 0)])
 
-        # Activate Metal Style for OSX
-        if wx.Platform == '__WXMAC__':
-            m_cb = wx.CheckBox(self, ed_glob.ID_PREF_METAL, \
-                               _("Use Metal Style"))
-            m_cb.SetValue(Profile_Get('METAL', 'bool', False))
-            m_cb.SetToolTip(wx.ToolTip(_("Restart Required")))
-        else:
-            m_cb = (0, 0)
-
         # Layout
         sizer = wx.GridBagSizer(5, 4)
         sizer.AddMany([((5, 5), (0, 1)),
@@ -929,7 +918,6 @@ class AppearancePanel(PrefPanelBase):
         sizer.Add((5, 5), (8, 0))
         sizer.Add(wx.StaticText(self, label=_("Misc") + u": "), (8, 1))
         sizer.AddMany([(tsizer, (8, 2), (1, 2)),
-                       (m_cb, (9, 2), (1, 2)),
                        ((15, 15), (10, 2))])
         self.SetSizer(sizer)
 
@@ -941,8 +929,6 @@ class AppearancePanel(PrefPanelBase):
         e_id = evt.GetId()
         val = evt.GetEventObject().GetValue()
         if e_id in [ed_glob.ID_PREF_WPOS, ed_glob.ID_PREF_WSIZE]:
-            Profile_Set(ed_glob.ID_2_PROF[e_id], val)
-        elif e_id == ed_glob.ID_PREF_METAL:
             Profile_Set(ed_glob.ID_2_PROF[e_id], val)
         else:
             evt.Skip()

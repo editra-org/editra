@@ -79,11 +79,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self.SetTitle()
         util.SetWindowIcon(self)
 
-        # Check if user wants Metal Style under OS X
-        # NOTE: soon to be deprecated
-        if wx.Platform == '__WXMAC__' and _PGET('METAL'):
-            self.SetExtraStyle(wx.FRAME_EX_METAL)
-
         # Attributes
         self.LOG = wx.GetApp().GetLog()
         self._handlers = dict(menu=list(), ui=list())

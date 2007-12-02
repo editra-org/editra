@@ -130,7 +130,6 @@ ID_PREF_EDGE     = wx.NewId()
 ID_PREF_SYNTHEME = wx.NewId()
 ID_PREF_TABS     = wx.NewId()
 ID_PREF_TABW     = wx.NewId()
-ID_PREF_METAL    = wx.NewId()
 ID_PREF_FHIST    = wx.NewId()
 ID_PREF_WSIZE    = wx.NewId()
 ID_PREF_WPOS     = wx.NewId()
@@ -265,7 +264,6 @@ ID_2_PROF = {
              ID_TRANSPARENCY      : 'ALPHA',
              ID_WORD_WRAP         : 'WRAP',
              ID_PREF_EDGE         : 'EDGE',
-             ID_PREF_METAL        : 'METAL',
              ID_PREF_SPOS         : 'SAVE_POS',
              ID_PREF_WSIZE        : 'SET_WSIZE',
              ID_PREF_WPOS         : 'SET_WPOS',
