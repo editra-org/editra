@@ -400,6 +400,10 @@ class EdMenuBar(wx.MenuBar):
         formatmenu.Append(ed_glob.ID_TO_LOWER,  _("Lowercase"),
                           _("Convert selected text to all lowercase letters"))
         formatmenu.AppendSeparator()
+        formatmenu.Append(ed_glob.ID_USE_SOFTTABS,
+                          _("Use Soft Tabs") + '\tCtrl+Shift+I',
+                          _("Insert spaces instead of tab "
+                            "characters with tab key"), wx.ITEM_CHECK)
         formatmenu.Append(ed_glob.ID_WORD_WRAP, _("Word Wrap"), 
                                _("Wrap Text Horizontally"), wx.ITEM_CHECK)
         formatmenu.AppendSeparator()

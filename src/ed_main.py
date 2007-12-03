@@ -198,6 +198,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      (ID_UNDO, self.OnUpdateClipboardUI),
                                      (ID_REDO, self.OnUpdateClipboardUI),
                                      # Format Menu
+                                     (ID_USE_SOFTTABS, self.OnUpdateFormatUI),
                                      (ID_WORD_WRAP, self.OnUpdateFormatUI),
                                      (ID_EOL_MAC, self.OnUpdateFormatUI),
                                      (ID_EOL_WIN, self.OnUpdateFormatUI),
@@ -855,11 +856,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                          ID_SHOW_LN,  ID_AUTOINDENT, ID_TAB_TO_SPACE, 
                          ID_SPACE_TO_TAB, ID_TRIM_WS, ID_SHOW_EDGE, 
                          ID_MACRO_START, ID_MACRO_STOP, ID_MACRO_PLAY, 
-                         ID_TO_LOWER, ID_TO_UPPER, ID_KWHELPER
+                         ID_TO_LOWER, ID_TO_UPPER, ID_KWHELPER, ID_USE_SOFTTABS
                          ])
         menu_ids.extend(active_only)
 
-        if evt.GetId() in menu_ids:
+        if e_id in menu_ids:
             ctrl.ControlDispatch(evt)
         else:
             evt.Skip()
@@ -903,7 +904,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         evt.SetUpdateInterval(350)
         ctrl = self.nb.GetCurrentCtrl()
         eol = ctrl.GetEOLModeId()
-        if e_id == ID_WORD_WRAP:
+        if e_id == ID_USE_SOFTTABS:
+            evt.Check(not bool(ctrl.GetUseTabs()))
+        elif e_id == ID_WORD_WRAP:
             evt.Check(bool(ctrl.GetWrapMode()))
         elif e_id in [ID_EOL_MAC, ID_EOL_WIN, ID_EOL_UNIX]:
             evt.Check(eol == e_id)

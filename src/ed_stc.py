@@ -1033,6 +1033,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.AddLine(before=True)
         elif e_id in [ed_glob.ID_TO_UPPER, ed_glob.ID_TO_LOWER]:
             self.ConvertCase(e_id == ed_glob.ID_TO_UPPER)
+        elif e_id == ed_glob.ID_USE_SOFTTABS:
+            self.SetUseTabs(not self.GetUseTabs())
         else:
             evt.Skip()
 
