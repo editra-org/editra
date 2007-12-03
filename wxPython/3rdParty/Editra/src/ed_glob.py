@@ -44,7 +44,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 'ID_MACRO_STOP',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
-            'ID_CLOSE_WINDOW'
+            'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS'
 ]
 
 #---- Project Info ----#
@@ -165,6 +165,7 @@ ID_EOL_MODE      = wx.NewId()
 ID_EOL_MAC       = wx.NewId()
 ID_EOL_UNIX      = wx.NewId()
 ID_EOL_WIN       = wx.NewId()
+ID_USE_SOFTTABS  = wx.NewId()
 ID_WORD_WRAP     = wx.NewId()
 ID_INDENT        = wx.ID_INDENT
 ID_UNINDENT      = wx.ID_UNINDENT

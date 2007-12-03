@@ -16,7 +16,9 @@ NEWS:
 
 
 NEW: [features/improvements]
-
++Support for highlighting PL/SQL and improved SQL highlighting (contributed by Thomas Keul)
++New highting color scheme "BlueMonday" (by Thomas Keul)
++Ctrl+Shift+I will toggle useage of Tabs and Soft Tabs.
 
 OTHER:
 -Removed support for Metal style windows on OS X
