@@ -190,6 +190,8 @@ LANG_ST = u'Smalltalk'
 # Use LEX_SQL (PL/SQL, SQL*Plus)
 ID_LANG_SQL = _NewId()
 LANG_SQL = u'SQL'
+ID_LANG_PLSQL = _NewId()
+LANG_PLSQL = u'PL/SQL'
 
 # Use LEX_TCL
 ID_LANG_TCL  = _NewId()
@@ -278,6 +280,7 @@ EXT_MAP = {
            'dfm dpk dpr inc p pas pp' : LANG_PASCAL,
            'cgi pl pm pod'      : LANG_PERL,
            'php php3 phtml phtm' : LANG_PHP,
+           'plsql'              : LANG_PLSQL,
            'ini inf reg url cfg cnf' : LANG_PROPS,
            'ai ps'              : LANG_PS,
            'py pyw python'      : LANG_PYTHON,
