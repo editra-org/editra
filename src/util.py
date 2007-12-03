@@ -639,10 +639,13 @@ def GetResourceFiles(resource, trim=True, get_all=False):
         for rec in recs:
             if os.path.isfile(rec_dir + rec) or \
               (get_all and os.path.isfile(rec_dir2 + rec)):
-                # Trim the last part of an exetion if one exists
+                # Trim the last part of an extension if one exists
                 if trim:
-                    rec = ".".join(rec.split(u".")[:-1])
-                rec_list.append(rec.title())
+                    rec = ".".join(rec.split(u".")[:-1]).strip()
+
+                if len(rec):
+                    rec = rec[0].upper() + rec[1:]
+                    rec_list.append(rec)
         rec_list.sort()
         return list(set(rec_list))
 
