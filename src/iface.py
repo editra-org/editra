@@ -316,6 +316,14 @@ class Shelf(plugin.Plugin):
                         self._shelf.GetPageText(page), 1))
         return rval
 
+    def GetOwnerWindow(self):
+        """Return the L{ed_main.MainWindow} instance that owns/created
+        this Shelf.
+        @return: reference to ed_main.MainWindow or None
+
+        """
+        return self._parent
+
     def GetWindow(self):
         """Return reference to the Shelfs window component
         @return: FlatnoteBook
