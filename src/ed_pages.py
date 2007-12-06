@@ -575,12 +575,15 @@ class EdPages(FNB.FlatNotebook):
                the document.
 
         """
-        pg_num = self.GetSelection()
-        title = self.GetPageText(pg_num)
-        if self.control.GetModify():
-            title = u"*" + title
-        if title != FNB.FlatNotebook.GetPageText(self, pg_num):
-            wx.CallAfter(self.SetPageText, pg_num, title)
+        try:
+            pg_num = self.GetSelection()
+            title = self.GetPageText(pg_num)
+            if self.control.GetModify():
+                title = u"*" + title
+            if title != FNB.FlatNotebook.GetPageText(self, pg_num):
+                wx.CallAfter(self.SetPageText, pg_num, title)
+        except wx.PyDeadObjectError:
+            pass
         
     def UpdateTextControls(self):
         """Updates all text controls to use any new settings that have
