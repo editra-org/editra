@@ -656,12 +656,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self.LOG("[main_evt][exit] Requesting Page Close")
             result = self.nb.ClosePage()
             if result == wx.ID_CANCEL:
-                break
+                self._exiting = False
+                return True
             controls -= 1
-
-        if result == wx.ID_CANCEL:
-            self._exiting = False
-            return True
 
         ### If we get to here there is no turning back so cleanup
         ### additional items and save user settings
