@@ -19,6 +19,7 @@ NEW: [features/improvements]
 +Support for highlighting PL/SQL and improved SQL highlighting (contributed by Thomas Keul)
 +New highting color scheme "BlueMonday" (by Thomas Keul)
 +Ctrl+Shift+I will toggle useage of Tabs and Soft Tabs.
++General UI improvements
 
 OTHER:
 -Removed support for Metal style windows on OS X
@@ -29,6 +30,7 @@ BUG FIXES:
 +Fixed bug in handling Enter key in Quick Find bar on Windows
 +Fixed graphical bug that occured on osx after maximizing a window when multiple
 windows are open.
++Fixed bug that caused a failure to exit when notebook has no pages
 
 #-----------------------------------------------------------------------------#
 
