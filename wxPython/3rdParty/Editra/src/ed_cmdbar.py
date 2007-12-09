@@ -36,6 +36,7 @@ import util
 import ed_glob
 import ed_search
 import ed_event
+import eclib.platebtn as platebtn
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -243,26 +244,20 @@ class CommandBar(wx.Panel):
         f_lbl = wx.StaticText(self, ID_FIND_LBL, _("Find") + u": ")
         ctrl_sizer = wx.BoxSizer(wx.HORIZONTAL)
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOWN), wx.ART_MENU)
-        next_btn = wx.BitmapButton(self, ID_SEARCH_NEXT, 
-                                   t_bmp, style=wx.NO_BORDER)
-        nlbl = wx.StaticText(self, label=_("Next"))
+        next_btn = platebtn.PlateButton(self, ID_SEARCH_NEXT, _("Next"), t_bmp)
 
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_UP), wx.ART_MENU)
-        pre_btn = wx.BitmapButton(self, ID_SEARCH_PRE, 
-                                  t_bmp, style=wx.NO_BORDER)
-        plbl = wx.StaticText(self, label=_("Previous"))
+        pre_btn = platebtn.PlateButton(self, ID_SEARCH_PRE, _("Previous"), t_bmp)
 
         match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
         match_case.SetValue(search.IsMatchCase())
         if wx.Platform == '__WXMAC__':
             t_sizer.Add((5, 5))
-            for win in [f_lbl, match_case, nlbl, plbl]:
+            for win in [f_lbl, match_case, next_btn, pre_btn]:
                 win.SetFont(wx.SMALL_FONT)
 
         ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
-                            ((3, 3)), (nlbl, 0, wx.ALIGN_CENTER_VERTICAL),
                             ((10, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
-                            ((3, 3)), (plbl, 0, wx.ALIGN_CENTER_VERTICAL),
                             ((10, 0)), 
                             (match_case, 0, wx.ALIGN_CENTER_VERTICAL)])
 
