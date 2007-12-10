@@ -88,8 +88,6 @@ class PerspectiveManager(object):
         self._window.SetTransparent(Profile_Get('ALPHA', default=255))
         if Profile_Get('SET_WPOS') and Profile_Get('WPOS', "size_tuple", False):
             self._window.SetPosition(Profile_Get('WPOS'))
-        else:
-            self._window.CenterOnParent()
 
         # Event Handlers
         self._window.Bind(wx.EVT_MENU, self.OnPerspectiveMenu)
