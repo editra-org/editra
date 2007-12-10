@@ -18,32 +18,32 @@ Any combination of the following values may be passed to the constructor's style
 keyword parameter.
 
 PB_STYLE_DEFAULT:
-  Creates a flat label button with rounded corners, the highlight for mouse over
+Creates a flat label button with rounded corners, the highlight for mouse over
 and press states is based off of the hightlight color from the systems current
 theme.
 
 PB_STYLE_GRADIENT:
-  The highlight and press states are drawn with gradient using the current
+The highlight and press states are drawn with gradient using the current
 highlight color.
 
 PB_STYLE_SQUARE:
-  Instead of the default rounded shape use a rectangular shaped button with
+Instead of the default rounded shape use a rectangular shaped button with
 square edges.
 
 
 Other attributes can be configured after the control has been created. The
 settings that are currently available are as follows:
 
-L{SetBitmap}: Change/Add the bitmap at any time and the control will resize and
-              refresh to display it.
-L{SetLabelColor}: Explicitly set text colors
-L{SetMenu}: Set the button to have a popupmenu. When a menu is set a small drop
+SetBitmap: Change/Add the bitmap at any time and the control will resize and
+           refresh to display it.
+SetLabelColor: Explicitly set text colors
+SetMenu: Set the button to have a popupmenu. When a menu is set a small drop
             arrow will be drawn on the button that can then be clicked to show
             a menu.
-L{SetPressColor}: Use a custom highlight color
+SetPressColor: Use a custom highlight color
 
 
-Methods Inherited from PyControl:
+Overridden Methods Inherited from PyControl:
 
 SetFont: Changing the font is one way to set the size of the button, by default
          the control will inherit its font from its parent.
@@ -462,7 +462,13 @@ class PlateButton(wx.PyControl):
                 adj = 3
             else:
                 adj = 0
-            self.PopupMenu(self._menu, (2, size[1] + adj))
+
+            if self._style & PB_STYLE_SQUARE:
+                xpos = 1
+            else:
+                xpos = size[1] / 2
+
+            self.PopupMenu(self._menu, (xpos, size[1] + adj))
             
     def OnLeftUp(self, evt):
         """Post a button event if the control was previously in a
@@ -575,7 +581,10 @@ class PlateButton(wx.PyControl):
         @param color: wx.Color
 
         """
-        self._color['hlight'] = AdjustAlpha(color, 145)
+        if color.Alpha() == 255:
+            self._color['hlight'] = AdjustAlpha(color, 200)
+        else:
+            self._color['hlight'] = color
         self._color['press'] = AdjustColour(color, -30, 170)
         self._color['htxt'] = BestLabelColour(self._color['hlight'])
         self._color['ptxt'] = BestLabelColour(self._color['press'])
