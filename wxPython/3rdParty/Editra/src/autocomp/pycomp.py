@@ -25,7 +25,7 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Dependancies
-import sys, tokenize, cStringIO, types
+import os, sys, tokenize, cStringIO, types
 from token import NAME, DEDENT, STRING #, NEWLINE
 import wx
 from wx.py import introspect
@@ -65,8 +65,19 @@ class Completer(object):
         """
         try:
             cmpl = PyCompleter()
+
+            # Put the files directory on the path so eval has a better
+            # chance of getting the proper completions
+            fname = self._buffer.GetFileName()
+            if fname:
+                sys.path.insert(0, os.path.dirname(fname))
+
             cmpl.evalsource(self._buffer.GetText(),
                             self._buffer.GetCurrentLine())
+
+            if fname:
+                sys.path.pop(0)
+
             if calltip:
                 return cmpl.get_completions(command + '(', '', calltip)
             else:
@@ -688,8 +699,8 @@ class PyParser:
                    '(' : '()', 'tuple' : '()', 'coerce' : '()'
                  }
 
-        if tokentype == tokenize.STRING or tokentype == tokenize.NUMBER:
-            token = tokentype
+        if tokentype == tokenize.NUMBER or tokentype == tokenize.STRING:
+            return token #token = tokentype
 
         if tokens.has_key(token):
             return tokens[token]
