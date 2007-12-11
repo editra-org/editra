@@ -53,10 +53,13 @@ SetWindowVariant: Setting the window variant will cause the control to resize to
                   a bitmap the bitmap will remain unchanged and only the font
                   will be adjusted.
 
+Requirements:
+    This module requires python2.4 or higher and wxPython2.8 or higher
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__cvsid__ = "$Id$"
+__svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
@@ -324,6 +327,7 @@ class PlateButton(wx.PyControl):
             gc.SetTextForeground(self._color['htxt'])
             gc.SetPen(wx.TRANSPARENT_PEN)
             self.__DrawHighlight(gc, width, height)
+
         elif self._state == PLATE_PRESSED:
             gc.SetTextForeground(self._color['ptxt'])
             if wx.Platform == '__WXMAC__':
@@ -338,6 +342,7 @@ class PlateButton(wx.PyControl):
             gc.DrawText(self.GetLabel(), txt_x + 2, txt_y)
             self.__DrawDropArrow(gc, txt_x + tw + 6, (height / 2) - 2)
             self.__DrawHighlight(gc, width, height)
+
         else:
             if self.IsEnabled():
                 gc.SetTextForeground(self.GetForegroundColour())
@@ -354,7 +359,7 @@ class PlateButton(wx.PyControl):
     #---- End Private Member Function ----#
 
     #---- Public Member Functions ----#
-    # Property defs for convient access
+    # Property defs for convenient access
     @property
     def BitmapDisabled(self):
         """Property for accessing the bitmap for the disabled state"""
@@ -383,6 +388,7 @@ class PlateButton(wx.PyControl):
     def GetBackgroundBrush(self):
         """Get the brush for drawing the background of the button
         @return: wx.Brush
+        @note: used internally when on gtk
 
         """
         bkgrd = self.GetBackgroundColour()
@@ -429,6 +435,7 @@ class PlateButton(wx.PyControl):
         return self.GetLabel()
 
     #---- Event Handlers ----#
+
     def OnErase(self, evt):
         """Trap the erase event to keep the background transparent
         on windows.
@@ -492,7 +499,8 @@ class PlateButton(wx.PyControl):
         else:
             self.SetState(PLATE_NORMAL)
         evt.Skip()
-    #---- Event Handlers ----#
+
+    #---- End Event Handlers ----#
 
     def SetBitmap(self, bmp):
         """Set the bitmap displayed in the button
@@ -606,7 +614,7 @@ class PlateButton(wx.PyControl):
         self.__CalcBestSize()
 
     def ShouldInheritColours(self):
-        """Overridden base class virtual.  If the parent has non-default
+        """Overridden base class virtual. If the parent has non-default
         colours then we want this control to inherit them.
 
         """
@@ -620,23 +628,3 @@ class PlateButton(wx.PyControl):
             self.SetState(PLATE_HIGHLIGHT)
 
     #---- Public Member Functions ----#
-
-#-----------------------------------------------------------------------------#
-# Test
-if __name__ == '__main__':
-    APP = wx.PySimpleApp(False)
-    FRAME = wx.Frame(None, title="PlateButton Test")
-    PANEL = wx.Panel(FRAME)
-
-    PBTN = PlateButton(PANEL, 
-                       bmp=wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU),
-                       label="Bitmap/Label")
-    PBTN.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
-    PBTN2 = PlateButton(PANEL, label="No Bitmap", style=PB_STYLE_SQUARE)
-    PBTN2.SetPressColor(wx.RED)
-    SIZER = wx.BoxSizer(wx.VERTICAL)
-    SIZER.AddMany([((20, 20)), (PBTN, 0, wx.CENTER), ((20, 20)), 
-                   (PBTN2, 0, wx.CENTER), ((20, 20))])
-    PANEL.SetSizer(SIZER)
-    FRAME.Show()
-    APP.MainLoop()
