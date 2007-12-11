@@ -208,6 +208,7 @@ ART = { ed_glob.ID_ABOUT  : u'about.png',
 # File Type Art
 MIME_ART = { synglob.ID_LANG_ADA : u'ada.png',
              synglob.ID_LANG_BASH : u'shell.png',
+             synglob.ID_LANG_BOO : u'boo.png',
              synglob.ID_LANG_BOURNE : u'shell.png',
              synglob.ID_LANG_C : u'c.png',
              synglob.ID_LANG_CPP : u'cpp.png',

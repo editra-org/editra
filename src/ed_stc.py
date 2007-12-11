@@ -940,7 +940,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     interp = u''
                 ex_map = { "python" : "py", "wish" : "tcl", "ruby" : "rb",
                            "bash" : "sh", "csh" : "csh", "perl" : "pl",
-                           "ksh" : "ksh", "php" : "php" }
+                           "ksh" : "ksh", "php" : "php", "booi" : "boo"}
                 self.ConfigureLexer(ex_map.get(interp, interp))
         self.Colourise(0, -1)
 
