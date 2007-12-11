@@ -172,6 +172,8 @@ ID_LANG_PS = _NewId()
 LANG_PS = u'Postscript'
 
 # Use LEX_PYTHON 
+ID_LANG_BOO = _NewId()
+LANG_BOO = u'Boo'
 ID_LANG_PYTHON = _NewId()
 LANG_PYTHON = u'Python'
 
@@ -242,6 +244,7 @@ EXT_MAP = {
            'conf htaccess'      : LANG_APACHE,
            'bsh sh configure'   : LANG_BASH,
            'bat cmd'            : LANG_BATCH,
+           'boo'                : LANG_BOO,
            'c h'                : LANG_C,
            'ml mli'             : LANG_CAML,
            'cfm cfc cfml dbm'   : LANG_COLDFUSION,
