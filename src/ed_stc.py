@@ -965,6 +965,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_KWHELPER: self.ShowKeywordHelp,
                   ed_glob.ID_CUT_LINE : self.LineCut, 
                   ed_glob.ID_COPY_LINE : self.LineCopy,
+                  ed_glob.ID_DUP_LINE : self.LineDuplicate,
                   ed_glob.ID_BRACKETHL : self.ToggleBracketHL,
                   ed_glob.ID_SYNTAX : self.SyntaxOnOff,
                   ed_glob.ID_UNINDENT : self.BackTab,

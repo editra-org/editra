@@ -44,7 +44,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 'ID_MACRO_STOP',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
-            'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS'
+            'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS', 'ID_DUP_LINE'
 ]
 
 #---- Project Info ----#
@@ -110,6 +110,7 @@ ID_LINE_AFTER    = wx.NewId()
 ID_LINE_BEFORE   = wx.NewId()
 ID_CUT_LINE      = wx.NewId()
 ID_COPY_LINE     = wx.NewId()
+ID_DUP_LINE      = wx.NewId()
 ID_JOIN_LINES    = wx.NewId()
 ID_TRANSPOSE     = wx.NewId()
 ID_FIND          = wx.ID_FIND
