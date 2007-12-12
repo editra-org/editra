@@ -1,7 +1,8 @@
 # Syntax Highlighting Test File for Boo
 # Comment line
-// This is also a comment line but not currently supported by Editra
-/* So is this but also not currently supported */
+/* This is also a comment line but highlighting is not
+*/   currently supported by Editra
+// So is this but also not currently supported
 
 import System
 name = Console.ReadLine()
