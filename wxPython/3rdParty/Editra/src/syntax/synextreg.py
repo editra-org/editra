@@ -81,6 +81,8 @@ ID_LANG_EDJE = _NewId()
 LANG_EDJE = u'Edje'
 ID_LANG_JAVA = _NewId()
 LANG_JAVA = u'Java'
+ID_LANG_PIKE = _NewId()
+LANG_PIKE = u'Pike'
 
 # Use LEX_CSS
 ID_LANG_CSS = _NewId()
@@ -283,6 +285,7 @@ EXT_MAP = {
            'dfm dpk dpr inc p pas pp' : LANG_PASCAL,
            'cgi pl pm pod'      : LANG_PERL,
            'php php3 phtml phtm' : LANG_PHP,
+           'pike'                : LANG_PIKE,
            'plsql'              : LANG_PLSQL,
            'ini inf reg url cfg cnf' : LANG_PROPS,
            'ai ps'              : LANG_PS,

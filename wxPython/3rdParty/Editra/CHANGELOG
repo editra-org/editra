@@ -18,7 +18,7 @@ NEWS:
 NEW: [features/improvements]
 +Support for highlighting PL/SQL and improved SQL highlighting (contributed by Thomas Keul)
 +New highting color scheme "BlueMonday" (by Thomas Keul)
-+Support for highlighting Boo programming language
++Support for highlighting (Boo, Pike) programming languages
 +Ctrl+Shift+I will toggle useage of Tabs and Soft Tabs.
 +General UI improvements
 +Minor python autocompletion improvements
