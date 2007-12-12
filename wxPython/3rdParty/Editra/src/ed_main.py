@@ -839,7 +839,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_JOIN_LINES, ID_CUT_LINE, ID_COPY_LINE, ID_INDENT, 
                         ID_UNINDENT, ID_TRANSPOSE, ID_COMMENT, ID_UNCOMMENT,
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY, 
-                        ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER ]
+                        ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE ]
 
         if self.FindFocus() != ctrl and e_id in active_only:
             evt.Skip()

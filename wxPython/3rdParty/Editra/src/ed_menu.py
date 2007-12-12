@@ -308,6 +308,9 @@ class EdMenuBar(wx.MenuBar):
                         _("Cut Current Line"))
         linemenu.Append(ed_glob.ID_COPY_LINE, _("Copy Line") + "\tCtrl+Y",
                         _("Copy Current Line"))
+        linemenu.Append(ed_glob.ID_DUP_LINE,
+                        _("Duplicate Line") + "\tShift+Ctrl+C",
+                        _("Duplicate the current line"))
         linemenu.AppendSeparator()
         linemenu.Append(ed_glob.ID_JOIN_LINES, _("Join Lines") + "\tCtrl+J",
                         _("Join the Selected Lines"))
