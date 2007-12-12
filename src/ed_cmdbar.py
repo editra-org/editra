@@ -244,10 +244,12 @@ class CommandBar(wx.Panel):
         f_lbl = wx.StaticText(self, ID_FIND_LBL, _("Find") + u": ")
         ctrl_sizer = wx.BoxSizer(wx.HORIZONTAL)
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOWN), wx.ART_MENU)
-        next_btn = platebtn.PlateButton(self, ID_SEARCH_NEXT, _("Next"), t_bmp)
+        next_btn = platebtn.PlateButton(self, ID_SEARCH_NEXT, _("Next"),
+                                        t_bmp, platebtn.PB_STYLE_NOBG)
 
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_UP), wx.ART_MENU)
-        pre_btn = platebtn.PlateButton(self, ID_SEARCH_PRE, _("Previous"), t_bmp)
+        pre_btn = platebtn.PlateButton(self, ID_SEARCH_PRE, _("Previous"),
+                                       t_bmp, platebtn.PB_STYLE_NOBG)
 
         match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
         match_case.SetValue(search.IsMatchCase())
