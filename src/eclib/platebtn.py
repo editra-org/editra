@@ -30,6 +30,12 @@ PB_STYLE_SQUARE:
 Instead of the default rounded shape use a rectangular shaped button with
 square edges.
 
+PB_STYLE_NB:
+This style only has an effect on Windows but does not cause harm to use on the
+platforms. It should only be used when the control is shown on a panel or other
+window that has a non solid color for a background. i.e a gradient or image is
+painted on the background of the parent window. If used on a background with
+a solid color it may cause the control to loose its transparent appearance.
 
 Other attributes can be configured after the control has been created. The
 settings that are currently available are as follows:
@@ -81,6 +87,8 @@ PLATE_HIGHLIGHT = 2
 PB_STYLE_DEFAULT  = 1   # Normal Flat Background
 PB_STYLE_GRADIENT = 2   # Gradient Filled Background
 PB_STYLE_SQUARE   = 4   # Use square corners instead of rounded
+PB_STYLE_NOBG     = 8   # Usefull on Windows to get a transparent appearance
+                        # when the control is shown on a non solid background
 
 #-----------------------------------------------------------------------------#
 # Utility Functions
@@ -183,7 +191,13 @@ class PlateButton(wx.PyControl):
         # Event Handlers
         self.Bind(wx.EVT_PAINT, lambda evt: self.__RefreshButton())
         self.Bind(wx.EVT_SET_FOCUS, lambda evt: self.SetState(PLATE_HIGHLIGHT))
-        self.Bind(wx.EVT_KILL_FOCUS, lambda evt: self.SetState(PLATE_NORMAL))
+
+        # Note: this delay needs to be at least as much as the on in the KeyUp
+        #       handler to prevent ghost highlighting from happening when
+        #       quickly changing focus and activating buttons
+        self.Bind(wx.EVT_KILL_FOCUS, lambda evt: wx.CallLater(100,
+                                                              self.SetState,
+                                                              PLATE_NORMAL))
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnErase)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
 
@@ -313,9 +327,10 @@ class PlateButton(wx.PyControl):
         gc.SetFont(self.GetFont())
         gc.SetBackgroundMode(wx.TRANSPARENT)
 
-        # Closest work around for lack of transparent controls on gtk
-        if wx.Platform == '__WXGTK__':
-            gc.SetBackground(self.GetBackgroundBrush())
+        # The background needs some help to look transparent on
+        # on Gtk and Windows
+        if wx.Platform in ['__WXGTK__', '__WXMSW__']:
+            gc.SetBackground(self.GetBackgroundBrush(gc))
             gc.Clear()
 
         # Calc Object Positions
@@ -385,20 +400,24 @@ class PlateButton(wx.PyControl):
         wx.PyControl.Enable(self, enable)
         self.Refresh()
 
-    def GetBackgroundBrush(self):
+    def GetBackgroundBrush(self, dc):
         """Get the brush for drawing the background of the button
         @return: wx.Brush
         @note: used internally when on gtk
 
         """
+        if wx.Platform == '__WXMAC__' or self._style & PB_STYLE_NOBG:
+            return wx.TRANSPARENT_BRUSH
+
         bkgrd = self.GetBackgroundColour()
         brush = wx.Brush(bkgrd, wx.SOLID)
         my_attr = self.GetDefaultAttributes()
         p_attr = self.GetParent().GetDefaultAttributes()
         my_def = bkgrd == my_attr.colBg
         p_def = self.GetParent().GetBackgroundColour() == p_attr.colBg
-        if my_def and p_def and wx.Platform != '__WXGTK__':
-            brush = wx.TRANSPARENT_BRUSH
+        if my_def and p_def and wx.Platform == '__WXMSW__':
+            if self.DoEraseBackground(dc):
+                brush = wx.TRANSPARENT_BRUSH
         elif my_def and not p_def:
             bkgrd = self.GetParent().GetBackgroundColour()
             brush = wx.Brush(bkgrd, wx.SOLID)
@@ -450,11 +469,18 @@ class PlateButton(wx.PyControl):
         @param evt: wx.EVT_KEY_UP
 
         """
-        if evt.GetKeyCode() == wx.WXK_RETURN:
+        if wx.Platform != '__WXMSW__':
+            key = wx.WXK_RETURN
+        else:
+            # ?BUG? for some reason the Return key causes tab traversals on msw
+            key = wx.WXK_SPACE
+
+        if evt.GetKeyCode() == key:
             self.SetState(PLATE_PRESSED)
             self.__PostEvent()
-            wx.CallLater(200, self.SetState, PLATE_HIGHLIGHT)
-        evt.Skip()
+            wx.CallLater(100, self.SetState, PLATE_HIGHLIGHT)
+        else:
+            evt.Skip()
 
     def OnLeftDown(self, evt):
         """Sets the pressed state and depending on the click position will
@@ -607,6 +633,15 @@ class PlateButton(wx.PyControl):
         self._pstate = self._state
         self._state = state
         self.GetParent().RefreshRect(self.GetRect(), False)
+
+    def SetWindowStyle(self, style):
+        """Sets the window style bytes, the updates take place
+        immediatly no need to call refresh afterwards.
+        @param style: bitmask of PB_STYLE_* values
+
+        """
+        self._style = style
+        self.Refresh()
 
     def SetWindowVariant(self, variant):
         """Set the variant/font size of this control"""
