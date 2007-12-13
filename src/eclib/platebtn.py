@@ -176,8 +176,7 @@ class PlateButton(wx.PyControl):
         self._menu = None
         self.SetLabel(label)
         self._style = style
-        self._pstate = PLATE_NORMAL        # Previous State
-        self._state = PLATE_NORMAL         # Current State
+        self._state = dict(pre=PLATE_NORMAL, cur=PLATE_NORMAL)
         color = GetHighlightColour()
         pcolor = AdjustColour(color, -20, 150)
         self._color = dict(hlight=color, 
@@ -185,11 +184,11 @@ class PlateButton(wx.PyControl):
                            htxt=BestLabelColour(self.GetForegroundColour()),
                            ptxt=BestLabelColour(pcolor))
 
-        # Setup
+        # Setup Initial Size
         self.__CalcBestSize()
 
         # Event Handlers
-        self.Bind(wx.EVT_PAINT, lambda evt: self.__RefreshButton())
+        self.Bind(wx.EVT_PAINT, lambda evt: self.__DrawButton())
         self.Bind(wx.EVT_SET_FOCUS, lambda evt: self.SetState(PLATE_HIGHLIGHT))
 
         # Note: this delay needs to be at least as much as the on in the KeyUp
@@ -288,7 +287,7 @@ class PlateButton(wx.PyControl):
         @param height: height of highlight
 
         """
-        if self._state == PLATE_PRESSED:
+        if self._state['cur'] == PLATE_PRESSED:
             color = self._color['press']
         else:
             color = self._color['hlight']
@@ -316,7 +315,7 @@ class PlateButton(wx.PyControl):
         bevt.SetString(self.GetLabel())
         wx.PostEvent(self.GetParent(), bevt)
 
-    def __RefreshButton(self):
+    def __DrawButton(self):
         """Draw the button"""
         dc = wx.PaintDC(self)
         gc = wx.GCDC(dc)
@@ -338,12 +337,12 @@ class PlateButton(wx.PyControl):
         tw, th = gc.GetTextExtent(self.GetLabel())
         txt_y = max((height - th) / 2, 1)
 
-        if self._state == PLATE_HIGHLIGHT:
+        if self._state['cur'] == PLATE_HIGHLIGHT:
             gc.SetTextForeground(self._color['htxt'])
             gc.SetPen(wx.TRANSPARENT_PEN)
             self.__DrawHighlight(gc, width, height)
 
-        elif self._state == PLATE_PRESSED:
+        elif self._state['cur'] == PLATE_PRESSED:
             gc.SetTextForeground(self._color['ptxt'])
             if wx.Platform == '__WXMAC__':
                 brush = wx.Brush(wx.BLACK)
@@ -366,7 +365,7 @@ class PlateButton(wx.PyControl):
                 gc.SetTextForeground(txt_c)
 
         # Draw bitmap and text
-        if self._state != PLATE_PRESSED:
+        if self._state['cur'] != PLATE_PRESSED:
             txt_x = self.__DrawBitmap(gc)
             gc.DrawText(self.GetLabel(), txt_x + 2, txt_y)
             self.__DrawDropArrow(gc, txt_x + tw + 6, (height / 2) - 2) 
@@ -374,7 +373,6 @@ class PlateButton(wx.PyControl):
     #---- End Private Member Function ----#
 
     #---- Public Member Functions ----#
-    # Property defs for convenient access
     @property
     def BitmapDisabled(self):
         """Property for accessing the bitmap for the disabled state"""
@@ -444,6 +442,13 @@ class PlateButton(wx.PyControl):
     # Alias for GetLabel
     GetLabelText = wx.PyControl.GetLabel
 
+    def GetMenu(self):
+        """Return the menu associated with this button or None if no
+        menu is associated with it.
+
+        """
+        return getattr(self, '_menu', None)
+
     def HasTransparentBackground(self):
         """Override setting of background fill"""
         return True
@@ -509,7 +514,7 @@ class PlateButton(wx.PyControl):
         @param evt: wx.MouseEvent
 
         """
-        if self._state == PLATE_PRESSED:
+        if self._state['cur'] == PLATE_PRESSED:
             self.__PostEvent()
         self.SetState(PLATE_HIGHLIGHT)
 
@@ -626,17 +631,17 @@ class PlateButton(wx.PyControl):
 
     def SetState(self, state):
         """Manually set the state of the button
-        @param state: one of the PLATE_STATE_* values
+        @param state: one of the PLATE_* values
         @note: the state may be altered by mouse actions
 
         """
-        self._pstate = self._state
-        self._state = state
+        self._state['pre'] = self._state['cur']
+        self._state['cur'] = state
         self.GetParent().RefreshRect(self.GetRect(), False)
 
     def SetWindowStyle(self, style):
         """Sets the window style bytes, the updates take place
-        immediatly no need to call refresh afterwards.
+        immediately no need to call refresh afterwards.
         @param style: bitmask of PB_STYLE_* values
 
         """
@@ -657,9 +662,9 @@ class PlateButton(wx.PyControl):
 
     def ToggleState(self):
         """Toggle button state"""
-        if self._state != PLATE_PRESSED:
+        if self._state['cur'] != PLATE_PRESSED:
             self.SetState(PLATE_PRESSED)
         else:
             self.SetState(PLATE_HIGHLIGHT)
 
-    #---- Public Member Functions ----#
+    #---- End Public Member Functions ----#
