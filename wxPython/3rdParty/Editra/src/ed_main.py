@@ -143,7 +143,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_NEW, self.OnNew),
                                        (ID_OPEN, self.OnOpen),
                                        (ID_CLOSE, self.OnClosePage),
-                                       (ID_CLOSE_WINDOW, self.OnClose),
                                        (ID_CLOSEALL, self.OnClosePage),
                                        (ID_SAVE, self.OnSave),
                                        (ID_SAVEAS, self.OnSaveAs),
@@ -461,8 +460,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if e_id == ID_CLOSE:
             self.nb.ClosePage()
         elif e_id == ID_CLOSEALL:
-            # XXX maybe warn and ask if they really want to close
-            #     all pages before doing it.
+            # TODO maybe warn and ask if they really want to close
+            #      all pages before doing it.
             self.nb.CloseAllPages()
         else:
             evt.Skip()

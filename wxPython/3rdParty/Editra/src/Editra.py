@@ -85,6 +85,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         #---- Bind Events ----#
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
         self.Bind(wx.EVT_MENU, self.OnNewWindow, id=ed_glob.ID_NEW_WINDOW)
+        self.Bind(wx.EVT_MENU, self.OnCloseWindow)
  
         return True
 
@@ -260,6 +261,20 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         if evt.GetId() == ed_glob.ID_NEW_WINDOW:
             frame = evt.GetEventObject().GetMenuBar().GetFrame()
             self.OpenNewWindow(caller=frame)
+        else:
+            evt.Skip()
+
+    def OnCloseWindow(self, evt):
+        """Close the currently active window
+        @param evt: wx.MenuEvent
+
+        """
+        if evt.GetId() in [ed_glob.ID_CLOSE, ed_glob.ID_CLOSE_WINDOW]:
+            for window in self._windows.values():
+                if hasattr(window[0], 'IsActive') and window[0].IsActive():
+                    if hasattr(window[0], 'Close'):
+                        window[0].Close()
+                    break
         else:
             evt.Skip()
 
