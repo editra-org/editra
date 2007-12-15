@@ -289,7 +289,14 @@ class PlateButton(wx.PyControl):
 
     def __DrawButton(self):
         """Draw the button"""
-        dc = wx.PaintDC(self)
+        # TODO using a buffered paintdc on windows with the nobg style
+        #      causes lots of weird drawing. So currently the use of a
+        #      buffered dc is dissabled for this style.
+        if PB_STYLE_NOBG & self._style:
+            dc = wx.PaintDC(self)
+        else:
+            dc = wx.AutoBufferedPaintDCFactory(self)
+
         gc = wx.GCDC(dc)
 
         # Setup
