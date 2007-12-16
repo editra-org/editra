@@ -251,7 +251,7 @@ class PrefTools(wx.Toolbook):
         dc = wx.PaintDC(self)
         gc = wx.GraphicsContext.Create(dc)
         col1 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        col2 = util.AdjustColour(col1, -20)
+        col2 = util.AdjustColour(col1, -10)
         rect = self.GetToolBar().GetRect()
 
         # Create the background path
@@ -296,15 +296,14 @@ class PrefPanelBase(wx.Panel):
         dc = wx.PaintDC(self)
         gc = wx.GraphicsContext.Create(dc)
         col1 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        col1 = util.AdjustColour(col1, 30)
-        brush = gc.CreateBrush(wx.Brush(col1))
+        brush = gc.CreateBrush(wx.Brush(util.AdjustColour(col1, 5)))
         rect = self.GetRect()
 
         # Create the background path
         path = gc.CreatePath()
         path.AddRectangle(0, 0, rect.width, rect.height)
 
-        gc.SetPen(wx.Pen(util.AdjustColour(col1, -60), 1))
+        gc.SetPen(wx.Pen(util.AdjustColour(col1, -10), 1))
         gc.SetBrush(brush)
         gc.DrawPath(path)
 
@@ -1204,8 +1203,8 @@ class ExtListCtrl(wx.ListCtrl,
             self.SetStringItem(index, self.EXT_COL, \
                                u'  %s' % u' '.join(self._extreg[key]))
             if not index % 2:
-                syscolor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-                color = util.AdjustColour(syscolor, 45)
+                color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+                color = util.AdjustColour(color, 10)
                 self.SetItemBackgroundColour(index, color)
 
         self.SetColumnWidth(self.FILE_COL, wx.LIST_AUTOSIZE)
