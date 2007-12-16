@@ -27,6 +27,7 @@ import ed_menu
 import syntax.syntax
 import util
 from profiler import Profile_Get, Profile_Set
+from eclib import platebtn
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -40,19 +41,19 @@ class BrowserMenuBar(wx.Panel):
     """Creates a menubar with """
     ID_MARK_PATH = wx.NewId()
     ID_OPEN_MARK = wx.NewId()
-    ID_PATHS = wx.NewId()
     ID_REMOVE_MARK = wx.NewId()
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, style=wx.NO_BORDER)
 
-        # Attributes
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
-        self._menub = wx.BitmapButton(self, self.ID_PATHS, 
-                                      bmp, style=wx.NO_BORDER)
+        menub = platebtn.PlateButton(self, bmp=bmp,
+                                     style=platebtn.PB_STYLE_NOBG)
         tt = wx.ToolTip(_("Pathmarks"))
-        self._menub.SetToolTip(tt)
-        self._menu = ed_menu.EdMenu()
+        menub.SetToolTip(tt)
+        menu = ed_menu.EdMenu()
+
+        # Attributes
         self._saved = ed_menu.EdMenu()
         self._rmpath = ed_menu.EdMenu()
         self._ids = list()  # List of ids of menu items
@@ -68,26 +69,29 @@ class BrowserMenuBar(wx.Panel):
         self.SetToolTip(tt)
 
         # Build Menus
-        self._menu.Append(self.ID_MARK_PATH, _("Save Selected Paths"))
-        self._menu.AppendMenu(self.ID_OPEN_MARK, 
-                              _("Jump to Saved Path"), self._saved)
-        self._menu.AppendSeparator()
-        self._menu.AppendMenu(self.ID_REMOVE_MARK, 
-                              _("Remove Saved Path"), self._rmpath)
+        menu.Append(self.ID_MARK_PATH, _("Save Selected Paths"))
+        menu.AppendMenu(self.ID_OPEN_MARK, 
+                        _("Jump to Saved Path"), self._saved)
+        menu.AppendSeparator()
+        menu.AppendMenu(self.ID_REMOVE_MARK, 
+                        _("Remove Saved Path"), self._rmpath)
+        menub.SetMenu(menu)
 
         # Layout bar
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
-        self._sizer.Add((3, 3))
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add((1, 1))
         men_sz = wx.BoxSizer(wx.HORIZONTAL)
         men_sz.Add((6, 6))
-        men_sz.Add(self._menub, 0, wx.ALIGN_LEFT)
-        self._sizer.Add(men_sz)
-        self._sizer.Add((3, 3))
-        self.SetSizer(self._sizer)
+        men_sz.Add(menub, 0, wx.ALIGN_LEFT)
+        sizer.Add(men_sz)
+        sizer.Add((1, 1))
+        self.SetSizer(sizer)
 
         # Event Handlers
-        self._menub.Bind(wx.EVT_BUTTON, self.OnButton, id=self.ID_PATHS)
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_BUTTON, lambda evt: menub.ShowMenu(), menub)
+        # Due to transparency issues dont do painting on gtk
+        if wx.Platform != '__WXGTK__':
+            self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     # XXX maybe change to list the more recently added items near the top
     def AddItem(self, label):
@@ -129,30 +133,20 @@ class BrowserMenuBar(wx.Panel):
         """Returns the menu containg the saved items"""
         return self._saved
 
-    def OnButton(self, evt):
-        """Pops the menu open when the button has been clicked on"""
-        e_id = evt.GetId()
-        if e_id == self.ID_PATHS:
-            men_rect = self._menub.GetRect()
-            pos = wx.Point(0, men_rect.GetY() + men_rect.GetHeight())
-            self._menub.PopupMenu(self._menu, pos)
-        else:
-            evt.Skip()
-
     def OnPaint(self, evt):
         """Paints the background of the menubar"""
         dc = wx.PaintDC(self)
         gc = wx.GraphicsContext.Create(dc)
-        col1 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), -50)
-        col2 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 50)
-        grad = gc.CreateLinearGradientBrush(0, 1, 0, 29, col2, col1)
+        col1 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), -15)
+        col2 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 40)
         rect = self.GetRect()
+        grad = gc.CreateLinearGradientBrush(0, 1, 0, rect.height, col2, col1)
 
         # Create the background path
         path = gc.CreatePath()
         path.AddRectangle(0, 0, rect.width - 0.5, rect.height - 0.5)
 
-        gc.SetPen(wx.Pen(util.AdjustColour(col1, -60), 1))
+        gc.SetPen(wx.Pen(util.AdjustColour(col1, -20), 1))
         gc.SetBrush(grad)
         gc.DrawPath(path)
 
@@ -276,8 +270,8 @@ class BrowserPane(wx.Panel):
         """Paints the background of the panel"""
         dc = wx.PaintDC(self)
         gc = wx.GraphicsContext.Create(dc)
-        col1 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), -50)
-        col2 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 50)
+        col1 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), -15)
+        col2 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 40)
         rect = self.GetRect()
         x = 0
         y = rect.height - (self._showh_cb.GetSize()[1] + 6)
@@ -290,7 +284,7 @@ class BrowserPane(wx.Panel):
         path.AddRectangle(x, y, rect.width - 0.5, 
                           self._showh_cb.GetSize()[1] + 6)
 
-        gc.SetPen(wx.Pen(util.AdjustColour(col1, -60), 1))
+        gc.SetPen(wx.Pen(util.AdjustColour(col1, -20), 1))
         gc.SetBrush(grad)
         gc.DrawPath(path)
 
