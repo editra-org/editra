@@ -664,7 +664,7 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     @type color: wx.Color
     @param percent: percent to adjust +(brighten) or -(darken)
     @type percent: int
-    @keyword alpha: amount to adjust alpha channel
+    @keyword alpha: Value to adjust alpha channel to
 
     """
     radj, gadj, badj = [ int(val * (abs(percent) / 100.))
@@ -673,7 +673,7 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     if percent < 0:
         radj, gadj, badj = [ val * -1 for val in [radj, gadj, badj] ]
     else:
-        radj, gadj, badj = [ val or 255 for val in [radj, gadj, badj] ]
+        radj, gadj, badj = [ val or percent for val in [radj, gadj, badj] ]
 
     red = min(color.Red() + radj, 255)
     green = min(color.Green() + gadj, 255)

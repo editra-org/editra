@@ -1204,7 +1204,7 @@ class ExtListCtrl(wx.ListCtrl,
                                u'  %s' % u' '.join(self._extreg[key]))
             if not index % 2:
                 color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-                color = util.AdjustColour(color, 10)
+                color = util.AdjustColour(color, 15)
                 self.SetItemBackgroundColour(index, color)
 
         self.SetColumnWidth(self.FILE_COL, wx.LIST_AUTOSIZE)
