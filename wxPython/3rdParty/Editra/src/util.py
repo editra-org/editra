@@ -666,18 +666,19 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     @type percent: int
     @keyword alpha: amount to adjust alpha channel
 
-    """ 
-    end_color = wx.WHITE
-    rdif = end_color.Red() - color.Red()
-    gdif = end_color.Green() - color.Green()
-    bdif = end_color.Blue() - color.Blue()
-    high = 100
+    """
+    radj, gadj, badj = [ int(val * (abs(percent) / 100.))
+                         for val in color.Get() ]
 
-    # We take the percent way of the color from color -. white
-    red = color.Red() + ((percent * rdif) / high)
-    green = color.Green() + ((percent * gdif) / high)
-    blue = color.Blue() + ((percent * bdif) / high)
-    return wx.Colour(max(red, 0), max(green, 0), max(blue, 0), alpha)
+    if percent < 0:
+        radj, gadj, badj = [ val * -1 for val in [radj, gadj, badj] ]
+    else:
+        radj, gadj, badj = [ val or 255 for val in [radj, gadj, badj] ]
+
+    red = min(color.Red() + radj, 255)
+    green = min(color.Green() + gadj, 255)
+    blue = min(color.Blue() + badj, 255)
+    return wx.Colour(red, green, blue, alpha)
 
 def HexToRGB(hex_str):
     """Returns a list of red/green/blue values from a

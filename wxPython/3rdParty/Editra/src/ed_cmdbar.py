@@ -29,6 +29,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import cStringIO, zlib
 import glob
 import re
 import wx
@@ -41,8 +42,6 @@ import eclib.platebtn as platebtn
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 # Close Button Bitmap
-from wx import ImageFromStream, BitmapFromImage
-import cStringIO, zlib
 
 def GetXData():
     """Returns the raw image data for the close button
@@ -79,15 +78,8 @@ def GetXBitmap():
     @return: bitmap of close button
 
     """
-    return BitmapFromImage(GetXImage())
-
-def GetXImage():
-    """Returns an image version of the close button
-    @return: image of close button
-
-    """
-    stream = cStringIO.StringIO(GetXData())
-    return ImageFromStream(stream)
+    img = wx.ImageFromStream(cStringIO.StringIO(GetXData()), wx.BITMAP_TYPE_PNG)
+    return wx.BitmapFromImage(img)
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -96,11 +88,8 @@ ID_SEARCH_CTRL = wx.NewId()
 ID_SEARCH_NEXT = wx.NewId()
 ID_SEARCH_PRE = wx.NewId()
 ID_MATCH_CASE = wx.NewId()
-ID_FIND_LBL = wx.NewId()
 ID_LINE_CTRL = wx.NewId()
-ID_GOTO_LBL = wx.NewId()
 ID_CMD_CTRL = wx.NewId()
-ID_CMD_LBL = wx.NewId()
 
 #-----------------------------------------------------------------------------#
 
@@ -188,7 +177,7 @@ class CommandBar(wx.Panel):
                             size=(100, 20))
         v_sizer.Add(linectrl, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
-        go_lbl = wx.StaticText(self, ID_GOTO_LBL, _("Goto Line") + ": ")
+        go_lbl = wx.StaticText(self, label=_("Goto Line") + ": ")
         if wx.Platform == '__WXMAC__':
             go_lbl.SetFont(wx.SMALL_FONT)
         h_sizer.AddMany([(go_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
@@ -211,7 +200,7 @@ class CommandBar(wx.Panel):
         cmdctrl = CommandExecuter(self, ID_CMD_CTRL, size=(150, 20))
         v_sizer.Add(cmdctrl, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
-        cmd_lbl = wx.StaticText(self, ID_CMD_LBL, _("Command") + ": ")
+        cmd_lbl = wx.StaticText(self, label=_("Command") + ": ")
         if wx.Platform == '__WXMAC__':
             cmd_lbl.SetFont(wx.SMALL_FONT)
         h_sizer.AddMany([(cmd_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
@@ -241,7 +230,7 @@ class CommandBar(wx.Panel):
                                          menulen=5, size=(180, -1))
         v_sizer.Add(search, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
-        f_lbl = wx.StaticText(self, ID_FIND_LBL, _("Find") + u": ")
+        f_lbl = wx.StaticText(self, label=_("Find") + u": ")
         ctrl_sizer = wx.BoxSizer(wx.HORIZONTAL)
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOWN), wx.ART_MENU)
         next_btn = platebtn.PlateButton(self, ID_SEARCH_NEXT, _("Next"),
@@ -259,8 +248,8 @@ class CommandBar(wx.Panel):
                 win.SetFont(wx.SMALL_FONT)
 
         ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
-                            ((10, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
-                            ((10, 0)), 
+                            ((5, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
+                            ((5, 0)), 
                             (match_case, 0, wx.ALIGN_CENTER_VERTICAL)])
 
         t_sizer.Add(ctrl_sizer, 0, wx.ALIGN_CENTER_VERTICAL)
@@ -322,12 +311,12 @@ class CommandBar(wx.Panel):
         dc = wx.PaintDC(self)
         gc = wx.GraphicsContext.Create(dc)
         col1 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        col2 = util.AdjustColour(col1, 50)
-        col1 = util.AdjustColour(col1, -60)
+        col2 = util.AdjustColour(col1, 40)
+        col1 = util.AdjustColour(col1, -15)
         grad = gc.CreateLinearGradientBrush(0, 1, 0, 29, col2, col1)
         rect = self.GetClientRect()
 
-        pen_col = tuple([min(190, x) for x in util.AdjustColour(col1, -60)])
+        pen_col = tuple([min(190, x) for x in util.AdjustColour(col1, 20)])
         gc.SetPen(gc.CreatePen(wx.Pen(pen_col, 1)))
         gc.SetBrush(grad)
         gc.DrawRectangle(0, 1, rect.width - 0.5, rect.height - 0.5)
