@@ -444,7 +444,9 @@ def InitConfig():
     ed_glob.CONFIG['STYLES_DIR'] = util.ResolvConfigDir("styles")
     ed_glob.CONFIG['SYS_PLUGIN_DIR'] = util.ResolvConfigDir("plugins", True)
     ed_glob.CONFIG['SYS_STYLES_DIR'] = util.ResolvConfigDir("styles", True)
-    ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir("tests", True)
+    ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir(os.path.join("tests", 
+                                                                   "syntax"),
+                                                                   True)
     if not util.HasConfigDir("cache"):
         util.MakeConfigDir("cache")
     ed_glob.CONFIG['CACHE_DIR'] = util.ResolvConfigDir("cache")
