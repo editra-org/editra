@@ -74,7 +74,6 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
-import wx.lib.imageutils as imageutils
 
 # Used on OSX to get access to carbon api constants
 if wx.Platform == '__WXMAC__':
@@ -175,11 +174,10 @@ class PlateButton(wx.PyControl):
         self.InheritAttributes()
         self._bmp = dict(enable=bmp)
         if bmp is not None:
-            img = wx.ImageFromBitmap(bmp)
-            img.SetMask(True)
-            img.ConvertAlphaToMask()
-            imageutils.grayOut(img)
-            self._bmp['disable'] = wx.BitmapFromImage(img)
+            img = bmp.ConvertToImage()
+            wx.Image
+            img = img.ConvertToGreyscale(.795, .073, .026) #(.634, .224, .143)
+            self._bmp['disable'] = img.ConvertToBitmap()
         else:
             self._bmp['disable'] = None
 
@@ -563,11 +561,9 @@ class PlateButton(wx.PyControl):
 
         """
         self._bmp['enable'] = bmp
-        img = wx.ImageFromBitmap(bmp)
-        img.SetMask(True)
-        img.ConvertAlphaToMask()
-        imageutils.grayOut(img)
-        self._bmp['disable'] = wx.BitmapFromImage(img)
+        img = bmp.ConvertToImage()
+        img = img.ConvertToGreyscale(.795, .073, .026) #(.634, .224, .143)
+        self._bmp['disable'] = img.ConvertToBitmap()
         self.InvalidateBestSize()
 
     def SetBitmapDisabled(self, bmp):
