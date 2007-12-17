@@ -404,13 +404,18 @@ def GetUniqueName(path, name):
     """
     tmpname = os.path.join(path, name)
     if os.path.exists(tmpname):
-        ext = name.split('.')[-1]
-        fbase = name[:-1 * len(ext) - 1]
+        if '.' not in name:
+            ext = ''
+            fbase = name
+        else:
+            ext = '.' + name.split('.')[-1]
+            fbase = name[:-1 * len(ext)]
+
         inc = len([x for x in os.listdir(path) if x.startswith(fbase)])
-        tmpname = os.path.join(path, "%s-%d.%s" % (fbase, inc, ext))
+        tmpname = os.path.join(path, "%s-%d%s" % (fbase, inc, ext))
         while os.path.exists(tmpname):
             inc = inc + 1
-            tmpname = os.path.join(path, "%s-%d.%s" % (fbase, inc, ext))
+            tmpname = os.path.join(path, "%s-%d%s" % (fbase, inc, ext))
 
     return tmpname
 
@@ -440,6 +445,45 @@ def GetExtension(file_str):
     pieces = file_str.split('.')
     extension = pieces[-1]
     return extension
+
+def MakeNewFile(path, name):
+    """Make a new file at the given path with the given name.
+    If the file already exists, the given name will be changed to
+    a unique name in the form of name + -NUMBER + .extension
+    @param path: path to directory to create file in
+    @param name: desired name of file
+    @return: Tuple of (success?, Path of new file OR Error message)
+
+    """
+    if not os.path.isdir(path):
+        path = os.path.dirname(path)
+    fname = GetUniqueName(path, name)
+
+    try:
+        open(fname, 'w').close()
+    except (IOError, OSError), msg:
+        return (False, str(msg))
+
+    return (True, fname)
+
+def MakeNewFolder(path, name):
+    """Make a new folder at the given path with the given name.
+    If the folder already exists, the given name will be changed to
+    a unique name in the form of name + -NUMBER.
+    @param path: path to create folder on
+    @param name: desired name for folder
+    @return: Tuple of (success?, new dirname OR Error message)
+
+    """
+    if not os.path.isdir(path):
+        path = os.path.dirname(path)
+    folder = GetUniqueName(path, name)
+    try:
+        os.mkdir(folder)
+    except (OSError, IOError), msg:
+        return (False, str(msg))
+
+    return (True, folder)
 
 def ResolvAbsPath(rel_path):
     """Takes a relative path and converts it to an
