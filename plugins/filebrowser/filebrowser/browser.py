@@ -20,8 +20,15 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Imports
 import os
+import sys
 import stat
+import zipfile
+import shutil
+import subprocess
+import threading
 import wx
+
+# Editra Library Modules
 import ed_glob
 import ed_menu
 import syntax.syntax
@@ -34,6 +41,28 @@ from eclib import platebtn
 PANE_NAME = u'FileBrowser'
 ID_BROWSERPANE = wx.NewId()
 ID_FILEBROWSE = wx.NewId()
+
+# Configure Platform specific commands
+if wx.Platform == '__WXMAC__': # MAC
+    FILEMAN = 'Finder'
+    FILEMAN_CMD = 'open'
+    TRASH = 'Trash'
+    DIFF_CMD = 'opendiff'
+elif wx.Platform == '__WXMSW__': # Windows
+    FILEMAN = 'Explorer'
+    FILEMAN_CMD = 'explorer'
+    TRASH = 'Recycle Bin'
+    DIFF_CMD = None
+else: # Other/Linux
+    # TODO how to check what desktop environment is in use
+    # this will work for Gnome but not KDE
+    FILEMAN = 'Nautilus'
+    FILEMAN_CMD = 'nautilus'
+    TRASH = 'Trash'
+    DIFF_CMD = None
+    #FILEMAN = 'Konqueror'
+    #FILEMAN_CMD = 'konqueror'
+
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
@@ -193,6 +222,8 @@ class BrowserPane(wx.Panel):
         self._showh_cb = wx.CheckBox(self, self.ID_SHOW_HIDDEN, 
                                      _("Show Hidden Files"))
         self._showh_cb.SetValue(False)
+        if wx.Platform == '__WXMAC__':
+            self._showh_cb.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
         #---- Add Menu Items ----#
         viewm = self._mw.GetMenuBar().GetMenuByName("view")
@@ -235,8 +266,6 @@ class BrowserPane(wx.Panel):
         else:
             evt.Skip()
 
-    # TODO Add input method so that paths can be given custom
-    #      labels
     # TODO after a jump the window should be properly rescrolled
     #      to have the jumped-to path at the top when possible
     def OnMenu(self, evt):
@@ -316,6 +345,16 @@ class BrowserPane(wx.Panel):
         evt.Skip()
 
 #-----------------------------------------------------------------------------#
+# Menu Id's
+ID_EDIT = wx.NewId()
+ID_OPEN = wx.NewId()
+ID_REVEAL = wx.NewId()
+ID_NEW_FOLDER = wx.NewId()
+ID_NEW_FILE = wx.NewId()
+ID_DELETE = wx.NewId()
+ID_DUPLICATE = wx.NewId()
+ID_ARCHIVE = wx.NewId()
+ARCHIVE_LBL = "Create Archive of \"%s\""
 
 class FileBrowser(wx.GenericDirCtrl):
     """A hack job done to make the genericdirctrl more useful
@@ -331,6 +370,8 @@ class FileBrowser(wx.GenericDirCtrl):
 
         # Attributes
         self._tree = self.GetTreeCtrl()
+        self._treeId = 0                # id of TreeItem that was last rclicked
+        self._fmenu = self._MakeMenu()
         
         # Set custom styles
         self._tree.SetWindowStyle(self._tree.GetWindowStyle() | wx.TR_MULTIPLE)
@@ -355,8 +396,87 @@ class FileBrowser(wx.GenericDirCtrl):
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnOpen)
         if wx.Platform == '__WXMSW__':
             self._tree.Bind(wx.EVT_KEY_UP, self.OnOpen)
+        self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
+        self.Bind(wx.EVT_MENU, self.OnMenu)
 #         self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnDragStart)
 #         self.Bind(wx.EVT_TREE_END_DRAG, self.OnDragEnd)
+
+    def _MakeMenu(self):
+        """Setup the context menu"""
+        menu = wx.Menu()
+
+        # MenuItems
+        items = [(ID_EDIT, _("Edit"), None),
+                 (ID_OPEN, _("Open with " + FILEMAN), ed_glob.ID_OPEN),
+                 (ID_REVEAL, _("Reveal in " + FILEMAN), None),
+                 (wx.ID_SEPARATOR, '', None),
+                 (ID_NEW_FOLDER, _("New Folder"), ed_glob.ID_FOLDER),
+                 (ID_NEW_FILE, _("New File"), ed_glob.ID_NEW),
+                 (wx.ID_SEPARATOR, '', None),
+                 (ID_DELETE, _("Move to " + TRASH), ed_glob.ID_DELETE),
+                 (wx.ID_SEPARATOR, '', None),
+                 (ID_DUPLICATE, _("Duplicate"), None),
+                 (ID_ARCHIVE, _(ARCHIVE_LBL) % '', None)
+                ]
+
+        for item in items:
+            mitem = wx.MenuItem(menu, item[0], item[1])
+            if item[2] is not None:
+                bmp = wx.ArtProvider.GetBitmap(str(item[2]), wx.ART_MENU)
+                mitem.SetBitmap(bmp)
+
+            menu.AppendItem(mitem)
+        return menu
+
+    def _SCommand(self, cmd, *args):
+        """Run a tree command that requires de-hacking the windows style
+        before running. (Some commands raise errors on msw if the style is
+        not set back to TR_SINGLE before calling it.
+        @param cmd: self.METHOD
+        @keyword args: args to pass to command
+
+        """
+        style = self.GetTreeStyle()
+        self.SetTreeStyle(wx.TR_SINGLE)
+        self.Refresh()
+        cmd(*args)
+        self.SetTreeStyle(style)
+        self.Refresh()
+
+    def GetItemPath(self, itemId):
+        """Get and return the path of the given item id
+        @param itemId: TreeItemId
+        @return: string
+
+        """
+        root = self._tree.GetRootItem()
+        start = itemId
+        atoms = [itemId]
+        while self._tree.GetItemParent(start) != root:
+            atoms.append(self._tree.GetItemParent(start))
+            start = atoms[-1]
+
+        atoms.reverse()
+        path = list()
+        for atom in atoms:
+            path.append(self._tree.GetItemText(atom))
+
+        if wx.Platform == '__WXMSW__':
+            r_txt = u''
+        else:
+            if wx.Platform == '__WXGTK__':
+                if path[0].lower() == 'home directory':
+                    path[0] = wx.GetHomeDir()
+                elif path[0].lower() == 'desktop':
+                    path.insert(0, wx.GetHomeDir())
+                else:
+                    pass
+
+            if wx.Platform == '__WXMAC__':
+                if path[0] != "/":
+                    path.pop(0)
+            r_txt = os.path.sep
+            return r_txt + util.GetPathChar().join(path)
 
     def GetPaths(self):
         """Gets a list of abs paths of the selected items"""
@@ -364,34 +484,7 @@ class FileBrowser(wx.GenericDirCtrl):
         root = self._tree.GetRootItem()
         ret_val = list()
         for leaf in treeIds:
-            start = leaf
-            atoms = [leaf]
-            while self._tree.GetItemParent(start) != root:
-                atoms.append(self._tree.GetItemParent(start))
-                start = atoms[-1]
-
-            atoms.reverse()
-            path = list()
-            for atom in atoms:
-                path.append(self._tree.GetItemText(atom))
-
-            if wx.Platform == '__WXMSW__':
-                r_txt = u''
-            else:
-                if wx.Platform == '__WXGTK__':
-                    if path[0].lower() == 'home directory':
-                        path[0] = wx.GetHomeDir()
-                    elif path[0].lower() == 'desktop':
-                        path.insert(0, wx.GetHomeDir())
-                    else:
-                        pass
-
-                if wx.Platform == '__WXMAC__':
-                    if path[0] != "/":
-                        path.pop(0)
-                r_txt = os.path.sep
-
-            ret_val.append(r_txt + util.GetPathChar().join(path))
+            ret_val.append(self.GetItemPath(leaf))
         return ret_val
 
     def GetScrollRange(self, orient=wx.VERTICAL):
@@ -401,6 +494,53 @@ class FileBrowser(wx.GenericDirCtrl):
     def GetTreeStyle(self):
         """Returns the trees current style"""
         return self._tree.GetWindowStyle()
+
+    def OnContext(self, evt):
+        """Show the popup context menu"""
+        self._treeId = evt.GetItem()
+        path = self.GetItemPath(self._treeId)
+        mitem = self._fmenu.FindItemById(ID_ARCHIVE)
+        if mitem != wx.NOT_FOUND:
+            mitem.SetItemLabel(_(ARCHIVE_LBL) % os.path.split(path)[1])
+
+        for item in (ID_DUPLICATE,):
+            self._fmenu.Enable(item, len(self._tree.GetSelections()) == 1)
+        self.PopupMenu(self._fmenu)
+
+    def OnMenu(self, evt):
+        """Handle the context menu events for performing
+        filesystem operations
+
+        """
+        e_id = evt.GetId()
+        path = self.GetItemPath(self._treeId)
+        ok = (False, '')
+        if e_id == ID_EDIT:
+            self.OpenFiles(self.GetPaths())
+        elif e_id == ID_OPEN:
+            worker = OpenerThread(self.GetPaths())
+            worker.start()
+        elif e_id == ID_REVEAL:
+            worker = OpenerThread([os.path.dirname(fname) for fname in self.GetPaths()])
+            worker.start()
+        elif e_id == ID_NEW_FOLDER:
+            ok = util.MakeNewFolder(path, _("Untitled_Folder"))
+        elif e_id == ID_NEW_FILE:
+            ok = util.MakeNewFile(path, _("Untitled_File") + ".txt")
+        elif e_id == ID_DELETE:
+            print "DELETE"
+        elif e_id == ID_DUPLICATE:
+            ok = DuplicatePath(path)
+        elif e_id == ID_ARCHIVE:
+            ok = MakeArchive(path)
+        else:
+            evt.Skip()
+            return
+
+        if e_id in (ID_NEW_FOLDER, ID_NEW_FILE, ID_DUPLICATE, ID_ARCHIVE):
+            if ok[0]:
+                self.ReCreateTree()
+                self._SCommand(self.SetPath, ok[1])
 
     def OnOpen(self, evt):
         """Handles item activations events. (i.e double clicked or 
@@ -417,6 +557,13 @@ class FileBrowser(wx.GenericDirCtrl):
                     self.ExpandPath(files[0])
                 return
 
+        self.OpenFiles(files)
+
+    def OpenFiles(self, files):
+        """Open the list of files in Editra for editing
+        @param files: list of file names
+
+        """
         to_open = list()
         for fname in files:
             try:
@@ -525,3 +672,79 @@ class PathMarkConfig(object):
             file_h.write(u"%s=%s\n" % (label, self._pmarks[label]))
         file_h.close()
         return True
+
+#-----------------------------------------------------------------------------#
+# Utilities
+def DuplicatePath(path):
+    """Create a copy of the item at the end of the given path. The item
+    will be created with a name in the form of Dirname_Copy for directories
+    and FileName_Copy.extension for files.
+    @param path: path to duplicate
+    @return: Tuple of (success?, filename OR Error Message)
+
+    """
+    head, tail = os.path.split(path)
+    if os.path.isdir(path):
+        name = util.GetUniqueName(head, tail + "_Copy")
+        copy = shutil.copytree
+    else:
+        tmp = tail.split('.')
+        if len(tmp) > 1:
+            name = util.GetUniqueName(head, '.'.join(tmp[:-1]) + "_Copy." + tmp[-1])
+        copy = shutil.copy2
+
+    try:
+        copy(path, name)
+    except Exception, msg:
+        return (False, str(msg))
+
+    return (True, name)
+
+def MakeArchive(path):
+    """Create a Zip archive of the item at the end of the given path
+    @param path: full path to item to archive
+    @return: Tuple of (success?, file name OR Error Message)
+    @rtype: (bool, str)
+    @todo: support for zipping multiple paths
+
+    """
+    dname, fname = os.path.split(path)
+    if dname and fname:
+        name = util.GetUniqueName(dname, fname + ".zip")
+        files = list()
+        cwd = os.getcwd()
+        head = dname
+        ok = True
+        try:
+            try:
+                os.chdir(dname)
+                if os.path.isdir(path):
+                    for dpath, dname, fnames in os.walk(path):
+                        files.extend([ os.path.join(dpath, fname).\
+                                       replace(head, '', 1).\
+                                       lstrip(os.path.sep) 
+                                       for fname in fnames])
+
+                zfile = zipfile.ZipFile(name, 'w', compression=zipfile.ZIP_DEFLATED)
+                for fname in files:
+                    zfile.write(fname.encode(sys.getfilesystemencoding()))
+            except Exception, msg:
+                ok = False
+                name = str(msg)
+        finally:
+            zfile.close()
+            os.chdir(cwd)
+
+    return (ok, name)
+
+#-----------------------------------------------------------------------------#
+class OpenerThread(threading.Thread):
+    """Job runner thread for opening files with the systems filemanager"""
+    def __init__(self, files):
+        self._files = files
+        threading.Thread.__init__(self)
+
+    def run(self):
+        """Do the work of opeing the files"""
+        for fname in self._files:
+            subprocess.call([FILEMAN_CMD, fname])
