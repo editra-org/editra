@@ -397,7 +397,7 @@ def GetPathChar():
 def GetUniqueName(path, name):
     """Make a file name that will be unique in case a file of the
     same name already exists at that path.
-    @param path: Root path to download folder
+    @param path: Root path to folder of files destination
     @param name: desired file name base
     @return: string
 
