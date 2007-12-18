@@ -36,6 +36,9 @@ import util
 from profiler import Profile_Get, Profile_Set
 from eclib import platebtn
 
+# Local Imports
+import FileInfo
+
 #-----------------------------------------------------------------------------#
 # Globals
 PANE_NAME = u'FileBrowser'
@@ -349,6 +352,7 @@ class BrowserPane(wx.Panel):
 ID_EDIT = wx.NewId()
 ID_OPEN = wx.NewId()
 ID_REVEAL = wx.NewId()
+ID_GETINFO = wx.NewId()
 ID_NEW_FOLDER = wx.NewId()
 ID_NEW_FILE = wx.NewId()
 ID_DELETE = wx.NewId()
@@ -409,6 +413,7 @@ class FileBrowser(wx.GenericDirCtrl):
         items = [(ID_EDIT, _("Edit"), None),
                  (ID_OPEN, _("Open with " + FILEMAN), ed_glob.ID_OPEN),
                  (ID_REVEAL, _("Reveal in " + FILEMAN), None),
+                 (ID_GETINFO, _("Get Info"), None),
                  (wx.ID_SEPARATOR, '', None),
                  (ID_NEW_FOLDER, _("New Folder"), ed_glob.ID_FOLDER),
                  (ID_NEW_FILE, _("New File"), ed_glob.ID_NEW),
@@ -476,7 +481,7 @@ class FileBrowser(wx.GenericDirCtrl):
                 if path[0] != "/":
                     path.pop(0)
             r_txt = os.path.sep
-            return r_txt + util.GetPathChar().join(path)
+        return r_txt + util.GetPathChar().join(path)
 
     def GetPaths(self):
         """Gets a list of abs paths of the selected items"""
@@ -501,7 +506,7 @@ class FileBrowser(wx.GenericDirCtrl):
         path = self.GetItemPath(self._treeId)
         mitem = self._fmenu.FindItemById(ID_ARCHIVE)
         if mitem != wx.NOT_FOUND:
-            mitem.SetItemLabel(_(ARCHIVE_LBL) % os.path.split(path)[1])
+            mitem.SetItemLabel(_(ARCHIVE_LBL) % path.split(os.path.sep)[-1])
 
         for item in (ID_DUPLICATE,):
             self._fmenu.Enable(item, len(self._tree.GetSelections()) == 1)
@@ -514,15 +519,27 @@ class FileBrowser(wx.GenericDirCtrl):
         """
         e_id = evt.GetId()
         path = self.GetItemPath(self._treeId)
+        paths = self.GetPaths()
         ok = (False, '')
         if e_id == ID_EDIT:
-            self.OpenFiles(self.GetPaths())
+            self.OpenFiles(paths)
         elif e_id == ID_OPEN:
-            worker = OpenerThread(self.GetPaths())
+            worker = OpenerThread(paths)
             worker.start()
         elif e_id == ID_REVEAL:
-            worker = OpenerThread([os.path.dirname(fname) for fname in self.GetPaths()])
+            worker = OpenerThread([os.path.dirname(fname) for fname in paths])
             worker.start()
+        elif e_id == ID_GETINFO:
+            last = None
+            for fname in paths:
+                info = FileInfo.FileInfoDlg(self.GetTopLevelParent(), fname)
+                if last is None:
+                    info.CenterOnParent()
+                else:
+                    lpos = last.GetPosition()
+                    info.SetPosition((lpos[0] + 14, lpos[1] + 14))
+                info.Show()
+                last = info
         elif e_id == ID_NEW_FOLDER:
             ok = util.MakeNewFolder(path, _("Untitled_Folder"))
         elif e_id == ID_NEW_FILE:
@@ -530,7 +547,8 @@ class FileBrowser(wx.GenericDirCtrl):
         elif e_id == ID_DELETE:
             print "DELETE"
         elif e_id == ID_DUPLICATE:
-            ok = DuplicatePath(path)
+            for fname in paths:
+                ok = DuplicatePath(fname)
         elif e_id == ID_ARCHIVE:
             ok = MakeArchive(path)
         else:
@@ -709,12 +727,13 @@ def MakeArchive(path):
 
     """
     dname, fname = os.path.split(path)
+    ok = True
+    name = ''
     if dname and fname:
         name = util.GetUniqueName(dname, fname + ".zip")
         files = list()
         cwd = os.getcwd()
         head = dname
-        ok = True
         try:
             try:
                 os.chdir(dname)
