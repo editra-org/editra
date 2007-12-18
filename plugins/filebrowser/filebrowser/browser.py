@@ -706,9 +706,20 @@ def DuplicatePath(path):
         name = util.GetUniqueName(head, tail + "_Copy")
         copy = shutil.copytree
     else:
-        tmp = tail.split('.')
+        tmp = [ part for part in tail.split('.') if len(part) ]
+        if tail.startswith('.'):
+            tmp[0] = "." + tmp[0]
+            if '.' not in tail[1:]:
+                tmp[0] = tmp[0] + "_Copy"
+            else:
+                tmp.insert(-1, "_Copy.")
+
+            tmp = ''.join(tmp)
+        else:
+            tmp = '.'.join(tmp[:-1]) + "_Copy." + tmp[-1]
+
         if len(tmp) > 1:
-            name = util.GetUniqueName(head, '.'.join(tmp[:-1]) + "_Copy." + tmp[-1])
+            name = util.GetUniqueName(head, tmp)
         copy = shutil.copy2
 
     try:
