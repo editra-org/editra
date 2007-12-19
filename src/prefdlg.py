@@ -279,7 +279,8 @@ class PrefPanelBase(wx.Panel):
                                               wx.SUNKEN_BORDER)
 
         # Event Handlers
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        if wx.Platform == '__WXMAC__':
+            self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def OnPaint(self, evt):
         """Paints the panels background
