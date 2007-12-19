@@ -840,8 +840,23 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY, 
                         ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE ]
 
-        if self.FindFocus() != ctrl and e_id in active_only:
-            evt.Skip()
+        has_focus = self.FindFocus()
+        if has_focus != ctrl and e_id in active_only:
+            if has_focus is not None:
+                if e_id == ID_PASTE and hasattr(has_focus, 'Paste'):
+                    has_focus.Paste()
+                elif e_id == ID_CUT and hasattr(has_focus, 'Cut'):
+                    has_focus.Cut()
+                elif e_id == ID_COPY and hasattr(has_focus, 'Copy'):
+                    has_focus.Copy()
+                elif e_id == ID_REDO and hasattr(has_focus, 'Redo'):
+                    has_focus.Redo()
+                elif e_id == ID_UNDO and hasattr(has_focus, 'Undo'):
+                    has_focus.Undo()
+                else:
+                    evt.Skip()
+            else:
+                evt.Skip()
             return
 
         menu_ids = syntax.SyntaxIds()
