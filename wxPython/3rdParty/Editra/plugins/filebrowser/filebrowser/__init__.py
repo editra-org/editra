@@ -41,6 +41,7 @@ class FileBrowserPanel(plugin.Plugin):
             self._log("[filebrowser] Installing filebrowser plugin")
             
             #---- Create File Browser ----#
+            # TODO hook in saved filter from profile
             self._filebrowser = browser.BrowserPane(self._mw, 
                                                     browser.ID_BROWSERPANE)
             mgr = self._mw.GetFrameManager()
@@ -53,7 +54,9 @@ class FileBrowserPanel(plugin.Plugin):
             mgr.Update()
 
     def GetMenuHandlers(self):
+        """Pass even handler for menu item to main window for management"""
         return [(browser.ID_FILEBROWSE, self._filebrowser.OnShowBrowser)]
 
     def GetUIHandlers(self):
+        """Pass Ui handlers to main window for management"""
         return list()
