@@ -317,13 +317,13 @@ class EdSearchCtrl(wx.SearchCtrl):
         self.SetMenu(self.rmenu)
 
         # Bind Events
-        if wx.Platform == '__WXMSW__':
+        if wx.Platform in ['__WXMSW__', '__WXGTK__']:
             for child in self.GetChildren():
                 if isinstance(child, wx.TextCtrl):
                     child.Bind(wx.EVT_KEY_UP, self.ProcessEvent)
                     break
-
-        self.Bind(wx.EVT_KEY_UP, self.ProcessEvent)
+        else:
+            self.Bind(wx.EVT_KEY_UP, self.ProcessEvent)
         self.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.OnCancel)
         self.Bind(wx.EVT_MENU, self.OnHistMenu)
 
@@ -475,7 +475,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             return
 
         s_cmd = wx.wxEVT_COMMAND_FIND
-        if e_key == wx.WXK_RETURN:
+        if e_key == wx.WXK_RETURN or e_key == wx.WXK_F3:
             if evt.ShiftDown():
                 if wx.FR_DOWN & self._flags:
                     self.ClearSearchFlag(wx.FR_DOWN)
