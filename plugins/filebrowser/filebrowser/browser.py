@@ -38,6 +38,7 @@ from eclib import platebtn
 
 # Local Imports
 import FileInfo
+import Trash
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -217,7 +218,9 @@ class BrowserPane(wx.Panel):
         self._browser = FileBrowser(self, ID_FILEBROWSE, 
                                     dir=wx.GetHomeDir(), 
                                     size=(200, -1),
-                                    style=wx.DIRCTRL_SHOW_FILTERS | wx.BORDER_SUNKEN,
+                                    style=wx.DIRCTRL_SHOW_FILTERS | 
+                                          wx.DIRCTRL_EDIT_LABELS | 
+                                          wx.BORDER_SUNKEN,
                                     filter=filters)
         self._config = PathMarkConfig(ed_glob.CONFIG['CACHE_DIR'])
         for item in self._config.GetItemLabels():
@@ -353,6 +356,7 @@ ID_EDIT = wx.NewId()
 ID_OPEN = wx.NewId()
 ID_REVEAL = wx.NewId()
 ID_GETINFO = wx.NewId()
+ID_RENAME = wx.NewId()
 ID_NEW_FOLDER = wx.NewId()
 ID_NEW_FILE = wx.NewId()
 ID_DELETE = wx.NewId()
@@ -367,7 +371,7 @@ class FileBrowser(wx.GenericDirCtrl):
 
     """
     def __init__(self, parent, id, dir=u'', pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.DIRCTRL_SHOW_FILTERS,
+                 size=wx.DefaultSize, style=wx.DIRCTRL_SHOW_FILTERS|wx.DIRCTRL_EDIT_LABELS,
                  filter=wx.EmptyString, defaultFilter=0):
         wx.GenericDirCtrl.__init__(self, parent, id, dir, pos, 
                                    size, style, filter, defaultFilter)
@@ -398,8 +402,6 @@ class FileBrowser(wx.GenericDirCtrl):
 
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnOpen)
-        if wx.Platform == '__WXMSW__':
-            self._tree.Bind(wx.EVT_KEY_UP, self.OnOpen)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnMenu)
 #         self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnDragStart)
@@ -413,15 +415,17 @@ class FileBrowser(wx.GenericDirCtrl):
         items = [(ID_EDIT, _("Edit"), None),
                  (ID_OPEN, _("Open with " + FILEMAN), ed_glob.ID_OPEN),
                  (ID_REVEAL, _("Reveal in " + FILEMAN), None),
+                 (wx.ID_SEPARATOR, '', None),
                  (ID_GETINFO, _("Get Info"), None),
+                 (ID_RENAME, _("Rename"), None),
                  (wx.ID_SEPARATOR, '', None),
                  (ID_NEW_FOLDER, _("New Folder"), ed_glob.ID_FOLDER),
                  (ID_NEW_FILE, _("New File"), ed_glob.ID_NEW),
                  (wx.ID_SEPARATOR, '', None),
-                 (ID_DELETE, _("Move to " + TRASH), ed_glob.ID_DELETE),
-                 (wx.ID_SEPARATOR, '', None),
                  (ID_DUPLICATE, _("Duplicate"), None),
-                 (ID_ARCHIVE, _(ARCHIVE_LBL) % '', None)
+                 (ID_ARCHIVE, _(ARCHIVE_LBL) % '', None),
+                 (wx.ID_SEPARATOR, '', None),
+                 (ID_DELETE, _("Move to " + TRASH), ed_glob.ID_DELETE),
                 ]
 
         for item in items:
@@ -444,9 +448,10 @@ class FileBrowser(wx.GenericDirCtrl):
         style = self.GetTreeStyle()
         self.SetTreeStyle(wx.TR_SINGLE)
         self.Refresh()
-        cmd(*args)
+        rval = cmd(*args)
         self.SetTreeStyle(style)
         self.Refresh()
+        return rval
 
     def GetItemPath(self, itemId):
         """Get and return the path of the given item id
@@ -540,22 +545,26 @@ class FileBrowser(wx.GenericDirCtrl):
                     info.SetPosition((lpos[0] + 14, lpos[1] + 14))
                 info.Show()
                 last = info
+        elif e_id == ID_RENAME:
+            self._tree.EditLabel(self._treeId)
         elif e_id == ID_NEW_FOLDER:
             ok = util.MakeNewFolder(path, _("Untitled_Folder"))
         elif e_id == ID_NEW_FILE:
             ok = util.MakeNewFile(path, _("Untitled_File") + ".txt")
-        elif e_id == ID_DELETE:
-            print "DELETE"
         elif e_id == ID_DUPLICATE:
             for fname in paths:
                 ok = DuplicatePath(fname)
         elif e_id == ID_ARCHIVE:
             ok = MakeArchive(path)
+        elif e_id == ID_DELETE:
+            Trash.moveToTrash(paths)
+            ok = (True, os.path.dirname(path))
         else:
             evt.Skip()
             return
 
-        if e_id in (ID_NEW_FOLDER, ID_NEW_FILE, ID_DUPLICATE, ID_ARCHIVE):
+        if e_id in (ID_NEW_FOLDER, ID_NEW_FILE, ID_DUPLICATE, ID_ARCHIVE,
+                    ID_DELETE):
             if ok[0]:
                 self.ReCreateTree()
                 self._SCommand(self.SetPath, ok[1])
@@ -567,14 +576,19 @@ class FileBrowser(wx.GenericDirCtrl):
 
         """
         files = self.GetPaths()
-        if wx.Platform == '__WXMSW__':
-            key = evt.GetKeyCode()
-            if len(files) == 1 and stat.S_ISDIR(os.stat(files[0])[0]):
+        item = self._SCommand(self.GetPath)
+        print evt.GetEventType(), evt.GetKeyCode()
+        if os.path.isdir(item):
+            # Unlike Mac/Gtk, need to skip the event here to allow for
+            # expanding paths with double clicks. This however disables the
+            # ability to use Return as a key for expanding.
+            if wx.Platform == '__WXMSW__':
                 evt.Skip()
-                if key == wx.WXK_RETURN:
-                    self.ExpandPath(files[0])
-                return
-
+            else:
+                self.ExpandPath(item)
+            return
+        else:
+            files = [ fname for fname in files if not os.path.isdir(fname) ]
         self.OpenFiles(files)
 
     def OpenFiles(self, files):
@@ -593,7 +607,7 @@ class FileBrowser(wx.GenericDirCtrl):
 
         win = wx.GetApp().GetActiveWindow()
         if win:
-            win.nb.OnDrop(to_open)
+            win.GetNotebook().OnDrop(to_open)
 
       # TODO implement drag and drop from the control to the editor
 #     def OnDragEnd(self, evt):

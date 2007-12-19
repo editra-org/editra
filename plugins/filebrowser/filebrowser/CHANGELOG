@@ -5,15 +5,19 @@ Licence: wxWindows
 Version 0.6:
 
     - Number of Ui improvements
-    - Added right Click menu for performing file system operations
+    - Added right click menu for performing file system operations
         - Open in Editor
         - Open with system filemanager
         - Show file in system filemanager
         - Get File Info
+        - Rename File
         - New Folder
         - New File
         - Duplicate File
-        - Create Zip Archive of file/folder
+        - Create compressed zip archive of file/folder
+        - Move to Trash/Recycle Bin
+    - Rename files by clicking on lables
+    - Fixed bug in behavior of opening files and navigating directories
 
 Version 0.5:
 
