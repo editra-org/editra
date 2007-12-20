@@ -249,7 +249,7 @@ class CommandBar(wx.Panel):
 
         ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
                             ((5, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
-                            ((5, 0)), 
+                            ((8, 0)), 
                             (match_case, 0, wx.ALIGN_CENTER_VERTICAL)])
 
         t_sizer.Add(ctrl_sizer, 0, wx.ALIGN_CENTER_VERTICAL)
