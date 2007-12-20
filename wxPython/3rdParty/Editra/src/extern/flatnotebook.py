@@ -1883,10 +1883,11 @@ class FNBRenderer:
             tabPos.x += vc8ShapeLen
             
         rect = wx.RectPS(tabPos, page.GetSize())
-        rect = wx.Rect(rect.x+2, rect.y+2, rect.width-4, rect.height-8)
+        rect = wx.Rect(rect.x+5, rect.y+2, rect.width-6, rect.height-8)
 
         if wx.Platform == '__WXMAC__':
-            rect.SetWidth(rect.GetWidth() + 1)
+            rect.SetWidth(rect.GetWidth() + 3)
+            rect.SetX(rect.GetX() - 2)
 
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
         dc.SetPen(self._focusPen)
