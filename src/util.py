@@ -106,16 +106,20 @@ class DropTargetFT(wx.PyDropTarget):
         @return: result of drop object entering window
 
         """
-        try:
-            if self.GetData():
-                files = self._data['fdata'].GetFilenames()
-                text = self._data['tdata'].GetText()
-            else:
-                return drag_result
-        except wx.PyAssertionError:
-            return wx.DragError
+        # GetData seems to happen automatically on msw, calling it again
+        # causes this to fail the first time.
+        if wx.Platform in ['__WXGTK__', '__WXMSW__']:
+            return wx.DragCopy
+
+        if wx.Platform == '__WXMAC__':
+            try:
+                self.GetData()
+            except wx.PyAssertionError:
+                return wx.DragError
 
         self._lastp = (x_cord, y_cord)
+        files = self._data['fdata'].GetFilenames()
+        text = self._data['tdata'].GetText()
         if len(files):
             self.window.SetCursor(wx.StockCursor(wx.CURSOR_COPY_ARROW))
         else:
@@ -163,6 +167,9 @@ class DropTargetFT(wx.PyDropTarget):
 
         """
         self.window.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+        if self.window.HasCapture():
+            self.window.ReleaseMouse()
+
         try:
             data = self.GetData()
         except wx.PyAssertionError:
@@ -196,6 +203,9 @@ class DropTargetFT(wx.PyDropTarget):
 
         """
         self.window.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+        if self.window.HasCapture():
+            self.window.ReleaseMouse()
+
         if self._tmp is not None:
             self._tmp.EndDrag()
 
