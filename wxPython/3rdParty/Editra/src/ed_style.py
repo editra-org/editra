@@ -79,10 +79,7 @@ class StyleItem(object):
         @rtype: bool
 
         """
-        if str(self) == str(si2):
-            return True
-        else:
-            return False
+        return str(self) == str(si2)
 
     def __str__(self):
         """Converts StyleItem to a string
@@ -124,28 +121,28 @@ class StyleItem(object):
         @return: style items background attribute
 
         """
-        return self.back
+        return self.back.split(',')[0]
 
     def GetFace(self):
         """Returns the value of the face attribute
         @return: style items font face attribute
 
         """
-        return self.face
+        return self.face.split(',')[0]
 
     def GetFore(self):
         """Returns the value of the fore attribute
         @return: style items foreground attribute
 
         """
-        return self.fore
+        return self.fore.split(',')[0]
 
     def GetSize(self):
         """Returns the value of the size attribute as a string
         @return: style items font size attribute
 
         """
-        return self.size
+        return self.size.split(',')[0]
 
     def GetNamedAttr(self, attr):
         """Get the value of the named attribute
@@ -269,7 +266,7 @@ class StyleItem(object):
             cur_str = cur_str.replace(u',' + ex_attr, wx.EmptyString)
             self.SetAttrFromStr(cur_str)
         else:
-            if ex_attr not in cur_str:
+            if u',' + ex_attr not in cur_str:
                 attr_map = { u"fore" : self.GetFore(),
                              u"back" : self.GetBack(),
                              u"face" : self.GetFace(),
@@ -291,7 +288,7 @@ class StyleItem(object):
 
         """
         self.null = False
-        cur_val = getattr(self, attr)
+        cur_val = getattr(self, attr, None)
         if cur_val is not None:
             if u"," in cur_val:
                 tmp = cur_val.split(u",")
@@ -450,13 +447,13 @@ class StyleMgr(object):
 
         """
         if self.HasNamedStyle(name):
-            if u"%" in unicode(self.STYLES[self.style_set][name]):
-                val = unicode(self.STYLES[self.style_set][name]) % self.fonts
+            if u"%" in unicode(StyleMgr.STYLES[self.style_set][name]):
+                val = unicode(StyleMgr.STYLES[self.style_set][name]) % self.fonts
                 item = StyleItem()
                 item.SetAttrFromStr(val)
                 return item
             else:
-                return self.STYLES[self.style_set][name]
+                return StyleMgr.STYLES[self.style_set][name]
         else:
             return StyleItem()
 
@@ -494,7 +491,7 @@ class StyleMgr(object):
         @rtype: dict
 
         """
-        return self.STYLES.get(self.style_set, DefaultStyleDictionary())
+        return StyleMgr.STYLES.get(self.style_set, DefaultStyleDictionary())
 
     def HasNamedStyle(self, name):
         """Checks if a style has been set/loaded or not
@@ -515,7 +512,7 @@ class StyleMgr(object):
         """
         if isinstance(style_sheet, basestring) and \
            os.path.exists(style_sheet) and \
-           ((force or not self.STYLES.has_key(style_sheet)) or \
+           ((force or not StyleMgr.STYLES.has_key(style_sheet)) or \
              style_sheet != self.style_set):
             reader = util.GetFileReader(style_sheet)
             if reader == -1:
@@ -524,7 +521,7 @@ class StyleMgr(object):
             ret_val = self.SetStyles(style_sheet, self.ParseStyleData(reader.read()))
             reader.close()
             return ret_val
-        elif not self.STYLES.has_key(style_sheet):
+        elif not StyleMgr.STYLES.has_key(style_sheet):
             self.LOG("[styles] Style sheet %s does not exists" % style_sheet)
             self.SetStyles('default', DefaultStyleDictionary())
             return False
@@ -730,7 +727,7 @@ class StyleMgr(object):
         @param value: style item to set tag to
 
         """
-        self.STYLES[self.style_set][style_tag] = value
+        StyleMgr.STYLES[self.style_set][style_tag] = value
 
     def SetStyles(self, name, style_dict, nomerge=False):
         """Sets the managers style data and returns True on success.
@@ -743,7 +740,7 @@ class StyleMgr(object):
         """
         if nomerge:
             self.style_set = name
-            self.STYLES[name] = self.PackStyleSet(style_dict)
+            StyleMgr.STYLES[name] = self.PackStyleSet(style_dict)
             return True
 
         # Merge the given style set with the default set to fill in any
@@ -757,7 +754,7 @@ class StyleMgr(object):
 
             self.style_set = name
             tmp = MergeStyles(DefaultStyleDictionary(), style_dict)
-            self.STYLES[name] = self.PackStyleSet(tmp)
+            StyleMgr.STYLES[name] = self.PackStyleSet(tmp)
             return True
         else:
             self.LOG("[styles][error] SetStyles expects a " \
