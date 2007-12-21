@@ -2117,7 +2117,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         self.Freeze()
         self.StyleClearAll()
-        self.UpdateBaseStyles()
         self.SetSyntax(self._code['syntax_set'])
         self.DefineMarkers()
         self.Thaw()
