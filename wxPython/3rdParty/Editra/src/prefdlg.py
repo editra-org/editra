@@ -208,7 +208,7 @@ class PrefTools(wx.Toolbook):
                      imageId=self.APPEAR_PG)
         self.AddPage(DocumentPanel(self), _("Document"), 
                      imageId=self.DOC_PG)
-        self.AddPage(UpdatePanel(self), _("Update"),
+        self.AddPage(NetworkPanel(self), _("Network"),
                      imageId=self.UPDATE_PG)
 #         self.AddPage(PrefPanelBase(self), _("Advanced"),
 #                      imageId=self.ADV_PG)
@@ -265,6 +265,8 @@ class PrefTools(wx.Toolbook):
 
         evt.Skip()
 
+#-----------------------------------------------------------------------------#
+
 class PrefPanelBase(wx.Panel):
     """Base of all preference panels
     @summary: Provides a panel with a painted background
@@ -309,6 +311,8 @@ class PrefPanelBase(wx.Panel):
         gc.DrawPath(path)
 
         evt.Skip()
+
+#-----------------------------------------------------------------------------#
 
 class GeneralPanel(PrefPanelBase):
     """Creates a panel with controls for Editra's general settings
@@ -448,6 +452,8 @@ class GeneralPanel(PrefPanelBase):
                 ed_glob.DEBUG = ('DEBUG' in e_obj.GetValue())
         else:
             evt.Skip()
+
+#-----------------------------------------------------------------------------#
 
 class DocumentPanel(PrefPanelBase):
     """Creates a panel with controls for Editra's editing settings
@@ -831,6 +837,8 @@ class DocSyntaxPanel(wx.Panel):
         else:
             evt.Skip()
 
+#-----------------------------------------------------------------------------#
+
 class AppearancePanel(PrefPanelBase):
     """Creates a panel with controls for Editra's appearance settings
     @summary: contains all the controls for configuring the appearance
@@ -985,7 +993,154 @@ class AppearancePanel(PrefPanelBase):
         else:
             evt.Skip()
 
-class UpdatePanel(PrefPanelBase):
+#-----------------------------------------------------------------------------#
+
+class NetworkPanel(PrefPanelBase):
+    """Network related configration options"""
+    def __init__(self, parent):
+        """Create the panel"""
+        PrefPanelBase.__init__(self, parent)
+
+        # Attributes
+        self._nb = wx.Notebook(self)
+        self.SetAutoLayout(True)
+
+        # Layout
+        self.__DoLayout()
+
+    def __DoLayout(self):
+        """Do the layout of the panel
+        @note: Do not call this after __init__
+
+        """
+        sizer = wx.GridBagSizer()
+        self._nb.AddPage(NetConfigPage(self._nb), _("Configuration"))
+        self._nb.AddPage(UpdatePage(self._nb), _("Update"))
+        sizer.Add(self._nb, (1, 1))
+        sizer.Add((5, 5), (2, 2))
+        self.SetSizer(sizer)
+
+#-----------------------------------------------------------------------------#
+
+ID_USE_PROXY = wx.NewId()
+ID_URL = wx.NewId()
+ID_PORT = wx.NewId()
+ID_USERNAME = wx.NewId()
+ID_PASSWORD = wx.NewId()
+
+class NetConfigPage(wx.Panel):
+    """Configuration page for network and proxy settings"""
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+        
+        # Attributes
+        
+        # Layout
+        self.__DoLayout()
+
+        # Event Handlers
+        self.Bind(wx.EVT_CHECKBOX, self.OnCheck, id=ID_USE_PROXY)
+        self.Bind(wx.EVT_BUTTON, self.OnApply, id=wx.ID_APPLY)
+
+    def __DoLayout(self):
+        """Layout the controls in the panel"""
+        msizer = wx.BoxSizer(wx.VERTICAL)
+
+        sbox = wx.StaticBox(self, label=_("Proxy Settings"))
+        sboxsz = wx.StaticBoxSizer(sbox, wx.VERTICAL)
+        flexg = wx.FlexGridSizer(4, 2, 10, 5)
+        flexg.AddGrowableCol(1, 1)
+
+        proxy_val = Profile_Get('PROXY_SETTINGS', default=dict())
+        use_proxy = wx.CheckBox(self, ID_USE_PROXY, _("Use Proxy"))
+        use_proxy.SetValue(Profile_Get('USE_PROXY', 'bool', False))
+        sboxsz.Add(use_proxy, 0, wx.ALIGN_LEFT)
+        sboxsz.Add((10, 10), 0)
+
+        url_sz = wx.BoxSizer(wx.HORIZONTAL)
+        url_lbl = wx.StaticText(self, label=_("Proxy URL") + u":")
+        url_txt = wx.TextCtrl(self, ID_URL, proxy_val.get('url', ''))
+        port_sep = wx.StaticText(self, label=":")
+        port_txt = wx.TextCtrl(self, ID_PORT, proxy_val.get('port', '80'))
+        url_sz.AddMany([(url_txt, 1, wx.EXPAND), ((2, 2)),
+                        (port_sep, 0, wx.ALIGN_CENTER_VERTICAL),
+                        ((2, 2)), (port_txt, 0, wx.ALIGN_CENTER_VERTICAL)])
+        flexg.Add(url_lbl, 0, wx.ALIGN_CENTER_VERTICAL)
+        flexg.Add(url_sz, 0, wx.EXPAND)
+
+        usr_sz = wx.BoxSizer(wx.HORIZONTAL)
+        usr_lbl = wx.StaticText(self, label=_("Username") + u":")
+        usr_txt = wx.TextCtrl(self, ID_USERNAME, proxy_val.get('uname', ''))
+        usr_sz.Add(usr_txt, 1, wx.EXPAND)
+        flexg.Add(usr_lbl, 0, wx.ALIGN_CENTER_VERTICAL)
+        flexg.Add(usr_sz, 0, wx.EXPAND)
+
+        pass_sz = wx.BoxSizer(wx.HORIZONTAL)
+        pass_lbl = wx.StaticText(self, label=_("Password") + u":")
+        pass_txt = wx.TextCtrl(self, ID_PASSWORD,
+                               proxy_val.get('passwd', ''),
+                               style=wx.TE_PASSWORD)
+        pass_sz.Add(pass_txt, 1, wx.EXPAND)
+        flexg.Add(pass_lbl, 0, wx.ALIGN_CENTER_VERTICAL)
+        flexg.Add(pass_sz, 0, wx.EXPAND)
+
+        flexg.Add((5, 5))
+        apply_b = wx.Button(self, wx.ID_APPLY)
+        flexg.Add(apply_b, 0, wx.ALIGN_RIGHT)
+
+        if wx.Platform == '__WXMAC__':
+            for lbl in (use_proxy, url_txt, port_sep, port_txt, url_lbl, 
+                        usr_lbl, usr_txt, pass_lbl, pass_txt, apply_b):
+                lbl.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
+        self.EnableControls(use_proxy.GetValue())
+        sboxsz.Add(flexg, 1, wx.EXPAND)
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer.AddMany([((5, 5)), (sboxsz, 1, wx.EXPAND), ((5, 5))])
+        msizer.AddMany([((10, 10)), (hsizer, 1, wx.EXPAND), ((10, 10))])
+        self.SetSizer(msizer)
+
+    def OnApply(self, evt):
+        """Apply the changes to the proxy settings
+        @param evt: wx.EVT_BUTTON
+
+        """
+        if evt.GetId() == wx.ID_APPLY:
+            key_map = { ID_USERNAME : 'uname', ID_URL : 'url', 
+                        ID_PORT : 'port', ID_PASSWORD : 'passwd' }
+            proxy_dict = dict(uname='', passwd='', url='', port='')
+            for val in (ID_URL, ID_PORT, ID_USERNAME, ID_PASSWORD):
+                win = self.FindWindowById(val)
+                if win is not None:
+                    proxy_dict[key_map[val]] = win.GetValue()
+
+            Profile_Set('PROXY_SETTINGS', proxy_dict)
+        else:
+            evt.Skip()
+
+    def EnableControls(self, enable=True):
+        """Enable the controls in the box or disable them
+        @keyword enable: Enable or Disable
+
+        """
+        for child in self.GetChildren():
+            if isinstance(child, wx.StaticText) or \
+               isinstance(child, wx.TextCtrl) or \
+               isinstance(child, wx.Button):
+                child.Enable(enable)
+
+    def OnCheck(self, evt):
+        """Enable the use of the proxy settings or not
+        @param evt: wx.EVT_CHECKBOX
+
+        """
+        e_val = evt.GetEventObject().GetValue()
+        Profile_Set('USE_PROXY', e_val)
+        self.EnableControls(e_val)
+
+#-----------------------------------------------------------------------------#
+
+class UpdatePage(wx.Panel):
     """Creates a panel with controls for updating Editra
     @summary: Panel with three controls, L{updater.UpdateProgress} bar,
               and two L{wx.Button} for checking and downloading updates.
@@ -996,7 +1151,7 @@ class UpdatePanel(PrefPanelBase):
         @param parent: Parent window of this panel
 
         """
-        PrefPanelBase.__init__(self, parent)
+        wx.Panel.__init__(self, parent)
         
         # Attributes
         self.LOG = wx.GetApp().GetLog()

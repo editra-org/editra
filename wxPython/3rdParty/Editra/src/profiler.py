@@ -52,7 +52,7 @@ _DEFAULTS = {
            'CHECKMOD'   : True,             # Auto check file for file mod
            'CODE_FOLD'  : True,             # Use code folding
            'DEFAULT'    : False,            # No longer used I believe
-           'DEFAULT_VIEW' : 'Automatic',      # Default Perspective
+           'DEFAULT_VIEW' : 'Automatic',    # Default Perspective
            'EDGE'       : 80,               # Edge guide column
            'EOL'        : 'Unix (\\n)',     # EOL mode
            'FHIST'      : list(),           # List of history files
@@ -66,6 +66,7 @@ _DEFAULTS = {
            'MYPROFILE'  : 'default.ppb',    # Path to profile file
            'OPEN_NW'    : False,            # Open files in new windows
            'PRINT_MODE' : 'BLACK/WHITE',    # Printer rendering mode
+           'PROXY_SETTINGS' : dict(),       # Proxy Server Settings
            'REPORTER'   : True,             # Error Reporter is Active
            'SAVE_POS'   : True,             # Remember Carat positions
            'SAVE_SESSION' : False,          # Load previous session on startup
@@ -81,6 +82,7 @@ _DEFAULTS = {
            'THEME'      : 'DEFAULT',        # For future use
            'TOOLBAR'    : True,             # Show Toolbar
            'USETABS'    : True,             # Use tabs instead of spaces
+           'USE_PROXY'  : False,            # Use Proxy server settings?
            'VI_EMU'     : False,            # Use Vi emulation mode 
            'WRAP'       : False,            # Use Wordwrap
            'WSIZE'      : (700, 450)        # Mainwindow size

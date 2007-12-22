@@ -35,6 +35,7 @@ import os
 import sys
 import codecs
 import mimetypes
+import urllib2
 import wx
 import ed_event
 import ed_glob
@@ -709,6 +710,16 @@ def Log(msg):
 
     """
     wx.GetApp().GetLog()(msg)
+
+def GetProxyOpener(proxy_set):
+    """Get a urlopener for use with a proxy
+    @param proxy_set: proxy settings to use
+
+    """
+    proxy = urllib2.ProxyHandler({"http" :
+    "%(uname)s:%(passwd)s@%(url)s:%(port)s" % proxy_set})
+    opener = urllib2.build_opener(proxy, urllib2.HTTPHandler)
+    return opener
 
 #---- GUI helper functions ----#
 def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):

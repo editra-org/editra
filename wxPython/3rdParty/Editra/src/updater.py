@@ -41,12 +41,12 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import re
-import urllib
+import urllib2
 import wx
 import wx.lib.delayedresult as delayedresult
 import ed_glob
 import ed_event
-from profiler import CalcVersionValue
+from profiler import CalcVersionValue, Profile_Get
 import util
 #--------------------------------------------------------------------------#
 # Globals
@@ -132,7 +132,15 @@ class UpdateService(object):
         """
         size = 0
         try:
-            dl_file = urllib.urlopen(url)
+            if Profile_Get('USE_PROXY', default=False):
+                proxy_set = Profile_Get('PROXY_SETTINGS',
+                                        default=dict(uname='', url='',
+                                                     port='80', passwd=''))
+                proxy = util.GetProxyOpener(proxy_set)
+                dl_file = proxy.open(url)
+            else:
+                dl_file = urllib2.urlopen(url)
+
             info = dl_file.info()
             size = int(info['Content-Length'])
             dl_file.close()
@@ -148,7 +156,16 @@ class UpdateService(object):
         """
         text = u''
         try:
-            h_file = urllib.urlopen(url)
+            if Profile_Get('USE_PROXY', default=False):
+                proxy_set = Profile_Get('PROXY_SETTINGS',
+                                        default=dict(uname='', url='',
+                                                     port='80', passwd=''))
+
+                proxy = util.GetProxyOpener(proxy_set)
+                h_file = proxy.open(dl_path)
+            else:
+                h_file = urllib2.urlopen(url)
+
             text = h_file.read()
             h_file.close()
         finally:
@@ -183,7 +200,15 @@ class UpdateService(object):
             blk_sz = 4096
             read = 0
             try:
-                webfile = urllib.urlopen(dl_path)
+                if Profile_Get('USE_PROXY', default=False):
+                    proxy_set = Profile_Get('PROXY_SETTINGS',
+                                            default=dict(uname='', url='',
+                                                         port='80', passwd=''))
+                    proxy = util.GetProxyOpener(proxy_set)
+                    webfile = proxy.open(dl_path)
+                else:
+                    webfile = urllib2.urlopen(dl_path)
+
                 fsize = int(webfile.info()['Content-Length'])
                 locfile = open(dl_to, 'wb')
                 while read < fsize and not self._abort:
