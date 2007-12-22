@@ -28,7 +28,7 @@ __revision__ = "$Revision$"
 import sys
 import os
 import re
-import urllib
+import urllib2
 import wx
 import wx.lib.delayedresult as delayedresult
 import wx.lib.mixins.listctrl as listmix
@@ -688,7 +688,15 @@ def _GetPluginListData(url=PLUGIN_REPO):
     text = u''
     try:
         try:
-            h_file = urllib.urlopen(url)
+            if Profile_Get('USE_PROXY', default=False):
+                proxy_set = Profile_Get('PROXY_SETTINGS',
+                                        default=dict(uname='', url='',
+                                                     port='80', passwd=''))
+                proxy = util.GetProxyOpener(proxy_set)
+                h_file = proxy.open(url)
+            else:
+                h_file = urllib2.urlopen(url)
+
             text = h_file.read()
             h_file.close()
         except (IOError, OSError), msg:
@@ -707,7 +715,15 @@ def _DownloadPlugin(*args):
     egg = None
     try:
         try:
-            h_file = urllib.urlopen(url)
+            if Profile_Get('USE_PROXY', default=False):
+                proxy_set = Profile_Get('PROXY_SETTINGS',
+                                        default=dict(uname='', url='',
+                                                     port='80', passwd=''))
+                proxy = util.GetProxyOpener(proxy_set)
+                h_file = proxy.open(url)
+            else:
+                h_file = urllib2.urlopen(url)
+
             egg = h_file.read()
             h_file.close()
         except (IOError, OSError), msg:
