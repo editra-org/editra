@@ -18,8 +18,8 @@ NEWS:
 NEW: [features/improvements]
 +Number of major enhancements to the FileBrowser plugin
 +Support for highlighting PL/SQL and improved SQL highlighting (contributed by Thomas Keul)
-+New highting color scheme "BlueMonday" (by Thomas Keul)
 +Support for highlighting (Boo, Pike) programming languages
++New highting color scheme "BlueMonday" (by Thomas Keul)
 +Shift+Ctrl+I will toggle useage of Tabs and Soft Tabs.
 +Shift+Ctrl+C to duplicate current line
 +F3/Shift+F3 can be used as shortcuts for Find Next/Find Previous in the quick
@@ -35,6 +35,9 @@ BUG FIXES:
 windows are open.
 +Fixed bug that caused a failure to exit when notebook has no pages
 +Fixed paste to quick find control bug on gtk version
++Style editor raises error when setting multiple extra style attributes on the
+default tag.
++Style editor slow input in preview window
 
 OTHER:
 -Removed support for Metal style windows on OS X
