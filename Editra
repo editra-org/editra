@@ -50,7 +50,7 @@ except ImportError:
 # script that will hopefully be removed in the not so distance future once
 # the plugin managers meta registry is redesigned.
 
-if __name__ == '__main__':
+def main():
     # The initial import above is necessary to get the path of where
     # Editra is installed so that the src package can be put on the path.
     # If the src module is not on the path the plugins are unable to import
@@ -77,3 +77,7 @@ if __name__ == '__main__':
     sys.path.insert(0, SRC_DIR)
     import Editra
     Editra.Main()
+
+
+if __name__ == '__main__':
+    main()
