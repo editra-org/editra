@@ -829,11 +829,19 @@ class DocSyntaxPanel(wx.Panel):
         """
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
-        if e_id in [ed_glob.ID_SYNTAX, ed_glob.ID_PREF_SYNTHEME]:
+        if e_id == ed_glob.ID_PREF_SYNTHEME:
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
 
             for mainw in wx.GetApp().GetMainWindows():
                 mainw.nb.UpdateTextControls()
+
+        elif e_id == ed_glob.ID_SYNTAX:
+            val = e_obj.GetValue()
+            Profile_Set(ed_glob.ID_2_PROF[e_id], val)
+
+            for mainw in wx.GetApp().GetMainWindows():
+                mainw.nb.UpdateTextControls('SyntaxOnOff', [val])
+
         else:
             evt.Skip()
 
