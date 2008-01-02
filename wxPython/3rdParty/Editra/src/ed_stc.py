@@ -143,11 +143,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Configure()
         self.UpdateBaseStyles()
 
-        # Configure Autocompletion
-        # NOTE: must be done after syntax configuration
-        if self._config['autocomp']:
-            self.ConfigureAutoComp()
-
         ### Folder Marker Styles
         self.DefineMarkers()
 
@@ -334,7 +329,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetIndentationGuides(_PGET('GUIDES'))
         self.SetEOLFromString(_PGET('EOL'))
         self.SetViewEOL(_PGET('SHOW_EOL'))
-        self.SyntaxOnOff(_PGET('SYNTAX'))  # <- do before autocomp
         self.SetAutoComplete(_PGET('AUTO_COMP'))
         self.FoldingOnOff(_PGET('CODE_FOLD'))
         self.ToggleAutoIndent(_PGET('AUTO_INDENT'))
