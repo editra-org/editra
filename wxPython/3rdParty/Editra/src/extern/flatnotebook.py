@@ -4763,8 +4763,10 @@ class PageContainer(wx.Panel):
         key = event.GetKeyCode()
         if key == wx.WXK_LEFT:
             self.GetParent().AdvanceSelection(False)
+            self.SetFocus()
         elif key == wx.WXK_RIGHT:
             self.GetParent().AdvanceSelection(True)
+            self.SetFocus()
         elif key == wx.WXK_TAB and not event.ControlDown():
             flags = 0
             if not event.ShiftDown(): flags |= wx.NavigationKeyEvent.IsForward
@@ -4843,7 +4845,7 @@ class PageContainer(wx.Panel):
             event.SetEventType(wxEVT_FLATNOTEBOOK_PAGE_CHANGED)
             event.SetOldSelection(oldSelection)
             self.GetParent().GetEventHandler().ProcessEvent(event)
-            self.SetFocus()
+#             self.SetFocus()
             
 
     def SetImageList(self, imglist):
