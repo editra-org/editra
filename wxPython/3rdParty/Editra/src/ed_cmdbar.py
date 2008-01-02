@@ -292,13 +292,14 @@ class CommandBar(wx.Panel):
         elif e_id in [ID_SEARCH_NEXT, ID_SEARCH_PRE]:
             search = self.FindWindowById(ID_SEARCH_CTRL)
             if search != None:
-                evt = wx.KeyEvent(wx.wxEVT_KEY_UP)
-                evt.m_keyCode = wx.WXK_RETURN
-                if e_id == ID_SEARCH_PRE:
-                    evt.m_shiftDown = True
-                else:
-                    evt.m_shiftDown = False
-                wx.PostEvent(search, evt)
+                search.DoSearch(e_id == ID_SEARCH_NEXT)
+#                 evt = wx.KeyEvent(wx.wxEVT_KEY_UP)
+#                 evt.m_keyCode = wx.WXK_RETURN
+#                 if e_id == ID_SEARCH_PRE:
+#                     evt.m_shiftDown = True
+#                 else:
+#                     evt.m_shiftDown = False
+#                 wx.PostEvent(search, evt)
         else:
             evt.Skip()
 

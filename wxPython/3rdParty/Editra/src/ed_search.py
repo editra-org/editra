@@ -335,6 +335,39 @@ class EdSearchCtrl(wx.SearchCtrl):
         """
         self._flags ^= flag
 
+    def DoSearch(self, next=True):
+        """Do the search and move the selection
+        @keyword next: search next or previous
+
+        """
+        s_cmd = wx.wxEVT_COMMAND_FIND
+        if next:
+            self.SetSearchFlag(wx.FR_DOWN)
+        else:
+            if wx.FR_DOWN & self._flags:
+                self.ClearSearchFlag(wx.FR_DOWN)
+
+        if self.GetValue() == self._last:
+            s_cmd = wx.wxEVT_COMMAND_FIND_NEXT
+        self.InsertHistoryItem(self.GetValue())
+
+        self._last = self.GetValue()
+        self.FindService.SetQueryString(self.GetValue())
+        self.FindService.SetSearchFlags(self._flags)
+        self.FindService.OnFind(wx.FindDialogEvent(s_cmd))
+
+        # Give feedback on whether text was found or not
+        if self.FindService.GetLastFound() < 0 and len(self.GetValue()) > 0:
+            self.SetForegroundColour(wx.RED)
+            wx.Bell()
+        else:
+            # ?wxBUG? cant set text back to black after changing color
+            # But setting it to this almost black color works. Most likely its
+            # due to bit masking but I havent looked at the source so I am not
+            # sure
+            self.SetForegroundColour(wx.ColorRGB(0 | 1 | 0))
+        self.Refresh()
+
     def GetSearchData(self):
         """Gets the find data from the controls FindService
         @return: search data
@@ -455,7 +488,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         e_key = evt.GetKeyCode()
         if e_key == wx.WXK_ESCAPE:
-            # HACK change to more safely determine the context
+            # TODO change to more safely determine the context
             # Currently control is only used in command bar
             self.GetParent().Hide()
             return
@@ -477,33 +510,11 @@ class EdSearchCtrl(wx.SearchCtrl):
         s_cmd = wx.wxEVT_COMMAND_FIND
         if e_key == wx.WXK_RETURN or e_key == wx.WXK_F3:
             if evt.ShiftDown():
-                if wx.FR_DOWN & self._flags:
-                    self.ClearSearchFlag(wx.FR_DOWN)
+                self.DoSearch(next=False)
             else:
-                self.SetSearchFlag(wx.FR_DOWN)
-
-            if self.GetValue() == self._last:
-                s_cmd = wx.wxEVT_COMMAND_FIND_NEXT
-            self.InsertHistoryItem(self.GetValue())
+                self.DoSearch(next=True)
         else:
-            self.SetSearchFlag(wx.FR_DOWN)
-
-        self._last = self.GetValue()
-        self.FindService.SetQueryString(self.GetValue())
-        self.FindService.SetSearchFlags(self._flags)
-        self.FindService.OnFind(wx.FindDialogEvent(s_cmd))
-
-        # Give feedback on whether text was found or not
-        if self.FindService.GetLastFound() < 0 and len(self.GetValue()) > 0:
-            self.SetForegroundColour(wx.RED)
-            wx.Bell()
-        else:
-            # ?wxBUG? cant set text back to black after changing color
-            # But setting it to this almost black color works. Most likely its
-            # due to bit masking but I havent looked at the source so I am not
-            # sure
-            self.SetForegroundColour(wx.ColorRGB(0 | 1 | 0))
-        self.Refresh()
+            self.DoSearch(next=True)
 
     def OnCancel(self, evt):
         """Cancels the Search Query
