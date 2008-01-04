@@ -25,10 +25,16 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Dependancies
-import os, sys, tokenize, cStringIO, types
-from token import NAME, DEDENT, STRING #, NEWLINE
+import os, sys, tokenize, types
+from token import NAME, DEDENT, STRING, NEWLINE
 import wx
 from wx.py import introspect
+
+# It would be nice to use cStringIO here for the better performance but it
+# doesn't work as uniformly across platfrom as the plain StringIO module. On
+# Linux and python2.4 under all platforms the cStringIO module makes tokens out
+# of each character instead of each actual token which causes the parse to fail.
+from StringIO import StringIO
 
 #--------------------------------------------------------------------------#
 
@@ -790,7 +796,7 @@ class PyParser:
 
         """
         self.curline = curline
-        buf = cStringIO.StringIO(text)
+        buf = StringIO(text)
         self.gen = tokenize.generate_tokens(buf.readline)
         self.currentscope = self.scope
 
