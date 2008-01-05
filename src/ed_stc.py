@@ -347,12 +347,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             sel = self.GetSelection()
             start = self.LineFromPosition(sel[0])
             end = self.LineFromPosition(sel[1])
-            c_start = self._code['comment'][0] + " "
+            c_start = self._code['comment'][0]
             c_end = u''
             if len(self._code['comment']) > 1:
-                c_end = " " + self._code['comment'][1]
+                c_end = self._code['comment'][1]
             if end > start and self.GetColumn(sel[1]) == 0:
                 end = end - 1
+
             self.BeginUndoAction()
             try:
                 nchars = 0
@@ -362,10 +363,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     lstart = self.PositionFromLine(line_num)
                     lend = self.GetLineEndPosition(line_num)
                     text = self.GetTextRange(lstart, lend)
-                    if len(text.strip()):
+                    tmp = text.strip()
+                    if len(tmp):
                         if uncomment:
-                            text = text.replace(c_start, u'', 1)
-                            text = text.replace(c_end, u'', 1)
+                            if tmp.startswith(c_start):
+                                text = text.replace(c_start, u'', 1)
+                            if c_end and tmp.endswith(c_end):
+                                text = text.replace(c_end, u'', 1)
                             nchars = nchars - len(c_start + c_end)
                         else:
                             text = c_start + text + c_end
