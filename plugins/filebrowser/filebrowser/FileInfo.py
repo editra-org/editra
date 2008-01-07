@@ -85,7 +85,7 @@ class FileInfoDlg(wx.MiniFrame):
         # Top Info
         top = wx.BoxSizer(wx.HORIZONTAL)
         head = wx.BoxSizer(wx.VERTICAL)
-        bmp = wx.StaticBitmap(self.panel, bitmap=FileIcon.getBitmap())
+        bmp = wx.StaticBitmap(self.panel, bitmap=FileIcon.Image.GetBitmap())
         lbl = wx.StaticText(self.panel, label=self._fname)
         font = self.GetFont()
         font.SetWeight(wx.FONTWEIGHT_BOLD)
@@ -136,7 +136,7 @@ class FileInfoDlg(wx.MiniFrame):
         # Top Info
         top = wx.BoxSizer(wx.HORIZONTAL)
         head = wx.BoxSizer(wx.HORIZONTAL)
-        bmp = wx.StaticBitmap(self.panel, bitmap=FileIcon.getBitmap())
+        bmp = wx.StaticBitmap(self.panel, bitmap=FileIcon.Image.GetBitmap())
         lbl = wx.StaticText(self.panel, label=self._fname)
         fszlbl = wx.StaticText(self.panel, label=self._fstat['size'])
         font = self.GetFont()
