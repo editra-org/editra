@@ -436,8 +436,6 @@ class StyleEditor(wx.Dialog):
         selection in the style tags list to the style tag of the area
         the cursor has moved into.
         @param evt: event that called this handler
-        @todo: optimizations, find out why UpdateBaseStyles is called 8 times
-               everytime this is fired.
 
         """
         if evt is not None:
