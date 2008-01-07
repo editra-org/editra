@@ -526,7 +526,7 @@ def Main():
     # Splash a warning if version is not a final version
     if Profile_Get('APPSPLASH') and int(ed_glob.VERSION[0]) < 1:
         import edimage
-        splash_img = edimage.getsplashwarnBitmap()
+        splash_img = edimage.splashwarn.GetBitmap()
         splash = wx.SplashScreen(splash_img, wx.SPLASH_CENTRE_ON_PARENT | \
                                  wx.SPLASH_NO_TIMEOUT, 0, None, wx.ID_ANY)
         splash.Show()

@@ -49,44 +49,20 @@ ID_LATE_BOX     = wx.NewId()
 _ = wx.GetTranslation
 #----------------------------------------------------------------------------#
 # Class Globals
-from wx import ImageFromStream, BitmapFromImage
-import cStringIO, zlib
+from extern.embeddedimage import PyEmbeddedImage
 
-def getData():
-    """Gets the data of the button background"""
-    return zlib.decompress(
-'x\xda\x01A\x02\xbe\xfd\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\
-\x00\x00 \x08\x06\x00\x00\x00szz\xf4\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\
-\x08d\x88\x00\x00\x01\xf8IDATX\x85\xed\x97?n\x1aA\x14\x87\xbf\xd9Y\xb0\xdd\
-\x10\x05\x87\xd2[Q`"\x91\x8a\x03P\xc6\x11R\xdcE.R9F\xb2\x94\x0b87\xc8\x01\\D\
-\x91S\xc5\xce\t\x9c.\x17\xa0\n\x8a%\xba\x95\x90\xe8b\x1cX\x8b\xc4\xec<&\x05\
-\x7fb\xc0`b0n\xf8I[\xcc\xe8\xcd\xfb}\xf3\xdehF\xab\x18T\x1cx\x96\xc9d\x0e\
-\xb5\xd6)\xe6(\x11)\x97J\xa5}\xe0;P\xeb\xcd\xabk1\xbb\xa9T*\x97\xcdfw\xb6\
-\x9eo\xb1\xfed}\x9e\xfe\x9c\xff<\xe7\xf4\xeb)\xc5b\xf1\xb8\\.\xbf\x06\xa4\
-\x07\xe0D"\x917\x85\xbd\xc2\xfbd2\x19\xf3<o\xae\xc6\xc3\xaaT*\x1c\xbc;\xf8\
-\xd0l6\xf7\x01Q@n\xfb\xe5\xf6\xb7|>\x7f\xaf\xc6\xd7U\xadV9\xfatt\xec\xfb\xfe\
-[wc\xc3\xdb\xf3<\x8f \xb8\x04\xecB\x00b\xb1Gln\xa6w|\xdf\xff\xe8F\\\xf7U"\
-\x91 \x08\x1a\xb7.\xb4\xd6b\xadE)\x85R\xea\xd6\xf8Iz\x9aNsv\xf6\xe3\xd05\xc6\
-P\xffU\x9fl\xdc\xad\x8cb6\xd3\x91\xbcm\x9br\x8d\x18\x1aS\xec~|\x16\xb8+\x97\
-\x11\x83+"4\x1a\xc1\xdd\x01f\x90\x88\xd0iA}\xb0\x05\x137d\xa7\t\x9a\xbc\xb4\
-\'c\x0c\xae\x18\xe12x\xa0\n\x18\xc1\r\x8d\xa1V\xbb@k=\xf3\xc9\x9eV\xd6ZD\x84\
-\xd0\x18\x14\xdd\xca\xc4\x1f\xc7\x89F\xa2\xfd \xad5\xd1\xe8\xca\\\x0c[\xad+D\
-\xe4\xdf8lQ\xbb\xe8<\x07}\x80ai\xadY\x89\xae\x0e\xcc)\xa5X[]\xc3q\x9c\x91\
-\xf8\xb6m\x13\x86!\xc6\x84\xd8\xa1\x8cW\xad?\x03\x00\x039\xc7\x01\x8c\x93\
-\xab#@\xe7B\x1a\xa2\xc3ZK\xbb}\xb3\xd18\xfd7\xc0\xbc5Z\xcb%\xc0\x12`\t\xb0\
-\x04X\x02,V/\x1c\xe0\xcb\x03\x02\xfc\x06\xc8\xd1y\x90\x16\xfd}\xa6\xf3/\x8a\
-\x03\x14\x80\xfa\x02\xcd\xeb\xc0\xeep9\n\x0b\x04(\xdc\xd4\x0f\xa7\xdb\x8e\
-\x93{4>\xe9z\xf4\x0f\xff_\x17\xe2 \x06n\xab\xb1\xf7\x00\x00\x00\x00IEND\xaeB\
-`\x82\x11\x87\x03\xa2' )
-
-def getBitmap():
-    """Gets the bitmap of the button base"""
-    return BitmapFromImage(getImage())
-
-def getImage():
-    """Gets the image of the button base"""
-    stream = cStringIO.StringIO(getData())
-    return ImageFromStream(stream)
+ButtonBackground = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAfhJ"
+    "REFUWIXtlz9uGkEUh7/ZWbDdEAWH0ltRYCKRigNQxhFS3EUuUjlGspQLODfIAVxEkVPFzgmc"
+    "LhegCoolupWQ6GIcWIvE7DwmBX9iwGBiMG74SVvM6M37ffPeaEarGFQceJbJZA611inmKBEp"
+    "l0qlfeA7UOvNq2sxu6lUKpfNZne2nm+x/mR9nv6c/zzn9OspxWLxuFwuvwakB+BEIpE3hb3C"
+    "+2QyGfM8b67Gw6pUKhy8O/jQbDb3AVFAbvvl9rd8Pn+vxtdVrVY5+nR07Pv+W3djw9vzPI8g"
+    "uATsQgBisUdsbqZ3fN//6EZc91UikSAIGrcutNZirUUphVLq1vhJeppOc3b249A1xlD/VZ9s"
+    "3K2MYjbTkbxtm3KNGBpT7H58FrgrlxGDKyI0GsHdAWaQiNBpQX2wBRM3ZKcJmry0J2MMrhjh"
+    "MnigChjBDY2hVrtAaz3zyZ5W1lpEhNAYFN3KxB/HiUai/SCtNdHoylwMW60rROTfOGxRu+g8"
+    "B32AYWmtWYmuDswppVhbXcNxnJH4tm0ThiHGhNihjFetPwMAAznHAYyTqyNA50IaosNaS7t9"
+    "s9E4/TfAvDVayyXAEmAJsARYAixWLxzgywMC/AbI0XmQFv19pvMvigMUgPoCzevA7nA5CgsE"
+    "KNzUD6fbjpN7ND7pevQP/18X4iAGbqux9wAAAABJRU5ErkJggg==")
 
 def MakeThemeTool(tool_id):
     """Makes a themed bitmap for the tool book of the pref dialog.
@@ -98,7 +74,7 @@ def MakeThemeTool(tool_id):
     Profile_Set('ICON_SZ', (24, 24))
     over = wx.ArtProvider.GetBitmap(str(tool_id), wx.ART_TOOLBAR)
     Profile_Set('ICON_SZ', osize)
-    mdc = wx.MemoryDC(getBitmap())
+    mdc = wx.MemoryDC(ButtonBackground.GetBitmap())
     if over.IsOk():
         # Create overlay
         if over.GetSize() != (24, 24):
