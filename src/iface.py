@@ -175,7 +175,7 @@ class Shelf(plugin.Plugin):
             try:
                 menu_i = observer.GetMenuEntry(menu)
                 if menu_i:
-                    menu_items.append((menu_i.GetLabel(), menu_i))
+                    menu_items.append((menu_i.GetItemLabel(), menu_i))
             except Exception, msg:
                 self._log("[shelf][err] %s" % str(msg))
         menu_items.sort()
