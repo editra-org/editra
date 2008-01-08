@@ -32,7 +32,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import wx
 import wx.stc
-import dev_tool
+import util
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -208,5 +208,5 @@ class EdPrintout(wx.Printout):
                                                 line_height * self.lines_pp))
 
         if end_point < end_pos:
-            dev_tool.DEBUGP("[printout][err] Rendering Error, page %s" % page)
+            util.Log("[ed_print][err] Rendering Error, page %s" % page)
         return True

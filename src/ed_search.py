@@ -416,7 +416,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             try:
                 self.rmenu.RemoveItem(m_items[-1])
             except IndexError, msg:
-                wx.GetApp().GetLog()("[searchbar] menu error: %s" % str(msg))
+                wx.GetApp().GetLog()("[ed_search][err] menu error: %s" % str(msg))
 
     def IsMatchCase(self):
         """Returns True if the search control is set to search

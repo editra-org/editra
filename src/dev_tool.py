@@ -17,6 +17,7 @@ __revision__ = "$Revision$"
 
 import os
 import sys
+import re
 import platform
 import traceback
 import codecs
@@ -24,71 +25,145 @@ import time
 import webbrowser
 import wx
 import ed_glob
+import ed_msg
 
 _ = wx.GetTranslation
+RE_LOG_LBL = re.compile(r"\[(.+?)\]")
 #-----------------------------------------------------------------------------#
 # General Debuging Helper Functions
 
-def DEBUGP(statement, mode="std"):
-    """Used to print Debug Statements. Statements should be formated as 
-    follows:
-    @note: mode variable and message type information in message string are
-           not currently used but will be in the future for organizing the
-           debug levels.
+def DEBUGP(statement):
+    """Prints debug messages and broadcasts them on the log message channel.
+    Subscribing a listener with any of the EDMSG_LOG_* types will recieve its
+    messages from this method.
+    @param statement: Should be a formatted string that starts with two
+                      identifier blocks. The first is used to indicate the
+                      source of the message and is used as the primary means
+                      of filtering. The second block is the type of message,
+                      this is used to indicate the priority of the message and
+                      is used as the secondary means of filtering.
 
         1. Formatting
-            - [object/module name][msg_type] msg
+            - [object/module name][msg_type] message string
 
-        2. Modes of operation:
-            - std = stdout
-            - log = writes to log file
-    
-        3. Message Type:
+        2. Message Type:
             - [err]  : Notes an exception or error condition (high priority)
             - [warn] : Notes a error that is not severe (medium priority)
             - [info] : General information message (normal priority)
-            - [evt]  : Some sort of event related message (normal priority)
+            - [evt]  : Event related message (normal priority)
 
-    @example: [ed_main][err] File failed to open
+    @example: DEBUGP([ed_main][err] File failed to open)
 
     """
-    # Turn off normal debugging messages when not in Debug mode
-    if mode == "std" and not ed_glob.DEBUG:
-        return 0
-
-    # Build time string for tstamp
-    now = time.localtime(time.time())
-    now = u"[%s:%s:%s]" % (str(now[3]).zfill(2), str(now[4]).zfill(2), 
-                           str(now[5]).zfill(2))
-
-    # Format Statement
-    statement = unicode(statement)
-    s_lst = [msg for msg in statement.split(u"\n") if len(msg.strip())]
-    
-    if mode == "std":
-        for line in s_lst:
-            out = u"%s %s" % (now, line)
-            print out.encode('utf-8', 'replace')
-    elif mode == "log":
-        logfile = os.environ.get('EDITRA_LOG')
-        if logfile is None or not os.path.exists(logfile):
-            print u"EDITRA_LOG enviroment variable not set!!!"
-            print u"Outputting log information to default log editra_tmp.log"
-            logfile = 'editra_tmp.log'
-        try:
-            file_handle = file(logfile, mode="ab")
-            writer = codecs.lookup('utf-8')[3](file_handle)
-            for line in s_lst:
-                try:
-                    writer.write(u"%s %s\n" % (now, line))
-                except (IOError, OSError):
-                    continue
-            file_handle.close()
-        except (IOError, OSError):
-            pass
+    # Create a LogMsg object from the statement string
+    lbls = [lbl.strip() for lbl in RE_LOG_LBL.findall(statement)]
+    info = RE_LOG_LBL.sub('', statement, 2).rstrip()
+    if len(lbls) > 1:
+        msg = LogMsg(info, lbls[0], lbls[1])
+    elif len(lbls) == 1:
+        msg = LogMsg(info, lbls[0])
     else:
-        print u"Improper DEBUG MODE: Defaulting to stdout"
-        print statement
+        msg = LogMsg(info)
+
+    # Only print to stdout when DEBUG is active
+    if ed_glob.DEBUG:
+        print str(msg)
+
+    # Dispatch message to all interested parties
+    if msg.Type in ['err', 'error']:
+        mtype = ed_msg.EDMSG_LOG_ERROR
+    elif msg.Type in ['warn', 'warning']:
+        mtype = ed_msg.EDMSG_LOG_WARN
+    elif msg.Type in ['evt', 'event']:
+        mtype = ed_msg.EDMSG_LOG_EVENT
+    elif msg.Type in ['info', 'information']:
+        mtype = ed_msg.EDMSG_LOG_INFO
+    else:
+        mtype = ed_msg.EDMSG_LOG_ALL
+
+    ed_msg.PostMessage(mtype, msg)
+
+#-----------------------------------------------------------------------------#
+
+class LogMsg:
+    """LogMsg is a container class for representing log messages. Converting
+    it to a string will yield a formatted log message with timestamp. Once a
+    message has been displayed once (converted to a string) it is marked as
+    being expired.
+
+    """
+    def __init__(self, msg, msrc='unknown', level="info"):
+        """Create a LogMsg object
+        @param msg: the log message string
+        @keyword msrc: Source of message
+        @keyword level: Priority of the message
+
+        """
+        # Attributes
+        self._msg = dict(mstr=msg, msrc=msrc, lvl=level, tstamp=time.time())
+        self._ok = True
+
+    def __repr__(self):
+        """String representation of the object"""
+        return '<LogMsg %s:%d>' % (self._msg['lvl'], self._msg['tstamp'])
+
+    def __str__(self):
+        """Returns a nice formatted string version of the message"""
+        ltime = time.localtime(self._msg['tstamp'])
+        tstamp = u"[%s:%s:%s]" % (str(ltime[3]).zfill(2),
+                                  str(ltime[4]).zfill(2),
+                                  str(ltime[5]).zfill(2))
+        statement = unicode(self._msg['mstr'])
+        s_lst = [u"%s[%s][%s] %s" % (tstamp, self._msg['msrc'],
+                                 self._msg['lvl'], msg) 
+                 for msg in statement.split(u"\n")
+                 if len(msg.strip())]
+        out = os.linesep.join(s_lst)
+
+        # Mark Message as have being fetched (expired)
+        self._ok = False
+
+        return out.encode('utf-8', 'replace')
+
+    @property
+    def Expired(self):
+        """Has this message already been retrieved
+        @return: bool
+
+        """
+        return not self._ok
+
+    @property
+    def Origin(self):
+        """Where the message came from
+        @return: string
+
+        """
+        return self._msg['msrc']
+
+    @property
+    def TimeStamp(self):
+        """Property for accessing timestamp
+        @return: long int
+
+        """
+        return self._msg['tstamp']
+
+    @property
+    def Type(self):
+        """The messages level type
+        @return string (err, warn, info, evt)
+
+        """
+        return self._msg['lvl']
+
+    @property
+    def Value(self):
+        """Returns the message part of the log string
+        @return: string
+
+        """
+        return self._msg['mstr']
 
 #-----------------------------------------------------------------------------#
 
@@ -132,7 +207,7 @@ def EnvironmentInfo():
     info.append(u"FTYPES=%s" % str(ftypes))
     info.append("#---- End Runtime Variables ----#")
 
-    return u"\n".join(info)
+    return os.linesep.join(info)
 
 def ExceptionHook(exctype, value, trace):
     """Handler for all unhandled exceptions
@@ -151,6 +226,7 @@ def ExceptionHook(exctype, value, trace):
         os._exit(1)
 
     # Prevent multiple reporter dialogs from opening at once
+    global REPORTER_ACTIVE
     if not REPORTER_ACTIVE and not ABORT:
         ErrorDialog(ftrace)
 
@@ -236,7 +312,7 @@ ID_SEND = wx.NewId()
 ABORT = False
 REPORTER_ACTIVE = False
 class ErrorDialog(wx.Dialog):
-    """Dialog for showing and and notifying Editra.org should the
+    """Dialog for showing errors and and notifying Editra.org should the
     user choose so.
 
     """
@@ -245,6 +321,7 @@ class ErrorDialog(wx.Dialog):
         @param message: Error message to display
 
         """
+        global REPORTER_ACTIVE
         REPORTER_ACTIVE = True
         wx.Dialog.__init__(self, None, title="Error/Crash Reporter", 
                            style=wx.DEFAULT_DIALOG_STYLE)
@@ -314,7 +391,7 @@ class ErrorDialog(wx.Dialog):
             self.Close()
         elif e_id == ID_SEND:
             msg = u"mailto:%s?subject=Error Report&body=%s"
-            addr = u"bugs@%s" % (ed_glob.HOME_PAGE.lstrip("http://"))
+            addr = u"bugs@%s" % (ed_glob.HOME_PAGE.replace("http://", '', 1))
             msg = msg % (addr, self.err_msg)
             msg = msg.replace(u"'", u'')
             webbrowser.open(msg)

@@ -1023,7 +1023,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetIndentationGuides(not bool(self.GetIndentationGuides()))
         elif e_id in syntax.SyntaxIds():
             f_ext = syntax.GetExtFromId(e_id)
-            self.LOG("[stc_evt] Manually Setting Lexer to %s" % str(f_ext))
+            self.LOG("[ed_stc][evt] Manually Setting Lexer to %s" % str(f_ext))
             self.FindLexer(f_ext)
         elif e_id == ed_glob.ID_AUTOCOMP:
             self.SetAutoComplete(not self.GetAutoComplete())
@@ -1675,11 +1675,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         if (switch is None and not self._config['folding']) or switch:
-            self.LOG("[stc_evt] Code Folding Turned On")
+            self.LOG("[ed_stc][evt] Code Folding Turned On")
             self._config['folding'] = True
             self.SetMarginWidth(FOLD_MARGIN, 12)
         else:
-            self.LOG("[stc_evt] Code Folding Turned Off")
+            self.LOG("[ed_stc][evt] Code Folding Turned Off")
             self._config['folding'] = False
             self.SetMarginWidth(FOLD_MARGIN, 0)
 
@@ -1689,11 +1689,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         if (switch is None and not self._config['highlight']) or switch:
-            self.LOG("[stc_evt] Syntax Highlighting Turned On")
+            self.LOG("[ed_stc][evt] Syntax Highlighting Turned On")
             self._config['highlight'] = True
             self.FindLexer()
         else:
-            self.LOG("[stc_evt] Syntax Highlighting Turned Off")
+            self.LOG("[ed_stc][evt] Syntax Highlighting Turned Off")
             self._config['highlight'] = False
             self.SetLexer(wx.stc.STC_LEX_NULL)
             self.ClearDocumentStyle()
@@ -1716,11 +1716,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         if (switch is None and not self._config['brackethl']) or switch:
-            self.LOG("[stc_evt] Bracket Highlighting Turned On")
+            self.LOG("[ed_stc][evt] Bracket Highlighting Turned On")
             self._config['brackethl'] = True
             self.Bind(wx.stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
         else:
-            self.LOG("[stc_evt] Bracket Highlighting Turned Off")
+            self.LOG("[ed_stc][evt] Bracket Highlighting Turned Off")
             self._config['brackethl'] = False
             self.Unbind(wx.stc.EVT_STC_UPDATEUI)
 
@@ -1730,10 +1730,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         if (switch is None and not self.GetMarginWidth(NUM_MARGIN)) or switch:
-            self.LOG("[stc_evt] Showing Line Numbers")
+            self.LOG("[ed_stc][evt] Showing Line Numbers")
             self.SetMarginWidth(NUM_MARGIN, 30)
         else:
-            self.LOG("[stc_evt] Hiding Line Numbers")
+            self.LOG("[ed_stc][evt] Hiding Line Numbers")
             self.SetMarginWidth(NUM_MARGIN, 0)
 
     def WordLeft(self):
@@ -1880,13 +1880,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 self.EndUndoAction()
                 self.SetSavePoint()
             except (AttributeError, OSError, IOError), msg:
-                self.LOG("[stc][err] Failed to Reload %s" % cfile)
+                self.LOG("[ed_stc][err] Failed to Reload %s" % cfile)
                 return False, str(msg)
             else:
                 self.GotoPos(cpos)
                 return True, ''
         else:
-            self.LOG("[stc][err] %s does not exists, cannot reload it." % cfile)
+            self.LOG("[ed_stc][err] %s does not exists, cant reload." % cfile)
             return False, "%s does not exist" % cfile
 
     def SaveFile(self, path):
@@ -1908,8 +1908,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             writer.close()
         except (AttributeError, IOError), msg:
             result = False
-            self.LOG("[stc][err] There was an error saving %s" % path)
-            self.LOG("[stc][err] ERROR: %s" % str(msg))
+            self.LOG("[ed_stc][err] There was an error saving %s" % path)
+            self.LOG("[ed_stc][err] ERROR: %s" % str(msg))
 
         if result:
             self.SetSavePoint()
@@ -1932,7 +1932,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         bom = unicode(bom, enc)
         if len(txt) > len(bom):
             if txt[:len(bom)] == bom:
-                self.LOG("[stc][info] Stripped BOM from text")
+                self.LOG("[ed_stc][info] Stripped BOM from text")
                 self._finfo['hasbom'] = True
                 txt = txt.replace(bom, u'', 1)
         wx.stc.StyledTextCtrl.SetText(self, txt)
@@ -1978,7 +1978,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         try:
             self._code['lang_id'] = syn_data[syntax.LANGUAGE]
         except KeyError:
-            self.LOG("[stc][err] Failed to get Lang Id from Syntax package")
+            self.LOG("[ed_stc][err] Failed to get Lang Id from Syntax package")
             self._code['lang_id'] = 0
 
         lexer = syn_data[syntax.LEXER]
@@ -1998,25 +1998,25 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         try:
             keywords = syn_data[syntax.KEYWORDS]
         except KeyError:
-            self.LOG("[stc][err] No Keywords Data Found")
+            self.LOG("[ed_stc][err] No Keywords Data Found")
             keywords = []
        
         try:
             synspec = syn_data[syntax.SYNSPEC]
         except KeyError:
-            self.LOG("[stc][err] Failed to get Syntax Specifications")
+            self.LOG("[ed_stc][err] Failed to get Syntax Specifications")
             synspec = []
 
         try:
             props = syn_data[syntax.PROPERTIES]
         except KeyError:
-            self.LOG("[stc][err] No Extra Properties to Set")
+            self.LOG("[ed_stc][err] No Extra Properties to Set")
             props = []
 
         try:
             comment = syn_data[syntax.COMMENT]
         except KeyError:
-            self.LOG("[stc][err] No Comment Pattern to set")
+            self.LOG("[ed_stc][err] No Comment Pattern to set")
             comment = []
 
         # Set Lexer

@@ -184,7 +184,7 @@ class EdPages(FNB.FlatNotebook):
         self.GetTopLevelParent().Freeze()
         self.pg_num += 1
         self.control = ed_stc.EditraStc(self, wx.ID_ANY)
-        self.LOG("[nb_evt] Page Creation ID: %d" % self.control.GetId())
+        self.LOG("[ed_pages][evt] Page Creation ID: %d" % self.control.GetId())
         self.AddPage(self.control, u"Untitled - %d" % self.pg_num)
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
         self.GetTopLevelParent().Thaw()
@@ -256,7 +256,7 @@ class EdPages(FNB.FlatNotebook):
         self.frame.SetTitle("%s - file://%s" % (filename, 
                                                 self.control.GetFileName()))
         self.SetPageText(self.GetSelection(), filename)
-        self.LOG("[nb_evt] Opened Page: ID = %d" % self.GetSelection())
+        self.LOG("[ed_pages][evt] Opened Page: ID = %d" % self.GetSelection())
 
         # Setup Document
         self.control.FindLexer()
@@ -282,7 +282,7 @@ class EdPages(FNB.FlatNotebook):
         if current_page < 0:
             return current_page
 
-        self.LOG("[nb_info] Current Page = %d" % current_page)
+        self.LOG("[ed_pages][info] Current Page = %d" % current_page)
 
         control = self.GetPage(current_page)
         control.SetFocus()
@@ -339,7 +339,7 @@ class EdPages(FNB.FlatNotebook):
         # Check file properties and make a "clean" list of file(s) to open
         valid_files = list()
         for fname in files:
-            self.LOG("[fdt_evt] File(s) Dropped: %s" % fname)
+            self.LOG("[ed_pages][evt] File(s) Dropped: %s" % fname)
             if not os.path.exists(fname):
                 self.frame.PushStatusText(_("Invalid file: %s") % fname, \
                                           ed_glob.SB_INFO)
@@ -428,7 +428,7 @@ class EdPages(FNB.FlatNotebook):
 
         """
         evt.Skip()
-        self.LOG("[nb_evt] Page Changed to %d" % evt.GetSelection())
+        self.LOG("[ed_pages][evt] Page Changed to %d" % evt.GetSelection())
 
     def ChangePage(self, pgid):
         """Change the page and focus to the the given page id
@@ -452,10 +452,11 @@ class EdPages(FNB.FlatNotebook):
 
         """
         self.ChangePage(evt.GetSelection())
-        self.LOG(("[nb_evt] Control Changing from Page: %d to Page: %d\n"
-                  "[nb_info] It has file named: %s" % (evt.GetOldSelection(), 
-                                                       evt.GetSelection(), 
-                                                       self.control.GetFileName())))
+        self.LOG("[ed_pages][evt] Control Changing from Page: "
+                  "%d to Page: %d\n" % (evt.GetOldSelection(),
+                                        evt.GetSelection()))
+        self.LOG("[ed_pages][info] It has file named: %s" % \
+                 self.control.GetFileName())
         evt.Skip()
 
     def OnPageClosing(self, evt):
@@ -464,7 +465,7 @@ class EdPages(FNB.FlatNotebook):
         @type evt: wx.lib.flatnotebook.EVT_FLATNOTEBOOK_PAGE_CLOSING
 
         """
-        self.LOG("[nb_evt] Closing Page: #%d" % self.GetSelection())
+        self.LOG("[ed_pages][evt] Closing Page: #%d" % self.GetSelection())
         page = self.GetCurrentPage()
         if len(page.GetFileName()) > 1:
             self.DocMgr.AddRecord([page.GetFileName(), page.GetCurrentPos()])
@@ -476,7 +477,7 @@ class EdPages(FNB.FlatNotebook):
         @type evt: wx.lib.flatnotebook.EVT_FLATNOTEBOOK_PAGE_CLOSED
 
         """
-        self.LOG("[nb_evt] Closed Page: #%d" % self.GetSelection())
+        self.LOG("[ed_pages][evt] Closed Page: #%d" % self.GetSelection())
         evt.Skip()
     #---- End Event Handlers ----#
 
@@ -488,7 +489,7 @@ class EdPages(FNB.FlatNotebook):
         for page in xrange(self.GetPageCount()):
             result = self.ClosePage()
             if result == wx.ID_CANCEL:
-                self.LOG("[nb][closeall] Canceled on page %d" % page)
+                self.LOG("[ed_pages][info] Canceled on page %d" % page)
                 break
             
     def ClosePage(self):
@@ -563,7 +564,7 @@ class EdPages(FNB.FlatNotebook):
         pg_num = self.GetSelection()
         ftype = util.GetExtension(self.control.GetFileName())
         ftype = ftype[-1].upper()
-        self.LOG("[nb_info] Updating Page Image: Page %d" % pg_num)
+        self.LOG("[ed_pages][info] Updating Page Image: Page %d" % pg_num)
         self.SetPageImage(pg_num, str(self.control.GetLangId()))
 
     def OnUpdatePageText(self, evt):

@@ -364,7 +364,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             else:
                 self._log("[app][info] UnRegistered %s" % name)
         else:
-            self._log("[app][warning] The window %s is not registered" % name)
+            self._log("[app][warn] The window %s is not registered" % name)
 
     def WindowCanLock(self, winname):
         """Checks if a named window can lock the application or
@@ -377,7 +377,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         if self._windows.has_key(winname):
             return self._windows[winname][1]
         else:
-            self._log("[app][warning] the window %s has "
+            self._log("[app][warn] the window %s has "
                       "not been registered" % winname)
             return False
 
@@ -395,7 +395,7 @@ def InitConfig():
         if profiler.ProfileIsCurrent():
             profiler.Profile().Load(profiler.GetProfileStr())
         else:
-            dev_tool.DEBUGP("[main_info] Updating Profile to current version")
+            dev_tool.DEBUGP("[InitConfig][info] Updating Profile to current version")
 
             # Load and update profile
             pstr = profiler.GetProfileStr()
@@ -498,7 +498,7 @@ def Main():
     profile_updated = InitConfig()
 
     # 1. Create Application
-    dev_tool.DEBUGP("[main_info] Initializing Application...")
+    dev_tool.DEBUGP("[main][info] Initializing Application...")
     editra_app = Editra(Profile_Get('MODE') == u"GUI_DEBUG")
 
     # 2. Initialize the Language Settings
@@ -559,8 +559,9 @@ def Main():
             dev_tool.DEBUGP("[main][err] IndexError on commandline args")
 
     # 3. Start Applications Main Loop
-    dev_tool.DEBUGP("[main_info] Starting MainLoop...")
+    dev_tool.DEBUGP("[main][info] Starting MainLoop...")
     editra_app.MainLoop()
+    dev_tool.DEBUGP("[main][info] MainLoop finished exiting application")
     os._exit(0)
 
 #-----------------------------------------------------------------------------#

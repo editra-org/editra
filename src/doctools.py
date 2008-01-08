@@ -91,7 +91,7 @@ class DocPositionMgr(object):
                 tfile = util.GetFileWriter(book)
                 tfile.close()
             except (IOError, OSError):
-                util.Log("[docpositionmgr] failed to load book")
+                util.Log("[docpositionmgr][err] failed to load book")
                 return False
 
         reader = util.GetFileReader(book)
@@ -106,12 +106,12 @@ class DocPositionMgr(object):
             try:
                 vals[1] = int(vals[1])
             except (TypeError, ValueError), msg:
-                util.Log("[docpositionmgr] %s" % str(msg))
+                util.Log("[docpositionmgr][err] %s" % str(msg))
                 continue
             else:
                 self.AddRecord(vals)
 
-        util.Log("[docpositionmgr] successfully loaded book")
+        util.Log("[docpositionmgr][info] successfully loaded book")
         return True
 
     def WriteBook(self):
@@ -125,4 +125,4 @@ class DocPositionMgr(object):
                 writer.write(u"%s=%d\n" % (key, self._records[key]))
             writer.close()
         except (IOError, AttributeError), msg:
-            util.Log("[docpositionmgr] %s" % str(msg))
+            util.Log("[docpositionmgr][err] %s" % str(msg))

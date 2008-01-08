@@ -510,7 +510,7 @@ class PluginManager(object):
         reader = util.GetFileReader(os.path.join(ed_glob.CONFIG['CONFIG_DIR'],
                                                  PLUGIN_CONFIG))
         if reader == -1:
-            self.LOG("[plugin_mgr][err] Failed to read plugin config file")
+            self.LOG("[pluginmgr][err] Failed to read plugin config file")
             return config
 
         reading = True
@@ -595,7 +595,7 @@ class PluginManager(object):
         writer = util.GetFileWriter(os.path.join(ed_glob.CONFIG['CONFIG_DIR'],
                                                  PLUGIN_CONFIG))
         if writer == -1:
-            self.LOG("[plugin_mgr][exception] Failed to write plugin config")
+            self.LOG("[pluginmgr][err] Failed to write plugin config")
             return
 
         writer.write("# Editra %s Plugin Config\n#\n" % ed_glob.VERSION)

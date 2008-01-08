@@ -358,7 +358,7 @@ class StyleEditor(wx.Dialog):
         @param evt: event that called this handler
 
         """
-        self.LOG('[style_editor][cancel] Cancel Clicked Closing Window')
+        self.LOG('[style_editor][evt] Cancel Clicked Closing Window')
         evt.Skip()
 
     def OnCheck(self, evt):
@@ -470,7 +470,7 @@ class StyleEditor(wx.Dialog):
         @param evt: event that called this handler
 
         """
-        self.LOG('[style_editor][info] Ok Clicked Closing Window')
+        self.LOG('[style_editor][evt] Ok Clicked Closing Window')
         result = self.DiffStyles()
         if result == wx.ID_NO:
             evt.Skip()
@@ -486,7 +486,7 @@ class StyleEditor(wx.Dialog):
         @param evt: event that called this handler
 
         """
-        self.LOG('[style_editor][export] Saving style changes')
+        self.LOG('[style_editor][evt] Export Clicked')
         self.ExportStyleSheet()
 
     def OpenPreviewFile(self, file_lbl):

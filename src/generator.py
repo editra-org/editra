@@ -95,7 +95,6 @@ class Generator(plugin.Plugin):
         @type menu: wx.Menu
 
         """
-        log = wx.GetApp().GetLog()
         menu_items = list()
         for observer in self.observers:
             try:
@@ -103,7 +102,8 @@ class Generator(plugin.Plugin):
                 if menu_i:
                     menu_items.append((menu_i.GetLabel(), menu_i))
             except Exception, msg:
-                log("[generator][err] %s" % str(msg))
+                util.Log("[generator][err] %s" % str(msg))
+
         menu_items.sort()
         genmenu = ed_menu.EdMenu()
         for item in menu_items:
@@ -126,7 +126,7 @@ class Generator(plugin.Plugin):
         for observer in self.observers:
             if observer.GetId() == e_id:
                 gentext = observer.Generate(txt_ctrl)
-        wx.GetApp().GetLog()("[generator][info] Generation time %f" % \
+        util.Log()("[generator][info] Generation time %f" % \
                                                         (time.time() - start))
         return gentext
 
