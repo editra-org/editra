@@ -198,7 +198,7 @@ class PrefTools(wx.Toolbook):
         @todo: animate the resizing so its smoother
 
         """
-        self.LOG("[prefdlg][toolbook][evt] page changed")
+        self.LOG("[prefdlg][evt] toolbook page changed")
         page = self.GetSelection()
         page = self.GetPage(page)
         page.SetInitialSize()
@@ -399,7 +399,7 @@ class GeneralPanel(PrefPanelBase):
         @param evt: event that called this handler
 
         """
-        self.LOG("[prefdlg][gen][evt] Check box clicked")
+        self.LOG("[prefdlg][evt] General Page: Check box clicked")
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
         if e_id in [ed_glob.ID_APP_SPLASH, ed_glob.ID_PREF_SPOS,
@@ -418,7 +418,7 @@ class GeneralPanel(PrefPanelBase):
         @note: Also handles the Language ComboBox
 
         """
-        self.LOG("[prefldg][gen][evt] Choice event caught")
+        self.LOG("[prefldg][evt] General Page: Choice event caught")
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
         if e_id in [ed_glob.ID_PREF_MODE, ed_glob.ID_PRINT_MODE,
@@ -1191,7 +1191,7 @@ class UpdatePage(wx.Panel):
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
         if e_id == ID_CHECK_UPDATE:
-            self.LOG("[prefdlg_evt] Check Update Clicked")
+            self.LOG("[prefdlg][evt] Update Page: Check Update Clicked")
             e_obj.Disable()
             prog_bar = self.FindWindowById(ed_glob.ID_PREF_UPDATE_BAR)
             # Note this function returns right away but its result is
@@ -1199,7 +1199,7 @@ class UpdatePage(wx.Panel):
             # via a custom event being posted by the control.
             prog_bar.CheckForUpdates()
         elif e_id == ID_DOWNLOAD:
-            self.LOG("[prefdlg_evt] Download Updates Clicked")
+            self.LOG("[prefdlg][evt] Update Page: Download Updates Clicked")
             e_obj.Disable()
             chk_bt = self.FindWindowById(ID_CHECK_UPDATE)
             chk_bt.Disable()
@@ -1214,7 +1214,7 @@ class UpdatePage(wx.Panel):
     def OnUpdateText(self, evt):
         """Handles text update events"""
         e_id = evt.GetId()
-        self.LOG("[prefdlg_evt] Updating version status text")
+        self.LOG("[prefdlg][evt] Update Page: Updating version status text")
         txt = self.FindWindowById(ID_UPDATE_MSG)
         upd = self.FindWindowById(ed_glob.ID_PREF_UPDATE_BAR)
         if None not in [txt, upd]:

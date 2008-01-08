@@ -325,9 +325,9 @@ class StyleMgr(object):
 
         # Get the Style Set
         if custom != wx.EmptyString and self.LoadStyleSheet(custom):
-            self.LOG("[styles][init] Loaded custom style sheet %s" % custom)
+            self.LOG("[ed_style][info] Loaded custom style sheet %s" % custom)
         else:
-            self.LOG("[styles][err] Failed to import styles from %s" % custom)
+            self.LOG("[ed_style][err] Failed to import styles from %s" % custom)
 
     def BlankStyleDictionary(self):
         """Returns a dictionary of unset style items based on the
@@ -516,17 +516,17 @@ class StyleMgr(object):
              style_sheet != self.style_set):
             reader = util.GetFileReader(style_sheet)
             if reader == -1:
-                self.LOG("[styles][err] Failed to open style sheet: %s" % style_sheet)
+                self.LOG("[ed_style][err] Failed to open style sheet: %s" % style_sheet)
                 return False
             ret_val = self.SetStyles(style_sheet, self.ParseStyleData(reader.read()))
             reader.close()
             return ret_val
         elif not StyleMgr.STYLES.has_key(style_sheet):
-            self.LOG("[styles] Style sheet %s does not exists" % style_sheet)
+            self.LOG("[ed_style][warn] Style sheet %s does not exists" % style_sheet)
             self.SetStyles('default', DefaultStyleDictionary())
             return False
         else:
-            self.LOG("[styles][info] Using cached style data")
+            self.LOG("[ed_style][info] Using cached style data")
             return True
 
     def PackStyleSet(self, style_set):
@@ -580,10 +580,10 @@ class StyleMgr(object):
         tmp = style_tree
         for style in tmp:
             if len(style) != 2:
-                self.LOG("[styles][error] There was an error parsing "
+                self.LOG("[ed_style][err] There was an error parsing "
                          "the syntax data from " + self.style_set)
-                self.LOG("[styles][error] You are missing a { or } " +
-                        "in Def: " + style[0].split()[0])
+                self.LOG("[ed_style][err] You are missing a { or } " +
+                         "in Def: " + style[0].split()[0])
                 if strict:
                     raise SyntaxError, \
                           "Missing { or } near Def: %s" % style[0].split()[0]
@@ -608,12 +608,12 @@ class StyleMgr(object):
             for leaf in branch[1]:
                 leaf[0] = leaf[0].strip() # Remove any remaining whitespace
                 if len(leaf) != 2:
-                    self.LOG("[styles][error] Missing a : or ; in the "
+                    self.LOG("[ed_style][err] Missing a : or ; in the "
                              "declaration of %s" % tag)
                     if strict:
                         raise SyntaxError, "Missing : or ; in def: %s" % tag
                 elif leaf[0] not in STY_ATTRIBUTES:
-                    self.LOG(("[styles][warning] Unknown style attribute: %s"
+                    self.LOG(("[ed_style][warn] Unknown style attribute: %s"
                              ", In declaration of %s") % (leaf[0], tag))
                     if strict:
                         raise SyntaxWarning, "Unknown attribute %s" % leaf[0]
@@ -630,7 +630,7 @@ class StyleMgr(object):
         # Validate leaf values and format into stylestring
         for style_def in style_dict:
             if not style_def[0][0].isalpha():
-                self.LOG("[styles][syntax_error] The style def %s is not a "
+                self.LOG("[ed_style][err] The style def %s is not a "
                          "valid name" % style_def[0])
                 if strict:
                     raise SyntaxError, "%s is an invalid name" % style_def[0]
@@ -640,7 +640,7 @@ class StyleMgr(object):
                     values = [ val for val in attrib[1].split(u" ") 
                                if val != wx.EmptyString ]
                     if len(values) > 2:
-                        self.LOG("[styles][warning] Only one extra " +
+                        self.LOG("[ed_style][warn] Only one extra " +
                                  "attribute can be set per style. See " +
                                  style_def + " => " + attrib[0])
                         if strict:
@@ -659,14 +659,14 @@ class StyleMgr(object):
                         if match1.match(values[0]) or match2.match(values[0]):
                             v1ok = True
                         else:
-                            self.LOG("[styles] [syntax_warning] Bad value in %s"
+                            self.LOG("[ed_style][warn] Bad value in %s"
                                      " the value %s is invalid." % \
                                      (attrib[0], values[0]))
 
                     if len(values) == 2 and values[1] in STY_EX_ATTRIBUTES:
                         v2ok = True
                     elif len(values) == 2:
-                        self.LOG("[styles][warning] Unknown extra " + \
+                        self.LOG("[ed_style][warn] Unknown extra " + \
                                  "attribute '" + values[1] + \
                                  "' in attribute: " + attrib[0])
 
@@ -749,7 +749,7 @@ class StyleMgr(object):
             # Check for bad data
             for style in style_dict.values():
                 if not isinstance(style, StyleItem):
-                    self.LOG("[styles][error] Invalid data in style dictionary")
+                    self.LOG("[ed_style][err] Invalid data in style dictionary")
                     return False
 
             self.style_set = name
@@ -757,7 +757,7 @@ class StyleMgr(object):
             StyleMgr.STYLES[name] = self.PackStyleSet(tmp)
             return True
         else:
-            self.LOG("[styles][error] SetStyles expects a " \
+            self.LOG("[ed_style][err] SetStyles expects a " \
                      "dictionary of StyleItems")
             return False
 

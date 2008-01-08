@@ -11,7 +11,7 @@
 # FILE:	ed_script       						                           #
 # AUTHOR: Cody Precord <cprecord@editra.org>                               # 
 # LANGUAGE: Python							                               #
-# SUMMARY:                                                                 #
+# SUMMARY: incomplete not used                                             #
 #
 #--------------------------------------------------------------------------#
 """

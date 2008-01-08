@@ -186,8 +186,8 @@ class PerspectiveManager(object):
         """
         reader = util.GetFileReader(self._base)
         if reader == -1:
-            util.Log("[perspectives][err] Failed to get " +
-                                           "file reader for %s" % self._base)
+            util.Log("[perspective][err] Failed to get " +
+                     "file reader for %s" % self._base)
             return 0
 
         try:
@@ -294,7 +294,7 @@ class PerspectiveManager(object):
         """
         writer = util.GetFileWriter(self._base)
         if writer == -1:
-            util.Log("[perspectives][err] Failed to save %s" % self._base)
+            util.Log("[perspective][err] Failed to save %s" % self._base)
             return False
 
         try:
@@ -303,7 +303,7 @@ class PerspectiveManager(object):
                 writer.write(u"%s=%s\n" % (perspect, self._viewset[perspect]))
             del self._viewset[LAST_KEY]
         except (IOError, OSError):
-            util.Log("[perspectives][err] Write error: %s" % self._base)
+            util.Log("[perspective][err] Write error: %s" % self._base)
             return False
         else:
             return True

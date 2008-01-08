@@ -81,6 +81,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()
+        self._exiting = False
         self._handlers = dict(menu=list(), ui=list())
 
         #---- Sizers to hold subapplets ----#
@@ -245,11 +246,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         #---- End other event actions ----#
 
         #---- Final Setup Calls ----#
-        self._exiting = False
         self.LoadFileHistory(_PGET('FHIST_LVL', fmt='int'))
 
         # Call add on plugins
-        self.LOG("[main][info] Loading MainWindow Plugins ")
+        self.LOG("[ed_main][info] Loading MainWindow Plugins")
         plgmgr = wx.GetApp().GetPluginManager()
         addons = MainWindowAddOn(plgmgr)
         addons.Init(self)
@@ -257,7 +257,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._handlers['ui'].extend(addons.GetEventHandlers(ui_evt=True))
         self._shelf = iface.Shelf(plgmgr)
         self._shelf.Init(self)
-        self.LOG("[main][info] Loading Generator plugins")
+        self.LOG("[ed_main][info] Loading Generator plugins")
         generator.Generator(plgmgr).InstallMenu(menbar.GetMenuByName("tools"))
 
         # Set Perspective
@@ -336,7 +336,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             dlg.SetFilterIndex(_PGET('FFILTER', 'int', 0))
 
             if dlg.ShowModal() != wx.ID_OK:
-                self.LOG('[mainw][info] Canceled Opening File')
+                self.LOG('[ed_main][info] Canceled Opening File')
             else:
                 _PSET('FFILTER', dlg.GetFilterIndex())
                 paths = dlg.GetPaths()
@@ -351,7 +351,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
             dlg.Destroy()
         else:
-            self.LOG("[mainw][info] CMD Open File: %s" % fname)
+            self.LOG("[ed_main][info] CMD Open File: %s" % fname)
             filename = util.GetFileName(fname)
             dirname = util.GetPathName(fname)
             self.nb.OpenPage(dirname, filename)
@@ -402,7 +402,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 if isinstance(fname, basestring) and fname:
                     self.filehistory.AddFileToHistory(fname)
         except UnicodeEncodeError, msg:
-            self.LOG("[main][err] Filehistory load failed: %s" % str(msg))
+            self.LOG("[ed_main][err] Filehistory load failed: %s" % str(msg))
 
     def OnNew(self, evt):
         """Start a New File in a new tab
@@ -647,12 +647,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         _PSET('LAST_SESSION', self.nb.GetFileNames())
         self._exiting = True
         controls = self.nb.GetPageCount()
-        self.LOG("[main_evt][exit] Number of controls: %d" % controls)
+        self.LOG("[ed_main][evt] OnClose: Number of controls: %d" % controls)
         while controls:
             if controls <= 0:
                 self.Close(True) # Force exit since there is a problem
 
-            self.LOG("[main_evt][exit] Requesting Page Close")
+            self.LOG("[ed_main][evt] OnClose: Requesting Page Close")
             result = self.nb.ClosePage()
             if result == wx.ID_CANCEL:
                 self._exiting = False
@@ -678,7 +678,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self.GetToolBar().Destroy()
         _PSET('WSIZE', self.GetSizeTuple())
         _PSET('WPOS', self.GetPositionTuple())
-        self.LOG("[main_evt] [exit] Closing editor at pos=%s size=%s" % \
+        self.LOG("[ed_main][evt] OnClose: Closing editor at pos=%s size=%s" % \
                  (_PGET('WPOS', 'str'), _PGET('WSIZE', 'str')))
         
         # Update profile
@@ -689,7 +689,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         try:
             del self.filehistory
         except AttributeError:
-            self.LOG("[main][exit][err] Trapped AttributeError OnExit")
+            self.LOG("[ed_main][err] OnClose: Trapped AttributeError OnExit")
 
         # Post exit notice to all aui panes
         panes = self._mgr.GetAllPanes()
@@ -699,7 +699,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             wx.PostEvent(pane.window, exit_evt)
 
         # Finally close the window
-        self.LOG("[main_info] Closing Main Frame")
+        self.LOG("[ed_main][evt] OnClose: Closing Main Frame")
         wx.GetApp().UnRegisterWindow(repr(self))
         self.Destroy()
 
@@ -1147,7 +1147,7 @@ class MainWindowAddOn(plugin.Plugin):
             try:
                 observer.PlugIt(window)
             except Exception, msg:
-                util.Log("[main_addon][err] %s" % str(msg))
+                util.Log("[ed_main][err] MainWindowAddOn.Init: %s" % str(msg))
 
     def GetEventHandlers(self, ui_evt=False):
         """Get Event handlers and Id's from all observers
@@ -1163,7 +1163,7 @@ class MainWindowAddOn(plugin.Plugin):
                 else:
                     items = observer.GetMenuHandlers()
             except Exception, msg:
-                util.Log("[main_addon][err] %s" % str(msg))
+                util.Log("[ed_main][err] MainWindoAddOn.GetEventHandlers: %s" % str(msg))
                 continue
             handlers.extend(items)
         return handlers

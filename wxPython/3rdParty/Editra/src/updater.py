@@ -278,7 +278,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
 
         """
         if self._timer.IsRunning():
-            self.LOG("[updateprog][info] Stopped timer on deletion")
+            self.LOG("[updater][info]UpdateProgress: __del__, stopped timer")
             self._timer.Stop()
 
     def Abort(self):
@@ -286,7 +286,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         @postcondition: any download actions in the L{UpdateService} are aborted
 
         """
-        self.LOG("[updateprog][info] Aborting action, stopping progress bar")
+        self.LOG("[updater][info] UpdateProgress: Download aborted")
         UpdateService.Abort(self)
         if self._timer.IsRunning():
             self._timer.Stop()
@@ -320,7 +320,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         @keyword dl_loc: location to download file to
         
         """
-        self.LOG("[updateprog][evt] Attempting to download updates...")
+        self.LOG("[updater][info] UpdateProgress: Download Starting...")
         if dl_loc == wx.EmptyString:
             dl_loc = wx.GetHomeDir() + util.GetPathChar()
             if os.path.exists(dl_loc + u"Desktop"):
@@ -427,7 +427,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
 
         """
         if not self._timer.IsRunning():
-            self.LOG('[updateprog][evt] Starting Clock')
+            self.LOG('[updater][info] UpdateProgress: Starting Timer')
             self.Enable()
             self._timer.Start(msec)
         else:
@@ -439,7 +439,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
 
         """
         if self._timer.IsRunning():
-            self.LOG('[updateprog][evt] Stopping Clock')
+            self.LOG('[updater][info] UpdateProgress: Stopping Clock')
             self._timer.Stop()
             self._mode = 0
         else:
@@ -467,7 +467,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         jid = delayedResult.getJobID()
 
         try:
-            self.LOG("[updateprog][info] Worker thread exited. ID = %d" % jid)
+            self.LOG("[updater][info] UpdateProgress: Worker thread exited. ID = %d" % jid)
             self._checking = self._downloading = False # Work has finished
         except wx.PyDeadObjectError:
             return
@@ -483,8 +483,8 @@ class UpdateProgress(wx.Gauge, UpdateService):
             else:
                 pass
         except (OSError, IOError), msg:
-            self.LOG("[updateprog][err] Error on thread exit")
-            self.LOG("[updateprog][err] %s" % str(msg))
+            self.LOG("[updater][err] UpdateProgress: Error on thread exit")
+            self.LOG("[updater][err] UpdateProgress: error = %s" % str(msg))
 
     def _UpdatesCheckThread(self):
         """Sets internal status value to the return value from calling
@@ -496,11 +496,11 @@ class UpdateProgress(wx.Gauge, UpdateService):
         @return: whether updates are available or not
         
         """
-        self.LOG("[updateprog][evt] Checking for updates")
+        self.LOG("[updater][info] UpdateProgress: Checking for updates")
         self._checking = True
         ret = self.GetCurrentVersionStr()
         self._status = ret
-        self.LOG("[updateprog][evt] Update Check Finished: result = " + ret)
+        self.LOG("[updater][info] UpdateProgress: Check Finished: result = " + ret)
         if ret[0].isdigit() and \
            CalcVersionValue(ret) > CalcVersionValue(ed_glob.VERSION):
             ret = True
@@ -588,7 +588,7 @@ class DownloadDialog(wx.Frame):
 
         """
         if self._timer.IsRunning():
-            self.LOG('[update-dlg][info] Stopping timer on deletion')
+            self.LOG('[updater][info] DownloadDialog: __del__ Timer Stopped')
             self._timer.Stop()
 
     def CalcDownRate(self):
@@ -613,7 +613,7 @@ class DownloadDialog(wx.Frame):
         """
         e_id = evt.GetId()
         if e_id == wx.ID_CANCEL:
-            self.LOG("[downloaddlg][evt] Cancel pressed, aborting download")
+            self.LOG("[updater][evt] DownloadDialog: Cancel pressed")
             self._progress.Abort()
             self._cancel_bt.Disable()
             self.SetStatusText(_("Canceled"), self.SB_INFO)
@@ -625,7 +625,7 @@ class DownloadDialog(wx.Frame):
         @param evt: event that called this handler
 
         """
-        self.LOG("[download-dlg] [evt] Closing Download Dialog")
+        self.LOG("[updater][evt] DownloadDialog: Closing Download Dialog")
         self._progress.Abort()
         # Wait till thread has halted before exiting
         while self._progress.IsDownloading():
@@ -649,14 +649,14 @@ class DownloadDialog(wx.Frame):
                                     _("Rate: %.2f Kb/s") % speed, 
                                     self.SB_DOWNLOADED)
             else:
-                self.LOG("[download-dlg][evt] Download finished")
+                self.LOG("[updater][evt] DownloadDialog:: Download finished")
                 self.SetStatusText(_("Downloaded") + ": " + str(prog[0]) + \
                                     u"/" + str(prog[1]), self.SB_DOWNLOADED)
                 if self._progress.GetDownloadResult():
-                    self.LOG("[download-dlg][info] Download Successful")
+                    self.LOG("[updater][info] DownloadDialog: Download Successful")
                     self.SetStatusText(_("Finished"), self.SB_INFO)
                 else:
-                    self.LOG("[download-dlg][info] Download Failed")
+                    self.LOG("[updater][info] DownloadDialog: Download Failed")
                     self.SetStatusText(_("Failed"), self.SB_INFO)
                 self._progress.Enable()
                 self._progress.SetValue(self._progress.GetProgress()[0])
