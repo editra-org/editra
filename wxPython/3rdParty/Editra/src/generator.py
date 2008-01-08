@@ -100,7 +100,7 @@ class Generator(plugin.Plugin):
             try:
                 menu_i = observer.GetMenuEntry(menu)
                 if menu_i:
-                    menu_items.append((menu_i.GetLabel(), menu_i))
+                    menu_items.append((menu_i.GetItemLabel(), menu_i))
             except Exception, msg:
                 util.Log("[generator][err] %s" % str(msg))
 
