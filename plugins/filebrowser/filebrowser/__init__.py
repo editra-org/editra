@@ -38,7 +38,7 @@ class FileBrowserPanel(plugin.Plugin):
         self._mw = parent
         self._log = wx.GetApp().GetLog()
         if self._mw != None:
-            self._log("[filebrowser] Installing filebrowser plugin")
+            self._log("[filebrowser][info] Installing filebrowser plugin")
             
             #---- Create File Browser ----#
             # TODO hook in saved filter from profile
