@@ -42,44 +42,20 @@ import eclib.platebtn as platebtn
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 # Close Button Bitmap
+from extern.embeddedimage import PyEmbeddedImage
 
-def GetXData():
-    """Returns the raw image data for the close button
-    @return: raw image data
-
-    """
-    return zlib.decompress(
-'x\xda\x011\x02\xce\xfd\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x0e\
-\x00\x00\x00\x0e\x08\x02\x00\x00\x00\x90*\xba\x86\x00\x00\x00\x03sBIT\x08\
-\x08\x08\xdb\xe1O\xe0\x00\x00\x01\xe9IDAT(\x91m\x92\xbdk\x13a\x18\xc0\x9f\
-\xbb\\r\xd7Ks\xb9&\xc6\xd2j\x8f\xc6D\x08\x8a\xa2\xed\xe2G\x87,\x15\xc4\xb5\
-\x8bH\x17-]\x02\x85:\x14\x84\xd0\x82J\x07A\x07\xc1\xff\xc1\xc1I\x04\x07\x11\
-\x05\x15\x1d\x1cJ\x87\xa2\xd5\x96\x92&49\xe9\x99\xf4\xbc7w\xf7\xbe\xef\xf3:\
-\xdcQ:\xf4\x99\x9e\x8f\x1f\xcf\xb7\xf4\xe9\xf1\xc3\xde\xd7\xcfAg/l5\xe08I\
-\x9d\xb2\xd4\xe1\x91\xec\xd5)\xe9\xcd\xad\x1b\x93W.\x9bC\x05.\xfc(&h?\xa6h\
-\xec\xe9\xb5\xbbk\x9b\xbbJ\xd0\xd93\xc6n\xd2\xfd\x16\xddo\xc7\x00c\x00\x80\
-\x9cE\xa6f\x1a\xc6\xe9\x9c\xfasK\x0e[\rP\x12\x9cx\xd2@*=\xbb(\x8d\x8e!g\xc8\
-\x99b\x95rs\x0f\xb8\xaa\xf9\xdd\x03\xa6&\xc5_[>\xecI\x9f\xa9\xa9\x95\x89\xec\
-\xbd\xbab\x95\x14\xab\x94\x9f_V+\x13\x85\xd9E\x1f\xa9\xc2)\x00(\x00 \x04\x13\
-\x10\x90\xf7\xaf\x92\xe3\x15Y\xd3\xf3\xf3\xcb\x00 k:\xfa\xc4y\xfb\xf20\x97\
-\x02\x00\xd0%\xc1\xae\xc36\xb6\x83\xe6\xfd\x93+\xcfdM\x07\x00\xf4I\xa3\xbe\
-\xe0o\xfd\x00\x00\x9e\x1b\x8dQ\xf6\x8f0/\xa0\xae/\x05\xec\xe8\x9a0\xe4\xcc\
-\xf59"w\\\xc1\xb8\x0c\x00"d\x88"u\xf6\xfc\xc8\xea\xf3\xa8.\xfaD\xd6\xf4\xf1\
-\'/\xf4s\x17\x00\x00(\x17!\x8d\xc7B\xa4\xd9\xdbw#ng\xa9\xb6\xb3T\x8b\xe8\xfc\
-\x9d9\x00\x10,\x00\xc4\xc4LF+_\xbaHl\xdb\xfb\xf2!Y,\xb7\x9e>"\x9b\x1b\xb4\
-\xd3\xf6\xd6\xbe\xcb\xb9Bc\xb5.3\xaa\r\x19\x9df[z}}r\xaaz\xad\xff\xc7>\xb0\
-\x9b\xcc\x8d\xcf\xc3\x11#%\x91J\x0e\x9a\x99\xf4\xe0\xc0z\xb3\xa7\xe8V\xd1u\
-\x1c#sB\xcb\xa4\x01@`\x185\x17\xd5e\x88\t\xce\xdc^\x1fr\xc3\x8aY\x9d\xfe\xf5\
-\xf1\x1dY\xff\xe6m\xff>\xf6]\xd2g\xca\xbaU4\xab\xd3\xff\x01\xe3\xf6\xf0\x91\
-\xbc\xe0^J\x00\x00\x00\x00IEND\xaeB`\x82\x7fU\x05\xed' )
-
-def GetXBitmap():
-    """Returns a bitmap version of the close button
-    @return: bitmap of close button
-
-    """
-    img = wx.ImageFromStream(cStringIO.StringIO(GetXData()), wx.BITMAP_TYPE_PNG)
-    return wx.BitmapFromImage(img)
+XButton = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAAAA3NCSVQICAjb4U/gAAAB6UlE"
+    "QVQokW2SvWsTYRjAn7tcctdLc7kmxtJqj8ZECIqi7eJHhywVxLWLSBctXQKFOhSE0IJKB0EH"
+    "wf/BwUkEBxEFFR0cSoei1ZaSJjQ56Zn0vDd3977v8zrcUTr0mZ6PH8+39Onxw97Xz0FnL2w1"
+    "4DhJnbLU4ZHs1Snpza0bk1cum0MFLvwoJmg/pmjs6bW7a5u7StDZM8Zu0v0W3W/HAGMAgJxF"
+    "pmYaxumc+nNLDlsNUBKceNJAKj27KI2OIWfImWKVcnMPuKr53QOmJsVfWz7sSZ+pqZWJ7L26"
+    "YpUUq5SfX1YrE4XZRR+pwikAKAAgBBMQkPevkuMVWdPz88sAIGs6+sR5+/IwlwIA0CXBrsM2"
+    "toPm/ZMrz2RNBwD0SaO+4G/9AACeG41R9o8wL6CuLwXs6Jow5Mz1OSJ3XMG4DAAiZIgidfb8"
+    "yOrzqC76RNb08Scv9HMXAAAoFyGNx0Kk2dt3I25nqbazVIvo/J05ABAsAMTETEYrX7pIbNv7"
+    "8iFZLLeePiKbG7TT9ta+y7lCY7UuM6oNGZ1mW3p9fXKqeq3/xz6wm8yNz8MRIyWRSg6amfTg"
+    "wHqzp+hW0XUcI3NCy6QBQGAYNRfVZYgJztxeH3LDilmd/vXxHVn/5m3/PvZd0mfKulU0q9P/"
+    "AeP28JG84F5KAAAAAElFTkSuQmCC")
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -124,7 +100,7 @@ class CommandBar(wx.Panel):
             bstyle = wx.NO_BORDER
 
         self.close_b = wx.BitmapButton(self, ID_CLOSE_BUTTON, \
-                                       GetXBitmap(), style=bstyle)
+                                       XButton.GetBitmap(), style=bstyle)
         self._sizers['h_sizer'].Add(self.close_b, 0, wx.ALIGN_CENTER_VERTICAL)
         self._sizers['h_sizer'].Add((12, 12))
         v_sizer.Add((2, 2))
