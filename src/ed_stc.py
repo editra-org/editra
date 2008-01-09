@@ -40,6 +40,7 @@ from syntax import syntax
 from autocomp import autocomp
 import util
 import ed_style
+import ed_msg
 
 #-------------------------------------------------------------------------#
 # Globals
@@ -1898,6 +1899,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         result = True
         try:
+            ed_msg.PostMessage(ed_msg.EDMSG_FILE_SAVE, (path, self._code['lang_id']))
             writer = util.GetFileWriter(path, enc=self._finfo['encoding'])
             if self.HasBom():
                 bom = unicode(util.BOM.get(self._finfo['encoding'], u''), 
@@ -1917,6 +1919,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_MODIFIED))
             self.SetFileName(path)
 
+        wx.CallAfter(ed_msg.PostMessage,
+                    ed_msg.EDMSG_FILE_SAVED,
+                    (path, self._code['lang_id']))
         return result
 
     # With utf-16 encoded text need to remove the BOM prior to setting
