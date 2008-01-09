@@ -41,6 +41,7 @@ import ed_search
 import util
 import doctools
 from extern import flatnotebook as FNB
+import ed_msg
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -428,7 +429,10 @@ class EdPages(FNB.FlatNotebook):
 
         """
         evt.Skip()
-        self.LOG("[ed_pages][evt] Page Changed to %d" % evt.GetSelection())
+        pages = (evt.GetOldSelection(), evt.GetSelection())
+        self.LOG("[ed_pages][evt] Control Changing from Page: "
+                  "%d to Page: %d\n" % pages)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGING, (self,) + pages)
 
     def ChangePage(self, pgid):
         """Change the page and focus to the the given page id
@@ -451,13 +455,13 @@ class EdPages(FNB.FlatNotebook):
         @type evt: wx.lib.flatnotebook.EVT_FLATNOTEBOOK_PAGE_CHANGED
 
         """
-        self.ChangePage(evt.GetSelection())
-        self.LOG("[ed_pages][evt] Control Changing from Page: "
-                  "%d to Page: %d\n" % (evt.GetOldSelection(),
-                                        evt.GetSelection()))
+        cpage = evt.GetSelection()
+        self.ChangePage(cpage)
+        self.LOG("[ed_pages][evt] Page Changed to %d" % cpage)
         self.LOG("[ed_pages][info] It has file named: %s" % \
                  self.control.GetFileName())
         evt.Skip()
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, cpage))
 
     def OnPageClosing(self, evt):
         """Checks page status to flag warnings before closing
@@ -470,6 +474,8 @@ class EdPages(FNB.FlatNotebook):
         if len(page.GetFileName()) > 1:
             self.DocMgr.AddRecord([page.GetFileName(), page.GetCurrentPos()])
         evt.Skip()
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSING, 
+                           (self, self.GetSelection()))
 
     def OnPageClosed(self, evt):
         """Handles Paged Closed Event
@@ -477,8 +483,11 @@ class EdPages(FNB.FlatNotebook):
         @type evt: wx.lib.flatnotebook.EVT_FLATNOTEBOOK_PAGE_CLOSED
 
         """
-        self.LOG("[ed_pages][evt] Closed Page: #%d" % self.GetSelection())
+        cpage = self.GetSelection()
+        self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
         evt.Skip()
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED, (self, cpage))
+
     #---- End Event Handlers ----#
 
     def CloseAllPages(self):
