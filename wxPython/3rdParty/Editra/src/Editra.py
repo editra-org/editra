@@ -33,7 +33,7 @@ import gettext
 import wx
 import ed_glob
 import ed_i18n
-from profiler import Profile_Del, Profile_Get, Profile_Set
+import profiler
 import util
 import dev_tool
 import ed_main
@@ -79,7 +79,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._log = dev_tool.DEBUGP
         self._log("[app][info] Editra is Initializing")
 
-        if Profile_Get('REPORTER', 'bool', True):
+        if profiler.Profile_Get('REPORTER', 'bool', True):
             sys.excepthook = dev_tool.ExceptionHook
 
         #---- Bind Events ----#
@@ -91,11 +91,12 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
     def Exit(self, force=False):
         """Exit the program
-        @postcondition: If no toplevel windows are precent program will exit.
+        @postcondition: If no toplevel windows are present program will exit.
         @postcondition: Program may remain open if an open window is locking.
 
         """
         self._pluginmgr.WritePluginConfig()
+        profiler.Profile().Write(profiler.Profile_Get('MYPROFILE'))
         if not self._lock or force:
             wx.App.Exit(self)
 
@@ -283,7 +284,8 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         @keyword fname: Open a file in the new window
 
         """
-        frame = ed_main.MainWindow(None, wx.ID_ANY, Profile_Get('WSIZE'), 
+        frame = ed_main.MainWindow(None, wx.ID_ANY,
+                                   profiler.Profile_Get('WSIZE'), 
                                    ed_glob.PROG_NAME)
         if caller:
             pos = caller.GetPosition()
@@ -344,6 +346,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             if not len(self._windows):
                 self._log("[app][info] No more open windows shutting down")
                 self.Exit()
+                return
 
             if name == repr(cur_top):
                 found = False
@@ -389,7 +392,7 @@ def InitConfig():
 
     """
     ed_glob.CONFIG['PROFILE_DIR'] = util.ResolvConfigDir("profiles")
-    import profiler
+#     import profiler
     profile_updated = False
     if util.HasConfigDir():
         if profiler.ProfileIsCurrent():
@@ -404,13 +407,13 @@ def InitConfig():
 
             ## Force some default values to be set on an upgrade
             if wx.Platform == '__WXGTK__':
-                Profile_Set('ICONS', 'Default')
+                profiler.Profile_Set('ICONS', 'Default')
             else:
-                Profile_Set('ICONS', 'Tango')
+                profiler.Profile_Set('ICONS', 'Tango')
 
             # Set default eol for windows TEMP for after 0.2.15 only
             if wx.Platform == '__WXMSW__':
-                Profile_Set('EOL', 'Windows (\\r\\n)')
+                profiler.Profile_Set('EOL', 'Windows (\\r\\n)')
 
             # Write out updated profile
             profiler.Profile().Write(pstr)
@@ -428,10 +431,10 @@ def InitConfig():
 
         # Set default eol for windows
         if wx.Platform == '__WXMSW__':
-            Profile_Set('EOL', 'Windows (\\r\\n)')
+            profiler.Profile_Set('EOL', 'Windows (\\r\\n)')
 
     # Set debug mode
-    if 'DEBUG' in Profile_Get('MODE'):
+    if 'DEBUG' in profiler.Profile_Get('MODE'):
         ed_glob.DEBUG = True
 
     # Resolve resource locations
@@ -499,10 +502,10 @@ def Main():
 
     # 1. Create Application
     dev_tool.DEBUGP("[main][info] Initializing Application...")
-    editra_app = Editra(Profile_Get('MODE') == u"GUI_DEBUG")
+    editra_app = Editra(profiler.Profile_Get('MODE') == u"GUI_DEBUG")
 
     # 2. Initialize the Language Settings
-    the_locale = wx.Locale(ed_i18n.GetLangId(Profile_Get('LANG')))
+    the_locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
     if the_locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
         the_locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
         the_locale.AddCatalog(ed_glob.PROG_NAME)
@@ -516,7 +519,7 @@ def Main():
 
     if profile_updated:
         # Make sure window iniliazes to default position
-        Profile_Del('WPOS')
+        profiler.Profile_Del('WPOS')
         wx.MessageBox(_("Your profile has been updated to the latest "
                         "version") + u"\n" + \
                       _("Please check the preferences dialog to reset "
@@ -524,21 +527,21 @@ def Main():
                       _("Profile Updated"))
 
     # Splash a warning if version is not a final version
-    if Profile_Get('APPSPLASH') and int(ed_glob.VERSION[0]) < 1:
+    if profiler.Profile_Get('APPSPLASH') and int(ed_glob.VERSION[0]) < 1:
         import edimage
         splash_img = edimage.splashwarn.GetBitmap()
         splash = wx.SplashScreen(splash_img, wx.SPLASH_CENTRE_ON_PARENT | \
                                  wx.SPLASH_NO_TIMEOUT, 0, None, wx.ID_ANY)
         splash.Show()
 
-    frame = ed_main.MainWindow(None, wx.ID_ANY, Profile_Get('WSIZE'), 
+    frame = ed_main.MainWindow(None, wx.ID_ANY, profiler.Profile_Get('WSIZE'), 
                                ed_glob.PROG_NAME)
     editra_app.RegisterWindow(repr(frame), frame, True)
     editra_app.SetTopWindow(frame)
 
     # Load Session Data
     # But not if there are command line args for files to open
-    if Profile_Get('SAVE_SESSION', 'bool', False) and not len(args):
+    if profiler.Profile_Get('SAVE_SESSION', 'bool', False) and not len(args):
         frame.GetNotebook().LoadSessionFiles()
 
     frame.Show(True)
