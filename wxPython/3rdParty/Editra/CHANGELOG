@@ -13,7 +13,11 @@ DATE xx/xx/200x
 9th Alpha Release
 
 NEWS:
-
+This release includes a new verision of the FileBrowser plugin that has been
+enhanced to be able handle most file system operations. There were also a number
+of UI and usabilitiy improvements made to the editor as well as support for some
+new languages. Besides the new features and improvements there are a number of
+bugs that have been fixed to further stabilize the editor.
 
 NEW: [features/improvements]
 +Number of major enhancements to the FileBrowser plugin
@@ -27,7 +31,9 @@ NEW: [features/improvements]
  Enter/Shift+Enter ones.
 +General UI improvements
 +Minor python autocompletion improvements
-+Add German Translation
++Add German Translation (contributed by DR0ID)
++Updated Spanish and Japanese translations
++New logging system
 
 BUG FIXES:
 +Fixed bug where potential infinite loop could happen when doing a replace all
@@ -40,6 +46,8 @@ windows are open.
 default tag.
 +Style editor slow input in preview window
 +Properly save/restore indentation guides preferences between sessions
++Python autocompletion not working with python2.4
++Save preferences even when last window closed is not a main window
 
 OTHER:
 -Removed support for Metal style windows on OS X
