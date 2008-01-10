@@ -760,7 +760,7 @@ msgstr "Lexer"
 
 #: ../../src/ed_menu.py:319
 msgid "Line Edit"
-msgstr "Zeilenbeareitung"
+msgstr "ZeilebearBeitung"
 
 #: ../../src/ed_stc.py:657
 #, python-format
