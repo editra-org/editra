@@ -33,6 +33,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import re
 import codecs
 import mimetypes
 import urllib2
@@ -237,6 +238,10 @@ BOM = { 'utf-8' : codecs.BOM_UTF8,
 # When no BOM is present this determines decode test order
 ENC = [ 'utf-8', 'utf-7', 'latin-1', 'utf-16-be', 'utf-16-le', 'ascii']
   #      'utf-32-be', 'utf-32-le', 
+
+# Regex for extracting magic comments from source files
+# i.e *-* coding: utf-8 *-*
+RE_MAGIC_COMMENT = re.compile("coding[:=]\s*([-\w.]+)")
 
 def DecodeString(str2decode):
     """Decode a given string if possible and return that string
@@ -716,8 +721,21 @@ def GetProxyOpener(proxy_set):
     @param proxy_set: proxy settings to use
 
     """
-    proxy = urllib2.ProxyHandler({"http" :
-    "%(uname)s:%(passwd)s@%(url)s:%(port)s" % proxy_set})
+    Log("[util][info] Making proxy opener with %s" % str(proxy_set))
+    auth_str = "%(uname)s:%(passwd)s@%(url)s"
+    url = proxy_set['url']
+    port = proxy_set.get('port', '')
+    if url.startswith('http://'):
+        auth_str = "http://" + auth_str
+        proxy_set['url'] = url.replace('http://', '')
+    else:
+        pass
+
+    if len(port):
+        auth_str = auth_str + ":%(port)s"
+
+    Log("[util][info] Formatted proxy request: %s" % (auth_str % proxy_set))
+    proxy = urllib2.ProxyHandler({"http" : auth_str % proxy_set})
     opener = urllib2.build_opener(proxy, urllib2.HTTPHandler)
     return opener
 
