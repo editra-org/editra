@@ -1051,7 +1051,8 @@ class NetConfigPage(wx.Panel):
         url_lbl = wx.StaticText(self, label=_("Proxy URL") + u":")
         url_txt = wx.TextCtrl(self, ID_URL, proxy_val.get('url', ''))
         port_sep = wx.StaticText(self, label=":")
-        port_txt = wx.TextCtrl(self, ID_PORT, proxy_val.get('port', '80'))
+        port_txt = wx.TextCtrl(self, ID_PORT, proxy_val.get('port', ''))
+        port_txt.SetToolTipString(_("Port Number"))
         url_sz.AddMany([(url_txt, 1, wx.EXPAND), ((2, 2)),
                         (port_sep, 0, wx.ALIGN_CENTER_VERTICAL),
                         ((2, 2)), (port_txt, 0, wx.ALIGN_CENTER_VERTICAL)])
