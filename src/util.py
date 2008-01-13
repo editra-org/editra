@@ -209,7 +209,10 @@ class DropTargetFT(wx.PyDropTarget):
             self.window.ReleaseMouse()
 
         if self._tmp is not None:
-            self._tmp.EndDrag()
+            try:
+                self._tmp.EndDrag()
+            except wx.PyAssertionError, msg:
+                Log("[droptargetft][err] %s" % str(msg))
 
 #---- End FileDropTarget ----#
 
