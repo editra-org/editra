@@ -175,7 +175,6 @@ class PlateButton(wx.PyControl):
         self._bmp = dict(enable=bmp)
         if bmp is not None:
             img = bmp.ConvertToImage()
-            wx.Image
             img = img.ConvertToGreyscale(.795, .073, .026) #(.634, .224, .143)
             self._bmp['disable'] = img.ConvertToBitmap()
         else:
@@ -345,7 +344,7 @@ class PlateButton(wx.PyControl):
         if self._state['cur'] != PLATE_PRESSED:
             txt_x = self.__DrawBitmap(gc)
             gc.DrawText(self.GetLabel(), txt_x + 2, txt_y)
-            self.__DrawDropArrow(gc, txt_x + tw + 6, (height / 2) - 2) 
+            self.__DrawDropArrow(gc, txt_x + tw + 6, (height / 2) - 2)
 
     def __InitColors(self):
         """Initialize the default colors"""
