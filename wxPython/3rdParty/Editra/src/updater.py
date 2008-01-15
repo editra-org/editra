@@ -40,6 +40,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import os
+import stat
 import re
 import urllib2
 import wx
@@ -48,6 +49,7 @@ import ed_glob
 import ed_event
 from profiler import CalcVersionValue, Profile_Get
 import util
+
 #--------------------------------------------------------------------------#
 # Globals
 DL_REQUEST = ed_glob.HOME_PAGE + "/?page=download&dist=%s"
@@ -66,6 +68,29 @@ class UpdateService(object):
         object.__init__(self)
         self._abort = False
         self._progress = (0, 100)
+
+    def __GetUrlHandle(self, url):
+        """Gets a file handle for the given url. The caller is responsible for
+        closing the handle.
+        @requires: network conection
+        @param url: url to get page from
+        @return: all text from the given url
+
+        """
+        h_file = None
+        try:
+            if Profile_Get('USE_PROXY', default=False):
+                proxy_set = Profile_Get('PROXY_SETTINGS',
+                                        default=dict(uname='', url='',
+                                                     port='80', passwd=''))
+
+                proxy = util.GetProxyOpener(proxy_set)
+                h_file = proxy.open(url)
+            else:
+                h_file = urllib2.urlopen(url)
+
+        finally:
+            return h_file
 
     def Abort(self):
         """Cancel any pending or in progress actions.
@@ -98,6 +123,7 @@ class UpdateService(object):
             url = url[0]
         else:
             url = wx.EmptyString
+
         return url.strip()
 
     def GetCurrFileName(self):
@@ -122,6 +148,8 @@ class UpdateService(object):
         if len(found):
             return found[0] # Should be the first/only match found
         else:
+            util.Log("[updater][warn] UpdateService.GetCurrentVersionStr "
+                     "Failed to get version info.")
             return _("Unable to retrieve version info")
 
     def GetFileSize(self, url):
@@ -132,15 +160,7 @@ class UpdateService(object):
         """
         size = 0
         try:
-            if Profile_Get('USE_PROXY', default=False):
-                proxy_set = Profile_Get('PROXY_SETTINGS',
-                                        default=dict(uname='', url='',
-                                                     port='80', passwd=''))
-                proxy = util.GetProxyOpener(proxy_set)
-                dl_file = proxy.open(url)
-            else:
-                dl_file = urllib2.urlopen(url)
-
+            dl_file = self.__GetUrlHandle(url)
             info = dl_file.info()
             size = int(info['Content-Length'])
             dl_file.close()
@@ -156,16 +176,7 @@ class UpdateService(object):
         """
         text = u''
         try:
-            if Profile_Get('USE_PROXY', default=False):
-                proxy_set = Profile_Get('PROXY_SETTINGS',
-                                        default=dict(uname='', url='',
-                                                     port='80', passwd=''))
-
-                proxy = util.GetProxyOpener(proxy_set)
-                h_file = proxy.open(dl_path)
-            else:
-                h_file = urllib2.urlopen(url)
-
+            h_file = self.__GetUrlHandle(url)
             text = h_file.read()
             h_file.close()
         finally:
@@ -200,26 +211,22 @@ class UpdateService(object):
             blk_sz = 4096
             read = 0
             try:
-                if Profile_Get('USE_PROXY', default=False):
-                    proxy_set = Profile_Get('PROXY_SETTINGS',
-                                            default=dict(uname='', url='',
-                                                         port='80', passwd=''))
-                    proxy = util.GetProxyOpener(proxy_set)
-                    webfile = proxy.open(dl_path)
-                else:
-                    webfile = urllib2.urlopen(dl_path)
-
+                # Download the file in chunks so it can be aborted if need be
+                # inbetween reads.
+                webfile = self.__GetUrlHandle(dl_path)
                 fsize = int(webfile.info()['Content-Length'])
                 locfile = open(dl_to, 'wb')
                 while read < fsize and not self._abort:
                     locfile.write(webfile.read(blk_sz))
                     read += blk_sz
                     self.UpdaterHook(int(read/blk_sz), blk_sz, fsize)
+
                 locfile.close()
                 webfile.close()
             finally:
                 self._abort = False
-                if os.path.exists(dl_to) and os.stat(dl_to)[6] == fsize:
+                if os.path.exists(dl_to) and \
+                   os.stat(dl_to)[stat.ST_SIZE] == fsize:
                     return True
                 else:
                     return False
