@@ -38,8 +38,9 @@ import codecs
 import mimetypes
 import urllib2
 import wx
-import ed_event
 import ed_glob
+import ed_event
+import ed_crypt
 from syntax.syntax import GetFileExtensions
 import dev_tool
 
@@ -725,20 +726,23 @@ def GetProxyOpener(proxy_set):
 
     """
     Log("[util][info] Making proxy opener with %s" % str(proxy_set))
+    proxy_info = dict(proxy_set)
     auth_str = "%(uname)s:%(passwd)s@%(url)s"
-    url = proxy_set['url']
-    port = proxy_set.get('port', '')
+    url = proxy_info['url']
     if url.startswith('http://'):
         auth_str = "http://" + auth_str
-        proxy_set['url'] = url.replace('http://', '')
+        proxy_info['url'] = url.replace('http://', '')
     else:
         pass
 
-    if len(port):
+    if len(proxy_info.get('port', '')):
         auth_str = auth_str + ":%(port)s"
 
-    Log("[util][info] Formatted proxy request: %s" % (auth_str % proxy_set))
-    proxy = urllib2.ProxyHandler({"http" : auth_str % proxy_set})
+    proxy_info['passwd'] = ed_crypt.Decrypt(proxy_info['passwd'],
+                                            proxy_info['pid'])
+    Log("[util][info] Formatted proxy request: %s" % \
+        (auth_str.replace('%(passwd)s', '****') % proxy_info))
+    proxy = urllib2.ProxyHandler({"http" : auth_str % proxy_info})
     opener = urllib2.build_opener(proxy, urllib2.HTTPHandler)
     return opener
 
