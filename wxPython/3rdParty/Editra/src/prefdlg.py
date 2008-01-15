@@ -27,12 +27,14 @@ __revision__ = "$Revision$"
 # Dependancies
 import wx
 import wx.lib.mixins.listctrl as listmix
+import os
 import sys
 import ed_glob
 import profiler
 from profiler import Profile_Get, Profile_Set
 import ed_i18n
 import ed_event
+import ed_crypt
 import updater
 import util
 import syntax.syntax as syntax
@@ -1069,7 +1071,8 @@ class NetConfigPage(wx.Panel):
         pass_sz = wx.BoxSizer(wx.HORIZONTAL)
         pass_lbl = wx.StaticText(self, label=_("Password") + u":")
         pass_txt = wx.TextCtrl(self, ID_PASSWORD,
-                               proxy_val.get('passwd', ''),
+                               ed_crypt.Decrypt(proxy_val.get('passwd', ''),
+                                                proxy_val.get('pid', '')),
                                style=wx.TE_PASSWORD)
         pass_sz.Add(pass_txt, 1, wx.EXPAND)
         flexg.Add(pass_lbl, 0, wx.ALIGN_CENTER_VERTICAL)
@@ -1097,13 +1100,24 @@ class NetConfigPage(wx.Panel):
 
         """
         if evt.GetId() == wx.ID_APPLY:
-            key_map = { ID_USERNAME : 'uname', ID_URL : 'url', 
+            key_map = { ID_USERNAME : 'uname', ID_URL : 'url',
                         ID_PORT : 'port', ID_PASSWORD : 'passwd' }
             proxy_dict = dict(uname='', passwd='', url='', port='')
             for val in (ID_URL, ID_PORT, ID_USERNAME, ID_PASSWORD):
                 win = self.FindWindowById(val)
                 if win is not None:
-                    proxy_dict[key_map[val]] = win.GetValue()
+                    winval = win.GetValue()
+                    if val == ID_PASSWORD:
+                        # This is not the most secure method of saving a
+                        # sensitive data but it is definitely better than plain
+                        # text. ALso as to be able to obtain this info from the
+                        # user profile the intruder would already have had to
+                        # compromise the users system account making anymore
+                        # such security rather moot by that point.
+                        pid = os.urandom(8)
+                        winval = ed_crypt.Encrypt(winval, pid)
+                        proxy_dict['pid'] = pid
+                    proxy_dict[key_map[val]] = winval
 
             Profile_Set('PROXY_SETTINGS', proxy_dict)
         else:
