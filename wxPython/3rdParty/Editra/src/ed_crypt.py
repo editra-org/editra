@@ -71,12 +71,32 @@ def _Decode(text):
 # Public Functions
 
 def Encrypt(passwd, salt):
-    return base64.b64encode(zlib.compress(str(long(_Encode(passwd))*\
-                            long(_Encode(salt).replace('8','9'))),9))
+    """Encrypt the given password string using the supplied salt as the 
+    cryptographic key. If either the passwd or salt strings are empty the 
+    return value will be the same as the passwd parameter.
+    @param passwd: String to encrypt
+    @param salt: key to encrypt string with
+
+    """
+    if not len(passwd.strip()) or not len(salt.strip()):
+        return passwd
+    else:
+        return base64.b64encode(zlib.compress(str(long(_Encode(passwd))*\
+                                long(_Encode(salt).replace('8','9'))),9))
 
 def Decrypt(passwd, salt):
-    return _Decode(str(long(zlib.decompress(base64.b64decode(passwd)))/\
-                   long(str.replace(_Encode(salt),'8','9'))))
+    """Decrypt the given password string using the supplied salt as a key
+    If either the passwd or salt strings are empty the return value will be
+    the same as the passwd parameter.
+    @param passwd: a non empty string
+    @param salt: a non empty string
+
+    """
+    if not len(passwd.strip()) or not len(salt.strip()):
+        return passwd
+    else:
+        return _Decode(str(long(zlib.decompress(base64.b64decode(passwd)))/\
+                       long(str.replace(_Encode(salt),'8','9'))))
 
 #-----------------------------------------------------------------------------#
 # Test
@@ -88,3 +108,9 @@ if __name__ == '__main__':
     es = Encrypt(PASSWD, salt)
     print "ENCRYPTED STR: ", es
     print "DECRYPTED STR: ", Decrypt(es, salt)
+
+    print "Empty String Test"
+    salt2 = os.urandom(8)
+    es = Encrypt('', salt2)
+    print "Encrypted String", es
+    print "Decrypted String", Decrypt(es, salt)
