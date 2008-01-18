@@ -9,13 +9,13 @@ Change Log:
 Changes since last release:
 
 VERSION 0.2.xx
-DATE xx/xx/200x
+DATE xx/xx/2008
 9th Alpha Release
 
 NEWS:
 This release includes a new verision of the FileBrowser plugin that has been
 enhanced to be able handle most file system operations. There were also a number
-of UI and usabilitiy improvements made to the editor as well as support for some
+of UI and usabilitiy improvements made to the editor, as well as support for some
 new programming languages. Besides the new features and improvements there are 
 a number of bugs that have been fixed to further stabilize the editor.
 
@@ -29,12 +29,15 @@ NEW: [features/improvements]
 +F3/Shift+F3 can be used as shortcuts for Find Next/Find Previous in the quick
  find bar. These bindings are in addition to the already existing 
  Enter/Shift+Enter ones.
-+General UI improvements
++Number of General UI improvements
 +Minor python autocompletion improvements
 +Add German Translation (contributed by DR0ID)
 +Updated Spanish and Japanese translations
 +New logging system
 +Proxy support for downloading plugins/updates
++LogViewer for viewing Editra's log output in the Shelf
++Number of new backend libraries to make developing plugins and other
+enhancements easier.
 
 BUG FIXES:
 +Fixed bug where potential infinite loop could happen when doing a replace all
