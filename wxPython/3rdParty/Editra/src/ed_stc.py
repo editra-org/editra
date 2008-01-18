@@ -418,6 +418,14 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         return self._config['autoindent']
 
+    def GetCommentChars(self):
+        """Return the list of characters used to comment a string in the
+        current language.
+        @return: list of strings
+
+        """
+        return self._code['comment']
+
     def GetLangId(self):
         """Returns the language identifer of this control
         @return: language identifier of document
