@@ -114,8 +114,8 @@ class LogMsg:
                                   str(ltime[4]).zfill(2),
                                   str(ltime[5]).zfill(2))
         statement = unicode(self._msg['mstr'])
-        s_lst = [u"%s[%s][%s] %s" % (tstamp, self._msg['msrc'],
-                                 self._msg['lvl'], msg) 
+        s_lst = [u"%s[%s][%s]%s" % (tstamp, self._msg['msrc'],
+                                    self._msg['lvl'], msg) 
                  for msg in statement.split(u"\n")
                  if len(msg.strip())]
         out = os.linesep.join(s_lst)
@@ -180,7 +180,7 @@ def EnvironmentInfo():
         info.append("Mac OSX: %s" % platform.mac_ver()[0])
     info.append("Python Version: %s" % sys.version)
     info.append("wxPython Version: %s" % wx.version())
-    info.append("wxPython Info: %s" % "\n\t\t".join(wx.PlatformInfo))
+    info.append("wxPython Info: (%s)" % ", ".join(wx.PlatformInfo))
     info.append("Python Encoding: Default=%s  File=%s" % \
                 (sys.getdefaultencoding(), sys.getfilesystemencoding()))
     info.append("wxPython Encoding: %s" % wx.GetDefaultPyEncoding())
@@ -192,13 +192,14 @@ def EnvironmentInfo():
     info.append("#---- Runtime Variables ----#")
     from profiler import Profile
     ftypes = list()
-    for key, val in Profile().iteritems():
+    for key in sorted(Profile().keys()):
         # Exclude "private" information
-        if key.startswith('FILE'):
+        val = Profile().Get(key)
+        if key.startswith('FILE') or 'proxy' in key.lower():
             continue
         elif key == 'LAST_SESSION' or key == 'FHIST':
             for fname in val:
-                if u'.' in fname:
+                if '.' in fname:
                     ext = fname.split('.')[-1]
                     if ext not in ftypes:
                         ftypes.append(ext)
