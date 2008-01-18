@@ -1,6 +1,7 @@
 ../../plugins/pyshell/pyshell/__init__.py
 ../../plugins/filebrowser/filebrowser/__init__.py
 ../../plugins/filebrowser/filebrowser/browser.py
+../../plugins/filebrowser/filebrowser/FileInfo.py
 ../../src/ed_art.py
 ../../src/dev_tool.py
 ../../src/doctools.py
@@ -8,6 +9,7 @@
 ../../src/ed_event.py
 ../../src/ed_glob.py
 ../../src/ed_i18n.py
+../../src/ed_log.py
 ../../src/ed_main.py
 ../../src/ed_menu.py
 ../../src/ed_msg.py

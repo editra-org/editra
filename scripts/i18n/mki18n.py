@@ -12,7 +12,7 @@
 #   Update history:
 #   - File updated: Thursday, June 12, 2007 by Cody Precord
 #   - File created: Saturday, June 7, 2003. by Pierre Rouleau
-#   - 07/12/07: Make it work with current wx code and clean up code
+#   - 07/12/07: Make it work with current wx code and clean up code CJP
 #   - 10/06/03 rcs : RCS Revision 1.1  2003/06/10 10:06:12  PRouleau
 #   - 10/06/03 rcs : RCS Initial revision
 #   - 23/08/03 rcs : RCS Revision 1.2  2003/06/10 10:54:27  PRouleau
