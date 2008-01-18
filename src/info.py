@@ -12,7 +12,7 @@ __revision__ = "$Revision$"
 
 
 AUTHOR = u'Cody Precord'
-VERSION = u'0.2.29'
+VERSION = u'0.2.50'
 PROG_NAME = u'Editra'
 HOME_PAGE = u"http://editra.org"
 CONTACT_MAIL = u"staff@editra.org"
