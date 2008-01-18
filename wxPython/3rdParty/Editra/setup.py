@@ -44,7 +44,7 @@ __platform__ = os.sys.platform
 APP = ['src/Editra.py']
 AUTHOR = "Cody Precord"
 AUTHOR_EMAIL = "staff@editra.org"
-YEAR = 2007
+YEAR = 2008
 
 CLASSIFIERS = [
             'Development Status :: 3 - Alpha',
