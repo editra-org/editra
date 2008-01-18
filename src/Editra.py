@@ -4,7 +4,7 @@
 # Purpose: Implements Editras App object and the Main method                  #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -392,7 +392,6 @@ def InitConfig():
 
     """
     ed_glob.CONFIG['PROFILE_DIR'] = util.ResolvConfigDir("profiles")
-#     import profiler
     profile_updated = False
     if util.HasConfigDir():
         if profiler.ProfileIsCurrent():
@@ -405,15 +404,19 @@ def InitConfig():
             profiler.Profile().Load(pstr)
             profiler.Profile().Update()
 
+            #---- Temporary Profile Adaptions ----#
             ## Force some default values to be set on an upgrade
             if wx.Platform == '__WXGTK__':
                 profiler.Profile_Set('ICONS', 'Default')
             else:
                 profiler.Profile_Set('ICONS', 'Tango')
 
-            # Set default eol for windows TEMP for after 0.2.15 only
-            if wx.Platform == '__WXMSW__':
-                profiler.Profile_Set('EOL', 'Windows (\\r\\n)')
+            # GUI_DEBUG mode removed in 0.2.5
+            mode = profiler.Profile_Get('MODE')
+            if mode == 'GUI_DEBUG':
+                profiler.Profile_Set('MODE', 'DEBUG')
+
+            #---- End Temporary Profile Adaptions ----#
 
             # Write out updated profile
             profiler.Profile().Write(pstr)
@@ -502,7 +505,7 @@ def Main():
 
     # 1. Create Application
     dev_tool.DEBUGP("[main][info] Initializing Application...")
-    editra_app = Editra(profiler.Profile_Get('MODE') == u"GUI_DEBUG")
+    editra_app = Editra(False)
 
     # 2. Initialize the Language Settings
     the_locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
