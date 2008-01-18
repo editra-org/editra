@@ -105,8 +105,7 @@ class EditraArt(wx.ArtProvider):
 
         # If using default theme let the system provide the art when possible
         # this is mostly for GTK where there is a native art provider that can
-        # provide theme icons. Hopefully the one I wrote for wxMac will get
-        # evaluated and added in the near future as well.
+        # provide theme icons.
         if Profile_Get('ICONS', 'str').lower() == u'default' and \
            DEFAULT.has_key(art_id):
             if client == wx.ART_MENU:
@@ -119,7 +118,8 @@ class EditraArt(wx.ArtProvider):
         bmp = self._library.GetBitmap(art_id, client)
         if not bmp.IsNull() and bmp.IsOk():
             # Dont scale toolbar icons on wxMac as the toolbar handles it
-            # internally and produces much nicer results.
+            # internally and produces much nicer results. Only allow images
+            # to be scaled down as scaling up degrades quality.
             if client == wx.ART_TOOLBAR and not wx.Platform == '__WXMAC__':
                 if size == wx.DefaultSize:
                     size = Profile_Get('ICON_SZ', 'size_tuple')
