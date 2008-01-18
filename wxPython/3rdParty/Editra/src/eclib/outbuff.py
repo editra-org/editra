@@ -3,7 +3,7 @@
 # Purpose: Gui and helper classes for running processes and displaying output #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows Licence                                                  #
 ###############################################################################
 
 """
@@ -74,8 +74,11 @@ class OutputBufferEvent(wx.PyCommandEvent):
 #--------------------------------------------------------------------------#
 
 class OutputBuffer(wx.stc.StyledTextCtrl):
-    """Output buffer to display results. It """
+    """Output buffer to display results. The ouputbuffer is a readonly
+    buffer meant for displaying results from running processes or batch
+    jobs
 
+    """
     def __init__(self, parent, id=wx.ID_ANY, 
                  pos=wx.DefaultPosition,
                  size=wx.DefaultSize,
@@ -211,6 +214,15 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
             self.DoUpdatesEmpty()
         else:
             pass
+
+    def SetText(self, text):
+        """Set the text that is shown in the buffer
+        @param text: text string to set as buffers current value
+
+        """
+        self.SetReadOnly(False)
+        wx.stc.StyledTextCtrl.SetText(self, text)
+        self.SetReadOnly(True)
 
     def Start(self, interval):
         """Start the window's timer to check for updates
@@ -415,10 +427,15 @@ if __name__ == '__main__':
     HSIZER = wx.BoxSizer(wx.HORIZONTAL)
     ID_START = wx.NewId()
     ID_STOP = wx.NewId()
-    HSIZER.Add(wx.ComboBox(FRAME, choices=[str(x) for x in range(20)]), 0, wx.ALIGN_LEFT)
+    HSIZER.Add(wx.StaticText(FRAME, label="Cmd: "), 0,
+               wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+    COMBO = wx.ComboBox(FRAME, value='ping localhost',
+                        choices=[ "ping %s" % x for x in ['localhost', 'editra.org', 'google.com']])
+    HSIZER.Add(COMBO, 1, wx.EXPAND)
+    HSIZER.Add((20, 20),)
     HSIZER.Add(wx.Button(FRAME, ID_STOP, "Stop"), 0, wx.ALIGN_RIGHT, 5)
     HSIZER.Add(wx.Button(FRAME, ID_START, "Start"), 0, wx.ALIGN_RIGHT, 5)
-    FSIZER.Add(HSIZER, 0, wx.ALIGN_RIGHT, 5)
+    FSIZER.Add(HSIZER, 0, wx.EXPAND, 5)
     FRAME.SetSizer(FSIZER)
     PROCESS = None
 
@@ -429,10 +446,11 @@ if __name__ == '__main__':
 
     def OnStart(evt):
         global PROCESS
-        PROCESS = ProcessThread(BUFFER, 'ping localhost')
+        PROCESS = ProcessThread(BUFFER, '%s' % COMBO.GetValue())
         PROCESS.start()
 
     FRAME.Bind(wx.EVT_BUTTON, OnAbort, id=ID_STOP)
     FRAME.Bind(wx.EVT_BUTTON, OnStart, id=ID_START)
+    FRAME.SetInitialSize()
     FRAME.Show()
     APP.MainLoop()
