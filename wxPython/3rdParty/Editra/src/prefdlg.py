@@ -332,7 +332,7 @@ class GeneralPanel(PrefPanelBase):
         start_lbl = wx.StaticText(self, label=_("Startup Settings") + u": ")
         mode_lbl = wx.StaticText(self, label=_("Editor Mode") + u": ")
         mode_ch = ExChoice(self, ed_glob.ID_PREF_MODE,
-                           choices=['CODE', 'DEBUG', 'GUI_DEBUG'],
+                           choices=['CODE', 'DEBUG'],
                            default=Profile_Get('MODE'))
         msizer = wx.BoxSizer(wx.HORIZONTAL)
         msizer.AddMany([(mode_lbl, 0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
