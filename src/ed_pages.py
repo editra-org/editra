@@ -595,7 +595,7 @@ class EdPages(FNB.FlatNotebook):
         except wx.PyDeadObjectError:
             pass
         
-    def UpdateTextControls(self):
+    def UpdateTextControls(self, meth=None, args=list()):
         """Updates all text controls to use any new settings that have
         been changed since initialization.
         @postcondition: all stc controls in the notebook are reconfigured
@@ -603,8 +603,11 @@ class EdPages(FNB.FlatNotebook):
 
         """
         for control in self.GetTextControls():
-            control.UpdateAllStyles()
-            control.Configure()
+            if meth is not None:
+                getattr(control, meth)(*args)
+            else:
+                control.UpdateAllStyles()
+                control.Configure()
 
 #---- End Function Definitions ----#
 
