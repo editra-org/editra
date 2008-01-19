@@ -330,8 +330,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             e_id = evt
 
         if e_id == ID_OPEN:
-            dlg = wx.FileDialog(self, _("Choose a File"), '', "", 
-                                ''.join(syntax.GenFileFilters()), 
+            fdir = self.GetNotebook().GetCurrentCtrl().GetFileName()
+            if len(fdir):
+                fdir = os.path.dirname(fdir)
+
+            dlg = wx.FileDialog(self, _("Choose a File"), fdir, "",
+                                ''.join(syntax.GenFileFilters()),
                                 wx.OPEN | wx.MULTIPLE)
             dlg.SetFilterIndex(_PGET('FFILTER', 'int', 0))
 
@@ -507,14 +511,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 if ret_val:
                     self.AddFileToHistory(ctrl[1].GetFileName())
 
-    def OnSaveAs(self, evt, title=u'', page=None):
+    def OnSaveAs(self, evt, title='', page=None):
         """Save File Using a new/different name
         @param evt: Event fired that called this handler
         @type evt: wxMenuEvent
 
         """
-        dlg = wx.FileDialog(self, _("Choose a Save Location"), u'', 
-                            title.lstrip(u"*"), 
+        dlg = wx.FileDialog(self, _("Choose a Save Location"), '', 
+                            title.lstrip("*"), 
                             ''.join(syntax.GenFileFilters()), 
                             wx.SAVE | wx.OVERWRITE_PROMPT)
 
