@@ -103,6 +103,26 @@ class LogMsg:
         self._msg = dict(mstr=msg, msrc=msrc, lvl=level, tstamp=time.time())
         self._ok = True
 
+    def __eq__(self, other):
+        """Define the equal to operation"""
+        return self.TimeStamp == other.TimeStamp
+
+    def __ge__(self, other):
+        """Define the greater than or equal to operation"""
+        return self.TimeStamp >= other.TimeStamp
+
+    def __gt__(self, other):
+        """Define the greater than operation"""
+        return self.TimeStamp > other.TimeStamp
+
+    def __le__(self, other):
+        """Define the less than or equal to operation"""
+        return self.TimeStamp <= other.TimeStamp
+
+    def __lt__(self, other):
+        """Define the less than operation"""
+        return self.TimeStamp < other.TimeStamp
+
     def __repr__(self):
         """String representation of the object"""
         return '<LogMsg %s:%d>' % (self._msg['lvl'], self._msg['tstamp'])
