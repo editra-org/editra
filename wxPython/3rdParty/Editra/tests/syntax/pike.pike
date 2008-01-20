@@ -7,7 +7,7 @@ int main() {
     return 0;
 }
 
-// TODO <- Documentation Keyword highlighting
+//! \todo <- Documentation Doxygen Keyword highlighting
 mixed something;
 something = 5;
 something = 2.5;
