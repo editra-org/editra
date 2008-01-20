@@ -1,3 +1,9 @@
+/* Editra Style Sheet
+ * Name: BlueMonday
+ * Author: Thomas Keul
+ * License: N/A
+ */
+ 
 default_style {
                fore:#FFFFFF;
                back:#233B5A;

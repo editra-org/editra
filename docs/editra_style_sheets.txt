@@ -1,5 +1,5 @@
 SPECIFICATION: Editra Style Sheet
-REVISION: 1.4
+REVISION: 1.5
 
 PURPOSE: Define the format for writing custom style sheets that allow for the
          customization of the color scheme used to highlight text in the editor
@@ -19,7 +19,8 @@ SYNTAX: The syntax of an Editra Style Sheet is very similar to that of a
         Cascading Style Sheet (CSS). It uses "tags" followed by the style
         definition enclosed in {}'s. Attribute keywords are followed by a
         colon and then the attribute values. A semicolon is used at the end of
-        each attribute definition as a delimiter between definitions.
+        each attribute definition as a delimiter between definitions. Comments
+        can be specified using '/* */' style comment markers.
 
 BEHAVIOR: The 'default_style' tag must be defined and must define all four of
           the default attributes (fore, back, face, size). All other tags with
@@ -154,9 +155,10 @@ SPECIAL TAGS:
 
 EXAMPLES:
 
+        /* Comment about this style */
         default_style {
                         fore: #000000;
-                        back: #FFFFFF;
+                        back: #FFFFFF; /* use a white background */
                         face: %(primary)s;
                         size: %(size)d;
         }

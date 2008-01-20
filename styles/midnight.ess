@@ -1,3 +1,9 @@
+/* Editra Style Sheet
+ * Name: Midnight
+ * Author: Cody Precord <cprecord@editra.org>
+ * License: wxWindows License
+ */
+
 default_style {
 		fore: #FFFFFF;
 		back: #000000;
