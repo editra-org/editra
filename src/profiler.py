@@ -49,6 +49,7 @@ _DEFAULTS = {
            'AUTO_COMP'  : True,             # Use Auto-comp if available
            'AUTO_INDENT': True,             # Use Auto Indent
            'BRACKETHL'  : True,             # Use bracket highlighting
+           'BSUNINDENT' : True,             # Backspace Unindents
            'CHECKMOD'   : True,             # Auto check file for file mod
            'CODE_FOLD'  : True,             # Use code folding
            'DEFAULT'    : False,            # No longer used I believe
@@ -81,7 +82,7 @@ _DEFAULTS = {
            'TABWIDTH'   : 8,                # Tab width
            'THEME'      : 'DEFAULT',        # For future use
            'TOOLBAR'    : True,             # Show Toolbar
-           'USETABS'    : True,             # Use tabs instead of spaces
+           'USETABS'    : False,             # Use tabs instead of spaces
            'USE_PROXY'  : False,            # Use Proxy server settings?
            'VI_EMU'     : False,            # Use Vi emulation mode 
            'WRAP'       : False,            # Use Wordwrap
