@@ -16,10 +16,11 @@ NEWS:
 
 
 NEW: [features/improvements]
-
++Support for comments in Editra Style Sheets
++Improved syntax highlighting sample/test files
 
 BUG FIXES:
-
++Fix bug with turning off syntax highlighting in the preference dialog
 
 #-----------------------------------------------------------------------------#
 

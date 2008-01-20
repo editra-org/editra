@@ -37,6 +37,10 @@ from profiler import Profile_Get, Profile_Set
 # Globals
 STY_ATTRIBUTES     = u"face fore back size"
 STY_EX_ATTRIBUTES  = u"eol bold italic underline"
+
+# Parser Values
+RE_ESS_COMMENT = re.compile("\/\*[^*]*\*+([^/][^*]*\*+)*\/")
+
 #--------------------------------------------------------------------------#
 
 class StyleItem(object):
@@ -566,6 +570,9 @@ class StyleMgr(object):
                  data.
 
         """
+        # Remove all comments
+        style_data = RE_ESS_COMMENT.sub(u'', style_data)
+
         # Compact data into a contiguous string
         style_data = style_data.replace(u"\r\n", u"").replace(u"\n", u"")
         style_data = style_data.replace(u"\t", u"")

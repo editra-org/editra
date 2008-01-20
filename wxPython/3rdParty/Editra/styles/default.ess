@@ -1,3 +1,9 @@
+/* Editra Style Sheet
+ * Name: Default
+ * Author: Cody Precord <cprecord@editra.org>
+ * License: wxWindows License
+ */
+
 brace_good {
         fore: #FFFFFF;
         back: #0000FF bold;

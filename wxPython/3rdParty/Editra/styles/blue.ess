@@ -1,3 +1,9 @@
+/* Editra Style Sheet
+ * Name: Blue
+ * Author: Cody Precord <cprecord@editra.org>
+ * License: wxWindows License
+ */
+ 
 default_style {
 		fore:#FFEEDD;
 		back:#000A87;
