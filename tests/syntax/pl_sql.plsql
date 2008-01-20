@@ -1,4 +1,5 @@
 /**
+ * Syntax Highlighting Test File for PLSQL
  * This is a package example for syntax colourising of
  * Oracle PL/SQL 11g
  * It is developed to meet at least my requirements.
