@@ -82,7 +82,7 @@ def CommentPattern(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_DIFF:
-        return list()
+        return ['--- ']
     else:
         return list()
 
