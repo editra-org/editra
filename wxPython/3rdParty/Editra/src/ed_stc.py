@@ -325,6 +325,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetViewWhiteSpace(_PGET('SHOW_WS', 'bool'))
         self.SetUseAntiAliasing(_PGET('AALIASING'))
         self.SetUseTabs(_PGET('USETABS'))
+        self.SetBackSpaceUnIndents(_PGET('BSUNINDENT'))
         self.SetIndent(_PGET('TABWIDTH', 'int'))
         self.SetTabWidth(_PGET('TABWIDTH', 'int'))
         self.SetIndentationGuides(_PGET('GUIDES'))

@@ -514,6 +514,9 @@ class DocGenPanel(wx.Panel):
         ut_cb = wx.CheckBox(self, ed_glob.ID_PREF_TABS, 
                             _("Use Tabs Instead of Spaces"))
         ut_cb.SetValue(Profile_Get('USETABS', 'bool', False))
+        bsu_cb = wx.CheckBox(self, ed_glob.ID_PREF_UNINDENT,
+                             _("Backspace Unindents"))
+        bsu_cb.SetValue(Profile_Get('BSUNINDENT', 'bool', True))
         eol_lbl = wx.StaticText(self, label=_("Default EOL Mode") + u": ")
         eol_ch = ExChoice(self, ed_glob.ID_EOL_MODE,
                           choices=[_("Macintosh (\\r)"), _("Unix (\\n)"), 
@@ -557,18 +560,19 @@ class DocGenPanel(wx.Panel):
         sizer.Add((5, 5), (1, 0))
         sizer.Add(wx.StaticText(self, label=_("Format") + u": "), (1, 1))
         sizer.AddMany([(ut_cb, (1, 2), (1, 2)),
-                       (tabw_lbl, (2, 2), (1, 1), wx.ALIGN_CENTER_VERTICAL),
-                       (tw_ch, (2, 3), (1, 3), wx.ALIGN_CENTER_VERTICAL),
-                       (eol_lbl, (3, 2), (1, 1), wx.ALIGN_CENTER_VERTICAL),
-                       (eol_ch, (3, 3), (1, 2), wx.ALIGN_CENTER_VERTICAL),
-                       ((5, 5), (5, 0)), (view_lbl, (5, 1)),
-                       (aa_cb, (5, 2)), (seol_cb, (6, 2)), (sln_cb, (7, 2)),
-                       (sws_cb, (8, 2)), (ww_cb, (9, 2)),
-                       (font_lbl, (11, 1), (1, 1), wx.ALIGN_CENTER_VERTICAL), 
-                       (fpicker, (11, 2), (1, 3), wx.EXPAND), 
-                       (font_lbl2, (12, 1), (1, 1), wx.ALIGN_CENTER_VERTICAL),
-                       (fpicker2, (12, 2), (1, 3), wx.EXPAND),
-                       ((5, 5), (13, 0))
+                       (bsu_cb, (2, 2), (1, 1)),
+                       (tabw_lbl, (3, 2), (1, 1), wx.ALIGN_CENTER_VERTICAL),
+                       (tw_ch, (3, 3), (1, 3), wx.ALIGN_CENTER_VERTICAL),
+                       (eol_lbl, (4, 2), (1, 1), wx.ALIGN_CENTER_VERTICAL),
+                       (eol_ch, (4, 3), (1, 2), wx.ALIGN_CENTER_VERTICAL),
+                       ((5, 5), (6, 0)), (view_lbl, (6, 1)),
+                       (aa_cb, (6, 2)), (seol_cb, (7, 2)), (sln_cb, (8, 2)),
+                       (sws_cb, (9, 2)), (ww_cb, (10, 2)),
+                       (font_lbl, (12, 1), (1, 1), wx.ALIGN_CENTER_VERTICAL), 
+                       (fpicker, (12, 2), (1, 3), wx.EXPAND), 
+                       (font_lbl2, (13, 1), (1, 1), wx.ALIGN_CENTER_VERTICAL),
+                       (fpicker2, (13, 2), (1, 3), wx.EXPAND),
+                       ((5, 5), (14, 0))
                        ])
         self.SetSizer(sizer)
 
@@ -610,10 +614,10 @@ class DocGenPanel(wx.Panel):
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
         if e_id in [ed_glob.ID_PREF_TABS, ed_glob.ID_PREF_TABW,
-                    ed_glob.ID_EOL_MODE, ed_glob.ID_PREF_AALIAS,
-                    ed_glob.ID_SHOW_EOL, ed_glob.ID_SHOW_LN,
-                    ed_glob.ID_SHOW_WS, ed_glob.ID_WORD_WRAP,
-                    ed_glob.ID_PREF_AALIAS]:
+                    ed_glob.ID_PREF_UNINDENT, ed_glob.ID_EOL_MODE,
+                    ed_glob.ID_PREF_AALIAS, ed_glob.ID_SHOW_EOL,
+                    ed_glob.ID_SHOW_LN, ed_glob.ID_SHOW_WS,
+                    ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS]:
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
             wx.CallLater(25, DoUpdates)
         else:

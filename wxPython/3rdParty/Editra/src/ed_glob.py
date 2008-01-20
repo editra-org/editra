@@ -130,6 +130,7 @@ ID_PREF_CHKMOD   = wx.NewId()
 ID_PREF_EDGE     = wx.NewId()
 ID_PREF_SYNTHEME = wx.NewId()
 ID_PREF_TABS     = wx.NewId()
+ID_PREF_UNINDENT = wx.NewId()
 ID_PREF_TABW     = wx.NewId()
 ID_PREF_FHIST    = wx.NewId()
 ID_PREF_WSIZE    = wx.NewId()
@@ -257,6 +258,7 @@ ID_2_PROF = {
              ID_SYNTAX            : 'SYNTAX',
              ID_PREF_SYNTHEME     : 'SYNTHEME',
              ID_PREF_TABS         : 'USETABS',
+             ID_PREF_UNINDENT     : 'BSUNINDENT',
              ID_PREF_TABW         : 'TABWIDTH',
              ID_SESSION           : 'SAVE_SESSION',
              ID_SHOW_EDGE         : 'SHOW_EDGE',
