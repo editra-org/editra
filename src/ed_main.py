@@ -3,7 +3,7 @@
 # Purpose: Editra's Main Window                                               #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -499,13 +499,15 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 if result:
                     self.PushStatusText(_("Saved File: %s") % fname, SB_INFO)
                 else:
-                    self.PushStatusText(_("ERROR: Failed to save %s") % fname, SB_INFO)
+                    err = ctrl[1].GetDocPointer().GetLastError()
+                    self.PushStatusText(_("ERROR: %s") % err, SB_INFO)
                     dlg = wx.MessageDialog(self, 
-                                           _("Failed to save file: %s\n\nError:\n%d") % \
-                                             (fname, result), _("Save Error"),
+                                           _("Failed to save file: %s\n\nError:\n%s") % \
+                                             (fname, err), _("Save Error"),
                                             wx.OK | wx.ICON_ERROR)
                     dlg.ShowModal()
                     dlg.Destroy()
+                    ctrl[1].GetDocPointer().ClearLastError()
             else:
                 ret_val = self.OnSaveAs(ID_SAVEAS, ctrl[0], ctrl[1])
                 if ret_val:
@@ -534,11 +536,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             result = ctrl.SaveFile(path)
             fname = util.GetFileName(ctrl.GetFileName())
             if not result:
-                dlg = wx.MessageDialog(self, _("Failed to save file: %s\n\nError:\n%d") % \
-                                       (fname, result), _("Save Error"),
+                err = ctrl.GetDocPointer().GetLastError()
+                dlg = wx.MessageDialog(self, _("Failed to save file: %s\n\nError:\n%s") % \
+                                       (fname, err), _("Save Error"),
                                        wx.OK | wx.ICON_ERROR)
                 dlg.ShowModal()
                 dlg.Destroy()
+                ctrl.GetDocPointer().ClearLastError()
                 self.PushStatusText(_("ERROR: Failed to save %s") % fname, SB_INFO)
             else:
                 self.PushStatusText(_("Saved File As: %s") % fname, SB_INFO)

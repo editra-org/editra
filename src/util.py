@@ -2,8 +2,8 @@
 # Name: util.py                                                               #
 # Purpose: Misc utility functions used through out Editra                     #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -15,14 +15,8 @@
 # This file contains various helper functions and utilities that the       #
 # program uses. Basically a random library of misfit functions.	           #
 #                                                                          #
-# METHODS:                                                                 #
-# - FileDropTarget: Is a class that handles drag and drop events for the   #
-#                   the interface.                                         #
-# - GetPathChar: Returns the character used in building paths '\\' for     #
-#                windows and '/' for linux and mac.                        #
-# - GetFileName: Returns the name of the file from a given string          #
-# - GetExtension: Returns the extension of a file.                         #
 #--------------------------------------------------------------------------#
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -231,79 +225,6 @@ def SetClipboardText(txt):
         return 1
     return 0
 
-# File Helper Functions
-BOM = { 'utf-8' : codecs.BOM_UTF8,
-        'utf-16-be' : codecs.BOM_UTF16_BE,
-        'utf-16-le' : codecs.BOM_UTF16_LE,
-        'utf-7' : '+\v8-',
-        'latin-1' : '',
-        'ascii' : '' }
-
-# When no BOM is present this determines decode test order
-ENC = [ 'utf-8', 'utf-7', 'latin-1', 'utf-16-be', 'utf-16-le', 'ascii']
-  #      'utf-32-be', 'utf-32-le', 
-
-# Regex for extracting magic comments from source files
-# i.e *-* coding: utf-8 *-*
-RE_MAGIC_COMMENT = re.compile("coding[:=]\s*([-\w.]+)")
-
-def DecodeString(str2decode):
-    """Decode a given string if possible and return that string
-    @param str2decode: the string to decode
-
-    """
-    decoded = str2decode
-    for enc in ENC:
-        try:
-            decoded = str2decode.decode(enc)
-        except (UnicodeDecodeError, UnicodeWarning):
-            continue
-        else:
-            break
-
-    return decoded
-
-def GetDecodedText(fname):
-    """Gets the text from a file and decodes the text using
-    a compatible decoder. Returns a tuple of the text and the
-    encoding it was decoded from.
-    @param fname: name of file to open and get text from
-    @return: tuple of (text, encoding string)
-    @note: must allow exceptions to be raised (side effect)
-
-    """
-    f_handle = file(fname, 'rb')
-    txt = f_handle.read()
-    f_handle.close()
-
-    # First try looking for a bom byte
-    tenc = ENC
-    for enc, bom in BOM.iteritems():
-        if txt.startswith(bom) and enc not in ['ascii', 'latin-1']:
-            if enc in tenc:
-                tenc.remove(enc)
-            tenc.insert(0, enc)
-            break
-
-    decoded = None
-    for enc in tenc:
-        try:
-            decoded = txt.decode(enc)
-        except (UnicodeDecodeError, UnicodeWarning):
-            continue
-        else:
-            break
-
-    if 'enc' not in locals():
-        enc = u''
-
-    if decoded:
-        dev_tool.DEBUGP("[txtdecoder] Decoded text as %s" % enc)
-        return decoded, enc
-    else:
-        dev_tool.DEBUGP("[txtdecoder][err] Decode Failed")
-        return txt, enc
-
 def FilterFiles(file_list):
     """Filters a list of paths and returns a list of paths
     that are valid, not directories, and not seemingly not binary.
@@ -375,9 +296,10 @@ def GetFileReader(file_name, enc='utf-8'):
     except (IOError, OSError):
         dev_tool.DEBUGP("[file_reader] Failed to open file %s" % file_name)
         return -1
+
     try:
-        reader = codecs.lookup(enc)[2](file_h)
-    except (LookupError, IndexError):
+        reader = codecs.getreader(enc)(file_h)
+    except (LookupError, IndexError, ValueError):
         dev_tool.DEBUGP('[file_reader] Failed to get %s Reader' % enc)
         reader = file_h
     return reader
@@ -396,12 +318,12 @@ def GetFileWriter(file_name, enc='utf-8'):
     try:
         file_h = file(file_name, "wb")
     except IOError:
-        dev_tool.DEBUGP("[file_writer] Failed to open file %s" % file_name)
+        dev_tool.DEBUGP("[file_writer][err] Failed to open file %s" % file_name)
         return -1
     try:
-        writer = codecs.lookup(enc)[3](file_h)
-    except (LookupError, IndexError):
-        dev_tool.DEBUGP('[file_writer] Failed to get %s Writer' % enc)
+        writer = codecs.getwriter(enc)(file_h)
+    except (LookupError, IndexError, ValueError):
+        dev_tool.DEBUGP('[file_writer][err] Failed to get %s Writer' % enc)
         writer = file_h
     return writer
 

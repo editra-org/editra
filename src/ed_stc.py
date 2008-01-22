@@ -3,7 +3,7 @@
 # Purpose: Editra's styled editing buffer                                     #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -41,6 +41,7 @@ from autocomp import autocomp
 import util
 import ed_style
 import ed_msg
+import ed_txt
 
 #-------------------------------------------------------------------------#
 # Globals
@@ -102,8 +103,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                         last=u'', cmdcache=u'')
 
         # File Attributes
-        self._finfo = dict(filename='', encoding='utf-8', 
-                           hasbom=False, modtime=0)
+        self.file = ed_txt.EdFile()
 
         # Macro Attributes
         self._macro = list()
@@ -456,7 +456,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def GetModTime(self):
         """Get the value of the buffers file last modtime"""
-        return self._finfo['modtime']
+        return self.file.GetModtime()
 
     def GetPos(self):
         """Update Line/Column information
@@ -562,7 +562,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @return: full path name of document
 
         """
-        return self._finfo['filename']
+        return self.file.GetPath()
+
+    def GetDocPointer(self):
+        """Return a reference to the document object represented
+        in this buffer.
+        @return: EdFile
+        @see: L{ed_txt.EdFile}
+
+        """
+        return self.file
 
     def GetStyleSheet(self, sheet_name=None):
         """Finds the current style sheet and returns its path. The
@@ -926,8 +935,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if set_ext != u'':
             ext = set_ext.lower()
         else:
-            fname = util.GetFileName(self._finfo['filename'])
-            ext = util.GetExtension(fname).lower()
+            ext = self.file.GetExtension()
         self.ClearDocumentStyle()
 
         # Configure Lexer from File Extension
@@ -1160,13 +1168,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             return u' ' * self.GetTabWidth()
 
-    def GetEncoding(self):
-        """Returns the encoding of the current document
-        @return: the encoding of the document
-
-        """
-        return self._finfo['encoding']
-
     def GetEOLModeId(self):
         """Gets the id of the eol format
         @return: id of the eol mode of this document
@@ -1177,13 +1178,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     wx.stc.STC_EOL_CRLF : ed_glob.ID_EOL_WIN
                   }
         return eol_map.get(self.GetEOLMode(), ed_glob.ID_EOL_UNIX)
-
-    def HasBom(self):
-        """Returns whether the loaded file had a BOM byte or not
-        @return: whether file had a bom byte or not
-
-        """
-        return self._finfo['hasbom']
 
     def IsBracketHlOn(self):
         """Returns whether bracket highlighting is being used by this
@@ -1259,7 +1253,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @param enc: encoding to set for document
 
         """
-        self._finfo['encoding'] = enc
+        self.file.SetEncoding(enc)
 
     def SetEOLFromString(self, mode_str):
         """Sets the EOL mode from a string descript
@@ -1276,11 +1270,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def SetFileName(self, path):
         """Set the buffers filename attributes from the given path"""
-        self._finfo['filename'] = path
+        self.file.SetPath(path)
 
     def SetModTime(self, modtime):
         """Set the value of the files last modtime"""
-        self._finfo['modtime'] = modtime
+        self.file.SetModtime(modtime)
 
     def SetViEmulationMode(self, use_vi):
         """Activate/Deactivate Vi eumulation mode
@@ -1868,6 +1862,22 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             wx.stc.StyledTextCtrl.WordRightExtend(self)
         self.SetWordChars('')
 
+    def LoadFile(self, path):
+        """Load the file at the given path into the buffer. Returns
+        True if no errors and False otherwise. To retrieve the errors
+        check the last error that was set in the file object returned by
+        L{GetDocPointer}.
+        @param path: path to file
+
+        """
+        self.file.SetPath(path)
+        txt = self.file.Read()
+        if txt is not None:
+            self.SetText(txt)
+            return True
+        else:
+            return False
+
     def ReloadFile(self):
         """Reloads the current file, returns True on success and
         False if there is a failure.
@@ -1881,17 +1891,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 self.BeginUndoAction()
                 marks = self.GetBookmarks()
                 cpos = self.GetCurrentPos()
-                reader = util.GetFileReader(cfile, self._finfo['encoding'])
-                self.SetText(reader.read())
-                reader.close()
-                self._finfo['modtime'] = util.GetFileModTime(cfile)
+                self.SetText(self.file.Read())
+                self.SetModTime(util.GetFileModTime(cfile))
                 for mark in marks:
                     self.MarkerAdd(mark, MARK_MARGIN)
                 self.EndUndoAction()
                 self.SetSavePoint()
             except (AttributeError, OSError, IOError), msg:
                 self.LOG("[ed_stc][err] Failed to Reload %s" % cfile)
-                return False, str(msg)
+                return False, msg
             else:
                 self.GotoPos(cpos)
                 return True, ''
@@ -1908,49 +1916,28 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         result = True
         try:
-            ed_msg.PostMessage(ed_msg.EDMSG_FILE_SAVE, (path, self._code['lang_id']))
-            writer = util.GetFileWriter(path, enc=self._finfo['encoding'])
-            if self.HasBom():
-                bom = unicode(util.BOM.get(self._finfo['encoding'], u''), 
-                              self._finfo['encoding'])
-            else:
-                bom = u''
-            writer.write(bom + self.GetText())
-            writer.close()
-        except (AttributeError, IOError), msg:
+            ed_msg.PostMessage(ed_msg.EDMSG_FILE_SAVE,
+                               (path, self._code['lang_id']))
+            self.file.SetPath(path)
+            self.LOG("[ed_stc][info] Writing file %s, with encoding %s" % \
+                     (path, self.file.GetEncoding()))
+            self.file.Write(self.GetText())
+        except Exception, msg:
             result = False
             self.LOG("[ed_stc][err] There was an error saving %s" % path)
             self.LOG("[ed_stc][err] ERROR: %s" % str(msg))
 
         if result:
             self.SetSavePoint()
-            self._finfo['modtime'] = util.GetFileModTime(path)
+            self.SetModTime(util.GetFileModTime(path))
             self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_MODIFIED))
             self.SetFileName(path)
 
         wx.CallAfter(ed_msg.PostMessage,
                     ed_msg.EDMSG_FILE_SAVED,
                     (path, self._code['lang_id']))
+
         return result
-
-    # With utf-16 encoded text need to remove the BOM prior to setting
-    # the text or there is alignment issues in the display of the first line 
-    # of text. Potentially a BUG in scintilla or wxStyledTextCtrl
-    def SetText(self, txt, enc=u'utf-8'):
-        """Sets the text of the control and the encoding to use for
-        writting the file with.
-        @keyword enc: encoding to use for decoding text
-
-        """
-        bom = util.BOM.get(enc, u'')
-        bom = unicode(bom, enc)
-        if len(txt) > len(bom):
-            if txt[:len(bom)] == bom:
-                self.LOG("[ed_stc][info] Stripped BOM from text")
-                self._finfo['hasbom'] = True
-                txt = txt.replace(bom, u'', 1)
-        wx.stc.StyledTextCtrl.SetText(self, txt)
-        self._finfo['encoding'] = enc
 
     def DoZoom(self, mode):
         """Zoom control in or out
