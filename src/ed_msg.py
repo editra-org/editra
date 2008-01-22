@@ -77,6 +77,9 @@ EDMSG_LOG_ERROR = EDMSG_LOG_INFO + ('err',)
 # Recieve notification of all file actions
 EDMSG_FILE_ALL = EDMSG_ALL + ('file',)
 
+# File was just opened / msgdata == file path
+EDMSG_FILE_OPENED = EDMSG_FILE_ALL + ('opened',)
+
 # File save requested / msgdata == (filename, filetypeId)
 # Note: All listeners of this message are processed *before* the save takes
 #       place. Meaning the listeners block the save action until they are
