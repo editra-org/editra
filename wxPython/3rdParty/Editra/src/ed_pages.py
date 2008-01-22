@@ -2,8 +2,8 @@
 # Name: ed_pages.py                                                           #
 # Purpose: The main editor notebook                                           #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -212,28 +212,28 @@ class EdPages(FNB.FlatNotebook):
                 control.Hide()
             else:
                 new_pg = False
+                control = self.control
         else:
             control = ed_stc.EditraStc(self, wx.ID_ANY)
             control.Hide()
 
         # Open file and get contents
-        err = False
-        in_txt = u''
-        enc = u'utf-8'
         if os.path.exists(path2file):
             try:
-                in_txt, enc = util.GetDecodedText(path2file)
-            except (UnicodeDecodeError, IOError, OSError), msg:
+                control.LoadFile(path2file)
+            except Exception, msg:
                 self.LOG(("[ed_pages][err] Failed to open file %s\n"
                           "[ed_pages][err] %s") % (path2file, msg))
 
                 # File could not be opened/read give up
-                err = wx.MessageDialog(self, _("Editra could not properly "
-                                               "open %s\n") \
-                                       % path2file, _("Error Opening File"),
+                errmsg = control.GetDocPointer().GetLastError()
+                err = wx.MessageDialog(self, _("Editra could not open %s\n"
+                                               "\nError:\n%s") % (path2file, errmsg),
+                                        _("Error Opening File"),
                                        style=wx.OK | wx.CENTER | wx.ICON_ERROR)
                 err.ShowModal()
                 err.Destroy()
+                control.GetDocPointer().ClearLastError()
 
                 if new_pg:
                     control.Destroy()
@@ -247,8 +247,6 @@ class EdPages(FNB.FlatNotebook):
             self.control = control
 
         # Pass directory and file name info to control object to save reference
-        self.control.SetText(in_txt, enc)
-        self.control.SetFileName(path2file)
         self.control.SetModTime(util.GetFileModTime(path2file))
         self.frame.AddFileToHistory(path2file)
         if new_pg:
@@ -630,7 +628,7 @@ def PromptToReSave(win, cfile):
     result = mdlg.ShowModal()
     mdlg.Destroy()
     if result == wx.ID_YES:
-        win.control.SaveFile(cfile)
+        result = win.control.SaveFile(cfile)
     else:
         win.control.SetModTime(0)
 

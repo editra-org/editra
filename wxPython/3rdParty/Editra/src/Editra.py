@@ -38,6 +38,7 @@ import util
 import dev_tool
 import ed_main
 import ed_art
+import ed_txt
 import plugin
 import extern.events as events
 
@@ -206,7 +207,9 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         window = self.GetTopWindow()
         if getattr(window, '__name__', '') == "MainWindow":
             try:
-                window.DoOpen(wx.ID_ANY, util.DecodeString(filename))
+                encoding = sys.getfilesystemencoding()
+                window.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN,
+                              ed_txt.DecodeString(filename, encoding))
                 self._log("[app][info] MacOpenFile Fired")
             except Exception, msg:
                 self._log("[app][err] Failed to open drop file: %s" % str(msg))
@@ -560,7 +563,8 @@ def Main():
     for arg in args:
         try:
             arg = os.path.abspath(arg)
-            frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, util.DecodeString(arg))
+            fname = ed_txt.DecodeString(arg, sys.getfilesystemencoding())
+            frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname)
         except IndexError:
             dev_tool.DEBUGP("[main][err] IndexError on commandline args")
 
