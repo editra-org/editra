@@ -41,6 +41,7 @@ import ed_pages
 import ed_menu
 import ed_print
 import ed_cmdbar
+import ed_mdlg
 import syntax.syntax as syntax
 import generator
 import plugin
@@ -501,12 +502,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 else:
                     err = ctrl[1].GetDocPointer().GetLastError()
                     self.PushStatusText(_("ERROR: %s") % err, SB_INFO)
-                    dlg = wx.MessageDialog(self, 
-                                           _("Failed to save file: %s\n\nError:\n%s") % \
-                                             (fname, err), _("Save Error"),
-                                            wx.OK | wx.ICON_ERROR)
-                    dlg.ShowModal()
-                    dlg.Destroy()
+                    ed_mdlg.SaveErrorDlg(self, fname, err)
                     ctrl[1].GetDocPointer().ClearLastError()
             else:
                 ret_val = self.OnSaveAs(ID_SAVEAS, ctrl[0], ctrl[1])
@@ -537,11 +533,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             fname = util.GetFileName(ctrl.GetFileName())
             if not result:
                 err = ctrl.GetDocPointer().GetLastError()
-                dlg = wx.MessageDialog(self, _("Failed to save file: %s\n\nError:\n%s") % \
-                                       (fname, err), _("Save Error"),
-                                       wx.OK | wx.ICON_ERROR)
-                dlg.ShowModal()
-                dlg.Destroy()
+                ed_mdlg.SaveErrorDlg(self, fname, err)
                 ctrl.GetDocPointer().ClearLastError()
                 self.PushStatusText(_("ERROR: Failed to save %s") % fname, SB_INFO)
             else:
