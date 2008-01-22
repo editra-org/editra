@@ -234,6 +234,7 @@ class EdPages(FNB.FlatNotebook):
                 err.ShowModal()
                 err.Destroy()
                 control.GetDocPointer().ClearLastError()
+                control.SetFileName('') # Reset the file name
 
                 if new_pg:
                     control.Destroy()

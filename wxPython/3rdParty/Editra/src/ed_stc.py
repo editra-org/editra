@@ -1876,6 +1876,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetText(txt)
             return True
         else:
+            self.file.SetPath('')
             return False
 
     def ReloadFile(self):
