@@ -271,6 +271,7 @@ class EdPages(FNB.FlatNotebook):
         # Refocus on selected page
         self.GoCurrentPage()
         self.GetTopLevelParent().Thaw()
+        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.control.GetFileName())
 
     def GoCurrentPage(self):
         """Move Focus to Currently Selected Page.
