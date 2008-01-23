@@ -319,10 +319,10 @@ class PerspectiveManager(object):
         if self._viewset.has_key(name):
 
             if name == AUTO_PERSPECTIVE:
-                self._viewset[name] = self._viewset[self._currview]
-            else:
-                self._mgr.LoadPerspective(self._viewset[name])
-                self._mgr.Update()
+                self._viewset[AUTO_PERSPECTIVE] = self._viewset[self._currview]
+
+            self._mgr.LoadPerspective(self._viewset[name])
+            self._mgr.Update()
 
             self._currview = name
             self.SavePerspectives()
