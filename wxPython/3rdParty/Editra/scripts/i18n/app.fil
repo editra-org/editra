@@ -11,6 +11,7 @@
 ../../src/ed_i18n.py
 ../../src/ed_log.py
 ../../src/ed_main.py
+../../src/ed_mdlg.py
 ../../src/ed_menu.py
 ../../src/ed_msg.py
 ../../src/ed_pages.py
@@ -18,6 +19,7 @@
 ../../src/ed_search.py
 ../../src/ed_stc.py 
 ../../src/ed_style.py
+../../src/ed_txt.py
 ../../src/ed_theme.py
 ../../src/ed_toolbar.py
 ../../src/Editra.py
