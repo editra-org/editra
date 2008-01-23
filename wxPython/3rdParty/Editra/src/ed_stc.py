@@ -1261,7 +1261,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @todo: get rid of this somehow
 
         """
-        mode_map = { 'Macintosh (\\r\\n)' : wx.stc.STC_EOL_CR,
+        mode_map = { 'Macintosh (\\r)' : wx.stc.STC_EOL_CR,
                      'Unix (\\n)' : wx.stc.STC_EOL_LF,
                      'Windows (\\r\\n)' : wx.stc.STC_EOL_CRLF
                    }
