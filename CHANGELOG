@@ -18,6 +18,12 @@ NEWS:
 NEW: [features/improvements]
 +Support for comments in Editra Style Sheets
 +Improved syntax highlighting sample/test files
++Use Softtabs by default
++Option to use backspace to dedent when in an indent region
++Support for magic comments as described in pep 0263 for setting the encoding
+ of a document. If an encoding is not explicitly set the default will still be
+ to use utf-8.
++Better unicode support
 
 BUG FIXES:
 +Fix bug with turning off syntax highlighting in the preference dialog
