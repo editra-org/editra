@@ -37,6 +37,7 @@ import ed_glob
 from profiler import Profile_Get
 import ed_stc
 import syntax.synglob as synglob
+import syntax.syntax as syntax
 import ed_search
 import util
 import doctools
@@ -188,6 +189,12 @@ class EdPages(FNB.FlatNotebook):
         self.LOG("[ed_pages][evt] Page Creation ID: %d" % self.control.GetId())
         self.AddPage(self.control, u"Untitled - %d" % self.pg_num)
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
+
+        # Set the control up the the preferred default lexer
+        dlexer = Profile_Get('DEFAULT_LEX', 'str', 'Plain Text')
+        ext_reg = syntax.ExtensionRegister()
+        ext_lst = ext_reg.get(dlexer, ['txt',])
+        self.control.FindLexer(ext_lst[0])
         self.GetTopLevelParent().Thaw()
 
     def OpenPage(self, path, filename):

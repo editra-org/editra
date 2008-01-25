@@ -52,6 +52,7 @@ _DEFAULTS = {
            'BSUNINDENT' : True,             # Backspace Unindents
            'CHECKMOD'   : True,             # Auto check file for file mod
            'CODE_FOLD'  : True,             # Use code folding
+           'DEFAULT_LEX': 'Plain Text',     # Default lexer for new documents
            'DEFAULT'    : False,            # No longer used I believe
            'DEFAULT_VIEW' : 'Automatic',    # Default Perspective
            'EDGE'       : 80,               # Edge guide column
