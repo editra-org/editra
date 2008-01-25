@@ -11,8 +11,8 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 
-AUTHOR = u'Cody Precord'
-VERSION = u'0.2.50'
-PROG_NAME = u'Editra'
-HOME_PAGE = u"http://editra.org"
-CONTACT_MAIL = u"staff@editra.org"
+AUTHOR = 'Cody Precord'
+VERSION = '0.2.50'
+PROG_NAME = 'Editra'
+HOME_PAGE = "http://editra.org"
+CONTACT_MAIL = "staff@editra.org"
