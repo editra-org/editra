@@ -3,7 +3,7 @@
 # Purpose: UI for configuring User Profile                                    #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -403,7 +403,7 @@ class GeneralPanel(PrefPanelBase):
                        (pos_cb, (9, 2), (1, 3)),
                        (chkmod_cb, (10, 2), (1, 2)),
                        (locale, (12, 1), (1, 1), wx.ALIGN_CENTER_VERTICAL),
-                       (lsizer, (12, 2), (1, 3)),
+                       (lsizer, (12, 2), (1, 2)),
                        ((15, 15), (13, 0))])
         self.SetSizer(sizer)
 
@@ -649,6 +649,18 @@ class DocCodePanel(wx.Panel):
         @note: Do not call this after __init__
 
         """
+        # General Section
+        gen_lbl = wx.StaticText(self, label=_("General") + u": ")
+        dlex_lbl = wx.StaticText(self, label=_("Default Lexer") + u": ")
+        dlex_ch = ExChoice(self, ed_glob.ID_PREF_DLEXER,
+                           choices=syntax.GetLexerList(),
+                           default=Profile_Get('DEFAULT_LEX',
+                                               default="Plain Text"))
+        dlex_ch.SetToolTipString(_("Default highlighing for new documents"))
+        dlex_sz = wx.BoxSizer(wx.HORIZONTAL)
+        dlex_sz.AddMany([(dlex_lbl, 0, wx.ALIGN_CENTER_VERTICAL), ((3, 3),),
+                         (dlex_ch, 0, wx.ALIGN_CENTER_VERTICAL)])
+
         # Visual Helpers Section
         vis_lbl = wx.StaticText(self, label=_("Visual Helpers") + u": ")
         br_cb = wx.CheckBox(self, ed_glob.ID_BRACKETHL, 
@@ -678,14 +690,15 @@ class DocCodePanel(wx.Panel):
 
         # Layout the controls
         sizer = wx.GridBagSizer(5, 5)
-        sizer.Add((5, 5), (1, 0))
-        sizer.Add(vis_lbl, (1, 1))
-        sizer.AddMany([(br_cb, (1, 2)), (fold_cb, (2, 2)),
-                       (edge_cb, (3, 2), (1, 1), wx.ALIGN_CENTER_VERTICAL),
-                       (edge_col, (3, 4), (1, 1), wx.ALIGN_CENTER_VERTICAL),
-                       (ind_cb, (4, 2))])
-        sizer.Add(wx.StaticText(self, label=_("Input Helpers") + u": "), (6, 1))
-        sizer.AddMany([(comp_cb, (6, 2)), (ai_cb, (7, 2)), (vi_cb, (8, 2))])
+        sizer.AddMany([((5, 5), (1, 0)),
+                       (gen_lbl, (1, 1), (1, 1), wx.ALIGN_CENTER_VERTICAL),
+                       (dlex_sz, (1, 2), (1, 3)), (vis_lbl, (3, 1)),
+                       (br_cb, (3, 2)), (fold_cb, (4, 2)),
+                       (edge_cb, (5, 2), (1, 1), wx.ALIGN_CENTER_VERTICAL),
+                       (edge_col, (5, 3), (1, 1), wx.ALIGN_CENTER_VERTICAL),
+                       (ind_cb, (7, 2))])
+        sizer.Add(wx.StaticText(self, label=_("Input Helpers") + u": "), (7, 1))
+        sizer.AddMany([(comp_cb, (8, 2)), (ai_cb, (9, 2)), (vi_cb, (10, 2))])
         self.SetSizer(sizer)
 
     def OnCheck(self, evt):
@@ -700,7 +713,8 @@ class DocCodePanel(wx.Panel):
         if e_id in [ed_glob.ID_BRACKETHL, ed_glob.ID_SHOW_EDGE,
                     ed_glob.ID_INDENT_GUIDES, ed_glob.ID_FOLDING,
                     ed_glob.ID_AUTOCOMP, ed_glob.ID_AUTOINDENT,
-                    ed_glob.ID_PREF_EDGE, ed_glob.ID_VI_MODE]:
+                    ed_glob.ID_PREF_EDGE, ed_glob.ID_VI_MODE,
+                    ed_glob.ID_PREF_DLEXER]:
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
             wx.CallLater(25, DoUpdates)
         else:
