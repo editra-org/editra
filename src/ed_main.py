@@ -1106,7 +1106,7 @@ def OnHelp(evt):
     elif e_id == ID_DOCUMENTATION:
         webbrowser.open(HOME_PAGE + "/?page=doc", 1)
     elif e_id == ID_CONTACT:
-        webbrowser.open(u'mailto:%s' % CONTACT_MAIL)
+        webbrowser.open("mailto:%s" % CONTACT_MAIL)
     else:
         evt.Skip()
 
