@@ -99,6 +99,7 @@ class ShelfI(plugin.Interface):
         @rtype: boolean
 
         """
+        return True
 
     def CreateItem(self, parent):
         """This is them method used to open the item in the L{Shelf}
@@ -107,6 +108,7 @@ class ShelfI(plugin.Interface):
         @return: wx.Panel
 
         """
+        raise NotImplementedError
 
     def GetId(self):
         """Return the id that identifies this item (same as the menuid)
@@ -114,6 +116,7 @@ class ShelfI(plugin.Interface):
         @rtype: int
 
         """
+        raise NotImplementedError
 
     def GetMenuEntry(self, menu):
         """Returns the menu entry associated with this item
@@ -121,6 +124,7 @@ class ShelfI(plugin.Interface):
         @return: wx.MenuItem
 
         """
+        raise NotImplementedError
 
     def GetName(self):
         """Return the name of this shelf item. This should be the
@@ -129,6 +133,7 @@ class ShelfI(plugin.Interface):
         @rtype: string
 
         """
+        raise NotImplementedError
 
     def IsStockable(self):
         """Return whether this item type is stockable. The shelf saves
@@ -138,6 +143,7 @@ class ShelfI(plugin.Interface):
         False.
 
         """
+        return True
         
 
 #-----------------------------------------------------------------------------#
