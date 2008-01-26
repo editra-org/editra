@@ -101,6 +101,7 @@ class EdPages(FNB.FlatNotebook):
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnUpdatePageText)
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
+        ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
 
         # Add a blank page
         self.NewPage()
@@ -201,6 +202,13 @@ class EdPages(FNB.FlatNotebook):
         ext_lst = ext_reg.get(dlexer, ['txt',])
         self.control.FindLexer(ext_lst[0])
         self.GetTopLevelParent().Thaw()
+
+    def OnThemeChanged(self, msg):
+        """Update icons when the theme has changed
+        @param msg: Message Object
+
+        """
+        self.UpdateAllImages()
 
     def OpenPage(self, path, filename):
         """Open a File Inside of a New Page

@@ -2,8 +2,8 @@
 # Name: ed_toolbar.py                                                         #
 # Purpose: Editra's Toolbar                                                   #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -28,6 +28,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import wx
 import ed_glob
+import ed_msg
 from profiler import Profile_Get
 
 _ = wx.GetTranslation
@@ -58,6 +59,9 @@ class EdToolBar(wx.ToolBar):
         self._theme = Profile_Get('ICONS')
         self.SetToolBitmapSize(Profile_Get('ICON_SZ', 'size_tuple'))
         self._PopulateTools()
+
+        # Message Handlers
+        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
         self.Realize()
 
@@ -110,6 +114,13 @@ class EdToolBar(wx.ToolBar):
         """
         return self._theme
 
+    def OnThemeChange(self, msg):
+        """Update the icons when the icon theme has changed
+        @param msg: Message object
+
+        """
+        self.ReInit()
+
     def ReInit(self):
         """Re-Initializes the tools in the toolbar
         @postcondition: all tool icons are changed to match current theme
@@ -120,4 +131,3 @@ class EdToolBar(wx.ToolBar):
         for tool_id in TOOL_ID:
             bmp = wx.ArtProvider.GetBitmap(str(tool_id), wx.ART_TOOLBAR)
             self.SetToolNormalBitmap(tool_id, bmp)
-                                     
