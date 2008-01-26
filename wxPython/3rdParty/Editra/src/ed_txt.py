@@ -66,7 +66,7 @@ class WriteError(Exception):
 
 #--------------------------------------------------------------------------#
 
-class EdFile:
+class EdFile(object):
     """Wrapper for representing a file object that stores data
     about the file encoding and path.
 
@@ -76,8 +76,11 @@ class EdFile:
         @param path: the absolute path to the file
 
         """
+        object.__init__(self)
+
         # Attribtues
         self._handle = None
+        self._magic = dict(comment=None, bad=False)
         self.encoding = DEFAULT_ENCODING
         self.open = False
         self.path = path
@@ -95,8 +98,12 @@ class EdFile:
         @note: this is normally done automatically after a read/write operation
 
         """
-        if self._handle is not None and not self._handle.closed:
+        try:
             self._handle.close()
+        except:
+            pass
+
+        self.open = False
 
     def DoOpen(self, mode):
         """Opens and creates the internal file object
@@ -147,6 +154,13 @@ class EdFile:
         """
         return str(self.last_err).replace("u'", "'")
 
+    def GetMagic(self):
+        """Get the magic comment if one was present
+        @return: string or None
+
+        """
+        return self._magic['comment']
+
     def GetModtime(self):
         """Get the timestamp of this files last modification"""
         return self.modtime
@@ -193,15 +207,28 @@ class EdFile:
                 if enc is None:
                     self.bom = None
                     enc = CheckMagicComment(lines)
+                    if enc:
+                        self._magic['comment'] = enc
                 else:
                     self.bom = BOM.get(enc, None)
 
             if enc is not None:
                 self.encoding = enc
 
-            reader = codecs.getreader(self.encoding)(self._handle)
-            txt = reader.read()
-            reader.close()
+            try:
+                reader = codecs.getreader(self.encoding)(self._handle)
+                txt = reader.read()
+                reader.close()
+            except Exception, msg:
+                self.last_err = str(msg)
+                self.Close()
+                if self._magic['comment']:
+                    self._magic['bad'] = True
+                enc, txt = FallbackReader(self.path)
+                if enc is not None:
+                    self.encoding = enc
+                else:
+                    raise UnicodeDecodeError, msg
 
             if self.bom is not None:
                 txt = txt.replace(self.bom, '', 1)
@@ -343,3 +370,24 @@ def EncodeString(string, encoding=None):
         return rtxt
     else:
         return string
+
+def FallbackReader(fname):
+    """Guess then encoding of a file by brute force by trying one
+    encoding after the next until something succeeds.
+    @param fname: file path to read from
+
+    """
+    txt = None
+    for enc in ('utf-8', 'utf-16', 'latin-1', 'ascii'):
+        try:
+            handle = open(fname, 'rb')
+            reader = codecs.getreader(enc)(handle)
+            txt = reader.read()
+            reader.close()
+        except Exception, msg:
+            handle.close()
+            continue
+        else:
+            return (enc, txt)
+
+    return (None, None)

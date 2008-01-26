@@ -43,6 +43,8 @@ import util
 import doctools
 from extern import flatnotebook as FNB
 import ed_msg
+import ed_txt
+import ed_mdlg
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -78,6 +80,7 @@ class EdPages(FNB.FlatNotebook):
         self.control = None
         self.frame = self.GetTopLevelParent() # MainWindow
         self._index = dict()          # image list index
+        self._ses_load = False
 
         # Set Additional Style Parameters
         self.SetNonActiveTabTextColour(wx.Colour(102, 102, 102))
@@ -168,12 +171,14 @@ class EdPages(FNB.FlatNotebook):
                         single blank page is opened.
 
         """
+        self._ses_load = True
         files = Profile_Get('LAST_SESSION')
         if files is not None:
             for fname in files:
                 if os.path.exists(fname) and os.access(fname, os.R_OK):
                     self.OpenPage(os.path.dirname(fname), 
                                   os.path.basename(fname))
+        self._ses_load = False
 
         if self.GetPageCount() == 0:
             self.NewPage()
@@ -227,18 +232,14 @@ class EdPages(FNB.FlatNotebook):
         # Open file and get contents
         if os.path.exists(path2file):
             try:
-                control.LoadFile(path2file)
+                result = control.LoadFile(path2file)
             except Exception, msg:
                 self.LOG("[ed_pages][err] Failed to open file %s\n" % path2file)
                 self.LOG("[ed_pages][err] %s" % msg)
 
                 # File could not be opened/read give up
-                err = wx.MessageDialog(self, _("Editra could not open %s\n"
-                                               "\nError:\n%s") % (path2file, msg),
-                                        _("Error Opening File"),
-                                       style=wx.OK | wx.CENTER | wx.ICON_ERROR)
-                err.ShowModal()
-                err.Destroy()
+                if not self._ses_load:
+                    ed_mdlg.OpenErrorDlg(self, path2file, msg)
                 control.GetDocPointer().ClearLastError()
                 control.SetFileName('') # Reset the file name
 
@@ -248,6 +249,35 @@ class EdPages(FNB.FlatNotebook):
                 self.GetTopLevelParent().Thaw()
                 return
 
+        # Check if there was encoding errors
+        if not result:
+            doc = control.GetDocPointer()
+            doc.ClearLastError()
+            enc = doc.GetEncoding()
+            enc1 = doc.GetMagic()
+            if enc1 is None:
+                enc1 = ed_txt.DEFAULT_ENCODING
+
+            if not self._ses_load:
+                dlg = wx.MessageDialog(self,
+                                       _("The document could not be decoded with %s."
+                                         "\n\nWould you like to open it as %s instead?")
+                                       % (enc1, enc), _("Encoding Error"),
+                                       style=wx.YES_NO|wx.ICON_WARNING)
+                dlg.CenterOnParent()
+                result = dlg.ShowModal()
+
+        if result == wx.ID_NO or not result:
+            if new_pg:
+                control.Destroy()
+            else:
+                control.SetText('')
+                control.SetDocPointer(ed_txt.EdFile())
+                control.SetSavePoint()
+
+            self.GetTopLevelParent().Thaw()
+            return
+            
         # Put control into page an place page in notebook
         if new_pg:
             control.Show()
