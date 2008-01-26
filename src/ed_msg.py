@@ -119,6 +119,9 @@ EDMSG_UI_NB_CLOSED = EDMSG_UI_NB + ('pgclosed',)
 
 #---- End UI Action Messages ----#
 
+#---- Misc Messages ----#
+EDMSG_THEME_CHANGED = EDMSG_ALL + ('theme',)
+
 #--------------------------------------------------------------------------#
 # Public Api
 

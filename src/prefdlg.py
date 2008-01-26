@@ -2,7 +2,7 @@
 # Name: prefdlg.py                                                            #
 # Purpose: UI for configuring User Profile                                    #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -38,6 +38,7 @@ import ed_crypt
 import updater
 import util
 import syntax.syntax as syntax
+import ed_msg
 
 #----------------------------------------------------------------------------#
 # Globals
@@ -964,21 +965,7 @@ class AppearancePanel(PrefPanelBase):
                 val = (int(val), int(val))
             Profile_Set(ed_glob.ID_2_PROF[e_id], val)
             wx.GetApp().ReloadArtProvider()
-            for mainw in wx.GetApp().GetMainWindows():
-                toolbar = mainw.GetToolBar()
-                if toolbar is not None and \
-                   (toolbar.GetToolTheme() != Profile_Get('ICONS')) \
-                   or (toolbar.GetToolBitmapSize() != Profile_Get('ICON_SZ')):
-                    toolbar.ReInit()
-
-                # Update Commandbar icons
-                sbar = mainw.FindWindowById(ed_glob.ID_COMMAND_BAR)
-                if sbar:
-                    sbar.UpdateIcons()
-
-                # Update Notebook Images
-                mainw.GetNotebook().UpdateAllImages()
-
+            ed_msg.PostMessage(ed_msg.EDMSG_THEME_CHANGED, True)
         elif e_id == ed_glob.ID_PERSPECTIVES:
             Profile_Set('DEFAULT_VIEW', e_obj.GetValue())
             for main_win in wx.GetApp().GetMainWindows():

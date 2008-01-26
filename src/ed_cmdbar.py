@@ -3,8 +3,8 @@
 # Purpose: Creates a small slit panel that holds small controls for searching #
 #          and other actions.                                                 #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -37,6 +37,7 @@ import util
 import ed_glob
 import ed_search
 import ed_event
+import ed_msg
 import eclib.platebtn as platebtn
 
 _ = wx.GetTranslation
@@ -109,6 +110,7 @@ class CommandBar(wx.Panel):
         self.SetAutoLayout(True)
 
         # Bind Events
+        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
@@ -292,6 +294,13 @@ class CommandBar(wx.Panel):
         gc.DrawRectangle(0, 1, rect.width - 0.5, rect.height - 0.5)
 
         evt.Skip()
+
+    def OnThemeChange(self, msg):
+        """Update icons when the theme has changed
+        @param msg: Message Object
+
+        """
+        self.UpdateIcons()
 
     def Show(self, id_=0):
         """Shows the control and installs it in the parents
