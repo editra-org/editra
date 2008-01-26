@@ -31,6 +31,21 @@ import wx
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 
+def OpenErrorDlg(parent, fname, err):
+    """Show a file open error dialog
+    @param parent: parent window
+    @param fname: file that failed to open
+    @param err: error message
+
+    """
+    dlg = wx.MessageDialog(self, _("Editra could not open %s\n\nError:\n%s") % \
+                           (fname, err), _("Error Opening File"),
+                           style=wx.OK|wx.CENTER|wx.ICON_ERROR)
+    dlg.CenterOnParent()
+    result = dlg.ShowModal()
+    dlg.Destroy()
+    return result
+
 def SaveErrorDlg(parent, fname, err):
     """Show a file save error modal dialog
     @param parent: window that the dialog is the child of
@@ -41,6 +56,7 @@ def SaveErrorDlg(parent, fname, err):
     """
     dlg = wx.MessageDialog(parent, _("Failed to save file: %s\n\nError:\n%s") %\
                            (fname, err), _("Save Error"), wx.OK|wx.ICON_ERROR)
+    dlg.CenterOnParent()
     result = dlg.ShowModal()
     dlg.Destroy()
     return result
