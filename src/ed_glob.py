@@ -227,6 +227,7 @@ ID_FOLDER            = wx.NewId()
 ID_HARDDISK          = wx.NewId()
 ID_PACKAGE           = wx.NewId()
 ID_REPORTER          = wx.NewId()
+ID_STOP              = wx.ID_STOP
 ID_THEME             = wx.NewId()
 ID_USB               = wx.NewId()
 ID_UP                = wx.ID_UP

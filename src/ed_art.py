@@ -64,6 +64,7 @@ DEFAULT = {
             ed_glob.ID_REDO    : wx.ART_REDO,
             ed_glob.ID_SAVE    : wx.ART_FILE_SAVE,
             ed_glob.ID_SAVEAS  : wx.ART_FILE_SAVE_AS,
+            ed_glob.ID_STOP    : wx.ART_ERROR,
             ed_glob.ID_THEME   : wx.ART_INFORMATION,   # Bad match
             ed_glob.ID_UNDO    : wx.ART_UNDO,
             ed_glob.ID_UP      : wx.ART_GO_UP,
