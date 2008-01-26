@@ -2,8 +2,8 @@
 # Name: dev_tool.py                                                           #
 # Purpose: Provides logging and error tracking utilities                      #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """ Editra Development Tools 
@@ -15,6 +15,8 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
+#-----------------------------------------------------------------------------#
+# Imports
 import os
 import sys
 import re
@@ -27,8 +29,11 @@ import wx
 import ed_glob
 import ed_msg
 
+#-----------------------------------------------------------------------------#
+# Globals
 _ = wx.GetTranslation
 RE_LOG_LBL = re.compile(r"\[(.+?)\]")
+
 #-----------------------------------------------------------------------------#
 # General Debuging Helper Functions
 
@@ -129,13 +134,9 @@ class LogMsg:
 
     def __str__(self):
         """Returns a nice formatted string version of the message"""
-        ltime = time.localtime(self._msg['tstamp'])
-        tstamp = u"[%s:%s:%s]" % (str(ltime[3]).zfill(2),
-                                  str(ltime[4]).zfill(2),
-                                  str(ltime[5]).zfill(2))
         statement = unicode(self._msg['mstr'])
-        s_lst = [u"%s[%s][%s]%s" % (tstamp, self._msg['msrc'],
-                                    self._msg['lvl'], msg) 
+        s_lst = [u"[%s][%s][%s]%s" % (self.ClockTime, self._msg['msrc'],
+                                      self._msg['lvl'], msg) 
                  for msg in statement.split(u"\n")
                  if len(msg.strip())]
         out = os.linesep.join(s_lst)
@@ -144,6 +145,14 @@ class LogMsg:
         self._ok = False
 
         return out.encode('utf-8', 'replace')
+
+    @property
+    def ClockTime(self):
+        ltime = time.localtime(self._msg['tstamp'])
+        tstamp = u"%s:%s:%s" % (str(ltime[3]).zfill(2),
+                                str(ltime[4]).zfill(2),
+                                str(ltime[5]).zfill(2))
+        return tstamp
 
     @property
     def Expired(self):
@@ -238,6 +247,7 @@ def ExceptionHook(exctype, value, trace):
 
     """
     ftrace = FormatTrace(exctype, value, trace)
+
     # Ensure that error gets raised to console as well
     print ftrace
 
