@@ -1248,6 +1248,14 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if value:
                 self._code['compsvc'].LoadCompProvider(self.GetLexer())
 
+    def SetDocPointer(self, doc):
+        """Change the document object used.
+        @param doc: an L{ed_txt.EdFile} instance
+
+        """
+        del self.file
+        self.file = doc
+
     def SetEncoding(self, enc):
         """Sets the encoding of the current document
         @param enc: encoding to set for document
@@ -1874,10 +1882,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         txt = self.file.Read()
         if txt is not None:
             self.SetText(txt)
-            return True
         else:
             self.file.SetPath('')
             return False
+
+        if self.file.GetLastError() != 'None':
+            # Return false if there was an encoding error and a fallback
+            # was used. So the caller knows to check the error status
+            return False
+        else:
+            return True
 
     def ReloadFile(self):
         """Reloads the current file, returns True on success and
