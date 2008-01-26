@@ -229,13 +229,12 @@ class EdPages(FNB.FlatNotebook):
             try:
                 control.LoadFile(path2file)
             except Exception, msg:
-                self.LOG(("[ed_pages][err] Failed to open file %s\n"
-                          "[ed_pages][err] %s") % (path2file, msg))
+                self.LOG("[ed_pages][err] Failed to open file %s\n" % path2file)
+                self.LOG("[ed_pages][err] %s" % msg)
 
                 # File could not be opened/read give up
-                errmsg = control.GetDocPointer().GetLastError()
                 err = wx.MessageDialog(self, _("Editra could not open %s\n"
-                                               "\nError:\n%s") % (path2file, errmsg),
+                                               "\nError:\n%s") % (path2file, msg),
                                         _("Error Opening File"),
                                        style=wx.OK | wx.CENTER | wx.ICON_ERROR)
                 err.ShowModal()
