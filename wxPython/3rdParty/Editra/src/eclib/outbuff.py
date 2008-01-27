@@ -3,7 +3,7 @@
 # Purpose: Gui and helper classes for running processes and displaying output #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# License: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -250,10 +250,44 @@ class ProcessBufferMixin:
         @keyword update: The update interval speed in msec
 
         """
+        # Attributes
+        self._rate = update
+
         # Event Handlers
-        self.Bind(EVT_PROCESS_START, lambda evt: self.Start(update))
+        self.Bind(EVT_PROCESS_START, self._OnProcessStart)
         self.Bind(EVT_UPDATE_TEXT, lambda evt: self.AppendUpdate(evt.GetValue()))
-        self.Bind(EVT_PROCESS_EXIT, lambda evt: self.Stop())
+        self.Bind(EVT_PROCESS_EXIT, self._OnProcessExit)
+
+    def _OnProcessExit(self, evt):
+        """Handles EVT_PROCESS_EXIT"""
+        self.Stop()
+        self.DoProcessExit()
+
+    def _OnProcessStart(self, evt):
+        """Handles EVT_PROCESS_START"""
+        self.DoProcessStart()
+        self.Start(self._rate)
+
+    def DoProcessExit(self):
+        """Override this method to do any post processing after the running
+        task has exited.
+
+        """
+        pass
+
+    def DoProcessStart(self):
+        """Override this method to do any pre processing before starting
+        a processes output.
+
+        """
+        pass
+
+    def SetUpdateInterval(self, value):
+        """Set the rate at which the buffer outputs update messages
+        @param value: rate in milliseconds to do updates on
+
+        """
+        self._rate = value
 
 #-----------------------------------------------------------------------------#
 
@@ -387,6 +421,15 @@ class ProcessThread(threading.Thread):
         evt = OutputBufferEvent(edEVT_PROCESS_EXIT, self._parent.GetId(), result)
         wx.CallAfter(wx.PostEvent, self._parent, evt)
 
+    def SetArgs(self, args):
+        """Set the args to pass to the command
+        @param args: list or string of program arguments
+
+        """
+        if isinstance(args, list):
+            ' '.join(item.strip() for item in args)
+        self._cmd['args'] = args.strip()
+
     def SetCommand(self, cmd):
         """Set the command to execute
         @param cmd: Command string
@@ -406,6 +449,7 @@ class ProcessThread(threading.Thread):
 if __name__ == '__main__':
     APP = wx.PySimpleApp(False)
     FRAME = wx.Frame(None, wx.ID_ANY, 'Test OutputBuffer')
+    FRAME.CreateStatusBar()
     FSIZER = wx.BoxSizer(wx.VERTICAL)
     class MyOutputBuffer(OutputBuffer, ProcessBufferMixin):
         def __init__(self, parent):
