@@ -96,6 +96,88 @@ class OutputHandler(object):
         pass
 
 #-----------------------------------------------------------------------------#
+class BashHandler(OutputHandler):
+    """OutputHandler for Bash scripts
+
+    """
+    COMMANDS = ['bash',]
+    __name__ == 'bash'
+
+    def GetCommands(self):
+        """Get the set of commands available for this file type"""
+        return self.COMMANDS
+
+    def GetName(self):
+        """Get the name of this handler"""
+        return 'bash'
+
+#-----------------------------------------------------------------------------#
+
+class BooHandler(OutputHandler):
+    """OutputHandler for Boo"""
+    COMMANDS = ['booi',]
+    __name__ == 'boo'
+
+    def GetCommands(self):
+        """Get the set of commands available for this file type"""
+        return self.COMMANDS
+
+    def GetName(self):
+        """Get the name of this handler"""
+        return 'boo'
+
+#-----------------------------------------------------------------------------#
+
+class LuaHandler(OutputHandler):
+    """OutputHandler for Lua
+
+    """
+    COMMANDS = ['lua',]
+    __name__ == 'lua'
+
+    def GetCommands(self):
+        """Get the set of commands available for this file type"""
+        return self.COMMANDS
+
+    def GetName(self):
+        """Get the name of this handler"""
+        return 'lua'
+
+#-----------------------------------------------------------------------------#
+
+class PikeHandler(OutputHandler):
+    """OutputHandler for Pike
+
+    """
+    COMMANDS = ['pike',]
+    __name__ == 'pike'
+
+    def GetCommands(self):
+        """Get the set of commands available for this file type"""
+        return self.COMMANDS
+
+    def GetName(self):
+        """Get the name of this handler"""
+        return 'pike'
+
+#-----------------------------------------------------------------------------#
+
+class PerlHandler(OutputHandler):
+    """OutputHandler for Perl scripts
+
+    """
+    COMMANDS = ['perl',]
+    __name__ == 'perl'
+
+    def GetCommands(self):
+        """Get the set of commands available for this file type"""
+        return self.COMMANDS
+
+    def GetName(self):
+        """Get the name of this handler"""
+        return 'perl'
+
+#-----------------------------------------------------------------------------#
 
 class PythonHandler(OutputHandler):
     PY_ERROR_RE = re.compile('.*File "(.+)", line ([0-9]+)')
@@ -165,5 +247,46 @@ class PythonHandler(OutputHandler):
                 stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_INFO)
 
 #-----------------------------------------------------------------------------#
+
+class RubyHandler(OutputHandler):
+    """OutputHandler for Ruby scripts
+
+    """
+    COMMANDS = ['ruby',]
+    __name__ == 'ruby'
+
+    def GetCommands(self):
+        """Get the set of commands available for this file type"""
+        return self.COMMANDS
+
+    def GetName(self):
+        """Get the name of this handler"""
+        return 'ruby'
+
+#-----------------------------------------------------------------------------#
+
+class TCLHandler(OutputHandler):
+    """OutputHandler for TCL/TK
+
+    """
+    COMMANDS = ['wish',]
+    __name__ == 'tcl/tk'
+
+    def GetCommands(self):
+        """Get the set of commands available for this file type"""
+        return self.COMMANDS
+
+    def GetName(self):
+        """Get the name of this handler"""
+        return 'tcl/tk'
+
+#-----------------------------------------------------------------------------#
 HANDLERS = { 0 : OutputHandler(),
-            synglob.ID_LANG_PYTHON : PythonHandler() }
+            synglob.ID_LANG_BASH : BashHandler(),
+            synglob.ID_LANG_BOO : BooHandler(),
+            synglob.ID_LANG_LUA : LuaHandler(),
+            synglob.ID_LANG_PERL : PerlHandler(),
+            synglob.ID_LANG_PIKE : PikeHandler(),
+            synglob.ID_LANG_PYTHON : PythonHandler(),
+            synglob.ID_LANG_RUBY : RubyHandler(),
+            synglob.ID_LANG_TCL : TCLHandler() }
