@@ -14,6 +14,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import sys
 import wx
 import wx.lib.mixins.listctrl as listmix
 import cStringIO
@@ -200,10 +201,19 @@ class ConfigPanel(wx.Panel):
         if e_id == ID_LANGUAGE:
             lang = e_obj.GetStringSelection()
             handler = handlers.GetHandlerByName(lang)
+            cmds = handler.GetCommands()
+
             elist = self.FindWindowById(ID_EXECUTABLES)
-            elist.ClearAll()
-            for exe in handler.GetCommands():
-                elist.Append([exe])
+            elist.DeleteAllItems()
+            def_ch = self.FindWindowById(wx.ID_DEFAULT)
+            def_ch.SetItems(cmds)
+            if len(cmds):
+                def_ch.SetStringSelection(cmds[0])
+
+            for exe in cmds:
+                index = elist.InsertStringItem(sys.maxint, exe)
+                elist.SetStringItem(index, 0, exe)
+
         elif e_id == wx.ID_DEFAULT:
             # TODO Add a config variable to save the default/preferred choice
             pass
