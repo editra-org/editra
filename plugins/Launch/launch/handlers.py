@@ -72,7 +72,7 @@ class OutputHandler(object):
 
     def GetName(self):
         """Get the name of this handler"""
-        return self.__name__
+        return 'handler'
 
     def HandleHotSpot(self, mainw, outbuff, line, fname):
         """Handle hotspot clicks. Called when a hotspot is clicked
@@ -112,6 +112,10 @@ class PythonHandler(OutputHandler):
 
         proc_env['PYTHONUNBUFFERED'] = '1'
         return proc_env
+
+    def GetName(self):
+        """Get the name of this handler"""
+        return 'python'
 
     def HandleHotSpot(self, mainw, outbuff, line, fname):
         """Hotspots are error messages, find the file/line of the

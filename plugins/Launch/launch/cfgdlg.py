@@ -15,11 +15,55 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
+import wx.lib.mixins.listctrl as listmix
+import cStringIO
+import zlib
 
 # Local Imports
 import handlers
 
 #-----------------------------------------------------------------------------#
+# Globals
+ID_LANGUAGE = wx.NewId()
+ID_EXECUTABLES = wx.NewId()
+
+_ = wx.GetTranslation
+
+#-----------------------------------------------------------------------------#
+
+def GetMinusData():
+    return zlib.decompress(
+"x\xda\xeb\x0c\xf0s\xe7\xe5\x92\xe2b``\xe0\xf5\xf4p\t\x02\xd2< \xcc\xc1\x06$\
+\xc3Jc\x9e\x03)\x96b'\xcf\x10\x0e \xa8\xe1H\xe9\x00\xf2\x9d<]\x1cC4&&\xa7\
+\xa4$\xa5)\xb0\x1aL\\RU\x90\x95\xe0\xf8,\xc6\xaa\xf0\xcf\xffr\x13\xd69\x87\
+\xb8x\xaaVM\xea\x890\xf512N\x9e\xb1v\xf5\xe9\x05\xdc\xc2;jf:\x96\xdf\xd2\x14\
+a\x96pO\xda\xc0\xc4\xa0\xf4\x8a\xab\xcau\xe2|\x1d\xa0i\x0c\x9e\xae~.\xeb\x9c\
+\x12\x9a\x00Ij($" )
+
+def GetMinusBitmap():
+    stream = cStringIO.StringIO(GetMinusData())
+    img = wx.ImageFromStream(stream)
+    return wx.BitmapFromImage(img)
+
+#----------------------------------------------------------------------
+def GetPlusData():
+    return zlib.decompress(
+"x\xda\xeb\x0c\xf0s\xe7\xe5\x92\xe2b``\xe0\xf5\xf4p\t\x02\xd2< \xcc\xc1\x06$\
+\xc3Jc\x9e\x03)\x96b'\xcf\x10\x0e \xa8\xe1H\xe9\x00\xf2{<]\x1cC4&&'Hp\x1c\
+\xd8\xb9\xcf\xe6U\xfd\xefi\xbb\xffo\xf44J\x14L\xae\xde\x97+yx\xd3\xe9\xfc\
+\x8d\xb3\xda|\x99\x99g\x1b07\x1b\xd8k\x87\xf1\xea\x18\x1c{\xaa\xec\xfe\xaf>%\
+!\xf9A\xda\xef\x03\x06\xf67{\x1f\x1e\xf8\xf9\x98g\xf9\xb9\xf9\xbf\xfe\xbf~\
+\xad\xcf\x96'h\xca\xe6\xcck\xe8&2\xb7\x8e\x87\xe7\xbfdAB\xfb\xbf\xe0\x88\xbf\
+\xcc\xcc\x7f.\xcbH\xfc{\xfd(\xa0\xe5*\xff\xfd\xff\x06\x06\x1f\xfe\xffh\xbaj\
+\xf2f^ZB\xc2\x83\xe4\xc3\xef2o13<r\xd5y\xc0\xb9\xc2\xfa\x0e\xd0]\x0c\x9e\xae\
+~.\xeb\x9c\x12\x9a\x00\xcf9S\xc6" )
+
+def GetPlusBitmap():
+    stream = cStringIO.StringIO(GetPlusData())
+    img = wx.ImageFromStream(stream)
+    return wx.BitmapFromImage(img)
+
+#----------------------------------------------------------------------
 
 class ConfigDialog(wx.Frame):
     """Configuration dialog for configuring what executables are available
@@ -27,21 +71,35 @@ class ConfigDialog(wx.Frame):
 
     """
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent)
+        wx.Frame.__init__(self, parent, title=_("Launch Configuration"))
 
         # Attributes
 
         # Layout
         self.__DoLayout()
 
+        # Event Handlers
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+
+        # Register with app
+        wx.GetApp().RegisterWindow(repr(self), self)
+
     def __DoLayout(self):
         """Layout the dialog"""
         sizer = wx.BoxSizer(wx.VERTICAL)
+        panel = ConfigPanel(self)
+        sizer.Add(panel, 1, wx.EXPAND)
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
+        self.SetInitialSize()
+        self.SetMinSize((400, 300))
+
+    def OnClose(self, evt):
+        """Unregister the window when its closed"""
+        wx.GetApp().UnRegisterWindow(repr(self))
+        evt.Skip()
 
 #-----------------------------------------------------------------------------#
-ID_LANGUAGE = wx.NewId()
 
 class ConfigPanel(wx.Panel):
     """Configuration panel that holds the controls for configuration"""
@@ -53,14 +111,18 @@ class ConfigPanel(wx.Panel):
         # Layout
         self.__DoLayout()
 
+        # Event Handlers
+        self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_CHOICE, self.OnChoice)
+
     def __DoLayout(self):
         """Layout the controls"""
         msizer = wx.BoxSizer(wx.VERTICAL)
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         lang_ch = wx.Choice(self, ID_LANGUAGE, choices=GetHandlerTypes())
-        lsizer.AddMany([(wx.StaticText(self, label=_("File Type")), 0),
-                        ((5, 5), 0), (lang_ch, 0)])
+        lsizer.AddMany([(wx.StaticText(self, label=_("File Type") + ":"), 0),
+                        ((5, 5), 0), (lang_ch, 1, wx.EXPAND)])
 
         # Main area
         sbox = wx.StaticBox(self, label=_("Executables"))
@@ -70,17 +132,94 @@ class ConfigPanel(wx.Panel):
         dsizer = wx.BoxSizer(wx.HORIZONTAL)
         chandler = handlers.GetHandlerByName(lang_ch.GetStringSelection())
         def_ch = wx.Choice(self, wx.ID_DEFAULT, choices=chandler.GetCommands())
-        dsizer.AddMany([(wx.StaticText(self, label=_("Default")), 0),
-                        ((5, 5), 0), (chandler, 0)])
+        dsizer.AddMany([(wx.StaticText(self, label=_("Default") + ":"), 0),
+                        ((5, 5), 0), (def_ch, 1, wx.EXPAND)])
 
-        # Edit List
-        
+        # Executables List
+        exelist = AutoWidthListCtrl(self, ID_EXECUTABLES,
+                                    style=wx.LC_EDIT_LABELS|\
+                                          wx.BORDER|\
+                                          wx.LC_REPORT)
+        exelist.InsertColumn(0, _("Executable Commands"))
+        for exe in chandler.GetCommands():
+            exelist.Append([exe])
+        exelist.SetToolTipString(_("Click on an item to edit"))
+        addbtn = wx.BitmapButton(self, wx.ID_ADD, GetPlusBitmap())
+        addbtn.SetToolTipString(_("Add a new executable"))
+        delbtn = wx.BitmapButton(self, wx.ID_REMOVE, GetMinusBitmap())
+        delbtn.SetToolTipString(_("Remove selection from list"))
+        btnsz = wx.BoxSizer(wx.HORIZONTAL)
+        btnsz.AddMany([(addbtn, 0), ((2, 2), 0), (delbtn, 0)])
+
+        # Box Sizer Layout
+        boxsz.AddMany([((5, 5), 0), (dsizer, 0, wx.ALIGN_CENTER|wx.EXPAND),
+                       ((5, 5), 0), (wx.StaticLine(self), 0, wx.EXPAND),
+                       ((8, 8), 0), (exelist, 1, wx.EXPAND), ((5, 5), 0),
+                       (btnsz, 0, wx.ALIGN_LEFT)])
 
         # Setup the main sizer
-        msizer.AddMany([(lsizer, 0, wx.ALIGN_CENTER_HORIZONTAL),
-                        (sbox, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
+        msizer.AddMany([((10, 10), 0), (lsizer, 0, wx.EXPAND),
+                        ((5, 5), 0), (wx.StaticLine(self), 0, wx.EXPAND),
+                        ((5, 5), 0),
+                        (boxsz, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL),
+                        ((10, 10), 0)])
+
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer.AddMany([((8, 8), 0), (msizer, 1, wx.EXPAND), ((8, 8), 0)])
+        self.SetSizer(hsizer)
+        self.SetAutoLayout(True)
+
+    def OnButton(self, evt):
+        """Handle the add and remove button events
+        @param evt: wxButtonEvent
+
+        """
+        e_id = evt.GetId()
+        elist = self.FindWindowById(ID_EXECUTABLES)
+        if e_id == wx.ID_ADD:
+            elist.Append([_("**New Value**")])
+        elif e_id == wx.ID_REMOVE:
+            item = -1
+            items = []
+            while True:
+                item = elist.GetNextItem(item, wx.LIST_NEXT_ALL,
+                                         wx.LIST_STATE_SELECTED)
+                if item == -1:
+                    break
+                items.append(item)
+
+            for item in reversed(sorted(items)):
+                elist.DeleteItem(item)
+        else:
+            evt.Skip()
+
+    def OnChoice(self, evt):
+        """Handle the choice selection events"""
+        e_id = evt.GetId()
+        e_obj = evt.GetEventObject()
+        if e_id == ID_LANGUAGE:
+            lang = e_obj.GetStringSelection()
+            handler = handlers.GetHandlerByName(lang)
+            elist = self.FindWindowById(ID_EXECUTABLES)
+            elist.ClearAll()
+            for exe in handler.GetCommands():
+                elist.Append([exe])
+        elif e_id == wx.ID_DEFAULT:
+            # TODO Add a config variable to save the default/preferred choice
+            pass
+        else:
+            evt.Skip()
 
 #-----------------------------------------------------------------------------#
+class AutoWidthListCtrl(listmix.ListCtrlAutoWidthMixin,
+                        wx.ListCtrl):
+    """ List control for showing and editing environmental variables """
+    def __init__(self, *args, **kwargs):
+        wx.ListCtrl.__init__(self, *args, **kwargs)
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
+
+#-----------------------------------------------------------------------------#
+
 def GetHandlerTypes():
     """Get the language type handlers for each language that
     has a handler defined.
