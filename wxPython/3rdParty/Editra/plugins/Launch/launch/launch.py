@@ -20,6 +20,7 @@ import wx.stc
 
 # Local Imports
 import handlers
+import cfgdlg
 
 # Editra Libraries
 import ed_glob
@@ -77,7 +78,6 @@ class LaunchWindow(ctrlbox.ControlBox):
         ctrlbar.AddControl(pref, wx.ALIGN_LEFT)
 
         # Exe
-        print "ADDED EXE"
         exe = wx.Choice(ctrlbar, ID_EXECUTABLE)
         ctrlbar.AddControl(exe, wx.ALIGN_LEFT)
 
@@ -152,7 +152,14 @@ class LaunchWindow(ctrlbox.ControlBox):
         """Handle events from the buttons on the control bar"""
         e_id = evt.GetId()
         if e_id == ID_SETTINGS:
-            pass
+            app = wx.GetApp()
+            win = app.GetWindowInstance(cfgdlg.ConfigDialog)
+            if win is None:
+                config = cfgdlg.ConfigDialog(self._mw)
+                config.CentreOnParent()
+                config.Show()
+            else:
+                win.Raise()
         elif e_id == ID_RUN:
             self.SetProcessRunning(not self._busy)
         else:
@@ -169,8 +176,6 @@ class LaunchWindow(ctrlbox.ControlBox):
         if hasattr(ctrl, 'GetFileName'):
             fname = ctrl.GetFileName()
             self.SetFile(fname)
-            print "HELLO", fname
-            print self.FindWindowById(wx.ID_CLEAR)
 
     def OnThemeChanged(self, msg):
         """Update icons when the theme has been changed
