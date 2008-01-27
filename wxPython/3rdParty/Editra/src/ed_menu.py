@@ -147,6 +147,7 @@ class EdMenu(wx.Menu):
             mitem = self.FindItemByPosition(item)
             if mitem.IsSeparator():
                 continue
+
             mlabel = mitem.GetItemLabel()
             if after and mitem.GetId() == after:
                 start = True
