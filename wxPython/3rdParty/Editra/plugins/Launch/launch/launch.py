@@ -162,7 +162,8 @@ class LaunchWindow(ctrlbox.ControlBox):
             app = wx.GetApp()
             win = app.GetWindowInstance(cfgdlg.ConfigDialog)
             if win is None:
-                config = cfgdlg.ConfigDialog(self._mw)
+                config = cfgdlg.ConfigDialog(self._mw,
+                                             ftype=self._config['lang'])
                 config.CentreOnParent()
                 config.Show()
             else:
@@ -318,15 +319,17 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         handler = handlers.GetHandlerById(lang_id)
         handler.StyleText(self, start, txt)
 
-    def DoProcessExit(self):
+    def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited"""
         parent = self.GetParent()
         parent.SetProcessRunning(False)
+        self.AppendUpdate(">>> %s: %d%s" % (_("Exit Code"), code, os.linesep))
 
-    def DoProcessStart(self):
-        """Do all that is needed to be done after a process has exited"""
+    def DoProcessStart(self, cmd=''):
+        """Do any necessary preprocessing before a process is started"""
         parent = self.GetParent()
         parent.SetProcessRunning(True)
+        self.AppendUpdate(">>> %s%s" % (cmd, os.linesep))
 
     def OnHotSpot(self, evt):
         """Handle clicks on hotspots"""
