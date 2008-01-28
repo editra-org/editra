@@ -23,13 +23,19 @@ import zlib
 # Local Imports
 import handlers
 
+# Editra Libraries
+import ed_msg
+import util
+
 #-----------------------------------------------------------------------------#
 # Globals
 ID_LANGUAGE = wx.NewId()
 ID_EXECUTABLES = wx.NewId()
 
-_ = wx.GetTranslation
+# Message Types
+LAUNCH_CFG_EXIT = ed_msg.EDMSG_ALL + ('launch', 'cfg', 'exit')
 
+_ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
 def GetMinusData():
@@ -98,6 +104,7 @@ class ConfigDialog(wx.Frame):
     def OnClose(self, evt):
         """Unregister the window when its closed"""
         wx.GetApp().UnRegisterWindow(repr(self))
+        ed_msg.PostMessage(LAUNCH_CFG_EXIT)
         evt.Skip()
 
 #-----------------------------------------------------------------------------#
@@ -115,6 +122,7 @@ class ConfigPanel(wx.Panel):
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
+        self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit)
 
     def __DoLayout(self):
         """Layout the controls"""
@@ -122,8 +130,9 @@ class ConfigPanel(wx.Panel):
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         lang_ch = wx.Choice(self, ID_LANGUAGE, choices=GetHandlerTypes())
-        lsizer.AddMany([(wx.StaticText(self, label=_("File Type") + ":"), 0),
-                        ((5, 5), 0), (lang_ch, 1, wx.EXPAND)])
+        lsizer.AddMany([(wx.StaticText(self, label=_("File Type") + ":"), 0,
+                         wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
+                        (lang_ch, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
 
         # Main area
         sbox = wx.StaticBox(self, label=_("Executables"))
@@ -133,8 +142,9 @@ class ConfigPanel(wx.Panel):
         dsizer = wx.BoxSizer(wx.HORIZONTAL)
         chandler = handlers.GetHandlerByName(lang_ch.GetStringSelection())
         def_ch = wx.Choice(self, wx.ID_DEFAULT, choices=chandler.GetCommands())
-        dsizer.AddMany([(wx.StaticText(self, label=_("Default") + ":"), 0),
-                        ((5, 5), 0), (def_ch, 1, wx.EXPAND)])
+        dsizer.AddMany([(wx.StaticText(self, label=_("Default") + ":"), 0,
+                         wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
+                        (def_ch, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
 
         # Executables List
         exelist = AutoWidthListCtrl(self, ID_EXECUTABLES,
@@ -142,8 +152,7 @@ class ConfigPanel(wx.Panel):
                                           wx.BORDER|\
                                           wx.LC_REPORT)
         exelist.InsertColumn(0, _("Executable Commands"))
-        for exe in chandler.GetCommands():
-            exelist.Append([exe])
+        self.SetListItems(chandler.GetCommands())
         exelist.SetToolTipString(_("Click on an item to edit"))
         addbtn = wx.BitmapButton(self, wx.ID_ADD, GetPlusBitmap())
         addbtn.SetToolTipString(_("Add a new executable"))
@@ -160,8 +169,8 @@ class ConfigPanel(wx.Panel):
 
         # Setup the main sizer
         msizer.AddMany([((10, 10), 0), (lsizer, 0, wx.EXPAND),
-                        ((5, 5), 0), (wx.StaticLine(self), 0, wx.EXPAND),
-                        ((5, 5), 0),
+                        ((10, 10), 0), (wx.StaticLine(self), 0, wx.EXPAND),
+                        ((10, 10), 0),
                         (boxsz, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL),
                         ((10, 10), 0)])
 
@@ -169,6 +178,26 @@ class ConfigPanel(wx.Panel):
         hsizer.AddMany([((8, 8), 0), (msizer, 1, wx.EXPAND), ((8, 8), 0)])
         self.SetSizer(hsizer)
         self.SetAutoLayout(True)
+
+    def GetCurrentHandler(self):
+        """Get the currently selected file type handler
+        @return: handlers.FileTypeHandler
+
+        """
+        ftype = self.FindWindowById(ID_LANGUAGE).GetStringSelection()
+        return handlers.GetHandlerByName(ftype)
+
+    def GetListItems(self):
+        """Get all the values from the list control"""
+        item_id = -1
+        exes = list()
+        elist = self.FindWindowById(ID_EXECUTABLES)
+        for item in xrange(elist.GetItemCount()):
+            item_id = elist.GetNextItem(item_id)
+            if item_id == -1:
+                break
+            exes.append(elist.GetItemText(item_id))
+        return exes
 
     def OnButton(self, evt):
         """Handle the add and remove button events
@@ -191,6 +220,14 @@ class ConfigPanel(wx.Panel):
 
             for item in reversed(sorted(items)):
                 elist.DeleteItem(item)
+
+            handler = self.GetCurrentHandler()
+            exes = self.GetListItems()
+            def_ch = self.FindWindowById(wx.ID_DEFAULT)
+            def_ch.SetItems(exes)
+            handler.SetCommands(exes)
+            def_ch.SetStringSelection(handler.GetDefault())
+
         else:
             evt.Skip()
 
@@ -198,35 +235,88 @@ class ConfigPanel(wx.Panel):
         """Handle the choice selection events"""
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
+        e_val = e_obj.GetStringSelection()
         if e_id == ID_LANGUAGE:
-            lang = e_obj.GetStringSelection()
-            handler = handlers.GetHandlerByName(lang)
+            handler = handlers.GetHandlerByName(e_val)
             cmds = handler.GetCommands()
-
             elist = self.FindWindowById(ID_EXECUTABLES)
             elist.DeleteAllItems()
             def_ch = self.FindWindowById(wx.ID_DEFAULT)
             def_ch.SetItems(cmds)
-            if len(cmds):
-                def_ch.SetStringSelection(cmds[0])
-
-            for exe in cmds:
-                index = elist.InsertStringItem(sys.maxint, exe)
-                elist.SetStringItem(index, 0, exe)
-
+            def_ch.SetStringSelection(handler.GetDefault())
+            self.SetListItems(cmds)
         elif e_id == wx.ID_DEFAULT:
-            # TODO Add a config variable to save the default/preferred choice
-            pass
+            handler = self.GetCurrentHandler()
+            handler.SetDefault(e_val)
         else:
             evt.Skip()
 
+    def OnEndEdit(self, evt):
+        """Store the new list values after the editing of a
+        label has finished.
+        @param evt: wxEVT_LIST_END_LABEL_EDIT
+
+        """
+        handler = self.GetCurrentHandler()
+        if handler.GetName() != handlers.DEFAULT_HANDLER:
+            exes = self.GetListItems()
+            idx = evt.GetIndex()
+            nval = evt.GetLabel()
+            if len(exes) >= idx:
+                exes[idx] = nval
+            else:
+                exes.append(nval)
+
+            # Store the new values
+            handler.SetCommands(exes)
+            def_ch = self.FindWindowById(wx.ID_DEFAULT)
+            def_ch.SetItems(sorted(exes))
+            def_ch.SetStringSelection(handler.GetDefault())
+
+    def SetListItems(self, items):
+        """Set the items that are in the list control
+        @param items: list of strings
+
+        """
+        elist = self.FindWindowById(ID_EXECUTABLES)
+        for exe in items:
+            index = elist.InsertStringItem(sys.maxint, exe)
+            elist.SetStringItem(index, 0, exe)
+
 #-----------------------------------------------------------------------------#
+
 class AutoWidthListCtrl(listmix.ListCtrlAutoWidthMixin,
                         wx.ListCtrl):
-    """ List control for showing and editing environmental variables """
+    """Auto-width adjusting list for showing editing the commands"""
     def __init__(self, *args, **kwargs):
         wx.ListCtrl.__init__(self, *args, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
+
+    def Append(self, entry):
+        """Append an entry to the list
+        @param entry: entry to add
+
+        """
+        wx.ListCtrl.Append(self, entry)
+        self.ColorRow(self.GetItemCount() - 1)
+        
+    def ColorRow(self, index):
+        """Color the given index
+        @param index: list index
+
+        """
+        if index % 2:
+            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+            color = util.AdjustColour(color, 15)
+            self.SetItemBackgroundColour(index, color)
+
+    def SetStringItem(self, index, col, label, imageId=-1):
+        """Set the item in the list at the given index and colorize
+        the row if it is an odd one.
+
+        """
+        wx.ListCtrl.SetStringItem(self, index, col, label, imageId=imageId)
+        self.ColorRow(index)
 
 #-----------------------------------------------------------------------------#
 
