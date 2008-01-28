@@ -51,17 +51,19 @@ class LaunchWindow(ctrlbox.ControlBox):
         self._busy = False
         self._config = dict(file='')
 
-        # Layout
+        # Setup
         self.__DoLayout()
+        cbuffer = self._mw.GetNotebook().GetCurrentCtrl()
+        self.SetupControlBar(cbuffer)
 
         # Event Handlers
-        self.Bind(wx.EVT_BUTTON, lambda evt: self._buffer.Clear(), id=wx.CLEAR)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
 
     def __del__(self):
         ed_msg.Unsubscribe(self.OnPageChanged)
+        ed_msg.Unsubscribe(self.OnThemeChanged)
         super(LaunchWindow).__del__()
 
     def __DoLayout(self):
@@ -75,14 +77,17 @@ class LaunchWindow(ctrlbox.ControlBox):
         prefbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF), wx.ART_MENU)
         pref = platebtn.PlateButton(ctrlbar, ID_SETTINGS, '', prefbmp,
                                     style=platebtn.PB_STYLE_NOBG)
+        pref.SetToolTipString(_("Settings"))
         ctrlbar.AddControl(pref, wx.ALIGN_LEFT)
 
         # Exe
         exe = wx.Choice(ctrlbar, ID_EXECUTABLE)
+        exe.SetToolTipString(_("Program Executable Command"))
         ctrlbar.AddControl(exe, wx.ALIGN_LEFT)
 
         # Args
         args = wx.TextCtrl(ctrlbar, ID_ARGS)
+        args.SetToolTipString(_("Program Arguments"))
         ctrlbar.AddControl(args, wx.ALIGN_LEFT)
 
         # Spacer
@@ -126,14 +131,6 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         return None
 
-    def CanRun(self, lang_id):
-        """Check if the files language id is a recognized one
-        that can be run.
-        @param lang_id: Unique language identifier
-
-        """
-        
-
     def GetFile(self):
         """Get the file that is currently set to be run
         @return: file path
@@ -162,6 +159,8 @@ class LaunchWindow(ctrlbox.ControlBox):
                 win.Raise()
         elif e_id == ID_RUN:
             self.SetProcessRunning(not self._busy)
+        elif e_id == wx.ID_CLEAR:
+            self._buffer.Clear()
         else:
             evt.Skip()
 
@@ -174,8 +173,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         mval = msg.GetData()
         ctrl = mval[0].GetCurrentCtrl()
         if hasattr(ctrl, 'GetFileName'):
-            fname = ctrl.GetFileName()
-            self.SetFile(fname)
+            self.SetupControlBar(ctrl)
 
     def OnThemeChanged(self, msg):
         """Update icons when the theme has been changed
@@ -225,6 +223,39 @@ class LaunchWindow(ctrlbox.ControlBox):
             rbtn.SetLabel(_("Run"))
 
         self.GetControlBar().Layout()
+        rbtn.Refresh()
+
+    def SetupControlBar(self, ctrl):
+        """Set the state of the controlbar based data found in the buffer
+        passed in.
+        @param ctrl: EdStc
+
+        """
+        fname = ctrl.GetFileName()
+        self.SetFile(fname)
+
+        # Setup filetype settings
+        lang_id = ctrl.GetLangId()
+        handler = handlers.GetHandlerById(lang_id)
+        cmds = handler.GetCommands()
+
+        # Get the controls
+        exe_ch = self.FindWindowById(ID_EXECUTABLE)
+        args_txt = self.FindWindowById(ID_ARGS)
+        run_btn = self.FindWindowById(ID_RUN)
+
+        # Set control states
+        exe_ch.SetItems(cmds)
+        if len(cmds):
+            exe_ch.Enable()
+            args_txt.Enable()
+            run_btn.Enable()
+            exe_ch.SetStringSelection(handler.GetDefault())
+            self.GetControlBar().Layout()
+        else:
+            run_btn.Disable()
+            args_txt.Disable()
+            exe_ch.Disable()
 
 #-----------------------------------------------------------------------------#
 
