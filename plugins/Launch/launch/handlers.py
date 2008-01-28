@@ -1,22 +1,41 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 # Name: handlers.py                                                           #
-# Purpose: Script Output Handlers                                             #
+# Purpose: File Type Handlers                                                 #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
-"""Script Output Handlers
-To add a new handler derive from the OutputHandler base class and add an
-instance of the class to the HANDLERS dictionary found at the end of this
-module.
+"""File Type Handlers
+The file type handlers are used to handle the execution of and output of the
+different file types that they represent. Each handler manages its own settings
+and configuration.
+
+It is easy to extend the filetypes supported by the Launch plugin through this
+interface. To add support for a new filetype simply derive a new class from the
+base L{FileTypeHandler} and override any of the following methods to provide
+custom functionality.
+
+Required Overrides:
+__init__ : define default command list and default command
+__name__ : set the name of the handler, this should be the file type
+
+Other Overrides:
+GetEnvironment : Return a dictionary of environmental variables to run the
+                 process within
+HandleHotSpot : Action to perform when a hotspot is clicked on in the output
+                buffer.
+StyleText : Perform custom styling on the text as its added, line by line
 
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
+
+__all__ = ['GetHandlerById', 'GetHandlerByName', 'GetState',
+           'SetState', 'DEFAULT_HANDLER']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -26,13 +45,13 @@ import re
 
 # Editra Libraries
 import syntax.synglob as synglob
-import eclib.outbuff as outbuff
 
 #-----------------------------------------------------------------------------#
 # Globals
+DEFAULT_HANDLER = 'handler'
 
 #-----------------------------------------------------------------------------#
-
+# Public Handler Api for use outside this module
 def GetHandlerById(lang_id):
     """Get a handler for the specified language id"""
     if HANDLERS.has_key(lang_id):
@@ -48,20 +67,59 @@ def GetHandlerByName(name):
     else:
         return HANDLERS[0]
 
+def GetState():
+    """Get a dictionary capturing the current state of all handlers
+    @return: dict { handlername : (default, [commands]) }
+
+    """
+    rdict = dict()
+    for handler in HANDLERS.values():
+        rdict[handler.GetName()] = (handler.GetDefault(), handler.GetCommands())
+    return rdict
+
+def SetState(state):
+    """Set the state of all handlers based on a dictionary of values
+    @param state: dict { handlername : (default, [commands]) }
+
+    """
+    
 #-----------------------------------------------------------------------------#
-# Handler Base Class
-class OutputHandler(object):
+# Handler Base Class and Handler implementations
+#
+class FileTypeHandler(object):
     """Base default Output handler all output handlers should derive from
     this class. This base class is used when an output handler is request
     but no special one exists.
 
     """
-    COMMANDS = list()
-    __name__ == 'handler'
+    def __init__(self):
+        object.__init__(self)
+        self.commands = list()
+        self.default = ''
+
+    @property
+    def __name__(self):
+        return DEFAULT_HANDLER
+
+    def AppendCommand(self, cmd):
+        """Add a command to the list of commands known to this handler
+        @param cmd: Command string / executable path
+
+        """
+        self.commands.append(cmd)
+        self.commands = list(set(self.commands))
+        self.commands.sort()
 
     def GetCommands(self):
         """Get the set of commands available for this file type"""
-        return self.COMMANDS
+        return self.commands
+
+    def GetDefault(self):
+        """Get the prefered default command
+        @return: string
+
+        """
+        return self.default
 
     def GetEnvironment(self):
         """Get the dictionary of environmental variables to run the
@@ -72,7 +130,7 @@ class OutputHandler(object):
 
     def GetName(self):
         """Get the name of this handler"""
-        return 'handler'
+        return self.__name__
 
     def HandleHotSpot(self, mainw, outbuff, line, fname):
         """Handle hotspot clicks. Called when a hotspot is clicked
@@ -85,7 +143,29 @@ class OutputHandler(object):
 
         """
         pass
-        
+
+    def SetCommands(self, cmds):
+        """Set the list of commands known by the handler
+        @param cmds: list of command strings
+
+        """
+        if not isinstance(cmds, list):
+            raise TypeError, "SetCommands expects a list of strings"
+        else:
+            self.commands = cmds
+
+    def SetDefault(self, cmd):
+        """Set the prefered default command
+        @param cmd: Command string to set as the preffered one
+        @postcondition: if cmd is not in the saved command list it will be
+                        added to that list as well as a side affect.
+
+        """
+        cmd = cmd.strip()
+        if cmd not in self.GetCommands():
+            self.AppendCommand(cmd)
+        self.default = cmd
+
     def StyleText(self, stc, start, txt):
         """Style the text in the given buffer
         @param stc: stc based buffer to apply styling to
@@ -96,94 +176,110 @@ class OutputHandler(object):
         pass
 
 #-----------------------------------------------------------------------------#
-class BashHandler(OutputHandler):
-    """OutputHandler for Bash scripts
+class BashHandler(FileTypeHandler):
+    """FileTypeHandler for Bash scripts"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['bash',]
+        self.default = 'bash'
 
-    """
-    COMMANDS = ['bash',]
-    __name__ == 'bash'
-
-    def GetCommands(self):
-        """Get the set of commands available for this file type"""
-        return self.COMMANDS
-
-    def GetName(self):
-        """Get the name of this handler"""
-        return 'bash'
+    @property
+    def __name__(self):
+        return 'bash shell'
 
 #-----------------------------------------------------------------------------#
 
-class BooHandler(OutputHandler):
-    """OutputHandler for Boo"""
-    COMMANDS = ['booi',]
-    __name__ == 'boo'
+class BooHandler(FileTypeHandler):
+    """FileTypeHandler for Boo"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['booi',]
+        self.default = 'booi'
 
-    def GetCommands(self):
-        """Get the set of commands available for this file type"""
-        return self.COMMANDS
-
-    def GetName(self):
-        """Get the name of this handler"""
+    @property
+    def __name__(self):
         return 'boo'
 
 #-----------------------------------------------------------------------------#
 
-class LuaHandler(OutputHandler):
-    """OutputHandler for Lua
+class CSHHandler(FileTypeHandler):
+    """FileTypeHandler for C-Shell"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['csh',]
+        self.default = 'csh'
 
-    """
-    COMMANDS = ['lua',]
-    __name__ == 'lua'
+    @property
+    def __name__(self):
+        return 'c shell'
 
-    def GetCommands(self):
-        """Get the set of commands available for this file type"""
-        return self.COMMANDS
+#-----------------------------------------------------------------------------#
 
-    def GetName(self):
-        """Get the name of this handler"""
+class KornHandler(FileTypeHandler):
+    """FileTypeHandler for Korn Shell scripts"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['ksh',]
+        self.default = 'ksh'
+
+    @property
+    def __name__(self):
+        return 'korn shell'
+
+#-----------------------------------------------------------------------------#
+
+class LuaHandler(FileTypeHandler):
+    """FileTypeHandler for Lua"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['lua',]
+        self.default = 'lua'
+
+    @property
+    def __name__(self):
         return 'lua'
 
 #-----------------------------------------------------------------------------#
 
-class PikeHandler(OutputHandler):
-    """OutputHandler for Pike
+class PikeHandler(FileTypeHandler):
+    """FileTypeHandler for Pike"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['pike',]
+        self.default = 'pike'
 
-    """
-    COMMANDS = ['pike',]
-    __name__ == 'pike'
-
-    def GetCommands(self):
-        """Get the set of commands available for this file type"""
-        return self.COMMANDS
-
-    def GetName(self):
-        """Get the name of this handler"""
+    @property
+    def __name__(self):
         return 'pike'
 
 #-----------------------------------------------------------------------------#
 
-class PerlHandler(OutputHandler):
-    """OutputHandler for Perl scripts
+class PerlHandler(FileTypeHandler):
+    """FileTypeHandler for Perl scripts"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['perl',]
+        self.default = 'perl'
 
-    """
-    COMMANDS = ['perl',]
-    __name__ == 'perl'
-
-    def GetCommands(self):
-        """Get the set of commands available for this file type"""
-        return self.COMMANDS
-
-    def GetName(self):
-        """Get the name of this handler"""
+    @property
+    def __name__(self):
         return 'perl'
 
 #-----------------------------------------------------------------------------#
 
-class PythonHandler(OutputHandler):
+class PythonHandler(FileTypeHandler):
+    """FileTypeHandler for Python"""
     PY_ERROR_RE = re.compile('.*File "(.+)", line ([0-9]+)')
     PY_INFO_RE = re.compile('[>]{3,3}.*' + os.linesep)
-    COMMANDS = ['python',]
-    __name__ = 'python'
+
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['python',]
+        self.default = 'python'
+
+    @property
+    def __name__(self):
+        return 'python'
 
     def GetEnvironment(self):
         """Get the environment to run the python script in"""
@@ -194,10 +290,6 @@ class PythonHandler(OutputHandler):
 
         proc_env['PYTHONUNBUFFERED'] = '1'
         return proc_env
-
-    def GetName(self):
-        """Get the name of this handler"""
-        return 'python'
 
     def HandleHotSpot(self, mainw, outbuff, line, fname):
         """Hotspots are error messages, find the file/line of the
@@ -248,42 +340,38 @@ class PythonHandler(OutputHandler):
 
 #-----------------------------------------------------------------------------#
 
-class RubyHandler(OutputHandler):
-    """OutputHandler for Ruby scripts
+class RubyHandler(FileTypeHandler):
+    """FileTypeHandler for Ruby scripts"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['ruby',]
+        self.default = 'ruby'
 
-    """
-    COMMANDS = ['ruby',]
-    __name__ == 'ruby'
-
-    def GetCommands(self):
-        """Get the set of commands available for this file type"""
-        return self.COMMANDS
-
-    def GetName(self):
-        """Get the name of this handler"""
+    @property
+    def __name__(self):
         return 'ruby'
 
 #-----------------------------------------------------------------------------#
 
-class TCLHandler(OutputHandler):
-    """OutputHandler for TCL/TK
+class TCLHandler(FileTypeHandler):
+    """FileTypeHandler for TCL/TK"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['wish',]
+        self.default = 'wish'
 
-    """
-    COMMANDS = ['wish',]
-    __name__ == 'tcl/tk'
-
-    def GetCommands(self):
-        """Get the set of commands available for this file type"""
-        return self.COMMANDS
-
-    def GetName(self):
-        """Get the name of this handler"""
+    @property
+    def __name__(self):
         return 'tcl/tk'
 
 #-----------------------------------------------------------------------------#
-HANDLERS = { 0 : OutputHandler(),
+# Handler Object Dictionary
+# Used to keep one instance of each handler to use like a singleton
+HANDLERS = { 0 : FileTypeHandler(),
             synglob.ID_LANG_BASH : BashHandler(),
             synglob.ID_LANG_BOO : BooHandler(),
+            synglob.ID_LANG_CSH : CSHHandler(),
+            synglob.ID_LANG_KSH : KornHandler(),
             synglob.ID_LANG_LUA : LuaHandler(),
             synglob.ID_LANG_PERL : PerlHandler(),
             synglob.ID_LANG_PIKE : PikeHandler(),
