@@ -77,10 +77,16 @@ class ConfigDialog(wx.Frame):
     for a filetype and what the preferred one is.
 
     """
-    def __init__(self, parent):
+    def __init__(self, parent, ftype=0):
+        """Create the ConfigDialog
+        @param parent: The parent window
+        @keyword: The filetype to set
+
+        """
         wx.Frame.__init__(self, parent, title=_("Launch Configuration"))
 
         # Attributes
+        self.ftype = ftype
 
         # Layout
         self.__DoLayout()
@@ -100,6 +106,9 @@ class ConfigDialog(wx.Frame):
         self.SetAutoLayout(True)
         self.SetInitialSize()
         self.SetMinSize((400, 300))
+
+    def GetLangId(self):
+        return self.ftype
 
     def OnClose(self, evt):
         """Unregister the window when its closed"""
@@ -129,7 +138,15 @@ class ConfigPanel(wx.Panel):
         msizer = wx.BoxSizer(wx.VERTICAL)
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
-        lang_ch = wx.Choice(self, ID_LANGUAGE, choices=GetHandlerTypes())
+        ftype = self.GetParent().GetLangId()
+        ftype = handlers.GetHandlerById(ftype).GetName()
+        htypes = GetHandlerTypes()
+        lang_ch = wx.Choice(self, ID_LANGUAGE, choices=htypes)
+        if ftype != handlers.DEFAULT_HANDLER:
+            lang_ch.SetStringSelection(ftype)
+        else:
+            lang_ch.SetStringSelection(htypes[0])
+
         lsizer.AddMany([(wx.StaticText(self, label=_("File Type") + ":"), 0,
                          wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                         (lang_ch, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
