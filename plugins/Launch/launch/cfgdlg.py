@@ -33,7 +33,7 @@ ID_LANGUAGE = wx.NewId()
 ID_EXECUTABLES = wx.NewId()
 
 # Message Types
-LAUNCH_CFG_EXIT = ed_msg.EDMSG_ALL + ('launch', 'cfg', 'exit')
+EDMSG_LAUNCH_CFG_EXIT = ed_msg.EDMSG_ALL + ('launch', 'cfg', 'exit')
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
@@ -104,7 +104,7 @@ class ConfigDialog(wx.Frame):
     def OnClose(self, evt):
         """Unregister the window when its closed"""
         wx.GetApp().UnRegisterWindow(repr(self))
-        ed_msg.PostMessage(LAUNCH_CFG_EXIT)
+        ed_msg.PostMessage(EDMSG_LAUNCH_CFG_EXIT)
         evt.Skip()
 
 #-----------------------------------------------------------------------------#

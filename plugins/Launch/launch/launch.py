@@ -15,6 +15,7 @@ __version__ = "0.1"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import os
 import wx
 import wx.stc
 
@@ -24,6 +25,7 @@ import cfgdlg
 
 # Editra Libraries
 import ed_glob
+from profiler import Profile_Get, Profile_Set
 import ed_msg
 import eclib.ctrlbox as ctrlbox
 import eclib.outbuff as outbuff
@@ -35,6 +37,9 @@ ID_SETTINGS = wx.NewId()
 ID_EXECUTABLE = wx.NewId()
 ID_ARGS = wx.NewId()
 ID_RUN = wx.NewId()
+
+# Profile Settings Key
+LAUNCH_KEY = 'Launch.Config'
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
@@ -49,10 +54,13 @@ class LaunchWindow(ctrlbox.ControlBox):
         self._buffer = OutputDisplay(self)
         self._worker = None
         self._busy = False
-        self._config = dict(file='')
+        self._config = dict(file='', lang=0)
 
         # Setup
         self.__DoLayout()
+        hstate = Profile_Get(LAUNCH_KEY)
+        if hstate is not None:
+            handlers.SetState(hstate)
         cbuffer = self._mw.GetNotebook().GetCurrentCtrl()
         self.SetupControlBar(cbuffer)
 
@@ -60,10 +68,12 @@ class LaunchWindow(ctrlbox.ControlBox):
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
+        ed_msg.Subscribe(self.OnConfigExit, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
 
     def __del__(self):
         ed_msg.Unsubscribe(self.OnPageChanged)
         ed_msg.Unsubscribe(self.OnThemeChanged)
+        ed_msg.Unsubscribe(self.OnConfigExit)
         super(LaunchWindow).__del__()
 
     def __DoLayout(self):
@@ -159,10 +169,30 @@ class LaunchWindow(ctrlbox.ControlBox):
                 win.Raise()
         elif e_id == ID_RUN:
             self.SetProcessRunning(not self._busy)
+            if self._busy:
+                handler = handlers.GetHandlerById(self._config['lang'])
+                cmd = self.FindWindowById(ID_EXECUTABLE).GetStringSelection()
+                path, fname = os.path.split(self._config['file'])
+                args = self.FindWindowById(ID_ARGS).GetValue().split()
+                self._worker = outbuff.ProcessThread(self._buffer, cmd, fname,
+                                                     args, path,
+                                                     handler.GetEnvironment())
+                self._worker.start()
+            else:
+                self._worker.Abort()
+                self._worker = None
         elif e_id == wx.ID_CLEAR:
             self._buffer.Clear()
         else:
             evt.Skip()
+
+    def OnConfigExit(self, msg):
+        """Update current state when the config dialog has been closed
+        @param msg: Message Object
+
+        """
+        self.RefreshControlBar()
+        Profile_Set(LAUNCH_KEY, handlers.GetState())
 
     def OnPageChanged(self, msg):
         """Update the status of the currently associated file
@@ -192,6 +222,29 @@ class LaunchWindow(ctrlbox.ControlBox):
             bmp = wx.ArtProvider.GetBitmap(str(art), wx.ART_MENU)
             btn.SetBitmap(bmp)
             btn.Refresh()
+
+    def RefreshControlBar(self):
+        """Refresh the state of the control bar based on the current config"""
+        handler = handlers.GetHandlerById(self._config['lang'])
+        cmds = handler.GetCommands()
+
+        # Get the controls
+        exe_ch = self.FindWindowById(ID_EXECUTABLE)
+        args_txt = self.FindWindowById(ID_ARGS)
+        run_btn = self.FindWindowById(ID_RUN)
+
+        # Set control states
+        exe_ch.SetItems(cmds)
+        if len(cmds):
+            exe_ch.Enable()
+            args_txt.Enable()
+            run_btn.Enable()
+            exe_ch.SetStringSelection(handler.GetDefault())
+            self.GetControlBar().Layout()
+        else:
+            run_btn.Disable()
+            args_txt.Disable()
+            exe_ch.Disable()
 
     def SetFile(self, fname):
         """Set the script file that will be run
@@ -236,26 +289,8 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         # Setup filetype settings
         lang_id = ctrl.GetLangId()
-        handler = handlers.GetHandlerById(lang_id)
-        cmds = handler.GetCommands()
-
-        # Get the controls
-        exe_ch = self.FindWindowById(ID_EXECUTABLE)
-        args_txt = self.FindWindowById(ID_ARGS)
-        run_btn = self.FindWindowById(ID_RUN)
-
-        # Set control states
-        exe_ch.SetItems(cmds)
-        if len(cmds):
-            exe_ch.Enable()
-            args_txt.Enable()
-            run_btn.Enable()
-            exe_ch.SetStringSelection(handler.GetDefault())
-            self.GetControlBar().Layout()
-        else:
-            run_btn.Disable()
-            args_txt.Disable()
-            exe_ch.Disable()
+        self._config['lang'] = lang_id
+        self.RefreshControlBar()
 
 #-----------------------------------------------------------------------------#
 
@@ -281,7 +316,7 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         """
         lang_id = GetLangIdFromMW(self._mw)
         handler = handlers.GetHandlerById(lang_id)
-        handler.StyleText(GetTextBuffer(self._mw), start, txt)
+        handler.StyleText(self, start, txt)
 
     def DoProcessExit(self):
         """Do all that is needed to be done after a process has exited"""
@@ -296,9 +331,8 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
     def OnHotSpot(self, evt):
         """Handle clicks on hotspots"""
         lang_id = GetLangIdFromMW(self._mw)
-        handler = GetOutputHandler(lang_id)
+        handler = handlers.GetHandlerById(lang_id)
         line = self.LineFromPosition(evt.GetPosition())
-        #TODO add filename parameter
         handler.HandleHotSpot(self._mw, self, line, self.GetParent().GetFile())
 
 #-----------------------------------------------------------------------------#
@@ -315,4 +349,4 @@ def GetLangIdFromMW(mainw):
 def GetTextBuffer(mainw):
     """Get the current text buffer of the current window"""
     nb = mainw.GetNotebook()
-    return mainw.GetCurrentCtrl()
+    return nb.GetCurrentCtrl()
