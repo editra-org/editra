@@ -51,6 +51,9 @@ import syntax.synglob as synglob
 # Globals
 DEFAULT_HANDLER = 'handler'
 
+# Process Start/Exit Regular Expression
+PROC_SE_RE = re.compile('>{3,3}.*' + os.linesep)
+
 #-----------------------------------------------------------------------------#
 # Public Handler Api for use outside this module
 def GetHandlerById(lang_id):
@@ -178,7 +181,12 @@ class FileTypeHandler(object):
         @param txt: text that was just added at start point
 
         """
-        pass
+        # Highlight Start End lines
+        for info in PROC_SE_RE.finditer(txt):
+            sty_s = start + info.start()
+            sty_e = start + info.end()
+            stc.StartStyling(sty_s, 0xff)
+            stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_INFO)
 
 #-----------------------------------------------------------------------------#
 class BashHandler(FileTypeHandler):
@@ -275,7 +283,6 @@ class PerlHandler(FileTypeHandler):
 class PythonHandler(FileTypeHandler):
     """FileTypeHandler for Python"""
     PY_ERROR_RE = re.compile('File "(.+)", line ([0-9]+)')
-    PY_INFO_RE = re.compile('[>]{3,3}.*' + os.linesep)
 
     def __init__(self):
         FileTypeHandler.__init__(self)
@@ -338,11 +345,9 @@ class PythonHandler(FileTypeHandler):
             stc.StartStyling(sty_s, 0xff)
             stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_ERROR)
         else:
-            for info in self.PY_INFO_RE.finditer(txt):
-                sty_s = start + info.start()
-                sty_e = start + info.end()
-                stc.StartStyling(sty_s, 0xff)
-                stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_INFO)
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
 
 #-----------------------------------------------------------------------------#
 
