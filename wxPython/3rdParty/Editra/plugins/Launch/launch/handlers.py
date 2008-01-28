@@ -44,6 +44,7 @@ import sys
 import re
 
 # Editra Libraries
+import eclib.outbuff as outbuff
 import syntax.synglob as synglob
 
 #-----------------------------------------------------------------------------#
@@ -82,7 +83,11 @@ def SetState(state):
     @param state: dict { handlername : (default, [commands]) }
 
     """
-    
+    for ftype, vals in state.iteritems():
+        handler = GetHandlerByName(ftype)
+        handler.SetCommands(vals[1])
+        handler.SetDefault(vals[0])
+
 #-----------------------------------------------------------------------------#
 # Handler Base Class and Handler implementations
 #
@@ -269,7 +274,7 @@ class PerlHandler(FileTypeHandler):
 
 class PythonHandler(FileTypeHandler):
     """FileTypeHandler for Python"""
-    PY_ERROR_RE = re.compile('.*File "(.+)", line ([0-9]+)')
+    PY_ERROR_RE = re.compile('File "(.+)", line ([0-9]+)')
     PY_INFO_RE = re.compile('[>]{3,3}.*' + os.linesep)
 
     def __init__(self):
@@ -297,19 +302,20 @@ class PythonHandler(FileTypeHandler):
 
         """
         txt = outbuff.GetLine(line)
-        match = self.PY_ERROR_RE.match(txt)
+        match = self.PY_ERROR_RE.findall(txt)
         ifile = None
-        if match:
-            ifile = match.group(1)
+        if len(match):
+            match = match[0]
+            ifile = match[0]
             try:
-                line = max(int(match.group(2)) - 1, 0)
+                line = max(int(match[1]) - 1, 0)
             except:
                 line = 0
 
-            # The error is in the script that ran if no other module name
-            # is in the error message.
-            if ifile is None:
-                ifile = fname
+            # If not an absolute path then the error is in the current script
+            if not os.path.isabs(ifile):
+                dname = os.path.split(fname)[0]
+                ifile = os.path.join(dname, ifile)
 
             nb = mainw.GetNotebook()
             buffers = [ page.GetFileName() for page in nb.GetTextControls() ]
