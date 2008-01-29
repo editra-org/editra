@@ -3,8 +3,8 @@
 # Name: browser.py                                                            #
 # Purpose: UI portion of the FileBrowser Plugin                               #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -30,6 +30,7 @@ import wx
 
 # Editra Library Modules
 import ed_glob
+import ed_msg
 import ed_menu
 import syntax.syntax
 import util
@@ -79,13 +80,6 @@ class BrowserMenuBar(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, style=wx.NO_BORDER)
 
-        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
-        menub = platebtn.PlateButton(self, bmp=bmp,
-                                     style=platebtn.PB_STYLE_NOBG)
-        tt = wx.ToolTip(_("Pathmarks"))
-        menub.SetToolTip(tt)
-        menu = ed_menu.EdMenu()
-
         # Attributes
         self._saved = ed_menu.EdMenu()
         self._rmpath = ed_menu.EdMenu()
@@ -102,26 +96,35 @@ class BrowserMenuBar(wx.Panel):
         self.SetToolTip(tt)
 
         # Build Menus
+        menu = ed_menu.EdMenu()
         menu.Append(self.ID_MARK_PATH, _("Save Selected Paths"))
         menu.AppendMenu(self.ID_OPEN_MARK, 
                         _("Jump to Saved Path"), self._saved)
         menu.AppendSeparator()
         menu.AppendMenu(self.ID_REMOVE_MARK, 
                         _("Remove Saved Path"), self._rmpath)
-        menub.SetMenu(menu)
+
+        # Button
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
+        self.menub = platebtn.PlateButton(self, bmp=bmp,
+                                          style=platebtn.PB_STYLE_NOBG)
+        self.menub.SetToolTipString(_("Pathmarks"))
+        self.menub.SetMenu(menu)
+
 
         # Layout bar
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add((1, 1))
         men_sz = wx.BoxSizer(wx.HORIZONTAL)
         men_sz.Add((6, 6))
-        men_sz.Add(menub, 0, wx.ALIGN_LEFT)
+        men_sz.Add(self.menub, 0, wx.ALIGN_LEFT)
         sizer.Add(men_sz)
         sizer.Add((1, 1))
         self.SetSizer(sizer)
 
         # Event Handlers
-        self.Bind(wx.EVT_BUTTON, lambda evt: menub.ShowMenu(), menub)
+        ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
+        self.Bind(wx.EVT_BUTTON, lambda evt: self.menub.ShowMenu(), self.menub)
         # Due to transparency issues dont do painting on gtk
         if wx.Platform != '__WXGTK__':
             self.Bind(wx.EVT_PAINT, self.OnPaint)
@@ -184,6 +187,15 @@ class BrowserMenuBar(wx.Panel):
         gc.DrawPath(path)
 
         evt.Skip()
+
+    def OnThemeChanged(self, msg):
+        """Update the buttons icon when the icon theme changes
+        @param msg: Message Object
+
+        """
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
+        self.menub.SetBitmap(bmp)
+        self.menub.Refresh()
 
     def RemoveItemById(self, path_id):
         """Removes a given menu item from both the saved
@@ -384,28 +396,32 @@ class FileBrowser(wx.GenericDirCtrl):
         # Set custom styles
         self._tree.SetWindowStyle(self._tree.GetWindowStyle() | wx.TR_MULTIPLE)
         self._tree.Refresh()
-
-        # HACK if the GenericDirCtrl ever changes the order of the images used 
-        #      in it this will have to be updated accordingly
-        if Profile_Get('ICONS', 'str', 'default').lower() != u'default':
-            bmp1 = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FOLDER), wx.ART_MENU)
-            fbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FILE), wx.ART_MENU)
-            self._imglst = self._tree.GetImageList()
-            ids = [ed_glob.ID_FOLDER, ed_glob.ID_OPEN, ed_glob.ID_COMPUTER, 
-                   ed_glob.ID_HARDDISK, ed_glob.ID_CDROM, ed_glob.ID_FLOPPY, 
-                   ed_glob.ID_USB, ed_glob.ID_FILE, ed_glob.ID_BIN_FILE]
-
-            for art in ids:
-                bmp = wx.ArtProvider.GetBitmap(str(art), wx.ART_MENU)
-                if bmp.IsOk():
-                    self._imglst.Replace(ids.index(art), bmp)
+        self._imglst = self._tree.GetImageList()
+        self._SetupIcons()
 
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnOpen)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnMenu)
+        ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
 #         self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnDragStart)
 #         self.Bind(wx.EVT_TREE_END_DRAG, self.OnDragEnd)
+
+    def _SetupIcons(self):
+        """If a custom theme is in use by Editra set the icons of the
+        directory control to match.
+
+        """
+        # HACK if the GenericDirCtrl ever changes the order of the images used 
+        #      in it this will have to be updated accordingly
+        ids = [ed_glob.ID_FOLDER, ed_glob.ID_OPEN, ed_glob.ID_COMPUTER, 
+               ed_glob.ID_HARDDISK, ed_glob.ID_CDROM, ed_glob.ID_FLOPPY, 
+               ed_glob.ID_USB, ed_glob.ID_FILE, ed_glob.ID_BIN_FILE]
+
+        for idx, art in enumerate(ids):
+            bmp = wx.ArtProvider.GetBitmap(str(art), wx.ART_MENU)
+            if bmp.IsOk():
+                self._imglst.Replace(idx, bmp)
 
     def _MakeMenu(self):
         """Setup the context menu"""
@@ -490,10 +506,8 @@ class FileBrowser(wx.GenericDirCtrl):
 
     def GetPaths(self):
         """Gets a list of abs paths of the selected items"""
-        treeIds = self._tree.GetSelections()
-        root = self._tree.GetRootItem()
         ret_val = list()
-        for leaf in treeIds:
+        for leaf in self._tree.GetSelections():
             ret_val.append(self.GetItemPath(leaf))
         return ret_val
 
@@ -507,6 +521,8 @@ class FileBrowser(wx.GenericDirCtrl):
 
     def OnContext(self, evt):
         """Show the popup context menu"""
+        self._fmenu.Destroy()
+        self._fmenu = self._MakeMenu()
         self._treeId = evt.GetItem()
         path = self.GetItemPath(self._treeId)
         mitem = self._fmenu.FindItemById(ID_ARCHIVE)
@@ -591,6 +607,14 @@ class FileBrowser(wx.GenericDirCtrl):
         else:
             files = [ fname for fname in files if not os.path.isdir(fname) ]
         self.OpenFiles(files)
+
+    def OnThemeChanged(self, msg):
+        """Update the icons when the icon theme has changed
+        @param msg: Message Object
+
+        """
+        self._SetupIcons()
+        self._tree.Refresh()
 
     def OpenFiles(self, files):
         """Open the list of files in Editra for editing
