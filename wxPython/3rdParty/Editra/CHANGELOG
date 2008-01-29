@@ -24,6 +24,13 @@ NEW: [features/improvements]
  of a document. If an encoding is not explicitly set the default will still be
  to use utf-8.
 +Better unicode support
++Option to set a preffered lexer for new files so highlighting and other 
+features are autmatically applied when starting a new buffer.
++New plugin "CommentBrowser" for listing and browsing TODO statements in the
+current buffer
++New icon theme available based on the Crystal Project Icons
++All existing icon themes have recieved some minor updates
++New bundled plugin "Launch" for running scripts and viewing output.
 
 BUG FIXES:
 +Fix bug with turning off syntax highlighting in the preference dialog
