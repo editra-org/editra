@@ -51,8 +51,39 @@ import syntax.synglob as synglob
 # Globals
 DEFAULT_HANDLER = 'handler'
 
+# Ansi escape sequence color table
+# For coloring shell script output
+RE_ANSI_START = re.compile(r'\[[34][0-9];01m')
+RE_ANSI_FORE = re.compile('\[3[0-9]m')
+RE_ANSI_BLOCK = re.compile('\[[34][0-9]m*.*?\[m')
+RE_ANSI_END = re.compile(r'\[[0]{0,1}m')
+RE_ANSI_ESC = re.compile('\[[0-9]+m')
+ANSI = {
+        ## Forground colours ##
+        '[30m' : (1, '#000000'),  # Black
+        '[31m' : (2, '#FF0000'),  # Red
+        '[32m' : (3, '#00FF00'),  # Green
+        '[33m' : (4, '#FFFF00'),  # Yellow
+        '[34m' : (5, '#0000FF'),  # Blue
+        '[35m' : (6, '#FF00FF'),  # Magenta
+        '[36m' : (7, '#00FFFF'),  # Cyan
+        '[37m' : (8, '#FFFFFF'),  # White
+        #'[39m' : default
+
+        ## Background colour ##
+        '[40m' : (011, '#000000'),  # Black
+        '[41m' : (012, '#FF0000'),  # Red
+        '[42m' : (013, '#00FF00'),  # Green
+        '[43m' : (014, '#FFFF00'),  # Yellow
+        '[44m' : (015, '#0000FF'),  # Blue
+        '[45m' : (016, '#FF00FF'),  # Magenta
+        '[46m' : (017, '#00FFFF'),  # Cyan
+        '[47m' : (020, '#FFFFFF'),  # White
+        #'[49m' : default
+        }
+
 # Process Start/Exit Regular Expression
-PROC_SE_RE = re.compile('>{3,3}.*' + os.linesep)
+RE_PROC_SE = re.compile('>{3,3}.*' + os.linesep)
 
 #-----------------------------------------------------------------------------#
 # Public Handler Api for use outside this module
@@ -152,6 +183,13 @@ class FileTypeHandler(object):
         """
         pass
 
+    def FilterInput(self, text):
+        """Filter incoming text return the text to be displayed
+        @param text: The incoming text to filter before putting in buffer
+
+        """
+        return text
+
     def SetCommands(self, cmds):
         """Set the list of commands known by the handler
         @param cmds: list of command strings
@@ -182,7 +220,7 @@ class FileTypeHandler(object):
 
         """
         # Highlight Start End lines
-        for info in PROC_SE_RE.finditer(txt):
+        for info in RE_PROC_SE.finditer(txt):
             sty_s = start + info.start()
             sty_e = start + info.end()
             stc.StartStyling(sty_s, 0xff)
@@ -199,6 +237,11 @@ class BashHandler(FileTypeHandler):
     @property
     def __name__(self):
         return 'bash shell'
+
+    def FilterInput(self, txt):
+        """Filter out ansi escape sequences from input"""
+        txt = RE_ANSI_START.sub('', txt)
+        return RE_ANSI_END.sub('', txt)
 
 #-----------------------------------------------------------------------------#
 
@@ -269,6 +312,7 @@ class PikeHandler(FileTypeHandler):
 
 class PerlHandler(FileTypeHandler):
     """FileTypeHandler for Perl scripts"""
+    RE_PERL_ERROR = re.compile(r'[a-zA-Z]+ error at (.+) line ([0-9]+),')
     def __init__(self):
         FileTypeHandler.__init__(self)
         self.commands = ['perl',]
@@ -278,38 +322,13 @@ class PerlHandler(FileTypeHandler):
     def __name__(self):
         return 'perl'
 
-#-----------------------------------------------------------------------------#
-
-class PythonHandler(FileTypeHandler):
-    """FileTypeHandler for Python"""
-    PY_ERROR_RE = re.compile('File "(.+)", line ([0-9]+)')
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = ['python',]
-        self.default = 'python'
-
-    @property
-    def __name__(self):
-        return 'python'
-
-    def GetEnvironment(self):
-        """Get the environment to run the python script in"""
-        if not hasattr(sys, 'frozen') or sys.platform.startswith('win'):
-            proc_env = os.environ.copy()
-        else:
-            proc_env = dict()
-
-        proc_env['PYTHONUNBUFFERED'] = '1'
-        return proc_env
-
     def HandleHotSpot(self, mainw, outbuff, line, fname):
         """Hotspots are error messages, find the file/line of the
         error in question and open the file to that point in the buffer.
 
         """
         txt = outbuff.GetLine(line)
-        match = self.PY_ERROR_RE.findall(txt)
+        match = self.RE_PERL_ERROR.findall(txt)
         ifile = None
         if len(match):
             match = match[0]
@@ -339,7 +358,78 @@ class PythonHandler(FileTypeHandler):
         output.
 
         """
-        for group in self.PY_ERROR_RE.finditer(txt):
+        for group in self.RE_PERL_ERROR.finditer(txt):
+            sty_s = start + group.start()
+            sty_e = start + group.end()
+            stc.StartStyling(sty_s, 0xff)
+            stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_ERROR)
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
+
+#-----------------------------------------------------------------------------#
+
+class PythonHandler(FileTypeHandler):
+    """FileTypeHandler for Python"""
+    RE_PY_ERROR = re.compile('File "(.+)", line ([0-9]+)')
+
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['python',]
+        self.default = 'python'
+
+    @property
+    def __name__(self):
+        return 'python'
+
+    def GetEnvironment(self):
+        """Get the environment to run the python script in"""
+        if not hasattr(sys, 'frozen') or sys.platform.startswith('win'):
+            proc_env = os.environ.copy()
+        else:
+            proc_env = dict()
+
+        proc_env['PYTHONUNBUFFERED'] = '1'
+        return proc_env
+
+    def HandleHotSpot(self, mainw, outbuff, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        txt = outbuff.GetLine(line)
+        match = self.RE_PY_ERROR.findall(txt)
+        ifile = None
+        if len(match):
+            match = match[0]
+            ifile = match[0]
+            try:
+                line = max(int(match[1]) - 1, 0)
+            except:
+                line = 0
+
+            # If not an absolute path then the error is in the current script
+            if not os.path.isabs(ifile):
+                dname = os.path.split(fname)[0]
+                ifile = os.path.join(dname, ifile)
+
+            nb = mainw.GetNotebook()
+            buffers = [ page.GetFileName() for page in nb.GetTextControls() ]
+            if ifile in buffers:
+                page = buffers.index(ifile)
+                nb.SetSelection(page)
+                nb.GetPage(page).GotoLine(line)
+            else:
+                nb.OnDrop([ifile])
+                nb.GetPage(nb.GetSelection()).GotoLine(line)
+
+    def StyleText(self, stc, start, txt):
+        """Style python Information and Error messages from script
+        output.
+
+        """
+        for group in self.RE_PY_ERROR.finditer(txt):
             sty_s = start + group.start()
             sty_e = start + group.end()
             stc.StartStyling(sty_s, 0xff)
