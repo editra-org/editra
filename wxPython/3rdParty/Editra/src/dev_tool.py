@@ -22,10 +22,11 @@ import sys
 import re
 import platform
 import traceback
-import codecs
 import time
 import webbrowser
 import wx
+
+# Local Imports
 import ed_glob
 import ed_msg
 
@@ -148,6 +149,7 @@ class LogMsg:
 
     @property
     def ClockTime(self):
+        """Formatted timestring of the messages timestamp"""
         ltime = time.localtime(self._msg['tstamp'])
         tstamp = u"%s:%s:%s" % (str(ltime[3]).zfill(2),
                                 str(ltime[4]).zfill(2),
@@ -252,13 +254,13 @@ def ExceptionHook(exctype, value, trace):
     print ftrace
 
     # If abort has been set and we get here again do a more forcefull shutdown
-    global ABORT
-    if ABORT:
+    
+    if ErrorDialog.ABORT:
         os._exit(1)
 
     # Prevent multiple reporter dialogs from opening at once
-    global REPORTER_ACTIVE
-    if not REPORTER_ACTIVE and not ABORT:
+    
+    if not ErrorDialog.REPORTER_ACTIVE and not ErrorDialog.ABORT:
         ErrorDialog(ftrace)
 
 def FormatTrace(etype, value, trace):
@@ -340,20 +342,19 @@ class ErrorReporter(object):
 #-----------------------------------------------------------------------------#
 
 ID_SEND = wx.NewId()
-ABORT = False
-REPORTER_ACTIVE = False
 class ErrorDialog(wx.Dialog):
     """Dialog for showing errors and and notifying Editra.org should the
     user choose so.
 
     """
+    ABORT = False
+    REPORTER_ACTIVE = False
     def __init__(self, message):
         """Initialize the dialog
         @param message: Error message to display
 
         """
-        global REPORTER_ACTIVE
-        REPORTER_ACTIVE = True
+        ErrorDialog.REPORTER_ACTIVE = True
         wx.Dialog.__init__(self, None, title="Error/Crash Reporter", 
                            style=wx.DEFAULT_DIALOG_STYLE)
         
@@ -421,15 +422,14 @@ class ErrorDialog(wx.Dialog):
         if e_id == wx.ID_CLOSE:
             self.Close()
         elif e_id == ID_SEND:
-            msg = u"mailto:%s?subject=Error Report&body=%s"
-            addr = u"bugs@%s" % (ed_glob.HOME_PAGE.replace("http://", '', 1))
+            msg = "mailto:%s?subject=Error Report&body=%s"
+            addr = "bugs@%s" % (ed_glob.HOME_PAGE.replace("http://", '', 1))
             msg = msg % (addr, self.err_msg)
-            msg = msg.replace(u"'", u'')
+            msg = msg.replace("'", '')
             webbrowser.open(msg)
             self.Close()
         elif e_id == wx.ID_ABORT:
-            global ABORT
-            ABORT = True
+            ErrorDialog.ABORT = True
             # Try a nice shutdown first time through
             wx.CallLater(500, wx.GetApp().OnExit, 
                          wx.MenuEvent(wx.wxEVT_MENU_OPEN, ed_glob.ID_EXIT),
@@ -443,6 +443,6 @@ class ErrorDialog(wx.Dialog):
         @param evt: Event that called this handler
 
         """
-        REPORTER_ACTIVE = False
+        ErrorDialog.REPORTER_ACTIVE = False
         self.Destroy()
         evt.Skip()
