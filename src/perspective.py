@@ -86,8 +86,12 @@ class PerspectiveManager(object):
         # Restore the managed windows previous position and alpha
         # preferences if they are available.
         self._window.SetTransparent(Profile_Get('ALPHA', default=255))
-        if Profile_Get('SET_WPOS') and Profile_Get('WPOS', "size_tuple", False):
-            self._window.SetPosition(Profile_Get('WPOS'))
+        pos = Profile_Get('WPOS', "size_tuple", False)
+        if Profile_Get('SET_WPOS') and pos:
+            # Ensure window is on screen
+            if pos[0] < 0 or pos[1] < 0:
+                pos = (0, 0)
+            self._window.SetPosition(pos)
 
         # Event Handlers
         self._window.Bind(wx.EVT_MENU, self.OnPerspectiveMenu)

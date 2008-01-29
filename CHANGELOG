@@ -34,6 +34,8 @@ current buffer
 
 BUG FIXES:
 +Fix bug with turning off syntax highlighting in the preference dialog
++Exiting Editra from a right click on the Windows taskbar saving invalid window
+size and postion for next launch.
 
 #-----------------------------------------------------------------------------#
 
