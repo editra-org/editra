@@ -2,14 +2,50 @@
 # Name: outbuff.py                                                            #
 # Purpose: Gui and helper classes for running processes and displaying output #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 """
 Editra Control Library: OutputBuffer
 
+This module contains classes that are usefull for displaying output from running
+tasks and processes. The classes are divided into three main catagories, gui
+classes, mixins, and thread classes. All the classes can be used together to
+easily create multithreaded gui display classes without neededing to worry about
+the details and thread saftey of the gui.
 
+For example usage of these classes see ed_log and the Editra's Launch plugin
+
+Class OutputBuffer:
+  This is the main class exported by ths module. It provides a readonly output
+display buffer that when used with the other classes in this module provides an
+easy way to display continous output from other processes and threads. It 
+provides two methods for subclasses to override if they wish to perform custom 
+handling.
+
+  * Override the ApplyStyles method to do any processing and coloring of the
+    text as it is put in the buffer.
+  * Override the DoUpdatesEmpty method to perform any idle processing when no
+    new text is waiting to be processed.
+
+Class ProcessBufferMixin:
+  Mixin class for the L{OutputBuffer} class that provides handling for when an
+OutputBuffer is used with a L{ProcessThread}. It provides three methods that can
+be overridden in subclasses to perform extra processing.
+
+  * DoProcessStart: Called as the process is being started in the ProcessThread,
+                    it recieves the process command string as an argument.
+  * DoFilterInput: Called as each chunk of output comes from the running process
+                   use it to filter the results before displaying them in the
+                   buffer.
+  * DoProcessExit: Called when the running process has exited. It recieves the
+                   processes exit code as a parameter.
+
+Class ProcessThread:
+  Thread class for running subprocesses and posting the output to an 
+L{OutputBuffer} via events.
+       
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -255,7 +291,7 @@ class ProcessBufferMixin:
 
         # Event Handlers
         self.Bind(EVT_PROCESS_START, self._OnProcessStart)
-        self.Bind(EVT_UPDATE_TEXT, lambda evt: self.AppendUpdate(evt.GetValue()))
+        self.Bind(EVT_UPDATE_TEXT, self._OnProcessUpdate)
         self.Bind(EVT_PROCESS_EXIT, self._OnProcessExit)
 
     def _OnProcessExit(self, evt):
@@ -267,6 +303,21 @@ class ProcessBufferMixin:
         """Handles EVT_PROCESS_START"""
         self.DoProcessStart(evt.GetValue())
         self.Start(self._rate)
+
+    def _OnProcessUpdate(self, evt):
+        """Handles EVT_UPDATE_TEXT"""
+        txt = self.DoFilterInput(evt.GetValue())
+        self.AppendUpdate(txt)
+
+    def DoFilterInput(self, txt):
+        """Override this method to do an filtering on input that is sent to
+        the buffer from the process text. The return text is what is put in
+        the buffer.
+        @param txt: incoming udpate text
+        @return: string
+
+        """
+        return txt
 
     def DoProcessExit(self, code=0):
         """Override this method to do any post processing after the running
@@ -466,7 +517,6 @@ if __name__ == '__main__':
             if ind % 2:
                 self.StartStyling(ind, 0xff)
                 self.SetStyling(ind + len(txt), OPB_STYLE_ERROR)
-
 
     BUFFER = MyOutputBuffer(FRAME)
     FSIZER.Add(BUFFER, 1, wx.EXPAND)
