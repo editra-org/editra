@@ -2,8 +2,8 @@
 # Name: FileInfo.py                                                           #
 # Purpose: Display information about files/folders                            #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -25,12 +25,7 @@ import stat
 import mimetypes
 import wx
 
-# Testing
-# import sys
-# sys.path.insert(0, os.path.abspath('../../../src/'))
-
 # Editra Library Modules
-import ed_glob
 import syntax.syntax as syntax
 import syntax.synglob as synglob
 
@@ -72,6 +67,12 @@ class FileInfoDlg(wx.MiniFrame):
             self.__DoErrorLayout(str(msg))
         else:
             self.__DoLayout()
+
+        self.panel.SetAutoLayout(True)
+        fsizer = wx.BoxSizer(wx.VERTICAL)
+        fsizer.Add(self.panel, 1, wx.EXPAND)
+        self.SetSizer(fsizer)
+        self.SetAutoLayout(True)
         self.SetInitialSize()
 
         # Event Handlers
@@ -124,19 +125,12 @@ class FileInfoDlg(wx.MiniFrame):
                         (wx.StaticLine(self.panel, style=wx.LI_HORIZONTAL), 0, wx.EXPAND),
                         ((10, 10))])
         self.panel.SetSizer(csizer)
-        self.panel.SetAutoLayout(True)
-
-        fsizer = wx.BoxSizer(wx.VERTICAL)
-        fsizer.Add(self.panel, 1, wx.EXPAND)
-        self.SetSizer(fsizer)
-        self.SetAutoLayout(True)
 
     def __DoLayout(self):
         """Layout the dialog"""
         # Top Info
         top = wx.BoxSizer(wx.HORIZONTAL)
         head = wx.BoxSizer(wx.HORIZONTAL)
-        bmp = wx.StaticBitmap(self.panel, bitmap=FileIcon.Image.GetBitmap())
         lbl = wx.StaticText(self.panel, label=self._fname)
         fszlbl = wx.StaticText(self.panel, label=self._fstat['size'])
         font = self.GetFont()
@@ -163,8 +157,11 @@ class FileInfoDlg(wx.MiniFrame):
         lblsize = wx.BoxSizer(wx.VERTICAL)
         lblsize.AddMany([(head, 1, wx.ALIGN_LEFT), ((3, 3),), 
                          (modlbl, 0, wx.ALIGN_LEFT | wx.ALIGN_BOTTOM)])
-        top.AddMany([((5, 5)), (bmp, 0, wx.ALIGN_LEFT), ((12, 12)), 
-                     (lblsize, 0, wx.ALIGN_LEFT), ((5, 5))])
+
+        top.AddMany([((5, 5)),
+                     (wx.StaticBitmap(self.panel,
+                      bitmap=FileIcon.Image.GetBitmap()), 0, wx.ALIGN_LEFT),
+                     ((12, 12)), (lblsize, 0, wx.ALIGN_LEFT), ((5, 5))])
 
         # Central Info
         center = wx.FlexGridSizer(5, 2, 3, 5)
@@ -196,19 +193,15 @@ class FileInfoDlg(wx.MiniFrame):
         # Main Layout
         msizer = wx.BoxSizer(wx.VERTICAL)
         msizer.AddMany([((10, 10)), (top, 0, wx.ALIGN_CENTER), ((10, 10),),
-                        (wx.StaticLine(self.panel, style=wx.LI_HORIZONTAL), 1, wx.EXPAND|wx.ALIGN_CENTER),
+                        (wx.StaticLine(self.panel, style=wx.LI_HORIZONTAL), 1,
+                                                    wx.EXPAND|wx.ALIGN_CENTER),
                         ((10, 10),), (cmain, 0, wx.ALIGN_TOP|wx.ALIGN_CENTER),
                         ((10, 10),),
-                        (wx.StaticLine(self.panel, style=wx.LI_HORIZONTAL), 1, wx.EXPAND|wx.ALIGN_CENTER),
+                        (wx.StaticLine(self.panel, style=wx.LI_HORIZONTAL), 1,
+                                                    wx.EXPAND|wx.ALIGN_CENTER),
                         ((10, 10),),
                         ])
         self.panel.SetSizer(msizer)
-        self.panel.SetAutoLayout(True)
-
-        fsizer = wx.BoxSizer(wx.VERTICAL)
-        fsizer.Add(self.panel, 1, wx.EXPAND)
-        self.SetSizer(fsizer)
-        self.SetAutoLayout(True)
 
     def _FormatLabel(self, lbl):
         """Format the label to a suitable width wrapping as necessary"""
@@ -240,7 +233,6 @@ def CalcSize(bits):
     @return: formatted string representation of value
 
     """
-    tmp = float(bits)
     val = ['bytes', 'KB', 'MB', 'GB', 'TB']
     ind = 0
     while bits > 1024:
@@ -273,13 +265,3 @@ def GetFileType(fname):
             return _("Unknown")
     else:
         return _("%s Source File") % eguess
-
-#-----------------------------------------------------------------------------#
-if __name__ == '__main__':
-    # Note: uncomment Testing lines on top for this to work
-    app = wx.PySimpleApp(False)
-    frame = wx.Frame(None, title="FileInfo Test")
-    finfo = FileInfoDlg(frame, sys.argv[1])
-    frame.Show()
-    finfo.Show()
-    app.MainLoop()
