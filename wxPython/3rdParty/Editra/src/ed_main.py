@@ -605,8 +605,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         showing print previews, and opening the printer settings
         dialog.
         @todo: is any manual cleanup required for the printer objects?
-        @param evt: Event fired that called this handler
-        @type evt: wxMenuEvent
+        @param evt: wxMenuEvent
 
         """
         e_id = evt.GetId()
@@ -676,8 +675,15 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         #     into account so destroy it so that the window size is accurate.
         if wx.Platform == '__WXMAC__' and self.GetToolBar():
             self.GetToolBar().Destroy()
+
+        # Raise the window from being iconized so that the size and position is
+        # correct for the next launch (msw).
+        if self.IsIconized():
+            self.Iconize(False)
+
         _PSET('WSIZE', self.GetSizeTuple())
         _PSET('WPOS', self.GetPositionTuple())
+
         self.LOG("[ed_main][evt] OnClose: Closing editor at pos=%s size=%s" % \
                  (_PGET('WPOS', 'str'), _PGET('WSIZE', 'str')))
         
