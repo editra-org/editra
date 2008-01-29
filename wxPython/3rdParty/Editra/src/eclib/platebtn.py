@@ -47,8 +47,8 @@ SetBitmap: Change/Add the bitmap at any time and the control will resize and
            refresh to display it.
 SetLabelColor: Explicitly set text colors
 SetMenu: Set the button to have a popupmenu. When a menu is set a small drop
-            arrow will be drawn on the button that can then be clicked to show
-            a menu.
+         arrow will be drawn on the button that can then be clicked to show
+         a menu.
 SetPressColor: Use a custom highlight color
 
 
