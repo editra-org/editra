@@ -8,6 +8,7 @@
 ###############################################################################
 # Plugin Metadata
 """Run the script in the current buffer"""
+
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
@@ -38,7 +39,7 @@ class Launch(plugin.Plugin):
     __name__ = u'Launch'
 
     def AllowMultiple(self):
-        """ScriptRun allows multiple instances"""
+        """Launch allows multiple instances"""
         return True
 
     def CreateItem(self, parent):
@@ -61,5 +62,8 @@ class Launch(plugin.Plugin):
     def GetName(self):
         """The name of this plugin"""
         return self.__name__
+
+    def IsStockable(self):
+        return True
 
 #-----------------------------------------------------------------------------#

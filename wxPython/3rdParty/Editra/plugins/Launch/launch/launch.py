@@ -25,6 +25,7 @@ import cfgdlg
 
 # Editra Libraries
 import ed_glob
+import util
 from profiler import Profile_Get, Profile_Set
 import ed_msg
 import eclib.ctrlbox as ctrlbox
@@ -67,6 +68,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
+        ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnConfigExit, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
 
@@ -171,6 +173,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         elif e_id == ID_RUN:
             self.SetProcessRunning(not self._busy)
             if self._busy:
+                util.Log("[Launch][info] Starting process")
                 handler = handlers.GetHandlerById(self._config['lang'])
                 cmd = self.FindWindowById(ID_EXECUTABLE).GetStringSelection()
                 path, fname = os.path.split(self._config['file'])
@@ -192,8 +195,21 @@ class LaunchWindow(ctrlbox.ControlBox):
         @param msg: Message Object
 
         """
+        util.Log("[Launch][info] Saving config to profile")
         self.RefreshControlBar()
         Profile_Set(LAUNCH_KEY, handlers.GetState())
+
+    def OnFileOpened(self, msg):
+        """Reset state when a file open message is recieved
+        @param msg: Message Object
+
+        """
+        fname = msg.GetData()
+        self.SetFile(fname)
+
+        # Setup filetype settings
+        self._config['lang'] = GetLangIdFromMW(self._mw)
+        self.RefreshControlBar()
 
     def OnPageChanged(self, msg):
         """Update the status of the currently associated file
@@ -236,7 +252,8 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         # Set control states
         exe_ch.SetItems(cmds)
-        if len(cmds):
+        util.Log("[Launch][info] Found commands %s" % str(cmds))
+        if handler.GetName() != handlers.DEFAULT_HANDLER and len(self.GetFile()):
             exe_ch.Enable()
             args_txt.Enable()
             run_btn.Enable()
@@ -315,9 +332,16 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         @param txt: the new text that was added to the buffer
 
         """
-        lang_id = GetLangIdFromMW(self._mw)
-        handler = handlers.GetHandlerById(lang_id)
+        handler = self.GetCurrentHandler()
         handler.StyleText(self, start, txt)
+
+    def DoFilterInput(self, txt):
+        """Filter the incoming input
+        @param txt: incoming text to filter
+
+        """
+        handler = self.GetCurrentHandler()
+        return handler.FilterInput(txt)
 
     def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited"""
@@ -330,6 +354,15 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         parent = self.GetParent()
         parent.SetProcessRunning(True)
         self.AppendUpdate(">>> %s%s" % (cmd, os.linesep))
+
+    def GetCurrentHandler(self):
+        """Get the current filetype handler
+        @return: L{handlers.FileTypeHandler} instance
+
+        """
+        lang_id = GetLangIdFromMW(self._mw)
+        handler = handlers.GetHandlerById(lang_id)
+        return handler
 
     def OnHotSpot(self, evt):
         """Handle clicks on hotspots"""

@@ -158,7 +158,15 @@ class ConfigPanel(wx.Panel):
         # Default exe
         dsizer = wx.BoxSizer(wx.HORIZONTAL)
         chandler = handlers.GetHandlerByName(lang_ch.GetStringSelection())
-        def_ch = wx.Choice(self, wx.ID_DEFAULT, choices=chandler.GetCommands())
+        cmds = chandler.GetCommands()
+        def_ch = wx.Choice(self, wx.ID_DEFAULT, choices=cmds)
+        if chandler.GetName() != handlers.DEFAULT_HANDLER:
+            def_ch.SetStringSelection(chandler.GetDefault())
+        elif len(cmds):
+            def_ch.SetStringSelection(cmds[0])
+        else:
+            pass
+
         dsizer.AddMany([(wx.StaticText(self, label=_("Default") + ":"), 0,
                          wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                         (def_ch, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
