@@ -280,7 +280,7 @@ EXT_MAP = {
            'm matlab'           : LANG_MATLAB,
            'mssql'              : LANG_MSSQL,
            'nasm'               : LANG_NASM,
-           'nsi'                : LANG_NSIS,
+           'nsi nsh'            : LANG_NSIS,
            'oct octave'         : LANG_OCTAVE,
            'dfm dpk dpr inc p pas pp' : LANG_PASCAL,
            'cgi pl pm pod'      : LANG_PERL,
