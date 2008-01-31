@@ -65,7 +65,7 @@ class TestPanel(wx.Panel):
         """Puts a set of controls in the panel
         @param panel: panel to layout
         @param label: panels title
-        @param exstyle: Set the PB_STYLE_NOBG or not
+        @keyword exstyle: Set the PB_STYLE_NOBG or not
 
         """
         # Bitmaps (32x32) and (16x16)
