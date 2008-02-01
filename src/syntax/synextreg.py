@@ -80,6 +80,8 @@ LANG_DOT = u'DOT'
 ID_LANG_EDJE = _NewId()
 LANG_EDJE = u'Edje'
 ID_LANG_JAVA = _NewId()
+LANG_FERITE = u'Ferite'
+ID_LANG_FERITE = _NewId()
 LANG_JAVA = u'Java'
 ID_LANG_PIKE = _NewId()
 LANG_PIKE = u'Pike'
@@ -260,9 +262,10 @@ EXT_MAP = {
            'e'                  : LANG_EIFFEL,
            'erl'                : LANG_ERLANG,
            'ess'                : LANG_ESS,
-           'prg'                : LANG_FLAGSHIP,
            'f for'              : LANG_F77,
            'f90 f95 f2k fpp'    : LANG_F95,
+           'prg'                : LANG_FLAGSHIP,
+           'fe'                 : LANG_FERITE,
            'gc gui'             : LANG_GUI4CLI,
            'hs'                 : LANG_HASKELL,
            'htm html shtm shtml xhtml' : LANG_HTML,
