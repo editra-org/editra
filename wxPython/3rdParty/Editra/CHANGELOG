@@ -18,6 +18,7 @@ NEWS:
 NEW: [features/improvements]
 +Support for using C style (/* */) comments in Editra Style Sheets
 +Improved syntax highlighting sample/test files
++Highlighting support for Ferite
 +Use Softtabs by default
 +Option to use backspace to dedent when in an indent region
 +Support for magic comments as described in pep 0263 for setting the encoding
