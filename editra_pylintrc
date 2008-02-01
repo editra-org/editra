@@ -1,5 +1,15 @@
+# Pylint Configuration File for Editra
 # Allow for CamelCase nameing convention used for functions and other
 # conventions used in Editra.
+
+# To use this file either:
+# 1) Copy it to $HOME/.pylintrc and run pylint normally
+#
+# OR
+#
+# 2) When running pylint use the following command
+#    pylint --rcfile=editra_pylintrc
+#
 
 [BASIC]
 # Regular expression which should only match correct module names
