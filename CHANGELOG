@@ -16,14 +16,14 @@ NEWS:
 
 
 NEW: [features/improvements]
-+Support for comments in Editra Style Sheets
++Support for using C style (/* */) comments in Editra Style Sheets
 +Improved syntax highlighting sample/test files
 +Use Softtabs by default
 +Option to use backspace to dedent when in an indent region
 +Support for magic comments as described in pep 0263 for setting the encoding
  of a document. If an encoding is not explicitly set the default will still be
  to use utf-8.
-+Better unicode support
++Improved unicode support
 +Option to set a preffered lexer for new files so highlighting and other 
 features are autmatically applied when starting a new buffer.
 +New plugin "CommentBrowser" for listing and browsing TODO statements in the
@@ -31,6 +31,7 @@ current buffer
 +New icon theme available based on the Crystal Project Icons
 +All existing icon themes have recieved some minor updates
 +New bundled plugin "Launch" for running scripts and viewing output.
++Improved Windows installer / Better Windows Desktop integration
 
 BUG FIXES:
 +Fix bug with turning off syntax highlighting in the preference dialog
