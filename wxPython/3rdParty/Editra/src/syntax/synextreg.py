@@ -79,9 +79,11 @@ ID_LANG_DOT = _NewId()
 LANG_DOT = u'DOT'
 ID_LANG_EDJE = _NewId()
 LANG_EDJE = u'Edje'
-ID_LANG_JAVA = _NewId()
-LANG_FERITE = u'Ferite'
 ID_LANG_FERITE = _NewId()
+LANG_FERITE = u'Ferite'
+ID_LANG_HAXE = _NewId()
+LANG_HAXE = u'HaXe'
+ID_LANG_JAVA = _NewId()
 LANG_JAVA = u'Java'
 ID_LANG_PIKE = _NewId()
 LANG_PIKE = u'Pike'
@@ -268,6 +270,7 @@ EXT_MAP = {
            'fe'                 : LANG_FERITE,
            'gc gui'             : LANG_GUI4CLI,
            'hs'                 : LANG_HASKELL,
+           'hx'                 : LANG_HAXE,
            'htm html shtm shtml xhtml' : LANG_HTML,
            'iss'                : LANG_INNO,
            'java'               : LANG_JAVA,
@@ -304,7 +307,6 @@ EXT_MAP = {
            'axl dtd plist rdf svg xml xrc xsd xsl xslt xul' : LANG_XML,
            'yaml yml'           : LANG_YAML,
           }
-
 
 
 #-----------------------------------------------------------------------------#
