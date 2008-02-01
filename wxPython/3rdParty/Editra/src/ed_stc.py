@@ -1677,7 +1677,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Update status bar
         if mw and self._vi['normal']:
             evt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
-                                       'NORMAL\t%s' % self._vi['cmdcache'],
+                                       'NORMAL  %s' % self._vi['cmdcache'],
                                         ed_glob.SB_BUFF)
             wx.PostEvent(self.GetTopLevelParent(), evt)
         
