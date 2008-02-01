@@ -271,6 +271,19 @@ class CSHHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class FeriteHandler(FileTypeHandler):
+    """FileTypeHandler for Ferite"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['ferite',]
+        self.default = 'ferite'
+
+    @property
+    def __name__(self):
+        return 'ferite'
+
+#-----------------------------------------------------------------------------#
+
 class KornHandler(FileTypeHandler):
     """FileTypeHandler for Korn Shell scripts"""
     def __init__(self):
@@ -472,6 +485,7 @@ HANDLERS = { 0 : FileTypeHandler(),
             synglob.ID_LANG_BASH : BashHandler(),
             synglob.ID_LANG_BOO : BooHandler(),
             synglob.ID_LANG_CSH : CSHHandler(),
+            synglob.ID_LANG_FERITE : FeriteHandler(),
             synglob.ID_LANG_KSH : KornHandler(),
             synglob.ID_LANG_LUA : LuaHandler(),
             synglob.ID_LANG_PERL : PerlHandler(),
