@@ -93,7 +93,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         #---- Status bar on bottom of window ----#
         self.CreateStatusBar(3, style=wx.ST_SIZEGRIP)
-        self.SetStatusWidths([-1, 120, 155])
+        self.SetStatusWidths([-1, 90, 155])
         #---- End Statusbar Setup ----#
 
         #---- Notebook that contains the editting buffers ----#
