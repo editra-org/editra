@@ -3,8 +3,8 @@
 # Purpose: Provide a messaging/notification system for actions performed in   #
 #          the editor.                                                        #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -169,19 +169,3 @@ def Unsubscribe(callback, messages=None):
     Publisher().unsubscribe(callback, messages)
 
 #-----------------------------------------------------------------------------#
-# Test
-if __name__ == '__main__':
-    import time
-
-    def listener(msg):
-        print "Got Message:"
-        print "    Message Type: ", msg.GetType()
-        print "    Message Data: ", msg.GetData()
-
-    Subscribe(listener, EDMSG_ALL)
-    t1 = time.time()
-    for msg in zip('abcdefghijk' * 1000, range(11 * 1000)):
-        PostMessage(EDMSG_ALL, "%s is %d" % msg)
-    print "Time to process/print", 11 * 1000, " messages =", \
-          time.time() - t1, "seconds"
-
