@@ -27,15 +27,12 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
-import re
 import codecs
-import mimetypes
 import urllib2
 import wx
 import ed_glob
 import ed_event
 import ed_crypt
-from syntax.syntax import GetFileExtensions
 import dev_tool
 
 _ = wx.GetTranslation
@@ -227,45 +224,22 @@ def SetClipboardText(txt):
 
 def FilterFiles(file_list):
     """Filters a list of paths and returns a list of paths
-    that are valid, not directories, and not seemingly not binary.
+    that can probably be opened in the editor.
     @param file_list: list of files/folders to filter for good files in
-    @todo: find a better way to check for files that can be opened
 
     """
     good = list()
     for path in file_list:
-        if not os.path.exists(path) or os.path.isdir(path):
+        # Filter out directories and some common filetypes that can't
+        # be opened.
+        if not os.path.exists(path) or os.path.isdir(path) or \
+           GetExtension(path).lower() in ['gz', 'tar', 'bz2', 'zip', 'rar',
+                                          'ace', 'png', 'jpg', 'gif', 'jpeg',
+                                          'bmp', 'exe', 'pyc', 'pyo', 'psd',
+                                          'a', 'o', 'dll', 'ico', 'icns']:
             continue
         else:
-            # Check for binary files
-            # 1. Keep all files types we know about and all that have a mime
-            #    type of text.
-            mime = mimetypes.guess_type(path)
-            if GetExtension(path) in GetFileExtensions() or \
-               (mime[0] and u'text' in mime[0]):
-                good.append(path)
-            # 2. Throw out common filetypes we cant open...HACK
-            elif GetExtension(path).lower() in ['gz', 'tar', 'bz2', 'zip',
-                                                'rar', 'ace', 'png', 'jpg', 
-                                                'gif', 'jpeg', 'exe', 'pyc',
-                                                'pyo', 'psd']:
-                continue
-            # 3. Try to judge if we can open the file or not by sampling
-            #    some of the data, if 10% of the data is bad, drop the file.
-            else:
-                try:
-                    fhandle = file(path, "rb")
-                    tmp = fhandle.read(1500)
-                    fhandle.close()
-                except IOError:
-                    continue
-                bad = 0
-                for bit in xrange(len(tmp)):
-                    val = ord(tmp[bit])
-                    if (val < 8) or (val > 13 and val < 32) or (val > 255):
-                        bad = bad + 1
-                if not len(tmp) or (float(bad)/float(len(tmp))) < 0.1:
-                    good.append(path)
+            good.append(path)
     return good
 
 def GetFileModTime(file_name):
@@ -485,7 +459,6 @@ def CreateConfigDir():
     """
     #---- Resolve Paths ----#
     pchar = GetPathChar()
-    prof_dir = ed_glob.CONFIG['PROFILE_DIR']
     config_dir = u"%s%s.%s" % (wx.GetHomeDir(), pchar, ed_glob.PROG_NAME)
     profile_dir = u"%s%sprofiles" % (config_dir, pchar)
     dest_file = u"%s%sdefault.ppb" % (profile_dir, pchar)
