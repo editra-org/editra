@@ -1,7 +1,11 @@
-../../plugins/pyshell/pyshell/__init__.py
+../../plugins/PyShell/pyshell/__init__.py
 ../../plugins/filebrowser/filebrowser/__init__.py
 ../../plugins/filebrowser/filebrowser/browser.py
 ../../plugins/filebrowser/filebrowser/FileInfo.py
+../../plugins/Launch/launch/__init__.py
+../../plugins/Launch/launch/cfgdlg.py
+../../plugins/Launch/launch/handlers.py
+../../plugins/Launch/launch/launch.py
 ../../src/ed_art.py
 ../../src/dev_tool.py
 ../../src/doctools.py
