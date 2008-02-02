@@ -38,7 +38,8 @@ def OpenErrorDlg(parent, fname, err):
     @param err: error message
 
     """
-    dlg = wx.MessageDialog(self, _("Editra could not open %s\n\nError:\n%s") % \
+    dlg = wx.MessageDialog(parent,
+                           _("Editra could not open %s\n\nError:\n%s") % \
                            (fname, err), _("Error Opening File"),
                            style=wx.OK|wx.CENTER|wx.ICON_ERROR)
     dlg.CenterOnParent()
