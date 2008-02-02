@@ -530,7 +530,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 self.PushStatusText(_("ERROR: Failed to save %s") % fname, SB_INFO)
             else:
                 self.PushStatusText(_("Saved File As: %s") % fname, SB_INFO)
-                self.SetTitle(u"%s - file://%s" % (fname, ctrl.GetFileName()))
+                self.SetTitle("%s - file://%s" % (fname, ctrl.GetFileName()))
                 self.nb.SetPageText(self.nb.GetSelection(), fname)
                 self.nb.GetCurrentCtrl().FindLexer()
                 self.nb.UpdatePageImage()
