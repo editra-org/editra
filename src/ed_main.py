@@ -2,7 +2,7 @@
 # Name: ed_main.py                                                            #
 # Purpose: Editra's Main Window                                               #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -340,26 +340,20 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                 wx.OPEN | wx.MULTIPLE)
             dlg.SetFilterIndex(_PGET('FFILTER', 'int', 0))
 
-            if dlg.ShowModal() != wx.ID_OK:
-                self.LOG('[ed_main][info] Canceled Opening File')
-            else:
+            if dlg.ShowModal() == wx.ID_OK:
                 _PSET('FFILTER', dlg.GetFilterIndex())
-                paths = dlg.GetPaths()
-                for path in paths:
+                for path in dlg.GetPaths():
                     if _PGET('OPEN_NW', default=False):
                         wx.GetApp().OpenNewWindow(path)
                     else:
-                        dirname = util.GetPathName(path)
-                        filename = util.GetFileName(path)
-                        self.nb.OpenPage(dirname, filename)   
+                        self.nb.OpenPage(util.GetPathName(path),
+                                         util.GetFileName(path))   
                         self.nb.GoCurrentPage()
 
             dlg.Destroy()
         else:
             self.LOG("[ed_main][info] CMD Open File: %s" % fname)
-            filename = util.GetFileName(fname)
-            dirname = util.GetPathName(fname)
-            self.nb.OpenPage(dirname, filename)
+            self.nb.OpenPage(util.GetPathName(fname), util.GetFileName(fname))
 
     def GetFrameManager(self):
         """Returns the manager for this frame
@@ -439,13 +433,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         fnum = evt.GetId() - wx.ID_FILE1
-        file_h = self.filehistory.GetHistoryFile(fnum)
+        fname = self.filehistory.GetHistoryFile(fnum)
 
         # Check if file still exists
-        if not os.path.exists(file_h):
+        if not os.path.exists(fname):
             mdlg = wx.MessageDialog(self, _("%s could not be found\nPerhaps "
                                             "its been moved or deleted") % \
-                                    file_h, _("File Not Found"),
+                                    fname, _("File Not Found"),
                                     wx.OK | wx.ICON_WARNING)
             mdlg.CenterOnParent()
             mdlg.ShowModal()
@@ -453,7 +447,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             # Remove offending file from history
             self.filehistory.RemoveFileFromHistory(fnum)
         else:
-            self.DoOpen(evt, file_h)
+            self.DoOpen(evt, fname)
 
     def OnClosePage(self, evt):
         """Close a page
@@ -465,8 +459,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if e_id == ID_CLOSE:
             self.nb.ClosePage()
         elif e_id == ID_CLOSEALL:
-            # TODO maybe warn and ask if they really want to close
-            #      all pages before doing it.
             self.nb.CloseAllPages()
         else:
             evt.Skip()
@@ -558,8 +550,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                _("Profile") + " (*.ppb)|*.ppb", 
                                 wx.SAVE | wx.OVERWRITE_PROMPT)
 
-            result = dlg.ShowModal()
-            if result == wx.ID_OK:
+            if dlg.ShowModal() == wx.ID_OK:
                 profiler.Profile().Write(dlg.GetPath())
                 self.PushStatusText(_("Profile Saved as: %s") % \
                                     dlg.GetFilename(), SB_INFO)
@@ -1065,7 +1056,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         name = "%s v%s" % (PROG_NAME, VERSION)
         if len(title):
-            name = u' - ' + name
+            name = " - " + name
         wx.Frame.SetTitle(self, title + name)
 
 
@@ -1138,12 +1129,10 @@ def OnPreferences(evt):
 
 #-----------------------------------------------------------------------------#
 # Plugin interface to the MainWindow
-# For backwards compatibility soon to be removed
-MainWindowI = iface.MainWindowI
 
 class MainWindowAddOn(plugin.Plugin):
     """Plugin that Extends the L{MainWindowI}"""
-    observers = plugin.ExtensionPoint(MainWindowI)
+    observers = plugin.ExtensionPoint(iface.MainWindowI)
     def Init(self, window):
         """Call all observers once to initialize
         @param window: window that observers become children of
