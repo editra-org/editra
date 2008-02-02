@@ -192,14 +192,14 @@ class EdPages(FNB.FlatNotebook):
         self.GetTopLevelParent().Freeze()
         self.pg_num += 1
         self.control = ed_stc.EditraStc(self, wx.ID_ANY)
-        self.LOG("[ed_pages][evt] Page Creation ID: %d" % self.control.GetId())
+        self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
         self.AddPage(self.control, u"Untitled - %d" % self.pg_num)
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
 
         # Set the control up the the preferred default lexer
         dlexer = Profile_Get('DEFAULT_LEX', 'str', 'Plain Text')
         ext_reg = syntax.ExtensionRegister()
-        ext_lst = ext_reg.get(dlexer, ['txt',])
+        ext_lst = ext_reg.get(dlexer, ['txt', ])
         self.control.FindLexer(ext_lst[0])
         self.GetTopLevelParent().Thaw()
 
@@ -300,7 +300,7 @@ class EdPages(FNB.FlatNotebook):
         self.frame.SetTitle("%s - file://%s" % (filename, 
                                                 self.control.GetFileName()))
         self.SetPageText(self.GetSelection(), filename)
-        self.LOG("[ed_pages][evt] Opened Page: ID = %d" % self.GetSelection())
+        self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
 
         # Setup Document
         self.control.FindLexer()
@@ -391,6 +391,7 @@ class EdPages(FNB.FlatNotebook):
             elif os.path.isdir(fname):
                 dcnt = glob.glob(os.path.join(fname, '*'))
                 dcnt = util.FilterFiles(dcnt)
+                dlg = None
                 if not len(dcnt):
                     dlg = wx.MessageDialog(self, 
                                            _("There are no files that Editra"
@@ -398,7 +399,8 @@ class EdPages(FNB.FlatNotebook):
                                            _("No Valid Files to Open"),
                                            style=wx.OK | wx.CENTER | \
                                                  wx.ICON_INFORMATION)
-                else:
+                elif len(dcnt) > 5:
+                    # Warn when the folder contains many files
                     dlg = wx.MessageDialog(self, 
                                            _("Do you wish to open all %d files"
                                              " in this directory?\n\nWarning"
@@ -408,8 +410,12 @@ class EdPages(FNB.FlatNotebook):
                                            _("Open Directory?"),
                                            style=wx.YES | wx.NO | \
                                                  wx.ICON_INFORMATION)
-                result = dlg.ShowModal()
-                dlg.Destroy()
+                if dlg is not None:
+                    result = dlg.ShowModal()
+                    dlg.Destroy()
+                else:
+                    result = wx.ID_YES
+
                 if result == wx.ID_YES:
                     valid_files.extend(dcnt)
                 else:
@@ -501,10 +507,10 @@ class EdPages(FNB.FlatNotebook):
         """
         cpage = evt.GetSelection()
         self.ChangePage(cpage)
+        evt.Skip()
         self.LOG("[ed_pages][evt] Page Changed to %d" % cpage)
         self.LOG("[ed_pages][info] It has file named: %s" % \
                  self.control.GetFileName())
-        evt.Skip()
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, cpage))
 
     def OnPageClosing(self, evt):
@@ -528,8 +534,8 @@ class EdPages(FNB.FlatNotebook):
 
         """
         cpage = self.GetSelection()
-        self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
         evt.Skip()
+        self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED, (self, cpage))
 
     #---- End Event Handlers ----#
@@ -542,7 +548,6 @@ class EdPages(FNB.FlatNotebook):
         for page in xrange(self.GetPageCount()):
             result = self.ClosePage()
             if result == wx.ID_CANCEL:
-                self.LOG("[ed_pages][info] Canceled on page %d" % page)
                 break
             
     def ClosePage(self):
@@ -614,11 +619,7 @@ class EdPages(FNB.FlatNotebook):
         @postcondition: page image is updated to reflect any changes in ctrl
 
         """
-        pg_num = self.GetSelection()
-        ftype = util.GetExtension(self.control.GetFileName())
-        ftype = ftype[-1].upper()
-        self.LOG("[ed_pages][info] Updating Page Image: Page %d" % pg_num)
-        self.SetPageImage(pg_num, str(self.control.GetLangId()))
+        self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
 
     def OnUpdatePageText(self, evt):
         """Update the title text of the current page
