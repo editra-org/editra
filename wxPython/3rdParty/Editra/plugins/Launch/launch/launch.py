@@ -55,7 +55,9 @@ class LaunchWindow(ctrlbox.ControlBox):
         self._buffer = OutputDisplay(self)
         self._worker = None
         self._busy = False
-        self._config = dict(file='', lang=0)
+        self._config = dict(file='', lang=0,
+                            cfile='', clang=0,
+                            last='', lastlang=0)
 
         # Setup
         self.__DoLayout()
@@ -98,6 +100,9 @@ class LaunchWindow(ctrlbox.ControlBox):
         ctrlbar.AddControl(exe, wx.ALIGN_LEFT)
 
         # Args
+        ctrlbar.AddControl((5,5), wx.ALIGN_LEFT)
+        ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("args") + ":"),
+                           wx.ALIGN_LEFT)
         args = wx.TextCtrl(ctrlbar, ID_ARGS)
         args.SetToolTipString(_("Program Arguments"))
         ctrlbar.AddControl(args, wx.ALIGN_LEFT)
@@ -149,6 +154,13 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         """
         return self._config['file']
+
+    def GetLastRun(self):
+        """Get the last file that was run
+        @return: (fname, lang_id)
+
+        """
+        return (self._config['last'], self._config['lastlang'])
 
     def GetMainWindow(self):
         """Get the mainwindow that created this instance
@@ -280,6 +292,10 @@ class LaunchWindow(ctrlbox.ControlBox):
         rbtn = self.FindWindowById(ID_RUN)
         self._busy = running
         if running:
+            self._config['last'] = self._config['file']
+            self._config['lastlang'] = self._config['lang']
+            self._config['cfile'] = self._config['file']
+            self._config['clang'] = self._config['lang']
             abort = wx.ArtProvider.GetBitmap(str(ed_glob.ID_STOP), wx.ART_MENU)
             if abort.IsNull() or not abort.IsOk():
                 abort = wx.ArtProvider.GetBitmap(wx.ART_ERROR,
@@ -292,6 +308,11 @@ class LaunchWindow(ctrlbox.ControlBox):
                 rbmp = None
             rbtn.SetBitmap(rbmp)
             rbtn.SetLabel(_("Run"))
+            # If the buffer was changed while this was running we should
+            # update to the new buffer now that it has stopped.
+            self._config['file'] = self._config['cfile']
+            self._config['lang'] = self._config['clang']
+            self.RefreshControlBar()
 
         self.GetControlBar().Layout()
         rbtn.Refresh()
@@ -303,12 +324,18 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         """
         fname = ctrl.GetFileName()
-        self.SetFile(fname)
-
-        # Setup filetype settings
         lang_id = ctrl.GetLangId()
-        self._config['lang'] = lang_id
-        self.RefreshControlBar()
+
+        # Don't update the bars status if the buffer is busy
+        if self._buffer.IsRunning():
+            self._config['cfile'] = fname
+            self._config['clang'] = lang_id
+        else:
+            self.SetFile(fname)
+            self._config['lang'] = lang_id
+
+            # Refresh the control bars view
+            self.RefreshControlBar()
 
 #-----------------------------------------------------------------------------#
 
@@ -345,14 +372,13 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
 
     def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited"""
-        parent = self.GetParent()
-        parent.SetProcessRunning(False)
         self.AppendUpdate(">>> %s: %d%s" % (_("Exit Code"), code, os.linesep))
+        self.Stop()
+        self.GetParent().SetProcessRunning(False)
 
     def DoProcessStart(self, cmd=''):
         """Do any necessary preprocessing before a process is started"""
-        parent = self.GetParent()
-        parent.SetProcessRunning(True)
+        self.GetParent().SetProcessRunning(True)
         self.AppendUpdate(">>> %s%s" % (cmd, os.linesep))
 
     def GetCurrentHandler(self):
@@ -360,16 +386,16 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         @return: L{handlers.FileTypeHandler} instance
 
         """
-        lang_id = GetLangIdFromMW(self._mw)
+        lang_id = self.GetParent().GetLastRun()[1]
         handler = handlers.GetHandlerById(lang_id)
         return handler
 
     def OnHotSpot(self, evt):
         """Handle clicks on hotspots"""
-        lang_id = GetLangIdFromMW(self._mw)
+        fname, lang_id = self.GetParent().GetLastRun()
         handler = handlers.GetHandlerById(lang_id)
         line = self.LineFromPosition(evt.GetPosition())
-        handler.HandleHotSpot(self._mw, self, line, self.GetParent().GetFile())
+        handler.HandleHotSpot(self._mw, self, line, fname)
 
 #-----------------------------------------------------------------------------#
 def GetLangIdFromMW(mainw):
