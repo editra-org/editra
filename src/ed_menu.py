@@ -2,8 +2,8 @@
 # Name: ed_menu.py                                                            #
 # Purpose: Editra's Menubar and Menu related classes                          #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -201,7 +201,7 @@ class EdMenu(wx.Menu):
 class EdMenuBar(wx.MenuBar):
     """Custom menubar to allow for easier access and updating
     of menu components.
-    @todo: this is currently a static object needs lots of refactoring
+    @todo: redo all of this
     
     """
     def __init__(self, style=0):
