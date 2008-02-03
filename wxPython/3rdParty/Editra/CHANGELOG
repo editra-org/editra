@@ -16,6 +16,7 @@ NEWS:
 
 
 NEW: [features/improvements]
++New bundled plugin "Launch" for running scripts and viewing output.
 +Support for using C style (/* */) comments in Editra Style Sheets
 +Improved syntax highlighting sample/test files
 +Highlighting support for (Ferite, haXe)
@@ -28,11 +29,11 @@ NEW: [features/improvements]
 +Option to set a preffered lexer for new files so highlighting and other 
 features are autmatically applied when starting a new buffer.
 +New plugin "CommentBrowser" for listing and browsing TODO statements in the
-current buffer
-+New icon theme available based on the Crystal Project Icons
+current buffer is available.
++Two new icon themes available (Crystal Project and Ubuntoon)
 +All existing icon themes have recieved some minor updates
-+New bundled plugin "Launch" for running scripts and viewing output.
 +Improved Windows installer / Better Windows Desktop integration
++Jump word pre/next keybindings (Alt+<- and Alt+->)
 
 BUG FIXES:
 +Fix bug with turning off syntax highlighting in the preference dialog
