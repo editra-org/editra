@@ -53,6 +53,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         # Attributes
         self._mw = self.__FindMainWindow()
         self._buffer = OutputDisplay(self)
+        self._slbl = None # Created in __DoLayout
         self._worker = None
         self._busy = False
         self._config = dict(file='', lang=0,
@@ -95,16 +96,23 @@ class LaunchWindow(ctrlbox.ControlBox):
         ctrlbar.AddControl(pref, wx.ALIGN_LEFT)
 
         # Exe
+        ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("exec") + ":"),
+                           wx.ALIGN_LEFT)
         exe = wx.Choice(ctrlbar, ID_EXECUTABLE)
         exe.SetToolTipString(_("Program Executable Command"))
         ctrlbar.AddControl(exe, wx.ALIGN_LEFT)
 
+        # Script Label
+        ctrlbar.AddControl((5, 5), wx.ALIGN_LEFT)
+        self._slbl = wx.StaticText(ctrlbar, label="")
+        ctrlbar.AddControl(self._slbl, wx.ALIGN_LEFT)
+
         # Args
-        ctrlbar.AddControl((5,5), wx.ALIGN_LEFT)
+        ctrlbar.AddControl((5, 5), wx.ALIGN_LEFT)
         ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("args") + ":"),
                            wx.ALIGN_LEFT)
         args = wx.TextCtrl(ctrlbar, ID_ARGS)
-        args.SetToolTipString(_("Program Arguments"))
+        args.SetToolTipString(_("Script Arguments"))
         ctrlbar.AddControl(args, wx.ALIGN_LEFT)
 
         # Spacer
@@ -282,6 +290,9 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         """
         self._config['file'] = fname
+        sname = os.path.split(fname)[1]
+        self._slbl.SetLabel(_("file") + ": " + sname)
+        self.GetControlBar().Layout()
 
     def SetProcessRunning(self, running=True):
         """Set the state of the window into either process running mode
