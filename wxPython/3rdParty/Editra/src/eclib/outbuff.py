@@ -297,7 +297,6 @@ class ProcessBufferMixin:
     def _OnProcessExit(self, evt):
         """Handles EVT_PROCESS_EXIT"""
         self.DoProcessExit(evt.GetValue())
-        self.Stop()
 
     def _OnProcessStart(self, evt):
         """Handles EVT_PROCESS_START"""
@@ -321,11 +320,12 @@ class ProcessBufferMixin:
 
     def DoProcessExit(self, code=0):
         """Override this method to do any post processing after the running
-        task has exited.
+        task has exited. Typically this is a good place to call L{Stop} to
+        stop the buffers timer.
         @keyword code: Exit code of program
 
         """
-        pass
+        self.Stop()
 
     def DoProcessStart(self, cmd=''):
         """Override this method to do any pre processing before starting
