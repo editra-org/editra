@@ -31,9 +31,9 @@ import synglob
 
 # Ruby Keywords
 RUBY_KW = (0, "__FILE__ and def end in or self unless __LINE__ begin defined? "
-              "ensure module redo super until BEGIN break do false next rescue "
-              "then when END case else for nil retry true while alias class "
-              "elsif if not return undef yieldr puts")
+              "ensure module redo super until BEGIN break do false next "
+              "require rescue then when END case else for nil retry true while "
+              "alias class elsif if not return undef yieldr puts")
 
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [ ('STC_RB_BACKTICKS', 'scalar_style'),
