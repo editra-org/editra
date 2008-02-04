@@ -171,11 +171,11 @@ class FileTypeHandler(object):
         """Get the name of this handler"""
         return self.__name__
 
-    def HandleHotSpot(self, mainw, outbuff, line, fname):
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
         """Handle hotspot clicks. Called when a hotspot is clicked
         in an output buffer of this file type.
         @param mainw: MainWindow instance that created the launch instance
-        @param outbuff: Buffer the click took place in
+        @param outbuffer: Buffer the click took place in
         @param line: line number of the hotspot region in the buffer
         @param fname: path of the script that was run to produce the output that
                       contains the hotspot.
@@ -229,6 +229,7 @@ class FileTypeHandler(object):
 #-----------------------------------------------------------------------------#
 class BashHandler(FileTypeHandler):
     """FileTypeHandler for Bash scripts"""
+    RE_BASH_ERROR = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
     def __init__(self):
         FileTypeHandler.__init__(self)
         self.commands = ['bash',]
@@ -242,6 +243,37 @@ class BashHandler(FileTypeHandler):
         """Filter out ansi escape sequences from input"""
         txt = RE_ANSI_START.sub('', txt)
         return RE_ANSI_END.sub('', txt)
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        txt = outbuffer.GetLine(line)
+        match = self.RE_BASH_ERROR.findall(txt)
+        ifile = None
+        if len(match):
+            ifile = match[0][0].split()[-1]
+            try:
+                line = max(int(match[0][1]) - 1, 0)
+            except:
+                line = 0
+
+        # If not an absolute path then the error is in the current script
+        if not os.path.isabs(ifile):
+            dname = os.path.split(fname)[0]
+            ifile = os.path.join(dname, ifile)
+
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style NSIS output messages"""
+        if _StyleError(stc, start, txt, self.RE_BASH_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
 
 #-----------------------------------------------------------------------------#
 
@@ -299,14 +331,63 @@ class KornHandler(FileTypeHandler):
 
 class LuaHandler(FileTypeHandler):
     """FileTypeHandler for Lua"""
+    RE_LUA_ERROR = re.compile('.*: (.+):([0-9]+):.*')
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['lua',]
+        self.commands = ['lua', 'luac']
         self.default = 'lua'
 
     @property
     def __name__(self):
         return 'lua'
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_LUA_ERROR)
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style NSIS output messages"""
+        if _StyleError(stc, start, txt, self.RE_LUA_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
+
+#-----------------------------------------------------------------------------#
+
+class NSISHandler(FileTypeHandler):
+    """FileTypeHandler for NSIS scripts"""
+    RE_NSIS_ERROR = re.compile(r'Error .* "(.+)" on line ([0-9]+) ')
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = ['makensis',]
+        self.default = 'makensis'
+
+    @property
+    def __name__(self):
+        return 'nsis'
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_NSIS_ERROR)
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style NSIS output messages"""
+        if _StyleError(stc, start, txt, self.RE_NSIS_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
 
 #-----------------------------------------------------------------------------#
 
@@ -325,7 +406,7 @@ class PikeHandler(FileTypeHandler):
 
 class PerlHandler(FileTypeHandler):
     """FileTypeHandler for Perl scripts"""
-    RE_PERL_ERROR = re.compile(r'[a-zA-Z]+ error at (.+) line ([0-9]+),')
+    RE_PERL_ERROR = re.compile(r'[a-zA-Z]+ error at (.+) line ([0-9]+),.*')
     def __init__(self):
         FileTypeHandler.__init__(self)
         self.commands = ['perl',]
@@ -335,47 +416,21 @@ class PerlHandler(FileTypeHandler):
     def __name__(self):
         return 'perl'
 
-    def HandleHotSpot(self, mainw, outbuff, line, fname):
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
         """Hotspots are error messages, find the file/line of the
         error in question and open the file to that point in the buffer.
 
         """
-        txt = outbuff.GetLine(line)
-        match = self.RE_PERL_ERROR.findall(txt)
-        ifile = None
-        if len(match):
-            match = match[0]
-            ifile = match[0]
-            try:
-                line = max(int(match[1]) - 1, 0)
-            except:
-                line = 0
-
-            # If not an absolute path then the error is in the current script
-            if not os.path.isabs(ifile):
-                dname = os.path.split(fname)[0]
-                ifile = os.path.join(dname, ifile)
-
-            nb = mainw.GetNotebook()
-            buffers = [ page.GetFileName() for page in nb.GetTextControls() ]
-            if ifile in buffers:
-                page = buffers.index(ifile)
-                nb.SetSelection(page)
-                nb.GetPage(page).GotoLine(line)
-            else:
-                nb.OnDrop([ifile])
-                nb.GetPage(nb.GetSelection()).GotoLine(line)
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_PERL_ERROR)
+        _OpenToLine(ifile, line, mainw)
 
     def StyleText(self, stc, start, txt):
-        """Style python Information and Error messages from script
+        """Style perl Information and Error messages from script
         output.
 
         """
-        for group in self.RE_PERL_ERROR.finditer(txt):
-            sty_s = start + group.start()
-            sty_e = start + group.end()
-            stc.StartStyling(sty_s, 0xff)
-            stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_ERROR)
+        if _StyleError(stc, start, txt, self.RE_PERL_ERROR):
+            return
         else:
             # Highlight Start end lines this is what the
             # base classes method does.
@@ -406,47 +461,21 @@ class PythonHandler(FileTypeHandler):
         proc_env['PYTHONUNBUFFERED'] = '1'
         return proc_env
 
-    def HandleHotSpot(self, mainw, outbuff, line, fname):
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
         """Hotspots are error messages, find the file/line of the
         error in question and open the file to that point in the buffer.
 
         """
-        txt = outbuff.GetLine(line)
-        match = self.RE_PY_ERROR.findall(txt)
-        ifile = None
-        if len(match):
-            match = match[0]
-            ifile = match[0]
-            try:
-                line = max(int(match[1]) - 1, 0)
-            except:
-                line = 0
-
-            # If not an absolute path then the error is in the current script
-            if not os.path.isabs(ifile):
-                dname = os.path.split(fname)[0]
-                ifile = os.path.join(dname, ifile)
-
-            nb = mainw.GetNotebook()
-            buffers = [ page.GetFileName() for page in nb.GetTextControls() ]
-            if ifile in buffers:
-                page = buffers.index(ifile)
-                nb.SetSelection(page)
-                nb.GetPage(page).GotoLine(line)
-            else:
-                nb.OnDrop([ifile])
-                nb.GetPage(nb.GetSelection()).GotoLine(line)
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_PY_ERROR)
+        _OpenToLine(ifile, line, mainw)
 
     def StyleText(self, stc, start, txt):
         """Style python Information and Error messages from script
         output.
 
         """
-        for group in self.RE_PY_ERROR.finditer(txt):
-            sty_s = start + group.start()
-            sty_e = start + group.end()
-            stc.StartStyling(sty_s, 0xff)
-            stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_ERROR)
+        if _StyleError(stc, start, txt, self.RE_PY_ERROR):
+            return
         else:
             # Highlight Start end lines this is what the
             # base classes method does.
@@ -456,6 +485,7 @@ class PythonHandler(FileTypeHandler):
 
 class RubyHandler(FileTypeHandler):
     """FileTypeHandler for Ruby scripts"""
+    RE_RUBY_ERROR = re.compile('(.+):([0-9]+)[:]{0,1}.*')
     def __init__(self):
         FileTypeHandler.__init__(self)
         self.commands = ['ruby',]
@@ -465,10 +495,28 @@ class RubyHandler(FileTypeHandler):
     def __name__(self):
         return 'ruby'
 
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_RUBY_ERROR)
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style NSIS output messages"""
+        if _StyleError(stc, start, txt, self.RE_RUBY_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
+
 #-----------------------------------------------------------------------------#
 
 class TCLHandler(FileTypeHandler):
     """FileTypeHandler for TCL/TK"""
+    RE_TCL_ERROR = re.compile('\(file "(.+)" line ([0-9]+)\)')
     def __init__(self):
         FileTypeHandler.__init__(self)
         self.commands = ['wish',]
@@ -478,9 +526,40 @@ class TCLHandler(FileTypeHandler):
     def __name__(self):
         return 'tcl/tk'
 
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        txt = outbuffer.GetLine(line)
+        match = self.RE_TCL_ERROR.findall(txt)
+        ifile = None
+        if len(match):
+            ifile = match[0][0]
+            try:
+                line = max(int(match[0][1]) - 1, 0)
+            except:
+                line = 0
+
+        # If not an absolute path then the error is in the current script
+        if not os.path.isabs(ifile):
+            dname = os.path.split(fname)[0]
+            ifile = os.path.join(dname, ifile)
+
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style NSIS output messages"""
+        if _StyleError(stc, start, txt, self.RE_TCL_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
+
 #-----------------------------------------------------------------------------#
 # Handler Object Dictionary
-# Used to keep one instance of each handler to use like a singleton
+# Create an instance of each Handler to use as a persistant object
 HANDLERS = { 0 : FileTypeHandler(),
             synglob.ID_LANG_BASH : BashHandler(),
             synglob.ID_LANG_BOO : BooHandler(),
@@ -488,8 +567,78 @@ HANDLERS = { 0 : FileTypeHandler(),
             synglob.ID_LANG_FERITE : FeriteHandler(),
             synglob.ID_LANG_KSH : KornHandler(),
             synglob.ID_LANG_LUA : LuaHandler(),
+            synglob.ID_LANG_NSIS : NSISHandler(),
             synglob.ID_LANG_PERL : PerlHandler(),
             synglob.ID_LANG_PIKE : PikeHandler(),
             synglob.ID_LANG_PYTHON : PythonHandler(),
             synglob.ID_LANG_RUBY : RubyHandler(),
             synglob.ID_LANG_TCL : TCLHandler() }
+
+#-----------------------------------------------------------------------------#
+# Local utility functions
+
+def _FindFileLine(outbuffer, line, fname, regex):
+    """Find and return the filename and line number found by applying
+    the given regular expression to the text found in the line of the
+    given buffer.
+    @param outbuffer: OutputBuffer instance
+    @param line: in the buffer
+    @param fname: Filname that generated the error message
+    @param regex: a regular exression with two groups the first group needs to
+                  match the filename. The second group needs to match the line
+                  number that the error is reporting
+
+    """
+    match = regex.findall(outbuffer.GetLine(line))
+    ifile = None
+    if len(match):
+        ifile = match[0][0]
+        try:
+            line = max(int(match[0][1]) - 1, 0)
+        except:
+            line = 0
+
+    # If not an absolute path then the error is relative to the
+    # script that produced this error message.
+    if not os.path.isabs(ifile):
+        dname = os.path.split(fname)[0]
+        ifile = os.path.join(dname, ifile)
+
+    return (ifile, line)
+
+def _OpenToLine(fname, line, mainw):
+    """Open the given filename to the given line number
+    @param fname: File name to open, relative paths will be converted to abs
+                  paths.
+    @param line: Line number to set the cursor to after opening the file
+    @param mainw: MainWindow instance to open the file in
+
+    """
+    nb = mainw.GetNotebook()
+    buffers = [ page.GetFileName() for page in nb.GetTextControls() ]
+    if fname in buffers:
+        page = buffers.index(fname)
+        nb.SetSelection(page)
+        nb.GetPage(page).GotoLine(line)
+    else:
+        nb.OnDrop([fname])
+        nb.GetPage(nb.GetSelection()).GotoLine(line)
+
+def _StyleError(stc, start, txt, regex):
+    """Style Error message groups
+    @param stc: outputbuffer reference
+    @param start: start of text just added to buffer
+    @param txt: text that was just added
+    @param regex: regular expression object for matching the errors
+    @return: bool (True if match), (False if no match)
+
+    """
+    for group in regex.finditer(txt):
+        sty_s = start + group.start()
+        sty_e = start + group.end()
+        stc.StartStyling(sty_s, 0xff)
+        stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_ERROR)
+    else:
+        return False
+
+    return True
