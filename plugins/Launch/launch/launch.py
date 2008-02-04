@@ -407,6 +407,7 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         handler = handlers.GetHandlerById(lang_id)
         line = self.LineFromPosition(evt.GetPosition())
         handler.HandleHotSpot(self._mw, self, line, fname)
+        self.GetParent().SetupControlBar(GetTextBuffer(self._mw))
 
 #-----------------------------------------------------------------------------#
 def GetLangIdFromMW(mainw):
