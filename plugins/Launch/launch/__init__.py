@@ -2,7 +2,7 @@
 ###############################################################################
 # Name: __init__.py                                                           #
 # Purpose: Launch Plugin                                                      #
-# Author: Cody Precord <cprecord@editra.org                                   #
+# Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
@@ -36,7 +36,10 @@ class Launch(plugin.Plugin):
     """Script Launcher and output viewer"""
     plugin.Implements(iface.ShelfI)
     ID_LAUNCH = wx.NewId()
-    __name__ = u'Launch'
+
+    @property
+    def __name__(self):
+        return u'Launch'
 
     def AllowMultiple(self):
         """Launch allows multiple instances"""
