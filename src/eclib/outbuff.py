@@ -74,7 +74,8 @@ THREADEDBUFF_NAME_STR = u'EditraThreadedBuffer'
 # Style Codes
 OPB_STYLE_DEFAULT = 0
 OPB_STYLE_INFO    = 1
-OPB_STYLE_ERROR   = 2
+OPB_STYLE_WARN    = 2
+OPB_STYLE_ERROR   = 3
 
 #--------------------------------------------------------------------------#
 
@@ -157,24 +158,24 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         # Define Styles
         font = wx.Font(11, wx.FONTFAMILY_MODERN, 
                        wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
-        face = font.GetFaceName()
-        size = font.GetPointSize()
-        back = "#FFFFFF"
+        style = (font.GetFaceName(), font.GetPointSize(), "#FFFFFF")
         
         # Custom Styles
         self.StyleSetSpec(OPB_STYLE_DEFAULT, 
-                          "face:%s,size:%d,fore:#000000,back:%s" % (face, size, back))
+                          "face:%s,size:%d,fore:#000000,back:%s" % style)
         self.StyleSetSpec(OPB_STYLE_INFO,
-                          "face:%s,size:%d,fore:#0000FF,back:%s" % (face, size, back))
+                          "face:%s,size:%d,fore:#0000FF,back:%s" % style)
+        self.StyleSetSpec(OPB_STYLE_WARN,
+                          "face:%s,size:%d,fore:#0000FF,back:%s" % style)
         self.StyleSetSpec(OPB_STYLE_ERROR, 
-                          "face:%s,size:%d,fore:#FF0000,back:%s" % (face, size, back))
+                          "face:%s,size:%d,fore:#FF0000,back:%s" % style)
         self.StyleSetHotSpot(OPB_STYLE_ERROR, True)
 
         # Default Styles
         self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, \
-                          "face:%s,size:%d,fore:#000000,back:%s" % (face, size, back))
+                          "face:%s,size:%d,fore:#000000,back:%s" % style)
         self.StyleSetSpec(wx.stc.STC_STYLE_CONTROLCHAR, \
-                          "face:%s,size:%d,fore:#000000,back:%s" % (face, size, back))
+                          "face:%s,size:%d,fore:#000000,back:%s" % style)
         self.Colourise(0, -1)
 
     def __PutText(self, txt, ind):
@@ -197,7 +198,6 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
     def AppendUpdate(self, value):
         """Buffer output before adding to window
         @param value: update string to append to stack
-        @note: This method is thread safe
 
         """
         self._updating.acquire()
@@ -245,7 +245,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         """
         ind = len(self._updates)
         if ind:
-            wx.CallAfter(self.__PutText, ''.join(self._updates), ind)
+            wx.CallAfter(self.__PutText, u''.join(self._updates), ind)
         elif evt is not None:
             self.DoUpdatesEmpty()
         else:
@@ -392,6 +392,12 @@ class ProcessThread(threading.Thread):
 
         if result == "" or result == None:
             return False
+
+        # Ignore encoding errors and return an empty line instead
+        try:
+            result = result.decode(sys.getfilesystemencoding())
+        except UnicodeDecodeError:
+            result = os.linesep
 
         evt = OutputBufferEvent(edEVT_UPDATE_TEXT, self._parent.GetId(), result)
         wx.CallAfter(wx.PostEvent, self._parent, evt)
