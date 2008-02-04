@@ -89,6 +89,7 @@ class ConfigDialog(wx.Frame):
         self.ftype = ftype
 
         # Layout
+        util.SetWindowIcon(self)
         self.__DoLayout()
 
         # Event Handlers
