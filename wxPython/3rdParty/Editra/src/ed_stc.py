@@ -92,10 +92,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           wx.stc.STC_CMD_ZOOMOUT)
         self.CmdKeyAssign(ord('+'), wx.stc.STC_SCMOD_CTRL | \
                           wx.stc.STC_SCMOD_SHIFT, wx.stc.STC_CMD_ZOOMIN)
-        self.CmdKeyAssign(wx.stc.STC_KEY_RIGHT,
-                          wx.stc.STC_SCMOD_ALT, wx.stc.STC_CMD_WORDRIGHT)
-        self.CmdKeyAssign(wx.stc.STC_KEY_LEFT,
-                          wx.stc.STC_SCMOD_ALT, wx.stc.STC_CMD_WORDLEFT)
 
         #---- Drop Target ----#
         if use_dt and hasattr(parent, 'OnDrop'):
