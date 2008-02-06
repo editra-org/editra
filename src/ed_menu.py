@@ -371,10 +371,19 @@ class EdMenuBar(wx.MenuBar):
         viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_GOTO_LINE, _("Goto Line") + u"\tCtrl+G",
                             _("Goto Line Number"))
+
+        # Use ALT on win/gtk so the jump to word command doesn't get overridden
+        if wx.Platform == '__WXMAC__':
+            shortn = "\tCtrl+Right"
+            shortp = "\tCtrl+Left"
+        else:
+            shortn = "\tAlt+Right"
+            shortp = "\tAlt+Left"
+
         viewmenu.Append(ed_glob.ID_NEXT_MARK, _("Next Bookmark") + \
-                        u"\tCtrl+Right", _("View Line of Next Bookmark"))
+                        shortn, _("View Line of Next Bookmark"))
         viewmenu.Append(ed_glob.ID_PRE_MARK, _("Previous Bookmark") + \
-                        u"\tCtrl+Left", _("View Line of Previous Bookmark"))
+                        shortp, _("View Line of Previous Bookmark"))
         viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_VIEW_TOOL, _("Toolbar"), 
                              _("Show Toolbar"), wx.ITEM_CHECK)
