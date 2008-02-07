@@ -33,13 +33,14 @@ current buffer is available.
 +Two new icon themes available (Crystal Project and Ubuntoon)
 +All existing icon themes have recieved some minor updates
 +Improved Windows installer / Better Windows Desktop integration
-+Jump word pre/next keybindings (Ctrl+<- and Ctrl+->)
++Log Viewer can filter messages based on their origin
 
 BUG FIXES:
 +Fix bug with turning off syntax highlighting in the preference dialog
 +Exiting Editra from a right click on the Windows taskbar saving invalid window
 size and postion for next launch.
 +Add some missing Ruby keywords
++Jump word pre/next keybindings (Ctrl+<- and Ctrl+->) now work on Linux/Windows
 
 #-----------------------------------------------------------------------------#
 
