@@ -2,8 +2,8 @@
 # Name: Cody Precord                                                          #
 # Purpose: Log output viewer for the shelf                                    #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -35,6 +35,7 @@ import ed_glob
 # Globals
 _ = wx.GetTranslation
 
+SHOW_ALL_MSG = 'ALL'
 #-----------------------------------------------------------------------------#
 
 # Interface Implementation
@@ -42,7 +43,10 @@ class EdLogViewer(plugin.Plugin):
     """Shelf interface implementation for the log viewer"""
     plugin.Implements(iface.ShelfI)
     ID_LOGGER = wx.NewId()
-    __name__ = u'Editra Log'
+
+    @property
+    def __name__(self):
+        return u'Editra Log'
 
     def AllowMultiple(self):
         """EdLogger allows multiple instances"""
@@ -78,20 +82,23 @@ class EdLogViewer(plugin.Plugin):
 class LogViewer(ctrlbox.ControlBox):
     """LogViewer is a control for displaying and working with output
     from Editra's log.
-    """
 
+    """
     def __init__(self, parent):
         ctrlbox.ControlBox.__init__(self, parent)
 
         # Attributes
         self._buffer = LogBuffer(self)
         self.SetWindow(self._buffer)
+        self._srcfilter = None
 
         # Layout
         self.__DoLayout()
 
         # Event Handlers
-        self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_BUTTON,
+                  lambda evt: self._buffer.Clear(), id=wx.ID_CLEAR)
+        self.Bind(wx.EVT_CHOICE, self.OnChoice, self._srcfilter)
 
     def __DoLayout(self):
         """Layout the log viewer window"""
@@ -100,6 +107,12 @@ class LogViewer(ctrlbox.ControlBox):
         if wx.Platform == '__WXGTK__':
             ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
 
+        # View Choice
+        self._srcfilter = wx.Choice(ctrlbar, wx.ID_ANY, choices=[])
+        ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("Filter") + ":"))
+        ctrlbar.AddControl(self._srcfilter)
+
+        # Clear Button
         ctrlbar.AddStretchSpacer()
         cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
         if cbmp.IsNull() or not cbmp.IsOk():
@@ -110,13 +123,26 @@ class LogViewer(ctrlbox.ControlBox):
         ctrlbar.SetVMargin(1, 1)
         self.SetControlBar(ctrlbar)
         
-    def OnButton(self, evt):
-        """Handle button events from the controlbar"""
-        e_id = evt.GetId()
-        if e_id == wx.ID_CLEAR:
-            self._buffer.Clear()
-        else:
-            evt.Skip()
+    def OnChoice(self, evt):
+        """Set the filter based on the choice controls value
+        @param evt: wx.CommandEvent
+
+        """
+        self._buffer.SetFilter(self._srcfilter.GetStringSelection())
+
+    def SetSources(self, srclist):
+        """Set the list of available log sources in the choice control
+        @param srclist: list of log sources
+
+        """
+        choice = self._srcfilter.GetStringSelection()
+        lst = sorted(srclist)
+        lst.insert(0, _("All"))
+        self._srcfilter.SetItems(lst)
+        if not self._srcfilter.SetStringSelection(choice):
+            self._srcfilter.SetSelection(0)
+
+#-----------------------------------------------------------------------------#
 
 class LogBuffer(outbuff.OutputBuffer):
     """Buffer for displaying log messages that are sent on Editra's
@@ -127,15 +153,43 @@ class LogBuffer(outbuff.OutputBuffer):
         outbuff.OutputBuffer.__init__(self, parent)
 
         # Attributes
-        self._cache = dict()
+        self._filter = SHOW_ALL_MSG
+        self._srcs = list()
 
         # Subscribe to Editra's Log
-        ed_msg.Subscribe(self.UpdateLog, ed_msg.EDMSG_LOG_ALL) 
+        ed_msg.Subscribe(self.UpdateLog, ed_msg.EDMSG_LOG_ALL)
 
     def __del__(self):
         """Unregister from recieving any more log messages"""
         ed_msg.Unsubscribe(self.UpdateLog, ed_msg.EDMSG_LOG_ALL)
         super(LogBuffer, self).__del__()
+
+    def AddFilter(self, src):
+        """Add a new filter source
+        @param src: filter source string
+        @postcondition: if src is new the parent window is updated
+
+        """
+        if src not in self._srcs:
+            self._srcs.append(src)
+            self.GetParent().SetSources(self._srcs)
+        else:
+            pass
+
+    def SetFilter(self, src):
+        """Set the level of what is shown in the display
+        @param src: Only show messages from src
+        @return: bool
+
+        """
+        if src in self._srcs:
+            self._filter = src
+            return True
+        elif src == _("All"):
+            self._filter = SHOW_ALL_MSG
+            return True
+        else:
+            return False
 
     def UpdateLog(self, msg):
         """Add a new log message
@@ -146,20 +200,13 @@ class LogBuffer(outbuff.OutputBuffer):
             if wx.Thread_IsMain():
                 self.Start(150)
 
-        self.AppendUpdate(str(msg.GetData()) + os.linesep)
-
-#-----------------------------------------------------------------------------#
-
-class LogFilterCache(dict):
-    """Data storage class for filtering and organizing log messages"""
-    def __init__(self):
-        """Create a new log cache"""
-        dict.__init__(self)
-
-    def Clear(self, subkey=None):
-        """Clear the log cache, if subkey is specified only clear
-        the subset of the cache pertaining to that
-        @keyword subkey: Toplevel cache filter to clear
-
-        """
-        
+        # Check filters
+        logmsg = msg.GetData()
+        self.AddFilter(logmsg.Origin)
+        if self._filter == SHOW_ALL_MSG:
+            self.AppendUpdate(str(logmsg) + os.linesep)
+        elif self._filter == logmsg.Origin:
+            msg = "[%s][%s]%s" % (logmsg.ClockTime, logmsg.Type, logmsg.Value)
+            self.AppendUpdate(msg + os.linesep)
+        else:
+            pass
