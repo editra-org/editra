@@ -290,6 +290,7 @@ class EdFile(object):
                 value = self.bom + value
             writer.write(value)
             writer.close()
+            Log("[ed_txt][info] %s was written successfully" % self.path)
         else:
             raise WriteError, self.last_err
 
