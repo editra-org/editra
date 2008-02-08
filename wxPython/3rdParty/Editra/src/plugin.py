@@ -172,6 +172,10 @@ class Plugin(object):
     """Base class for all plugin type objects"""
     __metaclass__ = PluginMeta
 
+    @property
+    def __name__(self):
+        return 'EdPlugin'
+
     def __new__(cls, *args, **kwargs):
         """Only one instance of each plugin is allowed to exist
         per manager. If an instance of this plugin has already be
@@ -184,7 +188,7 @@ class Plugin(object):
         # Case for a pluginmanager being managed by a plugin manager
         if issubclass(cls, PluginManager):
             self = super(Plugin, cls).__new__(cls)
-            self._pluginmgr = self
+            self.pluginmgr = self
             return self
 
         pluginmgr = args[0]
@@ -193,6 +197,14 @@ class Plugin(object):
             self = super(Plugin, cls).__new__(cls)
             self.pluginmgr = pluginmgr
         return self
+
+    def InstallHook(self):
+        """Override in subclasses to allow the plugin to be loaded
+        dynamically.
+        @return: None
+
+        """
+        pass
 
 #-----------------------------------------------------------------------------#
 
@@ -315,6 +327,7 @@ class PluginManager(object):
         self._env = self.CreateEnvironment(self._pi_path)
         self._plugins = dict()      # Set of available plugins
         self._enabled = dict()      # Set of enabled plugins
+        self._loaded = list()       # List of 
         self.InitPlugins(self._env)
         self.RefreshConfig()
 
@@ -466,18 +479,28 @@ class PluginManager(object):
 
         pkg_env = env
         for name in pkg_env:
+            self.LOG("[pluginmgr][info] Found plugin: %s" % name)
             egg = pkg_env[name][0]  # egg is of type Distrobution
             egg.activate()
             for name in egg.get_entry_map(ENTRYPOINT):
                 try:
-                    entry_point = egg.get_entry_info(ENTRYPOINT, name)
-                    cls = entry_point.load()
+                    # Only load a given entrypoint once
+                    if name not in self._loaded:
+                        entry_point = egg.get_entry_info(ENTRYPOINT, name)
+                        cls = entry_point.load()
+                        self._loaded.append(name)
+                    else:
+                        continue
                 except Exception, msg:
                     self.LOG("[pluginmgr][err] Couldn't Load %s: %s" % \
                                                           (str(name), str(msg)))
                 else:
                     try:
-                        self._plugins[cls] = cls(self)
+                        # Only initialize plugins that haven't already been
+                        # initialized
+                        if cls not in self._plugins:
+                            self.LOG("[pluginmgr][info] Creating Instance of %s" % name)
+                            self._plugins[cls] = cls(self)
                     finally:
                         pass
 
