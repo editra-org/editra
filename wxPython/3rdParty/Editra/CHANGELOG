@@ -35,6 +35,7 @@ filtering for some lanuguages such as python. The special ouput handling will
 create hotspots on error messages in the output and allow you to instantly
 navigate to the error by clicking on the hotspot.
 
+
 NEW: [features/improvements]
 +New bundled plugin "Launch" for running scripts and viewing output.
 +Support for using C style (/* */) comments in Editra Style Sheets
