@@ -130,6 +130,7 @@ Section "Context Menus" SEC02
   SectionIn 1
   WriteRegStr HKCR "*\shell\OpenWithEditra" "" "Edit with ${PRODUCT_NAME}"
   WriteRegStr HKCR "*\shell\OpenWithEditra\command" "" '$INSTDIR\Editra.exe "%1"'
+;  WriteRegStr HKCR "*\shell\OpenWithEditra\DefaultIcon" "" "$INSTDIR\Editra.exe,1"
 
   ; Notify of the shell extension changes
   System::Call 'Shell32::SHChangeNotify(i ${SHCNE_ASSOCCHANGED}, i ${SHCNF_FLUSH}, i 0, i 0)'
