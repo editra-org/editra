@@ -3,24 +3,22 @@
 # Purpose: Provides the front end interface for autocompletion services for   #
 #          the editor.                                                        #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: autocomp.py                                                        #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#    Provides an interface/service for getting autocompletion/calltip data #
-# into an stc control. This is a data provider only it does not do provide #
-# any UI functionality or calls. The user called object from this library  #
-# is intended to be the AutoCompService. This service provides the generic #
-# interface into the various language specific autocomplete services, and  #
-# makes the calls to the other support objects/functions in this library.  #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: autocomp.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+   Provides an interface/service for getting autocompletion/calltip data
+into an stc control. This is a data provider only it does not do provide
+any UI functionality or calls. The user called object from this library
+is intended to be the AutoCompService. This service provides the generic
+interface into the various language specific autocomplete services, and
+makes the calls to the other support objects/functions in this library.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -30,6 +28,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import wx.stc as stc
+
 #--------------------------------------------------------------------------#
 
 class AutoCompService(object):
@@ -68,7 +67,7 @@ class AutoCompService(object):
             return self._completer.GetAutoCompList(command)
         else:
             return list()
- 
+
     def GetAutoCompStops(self):
         """Returns a string of characters that should cancel
         the autocompletion lookup.
