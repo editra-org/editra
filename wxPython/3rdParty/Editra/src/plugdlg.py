@@ -3,8 +3,8 @@
 # Purpose: User interface into the PluginManager, also provides interface for #
 #          downloading and installing plugins.                                #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -118,14 +118,16 @@ class PluginDialog(wx.Frame):
         """
         busy = self._nb.IsBusy()
         if busy:
-            dlg = wx.MessageDialog(self, busy, _("Do you wish to exit"), 
+            dlg = wx.MessageDialog(self, busy, _("Do you wish to exit?"),
                                    style = wx.YES_NO | wx.ICON_EXCLAMATION | \
                                            wx.CENTER)
             result = dlg.ShowModal()
-            if result == wx.YES:
+            dlg.Destroy()
+            if result == wx.ID_NO:
                 return
             else:
                 pass
+
         wx.GetApp().UnRegisterWindow(repr(self))
         evt.Skip()
 
