@@ -258,6 +258,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._handlers['ui'].extend(addons.GetEventHandlers(ui_evt=True))
         self._shelf = iface.Shelf(plgmgr)
         self._shelf.Init(self)
+        self._handlers['ui'].extend(self._shelf.GetUiHandlers())
         self.LOG("[ed_main][info] Loading Generator plugins")
         generator.Generator(plgmgr).InstallMenu(menbar.GetMenuByName("tools"))
 
@@ -886,7 +887,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         e_id = evt.GetId()
         evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
         # Slow the update interval to reduce overhead
-        evt.SetUpdateInterval(200)
+        evt.SetUpdateInterval(160)
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_UNDO:
             evt.Enable(ctrl.CanUndo())
@@ -909,7 +910,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         e_id = evt.GetId()
         evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        evt.SetUpdateInterval(350)
+        evt.SetUpdateInterval(300)
         ctrl = self.nb.GetCurrentCtrl()
         eol = ctrl.GetEOLModeId()
         if e_id == ID_USE_SOFTTABS:
