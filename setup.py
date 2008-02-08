@@ -3,8 +3,8 @@
 # Name: setup.py                                                              #
 # Purpose: Setup/build script for Editra                                      #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
