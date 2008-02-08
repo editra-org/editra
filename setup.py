@@ -151,6 +151,7 @@ Dependancies
 """
 
 ICON = { 'Win' : "pixmaps/editra.ico",
+         'WinDoc' : "pixmaps/editra_doc.ico",
          'Mac' : "pixmaps/Editra.icns"
 }
 
@@ -216,7 +217,7 @@ if __platform__ == "win32" and 'py2exe' in sys.argv:
         options = {"py2exe" : {"compressed" : 1, "optimize" : 2, 
                                "includes" : INCLUDES }},
         windows = [{"script": "src/Editra.py",
-                    "icon_resources": [(1, ICON['Win'])], 
+                    "icon_resources": [(0, ICON['Win'])], 
                     "other_resources" : [(RT_MANIFEST, 1, 
                                           MANIFEST_TEMPLATE % dict(prog=NAME))],
                   }],
