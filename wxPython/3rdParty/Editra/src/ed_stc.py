@@ -677,6 +677,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                                     msg, ed_glob.SB_ROWCOL)
         wx.PostEvent(self.GetTopLevelParent(), nevt)
 
+        if isinstance(evt, wx.KeyEvent):
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_KEYUP,
+                               (evt.GetPositionTuple(), evt.GetKeyCode()))
+
     def OnRecordMacro(self, evt):
         """Records macro events
         @param evt: event that called this handler
