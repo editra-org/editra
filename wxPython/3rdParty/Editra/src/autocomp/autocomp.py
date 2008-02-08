@@ -119,4 +119,4 @@ class AutoCompService(object):
             import pycomp
             self._completer = pycomp.Completer(self._buffer)
         else:
-            pass
+            self._completer = None
