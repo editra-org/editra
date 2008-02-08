@@ -2,24 +2,23 @@
 # Name: iface.py                                                              #
 # Purpose: Plugin interface definitions                                       #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: iface.py
-# AUTHOR: Cody Precord
-# LANGUAGE: Python
-# SUMMARY:
-#   This module contains numerous plugin interfaces and the Extension points
-# that they extend.
-#
-# Intefaces:
-#   * ShelfI: Interface into the L{Shelf}
-#   * MainWindowI: Interface into L{ed_main.MainWindow}
-#
-#--------------------------------------------------------------------------#
+FILE: iface.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+  This module contains numerous plugin interfaces and the Extension points
+that they extend. Included below is a list of interfaces available in this
+module.
+
+Intefaces:
+  * ShelfI: Interface into the L{Shelf}
+  * MainWindowI: Interface into L{ed_main.MainWindow}
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -147,6 +146,7 @@ class ShelfI(plugin.Interface):
         
 
 #-----------------------------------------------------------------------------#
+
 SHELF_NAME = u'Shelf'
 class Shelf(plugin.Plugin):
     """Plugin that creates a notebook for holding the various Shelf items
@@ -220,6 +220,34 @@ class Shelf(plugin.Plugin):
                     break
         return False
 
+    def GetUiHandlers(self):
+        """Gets the update ui handlers for the shelfs menu
+        @return: [(ID, handler),]
+
+        """
+        handlers = [ (item.GetId(), self.UpdateShelfMenuUI)
+                     for item in self.observers]
+        return handlers
+
+    def UpdateShelfMenuUI(self, evt):
+        """Enable/Disable shelf items based on whether they support
+        muliple instances or not.
+        @param evt: wxEVT_UPDATEUI
+
+        """
+        item = self.GetItemById(evt.GetId())
+        if item is None:
+            evt.Skip()
+            return
+
+        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        evt.SetUpdateInterval(200)
+        count = self.GetCount(item.GetName())
+        if count and not item.AllowMultiple():
+            evt.Enable(False)
+        else:
+            evt.Enable(True)
+
     def Init(self, parent):
         """Mixes the shelf into the parent window
         @param parent: Reference to MainWindow
@@ -231,7 +259,7 @@ class Shelf(plugin.Plugin):
         if mgr.GetPane(SHELF_NAME).IsOk():
             return
 
-        self._shelf = FNB.FlatNotebook(parent, 
+        self._shelf = FNB.FlatNotebook(parent,
                                        style=FNB.FNB_FF2 | \
                                              FNB.FNB_X_ON_TAB | \
                                              FNB.FNB_BACKGROUND_GRADIENT | \
@@ -296,6 +324,17 @@ class Shelf(plugin.Plugin):
                                    self._shelf.GetPageText(page), 1):
                 count = count + 1
         return count
+
+    def GetItemById(self, itemid):
+        """Get the shelf item by its id
+        @param itemid: Shelf item id
+        @return: reference to a ShelfI object
+
+        """
+        for item in self.observers:
+            if item.GetId() == itemid:
+                return item
+        return None
 
     def GetItemId(self, item_name):
         """Get the id that identifies a given item
