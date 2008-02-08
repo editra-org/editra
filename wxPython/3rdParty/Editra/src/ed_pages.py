@@ -245,6 +245,9 @@ class EdPages(FNB.FlatNotebook):
                 self.LOG("[ed_pages][err] %s" % msg)
 
                 # File could not be opened/read give up
+                # Don't raise a dialog during a session load error as if the
+                # dialog is shown before the mainwindow is ready it can cause
+                # the app to freeze.
                 if not self._ses_load:
                     ed_mdlg.OpenErrorDlg(self, path2file, msg)
                 control.GetDocPointer().ClearLastError()
