@@ -58,7 +58,8 @@ class LaunchWindow(ctrlbox.ControlBox):
         self._busy = False
         self._config = dict(file='', lang=0,
                             cfile='', clang=0,
-                            last='', lastlang=0)
+                            last='', lastlang=0,
+                            prelang=0)
 
         # Setup
         self.__DoLayout()
@@ -271,13 +272,17 @@ class LaunchWindow(ctrlbox.ControlBox):
         run_btn = self.FindWindowById(ID_RUN)
 
         # Set control states
+        csel = exe_ch.GetStringSelection()
         exe_ch.SetItems(cmds)
         util.Log("[Launch][info] Found commands %s" % str(cmds))
         if handler.GetName() != handlers.DEFAULT_HANDLER and len(self.GetFile()):
             exe_ch.Enable()
             args_txt.Enable()
             run_btn.Enable()
-            exe_ch.SetStringSelection(handler.GetDefault())
+            if self._config['lang'] == self._config['prelang'] and len(csel):
+                exe_ch.SetStringSelection(csel)
+            else:
+                exe_ch.SetStringSelection(handler.GetDefault())
             self.GetControlBar().Layout()
         else:
             run_btn.Disable()
@@ -293,6 +298,14 @@ class LaunchWindow(ctrlbox.ControlBox):
         sname = os.path.split(fname)[1]
         self._slbl.SetLabel(_("file") + ": " + sname)
         self.GetControlBar().Layout()
+
+    def SetLangId(self, langid):
+        """Set the language id value(s)
+        @param langid: syntax.synglob lang id
+
+        """
+        self._config['prelang'] = self._config['lang']
+        self._config['lang'] = langid
 
     def SetProcessRunning(self, running=True):
         """Set the state of the window into either process running mode
@@ -321,8 +334,8 @@ class LaunchWindow(ctrlbox.ControlBox):
             rbtn.SetLabel(_("Run"))
             # If the buffer was changed while this was running we should
             # update to the new buffer now that it has stopped.
-            self._config['file'] = self._config['cfile']
-            self._config['lang'] = self._config['clang']
+            self.SetFile(self._config['cfile'])
+            self.SetLangId(self._config['clang'])
             self.RefreshControlBar()
 
         self.GetControlBar().Layout()
@@ -343,7 +356,7 @@ class LaunchWindow(ctrlbox.ControlBox):
             self._config['clang'] = lang_id
         else:
             self.SetFile(fname)
-            self._config['lang'] = lang_id
+            self.SetLangId(lang_id)
 
             # Refresh the control bars view
             self.RefreshControlBar()
