@@ -8,12 +8,32 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.2.xx
-DATE 0x/xx/2008
+VERSION 0.2.65
+DATE 02/08/2008
 10th Alpha Release
 
 NEWS:
+This release includes major improvements to the detection and handling of file
+encodings and reporting of related errors when they happen. As part of this
+enhancement support for magic encoding comments are now supported in the editor
+for specifing an encoding for a document. The comment must be found on either
+the first or second line of the file. All popular comment formats are supported,
 
+example1: # -*- encoding: utf-8 *-*
+example2: # vim: set fileencoding=latin-1 :
+example3: # coding=utf-16
+
+When no encoding is specified the default will be to use utf-8 for encoding text
+when possible and falling back to other available system encodings when utf-8
+fails.
+
+There is also a new bundled plugin that is distributed with this release. The
+plugin is called Launch ant it is the highly requested solution to be able to 
+run scripts from within Editra. It currently supports most of the scripting
+languages that Editra has support for and provides custom output parsing and
+filtering for some lanuguages such as python. The special ouput handling will
+create hotspots on error messages in the output and allow you to instantly
+navigate to the error by clicking on the hotspot.
 
 NEW: [features/improvements]
 +New bundled plugin "Launch" for running scripts and viewing output.
@@ -34,6 +54,7 @@ current buffer is available.
 +All existing icon themes have recieved some minor updates
 +Improved Windows installer / Better Windows Desktop integration
 +Log Viewer can filter messages based on their origin
++Updated Russian and Japanese Translations
 
 BUG FIXES:
 +Fix bug with turning off syntax highlighting in the preference dialog
@@ -41,6 +62,8 @@ BUG FIXES:
 size and postion for next launch.
 +Add some missing Ruby keywords
 +Jump word pre/next keybindings (Ctrl+<- and Ctrl+->) now work on Linux/Windows
++Shelf plugins that dont allow multiple instances are now correctly shown as
+disabled in the Shelf menu when an instance is already open.
 
 #-----------------------------------------------------------------------------#
 
