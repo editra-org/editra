@@ -9,7 +9,7 @@
 
 ; Global Variables
 !define PRODUCT_NAME "Editra"
-!define PRODUCT_VERSION "0.2.50"
+!define PRODUCT_VERSION "0.2.65"
 !define PRODUCT_PUBLISHER "Cody Precord"
 !define PRODUCT_WEB_SITE "http://editra.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Editra.exe"
