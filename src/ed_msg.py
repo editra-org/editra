@@ -117,6 +117,10 @@ EDMSG_UI_NB_CLOSING = EDMSG_UI_NB + ('pgclosing',)
 # msgdata == (ref to notebook, index of page that is now selected)
 EDMSG_UI_NB_CLOSED = EDMSG_UI_NB + ('pgclosed',)
 
+## Text Buffer
+# msgdata == ((x, y), keycode)
+EDMSG_UI_STC_KEYUP = EDMSG_UI_ALL + ('stc', 'keyup')
+
 #---- End UI Action Messages ----#
 
 #---- Misc Messages ----#
