@@ -16,7 +16,7 @@ NEWS:
 This release includes major improvements to the detection and handling of file
 encodings and reporting of related errors when they happen. As part of this
 enhancement support for magic encoding comments are now supported in the editor
-for specifing an encoding for a document. The comment must be found on either
+for specifying an encoding for a document. The comment must be found on either
 the first or second line of the file. All popular comment formats are supported,
 
 example1: # -*- encoding: utf-8 *-*
@@ -31,7 +31,7 @@ There is also a new bundled plugin that is distributed with this release. The
 plugin is called Launch ant it is the highly requested solution to be able to 
 run scripts from within Editra. It currently supports most of the scripting
 languages that Editra has support for and provides custom output parsing and
-filtering for some lanuguages such as python. The special ouput handling will
+filtering for some languages such as python. The special output handling will
 create hotspots on error messages in the output and allow you to instantly
 navigate to the error by clicking on the hotspot.
 
@@ -47,12 +47,12 @@ NEW: [features/improvements]
  of a document. If an encoding is not explicitly set the default will still be
  to use utf-8.
 +Improved unicode support
-+Option to set a preffered lexer for new files so highlighting and other 
-features are autmatically applied when starting a new buffer.
++Option to set a preferred lexer for new files so highlighting and other 
+features are automatically applied when starting a new buffer.
 +New plugin "CommentBrowser" for listing and browsing TODO statements in the
 current buffer is available.
 +Two new icon themes available (Crystal Project and Ubuntoon)
-+All existing icon themes have recieved some minor updates
++All existing icon themes have received some minor updates
 +Improved Windows installer / Better Windows Desktop integration
 +Log Viewer can filter messages based on their origin
 +Updated Russian and Japanese Translations
@@ -60,10 +60,10 @@ current buffer is available.
 BUG FIXES:
 +Fix bug with turning off syntax highlighting in the preference dialog
 +Exiting Editra from a right click on the Windows taskbar saving invalid window
-size and postion for next launch.
+size and position for next launch.
 +Add some missing Ruby keywords
 +Jump word pre/next keybindings (Ctrl+<- and Ctrl+->) now work on Linux/Windows
-+Shelf plugins that dont allow multiple instances are now correctly shown as
++Shelf plugins that don't allow multiple instances are now correctly shown as
 disabled in the Shelf menu when an instance is already open.
 
 #-----------------------------------------------------------------------------#
