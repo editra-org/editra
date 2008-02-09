@@ -44,7 +44,8 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 'ID_MACRO_STOP',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
-            'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS', 'ID_DUP_LINE'
+            'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
+            'I18N_PAGE'
 ]
 
 #---- Project Info ----#
@@ -213,6 +214,7 @@ ID_RTF_GEN       = wx.NewId()
 ID_ABOUT         = wx.ID_ABOUT
 ID_HOMEPAGE      = wx.ID_HOME
 ID_DOCUMENTATION = wx.NewId()
+ID_TRANSLATE     = wx.NewId()
 ID_CONTACT       = wx.NewId()
 
 # Misc IDs
