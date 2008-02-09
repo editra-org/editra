@@ -15,4 +15,5 @@ AUTHOR = 'Cody Precord'
 VERSION = '0.2.65'
 PROG_NAME = 'Editra'
 HOME_PAGE = "http://editra.org"
+I18N_PAGE = "https://translations.launchpad.net/editra/trunk/+pots/editra"
 CONTACT_MAIL = "staff@editra.org"

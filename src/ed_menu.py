@@ -503,6 +503,8 @@ class EdMenuBar(wx.MenuBar):
                         _("Visit the project homepage %s") % ed_glob.HOME_PAGE)
         helpmenu.Append(ed_glob.ID_DOCUMENTATION, _("Online Documentation"),
                         _("Online project documentation and help guides"))
+        helpmenu.Append(ed_glob.ID_TRANSLATE, _("Translate Editra") + u"...",
+                        _("Editra translations project"))
         helpmenu.Append(ed_glob.ID_CONTACT, _("Feedback"),
                         _("Send me bug reports and suggestions"))
         self.Append(helpmenu, _("Help"))

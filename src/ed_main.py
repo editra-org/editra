@@ -180,6 +180,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_ABOUT, OnAbout),
                                        (ID_HOMEPAGE, OnHelp),
                                        (ID_DOCUMENTATION, OnHelp),
+                                       (ID_TRANSLATE, OnHelp),
                                        (ID_CONTACT, OnHelp)])
 
         self._handlers['menu'].extend([(l_id, self.DispatchToControl) 
@@ -1103,6 +1104,8 @@ def OnHelp(evt):
         webbrowser.open(HOME_PAGE, 1)
     elif e_id == ID_DOCUMENTATION:
         webbrowser.open(HOME_PAGE + "/?page=doc", 1)
+    elif e_id == ID_TRANSLATE:
+        webbrowser.open(I18N_PAGE, 1)
     elif e_id == ID_CONTACT:
         webbrowser.open("mailto:%s" % CONTACT_MAIL)
     else:
