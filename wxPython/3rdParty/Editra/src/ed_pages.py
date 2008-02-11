@@ -250,7 +250,7 @@ class EdPages(FNB.FlatNotebook):
                 # the app to freeze.
                 if not self._ses_load:
                     ed_mdlg.OpenErrorDlg(self, path2file, msg)
-                control.GetDocPointer().ClearLastError()
+                control.GetDocument().ClearLastError()
                 control.SetFileName('') # Reset the file name
 
                 if new_pg:
@@ -261,7 +261,7 @@ class EdPages(FNB.FlatNotebook):
 
         # Check if there was encoding errors
         if not result:
-            doc = control.GetDocPointer()
+            doc = control.GetDocument()
             doc.ClearLastError()
             enc = doc.GetEncoding()
             enc1 = doc.GetMagic()
@@ -282,7 +282,7 @@ class EdPages(FNB.FlatNotebook):
                 control.Destroy()
             else:
                 control.SetText('')
-                control.SetDocPointer(ed_txt.EdFile())
+                control.SetDocument(ed_txt.EdFile())
                 control.SetSavePoint()
 
             self.GetTopLevelParent().Thaw()
