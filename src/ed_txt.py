@@ -342,7 +342,7 @@ def DecodeString(string, encoding=None):
 
     if isinstance(string, types.UnicodeType):
         try:
-            rtxt = codecs.getdecoder(encoding)(string)
+            rtxt = codecs.getdecoder(encoding)(string)[0]
         except Exception, msg:
             Log("[ed_txt][err] DecodeString with %s failed" % encoding)
             Log("[ed_txt][err] %s" % msg)
