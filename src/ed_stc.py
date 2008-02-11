@@ -564,7 +564,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         return self.file.GetPath()
 
-    def GetDocPointer(self):
+    def GetDocument(self):
         """Return a reference to the document object represented
         in this buffer.
         @return: EdFile
@@ -1252,7 +1252,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if value:
                 self._code['compsvc'].LoadCompProvider(self.GetLexer())
 
-    def SetDocPointer(self, doc):
+    def SetDocument(self, doc):
         """Change the document object used.
         @param doc: an L{ed_txt.EdFile} instance
 
@@ -1878,7 +1878,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Load the file at the given path into the buffer. Returns
         True if no errors and False otherwise. To retrieve the errors
         check the last error that was set in the file object returned by
-        L{GetDocPointer}.
+        L{GetDocument}.
         @param path: path to file
 
         """
