@@ -365,7 +365,7 @@ def EncodeString(string, encoding=None):
 
     if isinstance(string, types.UnicodeType):
         try:
-            rtxt = codecs.getencoder(encoding)(string)
+            rtxt = codecs.getencoder(encoding)(string)[0]
         except LookupError:
             rtxt = string
         return rtxt
