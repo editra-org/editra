@@ -3,34 +3,21 @@
 # Purpose: UI and services for checking update status and downloading updates #
 #          for Editra.                                                        #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: updater.py                                                         #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#   Provides controls/services that are used in checking and downloading   #
-# updates for the editor if they are available. The main control exported  #
-# by this module is the UpdateProgress bar it displays the progress of the #
-# network action and provides a higher level interface into the            #
-# UpdateService.                                                           #
-#                                                                          #
-# METHODS:                                                                 #
-# - UpdateService: Does the actual network lookups and downloads           #
-# - UpdateProgress: A Progress bar control which inherits its functionality#
-#                   from the UpdateService. It runs the network service on #
-#                   a separate thread from the gui to allow for fluid gui  #
-#                   response during the long delays that can occure while  #
-#                   waiting for the network to respond.                    #
-# - DownloadDialog: Uses the UpdateProgress bar and performs the downloads #
-#                   in a standalone dialog that can remain running after   #
-#                   the app has exited.                                    #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: updater.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+  Provides controls/services that are used in checking and downloading
+updates for the editor if they are available. The main control exported
+by this module is the UpdateProgress bar it displays the progress of the
+network action and provides a higher level interface into the
+UpdateService.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -64,7 +51,7 @@ _ = wx.GetTranslation
 class UpdateService(object):
     """Defines an updater service object for Editra"""
     def __init__(self):
-        """Initializes the Updator Object"""
+        """Initializes the Updater Object"""
         object.__init__(self)
         self._abort = False
         self._progress = (0, 100)
@@ -105,7 +92,7 @@ class UpdateService(object):
         project homepage.
         @requires: active network connection
         @return: url of latest available program version
-        
+
         """
         if wx.Platform == '__WXGTK__':
             dist = DL_LIN
@@ -140,7 +127,7 @@ class UpdateService(object):
         recent version of the program.
         @requires: network connection
         @return: verision number of latest available program
-        
+
         """
         version = re.compile('<\s*a id\="VERSION"[^>]*>(.*?)<\s*/a\s*>')
         page = self.GetPageText(ed_glob.HOME_PAGE)
@@ -188,14 +175,14 @@ class UpdateService(object):
 
         """
         return self._progress
-            
+
     def GetUpdateFiles(self, dl_to=wx.GetHomeDir()):
         """Gets the requested version of the program from the website
         if possible. It will download the current files for the host system to
         location (dl_to). On success it returns True, otherwise it returns
         false.
         @keyword dl_to: where to download the file to
-        
+
         """
         # Check version to see if update is needed
         # Dont allow update if files are current
@@ -254,7 +241,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
     ID_DOWNLOADING = wx.NewId()
     ID_TIMER = wx.NewId()
 
-    def __init__(self, parent, id_, range_=100, 
+    def __init__(self, parent, id_, range_=100,
                  style=wx.GA_HORIZONTAL | wx.GA_PROGRESSBAR):
         """Initiliazes the bar in a disabled state."""
         wx.Gauge.__init__(self, parent, id_, range_, style=style)
@@ -275,7 +262,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
 
         #---- Bind Events ----#
         self.Bind(wx.EVT_TIMER, self.OnUpdate, id = self.ID_TIMER)
-        
+
         # Disable bar till caller is ready to use it
         self.Disable()
 
@@ -305,7 +292,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         attribute to false and set the _status attribute (See GetStatus) to the
         return value of the check function which is either a version string or
         an appropriate error message.
-        
+
         @see: L{_UpdatesCheckThread}
 
         """
@@ -314,36 +301,34 @@ class UpdateProgress(wx.Gauge, UpdateService):
         self.SetValue(0)
         self.Start(10)
         self._checking = True
-        delayedresult.startWorker(self._ResultNotifier, 
+        delayedresult.startWorker(self._ResultNotifier,
                                   self._UpdatesCheckThread,
                                   jobID=self.ID_CHECKING)
 
     def DownloadUpdates(self, dl_loc=wx.EmptyString):
         """Downloads available updates and configures the bar.
         Returns True if the update was successfull or False if
-        it was not. The updates will be downloaded to the 
+        it was not. The updates will be downloaded to the
         specified location or to the Users Desktop or Home
         Folder if no location is specified.
         @keyword dl_loc: location to download file to
-        
+
         """
         self.LOG("[updater][info] UpdateProgress: Download Starting...")
         if dl_loc == wx.EmptyString:
-            dl_loc = wx.GetHomeDir() + util.GetPathChar()
-            if os.path.exists(dl_loc + u"Desktop"):
-                dl_loc = dl_loc + u"Desktop" + util.GetPathChar()
+            dl_loc = self.GetDownloadLocation()
         self._mode = self.ID_DOWNLOADING
         self.SetValue(0)
         self.Start(50)   #XXX Try this for starters
         self._downloading = True # Mark the work status as busy
-        delayedresult.startWorker(self._ResultNotifier, self._DownloadThread, 
+        delayedresult.startWorker(self._ResultNotifier, self._DownloadThread,
                                   wargs=dl_loc, jobID=self.ID_DOWNLOADING)
 
     def GetDownloadResult(self):
         """Returns the status of the last download action. Either
         True for success or False for failure.
         @return: whether last download was successfull or not
-        
+
         """
         return self._dl_result
 
@@ -352,18 +337,18 @@ class UpdateProgress(wx.Gauge, UpdateService):
         Currently will either return the users Desktop path or the
         users home directory in the case that there is no deskop directory
         @return: path to download file
-        
+
         """
-        dl_loc = wx.GetHomeDir() + util.GetPathChar()
+        dl_loc = wx.GetHomeDir() + os.sep
         if os.path.exists(dl_loc + u"Desktop"):
-            dl_loc = dl_loc + u"Desktop" + util.GetPathChar()
+            dl_loc = dl_loc + u"Desktop" + os.sep
         return dl_loc
 
     def GetMode(self):
         """Returns the current mode of operation or 0 if the bar
         is currently inactive.
         @return: mode of operation for the progres bar
-        
+
         """
         return self._mode
 
@@ -380,7 +365,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         that CheckForUpdates has been called prior to calling this
         function. Returns True if Available and False otherwise.
         @return: whether udpates are available or not
-        
+
         """
         if self._status[0].isdigit():
             return CalcVersionValue(self._status) > CalcVersionValue(ed_glob.VERSION)
@@ -391,7 +376,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         """Returns a bool stating whether there is a download
         in progress or not.
         @return: whether downloading is active or not
-        
+
         """
         return self._downloading
 
@@ -399,7 +384,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         """Timer Event Handler Updates the progress bar
         on each cycle of the timer
         @param evt: event that called this handler
-        
+
         """
         mode = self.GetMode()
         progress = self.GetProgress()
@@ -460,7 +445,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         properly. Then returns either True if the download was succesfull or
         False if it failed in some way.
         @return: success status of download
-        
+
         """
         dl_ok = self.GetUpdateFiles("".join(args))
         return dl_ok
@@ -469,7 +454,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         """Recieves the return from the result of the worker thread and
         notifies the interested party with the result.
         @param delayedResult:  value from worker thread
-        
+
         """
         jid = delayedResult.getJobID()
 
@@ -501,7 +486,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         True to the consumer if updates are available and false if they
         are not or status is unknown.
         @return: whether updates are available or not
-        
+
         """
         self.LOG("[updater][info] UpdateProgress: Checking for updates")
         self._checking = True
@@ -525,14 +510,14 @@ class DownloadDialog(wx.Frame):
     ID_TIMER        = wx.NewId()
     SB_DOWNLOADED   = 0
     SB_INFO         = 1
-    
+
     def __init__(self, parent, id_, title,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.MINIMIZE_BOX):
         """Creates a standalone window that is used for downloading
         updates for the editor.
         @param parent: Parent Window of the dialog
         @param title: Title of dialog
-        
+
         """
         wx.Frame.__init__(self, parent, id_, title, style=style)
         util.SetWindowIcon(self)
@@ -544,7 +529,7 @@ class DownloadDialog(wx.Frame):
         fname = self._progress.GetCurrFileName()
         floc = self._progress.GetDownloadLocation()
         dl_file = wx.StaticText(panel, label=_("Downloading: %s") % fname)
-        dl_loc = wx.StaticText(panel, wx.ID_ANY, 
+        dl_loc = wx.StaticText(panel, wx.ID_ANY,
                                _("Downloading To: %s") % floc)
         self._cancel_bt = wx.Button(panel, wx.ID_CANCEL)
         self._timer = wx.Timer(self, id=self.ID_TIMER)
@@ -555,7 +540,7 @@ class DownloadDialog(wx.Frame):
         self._sizer = wx.GridBagSizer()
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_WEB), wx.ART_TOOLBAR)
         mdc = wx.MemoryDC(bmp)
-        tmp_bmp = wx.Image(ed_glob.CONFIG['SYSPIX_DIR'] + u"editra.png", 
+        tmp_bmp = wx.Image(ed_glob.CONFIG['SYSPIX_DIR'] + u"editra.png",
                            wx.BITMAP_TYPE_PNG)
         tmp_bmp.Rescale(20, 20, wx.IMAGE_QUALITY_HIGH)
         mdc.DrawBitmap(tmp_bmp.ConvertToBitmap(), 11, 11)
@@ -603,7 +588,7 @@ class DownloadDialog(wx.Frame):
         in Kb/s
         @return: current downlaod rate in Kb/s
         @rtype: float
-        
+
         """
         dlist = list()
         last = 0
@@ -612,7 +597,7 @@ class DownloadDialog(wx.Frame):
             dlist.append(val)
             last = item
         return round((float(sum(dlist) / len(self._proghist)) / 1024), 2)
-            
+
     def OnButton(self, evt):
         """Handles events that are generated when buttons are pushed.
         @param evt: event that called this handler
@@ -639,7 +624,7 @@ class DownloadDialog(wx.Frame):
             wx.Yield()
         wx.GetApp().UnRegisterWindow(repr(self))
         evt.Skip()
-        
+
     def OnUpdate(self, evt):
         """Updates the status text on each pulse from the timer
         @param evt: event that called this handler
@@ -653,7 +638,7 @@ class DownloadDialog(wx.Frame):
             if self._progress.IsDownloading():
                 self.SetStatusText(_("Downloaded") + ": " + str(prog[0]) + \
                                     u"/" + str(prog[1]) + u" | " + \
-                                    _("Rate: %.2f Kb/s") % speed, 
+                                    _("Rate: %.2f Kb/s") % speed,
                                     self.SB_DOWNLOADED)
             else:
                 self.LOG("[updater][evt] DownloadDialog:: Download finished")
@@ -681,5 +666,5 @@ class DownloadDialog(wx.Frame):
         # Tell the main loop we are busy
         wx.GetApp().RegisterWindow(repr(self), self, True)
         self._timer.Start(1000) # One pulse every second
-        self._progress.DownloadUpdates()  
+        self._progress.DownloadUpdates()
         wx.Frame.Show(self)

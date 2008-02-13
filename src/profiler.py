@@ -2,27 +2,24 @@
 # Name: profiler.py                                                           #
 # Purpose: Editra's user profile services                                     #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: profiler.py                                                        #
-# LANGUAGE: Python                                                         #
-#                                                                          #
-# @summary:                                                                #
-# This module provides the profile object and support functions for        #
-# loading and saving user preferences between sessions. The preferences are#
-# saved on disk as a cPickle, because of this no objects that cannot be    #
-# resolved in the namespace of this module prior to starting the mainloop  #
-# must not be put in the Profile as it will cause errors on load. Ths means#
-# that only builtin python types should be used and that a translation from#
-# that type to the required type should happen during run time.            #
-#                                                                          #
-# METHODS:                                                                 #
-# UpdateProfileLoader: Updates loader after changes to profile	           #
-#--------------------------------------------------------------------------#
+ FILE: profiler.py
+ AUTHOR: Cody Precord
+ LANGUAGE: Python
+
+ @summary:
+   This module provides the profile object and support functions for
+ loading and saving user preferences between sessions. The preferences are
+ saved on disk as a cPickle, because of this no objects that cannot be
+ resolved in the namespace of this module prior to starting the mainloop
+ must not be put in the Profile as it will cause errors on load. Ths means
+ that only builtin python types should be used and that a translation from
+ that type to the required type should happen during run time.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -85,10 +82,10 @@ _DEFAULTS = {
            'TOOLBAR'    : True,             # Show Toolbar
            'USETABS'    : False,             # Use tabs instead of spaces
            'USE_PROXY'  : False,            # Use Proxy server settings?
-           'VI_EMU'     : False,            # Use Vi emulation mode 
+           'VI_EMU'     : False,            # Use Vi emulation mode
            'WRAP'       : False,            # Use Wordwrap
            'WSIZE'      : (700, 450)        # Mainwindow size
-          #FONT1 created at runtime by ed_styles as primary font           
+          #FONT1 created at runtime by ed_styles as primary font
           #FONT2 created at runtime by ed_styles as secondary font
 }
 
@@ -104,7 +101,7 @@ class Profile(dict):
     """
     _instance = None
     _created = False
-    
+
     def __init__(self):
         """Initialize the profile"""
         if not self._created:
@@ -123,12 +120,10 @@ class Profile(dict):
 
     #---- End Private Members ----#
 
-    #---- Protected Members ----#
-
     #---- Begin Public Members ----#
     def DeleteItem(self, item):
         """Removes an entry from the profile
-        
+
         @param item: items name
         @type item: string
 
@@ -140,7 +135,7 @@ class Profile(dict):
 
     def Get(self, index, fmt=None, default=None):
         """Gets the specified item from the data set
-        
+
         @param index: index of item to get
         @keyword fmt: format the item should be in
         @keyword default: Default value to return if index is
@@ -168,7 +163,7 @@ class Profile(dict):
                 fhandle = open(path, 'rb')
                 val = cPickle.load(fhandle)
                 fhandle.close()
-            except (IOError, SystemError, OSError, 
+            except (IOError, SystemError, OSError,
                     cPickle.UnpicklingError, EOFError), msg:
                 dev_tool.DEBUGP("[profile][err] %s" % str(msg))
             else:
@@ -240,7 +235,7 @@ class Profile(dict):
         if update is None:
             for key, val in _DEFAULTS.iteritems():
                 if not self.has_key(key):
-                    self.Set(key, val)            
+                    self.Set(key, val)
         else:
             self.update(update)
 
@@ -291,7 +286,7 @@ def _ToObject(index, val, fmt):
     @param val: value to convert
     @param fmt: Format to convert to
     @type fmt: string
-    @todo: exception handling, 
+    @todo: exception handling,
 
     """
     if not isinstance(fmt, basestring):
@@ -328,7 +323,7 @@ def _ToObject(index, val, fmt):
 #---- Begin Function Definitions ----#
 def AddFileHistoryToProfile(file_history):
     """Manages work of adding a file from the profile in order
-    to allow the top files from the history to be available 
+    to allow the top files from the history to be available
     the next time the user opens the program.
     @param file_history: add saved files to history list
 
@@ -348,7 +343,7 @@ def CalcVersionValue(ver_str="0.0.0"):
          - micro values: >= 1000 (i.e 1.1.85 = 1001.850)
 
     """
-    ver_str = ''.join([char for char in ver_str 
+    ver_str = ''.join([char for char in ver_str
                        if char.isdigit() or char == '.'])
     ver_lvl = ver_str.split(u".")
     if len(ver_lvl) < 3:
@@ -368,10 +363,8 @@ def GetLoader():
            should be.
 
     """
-    user_home = wx.GetHomeDir() + util.GetPathChar()
-    rel_prof_path = ("." + PROG_NAME + util.GetPathChar() + 
-                     "profiles" + util.GetPathChar() + ".loader2")
-    loader = user_home + rel_prof_path
+    loader = os.path.join(wx.GetHomeDir(), u"." + PROG_NAME,
+                          u"profiles", u".loader2")
     return loader
 
 def GetProfileStr():

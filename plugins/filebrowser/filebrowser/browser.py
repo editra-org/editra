@@ -502,7 +502,7 @@ class FileBrowser(wx.GenericDirCtrl):
                 if path[0] != "/":
                     path.pop(0)
             r_txt = os.path.sep
-        return r_txt + util.GetPathChar().join(path)
+        return r_txt + os.sep.join(path)
 
     def GetPaths(self):
         """Gets a list of abs paths of the selected items"""
