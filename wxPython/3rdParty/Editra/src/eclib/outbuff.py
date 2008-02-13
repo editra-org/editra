@@ -201,7 +201,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
 
         """
         self._updating.acquire()
-        self._updates.append(value)
+        self._updates.append(value.decode(sys.getfilesystemencoding()))
         self._updating.release()
 
     def ApplyStyles(self, start, txt):
@@ -370,7 +370,7 @@ class ProcessThread(threading.Thread):
         threading.Thread.__init__(self)
 
         if isinstance(args, list):
-            args = ' '.join([arg.strip() for arg in args])
+            args = u' '.join([arg.strip() for arg in args])
 
         # Attributes
         self.abort = False          # Abort Process
@@ -439,17 +439,17 @@ class ProcessThread(threading.Thread):
         @note: overridden from Thread
 
         """
-        command = ' '.join([item.strip() for item in [self._cmd['cmd'],
-                                                      self._cmd['file'],
-                                                      self._cmd['args']]])
+        command = u' '.join([item.strip() for item in [self._cmd['cmd'],
+                                                       self._cmd['file'],
+                                                       self._cmd['args']]])
         
         proc = subprocess.Popen(command.strip(), stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT, shell=True,
                                 cwd=self._cwd, env=self._env)
 
         evt = OutputBufferEvent(edEVT_PROCESS_START,
-                             self._parent.GetId(),
-                             command.strip())
+                                self._parent.GetId(),
+                                command.strip())
         wx.CallAfter(wx.PostEvent, self._parent, evt)
 
         # Read from stdout while there is output from process
@@ -486,7 +486,7 @@ class ProcessThread(threading.Thread):
 
         """
         if isinstance(args, list):
-            ' '.join(item.strip() for item in args)
+            u' '.join(item.strip() for item in args)
         self._cmd['args'] = args.strip()
 
     def SetCommand(self, cmd):
