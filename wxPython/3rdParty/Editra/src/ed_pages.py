@@ -75,7 +75,7 @@ class EdPages(FNB.FlatNotebook):
         self.LOG = wx.GetApp().GetLog()
         self.FindService = ed_search.TextFinder(self, self.GetCurrentCtrl)
         self.DocMgr = doctools.DocPositionMgr(ed_glob.CONFIG['CACHE_DIR'] + \
-                                              util.GetPathChar() + u'positions')
+                                              os.sep + u'positions')
         self.pg_num = -1              # Track new pages (aka untitled docs)
         self.control = None
         self.frame = self.GetTopLevelParent() # MainWindow

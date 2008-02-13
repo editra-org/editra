@@ -8,6 +8,25 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.2.xx
+DATE xx/xx/2008
+11th Alpha Release
+
+NEWS:
+
+
+NEW: [features/improvements]
+
+
+BUG FIXES:
++Fix bug in that would prevent opening files from command line or via drag/drop
++Editra Style Sheets allow fonts with non ascii characters in their names
++Editra Style Sheets parse error on fonts with spaces in their names
++Numerous minor unicode fixes throughout the editor
+
+#-----------------------------------------------------------------------------#
+Changes since last release:
+
 VERSION 0.2.65
 DATE 02/08/2008
 10th Alpha Release

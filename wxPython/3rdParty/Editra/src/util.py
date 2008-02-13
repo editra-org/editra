@@ -301,15 +301,6 @@ def GetFileWriter(file_name, enc='utf-8'):
         writer = file_h
     return writer
 
-def GetPathChar():
-    """Returns the path character for the OS running the program
-    @return: character used as file path separator
-    """
-    if wx.Platform == '__WXMSW__':
-        return u"\\"
-    else:
-        return u"/"
-
 def GetUniqueName(path, name):
     """Make a file name that will be unique in case a file of the
     same name already exists at that path.
@@ -340,17 +331,14 @@ def GetPathName(path):
     @param path: full path to get base of
 
     """
-    pieces = os.path.split(path)
-    return pieces[0]
+    return os.path.split(path)[0]
 
 def GetFileName(path):
     """Gets last atom on end of string as filename
     @param path: full path to get filename from
 
     """
-    pieces = os.path.split(path)
-    filename = pieces[-1]
-    return filename
+    return os.path.split(path)[-1]
 
 def GetExtension(file_str):
     """Gets last atom at end of string as extension if 
@@ -358,9 +346,7 @@ def GetExtension(file_str):
     @param file_str: path or file name to get extension from
 
     """
-    pieces = file_str.split('.')
-    extension = pieces[-1]
-    return extension
+    return file_str.split('.')[-1]
 
 def MakeNewFile(path, name):
     """Make a new file at the given path with the given name.
@@ -407,9 +393,8 @@ def ResolvAbsPath(rel_path):
     @param rel_path: path to construct absolute path for
 
     """
-    path_char = GetPathChar()
     cwd = os.getcwd()
-    pieces = rel_path.split(path_char)
+    pieces = rel_path.split(os.sep)
     cut = 0
 
     for token in pieces:
@@ -417,15 +402,15 @@ def ResolvAbsPath(rel_path):
             cut += 1
 
         if cut > 0:
-            rpath = path_char.join(pieces[cut:])
+            rpath = os.sep.join(pieces[cut:])
             cut *= -1
-            cwd = cwd.split(path_char)
-            apath = path_char.join(cwd[0:cut])
+            cwd = cwd.split(os.sep)
+            apath = os.sep.join(cwd[0:cut])
         else:
             rpath = rel_path
             apath = cwd
 
-    return apath + path_char + rpath
+    return apath + os.sep + rpath
 
 def HasConfigDir(loc=u""):
     """ Checks if the user has a config directory and returns True 
@@ -433,21 +418,20 @@ def HasConfigDir(loc=u""):
     @return: whether config dir in question exists on an expected path
 
     """
-    pchar = GetPathChar()
-    if os.path.exists(u"%s%s.%s%s%s" % (wx.GetHomeDir(), pchar,
-                                        ed_glob.PROG_NAME, pchar, loc)):
+    if os.path.exists(u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
+                                        ed_glob.PROG_NAME, os.sep, loc)):
         return True
     else:
         return False
 
 def MakeConfigDir(name):
-    """Makes a user config direcotry
+    """Makes a user config directory
     @param name: name of config directory to make in user config dir
 
     """
-    config_dir = wx.GetHomeDir() + GetPathChar() + u"." + ed_glob.PROG_NAME
+    config_dir = wx.GetHomeDir() + os.sep + u"." + ed_glob.PROG_NAME
     try:
-        os.mkdir(config_dir + GetPathChar() + name)
+        os.mkdir(config_dir + os.sep + name)
     except (OSError, IOError):
         pass
 
@@ -458,10 +442,9 @@ def CreateConfigDir():
 
     """
     #---- Resolve Paths ----#
-    pchar = GetPathChar()
-    config_dir = u"%s%s.%s" % (wx.GetHomeDir(), pchar, ed_glob.PROG_NAME)
-    profile_dir = u"%s%sprofiles" % (config_dir, pchar)
-    dest_file = u"%s%sdefault.ppb" % (profile_dir, pchar)
+    config_dir = u"%s%s.%s" % (wx.GetHomeDir(), os.sep, ed_glob.PROG_NAME)
+    profile_dir = u"%s%sprofiles" % (config_dir, os.sep)
+    dest_file = u"%s%sdefault.ppb" % (profile_dir, os.sep)
     ext_cfg = ["cache", "styles", "plugins"]
 
     #---- Create Directories ----#
@@ -493,21 +476,20 @@ def ResolvConfigDir(config_dir, sys_only=False):
            the code has proven itself.
 
     """
-    path_char = GetPathChar()
     if not sys_only:
         # Try to look for a user dir
-        user_config = u"%s%s.%s%s%s" % (wx.GetHomeDir(), path_char,
-                                        ed_glob.PROG_NAME, path_char, 
+        user_config = u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
+                                        ed_glob.PROG_NAME, os.sep, 
                                         config_dir)
         if os.path.exists(user_config):
-            return user_config + path_char
+            return user_config + os.sep
 
     # The following lines are used only when Editra is being run as a
     # source package. If the found path does not exist then Editra is
     # running as as a built package.
     path = __file__
-    path = path_char.join(path.split(path_char)[:-2])
-    path =  path + path_char + config_dir + path_char
+    path = os.sep.join(path.split(os.sep)[:-2])
+    path =  path + os.sep + config_dir + os.sep
     if os.path.exists(path):
         return path
 
@@ -520,41 +502,41 @@ def ResolvConfigDir(config_dir, sys_only=False):
         path = os.path.realpath(path)
 
     # Tokenize path
-    pieces = path.split(path_char)
+    pieces = path.split(os.sep)
 
     if os.sys.platform == 'win32':
         # On Windows the exe is in same dir as config directories
-        pro_path = path_char.join(pieces[:-1])
+        pro_path = os.sep.join(pieces[:-1])
 
         if os.path.isabs(pro_path):
             pass
         elif pro_path == "":
             pro_path = os.getcwd()
-            pieces = pro_path.split(path_char)
-            pro_path = path_char.join(pieces[:-1])
+            pieces = pro_path.split(os.sep)
+            pro_path = os.sep.join(pieces[:-1])
         else:
             pro_path = ResolvAbsPath(pro_path)
     else:
-        pro_path = path_char.join(pieces[:-2])
+        pro_path = os.sep.join(pieces[:-2])
 
-        if pro_path.startswith(path_char):
+        if pro_path.startswith(os.sep):
             pass
         elif pro_path == "":
             pro_path = os.getcwd()
-            pieces = pro_path.split(path_char)
+            pieces = pro_path.split(os.sep)
             if pieces[-1] not in [ed_glob.PROG_NAME.lower(), ed_glob.PROG_NAME]:
-                pro_path = path_char.join(pieces[:-1])
+                pro_path = os.sep.join(pieces[:-1])
         else:
             pro_path = ResolvAbsPath(pro_path)
 
     if os.sys.platform == "darwin":
         # On OS X the config directories are in the applet under Resources
-        pro_path = u"%s%sResources%s%s%s" % (pro_path, path_char, path_char,
-                                             config_dir, path_char)
+        pro_path = u"%s%sResources%s%s%s" % (pro_path, os.sep, os.sep,
+                                             config_dir, os.sep)
     else:
-        pro_path = pro_path + path_char + config_dir + path_char
+        pro_path = pro_path + os.sep + config_dir + os.sep
 
-    return os.path.normpath(pro_path) + path_char
+    return os.path.normpath(pro_path) + os.sep
 
 def GetResources(resource):
     """Returns a list of resource directories from a given toplevel config dir

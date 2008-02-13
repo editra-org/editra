@@ -254,13 +254,14 @@ class TangoTheme(plugin.Plugin):
             ed_glob.CONFIG['THEME_DIR'] = theme
 
         if mime:
-            path = ed_glob.CONFIG['THEME_DIR'] + util.GetPathChar() + \
-                   Profile_Get('ICONS') + util.GetPathChar() + \
-                   u'mime' + util.GetPathChar()
+            path = os.path.join(ed_glob.CONFIG['THEME_DIR'],
+                                Profile_Get('ICONS'), u'mime')
         else:
-            path = ed_glob.CONFIG['THEME_DIR'] + util.GetPathChar() + \
-                   Profile_Get('ICONS') + util.GetPathChar() + \
-                   clients.get(client, u"menu") + util.GetPathChar()
+            path = os.path.join(ed_glob.CONFIG['THEME_DIR'],
+                                Profile_Get('ICONS'),
+                                clients.get(client, u"menu"))
+
+        path += os.sep
 
         if os.path.exists(path):
             return path
