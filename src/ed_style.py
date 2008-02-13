@@ -3,23 +3,21 @@
 # Purpose: Editra's style management system. Implements the interpretation of #
 #          Editra Style Sheets to the StyledTextCtrl.                         #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_style.py                                                        #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-# Provides a system for managing styles in the text control by parsing and #
-# managing data from Editra Style Sheets and translating it to be usable   #
-# with Editra's StyledTextCtrl. By default style sheets are only loaded    #
-# and parsed once per program execution to maximize performance and file   #
-# loading times.                                                           #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_style.py                                                        
+AUTHOR: Cody Precord                                                     
+LANGUAGE: Python                                                         
+SUMMARY:                                                                 
+  Provides a system for managing styles in the text control. Compiles the data
+in an Editra Style Sheet to a format that Scintilla can understand. The
+specification of Editra Style Sheets that this module implements can be found
+either in the _docs_ folder of the source distrobution or on Editras home page
+http://editra.org/?page=docs&doc=ess_spec.
+                                                                      
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -40,6 +38,8 @@ STY_EX_ATTRIBUTES  = u"eol bold italic underline"
 
 # Parser Values
 RE_ESS_COMMENT = re.compile("\/\*[^*]*\*+([^/][^*]*\*+)*\/")
+RE_ESS_SCALAR = re.compile("\%\([a-zA-Z0-9]+\)")
+RE_HEX_STR = re.compile("#[0-9a-fA-F]{3,6}")
 
 #--------------------------------------------------------------------------#
 
@@ -47,7 +47,7 @@ class StyleItem(object):
     """A storage class for holding styling information
     @todo: The extra Attributes should be saved as a separate attribute in the
            StyleItem. This currenlty causes problems when customizing values in
-           the StyleEditor Changing this is fairly easy in this class but it 
+           the StyleEditor. Changing this is fairly easy in this class but it 
            will require changes to the StyleMgr and Editor as well.
 
     """
@@ -484,7 +484,7 @@ class StyleMgr(object):
 
         """
         if self.HasNamedStyle(name):
-            return str(self.GetItemByName(name))
+            return unicode(self.GetItemByName(name))
         else:
             return wx.EmptyString
 
@@ -655,20 +655,20 @@ class StyleMgr(object):
 
                     # Validate values
                     v1ok = v2ok = False
-                    if len(values) and attrib[0] in "fore back":
-                        if values[0][0] == u"#" and len(values[0]) == 7 and \
-                           values[0][1:].isalnum():
-                            v1ok = True
-                    elif len(values) and attrib[0] in "face size": 
-                        # TODO these regular expressions need work
-                        match1 = re.compile("\%\([a-zA-Z0-9]+\)")
-                        match2 = re.compile("[a-zA-Z0-9]+")
-                        if match1.match(values[0]) or match2.match(values[0]):
+                    if attrib[0] in "fore back" and RE_HEX_STR.match(values[0]):
+                        v1ok = True
+                    elif len(values) and attrib[0] == "size":
+                        if RE_ESS_SCALAR.match(values[0]) or values[0].isnum():
                             v1ok = True
                         else:
                             self.LOG("[ed_style][warn] Bad value in %s"
                                      " the value %s is invalid." % \
                                      (attrib[0], values[0]))
+                    elif len(values) and attrib[0] == "face":
+                        if len(values) == 2 and \
+                           values[1] not in STY_EX_ATTRIBUTES:
+                            values = [u' '.join(values)]
+                        v1ok = True
 
                     if len(values) == 2 and values[1] in STY_EX_ATTRIBUTES:
                         v2ok = True
