@@ -26,6 +26,7 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 class Scope(object):
+    """Code representation objects base class"""
     def __init__(self, name, line, scope=None):
         """Create the Scope object
         @param name: Items Name
@@ -55,27 +56,52 @@ class Scope(object):
         return self.scope
 
 class Class(Scope):
+    """Class object"""
     def __init__(self, name, line, scope=None):
         Scope.__init__(self, name, line, scope)
-        self.methods = list()
+        self.methods = list()   # Class Methods
+        self.variables = list() # Class Variables
 
     def GetMethods(self):
         return self.methods
 
+    def GetVariables(self):
+        return self.variables
+
     def AddMethod(self, method):
+        """Add a class method to the class object
+        @param method: L{Method} object
+
+        """
         self.methods.append(method)
 
+    def AddVariable(self, var):
+        """Add a class variable to the class object
+        @param var: L{Variable} object
+
+        """
+        self.variables.append(var)
+
 class Method(Scope):
+    """Class Method object"""
     pass
 
 class Function(Scope):
+    """Function object"""
     pass
 
 class Variable(Scope):
+    """Variable object"""
     pass
 
 
 class DocStruct(object):
+    """Code Document Representation Object
+    Captures the structure of the code in a document, this structure can
+    then be easily used to represnt the document in a number of differen't
+    formats such as a Tree.
+
+    """
     def __init__(self):
         object.__init__(self)
         self.classes = dict()
@@ -97,11 +123,29 @@ class DocStruct(object):
         self.variables[vobj.GetName()] = vobj
 
     def GetClasses(self):
+        """Get all classes in the document and return them as
+        a sorted list.
+
+        """
         return [ self.classes[key] for key in sorted(self.classes.keys()) ]
 
     def GetFunctions(self):
+        """Get all top level functions defined in a document and 
+        return them as a sorted list.
+
+        """
         return [ self.functions[key] for key in sorted(self.functions.keys()) ]
 
+    def GetVariables(self):
+        """Get all global variables defined in a document and 
+        return them as a sorted list.
+
+        """
+        return [ self.variables[key] for key in sorted(self.variables.keys()) ]
+
     def GetLastClass(self):
-        """@return: L{Class}"""
+        """Gets the last class that was added to the document
+        @return: L{Class}
+
+        """
         return self.classes.get(self.lastclass, None)
