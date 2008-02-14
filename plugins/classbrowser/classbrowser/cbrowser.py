@@ -25,11 +25,14 @@ import wx
 
 # Editra Libraries
 import ed_glob
+from profiler import Profile_Get, Profile_Set
 import ed_msg
 import syntax.synglob as synglob
 
 # Local Imports
+import gentag.taglib as taglib
 import gentag.pytags as pytags
+import IconFile
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -47,15 +50,22 @@ class ClassBrowserTree(wx.TreeCtrl):
 
         # Attributes
         self._mw = parent
-        self.root = self.AddRoot('ClassBrowser')
-        self.SetPyData(self.root, None)
+        self.icons = dict()
+        self.il = None
 
         # Setup
+        self._SetupImageList()
         viewm = self._mw.GetMenuBar().GetMenuByName("view")
         self._mi = viewm.InsertAlpha(ID_CLASSBROWSER, _("Class Browser"), 
                                      _("Open Class Browser Sidepanel"),
                                      wx.ITEM_CHECK,
                                      after=ed_glob.ID_PRE_MARK)
+
+        self.root = self.AddRoot('ClassBrowser')
+        self.SetPyData(self.root, None)
+        self.SetItemImage(self.root, self.icons['class'], wx.TreeItemIcon_Normal)
+        self.SetItemImage(self.root, self.icons['class'], wx.TreeItemIcon_Expanded)
+        self.nodes = dict(globals=None, classes=None, funct=None)
 
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
@@ -70,24 +80,84 @@ class ClassBrowserTree(wx.TreeCtrl):
         """Get the current buffer"""
         return self._mw.GetNotebook().GetCurrentCtrl()
 
+    def _SetupImageList(self):
+        """Setup the image list for the tree"""
+        imglst = wx.ImageList(16, 16)
+        if Profile_Get('ICONS', 'Default') != 'Default':
+            globe = wx.ArtProvider.GetBitmap(str(ed_glob.ID_WEB), wx.ART_MENU)
+            self.icons['globals'] = imglst.Add(globe)
+        else:
+            self.icons['globals'] = imglst.Add(IconFile.GetGlobalBitmap())
+        self.icons['class'] = imglst.Add(IconFile.GetBricksBitmap())
+        self.icons['function'] = imglst.Add(IconFile.GetBrickGoBitmap())
+        self.icons['variable'] = imglst.Add(IconFile.GetBrickBitmap())
+        self.SetImageList(imglst)
+        # NOTE: Must save reference to the image list or tree will crash!!!
+        self.il = imglst
+
     def AppendClass(self, cobj):
         """Append a class node to the tree
         @param cobj: Class item object
 
         """
-        croot = self.AppendItem(self.GetRootItem(), cobj.GetName())
+        if self.nodes['classes'] is None:
+            croot = self.AppendItem(self.GetRootItem(), _("Class Definitions"))
+            self.SetItemHasChildren(croot)
+            self.SetPyData(croot, None)
+            self.SetItemImage(croot, self.icons['class'])
+            self.nodes['classes'] = croot
+
+        croot = self.AppendItem(self.nodes['classes'], cobj.GetName())
+        self.SetItemHasChildren(croot)
         self.SetPyData(croot, cobj.GetLine())
-        for meth in cobj.GetMethods():
+        self.SetItemImage(croot, self.icons['class'])
+        for meth in cobj.GetVariables() + cobj.GetMethods():
             item = self.AppendItem(croot, meth.GetName())
             self.SetPyData(item, meth.GetLine())
+            if isinstance(meth, taglib.Method):
+                self.SetItemImage(item, self.icons['function'])
+            else:
+                self.SetItemImage(item, self.icons['variable'])
 
-    def AppendStatement(self, sobj):
-        """Append a toplevel item to the tree
+    def AppendGlobal(self, gobj):
+        """Append a global variable/object to the Globals node
+        @param gobj: Object derived from Scope
+
+        """
+        if self.nodes['globals'] is None:
+            self.nodes['globals']  = self.AppendItem(self.GetRootItem(),
+                                                     _("Global Variables"))
+            self.SetItemHasChildren(self.nodes['globals'])
+            self.SetPyData(self.nodes['globals'], None)
+            self.SetItemImage(self.nodes['globals'], self.icons['globals'])
+
+        item = self.AppendItem(self.nodes['globals'], gobj.GetName())
+        self.SetPyData(item, gobj.GetLine())
+        self.SetItemImage(item, self.icons['variable'])
+
+    def AppendFunction(self, sobj):
+        """Append a toplevel function to the tree
         @param sobj: Code object derived from Scope
 
         """
-        croot = self.AppendItem(self.GetRootItem(), sobj.GetName())
+        if self.nodes['funct'] is None:
+            froot = self.AppendItem(self.GetRootItem(),
+                                    _("Function Definitions"))
+            self.SetItemHasChildren(froot)
+            self.SetPyData(froot, None)
+            self.SetItemImage(froot, self.icons['function'])
+            self.nodes['funct'] = froot
+
+        croot = self.AppendItem(self.nodes['funct'], sobj.GetName())
         self.SetPyData(croot, sobj.GetLine())
+        self.SetItemImage(croot, self.icons['function'])
+
+    def DeleteChildren(self, item):
+        """Delete the children of a given node"""
+        wx.TreeCtrl.DeleteChildren(self, item)
+        self.nodes['globals'] = None
+        self.nodes['classes'] = None
+        self.nodes['funct'] = None
 
     def OnActivated(self, evt):
         """Handle when an item is clicked on
@@ -95,9 +165,10 @@ class ClassBrowserTree(wx.TreeCtrl):
 
         """
         line = self.GetItemPyData(evt.GetItem())
-        ctrl = self._mw.GetNotebook().GetCurrentCtrl()
-        ctrl.GotoLine(line)
-        ctrl.SetFocus()
+        if line is not None:
+            ctrl = self._mw.GetNotebook().GetCurrentCtrl()
+            ctrl.GotoLine(line)
+            ctrl.SetFocus()
 
     def OnUpdateTree(self, msg):
         page = self._GetCurrentCtrl()
@@ -127,11 +198,14 @@ class ClassBrowserTree(wx.TreeCtrl):
 
         """
         self.DeleteChildren(self.root)
-        for fun in tags.GetFunctions():
-            self.AppendStatement(fun)
+        for var in tags.GetVariables():
+            self.AppendGlobal(var)
 
         for cls in tags.GetClasses():
             self.AppendClass(cls)
+
+        for fun in tags.GetFunctions():
+            self.AppendFunction(fun)
 
 #--------------------------------------------------------------------------#
 # Test
