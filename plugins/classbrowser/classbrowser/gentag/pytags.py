@@ -58,7 +58,7 @@ def GenerateTags(buff):
 
                 if lastclass is not None:
                     if indent <= lastclass.get('indent', 0):
-                        parents = CleanList(parents, indent)
+                        parents = PopScopes(parents, indent)
                         if len(parents):
                             lastclass = parents[-1]
                         else:
@@ -69,14 +69,13 @@ def GenerateTags(buff):
             elif line[idx].isspace():
                 # Get indent width
                 if idx == 0:
-                    tstr = str(line)
-                    indent = (len(tstr) - len(tstr.lstrip()))
+                    indent = (len(line) - len(line.lstrip()))
                     idx += indent
                 else:
                     # Non indent space
                     idx = idx + 1
             elif line[idx] == u"#":
-                break
+                break # Rest of line is comment
             elif line[idx:idx+5] == u"class":
                 idx += 5
                 if line[idx].isspace():
@@ -106,22 +105,33 @@ def GenerateTags(buff):
                         if lclass is not None:
                             lclass.AddMethod(taglib.Method(fname, lnum, lclass.GetName()))
                         else:
-                            print "ERR What shoudl I do?"
+                            # Something must have failed with the parse so
+                            # ignore this tag.
+                            pass
                     break
             elif not infunction and line[idx] == u"=":
-                # TODO: Parse global and class variables
-                break
+                idx = idx + 1
+                if line[idx] != u"=": # ignore == statements
+                    var = line[:idx-1].strip()
+                    lclass = rtags.GetLastClass()
+                    if lclass is not None:
+                        lclass.AddVariable(taglib.Variable(var, lnum, lclass.GetName()))
+                    else:
+                        rtags.AddVariable(taglib.Variable(var, lnum))
             else:
-                break
+                idx = idx + 1
 
     return rtags
 
 #-----------------------------------------------------------------------------#
 # Utilities
 
-def CleanList(lst, indent):
-    """Clean the list of classes based on indent. The list should
-    be a list of dictionary objects [dict(name='', indent=0),]
+def PopScopes(lst, indent):
+    """Pop all parent scopes until the list only contains scopes that are
+    higher up in the hierarchy. The list should be a list of dictionary objects
+    [dict(name='', indent=0),].
+    @param lst: list of dictionaries
+    @param indent: indent to check for
 
     """
     rlist = list()
@@ -141,6 +151,9 @@ if __name__ == '__main__':
     txt = fhandle.read()
     fhandle.close()
     tags = GenerateTags(StringIO.StringIO(txt))
+    print "\n\nVARIABLES:"
+    for var in tags.GetVariables():
+        print "%s [%d]" % (var.GetName(), var.GetLine())
     print "\n\nFUNCTIONS:"
     for fun in tags.GetFunctions():
         print "%s [%d]" % (fun.GetName(), fun.GetLine())
@@ -148,6 +161,8 @@ if __name__ == '__main__':
     print "CLASSES:"
     for c in tags.GetClasses():
         print "* %s [%d]" % (c.GetName(), c.GetLine())
+        for var in c.GetVariables():
+            print "VAR: ", var.GetName()
         for meth in c.GetMethods():
             print "    %s [%d]" % (meth.GetName(), meth.GetLine())
     print "END"
