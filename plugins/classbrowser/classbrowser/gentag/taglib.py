@@ -19,12 +19,6 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
-
-#--------------------------------------------------------------------------#
-# Globals
-
-#--------------------------------------------------------------------------#
 class Scope(object):
     """Code representation objects base class"""
     def __init__(self, name, line, scope=None):
@@ -47,12 +41,25 @@ class Scope(object):
             return self.name
 
     def GetLine(self):
+        """Returns the line of the code object
+        @return: int
+
+        """
         return self.line
 
     def GetName(self):
+        """Get the name of this code object
+        @return: string
+
+        """
         return self.name
 
     def GetScope(self):
+        """Get the scope this object belongs to, if it returns None
+        the scope of the object is at the global/top level.
+        @return: string
+
+        """
         return self.scope
 
 class Class(Scope):
@@ -63,9 +70,17 @@ class Class(Scope):
         self.variables = list() # Class Variables
 
     def GetMethods(self):
+        """Gets the methods of this class object
+        @return: list of L{Method} objects
+
+        """
         return self.methods
 
     def GetVariables(self):
+        """Gets the variables that belong to this class
+        @return: list of L{Variable} objects
+
+        """
         return self.variables
 
     def AddMethod(self, method):
@@ -94,6 +109,7 @@ class Variable(Scope):
     """Variable object"""
     pass
 
+#-----------------------------------------------------------------------------#
 
 class DocStruct(object):
     """Code Document Representation Object

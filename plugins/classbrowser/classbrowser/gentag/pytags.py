@@ -7,10 +7,11 @@
 ###############################################################################
 
 """
-FILE:
-AUTHOR:
+FILE: pytags.py
+AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
+  Generate a DocStruct object that captures the structure of a python document
 
 """
 
@@ -25,7 +26,7 @@ import taglib
 #--------------------------------------------------------------------------#
 
 def GenerateTags(buff):
-    """Find all python tags in a given buffer object
+    """Create a DocStruct object that represents a Python file
     @param buff: a file like buffer object (StringIO)
 
     """
@@ -76,7 +77,8 @@ def GenerateTags(buff):
                     idx = idx + 1
             elif line[idx] == u"#":
                 break # Rest of line is comment
-            elif line[idx:idx+5] == u"class":
+            elif line[idx:idx+5] == u"class" and \
+                 (line[:idx].isspace() or not len(line[:idx])):
                 idx += 5
                 if line[idx].isspace():
                     if u'(' in line:
@@ -91,7 +93,8 @@ def GenerateTags(buff):
                     lastclass = dict(name=cname, indent=indent)
                     parents.append(dict(lastclass))
                     break
-            elif line[idx:idx+3] == u"def":
+            elif line[idx:idx+3] == u"def" and \
+                 (line[:idx].isspace() or not len(line[:idx])):
                 # Function/Method Definition
                 idx += 3
                 if line[idx].isspace():
@@ -113,11 +116,13 @@ def GenerateTags(buff):
                 idx = idx + 1
                 if line[idx] != u"=": # ignore == statements
                     var = line[:idx-1].strip()
-                    lclass = rtags.GetLastClass()
-                    if lclass is not None:
-                        lclass.AddVariable(taglib.Variable(var, lnum, lclass.GetName()))
-                    else:
-                        rtags.AddVariable(taglib.Variable(var, lnum))
+                    if len(var.split()) == 1:
+                        lclass = rtags.GetLastClass()
+                        if lclass is not None:
+                            vobj = taglib.Variable(var, lnum, lclass.GetName())
+                            lclass.AddVariable(vobj)
+                        else:
+                            rtags.AddVariable(taglib.Variable(var, lnum))
             else:
                 idx = idx + 1
 
