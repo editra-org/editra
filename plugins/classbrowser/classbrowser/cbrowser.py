@@ -33,6 +33,7 @@ import syntax.synglob as synglob
 import gentag.taglib as taglib
 import gentag.pytags as pytags
 import gentag.shtags as shtags
+import gentag.luatags as luatags
 import IconFile
 
 #--------------------------------------------------------------------------#
@@ -180,6 +181,8 @@ class ClassBrowserTree(wx.TreeCtrl):
             tags = pytags.GenerateTags(StringIO.StringIO(page.GetText()))
         elif lang_id in SHELL_IDS:
             tags = shtags.GenerateTags(StringIO.StringIO(page.GetText()))
+        elif lang_id == synglob.ID_LANG_LUA:
+            tags = luatags.GenerateTags(StringIO.StringIO(page.GetText()))
         else:
             self.DeleteChildren(self.root)
             return
