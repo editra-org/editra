@@ -32,6 +32,7 @@ import syntax.synglob as synglob
 # Local Imports
 import gentag.taglib as taglib
 import gentag.pytags as pytags
+import gentag.shtags as shtags
 import IconFile
 
 #--------------------------------------------------------------------------#
@@ -39,6 +40,8 @@ import IconFile
 ID_CLASSBROWSER = wx.NewId()
 ID_BROWSER = wx.NewId()
 PANE_NAME = u"ClassBrowser"
+
+SHELL_IDS = [synglob.ID_LANG_BASH, synglob.ID_LANG_KSH, synglob.ID_LANG_CSH]
 
 #--------------------------------------------------------------------------#
 
@@ -172,11 +175,16 @@ class ClassBrowserTree(wx.TreeCtrl):
 
     def OnUpdateTree(self, msg):
         page = self._GetCurrentCtrl()
-        if page.GetLangId() == synglob.ID_LANG_PYTHON:
+        lang_id = page.GetLangId()
+        if lang_id == synglob.ID_LANG_PYTHON:
             tags = pytags.GenerateTags(StringIO.StringIO(page.GetText()))
-            self.UpdateAll(tags)
+        elif lang_id in SHELL_IDS:
+            tags = shtags.GenerateTags(StringIO.StringIO(page.GetText()))
         else:
             self.DeleteChildren(self.root)
+            return
+
+        self.UpdateAll(tags)
 
     def OnShowBrowser(self, evt):
         if evt.GetId() == ID_CLASSBROWSER:
