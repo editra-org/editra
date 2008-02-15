@@ -56,8 +56,11 @@ def GenerateTags(buff):
             parts = [ part.strip() for part in line.split() ]
             if len(parts) > 1 and parts[1][0] not in ['"', "'", "`"]:
                 rtags.AddElement('section', taglib.Section(parts[1], lnum))
-            elif len(parts) > 2:
-                rtags.AddElement('section', taglib.Section(parts[3], lnum))
+            else:
+                for idx, part in enumerate(parts[1:]):
+                    if parts[idx][-1] in ['"', "'", "`"]:
+                        rtags.AddElement('section', taglib.Section(part, lnum))
+                        break
         elif line.startswith('!macro') and llen > 6 and line[6].isspace():
             parts = [ part.strip() for part in line.split() ]
             if len(parts) > 1:
