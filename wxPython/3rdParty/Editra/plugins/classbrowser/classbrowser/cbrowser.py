@@ -31,10 +31,8 @@ import syntax.synglob as synglob
 
 # Local Imports
 import gentag.taglib as taglib
-import gentag.pytags as pytags
-import gentag.shtags as shtags
-import gentag.luatags as luatags
-import gentag.nsistags as nsistags
+from tagload import TagLoader
+
 import IconFile
 
 #--------------------------------------------------------------------------#
@@ -199,15 +197,9 @@ class ClassBrowserTree(wx.TreeCtrl):
 
     def OnUpdateTree(self, msg):
         page = self._GetCurrentCtrl()
-        lang_id = page.GetLangId()
-        if lang_id == synglob.ID_LANG_PYTHON:
-            tags = pytags.GenerateTags(StringIO.StringIO(page.GetText()))
-        elif lang_id in SHELL_IDS:
-            tags = shtags.GenerateTags(StringIO.StringIO(page.GetText()))
-        elif lang_id == synglob.ID_LANG_LUA:
-            tags = luatags.GenerateTags(StringIO.StringIO(page.GetText()))
-        elif lang_id == synglob.ID_LANG_NSIS:
-            tags = nsistags.GenerateTags(StringIO.StringIO(page.GetText()))
+        genfun = TagLoader.GetGenerator(page.GetLangId())
+        if genfun is not None:
+            tags = genfun(StringIO.StringIO(page.GetText()))
         else:
             self._cdoc = None
             self.DeleteChildren(self.root)
