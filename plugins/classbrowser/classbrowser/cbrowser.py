@@ -34,6 +34,7 @@ import gentag.taglib as taglib
 import gentag.pytags as pytags
 import gentag.shtags as shtags
 import gentag.luatags as luatags
+import gentag.nsistags as nsistags
 import IconFile
 
 #--------------------------------------------------------------------------#
@@ -54,6 +55,7 @@ class ClassBrowserTree(wx.TreeCtrl):
 
         # Attributes
         self._mw = parent
+        self._cdoc = None   # Current DocStruct
         self.icons = dict()
         self.il = None
 
@@ -104,7 +106,7 @@ class ClassBrowserTree(wx.TreeCtrl):
         @param cobj: Class item object
 
         """
-        if self.nodes['classes'] is None:
+        if self.nodes.get('classes', None) is None:
             croot = self.AppendItem(self.GetRootItem(), _("Class Definitions"))
             self.SetItemHasChildren(croot)
             self.SetPyData(croot, None)
@@ -115,7 +117,7 @@ class ClassBrowserTree(wx.TreeCtrl):
         self.SetItemHasChildren(croot)
         self.SetPyData(croot, cobj.GetLine())
         self.SetItemImage(croot, self.icons['class'])
-        for meth in cobj.GetVariables() + cobj.GetMethods():
+        for meth in cobj.GetElements():
             item = self.AppendItem(croot, meth.GetName())
             self.SetPyData(item, meth.GetLine())
             if isinstance(meth, taglib.Method):
@@ -128,7 +130,7 @@ class ClassBrowserTree(wx.TreeCtrl):
         @param gobj: Object derived from Scope
 
         """
-        if self.nodes['globals'] is None:
+        if self.nodes.get('globals', None) is None:
             self.nodes['globals']  = self.AppendItem(self.GetRootItem(),
                                                      _("Global Variables"))
             self.SetItemHasChildren(self.nodes['globals'])
@@ -139,29 +141,50 @@ class ClassBrowserTree(wx.TreeCtrl):
         self.SetPyData(item, gobj.GetLine())
         self.SetItemImage(item, self.icons['variable'])
 
+    def AppendElement(self, obj):
+        """Append a general code object to the document
+        @param obj: Code object
+
+        """
+        # Check if there is a node for this Code object
+        if self.nodes.get(obj.type, None) is None:
+            # Look for a description to use as catagory title
+            if self._cdoc is not None:
+                desc = self._cdoc.GetElementDescription(obj.type).title()
+            else:
+                desc = obj.type.title()
+
+            self.nodes[obj.type] = self.AppendItem(self.GetRootItem(), desc)
+            self.SetItemHasChildren(self.nodes[obj.type])
+            self.SetPyData(self.nodes[obj.type], None)
+            self.SetItemImage(self.nodes[obj.type], self.icons['variable'])
+
+        item = self.AppendItem(self.nodes[obj.type], obj.GetName())
+        self.SetPyData(item, obj.GetLine())
+        self.SetItemImage(item, self.icons['variable'])
+
     def AppendFunction(self, sobj):
         """Append a toplevel function to the tree
         @param sobj: Code object derived from Scope
 
         """
-        if self.nodes['funct'] is None:
+        if self.nodes.get('function', None) is None:
             froot = self.AppendItem(self.GetRootItem(),
                                     _("Function Definitions"))
             self.SetItemHasChildren(froot)
             self.SetPyData(froot, None)
             self.SetItemImage(froot, self.icons['function'])
-            self.nodes['funct'] = froot
+            self.nodes['function'] = froot
 
-        croot = self.AppendItem(self.nodes['funct'], sobj.GetName())
+        croot = self.AppendItem(self.nodes['function'], sobj.GetName())
         self.SetPyData(croot, sobj.GetLine())
         self.SetItemImage(croot, self.icons['function'])
 
     def DeleteChildren(self, item):
         """Delete the children of a given node"""
         wx.TreeCtrl.DeleteChildren(self, item)
-        self.nodes['globals'] = None
-        self.nodes['classes'] = None
-        self.nodes['funct'] = None
+        for key in self.nodes.keys():
+            self.nodes[key] = None
 
     def OnActivated(self, evt):
         """Handle when an item is clicked on
@@ -183,7 +206,10 @@ class ClassBrowserTree(wx.TreeCtrl):
             tags = shtags.GenerateTags(StringIO.StringIO(page.GetText()))
         elif lang_id == synglob.ID_LANG_LUA:
             tags = luatags.GenerateTags(StringIO.StringIO(page.GetText()))
+        elif lang_id == synglob.ID_LANG_NSIS:
+            tags = nsistags.GenerateTags(StringIO.StringIO(page.GetText()))
         else:
+            self._cdoc = None
             self.DeleteChildren(self.root)
             return
 
@@ -208,15 +234,27 @@ class ClassBrowserTree(wx.TreeCtrl):
         @param tags: DocStruct object
 
         """
+        self._cdoc = tags
         self.DeleteChildren(self.root)
+        # Check and add any common types in the document first
+
+        # Global Variables
         for var in tags.GetVariables():
             self.AppendGlobal(var)
 
+        # Class Definitions
         for cls in tags.GetClasses():
             self.AppendClass(cls)
 
+        # Function Definitions
         for fun in tags.GetFunctions():
             self.AppendFunction(fun)
+
+        # Check for any remaining custom types of code objects to add
+        for obj, element in tags.GetElements().iteritems():
+            if obj not in ['class', 'function', 'variable']:
+                for item in element:
+                    self.AppendElement(item)
 
 #--------------------------------------------------------------------------#
 # Test
