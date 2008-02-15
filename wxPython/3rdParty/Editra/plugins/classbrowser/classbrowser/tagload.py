@@ -1,6 +1,6 @@
 ###############################################################################
-# Name: luatags.py                                                            #
-# Purpose: Generate Tags for Lua Scripts                                      #
+# Name: tagload.py                                                            #
+# Purpose: Dynamic tag generator loader                                       #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
@@ -11,6 +11,8 @@ FILE: tagload.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
+    Dynamically load and provide tag generator methods based on the unique
+file type identifiers defined in Editra.src.syntax.synglob.
 
 """
 
