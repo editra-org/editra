@@ -7,9 +7,9 @@
 ###############################################################################
 
 # Plugin Meta
-"""Adds a File Browser Sidepanel"""
+"""Adds a ClassBrowser Sidepanel"""
 __author__ = "Cody Precord"
-__version__ = "0.6"
+__version__ = "0.1"
 
 #-----------------------------------------------------------------------------#
 # Imports
