@@ -1,13 +1,13 @@
 ###############################################################################
 # Name: __ini__.py                                                            #
-# Purpose: ClassBrowser Plugin                                                #
+# Purpose: CodeBrowser Plugin                                                #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 # Plugin Meta
-"""Adds a ClassBrowser Sidepanel"""
+"""Adds a CodeBrowser Sidepanel"""
 __author__ = "Cody Precord"
 __version__ = "0.1"
 
@@ -29,8 +29,8 @@ _ = wx.GetTranslation
 
 #-----------------------------------------------------------------------------#
 # Interface implementation
-class ClassBrowser(plugin.Plugin):
-    """Adds a classbrowser to the view menu"""
+class CodeBrowser(plugin.Plugin):
+    """Adds a CodeBrowser to the view menu"""
     plugin.Implements(iface.MainWindowI)
 
     def PlugIt(self, parent):
@@ -38,15 +38,15 @@ class ClassBrowser(plugin.Plugin):
         self._mw = parent
         self._log = wx.GetApp().GetLog()
         if self._mw != None:
-            self._log("[classbrowser][info] Installing classbrowser plugin")
+            self._log("[codebrowser][info] Installing classbrowser plugin")
             
             #---- Create File Browser ----#
             # TODO hook in saved filter from profile
-            self._classbrowser = cbrowser.ClassBrowserTree(self._mw)
+            self._codebrowser = cbrowser.CodeBrowserTree(self._mw)
             mgr = self._mw.GetFrameManager()
-            mgr.AddPane(self._classbrowser, 
+            mgr.AddPane(self._codebrowser, 
                         wx.aui.AuiPaneInfo().Name(cbrowser.PANE_NAME).\
-                            Caption("Editra | ClassBrowser").Left().Layer(1).\
+                            Caption("Editra | CodeBrowser").Left().Layer(1).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(215, 350)))
 
@@ -63,7 +63,7 @@ class ClassBrowser(plugin.Plugin):
 
     def GetMenuHandlers(self):
         """Pass even handler for menu item to main window for management"""
-        return [(cbrowser.ID_CLASSBROWSER, self._classbrowser.OnShowBrowser)]
+        return [(cbrowser.ID_CODEBROWSER, self._codebrowser.OnShowBrowser)]
 
     def GetUIHandlers(self):
         """Pass Ui handlers to main window for management"""
@@ -73,7 +73,7 @@ class ClassBrowser(plugin.Plugin):
         """ Handles when the pane is closed to update the profile """
         pane = evt.GetPane()
         if pane.name == cbrowser.PANE_NAME:
-            self._log('[classbrowser][info] Closed ClassBrowser')
+            self._log('[codebrowser][info] Closed CodeBrowser')
 #            Profile_Set('SHOW_FB', False)
         else:
             # Make sure to Skip if we are not the intended receiver

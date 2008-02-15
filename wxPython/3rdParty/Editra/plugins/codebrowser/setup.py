@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Setup script to build the ClassBrowser plugin. To build the plugin
+# Setup script to build the CodeBrowser plugin. To build the plugin
 # just run 'python setup.py bdist_egg' and an egg will be built and put into 
 # a directory called dist in the same directory as this script.
-""" Editra ClassBrowser Plugin """
+""" Editra CodeBrowser Plugin """
 
 __author__ = "Cody Precord"
 
@@ -15,7 +15,7 @@ except ImportError:
 
 if setup != None:
     setup(
-        name='ClassBrowser',
+        name='CodeBrowser',
         version='0.1',
         description=__doc__,
         author=__author__,
@@ -23,10 +23,10 @@ if setup != None:
         license="wxWindows",
         url="http://editra.org",
         platforms=["Linux", "OS X", "Windows"],
-        packages=['classbrowser'],
-        package_data={'classbrowser' : ['gentag/*.py']},
+        packages=['codebrowser'],
+        package_data={'codebrowser' : ['gentag/*.py']},
         entry_points='''
         [Editra.plugins]
-        ClassBrowser = classbrowser:ClassBrowser
+        CodeBrowser = codebrowser:CodeBrowser
         '''
         )
