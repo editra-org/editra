@@ -1,4 +1,4 @@
 Author=Cody Precord
 Version=0.1
-Name=ClassBrowser
-Description=ClassBrowser Sidepanel
+Name=CodeBrowser
+Description=CodeBrowser Sidepanel

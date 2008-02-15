@@ -1,16 +1,17 @@
 ###############################################################################
 # Name: cbrowser.py                                                           #
-# Purpose: ClassBrowser UI                                                    #
+# Purpose: CodeBrowser UI                                                     #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 """
-FILE:
-AUTHOR:
+FILE: cbrowser.py
+AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
+    CodeBrowser UI
 
 """
 
@@ -37,15 +38,15 @@ import IconFile
 
 #--------------------------------------------------------------------------#
 # Globals
-ID_CLASSBROWSER = wx.NewId()
+ID_CODEBROWSER = wx.NewId()
 ID_BROWSER = wx.NewId()
-PANE_NAME = u"ClassBrowser"
+PANE_NAME = u"CodeBrowser"
 
 SHELL_IDS = [synglob.ID_LANG_BASH, synglob.ID_LANG_KSH, synglob.ID_LANG_CSH]
 
 #--------------------------------------------------------------------------#
 
-class ClassBrowserTree(wx.TreeCtrl):
+class CodeBrowserTree(wx.TreeCtrl):
     def __init__(self, parent, id=ID_BROWSER,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.TR_DEFAULT_STYLE|wx.TR_HIDE_ROOT):
@@ -60,15 +61,14 @@ class ClassBrowserTree(wx.TreeCtrl):
         # Setup
         self._SetupImageList()
         viewm = self._mw.GetMenuBar().GetMenuByName("view")
-        self._mi = viewm.InsertAlpha(ID_CLASSBROWSER, _("Class Browser"), 
-                                     _("Open Class Browser Sidepanel"),
+        self._mi = viewm.InsertAlpha(ID_CODEBROWSER, _("Code Browser"), 
+                                     _("Open Code Browser Sidepanel"),
                                      wx.ITEM_CHECK,
                                      after=ed_glob.ID_PRE_MARK)
 
-        self.root = self.AddRoot('ClassBrowser')
+        self.root = self.AddRoot('CodeBrowser')
         self.SetPyData(self.root, None)
-        self.SetItemImage(self.root, self.icons['class'], wx.TreeItemIcon_Normal)
-        self.SetItemImage(self.root, self.icons['class'], wx.TreeItemIcon_Expanded)
+        self.SetItemImage(self.root, self.icons['class'])
         self.nodes = dict(globals=None, classes=None, funct=None)
 
         # Event Handlers
@@ -228,7 +228,7 @@ class ClassBrowserTree(wx.TreeCtrl):
         @param evt: wx.MenuEvent
 
         """
-        if evt.GetId() == ID_CLASSBROWSER:
+        if evt.GetId() == ID_CODEBROWSER:
             mgr = self._mw.GetFrameManager()
             pane = mgr.GetPane(PANE_NAME)
             if pane.IsShown():
@@ -278,8 +278,8 @@ if __name__ == '__main__':
     tags = pytags.GenerateTags(StringIO.StringIO(txt))
 
     app = wx.App(False)
-    frame = wx.Frame(None, title="ClassBrowser Test")
-    tree = ClassBrowserTree(frame)
+    frame = wx.Frame(None, title="CodeBrowser Test")
+    tree = CodeBrowserTree(frame)
 
     for fun in tags.GetFunctions():
         tree.AppendStatement(fun)
