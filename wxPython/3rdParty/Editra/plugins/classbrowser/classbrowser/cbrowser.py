@@ -99,6 +99,17 @@ class ClassBrowserTree(wx.TreeCtrl):
         # NOTE: Must save reference to the image list or tree will crash!!!
         self.il = imglst
 
+    def _ShouldUpdate(self):
+        """Check whether the tree should do an update or not
+        @return: bool
+
+        """
+        pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
+        if self._mw.IsExiting() or not pane.IsShown():
+            return False
+        else:
+            return True
+
     def AppendClass(self, cobj):
         """Append a class node to the tree
         @param cobj: Class item object
@@ -111,17 +122,25 @@ class ClassBrowserTree(wx.TreeCtrl):
             self.SetItemImage(croot, self.icons['class'])
             self.nodes['classes'] = croot
 
-        croot = self.AppendItem(self.nodes['classes'], cobj.GetName())
+        croot = self.AppendCodeObj(self.nodes['classes'], cobj, self.icons['class'])
         self.SetItemHasChildren(croot)
-        self.SetPyData(croot, cobj.GetLine())
-        self.SetItemImage(croot, self.icons['class'])
         for meth in cobj.GetElements():
-            item = self.AppendItem(croot, meth.GetName())
-            self.SetPyData(item, meth.GetLine())
             if isinstance(meth, taglib.Method):
-                self.SetItemImage(item, self.icons['function'])
+                img = self.icons['function']
             else:
-                self.SetItemImage(item, self.icons['variable'])
+                img = self.icons['variable']
+            self.AppendCodeObj(croot, meth, img)
+
+    def AppendCodeObj(self, node, cobj, img):
+        """Append a code object to the given node and set its data
+        @param node: node to attach object to
+        @param cobj: code object
+        @return: tree item id
+
+        """
+        item_id = self.AppendItem(node, cobj.GetName(), img)
+        self.SetPyData(item_id, cobj.GetLine())
+        return item_id
 
     def AppendGlobal(self, gobj):
         """Append a global variable/object to the Globals node
@@ -135,9 +154,7 @@ class ClassBrowserTree(wx.TreeCtrl):
             self.SetPyData(self.nodes['globals'], None)
             self.SetItemImage(self.nodes['globals'], self.icons['globals'])
 
-        item = self.AppendItem(self.nodes['globals'], gobj.GetName())
-        self.SetPyData(item, gobj.GetLine())
-        self.SetItemImage(item, self.icons['variable'])
+        self.AppendCodeObj(self.nodes['globals'], gobj, self.icons['variable'])
 
     def AppendElement(self, obj):
         """Append a general code object to the document
@@ -152,14 +169,12 @@ class ClassBrowserTree(wx.TreeCtrl):
             else:
                 desc = obj.type.title()
 
-            self.nodes[obj.type] = self.AppendItem(self.GetRootItem(), desc)
+            self.nodes[obj.type] = self.AppendItem(self.GetRootItem(), desc,
+                                                   self.icons['variable'])
             self.SetItemHasChildren(self.nodes[obj.type])
             self.SetPyData(self.nodes[obj.type], None)
-            self.SetItemImage(self.nodes[obj.type], self.icons['variable'])
 
-        item = self.AppendItem(self.nodes[obj.type], obj.GetName())
-        self.SetPyData(item, obj.GetLine())
-        self.SetItemImage(item, self.icons['variable'])
+        self.AppendCodeObj(self.nodes[obj.type], obj, self.icons['variable'])
 
     def AppendFunction(self, sobj):
         """Append a toplevel function to the tree
@@ -168,15 +183,13 @@ class ClassBrowserTree(wx.TreeCtrl):
         """
         if self.nodes.get('function', None) is None:
             froot = self.AppendItem(self.GetRootItem(),
-                                    _("Function Definitions"))
-            self.SetItemHasChildren(froot)
+                                    _("Function Definitions"),
+                                    self.icons['function'])
             self.SetPyData(froot, None)
-            self.SetItemImage(froot, self.icons['function'])
+            self.SetItemHasChildren(froot)
             self.nodes['function'] = froot
 
-        croot = self.AppendItem(self.nodes['function'], sobj.GetName())
-        self.SetPyData(croot, sobj.GetLine())
-        self.SetItemImage(croot, self.icons['function'])
+        self.AppendCodeObj(self.nodes['function'], sobj, self.icons['function'])
 
     def DeleteChildren(self, item):
         """Delete the children of a given node"""
@@ -196,18 +209,25 @@ class ClassBrowserTree(wx.TreeCtrl):
             ctrl.SetFocus()
 
     def OnUpdateTree(self, msg):
+        """Update the tree when an action message is sent
+        @param msg: Message Obect
+
+        """
         page = self._GetCurrentCtrl()
         genfun = TagLoader.GetGenerator(page.GetLangId())
-        if genfun is not None:
+        if genfun is not None and self._ShouldUpdate():
             tags = genfun(StringIO.StringIO(page.GetText()))
+            self.UpdateAll(tags)
         else:
             self._cdoc = None
             self.DeleteChildren(self.root)
             return
 
-        self.UpdateAll(tags)
-
     def OnShowBrowser(self, evt):
+        """Show the browser pane
+        @param evt: wx.MenuEvent
+
+        """
         if evt.GetId() == ID_CLASSBROWSER:
             mgr = self._mw.GetFrameManager()
             pane = mgr.GetPane(PANE_NAME)
@@ -251,7 +271,6 @@ class ClassBrowserTree(wx.TreeCtrl):
 #--------------------------------------------------------------------------#
 # Test
 if __name__ == '__main__':
-    import StringIO
     import gentag.pytags as pytags
     fhandle = open(__file__)
     txt = fhandle.read()
