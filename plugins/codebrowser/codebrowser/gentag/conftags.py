@@ -48,7 +48,7 @@ def GenerateTags(buff):
             if secend != -1:
                 section = taglib.Section(line[1:secend], lnum)
                 rtags.AddElement('section', section)
-                continue
+            continue # Go to next line
 
         # Look for keys
         if u"=" in line and section is not None:

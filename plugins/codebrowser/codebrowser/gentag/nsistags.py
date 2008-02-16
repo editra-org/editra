@@ -49,11 +49,11 @@ def GenerateTags(buff):
 
         # Look for functions and sections
         if line.startswith('Function') and llen > 8 and line[8].isspace():
-            parts = [ part.strip() for part in line.split() ]
+            parts = line.split()
             if len(parts) > 1:
                 rtags.AddFunction(taglib.Function(parts[1], lnum))
         elif line.startswith('Section') and llen > 7 and line[7].isspace():
-            parts = [ part.strip() for part in line.split() ]
+            parts = line.split()
             if len(parts) > 1 and parts[1][0] not in ['"', "'", "`"]:
                 rtags.AddElement('section', taglib.Section(parts[1], lnum))
             else:
@@ -62,7 +62,7 @@ def GenerateTags(buff):
                         rtags.AddElement('section', taglib.Section(part, lnum))
                         break
         elif line.startswith('!macro') and llen > 6 and line[6].isspace():
-            parts = [ part.strip() for part in line.split() ]
+            parts = line.split()
             if len(parts) > 1:
                 rtags.AddElement('macro', taglib.Macro(parts[1], lnum))
         else:
