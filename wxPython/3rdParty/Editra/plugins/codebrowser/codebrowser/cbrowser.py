@@ -11,7 +11,9 @@ FILE: cbrowser.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
-    CodeBrowser UI
+    CodeBrowser UI, displays the DocStruct object returned by the L{gentag} lib
+as a tree. Clicking on the elements in the tree will navigate to where the
+element is defined in the file.
 
 """
 
@@ -20,15 +22,15 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import StringIO
+import threading
 import wx
 
 # Editra Libraries
 import ed_glob
 from profiler import Profile_Get, Profile_Set
 import ed_msg
-import syntax.synglob as synglob
 
 # Local Imports
 import gentag.taglib as taglib
@@ -52,6 +54,7 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         # Attributes
         self._mw = parent
+        self._cjob = 0
         self._cdoc = None   # Current DocStruct
         self.icons = dict()
         self.il = None
@@ -71,6 +74,7 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
+        self.Bind(EVT_JOB_FINISHED, self.OnTagsReady)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_SAVED)
@@ -91,6 +95,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         else:
             self.icons['globals'] = imglst.Add(IconFile.GetGlobalBitmap())
         self.icons['class'] = imglst.Add(IconFile.GetBricksBitmap())
+        self.icons['section'] = imglst.Add(IconFile.GetBrickAddBitmap())
         self.icons['function'] = imglst.Add(IconFile.GetBrickGoBitmap())
         self.icons['variable'] = imglst.Add(IconFile.GetBrickBitmap())
         self.SetImageList(imglst)
@@ -121,13 +126,6 @@ class CodeBrowserTree(wx.TreeCtrl):
             self.nodes['classes'] = croot
 
         croot = self.AppendCodeObj(self.nodes['classes'], cobj, self.icons['class'])
-#        self.SetItemHasChildren(croot)
-#        for meth in cobj.GetElements():
-#            if isinstance(meth, taglib.Method):
-#                img = self.icons['function']
-#            else:
-#                img = self.icons['variable']
-#            self.AppendCodeObj(croot, meth, img)
 
     def AppendCodeObj(self, node, cobj, img):
         """Append a code object to the given node and set its data
@@ -180,11 +178,15 @@ class CodeBrowserTree(wx.TreeCtrl):
                 desc = obj.type.title()
 
             self.nodes[obj.type] = self.AppendItem(self.GetRootItem(), desc,
-                                                   self.icons['variable'])
+                                                   self.icons['section'])
             self.SetItemHasChildren(self.nodes[obj.type])
             self.SetPyData(self.nodes[obj.type], None)
 
-        self.AppendCodeObj(self.nodes[obj.type], obj, self.icons['variable'])
+        img = self.icons.get(obj, None) # Check for custom icon
+        if img is None:
+            img = self.icons['variable']
+
+        self.AppendCodeObj(self.nodes[obj.type], obj, img)
 
     def AppendFunction(self, sobj):
         """Append a toplevel function to the tree
@@ -218,6 +220,16 @@ class CodeBrowserTree(wx.TreeCtrl):
             ctrl.GotoLine(line)
             ctrl.SetFocus()
 
+    def OnTagsReady(self, evt):
+        """Processing of tag generation has completed, check results
+        and update view.
+        @param evt: EVT_JOB_FINISHED
+
+        """
+        job = evt.GetId()
+        if job == self._cjob:
+            self.UpdateAll(evt.GetValue())
+
     def OnUpdateTree(self, msg):
         """Update the tree when an action message is sent
         @param msg: Message Obect
@@ -226,11 +238,10 @@ class CodeBrowserTree(wx.TreeCtrl):
         page = self._GetCurrentCtrl()
         genfun = TagLoader.GetGenerator(page.GetLangId())
         if genfun is not None and self._ShouldUpdate():
-            tags = genfun(StringIO.StringIO(page.GetText()))
-            self.UpdateAll(tags)
-            for node in [ node for node in self.nodes.values()
-                          if node is not None ]:
-                self.Expand(node)
+            self._cjob += 1
+            thread = TagGenThread(self, self._cjob, genfun,
+                                  StringIO.StringIO(page.GetText()))
+            wx.CallLater(100, thread.start)
         else:
             self._cdoc = None
             self.DeleteChildren(self.root)
@@ -282,24 +293,64 @@ class CodeBrowserTree(wx.TreeCtrl):
                     for item in elem:
                         self.AppendElement(item)
 
+        # Expand all nodes
+        for node in [ node for node in self.nodes.values()
+                      if node is not None ]:
+            self.Expand(node)
+
 #--------------------------------------------------------------------------#
-# Test
-if __name__ == '__main__':
-    import gentag.pytags as pytags
-    fhandle = open(__file__)
-    txt = fhandle.read()
-    fhandle.close()
-    tags = pytags.GenerateTags(StringIO.StringIO(txt))
+# Tag Generator Thread
 
-    app = wx.App(False)
-    frame = wx.Frame(None, title="CodeBrowser Test")
-    tree = CodeBrowserTree(frame)
+class TagGenThread(threading.Thread):
+    """Thread for running tag parser on and returning the results for
+    display in the tree.
 
-    for fun in tags.GetFunctions():
-        tree.AppendStatement(fun)
+    """
+    def __init__(self, reciever, job_id, genfun, buff):
+        """Create the thread object
+        @param reciever: Window to recieve result
+        @param job_id: id of this job
+        @param genfun: tag generator function
+        @param buff: string buffer to pass to genfun
 
-    for cls in tags.GetClasses():
-        tree.AppendClass(cls)
+        """
+        threading.Thread.__init__(self)
 
-    frame.Show()
-    app.MainLoop()
+        # Attributes
+        self.reciever = reciever
+        self.job = job_id
+        self.buff = buff
+        self.task = genfun
+
+    def run(self):
+        """Run the generator function and return the docstruct to
+        the main thread.
+
+        """
+        tags = self.task(self.buff)
+        evt = TagGenEvent(edEVT_JOB_FINISHED, self.job, tags)
+        wx.CallAfter(wx.PostEvent, self.reciever, evt)
+        
+#--------------------------------------------------------------------------#
+# Tag Generator Thread Event(s)
+
+edEVT_JOB_FINISHED = wx.NewEventType()
+EVT_JOB_FINISHED = wx.PyEventBinder(edEVT_JOB_FINISHED, 1)
+
+class TagGenEvent(wx.PyCommandEvent):
+    """Event to signal when a tag generation job is complete.
+    The event id is the job number and the value is the DocStruct
+    created by the tag generator
+
+    """
+    def __init__(self, etype, eid, value=taglib.DocStruct()):
+        """Creates the event object"""
+        wx.PyCommandEvent.__init__(self, etype, eid)
+        self._value = value
+
+    def GetValue(self):
+        """Returns the value from the event.
+        @return: the value of this event
+
+        """
+        return self._value
