@@ -31,13 +31,14 @@ import syntax.synglob as synglob
 # Globals
 TAGLIB = 'gentag.'
 
-LOAD_MAP = { synglob.ID_LANG_PYTHON : TAGLIB + 'pytags',
-             synglob.ID_LANG_BASH : TAGLIB + 'shtags',
+LOAD_MAP = { synglob.ID_LANG_BASH : TAGLIB + 'shtags',
              synglob.ID_LANG_CSH : TAGLIB + 'shtags',
              synglob.ID_LANG_KSH : TAGLIB + 'shtags',
-             synglob.ID_LANG_NSIS : TAGLIB + 'nsistags',
+             synglob.ID_LANG_LISP : TAGLIB + 'lisptags',
              synglob.ID_LANG_LUA : TAGLIB + 'luatags',
-             synglob.ID_LANG_PROPS : TAGLIB + 'conftags' }
+             synglob.ID_LANG_NSIS : TAGLIB + 'nsistags',
+             synglob.ID_LANG_PROPS : TAGLIB + 'conftags',
+             synglob.ID_LANG_PYTHON : TAGLIB + 'pytags' }
 
 #--------------------------------------------------------------------------#
 
