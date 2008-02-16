@@ -147,8 +147,9 @@ class CodeBrowserTree(wx.TreeCtrl):
                     if img is None:
                         img = self.icons['variable']
                     for otype in elem[elem.keys()[0]]:
-                        item = self.AppendItem(item_id, otype.GetName(), img)
-                        self.SetPyData(item, otype.GetLine())
+                        # Make recursive call as Scope's may contain other
+                        # Scopes.
+                        self.AppendCodeObj(item_id, otype, img)
         return item_id
 
     def AppendGlobal(self, gobj):
