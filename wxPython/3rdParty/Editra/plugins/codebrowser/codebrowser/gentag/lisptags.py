@@ -42,7 +42,7 @@ def GenerateTags(buff):
         if line.startswith('(') and u'defun' in line:
             dend = line.find(u'defun') + 5
             if dend < len(line) and line[dend].isspace():
-                parts = [ part.strip() for part in line[dend:].split() ]
+                parts = line[dend:].split()
                 if len(parts) > 1 and parts[1].startswith('('):
                     rtags.AddFunction(taglib.Function(parts[0], lnum))
 

@@ -11,7 +11,9 @@ FILE: shtags.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
-  Generate a DocStruct object that captures the structure of a shell script
+  Generate a DocStruct object that captures the structure of a shell script,
+the returned structure contains all the function definitions in the document.
+It currently should work well with Bourne, Bash, Korn, and C-Shell scripts.
 
 """
 
@@ -28,12 +30,9 @@ import taglib
 def GenerateTags(buff):
     """Create a DocStruct object that represents a Shell Script
     @param buff: a file like buffer object (StringIO)
-    @note: only generates function tags and will only generate a tag for
-           the first time it finds a given function.
 
     """
     rtags = taglib.DocStruct()
-    names = list()
     for lnum, line in enumerate(buff):
         line = line.strip()
 
@@ -43,7 +42,7 @@ def GenerateTags(buff):
 
         # Check Regular Function Defs
         if line.startswith(u'function '):
-            parts = [ part.strip() for part in line.split() ]
+            parts = line.split()
             plen = len(parts)
             if plen >= 2 and IsValidName(parts[1]):
                 if plen == 2 or parts[2] == u"{" and parts[1] not in names:
@@ -52,14 +51,14 @@ def GenerateTags(buff):
             continue
 
         # Check fname () function defs
-        parts = [ part.strip() for part in line.split() ]
-        plen = len(parts)
-        if plen >= 2 and parts[1].startswith("(") and IsValidName(parts[0]):
-            if u''.join(parts[1:]).startswith("()") and parts[0] not in names:
-                rtags.AddFunction(taglib.Function(parts[0], lnum))
-                names.append(parts[0])
-        else:
-            continue
+        if u"(" in line:
+            parts = line.split()
+            plen = len(parts)
+            if plen >= 2 and IsValidName(parts[0]):
+                if u''.join(parts[1:]).startswith("()"):
+                    rtags.AddFunction(taglib.Function(parts[0], lnum))
+            else:
+                continue
 
     return rtags
 
