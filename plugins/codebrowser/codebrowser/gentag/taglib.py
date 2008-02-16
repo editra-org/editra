@@ -105,10 +105,13 @@ class Scope(Code):
 
     def GetElements(self):
         """Return the dictionary of elements contained in this scope
-        @return: dict
+        @return: list of dict
 
         """
-        return self.elements
+        rlist = list()
+        for key, value in self.elements.iteritems():
+            rlist.append({key:sorted(value)})
+        return rlist
 
     def GetElementType(self, obj):
         """Get the list of element types in this object that match the
@@ -156,14 +159,13 @@ class Class(Scope):
         @return: list
 
         """
-        elements = Scope.GetElements(self)
-        vars = sorted(elements.get('variable', list()))
-        methods = sorted(elements.get('method', list()))
-        rlist = vars + methods
-        other = [ element for element in elements
+        rlist = list()
+        rlist.append(dict(variable=sorted(self.elements.get('variable', list()))))
+        rlist.append(dict(method=sorted(self.elements.get('method', list()))))
+        other = [ element for element in self.elements
                   if element not in ['variable', 'method'] ]
         for obj in other:
-            rlist.extend(sorted(elements.get(obj, list())))
+            rlist.append({obj:sorted(self.elements.get(obj, list()))})
         return rlist
 
 class Namespace(Scope):
