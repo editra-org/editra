@@ -193,6 +193,11 @@ class Macro(Code):
     def __init__(self, name, line, scope=None):
         Code.__init__(self, name, line, "macro", scope)
 
+class Procedure(Code):
+    """Procedure object"""
+    def __init__(self, name, line, scope=None):
+        Code.__init__(self, name, line, "procedure", scope)
+
 class Variable(Code):
     """Variable object"""
     def __init__(self, name, line, scope=None):
