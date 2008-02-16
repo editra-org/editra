@@ -42,8 +42,6 @@ ID_CODEBROWSER = wx.NewId()
 ID_BROWSER = wx.NewId()
 PANE_NAME = u"CodeBrowser"
 
-SHELL_IDS = [synglob.ID_LANG_BASH, synglob.ID_LANG_KSH, synglob.ID_LANG_CSH]
-
 #--------------------------------------------------------------------------#
 
 class CodeBrowserTree(wx.TreeCtrl):
@@ -123,13 +121,13 @@ class CodeBrowserTree(wx.TreeCtrl):
             self.nodes['classes'] = croot
 
         croot = self.AppendCodeObj(self.nodes['classes'], cobj, self.icons['class'])
-        self.SetItemHasChildren(croot)
-        for meth in cobj.GetElements():
-            if isinstance(meth, taglib.Method):
-                img = self.icons['function']
-            else:
-                img = self.icons['variable']
-            self.AppendCodeObj(croot, meth, img)
+#        self.SetItemHasChildren(croot)
+#        for meth in cobj.GetElements():
+#            if isinstance(meth, taglib.Method):
+#                img = self.icons['function']
+#            else:
+#                img = self.icons['variable']
+#            self.AppendCodeObj(croot, meth, img)
 
     def AppendCodeObj(self, node, cobj, img):
         """Append a code object to the given node and set its data
@@ -140,6 +138,18 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         item_id = self.AppendItem(node, cobj.GetName(), img)
         self.SetPyData(item_id, cobj.GetLine())
+        # If the item is a scope it may have sub items
+        if isinstance(cobj, taglib.Scope):
+            elements = cobj.GetElements()
+            if len(elements):
+                self.SetItemHasChildren(item_id)
+                for elem in elements: # Ordered list of dict objects
+                    img = self.icons.get(elem.keys()[0], None) # one key each
+                    if img is None:
+                        img = self.icons['variable']
+                    for otype in elem[elem.keys()[0]]:
+                        item = self.AppendItem(item_id, otype.GetName(), img)
+                        self.SetPyData(item, otype.GetLine())
         return item_id
 
     def AppendGlobal(self, gobj):
@@ -263,10 +273,13 @@ class CodeBrowserTree(wx.TreeCtrl):
             self.AppendFunction(fun)
 
         # Check for any remaining custom types of code objects to add
-        for obj, element in tags.GetElements().iteritems():
-            if obj not in ['class', 'function', 'variable']:
-                for item in element:
-                    self.AppendElement(item)
+        for element in tags.GetElements():
+            print "ELEMENT: ", element
+            for elem in element.values():
+                print "KEYS:", element.keys(), elem
+                if element.keys()[0] not in ['class', 'function', 'variable']:
+                    for item in elem:
+                        self.AppendElement(item)
 
 #--------------------------------------------------------------------------#
 # Test
