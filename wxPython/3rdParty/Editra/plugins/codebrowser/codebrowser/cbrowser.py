@@ -228,6 +228,9 @@ class CodeBrowserTree(wx.TreeCtrl):
         if genfun is not None and self._ShouldUpdate():
             tags = genfun(StringIO.StringIO(page.GetText()))
             self.UpdateAll(tags)
+            for node in [ node for node in self.nodes.values()
+                          if node is not None ]:
+                self.Expand(node)
         else:
             self._cdoc = None
             self.DeleteChildren(self.root)
@@ -274,9 +277,7 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         # Check for any remaining custom types of code objects to add
         for element in tags.GetElements():
-            print "ELEMENT: ", element
             for elem in element.values():
-                print "KEYS:", element.keys(), elem
                 if element.keys()[0] not in ['class', 'function', 'variable']:
                     for item in elem:
                         self.AppendElement(item)
