@@ -1,17 +1,17 @@
 ###############################################################################
-# Name: luatags.py                                                            #
-# Purpose: Generate Tags for Lua Scripts                                      #
+# Name: lisptags.py                                                           #
+# Purpose: Generate Tags for Lisp                                             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 """
-FILE: luatags.py
+FILE: lisptags.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
-  Generate a DocStruct object that captures the structure of a Lua Script
+  Generate a DocStruct object that captures the structure of Lisp code
 
 """
 
@@ -26,9 +26,8 @@ import taglib
 #--------------------------------------------------------------------------#
 
 def GenerateTags(buff):
-    """Create a DocStruct object that represents a Lua Script
+    """Create a DocStruct object that represents a Lisp document
     @param buff: a file like buffer object (StringIO)
-    @todo: generate tags for lua tables?
 
     """
     rtags = taglib.DocStruct()
@@ -36,24 +35,16 @@ def GenerateTags(buff):
         line = line.strip()
 
         # Skip comment and empty lines
-        if line.startswith(u"--") or not line:
+        if line.startswith(u";") or not line:
             continue
 
-        # Check Regular Function Defs
-        if u'function' in line:
-            name = None
-            if u'=' in line and line.index(u'=') < line.index(u'function'):
-                name = line[:line.index(u'=')].strip()
-            elif u'(' in line:
-                idx = line.find(u'function')
-                idx2 = line.find(u'(')
-                if idx < idx2:
-                    name = line[idx+9:idx2].strip()
-            else:
-                continue
-
-            if name is not None:
-                rtags.AddFunction(taglib.Function(name, lnum))
+        # Check Function Definitions
+        if line.startswith('(') and u'defun' in line:
+            dend = line.find(u'defun') + 5
+            if dend < len(line) and line[dend].isspace():
+                parts = [ part.strip() for part in line[dend:].split() ]
+                if len(parts) > 1 and parts[1].startswith('('):
+                    rtags.AddFunction(taglib.Function(parts[0], lnum))
 
     return rtags
 
