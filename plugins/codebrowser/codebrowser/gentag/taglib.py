@@ -7,10 +7,26 @@
 ###############################################################################
 
 """
-FILE:
-AUTHOR:
+FILE: taglib.py
+AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
+    Basic api for creating tag generator module. Tag generator modules have two
+requirements to fit into the api expected by the Editra's CodeBrowser.
+
+  1. The method `GenerateTags` must be defined
+  2. GenerateTags must return a L{DocStruct} that contains the code structure
+
+Most common code elements have convinience classes defined in this module. If a
+new generator module needs some type of element that is not available in this
+module the generator module can derive a type to describe the element. The
+derived class should inherit from L{Code} if it is a non container type code
+element. If the code element can contain other elements it should instead
+derive from L{Scope}. In either case it is important to set the type identifier
+attribute that describes the type.
+
+@see: L{Class} and L{Method} for examples
+
 
 """
 
@@ -22,15 +38,15 @@ __revision__ = "$Revision$"
 # Code Object Base Classes
 
 class Code(object):
-    """Code representation objects base class all code types should
-    be decendants of this object.
+    """Code representation objects base class all code elements should
+    inheirit from this class.
 
     """
     def __init__(self, name, line, obj="code", scope=None):
         """Create the Code Object
         @param name: Items Name
         @param line: Line in buffer item is found on
-        @keyword obj: Object type
+        @keyword obj: Object type identifier string
         @keyword scope: The name of the scope the object belongs to or None
                         for top level.
 
@@ -104,7 +120,8 @@ class Scope(Code):
         return self.descript.get(obj, obj)
 
     def GetElements(self):
-        """Return the dictionary of elements contained in this scope
+        """Return the dictionary of elements contained in this scope as an
+        ordered list of single key dictionaries 
         @return: list of dict
 
         """
@@ -140,14 +157,14 @@ class Class(Scope):
         Scope.__init__(self, name, line, "class", scope)
 
     def AddMethod(self, method):
-        """Add a class method to the class object
+        """Convenience method for adding a L{Method} to the class object
         @param method: L{Method} object
 
         """
         self.AddElement('method', method)
 
     def AddVariable(self, var):
-        """Add a class variable to the class object
+        """Convenience method for adding a L{Variable} to the class object
         @param var: L{Variable} object
 
         """
@@ -220,7 +237,7 @@ class DocStruct(Scope):
         self.lastclass = None
 
     def AddClass(self, cobj):
-        """Convenience function for adding a class to the document
+        """Convenience method for adding a L{Class} to the document
         @param cobj: L{Class} object
 
         """
@@ -228,7 +245,7 @@ class DocStruct(Scope):
         self.AddElement('class', cobj)
 
     def AddFunction(self, fobj):
-        """Convenience for adding a function to the document
+        """Convenience method for adding a L{Function} to the document
         @param fobj: L{Function} object
 
         """
@@ -263,7 +280,7 @@ class DocStruct(Scope):
         return sorted(self.GetElementType('variable'))
 
     def GetLastClass(self):
-        """Gets the last class that was added to the document
+        """Gets the last L{Class} that was added to the document
         @return: L{Class}
 
         """
