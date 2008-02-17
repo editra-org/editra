@@ -201,9 +201,13 @@ class Method(Code):
         Code.__init__(self, name, line, "method", scope)
 
 class Function(Code):
-    """Function object"""
-    def __init__(self, name, line, scope=None):
-        Code.__init__(self, name, line, "function", scope)
+    """General Function Object, to create a function like object with
+    a differen't type identifier, change the obj parameter to set the
+    element type property.
+
+    """
+    def __init__(self, name, line, obj="function", scope=None):
+        Code.__init__(self, name, line, obj, scope)
 
 class Macro(Code):
     """Macro Object"""
@@ -235,6 +239,7 @@ class DocStruct(Scope):
     def __init__(self):
         Scope.__init__(self, 'docstruct', None)
         self.lastclass = None
+        self.prio = dict()
 
     def AddClass(self, cobj):
         """Convenience method for adding a L{Class} to the document
@@ -243,6 +248,16 @@ class DocStruct(Scope):
         """
         self.lastclass = cobj
         self.AddElement('class', cobj)
+
+    def AddElement(self, obj, element):
+        """Add an element to this scope
+        @param obj: object indentifier string
+        @param element: L{Code} object to add to this scope
+
+        """
+        Scope.AddElement(self, obj, element)
+        if not self.prio.has_key(obj):
+            self.prio[obj] = 0
 
     def AddFunction(self, fobj):
         """Convenience method for adding a L{Function} to the document
@@ -265,6 +280,27 @@ class DocStruct(Scope):
         """
         return sorted(self.GetElementType('class'))
 
+    def GetElements(self):
+        """Return the dictionary of elements contained in this scope as an
+        ordered list of single key dictionaries 
+        @return: list of dict
+
+        """
+        def cmptup(x, y):
+            if x[1] < y[1]:
+                return -1
+            elif x[1] == y[1]:
+                return 0
+            else:
+                return 1
+
+        sorder = [ key for key, val in sorted(self.prio.items(), cmptup, reverse=True) ]
+        rlist = list()
+        for key in sorder:
+            if self.elements.has_key(key):
+                rlist.append({key:sorted(self.elements[key])})
+        return rlist
+
     def GetFunctions(self):
         """Get all top level functions defined in a document and 
         return them as a sorted list.
@@ -285,3 +321,13 @@ class DocStruct(Scope):
 
         """
         return self.lastclass
+
+    def SetElementPriority(self, obj, prio):
+        """Set the priority of of an object in the document. The priority
+        is used to decide the order of the list returned by L{GetElements}.
+        A higher number means higher priorty (i.e listed earlier).
+        @param obj: element identifier string
+        @param prio: priority value (int)
+
+        """
+        self.prio[obj] = prio
