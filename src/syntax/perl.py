@@ -2,18 +2,16 @@
 # Name: perl.py                                                               #
 # Purpose: Define Perl syntax for highlighting and other features             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: perl.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# @summary: Lexer configuration module for Perl.                              #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: perl.py
+AUTHOR: Cody Precord
+
+@summary: Lexer configuration module for Perl.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -74,7 +72,7 @@ SYNTAX_ITEMS = [ ('STC_PL_DEFAULT', 'default_style'),
                  ('STC_PL_LONGQUOTE', 'default_style'), # STYLE ME
                  ('STC_PL_NUMBER', 'number_style'),
                  ('STC_PL_OPERATOR', 'operator_style'),
-                 ('STC_PL_POD', 'default_style'), #STYLE ME
+                 ('STC_PL_POD', 'comment_style'),
                  ('STC_PL_PREPROCESSOR',  'pre_style' ),
                  ('STC_PL_PUNCTUATION', 'default_style'), # STYLE ME
                  ('STC_PL_REGEX', 'regex_style'),
