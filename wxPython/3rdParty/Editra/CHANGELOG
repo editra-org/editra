@@ -16,7 +16,7 @@ NEWS:
 
 
 NEW: [features/improvements]
-
++Highlight Perl POD's as comments
 
 BUG FIXES:
 +Fix bug in that would prevent opening files from command line or via drag/drop
