@@ -11,7 +11,9 @@ FILE: pytags.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
-  Generate a DocStruct object that captures the structure of a python document
+  Generate a DocStruct object that captures the structure of a python document.
+It supports parsing for global and class variables, class, method, and function
+definitions.
 
 """
 
@@ -33,21 +35,21 @@ def GenerateTags(buff):
     rtags = taglib.DocStruct()
     parents = list()
     indent = 0
-    indocstring = False
-    lastclass = None
-    infunction = False
     fn_indent = 0
+    indocstring = False
+    infunction = False
+    lastclass = None
 
     for lnum, line in enumerate(buff):
         indent = 0
         idx = 0
         while idx < len(line):
             # Check for docstrings
-            if line[idx] in ['"', "'"] and line[idx:idx+3] in ['"""', "'''"]:
+            if line[idx:idx+3] in ['"""', "'''"]:
                 indocstring = not indocstring
                 idx += 3
 
-            # If end of line break
+            # If end of line or start of comment start next line
             if idx == len(line) or line[idx] == u"#":
                 break
 
@@ -101,7 +103,8 @@ def GenerateTags(buff):
                     fname = line[idx:].split('(')[0].strip()
                     infunction = True
                     fn_indent = indent + 1
-                    if not line[0].isspace() or lastclass is None or not len(lastclass.get("name", "")):
+                    if not line[0].isspace() or lastclass is None or \
+                       not len(lastclass.get("name", "")):
                         rtags.AddFunction(taglib.Function(fname, lnum))
                     else:
                         lclass = rtags.GetLastClass()
