@@ -101,6 +101,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.icons['section'] = imglst.Add(IconFile.GetBrickAddBitmap())
         self.icons['function'] = imglst.Add(IconFile.GetBrickGoBitmap())
         self.icons['method'] = self.icons['function']
+        self.icons['subroutine'] = self.icons['function']
         self.icons['variable'] = imglst.Add(IconFile.GetBrickBitmap())
         self.SetImageList(imglst)
         # NOTE: Must save reference to the image list or tree will crash!!!
