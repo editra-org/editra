@@ -188,7 +188,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             self.SetItemHasChildren(self.nodes[obj.type])
             self.SetPyData(self.nodes[obj.type], None)
 
-        img = self.icons.get(obj, None) # Check for custom icon
+        img = self.icons.get(obj.type, None) # Check for custom icon
         if img is None:
             img = self.icons['variable']
 
