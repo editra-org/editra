@@ -116,16 +116,17 @@ def GenerateTags(buff):
                             pass
                     break
             elif not infunction and line[idx] == u"=":
-                idx = idx + 1
+                # Check for Global and Class variables
+                idx += 1
                 if line[idx] != u"=": # ignore == statements
-                    var = line[:idx-1].strip()
-                    if len(var.split()) == 1:
+                    var = line[:idx-1].strip().split()
+                    if len(var) == 1 and GoodName(var[0]):
                         lclass = rtags.GetLastClass()
                         if lclass is not None:
-                            vobj = taglib.Variable(var, lnum, lclass.GetName())
+                            vobj = taglib.Variable(var[0], lnum, lclass.GetName())
                             lclass.AddVariable(vobj)
                         else:
-                            rtags.AddVariable(taglib.Variable(var, lnum))
+                            rtags.AddVariable(taglib.Variable(var[0], lnum))
             else:
                 idx = idx + 1
 
@@ -133,6 +134,21 @@ def GenerateTags(buff):
 
 #-----------------------------------------------------------------------------#
 # Utilities
+def GoodName(name):
+    """Check if the name is a valid identifier name or not
+    @param name: name to check
+    @return: bool
+
+    """
+    if name.isalnum():
+        return True
+    else:
+        for char in name:
+            if char.isalnum() or char == u'_':
+                continue
+            else:
+                return False
+    return True
 
 def PopScopes(lst, indent):
     """Pop all parent scopes until the list only contains scopes that are
