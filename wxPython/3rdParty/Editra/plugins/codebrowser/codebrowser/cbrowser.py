@@ -75,12 +75,15 @@ class CodeBrowserTree(wx.TreeCtrl):
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
         self.Bind(EVT_JOB_FINISHED, self.OnTagsReady)
+        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_SAVED)
 
     def __del__(self):
+        """Unsubscribe from messages on del"""
         ed_msg.Unsubscribe(self.OnUpdateTree)
+        ed_msg.Unsubscribe(self.OnThemeChange)
 
     def _GetCurrentCtrl(self):
         """Get the current buffer"""
@@ -221,6 +224,14 @@ class CodeBrowserTree(wx.TreeCtrl):
             ctrl = self._mw.GetNotebook().GetCurrentCtrl()
             ctrl.GotoLine(line)
             ctrl.SetFocus()
+
+    def OnThemeChange(self, msg):
+        """Update the images when Editra's theme changes
+        @param msg: Message Object
+
+        """
+        self._SetupImageList()
+        self.Refresh()
 
     def OnTagsReady(self, evt):
         """Processing of tag generation has completed, check results
