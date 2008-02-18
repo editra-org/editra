@@ -10,6 +10,7 @@ Released: xx/xx/2008
 - Initial Release
   + Support for generating browsing trees for elements of the following languages
     - Ada (Procedure Definitions)
+    - Cascading Style Sheets (Global Classes, Global Identities)
     - Configuration Files (ini) (sections, keys)
     - Dos Batch Scripts (Labels)
     - Editra Style Sheets (Style Tags Definitions)
