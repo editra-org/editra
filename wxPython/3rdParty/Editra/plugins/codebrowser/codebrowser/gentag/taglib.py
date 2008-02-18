@@ -177,8 +177,12 @@ class Class(Scope):
 
         """
         rlist = list()
-        rlist.append(dict(variable=sorted(self.elements.get('variable', list()))))
-        rlist.append(dict(method=sorted(self.elements.get('method', list()))))
+        vars = self.elements.get('variable', list())
+        if len(vars):
+            rlist.append(dict(variable=sorted(vars)))
+        meths = self.elements.get('method', list())
+        if len(meths):
+            rlist.append(dict(method=sorted(meths)))
         other = [ element for element in self.elements
                   if element not in ['variable', 'method'] ]
         for obj in other:
