@@ -149,7 +149,10 @@ class CodeBrowserTree(wx.TreeCtrl):
                 for elem in elements: # Ordered list of dict objects
                     img = self.icons.get(elem.keys()[0], None) # one key each
                     if img is None:
-                        img = self.icons['variable']
+                        if isinstance(cobj, taglib.Function):
+                            img = self.icons['function']
+                        else:
+                            img = self.icons['variable']
                     for otype in elem[elem.keys()[0]]:
                         # Make recursive call as Scope's may contain other
                         # Scopes.
@@ -162,8 +165,10 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         """
         if self.nodes.get('globals', None) is None:
-            self.nodes['globals']  = self.AppendItem(self.GetRootItem(),
-                                                     _("Global Variables"))
+            desc = self._cdoc.GetElementDescription('variable')
+            if desc == 'variable':
+                desc = _("Global Variables")
+            self.nodes['globals']  = self.AppendItem(self.GetRootItem(), desc)
             self.SetItemHasChildren(self.nodes['globals'])
             self.SetPyData(self.nodes['globals'], None)
             self.SetItemImage(self.nodes['globals'], self.icons['globals'])
