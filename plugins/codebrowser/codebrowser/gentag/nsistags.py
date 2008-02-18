@@ -35,6 +35,7 @@ def GenerateTags(buff):
     rtags = taglib.DocStruct()
 
     # Set Descriptions of Document Element Types
+    rtags.SetElementDescription('variable', "Defines")
     rtags.SetElementDescription('section', "Sections Definitions")
     rtags.SetElementDescription('macro', "Macros Definitions")
 
@@ -65,7 +66,28 @@ def GenerateTags(buff):
             parts = line.split()
             if len(parts) > 1:
                 rtags.AddElement('macro', taglib.Macro(parts[1], lnum))
+        elif line.startswith('!define') and llen > 7 and line[7].isspace():
+            parts = line.split()
+            if len(parts) > 1 and parts[1][0].isalpha():
+                rtags.AddVariable(taglib.Variable(parts[1], lnum))
         else:
             continue
 
     return rtags
+    
+#-----------------------------------------------------------------------------#
+# Test
+if __name__ == '__main__':
+    import sys
+    import StringIO
+    fhandle = open(sys.argv[1])
+    txt = fhandle.read()
+    fhandle.close()
+    tags = GenerateTags(StringIO.StringIO(txt))
+    print "\n\nElements:"
+    for element in tags.GetElements():
+        print "\n%s:" % element.keys()[0]
+        for val in element.values()[0]:
+            print "%s [%d]" % (val.GetName(), val.GetLine())
+    print "END"
+
