@@ -63,11 +63,15 @@ def GenerateTags(buff):
 
             # Check for coments
             if line[idx] == u'/' and llen > idx and line[idx+1] == u'*':
-                idx += 1
+                idx += 2
                 incomment = True
             elif line[idx] == u'*' and llen > idx and line[idx+1] == u'/':
-                idx += 1
+                idx += 2
                 incomment = False
+
+            # At end of line
+            if idx >= llen:
+                break
 
             # Look for tags
             if incomment:
