@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-08 08:47-0600\n"
+"POT-Creation-Date: 2008-02-17 17:19-0600\n"
 "PO-Revision-Date: 2008-02-02 08:15+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s Source File"
 msgstr ""
 
-#: ../../src/ed_main.py:441
+#: ../../src/ed_main.py:442
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -110,7 +110,7 @@ msgstr "アンチエイリアス"
 msgid "Appearance"
 msgstr "外観"
 
-#: ../../src/style_editor.py:647
+#: ../../src/style_editor.py:645
 msgid "Attributes"
 msgstr "属性"
 
@@ -130,7 +130,7 @@ msgstr "自動インデント"
 msgid "Automatically save/use window state from last session"
 msgstr "自動的にウィンドウのサイズを保存する"
 
-#: ../../src/style_editor.py:636
+#: ../../src/style_editor.py:634
 msgid "Background"
 msgstr "背景"
 
@@ -138,7 +138,7 @@ msgstr "背景"
 msgid "Backspace Unindents"
 msgstr ""
 
-#: ../../src/style_editor.py:196
+#: ../../src/style_editor.py:194
 #, fuzzy
 msgid "Base new theme on existing one"
 msgstr "現状のテーマを使って新しいテーマを作成する"
@@ -151,11 +151,11 @@ msgstr "ブックマーク"
 msgid "Bracket Highlighting"
 msgstr "カッコをハイライトする"
 
-#: ../../src/style_editor.py:141
+#: ../../src/style_editor.py:139
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../../src/updater.py:626
+#: ../../src/updater.py:611
 msgid "Canceled"
 msgstr "キャンセルされました"
 
@@ -168,7 +168,7 @@ msgstr "フォント設定を変える"
 msgid "Change view to \"%s\""
 msgstr "%sのビューに変更して"
 
-#: ../../src/style_editor.py:318
+#: ../../src/style_editor.py:316
 #, fuzzy, python-format
 msgid "Changed color scheme to %s"
 msgstr "カラー設定を%sに変える"
@@ -185,11 +185,11 @@ msgstr "チェック"
 msgid "Check if on disk file has been modified by others"
 msgstr ""
 
-#: ../../src/ed_main.py:339
+#: ../../src/ed_main.py:340
 msgid "Choose a File"
 msgstr "ファイルを選択する"
 
-#: ../../src/ed_main.py:511
+#: ../../src/ed_main.py:512
 msgid "Choose a Save Location"
 msgstr "保存場所を選ぶ"
 
@@ -239,7 +239,7 @@ msgstr "コード"
 msgid "Code Folding"
 msgstr "コードをたたむ"
 
-#: ../../src/style_editor.py:620
+#: ../../src/style_editor.py:618
 msgid "Color"
 msgstr "色"
 
@@ -401,15 +401,15 @@ msgstr "ドキュメント"
 msgid "Download"
 msgstr "ダウンロード"
 
-#: ../../src/plugdlg.py:482 ../../src/updater.py:654 ../../src/updater.py:660
+#: ../../src/plugdlg.py:482 ../../src/updater.py:639 ../../src/updater.py:645
 msgid "Downloaded"
 msgstr "ダウンロードが完了しました"
 
-#: ../../src/plugdlg.py:591 ../../src/updater.py:585
+#: ../../src/plugdlg.py:591 ../../src/updater.py:570
 msgid "Downloading"
 msgstr "ダウンロード中"
 
-#: ../../src/updater.py:548
+#: ../../src/updater.py:533
 #, python-format
 msgid "Downloading To: %s"
 msgstr ""
@@ -419,7 +419,7 @@ msgstr ""
 msgid "Downloading Update"
 msgstr "更新のダウンロード"
 
-#: ../../src/updater.py:546
+#: ../../src/updater.py:531
 #, python-format
 msgid "Downloading: %s"
 msgstr "ダウンロード中：%s"
@@ -446,12 +446,12 @@ msgstr "この行の後に新しい行を追加する"
 msgid "EOL Mode"
 msgstr "EOLモード"
 
-#: ../../src/ed_main.py:497
+#: ../../src/ed_main.py:498
 #, python-format
 msgid "ERROR: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:531
+#: ../../src/ed_main.py:532
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "エラー：%sを保存に失敗しました"
@@ -485,7 +485,7 @@ msgstr "エディターコマンド"
 msgid "Editor Mode"
 msgstr "エディターモード"
 
-#: ../../src/style_editor.py:286
+#: ../../src/style_editor.py:284
 msgid "Editra Style Sheet"
 msgstr "Editraのスタイルシート"
 
@@ -496,6 +496,10 @@ msgid ""
 "\n"
 "Error:\n"
 "%s"
+msgstr ""
+
+#: ../../src/ed_menu.py:507
+msgid "Editra translations project"
 msgstr ""
 
 #: ../../src/prefdlg.py:689
@@ -512,7 +516,7 @@ msgstr "マクロ記録中"
 msgid "End of line character formatting"
 msgstr ""
 
-#: ../../src/style_editor.py:721
+#: ../../src/style_editor.py:719
 msgid "Enter a hex color value"
 msgstr "16進カラー値を入力する"
 
@@ -560,11 +564,11 @@ msgstr "エディターモード"
 msgid "Exit the Program"
 msgstr "プログラムを終了"
 
-#: ../../src/style_editor.py:142
+#: ../../src/style_editor.py:140
 msgid "Export"
 msgstr "エキスポート"
 
-#: ../../src/style_editor.py:284
+#: ../../src/style_editor.py:282
 msgid "Export Style Sheet"
 msgstr "スタイルシートをエクスポート"
 
@@ -573,7 +577,7 @@ msgstr "スタイルシートをエクスポート"
 msgid "Extensions (space separated, no dots)"
 msgstr "ファイル拡張子（空白で区切られた、ドットなしい）"
 
-#: ../../src/updater.py:667
+#: ../../src/updater.py:652
 msgid "Failed"
 msgstr "失敗しました"
 
@@ -604,7 +608,7 @@ msgstr ""
 "エラー：\n"
 "%d"
 
-#: ../../src/ed_menu.py:506
+#: ../../src/ed_menu.py:508
 msgid "Feedback"
 msgstr "フィードバック"
 
@@ -620,7 +624,7 @@ msgstr "ファイルブラウザ"
 msgid "File History Length"
 msgstr "ファイルの履歴"
 
-#: ../../src/ed_main.py:443
+#: ../../src/ed_main.py:444
 msgid "File Not Found"
 msgstr "ファイルが見つかりません"
 
@@ -675,7 +679,7 @@ msgstr "テキストを検索と置換"
 msgid "Find/Replace"
 msgstr "置換"
 
-#: ../../src/updater.py:664
+#: ../../src/updater.py:649
 #, fuzzy
 msgid "Finished"
 msgstr "完成"
@@ -693,15 +697,15 @@ msgstr "プラグインのダウンロードを終了しました"
 msgid "Folder"
 msgstr ""
 
-#: ../../src/ed_menu.py:399 ../../src/style_editor.py:668
+#: ../../src/ed_menu.py:399 ../../src/style_editor.py:666
 msgid "Font"
 msgstr "フォント"
 
-#: ../../src/style_editor.py:663
+#: ../../src/style_editor.py:661
 msgid "Font Settings"
 msgstr "フォントの設定"
 
-#: ../../src/style_editor.py:624
+#: ../../src/style_editor.py:622
 msgid "Foreground"
 msgstr "前景"
 
@@ -762,7 +766,7 @@ msgstr "指定行へジャンプ"
 msgid "Goto command buffer"
 msgstr ""
 
-#: ../../src/ed_main.py:136 ../../src/ed_menu.py:508
+#: ../../src/ed_main.py:136 ../../src/ed_menu.py:510
 msgid "Help"
 msgstr "ヘルプ"
 
@@ -898,7 +902,7 @@ msgstr "最後のセッション荷重"
 msgid "Load Profile"
 msgstr "プロファイルを読み込む"
 
-#: ../../src/ed_main.py:570 ../../src/ed_menu.py:264
+#: ../../src/ed_main.py:571 ../../src/ed_menu.py:264
 msgid "Load a Custom Profile"
 msgstr "カスタムプロファイルを読み込む"
 
@@ -910,7 +914,7 @@ msgstr ""
 msgid "Load files from last session on startup"
 msgstr ""
 
-#: ../../src/ed_main.py:577
+#: ../../src/ed_main.py:578
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr "%sのプロフィールをロードした"
@@ -957,7 +961,7 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: ../../src/ed_toolbar.py:77 ../../src/style_editor.py:198
+#: ../../src/ed_toolbar.py:77 ../../src/style_editor.py:196
 msgid "New"
 msgstr "新規作成"
 
@@ -1002,7 +1006,7 @@ msgstr "説明なしで利用可能"
 msgid "No Valid Files to Open"
 msgstr ""
 
-#: ../../src/style_editor.py:139
+#: ../../src/style_editor.py:137
 msgid "Ok"
 msgstr "Ok"
 
@@ -1108,7 +1112,7 @@ msgstr ""
 msgid "Plugin"
 msgstr "プラグイン"
 
-#: ../../src/ed_main.py:795 ../../src/ed_menu.py:479
+#: ../../src/ed_main.py:796 ../../src/ed_menu.py:479
 msgid "Plugin Manager"
 msgstr "プラグインマネージャ"
 
@@ -1126,7 +1130,7 @@ msgstr "選択"
 msgid "Preferences - Editra"
 msgstr ""
 
-#: ../../src/style_editor.py:132
+#: ../../src/style_editor.py:130
 msgid "Preview"
 msgstr "プレビュー"
 
@@ -1162,11 +1166,11 @@ msgstr "印刷プレビュー"
 msgid "Printer Mode"
 msgstr "プリンタのモード"
 
-#: ../../src/ed_main.py:551 ../../src/ed_main.py:572 ../../src/ed_menu.py:265
+#: ../../src/ed_main.py:552 ../../src/ed_main.py:573 ../../src/ed_menu.py:265
 msgid "Profile"
 msgstr "プロフィール"
 
-#: ../../src/ed_main.py:556
+#: ../../src/ed_main.py:557
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr ""
@@ -1204,7 +1208,7 @@ msgstr ""
 msgid "Quick Find"
 msgstr ""
 
-#: ../../src/updater.py:656
+#: ../../src/updater.py:641
 #, python-format
 msgid "Rate: %.2f Kb/s"
 msgstr ""
@@ -1331,7 +1335,7 @@ msgstr "すべて保存"
 msgid "Save As"
 msgstr "別名で保存"
 
-#: ../../src/ed_main.py:1041
+#: ../../src/ed_main.py:1042
 msgid "Save Changes?"
 msgstr "変更を保存する?"
 
@@ -1363,7 +1367,7 @@ msgstr "プロファイルを保存"
 msgid "Save Selected Paths"
 msgstr ""
 
-#: ../../src/style_editor.py:252
+#: ../../src/style_editor.py:250
 #, fuzzy
 msgid "Save Styles"
 msgstr "スタイルを保存"
@@ -1376,12 +1380,12 @@ msgstr ""
 msgid "Save the current window layout"
 msgstr ""
 
-#: ../../src/ed_main.py:533
+#: ../../src/ed_main.py:534
 #, python-format
 msgid "Saved File As: %s"
 msgstr "別名で保存する: %s"
 
-#: ../../src/ed_main.py:494
+#: ../../src/ed_main.py:495
 #, python-format
 msgid "Saved File: %s"
 msgstr "保存されているファイル: %s"
@@ -1411,7 +1415,7 @@ msgstr ""
 msgid "Select the desired plugins and then Click Download"
 msgstr ""
 
-#: ../../src/ed_menu.py:507
+#: ../../src/ed_menu.py:509
 msgid "Send me bug reports and suggestions"
 msgstr ""
 
@@ -1419,7 +1423,7 @@ msgstr ""
 msgid "Set Font"
 msgstr ""
 
-#: ../../src/style_editor.py:177
+#: ../../src/style_editor.py:175
 msgid "Set the preview file type"
 msgstr ""
 
@@ -1490,11 +1494,11 @@ msgid "Show the edge column guide"
 msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:170
-#: ../../src/style_editor.py:680
+#: ../../src/style_editor.py:678
 msgid "Size"
 msgstr "サイズ"
 
-#: ../../src/style_editor.py:250
+#: ../../src/style_editor.py:248
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr ""
 
@@ -1506,7 +1510,7 @@ msgstr ""
 msgid "Start a New File"
 msgstr "新しいファイルを開始する"
 
-#: ../../src/style_editor.py:199
+#: ../../src/style_editor.py:197
 msgid "Start a blank new style"
 msgstr ""
 
@@ -1523,19 +1527,19 @@ msgstr ""
 msgid "Startup Settings"
 msgstr "起動時の設定"
 
-#: ../../src/updater.py:269
+#: ../../src/updater.py:256
 msgid "Status Unknown"
 msgstr "ステータス不明"
 
-#: ../../src/ed_menu.py:481 ../../src/style_editor.py:66
+#: ../../src/ed_menu.py:481 ../../src/style_editor.py:64
 msgid "Style Editor"
 msgstr "スタイルエディタ"
 
-#: ../../src/style_editor.py:216
+#: ../../src/style_editor.py:214
 msgid "Style Tags"
 msgstr "スタイルのタグ"
 
-#: ../../src/style_editor.py:192
+#: ../../src/style_editor.py:190
 msgid "Style Theme"
 msgstr "スタイルのテーマ"
 
@@ -1548,7 +1552,7 @@ msgstr ""
 msgid "Switch Lexer to %s"
 msgstr ""
 
-#: ../../src/style_editor.py:174
+#: ../../src/style_editor.py:172
 msgid "Syntax Files"
 msgstr "構文のファイル"
 
@@ -1581,7 +1585,7 @@ msgid ""
 "Would you like to open it as %s instead?"
 msgstr ""
 
-#: ../../src/ed_main.py:1038
+#: ../../src/ed_main.py:1039
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -1634,6 +1638,10 @@ msgstr "アイコンのサイズ"
 msgid "Tools"
 msgstr "ツール"
 
+#: ../../src/ed_menu.py:506
+msgid "Translate Editra"
+msgstr ""
+
 #: ../../src/prefdlg.py:914
 msgid "Transparency"
 msgstr "透明"
@@ -1663,7 +1671,7 @@ msgstr ""
 msgid "Unable to retrieve plugin list"
 msgstr ""
 
-#: ../../src/updater.py:153
+#: ../../src/updater.py:140
 msgid "Unable to retrieve version info"
 msgstr ""
 
@@ -1785,7 +1793,7 @@ msgstr ""
 msgid "Where"
 msgstr ""
 
-#: ../../src/ed_main.py:549
+#: ../../src/ed_main.py:550
 msgid "Where to Save Profile?"
 msgstr ""
 
@@ -1831,11 +1839,11 @@ msgstr "縮小する"
 msgid "args"
 msgstr ""
 
-#: ../../src/style_editor.py:651
+#: ../../src/style_editor.py:649
 msgid "bold"
 msgstr "ボールド"
 
-#: ../../src/style_editor.py:652
+#: ../../src/style_editor.py:650
 msgid "eol"
 msgstr "eol"
 
@@ -1849,11 +1857,11 @@ msgstr "レクサー"
 msgid "file"
 msgstr "ファイル"
 
-#: ../../src/style_editor.py:653
+#: ../../src/style_editor.py:651
 msgid "italic"
 msgstr "イタリック"
 
-#: ../../src/style_editor.py:654
+#: ../../src/style_editor.py:652
 msgid "underline"
 msgstr "下線"
 
