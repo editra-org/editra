@@ -16,6 +16,9 @@ NEWS:
 
 
 NEW: [features/improvements]
++Added Simplified Chinese translation (contributed by heccj)
++Updated Russian translation (contributed by slavOnic)
++Updated Japanese translation
 +Highlight Perl POD's as comments
 
 BUG FIXES:
