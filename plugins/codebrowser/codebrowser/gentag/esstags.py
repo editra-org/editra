@@ -35,6 +35,7 @@ def GenerateTags(buff):
     rtags = taglib.DocStruct()
     rtags.SetElementDescription('styletag', "Style Tags")
 
+    c_element = None  # Currently found document element
     incomment = False # Inside a comment
     indef = False     # Inside a style definition {}
 
@@ -43,6 +44,16 @@ def GenerateTags(buff):
         llen = len(line)
         idx = 0
         while idx < len(line):
+        
+            # Skip Whitespace
+            while line[idx].isspace():
+                idx += 1
+
+            # Check if valid item to add to document
+            if c_element is not None and line[idx] == u'{':
+                rtags.AddElement('styletag', c_element)
+                c_element = None
+
             # Check for coments
             if line[idx] == u'/' and llen > idx and line[idx+1] == u'*':
                 idx += 1
@@ -64,8 +75,15 @@ def GenerateTags(buff):
                 # Found start of tag
                 name = parselib.GetFirstIdentifier(line[idx:])
                 if name is not None:
-                    rtags.AddElement('styletag', StyleTag(name, lnum))
-                idx += len(name)
+                    # Make a tag but don't add it to the DocStruct till we
+                    # find if a { is the next non space character to follow
+                    c_element = StyleTag(name, lnum)
+                    idx += len(name)
+                else:
+                    # This should never happen but if it does there must
+                    # be something wrong with the document or the parse has
+                    # gone afowl.
+                    idx += 1
             else:
                 idx += 1
 
