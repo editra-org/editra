@@ -24,6 +24,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import taglib
+import parselib
 
 #--------------------------------------------------------------------------#
 
@@ -41,36 +42,25 @@ def GenerateTags(buff):
             continue
 
         # Check Regular Function Defs
-        if line.startswith(u'function '):
+        if line.startswith(u'function') and len(line) > 8 and line[8].isspace():
             parts = line.split()
             plen = len(parts)
-            if plen >= 2 and IsValidName(parts[1]):
-                if plen == 2 or parts[2] == u"{" and parts[1] not in names:
+            if plen >= 2 and parselib.IsGoodName(parts[1]):
+                if plen == 2 or parts[2] == u"{":
                     rtags.AddFunction(taglib.Function(parts[1], lnum))
-                    names.append(parts[1])
             continue
 
         # Check fname () function defs
         if u"(" in line:
             parts = line.split()
             plen = len(parts)
-            if plen >= 2 and IsValidName(parts[0]):
+            if plen >= 2 and parselib.IsGoodName(parts[0]):
                 if u''.join(parts[1:]).startswith("()"):
                     rtags.AddFunction(taglib.Function(parts[0], lnum))
             else:
                 continue
 
     return rtags
-
-#-----------------------------------------------------------------------------#
-# Utilities
-def IsValidName(name):
-    for char in name:
-        if char.isalnum() or char == "_":
-            continue
-        else:
-            return False
-    return True
 
 #-----------------------------------------------------------------------------#
 # Test
@@ -81,7 +71,9 @@ if __name__ == '__main__':
     txt = fhandle.read()
     fhandle.close()
     tags = GenerateTags(StringIO.StringIO(txt))
-    print "\n\nFUNCTIONS:"
-    for fun in tags.GetFunctions():
-        print "%s [%d]" % (fun.GetName(), fun.GetLine())
+    print "\n\nElements:"
+    for element in tags.GetElements():
+        print "\n%s:" % element.keys()[0]
+        for val in element.values()[0]:
+            print "%s [%d]" % (val.GetName(), val.GetLine())
     print "END"

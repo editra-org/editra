@@ -57,7 +57,9 @@ if __name__ == '__main__':
     txt = fhandle.read()
     fhandle.close()
     tags = GenerateTags(StringIO.StringIO(txt))
-    print "\n\nFUNCTIONS:"
-    for fun in tags.GetFunctions():
-        print "%s [%d]" % (fun.GetName(), fun.GetLine())
+    print "\n\nElements:"
+    for element in tags.GetElements():
+        print "\n%s:" % element.keys()[0]
+        for val in element.values()[0]:
+            print "%s [%d]" % (val.GetName(), val.GetLine())
     print "END"
