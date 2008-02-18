@@ -24,6 +24,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import taglib
+import parselib
 
 #--------------------------------------------------------------------------#
 
@@ -43,14 +44,15 @@ def GenerateTags(buff):
     for lnum, line in enumerate(buff):
         indent = 0
         idx = 0
-        while idx < len(line):
+        llen = len(line)
+        while idx < llen:
             # Check for docstrings
-            if line[idx:idx+3] in ['"""', "'''"]:
+            if llen >= idx + 3 and line[idx:idx+3] in ['"""', "'''"]:
                 indocstring = not indocstring
                 idx += 3
 
             # If end of line or start of comment start next line
-            if idx == len(line) or line[idx] == u"#":
+            if idx == llen or line[idx] == u"#":
                 break
 
             # Check indent sensitive tokens
@@ -66,7 +68,8 @@ def GenerateTags(buff):
                             lastclass = parents[-1]
                         else:
                             lastclass = None
-            
+
+            # Parse and look for elements to add to the DocStruct
             if indocstring:
                 idx = idx + 1
             elif line[idx].isspace():
@@ -120,9 +123,10 @@ def GenerateTags(buff):
                 idx += 1
                 if line[idx] != u"=": # ignore == statements
                     var = line[:idx-1].strip().split()
-                    if len(var) == 1 and GoodName(var[0]):
+                    if len(var) == 1 and parselib.IsGoodName(var[0]):
                         lclass = rtags.GetLastClass()
-                        if lclass is not None:
+                        # Check if we are still inside a class def or not
+                        if lastclass is not None and lclass is not None:
                             vobj = taglib.Variable(var[0], lnum, lclass.GetName())
                             lclass.AddVariable(vobj)
                         else:
@@ -134,21 +138,6 @@ def GenerateTags(buff):
 
 #-----------------------------------------------------------------------------#
 # Utilities
-def GoodName(name):
-    """Check if the name is a valid identifier name or not
-    @param name: name to check
-    @return: bool
-
-    """
-    if name.isalnum():
-        return True
-    else:
-        for char in name:
-            if char.isalnum() or char == u'_':
-                continue
-            else:
-                return False
-    return True
 
 def PopScopes(lst, indent):
     """Pop all parent scopes until the list only contains scopes that are
