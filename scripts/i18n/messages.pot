@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-08 08:47-0600\n"
+"POT-Creation-Date: 2008-02-17 17:19-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "%s Source File"
 msgstr ""
 
-#: ../../src/ed_main.py:441
+#: ../../src/ed_main.py:442
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -100,7 +100,7 @@ msgstr ""
 msgid "Appearance"
 msgstr ""
 
-#: ../../src/style_editor.py:647
+#: ../../src/style_editor.py:645
 msgid "Attributes"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Automatically save/use window state from last session"
 msgstr ""
 
-#: ../../src/style_editor.py:636
+#: ../../src/style_editor.py:634
 msgid "Background"
 msgstr ""
 
@@ -128,7 +128,7 @@ msgstr ""
 msgid "Backspace Unindents"
 msgstr ""
 
-#: ../../src/style_editor.py:196
+#: ../../src/style_editor.py:194
 msgid "Base new theme on existing one"
 msgstr ""
 
@@ -140,11 +140,11 @@ msgstr ""
 msgid "Bracket Highlighting"
 msgstr ""
 
-#: ../../src/style_editor.py:141
+#: ../../src/style_editor.py:139
 msgid "Cancel"
 msgstr ""
 
-#: ../../src/updater.py:626
+#: ../../src/updater.py:611
 msgid "Canceled"
 msgstr ""
 
@@ -157,7 +157,7 @@ msgstr ""
 msgid "Change view to \"%s\""
 msgstr ""
 
-#: ../../src/style_editor.py:318
+#: ../../src/style_editor.py:316
 #, python-format
 msgid "Changed color scheme to %s"
 msgstr ""
@@ -174,11 +174,11 @@ msgstr ""
 msgid "Check if on disk file has been modified by others"
 msgstr ""
 
-#: ../../src/ed_main.py:339
+#: ../../src/ed_main.py:340
 msgid "Choose a File"
 msgstr ""
 
-#: ../../src/ed_main.py:511
+#: ../../src/ed_main.py:512
 msgid "Choose a Save Location"
 msgstr ""
 
@@ -226,7 +226,7 @@ msgstr ""
 msgid "Code Folding"
 msgstr ""
 
-#: ../../src/style_editor.py:620
+#: ../../src/style_editor.py:618
 msgid "Color"
 msgstr ""
 
@@ -378,15 +378,15 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: ../../src/plugdlg.py:482 ../../src/updater.py:654 ../../src/updater.py:660
+#: ../../src/plugdlg.py:482 ../../src/updater.py:639 ../../src/updater.py:645
 msgid "Downloaded"
 msgstr ""
 
-#: ../../src/plugdlg.py:591 ../../src/updater.py:585
+#: ../../src/plugdlg.py:591 ../../src/updater.py:570
 msgid "Downloading"
 msgstr ""
 
-#: ../../src/updater.py:548
+#: ../../src/updater.py:533
 #, python-format
 msgid "Downloading To: %s"
 msgstr ""
@@ -395,7 +395,7 @@ msgstr ""
 msgid "Downloading Update"
 msgstr ""
 
-#: ../../src/updater.py:546
+#: ../../src/updater.py:531
 #, python-format
 msgid "Downloading: %s"
 msgstr ""
@@ -420,12 +420,12 @@ msgstr ""
 msgid "EOL Mode"
 msgstr ""
 
-#: ../../src/ed_main.py:497
+#: ../../src/ed_main.py:498
 #, python-format
 msgid "ERROR: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:531
+#: ../../src/ed_main.py:532
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr ""
@@ -459,7 +459,7 @@ msgstr ""
 msgid "Editor Mode"
 msgstr ""
 
-#: ../../src/style_editor.py:286
+#: ../../src/style_editor.py:284
 msgid "Editra Style Sheet"
 msgstr ""
 
@@ -470,6 +470,10 @@ msgid ""
 "\n"
 "Error:\n"
 "%s"
+msgstr ""
+
+#: ../../src/ed_menu.py:507
+msgid "Editra translations project"
 msgstr ""
 
 #: ../../src/prefdlg.py:689
@@ -484,7 +488,7 @@ msgstr ""
 msgid "End of line character formatting"
 msgstr ""
 
-#: ../../src/style_editor.py:721
+#: ../../src/style_editor.py:719
 msgid "Enter a hex color value"
 msgstr ""
 
@@ -527,11 +531,11 @@ msgstr ""
 msgid "Exit the Program"
 msgstr ""
 
-#: ../../src/style_editor.py:142
+#: ../../src/style_editor.py:140
 msgid "Export"
 msgstr ""
 
-#: ../../src/style_editor.py:284
+#: ../../src/style_editor.py:282
 msgid "Export Style Sheet"
 msgstr ""
 
@@ -539,7 +543,7 @@ msgstr ""
 msgid "Extensions (space separated, no dots)"
 msgstr ""
 
-#: ../../src/updater.py:667
+#: ../../src/updater.py:652
 msgid "Failed"
 msgstr ""
 
@@ -564,7 +568,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../../src/ed_menu.py:506
+#: ../../src/ed_menu.py:508
 msgid "Feedback"
 msgstr ""
 
@@ -580,7 +584,7 @@ msgstr ""
 msgid "File History Length"
 msgstr ""
 
-#: ../../src/ed_main.py:443
+#: ../../src/ed_main.py:444
 msgid "File Not Found"
 msgstr ""
 
@@ -628,7 +632,7 @@ msgstr ""
 msgid "Find/Replace"
 msgstr ""
 
-#: ../../src/updater.py:664
+#: ../../src/updater.py:649
 msgid "Finished"
 msgstr ""
 
@@ -644,15 +648,15 @@ msgstr ""
 msgid "Folder"
 msgstr ""
 
-#: ../../src/ed_menu.py:399 ../../src/style_editor.py:668
+#: ../../src/ed_menu.py:399 ../../src/style_editor.py:666
 msgid "Font"
 msgstr ""
 
-#: ../../src/style_editor.py:663
+#: ../../src/style_editor.py:661
 msgid "Font Settings"
 msgstr ""
 
-#: ../../src/style_editor.py:624
+#: ../../src/style_editor.py:622
 msgid "Foreground"
 msgstr ""
 
@@ -713,7 +717,7 @@ msgstr ""
 msgid "Goto command buffer"
 msgstr ""
 
-#: ../../src/ed_main.py:136 ../../src/ed_menu.py:508
+#: ../../src/ed_main.py:136 ../../src/ed_menu.py:510
 msgid "Help"
 msgstr ""
 
@@ -845,7 +849,7 @@ msgstr ""
 msgid "Load Profile"
 msgstr ""
 
-#: ../../src/ed_main.py:570 ../../src/ed_menu.py:264
+#: ../../src/ed_main.py:571 ../../src/ed_menu.py:264
 msgid "Load a Custom Profile"
 msgstr ""
 
@@ -857,7 +861,7 @@ msgstr ""
 msgid "Load files from last session on startup"
 msgstr ""
 
-#: ../../src/ed_main.py:577
+#: ../../src/ed_main.py:578
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr ""
@@ -903,7 +907,7 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: ../../src/ed_toolbar.py:77 ../../src/style_editor.py:198
+#: ../../src/ed_toolbar.py:77 ../../src/style_editor.py:196
 msgid "New"
 msgstr ""
 
@@ -947,7 +951,7 @@ msgstr ""
 msgid "No Valid Files to Open"
 msgstr ""
 
-#: ../../src/style_editor.py:139
+#: ../../src/style_editor.py:137
 msgid "Ok"
 msgstr ""
 
@@ -1049,7 +1053,7 @@ msgstr ""
 msgid "Plugin"
 msgstr ""
 
-#: ../../src/ed_main.py:795 ../../src/ed_menu.py:479
+#: ../../src/ed_main.py:796 ../../src/ed_menu.py:479
 msgid "Plugin Manager"
 msgstr ""
 
@@ -1065,7 +1069,7 @@ msgstr ""
 msgid "Preferences - Editra"
 msgstr ""
 
-#: ../../src/style_editor.py:132
+#: ../../src/style_editor.py:130
 msgid "Preview"
 msgstr ""
 
@@ -1101,11 +1105,11 @@ msgstr ""
 msgid "Printer Mode"
 msgstr ""
 
-#: ../../src/ed_main.py:551 ../../src/ed_main.py:572 ../../src/ed_menu.py:265
+#: ../../src/ed_main.py:552 ../../src/ed_main.py:573 ../../src/ed_menu.py:265
 msgid "Profile"
 msgstr ""
 
-#: ../../src/ed_main.py:556
+#: ../../src/ed_main.py:557
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr ""
@@ -1142,7 +1146,7 @@ msgstr ""
 msgid "Quick Find"
 msgstr ""
 
-#: ../../src/updater.py:656
+#: ../../src/updater.py:641
 #, python-format
 msgid "Rate: %.2f Kb/s"
 msgstr ""
@@ -1267,7 +1271,7 @@ msgstr ""
 msgid "Save As"
 msgstr ""
 
-#: ../../src/ed_main.py:1041
+#: ../../src/ed_main.py:1042
 msgid "Save Changes?"
 msgstr ""
 
@@ -1299,7 +1303,7 @@ msgstr ""
 msgid "Save Selected Paths"
 msgstr ""
 
-#: ../../src/style_editor.py:252
+#: ../../src/style_editor.py:250
 msgid "Save Styles"
 msgstr ""
 
@@ -1311,12 +1315,12 @@ msgstr ""
 msgid "Save the current window layout"
 msgstr ""
 
-#: ../../src/ed_main.py:533
+#: ../../src/ed_main.py:534
 #, python-format
 msgid "Saved File As: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:494
+#: ../../src/ed_main.py:495
 #, python-format
 msgid "Saved File: %s"
 msgstr ""
@@ -1345,7 +1349,7 @@ msgstr ""
 msgid "Select the desired plugins and then Click Download"
 msgstr ""
 
-#: ../../src/ed_menu.py:507
+#: ../../src/ed_menu.py:509
 msgid "Send me bug reports and suggestions"
 msgstr ""
 
@@ -1353,7 +1357,7 @@ msgstr ""
 msgid "Set Font"
 msgstr ""
 
-#: ../../src/style_editor.py:177
+#: ../../src/style_editor.py:175
 msgid "Set the preview file type"
 msgstr ""
 
@@ -1422,11 +1426,11 @@ msgid "Show the edge column guide"
 msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:170
-#: ../../src/style_editor.py:680
+#: ../../src/style_editor.py:678
 msgid "Size"
 msgstr ""
 
-#: ../../src/style_editor.py:250
+#: ../../src/style_editor.py:248
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr ""
 
@@ -1438,7 +1442,7 @@ msgstr ""
 msgid "Start a New File"
 msgstr ""
 
-#: ../../src/style_editor.py:199
+#: ../../src/style_editor.py:197
 msgid "Start a blank new style"
 msgstr ""
 
@@ -1454,19 +1458,19 @@ msgstr ""
 msgid "Startup Settings"
 msgstr ""
 
-#: ../../src/updater.py:269
+#: ../../src/updater.py:256
 msgid "Status Unknown"
 msgstr ""
 
-#: ../../src/ed_menu.py:481 ../../src/style_editor.py:66
+#: ../../src/ed_menu.py:481 ../../src/style_editor.py:64
 msgid "Style Editor"
 msgstr ""
 
-#: ../../src/style_editor.py:216
+#: ../../src/style_editor.py:214
 msgid "Style Tags"
 msgstr ""
 
-#: ../../src/style_editor.py:192
+#: ../../src/style_editor.py:190
 msgid "Style Theme"
 msgstr ""
 
@@ -1479,7 +1483,7 @@ msgstr ""
 msgid "Switch Lexer to %s"
 msgstr ""
 
-#: ../../src/style_editor.py:174
+#: ../../src/style_editor.py:172
 msgid "Syntax Files"
 msgstr ""
 
@@ -1511,7 +1515,7 @@ msgid ""
 "Would you like to open it as %s instead?"
 msgstr ""
 
-#: ../../src/ed_main.py:1038
+#: ../../src/ed_main.py:1039
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -1564,6 +1568,10 @@ msgstr ""
 msgid "Tools"
 msgstr ""
 
+#: ../../src/ed_menu.py:506
+msgid "Translate Editra"
+msgstr ""
+
 #: ../../src/prefdlg.py:914
 msgid "Transparency"
 msgstr ""
@@ -1592,7 +1600,7 @@ msgstr ""
 msgid "Unable to retrieve plugin list"
 msgstr ""
 
-#: ../../src/updater.py:153
+#: ../../src/updater.py:140
 msgid "Unable to retrieve version info"
 msgstr ""
 
@@ -1710,7 +1718,7 @@ msgstr ""
 msgid "Where"
 msgstr ""
 
-#: ../../src/ed_main.py:549
+#: ../../src/ed_main.py:550
 msgid "Where to Save Profile?"
 msgstr ""
 
@@ -1754,11 +1762,11 @@ msgstr ""
 msgid "args"
 msgstr ""
 
-#: ../../src/style_editor.py:651
+#: ../../src/style_editor.py:649
 msgid "bold"
 msgstr ""
 
-#: ../../src/style_editor.py:652
+#: ../../src/style_editor.py:650
 msgid "eol"
 msgstr ""
 
@@ -1770,10 +1778,10 @@ msgstr ""
 msgid "file"
 msgstr ""
 
-#: ../../src/style_editor.py:653
+#: ../../src/style_editor.py:651
 msgid "italic"
 msgstr ""
 
-#: ../../src/style_editor.py:654
+#: ../../src/style_editor.py:652
 msgid "underline"
 msgstr ""
