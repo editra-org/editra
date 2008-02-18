@@ -201,7 +201,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
 
         """
         self._updating.acquire()
-        self._updates.append(value.decode(sys.getfilesystemencoding()))
+        self._updates.append(value)
         self._updating.release()
 
     def ApplyStyles(self, start, txt):
