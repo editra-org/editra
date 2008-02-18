@@ -31,8 +31,12 @@ import syntax.synglob as synglob
 # Globals
 TAGLIB = 'gentag.'
 
-LOAD_MAP = { synglob.ID_LANG_BASH : TAGLIB + 'shtags',
+LOAD_MAP = { synglob.ID_LANG_ADA : TAGLIB + 'adatags',
+             synglob.ID_LANG_BASH : TAGLIB + 'shtags',
+             synglob.ID_LANG_BATCH : TAGLIB + 'batchtags',
              synglob.ID_LANG_CSH : TAGLIB + 'shtags',
+             synglob.ID_LANG_F77 : TAGLIB + 'fortrantags',
+             synglob.ID_LANG_F95 : TAGLIB + 'fortrantags',
              synglob.ID_LANG_KSH : TAGLIB + 'shtags',
              synglob.ID_LANG_LISP : TAGLIB + 'lisptags',
              synglob.ID_LANG_LUA : TAGLIB + 'luatags',
