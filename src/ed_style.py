@@ -658,7 +658,7 @@ class StyleMgr(object):
                     if attrib[0] in "fore back" and RE_HEX_STR.match(values[0]):
                         v1ok = True
                     elif len(values) and attrib[0] == "size":
-                        if RE_ESS_SCALAR.match(values[0]) or values[0].isnum():
+                        if RE_ESS_SCALAR.match(values[0]) or values[0].isdigit():
                             v1ok = True
                         else:
                             self.LOG("[ed_style][warn] Bad value in %s"
