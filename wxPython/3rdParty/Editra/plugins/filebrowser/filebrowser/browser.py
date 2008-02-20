@@ -527,7 +527,7 @@ class FileBrowser(wx.GenericDirCtrl):
         path = self.GetItemPath(self._treeId)
         mitem = self._fmenu.FindItemById(ID_ARCHIVE)
         if mitem != wx.NOT_FOUND:
-            mitem.SetItemLabel(_(ARCHIVE_LBL) % path.split(os.path.sep)[-1])
+            mitem.SetText(_(ARCHIVE_LBL) % path.split(os.path.sep)[-1])
 
         for item in (ID_DUPLICATE,):
             self._fmenu.Enable(item, len(self._tree.GetSelections()) == 1)
