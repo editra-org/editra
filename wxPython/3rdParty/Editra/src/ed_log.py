@@ -23,6 +23,8 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import wx
+
+# Editra Libraries
 import ed_msg
 import eclib.outbuff as outbuff
 import eclib.ctrlbox as ctrlbox
@@ -30,6 +32,7 @@ import eclib.platebtn as platebtn
 import iface
 import plugin
 import ed_glob
+import ed_txt
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -204,7 +207,7 @@ class LogBuffer(outbuff.OutputBuffer):
         logmsg = msg.GetData()
         self.AddFilter(logmsg.Origin)
         if self._filter == SHOW_ALL_MSG:
-            self.AppendUpdate(str(logmsg) + os.linesep)
+            self.AppendUpdate(unicode(logmsg) + os.linesep)
         elif self._filter == logmsg.Origin:
             msg = "[%s][%s]%s" % (logmsg.ClockTime, logmsg.Type, logmsg.Value)
             self.AppendUpdate(msg + os.linesep)
