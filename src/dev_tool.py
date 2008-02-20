@@ -26,7 +26,7 @@ import time
 import webbrowser
 import wx
 
-# Local Imports
+# Editra Libraries
 import ed_glob
 import ed_msg
 
@@ -73,16 +73,17 @@ def DEBUGP(statement):
 
     # Only print to stdout when DEBUG is active
     if ed_glob.DEBUG:
-        print str(msg)
+        mstr = unicode(msg)
+        print mstr.encode('utf-8', 'replace')
 
     # Dispatch message to all interested parties
-    if msg.Type in ['err', 'error']:
+    if msg.Type in ('err', 'error'):
         mtype = ed_msg.EDMSG_LOG_ERROR
-    elif msg.Type in ['warn', 'warning']:
+    elif msg.Type in ('warn', 'warning'):
         mtype = ed_msg.EDMSG_LOG_WARN
-    elif msg.Type in ['evt', 'event']:
+    elif msg.Type in ('evt', 'event'):
         mtype = ed_msg.EDMSG_LOG_EVENT
-    elif msg.Type in ['info', 'information']:
+    elif msg.Type in ('info', 'information'):
         mtype = ed_msg.EDMSG_LOG_INFO
     else:
         mtype = ed_msg.EDMSG_LOG_ALL
@@ -145,7 +146,7 @@ class LogMsg:
         # Mark Message as have being fetched (expired)
         self._ok = False
 
-        return out.encode('utf-8', 'replace')
+        return out
 
     @property
     def ClockTime(self):
