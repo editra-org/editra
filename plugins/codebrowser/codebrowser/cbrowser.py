@@ -139,7 +139,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         @return: tree item id
 
         """
-        item_id = self.AppendItem(node, cobj.GetName(), img)
+        item_id = self.AppendItem(node, u"%s [%d]" % (cobj.GetName(), 1 + cobj.GetLine()), img)
         self.SetPyData(item_id, cobj.GetLine())
         # If the item is a scope it may have sub items
         if isinstance(cobj, taglib.Scope):
@@ -153,6 +153,7 @@ class CodeBrowserTree(wx.TreeCtrl):
                             img = self.icons['function']
                         else:
                             img = self.icons['variable']
+
                     for otype in elem[elem.keys()[0]]:
                         # Make recursive call as Scope's may contain other
                         # Scopes.
