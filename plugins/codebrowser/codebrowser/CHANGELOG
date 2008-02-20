@@ -15,6 +15,7 @@ Released: xx/xx/2008
     - Dos Batch Scripts (Labels)
     - Editra Style Sheets (Style Tags Definitions)
     - Fortran (Programs, Subroutines, Functions)
+    - Inno Setup Scripts (Sections, Procedures, Functions, Defines)
     - Lisp (Function Definitions)
     - Lua (Function Definitions)
     - Nullsoft Installer Scripts (Defines, Functions, Sections)
