@@ -23,11 +23,14 @@
     }
 
     /* Class Definition Test */
-    class A
+    class Foo
     {
-        function foo()
+        var $myvalue;
+
+        function bar()
         {
-            if (isset($this)) {
+            if (isset($this))
+            {
                 echo '$this is defined (';
                 echo get_class($this);
                 echo ")\n";
@@ -35,6 +38,14 @@
                 echo "\$this is not defined.\n";
             }
         }
+        function helloA(param) {
+            echo "$param";
+        }
+
+    }
+
+    function hello(param) {
+        echo "$param";
     }
 ?>
 
