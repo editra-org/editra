@@ -168,10 +168,13 @@ class PrefTools(wx.Toolbook):
 
     def __init__(self, parent, tbid=wx.ID_ANY, style=wx.BK_BUTTONBAR):
         """Initializes the main book control of the preferences dialog
-        @summary: creates the top level notebook control for the prefdlg
+        @summary: Creates the top level notebook control for the prefdlg
                   a toolbar is used for changing pages.
-        @todo: there is some nasty dithering/icon rescaling happening on
+        @todo: There is some nasty dithering/icon rescaling happening on
                osx. need to se why this is.
+        @note: Look into wxtoolbook source and see why images cant be changed
+               after they have been set. Because of this when the theme is
+               changed the toolbook icons cannont be updated instantly.
 
         """
         wx.Toolbook.__init__(self, parent, tbid, style=style)
@@ -247,6 +250,15 @@ class PrefTools(wx.Toolbook):
         gc.DrawPath(path)
 
         evt.Skip()
+
+    def OnThemeChange(self, msg):
+        """Update the toolbook icons when the icon theme is changed
+        @param msg: Message Object
+
+        """
+        print "UPDATE TOOLBOOK"
+        self._SetupImageList()
+        self.Refresh()
 
 #-----------------------------------------------------------------------------#
 
@@ -476,7 +488,9 @@ class DocumentPanel(PrefPanelBase):
         self._nb.AddPage(DocCodePanel(self._nb), _("Code"))
         self._nb.AddPage(DocSyntaxPanel(self._nb), _("Syntax Highlighting"))
         sizer.AddMany([((10, 10), 0), (self._nb, 1, wx.EXPAND), ((10, 10), 0)])
-        self.SetSizer(sizer)
+        msizer = wx.BoxSizer(wx.VERTICAL)
+        msizer.AddMany([(sizer, 1, wx.EXPAND), ((10, 10), 0)])
+        self.SetSizer(msizer)
 
 class DocGenPanel(wx.Panel):
     """Panel used for general document settings in the DocumentPanel's
@@ -497,6 +511,7 @@ class DocGenPanel(wx.Panel):
         
         # Layout
         self._DoLayout()
+        self.SetAutoLayout(True)
         
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnUpdateEditor)
@@ -566,6 +581,7 @@ class DocGenPanel(wx.Panel):
 
         # Layout
         sizer = wx.FlexGridSizer(17, 2, 5, 5)
+        sizer.AddGrowableCol(1, 1)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Format") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (ut_cb, 0),
@@ -579,8 +595,10 @@ class DocGenPanel(wx.Panel):
                        ((5, 5), 0), (sws_cb, 0),
                        ((5, 5), 0), (ww_cb, 0),
                        ((10, 10), 0), ((10, 10), 0),
-                       (font_lbl, 0, wx.ALIGN_CENTER_VERTICAL), (fpicker, 0, wx.EXPAND),
-                       (font_lbl2, 0, wx.ALIGN_CENTER_VERTICAL), (fpicker2, 0, wx.EXPAND),
+                       (font_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                       (fpicker, 1, wx.EXPAND),
+                       (font_lbl2, 0, wx.ALIGN_CENTER_VERTICAL),
+                       (fpicker2, 1, wx.EXPAND),
                        ((10, 10), 0), ((10, 10), 0)])
         msizer = wx.BoxSizer(wx.HORIZONTAL)
         msizer.AddMany([((10, 10), 0), (sizer, 1, wx.EXPAND), ((10, 10), 0)])
@@ -648,6 +666,7 @@ class DocCodePanel(wx.Panel):
         
         # Layout
         self._DoLayout()
+        self.SetAutoLayout(True)
         
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
@@ -770,11 +789,12 @@ class DocSyntaxPanel(wx.Panel):
         # Attributes
         self._elist = ExtListCtrl(self)
         self._elist.LoadList()
-        self._elist.SetMinSize((400, 200))
+        self._elist.SetMinSize((425, 200))
 
         # Layout page
         self._DoLayout()
-        
+        self.SetAutoLayout(True)
+
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHECKBOX, self.OnSynChange)
@@ -817,7 +837,7 @@ class DocSyntaxPanel(wx.Panel):
         hsizer2 = wx.BoxSizer(wx.HORIZONTAL)
         hsizer2.AddMany([((5, 5), 0), (self._elist, 1, wx.EXPAND), ((5, 5), 0)])
 
-        default_btn = wx.Button(self, wx.ID_DEFAULT,_("Revert to Default"))
+        default_btn = wx.Button(self, wx.ID_DEFAULT, _("Revert to Default"))
         if wx.Platform == '__WXMAC__':
             default_btn.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
         sizer.AddMany([((10, 10), 0), (hsizer2, 1, wx.EXPAND), ((15, 15), 0),
@@ -1033,12 +1053,13 @@ class NetworkPanel(PrefPanelBase):
         @note: Do not call this after __init__
 
         """
-        sizer = wx.GridBagSizer()
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
         self._nb.AddPage(NetConfigPage(self._nb), _("Configuration"))
         self._nb.AddPage(UpdatePage(self._nb), _("Update"))
-        sizer.Add(self._nb, (1, 1))
-        sizer.Add((5, 5), (2, 2))
-        self.SetSizer(sizer)
+        sizer.AddMany([((10, 10), 0), (self._nb, 1, wx.EXPAND), ((10, 10), 0)])
+        msizer = wx.BoxSizer(wx.VERTICAL)
+        msizer.AddMany([(sizer, 1, wx.EXPAND), ((10, 10), 0)])
+        self.SetSizer(msizer)
 
 #-----------------------------------------------------------------------------#
 
@@ -1141,7 +1162,7 @@ class NetConfigPage(wx.Panel):
                         # text. ALso as to be able to obtain this info from the
                         # user profile the intruder would already have had to
                         # compromise the users system account making anymore
-                        # such security rather moot by that point.
+                        # such security rather moot by this point anyway.
                         pid = os.urandom(8)
                         winval = ed_crypt.Encrypt(winval, pid)
                         proxy_dict['pid'] = pid
@@ -1225,12 +1246,26 @@ class UpdatePage(wx.Panel):
                         ((20, 10), 1),
                         (upd_bsz, 0),
                         ((15, 15), 0)])
-        sizer = wx.GridBagSizer()
-        sizer.AddMany([(statsz, (1, 1), (2, 5), wx.EXPAND),
-                       (e_update, (4, 1), (1, 5), wx.EXPAND),
-                       (check_b, (6, 2), (1, 1)), (dl_b, (6, 4), (1, 1)),
-                       ((15, 15), (7, 2)), ((5, 5), (7, 7))])
-        self.SetSizer(sizer)
+
+        bsizer = wx.BoxSizer(wx.HORIZONTAL)
+        bsizer.AddStretchSpacer()
+        bsizer.Add(check_b, 0, wx.ALIGN_LEFT)
+        bsizer.AddStretchSpacer(2)
+        bsizer.Add(dl_b, 0, wx.ALIGN_RIGHT)
+        bsizer.AddStretchSpacer()
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.AddMany([((15, 15), 1),
+                       (statsz, 0, wx.EXPAND),
+                       ((15, 15), 0),
+                       (e_update, 0, wx.EXPAND),
+                       ((15, 15), 0),
+                       (bsizer, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL),
+                       ((15, 15), 1)])
+
+        msizer = wx.BoxSizer(wx.HORIZONTAL)
+        msizer.AddMany([((5, 5), 0), (sizer, 1, wx.EXPAND), ((5, 5), 0)])
+        self.SetSizer(msizer)
 
     def OnButton(self, evt):
         """Handles events generated by the panels buttons
