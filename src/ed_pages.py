@@ -237,6 +237,7 @@ class EdPages(FNB.FlatNotebook):
             control.Hide()
 
         # Open file and get contents
+        result = False
         if os.path.exists(path2file):
             try:
                 result = control.LoadFile(path2file)
