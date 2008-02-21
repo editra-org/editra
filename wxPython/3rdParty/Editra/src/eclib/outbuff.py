@@ -150,6 +150,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetMarginWidth(1, 0)
 
         self.SetLayoutCache(wx.stc.STC_CACHE_DOCUMENT)
+        self.SetUndoCollection(False) # Don't keep undo history
         self.SetReadOnly(True)
         
         #self.SetEndAtLastLine(False)
@@ -219,6 +220,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         """Clear the Buffer"""
         self.SetReadOnly(False)
         self.SetText('')
+        self.EmptyUndoBuffer()
         self.SetReadOnly(False)
 
     def DoUpdatesEmpty(self):
