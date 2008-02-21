@@ -91,10 +91,7 @@ def GenerateTags(buff):
                             rtags.AddClass(taglib.Class(name, lnum))
                         else:
                             rtags.AddVariable(taglib.Variable(name, lnum))
-#                        idx += (len(name) + 1)
-                    idx += 1
-                else:
-                    idx += 1
+                idx += 1
             else:
                 idx += 1
 
