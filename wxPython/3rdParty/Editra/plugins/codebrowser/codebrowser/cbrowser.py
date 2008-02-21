@@ -263,7 +263,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             self._cjob += 1
             thread = TagGenThread(self, self._cjob, genfun,
                                   StringIO.StringIO(page.GetText()))
-            wx.CallLater(100, thread.start)
+            wx.CallLater(75, thread.start)
         else:
             self._cdoc = None
             self.DeleteChildren(self.root)
@@ -306,9 +306,9 @@ class CodeBrowserTree(wx.TreeCtrl):
                     for item in elem:
                         self.AppendElement(item)
 
-        # Expand all nodes
+        # Expand all main nodes except the one for global variables
         for node in [ node for node in self.nodes.values()
-                      if node is not None ]:
+                      if node is not None and node != self.nodes['globals']]:
             self.Expand(node)
 
 #--------------------------------------------------------------------------#
