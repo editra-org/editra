@@ -1,0 +1,30 @@
+# Editra Launch Plugin
+# Author: Cody Precord
+# License: wxWindows License
+#
+
+#-----------------------------------------------------------------------------#
+
+Version: 0.2
+Date:
+
+
+#-----------------------------------------------------------------------------#
+
+Version: 0.1
+Date: 02/02/2008
+
+  - Initial Release
+    - Support for launching the following file types
+      + Bash Shell
+      + Boo
+      + C-Shell
+      + Ferite
+      + Korn Shell
+      + Lua
+      + NSIS
+      + Perl
+      + Pike
+      + Python
+      + Ruby
+      + Tcl/Tk
