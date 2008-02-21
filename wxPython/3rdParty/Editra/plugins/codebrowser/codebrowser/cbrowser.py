@@ -102,10 +102,27 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.icons['function'] = imglst.Add(IconFile.GetBrickGoBitmap())
         self.icons['method'] = self.icons['function']
         self.icons['subroutine'] = self.icons['function']
+        self.icons['procedure'] = self.icons['function']
         self.icons['variable'] = imglst.Add(IconFile.GetBrickBitmap())
         self.SetImageList(imglst)
         # NOTE: Must save reference to the image list or tree will crash!!!
         self.il = imglst
+
+    def _GetIconIndex(self, cobj):
+        """Get the index of an appropriate icon for the given code object
+        @param cobj: L{taglib.Code} object
+        @return: int
+
+        """
+        img = self.icons.get(cobj.type, None)
+        if img is None:
+            if isinstance(cobj, taglib.Function):
+                img = self.icons['function']
+            elif isinstance(cobj, taglib.Scope):
+                img = self.icons['section']
+            else:
+                img = self.icons['variable']
+        return img
 
     def _ShouldUpdate(self):
         """Check whether the tree should do an update or not
@@ -147,14 +164,8 @@ class CodeBrowserTree(wx.TreeCtrl):
             if len(elements):
                 self.SetItemHasChildren(item_id)
                 for elem in elements: # Ordered list of dict objects
-                    img = self.icons.get(elem.keys()[0], None) # one key each
-                    if img is None:
-                        if isinstance(cobj, taglib.Function):
-                            img = self.icons['function']
-                        else:
-                            img = self.icons['variable']
-
                     for otype in elem[elem.keys()[0]]:
+                        img = self._GetIconIndex(otype)
                         # Make recursive call as Scope's may contain other
                         # Scopes.
                         self.AppendCodeObj(item_id, otype, img)
@@ -190,30 +201,11 @@ class CodeBrowserTree(wx.TreeCtrl):
                 desc = obj.type.title()
 
             self.nodes[obj.type] = self.AppendItem(self.GetRootItem(), desc,
-                                                   self.icons['section'])
+                                                   self._GetIconIndex(obj))
             self.SetItemHasChildren(self.nodes[obj.type])
             self.SetPyData(self.nodes[obj.type], None)
 
-        img = self.icons.get(obj.type, None) # Check for custom icon
-        if img is None:
-            img = self.icons['variable']
-
-        self.AppendCodeObj(self.nodes[obj.type], obj, img)
-
-    def AppendFunction(self, sobj):
-        """Append a toplevel function to the tree
-        @param sobj: Code object derived from Scope
-
-        """
-        if self.nodes.get('function', None) is None:
-            froot = self.AppendItem(self.GetRootItem(),
-                                    _("Function Definitions"),
-                                    self.icons['function'])
-            self.SetPyData(froot, None)
-            self.SetItemHasChildren(froot)
-            self.nodes['function'] = froot
-
-        self.AppendCodeObj(self.nodes['function'], sobj, self.icons['function'])
+        self.AppendCodeObj(self.nodes[obj.type], obj, self._GetIconIndex(obj))
 
     def DeleteChildren(self, item):
         """Delete the children of a given node"""
@@ -302,14 +294,10 @@ class CodeBrowserTree(wx.TreeCtrl):
         for cls in tags.GetClasses():
             self.AppendClass(cls)
 
-        # Function Definitions
-        for fun in tags.GetFunctions():
-            self.AppendFunction(fun)
-
         # Check for any remaining custom types of code objects to add
         for element in tags.GetElements():
             for elem in element.values():
-                if element.keys()[0] not in ['class', 'function', 'variable']:
+                if element.keys()[0] not in ['class', 'variable']:
                     for item in elem:
                         self.AppendElement(item)
 
