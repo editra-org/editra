@@ -238,9 +238,19 @@ class CodeBrowserTree(wx.TreeCtrl):
         @param evt: EVT_JOB_FINISHED
 
         """
-        job = evt.GetId()
-        if job == self._cjob:
+        # Make sure that the values that are being returned are the ones for
+        # the currently active buffer.
+        if evt.GetId() == self._cjob:
             self.UpdateAll(evt.GetValue())
+
+    def OnUpdateMenu(self, evt):
+        """UpdateUI handler for the panels menu item, to update the check
+        mark.
+        @param evt: wx.UpdateUIEvent
+
+        """
+        pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
+        evt.Check(pane.IsShown())
 
     def OnUpdateTree(self, msg):
         """Update the tree when an action message is sent
@@ -267,12 +277,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         if evt.GetId() == ID_CODEBROWSER:
             mgr = self._mw.GetFrameManager()
             pane = mgr.GetPane(PANE_NAME)
-            if pane.IsShown():
-                pane.Hide()
-#                Profile_Set('SHOW_FB', False)
-            else:
-                pane.Show()
-#                Profile_Set('SHOW_FB', True)
+            pane.Show(not pane.IsShown())
             mgr.Update()
         else:
             evt.Skip()

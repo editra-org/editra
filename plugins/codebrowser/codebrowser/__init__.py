@@ -41,25 +41,14 @@ class CodeBrowser(plugin.Plugin):
             self._log("[codebrowser][info] Installing classbrowser plugin")
             
             #---- Create File Browser ----#
-            # TODO hook in saved filter from profile
             self._codebrowser = cbrowser.CodeBrowserTree(self._mw)
             mgr = self._mw.GetFrameManager()
             mgr.AddPane(self._codebrowser, 
                         wx.aui.AuiPaneInfo().Name(cbrowser.PANE_NAME).\
-                            Caption("Editra | CodeBrowser").Left().Layer(1).\
+                            Caption("Editra | CodeBrowser").Top().Left().Layer(1).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(215, 350)))
-
-            # Get settings from profile
-#            if Profile_Get('SHOW_FB', 'bool', False):
-#                mgr.GetPane(browser.PANE_NAME).Show()
-#            else:
-#                mgr.GetPane(browser.PANE_NAME).Hide()
-
             mgr.Update()
-
-            # Event Handlers
-            self._mw.Bind(wx.aui.EVT_AUI_PANE_CLOSE, self.OnPaneClose)
 
     def GetMenuHandlers(self):
         """Pass even handler for menu item to main window for management"""
@@ -67,15 +56,4 @@ class CodeBrowser(plugin.Plugin):
 
     def GetUIHandlers(self):
         """Pass Ui handlers to main window for management"""
-        return list()
-
-    def OnPaneClose(self, evt):
-        """ Handles when the pane is closed to update the profile """
-        pane = evt.GetPane()
-        if pane.name == cbrowser.PANE_NAME:
-            self._log('[codebrowser][info] Closed CodeBrowser')
-#            Profile_Set('SHOW_FB', False)
-        else:
-            # Make sure to Skip if we are not the intended receiver
-            # so other handlers waiting on this event can recieve it
-            evt.Skip()
+        return [(cbrowser.ID_CODEBROWSER, self._codebrowser.OnUpdateMenu)]
