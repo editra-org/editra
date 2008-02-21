@@ -41,7 +41,7 @@ def GenerateTags(buff):
     rtags.SetElementDescription('function', "Function Definitions")
     rtags.SetElementDescription('procedure', "Procedure Definitions")
     rtags.SetElementPriority('section', 3)
-    rtags.SetElementPriority('funct', 2)
+    rtags.SetElementPriority('function', 2)
     rtags.SetElementPriority('procedure', 1)
 
     for lnum, line in enumerate(buff):
@@ -61,8 +61,7 @@ def GenerateTags(buff):
               len(line) > 8 and line[8].isspace():
             name = parselib.GetFirstIdentifier(line[8:].strip())
             if name is not None:
-                rtags.AddElement('funct',
-                                 taglib.Function(name, lnum))
+                rtags.AddFunction(taglib.Function(name, lnum))
         elif line.startswith(u"procedure") and \
               len(line) > 9 and line[9].isspace():
             name = parselib.GetFirstIdentifier(line[9:].strip())

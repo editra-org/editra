@@ -57,7 +57,6 @@ class _TagLoader(object):
     _loaded = dict()
     def __init__(self):
         object.__init__(self)
-        
 
     def GetGenerator(self, lang_id):
         """Get the tag generator method for the given language id
