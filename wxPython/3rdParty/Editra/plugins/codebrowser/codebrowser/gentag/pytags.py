@@ -37,6 +37,7 @@ def GenerateTags(buff):
     parents = list()
     indent = 0
     fn_indent = 0
+    parens = 0          # Paren nesting count
     indocstring = False
     infunction = False
     lastclass = None
@@ -118,7 +119,13 @@ def GenerateTags(buff):
                             # ignore this tag.
                             pass
                     break
-            elif not infunction and line[idx] == u"=":
+            elif not infunction and line[idx] in (u"(", u")"):
+                if line[idx] == u"(":
+                    parens += 1
+                else:
+                    parens -= 1
+                idx += 1
+            elif not infunction and line[idx] == u"=" and not parens:
                 # Check for Global and Class variables
                 idx += 1
                 if line[idx] != u"=": # ignore == statements
