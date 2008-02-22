@@ -13,6 +13,7 @@ __version__ = "0.1"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx
 import wx.aui
 
 # Libs from Editra
@@ -38,14 +39,15 @@ class CodeBrowser(plugin.Plugin):
         self._mw = parent
         self._log = wx.GetApp().GetLog()
         if self._mw != None:
-            self._log("[codebrowser][info] Installing classbrowser plugin")
+            self._log("[codebrowser][info] Installing codebrowser plugin")
             
             #---- Create File Browser ----#
             self._codebrowser = cbrowser.CodeBrowserTree(self._mw)
             mgr = self._mw.GetFrameManager()
             mgr.AddPane(self._codebrowser, 
                         wx.aui.AuiPaneInfo().Name(cbrowser.PANE_NAME).\
-                            Caption("Editra | CodeBrowser").Top().Left().Layer(1).\
+                            Caption(_("Editra | CodeBrowser")).\
+                            Top().Right().Layer(0).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(215, 350)))
             mgr.Update()
