@@ -65,7 +65,7 @@
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__cvsid__ = "$Id$"
+__svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
@@ -73,8 +73,14 @@ __revision__ = "$Revision$"
 import os
 import sys
 import wx
+
+# Editra Libraries
 import ed_glob
 import util
+from profiler import CalcVersionValue
+
+# Try to use the system version of pkg_resources if available else fall
+# back to the bundled version. Mostly for binary versions of Editra.
 try:
     import pkg_resources
 except ImportError:
@@ -197,6 +203,15 @@ class Plugin(object):
             self = super(Plugin, cls).__new__(cls)
             self.pluginmgr = pluginmgr
         return self
+
+    def GetMinVersion(self):
+        """Override in subclasses to return the minimum version of Editra that
+        the plugin is compatible with. By default it will return the current
+        version of Editra.
+        @return: version str
+
+        """
+        return ed_glob.VERSION
 
     def InstallHook(self):
         """Override in subclasses to allow the plugin to be loaded
@@ -328,6 +343,7 @@ class PluginManager(object):
         self._plugins = dict()      # Set of available plugins
         self._enabled = dict()      # Set of enabled plugins
         self._loaded = list()       # List of 
+        self._obsolete = list()     # Obsolete plugins list
         self.InitPlugins(self._env)
         self.RefreshConfig()
 
@@ -457,6 +473,14 @@ class PluginManager(object):
         """
         return self._env
 
+    def GetIncompatible(self):
+        """Get the list of loaded plugins that are incompatible with the
+        current running version of Editra.
+        return: list of strings
+
+        """
+        return self._obsolete
+
     def GetPlugins(self):
         """Returns a the dictionary of plugins managed by this manager
         @return: all plugins managed by this manger
@@ -500,7 +524,12 @@ class PluginManager(object):
                         # initialized
                         if cls not in self._plugins:
                             self.LOG("[pluginmgr][info] Creating Instance of %s" % name)
-                            self._plugins[cls] = cls(self)
+                            instance = cls(self)
+                            minv = CalcVersionValue(instance.GetMinVersion())
+                            if minv <= CalcVersionValue(ed_glob.VERSION):
+                                self._plugins[cls] = cls(self)
+                            else:
+                                self._obsolete.append(name)
                     finally:
                         pass
 
