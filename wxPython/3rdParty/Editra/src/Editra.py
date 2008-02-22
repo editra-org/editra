@@ -3,21 +3,19 @@
 # Name: Editra.py                                                             #
 # Purpose: Implements Editras App object and the Main method                  #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE:  Editra.py                                                         #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-#                                                                          #
-# SUMMARY:                                                                 #
-#   This module defines the Editra Application object and the Main method  #
-# for running Editra.                                                      #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE:  Editra.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+
+SUMMARY:
+This module defines the Editra Application object and the Main method
+for running Editra.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -29,8 +27,15 @@ __revision__ = "$Revision$"
 import os
 import sys
 import getopt
-import gettext
 import wx
+
+# Due to some methods that were added in 2.8.3 being used in a large number
+# of places Editra has become incompatable with wxPython 2.8.1.1 and earlier.
+if wx.VERSION < (2, 8, 3, ''):
+    print "VersionError: Editra requires wxPython 2.8.3 or higher"
+    print "              Your version is %s" % wx.VERSION_STRING
+
+# Editra Libraries
 import ed_glob
 import ed_i18n
 import profiler
@@ -67,6 +72,15 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._windows = dict()
         self._pluginmgr = plugin.PluginManager()
 
+        # Setup Locale
+        self.locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
+        if self.locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
+            self.locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
+            self.locale.AddCatalog(ed_glob.PROG_NAME)
+        else:
+            del self.locale
+            self.locale = None
+
         self._log("[app][info] Registering Editra's ArtProvider")
         wx.ArtProvider.PushProvider(ed_art.EditraArt())
 
@@ -87,7 +101,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
         self.Bind(wx.EVT_MENU, self.OnNewWindow, id=ed_glob.ID_NEW_WINDOW)
         self.Bind(wx.EVT_MENU, self.OnCloseWindow)
- 
+
         return True
 
     def Exit(self, force=False):
@@ -101,6 +115,14 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         if not self._lock or force:
             wx.App.Exit(self)
 
+    def GetLocaleObject(self):
+        """Get the locale object owned by this app. Use this method to add
+        extra catalogs for lookup.
+        @return: wx.Locale or None
+
+        """
+        return self.locale
+
     def GetLog(self):
         """Returns the logging function used by the app
         @return: the logging function of this program instance
@@ -112,7 +134,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """Returns reference to the instance of the MainWindow
         that is running if available, and None if not.
         @return: the L{MainWindow} of this app if it is open
-        
+
         """
         self._log("[app][warn] Editra::GetMainWindow is deprecated")
         for window in self._windows:
@@ -144,7 +166,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
     def GetMainWindows(self):
         """Returns a list of all open main windows
         @return: list of L{MainWindow} instances of this app (list may be empty)
-        
+
         """
         mainw = list()
         for window in self._windows:
@@ -202,7 +224,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         running.
         @param filename: file path string
         @postcondition: if L{MainWindow} is open file will be opened in notebook
-        
+
         """
         window = self.GetTopWindow()
         if getattr(window, '__name__', '') == "MainWindow":
@@ -288,7 +310,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         """
         frame = ed_main.MainWindow(None, wx.ID_ANY,
-                                   profiler.Profile_Get('WSIZE'), 
+                                   profiler.Profile_Get('WSIZE'),
                                    ed_glob.PROG_NAME)
         if caller:
             pos = caller.GetPosition()
@@ -299,7 +321,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         if isinstance(fname, basestring) and fname != u'':
             frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname)
         frame.Show(True)
-        
+
         # Ensure frame gets an Activate event when shown
         # this doesn't happen automatically on windows
         if wx.Platform == '__WXMSW__':
@@ -308,12 +330,12 @@ class Editra(wx.App, events.AppEventHandlerMixin):
     def RegisterWindow(self, name, window, can_lock=False):
         """Registers winows with the app. The name should be the
         repr of window. The can_lock parameter is a boolean stating
-        whether the window can keep the main app running after the 
+        whether the window can keep the main app running after the
         main frame has exited.
         @param name: name of window
         @param window: reference to window object
         @keyword can_lock: whether window can lock exit or not
-        
+
         """
         self._windows[name] = (window, can_lock)
 
@@ -336,12 +358,12 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
     def UnRegisterWindow(self, name):
         """Unregisters a named window with the app if the window
-        was the top window and if other windows that can lock are 
-        registered in the window stack it will promote the next one 
+        was the top window and if other windows that can lock are
+        registered in the window stack it will promote the next one
         it finds to be the top window. If no windows that fit this
         criteria are found it will close the application.
         @param name: name of window to unregister
-        
+
         """
         if self._windows.has_key(name):
             self._windows.pop(name)
@@ -378,7 +400,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         a call to RegisterWindow for this function to have any
         real usefullness.
         @param winname: name of window to query
-        
+
         """
         if self._windows.has_key(winname):
             return self._windows[winname][1]
@@ -453,7 +475,7 @@ def InitConfig():
     ed_glob.CONFIG['STYLES_DIR'] = util.ResolvConfigDir("styles")
     ed_glob.CONFIG['SYS_PLUGIN_DIR'] = util.ResolvConfigDir("plugins", True)
     ed_glob.CONFIG['SYS_STYLES_DIR'] = util.ResolvConfigDir("styles", True)
-    ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir(os.path.join("tests", 
+    ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir(os.path.join("tests",
                                                                    "syntax"),
                                                                    True)
     if not util.HasConfigDir("cache"):
@@ -471,7 +493,7 @@ def Main():
 
     """
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "dhv", 
+        opts, args = getopt.getopt(sys.argv[1:], "dhv",
                                    ['debug', 'help', 'version'])
     except getopt.GetoptError, msg:
         dev_tool.DEBUGP("[main][err] %s" % str(msg))
@@ -506,22 +528,9 @@ def Main():
     # We are ready to run so fire up the config and launch the app
     profile_updated = InitConfig()
 
-    # 1. Create Application
+    # Create Application
     dev_tool.DEBUGP("[main][info] Initializing Application...")
     editra_app = Editra(False)
-
-    # 2. Initialize the Language Settings
-    the_locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
-    if the_locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
-        the_locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
-        the_locale.AddCatalog(ed_glob.PROG_NAME)
-        language = gettext.translation(ed_glob.PROG_NAME, 
-                                       ed_glob.CONFIG['LANG_DIR'],
-                                       [the_locale.GetCanonicalName()], 
-                                       fallback=True)
-        language.install()
-    else:
-        del the_locale
 
     if profile_updated:
         # Make sure window iniliazes to default position
@@ -540,7 +549,7 @@ def Main():
                                  wx.SPLASH_NO_TIMEOUT, 0, None, wx.ID_ANY)
         splash.Show()
 
-    frame = ed_main.MainWindow(None, wx.ID_ANY, profiler.Profile_Get('WSIZE'), 
+    frame = ed_main.MainWindow(None, wx.ID_ANY, profiler.Profile_Get('WSIZE'),
                                ed_glob.PROG_NAME)
     editra_app.RegisterWindow(repr(frame), frame, True)
     editra_app.SetTopWindow(frame)
