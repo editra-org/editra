@@ -43,6 +43,7 @@ import IconFile
 ID_CODEBROWSER = wx.NewId()
 ID_BROWSER = wx.NewId()
 PANE_NAME = u"CodeBrowser"
+_ = wx.GetTranslation
 
 #--------------------------------------------------------------------------#
 
