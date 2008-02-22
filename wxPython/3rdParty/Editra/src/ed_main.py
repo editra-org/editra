@@ -200,7 +200,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      (ID_UNDO, self.OnUpdateClipboardUI),
                                      (ID_REDO, self.OnUpdateClipboardUI),
                                      # Format Menu
+                                     (ID_INDENT, self.OnUpdateFormatUI),
                                      (ID_USE_SOFTTABS, self.OnUpdateFormatUI),
+                                     (ID_TO_UPPER, self.OnUpdateFormatUI),
+                                     (ID_TO_LOWER, self.OnUpdateFormatUI),
                                      (ID_WORD_WRAP, self.OnUpdateFormatUI),
                                      (ID_EOL_MAC, self.OnUpdateFormatUI),
                                      (ID_EOL_WIN, self.OnUpdateFormatUI),
@@ -913,13 +916,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
         evt.SetUpdateInterval(300)
         ctrl = self.nb.GetCurrentCtrl()
-        eol = ctrl.GetEOLModeId()
         if e_id == ID_USE_SOFTTABS:
             evt.Check(not bool(ctrl.GetUseTabs()))
         elif e_id == ID_WORD_WRAP:
             evt.Check(bool(ctrl.GetWrapMode()))
         elif e_id in [ID_EOL_MAC, ID_EOL_WIN, ID_EOL_UNIX]:
-            evt.Check(eol == e_id)
+            evt.Check(ctrl.GetEOLModeId() == e_id)
+        elif e_id in [ID_INDENT, ID_TO_UPPER, ID_TO_LOWER]:
+            evt.Enable(ctrl.GetSelectionStart() != ctrl.GetSelectionEnd())
         else:
             evt.Skip()
 
