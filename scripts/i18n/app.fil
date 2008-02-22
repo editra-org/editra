@@ -1,4 +1,6 @@
 ../../plugins/PyShell/pyshell/__init__.py
+../../plugins/codebrowser/codebrowser/__init__.py
+../../plugins/codebrowser/codebrowser/cbrowser.py
 ../../plugins/filebrowser/filebrowser/__init__.py
 ../../plugins/filebrowser/filebrowser/browser.py
 ../../plugins/filebrowser/filebrowser/FileInfo.py
