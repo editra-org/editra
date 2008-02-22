@@ -13,7 +13,7 @@ This module contains classes that are usefull for displaying output from running
 tasks and processes. The classes are divided into three main catagories, gui
 classes, mixins, and thread classes. All the classes can be used together to
 easily create multithreaded gui display classes without neededing to worry about
-the details and thread saftey of the gui.
+the details and thread safety of the gui.
 
 For example usage of these classes see ed_log and the Editra's Launch plugin
 
@@ -72,10 +72,10 @@ OUTPUTBUFF_NAME_STR = u'EditraOutputBuffer'
 THREADEDBUFF_NAME_STR = u'EditraThreadedBuffer'
 
 # Style Codes
-OPB_STYLE_DEFAULT = 0
-OPB_STYLE_INFO    = 1
-OPB_STYLE_WARN    = 2
-OPB_STYLE_ERROR   = 3
+OPB_STYLE_DEFAULT = 0  # Default Black text styling
+OPB_STYLE_INFO    = 1  # Default Blue text styling
+OPB_STYLE_WARN    = 2  # Default Red text styling
+OPB_STYLE_ERROR   = 3  # Default Red/Hotspot text styling
 
 #--------------------------------------------------------------------------#
 
@@ -112,8 +112,7 @@ class OutputBufferEvent(wx.PyCommandEvent):
 
 class OutputBuffer(wx.stc.StyledTextCtrl):
     """Output buffer to display results. The ouputbuffer is a readonly
-    buffer meant for displaying results from running processes or batch
-    jobs
+    buffer for displaying results from running processes or batch jobs.
 
     """
     def __init__(self, parent, id=wx.ID_ANY, 
@@ -143,6 +142,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
     def __ConfigureSTC(self):
         """Setup the stc to behave/appear as we want it to 
         and define all styles used for giving the output context.
+        @todo: make more of this configurable
 
         """
         self.SetMargins(3, 3)
@@ -152,6 +152,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetLayoutCache(wx.stc.STC_CACHE_DOCUMENT)
         self.SetUndoCollection(False) # Don't keep undo history
         self.SetReadOnly(True)
+        self.SetCaretWidth(0)
         
         #self.SetEndAtLastLine(False)
         self.SetVisiblePolicy(1, wx.stc.STC_VISIBLE_STRICT)
@@ -177,6 +178,8 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
                           "face:%s,size:%d,fore:#000000,back:%s" % style)
         self.StyleSetSpec(wx.stc.STC_STYLE_CONTROLCHAR, \
                           "face:%s,size:%d,fore:#000000,back:%s" % style)
+        highlight = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        self.SetSelBackground(True, highlight)
         self.Colourise(0, -1)
 
     def __PutText(self, txt, ind):
@@ -187,7 +190,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         """
         self._updating.acquire()
         self.SetReadOnly(False)
-        start = self.GetLength()
+        start = self.GetLength() # Get position new text will start from
         self.AppendText(txt)
         self.GotoPos(self.GetLength())
         self._updates = self._updates[ind:]
@@ -197,7 +200,8 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
 
     #---- Public Member Functions ----#
     def AppendUpdate(self, value):
-        """Buffer output before adding to window
+        """Buffer output before adding to window. This method can safely be
+        called from non gui threads to add updates to the buffer. 
         @param value: update string to append to stack
 
         """
