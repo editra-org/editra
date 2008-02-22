@@ -68,7 +68,7 @@ class EdLogViewer(plugin.Plugin):
         @param menu: the menu items parent menu
 
         """
-        return wx.MenuItem(menu, self.ID_LOGGER, _(self.__name__), 
+        return wx.MenuItem(menu, self.ID_LOGGER, _("Editra Log"),
                            _("View Editra's console log"))
 
     def GetName(self):
