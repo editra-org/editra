@@ -39,3 +39,27 @@ class A {
         return .value;
     }
 }
+
+// Some Namespace defs
+namespace A {
+    function f() {
+        return "A.f";
+    }
+}
+
+namespace modifies A {
+    function g() {
+        return "A.g";
+    }
+}
+
+// Protocols
+protocol C {
+    function getX();
+    function getY();
+}
+
+class A implementes C {
+    function getX() { return "X"; }
+    function getY() { return "Y"; }
+}
