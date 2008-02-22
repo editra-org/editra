@@ -282,7 +282,7 @@ class Shelf(plugin.Plugin):
             if mitem.GetId() == ed_glob.ID_PERSPECTIVES:
                 break
 
-        view.InsertMenu(pos + 1, ed_glob.ID_SHELF, SHELF_NAME, 
+        view.InsertMenu(pos + 1, ed_glob.ID_SHELF, _("Shelf"), 
                         menu, _("Put an item on the Shelf"))
         for item in menu.GetMenuItems():
             if item.IsSeparator():
