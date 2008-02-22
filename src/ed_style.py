@@ -15,7 +15,7 @@ SUMMARY:
   Provides a system for managing styles in the text control. Compiles the data
 in an Editra Style Sheet to a format that Scintilla can understand. The
 specification of Editra Style Sheets that this module implements can be found
-either in the _docs_ folder of the source distrobution or on Editras home page
+either in the _docs_ folder of the source distribution or on Editra's home page
 http://editra.org/?page=docs&doc=ess_spec.
                                                                       
 """
@@ -88,7 +88,7 @@ class StyleItem(object):
     def __str__(self):
         """Converts StyleItem to a string
         @note: this return string is in a format that can be accepted by
-               Scintilla. Thus no spaces after the ':'
+               Scintilla. No spaces may be in the string after the ':'.
         @return: string representation of the StyleItem
 
         """
@@ -613,7 +613,8 @@ class StyleMgr(object):
             value = list()
             tag = branch[0].replace(u" ", u"")
             for leaf in branch[1]:
-                leaf[0] = leaf[0].strip() # Remove any remaining whitespace
+                # Remove any remaining whitespace
+                leaf = [part.strip() for part in leaf]
                 if len(leaf) != 2:
                     self.LOG("[ed_style][err] Missing a : or ; in the "
                              "declaration of %s" % tag)
