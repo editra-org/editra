@@ -49,8 +49,7 @@ a\x96pO\xda\xc0\xc4\xa0\xf4\x8a\xab\xcau\xe2|\x1d\xa0i\x0c\x9e\xae~.\xeb\x9c\
 
 def GetMinusBitmap():
     stream = cStringIO.StringIO(GetMinusData())
-    img = wx.ImageFromStream(stream)
-    return wx.BitmapFromImage(img)
+    return wx.BitmapFromImage(wx.ImageFromStream(stream))
 
 #----------------------------------------------------------------------
 def GetPlusData():
@@ -67,8 +66,7 @@ def GetPlusData():
 
 def GetPlusBitmap():
     stream = cStringIO.StringIO(GetPlusData())
-    img = wx.ImageFromStream(stream)
-    return wx.BitmapFromImage(img)
+    return wx.BitmapFromImage(wx.ImageFromStream(stream))
 
 #----------------------------------------------------------------------
 
@@ -159,7 +157,7 @@ class ConfigPanel(wx.Panel):
         # Default exe
         dsizer = wx.BoxSizer(wx.HORIZONTAL)
         chandler = handlers.GetHandlerByName(lang_ch.GetStringSelection())
-        cmds = chandler.GetCommands()
+        cmds = chandler.GetAliases()
         def_ch = wx.Choice(self, wx.ID_DEFAULT, choices=cmds)
         if chandler.GetName() != handlers.DEFAULT_HANDLER:
             def_ch.SetStringSelection(chandler.GetDefault())
@@ -177,7 +175,9 @@ class ConfigPanel(wx.Panel):
                                     style=wx.LC_EDIT_LABELS|\
                                           wx.BORDER|\
                                           wx.LC_REPORT)
-        exelist.InsertColumn(0, _("Executable Commands"))
+        exelist.SetToolTipString(_("Click on an item to edit"))
+        exelist.InsertColumn(0, _("Alias"))
+        exelist.InsertColumn(1, _("Executable Commands"))
         self.SetListItems(chandler.GetCommands())
         exelist.SetToolTipString(_("Click on an item to edit"))
         addbtn = wx.BitmapButton(self, wx.ID_ADD, GetPlusBitmap())
@@ -205,6 +205,13 @@ class ConfigPanel(wx.Panel):
         self.SetSizer(hsizer)
         self.SetAutoLayout(True)
 
+    def __DoUpdateHandler(self, handler):
+        exes = self.GetListItems()
+        handler.SetCommands(exes)
+        def_ch = self.FindWindowById(wx.ID_DEFAULT)
+        def_ch.SetItems(handler.GetAliases())
+        def_ch.SetStringSelection(handler.GetDefault())
+
     def GetCurrentHandler(self):
         """Get the currently selected file type handler
         @return: handlers.FileTypeHandler
@@ -214,7 +221,10 @@ class ConfigPanel(wx.Panel):
         return handlers.GetHandlerByName(ftype)
 
     def GetListItems(self):
-        """Get all the values from the list control"""
+        """Get all the values from the list control
+        return: tuple (alias, cmd)
+
+        """
         item_id = -1
         exes = list()
         elist = self.FindWindowById(ID_EXECUTABLES)
@@ -222,7 +232,9 @@ class ConfigPanel(wx.Panel):
             item_id = elist.GetNextItem(item_id)
             if item_id == -1:
                 break
-            exes.append(elist.GetItemText(item_id))
+            val = (elist.GetItem(item_id, 0).GetText(),
+                   elist.GetItem(item_id, 1).GetText())
+            exes.append(val)
         return exes
 
     def OnButton(self, evt):
@@ -233,7 +245,7 @@ class ConfigPanel(wx.Panel):
         e_id = evt.GetId()
         elist = self.FindWindowById(ID_EXECUTABLES)
         if e_id == wx.ID_ADD:
-            elist.Append([_("**New Value**")])
+            elist.Append([_("**Alias**"), _("**New Value**")])
         elif e_id == wx.ID_REMOVE:
             item = -1
             items = []
@@ -247,12 +259,7 @@ class ConfigPanel(wx.Panel):
             for item in reversed(sorted(items)):
                 elist.DeleteItem(item)
 
-            handler = self.GetCurrentHandler()
-            exes = self.GetListItems()
-            def_ch = self.FindWindowById(wx.ID_DEFAULT)
-            def_ch.SetItems(exes)
-            handler.SetCommands(exes)
-            def_ch.SetStringSelection(handler.GetDefault())
+            wx.CallAfter(self.__DoUpdateHandler, self.GetCurrentHandler())
 
         else:
             evt.Skip()
@@ -273,7 +280,7 @@ class ConfigPanel(wx.Panel):
             self.SetListItems(cmds)
         elif e_id == wx.ID_DEFAULT:
             handler = self.GetCurrentHandler()
-            handler.SetDefault(e_val)
+            handler.SetDefault((e_val, handler.GetCommand(e_val)))
         else:
             evt.Skip()
 
@@ -281,42 +288,54 @@ class ConfigPanel(wx.Panel):
         """Store the new list values after the editing of a
         label has finished.
         @param evt: wxEVT_LIST_END_LABEL_EDIT
+        @note: values in list are set until after this handler has finished
 
         """
         handler = self.GetCurrentHandler()
         if handler.GetName() != handlers.DEFAULT_HANDLER:
             exes = self.GetListItems()
             idx = evt.GetIndex()
+            col = evt.GetColumn()
             nval = evt.GetLabel()
             if len(exes) >= idx:
-                exes[idx] = nval
+                # Update an existing item
+                if col == 0:
+                    exes[idx] = (nval, exes[idx][1])
+                else:
+                    exes[idx] = (exes[idx][0], nval)
             else:
-                exes.append(nval)
+                # Add a new item
+                # This should not happen
+                if col == 0:
+                    exes.append((nval, nval))
+                else:
+                    exes.append((nval, nval))
 
             # Store the new values
             handler.SetCommands(exes)
             def_ch = self.FindWindowById(wx.ID_DEFAULT)
-            def_ch.SetItems(sorted(exes))
+            def_ch.SetItems(handler.GetAliases())
             def_ch.SetStringSelection(handler.GetDefault())
 
     def SetListItems(self, items):
         """Set the items that are in the list control
-        @param items: list of strings
+        @param items: list of tuples (alias, cmd)
 
         """
         elist = self.FindWindowById(ID_EXECUTABLES)
         for exe in items:
-            index = elist.InsertStringItem(sys.maxint, exe)
-            elist.SetStringItem(index, 0, exe)
+            elist.Append(exe)
 
 #-----------------------------------------------------------------------------#
 
 class AutoWidthListCtrl(listmix.ListCtrlAutoWidthMixin,
+                        listmix.TextEditMixin,
                         wx.ListCtrl):
     """Auto-width adjusting list for showing editing the commands"""
     def __init__(self, *args, **kwargs):
         wx.ListCtrl.__init__(self, *args, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
+        listmix.TextEditMixin.__init__(self)
 
     def Append(self, entry):
         """Append an entry to the list
