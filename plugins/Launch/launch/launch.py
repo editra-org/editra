@@ -197,6 +197,7 @@ class LaunchWindow(ctrlbox.ControlBox):
                 util.Log("[Launch][info] Starting process")
                 handler = handlers.GetHandlerById(self._config['lang'])
                 cmd = self.FindWindowById(ID_EXECUTABLE).GetStringSelection()
+                cmd = handler.GetCommand(cmd)
                 path, fname = os.path.split(self._config['file'])
                 args = self.FindWindowById(ID_ARGS).GetValue().split()
                 self._worker = outbuff.ProcessThread(self._buffer, cmd, fname,
@@ -264,7 +265,7 @@ class LaunchWindow(ctrlbox.ControlBox):
     def RefreshControlBar(self):
         """Refresh the state of the control bar based on the current config"""
         handler = handlers.GetHandlerById(self._config['lang'])
-        cmds = handler.GetCommands()
+        cmds = handler.GetAliases()
 
         # Get the controls
         exe_ch = self.FindWindowById(ID_EXECUTABLE)

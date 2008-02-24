@@ -18,7 +18,7 @@ base L{FileTypeHandler} and override any of the following methods to provide
 custom functionality.
 
 Required Overrides:
-__init__ : define default command list and default command
+__init__ : define default command mapping and default command
 __name__ : set the name of the handler, this should be the file type
 
 Other Overrides:
@@ -114,13 +114,13 @@ def GetState():
 
 def SetState(state):
     """Set the state of all handlers based on a dictionary of values
-    @param state: dict { handlername : (default, [commands]) }
+    @param state: dict { handlername : (default, [(alias, command), ]) }
 
     """
     for ftype, vals in state.iteritems():
         handler = GetHandlerByName(ftype)
         handler.SetCommands(vals[1])
-        handler.SetDefault(vals[0])
+        handler.SetDefault(vals)
 
 #-----------------------------------------------------------------------------#
 # Handler Base Class and Handler implementations
@@ -133,7 +133,7 @@ class FileTypeHandler(object):
     """
     def __init__(self):
         object.__init__(self)
-        self.commands = list()
+        self.commands = dict()
         self.default = ''
 
     @property
@@ -142,16 +142,26 @@ class FileTypeHandler(object):
 
     def AppendCommand(self, cmd):
         """Add a command to the list of commands known to this handler
-        @param cmd: Command string / executable path
+        @param cmd: Tuple of (Command alias, executable path or name)
 
         """
-        self.commands.append(cmd)
-        self.commands = list(set(self.commands))
-        self.commands.sort()
+        if isinstance(cmd, tuple):
+            self.commands[cmd[0]] = cmd[1]
+        else:
+            # Bad data
+            pass
+
+    def GetAliases(self):
+        """Get the list of command aliases"""
+        return sorted(self.commands.keys())
+
+    def GetCommand(self, alias):
+        """Get the command for a given alias"""
+        return self.commands.get(alias, alias)
 
     def GetCommands(self):
         """Get the set of commands available for this file type"""
-        return self.commands
+        return sorted(self.commands.items())
 
     def GetDefault(self):
         """Get the prefered default command
@@ -192,25 +202,38 @@ class FileTypeHandler(object):
 
     def SetCommands(self, cmds):
         """Set the list of commands known by the handler
-        @param cmds: list of command strings
+        @param cmds: list of command tuples
 
         """
         if not isinstance(cmds, list):
-            raise TypeError, "SetCommands expects a list of strings"
+            raise TypeError, "SetCommands expects a list of tuples"
         else:
-            self.commands = cmds
+            sdict = dict()
+            for cmd in cmds:
+                if len(cmd) == 2:
+                    sdict[cmd[0]] = cmd[1]
+
+            if len(sdict.keys()):
+                self.commands.clear()
+                self.commands.update(sdict)
+
+            # Reset default if it has been removed
+            if not self.commands.has_key(self.default):
+                keys = self.commands.keys()
+                if len(keys):
+                    self.default = keys[0]
 
     def SetDefault(self, cmd):
         """Set the prefered default command
-        @param cmd: Command string to set as the preffered one
+        @param cmd: Command alias/path tuple to set as the preffered one
         @postcondition: if cmd is not in the saved command list it will be
-                        added to that list as well as a side affect.
+                        added to that list.
 
         """
-        cmd = cmd.strip()
-        if cmd not in self.GetCommands():
+        cmd = [ cmd[0].strip(), cmd[1] ]
+        if cmd[0] not in self.GetAliases():
             self.AppendCommand(cmd)
-        self.default = cmd
+        self.default = cmd[0]
 
     def StyleText(self, stc, start, txt):
         """Style the text in the given buffer
@@ -219,7 +242,7 @@ class FileTypeHandler(object):
         @param txt: text that was just added at start point
 
         """
-        # Highlight Start End lines
+        # Highlight Start and End lines in info style
         for info in RE_PROC_SE.finditer(txt):
             sty_s = start + info.start()
             sty_e = start + info.end()
@@ -232,7 +255,7 @@ class BashHandler(FileTypeHandler):
     RE_BASH_ERROR = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['bash',]
+        self.commands = dict(bash='bash')
         self.default = 'bash'
 
     @property
@@ -281,7 +304,7 @@ class BooHandler(FileTypeHandler):
     """FileTypeHandler for Boo"""
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['booi',]
+        self.commands = dict(booi='booi')
         self.default = 'booi'
 
     @property
@@ -294,7 +317,7 @@ class CSHHandler(FileTypeHandler):
     """FileTypeHandler for C-Shell"""
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['csh',]
+        self.commands = dict(csh='csh')
         self.default = 'csh'
 
     @property
@@ -307,7 +330,7 @@ class FeriteHandler(FileTypeHandler):
     """FileTypeHandler for Ferite"""
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['ferite',]
+        self.commands = dict(ferite='ferite')
         self.default = 'ferite'
 
     @property
@@ -320,7 +343,7 @@ class KornHandler(FileTypeHandler):
     """FileTypeHandler for Korn Shell scripts"""
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['ksh',]
+        self.commands = dict(ksh='ksh')
         self.default = 'ksh'
 
     @property
@@ -334,7 +357,7 @@ class LuaHandler(FileTypeHandler):
     RE_LUA_ERROR = re.compile('.*: (.+):([0-9]+):.*')
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['lua', 'luac']
+        self.commands = dict(lua='lua', luac='luac')
         self.default = 'lua'
 
     @property
@@ -365,7 +388,7 @@ class NSISHandler(FileTypeHandler):
     RE_NSIS_ERROR = re.compile(r'Error .* "(.+)" on line ([0-9]+) ')
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['makensis',]
+        self.commands = dict(makensis='makensis')
         self.default = 'makensis'
 
     @property
@@ -395,7 +418,7 @@ class PikeHandler(FileTypeHandler):
     """FileTypeHandler for Pike"""
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['pike',]
+        self.commands = dict(pike='pike')
         self.default = 'pike'
 
     @property
@@ -409,7 +432,7 @@ class PerlHandler(FileTypeHandler):
     RE_PERL_ERROR = re.compile(r'[a-zA-Z]+ error at (.+) line ([0-9]+),.*')
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['perl',]
+        self.commands = dict(perl='perl')
         self.default = 'perl'
 
     @property
@@ -444,7 +467,7 @@ class PythonHandler(FileTypeHandler):
 
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['python', 'pylint']
+        self.commands = dict(python='python', pylint='pylint')
         self.default = 'python'
 
     @property
@@ -488,7 +511,7 @@ class RubyHandler(FileTypeHandler):
     RE_RUBY_ERROR = re.compile('(.+):([0-9]+)[:]{0,1}.*')
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['ruby',]
+        self.commands = dict(ruby='ruby')
         self.default = 'ruby'
 
     @property
@@ -519,7 +542,7 @@ class TCLHandler(FileTypeHandler):
     RE_TCL_ERROR = re.compile('\(file "(.+)" line ([0-9]+)\)')
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = ['wish',]
+        self.commands = dict(wish='wish')
         self.default = 'wish'
 
     @property
