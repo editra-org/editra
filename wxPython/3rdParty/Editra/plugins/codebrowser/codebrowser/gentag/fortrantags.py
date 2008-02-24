@@ -37,8 +37,8 @@ def GenerateTags(buff):
     rtags.SetElementPriority('program', 3)
     rtags.SetElementDescription('subroutine', "Subroutines")
     rtags.SetElementPriority('subroutine', 2)
-    rtags.SetElementDescription('ffunction', "Function Definitions")
-    rtags.SetElementPriority('ffunction', 1)
+    rtags.SetElementDescription('function', "Function Definitions")
+    rtags.SetElementPriority('function', 1)
 
     for lnum, line in enumerate(buff):
         line = line.strip()
@@ -60,7 +60,7 @@ def GenerateTags(buff):
             rtags.AddElement('subroutine', taglib.Function(name, lnum, 'subroutine'))
         elif tline.startswith(u'function') and llen > 8 and line[8].isspace():
             name = parselib.GetFirstIdentifier(line[8:].strip())
-            rtags.AddElement('ffunction', taglib.Function(name, lnum))
+            rtags.AddFunction(taglib.Function(name, lnum))
         else:
             pass
     return rtags

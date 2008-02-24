@@ -36,6 +36,7 @@ def GenerateTags(buff):
     rtags = taglib.DocStruct()
 
     # Setup document structure
+    rtags.SetElementDescription('function', "Function Definitions")
 
     inphp = False        # Are we in a php section or not
     inclass = False      # Inside a class defintion

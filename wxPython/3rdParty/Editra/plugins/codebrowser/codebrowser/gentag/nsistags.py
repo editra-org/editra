@@ -36,8 +36,13 @@ def GenerateTags(buff):
 
     # Set Descriptions of Document Element Types
     rtags.SetElementDescription('variable', "Defines")
-    rtags.SetElementDescription('section', "Sections Definitions")
-    rtags.SetElementDescription('macro', "Macros Definitions")
+    rtags.SetElementDescription('section', "Section Definitions")
+    rtags.SetElementDescription('macro', "Macro Definitions")
+    rtags.SetElementDescription('function', "Function Definitions")
+    rtags.SetElementPriority('variable', 4)
+    rtags.SetElementPriority('section', 3)
+    rtags.SetElementPriority('function', 2)
+    rtags.SetElementPriority('macro', 1)
 
     # Parse the lines for code objects
     for lnum, line in enumerate(buff):

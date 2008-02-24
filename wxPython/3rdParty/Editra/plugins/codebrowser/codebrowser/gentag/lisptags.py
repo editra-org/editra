@@ -31,6 +31,8 @@ def GenerateTags(buff):
 
     """
     rtags = taglib.DocStruct()
+    rtags.SetElementDescription('function', "Function Definitions")
+
     for lnum, line in enumerate(buff):
         line = line.strip()
 
