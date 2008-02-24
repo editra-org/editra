@@ -265,7 +265,6 @@ class BrowserPane(wx.Panel):
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(wx.EVT_MENU, self.OnMenu)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
-        viewm.Bind(wx.EVT_MENU_OPEN, self.UpdateMenuItem)
 
     def __del__(self):
         """Save the config before we get destroyed"""
@@ -344,23 +343,20 @@ class BrowserPane(wx.Panel):
             pane = mgr.GetPane(PANE_NAME)
             if pane.IsShown():
                 pane.Hide()
-                Profile_Set('SHOW_FB', False)
             else:
                 pane.Show()
-                Profile_Set('SHOW_FB', True)
             mgr.Update()
         else:
             evt.Skip()
 
-    def UpdateMenuItem(self, evt):
-        """Update the check mark for the menu item"""
-        mgr = self._mw.GetFrameManager()
-        pane = mgr.GetPane(PANE_NAME)
-        if pane.IsShown():
-            self._mi.Check(True)
-        else:
-            self._mi.Check(False)
-        evt.Skip()
+    def OnUpdateMenu(self, evt):
+        """UpdateUI handler for the panels menu item, to update the check
+        mark.
+        @param evt: wx.UpdateUIEvent
+
+        """
+        pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
+        evt.Check(pane.IsShown())
 
 #-----------------------------------------------------------------------------#
 # Menu Id's
@@ -377,13 +373,10 @@ ID_ARCHIVE = wx.NewId()
 ARCHIVE_LBL = "Create Archive of \"%s\""
 
 class FileBrowser(wx.GenericDirCtrl):
-    """A hack job done to make the genericdirctrl more useful
-    and work with Editra's art provider.
-    @todo: write my own dirctrl
-
-    """
+    """Custom directory control for displaying and managing files"""
     def __init__(self, parent, id, dir=u'', pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.DIRCTRL_SHOW_FILTERS|wx.DIRCTRL_EDIT_LABELS,
+                 size=wx.DefaultSize,
+                 style=wx.DIRCTRL_SHOW_FILTERS|wx.DIRCTRL_EDIT_LABELS,
                  filter=wx.EmptyString, defaultFilter=0):
         wx.GenericDirCtrl.__init__(self, parent, id, dir, pos, 
                                    size, style, filter, defaultFilter)

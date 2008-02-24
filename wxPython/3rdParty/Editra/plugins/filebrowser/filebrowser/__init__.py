@@ -50,17 +50,7 @@ class FileBrowserPanel(plugin.Plugin):
                             Caption("Editra | File Browser").Left().Layer(1).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(215, 350)))
-
-            # Get settings from profile
-            if Profile_Get('SHOW_FB', 'bool', False):
-                mgr.GetPane(browser.PANE_NAME).Show()
-            else:
-                mgr.GetPane(browser.PANE_NAME).Hide()
-
             mgr.Update()
-
-            # Event Handlers
-            self._mw.Bind(wx.aui.EVT_AUI_PANE_CLOSE, self.OnPaneClose)
 
     def GetMenuHandlers(self):
         """Pass even handler for menu item to main window for management"""
@@ -68,15 +58,4 @@ class FileBrowserPanel(plugin.Plugin):
 
     def GetUIHandlers(self):
         """Pass Ui handlers to main window for management"""
-        return list()
-
-    def OnPaneClose(self, evt):
-        """ Handles when the pane is closed to update the profile """
-        pane = evt.GetPane()
-        if pane.name == browser.PANE_NAME:
-            self._log('[filebrowser][info] Closed Filebrowser')
-            Profile_Set('SHOW_FB', False)
-        else:
-            # Make sure to Skip if we are not the intended receiver
-            # so other handlers waiting on this event can recieve it
-            evt.Skip()
+        return [(browser.ID_FILEBROWSE, self._filebrowser.OnUpdateMenu)]
