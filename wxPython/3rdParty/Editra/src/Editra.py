@@ -31,7 +31,9 @@ import wx
 
 # Due to some methods that were added in 2.8.3 being used in a large number
 # of places Editra has become incompatable with wxPython 2.8.1.1 and earlier.
-if wx.VERSION < (2, 8, 3, ''):
+# TODO: add a message dialog to display this, or look into the cause of the
+#       issues of using wxversion on windows.
+if not hasattr(sys, 'frozen') and wx.VERSION < (2, 8, 3, ''):
     print "VersionError: Editra requires wxPython 2.8.3 or higher"
     print "              Your version is %s" % wx.VERSION_STRING
 
@@ -70,7 +72,6 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._log = dev_tool.DEBUGP
         self._lock = False
         self._windows = dict()
-        self._pluginmgr = plugin.PluginManager()
 
         # Setup Locale
         self.locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
@@ -80,6 +81,10 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         else:
             del self.locale
             self.locale = None
+
+        # Setup Plugins after locale as they may have resource that need to
+        # be loaded.
+        self._pluginmgr = plugin.PluginManager()
 
         self._log("[app][info] Registering Editra's ArtProvider")
         wx.ArtProvider.PushProvider(ed_art.EditraArt())
