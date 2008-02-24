@@ -6,6 +6,7 @@ Version 0.7:
 
     - Syncronize icons with theme changes in Editra
     - Minor compatibility fixes
+    - Menu item being improperly checked under some use cases
 
 Version 0.6:
 
