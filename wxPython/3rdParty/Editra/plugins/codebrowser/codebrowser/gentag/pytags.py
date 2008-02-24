@@ -34,6 +34,9 @@ def GenerateTags(buff):
 
     """
     rtags = taglib.DocStruct()
+    rtags.SetElementDescription('function', "Function Definitions")
+
+    # Variables for managing the state of the parse
     parents = list()
     indent = 0
     fn_indent = 0

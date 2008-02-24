@@ -1,6 +1,6 @@
 ###############################################################################
 # Name: __ini__.py                                                            #
-# Purpose: CodeBrowser Plugin                                                #
+# Purpose: CodeBrowser Plugin                                                 #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
@@ -16,7 +16,7 @@ __version__ = "0.1"
 import wx
 import wx.aui
 
-# Libs from Editra
+# Editra Libraries
 import iface
 import plugin
 from profiler import Profile_Get, Profile_Set
