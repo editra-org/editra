@@ -103,8 +103,11 @@ class AppEventHandlerMixin:
         id = event.GetId()
         if id in self.handlers:
             handler = self.handlers[id]
-            if handler:
-                return handler(event)
+            try:
+                if handler:
+                    return handler(event)
+            except wx.PyDeadObjectError:
+                self.RemoveHandlerForID(id)
 
         return False
 
@@ -112,7 +115,10 @@ class AppEventHandlerMixin:
         id = event.GetId()
         if id in self.uihandlers:
             handler = self.uihandlers[id]
-            if handler:
-                return handler(event)
+            try:
+                if handler:
+                    return handler(event)
+            except wx.PyDeadObjectError:
+                self.RemoveUIHandlerForID(id)
 
         return False

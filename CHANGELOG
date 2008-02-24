@@ -21,6 +21,7 @@ NEW: [features/improvements]
 +Updated Russian translation (contributed by slavOnic)
 +Updated Japanese translation
 +Highlight Perl POD's as comments
++Minor updates to Launch to allow for use of command aliases
 
 BUG FIXES:
 +Fix bug in that would prevent opening files from command line or via drag/drop
@@ -28,6 +29,7 @@ BUG FIXES:
 +Editra Style Sheets parse error on fonts with spaces in their names
 +Numerous minor unicode fixes throughout the editor
 +Fix memory leak in the LogViewer and Launch
++Fix some dead object errors from improper event handling
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
