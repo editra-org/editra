@@ -605,8 +605,10 @@ class EdPages(FNB.FlatNotebook):
         @param pgnum: page number index
 
         """
+        csel = self.GetSelection()
         FNB.FlatNotebook.SetSelection(self, pgnum)
         self.ChangePage(pgnum)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, (csel, pgnum)))
 
     def UpdateAllImages(self):
         """Reload and Reset all images in the notebook pages and
