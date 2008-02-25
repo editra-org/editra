@@ -710,9 +710,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     #---- View Menu Functions ----#
     def OnViewTb(self, evt):
         """Toggles visibility of toolbar
-        @note: On OSX there is a frame button for hidding the toolbar
-               that is handled internally by the osx toolbar and not this
-               handler.
         @param evt: Event fired that called this handler
         @type evt: wxMenuEvent
 
@@ -1065,7 +1062,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             name = " - " + name
         wx.Frame.SetTitle(self, title + name)
 
-
 #-----------------------------------------------------------------------------#
 # Event handlers that don't need to be part of the class
 
@@ -1078,17 +1074,17 @@ def OnAbout(evt):
     if evt.GetId() == ID_ABOUT:
         info = wx.AboutDialogInfo()
         year = time.localtime()
-        desc = ["Editra is a programmers text editor.",
-                "Written in 100%% Python.",
-                "Homepage: " + HOME_PAGE + "\n",
-                "Platform Info: (%s,%s)", 
-                "License: wxWindows (see COPYING.txt for full license)"]
+        desc = [_("Editra is a programmers text editor."),
+                _("Written in 100%% Python."),
+                _("Homepage") + ": " + HOME_PAGE + "\n",
+                _("Platform Info") + ": (%s,%s)",
+                _("License: wxWindows (see COPYING.txt for full license)")]
         desc = "\n".join(desc)
         py_version = sys.platform + ", python " + sys.version.split()[0]
         platform = list(wx.PlatformInfo[1:])
         platform[0] += (" " + wx.VERSION_STRING)
         wx_info = ", ".join(platform)
-        info.SetCopyright("Copyright(C) 2005-%d Cody Precord" % year[0])
+        info.SetCopyright(_("Copyright") + "(C) 2005-%d Cody Precord" % year[0])
         info.SetName(PROG_NAME.title())
         info.SetDescription(desc % (py_version, wx_info))
         info.SetVersion(VERSION)
