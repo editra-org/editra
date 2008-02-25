@@ -26,6 +26,8 @@ handling.
 
   * Override the ApplyStyles method to do any processing and coloring of the
     text as it is put in the buffer.
+  * Override the DoHotSpotClicked method to handle any actions to take when a
+    hotspot has been clicked in the buffer.
   * Override the DoUpdatesEmpty method to perform any idle processing when no
     new text is waiting to be processed.
 
@@ -76,6 +78,7 @@ OPB_STYLE_DEFAULT = 0  # Default Black text styling
 OPB_STYLE_INFO    = 1  # Default Blue text styling
 OPB_STYLE_WARN    = 2  # Default Red text styling
 OPB_STYLE_ERROR   = 3  # Default Red/Hotspot text styling
+OPB_STYLE_MAX     = 3  # Highest style byte used by outputbuffer
 
 #--------------------------------------------------------------------------#
 
@@ -111,8 +114,10 @@ class OutputBufferEvent(wx.PyCommandEvent):
 #--------------------------------------------------------------------------#
 
 class OutputBuffer(wx.stc.StyledTextCtrl):
-    """Output buffer to display results. The ouputbuffer is a readonly
-    buffer for displaying results from running processes or batch jobs.
+    """OutputBuffer is a general purpose output display for showing text. It
+    provides an easy interface for the buffer to interact with multiple threads
+    that may all be sending updates to the buffer at the same time. Methods for
+    styleing and filtering output are also available.
 
     """
     def __init__(self, parent, id=wx.ID_ANY, 
@@ -133,6 +138,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
 
         # Event Handlers
         self.Bind(wx.EVT_TIMER, self.OnTimer)
+        self.Bind(wx.stc.EVT_STC_HOTSPOT_CLICK, self._OnHotSpot)
 
     def __del__(self):
         """Ensure timer is cleaned up when we are deleted"""
@@ -158,29 +164,9 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetVisiblePolicy(1, wx.stc.STC_VISIBLE_STRICT)
 
         # Define Styles
-        font = wx.Font(11, wx.FONTFAMILY_MODERN, 
-                       wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
-        style = (font.GetFaceName(), font.GetPointSize(), "#FFFFFF")
-        
-        # Custom Styles
-        self.StyleSetSpec(OPB_STYLE_DEFAULT, 
-                          "face:%s,size:%d,fore:#000000,back:%s" % style)
-        self.StyleSetSpec(OPB_STYLE_INFO,
-                          "face:%s,size:%d,fore:#0000FF,back:%s" % style)
-        self.StyleSetSpec(OPB_STYLE_WARN,
-                          "face:%s,size:%d,fore:#0000FF,back:%s" % style)
-        self.StyleSetSpec(OPB_STYLE_ERROR, 
-                          "face:%s,size:%d,fore:#FF0000,back:%s" % style)
-        self.StyleSetHotSpot(OPB_STYLE_ERROR, True)
-
-        # Default Styles
-        self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, \
-                          "face:%s,size:%d,fore:#000000,back:%s" % style)
-        self.StyleSetSpec(wx.stc.STC_STYLE_CONTROLCHAR, \
-                          "face:%s,size:%d,fore:#000000,back:%s" % style)
         highlight = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
         self.SetSelBackground(True, highlight)
-        self.Colourise(0, -1)
+        self.__SetupStyles()
 
     def __PutText(self, txt, ind):
         """
@@ -197,6 +183,44 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.ApplyStyles(start, txt)
         self.SetReadOnly(True)
         self._updating.release()
+
+    def __SetupStyles(self, font=None):
+        """Setup the default styles of the text in the buffer
+        @keyword font: wx.Font to use or None to use default
+
+        """
+        if font is None:
+            if wx.Platform == '__WXMAC__':
+                fsize = 11
+            else:
+                fsize = 10
+            font = wx.Font(fsize, wx.FONTFAMILY_MODERN, 
+                           wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
+        style = (font.GetFaceName(), font.GetPointSize(), "#FFFFFF")
+        wx.stc.StyledTextCtrl.SetFont(self, font)
+        
+        # Custom Styles
+        self.StyleSetSpec(OPB_STYLE_DEFAULT, 
+                          "face:%s,size:%d,fore:#000000,back:%s" % style)
+        self.StyleSetSpec(OPB_STYLE_INFO,
+                          "face:%s,size:%d,fore:#0000FF,back:%s" % style)
+        self.StyleSetSpec(OPB_STYLE_WARN,
+                          "face:%s,size:%d,fore:#FF0000,back:%s" % style)
+        self.StyleSetSpec(OPB_STYLE_ERROR, 
+                          "face:%s,size:%d,fore:#FF0000,back:%s" % style)
+        self.StyleSetHotSpot(OPB_STYLE_ERROR, True)
+
+        # Default Styles
+        self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, \
+                          "face:%s,size:%d,fore:#000000,back:%s" % style)
+        self.StyleSetSpec(wx.stc.STC_STYLE_CONTROLCHAR, \
+                          "face:%s,size:%d,fore:#000000,back:%s" % style)
+        self.Colourise(0, -1)
+
+    def _OnHotSpot(self, evt):
+        """Handle hotspot clicks"""
+        pos = evt.GetPosition()
+        self.DoHotSpotClicked(pos, self.LineFromPosition(pos))
 
     #---- Public Member Functions ----#
     def AppendUpdate(self, value):
@@ -225,7 +249,16 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetReadOnly(False)
         self.SetText('')
         self.EmptyUndoBuffer()
-        self.SetReadOnly(False)
+        self.SetReadOnly(True)
+
+    def DoHotSpotClicked(self, pos, line):
+        """Action to perform when a hotspot region is clicked in the buffer.
+        Override this function to provide handling of hotspots.
+        @param pos: Position in buffer of where the click occurred.
+        @param line: Line in which the click occurred (zero based index)
+
+        """
+        pass
 
     def DoUpdatesEmpty(self):
         """Called when update stack is empty
@@ -256,6 +289,13 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
             self.DoUpdatesEmpty()
         else:
             pass
+
+    def SetFont(self, font):
+        """Set the font used by all text in the buffer
+        @param font: wxFont
+
+        """
+        self.__SetupStyles(font)
 
     def SetText(self, text):
         """Set the text that is shown in the buffer
@@ -342,7 +382,9 @@ class ProcessBufferMixin:
         pass
 
     def SetUpdateInterval(self, value):
-        """Set the rate at which the buffer outputs update messages
+        """Set the rate at which the buffer outputs update messages. Set to
+        a higher number if the process outputs large amounts of text at a very
+        high rate.
         @param value: rate in milliseconds to do updates on
 
         """
