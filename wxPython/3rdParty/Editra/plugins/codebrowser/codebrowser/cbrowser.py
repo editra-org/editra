@@ -35,7 +35,6 @@ import ed_msg
 # Local Imports
 import gentag.taglib as taglib
 from tagload import TagLoader
-
 import IconFile
 
 #--------------------------------------------------------------------------#
@@ -44,6 +43,14 @@ ID_CODEBROWSER = wx.NewId()
 ID_BROWSER = wx.NewId()
 PANE_NAME = u"CodeBrowser"
 _ = wx.GetTranslation
+
+# HACK for i18n scripts to pick up translation strings
+STRINGS = ( _("Class Definitions"), _("Defines"), _("Function Defintions"),
+            _("Global Variables"), _("Identities"), _("Labels"), _("Macros"),
+            _("Macro Definitions"), _("Packages"), _("Procedure Definitions"),
+            _("Programs"), _("Sections"), _("Style Tags"), _("Subroutines"),
+            _("Subroutine Declarations") )
+del STRINGS
 
 #--------------------------------------------------------------------------#
 
@@ -180,8 +187,8 @@ class CodeBrowserTree(wx.TreeCtrl):
         if self.nodes.get('globals', None) is None:
             desc = self._cdoc.GetElementDescription('variable')
             if desc == 'variable':
-                desc = _("Global Variables")
-            self.nodes['globals']  = self.AppendItem(self.GetRootItem(), desc)
+                desc = "Global Variables"
+            self.nodes['globals']  = self.AppendItem(self.GetRootItem(), _(desc))
             self.SetItemHasChildren(self.nodes['globals'])
             self.SetPyData(self.nodes['globals'], None)
             self.SetItemImage(self.nodes['globals'], self.icons['globals'])
@@ -201,7 +208,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             else:
                 desc = obj.type.title()
 
-            self.nodes[obj.type] = self.AppendItem(self.GetRootItem(), desc,
+            self.nodes[obj.type] = self.AppendItem(self.GetRootItem(), _(desc),
                                                    self._GetIconIndex(obj))
             self.SetItemHasChildren(self.nodes[obj.type])
             self.SetPyData(self.nodes[obj.type], None)
