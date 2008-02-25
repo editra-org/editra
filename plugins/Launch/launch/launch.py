@@ -374,8 +374,11 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         self._mw = parent.GetMainWindow()
         self._cfile = ''
 
-        # Event Handlers
-        self.Bind(wx.stc.EVT_STC_HOTSPOT_CLICK, self.OnHotSpot)
+        # Setup
+        font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN,
+                                                    wx.FONTSTYLE_NORMAL,
+                                                    wx.FONTWEIGHT_NORMAL))
+        self.SetFont(font)
 
     def ApplyStyles(self, start, txt):
         """Apply any desired output formatting to the text in
@@ -394,6 +397,18 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         """
         handler = self.GetCurrentHandler()
         return handler.FilterInput(txt)
+
+    def DoHotSpotClicked(self, pos, line):
+        """Pass hotspot click to the filetype handler for processing
+        @param pos: click position
+        @param line: line the click happened on
+        @note: overridden from L{outbuff.OutputBuffer}
+
+        """
+        fname, lang_id = self.GetParent().GetLastRun()
+        handler = handlers.GetHandlerById(lang_id)
+        handler.HandleHotSpot(self._mw, self, line, fname)
+        self.GetParent().SetupControlBar(GetTextBuffer(self._mw))
 
     def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited"""
@@ -414,14 +429,6 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         lang_id = self.GetParent().GetLastRun()[1]
         handler = handlers.GetHandlerById(lang_id)
         return handler
-
-    def OnHotSpot(self, evt):
-        """Handle clicks on hotspots"""
-        fname, lang_id = self.GetParent().GetLastRun()
-        handler = handlers.GetHandlerById(lang_id)
-        line = self.LineFromPosition(evt.GetPosition())
-        handler.HandleHotSpot(self._mw, self, line, fname)
-        self.GetParent().SetupControlBar(GetTextBuffer(self._mw))
 
 #-----------------------------------------------------------------------------#
 def GetLangIdFromMW(mainw):
