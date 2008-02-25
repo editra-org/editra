@@ -7,7 +7,13 @@
 ###############################################################################
 
 """
-Test file for testing the OutputBuffer (eclib.outbuff) module and controls
+Test file for testing the OutputBuffer (eclib.outbuff) module and controls. This
+demo/test contains a small application for running 'ping' and other command line
+commands and then displaying their output. Special text styling is provided for
+ping to highlight and create hotspot regions on IP and website addresses.
+
+Clicking the start button multiple times will spawn multiple processes and
+threads to interact with the buffer.
 
 
 """
@@ -20,6 +26,7 @@ __revision__ = "$Revision$"
 # Imports
 import os
 import sys
+import re
 import wx
 
 sys.path.insert(0, os.path.abspath('../../'))
@@ -42,7 +49,7 @@ class TestPanel(wx.Panel):
 
         # Attributes
         self.ssizer = wx.BoxSizer(wx.HORIZONTAL)
-        self._buff = ProcessOutputBuffer(self)
+        self._buff = ProcessOutputBuffer(self, self.log)
 
         # Layout
         self.__DoLayout()
@@ -70,7 +77,8 @@ class TestPanel(wx.Panel):
         stopb = wx.Button(self, ID_STOP, "Stop")
         stopb.SetToolTipString("Stop all running processes")
         startb = wx.Button(self, ID_START, "Start")
-        startb.SetToolTipString("Run the command in the combo box")
+        startb.SetToolTipString("Run the command in the combo box\n"
+                                "Press multiple times to start multiple threads")
         hsizer.AddMany([((5, 5),), (wx.StaticText(self, label="Cmd: "), 0,
                                     wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT),
                         (combo, 1, wx.EXPAND), ((20, 20),),
@@ -96,8 +104,7 @@ class TestPanel(wx.Panel):
         elif e_id == ID_START:
             # Spawn a new ProcessThread
             combo = self.FindWindowById(ID_COMMAND)
-            cmd = '%s' % combo.GetValue()
-            self._buff.StartProcess(cmd)
+            self._buff.StartProcess('%s' % combo.GetValue())
             self.UpdateProcs()
         else:
             evt.Skip()
@@ -119,12 +126,24 @@ STARTED_STR = 'ProcessThread Started'
 FINISHED_STR = 'ProcessThread Finished'
 
 class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
-    def __init__(self, parent):
+    """Custom output buffer for processing output from running ping"""
+    RE_ADDR = re.compile(r' ([a-z0-9]+\.[a-z0-9]+\.{0,1})+')
+    ADDRESS_STYLE = outbuff.OPB_STYLE_MAX + 1
+
+    def __init__(self, parent, log):
         outbuff.OutputBuffer.__init__(self, parent)
-        outbuff.ProcessBufferMixin.__init__(self)
+        outbuff.ProcessBufferMixin.__init__(self, update=125)
 
         # Attributes
+        self.log = log
         self._threads = list()
+
+        # Setup a custom style for highlighting IP addresses
+        font = self.GetFont()
+        style = (font.GetFaceName(), font.GetPointSize(), "#FFFFFF")
+        self.StyleSetSpec(ProcessOutputBuffer.ADDRESS_STYLE, 
+                          "face:%s,size:%d,fore:#3030FF,back:%s" % style)
+        self.StyleSetHotSpot(ProcessOutputBuffer.ADDRESS_STYLE, True)
 
     def Abort(self):
         """Kill off all running threads and procesess"""
@@ -139,6 +158,14 @@ class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         @param txt: the text that was just inserted at ind
 
         """
+        # Highlight ip addresses
+        for group in ProcessOutputBuffer.RE_ADDR.finditer(txt):
+            sty_s = ind + group.start() + 1 # start past whitespace
+            sty_e = ind + group.end()
+            self.StartStyling(sty_s, 0xff)
+            self.SetStyling(sty_e - sty_s, ProcessOutputBuffer.ADDRESS_STYLE)
+
+        # Check for first/last messages
         start = txt.find(STARTED_STR)
         end = txt.find(FINISHED_STR)
         if start >= 0:
@@ -148,13 +175,28 @@ class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         elif end >= 0:
             sty_s = ind + end
             slen = len(FINISHED_STR)
-            style = outbuff.OPB_STYLE_ERROR
+            style = outbuff.OPB_STYLE_WARN
         else:
             return
 
         # Do the styling if one of the patterns was found
         self.StartStyling(sty_s, 0xff)
         self.SetStyling(slen, style)
+
+    def DoHotSpotClicked(self, pos, line):
+        """Overridden method from base L{outbuff.OutputBuffer} class.
+        This method is called whenever a hotspot in the output buffer is
+        clicked on.
+        @param pos: Click postion in buffer
+        @param line: Line click occurred on
+
+        """
+        self.log.write("Hotspot Clicked: Pos %d, Line %d" % (pos, line))
+        if self.GetStyleAt(pos) == ProcessOutputBuffer.ADDRESS_STYLE:
+            ipaddr = ProcessOutputBuffer.RE_ADDR.search(self.GetLine(line))
+            if ipaddr is not None:
+                ipaddr = ipaddr.group(0)
+                self.log.write("Address Clicked: %s" % ipaddr)
 
     def DoProcessStart(self, cmd=''):
         """Do any necessary preprocessing before a process is started.
