@@ -6,9 +6,10 @@
 #-----------------------------------------------------------------------------#
 
 Version: 0.2
-Date: xx/xx/xxxx
+Date: xx/xx/2008
 
 + Use aliases for command names
++ Use Primary Font from Profile settings for output
 
 #-----------------------------------------------------------------------------#
 
