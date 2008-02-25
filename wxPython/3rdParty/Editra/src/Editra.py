@@ -37,6 +37,13 @@ if not hasattr(sys, 'frozen') and wx.VERSION < (2, 8, 3, ''):
     print "VersionError: Editra requires wxPython 2.8.3 or higher"
     print "              Your version is %s" % wx.VERSION_STRING
 
+# Try and import a system installed version of pkg_resources else fallback to
+# the one bundled with Editra's source.
+try:
+    from pkg_resources import resource_filename
+except ImportError:
+    from extern.pkg_resources import resource_filename
+
 # Editra Libraries
 import ed_glob
 import ed_i18n
@@ -88,6 +95,17 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         self._log("[app][info] Registering Editra's ArtProvider")
         wx.ArtProvider.PushProvider(ed_art.EditraArt())
+
+    def AddMessageCatalog(self, name, path):
+        """Add a catalog lookup path to the app
+        @param name: name of catalog (i.e 'projects')
+        @param path: catalog lookup path
+
+        """
+        if self.locale is not None:
+            path = resource_filename(path, 'locale')
+            self.locale.AddCatalogLookupPathPrefix(path)
+            self.locale.AddCatalog(name)
 
     def OnInit(self):
         """Initialize the Editor
