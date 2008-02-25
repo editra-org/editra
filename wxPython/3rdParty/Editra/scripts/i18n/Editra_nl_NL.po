@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: Gerard Petersen <editra@gp-net.nl>\n"
 "POT-Creation-Date: 2008-02-22 07:32-0600\n"
-"PO-Revision-Date: 2008-02-22 09:36+0000\n"
-"Last-Translator: Gerard Petersen <Unknown>\n"
+"PO-Revision-Date: 2008-02-24 22:18+0000\n"
+"Last-Translator: Gerard <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-02-22 10:52+0000\n"
+"X-Launchpad-Export-Date: 2008-02-25 07:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:267
@@ -191,7 +191,7 @@ msgstr "Kies een Opslaan locatie"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:145
 msgid "Class Definitions"
-msgstr ""
+msgstr "Class definities"
 
 #: ../../plugins/Launch/launch/launch.py:134 ../../src/ed_log.py:123
 msgid "Clear"
@@ -234,9 +234,8 @@ msgid "Code"
 msgstr "Code"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:66
-#, fuzzy
 msgid "Code Browser"
-msgstr "Bestandsverkenner"
+msgstr "Code verkenner"
 
 #: ../../src/ed_menu.py:465 ../../src/prefdlg.py:698
 msgid "Code Folding"
@@ -379,11 +378,13 @@ msgstr "Wil je afsluiten?"
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
 "\n"
-"Warning opening many files at once may cause the editor to temporarly  freeze."
+"Warning opening many files at once may cause the editor to temporarly  "
+"freeze."
 msgstr ""
 "Wil je alle %d bestanden in deze folder openen?\n"
 "\n"
-"Letop: Bij veel bestanden tegelijk openen kan het programma tijdelijk bevriezen."
+"Letop: Bij veel bestanden tegelijk openen kan het programma tijdelijk "
+"bevriezen."
 
 #: ../../src/prefdlg.py:195
 msgid "Document"
@@ -475,9 +476,8 @@ msgid "Editor Mode"
 msgstr "Bewerk modus"
 
 #: ../../src/ed_log.py:71
-#, fuzzy
 msgid "Editra Log"
-msgstr "Bewerk modus"
+msgstr "Editra Log"
 
 #: ../../src/style_editor.py:284
 msgid "Editra Style Sheet"
@@ -497,11 +497,11 @@ msgstr ""
 
 #: ../../src/ed_menu.py:513
 msgid "Editra translations project"
-msgstr ""
+msgstr "Editra vertaal project"
 
 #: ../../plugins/codebrowser/codebrowser/__init__.py:49
 msgid "Editra | CodeBrowser"
-msgstr ""
+msgstr "Editra | Code verkenner"
 
 #: ../../src/prefdlg.py:718
 msgid "Enable Vi Emulation"
@@ -739,7 +739,7 @@ msgstr "Informatie verkrijgen"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:183
 msgid "Global Variables"
-msgstr ""
+msgstr "Globale variabelen"
 
 #: ../../src/plugdlg.py:837
 msgid "Go to configuration page?"
@@ -758,9 +758,8 @@ msgid "Goto command buffer"
 msgstr "Ga naar commando buffer"
 
 #: ../../src/prefdlg.py:705
-#, fuzzy
 msgid "Guide Column"
-msgstr "Kolom"
+msgstr "Kantlijn kolom"
 
 #: ../../src/ed_main.py:136 ../../src/ed_menu.py:516
 msgid "Help"
@@ -1019,9 +1018,8 @@ msgid "Open A Python Shell"
 msgstr "Open een Python shell"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:67
-#, fuzzy
 msgid "Open Code Browser Sidepanel"
-msgstr "Open bestandsverkenner paneel"
+msgstr "Open Code Browser paneel"
 
 #: ../../src/ed_pages.py:413
 msgid "Open Directory?"
@@ -1404,9 +1402,8 @@ msgid "Select the desired plugins and then Click Download"
 msgstr "Selecteer te gewenste plugin en klik op downloaden"
 
 #: ../../src/ed_menu.py:515
-#, fuzzy
 msgid "Send bug reports and suggestions"
-msgstr "Stuur me bug rapportages en suggesties"
+msgstr "Verstuur bug rapportage en suggesties"
 
 #: ../../src/prefdlg.py:1516
 msgid "Set Font"
@@ -1417,8 +1414,12 @@ msgid "Set the preview file type"
 msgstr "Stel voorbeeld lettertype in"
 
 #: ../../src/prefdlg.py:578
-msgid "Sets a secondary font used for special regions when syntax highlighting is in use"
-msgstr "Stel een secundair lettertype in for speciale taal gebieden indien kleuren weergave in gebruik is"
+msgid ""
+"Sets a secondary font used for special regions when syntax highlighting is "
+"in use"
+msgstr ""
+"Stel een secundair lettertype in for speciale taal gebieden indien kleuren "
+"weergave in gebruik is"
 
 #: ../../src/prefdlg.py:571
 msgid "Sets the main/default font of the document"
@@ -1429,9 +1430,8 @@ msgid "Settings"
 msgstr "Instellingen"
 
 #: ../../src/iface.py:285
-#, fuzzy
 msgid "Shelf"
-msgstr "Paneel weergeven"
+msgstr "Paneel"
 
 #: ../../src/ed_menu.py:360 ../../src/ed_menu.py:361 ../../src/prefdlg.py:554
 msgid "Show EOL Markers"
@@ -1492,7 +1492,9 @@ msgstr "Grootte"
 
 #: ../../src/style_editor.py:248
 msgid "Some styles have been changed would you like to save before exiting?"
-msgstr "Bepaalde stijlen zijn gewijzigd. Wil je de wijzigingen opslaan voor afsluiten?"
+msgstr ""
+"Bepaalde stijlen zijn gewijzigd. Wil je de wijzigingen opslaan voor "
+"afsluiten?"
 
 #: ../../src/ed_menu.py:429
 msgid "Spaces to Tabs"
@@ -1606,12 +1608,17 @@ msgstr ""
 
 #: ../../src/plugdlg.py:337
 msgid "To enable a plugin check the box next to its label"
-msgstr "Selecteer de checkbox naast de naam van een plugin om deze te activeren"
+msgstr ""
+"Selecteer de checkbox naast de naam van een plugin om deze te activeren"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:93
 #, python-format
-msgid "To open multiple files at once %s+Click to select the desired files/folders then hit Enter to open them all at once"
-msgstr "Om meerdere bestanden/folders tegelijkertijd te openen gebruik %s+Klik en druk op Enter"
+msgid ""
+"To open multiple files at once %s+Click to select the desired files/folders "
+"then hit Enter to open them all at once"
+msgstr ""
+"Om meerdere bestanden/folders tegelijkertijd te openen gebruik %s+Klik en "
+"druk op Enter"
 
 #: ../../src/ed_menu.py:461
 msgid "Toggle Auto-Indentation functionality"
@@ -1639,7 +1646,7 @@ msgstr "Hulpmiddelen"
 
 #: ../../src/ed_menu.py:512
 msgid "Translate Editra"
-msgstr ""
+msgstr "Vertaal Editra"
 
 #: ../../src/prefdlg.py:956
 msgid "Transparency"
