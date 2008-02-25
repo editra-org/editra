@@ -22,6 +22,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import os
+import re
 import wx
 
 # Editra Libraries
@@ -31,6 +32,7 @@ import eclib.ctrlbox as ctrlbox
 import eclib.platebtn as platebtn
 import iface
 import plugin
+from profiler import Profile_Get
 import ed_glob
 import ed_txt
 
@@ -146,18 +148,29 @@ class LogViewer(ctrlbox.ControlBox):
             self._srcfilter.SetSelection(0)
 
 #-----------------------------------------------------------------------------#
-
 class LogBuffer(outbuff.OutputBuffer):
     """Buffer for displaying log messages that are sent on Editra's
     log channel.
 
     """
+    RE_WARN_MSG = re.compile(r'\[err\]|\[error\]|\[warn\]')
+    ERROR_STYLE = outbuff.OPB_STYLE_MAX + 1
+
     def __init__(self, parent):
         outbuff.OutputBuffer.__init__(self, parent)
 
         # Attributes
         self._filter = SHOW_ALL_MSG
         self._srcs = list()
+
+        # Setup
+        font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN, 
+                                                    wx.FONTSTYLE_NORMAL, 
+                                                    wx.FONTWEIGHT_NORMAL))
+        self.SetFont(font)
+        style = (font.GetFaceName(), font.GetPointSize(), "#FF0000")
+        self.StyleSetSpec(LogBuffer.ERROR_STYLE,
+                          "face:%s,size:%d,fore:#FFFFFF,back:%s" % style)
 
         # Subscribe to Editra's Log
         ed_msg.Subscribe(self.UpdateLog, ed_msg.EDMSG_LOG_ALL)
@@ -178,6 +191,20 @@ class LogBuffer(outbuff.OutputBuffer):
             self.GetParent().SetSources(self._srcs)
         else:
             pass
+
+    def ApplyStyles(self, start, txt):
+        """Apply coloring to error and warning messages
+        @note: overridden from L{outbuff.OutputBuffer}
+        @param start: Start position of text that needs styling in the buffer
+        @param txt: The string of text that starts at the start position in the
+                    buffer.
+
+        """
+        for group in LogBuffer.RE_WARN_MSG.finditer(txt):
+            sty_s = start + group.start() + 1
+            sty_e = start + group.end() - 1
+            self.StartStyling(sty_s, 0xff)
+            self.SetStyling(sty_e - sty_s, self.ERROR_STYLE)
 
     def SetFilter(self, src):
         """Set the level of what is shown in the display
