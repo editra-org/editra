@@ -226,6 +226,10 @@ class LaunchWindow(ctrlbox.ControlBox):
         @param msg: Message Object
 
         """
+        # Only update when in the active window
+        if not self._mw.IsActive():
+            return
+
         fname = msg.GetData()
         self.SetFile(fname)
 
@@ -239,6 +243,10 @@ class LaunchWindow(ctrlbox.ControlBox):
         @param msg: Message object
 
         """
+        # Only update when in the active window
+        if not self._mw.IsActive():
+            return
+
         mval = msg.GetData()
         ctrl = mval[0].GetCurrentCtrl()
         if hasattr(ctrl, 'GetFileName'):
