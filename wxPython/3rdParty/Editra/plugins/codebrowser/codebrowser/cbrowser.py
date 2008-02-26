@@ -265,6 +265,10 @@ class CodeBrowserTree(wx.TreeCtrl):
         @param msg: Message Obect
 
         """
+        # Don't update when this window is not Active
+        if not self._mw.IsActive():
+            return
+
         page = self._GetCurrentCtrl()
         genfun = TagLoader.GetGenerator(page.GetLangId())
         if genfun is not None and self._ShouldUpdate():
@@ -274,6 +278,9 @@ class CodeBrowserTree(wx.TreeCtrl):
             wx.CallLater(75, thread.start)
         else:
             self._cdoc = None
+            # Reset job id so that browser is properly cleared when any other
+            # pending jobs are completed
+            self._cjob = 0
             self.DeleteChildren(self.root)
             return
 
