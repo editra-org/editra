@@ -2,21 +2,19 @@
 # Name: caml.py                                                               #
 # Purpose: Define Caml syntax for highlighting and other features             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: caml.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for                                              #
-#                                                                             #
-# @todo:                                                                      #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: caml.py
+AUTHOR: Cody Precord
+
+SUMMARY:
+Lexer configuration module for Caml
+
+@todo:
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -59,7 +57,7 @@ SYNTAX_ITEMS = [('STC_CAML_CHAR', 'char_style'),
                 ('STC_CAML_NUMBER', 'number_style'),
                 ('STC_CAML_OPERATOR', 'operator_style'),
                 ('STC_CAML_STRING', 'string_style'),
-                ('STC_CAML_TAGNAME', 'directive_style')] #STYLE ME]
+                ('STC_CAML_TAGNAME', 'directive_style')] #STYLE ME
 
 #---- Extra Properties ----#
 FOLD = ('fold', '1')
