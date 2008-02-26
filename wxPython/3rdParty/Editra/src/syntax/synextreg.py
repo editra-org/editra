@@ -6,16 +6,25 @@
 #                                                                             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
+"""
+FILE: synextreg.py
+LANGUAGE: Python
+
+This module defines all supported language/filetype indentifiers and an
+extension register for mapping file extensions to filetypes.
+
+@see: synglob.py for more details on how this data is used
+
+"""
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
-
 import os
 
 #-----------------------------------------------------------------------------#
@@ -87,6 +96,8 @@ ID_LANG_JAVA = _NewId()
 LANG_JAVA = u'Java'
 ID_LANG_PIKE = _NewId()
 LANG_PIKE = u'Pike'
+ID_LANG_OBJC = _NewId()
+LANG_OBJC = u'Objective C'
 
 # Use LEX_CSS
 ID_LANG_CSS = _NewId()
@@ -283,10 +294,11 @@ EXT_MAP = {
            'lua'                : LANG_LUA,
            'mak makefile'       : LANG_MAKE,
            'asm masm'           : LANG_MASM,
-           'm matlab'           : LANG_MATLAB,
+           'matlab'             : LANG_MATLAB,
            'mssql'              : LANG_MSSQL,
            'nasm'               : LANG_NASM,
            'nsi nsh'            : LANG_NSIS,
+           'mm m'               : LANG_OBJC,
            'oct octave'         : LANG_OCTAVE,
            'dfm dpk dpr inc p pas pp' : LANG_PASCAL,
            'cgi pl pm pod'      : LANG_PERL,
