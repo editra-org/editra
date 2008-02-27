@@ -36,6 +36,7 @@ BUG FIXES:
 +Numerous minor unicode fixes throughout the editor
 +Fix memory leak in the LogViewer and Launch
 +Fix some dead object errors from improper event handling
++Fix BOM related file opening errors
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
