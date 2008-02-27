@@ -210,7 +210,8 @@ class EdFile(object):
                     if enc:
                         self._magic['comment'] = enc
                 else:
-                    self.bom = BOM.get(enc, None)
+                    Log("[ed_txt][info] File Has %s BOM" % enc)
+                    self.bom = unicode(BOM.get(enc, None), enc)
 
             if enc is not None:
                 self.encoding = enc
@@ -231,7 +232,8 @@ class EdFile(object):
                     raise UnicodeDecodeError, msg
 
             if self.bom is not None:
-                txt = txt.replace(self.bom, '', 1)
+                Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
+                txt = txt.replace(self.bom, u'', 1)
 
             Log("[ed_txt][info] Decoded %s with %s" % (self.path, self.encoding))
             return txt
@@ -284,9 +286,10 @@ class EdFile(object):
 
         # Open and write the file
         if self.DoOpen('wb'):
-            Log("[ed_txt][info] Opened %s, wrtiting as %s" % (self.path, self.encoding))
-            writer = codecs.getwriter(self.Encoding)(self._handle)
+            Log("[ed_txt][info] Opened %s, writing as %s" % (self.path, self.encoding))
+            writer = codecs.getwriter(self.encoding)(self._handle)
             if self.HasBom():
+                Log("[ed_txt][info] Adding BOM back to text")
                 value = self.bom + value
             writer.write(value)
             writer.close()
