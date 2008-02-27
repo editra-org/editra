@@ -78,6 +78,8 @@ ID_LANG_APACHE = _NewId()
 LANG_APACHE = u'Apache Conf'
 
 # Use LEX_CPP
+ID_LANG_AS = _NewId()
+LANG_AS = u'ActionScript'
 ID_LANG_C    = _NewId()
 LANG_C = u'C'
 ID_LANG_CPP  = _NewId()
@@ -94,10 +96,10 @@ ID_LANG_HAXE = _NewId()
 LANG_HAXE = u'HaXe'
 ID_LANG_JAVA = _NewId()
 LANG_JAVA = u'Java'
-ID_LANG_PIKE = _NewId()
-LANG_PIKE = u'Pike'
 ID_LANG_OBJC = _NewId()
 LANG_OBJC = u'Objective C'
+ID_LANG_PIKE = _NewId()
+LANG_PIKE = u'Pike'
 
 # Use LEX_CSS
 ID_LANG_CSS = _NewId()
@@ -254,11 +256,12 @@ LANG_YAML = u'YAML'
 
 #---- End Language Identifier Keys ----#
 
-# Default extensions to file type map
+# Default extensions to file type mapping
 EXT_MAP = {
            '68k'                : LANG_68K,
            'ada adb ads a'      : LANG_ADA,
            'conf htaccess'      : LANG_APACHE,
+           'as asc mx'          : LANG_AS,
            'bsh sh configure'   : LANG_BASH,
            'bat cmd'            : LANG_BATCH,
            'boo'                : LANG_BOO,

@@ -37,6 +37,7 @@ from synextreg import *
 LANG_MAP = {LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
             LANG_ADA    : (ID_LANG_ADA,    stc.STC_LEX_ADA,      'ada'),
             LANG_APACHE : (ID_LANG_APACHE, stc.STC_LEX_CONF,     'apache'),
+            LANG_AS     : (ID_LANG_AS,     stc.STC_LEX_CPP,      'actionscript'),
             LANG_BASH   : (ID_LANG_BASH,   stc.STC_LEX_BASH,     'sh'),
             LANG_BATCH  : (ID_LANG_BATCH,  stc.STC_LEX_BATCH,    'batch'),
             LANG_BOO    : (ID_LANG_BOO,    stc.STC_LEX_PYTHON,   'boo'),
