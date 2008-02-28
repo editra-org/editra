@@ -161,6 +161,8 @@ LANG_KIX = u'Kix'
 # Use LEX_LISP
 ID_LANG_LISP = _NewId()
 LANG_LISP = u'Lisp'
+ID_LANG_SCHEME = _NewId()
+LANG_SCHEME = u'Scheme'
 
 # Use LEX_LOUT
 ID_LANG_LOUT = _NewId()
@@ -312,6 +314,7 @@ EXT_MAP = {
            'ai ps'              : LANG_PS,
            'py pyw python'      : LANG_PYTHON,
            'rb rbw rbx'         : LANG_RUBY,
+           'scm smd ss'         : LANG_SCHEME,
            'sql'                : LANG_SQL,
            'st'                 : LANG_ST,
            'itcl tcl tk'        : LANG_TCL,
