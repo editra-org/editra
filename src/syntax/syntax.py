@@ -159,9 +159,12 @@ class SyntaxMgr(object):
         if not self._config or not os.path.exists(self._config):
             return False
         path = os.path.join(self._config, self._extreg.config)
-        file_h = file(path, "wb")
-        file_h.write(str(self._extreg))
-        file_h.close()
+        try:
+            file_h = open(path, "wb")
+            file_h.write(str(self._extreg))
+            file_h.close()
+        except IOError:
+            return False
         return True
 
     def SyntaxData(self, ext):
