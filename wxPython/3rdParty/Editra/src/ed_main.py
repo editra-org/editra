@@ -133,7 +133,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # Note it must be done before setting the menu bar and after the
         # menus have been created.
         if wx.Platform == '__WXMAC__':
-            wx.GetApp().SetMacHelpMenuTitleName(_("Help"))
+            wx.GetApp().SetMacHelpMenuTitleName(_("&Help"))
 
         #---- Menu Bar ----#
         self.SetMenuBar(menbar)
