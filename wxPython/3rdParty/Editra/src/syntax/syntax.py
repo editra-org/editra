@@ -238,7 +238,7 @@ def GenFileFilters():
         tmp = u" (%s)|%s|" % (f_dict[key][1:], f_dict[key][1:])
         filters.append(key + tmp)
     filters.sort()
-    filters.insert(0, u"All Files (*.*)|*.*|")
+    filters.insert(0, u"All Files (*)|*|")
     filters[-1] = filters[-1][:-1] # IMPORTANT trim last '|' from item in list
     return filters
 
