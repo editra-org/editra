@@ -229,12 +229,12 @@ class EdMenuBar(wx.MenuBar):
         """
         filemenu = EdMenu()
         filehist = self._filehistorymenu
-        filemenu.Append(ed_glob.ID_NEW, _("New Tab") + u"\tCtrl+N",
+        filemenu.Append(ed_glob.ID_NEW, _("&New Tab") + u"\tCtrl+N",
                         _("Start a new file in a new tab"))
-        filemenu.Append(ed_glob.ID_NEW_WINDOW, _("New Window") + \
+        filemenu.Append(ed_glob.ID_NEW_WINDOW, _("New &Window") + \
                         "\tCtrl+Shift+N", _("Start a new file in a new window"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_OPEN, _("Open") + "\tCtrl+O", _("Open"))
+        filemenu.Append(ed_glob.ID_OPEN, _("&Open") + "\tCtrl+O", _("Open"))
         ## Setup File History in the File Menu
         filemenu.AppendMenu(ed_glob.ID_FHIST, _("Open Recent"),
                             filehist, _("Recently Opened Files"))
@@ -247,9 +247,9 @@ class EdMenuBar(wx.MenuBar):
         filemenu.Append(ed_glob.ID_CLOSEALL, _("Close All Pages"),
                         _("Close all open tabs"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_SAVE, _("Save") + "\tCtrl+S",
+        filemenu.Append(ed_glob.ID_SAVE, _("&Save") + "\tCtrl+S",
                         _("Save Current File"))
-        filemenu.Append(ed_glob.ID_SAVEAS, _("Save As") + "\tCtrl+Shift+S",
+        filemenu.Append(ed_glob.ID_SAVEAS, _("Save &As") + "\tCtrl+Shift+S",
                         _("Save As"))
         filemenu.Append(ed_glob.ID_SAVEALL, _("Save All"), \
                         _("Save all open pages"))
@@ -262,16 +262,16 @@ class EdMenuBar(wx.MenuBar):
         filemenu.AppendSubMenu(pmenu, _("Profile"),
                                _("Load and save custom Profiles"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_PRINT_SU, _("Page Setup") + "\tCtrl+Shift+P",
+        filemenu.Append(ed_glob.ID_PRINT_SU, _("Page Set&up") + "\tCtrl+Shift+P",
                         _("Configure Printer"))
-        filemenu.Append(ed_glob.ID_PRINT_PRE, _("Print Preview"),
+        filemenu.Append(ed_glob.ID_PRINT_PRE, _("Print Pre&view"),
                         _("Preview Printout"))
-        filemenu.Append(ed_glob.ID_PRINT, _("Print") + "\tCtrl+P",
+        filemenu.Append(ed_glob.ID_PRINT, _("&Print") + "\tCtrl+P",
                         _("Print Current File"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_EXIT, _("Exit") + "\tCtrl+Q",
+        filemenu.Append(ed_glob.ID_EXIT, _("E&xit") + "\tCtrl+Q",
                         _("Exit the Program"))
-        self.Append(filemenu, _("File"))
+        self.Append(filemenu, _("&File"))
         return filemenu
 
     def GenEditMenu(self):
@@ -280,19 +280,19 @@ class EdMenuBar(wx.MenuBar):
 
         """
         editmenu = EdMenu()
-        editmenu.Append(ed_glob.ID_UNDO, _("Undo") + "\tCtrl+Z",
+        editmenu.Append(ed_glob.ID_UNDO, _("&Undo") + "\tCtrl+Z",
                         _("Undo Last Action"))
         editmenu.Append(ed_glob.ID_REDO, _("Redo") + "\tCtrl+Shift+Z",
                         _("Redo Last Undo"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_CUT, _("Cut") + "\tCtrl+X",
+        editmenu.Append(ed_glob.ID_CUT, _("Cu&t") + "\tCtrl+X",
                         _("Cut Selected Text from File"))
-        editmenu.Append(ed_glob.ID_COPY, _("Copy") + "\tCtrl+C",
+        editmenu.Append(ed_glob.ID_COPY, _("&Copy") + "\tCtrl+C",
                         _("Copy Selected Text to Clipboard"))
-        editmenu.Append(ed_glob.ID_PASTE, _("Paste") + "\tCtrl+V",
+        editmenu.Append(ed_glob.ID_PASTE, _("&Paste") + "\tCtrl+V",
                         _("Paste Text from Clipboard to File"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_SELECTALL, _("Select All") + "\tCtrl+A",
+        editmenu.Append(ed_glob.ID_SELECTALL, _("Select &All") + "\tCtrl+A",
                         _("Select All Text in Document"))
         editmenu.AppendSeparator()
         linemenu = EdMenu()
@@ -327,16 +327,16 @@ class EdMenuBar(wx.MenuBar):
         editmenu.AppendMenu(ed_glob.ID_BOOKMARK, _("Bookmarks"),  bookmenu,
                             _("Add and remove bookmarks"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_FIND, _("Find") + "\tCtrl+Shift+F",
+        editmenu.Append(ed_glob.ID_FIND, _("&Find") + "\tCtrl+Shift+F",
                         _("Find Text"))
-        editmenu.Append(ed_glob.ID_FIND_REPLACE, _("Find/Replace") + "\tCtrl+R",
+        editmenu.Append(ed_glob.ID_FIND_REPLACE, _("Find/R&eplace") + "\tCtrl+R",
                         _("Find and Replace Text"))
-        editmenu.Append(ed_glob.ID_QUICK_FIND, _("Quick Find") + "\tCtrl+F",
+        editmenu.Append(ed_glob.ID_QUICK_FIND, _("&Quick Find") + "\tCtrl+F",
                         _("Open the Quick Find Bar"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_PREF, _("Preferences"),
+        editmenu.Append(ed_glob.ID_PREF, _("Pr&eferences"),
                         _("Edit Preferences / Settings"))
-        self.Append(editmenu, _("Edit"))
+        self.Append(editmenu, _("&Edit"))
         return editmenu
 
     def GenViewMenu(self):
@@ -366,7 +366,7 @@ class EdMenuBar(wx.MenuBar):
         viewmenu.AppendSubMenu(self._vieweditmenu, _("Editor"), \
                                _("Toggle Editor View Options"))
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_GOTO_LINE, _("Goto Line") + u"\tCtrl+G",
+        viewmenu.Append(ed_glob.ID_GOTO_LINE, _("&Goto Line") + u"\tCtrl+G",
                             _("Goto Line Number"))
 
         # Use ALT on win/gtk so the jump to word command doesn't get overridden
@@ -382,9 +382,9 @@ class EdMenuBar(wx.MenuBar):
         viewmenu.Append(ed_glob.ID_PRE_MARK, _("Previous Bookmark") + \
                         shortp, _("View Line of Previous Bookmark"))
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_VIEW_TOOL, _("Toolbar"),
+        viewmenu.Append(ed_glob.ID_VIEW_TOOL, _("&Toolbar"),
                              _("Show Toolbar"), wx.ITEM_CHECK)
-        self.Append(viewmenu, _("View"))
+        self.Append(viewmenu, _("&View"))
         return viewmenu
 
     def GenFormatMenu(self):
@@ -393,7 +393,7 @@ class EdMenuBar(wx.MenuBar):
 
         """
         formatmenu = EdMenu()
-        formatmenu.Append(ed_glob.ID_FONT, _("Font"), _("Change Font Settings"))
+        formatmenu.Append(ed_glob.ID_FONT, _("&Font"), _("Change Font Settings"))
         formatmenu.AppendSeparator()
         formatmenu.Append(ed_glob.ID_COMMENT, _("Comment Lines") + u"\tCtrl+1",
                                _("Comment the selected lines"))
@@ -446,7 +446,7 @@ class EdMenuBar(wx.MenuBar):
                               "Windows (\\r\\n)", wx.ITEM_CHECK)
         formatmenu.AppendMenu(ed_glob.ID_EOL_MODE, _("EOL Mode"), lineformat,
                                   _("End of line character formatting"))
-        self.Append(formatmenu, _("Format"))
+        self.Append(formatmenu, _("F&ormat"))
         return formatmenu
 
     def GenSettingsMenu(self):
@@ -467,7 +467,7 @@ class EdMenuBar(wx.MenuBar):
         settingsmenu.Append(ed_glob.ID_SYNTAX, _("Syntax Highlighting"),
                             _("Color Highlight Code Syntax"), wx.ITEM_CHECK)
         # Lexer Menu Appended later by main frame
-        self.Append(settingsmenu, _("Settings"))
+        self.Append(settingsmenu, _("&Settings"))
         return settingsmenu
 
     def GenToolsMenu(self):
@@ -493,7 +493,7 @@ class EdMenuBar(wx.MenuBar):
 #                          _("Stop macro recording"))
 #         macro.Append(ed_glob.ID_MACRO_PLAY, "Play Macro", "Play Macro")
 #         toolsmenu.AppendMenu(wx.NewId(), _("Macros"), macro, _("Macro Tools"))
-        self.Append(toolsmenu, _("Tools"))
+        self.Append(toolsmenu, _("&Tools"))
         return toolsmenu
 
     def GenHelpMenu(self):
@@ -513,7 +513,7 @@ class EdMenuBar(wx.MenuBar):
                         _("Editra translations project"))
         helpmenu.Append(ed_glob.ID_CONTACT, _("Feedback"),
                         _("Send bug reports and suggestions"))
-        self.Append(helpmenu, _("Help"))
+        self.Append(helpmenu, _("&Help"))
         return helpmenu
 
     def GetMenuByName(self, namestr):

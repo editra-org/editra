@@ -18,16 +18,19 @@ NEWS:
 NEW: [features/improvements]
 +New CodeBrowser plugin for browsing classes, functions, variables and other
 significant objects in a code document.
-+Added Dutch translation (contributed by Gerard Petersen)
-+Added Simplified Chinese translation (contributed by heccj)
-+Updated Russian translation (contributed by slavOnic)
-+Updated Japanese translation
 +Improved Perl and Lisp highlighting
 +Minor updates to Launch to allow for use of command aliases
 +New version of FileBrowser with some minor fixes and enhancements
 +Colorize Error and Warning messages in Log Viewer
 +Use prefered font from preferences in Log and Launch output
 +Support for (Objective C, ActionScript, Scheme)
++Add option to automatically check for updates on startup
++Add menu mneomnics for navigating menus without mouse (gtk/msw)
++Added Dutch translation (contributed by Gerard Petersen)
++Added Simplified Chinese translation (contributed by heccj)
++Updated Russian translation (contributed by slavOnic)
++Updated German translation (contributed by nireb)
++Updated Japanese translation
 
 BUG FIXES:
 +Fix bug in that would prevent opening files from command line or via drag/drop
