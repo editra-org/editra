@@ -133,6 +133,7 @@ ID_PREF          = wx.ID_PREFERENCES
 ID_PREF_LANG     = wx.NewId()
 ID_PREF_AALIAS   = wx.NewId()
 ID_PREF_CHKMOD   = wx.NewId()
+ID_PREF_CHKUPDATE = wx.NewId()
 ID_PREF_DLEXER   = wx.NewId()
 ID_PREF_EDGE     = wx.NewId()
 ID_PREF_SYNTHEME = wx.NewId()
@@ -256,6 +257,7 @@ ID_2_PROF = {
              ID_AUTOINDENT        : 'AUTO_INDENT',
              ID_BRACKETHL         : 'BRACKETHL',
              ID_PREF_CHKMOD       : 'CHECKMOD',
+             ID_PREF_CHKUPDATE    : 'CHECKUPDATE',
              ID_FOLDING           : 'CODE_FOLD',
              ID_PERSPECTIVES      : 'DEFAULT_VIEW',
              ID_KWHELPER          : 'KWHELPER',

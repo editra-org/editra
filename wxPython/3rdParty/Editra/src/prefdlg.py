@@ -371,6 +371,9 @@ class GeneralPanel(PrefPanelBase):
         splash_cb = wx.CheckBox(self, ed_glob.ID_APP_SPLASH, 
                                 _("Show Splash Screen"))
         splash_cb.SetValue(Profile_Get('APPSPLASH'))
+        chk_update = wx.CheckBox(self, ed_glob.ID_PREF_CHKUPDATE,
+                                 _("Check for updates on startup"))
+        chk_update.SetValue(Profile_Get('CHECKUPDATE'))
 
         # File settings
         file_lbl = wx.StaticText(self, label=_("File Settings") + u": ")
@@ -403,13 +406,14 @@ class GeneralPanel(PrefPanelBase):
                         (lang_c, 0, wx.ALIGN_CENTER_VERTICAL)])
 
         # Layout items
-        sizer = wx.FlexGridSizer(14, 2, 5, 5)
+        sizer = wx.FlexGridSizer(15, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (start_lbl, 0, wx.ALIGN_CENTER_VERTICAL), (msizer, 0),
                        ((5, 5),), (psizer, 0),
                        ((5, 5),), (reporter_cb, 0),
                        ((5, 5),), (session_cb, 0),
                        ((5, 5),), (splash_cb, 0),
+                       ((5, 5),), (chk_update, 0),
                        ((5, 5),), ((5, 5),),
                        (file_lbl, 0, wx.ALIGN_CENTER_VERTICAL), (fhsizer, 0),
                        ((5, 5),), (win_cb, 0),
@@ -432,7 +436,7 @@ class GeneralPanel(PrefPanelBase):
         e_obj = evt.GetEventObject()
         if e_id in [ed_glob.ID_APP_SPLASH, ed_glob.ID_PREF_SPOS,
                     ed_glob.ID_PREF_CHKMOD, ed_glob.ID_SESSION,
-                    ed_glob.ID_NEW_WINDOW]:
+                    ed_glob.ID_NEW_WINDOW, ed_glob.ID_PREF_CHKUPDATE]:
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
         elif e_id == ed_glob.ID_REPORTER:
             Profile_Set(ed_glob.ID_2_PROF[e_id], not e_obj.GetValue())
