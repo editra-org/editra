@@ -201,8 +201,8 @@ class LogBuffer(outbuff.OutputBuffer):
 
         """
         for group in LogBuffer.RE_WARN_MSG.finditer(txt):
-            sty_s = start + group.start() + 1
-            sty_e = start + group.end() - 1
+            sty_s = start + group.start()
+            sty_e = start + group.end()
             self.StartStyling(sty_s, 0xff)
             self.SetStyling(sty_e - sty_s, self.ERROR_STYLE)
 
