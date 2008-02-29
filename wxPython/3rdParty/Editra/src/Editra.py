@@ -625,7 +625,7 @@ def Main():
     tval = sum(time.localtime(time.time())[:3])
     if profiler.Profile_Get('CHECKUPDATE', default=True) and \
        tval - profiler.Profile_Get('LASTCHECK', 'int', default=0) > 1:
-#        profiler.Profile_Set('LASTCHECK', tval)
+        profiler.Profile_Set('LASTCHECK', tval)
         uthread = updater.UpdateThread(editra_app, ID_UPDATE_CHECK)
         uthread.start()
 
