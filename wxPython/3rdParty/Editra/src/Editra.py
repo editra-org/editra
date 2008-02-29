@@ -481,11 +481,6 @@ def InitConfig():
             profiler.Profile().Update()
 
             #---- Temporary Profile Adaptions ----#
-            ## Force some default values to be set on an upgrade
-            if wx.Platform == '__WXGTK__':
-                profiler.Profile_Set('ICONS', 'Default')
-            else:
-                profiler.Profile_Set('ICONS', 'Tango')
 
             # GUI_DEBUG mode removed in 0.2.5
             mode = profiler.Profile_Get('MODE')
