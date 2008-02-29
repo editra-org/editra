@@ -42,6 +42,7 @@ import util
 
 #--------------------------------------------------------------------------#
 # Globals
+RE_VERSION = re.compile('<\s*span id\="VERSION"[^>]*>(.*?)<\s*/span\s*>')
 DL_REQUEST = ed_glob.HOME_PAGE + "/?page=download&dist=%s"
 DL_LIN = 'SRC'          # This may need to change in future
 DL_MAC = 'Macintosh'
@@ -107,8 +108,7 @@ class UpdateService(object):
             dist = DL_SRC
 
         url = self.GetPageText(DL_REQUEST % dist)
-        url_pat = re.compile('<\s*a id\="CURRENT"[^>]*>(.*?)<\s*/a\s*>')
-        url = re.findall(url_pat, url)
+        url = re.findall(RE_VERSION, url)
         if len(url):
             url = url[0]
         else:
@@ -132,9 +132,8 @@ class UpdateService(object):
         @return: verision number of latest available program
 
         """
-        version = re.compile('<\s*a id\="VERSION"[^>]*>(.*?)<\s*/a\s*>')
-        page = self.GetPageText(ed_glob.HOME_PAGE)
-        found = re.findall(version, page)
+        page = self.GetPageText(ed_glob.HOME_PAGE + "/version.php?check=True")
+        found = re.findall(RE_VERSION, page)
         if len(found):
             return found[0] # Should be the first/only match found
         else:
