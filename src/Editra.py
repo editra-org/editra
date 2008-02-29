@@ -26,6 +26,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import time
 import getopt
 import wx
 
@@ -53,11 +54,14 @@ import dev_tool
 import ed_main
 import ed_art
 import ed_txt
+import ed_event
+import updater
 import plugin
 import extern.events as events
 
 #--------------------------------------------------------------------------#
 # Global Variables
+ID_UPDATE_CHECK = wx.NewId()
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -124,6 +128,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
         self.Bind(wx.EVT_MENU, self.OnNewWindow, id=ed_glob.ID_NEW_WINDOW)
         self.Bind(wx.EVT_MENU, self.OnCloseWindow)
+        self.Bind(ed_event.EVT_NOTIFY, self.OnNotify)
 
         return True
 
@@ -349,6 +354,29 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         # this doesn't happen automatically on windows
         if wx.Platform == '__WXMSW__':
             wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
+
+    def OnNotify(self, evt):
+        """Handle notification events
+        @param evt: L{ed_event.NotifyEvent}
+
+        """
+        e_val = evt.GetValue()
+        if evt.GetId() == ID_UPDATE_CHECK and \
+           isinstance(e_val, tuple) and e_val[0]:
+            mdlg = wx.MessageDialog(self.GetActiveWindow(),
+                                    _("An updated version of Editra is available\n"
+                                      "Would you like to download Editra %s now?") %\
+                                      e_val[1], _("Update Available"),
+                                    wx.YES_NO|wx.YES_DEFAULT|wx.CENTER|wx.ICON_INFORMATION)
+            if mdlg.ShowModal() == wx.ID_YES:
+                dl_dlg = updater.DownloadDialog(None, wx.ID_ANY,
+                                                _("Downloading Update"))
+                dp_sz = wx.GetDisplaySize()
+                dl_dlg.SetPosition(((dp_sz[0] - (dl_dlg.GetSize()[0] + 5)), 25))
+                dl_dlg.Show()
+            mdlg.Destroy()
+        else:
+            evt.Skip()
 
     def RegisterWindow(self, name, window, can_lock=False):
         """Registers winows with the app. The name should be the
@@ -591,6 +619,15 @@ def Main():
 
     if 'splash' in locals():
         splash.Destroy()
+
+    # Do update check, only check if its been more than a day since the last
+    # check
+    tval = sum(time.localtime(time.time())[:3])
+    if profiler.Profile_Get('CHECKUPDATE', default=True) and \
+       tval - profiler.Profile_Get('LASTCHECK', 'int', default=0) > 1:
+#        profiler.Profile_Set('LASTCHECK', tval)
+        uthread = updater.UpdateThread(editra_app, ID_UPDATE_CHECK)
+        uthread.start()
 
     for arg in args:
         try:

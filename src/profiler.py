@@ -48,6 +48,7 @@ _DEFAULTS = {
            'BRACKETHL'  : True,             # Use bracket highlighting
            'BSUNINDENT' : True,             # Backspace Unindents
            'CHECKMOD'   : True,             # Auto check file for file mod
+           'CHECKUPDATE': True,             # Check for updates on start
            'CODE_FOLD'  : True,             # Use code folding
            'DEFAULT_LEX': 'Plain Text',     # Default lexer for new documents
            'DEFAULT'    : False,            # No longer used I believe
@@ -61,6 +62,7 @@ _DEFAULTS = {
            'ICONS'      : 'Tango',          # Icon Theme
            'ICON_SZ'    : (24, 24),         # Toolbar Icon Size
            'LANG'       : 'Default',        # UI language
+           'LASTCHECK'  : 0,                # Last time update check was done
            'MODE'       : 'CODE',           # Overall editor mode
            'MYPROFILE'  : 'default.ppb',    # Path to profile file
            'OPEN_NW'    : False,            # Open files in new windows

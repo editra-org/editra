@@ -21,7 +21,7 @@ UpdateService.
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__cvsid__ = "$Id$"
+__svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
@@ -30,8 +30,11 @@ import os
 import stat
 import re
 import urllib2
+import threading
 import wx
 import wx.lib.delayedresult as delayedresult
+
+# Editra Libraries
 import ed_glob
 import ed_event
 from profiler import CalcVersionValue, Profile_Get
@@ -232,6 +235,35 @@ class UpdateService(object):
         if done > total_sz:
             done = total_sz
         self._progress = (done, total_sz)
+
+#-----------------------------------------------------------------------------#
+
+class UpdateThread(threading.Thread):
+    """Thread for checking for updates"""
+    def __init__(self, parent, jobId):
+        """Create the thread object
+        @param parent: parent window to post event to after completion
+        @param jobId: job identification id will be set as event id on finish
+
+        """
+        threading.Thread.__init__(self)
+
+        # Attributes
+        self.parent = parent
+        self.id = jobId
+
+    def run(self):
+        """Run the update check job"""
+        service = UpdateService()
+        result = service.GetCurrentVersionStr()
+        if result.replace('.', '').isdigit():
+            isupdate = CalcVersionValue(result) > CalcVersionValue(ed_glob.VERSION)
+        else:
+            isupdate = False
+
+        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
+                                         self.id, (isupdate, result))
+        wx.CallAfter(wx.PostEvent, self.parent, evt)
 
 #-----------------------------------------------------------------------------#
 
