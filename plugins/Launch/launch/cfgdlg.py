@@ -271,13 +271,12 @@ class ConfigPanel(wx.Panel):
         e_val = e_obj.GetStringSelection()
         if e_id == ID_LANGUAGE:
             handler = handlers.GetHandlerByName(e_val)
-            cmds = handler.GetCommands()
             elist = self.FindWindowById(ID_EXECUTABLES)
             elist.DeleteAllItems()
             def_ch = self.FindWindowById(wx.ID_DEFAULT)
-            def_ch.SetItems(cmds)
+            def_ch.SetItems(handler.GetAliases())
             def_ch.SetStringSelection(handler.GetDefault())
-            self.SetListItems(cmds)
+            self.SetListItems(handler.GetCommands())
         elif e_id == wx.ID_DEFAULT:
             handler = self.GetCurrentHandler()
             handler.SetDefault((e_val, handler.GetCommand(e_val)))
