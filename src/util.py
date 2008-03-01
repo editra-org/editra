@@ -333,6 +333,25 @@ def GetPathName(path):
     """
     return os.path.split(path)[0]
 
+def GetFileManagerCmd():
+    """Get the file manager open command for the current os. Under linux
+    it will check for nautilus and konqueror and return which one it finds
+    first or 'nautilus' (Gnome) if it finds neither.
+    @return: string command
+
+    """
+    if wx.Platform == '__WXMAC__':
+        return 'open'
+    elif wx.Platform == '__WXMSW__':
+        return 'explorer'
+    else:
+        for cmd in ('nautilus', 'konqueror'):
+            result = os.system("which %s > /dev/null" % cmd)
+            if result == 0:
+                return cmd
+        else:
+            return 'nautilus'
+
 def GetFileName(path):
     """Gets last atom on end of string as filename
     @param path: full path to get filename from
