@@ -339,6 +339,37 @@ class FeriteHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class HaxeHandler(FileTypeHandler):
+    """FileTypeHandler for haXe"""
+    RE_HAXE_ERROR = re.compile('([a-zA-Z_.]+)\(([0-9]+)\):.*')
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(neko='neko', nekoc='nekoc')
+        self.default = 'nekoc'
+
+    @property
+    def __name__(self):
+        return 'haxe'
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_HAXE_ERROR)
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style haXe output messages"""
+        if _StyleError(stc, start, txt, self.RE_HAXE_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
+
+#-----------------------------------------------------------------------------#
+
 class KornHandler(FileTypeHandler):
     """FileTypeHandler for Korn Shell scripts"""
     def __init__(self):
@@ -623,6 +654,7 @@ HANDLERS = { 0 : FileTypeHandler(),
             synglob.ID_LANG_CSH : CSHHandler(),
             synglob.ID_LANG_FERITE : FeriteHandler(),
             synglob.ID_LANG_KSH : KornHandler(),
+            synglob.ID_LANG_HAXE : HaxeHandler(),
             synglob.ID_LANG_LUA : LuaHandler(),
             synglob.ID_LANG_NSIS : NSISHandler(),
             synglob.ID_LANG_PERL : PerlHandler(),
