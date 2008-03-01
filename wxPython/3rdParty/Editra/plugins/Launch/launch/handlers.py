@@ -414,6 +414,40 @@ class NSISHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class PhpHandler(FileTypeHandler):
+    """FileTypeHandler for Php"""
+    RE_PHP_ERROR = re.compile(r'[a-zA-Z]+ error: .* in (.+) on line ([0-9]+).*')
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(php='php -f')
+        self.default = 'php'
+
+    @property
+    def __name__(self):
+        return 'php'
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_PHP_ERROR)
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style php Information and Error messages from script
+        output.
+
+        """
+        if _StyleError(stc, start, txt, self.RE_PHP_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
+
+#-----------------------------------------------------------------------------#
+
 class PikeHandler(FileTypeHandler):
     """FileTypeHandler for Pike"""
     def __init__(self):
@@ -592,6 +626,7 @@ HANDLERS = { 0 : FileTypeHandler(),
             synglob.ID_LANG_LUA : LuaHandler(),
             synglob.ID_LANG_NSIS : NSISHandler(),
             synglob.ID_LANG_PERL : PerlHandler(),
+            synglob.ID_LANG_PHP : PhpHandler(),
             synglob.ID_LANG_PIKE : PikeHandler(),
             synglob.ID_LANG_PYTHON : PythonHandler(),
             synglob.ID_LANG_RUBY : RubyHandler(),
