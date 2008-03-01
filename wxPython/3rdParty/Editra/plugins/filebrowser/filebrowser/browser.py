@@ -48,25 +48,19 @@ ID_BROWSERPANE = wx.NewId()
 ID_FILEBROWSE = wx.NewId()
 
 # Configure Platform specific commands
-if wx.Platform == '__WXMAC__': # MAC
+FILEMAN_CMD = util.GetFileManagerCmd()
+if wx.Platform == '__WXMAC__':
     FILEMAN = 'Finder'
-    FILEMAN_CMD = 'open'
     TRASH = 'Trash'
     DIFF_CMD = 'opendiff'
-elif wx.Platform == '__WXMSW__': # Windows
+elif wx.Platform == '__WXMSW__':
     FILEMAN = 'Explorer'
-    FILEMAN_CMD = 'explorer'
     TRASH = 'Recycle Bin'
     DIFF_CMD = None
 else: # Other/Linux
-    # TODO how to check what desktop environment is in use
-    # this will work for Gnome but not KDE
-    FILEMAN = 'Nautilus'
-    FILEMAN_CMD = 'nautilus'
+    FILEMAN = FILEMAN_CMD.title()
     TRASH = 'Trash'
     DIFF_CMD = None
-    #FILEMAN = 'Konqueror'
-    #FILEMAN_CMD = 'konqueror'
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
@@ -370,7 +364,6 @@ ID_NEW_FILE = wx.NewId()
 ID_DELETE = wx.NewId()
 ID_DUPLICATE = wx.NewId()
 ID_ARCHIVE = wx.NewId()
-ARCHIVE_LBL = "Create Archive of \"%s\""
 
 class FileBrowser(wx.GenericDirCtrl):
     """Custom directory control for displaying and managing files"""
@@ -432,7 +425,7 @@ class FileBrowser(wx.GenericDirCtrl):
                  (ID_NEW_FILE, _("New File"), ed_glob.ID_NEW),
                  (wx.ID_SEPARATOR, '', None),
                  (ID_DUPLICATE, _("Duplicate"), None),
-                 (ID_ARCHIVE, _(ARCHIVE_LBL) % '', None),
+                 (ID_ARCHIVE, _("Create Archive of \"%s\"") % '', None),
                  (wx.ID_SEPARATOR, '', None),
                  (ID_DELETE, _("Move to " + TRASH), ed_glob.ID_DELETE),
                 ]
@@ -520,7 +513,8 @@ class FileBrowser(wx.GenericDirCtrl):
         path = self.GetItemPath(self._treeId)
         mitem = self._fmenu.FindItemById(ID_ARCHIVE)
         if mitem != wx.NOT_FOUND:
-            mitem.SetText(_(ARCHIVE_LBL) % path.split(os.path.sep)[-1])
+            mitem.SetText(_("Create Archive of \"%s\"") % \
+                          path.split(os.path.sep)[-1])
 
         for item in (ID_DUPLICATE,):
             self._fmenu.Enable(item, len(self._tree.GetSelections()) == 1)
