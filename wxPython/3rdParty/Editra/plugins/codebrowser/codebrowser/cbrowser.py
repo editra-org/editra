@@ -45,7 +45,7 @@ PANE_NAME = u"CodeBrowser"
 _ = wx.GetTranslation
 
 # HACK for i18n scripts to pick up translation strings
-STRINGS = ( _("Class Definitions"), _("Defines"), _("Function Defintions"),
+STRINGS = ( _("Class Definitions"), _("Defines"), _("Function Definitions"),
             _("Global Variables"), _("Identities"), _("Labels"), _("Macros"),
             _("Macro Definitions"), _("Packages"), _("Procedure Definitions"),
             _("Programs"), _("Sections"), _("Style Tags"), _("Subroutines"),
