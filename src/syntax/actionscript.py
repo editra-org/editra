@@ -42,11 +42,13 @@ AS_KEYWORDS = ("break case catch continue default do each else finally for if "
                # Primary Expression Keywords
                "false null this true "
                # Special Types
-               "void Null")
-
+               "void Null *")
 
 # ActionScript Keywords 1
-#AS_TYPES = ()
+# Namespaces and Packages
+AS_TYPES = ("AS3 flash_proxy object_proxy flash accessibility display errors "
+            "events external filters geom media net printing profiler system "
+            "text ui utils xml ")
 
 #---- Syntax Style Specs ----#
 # Same as cpp
@@ -63,7 +65,7 @@ def Keywords(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_AS:
-        return [(0, AS_KEYWORDS)]
+        return [(0, AS_KEYWORDS), (1, AS_TYPES)]
     else:
         return list()
 
