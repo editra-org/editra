@@ -463,7 +463,7 @@ class EdMenuBar(wx.MenuBar):
         settingsmenu.Append(ed_glob.ID_BRACKETHL, _("Bracket Highlighting"),
                             _("Highlight Brackets/Braces"), wx.ITEM_CHECK)
         settingsmenu.Append(ed_glob.ID_FOLDING, _("Code Folding"),
-                            _("Toggle Code Foldering"), wx.ITEM_CHECK)
+                            _("Toggle Code Folding"), wx.ITEM_CHECK)
         settingsmenu.Append(ed_glob.ID_SYNTAX, _("Syntax Highlighting"),
                             _("Color Highlight Code Syntax"), wx.ITEM_CHECK)
         # Lexer Menu Appended later by main frame
