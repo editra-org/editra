@@ -44,7 +44,9 @@ class ProgressStatusBar(wx.StatusBar):
         wx.StatusBar.__init__(self, parent, id_, style, name)
   
         # Attributes
-        self._changed = False
+        self._changed = False   # position has changed ?
+        self.busy = False       # Bar in busy mode ?
+        self.progress = 0       # Current progress value of the bar
         self.timer = wx.Timer(self)
         self.prog = wx.Gauge(self, style=wx.GA_HORIZONTAL)
         self.prog.Hide()
@@ -96,6 +98,13 @@ class ProgressStatusBar(wx.StatusBar):
         """
         return self.prog.GetValue()
 
+    def GetRange(self):
+        """Get the what the range of the progress bar is
+        @return: int
+
+        """
+        return self.prog.GetRange()
+
     def OnSize(self, evt):
         """Reposition progress bar on resize
         @param evt: wx.EVT_SIZE
@@ -105,21 +114,40 @@ class ProgressStatusBar(wx.StatusBar):
         self._changed = True
         evt.Skip()
 
+    def OnTimer(self, evt):
+        """Update the progress bar while the timer is running
+        @param evt: wx.EVT_TIMER
+
+        """
+        if self.busy or self.progress < 0:
+            self.prog.Pulse()
+        else:
+            self.SetProgress(self.progress)
+
+    def Run(self, rate=100):
+        """Start the bar's timer to check for updates to progress
+        @keyword rate: rate at which to check for updates
+
+        """
+        if not self.timer.IsRunning():
+            self.timer.Start(rate)
+
+    def SetProgress(self, val):
+        """Set the controls internal progress value that is reflected in the
+        progress bar when the timer next updates. Be sure to call Start before
+        calling this method if you want the changes to be visible. This method
+        can be called from non gui threads.
+        @param val: int
+
+        """
+        self.progress = val
+
     def SetRange(self, val):
         """Set the what the range of the progress bar is
         @param val: int
 
         """
         self.prog.SetRange(val)
-
-    def SetProgress(self, val):
-        """Set the progress of the progress bar
-        @param val: int
-
-        """
-        if not self.prog.IsShown():
-            self.prog.Show()
-        self.prog.SetValue(val)
 
     def ShowProgress(self, show=True):
         """Manually show or hide the progress bar
@@ -136,13 +164,21 @@ class ProgressStatusBar(wx.StatusBar):
         @keyword rate: interval to pulse indicator at in msec
 
         """
+        self.busy = True
         self.ShowProgress(True)
-        self.timer.Start(rate)
+        self.Run(rate)
+
+    def Stop(self):
+        """Stop and hide the progress bar"""
+        self.timer.Stop()
+        self.ShowProgress(False)
+        self.prog.SetValue(0)   # Rest progress value
+        self.progress = 0
 
     def StopBusy(self):
         """Stop and hide the progress indicator
         @postcondition: Progress bar is hidden from view
 
         """
-        self.ShowProgress(False)
-        self.timer.Stop()
+        self.busy = False
+        self.Stop()
