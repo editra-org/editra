@@ -1882,6 +1882,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @param path: path to file
 
         """
+        # Post notification that a file load is starting
+        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENING, path)
         self.file.SetPath(path)
         txt = self.file.Read()
         if txt is not None:

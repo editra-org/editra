@@ -77,6 +77,9 @@ EDMSG_LOG_ERROR = EDMSG_LOG_INFO + ('err',)
 # Recieve notification of all file actions
 EDMSG_FILE_ALL = EDMSG_ALL + ('file',)
 
+# File open was just requested / msgdata == file path
+EDMSG_FILE_OPENING = EDMSG_FILE_ALL + ('opening',)
+
 # File was just opened / msgdata == file path
 EDMSG_FILE_OPENED = EDMSG_FILE_ALL + ('opened',)
 
