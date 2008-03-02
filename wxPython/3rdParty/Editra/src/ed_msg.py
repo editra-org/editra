@@ -127,7 +127,15 @@ EDMSG_UI_STC_KEYUP = EDMSG_UI_ALL + ('stc', 'keyup')
 #---- End UI Action Messages ----#
 
 #---- Misc Messages ----#
+# Signal that the icon theme has changed. Respond to this to update icon
+# resources from the ArtProvider.
 EDMSG_THEME_CHANGED = EDMSG_ALL + ('theme',)
+
+# Post this message to manipulate the state of the MainWindows status bar
+# progress indicator. The message data should be a tuple of the current progress
+# and the total range (current, total). If both values are 0 then the bar will
+# be hidden. If both are negative the bar will be set into pulse mode.
+EDMSG_PROGRESS_STATE = EDMSG_ALL + ('progbar',)
 
 #--------------------------------------------------------------------------#
 # Public Api
