@@ -46,6 +46,7 @@ class ProgressStatusBar(wx.StatusBar):
         # Attributes
         self._changed = False   # position has changed ?
         self.busy = False       # Bar in busy mode ?
+        self.stop = False       # Stop flag to stop progress from other threads
         self.progress = 0       # Current progress value of the bar
         self.timer = wx.Timer(self)
         self.prog = wx.Gauge(self, style=wx.GA_HORIZONTAL)
@@ -119,6 +120,14 @@ class ProgressStatusBar(wx.StatusBar):
         @param evt: wx.EVT_TIMER
 
         """
+        # Check stop flag that can be set from non main thread
+        if self.stop:
+            self.timer.Stop()
+            self.ShowProgress(False)
+            self.prog.SetValue(0)   # Rest progress value
+            self.stop = False
+            return
+
         if self.busy or self.progress < 0:
             self.prog.Pulse()
         else:
@@ -159,20 +168,33 @@ class ProgressStatusBar(wx.StatusBar):
             self.__Reposition()
         self.prog.Show(show)
 
+    def Start(self, rate=100):
+        """Show and the progress indicator and start the timer
+        @keyword rate: rate to update progress bar in msec
+
+        """
+        self.ShowProgress(True)
+        self.Run(rate)
+
     def StartBusy(self, rate=100):
         """Show and start the progress indicator in pulse mode
         @keyword rate: interval to pulse indicator at in msec
 
         """
         self.busy = True
-        self.ShowProgress(True)
-        self.Run(rate)
+        self.Start(rate)
 
     def Stop(self):
-        """Stop and hide the progress bar"""
-        self.timer.Stop()
-        self.ShowProgress(False)
-        self.prog.SetValue(0)   # Rest progress value
+        """Stop and hide the progress bar.
+        @note: thread safe
+
+        """
+        if wx.Thread_IsMain():
+            self.timer.Stop()
+            self.ShowProgress(False)
+            self.prog.SetValue(0)   # Rest progress value
+        else:
+            self.stop = True # Set flag from non main thread
         self.progress = 0
 
     def StopBusy(self):
