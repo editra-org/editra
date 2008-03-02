@@ -8,15 +8,13 @@
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE:	plugdlg.py                                                         #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#     Provides a dialog for downloading, installing and configuring        #
-# plugins for Editra.                                                      #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: plugdlg.py                                                         
+AUTHOR: Cody Precord                                                     
+LANGUAGE: Python                                                         
+SUMMARY:                                                                 
+ Provides a dialog for downloading, installing and configuring plugins for 
+Editra.
+                                                                      
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -32,11 +30,14 @@ import urllib2
 import wx
 import wx.lib.delayedresult as delayedresult
 import wx.lib.mixins.listctrl as listmix
+
+# Editra Libraries
 import ed_glob
 from profiler import Profile_Get, Profile_Set
 import ed_event
 import plugin
 import util
+import eclib.pstatbar as pstatbar
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -90,14 +91,14 @@ class PluginDialog(wx.Frame):
 
     """
     def __init__(self, parent, fid, title, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
+                 size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
         """Creates the dialog, does not call Show()"""
         wx.Frame.__init__(self, parent, fid, title, pos, size, style)
         util.SetWindowIcon(self)
 
         # Attributes
         sizer = wx.BoxSizer(wx.VERTICAL)
-        self.SetStatusBar(DownloadStatusBar(self))
+        self.SetStatusBar(pstatbar.ProgressStatusBar(self, style=wx.SB_FLAT))
         self._nb = PluginPages(self)
         
         # Layout Dialog
@@ -105,6 +106,7 @@ class PluginDialog(wx.Frame):
         self._title = title
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
+        self.SetMinSize(size)
 
         # Event Handlers
         self.Bind(wx.EVT_CLOSE, self.OnClose)
@@ -148,103 +150,6 @@ class PluginDialog(wx.Frame):
             self.GetStatusBar().StartBusy()
         else:
             self.GetStatusBar().StopBusy()
-
-#--------------------------------------------------------------------------#
-
-class DownloadStatusBar(wx.StatusBar):
-    """Custom StatusBar with a builtin progress bar"""
-    def __init__(self, parent):
-        """Creates a status bar that can hide and show a progressbar
-        in the far right divider.
-        @param parent: Frame this status bar belongs to
-
-        """
-        wx.StatusBar.__init__(self, parent, style=wx.SB_FLAT)
-  
-        # Attributes
-        self._changed = False
-        self.timer = wx.Timer(self)
-        self.prog = wx.Gauge(self, style=wx.GA_HORIZONTAL)
-        self.prog.Hide()
-
-        # Layout
-        self.SetFieldsCount(2)
-        self.SetStatusWidths([-1, 155])
-
-        # Event Handlers
-        self.Bind(wx.EVT_TIMER, self.OnTick)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.Bind(wx.EVT_IDLE, self.OnIdle)
-
-    def __del__(self):
-        """Make sure the timer is stopped
-        @postcondition: timer is cleaned up
-
-        """
-        if self.timer.IsRunning():
-            self.timer.Stop()
-
-    def Destroy(self):
-        """Cleanup timer
-        @postcondition: timer is cleaned up and status bar is destroyed
-
-        """
-        if self.timer.IsRunning():
-            self.timer.Stop()
-        del self.timer
-        wx.StatusBar.Destroy(self)
-
-    def OnIdle(self, evt):
-        """Reposition progress bar as necessary on moves, ect...
-        @param evt: wx.EVT_IDLE
-
-        """
-        if self._changed:
-            self.Reposition()
-        evt.Skip()
-
-    def OnSize(self, evt):
-        """Reposition progress bar on resize
-        @param evt: wx.EVT_SIZE
-
-        """
-        self.Reposition()
-        self._changed = True
-        evt.Skip()
-
-    def OnTick(self, evt):
-        """Update progress bar
-        @param evt: wx.EVT_TIMER
-
-        """
-        self.prog.Pulse()
-
-    def Reposition(self):
-        """Does the actual repositioning of progress bar
-        @postcondition: Progress bar is repostioned to right side
-
-        """
-        rect = self.GetFieldRect(1)
-        self.prog.SetPosition((rect.x + 2, rect.y + 2))
-        self.prog.SetSize((rect.width - 8, rect.height - 4))
-        self._changed = False
-
-    def StartBusy(self):
-        """Start the timer
-        @postcondition: Progress bar is shown and animated
-
-        """
-        self.Reposition()
-        self.prog.Show()
-        self.timer.Start(100)
-
-    def StopBusy(self):
-        """Stop the timer
-        @postcondition: Progress bar is hidden from view
-
-        """
-        self.prog.Hide()
-        self.timer.Stop()
 
 #--------------------------------------------------------------------------#
 
