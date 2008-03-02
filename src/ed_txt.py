@@ -221,6 +221,8 @@ class EdFile(object):
                 txt = reader.read()
                 reader.close()
             except Exception, msg:
+                Log("[ed_txt][err] Error while reading with %s" % self.encoding)
+                Log("[ed_txt][err] %s" % msg)
                 self.last_err = str(msg)
                 self.Close()
                 if self._magic['comment']:
@@ -279,6 +281,7 @@ class EdFile(object):
         tbuff = StringIO(value)
         enc = CheckMagicComment([ tbuff.readline() for x in range(2) ])
         tbuff.close()
+        del tbuff
 
         # Update encoding if necessary
         if enc is not None:
