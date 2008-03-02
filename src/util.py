@@ -7,15 +7,12 @@
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: util.py                                                            #
-# LANGUAGE: Python                                                         #
-#                                                                          #
-# SUMMARY:                                                                 #
-# This file contains various helper functions and utilities that the       #
-# program uses. Basically a random library of misfit functions.	           #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: util.py
+LANGUAGE: Python
+
+SUMMARY:
+This file contains various helper functions and utilities that the
+program uses. Basically a random library of misfit functions.
 
 """
 
@@ -27,9 +24,12 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import stat
 import codecs
 import urllib2
 import wx
+
+# Editra Libraries
 import ed_glob
 import ed_event
 import ed_crypt
@@ -51,7 +51,7 @@ class DropTargetFT(wx.PyDropTarget):
         """
         wx.PyDropTarget.__init__(self)
         self.window = window
-        self._data = dict(data=None, fdata=None, tdata=None, 
+        self._data = dict(data=None, fdata=None, tdata=None,
                           tcallb=textcallback, fcallb=filecallback)
         self._tmp = None
         self._lastp = None
@@ -75,7 +75,7 @@ class DropTargetFT(wx.PyDropTarget):
                 longest = ext
 
         cords = [ (0, x * longest[1]) for x in xrange(len(txt)) ]
-        mdc = wx.MemoryDC(wx.EmptyBitmap(longest[0] + 5, 
+        mdc = wx.MemoryDC(wx.EmptyBitmap(longest[0] + 5,
                                          longest[1] * len(txt), 32))
         mdc.SetBackgroundMode(wx.TRANSPARENT)
         mdc.SetTextForeground(stc.GetDefaultForeColour())
@@ -258,7 +258,7 @@ def GetFileReader(file_name, enc='utf-8'):
     supplied file name. It returns a file reader using the encoding
     (enc) which defaults to utf-8. If lookup of the reader fails on
     the host system it will return an ascii reader.
-    If there is an error in creating the file reader the function 
+    If there is an error in creating the file reader the function
     will return a negative number.
     @param file_name: name of file to get a reader for
     @keyword enc: encoding to use for reading the file
@@ -281,9 +281,9 @@ def GetFileReader(file_name, enc='utf-8'):
 def GetFileWriter(file_name, enc='utf-8'):
     """Returns a file stream writer object for reading the
     supplied file name. It returns a file writer in the supplied
-    encoding if the host system supports it other wise it will return 
+    encoding if the host system supports it other wise it will return
     an ascii reader. The default will try and return a utf-8 reader.
-    If there is an error in creating the file reader the function 
+    If there is an error in creating the file reader the function
     will return a negative number.
     @param file_name: path of file to get writer for
     @keyword enc: encoding to write text to file with
@@ -359,8 +359,19 @@ def GetFileName(path):
     """
     return os.path.split(path)[-1]
 
+def GetFileSize(path):
+    """Get the size of the file at a given path
+    @param path: Path to file
+    @return: long
+
+    """
+    try:
+        return os.stat(path)[stat.ST_SIZE]
+    except:
+        return 0
+
 def GetExtension(file_str):
-    """Gets last atom at end of string as extension if 
+    """Gets last atom at end of string as extension if
     no extension whole string is returned
     @param file_str: path or file name to get extension from
 
@@ -432,7 +443,7 @@ def ResolvAbsPath(rel_path):
     return apath + os.sep + rpath
 
 def HasConfigDir(loc=u""):
-    """ Checks if the user has a config directory and returns True 
+    """ Checks if the user has a config directory and returns True
     if the config directory exists or False if it does not.
     @return: whether config dir in question exists on an expected path
 
@@ -455,7 +466,7 @@ def MakeConfigDir(name):
         pass
 
 def CreateConfigDir():
-    """ Creates the user config directory its default sub 
+    """ Creates the user config directory its default sub
     directories and any of the default config files.
     @postcondition: all default configuration files/folders are created
 
@@ -484,9 +495,9 @@ def CreateConfigDir():
 
 def ResolvConfigDir(config_dir, sys_only=False):
     """Checks for a user config directory and if it is not
-    found it then resolves the absolute path of the executables 
-    directory from the relative execution path. This is then used 
-    to find the location of the specified directory as it relates 
+    found it then resolves the absolute path of the executables
+    directory from the relative execution path. This is then used
+    to find the location of the specified directory as it relates
     to the executable directory, and returns that path as a
     string.
     @param config_dir: name of config directory to resolve
@@ -498,7 +509,7 @@ def ResolvConfigDir(config_dir, sys_only=False):
     if not sys_only:
         # Try to look for a user dir
         user_config = u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
-                                        ed_glob.PROG_NAME, os.sep, 
+                                        ed_glob.PROG_NAME, os.sep,
                                         config_dir)
         if os.path.exists(user_config):
             return user_config + os.sep
@@ -582,7 +593,7 @@ def GetResourceFiles(resource, trim=True, get_all=False):
     @param resource: name of config directory
     @keyword trim: trim file extensions or not
     @keyword get_all: get a set of both system/user files or just user level
-    
+
 
     """
     rec_dir = ResolvConfigDir(resource)
@@ -670,7 +681,7 @@ def HexToRGB(hex_str):
     """Returns a list of red/green/blue values from a
     hex string.
     @param hex_str: hex string to convert to rgb
-    
+
     """
     hexval = hex_str
     if hexval[0] == u"#":
@@ -728,7 +739,7 @@ class IntValidator(wx.PyValidator):
         @param win: window to validate
 
         """
-        val = win.GetValue()      
+        val = win.GetValue()
         return val.isdigit()
 
     def OnChar(self, event):
