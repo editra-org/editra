@@ -7,17 +7,14 @@
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_main.py                                                         #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-#                                                                          #
-# SUMMARY:                                                                 #
-#  This module provides the class for the main window. The MainWindow is   #
-# main object of the editor containing the notebook, shelf, command bar    #
-# and other items.                                                         #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_main.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+
+SUMMARY:
+This module provides the L{MainWindow} class for Editra. The MainWindow is
+main Ui component of the editor that contains all the other components.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -26,12 +23,13 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Dependancies
-
 import os
 import sys
 import time
 import wx
 import wx.aui
+
+# Editra Libraries
 from ed_glob import *
 import util
 import profiler
@@ -41,6 +39,7 @@ import ed_pages
 import ed_menu
 import ed_print
 import ed_cmdbar
+import ed_statbar
 import ed_mdlg
 import syntax.syntax as syntax
 import generator
@@ -76,7 +75,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         viewmgr.PerspectiveManager.__init__(self, self._mgr, \
                                             CONFIG['CACHE_DIR'])
 
-        # Setup app icon and title 
+        # Setup app icon and title
         self.SetTitle()
         util.SetWindowIcon(self)
 
@@ -92,8 +91,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self.filehistory = wx.FileHistory(_PGET('FHIST_LVL', 'int', 5))
 
         #---- Status bar on bottom of window ----#
-        self.CreateStatusBar(3, style=wx.ST_SIZEGRIP)
-        self.SetStatusWidths([-1, 90, 155])
+        self.SetStatusBar(ed_statbar.EdStatBar(self))
+
         #---- End Statusbar Setup ----#
 
         #---- Notebook that contains the editting buffers ----#
@@ -125,7 +124,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         ## Setup additional menu items
         self.filehistory.UseMenu(menbar.GetMenuByName("filehistory"))
-        menbar.GetMenuByName("settings").AppendMenu(ID_LEXER, _("Lexers"), 
+        menbar.GetMenuByName("settings").AppendMenu(ID_LEXER, _("Lexers"),
                                                     syntax.GenLexerMenu(),
                                               _("Manually Set a Lexer/Syntax"))
 
@@ -157,9 +156,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_PRINT_SU, self.OnPrint),
 
                                        # Edit Menu
-                                       (ID_FIND, 
+                                       (ID_FIND,
                                         self.nb.FindService.OnShowFindDlg),
-                                       (ID_FIND_REPLACE, 
+                                       (ID_FIND_REPLACE,
                                         self.nb.FindService.OnShowFindDlg),
                                        (ID_QUICK_FIND, self.OnCommandBar),
                                        (ID_PREF, OnPreferences),
@@ -183,13 +182,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_TRANSLATE, OnHelp),
                                        (ID_CONTACT, OnHelp)])
 
-        self._handlers['menu'].extend([(l_id, self.DispatchToControl) 
+        self._handlers['menu'].extend([(l_id, self.DispatchToControl)
                                        for l_id in syntax.SyntaxIds()])
 
         # Extra menu handlers (need to work these into above system yet)
         self.Bind(wx.EVT_MENU, self.DispatchToControl)
         self.Bind(wx.EVT_MENU, self.OnGenerate)
-        self.Bind(wx.EVT_MENU_RANGE, self.OnFileHistory, 
+        self.Bind(wx.EVT_MENU_RANGE, self.OnFileHistory,
                   id=wx.ID_FILE1, id2=wx.ID_FILE9)
 
         # Update UI Handlers
@@ -227,7 +226,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                     ])
 
         # Lexer Menu
-        self._handlers['ui'].extend([(l_id, self.OnUpdateLexerUI) 
+        self._handlers['ui'].extend([(l_id, self.OnUpdateLexerUI)
                                      for l_id in syntax.SyntaxIds()])
 
         # Perspectives
@@ -321,7 +320,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         for win in wx.GetApp().GetMainWindows():
             if hasattr(win, 'filehistory'):
                 win.filehistory.AddFileToHistory(fname)
-        
+
     def DoOpen(self, evt, fname=u''):
         """ Do the work of opening a file and placing it
         in a new notebook page.
@@ -352,7 +351,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         wx.GetApp().OpenNewWindow(path)
                     else:
                         self.nb.OpenPage(util.GetPathName(path),
-                                         util.GetFileName(path))   
+                                         util.GetFileName(path))
                         self.nb.GoCurrentPage()
 
             dlg.Destroy()
@@ -477,13 +476,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         e_id = evt.GetId()
         ctrls = list()
         if e_id == ID_SAVE:
-            ctrls = [(self.nb.GetPageText(self.nb.GetSelection()), 
+            ctrls = [(self.nb.GetPageText(self.nb.GetSelection()),
                      self.nb.GetCurrentCtrl())]
         elif e_id == ID_SAVEALL:
             for page in xrange(self.nb.GetPageCount()):
-                if issubclass(self.nb.GetPage(page).__class__, 
+                if issubclass(self.nb.GetPage(page).__class__,
                                            wx.stc.StyledTextCtrl):
-                    ctrls.append((self.nb.GetPageText(page), 
+                    ctrls.append((self.nb.GetPageText(page),
                                   self.nb.GetPage(page)))
         else:
             evt.Skip()
@@ -512,9 +511,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type evt: wxMenuEvent
 
         """
-        dlg = wx.FileDialog(self, _("Choose a Save Location"), '', 
-                            title.lstrip("*"), 
-                            ''.join(syntax.GenFileFilters()), 
+        dlg = wx.FileDialog(self, _("Choose a Save Location"), '',
+                            title.lstrip("*"),
+                            ''.join(syntax.GenFileFilters()),
                             wx.SAVE | wx.OVERWRITE_PROMPT)
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -552,7 +551,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if evt.GetId() == ID_SAVE_PROFILE:
             dlg = wx.FileDialog(self, _("Where to Save Profile?"), \
                                CONFIG['PROFILE_DIR'], "default.ppb", \
-                               _("Profile") + " (*.ppb)|*.ppb", 
+                               _("Profile") + " (*.ppb)|*.ppb",
                                 wx.SAVE | wx.OVERWRITE_PROMPT)
 
             if dlg.ShowModal() == wx.ID_OK:
@@ -571,12 +570,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         if evt.GetId() == ID_LOAD_PROFILE:
-            dlg = wx.FileDialog(self, _("Load a Custom Profile"), 
-                                CONFIG['PROFILE_DIR'], "default.ppb", 
+            dlg = wx.FileDialog(self, _("Load a Custom Profile"),
+                                CONFIG['PROFILE_DIR'], "default.ppb",
                                 _("Profile") + " (*.ppb)|*.ppb", wx.OPEN)
 
             result = dlg.ShowModal()
-            if result == wx.ID_OK: 
+            if result == wx.ID_OK:
                 profiler.Profile().Load(dlg.GetPath())
                 self.PushStatusText(_("Loaded Profile: %s") % \
                                     dlg.GetFilename(), SB_INFO)
@@ -682,7 +681,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         self.LOG("[ed_main][evt] OnClose: Closing editor at pos=%s size=%s" % \
                  (_PGET('WPOS', 'str'), _PGET('WSIZE', 'str')))
-        
+
         # Update profile
         profiler.AddFileHistoryToProfile(self.filehistory)
         profiler.Profile().Write(_PGET('MYPROFILE'))
@@ -814,7 +813,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if doc:
             self.nb.NewPage()
             ctrl = self.nb.GetCurrentCtrl()
-            ctrl.SetText(doc[1]) 
+            ctrl.SetText(doc[1])
             ctrl.FindLexer(doc[0])
         else:
             evt.Skip()
@@ -834,9 +833,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         ctrl = self.nb.GetCurrentCtrl()
         active_only = [ ID_ZOOM_IN, ID_ZOOM_OUT, ID_ZOOM_NORMAL,
-                        ID_JOIN_LINES, ID_CUT_LINE, ID_COPY_LINE, ID_INDENT, 
+                        ID_JOIN_LINES, ID_CUT_LINE, ID_COPY_LINE, ID_INDENT,
                         ID_UNINDENT, ID_TRANSPOSE, ID_COMMENT, ID_UNCOMMENT,
-                        ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY, 
+                        ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY,
                         ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE ]
 
         has_focus = self.FindFocus()
@@ -861,11 +860,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         menu_ids = syntax.SyntaxIds()
         menu_ids.extend([ID_SHOW_EOL, ID_SHOW_WS, ID_INDENT_GUIDES, ID_SYNTAX,
                          ID_WORD_WRAP, ID_BRACKETHL, ID_EOL_MAC, ID_EOL_UNIX,
-                         ID_EOL_WIN, ID_NEXT_MARK, ID_PRE_MARK, ID_ADD_BM, 
-                         ID_DEL_BM, ID_DEL_ALL_BM, ID_FOLDING, ID_AUTOCOMP, 
-                         ID_SHOW_LN,  ID_AUTOINDENT, ID_TAB_TO_SPACE, 
-                         ID_SPACE_TO_TAB, ID_TRIM_WS, ID_SHOW_EDGE, 
-                         ID_MACRO_START, ID_MACRO_STOP, ID_MACRO_PLAY, 
+                         ID_EOL_WIN, ID_NEXT_MARK, ID_PRE_MARK, ID_ADD_BM,
+                         ID_DEL_BM, ID_DEL_ALL_BM, ID_FOLDING, ID_AUTOCOMP,
+                         ID_SHOW_LN,  ID_AUTOINDENT, ID_TAB_TO_SPACE,
+                         ID_SPACE_TO_TAB, ID_TRIM_WS, ID_SHOW_EDGE,
+                         ID_MACRO_START, ID_MACRO_STOP, ID_MACRO_PLAY,
                          ID_TO_LOWER, ID_TO_UPPER, ID_KWHELPER, ID_USE_SOFTTABS
                          ])
         menu_ids.extend(active_only)
@@ -1036,11 +1035,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if name == u"":
             name = self.nb.GetPageText(self.nb.GetSelection())
 
-        dlg = wx.MessageDialog(self, 
+        dlg = wx.MessageDialog(self,
                                 _("The file: \"%s\" has been modified since "
                                   "the last save point.\n\nWould you like to "
-                                  "save the changes?") % name, 
-                               _("Save Changes?"), 
+                                  "save the changes?") % name,
+                               _("Save Changes?"),
                                wx.YES_NO | wx.YES_DEFAULT | wx.CANCEL | \
                                wx.ICON_INFORMATION)
         result = dlg.ShowModal()
@@ -1113,7 +1112,7 @@ def OnHelp(evt):
 
 def OnPreferences(evt):
     """Open the Preference Panel
-    @note: The dialogs module is not imported until this is 
+    @note: The dialogs module is not imported until this is
            first called so the first open may lag a little.
     @param evt: Event fired that called this handler
     @type evt: wxMenuEvent
