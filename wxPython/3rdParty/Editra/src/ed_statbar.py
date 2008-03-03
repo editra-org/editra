@@ -45,9 +45,10 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         self.SetStatusWidths([-1, 90, 155])
 
         # Messages
+        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_PROGRESS_SHOW)
         ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_PROGRESS_STATE)
 #        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENING)
-        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENED)
+#        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENED)
 
     def __del__(self):
         """Unsubscribe from messages"""
@@ -68,7 +69,15 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         if mtype == ed_msg.EDMSG_PROGRESS_STATE:
             # May be called from non gui thread so don't do anything with
             # the gui here.
-            self.progress = mdata[0]
+            self.SetProgress(mdata[0])
+            self.range = mdata[1]
+            if sum(mdata) == 0:
+                self.Stop()
+        elif mtype == ed_msg.EDMSG_PROGRESS_SHOW:
+            if mdata:
+                self.Start(75)
+            else:
+                self.Stop()
         elif mtype == ed_msg.EDMSG_FILE_OPENED:
             self.StopBusy()
         elif mtype == ed_msg.EDMSG_FILE_OPENING:
@@ -76,4 +85,4 @@ class EdStatBar(pstatbar.ProgressStatusBar):
             self.SetStatusText('', ed_glob.SB_ROWCOL)
             # Data is the file path
             self.SetRange(util.GetFileSize(mdata))
-
+            self.Start(75)
