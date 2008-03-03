@@ -151,7 +151,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-        self.Bind(wx.EVT_LEFT_UP, self.OnKeyUp)
+        self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_MIDDLE_UP, self.OnMiddleUp)
 
        #---- End Init ----#
 
@@ -666,14 +667,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def OnKeyUp(self, evt):
         """Update status bar of window
-        @param evt: wxEVT_KEY_UP / wxEVT_LEFT_UP
+        @param evt: wxEVT_KEY_UP
 
         """
         evt.Skip()
         self.PostPositionEvent()
-        if isinstance(evt, wx.KeyEvent):
-            ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_KEYUP,
-                               (evt.GetPositionTuple(), evt.GetKeyCode()))
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_KEYUP,
+                           (evt.GetPositionTuple(), evt.GetKeyCode()))
 
     def PostPositionEvent(self):
         """Post an event to update the status of the line/column"""
@@ -789,6 +789,30 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             pos2 = self.WordStartPosition(pos, True)
             self.AutoCompShow(pos - pos2, self._code['keywords'])
         return
+
+    def OnLeftUp(self, evt):
+        """Set primary selection if necessary and inform mainwindow that
+        cursor position has changed.
+
+        """
+        evt.Skip()
+        stxt = self.GetSelectedText()
+        if len(stxt):
+            util.SetClipboardText(stxt, primary=True)
+        self.PostPositionEvent()
+
+    def OnMiddleUp(self, evt):
+        """Paste the primary selection if there is one. Currenly only for
+        under X11.
+        @param evt: wx.MouseEvent
+
+        """
+        pos = self.PositionFromPoint(evt.GetPosition())
+        if pos != wx.stc.STC_INVALID_POSITION:
+            txt = util.GetClipboardText()
+            if txt is not None and len(txt):
+                self.InsertText(pos, txt)
+                self.GotoPos(pos + len(txt))
 
     def OnModified(self, evt):
         """Handles updates that need to take place after
