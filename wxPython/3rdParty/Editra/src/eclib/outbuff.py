@@ -247,7 +247,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
     def Clear(self):
         """Clear the Buffer"""
         self.SetReadOnly(False)
-        self.SetText('')
+        self.ClearAll()
         self.EmptyUndoBuffer()
         self.SetReadOnly(True)
 
