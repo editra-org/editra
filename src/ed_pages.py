@@ -259,6 +259,9 @@ class EdPages(FNB.FlatNotebook):
 
                 self.GetTopLevelParent().Thaw()
                 return
+        else:
+            control.SetFileName(path2file)
+            result = True
 
         # Check if there was encoding errors
         if not result:
@@ -278,6 +281,7 @@ class EdPages(FNB.FlatNotebook):
                 dlg.CenterOnParent()
                 result = dlg.ShowModal()
 
+        # Don't want to open it in another encoding
         if result == wx.ID_NO or not result:
             if new_pg:
                 control.Destroy()
@@ -514,7 +518,7 @@ class EdPages(FNB.FlatNotebook):
         self.LOG("[ed_pages][evt] Page Changed to %d" % cpage)
         self.LOG("[ed_pages][info] It has file named: %s" % \
                  self.control.GetFileName())
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, cpage))
+        self.control.PostPositionEvent()
 
     def OnPageClosing(self, evt):
         """Checks page status to flag warnings before closing
@@ -608,7 +612,7 @@ class EdPages(FNB.FlatNotebook):
         csel = self.GetSelection()
         FNB.FlatNotebook.SetSelection(self, pgnum)
         self.ChangePage(pgnum)
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, (csel, pgnum)))
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pgnum))
 
     def UpdateAllImages(self):
         """Reload and Reset all images in the notebook pages and
