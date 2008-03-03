@@ -7,20 +7,18 @@
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: ed_stc.py                                                             #
-# LANGUAGE: Python                                                            #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-#  This is the main component of the editor that manages all the information  #
-# of the on disk file that it represents in memory. It works with the         #
-# L{ed_style.StyleManager} and L{syntax.syntax.SyntaxManager} to provide an   #
-# editing pane that auto detects and configures itself for type of file that  #
-# is in buffer to do highlighting and other language specific options such as #
-# commenting code.                                                            #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: ed_stc.py
+LANGUAGE: Python
+AUTHOR: Cody Precord
+
+SUMMARY:
+ This is the main component of the editor that manages all the information
+of the on disk file that it represents in memory. It works with the
+L{ed_style.StyleManager} and L{syntax.syntax.SyntaxManager} to provide an
+editing pane that auto detects and configures itself for type of file that
+is in buffer to do highlighting and other language specific options such as
+commenting code.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -124,7 +122,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           comment=list(),
                           lang_id=0)        # Language ID from syntax module
 
-        # Set Up Margins 
+        # Set Up Margins
         ## Outer Left Margin Bookmarks
         self.SetMarginType(MARK_MARGIN, wx.stc.STC_MARGIN_SYMBOL)
         self.SetMarginMask(MARK_MARGIN, self.ED_STC_MASK_MARKERS)
@@ -520,19 +518,19 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         back = self.GetDefaultForeColour()
         fore = self.GetDefaultBackColour()
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPEN, 
+        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPEN,
                           wx.stc.STC_MARK_BOXMINUS, fore, back)
         self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDER,
                           wx.stc.STC_MARK_BOXPLUS,  fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERSUB,     
+        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERSUB,
                           wx.stc.STC_MARK_VLINE, fore, back)
         self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERTAIL,
                           wx.stc.STC_MARK_LCORNER, fore, back)
         self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEREND,
                           wx.stc.STC_MARK_BOXPLUSCONNECTED, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPENMID, 
+        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPENMID,
                           wx.stc.STC_MARK_BOXMINUSCONNECTED, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERMIDTAIL, 
+        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERMIDTAIL,
                           wx.stc.STC_MARK_TCORNER, fore, back)
         self.MarkerDefine(0, wx.stc.STC_MARK_SHORTARROW, fore, back)
         self.SetFoldMarginHiColour(True, fore)
@@ -672,14 +670,17 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         evt.Skip()
-        msg = _("Line: %d  Column: %d") % self.GetPos()
-        nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(), 
-                                    msg, ed_glob.SB_ROWCOL)
-        wx.PostEvent(self.GetTopLevelParent(), nevt)
-
+        self.PostPositionEvent()
         if isinstance(evt, wx.KeyEvent):
             ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_KEYUP,
                                (evt.GetPositionTuple(), evt.GetKeyCode()))
+
+    def PostPositionEvent(self):
+        """Post an event to update the status of the line/column"""
+        msg = _("Line: %d  Column: %d") % self.GetPos()
+        nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
+                                    msg, ed_glob.SB_ROWCOL)
+        wx.PostEvent(self.GetTopLevelParent(), nevt)
 
     def OnRecordMacro(self, evt):
         """Records macro events
@@ -813,7 +814,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             char_before = self.GetCharAt(caret_pos - 1)
 
         # check before
-        if char_before and chr(char_before) in "[]{}()<>": 
+        if char_before and chr(char_before) in "[]{}()<>":
             brace_at_caret = caret_pos - 1
 
         # check after
@@ -983,25 +984,25 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_PASTE : self.Paste, ed_glob.ID_UNDO : self.Undo,
                   ed_glob.ID_REDO  : self.Redo, ed_glob.ID_INDENT : self.Tab,
                   ed_glob.ID_KWHELPER: self.ShowKeywordHelp,
-                  ed_glob.ID_CUT_LINE : self.LineCut, 
+                  ed_glob.ID_CUT_LINE : self.LineCut,
                   ed_glob.ID_COPY_LINE : self.LineCopy,
                   ed_glob.ID_DUP_LINE : self.LineDuplicate,
                   ed_glob.ID_BRACKETHL : self.ToggleBracketHL,
                   ed_glob.ID_SYNTAX : self.SyntaxOnOff,
                   ed_glob.ID_UNINDENT : self.BackTab,
-                  ed_glob.ID_TRANSPOSE : self.LineTranspose, 
+                  ed_glob.ID_TRANSPOSE : self.LineTranspose,
                   ed_glob.ID_SELECTALL: self.SelectAll,
-                  ed_glob.ID_FOLDING : self.FoldingOnOff, 
+                  ed_glob.ID_FOLDING : self.FoldingOnOff,
                   ed_glob.ID_SHOW_LN : self.ToggleLineNumbers,
-                  ed_glob.ID_COMMENT : self.Comment, 
+                  ed_glob.ID_COMMENT : self.Comment,
                   ed_glob.ID_AUTOINDENT : self.ToggleAutoIndent,
-                  ed_glob.ID_LINE_AFTER : self.AddLine, 
+                  ed_glob.ID_LINE_AFTER : self.AddLine,
                   ed_glob.ID_TRIM_WS : self.TrimWhitespace,
-                  ed_glob.ID_MACRO_START : self.StartRecord, 
+                  ed_glob.ID_MACRO_START : self.StartRecord,
                   ed_glob.ID_MACRO_STOP : self.StopRecord,
                   ed_glob.ID_MACRO_PLAY : self.PlayMacro
         }
-        
+
         e_idmap = { ed_glob.ID_ZOOM_OUT : self.DoZoom,
                     ed_glob.ID_ZOOM_IN  : self.DoZoom,
                     ed_glob.ID_ZOOM_NORMAL : self.DoZoom,
@@ -1071,7 +1072,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         mixed = diff = False
-        eol_map = {"\n" : wx.stc.STC_EOL_LF, 
+        eol_map = {"\n" : wx.stc.STC_EOL_LF,
                    "\r\n" : wx.stc.STC_EOL_CRLF,
                    "\r" : wx.stc.STC_EOL_CR}
         eol = chr(self.GetCharAt(self.GetLineEndPosition(0)))
@@ -1314,7 +1315,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetCaretWidth(1)
             msg = 'INSERT'
 
-        evt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(), 
+        evt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
                                    msg, ed_glob.SB_BUFF)
         wx.PostEvent(self.GetTopLevelParent(), evt)
 
@@ -1369,7 +1370,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 if not eol.isspace():
                     eol = u''
             else:
-                eol = u''            
+                eol = u''
             if line == cline:
                 npos = cpos - (abs(len(self.GetTextRange(0, \
                                        self.GetLineEndPosition(cline-1))) - \
@@ -1511,7 +1512,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
             self.BeginUndoAction()
             if rcmd in u'CD': # Cut line right
-                self.SetSelection(cpos, 
+                self.SetSelection(cpos,
                                   self.GetLineEndPosition(cline + (repeat - 1)))
                 self.Cut()
             elif rcmd == u'J':
@@ -1534,7 +1535,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 if not cmd_map.has_key(rcmd):
                     return
                 run = cmd_map[rcmd]
-                for count in xrange(repeat):                
+                for count in xrange(repeat):
                     run(*args, **kargs)
             if rcmd == u'p':
                 if newline:
@@ -1684,7 +1685,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                                        'NORMAL  %s' % self._vi['cmdcache'],
                                         ed_glob.SB_BUFF)
             wx.PostEvent(self.GetTopLevelParent(), evt)
-        
+
     def FoldingOnOff(self, switch=None):
         """Turn code folding on and off
         @keyword switch: force a particular setting
@@ -2022,7 +2023,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         except KeyError:
             self.LOG("[ed_stc][err] No Keywords Data Found")
             keywords = []
-       
+
         try:
             synspec = syn_data[syntax.SYNSPEC]
         except KeyError:
@@ -2079,7 +2080,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         kwlist.sort()                              # Sort into alphbetical order
         self._code['keywords'] = " ".join(kwlist)  # Put back into a string
         return True
- 
+
     def SetSyntax(self, syn_lst):
         """Sets the Syntax Style Specs from a list of specifications
         @param syn_lst: [(STYLE_ID, "STYLE_TYPE"), (STYLE_ID2, "STYLE_TYPE2)]
@@ -2130,7 +2131,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     #---- Style Function Definitions ----#
     def RefreshStyles(self):
-        """Refreshes the colorization of the window by reloading any 
+        """Refreshes the colorization of the window by reloading any
         style tags that may have been modified.
         @postcondition: all style settings are refreshed in the control
 
