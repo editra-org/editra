@@ -18,8 +18,9 @@ NEWS:
 NEW: [features/improvements]
 +New CodeBrowser plugin for browsing classes, functions, variables and other
 significant objects in a code document.
++New version of Launch (add support for haXe, PHP)
++New version of Projects Plugin (add support for Bazaar)
 +Improved Perl and Lisp highlighting
-+Minor updates to Launch to allow for use of command aliases
 +New version of FileBrowser with some minor fixes and enhancements
 +Colorize Error and Warning messages in Log Viewer
 +Use prefered font from preferences in Log and Launch output
@@ -40,6 +41,7 @@ BUG FIXES:
 +Fix memory leak in the LogViewer and Launch
 +Fix some dead object errors from improper event handling
 +Fix BOM related file opening errors
++Php autocomment now works
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
