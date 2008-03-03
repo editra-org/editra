@@ -250,6 +250,8 @@ class CodeBrowserTree(wx.TreeCtrl):
         # the currently active buffer.
         if evt.GetId() == self._cjob:
             self.UpdateAll(evt.GetValue())
+            # Stop busy indicator
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (0, 0))
 
     def OnUpdateMenu(self, evt):
         """UpdateUI handler for the panels menu item, to update the check
@@ -266,13 +268,16 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         """
         # Don't update when this window is not Active
-        if not self._mw.IsActive():
+        if self._mw != wx.GetApp().GetActiveWindow():
             return
 
         page = self._GetCurrentCtrl()
         genfun = TagLoader.GetGenerator(page.GetLangId())
         if genfun is not None and self._ShouldUpdate():
             self._cjob += 1
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW, True)
+            # Start progress indicator in pulse mode
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (-1, -1))
             thread = TagGenThread(self, self._cjob, genfun,
                                   StringIO.StringIO(page.GetText()))
             wx.CallLater(75, thread.start)
@@ -328,7 +333,6 @@ class CodeBrowserTree(wx.TreeCtrl):
 
 #--------------------------------------------------------------------------#
 # Tag Generator Thread
-
 class TagGenThread(threading.Thread):
     """Thread for running tag parser on and returning the results for
     display in the tree.
