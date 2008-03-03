@@ -209,18 +209,51 @@ class DropTargetFT(wx.PyDropTarget):
 #---- End FileDropTarget ----#
 
 #---- Misc Common Function Library ----#
-def SetClipboardText(txt):
-    """Copies text to the clipboard
-    @param txt: text to put in clipboard
+# Used for holding the primary selection on mac/msw
+FAKE_CLIPBOARD = None
+
+def GetClipboardText():
+    """Get the primary selection from the clipboard if there is one
+    @return: str or None
 
     """
+    if wx.Platform in '__WXGTK__':
+        wx.TheClipboard.UsePrimarySelection(True)
+    else:
+        # Fake the primary selection on mac/msw
+        global FAKE_CLIPBOARD
+        return FAKE_CLIPBOARD
+    text_obj = wx.TextDataObject()
+    rtxt = None
+    if wx.TheClipboard.Open():
+        if wx.TheClipboard.GetData(text_obj):
+            rtxt = text_obj.GetText()
+        wx.TheClipboard.Close()
+    return rtxt
+
+def SetClipboardText(txt, primary=False):
+    """Copies text to the clipboard
+    @param txt: text to put in clipboard
+    @keyword primary: Set txt as primary selection (x11)
+
+    """
+    if primary:
+        if wx.Platform == '__WXGTK__':
+            wx.TheClipboard.UsePrimarySelection(True)
+        else:
+            # Fake the primary selection on mac/msw
+            global FAKE_CLIPBOARD
+            FAKE_CLIPBOARD = txt
+            return True
+
     data_o = wx.TextDataObject()
     data_o.SetText(txt)
     if wx.TheClipboard.Open():
         wx.TheClipboard.SetData(data_o)
         wx.TheClipboard.Close()
-        return 1
-    return 0
+        return True
+    else:
+        return False
 
 def FilterFiles(file_list):
     """Filters a list of paths and returns a list of paths
