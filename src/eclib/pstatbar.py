@@ -7,14 +7,17 @@
 ###############################################################################
 
 """
-Editra Control Library: Progress StatusBar
+Editra Control Library: ProgressStatusBar
 
 Custom StatusBar that has a builtin progress gauge to indicate busy status and
-progress of long running tasks in a window. The progress bar is only shown when
-it is active and shown in the far rightmost field of the StatusBar. The size of
-the progress Guage is also determined by the size of the right most field. When
-created the StatusBar will create two fields by default, to change this behavior
-simply call SetFields after creating the bar to change it.
+progress of long running tasks in a window.
+
+The Progress Gauge is only shown when it is active. When shown it is shown in 
+the far rightmost field of the StatusBar. The size of the progress Guage is 
+also determined by the size of the right most field.When created the StatusBar 
+will creates two fields by default, field 0 is expanding, field 1 is set as a
+small fixed field on the right. To change this behavior simply call SetFields 
+after creating the bar to change it.
 
 """
 
@@ -31,7 +34,7 @@ import wx
 
 #--------------------------------------------------------------------------#
 class ProgressStatusBar(wx.StatusBar):
-    """Custom StatusBar with a builtin progress bar"""
+    """Custom StatusBar with a built-in progress bar"""
     def __init__(self, parent, id_=wx.ID_ANY,
                  style=wx.DEFAULT_STATUSBAR_STYLE,
                  name="ProgressStatusBar"):
@@ -48,6 +51,8 @@ class ProgressStatusBar(wx.StatusBar):
         self.busy = False       # Bar in busy mode ?
         self.stop = False       # Stop flag to stop progress from other threads
         self.progress = 0       # Current progress value of the bar
+        self.range = 0          # Range of progress indicator
+        self.tmp = None         # Temp for text that may be pushed when busy
         self.timer = wx.Timer(self)
         self.prog = wx.Gauge(self, style=wx.GA_HORIZONTAL)
         self.prog.Hide()
@@ -58,7 +63,7 @@ class ProgressStatusBar(wx.StatusBar):
 
         # Event Handlers
         self.Bind(wx.EVT_IDLE, lambda evt: self.__Reposition())
-        self.Bind(wx.EVT_TIMER, lambda evt: self.prog.Pulse())
+        self.Bind(wx.EVT_TIMER, self.OnTimer)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def __del__(self):
@@ -71,7 +76,7 @@ class ProgressStatusBar(wx.StatusBar):
 
     def __Reposition(self):
         """Does the actual repositioning of progress bar
-        @postcondition: Progress bar is repostioned to right side
+        @postcondition: Progress bar is repostioned inside right most field
 
         """
         if self._changed:
@@ -83,14 +88,31 @@ class ProgressStatusBar(wx.StatusBar):
     #---- Public Methods ----#
 
     def Destroy(self):
-        """Cleanup timer
-        @postcondition: timer is cleaned up and status bar is destroyed
-
-        """
+        """Destroy the control"""
         if self.timer.IsRunning():
             self.timer.Stop()
         del self.timer
         wx.StatusBar.Destroy(self)
+
+    def DoStop(self):
+        """Stop any progress indication action and hide the bar"""
+        self.timer.Stop()
+        self.ShowProgress(False)
+        self.prog.SetValue(0)   # Reset progress value
+        self.busy = False
+        self.stop = False
+
+        # Restore any status text that was sent while busy
+        if self.tmp is not None:
+            self.SetStatusText(self.tmp, self.GetFieldsCount() - 1)
+            self.tmp = None
+
+    def GetGauge(self):
+        """Return the wx.Gauge used by this window
+        @return: wx.Gauge
+
+        """
+        return self.prog
 
     def GetProgress(self):
         """Get the progress of the progress bar
@@ -105,6 +127,13 @@ class ProgressStatusBar(wx.StatusBar):
 
         """
         return self.prog.GetRange()
+
+    def IsBusy(self):
+        """Is the progress indicator busy or not
+        @return: bool
+
+        """
+        return self.timer.IsRunning()
 
     def OnSize(self, evt):
         """Reposition progress bar on resize
@@ -122,20 +151,21 @@ class ProgressStatusBar(wx.StatusBar):
         """
         # Check stop flag that can be set from non main thread
         if self.stop:
-            self.timer.Stop()
-            self.ShowProgress(False)
-            self.prog.SetValue(0)   # Rest progress value
-            self.stop = False
+            self.DoStop()
             return
 
         if self.busy or self.progress < 0:
             self.prog.Pulse()
         else:
-            self.SetProgress(self.progress)
+            if self.range != self.prog.GetRange():
+                self.prog.SetRange(self.range)
+
+            if self.progress <= self.range:
+                self.prog.SetValue(self.progress)
 
     def Run(self, rate=100):
         """Start the bar's timer to check for updates to progress
-        @keyword rate: rate at which to check for updates
+        @keyword rate: rate at which to check for updates in msec
 
         """
         if not self.timer.IsRunning():
@@ -150,13 +180,18 @@ class ProgressStatusBar(wx.StatusBar):
 
         """
         self.progress = val
+        if wx.Thread_IsMain():
+            self.prog.SetValue(val)
 
     def SetRange(self, val):
-        """Set the what the range of the progress bar is
+        """Set the what the range of the progress bar is. This method can safely
+        be called from non gui threads.
         @param val: int
 
         """
-        self.prog.SetRange(val)
+        self.range = val
+        if wx.Thread_IsMain():
+            self.prog.SetRange(val)
 
     def ShowProgress(self, show=True):
         """Manually show or hide the progress bar
@@ -168,11 +203,31 @@ class ProgressStatusBar(wx.StatusBar):
             self.__Reposition()
         self.prog.Show(show)
 
+    def SetStatusText(self, txt, number=0):
+        """Override wx.StatusBar method to prevent text from being
+        put in when the progress indicator is running. Any text that
+        comes when it is running is buffered to be displayed afterwards.
+        @param txt: Text to put on status bar
+        @keyword number: Section number to put text in
+
+        """
+        if number == self.GetFieldsCount() - 1 and self.IsBusy():
+            self.tmp = txt
+        else:
+            wx.StatusBar.SetStatusText(self, txt, number)
+
+    # Alias for SetStatusText
+    PushStatusText = SetStatusText
+
     def Start(self, rate=100):
         """Show and the progress indicator and start the timer
         @keyword rate: rate to update progress bar in msec
 
         """
+        bfield = self.GetFieldsCount() - 1
+        self.tmp = self.GetStatusText(bfield)
+        self.SetStatusText('', bfield) # Clear the progress field
+        self.stop = False
         self.ShowProgress(True)
         self.Run(rate)
 
@@ -185,14 +240,13 @@ class ProgressStatusBar(wx.StatusBar):
         self.Start(rate)
 
     def Stop(self):
-        """Stop and hide the progress bar.
-        @note: thread safe
+        """Stop and hide the progress bar. This method may safely be called
+        from background threads.
+        @precondition: Bar is already running
 
         """
         if wx.Thread_IsMain():
-            self.timer.Stop()
-            self.ShowProgress(False)
-            self.prog.SetValue(0)   # Rest progress value
+            self.DoStop()
         else:
             self.stop = True # Set flag from non main thread
         self.progress = 0
