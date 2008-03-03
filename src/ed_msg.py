@@ -120,6 +120,17 @@ EDMSG_UI_NB_CLOSING = EDMSG_UI_NB + ('pgclosing',)
 # msgdata == (ref to notebook, index of page that is now selected)
 EDMSG_UI_NB_CLOSED = EDMSG_UI_NB + ('pgclosed',)
 
+# Post message to show the progress indicator of the MainWindow
+# msgdata == True / False
+EDMSG_PROGRESS_SHOW = EDMSG_UI_ALL + ('progbar', 'show')
+
+# Post this message to manipulate the state of the MainWindows status bar
+# progress indicator. The message data should be a tuple of the current progress
+# and the total range (current, total). If both values are 0 then the bar will
+# be hidden. If both are negative the bar will be set into pulse mode. This
+# message can safely be sent from background threads.
+EDMSG_PROGRESS_STATE = EDMSG_UI_ALL + ('progbar', 'state')
+
 ## Text Buffer
 # msgdata == ((x, y), keycode)
 EDMSG_UI_STC_KEYUP = EDMSG_UI_ALL + ('stc', 'keyup')
@@ -130,12 +141,6 @@ EDMSG_UI_STC_KEYUP = EDMSG_UI_ALL + ('stc', 'keyup')
 # Signal that the icon theme has changed. Respond to this to update icon
 # resources from the ArtProvider.
 EDMSG_THEME_CHANGED = EDMSG_ALL + ('theme',)
-
-# Post this message to manipulate the state of the MainWindows status bar
-# progress indicator. The message data should be a tuple of the current progress
-# and the total range (current, total). If both values are 0 then the bar will
-# be hidden. If both are negative the bar will be set into pulse mode.
-EDMSG_PROGRESS_STATE = EDMSG_ALL + ('progbar',)
 
 #--------------------------------------------------------------------------#
 # Public Api
