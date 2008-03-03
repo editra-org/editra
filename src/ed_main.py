@@ -592,8 +592,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: event that called this handler
 
         """
-        if self.GetStatusBar():
-            self.PushStatusText(evt.GetMessage(), evt.GetSection())
+        statbar = self.GetStatusBar()
+        if statbar:
+            # The frames Set/PushStatusText methods don't seem to call the
+            # method of the statusbar class instance when setting the text so
+            # get and set the text in the status bar directly so that our
+            # statusbar's overridden settext method gets called
+            statbar.SetStatusText(evt.GetMessage(), evt.GetSection())
+#            self.SetStatusText(evt.GetMessage(), evt.GetSection())
 
     def OnPrint(self, evt):
         """Handles sending the current document to the printer,
