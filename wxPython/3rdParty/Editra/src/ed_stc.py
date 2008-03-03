@@ -1266,6 +1266,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetTargetEnd(self.GetLineEndPosition(eline))
         self.ReplaceTarget(u' '.join(lines))
 
+    def LineTranspose(self):
+        """Switch the current line with the previous one
+        @note: overrides base stc method to do transpose in single undo action
+
+        """
+        self.BeginUndoAction()
+        wx.stc.StyledTextCtrl.LineTranspose(self)
+        self.EndUndoAction()
+
     def SetAutoComplete(self, value):
         """Turns Autocompletion on and off
         @param value: use autocomp or not
