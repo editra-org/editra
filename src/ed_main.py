@@ -177,10 +177,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
                                        # Help Menu
                                        (ID_ABOUT, OnAbout),
-                                       (ID_HOMEPAGE, OnHelp),
-                                       (ID_DOCUMENTATION, OnHelp),
-                                       (ID_TRANSLATE, OnHelp),
-                                       (ID_CONTACT, OnHelp)])
+                                       (ID_HOMEPAGE, self.OnHelp),
+                                       (ID_DOCUMENTATION, self.OnHelp),
+                                       (ID_TRANSLATE, self.OnHelp),
+                                       (ID_CONTACT, self.OnHelp)])
 
         self._handlers['menu'].extend([(l_id, self.DispatchToControl)
                                        for l_id in syntax.SyntaxIds()])
@@ -1022,6 +1022,37 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Skip()
         self.sizer.Layout()
 
+    def OnHelp(self, evt):
+        """Handles help related menu events
+        @param evt: Event fired that called this handler
+        @type evt: wxMenuEvent
+
+        """
+        import webbrowser
+
+        e_id = evt.GetId()
+        if e_id == ID_HOMEPAGE:
+            page = HOME_PAGE
+        elif e_id == ID_DOCUMENTATION:
+            page = HOME_PAGE + "/?page=doc"
+        elif e_id == ID_TRANSLATE:
+            page = I18N_PAGE
+        elif e_id == ID_CONTACT:
+            webbrowser.open("mailto:%s" % CONTACT_MAIL)
+            return
+        else:
+            evt.Skip()
+            return
+
+        # It seems under some cases when running under windows the call to
+        # subprocess in webbrowser will fail and raise an exception here. So
+        # simply trap and ingnore it.
+        try:
+            self.PushStatusText(_("Opening %s") % page, SB_INFO)
+            webbrowser.open(page, 1)
+        except:
+            self.PushStatusText(_("Error: Unable to open %s") % page, SB_INFO)
+
     def ShowCommandCtrl(self):
         """Open the Commandbar in command mode.
         @todo: check if this is necessary
@@ -1094,25 +1125,6 @@ def OnAbout(evt):
         info.SetDescription(desc % (py_version, wx_info))
         info.SetVersion(VERSION)
         wx.AboutBox(info)
-    else:
-        evt.Skip()
-
-def OnHelp(evt):
-    """Handles help related menu events
-    @param evt: Event fired that called this handler
-    @type evt: wxMenuEvent
-
-    """
-    import webbrowser
-    e_id = evt.GetId()
-    if e_id == ID_HOMEPAGE:
-        webbrowser.open(HOME_PAGE, 1)
-    elif e_id == ID_DOCUMENTATION:
-        webbrowser.open(HOME_PAGE + "/?page=doc", 1)
-    elif e_id == ID_TRANSLATE:
-        webbrowser.open(I18N_PAGE, 1)
-    elif e_id == ID_CONTACT:
-        webbrowser.open("mailto:%s" % CONTACT_MAIL)
     else:
         evt.Skip()
 
