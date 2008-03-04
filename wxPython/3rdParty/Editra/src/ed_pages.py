@@ -178,6 +178,7 @@ class EdPages(FNB.FlatNotebook):
                 if os.path.exists(fname) and os.access(fname, os.R_OK):
                     self.OpenPage(os.path.dirname(fname), 
                                   os.path.basename(fname))
+                    self.Update() # Give feedback as files are loaded
         self._ses_load = False
 
         if self.GetPageCount() == 0:
