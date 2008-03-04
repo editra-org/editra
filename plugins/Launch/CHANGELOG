@@ -11,7 +11,7 @@ Date: xx/xx/2008
 + Use aliases for command names
 + Use Primary Font from Profile settings for output
 + Fix improper updating from events taking place in other windows
-+ Support for PHP, haXe
++ Support for Ada, PHP, Haskell, haXe, PostScript
 
 #-----------------------------------------------------------------------------#
 

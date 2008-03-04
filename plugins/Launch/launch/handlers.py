@@ -250,6 +250,20 @@ class FileTypeHandler(object):
             stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_INFO)
 
 #-----------------------------------------------------------------------------#
+
+class AdaHandler(FileTypeHandler):
+    """FileTypeHandler for Ada"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = {'gcc -c' : 'gcc -c'}
+        self.default = 'gcc -c'
+
+    @property
+    def __name__(self):
+        return 'ada'
+
+#-----------------------------------------------------------------------------#
+
 class BashHandler(FileTypeHandler):
     """FileTypeHandler for Bash scripts"""
     RE_BASH_ERROR = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
@@ -336,6 +350,19 @@ class FeriteHandler(FileTypeHandler):
     @property
     def __name__(self):
         return 'ferite'
+
+#-----------------------------------------------------------------------------#
+
+class HaskellHandler(FileTypeHandler):
+    """FileTypeHandler for Haskell"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = {'ghc --make' : 'ghc --make'}
+        self.default = 'ghc --make'
+
+    @property
+    def __name__(self):
+        return 'haskell'
 
 #-----------------------------------------------------------------------------#
 
@@ -526,6 +553,26 @@ class PerlHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class PostScriptHandler(FileTypeHandler):
+    """FileTypeHandler for Post/GhostScript"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        if sys.platform.startswith('win'):
+            self.commands = dict(gswin32c='gswin32c')
+            self.default = 'gs2in32c'
+        elif 'darwin' in sys.platform:
+            self.commands = dict(pstopdf='pstopdf')
+            self.default = 'pstopdf'
+        else:
+            self.commands = dict(gs='gs')
+            self.default = 'gs'
+
+    @property
+    def __name__(self):
+        return 'postscript'
+
+#-----------------------------------------------------------------------------#
+
 class PythonHandler(FileTypeHandler):
     """FileTypeHandler for Python"""
     RE_PY_ERROR = re.compile('File "(.+)", line ([0-9]+)')
@@ -648,18 +695,21 @@ class TCLHandler(FileTypeHandler):
 #-----------------------------------------------------------------------------#
 # Handler Object Dictionary
 # Create an instance of each Handler to use as a persistant object
-HANDLERS = { 0 : FileTypeHandler(),
+HANDLERS = { 0 : FileTypeHandler(), # Null Hanlder
+            synglob.ID_LANG_ADA : AdaHandler(),
             synglob.ID_LANG_BASH : BashHandler(),
             synglob.ID_LANG_BOO : BooHandler(),
             synglob.ID_LANG_CSH : CSHHandler(),
             synglob.ID_LANG_FERITE : FeriteHandler(),
             synglob.ID_LANG_KSH : KornHandler(),
+            synglob.ID_LANG_HASKELL : HaskellHandler(),
             synglob.ID_LANG_HAXE : HaxeHandler(),
             synglob.ID_LANG_LUA : LuaHandler(),
             synglob.ID_LANG_NSIS : NSISHandler(),
             synglob.ID_LANG_PERL : PerlHandler(),
             synglob.ID_LANG_PHP : PhpHandler(),
             synglob.ID_LANG_PIKE : PikeHandler(),
+            synglob.ID_LANG_PS   : PostScriptHandler(),
             synglob.ID_LANG_PYTHON : PythonHandler(),
             synglob.ID_LANG_RUBY : RubyHandler(),
             synglob.ID_LANG_TCL : TCLHandler() }
