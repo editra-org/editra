@@ -264,7 +264,7 @@ class CodeBrowserTree(wx.TreeCtrl):
 
     def OnUpdateTree(self, msg):
         """Update the tree when an action message is sent
-        @param msg: Message Obect
+        @param msg: Message Object
 
         """
         # Don't update when this window is not Active
@@ -287,6 +287,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             # pending jobs are completed
             self._cjob = 0
             self.DeleteChildren(self.root)
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW, False)
             return
 
     def OnShowBrowser(self, evt):
