@@ -599,13 +599,13 @@ def Main():
                                ed_glob.PROG_NAME)
     editra_app.RegisterWindow(repr(frame), frame, True)
     editra_app.SetTopWindow(frame)
+    frame.Show(True)
 
     # Load Session Data
     # But not if there are command line args for files to open
     if profiler.Profile_Get('SAVE_SESSION', 'bool', False) and not len(args):
         frame.GetNotebook().LoadSessionFiles()
 
-    frame.Show(True)
     # Unlike wxMac/wxGTK Windows doesn't post an activate event when a window
     # is first shown, so do it manually to make sure all event handlers get
     # pushed.
