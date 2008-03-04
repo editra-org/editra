@@ -791,14 +791,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         return
 
     def OnLeftUp(self, evt):
-        """Set primary selection if necessary and inform mainwindow that
-        cursor position has changed.
+        """Set primary selection and inform mainwindow that cursor position 
+        has changed.
+        @param evt: wx.MouseEvent()
 
         """
         evt.Skip()
-        stxt = self.GetSelectedText()
-        if len(stxt):
-            util.SetClipboardText(stxt, primary=True)
+        util.SetClipboardText(self.GetSelectedText(), primary=True)
         self.PostPositionEvent()
 
     def OnMiddleUp(self, evt):
