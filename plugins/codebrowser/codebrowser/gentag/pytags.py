@@ -15,6 +15,9 @@ SUMMARY:
 It supports parsing for global and class variables, class, method, and function
 definitions.
 
+@fixme: Functions defined within functions/methods produce some parsing mistakes
+@fixme: Classes defined within scopes outside the module scope are not parsed
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
