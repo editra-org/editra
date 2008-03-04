@@ -157,9 +157,11 @@ class ProgressStatusBar(wx.StatusBar):
         if self.busy or self.progress < 0:
             self.prog.Pulse()
         else:
-            if self.range != self.prog.GetRange():
+            # Update the Rqnge if it has changed
+            if self.range >= 0 and self.range != self.prog.GetRange():
                 self.prog.SetRange(self.range)
 
+            # Update the progress value if it is less than the range
             if self.progress <= self.range:
                 self.prog.SetValue(self.progress)
 
@@ -180,7 +182,7 @@ class ProgressStatusBar(wx.StatusBar):
 
         """
         self.progress = val
-        if wx.Thread_IsMain():
+        if val > 0 and wx.Thread_IsMain():
             self.prog.SetValue(val)
 
     def SetRange(self, val):
@@ -190,7 +192,7 @@ class ProgressStatusBar(wx.StatusBar):
 
         """
         self.range = val
-        if wx.Thread_IsMain():
+        if val > 0 and wx.Thread_IsMain():
             self.prog.SetRange(val)
 
     def ShowProgress(self, show=True):
