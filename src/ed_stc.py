@@ -1711,12 +1711,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self._vi['cmdcache'] = u''
         elif re.match(VI_GCMDS, cmd):
             rcmd = cmd[-1]
-            self.BeginUndoAction()
             if rcmd == u'g':
                 self.GotoLine(0)
             elif rcmd == u'f':
                 pass # TODO: gf (Goto file at cursor)
-            self.EndUndoAction()
             self._vi['last'] = cmd
             self._vi['cmdcache'] = u''
         else:
