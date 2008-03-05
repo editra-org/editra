@@ -55,6 +55,7 @@ VI_DCMD_RIGHT = '[bBcdeEGhHlLMwWy|{}$<>]'
 VI_DOUBLE_P1 = re.compile('[cdy<>][0-9]*' + VI_DCMD_RIGHT)
 VI_DOUBLE_P2 = re.compile('[0-9]*[cdy<>]' + VI_DCMD_RIGHT)
 VI_SINGLE_REPEAT = re.compile('[0-9]*[bBCDeEGhjJkloOpPsuwWxX{}~|+-]')
+VI_GCMDS = re.compile('g[fg]')
 NUM_PAT = re.compile('[0-9]*')
 NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
            "0123456789_./\?[]{}<>!@#$%^&*():=-+\"';,"
@@ -1706,6 +1707,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.EndUndoAction()
             if rcmd in '<<>>' or rcmd[-1] == u'G':
                 self.GotoIndentPos(cline)
+            self._vi['last'] = cmd
+            self._vi['cmdcache'] = u''
+        elif re.match(VI_GCMDS, cmd):
+            rcmd = cmd[-1]
+            self.BeginUndoAction()
+            if rcmd == u'g':
+                self.GotoLine(0)
+            elif rcmd == u'f':
+                pass # TODO: gf (Goto file at cursor)
+            self.EndUndoAction()
             self._vi['last'] = cmd
             self._vi['cmdcache'] = u''
         else:
