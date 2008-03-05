@@ -7,21 +7,19 @@
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_pages.py                                                        #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-#                                                                          #
-# SUMMARY:                                                                 #
-# This file defines the notebook for containing the text controls for      #
-# for editing text in Editra. The note book is a custom sublclass of       #
-# FlatNotebook that allow for automatic page images and drag and dropping  #
-# of tabs between open editor windows. The notebook is also primarly in    #
-# charge of opening files that are requested by the user and setting up the#
-# text control to use them. For more information on the text controls used #
-# in the notebook see ed_stc.py                                            #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_pages.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+
+SUMMARY:
+This file defines the notebook for containing the text controls for
+for editing text in Editra. The note book is a custom sublclass of
+FlatNotebook that allow for automatic page images and drag and dropping
+of tabs between open editor windows. The notebook is also primarly in
+charge of opening files that are requested by the user and setting up the
+text control to use them. For more information on the text controls used
+in the notebook see ed_stc.py
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -33,6 +31,8 @@ __revision__ = "$Revision$"
 import os
 import glob
 import wx
+
+# Editra Libraries
 import ed_glob
 from profiler import Profile_Get
 import ed_stc
@@ -41,16 +41,17 @@ import syntax.syntax as syntax
 import ed_search
 import util
 import doctools
-from extern import flatnotebook as FNB
 import ed_msg
 import ed_txt
 import ed_mdlg
+from extern import flatnotebook as FNB
 
 #--------------------------------------------------------------------------#
 # Globals
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
+
 class EdPages(FNB.FlatNotebook):
     """Editras editor buffer botebook
     @todo: allow for tab styles to be configurable (maybe)
@@ -62,9 +63,9 @@ class EdPages(FNB.FlatNotebook):
         @param id_num: this notebooks id
 
         """
-        FNB.FlatNotebook.__init__(self, parent, id_num, 
+        FNB.FlatNotebook.__init__(self, parent, id_num,
                                   style=FNB.FNB_FF2 |
-                                        FNB.FNB_X_ON_TAB | 
+                                        FNB.FNB_X_ON_TAB |
                                         FNB.FNB_SMART_TABS |
                                         FNB.FNB_BACKGROUND_GRADIENT |
                                         FNB.FNB_DROPDOWN_TABS_LIST |
@@ -112,8 +113,8 @@ class EdPages(FNB.FlatNotebook):
     def _NeedOpen(self, path):
         """Check if a file needs to be opened. If the file is already open in
         the notebook a dialog will be opened to ask if the user wants to reopen
-        the file again. If the file is not open and exists or the user chooses 
-        to reopen the file again the function will return True else it will 
+        the file again. If the file is not open and exists or the user chooses
+        to reopen the file again the function will return True else it will
         return False.
         @param path: file to check for
 
@@ -123,7 +124,7 @@ class EdPages(FNB.FlatNotebook):
             mdlg = wx.MessageDialog(self,
                                     _("File is already open in an existing "
                                       "page.\nDo you wish to open it again?"),
-                                    _("Open File") + u"?", 
+                                    _("Open File") + u"?",
                                     wx.YES_NO | wx.NO_DEFAULT | \
                                     wx.ICON_INFORMATION)
             result = mdlg.ShowModal()
@@ -176,7 +177,7 @@ class EdPages(FNB.FlatNotebook):
         if files is not None:
             for fname in files:
                 if os.path.exists(fname) and os.access(fname, os.R_OK):
-                    self.OpenPage(os.path.dirname(fname), 
+                    self.OpenPage(os.path.dirname(fname),
                                   os.path.basename(fname))
                     self.Update() # Give feedback as files are loaded
         self._ses_load = False
@@ -293,7 +294,7 @@ class EdPages(FNB.FlatNotebook):
 
             self.GetTopLevelParent().Thaw()
             return
-            
+
         # Put control into page an place page in notebook
         if new_pg:
             control.Show()
@@ -305,7 +306,7 @@ class EdPages(FNB.FlatNotebook):
         if new_pg:
             self.AddPage(self.control, filename)
 
-        self.frame.SetTitle("%s - file://%s" % (filename, 
+        self.frame.SetTitle("%s - file://%s" % (filename,
                                                 self.control.GetFileName()))
         self.SetPageText(self.GetSelection(), filename)
         self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
@@ -401,7 +402,7 @@ class EdPages(FNB.FlatNotebook):
                 dcnt = util.FilterFiles(dcnt)
                 dlg = None
                 if not len(dcnt):
-                    dlg = wx.MessageDialog(self, 
+                    dlg = wx.MessageDialog(self,
                                            _("There are no files that Editra"
                                              " can open in %s") % fname,
                                            _("No Valid Files to Open"),
@@ -409,7 +410,7 @@ class EdPages(FNB.FlatNotebook):
                                                  wx.ICON_INFORMATION)
                 elif len(dcnt) > 5:
                     # Warn when the folder contains many files
-                    dlg = wx.MessageDialog(self, 
+                    dlg = wx.MessageDialog(self,
                                            _("Do you wish to open all %d files"
                                              " in this directory?\n\nWarning"
                                              " opening many files at once may"
@@ -456,9 +457,9 @@ class EdPages(FNB.FlatNotebook):
                 wx.CallAfter(AskToReload, self, cfile)
             else:
                 return False
-                        
+
     def OnLeftUp(self, evt):
-        """Traps clicks sent to page close buttons and 
+        """Traps clicks sent to page close buttons and
         redirects the action to the ClosePage function
         @param evt: Event that called this handler
         @type evt: wx.MouseEvent
@@ -474,7 +475,7 @@ class EdPages(FNB.FlatNotebook):
         elif cord == FNB.FNB_TAB_X:
             # Make sure that the button was pressed before
             if self._pages._nTabXButtonStatus != FNB.FNB_BTN_PRESSED:
-                return 
+                return
             self._pages._nTabXButtonStatus = FNB.FNB_BTN_HOVER
             self.ClosePage()
         else:
@@ -504,8 +505,8 @@ class EdPages(FNB.FlatNotebook):
 
         if fname == "":
             fname = self.GetPageText(pgid)
-
         self.frame.SetTitle("%s - file://%s" % (util.GetFileName(fname), fname))
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pgid))
 
     def OnPageChanged(self, evt):
         """Actions to do after a page change
@@ -532,7 +533,7 @@ class EdPages(FNB.FlatNotebook):
         if len(page.GetFileName()) > 1:
             self.DocMgr.AddRecord([page.GetFileName(), page.GetCurrentPos()])
         evt.Skip()
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSING, 
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSING,
                            (self, self.GetSelection()))
 
     def OnPageClosed(self, evt):
@@ -557,7 +558,7 @@ class EdPages(FNB.FlatNotebook):
             result = self.ClosePage()
             if result == wx.ID_CANCEL:
                 break
-            
+
     def ClosePage(self):
         """Closes Currently Selected Page
         @postcondition: currently selected page is closed
@@ -613,7 +614,6 @@ class EdPages(FNB.FlatNotebook):
         csel = self.GetSelection()
         FNB.FlatNotebook.SetSelection(self, pgnum)
         self.ChangePage(pgnum)
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pgnum))
 
     def UpdateAllImages(self):
         """Reload and Reset all images in the notebook pages and
@@ -657,7 +657,7 @@ class EdPages(FNB.FlatNotebook):
                 wx.CallAfter(self.SetPageText, pg_num, title)
         except wx.PyDeadObjectError:
             pass
-        
+
     def UpdateTextControls(self, meth=None, args=list()):
         """Updates all text controls to use any new settings that have
         been changed since initialization.
@@ -687,7 +687,7 @@ def PromptToReSave(win, cfile):
                             _("%s has been deleted since its "
                               "last save point.\n\nWould you "
                               "like to save it again?") % cfile,
-                            _("Resave File?"), 
+                            _("Resave File?"),
                             wx.YES_NO | wx.ICON_INFORMATION)
     mdlg.CenterOnParent()
     result = mdlg.ShowModal()
@@ -703,10 +703,10 @@ def AskToReload(win, cfile):
     @param cfile: the file to prompt for a reload of
 
     """
-    mdlg = wx.MessageDialog(win.frame, 
+    mdlg = wx.MessageDialog(win.frame,
                             _("%s has been modified by another "
                               "application.\n\nWould you like "
-                              "to Reload it?") % cfile, 
+                              "to Reload it?") % cfile,
                               _("Reload File?"),
                               wx.YES_NO | wx.ICON_INFORMATION)
     mdlg.CenterOnParent()
@@ -715,7 +715,7 @@ def AskToReload(win, cfile):
     if result == wx.ID_YES:
         ret, rmsg = win.control.ReloadFile()
         if not ret:
-            mdlg = wx.MessageDialog(win.frame, 
+            mdlg = wx.MessageDialog(win.frame,
                                     _("Failed to reload %s:\n"
                                       "Error: %s") % \
                                       (cfile, rmsg),
