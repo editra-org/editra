@@ -688,7 +688,6 @@ def RandomColour():
 
 def PaintStraightGradientBox(dc, rect, startColor, endColor, vertical=True):
     """ Draws a gradient colored box from startColor to endColor. """
-
     rd = endColor.Red() - startColor.Red()
     gd = endColor.Green() - startColor.Green()
     bd = endColor.Blue() - startColor.Blue()
@@ -1301,17 +1300,7 @@ class FNBRenderer:
 
     def GetLeftButtonPos(self, pageContainer):
         """ Returns the left button position in the navigation area. """
-
-        pc = pageContainer
-        style = pc.GetParent().GetWindowStyleFlag()
-        rect = pc.GetClientRect()
-        clientWidth = rect.width
-        
-        if style & FNB_NO_X_BUTTON:
-            return clientWidth - 38
-        else:
-            return clientWidth - 54
-
+        return 2
 
 
     def GetRightButtonPos(self, pageContainer):
@@ -1323,15 +1312,24 @@ class FNBRenderer:
         clientWidth = rect.width
         
         if style & FNB_NO_X_BUTTON:
-            return clientWidth - 22
+            return clientWidth - 20
         else:
-            return clientWidth - 38
+            return clientWidth - 36
 
 
     def GetDropArrowButtonPos(self, pageContainer):
         """ Returns the drop down button position in the navigation area. """
-
-        return self.GetRightButtonPos(pageContainer)
+        pc = pageContainer
+        style = pc.GetParent().GetWindowStyleFlag()
+        rect = pc.GetClientRect()
+        clientWidth = rect.width
+        
+        if style & FNB_NO_X_BUTTON and style & FNB_NO_NAV_BUTTONS:
+            return clientWidth - 20
+        elif style & FNB_NO_X_BUTTON or style & FNB_NO_NAV_BUTTONS:
+            return clientWidth - 36
+        else:
+            return clientWidth - 52
 
 
     def GetXPos(self, pageContainer):
@@ -1345,7 +1343,7 @@ class FNBRenderer:
         if style & FNB_NO_X_BUTTON:
             return clientWidth
         else:
-            return clientWidth - 22
+            return clientWidth - 20
 
 
     def GetButtonsAreaLength(self, pageContainer):
@@ -1413,7 +1411,7 @@ class FNBRenderer:
         self.DrawArrowAccordingToState(dc, pc, wx.Rect(posx, 6, 16, 14))
 
         # Draw the new bitmap
-        dc.DrawBitmap(arrowBmp, posx, 6, True)
+        dc.DrawBitmap(arrowBmp, posx + 2, 6, True)
 
 
     def DrawRightArrow(self, pageContainer, dc):
@@ -1792,6 +1790,10 @@ class FNBRenderer:
         dc.SetFont(boldFont)
 
         posx = pc._pParent.GetPadding()
+
+        # Add padding for LeftArrow button if necessary
+        if not pc.HasFlag(FNB_NO_NAV_BUTTONS):
+            posx += 12
 
         # Update all the tabs from 0 to 'pc._nFrom' to be non visible
         for i in xrange(pc._nFrom):
@@ -4094,8 +4096,8 @@ class PageContainer(wx.Panel):
 
         rect = wx.Rect(btnRightPos, 8, 16, 16)
         if style & FNB_DROPDOWN_TABS_LIST:
-            rect = wx.Rect(render.GetDropArrowButtonPos(self), 8, 16, 16)
-            if rect.Contains(pt):
+            ddrect = wx.Rect(render.GetDropArrowButtonPos(self), 8, 16, 16)
+            if ddrect.Contains(pt):
                 return FNB_DROP_DOWN_ARROW, tabIdx
 
         if rect.Contains(pt):
@@ -4796,20 +4798,47 @@ class PageContainer(wx.Panel):
 
         popupMenu = wx.Menu()
 
+        longest = 0
+        has_bmp = False
         for i in xrange(len(self._pagesInfoVec)):
             pi = self._pagesInfoVec[i]
-            item = wx.MenuItem(popupMenu, i+1, pi.GetCaption(), pi.GetCaption(), wx.ITEM_NORMAL)
+            caption = pi.GetCaption()
+            item = wx.MenuItem(popupMenu, i+1, caption, caption, wx.ITEM_NORMAL)
+
+            # Save longest caption width for calculating menu width with
+            width = self.GetTextExtent(caption)[0]
+            if width > longest:
+                longest = width
+
             self.Bind(wx.EVT_MENU, self.OnTabMenuSelection, item)
 
             # There is an alignment problem with wx2.6.3 & Menus so only use
             # images for versions above 2.6.3
             if wx.VERSION > (2, 6, 3, 0) and self.TabHasImage(i):
+                has_bmp = True
                 item.SetBitmap(self.GetImageList().GetBitmap(pi.GetImageIndex()))
 
             popupMenu.AppendItem(item)
             item.Enable(pi.GetEnabled())
-            
-        self.PopupMenu(popupMenu)
+
+        # Calculate the approximate size of the popupmenu for setting the
+        # position of the menu when its shown.
+        # Account for extra padding on left/right of text on mac menus
+        if wx.Platform == '__WXMAC__':
+            longest += 32
+
+        # Bitmap width + padding
+        if has_bmp:
+            longest += 20
+
+        if not self.HasFlag(FNB_NO_X_BUTTON) or \
+           not self.HasFlag(FNB_NO_NAV_BUTTONS):
+            longest += 16
+
+        rect = self.GetClientRect()
+        self.PopupMenu(popupMenu,
+                       wx.Point(rect.x + rect.width - longest,
+                                rect.y + rect.height))
 
 
     def OnTabMenuSelection(self, event):
