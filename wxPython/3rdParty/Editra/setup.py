@@ -146,7 +146,7 @@ Overview
 Editra is a multi-platform text editor with an implementation that focuses on 
 creating an easy to use interface and features that aid in code development. 
 Currently it supports syntax highlighting and variety of other useful features 
-for over 50 programing languages. For a more complete list of features and
+for over 60 programing languages. For a more complete list of features and
 screenshots visit the projects homepage at `Editra.org
 <http://www.editra.org/>`_.
 
