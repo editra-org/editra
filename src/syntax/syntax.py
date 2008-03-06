@@ -39,7 +39,6 @@ __revision__ = "$Revision$"
 # Dependencies
 import wx
 import os
-import sys
 import synglob
 
 #-----------------------------------------------------------------------------#
@@ -61,6 +60,7 @@ COMMENT    = 5    # Gets the comment characters pattern
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
+# Needed by other modules that use this api
 from synextreg import ExtensionRegister, GetFileExtensions
 
 #-----------------------------------------------------------------------------#
@@ -129,7 +129,7 @@ class SyntaxMgr(object):
         @param modname: name of module to lookup
 
         """
-        if modname in sys.modules or modname in self._loaded:
+        if modname in self._loaded:
             return True
         else:
             return False
