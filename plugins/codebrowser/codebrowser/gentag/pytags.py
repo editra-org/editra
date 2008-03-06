@@ -16,7 +16,7 @@ It supports parsing for global and class variables, class, method, and function
 definitions.
 
 @fixme: Functions defined within functions/methods produce some parsing mistakes
-@fixme: Classes defined within scopes outside the module scope are not parsed
+@fixme: Classes defined within subscopes of the module scope are not parsed
 
 """
 
@@ -38,6 +38,7 @@ def GenerateTags(buff):
     """
     rtags = taglib.DocStruct()
     rtags.SetElementDescription('function', "Function Definitions")
+    rtags.SetElementDescription('class', "Class Definitions")
 
     # Variables for managing the state of the parse
     parents = list()
@@ -78,9 +79,10 @@ def GenerateTags(buff):
 
             # Parse and look for elements to add to the DocStruct
             if indocstring:
+                # Token is in a docstring so ignore and move on
                 idx = idx + 1
             elif line[idx].isspace():
-                # Get indent width
+                # Get indent width for current scope
                 if idx == 0:
                     indent = (len(line) - len(line.lstrip()))
                     idx += indent
@@ -88,8 +90,8 @@ def GenerateTags(buff):
                     # Non indent space
                     idx = idx + 1
             elif line[idx] == u"#":
-                break # Rest of line is comment
-            elif line[idx:idx+5] == u"class" and \
+                break # Rest of line is comment so go to next line
+            elif line[idx:].startswith(u"class") and len(line[idx:]) > 5 and \
                  (line[:idx].isspace() or not len(line[:idx])):
                 idx += 5
                 if line[idx].isspace():
@@ -104,13 +106,13 @@ def GenerateTags(buff):
 
                     lastclass = dict(name=cname, indent=indent)
                     parents.append(dict(lastclass))
-                    break
-            elif line[idx:idx+3] == u"def" and \
+                    break # Go to next line
+            elif line[idx:].startswith(u"def") and len(line[idx:]) > 3 and \
                  (line[:idx].isspace() or not len(line[:idx])):
                 # Function/Method Definition
                 idx += 3
-                if line[idx].isspace():
-                    fname = line[idx:].split('(')[0].strip()
+                fname = parselib.GetFirstIdentifier(line[idx:])
+                if line[idx].isspace() and fname is not None:
                     infunction = True
                     fn_indent = indent + 1
                     if not line[0].isspace() or lastclass is None or \
@@ -122,10 +124,11 @@ def GenerateTags(buff):
                             lclass.AddMethod(taglib.Method(fname, lnum, lclass.GetName()))
                         else:
                             # Something must have failed with the parse so
-                            # ignore this tag.
+                            # ignore this element.
                             pass
                     break
             elif not infunction and line[idx] in (u"(", u")"):
+                # Track paren nesting to help with variable parsing
                 if line[idx] == u"(":
                     parens += 1
                 else:
@@ -143,10 +146,13 @@ def GenerateTags(buff):
                             vobj = taglib.Variable(var[0], lnum, lclass.GetName())
                             lclass.AddVariable(vobj)
                         else:
+                            # Global Scope variable
                             rtags.AddVariable(taglib.Variable(var[0], lnum))
             else:
+                # Nothing so skip ahead
                 idx = idx + 1
 
+    # Return the document structure object
     return rtags
 
 #-----------------------------------------------------------------------------#
