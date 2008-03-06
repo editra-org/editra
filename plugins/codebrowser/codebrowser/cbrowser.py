@@ -26,6 +26,7 @@ __revision__ = "$Revision$"
 import StringIO
 import threading
 import wx
+import wx.aui
 
 # Editra Libraries
 import ed_glob
@@ -262,11 +263,12 @@ class CodeBrowserTree(wx.TreeCtrl):
         pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
         evt.Check(pane.IsShown())
 
-    def OnUpdateTree(self, msg):
+    def OnUpdateTree(self, msg=None):
         """Update the tree when an action message is sent
-        @param msg: Message Object
+        @param keyword: Message Object
 
         """
+        print "UPDATE TREE:", msg
         # Don't update when this window is not Active
         if self._mw != wx.GetApp().GetActiveWindow():
             return
@@ -300,6 +302,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             pane = mgr.GetPane(PANE_NAME)
             pane.Show(not pane.IsShown())
             mgr.Update()
+            self.OnUpdateTree()
         else:
             evt.Skip()
 
