@@ -40,6 +40,7 @@ import util
 import ed_style
 import ed_msg
 import ed_txt
+from ed_keyh import KeyHandler, ViKeyHandler
 
 #-------------------------------------------------------------------------#
 # Globals
@@ -50,17 +51,9 @@ MARK_MARGIN = 0
 NUM_MARGIN  = 1
 FOLD_MARGIN = 2
 
-# Vi command patterns
-VI_DCMD_RIGHT = '[bBcdeEGhHlLMwWy|{}$<>]'
-VI_DOUBLE_P1 = re.compile('[cdy<>][0-9]*' + VI_DCMD_RIGHT)
-VI_DOUBLE_P2 = re.compile('[0-9]*[cdy<>]' + VI_DCMD_RIGHT)
-VI_SINGLE_REPEAT = re.compile('[0-9]*[bBCDeEGhjJkloOpPsuwWxX{}~|+-]')
-VI_GCMDS = re.compile('g[fg]')
-NUM_PAT = re.compile('[0-9]*')
+SPACECHARS = " \t\r\n"
 NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
            "0123456789_./\?[]{}<>!@#$%^&*():=-+\"';,"
-SPACECHARS = " \t\r\n"
-
 #-------------------------------------------------------------------------#
 class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     """Defines a styled text control for editing text
@@ -98,8 +91,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()
-        self._vi = dict(vimode=False, normal=False,
-                        last=u'', cmdcache=u'')
+        self.key_handler = KeyHandler(self)
 
         # File Attributes
         self.file = ed_txt.EdFile()
@@ -565,8 +557,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         return self.file.GetPath()
 
     def GetDocument(self):
-        """Return a reference to the document object represented
-        in this buffer.
+        """Return a reference to the document object represented in this buffer.
         @return: EdFile
         @see: L{ed_txt.EdFile}
 
@@ -608,11 +599,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         k_code = evt.GetKeyCode()
         if not evt.ShiftDown() and \
-           self._vi['vimode'] and \
+           self.key_handler.GetHandlerName() == u'VI' and \
            k_code == wx.WXK_ESCAPE:
             # If Vi emulation is active go into Normal mode and
             # pass the key event to OnChar
-            self.SetViNormalMode(True)
+            self.key_handler.SetMode(ViKeyHandler.NORMAL)
             evt.Skip()
             return
         elif k_code == wx.WXK_RETURN:
@@ -642,9 +633,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         key_code = evt.GetKeyCode()
-        if self._vi['vimode'] and self._vi['normal']:
-            self._vi['cmdcache'] = self._vi['cmdcache'] + unichr(key_code)
-            self.ViCmdDispatch()
+        if self.key_handler.ProcessKey(key_code):
+            # The key handler handled this keypress, we don't need to insert
+            # the character into the buffer.
+            pass
         elif not self._config['autocomp']:
             evt.Skip()
             return
@@ -1328,29 +1320,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @type use_vi: boolean
 
         """
-        self._vi['vimode'] = use_vi
-        self.SetViNormalMode(False)  # Use input mode by default
-        self._vi['cmdcache'] = u'' # clear all cmds when switching modes
-
-    def SetViNormalMode(self, normal):
-        """Change the cursor appearance when toggling
-        in and out of vi normal mode.
-        @param normal: Normal mode on/off
-        @type normal: boolean
-
-        """
-        self._vi['normal'] = normal
-        self._vi['cmdcache'] = u''
-        if normal:
-            self.SetCaretWidth(10)
-            msg = 'NORMAL'
+        self.key_handler.ClearMode()
+        if use_vi:
+            self.key_handler = ViKeyHandler(self)
         else:
-            self.SetCaretWidth(1)
-            msg = 'INSERT'
-
-        evt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
-                                   msg, ed_glob.SB_BUFF)
-        wx.PostEvent(self.GetTopLevelParent(), evt)
+            self.key_handler = KeyHandler(self)
 
     def SetViewEdgeGuide(self, switch=None):
         """Toggles the visibility of the edge guide
@@ -1415,317 +1389,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             txt = txt + tmp.rstrip() + eol
         self.SetText(txt)
         self.GotoPos(cpos)
-
-    def ViCmdDispatch(self):
-        """Processes vi commands
-        @todo: complete rewrite, this was initially intended as a quick hack
-               put together for testing but now has implemented everything.
-
-        """
-        if not len(self._vi['cmdcache']):
-            return
-
-        if self._vi['cmdcache'] != u'.':
-            cmd = self._vi['cmdcache']
-        else:
-            cmd = self._vi['last']
-        cpos = self.GetCurrentPos()
-        cline = self.LineFromPosition(cpos)
-        mw = self.GetTopLevelParent()
-        if u':' in cmd:
-            self._vi['cmdcache'] = u''
-            mw.ShowCommandCtrl()
-
-        # Single key commands
-        if len(cmd) == 1 and (cmd in 'AHILmM0^$nia/?:'):
-            if  cmd in u'A$': # Insert at EOL
-                self.GotoPos(self.GetLineEndPosition(cline))
-            elif cmd == u'H': # Go first visible line # todo allow num
-                self.GotoIndentPos(self.GetFirstVisibleLine())
-            elif cmd in u'I^': # Insert at line start / Jump line start
-                self.GotoIndentPos(cline)
-            elif cmd == u'0': # Jump to line start column 0
-                self.GotoPos(self.PositionFromLine(cline))
-            elif cmd == u'L': # Goto start of last visible line # todo allow num
-                self.GotoIndentPos(self.GetLastVisibleLine())
-            elif cmd == u'M': # Goto middle line of display
-                self.GotoIndentPos(self.GetMiddleVisibleLine())
-            elif cmd == u'm': # Mark line
-                if self.MarkerGet(cline):
-                    self.Bookmark(ed_glob.ID_DEL_BM)
-                else:
-                    self.Bookmark(ed_glob.ID_ADD_BM)
-            elif cmd == u'a': # insert mode after current pos
-                self.GotoPos(cpos + 1)
-            elif cmd in u'/?':
-                if mw is not None:
-                    evt = wx.MenuEvent(wx.wxEVT_COMMAND_MENU_SELECTED,
-                                       ed_glob.ID_QUICK_FIND)
-                    wx.PostEvent(mw, evt)
-
-            if cmd in u'aAiI':
-                self.SetViNormalMode(False)
-
-            self._vi['last'] = cmd
-            self._vi['cmdcache'] = u''
-        # Repeatable 1 key commands
-        elif re.match(VI_SINGLE_REPEAT, cmd):
-            rcmd = cmd[-1]
-            repeat = cmd[0:-1]
-            if repeat == u'':
-                repeat = 1
-            else:
-                repeat = int(repeat)
-
-            args = list()
-            kargs = dict()
-            cmd_map = { u'b' : self.WordPartLeft,
-                       u'B' : self.WordLeft,
-                       u'e' : self.WordPartRightEnd,
-                       u'E' : self.WordRightEnd,
-                       u'h' : self.CharLeft,
-                       u'j' : self.LineDown,
-                       u'k' : self.LineUp,
-                       u'l' : self.CharRight,
-                       u'o' : self.AddLine,
-                       u'O' : self.AddLine,
-                       u'p' : self.Paste,
-                       u'P' : self.Paste,
-                       u's' : self.Cut,
-                       u'u' : self.Undo,
-                       u'w' : self.WordPartRight,
-                       u'W' : self.WordRight,
-                       u'x' : self.Cut,
-                       u'X' : self.Cut,
-                       u'{' : self.ParaUp,
-                       u'}' : self.ParaDown,
-                       u'~' : self.InvertCase }
-
-            if rcmd in u'pP':
-                success = False
-                newline = False
-                if wx.TheClipboard.Open():
-                    td = wx.TextDataObject()
-                    success = wx.TheClipboard.GetData(td)
-                    wx.TheClipboard.Close()
-                if success:
-                    text = td.GetText()
-                    if text[-1] == '\n':
-                        if cline == self.GetLineCount() - 1 and rcmd == u'p':
-                            self.NewLine()
-                        else:
-                            if rcmd == u'P':
-                                self.GotoLine(cline)
-                            else:
-                                self.GotoLine(cline + 1)
-                        newline = True
-                    elif rcmd == u'p' and \
-                         self.LineFromPosition(cpos + 1) == cline:
-                        self.CharRight()
-            elif rcmd in u'sxX~':
-                if rcmd in u'sx~':
-                    tmp = self.GetTextRange(cpos, cpos + repeat)
-                    tmp = tmp.split(self.GetEOLChar())
-                    end = cpos + len(tmp[0])
-                else:
-                    tmp = self.GetTextRange(cpos - repeat, cpos)
-                    tmp = tmp.split(self.GetEOLChar())
-                    end = cpos - len(tmp[-1])
-                    tmp = end
-                    end = cpos
-                    cpos = tmp
-
-                if cpos == self.GetLineEndPosition(cline):
-                    self.SetSelection(cpos - 1, cpos)
-                else:
-                    self.SetSelection(cpos, end)
-                repeat = 1
-            elif rcmd == u'O':
-                kargs['before'] = True
-
-            self.BeginUndoAction()
-            if rcmd in u'CD': # Cut line right
-                self.SetSelection(cpos,
-                                  self.GetLineEndPosition(cline + (repeat - 1)))
-                self.Cut()
-            elif rcmd == u'J':
-                self.SetTargetStart(cpos)
-                if repeat == 1:
-                    repeat = 2
-                self.SetTargetEnd(self.PositionFromLine(cline + repeat - 1))
-                self.LinesJoin()
-            elif rcmd == u'G':
-                if repeat == 1 and '1' not in cmd:
-                    repeat = self.GetLineCount()
-                self.GotoLine(repeat - 1)
-            elif rcmd == u'+':
-                self.GotoIndentPos(cline + repeat)
-            elif rcmd == u'-':
-                self.GotoIndentPos(cline - repeat)
-            elif rcmd == u'|':
-                self.GotoColumn(repeat - 1)
-            else:
-                if not cmd_map.has_key(rcmd):
-                    return
-                run = cmd_map[rcmd]
-                for count in xrange(repeat):
-                    run(*args, **kargs)
-            if rcmd == u'p':
-                if newline:
-                    self.GotoIndentPos(cline + repeat)
-                else:
-                    self.GotoPos(cpos + 1)
-            elif rcmd == u'P':
-                if newline:
-                    self.GotoIndentPos(cline)
-                else:
-                    self.GotoPos(cpos)
-#             elif rcmd == u'u':
-#                 self.GotoPos(cpos)
-            elif rcmd in u'CoOs':
-                self.SetViNormalMode(False)
-            self.EndUndoAction()
-            self._vi['last'] = cmd
-            self._vi['cmdcache'] = u''
-        # 2 key commands
-        elif re.match(VI_DOUBLE_P1, cmd) or \
-             re.match(VI_DOUBLE_P2, cmd) or \
-             re.match(re.compile('[cdy]0'), cmd):
-            if re.match(re.compile('[cdy]0'), cmd):
-                rcmd = cmd
-            else:
-                rcmd = re.sub(NUM_PAT, u'', cmd)
-            repeat = re.subn(re.compile(VI_DCMD_RIGHT), u'', cmd, 2)[0]
-            if repeat == u'':
-                repeat = 1
-            else:
-                repeat = int(repeat)
-
-            if rcmd[-1] not in u'bBeEGhHlLMwW$|{}0':
-                self.GotoLine(cline)
-                if repeat != 1 or rcmd not in u'>><<':
-                    self.SetSelectionStart(self.GetCurrentPos())
-                    self.SetSelectionEnd(self.PositionFromLine(cline + repeat))
-            else:
-                self.SetAnchor(self.GetCurrentPos())
-                mcmd = { u'b' : self.WordPartLeftExtend,
-                         u'B' : self.WordLeftExtend,
-                         u'e' : self.WordPartRightEndExtend,
-                         u'E' : self.WordRightEndExtend,
-                         u'h' : self.CharLeftExtend,
-                         u'l' : self.CharRightExtend,
-                         u'w' : self.WordPartRightExtend,
-                         u'W' : self.WordRightExtend,
-                         u'{' : self.ParaUpExtend,
-                         u'}' : self.ParaDownExtend}
-
-                if u'$' in rcmd:
-                    pos = self.GetLineEndPosition(cline + repeat - \
-                                                  len(self.GetEOLChar()))
-                    self.SetCurrentPos(pos)
-                elif u'G' in rcmd:
-                    if repeat == 0: # invalid cmd
-                        self._vi['cmdcache'] = u''
-                        return
-                    if repeat == 1 and u'1' not in cmd: # Default eof
-                        self.SetAnchor(self.GetLineEndPosition(cline - 1))
-                        repeat = self.GetLength()
-                    elif repeat < cline + 1:
-                        self.SetAnchor(self.PositionFromLine(cline + 1))
-                        repeat = self.PositionFromLine(repeat - 1)
-                        cline = self.LineFromPosition(repeat) - 1
-                    elif repeat > cline:
-                        self.SetAnchor(self.GetLineEndPosition(cline - 1))
-                        if cline == 0:
-                            repeat = self.PositionFromLine(repeat)
-                        else:
-                            repeat = self.GetLineEndPosition(repeat - 1)
-                    else:
-                        self.SetAnchor(self.PositionFromLine(cline))
-                        repeat = self.PositionFromLine(cline + 1)
-                    self.SetCurrentPos(repeat)
-                elif rcmd[-1] in u'HM':
-                    fline = self.GetFirstVisibleLine()
-                    lline = self.GetLastVisibleLine()
-
-                    if u'M' in rcmd:
-                        repeat = self.GetMiddleVisibleLine() + 1
-                    elif fline + repeat > lline:
-                        repeat = lline
-                    else:
-                        repeat = fline + repeat
-
-                    if repeat > cline:
-                        self.SetAnchor(self.PositionFromLine(cline))
-                        self.SetCurrentPos(self.PositionFromLine(repeat))
-                    else:
-                        self.SetAnchor(self.PositionFromLine(repeat - 1))
-                        self.SetCurrentPos(self.PositionFromLine(cline + 1))
-                elif u'L' in rcmd:
-                    fline = self.GetFirstVisibleLine()
-                    lline = self.GetLastVisibleLine()
-                    if lline - repeat < fline:
-                        repeat = fline
-                    else:
-                        repeat = lline - repeat
-
-                    if repeat < cline:
-                        self.SetAnchor(self.PositionFromLine(cline))
-                        self.SetCurrentPos(self.PositionFromLine(repeat))
-                    else:
-                        self.SetAnchor(self.PositionFromLine(cline))
-                        self.SetCurrentPos(self.PositionFromLine(repeat + 2))
-                elif u'|' in rcmd:
-                    if repeat == 1 and u'1' not in cmd:
-                        repeat = 0
-                    self.SetCurrentCol(repeat)
-                elif rcmd[-1] == u'0':
-                    self.SetCurrentCol(0)
-                else:
-                    doit = mcmd[rcmd[-1]]
-                    for x in xrange(repeat):
-                        doit()
-
-            self.BeginUndoAction()
-            if re.match(re.compile('c|c' + VI_DCMD_RIGHT), rcmd):
-                if rcmd == u'cc':
-                    self.SetSelectionEnd(self.GetSelectionEnd() - \
-                                         len(self.GetEOLChar()))
-                self.Cut()
-                self.SetViNormalMode(False)
-            elif re.match(re.compile('d|d' + VI_DCMD_RIGHT), rcmd):
-                self.Cut()
-            elif re.match(re.compile('y|y' + VI_DCMD_RIGHT), rcmd):
-                self.Copy()
-                self.GotoPos(cpos)
-            elif rcmd == u'<<':
-                self.BackTab()
-            elif rcmd == u'>>':
-                self.Tab()
-            else:
-                pass
-            self.EndUndoAction()
-            if rcmd in '<<>>' or rcmd[-1] == u'G':
-                self.GotoIndentPos(cline)
-            self._vi['last'] = cmd
-            self._vi['cmdcache'] = u''
-        elif re.match(VI_GCMDS, cmd):
-            rcmd = cmd[-1]
-            if rcmd == u'g':
-                self.GotoLine(0)
-            elif rcmd == u'f':
-                pass # TODO: gf (Goto file at cursor)
-            self._vi['last'] = cmd
-            self._vi['cmdcache'] = u''
-        else:
-            pass
-
-        # Update status bar
-        if mw and self._vi['normal']:
-            evt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
-                                       'NORMAL  %s' % self._vi['cmdcache'],
-                                        ed_glob.SB_BUFF)
-            wx.PostEvent(self.GetTopLevelParent(), evt)
 
     def FoldingOnOff(self, switch=None):
         """Turn code folding on and off
