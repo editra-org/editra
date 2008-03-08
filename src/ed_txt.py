@@ -242,6 +242,17 @@ class EdFile(object):
         else:
             raise ReadError, self.last_err
 
+    def ResetAll(self):
+        """Reset all attributes of this file"""
+        self._handle = None
+        self._magic = dict(comment=None, bad=False)
+        self.encoding = DEFAULT_ENCODING
+        self.open = False
+        self.path = ''
+        self.bom = None
+        self.modtime = 0
+        self.last_err = None
+
     def SetEncoding(self, enc):
         """Explicitly set/change the encoding of the file
         @param enc: encoding to change to

@@ -499,7 +499,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                     err = ctrl[1].GetDocument().GetLastError()
                     self.PushStatusText(_("ERROR: %s") % err, SB_INFO)
                     ed_mdlg.SaveErrorDlg(self, fname, err)
-                    ctrl[1].GetDocument().ClearLastError()
+                    ctrl[1].GetDocument().ResetAll()
             else:
                 ret_val = self.OnSaveAs(ID_SAVEAS, ctrl[0], ctrl[1])
                 if ret_val:
@@ -530,7 +530,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             if not result:
                 err = ctrl.GetDocument().GetLastError()
                 ed_mdlg.SaveErrorDlg(self, fname, err)
-                ctrl.GetDocument().ClearLastError()
+                ctrl.GetDocument().ResetAll()
                 self.PushStatusText(_("ERROR: Failed to save %s") % fname, SB_INFO)
             else:
                 self.PushStatusText(_("Saved File As: %s") % fname, SB_INFO)
