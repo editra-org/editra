@@ -26,7 +26,6 @@ __revision__ = "$Revision$"
 import StringIO
 import threading
 import wx
-import wx.aui
 
 # Editra Libraries
 import ed_glob
@@ -252,7 +251,8 @@ class CodeBrowserTree(wx.TreeCtrl):
         if evt.GetId() == self._cjob:
             self.UpdateAll(evt.GetValue())
             # Stop busy indicator
-            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (0, 0))
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
+                               (self._mw.GetId(), 0, 0))
 
     def OnUpdateMenu(self, evt):
         """UpdateUI handler for the panels menu item, to update the check
@@ -268,7 +268,6 @@ class CodeBrowserTree(wx.TreeCtrl):
         @param keyword: Message Object
 
         """
-        print "UPDATE TREE:", msg
         # Don't update when this window is not Active
         if self._mw != wx.GetApp().GetActiveWindow():
             return
@@ -277,9 +276,11 @@ class CodeBrowserTree(wx.TreeCtrl):
         genfun = TagLoader.GetGenerator(page.GetLangId())
         if genfun is not None and self._ShouldUpdate():
             self._cjob += 1
-            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW, True)
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
+                               (self._mw.GetId(), True))
             # Start progress indicator in pulse mode
-            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (-1, -1))
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
+                               (self._mw.GetId(), -1, -1))
             thread = TagGenThread(self, self._cjob, genfun,
                                   StringIO.StringIO(page.GetText()))
             wx.CallLater(75, thread.start)
@@ -289,7 +290,8 @@ class CodeBrowserTree(wx.TreeCtrl):
             # pending jobs are completed
             self._cjob = 0
             self.DeleteChildren(self.root)
-            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW, False)
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
+                               (self._mw.GetId(), False))
             return
 
     def OnShowBrowser(self, evt):
