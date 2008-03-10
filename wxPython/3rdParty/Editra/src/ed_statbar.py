@@ -41,6 +41,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         pstatbar.ProgressStatusBar.__init__(self, parent, style=wx.ST_SIZEGRIP)
 
         # Setup
+        self._pid = parent.GetId() # Save parents id for filtering msgs
         self.SetFieldsCount(3) # Info, vi stuff, line/progress
         self.SetStatusWidths([-1, 90, 155])
 
@@ -57,24 +58,24 @@ class EdStatBar(pstatbar.ProgressStatusBar):
 
     def OnProgress(self, msg):
         """Set the progress bar's state
-        @param msg: 
+        @param msg: Message Object
 
         """
-        # Don't do anything if the parent window is not active
-        if not self.GetParent().IsActive():
+        mdata = msg.GetData()
+        # Don't do anything if the message is not for this frame
+        if self._pid != mdata[0]:
             return
 
         mtype = msg.GetType()
-        mdata = msg.GetData()
         if mtype == ed_msg.EDMSG_PROGRESS_STATE:
             # May be called from non gui thread so don't do anything with
             # the gui here.
-            self.SetProgress(mdata[0])
-            self.range = mdata[1]
-            if sum(mdata) == 0:
+            self.SetProgress(mdata[1])
+            self.range = mdata[2]
+            if sum(mdata[1:]) == 0:
                 self.Stop()
         elif mtype == ed_msg.EDMSG_PROGRESS_SHOW:
-            if mdata:
+            if mdata[1]:
                 self.Start(75)
             else:
                 self.Stop()
