@@ -1,7 +1,8 @@
 ;------------------------------------------------------------------------------
 ; Editra Windows Installer Build Script
+; Author: Cody Precord
 ; Language: NSIS
-; 
+; Licence: wxWindows License
 ;------------------------------------------------------------------------------
 
 
@@ -9,7 +10,7 @@
 
 ; Global Variables
 !define PRODUCT_NAME "Editra"
-!define PRODUCT_VERSION "0.2.65"
+!define PRODUCT_VERSION "0.2.90"
 !define PRODUCT_PUBLISHER "Cody Precord"
 !define PRODUCT_WEB_SITE "http://editra.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Editra.exe"
@@ -74,6 +75,7 @@ ShowUnInstDetails show
 !undef SHCNE_ASSOCCHANGED
 !endif
 !define SHCNE_ASSOCCHANGED 0x08000000
+
 !ifdef SHCNF_FLUSH
 !undef SHCNF_FLUSH
 !endif
@@ -96,9 +98,9 @@ Function .onInit
   "An existing installation of Editra has been found. $\nDo you want to remove the previous version before installing $(^Name) ?" \
   IDNO done
 
-  ;Run the uninstaller
+  ; Run the uninstaller
   ClearErrors
-  ExecWait '$R0 _?=$INSTDIR' ;Do not copy the uninstaller to a temp file
+  ExecWait '$R0 _?=$INSTDIR' ; Do not copy the uninstaller to a temp file
 
   done:
 FunctionEnd
