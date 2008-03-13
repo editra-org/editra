@@ -3,19 +3,17 @@
 # Purpose: Define Ruby syntax for highlighting and other features             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: ruby.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Ruby.                                        #
-#                                                                             #
-# @todo: Default Style Refinement.                                            #
-#-----------------------------------------------------------------------------#
+FILE: ruby.py                                                               
+AUTHOR: Cody Precord                                                        
+                                                                         
+SUMMARY:                                                                    
+Lexer configuration module for Ruby.                                        
+                                                                         
+@todo: Default Style Refinement.                                            
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -30,7 +28,9 @@ import synglob
 #---- Keyword Specifications ----#
 
 # Ruby Keywords
-RUBY_KW = (0, "__FILE__ and def end in or self unless __LINE__ begin defined? "
+# NOTE: putting words with question marks in them causes an assertion to be
+#       raised when showing the list in the keyword helper! defined?
+RUBY_KW = (0, "__FILE__ and def end in or self unless __LINE__ begin defined "
               "ensure module redo super until BEGIN break do false next "
               "require rescue then when END case else for nil retry true while "
               "alias class elsif if not return undef yieldr puts")
