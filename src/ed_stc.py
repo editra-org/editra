@@ -145,7 +145,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
-        self.Bind(wx.EVT_MIDDLE_UP, self.OnMiddleUp)
 
        #---- End Init ----#
 
@@ -790,21 +789,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         evt.Skip()
-        util.SetClipboardText(self.GetSelectedText(), primary=True)
+        stxt = self.GetSelectedText()
+        if len(stxt):
+            util.SetClipboardText(stxt, primary=True)
         self.PostPositionEvent()
-
-    def OnMiddleUp(self, evt):
-        """Paste the primary selection if there is one. Currenly only for
-        under X11.
-        @param evt: wx.MouseEvent
-
-        """
-        pos = self.PositionFromPoint(evt.GetPosition())
-        if pos != wx.stc.STC_INVALID_POSITION:
-            txt = util.GetClipboardText()
-            if txt is not None and len(txt):
-                self.InsertText(pos, txt)
-                self.GotoPos(pos + len(txt))
 
     def OnModified(self, evt):
         """Handles updates that need to take place after
@@ -1040,6 +1028,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.AutoCompCancel()
 
         if e_obj.GetClassName() == "wxToolBar" or e_map.has_key(e_id):
+            if e_id in [ed_glob.ID_COPY, ed_glob.ID_PASTE]:
+                print "COPY PASTE"
+
             if e_map.has_key(e_id):
                 e_map[e_id]()
             return
