@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-22 07:32-0600\n"
-"PO-Revision-Date: 2008-02-18 15:45+0000\n"
-"Last-Translator: Minggui He <heccjj@gmail.com>\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-02-29 18:29-0600\n"
+"PO-Revision-Date: 2008-03-02 01:25+0000\n"
+"Last-Translator: heccj <heccjj@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-02-18 21:48+0000\n"
+"X-Launchpad-Export-Date: 2008-03-06 12:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:267
@@ -31,7 +31,7 @@ msgstr ""
 "%s 没有找到\n"
 "可能被移动或者删除"
 
-#: ../../src/ed_pages.py:680
+#: ../../src/ed_pages.py:682
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -42,7 +42,7 @@ msgstr ""
 "\n"
 "要再次保存吗？"
 
-#: ../../src/ed_pages.py:700
+#: ../../src/ed_pages.py:702
 #, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -56,11 +56,87 @@ msgstr ""
 msgid "&About"
 msgstr "关于(&A)"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:236
+#: ../../src/ed_menu.py:290
+msgid "&Copy"
+msgstr "复制(&C)"
+
+#: ../../src/ed_menu.py:339
+msgid "&Edit"
+msgstr "编辑(&E)"
+
+#: ../../src/ed_menu.py:274
+msgid "&File"
+msgstr "文件(&F)"
+
+#: ../../src/ed_menu.py:330
+msgid "&Find"
+msgstr "查找(&F)"
+
+#: ../../src/ed_menu.py:396
+msgid "&Font"
+msgstr "字体(&F)"
+
+#: ../../src/ed_menu.py:369
+msgid "&Goto Line"
+msgstr "跳到行(&G)"
+
+#: ../../src/ed_main.py:136 ../../src/ed_menu.py:516
+msgid "&Help"
+msgstr "帮助(&H)"
+
+#: ../../src/ed_menu.py:232
+msgid "&New Tab"
+msgstr "新建标签(&N)"
+
+#: ../../src/ed_menu.py:237
+msgid "&Open"
+msgstr "打开(&O)"
+
+#: ../../src/ed_menu.py:292
+msgid "&Paste"
+msgstr "粘贴(&P)"
+
+#: ../../src/ed_menu.py:269
+msgid "&Print"
+msgstr "打印(&P)"
+
+#: ../../src/ed_menu.py:334
+msgid "&Quick Find"
+msgstr "快速查找(&Q)"
+
+#: ../../src/ed_menu.py:250
+msgid "&Save"
+msgstr "保存(&S)"
+
+#: ../../src/ed_menu.py:470
+msgid "&Settings"
+msgstr "设置(&S)"
+
+#: ../../src/ed_menu.py:385
+msgid "&Toolbar"
+msgstr "工具栏(&T)"
+
+#: ../../src/ed_menu.py:496
+msgid "&Tools"
+msgstr "工具(&T)"
+
+#: ../../src/ed_menu.py:283
+msgid "&Undo"
+msgstr "撤消(&U)"
+
+#: ../../src/ed_menu.py:387
+msgid "&View"
+msgstr "查看(&V)"
+
+#: ../../plugins/Launch/launch/cfgdlg.py:248
+msgid "**Alias**"
+msgstr "**别名**"
+
+#: ../../plugins/Launch/launch/cfgdlg.py:248
 msgid "**New Value**"
 msgstr "**新值**"
 
-#: ../../plugins/Launch/launch/launch.py:328 ../../src/dev_tool.py:397
+#: ../../plugins/Launch/launch/launch.py:337 ../../src/dev_tool.py:397
 msgid "Abort"
 msgstr "终止"
 
@@ -92,7 +168,11 @@ msgstr "添加新行到行前"
 msgid "Add and remove bookmarks"
 msgstr "添加移除书签"
 
-#: ../../src/ed_log.py:143 ../../src/ed_log.py:191
+#: ../../plugins/Launch/launch/cfgdlg.py:179
+msgid "Alias"
+msgstr "别名"
+
+#: ../../src/ed_log.py:145 ../../src/ed_log.py:218
 msgid "All"
 msgstr "全部"
 
@@ -100,7 +180,16 @@ msgstr "全部"
 msgid "All Done"
 msgstr "完成所有"
 
-#: ../../src/prefdlg.py:552
+#: ../../src/Editra.py:367
+#, python-format
+msgid ""
+"An updated version of Editra is available\n"
+"Would you like to download Editra %s now?"
+msgstr ""
+"发现Editra新版本\n"
+"现在下载 Editra %s 吗？"
+
+#: ../../src/prefdlg.py:556
 msgid "AntiAliasing"
 msgstr "抗锯齿"
 
@@ -116,11 +205,11 @@ msgstr "属性"
 msgid "Author"
 msgstr "作者"
 
-#: ../../src/ed_menu.py:458 ../../src/prefdlg.py:714
+#: ../../src/ed_menu.py:458 ../../src/prefdlg.py:718
 msgid "Auto-Completion"
 msgstr "自动完成"
 
-#: ../../src/ed_menu.py:460 ../../src/prefdlg.py:716
+#: ../../src/ed_menu.py:460 ../../src/prefdlg.py:720
 msgid "Auto-Indent"
 msgstr "自动缩进"
 
@@ -132,10 +221,9 @@ msgstr "自动 保存/使用 最后一次会话的窗口状态"
 msgid "Background"
 msgstr "背景"
 
-#: ../../src/prefdlg.py:539
-#, fuzzy
+#: ../../src/prefdlg.py:543
 msgid "Backspace Unindents"
-msgstr "退格"
+msgstr "退格取消缩进"
 
 #: ../../src/style_editor.py:194
 msgid "Base new theme on existing one"
@@ -145,7 +233,7 @@ msgstr "新主题基于当前主题"
 msgid "Bookmarks"
 msgstr "书签"
 
-#: ../../src/ed_menu.py:463 ../../src/prefdlg.py:696
+#: ../../src/ed_menu.py:463 ../../src/prefdlg.py:700
 msgid "Bracket Highlighting"
 msgstr "高亮括号"
 
@@ -153,7 +241,7 @@ msgstr "高亮括号"
 msgid "Cancel"
 msgstr "取消"
 
-#: ../../src/updater.py:611
+#: ../../src/updater.py:642
 msgid "Canceled"
 msgstr "已取消"
 
@@ -175,11 +263,15 @@ msgstr "颜色方案改为 \"%s\""
 msgid "Changes will take affect once the program has been restarted"
 msgstr "更改将会在程序重新启动后生效"
 
-#: ../../src/prefdlg.py:1238
+#: ../../src/prefdlg.py:1242
 msgid "Check"
 msgstr "检查"
 
-#: ../../src/prefdlg.py:392
+#: ../../src/prefdlg.py:375
+msgid "Check for updates on startup"
+msgstr "启动检查更新"
+
+#: ../../src/prefdlg.py:395
 msgid "Check if on disk file has been modified by others"
 msgstr "检查文件是否被其它程序更改过"
 
@@ -191,11 +283,12 @@ msgstr "选择文件"
 msgid "Choose a Save Location"
 msgstr "选择保存位置"
 
-#: ../../plugins/codebrowser/codebrowser/cbrowser.py:145
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:48
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:152
 msgid "Class Definitions"
-msgstr ""
+msgstr "类定义"
 
-#: ../../plugins/Launch/launch/launch.py:134 ../../src/ed_log.py:123
+#: ../../plugins/Launch/launch/launch.py:134 ../../src/ed_log.py:125
 msgid "Clear"
 msgstr "清除"
 
@@ -203,6 +296,7 @@ msgstr "清除"
 msgid "Click on Install to install the plugins in the list"
 msgstr "点击 安装 以安装列表中的插件"
 
+#: ../../plugins/Launch/launch/cfgdlg.py:178
 #: ../../plugins/Launch/launch/cfgdlg.py:182
 msgid "Click on an item to edit"
 msgstr "选择要编辑条目"
@@ -231,16 +325,15 @@ msgstr "关闭所有打开标签"
 msgid "Close the current window"
 msgstr "关闭当前窗口"
 
-#: ../../src/prefdlg.py:488
+#: ../../src/prefdlg.py:492
 msgid "Code"
 msgstr "代码"
 
-#: ../../plugins/codebrowser/codebrowser/cbrowser.py:66
-#, fuzzy
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:73
 msgid "Code Browser"
-msgstr "文件浏览器"
+msgstr "代码浏览器"
 
-#: ../../src/ed_menu.py:465 ../../src/prefdlg.py:698
+#: ../../src/ed_menu.py:465 ../../src/prefdlg.py:702
 msgid "Code Folding"
 msgstr "代码折叠"
 
@@ -252,7 +345,7 @@ msgstr "颜色"
 msgid "Color Highlight Code Syntax"
 msgstr "颜色高亮代码语法"
 
-#: ../../src/prefdlg.py:826
+#: ../../src/prefdlg.py:830
 msgid "Color Scheme"
 msgstr "配色方案"
 
@@ -272,7 +365,7 @@ msgstr "注释行"
 msgid "Comment the selected lines"
 msgstr "注释选定行"
 
-#: ../../src/prefdlg.py:1057
+#: ../../src/prefdlg.py:1061
 msgid "Configuration"
 msgstr "配置"
 
@@ -300,7 +393,7 @@ msgstr "转换选定文本中的空格为制表符"
 msgid "Convert tabs to spaces in selected/all text"
 msgstr "转换选定文本中的制表符为空格"
 
-#: ../../src/ed_menu.py:290 ../../src/ed_toolbar.py:88
+#: ../../src/ed_toolbar.py:88
 msgid "Copy"
 msgstr "复制"
 
@@ -316,11 +409,19 @@ msgstr "复制行"
 msgid "Copy Selected Text to Clipboard"
 msgstr "复制选定文本到剪贴板"
 
+#: ../../src/ed_main.py:1087
+msgid "Copyright"
+msgstr "版权"
+
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:174
 msgid "Created"
 msgstr "创建时间"
 
-#: ../../src/ed_menu.py:288 ../../src/ed_toolbar.py:86
+#: ../../src/ed_menu.py:288
+msgid "Cu&t"
+msgstr "剪切(&t)"
+
+#: ../../src/ed_toolbar.py:86
 msgid "Cut"
 msgstr "剪切"
 
@@ -336,26 +437,29 @@ msgstr "剪切行"
 msgid "Cut Selected Text from File"
 msgstr "从文件中剪切选定文件"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:171
+#: ../../plugins/Launch/launch/cfgdlg.py:169
 msgid "Default"
 msgstr "默认"
 
-#: ../../src/prefdlg.py:542
+#: ../../src/prefdlg.py:546
 msgid "Default EOL Mode"
 msgstr "默认行尾模式"
 
-#: ../../src/prefdlg.py:689
+#: ../../src/prefdlg.py:693
 msgid "Default Lexer"
 msgstr "默认分析器"
 
-#: ../../src/prefdlg.py:940
+#: ../../src/prefdlg.py:944
 msgid "Default Perspective"
 msgstr "默认透视"
 
-#: ../../src/prefdlg.py:687
-#, fuzzy
+#: ../../src/prefdlg.py:691
 msgid "Default highlighing for new documents"
 msgstr "新文档默认高亮"
+
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:48
+msgid "Defines"
+msgstr "定义"
 
 #: ../../src/perspective.py:236
 msgid "Delete Perspective"
@@ -382,7 +486,8 @@ msgstr "要退出吗？"
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
 "\n"
-"Warning opening many files at once may cause the editor to temporarly  freeze."
+"Warning opening many files at once may cause the editor to temporarly  "
+"freeze."
 msgstr ""
 "要打开当前目录下的所有 %d 文件吗？\n"
 "警告：同时打开多个文件编辑器可能为暂时停顿。"
@@ -391,28 +496,28 @@ msgstr ""
 msgid "Document"
 msgstr "文档"
 
-#: ../../src/plugdlg.py:277 ../../src/plugdlg.py:452 ../../src/prefdlg.py:1239
+#: ../../src/plugdlg.py:277 ../../src/plugdlg.py:452 ../../src/prefdlg.py:1243
 msgid "Download"
 msgstr "下载"
 
-#: ../../src/plugdlg.py:482 ../../src/updater.py:639 ../../src/updater.py:645
+#: ../../src/plugdlg.py:482 ../../src/updater.py:670 ../../src/updater.py:676
 msgid "Downloaded"
 msgstr "已下载"
 
-#: ../../src/plugdlg.py:591 ../../src/updater.py:570
+#: ../../src/plugdlg.py:591 ../../src/updater.py:601
 msgid "Downloading"
 msgstr "正在下载"
 
-#: ../../src/updater.py:533
+#: ../../src/updater.py:564
 #, python-format
 msgid "Downloading To: %s"
 msgstr "下载：%s"
 
-#: ../../src/prefdlg.py:1291
+#: ../../src/Editra.py:373 ../../src/prefdlg.py:1295
 msgid "Downloading Update"
 msgstr "正在下载更新"
 
-#: ../../src/updater.py:531
+#: ../../src/updater.py:562
 #, python-format
 msgid "Downloading: %s"
 msgstr "下载: %s"
@@ -421,7 +526,7 @@ msgstr "下载: %s"
 msgid "Downloads are incomplete"
 msgstr "下载完成"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:441
+#: ../../plugins/filebrowser/filebrowser/browser.py:434
 msgid "Duplicate"
 msgstr "克隆"
 
@@ -432,6 +537,10 @@ msgstr "克隆行"
 #: ../../src/ed_menu.py:311
 msgid "Duplicate the current line"
 msgstr "克隆当前行"
+
+#: ../../src/ed_menu.py:272
+msgid "E&xit"
+msgstr "退出(&x)"
 
 #: ../../src/ed_menu.py:447
 msgid "EOL Mode"
@@ -447,12 +556,11 @@ msgstr "错误： %s"
 msgid "ERROR: Failed to save %s"
 msgstr "错误：保存 %s 失败"
 
-#: ../../src/prefdlg.py:700
+#: ../../src/prefdlg.py:704
 msgid "Edge Guide"
 msgstr "边界线"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:431
-#: ../../src/ed_menu.py:339
+#: ../../plugins/filebrowser/filebrowser/browser.py:424
 msgid "Edit"
 msgstr "编辑"
 
@@ -476,10 +584,9 @@ msgstr "编辑器命令"
 msgid "Editor Mode"
 msgstr "编辑器模式"
 
-#: ../../src/ed_log.py:71
-#, fuzzy
+#: ../../src/ed_log.py:73
 msgid "Editra Log"
-msgstr "编辑器模式"
+msgstr "Editra 日志"
 
 #: ../../src/style_editor.py:284
 msgid "Editra Style Sheet"
@@ -498,15 +605,19 @@ msgstr ""
 "错误：\n"
 "%s"
 
+#: ../../src/ed_main.py:1077
+msgid "Editra is a programmers text editor."
+msgstr "Editra是程序员的编辑器。"
+
 #: ../../src/ed_menu.py:513
 msgid "Editra translations project"
-msgstr ""
+msgstr "Editra 翻译工程"
 
 #: ../../plugins/codebrowser/codebrowser/__init__.py:49
 msgid "Editra | CodeBrowser"
-msgstr ""
+msgstr "Editra | 代码浏览器"
 
-#: ../../src/prefdlg.py:718
+#: ../../src/prefdlg.py:722
 msgid "Enable Vi Emulation"
 msgstr "启用 Vi 仿真"
 
@@ -522,7 +633,7 @@ msgstr "行尾字符格式"
 msgid "Enter a hex color value"
 msgstr "输入十六进制颜色值"
 
-#: ../../src/ed_pages.py:715 ../../src/plugdlg.py:850
+#: ../../src/ed_pages.py:717 ../../src/plugdlg.py:850
 msgid "Error"
 msgstr "错误"
 
@@ -545,15 +656,11 @@ msgstr "错误：为了提高Editra，请点击报告错误将错误信息提交
 msgid "Executable Commands"
 msgstr "可执行命令"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:156
+#: ../../plugins/Launch/launch/cfgdlg.py:154
 msgid "Executables"
 msgstr "可执行"
 
-#: ../../src/ed_menu.py:272
-msgid "Exit"
-msgstr "退出"
-
-#: ../../plugins/Launch/launch/launch.py:399
+#: ../../plugins/Launch/launch/launch.py:423
 msgid "Exit Code"
 msgstr "退出码"
 
@@ -569,11 +676,15 @@ msgstr "导出"
 msgid "Export Style Sheet"
 msgstr "导出样式表"
 
-#: ../../src/prefdlg.py:1389
+#: ../../src/prefdlg.py:1393
 msgid "Extensions (space separated, no dots)"
 msgstr "扩展名（空格分隔，无点）"
 
-#: ../../src/updater.py:652
+#: ../../src/ed_menu.py:449
+msgid "F&ormat"
+msgstr "格式(&o)"
+
+#: ../../src/updater.py:683
 msgid "Failed"
 msgstr "失败"
 
@@ -582,7 +693,7 @@ msgstr "失败"
 msgid "Failed to install %d plugins"
 msgstr "安装插件 %d 失败"
 
-#: ../../src/ed_pages.py:712
+#: ../../src/ed_pages.py:714
 #, python-format
 msgid ""
 "Failed to reload %s:\n"
@@ -608,15 +719,11 @@ msgstr ""
 msgid "Feedback"
 msgstr "反馈"
 
-#: ../../src/ed_menu.py:274
-msgid "File"
-msgstr "文件"
-
 #: ../../plugins/filebrowser/filebrowser/browser.py:248
 msgid "File Browser"
 msgstr "文件浏览器"
 
-#: ../../src/prefdlg.py:377
+#: ../../src/prefdlg.py:380
 msgid "File History Length"
 msgstr "文件历史"
 
@@ -624,7 +731,7 @@ msgstr "文件历史"
 msgid "File Not Found"
 msgstr "文件未找到"
 
-#: ../../src/prefdlg.py:376
+#: ../../src/prefdlg.py:379
 msgid "File Settings"
 msgstr "文件设置"
 
@@ -632,7 +739,7 @@ msgstr "文件设置"
 msgid "File Stat Failed"
 msgstr "文件状态失败"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:151
+#: ../../plugins/Launch/launch/cfgdlg.py:149
 msgid "File Type"
 msgstr "文件类型"
 
@@ -644,16 +751,16 @@ msgstr ""
 "文件已经打开。\n"
 "要再次打开吗？"
 
-#: ../../src/prefdlg.py:820
+#: ../../src/prefdlg.py:824
 msgid "Filetype Associations"
 msgstr "文件类型关联"
 
-#: ../../src/ed_log.py:115
+#: ../../src/ed_log.py:117
 msgid "Filter"
 msgstr "过滤器"
 
-#: ../../src/ed_cmdbar.py:211 ../../src/ed_menu.py:330
-#: ../../src/ed_search.py:239 ../../src/ed_toolbar.py:93
+#: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:239
+#: ../../src/ed_toolbar.py:93
 msgid "Find"
 msgstr "查找"
 
@@ -665,12 +772,15 @@ msgstr "查找文本"
 msgid "Find and Replace Text"
 msgstr "查找替换文本"
 
-#: ../../src/ed_menu.py:332 ../../src/ed_search.py:235
-#: ../../src/ed_toolbar.py:94
+#: ../../src/ed_menu.py:332
+msgid "Find/R&eplace"
+msgstr "查找/替换(&e)"
+
+#: ../../src/ed_search.py:235 ../../src/ed_toolbar.py:94
 msgid "Find/Replace"
 msgstr "查找/替换"
 
-#: ../../src/updater.py:649
+#: ../../src/updater.py:680
 msgid "Finished"
 msgstr "已完成"
 
@@ -686,7 +796,7 @@ msgstr "完成插件下载"
 msgid "Folder"
 msgstr "文件夹"
 
-#: ../../src/ed_menu.py:396 ../../src/style_editor.py:666
+#: ../../src/style_editor.py:666
 msgid "Font"
 msgstr "字体"
 
@@ -698,7 +808,7 @@ msgstr "字体设置"
 msgid "Foreground"
 msgstr "前景"
 
-#: ../../src/ed_menu.py:449 ../../src/prefdlg.py:586
+#: ../../src/prefdlg.py:590
 msgid "Format"
 msgstr "格式"
 
@@ -707,7 +817,11 @@ msgstr "格式"
 msgid "Format all EOL characters to %s Mode"
 msgstr "将所有行尾符转为 %s 模式"
 
-#: ../../src/prefdlg.py:191 ../../src/prefdlg.py:487 ../../src/prefdlg.py:682
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:48
+msgid "Function Defintions"
+msgstr "函数定义"
+
+#: ../../src/prefdlg.py:191 ../../src/prefdlg.py:491 ../../src/prefdlg.py:686
 msgid "General"
 msgstr "常规"
 
@@ -735,19 +849,19 @@ msgstr "生成当前文档的 %s 版本"
 msgid "Generator"
 msgstr "生成器"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:435
+#: ../../plugins/filebrowser/filebrowser/browser.py:428
 msgid "Get Info"
 msgstr "获取信息"
 
-#: ../../plugins/codebrowser/codebrowser/cbrowser.py:183
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 msgid "Global Variables"
-msgstr ""
+msgstr "全局变量"
 
 #: ../../src/plugdlg.py:837
 msgid "Go to configuration page?"
 msgstr "跳到设置页吗？"
 
-#: ../../src/ed_cmdbar.py:158 ../../src/ed_menu.py:369
+#: ../../src/ed_cmdbar.py:158
 msgid "Goto Line"
 msgstr "跳到行"
 
@@ -759,27 +873,29 @@ msgstr "跳到行号"
 msgid "Goto command buffer"
 msgstr "跳到命令缓冲"
 
-#: ../../src/prefdlg.py:705
-#, fuzzy
+#: ../../src/prefdlg.py:709
 msgid "Guide Column"
-msgstr "列"
-
-#: ../../src/ed_main.py:136 ../../src/ed_menu.py:516
-msgid "Help"
-msgstr "帮助"
+msgstr "指示列"
 
 #: ../../src/ed_menu.py:464
-#, fuzzy
 msgid "Highlight Brackets/Braces"
-msgstr "高亮括号/"
+msgstr "高亮括"
 
-#: ../../src/prefdlg.py:921
+#: ../../src/ed_main.py:1079
+msgid "Homepage"
+msgstr "主页"
+
+#: ../../src/prefdlg.py:925
 msgid "Icon Theme"
 msgstr "图标主题"
 
-#: ../../src/prefdlg.py:967
+#: ../../src/prefdlg.py:971
 msgid "Icons"
 msgstr "图标"
+
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
+msgid "Identities"
+msgstr "身份"
 
 #: ../../src/ed_menu.py:411
 msgid "Indent Lines"
@@ -789,7 +905,7 @@ msgstr "缩进"
 msgid "Indent the selected lines"
 msgstr "缩进选定行"
 
-#: ../../src/ed_menu.py:356 ../../src/prefdlg.py:710
+#: ../../src/ed_menu.py:356 ../../src/prefdlg.py:714
 msgid "Indentation Guides"
 msgstr "缩进指示"
 
@@ -797,7 +913,7 @@ msgstr "缩进指示"
 msgid "Info"
 msgstr "信息"
 
-#: ../../src/prefdlg.py:731
+#: ../../src/prefdlg.py:735
 msgid "Input Helpers"
 msgstr "输入助手"
 
@@ -825,7 +941,7 @@ msgstr "只为当前用户安装插件"
 msgid "Installation Error"
 msgstr "安装错误"
 
-#: ../../src/prefdlg.py:1224
+#: ../../src/prefdlg.py:1228
 msgid "Installed Version"
 msgstr "已安装版本"
 
@@ -834,7 +950,7 @@ msgstr "已安装版本"
 msgid "Invalid file: %s"
 msgstr "无效文件：%s"
 
-#: ../../src/prefdlg.py:1348
+#: ../../src/prefdlg.py:1352
 msgid "Item"
 msgstr "条目"
 
@@ -858,29 +974,37 @@ msgstr "关键字助手"
 msgid "Kind"
 msgstr "种类"
 
-#: ../../src/prefdlg.py:399
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
+msgid "Labels"
+msgstr "标签"
+
+#: ../../src/prefdlg.py:402
 msgid "Language"
 msgstr "语言"
 
-#: ../../src/prefdlg.py:1230
+#: ../../src/prefdlg.py:1234
 msgid "Latest Version"
 msgstr "最新版本"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:86
+#: ../../plugins/Launch/launch/cfgdlg.py:84
 msgid "Launch Configuration"
 msgstr "装载配置"
 
-#: ../../src/prefdlg.py:971
+#: ../../src/prefdlg.py:975
 msgid "Layout"
 msgstr "布局"
 
-#: ../../src/prefdlg.py:1387
+#: ../../src/prefdlg.py:1391
 msgid "Lexer"
 msgstr "解析器"
 
 #: ../../src/ed_main.py:128
 msgid "Lexers"
 msgstr "解析器"
+
+#: ../../src/ed_main.py:1081
+msgid "License: wxWindows (see COPYING.txt for full license)"
+msgstr "许可：wxWindows(许可全文见 COPYING.txt)"
 
 #: ../../src/ed_menu.py:317
 msgid "Line Edit"
@@ -916,7 +1040,7 @@ msgstr "启动时载入最后会话的文件"
 msgid "Loaded Profile: %s"
 msgstr "载入配置： %s"
 
-#: ../../src/prefdlg.py:397
+#: ../../src/prefdlg.py:400
 msgid "Locale Settings"
 msgstr "区域设置"
 
@@ -924,9 +1048,17 @@ msgstr "区域设置"
 msgid "Lowercase"
 msgstr "小写"
 
-#: ../../src/ed_menu.py:438 ../../src/prefdlg.py:545
+#: ../../src/ed_menu.py:438 ../../src/prefdlg.py:549
 msgid "Macintosh (\\r)"
 msgstr "Macintosh (\\r)"
+
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
+msgid "Macro Definitions"
+msgstr "宏定义"
+
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
+msgid "Macros"
+msgstr "宏"
 
 #: ../../src/ed_menu.py:485
 msgid "Manage, Download, and Install plugins"
@@ -940,7 +1072,7 @@ msgstr "手动设置 解析器/语法"
 msgid "Match Case"
 msgstr "匹配"
 
-#: ../../src/prefdlg.py:977
+#: ../../src/prefdlg.py:981
 msgid "Misc"
 msgstr "杂项"
 
@@ -949,7 +1081,7 @@ msgstr "杂项"
 msgid "Modified"
 msgstr "已修改"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:444
+#: ../../plugins/filebrowser/filebrowser/browser.py:437
 msgid "Move to "
 msgstr "移动到 "
 
@@ -961,11 +1093,15 @@ msgstr "网络"
 msgid "New"
 msgstr "新建"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:439
+#: ../../src/ed_menu.py:234
+msgid "New &Window"
+msgstr "新窗口(&W)"
+
+#: ../../plugins/filebrowser/filebrowser/browser.py:432
 msgid "New File"
 msgstr "新文件"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:438
+#: ../../plugins/filebrowser/filebrowser/browser.py:431
 msgid "New Folder"
 msgstr "建立新文件夹"
 
@@ -976,14 +1112,6 @@ msgstr "在后面添加行"
 #: ../../src/ed_menu.py:302
 msgid "New Line Before"
 msgstr "在前面添加行"
-
-#: ../../src/ed_menu.py:232
-msgid "New Tab"
-msgstr "新建标签"
-
-#: ../../src/ed_menu.py:234
-msgid "New Window"
-msgstr "新建窗口"
 
 #: ../../src/ed_cmdbar.py:214
 msgid "Next"
@@ -1021,10 +1149,9 @@ msgstr "打开"
 msgid "Open A Python Shell"
 msgstr "打开 Python 命令行"
 
-#: ../../plugins/codebrowser/codebrowser/cbrowser.py:67
-#, fuzzy
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:74
 msgid "Open Code Browser Sidepanel"
-msgstr "打开 文件浏览 面板"
+msgstr "打开代码浏览器面板"
 
 #: ../../src/ed_pages.py:413
 msgid "Open Directory?"
@@ -1042,7 +1169,7 @@ msgstr "打开 文件浏览 面板"
 msgid "Open Recent"
 msgstr "打开最近"
 
-#: ../../src/prefdlg.py:386
+#: ../../src/prefdlg.py:389
 msgid "Open files in new windows by default"
 msgstr "默认在新窗口中打开文件"
 
@@ -1050,7 +1177,7 @@ msgstr "默认在新窗口中打开文件"
 msgid "Open the Quick Find Bar"
 msgstr "打开快速搜索栏"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:432
+#: ../../plugins/filebrowser/filebrowser/browser.py:425
 msgid "Open with "
 msgstr "打开用 "
 
@@ -1059,20 +1186,24 @@ msgstr "打开用 "
 msgid "Opened file: %s"
 msgstr "已打开文件：%s"
 
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
+msgid "Packages"
+msgstr "软件包"
+
 #: ../../src/ed_menu.py:265
-msgid "Page Setup"
-msgstr "页面设置"
+msgid "Page Set&up"
+msgstr "页面设置(u)"
 
 #: ../../src/ed_print.py:190
 #, python-format
 msgid "Page: %d"
 msgstr "页：%d"
 
-#: ../../src/prefdlg.py:1121
+#: ../../src/prefdlg.py:1125
 msgid "Password"
 msgstr "密码"
 
-#: ../../src/ed_menu.py:292 ../../src/ed_toolbar.py:90
+#: ../../src/ed_toolbar.py:90
 msgid "Paste"
 msgstr "粘贴"
 
@@ -1100,7 +1231,11 @@ msgstr "要删除视图"
 msgid "Perspectives"
 msgstr "视图"
 
-#: ../../src/Editra.py:540
+#: ../../src/ed_main.py:1080
+msgid "Platform Info"
+msgstr "平台信息"
+
+#: ../../src/Editra.py:586
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr "请在 参数选择 对话框中重置配置"
 
@@ -1108,17 +1243,17 @@ msgstr "请在 参数选择 对话框中重置配置"
 msgid "Plugin"
 msgstr "插件"
 
-#: ../../src/ed_main.py:799 ../../src/ed_menu.py:484
+#: ../../src/ed_main.py:796 ../../src/ed_menu.py:484
 msgid "Plugin Manager"
 msgstr "插件管理器"
 
-#: ../../src/prefdlg.py:1106
+#: ../../src/prefdlg.py:1110
 msgid "Port Number"
 msgstr "端口号"
 
 #: ../../src/ed_menu.py:337
-msgid "Preferences"
-msgstr "参数设置"
+msgid "Pr&eferences"
+msgstr "配置(&e)"
 
 #: ../../src/prefdlg.py:109
 msgid "Preferences - Editra"
@@ -1140,11 +1275,11 @@ msgstr "上一页"
 msgid "Previous Bookmark"
 msgstr "上一个书签"
 
-#: ../../src/prefdlg.py:566
+#: ../../src/prefdlg.py:570
 msgid "Primary Font"
 msgstr "主字体"
 
-#: ../../src/ed_menu.py:269 ../../src/ed_toolbar.py:80
+#: ../../src/ed_toolbar.py:80
 msgid "Print"
 msgstr "打印"
 
@@ -1152,13 +1287,21 @@ msgstr "打印"
 msgid "Print Current File"
 msgstr "打印当前文件"
 
-#: ../../src/ed_menu.py:267 ../../src/ed_print.py:91
+#: ../../src/ed_menu.py:267
+msgid "Print Pre&view"
+msgstr "打印预览(&v)"
+
+#: ../../src/ed_print.py:91
 msgid "Print Preview"
 msgstr "打印预览"
 
 #: ../../src/prefdlg.py:354
 msgid "Printer Mode"
 msgstr "打印机模式"
+
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
+msgid "Procedure Definitions"
+msgstr "过程定义"
 
 #: ../../src/ed_main.py:555 ../../src/ed_main.py:576 ../../src/ed_menu.py:262
 msgid "Profile"
@@ -1169,13 +1312,17 @@ msgstr "配置"
 msgid "Profile Saved as: %s"
 msgstr "配置保存为：%s"
 
-#: ../../src/Editra.py:542
+#: ../../src/Editra.py:588
 msgid "Profile Updated"
 msgstr "配置更新"
 
 #: ../../plugins/Launch/launch/launch.py:103
 msgid "Program Executable Command"
 msgstr "可执行命令"
+
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
+msgid "Programs"
+msgstr "程序"
 
 #: ../../src/ed_menu.py:507
 msgid "Project Homepage"
@@ -1185,11 +1332,11 @@ msgstr "工程主页"
 msgid "Provides a Contextual Help Menu Listing Standard Keywords/Functions"
 msgstr "提供上下文帮助菜单列出标准关键字/函数"
 
-#: ../../src/prefdlg.py:1090
+#: ../../src/prefdlg.py:1094
 msgid "Proxy Settings"
 msgstr "代理设置"
 
-#: ../../src/prefdlg.py:1102
+#: ../../src/prefdlg.py:1106
 msgid "Proxy URL"
 msgstr "代理地址"
 
@@ -1197,11 +1344,7 @@ msgstr "代理地址"
 msgid "Put an item on the Shelf"
 msgstr "添加条目"
 
-#: ../../src/ed_menu.py:334
-msgid "Quick Find"
-msgstr "快速查找"
-
-#: ../../src/updater.py:641
+#: ../../src/updater.py:672
 #, python-format
 msgid "Rate: %.2f Kb/s"
 msgstr "速率：%.2fKb/s"
@@ -1230,19 +1373,19 @@ msgstr "重做"
 msgid "Redo Last Undo"
 msgstr "重做最后撤销"
 
-#: ../../src/ed_pages.py:703
+#: ../../src/ed_pages.py:705
 msgid "Reload File?"
 msgstr "重载文件？"
 
-#: ../../src/prefdlg.py:389
+#: ../../src/prefdlg.py:392
 msgid "Remember File Position"
 msgstr "记住文件位置"
 
-#: ../../src/prefdlg.py:949
+#: ../../src/prefdlg.py:953
 msgid "Remember Window Position on Exit"
 msgstr "退出时记住窗口位置"
 
-#: ../../src/prefdlg.py:946
+#: ../../src/prefdlg.py:950
 msgid "Remember Window Size on Exit"
 msgstr "退出时记住窗口大小"
 
@@ -1274,7 +1417,7 @@ msgstr "移除选定项"
 msgid "Remove trailing whitespace"
 msgstr "移除结尾空格"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:436
+#: ../../plugins/filebrowser/filebrowser/browser.py:429
 msgid "Rename"
 msgstr "重命名"
 
@@ -1291,7 +1434,7 @@ msgstr ""
 msgid "Report Error"
 msgstr "报告错误"
 
-#: ../../src/ed_pages.py:683
+#: ../../src/ed_pages.py:685
 msgid "Resave File?"
 msgstr "要重新保存文件吗？"
 
@@ -1299,16 +1442,16 @@ msgstr "要重新保存文件吗？"
 msgid "Retrieving Plugin List"
 msgstr "检索插件列表"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:433
+#: ../../plugins/filebrowser/filebrowser/browser.py:426
 msgid "Reveal in "
 msgstr "显示于 "
 
-#: ../../src/prefdlg.py:840
+#: ../../src/prefdlg.py:844
 msgid "Revert to Default"
 msgstr "恢复默认"
 
 #: ../../plugins/Launch/launch/launch.py:126
-#: ../../plugins/Launch/launch/launch.py:334
+#: ../../plugins/Launch/launch/launch.py:343
 msgid "Run"
 msgstr "运行"
 
@@ -1316,19 +1459,23 @@ msgstr "运行"
 msgid "Run script from current buffer"
 msgstr "在当前缓冲中运行脚本"
 
-#: ../../src/ed_menu.py:250 ../../src/ed_toolbar.py:79
+#: ../../src/ed_toolbar.py:79
 msgid "Save"
 msgstr "保存"
+
+#: ../../src/ed_menu.py:252
+msgid "Save &As"
+msgstr "另存为(&A)"
 
 #: ../../src/ed_menu.py:254
 msgid "Save All"
 msgstr "保存所有"
 
-#: ../../src/ed_menu.py:252 ../../src/ed_menu.py:253
+#: ../../src/ed_menu.py:253
 msgid "Save As"
 msgstr "另存为"
 
-#: ../../src/ed_main.py:1046
+#: ../../src/ed_main.py:1043
 msgid "Save Changes?"
 msgstr "保存更改？"
 
@@ -1386,13 +1533,17 @@ msgstr "保存文件: %s"
 msgid "Script Arguments"
 msgstr "脚本参数"
 
-#: ../../src/prefdlg.py:573
+#: ../../src/prefdlg.py:577
 msgid "Secondary Font"
 msgstr "次字体"
 
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
+msgid "Sections"
+msgstr "区段"
+
 #: ../../src/ed_menu.py:295
-msgid "Select All"
-msgstr "全选"
+msgid "Select &All"
+msgstr "全选(&A)"
 
 #: ../../src/ed_menu.py:296
 msgid "Select All Text in Document"
@@ -1407,11 +1558,10 @@ msgid "Select the desired plugins and then Click Download"
 msgstr "选定需要插件，点击下载按钮"
 
 #: ../../src/ed_menu.py:515
-#, fuzzy
 msgid "Send bug reports and suggestions"
-msgstr "发送错误报告及建议"
+msgstr "发送错误报告与建议"
 
-#: ../../src/prefdlg.py:1516
+#: ../../src/prefdlg.py:1520
 msgid "Set Font"
 msgstr "设置字体"
 
@@ -1419,24 +1569,25 @@ msgstr "设置字体"
 msgid "Set the preview file type"
 msgstr "设置预览文件类型"
 
-#: ../../src/prefdlg.py:578
-msgid "Sets a secondary font used for special regions when syntax highlighting is in use"
+#: ../../src/prefdlg.py:582
+msgid ""
+"Sets a secondary font used for special regions when syntax highlighting is "
+"in use"
 msgstr "设置次字体用于颜色高亮时的特殊区域"
 
-#: ../../src/prefdlg.py:571
+#: ../../src/prefdlg.py:575
 msgid "Sets the main/default font of the document"
 msgstr "设置文档的主要/默认字体"
 
-#: ../../plugins/Launch/launch/launch.py:96 ../../src/ed_menu.py:470
+#: ../../plugins/Launch/launch/launch.py:96
 msgid "Settings"
 msgstr "设置"
 
 #: ../../src/iface.py:285
-#, fuzzy
 msgid "Shelf"
-msgstr "显示书架"
+msgstr "书架"
 
-#: ../../src/ed_menu.py:360 ../../src/ed_menu.py:361 ../../src/prefdlg.py:554
+#: ../../src/ed_menu.py:360 ../../src/ed_menu.py:361 ../../src/prefdlg.py:558
 msgid "Show EOL Markers"
 msgstr "显示行尾特殊字符"
 
@@ -1456,7 +1607,7 @@ msgstr "显示缩进指示"
 msgid "Show Line Number Margin"
 msgstr "显示行号边"
 
-#: ../../src/ed_menu.py:362 ../../src/prefdlg.py:556
+#: ../../src/ed_menu.py:362 ../../src/prefdlg.py:560
 msgid "Show Line Numbers"
 msgstr "显示行号"
 
@@ -1472,7 +1623,7 @@ msgstr "显示启动屏"
 msgid "Show Toolbar"
 msgstr "显示工具栏"
 
-#: ../../src/ed_menu.py:364 ../../src/prefdlg.py:558
+#: ../../src/ed_menu.py:364 ../../src/prefdlg.py:562
 msgid "Show Whitespace"
 msgstr "显示空格"
 
@@ -1521,7 +1672,7 @@ msgstr "在新窗口中新建文档"
 msgid "Startup Settings"
 msgstr "新建设置"
 
-#: ../../src/updater.py:256
+#: ../../src/updater.py:287
 msgid "Status Unknown"
 msgstr "状态未知"
 
@@ -1529,6 +1680,7 @@ msgstr "状态未知"
 msgid "Style Editor"
 msgstr "样式编辑器"
 
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 #: ../../src/style_editor.py:214
 msgid "Style Tags"
 msgstr "样式标记"
@@ -1537,11 +1689,19 @@ msgstr "样式标记"
 msgid "Style Theme"
 msgstr "样式主题"
 
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:52
+msgid "Subroutine Declarations"
+msgstr "子程序申明"
+
+#: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
+msgid "Subroutines"
+msgstr "子例程"
+
 #: ../../src/plugdlg.py:836
 msgid "Successfully Installed Plugins"
 msgstr "成功安装插件"
 
-#: ../../src/syntax/syntax.py:217
+#: ../../src/syntax/syntax.py:220
 #, python-format
 msgid "Switch Lexer to %s"
 msgstr "切换到 %s 解析器"
@@ -1550,7 +1710,7 @@ msgstr "切换到 %s 解析器"
 msgid "Syntax Files"
 msgstr "语法文件"
 
-#: ../../src/ed_menu.py:467 ../../src/prefdlg.py:489 ../../src/prefdlg.py:811
+#: ../../src/ed_menu.py:467 ../../src/prefdlg.py:493 ../../src/prefdlg.py:815
 msgid "Syntax Highlighting"
 msgstr "语法加亮"
 
@@ -1558,7 +1718,7 @@ msgstr "语法加亮"
 msgid "System Directory"
 msgstr "系统目录"
 
-#: ../../src/prefdlg.py:528
+#: ../../src/prefdlg.py:532
 msgid "Tab Width"
 msgstr "Tab宽"
 
@@ -1581,7 +1741,7 @@ msgstr ""
 "\n"
 "要用 %s 打开吗？"
 
-#: ../../src/ed_main.py:1043
+#: ../../src/ed_main.py:1040
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -1613,7 +1773,9 @@ msgstr "选中标签启用插件"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:93
 #, python-format
-msgid "To open multiple files at once %s+Click to select the desired files/folders then hit Enter to open them all at once"
+msgid ""
+"To open multiple files at once %s+Click to select the desired files/folders "
+"then hit Enter to open them all at once"
 msgstr "要一次打开多个文件，请按住 %s 键并用左键选定文件/目录，然后回车"
 
 #: ../../src/ed_menu.py:461
@@ -1628,23 +1790,15 @@ msgstr "触发代码折叠"
 msgid "Toggle Editor View Options"
 msgstr "触发编辑器查看选项"
 
-#: ../../src/ed_menu.py:385
-msgid "Toolbar"
-msgstr "工具栏"
-
-#: ../../src/prefdlg.py:927
+#: ../../src/prefdlg.py:931
 msgid "Toolbar Icon Size"
 msgstr "工具栏图标大小"
 
-#: ../../src/ed_menu.py:496
-msgid "Tools"
-msgstr "工具"
-
 #: ../../src/ed_menu.py:512
 msgid "Translate Editra"
-msgstr ""
+msgstr "翻译Editra"
 
-#: ../../src/prefdlg.py:956
+#: ../../src/prefdlg.py:960
 msgid "Transparency"
 msgstr "透明"
 
@@ -1660,7 +1814,7 @@ msgstr "对调当前行和前一行"
 msgid "Trim Trailing Whitespace"
 msgstr "整理行尾空格"
 
-#: ../../src/prefdlg.py:563
+#: ../../src/prefdlg.py:567
 msgid "Turn off for better performance"
 msgstr "关闭以获得更好性能"
 
@@ -1672,7 +1826,7 @@ msgstr "无法打开除去的文件和文本"
 msgid "Unable to retrieve plugin list"
 msgstr "无法检索插件列表"
 
-#: ../../src/updater.py:140
+#: ../../src/updater.py:142
 msgid "Unable to retrieve version info"
 msgstr "无法检索版本信息"
 
@@ -1684,7 +1838,7 @@ msgstr "取消行注释"
 msgid "Uncomment the selected lines"
 msgstr "取消选定行注释"
 
-#: ../../src/ed_menu.py:283 ../../src/ed_toolbar.py:83
+#: ../../src/ed_toolbar.py:83
 msgid "Undo"
 msgstr "撤销"
 
@@ -1700,7 +1854,7 @@ msgstr "取消缩进"
 msgid "Unindent the selected lines"
 msgstr "取消选定行缩进"
 
-#: ../../src/ed_menu.py:441 ../../src/prefdlg.py:545
+#: ../../src/ed_menu.py:441 ../../src/prefdlg.py:549
 msgid "Unix (\\n)"
 msgstr "Unix(\\n)"
 
@@ -1709,17 +1863,21 @@ msgstr "Unix(\\n)"
 msgid "Unknown"
 msgstr "未知"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:569
+#: ../../plugins/filebrowser/filebrowser/browser.py:562
 msgid "Untitled_File"
 msgstr "未命名文件"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:567
+#: ../../plugins/filebrowser/filebrowser/browser.py:560
 msgid "Untitled_Folder"
 msgstr "未命名文件夹"
 
-#: ../../src/prefdlg.py:1058
+#: ../../src/prefdlg.py:1062
 msgid "Update"
 msgstr "更新"
+
+#: ../../src/Editra.py:369
+msgid "Update Available"
+msgstr "有可用的更新"
 
 #: ../../src/ed_menu.py:416
 msgid "Uppercase"
@@ -1729,7 +1887,7 @@ msgstr "大写"
 msgid "Use Auto Completion when available"
 msgstr "自动完成"
 
-#: ../../src/prefdlg.py:1096
+#: ../../src/prefdlg.py:1100
 msgid "Use Proxy"
 msgstr "使用代理"
 
@@ -1737,7 +1895,7 @@ msgstr "使用代理"
 msgid "Use Soft Tabs"
 msgstr "使用软Tab"
 
-#: ../../src/prefdlg.py:536
+#: ../../src/prefdlg.py:540
 msgid "Use Tabs Instead of Spaces"
 msgstr "Tab代替空格"
 
@@ -1745,11 +1903,11 @@ msgstr "Tab代替空格"
 msgid "User Directory"
 msgstr "用户目录"
 
-#: ../../src/prefdlg.py:1114
+#: ../../src/prefdlg.py:1118
 msgid "Username"
 msgstr "用户名"
 
-#: ../../src/prefdlg.py:1349
+#: ../../src/prefdlg.py:1353
 msgid "Value"
 msgstr "值"
 
@@ -1757,11 +1915,7 @@ msgstr "值"
 msgid "Version"
 msgstr "版本"
 
-#: ../../src/ed_menu.py:387
-msgid "View"
-msgstr "查看"
-
-#: ../../src/ed_log.py:72
+#: ../../src/ed_log.py:74
 msgid "View Editra's console log"
 msgstr "查看Editra的控制台日志"
 
@@ -1773,7 +1927,7 @@ msgstr "查看下一书签行"
 msgid "View Line of Previous Bookmark"
 msgstr "查看前一书签行"
 
-#: ../../src/prefdlg.py:551
+#: ../../src/prefdlg.py:555
 msgid "View Options"
 msgstr "查看选项"
 
@@ -1782,7 +1936,7 @@ msgstr "查看选项"
 msgid "Visit the project homepage %s"
 msgstr "工程主页 %s"
 
-#: ../../src/prefdlg.py:694
+#: ../../src/prefdlg.py:698
 msgid "Visual Helpers"
 msgstr "可视助手"
 
@@ -1802,11 +1956,11 @@ msgstr "空格"
 msgid "Whitespace formating commands"
 msgstr "空格格式命令"
 
-#: ../../src/ed_menu.py:444 ../../src/prefdlg.py:546
+#: ../../src/ed_menu.py:444 ../../src/prefdlg.py:550
 msgid "Windows (\\r\\n)"
 msgstr "Windows(\\r\\n)"
 
-#: ../../src/ed_menu.py:425 ../../src/prefdlg.py:560
+#: ../../src/ed_menu.py:425 ../../src/prefdlg.py:564
 msgid "Word Wrap"
 msgstr "自动换行"
 
@@ -1814,7 +1968,12 @@ msgstr "自动换行"
 msgid "Wrap Text Horizontally"
 msgstr "文本自动换行"
 
-#: ../../src/Editra.py:538
+#: ../../src/ed_main.py:1078
+#, python-format
+msgid "Written in 100%% Python."
+msgstr "用100%% Python 编写。"
+
+#: ../../src/Editra.py:584
 msgid "Your profile has been updated to the latest version"
 msgstr "配置更新到最新版本"
 
@@ -1846,7 +2005,7 @@ msgstr "行尾"
 msgid "exec"
 msgstr "执行"
 
-#: ../../plugins/Launch/launch/launch.py:299
+#: ../../plugins/Launch/launch/launch.py:308
 msgid "file"
 msgstr "文件"
 
