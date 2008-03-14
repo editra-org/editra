@@ -217,7 +217,7 @@ def GetClipboardText():
     @return: str or None
 
     """
-    if wx.Platform in '__WXGTK__':
+    if wx.Platform == '__WXGTK__':
         wx.TheClipboard.UsePrimarySelection(True)
     else:
         # Fake the primary selection on mac/msw
@@ -229,6 +229,9 @@ def GetClipboardText():
         if wx.TheClipboard.GetData(text_obj):
             rtxt = text_obj.GetText()
         wx.TheClipboard.Close()
+
+    if wx.Platform == '__WXGTK__':
+        wx.TheClipboard.UsePrimarySelection(False)
     return rtxt
 
 def SetClipboardText(txt, primary=False):
@@ -237,20 +240,21 @@ def SetClipboardText(txt, primary=False):
     @keyword primary: Set txt as primary selection (x11)
 
     """
-    if primary:
-        if wx.Platform == '__WXGTK__':
-            wx.TheClipboard.UsePrimarySelection(True)
-        else:
-            # Fake the primary selection on mac/msw
-            global FAKE_CLIPBOARD
-            FAKE_CLIPBOARD = txt
-            return True
+    if primary and wx.Platform == '__WXGTK__':
+        wx.TheClipboard.UsePrimarySelection(True)
+    else:
+        # Fake the primary selection on mac/msw
+        global FAKE_CLIPBOARD
+        FAKE_CLIPBOARD = txt
+        return True
 
     data_o = wx.TextDataObject()
     data_o.SetText(txt)
     if wx.TheClipboard.Open():
         wx.TheClipboard.SetData(data_o)
         wx.TheClipboard.Close()
+        if primary and wx.Platform == '__WXGTK__':
+            wx.TheClipboard.UsePrimarySelection(False)
         return True
     else:
         return False
