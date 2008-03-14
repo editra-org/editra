@@ -60,7 +60,6 @@ BUG FIXES:
 +Fix some dead object errors from improper event handling
 +Fix BOM related file opening errors
 +Php autocomment now works
-+Copy/Paste via primary selection under x11 now works
 +Error launching webbrowser from Editra under Windows
 +Title bar correctly displays files modification status
 

@@ -779,6 +779,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         elif len(self._code['keywords']) > 1:
             pos = self.GetCurrentPos()
             pos2 = self.WordStartPosition(pos, True)
+            print pos, pos2
             self.AutoCompShow(pos - pos2, self._code['keywords'])
         return
 
@@ -789,9 +790,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         evt.Skip()
-        stxt = self.GetSelectedText()
-        if len(stxt):
-            util.SetClipboardText(stxt, primary=True)
+        # FIXME: there is problems with using the primary selection. Setting
+        #        the primary selection causes anything else on the clipboard
+        #        to get killed.
+#        stxt = self.GetSelectedText()
+#        if len(stxt):
+#            util.SetClipboardText(stxt, primary=True)
         self.PostPositionEvent()
 
     def OnModified(self, evt):
@@ -1028,9 +1032,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.AutoCompCancel()
 
         if e_obj.GetClassName() == "wxToolBar" or e_map.has_key(e_id):
-            if e_id in [ed_glob.ID_COPY, ed_glob.ID_PASTE]:
-                print "COPY PASTE"
-
             if e_map.has_key(e_id):
                 e_map[e_id]()
             return
