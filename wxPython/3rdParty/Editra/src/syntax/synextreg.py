@@ -286,7 +286,7 @@ EXT_MAP = {
            'fe'                 : LANG_FERITE,
            'gc gui'             : LANG_GUI4CLI,
            'hs'                 : LANG_HASKELL,
-           'hx'                 : LANG_HAXE,
+           'hx hxml'            : LANG_HAXE,
            'htm html shtm shtml xhtml' : LANG_HTML,
            'iss'                : LANG_INNO,
            'java'               : LANG_JAVA,
