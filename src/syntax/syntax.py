@@ -281,7 +281,6 @@ def GetExtFromId(ext_id):
     """
     extreg = ExtensionRegister()
     ftype = synglob.GetDescriptionFromId(ext_id)
-    print "HELLO", ftype
     return extreg[ftype][0]
 
 def GetIdFromExt(ext):
