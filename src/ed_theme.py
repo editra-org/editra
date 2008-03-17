@@ -154,6 +154,7 @@ class BitmapProvider(plugin.Plugin):
 # Default theme data maps
 ART = { ed_glob.ID_ABOUT  : u'about.png',
         ed_glob.ID_ADD_BM : u'bmark_add.png',
+        ed_glob.ID_ADVANCED : u'advanced.png',
         ed_glob.ID_BIN_FILE : u'bin_file.png',
         ed_glob.ID_CDROM  : u'cdrom.png',
         ed_glob.ID_CONTACT : u'mail.png',
