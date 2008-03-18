@@ -36,6 +36,7 @@ import ed_theme
 #--------------------------------------------------------------------------#
 
 # Map for default system/wx provided graphic resources.
+# For toolbar ones fall back to ones provided by the default Tango theme
 DEFAULT = { 
             ed_glob.ID_ADD_BM  : wx.ART_ADD_BOOKMARK,
             ed_glob.ID_BIN_FILE : wx.ART_EXECUTABLE_FILE,
@@ -44,7 +45,7 @@ DEFAULT = {
             ed_glob.ID_CUT     : wx.ART_CUT,
             ed_glob.ID_DELETE  : wx.ART_DELETE,
             ed_glob.ID_DEL_BM  : wx.ART_DEL_BOOKMARK,
-            ed_glob.ID_DOCPROP : wx.ART_NORMAL_FILE,        # Bad match
+#            ed_glob.ID_DOCPROP : wx.ART_NORMAL_FILE,        # Bad match
             ed_glob.ID_DOWN    : wx.ART_GO_DOWN,
             ed_glob.ID_EXIT    : wx.ART_QUIT,
             ed_glob.ID_FILE    : wx.ART_NORMAL_FILE,
@@ -56,20 +57,20 @@ DEFAULT = {
             ed_glob.ID_NEW     : wx.ART_NEW,
             ed_glob.ID_NEXT_MARK : wx.ART_GO_FORWARD,
             ed_glob.ID_OPEN    : wx.ART_FILE_OPEN,
-            ed_glob.ID_PACKAGE : wx.ART_HARDDISK,           # Poor match
+#            ed_glob.ID_PACKAGE : wx.ART_HARDDISK,           # Poor match
             ed_glob.ID_PASTE   : wx.ART_PASTE,
-            ed_glob.ID_PREF    : wx.ART_EXECUTABLE_FILE,    # Bad match
+#            ed_glob.ID_PREF    : wx.ART_EXECUTABLE_FILE,    # Bad match
             ed_glob.ID_PRE_MARK : wx.ART_GO_BACK,
             ed_glob.ID_PRINT   : wx.ART_PRINT,
             ed_glob.ID_REDO    : wx.ART_REDO,
             ed_glob.ID_SAVE    : wx.ART_FILE_SAVE,
             ed_glob.ID_SAVEAS  : wx.ART_FILE_SAVE_AS,
             ed_glob.ID_STOP    : wx.ART_ERROR,
-            ed_glob.ID_THEME   : wx.ART_INFORMATION,   # Bad match
+#            ed_glob.ID_THEME   : wx.ART_INFORMATION,   # Bad match
             ed_glob.ID_UNDO    : wx.ART_UNDO,
             ed_glob.ID_UP      : wx.ART_GO_UP,
             ed_glob.ID_USB     : wx.ART_REMOVABLE,
-            ed_glob.ID_WEB     : wx.ART_HARDDISK       # Bad match
+#            ed_glob.ID_WEB     : wx.ART_HARDDISK       # Bad match
 }
 
 #--------------------------------------------------------------------------#
