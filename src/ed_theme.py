@@ -122,6 +122,26 @@ class BitmapProvider(plugin.Plugin):
 
         return None
 
+    def _GetTango(self, bmp_id, client):
+        """Try to get the icon from the default tango theme"""
+        theme = None
+        bmp = wx.NullBitmap
+        for prov in self.observers:
+            if prov.GetName() == TangoTheme.name:
+                theme = prov
+                break
+        else:
+            return bmp
+
+        if client == wx.ART_TOOLBAR:
+            bmp = theme.GetToolbarBitmap(bmp_id)
+        elif client == wx.ART_MENU:
+            bmp = theme.GetMenuBitmap(bmp_id)
+        else:
+            pass
+
+        return bmp
+
     def GetThemes(self):
         """Gets a list of the installed and activated themes
         @return: list of strings
@@ -135,7 +155,7 @@ class BitmapProvider(plugin.Plugin):
         found.
 
         @param bmp_id: id of bitmap to lookup
-        @param client: wxART_MENU, ART_MIME, wxART_TOOLBAR
+        @param client: wxART_MENU, wxART_TOOLBAR
         @see: L{ed_glob}
 
         """
@@ -148,6 +168,12 @@ class BitmapProvider(plugin.Plugin):
 
             if bmp.IsOk():
                 return bmp
+
+        # Try to fallback to tango theme when icon lookup fails
+        bmp = self._GetTango(bmp_id, client)
+        if bmp.IsOk():
+            return bmp
+
         return wx.NullBitmap
 
 #-----------------------------------------------------------------------------#
@@ -240,6 +266,8 @@ class TangoTheme(plugin.Plugin):
     """Represents the Tango Icon theme for Editra"""
     plugin.Implements(ThemeI)
 
+    name = u'Tango'
+
     def __GetArtPath(self, client, mime=False):
         """Gets the path of the resource directory to get
         the bitmaps from.
@@ -259,7 +287,7 @@ class TangoTheme(plugin.Plugin):
                                 Profile_Get('ICONS'), u'mime')
         else:
             path = os.path.join(ed_glob.CONFIG['THEME_DIR'],
-                                Profile_Get('ICONS'),
+                                self.GetName(),
                                 clients.get(client, u"menu"))
 
         path += os.sep
@@ -274,7 +302,7 @@ class TangoTheme(plugin.Plugin):
         @return: string
 
         """
-        return u'Tango'
+        return TangoTheme.name
 
     def GetMenuBitmap(self, bmp_id):
         """Get a menu bitmap
