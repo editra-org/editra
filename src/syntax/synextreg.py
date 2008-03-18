@@ -319,7 +319,7 @@ EXT_MAP = {
            'scm smd ss'         : LANG_SCHEME,
            'sql'                : LANG_SQL,
            'st'                 : LANG_ST,
-           'sv'                 : LANG_SYSVERILOG,
+           'sv svh'             : LANG_SYSVERILOG,
            'itcl tcl tk'        : LANG_TCL,
            'txt'                : LANG_TXT,
            'bas cls ctl frm vb' : LANG_VB,
