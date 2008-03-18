@@ -219,6 +219,7 @@ ID_TRANSLATE     = wx.NewId()
 ID_CONTACT       = wx.NewId()
 
 # Misc IDs
+ID_ADVANCED          = wx.NewId()
 ID_APP_SPLASH        = wx.NewId()
 ID_BIN_FILE          = ID_COMMAND
 ID_CDROM             = wx.NewId()
@@ -233,6 +234,7 @@ ID_FILE              = wx.ID_FILE
 ID_FLOPPY            = wx.NewId()
 ID_FOLDER            = wx.NewId()
 ID_HARDDISK          = wx.NewId()
+ID_KEY_PROFILES      = wx.NewId()
 ID_PACKAGE           = wx.NewId()
 ID_REPORTER          = wx.NewId()
 ID_STOP              = wx.ID_STOP
@@ -264,6 +266,7 @@ ID_2_PROF = {
              ID_EOL_MODE          : 'EOL',
              ID_PREF_FHIST        : 'FHIST_LVL',
              ID_INDENT_GUIDES     : 'GUIDES',
+             ID_KEY_PROFILES      : 'KEY_PROFILE',
              ID_PREF_LANG         : 'LANG',
              ID_REPORTER          : 'REPORTER',
              ID_SYNTAX            : 'SYNTAX',
