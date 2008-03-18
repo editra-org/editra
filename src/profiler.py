@@ -61,6 +61,7 @@ _DEFAULTS = {
            'GUIDES'     : False,            # Use Indentation guides
            'ICONS'      : 'Tango',          # Icon Theme
            'ICON_SZ'    : (24, 24),         # Toolbar Icon Size
+           'KEY_PROFILE': 'Default',        # Keybinding profile
            'LANG'       : 'Default',        # UI language
            'LASTCHECK'  : 0,                # Last time update check was done
            'MODE'       : 'CODE',           # Overall editor mode
