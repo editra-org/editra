@@ -8,6 +8,20 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.x.xx
+DATE xx/xx/2008
+12th Alpha Release
+
+NEWS:
+
+NEW: [features/improvements]
++Add highlighting support for System Verilog
+
+BUG FIXES:
++Typo in OCaml config module
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.2.90
 DATE 03/15/2008
 11th Alpha Release

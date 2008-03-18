@@ -233,6 +233,8 @@ LANG_VB = u'Visual Basic'
 # Use LEX_VERILOG
 ID_LANG_VERILOG = _NewId()
 LANG_VERILOG = u'Verilog'
+ID_LANG_SYSVERILOG = _NewId()
+LANG_SYSVERILOG = u'System Verilog'
 
 # Use LEX_VHDL
 ID_LANG_VHDL = _NewId()
@@ -317,6 +319,7 @@ EXT_MAP = {
            'scm smd ss'         : LANG_SCHEME,
            'sql'                : LANG_SQL,
            'st'                 : LANG_ST,
+           'sv'                 : LANG_SYSVERILOG,
            'itcl tcl tk'        : LANG_TCL,
            'txt'                : LANG_TXT,
            'bas cls ctl frm vb' : LANG_VB,
