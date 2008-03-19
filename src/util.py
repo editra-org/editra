@@ -619,7 +619,8 @@ def GetResources(resource):
     else:
         return -1
 
-def GetResourceFiles(resource, trim=True, get_all=False):
+def GetResourceFiles(resource, trim=True, get_all=False,
+                     suffix=None, title=True):
     """Gets a list of resource files from a directory and trims the
     file extentions from the names if trim is set to True (default).
     If the get_all parameter is set to True the function will return
@@ -627,10 +628,11 @@ def GetResourceFiles(resource, trim=True, get_all=False):
     files and combining them, the default behavior returns the user
     level files if they exist or the system level files if the
     user ones do not exist.
-    @param resource: name of config directory
+    @param resource: name of config directory to look in (i.e cache)
     @keyword trim: trim file extensions or not
     @keyword get_all: get a set of both system/user files or just user level
-
+    @keyword suffix: Get files that have the specified suffix or all (default)
+    @keyword title: Titlize the results
 
     """
     rec_dir = ResolvConfigDir(resource)
@@ -647,14 +649,24 @@ def GetResourceFiles(resource, trim=True, get_all=False):
         for rec in recs:
             if os.path.isfile(rec_dir + rec) or \
               (get_all and os.path.isfile(rec_dir2 + rec)):
+
+                # If a suffix was specified only keep files that match
+                if suffix is not None:
+                    if not rec.endswith(suffix):
+                        continue
+
                 # Trim the last part of an extension if one exists
                 if trim:
                     rec = ".".join(rec.split(u".")[:-1]).strip()
 
-                if len(rec):
+                # Make the resource name a title if requested
+                if title and len(rec):
                     rec = rec[0].upper() + rec[1:]
+
+                if len(rec):
                     rec_list.append(rec)
         rec_list.sort()
+        
         return list(set(rec_list))
 
 def Log(msg):
