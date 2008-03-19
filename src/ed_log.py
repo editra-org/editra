@@ -104,6 +104,12 @@ class LogViewer(ctrlbox.ControlBox):
         self.Bind(wx.EVT_BUTTON,
                   lambda evt: self._buffer.Clear(), id=wx.ID_CLEAR)
         self.Bind(wx.EVT_CHOICE, self.OnChoice, self._srcfilter)
+        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
+
+    def __del__(self):
+        """Cleanup and unsubscribe from messages"""
+        ed_msg.Unsubscribe(self.OnThemeChange)
+        super(LogViewer).__del__()
 
     def __DoLayout(self):
         """Layout the log viewer window"""
@@ -134,6 +140,16 @@ class LogViewer(ctrlbox.ControlBox):
 
         """
         self._buffer.SetFilter(self._srcfilter.GetStringSelection())
+
+    def OnThemeChange(self, msg):
+        """Update the buttons icon when the icon theme changes
+        @param msg: Message Object
+
+        """
+        clear = self.FindWindowById(wx.ID_CLEAR)
+        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
+        clear.SetBitmap(cbmp)
+        clear.Refresh()
 
     def SetSources(self, srclist):
         """Set the list of available log sources in the choice control
