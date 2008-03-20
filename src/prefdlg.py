@@ -7,16 +7,14 @@
 ###############################################################################
 
 """
-#----------------------------------------------------------------------------#
-# FILE: prefdlg.py                                                           #
-# LANGUAGE: Python							                                 #
-#                                                                            #
-# SUMMARY:                                                                   #
-#   The classes and functions contained in this file are used for creating   #
-#  the preference dialog that allows for dynamically configuring most of the #
-#  options and setting of the program by setting values in the Profile.      #
-#                                                                            #
-#----------------------------------------------------------------------------#
+FILE: prefdlg.py
+LANGUAGE: Python
+
+SUMMARY:
+The classes and functions contained in this file are used for creating
+the preference dialog that allows for dynamically configuring most of the
+options and setting of the program by setting values in the Profile.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -186,18 +184,19 @@ class PrefTools(wx.Toolbook):
         self._imglst.Add(MakeThemeTool(ed_glob.ID_THEME))
         self._imglst.Add(MakeThemeTool(ed_glob.ID_DOCPROP))
         self._imglst.Add(MakeThemeTool(ed_glob.ID_WEB))
+        self._imglst.Add(MakeThemeTool(ed_glob.ID_ADVANCED))
         self.SetImageList(self._imglst)
 
-        self.AddPage(GeneralPanel(self), _("General"), 
+        self.AddPage(GeneralPanel(self), _("General"),
                      imageId=self.GENERAL_PG)
-        self.AddPage(AppearancePanel(self), _("Appearance"), 
+        self.AddPage(AppearancePanel(self), _("Appearance"),
                      imageId=self.APPEAR_PG)
-        self.AddPage(DocumentPanel(self), _("Document"), 
+        self.AddPage(DocumentPanel(self), _("Document"),
                      imageId=self.DOC_PG)
         self.AddPage(NetworkPanel(self), _("Network"),
                      imageId=self.UPDATE_PG)
-#         self.AddPage(PrefPanelBase(self), _("Advanced"),
-#                      imageId=self.ADV_PG)
+        self.AddPage(AdvancedPanel(self), _("Advanced"),
+                     imageId=self.ADV_PG)
 
         # Event Handlers
         self.Bind(wx.EVT_TOOLBOOK_PAGE_CHANGED, self.OnPageChanged)
@@ -215,7 +214,15 @@ class PrefTools(wx.Toolbook):
         parent = self.GetParent()
         psz = page.GetSize()
         tbh = self.GetToolBar().GetSize().GetHeight()
-        parent.SetClientSize((psz.GetWidth(), psz.GetHeight() + tbh))
+
+        # Make sure not to resize the width less than the size needed to show
+        # all the books icons.
+        tbw = self.GetToolBar().GetBestSize().GetWidth()
+        if psz.GetWidth() >= tbw:
+            width = psz.GetWidth()
+        else:
+            width = tbw
+        parent.SetClientSize((width, psz.GetHeight() + tbh))
         parent.SendSizeEvent()
         parent.Layout()
         if evt is not None:
@@ -267,13 +274,12 @@ class PrefPanelBase(wx.Panel):
     @summary: Provides a panel with a painted background
 
     """
-    def __init__(self, parent):
+    def __init__(self, parent, style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER):
         """Default Constructor
         @param parent: The panels parent
 
         """
-        wx.Panel.__init__(self, parent, style=wx.TAB_TRAVERSAL | \
-                                              wx.SUNKEN_BORDER)
+        wx.Panel.__init__(self, parent, style=style)
 
         # Event Handlers
         if wx.Platform == '__WXMAC__':
@@ -285,7 +291,7 @@ class PrefPanelBase(wx.Panel):
 
         """
         # This is odd but I have recieved a number of error reports where
-        # wx is being reported as None in this function requires more 
+        # wx is being reported as None in this function requires more
         # investigation as I cannot reproduce
         if 'wx' not in globals() or wx is None:
             evt.Skip()
@@ -321,7 +327,7 @@ class GeneralPanel(PrefPanelBase):
 
         """
         PrefPanelBase.__init__(self, parent)
-        
+
         # Attributes
         self.LOG = wx.GetApp().GetLog()
         toolt = wx.ToolTip("Changes made in this dialog are saved in your "
@@ -330,7 +336,7 @@ class GeneralPanel(PrefPanelBase):
                            "affect.")
         self.SetToolTip(toolt)
         self._DoLayout()
-        
+
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
@@ -353,22 +359,22 @@ class GeneralPanel(PrefPanelBase):
 
         pmode_lbl = wx.StaticText(self, label=_("Printer Mode") + u": ")
         pmode_ch = ExChoice(self, ed_glob.ID_PRINT_MODE,
-                            choices=['Black/White', 'Colour/White', 
+                            choices=['Black/White', 'Colour/White',
                                      'Colour/Default', 'Inverse', 'Normal'],
                             default=Profile_Get('PRINT_MODE'))
         psizer = wx.BoxSizer(wx.HORIZONTAL)
         psizer.AddMany([(pmode_lbl, 0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                         (pmode_ch, 0, wx.ALIGN_CENTER_VERTICAL)])
 
-        reporter_cb = wx.CheckBox(self, ed_glob.ID_REPORTER, 
+        reporter_cb = wx.CheckBox(self, ed_glob.ID_REPORTER,
                                   _("Disable Error Reporter"))
         reporter_cb.SetValue(not Profile_Get('REPORTER'))
-        session_cb = wx.CheckBox(self, ed_glob.ID_SESSION, 
+        session_cb = wx.CheckBox(self, ed_glob.ID_SESSION,
                                  _("Load Last Session"))
         session_cb.SetValue(Profile_Get('SAVE_SESSION'))
         tt = wx.ToolTip(_("Load files from last session on startup"))
         session_cb.SetToolTip(tt)
-        splash_cb = wx.CheckBox(self, ed_glob.ID_APP_SPLASH, 
+        splash_cb = wx.CheckBox(self, ed_glob.ID_APP_SPLASH,
                                 _("Show Splash Screen"))
         splash_cb.SetValue(Profile_Get('APPSPLASH'))
         chk_update = wx.CheckBox(self, ed_glob.ID_PREF_CHKUPDATE,
@@ -388,10 +394,10 @@ class GeneralPanel(PrefPanelBase):
         win_cb = wx.CheckBox(self, ed_glob.ID_NEW_WINDOW,
                              _("Open files in new windows by default"))
         win_cb.SetValue(Profile_Get('OPEN_NW'))
-        pos_cb = wx.CheckBox(self, ed_glob.ID_PREF_SPOS, 
+        pos_cb = wx.CheckBox(self, ed_glob.ID_PREF_SPOS,
                              _("Remember File Position"))
         pos_cb.SetValue(Profile_Get('SAVE_POS'))
-        chkmod_cb = wx.CheckBox(self, ed_glob.ID_PREF_CHKMOD, 
+        chkmod_cb = wx.CheckBox(self, ed_glob.ID_PREF_CHKMOD,
                                 _("Check if on disk file has been "
                                   "modified by others"))
         chkmod_cb.SetValue(Profile_Get('CHECKMOD'))
@@ -400,7 +406,7 @@ class GeneralPanel(PrefPanelBase):
         locale = wx.StaticText(self, label=_("Locale Settings") + u": ")
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         lang_lbl = wx.StaticText(self, label=_("Language") + u": ")
-        lang_c = ed_i18n.LangListCombo(self, ed_glob.ID_PREF_LANG, 
+        lang_c = ed_i18n.LangListCombo(self, ed_glob.ID_PREF_LANG,
                                        Profile_Get('LANG'))
         lsizer.AddMany([(lang_lbl, 0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                         (lang_c, 0, wx.ALIGN_CENTER_VERTICAL)])
@@ -476,7 +482,7 @@ class DocumentPanel(PrefPanelBase):
 
         """
         PrefPanelBase.__init__(self, parent)
-        
+
         # Attributes
         self._nb = wx.Notebook(self)
         self._DoLayout()
@@ -512,11 +518,11 @@ class DocGenPanel(wx.Panel):
 
         """
         wx.Panel.__init__(self, parent)
-        
+
         # Layout
         self._DoLayout()
         self.SetAutoLayout(True)
-        
+
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnUpdateEditor)
         self.Bind(wx.EVT_CHOICE, self.OnUpdateEditor)
@@ -536,7 +542,7 @@ class DocGenPanel(wx.Panel):
                           default=Profile_Get('TABWIDTH', 'str')), 0,
                         wx.ALIGN_CENTER_VERTICAL)])
 
-        ut_cb = wx.CheckBox(self, ed_glob.ID_PREF_TABS, 
+        ut_cb = wx.CheckBox(self, ed_glob.ID_PREF_TABS,
                             _("Use Tabs Instead of Spaces"))
         ut_cb.SetValue(Profile_Get('USETABS', 'bool', False))
         bsu_cb = wx.CheckBox(self, ed_glob.ID_PREF_UNINDENT,
@@ -546,9 +552,9 @@ class DocGenPanel(wx.Panel):
         eolsz.AddMany([(wx.StaticText(self, label=_("Default EOL Mode") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                        (ExChoice(self, ed_glob.ID_EOL_MODE,
-                                 choices=[_("Macintosh (\\r)"), _("Unix (\\n)"), 
+                                 choices=[_("Macintosh (\\r)"), _("Unix (\\n)"),
                                           _("Windows (\\r\\n)")],
-                                 default=Profile_Get('EOL')), 
+                                 default=Profile_Get('EOL')),
                         0, wx.ALIGN_CENTER_VERTICAL)])
 
         # View Options
@@ -568,15 +574,15 @@ class DocGenPanel(wx.Panel):
 
         # Font Options
         font_lbl = wx.StaticText(self, label=_("Primary Font") + u": ")
-        fnt = Profile_Get('FONT1', 'font', wx.Font(10, wx.FONTFAMILY_MODERN, 
-                                                   wx.FONTSTYLE_NORMAL, 
+        fnt = Profile_Get('FONT1', 'font', wx.Font(10, wx.FONTFAMILY_MODERN,
+                                                   wx.FONTSTYLE_NORMAL,
                                                    wx.FONTWEIGHT_NORMAL))
         fpicker = PyFontPicker(self, self.ID_FONT_PICKER, fnt)
         tt = wx.ToolTip(_("Sets the main/default font of the document"))
         fpicker.SetToolTip(tt)
         font_lbl2 = wx.StaticText(self, label=_("Secondary Font") + u": ")
         fnt = Profile_Get('FONT2', 'font', wx.Font(10, wx.FONTFAMILY_SWISS,
-                                                   wx.FONTSTYLE_NORMAL, 
+                                                   wx.FONTSTYLE_NORMAL,
                                                    wx.FONTWEIGHT_NORMAL))
         fpicker2 = PyFontPicker(self, self.ID_FONT_PICKER2, fnt)
         tt = wx.ToolTip(_("Sets a secondary font used for special regions "
@@ -657,7 +663,7 @@ class DocGenPanel(wx.Panel):
 
 class DocCodePanel(wx.Panel):
     """Panel used for programming settings
-    @summary: Houses many of the controls for configuring the editors features 
+    @summary: Houses many of the controls for configuring the editors features
               that are related to programming.
 
     """
@@ -667,11 +673,11 @@ class DocCodePanel(wx.Panel):
 
         """
         wx.Panel.__init__(self, parent)
-        
+
         # Layout
         self._DoLayout()
         self.SetAutoLayout(True)
-        
+
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(wx.EVT_CHOICE, self.OnCheck)
@@ -696,7 +702,7 @@ class DocCodePanel(wx.Panel):
 
         # Visual Helpers Section
         vis_lbl = wx.StaticText(self, label=_("Visual Helpers") + u": ")
-        br_cb = wx.CheckBox(self, ed_glob.ID_BRACKETHL, 
+        br_cb = wx.CheckBox(self, ed_glob.ID_BRACKETHL,
                             _("Bracket Highlighting"))
         br_cb.SetValue(Profile_Get('BRACKETHL'))
         fold_cb = wx.CheckBox(self, ed_glob.ID_FOLDING, _("Code Folding"))
@@ -710,7 +716,7 @@ class DocCodePanel(wx.Panel):
         edge_col = wx.BoxSizer(wx.HORIZONTAL)
         edge_col.AddMany([(edge_cb, 0, wx.ALIGN_CENTER_VERTICAL),
                           ((10, 5), 0), (edge_sp, 0, wx.ALIGN_CENTER_VERTICAL)])
-        ind_cb = wx.CheckBox(self, ed_glob.ID_INDENT_GUIDES, 
+        ind_cb = wx.CheckBox(self, ed_glob.ID_INDENT_GUIDES,
                              _("Indentation Guides"))
         ind_cb.SetValue(Profile_Get('GUIDES'))
 
@@ -810,12 +816,12 @@ class DocSyntaxPanel(wx.Panel):
 
         """
         sizer = wx.BoxSizer(wx.VERTICAL)
-        
+
         # Syntax Settings
         syn_cb = wx.CheckBox(self, ed_glob.ID_SYNTAX, _("Syntax Highlighting"))
         syn_cb.SetValue(Profile_Get('SYNTAX'))
         syntheme = ExChoice(self, ed_glob.ID_PREF_SYNTHEME,
-                            choices=util.GetResourceFiles(u'styles', 
+                            choices=util.GetResourceFiles(u'styles',
                                                           get_all=True),
                             default=Profile_Get('SYNTHEME', 'str'))
         line = wx.StaticLine(self, size=(-1, 2))
@@ -831,7 +837,7 @@ class DocSyntaxPanel(wx.Panel):
                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL),
                         (syntheme, 0, wx.EXPAND), ((5, 5), 0)])
 
-        sizer.AddMany([((15, 15), 0), 
+        sizer.AddMany([((15, 15), 0),
                        (hsizer, 0, wx.EXPAND),
                        ((5, 5), 0),
                        (lsizer, 0, wx.EXPAND),
@@ -902,10 +908,10 @@ class AppearancePanel(PrefPanelBase):
 
         """
         PrefPanelBase.__init__(self, parent)
-        
+
         # Layout
         self._DoLayout()
-        
+
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
@@ -958,9 +964,9 @@ class AppearancePanel(PrefPanelBase):
         if wx.Platform == '__WXGTK__':
             trans_size = (200, 15)
         trans_lbl = wx.StaticText(self, wx.ID_ANY, _("Transparency") + u": ")
-        trans = wx.Slider(self, ed_glob.ID_TRANSPARENCY, 
+        trans = wx.Slider(self, ed_glob.ID_TRANSPARENCY,
                           Profile_Get('ALPHA'), 100, 255, size=trans_size,
-                          style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | 
+                          style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS |
                                 wx.SL_LABELS)
         tsizer = wx.BoxSizer(wx.HORIZONTAL)
         tsizer.AddMany([(trans_lbl, 0), ((5, 5), 0), (trans, 0)])
@@ -1077,9 +1083,9 @@ class NetConfigPage(wx.Panel):
     """Configuration page for network and proxy settings"""
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        
+
         # Attributes
-        
+
         # Layout
         self.__DoLayout()
 
@@ -1136,7 +1142,7 @@ class NetConfigPage(wx.Panel):
         flexg.Add(apply_b, 0, wx.ALIGN_RIGHT)
 
         if wx.Platform == '__WXMAC__':
-            for lbl in (use_proxy, url_txt, port_sep, port_txt, url_lbl, 
+            for lbl in (use_proxy, url_txt, port_sep, port_txt, url_lbl,
                         usr_lbl, usr_txt, pass_lbl, pass_txt, apply_b):
                 lbl.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
@@ -1210,11 +1216,11 @@ class UpdatePage(wx.Panel):
 
         """
         wx.Panel.__init__(self, parent)
-        
+
         # Attributes
         self.LOG = wx.GetApp().GetLog()
         self._DoLayout()
-        
+
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(ed_event.EVT_UPDATE_TEXT, self.OnUpdateText)
@@ -1317,15 +1323,443 @@ class UpdatePage(wx.Panel):
                     chk_bt.Enable()
         self.Layout()
         curr_pg = self.GetParent().GetSelection()
-        nbevt = wx.NotebookEvent(wx.wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, 
+        nbevt = wx.NotebookEvent(wx.wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED,
                                  0, curr_pg, curr_pg)
         wx.PostEvent(self.GetParent(), nbevt)
         self.Refresh()
 
+#-----------------------------------------------------------------------------#
+# Advanced Page
+
+class AdvancedPanel(PrefPanelBase):
+    """Creates a panel for holding advanced configuration options
+    @summary: Contains a L{wx.Notebook} that contains a number of pages
+              with setting controls for how documents are handled by the
+              L{ed_stc.EditraStc} text control.
+
+    """
+    def __init__(self, parent):
+        """Create the panel
+        @param parent: Parent window of this panel
+
+        """
+        PrefPanelBase.__init__(self, parent)
+
+        # Attributes
+        self._nb = wx.Notebook(self)
+        self._DoLayout()
+        self.SetAutoLayout(True)
+
+    def _DoLayout(self):
+        """Do the layout of the panel
+        @note: Do not call this after __init__
+
+        """
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self._nb.AddPage(KeyBindingPanel(self._nb), _("Keybindings"))
+        sizer.AddMany([((10, 10), 0), (self._nb, 1, wx.EXPAND), ((10, 10), 0)])
+        msizer = wx.BoxSizer(wx.VERTICAL)
+        msizer.AddMany([(sizer, 1, wx.EXPAND), ((10, 10), 0)])
+        self.SetSizer(msizer)
+
+#-----------------------------------------------------------------------------#
+# Keybinding Panel
+
+ID_MENUS = wx.NewId()
+ID_MENU_ITEMS = wx.NewId()
+ID_MOD1 = wx.NewId()
+ID_MOD2 = wx.NewId()
+ID_KEYS = wx.NewId()
+ID_BINDING = wx.NewId()
+KEYS = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+', 'Left',
+        'Right', 'Down', 'Up', 'Home', 'End', 'Tab']
+if wx.Platform == '__WXMSW__':
+    KEYS.remove('Tab')
+KEYS.sort()
+
+MODIFIERS = ['', 'Alt', 'Shift']
+if wx.Platform == '__WXMAC__':
+    MODIFIERS.append('Cmd')
+else:
+    MODIFIERS.append('Ctrl')
+MODIFIERS.sort()
+
+class KeyBindingPanel(wx.Panel):
+    """Keybinding configration options"""
+    def __init__(self, parent):
+        """Create the panel"""
+        wx.Panel.__init__(self, parent)
+
+        # Attributes
+        self.menub = wx.GetApp().GetActiveWindow().GetMenuBar()
+        self.binder = self.menub.GetKeyBinder()
+        self.menumap = dict()
+        for item in self.menub.GetMenuMap():
+            for key, val in item.iteritems():
+                if len(val) and val[0] in \
+                    (ed_glob.ID_FHIST, ed_glob.ID_LEXER,
+                     ed_glob.ID_SHELF, ed_glob.ID_PERSPECTIVES):
+                    continue
+                else:
+                    if isinstance(val[0], int):
+                        val = val[1:]
+                    self.menumap[key] = sorted(val, self._tupSort)
+
+        # Layout
+        self.__DoLayout()
+
+        # Event Handlers
+        self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_CHOICE, self.OnChoice)
+        self.Bind(wx.EVT_LISTBOX, self.OnListBox)
+
+    @staticmethod
+    def _tupSort(tup1, tup2):
+        if tup1[1] > tup2[1]:
+            return 1
+        elif tup1[1] < tup2[1]:
+            return -1
+        else:
+            return 0
+
+    def __DoLayout(self):
+        """Layout the controls"""
+        msizer = wx.BoxSizer(wx.VERTICAL) # Main Sizer
+
+        # Key profile section
+        profsz = wx.BoxSizer(wx.HORIZONTAL)
+        kprofiles = self.binder.GetKeyProfiles()
+        # Add an empty selection for the default profile
+        if len(kprofiles):
+            kprofiles.insert(0, '')
+        cprofile = profiler.Profile_Get('KEY_PROFILE', default=None)
+        profiles = wx.Choice(self, ed_glob.ID_KEY_PROFILES, choices=kprofiles)
+        profiles.Enable(len(kprofiles))
+        delete_b = wx.Button(self, wx.ID_DELETE, _("Delete"))
+        if cprofile is None:
+            profiles.SetStringSelection('')
+            delete_b.Enable(False)
+        else:
+            profiles.SetStringSelection(cprofile)
+        profsz.AddMany([((5, 5), 0),
+                        (wx.StaticText(self, label=_("Key Profile") + u":"),
+                         0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
+                        (profiles, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL),
+                        ((5, 5), 0), (wx.Button(self, wx.ID_NEW, _("New")), 0),
+                        ((5, 5), 0), (delete_b, 0), ((5, 5), 0)])
+
+        # Left Side Sizer
+        lvsizer = wx.BoxSizer(wx.VERTICAL)
+        menus = wx.Choice(self, ID_MENUS, choices=sorted(self.menumap.keys()))
+        menus.SetSelection(0)
+        milbls = [ item[1]
+                    for item in self.menumap.get(menus.GetStringSelection()) ]
+        mitems = wx.ListBox(self, ID_MENU_ITEMS, choices=sorted(milbls),
+                            style=wx.SIMPLE_BORDER)
+        lvsizer.AddMany([(wx.StaticText(self, label=_("Menu") + u":"),
+                          0, wx.ALIGN_LEFT), ((5, 5), 0),
+                         (menus, 0, wx.ALIGN_LEFT|wx.EXPAND), ((5, 5), 0),
+                         (mitems, 1, wx.EXPAND), ((5, 5), 0)])
+
+        # Right Side Sizer
+        rvsizer = wx.BoxSizer(wx.VERTICAL)
+        mod1 = wx.Choice(self, ID_MOD1, choices=MODIFIERS)
+        mod2 = wx.Choice(self, ID_MOD2, choices=[])
+        keys = wx.Choice(self, ID_KEYS, choices=KEYS)
+        twidth = self.GetTextExtent('Ctrl+Shift+Right')[0]
+        rvsizer.AddMany([(wx.StaticText(self, label=_("Modifier 1") + u":"),
+                          0, wx.ALIGN_LEFT), ((5, 5), 0),
+                         (mod1, 0, wx.ALIGN_LEFT|wx.EXPAND), ((5, 5), 0),
+                         (wx.StaticText(self, label=_("Modifier 2") + u":"),
+                          0, wx.ALIGN_LEFT), ((5, 5), 0),
+                         (mod2, 0, wx.ALIGN_LEFT|wx.EXPAND), ((5, 5), 0),
+                         (wx.StaticText(self, label=_("Key") + u":"),
+                          0, wx.ALIGN_LEFT), ((5, 5), 0),
+                         (keys, 0, wx.ALIGN_LEFT|wx.EXPAND), ((5, 5), 0),
+                         (wx.StaticText(self, label=_("Binding") + u":"),
+                          0, wx.ALIGN_LEFT), ((5, 5), 0),
+                         (wx.StaticText(self, ID_BINDING, ""), 0, wx.ALIGN_LEFT),
+                         ((twidth, 1), 0),
+                        ])
+
+        # Lower Section
+        lmsizer = wx.BoxSizer(wx.HORIZONTAL)
+        lmsizer.AddMany([((5, 5), 0), (lvsizer, 1, wx.EXPAND), ((10, 10), 0),
+                         (rvsizer, 0, wx.EXPAND), ((5, 5), 0)])
+
+        # Main Layout
+        line_sz = wx.BoxSizer(wx.HORIZONTAL)
+        line_sz.AddMany([((5, 0), 0),
+                         (wx.StaticLine(self, size=(-1, 1)), 1, wx.EXPAND),
+                         ((5, 0), 0)])
+        line_sz2 = wx.BoxSizer(wx.HORIZONTAL)
+        line_sz2.AddMany([((5, 0), 0),
+                         (wx.StaticLine(self, size=(-1, 1)), 1, wx.EXPAND),
+                         ((5, 0), 0)])
+        revert = wx.Button(self, wx.ID_REVERT, _("Revert to Default"))
+        apply = wx.Button(self, wx.ID_APPLY, _("Apply"))
+        bsizer = wx.BoxSizer(wx.HORIZONTAL)
+        bsizer.AddMany([((5, 5), 0), (revert, 0, wx.ALIGN_LEFT),
+                        ((-1, 5), 1, wx.EXPAND), (apply, 0, wx.ALIGN_RIGHT),
+                        ((5, 5), 0)])
+        msizer.AddMany([((10, 10), 0), (profsz, 0, wx.EXPAND), ((5, 5), 0),
+                        (line_sz, 0, wx.EXPAND), ((5, 5), 0),
+                        (lmsizer, 1, wx.EXPAND), ((10, 10), 0),
+                        (line_sz2, 0, wx.EXPAND), ((5, 5), 0),
+                        (bsizer, 0, wx.EXPAND), ((5, 5), 0)])
+
+        # Use the small buttons on mac
+        if wx.Platform == '__WXMAC__':
+            for item in (revert, apply):
+                item.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
+        self.SetSizer(msizer)
+        self.SetAutoLayout(True)
+
+        # Setup control status
+        self.ClearKeyView()
+        self.EnableControls(len(profiles.GetStringSelection()))
+
+    def _GetMenuId(self):
+        """Get the id of the currently selected menu item
+        @return: int or None
+
+        """
+        sel_idx = self.FindWindowById(ID_MENU_ITEMS).GetSelection()
+        cmenu = self.FindWindowById(ID_MENUS).GetStringSelection()
+        menu_id = self.menumap.get(cmenu)[sel_idx][0]
+        return menu_id
+
+    def _UpdateBinding(self):
+        """Update the current keybinding and its display"""
+        binding = self.FindWindowById(ID_BINDING) # StaticText
+        bvalue = self.GetBindingValue()
+        bstr = u"+".join(bvalue)
+        if not len(bstr):
+            bstr = _("None")
+        binding.SetLabel(bstr)
+
+    def _UpdateKeyDisplay(self, keys):
+        """Update the controls that show the key binding of the current
+        menu item.
+        @param keys: tuple of keys
+
+        """
+        mod1 = self.FindWindowById(ID_MOD1) # Choice
+        mod1.SetItems(MODIFIERS)
+        mod2 = self.FindWindowById(ID_MOD2) # Choice
+        mod2.Enable()
+        key = self.FindWindowById(ID_KEYS) # Choice
+
+        if keys is None:
+            keys = ('')
+
+        # Change the main meta key for display reasons to keep it from
+        # being confused with the actual ctrl key since wx translates ctrl
+        # to apple key (cmd) automatically.
+        if wx.Platform == '__WXMAC__' and len(keys) and 'Ctrl' in keys:
+            nkeys = list()
+            for keystr in keys:
+                if keystr == 'Ctrl':
+                    nkeys.append('Cmd')
+                else:
+                    nkeys.append(keystr)
+            keys = nkeys
+
+        if len(keys) >= 3:
+            mod1.SetStringSelection(keys[0])
+            tmods = list(MODIFIERS)
+            tmods.remove(keys[0])
+            mod2.SetItems(tmods)
+            mod2.SetStringSelection(keys[1])
+            key.SetStringSelection(keys[2])
+        elif len(keys) == 2:
+            mod1.SetStringSelection(keys[0])
+            tmods = list(MODIFIERS)
+            tmods.remove(keys[0])
+            mod2.SetItems(tmods)
+            mod2.SetStringSelection('')
+            key.SetStringSelection(keys[1])
+        elif len(keys) == 1 and keys[0] in KEYS:
+            self.ClearKeyView()
+            key.SetStringSelection(keys[0])
+        else:
+            self.ClearKeyView()
+
+        self._UpdateBinding()
+
+    def ClearKeyView(self):
+        """Clear all selections in the keybinding controls"""
+        mod1 = self.FindWindowById(ID_MOD1) # Choice
+        mod1.SetStringSelection('')
+        mod2 = self.FindWindowById(ID_MOD2) # Choice
+        mod2.Clear()
+        mod2.Disable()
+        key = self.FindWindowById(ID_KEYS) # Choice
+        key.SetStringSelection('')
+        self._UpdateBinding()
+
+    def EnableControls(self, enable=True):
+        """Enable/Disable the controls for editing the keybinding settings
+        @keyword enable: enable (True), disable (False)
+
+        """
+        for ctrl in (ID_MENUS, ID_MENU_ITEMS,
+                     wx.ID_APPLY, wx.ID_REVERT, wx.ID_DELETE):
+            self.FindWindowById(ctrl).Enable(enable)
+
+        self.EnableKeyView(enable)
+
+    def EnableKeyView(self, enable=True):
+        """Enable/Disable the key view/edit controls
+        @keyword enable: enable (True), disable (False)
+
+        """
+        for ctrl in (ID_MOD1, ID_MOD2, ID_KEYS, ID_BINDING):
+            self.FindWindowById(ctrl).Enable(enable)
+
+    def GetBindingValue(self):
+        """Get the values of the keybindings selected in the choice controls
+        @return: list
+
+        """
+        mod1 = self.FindWindowById(ID_MOD1) # Choice
+        mod2 = self.FindWindowById(ID_MOD2) # Choice
+        key = self.FindWindowById(ID_KEYS) # Choice
+        rval = list()
+        for ctrl in (mod1, mod2, key):
+            val = ctrl.GetStringSelection()
+            if len(val):
+                rval.append(val)
+        return rval
+
+    def OnButton(self, evt):
+        """Handle button events
+        @param evt: wx.CommandEvent
+
+        """
+        e_id = evt.GetId()
+        profiles = self.FindWindowById(ed_glob.ID_KEY_PROFILES)
+        csel = profiles.GetStringSelection()
+        if e_id == wx.ID_NEW:
+            dlg = wx.TextEntryDialog(self, _("New Profile"),
+                                     _("Enter the name of the new key profile"))
+            dlg.ShowModal()
+            val = dlg.GetValue()
+            if len(val):
+                choices = list(profiles.GetItems())
+                choices.append(val)
+                choices = sorted(list(set(choices)))
+                if '' not in choices:
+                    choices.insert(0, '')
+                profiles.SetItems(choices)
+                profiles.SetStringSelection(val)
+                self.menub.NewKeyProfile(val)
+            profiles.Enable(len(profiles.GetItems()))
+            self.EnableControls(len(profiles.GetItems()))
+        elif e_id == wx.ID_DELETE:
+            val = profiles.GetStringSelection()
+            if val:
+                # Remove the selected profile
+                items = profiles.GetItems()
+                items.remove(val)
+                self.menub.DeleteKeyProfile(val)
+                if len(items) == 1 and items[0] == '':
+                    items = list()
+
+                profiles.SetItems(items)
+                profiles.Enable(len(items))
+                if len(items):
+                    profiles.SetSelection(0)
+
+            self.EnableControls(len(profiles.GetItems()))
+            csel = profiles.GetStringSelection()
+            if csel:
+                profiler.Profile_Set('KEY_PROFILE', csel)
+            else:
+                profiler.Profile_Set('KEY_PROFILE', None) # Use defaults
+            ed_msg.PostMessage(ed_msg.EDMSG_MENU_LOADPROFILE,
+                               profiler.Profile_Get('KEY_PROFILE',
+                                                    default=None))
+        elif e_id == wx.ID_REVERT:
+            # Revert to the original settings
+            profiler.Profile_Set('KEY_PROFILE', None)
+            ed_msg.PostMessage(ed_msg.EDMSG_MENU_LOADPROFILE, None)
+            self.menub.SaveKeyProfile()
+            self.FindWindowById(ed_glob.ID_KEY_PROFILES).SetStringSelection('')
+            self.EnableControls(False)
+        elif e_id == wx.ID_APPLY:
+            # Update the menu(s) to the new settings
+            profiles = self.FindWindowById(ed_glob.ID_KEY_PROFILES)
+            csel = profiles.GetStringSelection()
+            if not len(csel):
+                csel = None
+            profiler.Profile_Set('KEY_PROFILE', csel)
+            ed_msg.PostMessage(ed_msg.EDMSG_MENU_REBIND)
+            self.menub.SaveKeyProfile()
+        else:
+            evt.Skip()
+
+    def OnChoice(self, evt):
+        """Handle selections in the choice controls
+        @param evt: wx.CommandEvent
+
+        """
+        e_id = evt.GetId()
+        csel = evt.GetEventObject().GetStringSelection()
+        if e_id == ed_glob.ID_KEY_PROFILES:
+            if not len(csel):
+                csel = None
+            self.binder.LoadKeyProfile(csel)
+            self.EnableControls(csel is not None)
+        elif e_id == ID_MENUS:
+            mi_listbx = self.FindWindowById(ID_MENU_ITEMS)
+            if mi_listbx is not None:
+                mi_listbx.SetItems([item[1] for item in self.menumap.get(csel)])
+            self.ClearKeyView()
+        elif e_id == ID_MOD1:
+            mod2 = self.FindWindowById(ID_MOD2)
+            if not len(csel):
+                mod2.Clear()
+                mod2.Disable()
+            else:
+                mod2.Enable()
+                tmods = list(MODIFIERS)
+                tmods.remove(csel)
+                mod2.SetItems(tmods)
+                mod2.SetStringSelection('')
+            self._UpdateBinding()
+        elif e_id in [ID_MOD2, ID_KEYS]:
+            self._UpdateBinding()
+        else:
+            evt.Skip()
+
+        # Update the keybinding
+        if e_id in (ID_MOD1, ID_MOD2, ID_KEYS):
+            bval = u"+".join(self.GetBindingValue())
+            bval = bval.replace('Cmd', 'Ctrl', 1)
+            self.binder.SetBinding(self._GetMenuId(), bval)
+
+    def OnListBox(self, evt):
+        """Handle listbox selections and update binding display
+        @param wx.CommandEvent
+
+        """
+        if evt.GetId() == ID_MENU_ITEMS:
+            sel_idx = evt.GetSelection()
+            cmenu = self.FindWindowById(ID_MENUS).GetStringSelection()
+            menu_id = self.menumap.get(cmenu)[sel_idx][0]
+            keys = self.binder.GetRawBinding(menu_id)
+            self._UpdateKeyDisplay(keys)
+        else:
+            evt.Skip()
+
 #----------------------------------------------------------------------------#
 # Custom controls for the Preference dialog
 
-class ProfileListCtrl(wx.ListCtrl, 
+class ProfileListCtrl(wx.ListCtrl,
                       listmix.ListCtrlAutoWidthMixin):
     """Displays the contents of the current users profile in a list control.
     @note: uses L{wx.lib.mixins.listctrl.ListCtrlAutoWidthMixin}
@@ -1336,8 +1770,8 @@ class ProfileListCtrl(wx.ListCtrl,
         @param parent: The parent window of this control
 
         """
-        wx.ListCtrl.__init__(self, parent, wx.ID_ANY, 
-                             wx.DefaultPosition, wx.DefaultSize, 
+        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
+                             wx.DefaultPosition, wx.DefaultSize,
                              style = wx.LC_REPORT | wx.LC_SORT_ASCENDING |
                                      wx.LC_VRULES)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
@@ -1364,9 +1798,10 @@ class ProfileListCtrl(wx.ListCtrl,
         self.SetColumnWidth(0, wx.LIST_AUTOSIZE)
         self.SetColumnWidth(1, wx.LIST_AUTOSIZE)
 
-    #---- End Function Definitions ----#
-class ExtListCtrl(wx.ListCtrl, 
-                  listmix.ListCtrlAutoWidthMixin, 
+#----------------------------------------------------------------------------#
+
+class ExtListCtrl(wx.ListCtrl,
+                  listmix.ListCtrlAutoWidthMixin,
                   listmix.TextEditMixin):
     """Class to manage the file extension associations
     @summary: Creates a list control for showing file type to file extension
@@ -1381,8 +1816,8 @@ class ExtListCtrl(wx.ListCtrl,
         @param parent: The parent window of this control
 
         """
-        wx.ListCtrl.__init__(self, parent, wx.ID_ANY, 
-                             wx.DefaultPosition, wx.DefaultSize, 
+        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
+                             wx.DefaultPosition, wx.DefaultSize,
                              style=wx.LC_REPORT | wx.LC_SORT_ASCENDING | \
                                    wx.LC_VRULES | wx.BORDER)
 
@@ -1467,7 +1902,7 @@ class ExtListCtrl(wx.ListCtrl,
 class ExChoice(wx.Choice):
     """Class to extend wx.Choice to have the GetValue
     function. This allows the application function to remain
-    uniform in its value retrieval from all objects. This also extends 
+    uniform in its value retrieval from all objects. This also extends
     wx.Choice to have a default selected value on init.
 
     """
@@ -1518,7 +1953,7 @@ class PyFontPicker(wx.Panel):
         self._text.SetValue(u"%s - %dpt" % (self._font.GetFaceName(), \
                                             self._font.GetPointSize()))
         self._button = wx.Button(self, label=_("Set Font") + u'...')
-        
+
         # Layout
         self._sizer = wx.BoxSizer(wx.HORIZONTAL)
         self._sizer.Add(self._text, 1, wx.ALIGN_CENTER_VERTICAL)
@@ -1526,7 +1961,7 @@ class PyFontPicker(wx.Panel):
         self._sizer.Add(self._button, 0, wx.ALIGN_CENTER_VERTICAL)
         self.SetSizer(self._sizer)
         self.SetAutoLayout(True)
-        
+
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton, self._button)
         self.Bind(wx.EVT_FONTPICKER_CHANGED, self.OnChange)
@@ -1556,7 +1991,7 @@ class PyFontPicker(wx.Panel):
         fdlg.ShowModal()
         fdata = fdlg.GetFontData()
         fdlg.Destroy()
-        wx.PostEvent(self, wx.FontPickerEvent(self, self.GetId(), 
+        wx.PostEvent(self, wx.FontPickerEvent(self, self.GetId(),
                                               fdata.GetChosenFont()))
 
     def OnChange(self, evt):
@@ -1573,7 +2008,7 @@ class PyFontPicker(wx.Panel):
         self._text.SetFont(self._font)
         self._text.SetValue(u"%s - %dpt" % (font.GetFaceName(), \
                                             font.GetPointSize()))
-        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY, 
+        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
                                          self.GetId(), self._font, self)
         wx.PostEvent(self.GetParent(), evt)
 

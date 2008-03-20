@@ -138,6 +138,18 @@ EDMSG_UI_STC_KEYUP = EDMSG_UI_ALL + ('stc', 'keyup')
 
 #---- End UI Action Messages ----#
 
+#---- Menu Messages ----#
+EDMSG_MENU = EDMSG_ALL + ('menu',)
+
+# Signal to all windows to update keybindings (msgdata == None)
+EDMSG_MENU_REBIND = EDMSG_MENU + ('rebind',)
+
+# Message to set key profile
+# msgdata == keyprofile name
+EDMSG_MENU_LOADPROFILE = EDMSG_MENU + ('load',)
+
+#---- End Menu Messages ----#
+
 #---- Misc Messages ----#
 # Signal that the icon theme has changed. Respond to this to update icon
 # resources from the ArtProvider.
