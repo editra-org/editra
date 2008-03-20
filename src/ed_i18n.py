@@ -118,9 +118,12 @@ if __name__ == '__main__':
     APP = wx.PySimpleApp(False)
     # Print a list of Cannonical names usefull for seeing what codes to
     # use when naming po files
+    OUT = list()
     for LANG in [x for x in dir(wx) if x.startswith("LANGUAGE")]:
         LOC_I = wx.Locale(wx.LANGUAGE_DEFAULT).\
                          GetLanguageInfo(getattr(wx, LANG))
         if LOC_I:
-            print LOC_I.CanonicalName
+            OUT.append(LOC_I.CanonicalName)
 
+    for LANG in sorted(OUT):
+        print LANG
