@@ -22,8 +22,14 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Dependancies
+import os
 import wx
+
+# Editra Libraries
 import ed_glob
+import ed_msg
+import profiler
+import util
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -195,295 +201,581 @@ class EdMenu(wx.Menu):
 
 #-----------------------------------------------------------------------------#
 
+class KeyBinder(object):
+    """Class for managing keybinding configurations"""
+    cprofile = None # Current Profile Name String
+    keyprofile = dict() # Active Profile (dict)
+
+    def __init__(self):
+        """Create the KeyBinder object"""
+        object.__init__(self)
+
+        # Attributes
+        self.cache = ed_glob.CONFIG['CACHE_DIR'] # Resource Directory
+
+    def GetBinding(self, item_id):
+        """Get the keybinding string for use in a menu
+        @param item_id: Menu Item Id
+        @return: string
+
+        """
+        rbind = self.GetRawBinding(item_id)
+        shortcut = u''
+        if rbind is not None:
+            shortcut = u"+".join(rbind)
+            if len(shortcut):
+                shortcut = u"\t" + shortcut
+        return shortcut
+
+    @classmethod
+    def GetCurrentProfile(cls):
+        """Get the name of the currenly set key profile if one exists
+        @return: string or None
+
+        """
+        return cls.cprofile
+
+    @classmethod
+    def GetCurrentProfileDict(cls):
+        """Get the dictionary of keybindings
+        @return: dict
+
+        """
+        return cls.keyprofile
+
+    @staticmethod
+    def GetKeyProfiles():
+        """Get the list of available key profiles
+        @return: list of strings
+
+        """
+        recs = util.GetResourceFiles('cache', trim=True, get_all=False,
+                                     suffix='.ekeys', title=False)
+        if recs == -1:
+            recs = list()
+        return recs
+
+    def GetProfilePath(self, pname):
+        """Get the full path to the given keyprofile
+        @param pname: profile name
+        @return: string or None
+
+        """
+        if pname is None:
+            return None
+
+        rname = None
+        for rec in self.GetKeyProfiles():
+            if rec.lower() == pname.lower():
+                rname = rec
+                break
+
+        # Must be a new profile
+        if rname is None:
+            rname = pname
+
+        rname = u"%s%s.ekeys" % (ed_glob.CONFIG['CACHE_DIR'], rname)
+
+        return rname
+
+    @classmethod
+    def GetRawBinding(cls, item_id):
+        """Get the raw key binding tuple
+        @param item_id: MenuItem Id
+        @return: tuple
+
+        """
+        if cls.cprofile is None:
+            return _DEFAULT_BINDING.get(item_id, None)
+        else:
+            return cls.keyprofile.get(item_id, None)
+
+    @classmethod
+    def LoadDefaults(cls):
+        """Load the default key profile"""
+        cls.keyprofile = dict(_DEFAULT_BINDING)
+        cls.cprofile = None
+
+    def LoadKeyProfile(self, pname):
+        """Load a key profile into the binder
+        @param pname: name of key profile to load
+
+        """
+        ppath = self.GetProfilePath(pname)
+        keydict = dict()
+        if ppath is not None and os.path.exists(ppath):
+            reader = util.GetFileReader(ppath)
+            if reader != -1:
+                util.Log("[ed_menu][info] Loading KeyProfile: %s" % ppath)
+                for line in reader:
+                    parts = line.split('=', 1)
+                    if len(parts) == 2:
+                        item_id = _GetValueFromStr(parts[0])
+                        if item_id is not None:
+                            keydict[item_id] = [ part.strip()
+                                                 for part in parts[1].split('+')
+                                                 if len(part.strip()) ]
+                            if parts[1].strip().endswith('++'):
+                                keydict[item_id].append('+')
+                reader.close()
+                KeyBinder.keyprofile = keydict
+                KeyBinder.cprofile = pname
+                return
+            else:
+                util.Log("[ed_menu][err] Couldn't read %s" % ppath)
+        else:
+            # Fallback to default keybindings
+            util.Log("[ed_menu][err] Failed to load bindings from %s" % pname)
+
+        util.Log("[ed_menu][info] Loading Default Keybindings")
+        KeyBinder.LoadDefaults()
+
+    def SaveKeyProfile(self):
+        """Save the current key profile to disk"""
+        if KeyBinder.cprofile is None:
+            util.Log("[ed_menu][warn] No keyprofile is set, cant save")
+        else:
+            ppath = self.GetProfilePath(KeyBinder.cprofile)
+            writer = util.GetFileWriter(ppath)
+            if writer != -1:
+                itemlst = list()
+                for item in KeyBinder.keyprofile.keys():
+                    itemlst.append("%s=%s%s" % (_FindStringRep(item),
+                                                self.GetBinding(item).lstrip(),
+                                                os.linesep))
+                writer.writelines(sorted(itemlst))
+                writer.close()
+            else:
+                util.Log("[ed_menu][err] Failed to open %s for writing" % ppath)
+
+    @classmethod
+    def SetBinding(cls, item_id, keys):
+        """Set the keybinding of a menu id
+        @param item_id: item to set
+        @param keys: string or list of key strings
+
+        """
+        if cls.cprofile is None:
+            util.Log("[ed_menu][warn] No keyprofile has been loaded yet")
+        else:
+            if isinstance(keys, basestring):
+                keys = [ key.strip() for key in keys.split('+') ]
+
+            if len(keys):
+                cls.keyprofile[item_id] = keys
+            elif cls.keyprofile.has_key(item_id):
+                del cls.keyprofile[item_id]
+            else:
+                pass
+
+    @classmethod
+    def SetProfileName(cls, pname):
+        """Set the name of the current profile
+        @param pname: name to set profile to
+
+        """
+        cls.cprofile = pname
+
+    @classmethod
+    def SetProfileDict(cls, keyprofile):
+        """Set the keyprofile using a dictionary of id => bindings
+        @param keyprofile: { menu_id : 'binding' }
+
+        """
+        cls.keyprofile = keyprofile
+
+#-----------------------------------------------------------------------------#
+
 class EdMenuBar(wx.MenuBar):
     """Custom menubar to allow for easier access and updating
     of menu components.
     @todo: redo all of this
 
     """
+    keybinder = KeyBinder()
+
     def __init__(self, style=0):
         """Initializes the Menubar
         @keyword style: style to set for menu bar
 
         """
         wx.MenuBar.__init__(self, style)
-        self._filehistorymenu = EdMenu()
-        self._filemenu = self.GenFileMenu()
-        self._whitespaceformatmenu = EdMenu()
-        self._lineformatmenu = EdMenu()
-        self._editmenu = self.GenEditMenu()
-        self._vieweditmenu = EdMenu()
-        self._viewmenu = self.GenViewMenu()
-        self._formatmenu = self.GenFormatMenu()
-        self._settingsmenu = self.GenSettingsMenu()
-        self._toolsmenu = self.GenToolsMenu()
-        self._helpmenu = self.GenHelpMenu()
+
+        # Setup
+        if EdMenuBar.keybinder.GetCurrentProfile() is None:
+            kprof = profiler.Profile_Get('KEY_PROFILE', default='default')
+            EdMenuBar.keybinder.LoadKeyProfile(kprof)
+
+        # Attributes
+        self._menus = dict()
+        self.GenFileMenu()
+        self.GenEditMenu()
+        self.GenViewMenu()
+        self.GenFormatMenu()
+        self.GenSettingsMenu()
+        self.GenToolsMenu()
+        self.GenHelpMenu()
+
+        # Message handlers
+        ed_msg.Subscribe(self.OnRebind, ed_msg.EDMSG_MENU_REBIND)
+        ed_msg.Subscribe(self.OnLoadProfile, ed_msg.EDMSG_MENU_LOADPROFILE)
+
+    @classmethod
+    def DeleteKeyProfile(cls, pname):
+        """Remove named keyprofile
+        @param pname: keyprofile name
+        @return: True if removed, False otherwise
+
+        """
+        ppath = cls.keybinder.GetProfilePath(pname)
+        if ppath is not None and os.path.exists(ppath):
+            try:
+                os.remove(ppath)
+            except:
+                return False
+            else:
+                return True
+        else:
+            return False
 
     # TODO these Gen* functions should be broken up to the components
     #      that supply the functionality and inserted in the menus on
     #      init when the editor loads an associated widget.
     def GenFileMenu(self):
         """Makes and attaches the file menu
-        @return: the default file menu
+        @return: None
 
         """
         filemenu = EdMenu()
-        filehist = self._filehistorymenu
-        filemenu.Append(ed_glob.ID_NEW, _("&New Tab") + u"\tCtrl+N",
+        filehist = self._menus['filehistory'] = EdMenu()
+        filemenu.Append(ed_glob.ID_NEW, _("&New Tab") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEW),
                         _("Start a new file in a new tab"))
         filemenu.Append(ed_glob.ID_NEW_WINDOW, _("New &Window") + \
-                        "\tCtrl+Shift+N", _("Start a new file in a new window"))
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEW_WINDOW),
+                        _("Start a new file in a new window"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_OPEN, _("&Open") + "\tCtrl+O", _("Open"))
+        filemenu.Append(ed_glob.ID_OPEN, _("&Open") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_OPEN),
+                        _("Open"))
         ## Setup File History in the File Menu
         filemenu.AppendMenu(ed_glob.ID_FHIST, _("Open Recent"),
                             filehist, _("Recently Opened Files"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_CLOSE, _("Close Page") + "\tCtrl+W",
+        filemenu.Append(ed_glob.ID_CLOSE, _("Close Page") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSE),
                         _("Close Current Page"))
         filemenu.Append(ed_glob.ID_CLOSE_WINDOW,
-                        _("Close Window") + "\tCtrl+Shift+W",
+                        _("Close Window") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSE_WINDOW),
                         _("Close the current window"))
-        filemenu.Append(ed_glob.ID_CLOSEALL, _("Close All Pages"),
+        filemenu.Append(ed_glob.ID_CLOSEALL, _("Close All Pages") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSEALL),
                         _("Close all open tabs"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_SAVE, _("&Save") + "\tCtrl+S",
+        filemenu.Append(ed_glob.ID_SAVE, _("&Save") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVE),
                         _("Save Current File"))
-        filemenu.Append(ed_glob.ID_SAVEAS, _("Save &As") + "\tCtrl+Shift+S",
+        filemenu.Append(ed_glob.ID_SAVEAS, _("Save &As") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVEAS),
                         _("Save As"))
-        filemenu.Append(ed_glob.ID_SAVEALL, _("Save All"), \
+        filemenu.Append(ed_glob.ID_SAVEALL, _("Save All") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVEALL),
                         _("Save all open pages"))
         filemenu.AppendSeparator()
         pmenu = EdMenu()
-        pmenu.Append(ed_glob.ID_SAVE_PROFILE, _("Save Profile"),
+        pmenu.Append(ed_glob.ID_SAVE_PROFILE, _("Save Profile") + \
+                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVE_PROFILE),
                      _("Save Current Settings to a New Profile"))
-        pmenu.Append(ed_glob.ID_LOAD_PROFILE, _("Load Profile"),
+        pmenu.Append(ed_glob.ID_LOAD_PROFILE, _("Load Profile") + \
+                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_LOAD_PROFILE),
                      _("Load a Custom Profile"))
         filemenu.AppendSubMenu(pmenu, _("Profile"),
                                _("Load and save custom Profiles"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_PRINT_SU, _("Page Set&up") + "\tCtrl+Shift+P",
+        filemenu.Append(ed_glob.ID_PRINT_SU, _("Page Set&up") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRINT_SU),
                         _("Configure Printer"))
-        filemenu.Append(ed_glob.ID_PRINT_PRE, _("Print Pre&view"),
+        filemenu.Append(ed_glob.ID_PRINT_PRE, _("Print Pre&view") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRINT_PRE),
                         _("Preview Printout"))
-        filemenu.Append(ed_glob.ID_PRINT, _("&Print") + "\tCtrl+P",
+        filemenu.Append(ed_glob.ID_PRINT, _("&Print") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRINT),
                         _("Print Current File"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_EXIT, _("E&xit") + "\tCtrl+Q",
+        filemenu.Append(ed_glob.ID_EXIT, _("E&xit") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_EXIT),
                         _("Exit the Program"))
+
+        # Attach to menubar and save reference
         self.Append(filemenu, _("&File"))
-        return filemenu
+        self._menus['file'] = filemenu
 
     def GenEditMenu(self):
         """Makes and attaches the edit menu
-        @return: the default edit menu
+        @return: None
 
         """
         editmenu = EdMenu()
-        editmenu.Append(ed_glob.ID_UNDO, _("&Undo") + "\tCtrl+Z",
+        editmenu.Append(ed_glob.ID_UNDO, _("&Undo") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_UNDO),
                         _("Undo Last Action"))
-        editmenu.Append(ed_glob.ID_REDO, _("Redo") + "\tCtrl+Shift+Z",
+        editmenu.Append(ed_glob.ID_REDO, _("Redo") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_REDO),
                         _("Redo Last Undo"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_CUT, _("Cu&t") + "\tCtrl+X",
+        editmenu.Append(ed_glob.ID_CUT, _("Cu&t") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CUT),
                         _("Cut Selected Text from File"))
-        editmenu.Append(ed_glob.ID_COPY, _("&Copy") + "\tCtrl+C",
+        editmenu.Append(ed_glob.ID_COPY, _("&Copy") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_COPY),
                         _("Copy Selected Text to Clipboard"))
-        editmenu.Append(ed_glob.ID_PASTE, _("&Paste") + "\tCtrl+V",
+        editmenu.Append(ed_glob.ID_PASTE, _("&Paste") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PASTE),
                         _("Paste Text from Clipboard to File"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_SELECTALL, _("Select &All") + "\tCtrl+A",
+        editmenu.Append(ed_glob.ID_SELECTALL, _("Select &All") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SELECTALL),
                         _("Select All Text in Document"))
         editmenu.AppendSeparator()
         linemenu = EdMenu()
-        linemenu.Append(ed_glob.ID_LINE_AFTER, _("New Line After") + "\tCtrl+L",
+        linemenu.Append(ed_glob.ID_LINE_AFTER, _("New Line After") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_LINE_AFTER),
                          _("Add a new line after the current line"))
         linemenu.Append(ed_glob.ID_LINE_BEFORE,
-                        _("New Line Before") + "\tCtrl+Shift+L",
+                        _("New Line Before") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_LINE_BEFORE),
                         _("Add a new line before the current line"))
         linemenu.AppendSeparator()
-        linemenu.Append(ed_glob.ID_CUT_LINE, _("Cut Line") + "\tCtrl+D",
+        linemenu.Append(ed_glob.ID_CUT_LINE, _("Cut Line") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CUT_LINE),
                         _("Cut Current Line"))
-        linemenu.Append(ed_glob.ID_COPY_LINE, _("Copy Line") + "\tCtrl+Y",
+        linemenu.Append(ed_glob.ID_COPY_LINE, _("Copy Line") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_COPY_LINE),
                         _("Copy Current Line"))
         linemenu.Append(ed_glob.ID_DUP_LINE,
-                        _("Duplicate Line") + "\tShift+Ctrl+C",
+                        _("Duplicate Line") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DUP_LINE),
                         _("Duplicate the current line"))
         linemenu.AppendSeparator()
-        linemenu.Append(ed_glob.ID_JOIN_LINES, _("Join Lines") + "\tCtrl+J",
+        linemenu.Append(ed_glob.ID_JOIN_LINES, _("Join Lines") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_JOIN_LINES),
                         _("Join the Selected Lines"))
-        linemenu.Append(ed_glob.ID_TRANSPOSE, _("Transpose Line") + "\tCtrl+T",
+        linemenu.Append(ed_glob.ID_TRANSPOSE, _("Transpose Line") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TRANSPOSE),
                         _("Transpose the current line with the previous one"))
         editmenu.AppendMenu(ed_glob.ID_LINE_EDIT, _("Line Edit"), linemenu,
                             _("Commands that affect an entire line"))
         bookmenu = EdMenu()
-        bookmenu.Append(ed_glob.ID_ADD_BM, _("Add Bookmark") + u"\tCtrl+B",
+        bookmenu.Append(ed_glob.ID_ADD_BM, _("Add Bookmark") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ADD_BM),
                         _("Add a bookmark to the current line"))
         bookmenu.Append(ed_glob.ID_DEL_BM, _("Remove Bookmark") + \
-                        u"\tCtrl+Shift+B",
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DEL_BM),
                         _("Remove bookmark from current line"))
-        bookmenu.Append(ed_glob.ID_DEL_ALL_BM, _("Remove All Bookmarks"),
+        bookmenu.Append(ed_glob.ID_DEL_ALL_BM, _("Remove All Bookmarks") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DEL_ALL_BM),
                         _("Remove all bookmarks from the current document"))
         editmenu.AppendMenu(ed_glob.ID_BOOKMARK, _("Bookmarks"),  bookmenu,
                             _("Add and remove bookmarks"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_FIND, _("&Find") + "\tCtrl+Shift+F",
+        editmenu.Append(ed_glob.ID_FIND, _("&Find") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND),
                         _("Find Text"))
-        editmenu.Append(ed_glob.ID_FIND_REPLACE, _("Find/R&eplace") + "\tCtrl+R",
+        editmenu.Append(ed_glob.ID_FIND_REPLACE, _("Find/R&eplace") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_REPLACE),
                         _("Find and Replace Text"))
-        editmenu.Append(ed_glob.ID_QUICK_FIND, _("&Quick Find") + "\tCtrl+F",
+        editmenu.Append(ed_glob.ID_QUICK_FIND, _("&Quick Find") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_QUICK_FIND),
                         _("Open the Quick Find Bar"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_PREF, _("Pr&eferences"),
+        editmenu.Append(ed_glob.ID_PREF, _("Pr&eferences") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PREF),
                         _("Edit Preferences / Settings"))
+
+        # Attach to menubar and save ref
         self.Append(editmenu, _("&Edit"))
-        return editmenu
+        self._menus['edit'] = editmenu
 
     def GenViewMenu(self):
         """Makes and attaches the view menu
-        @return: the default view menu
+        @return: None
 
         """
         viewmenu = EdMenu()
-        viewmenu.Append(ed_glob.ID_ZOOM_OUT, _("Zoom Out") + "\tCtrl+-",
+        viewmenu.Append(ed_glob.ID_ZOOM_OUT, _("Zoom Out") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ZOOM_OUT),
                         _("Zoom Out"))
-        viewmenu.Append(ed_glob.ID_ZOOM_IN, _("Zoom In") + "\tCtrl++",
+        viewmenu.Append(ed_glob.ID_ZOOM_IN, _("Zoom In") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ZOOM_IN),
                         _("Zoom In"))
-        viewmenu.Append(ed_glob.ID_ZOOM_NORMAL, _("Zoom Default") + "\tCtrl+0",
+        viewmenu.Append(ed_glob.ID_ZOOM_NORMAL, _("Zoom Default") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ZOOM_NORMAL),
                         _("Zoom Default"))
         viewmenu.AppendSeparator()
-        self._vieweditmenu.Append(ed_glob.ID_INDENT_GUIDES,
-                                  _("Indentation Guides"),
-                                  _("Show Indentation Guides"), wx.ITEM_CHECK)
-        self._vieweditmenu.Append(ed_glob.ID_SHOW_EDGE, _("Show Edge Guide"),
-                                  _("Show the edge column guide"), wx.ITEM_CHECK)
-        self._vieweditmenu.Append(ed_glob.ID_SHOW_EOL, _("Show EOL Markers"),
-                                  _("Show EOL Markers"), wx.ITEM_CHECK)
-        self._vieweditmenu.Append(ed_glob.ID_SHOW_LN, _("Show Line Numbers"),
-                                  _("Show Line Number Margin"), wx.ITEM_CHECK)
-        self._vieweditmenu.Append(ed_glob.ID_SHOW_WS, _("Show Whitespace"),
-                                  _("Show Whitespace Markers"), wx.ITEM_CHECK)
-        viewmenu.AppendSubMenu(self._vieweditmenu, _("Editor"), \
+        viewedit = self._menus['viewedit'] = EdMenu()
+        viewedit.Append(ed_glob.ID_INDENT_GUIDES,
+                        _("Indentation Guides") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_INDENT_GUIDES),
+                        _("Show Indentation Guides"),
+                        wx.ITEM_CHECK)
+        viewedit.Append(ed_glob.ID_SHOW_EDGE, _("Show Edge Guide") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_EDGE),
+                        _("Show the edge column guide"), wx.ITEM_CHECK)
+        viewedit.Append(ed_glob.ID_SHOW_EOL, _("Show EOL Markers") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_EOL),
+                        _("Show EOL Markers"), wx.ITEM_CHECK)
+        viewedit.Append(ed_glob.ID_SHOW_LN, _("Show Line Numbers") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_LN),
+                        _("Show Line Number Margin"), wx.ITEM_CHECK)
+        viewedit.Append(ed_glob.ID_SHOW_WS, _("Show Whitespace") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_WS),
+                        _("Show Whitespace Markers"), wx.ITEM_CHECK)
+        viewmenu.AppendSubMenu(self._menus['viewedit'], _("Editor"), \
                                _("Toggle Editor View Options"))
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_GOTO_LINE, _("&Goto Line") + u"\tCtrl+G",
-                            _("Goto Line Number"))
-
-        # Use ALT on win/gtk so the jump to word command doesn't get overridden
-        if wx.Platform == '__WXMAC__':
-            shortn = "\tCtrl+Right"
-            shortp = "\tCtrl+Left"
-        else:
-            shortn = "\tAlt+Right"
-            shortp = "\tAlt+Left"
+        viewmenu.Append(ed_glob.ID_GOTO_LINE, _("&Goto Line") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_LINE),
+                        _("Goto Line Number"))
 
         viewmenu.Append(ed_glob.ID_NEXT_MARK, _("Next Bookmark") + \
-                        shortn, _("View Line of Next Bookmark"))
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEXT_MARK),
+                        _("View Line of Next Bookmark"))
         viewmenu.Append(ed_glob.ID_PRE_MARK, _("Previous Bookmark") + \
-                        shortp, _("View Line of Previous Bookmark"))
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRE_MARK),
+                        _("View Line of Previous Bookmark"))
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_VIEW_TOOL, _("&Toolbar"),
-                             _("Show Toolbar"), wx.ITEM_CHECK)
+        viewmenu.Append(ed_glob.ID_VIEW_TOOL, _("&Toolbar") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_VIEW_TOOL),
+                        _("Show Toolbar"), wx.ITEM_CHECK)
+
+        # Attach to menubar
         self.Append(viewmenu, _("&View"))
-        return viewmenu
+        self._menus['view'] = viewmenu
 
     def GenFormatMenu(self):
         """Makes and attaches the format menu
-        @return: the default format menu
+        @return: None
 
         """
         formatmenu = EdMenu()
-        formatmenu.Append(ed_glob.ID_FONT, _("&Font"), _("Change Font Settings"))
+        formatmenu.Append(ed_glob.ID_FONT, _("&Font") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_FONT),
+                          _("Change Font Settings"))
         formatmenu.AppendSeparator()
-        formatmenu.Append(ed_glob.ID_COMMENT, _("Comment Lines") + u"\tCtrl+1",
-                               _("Comment the selected lines"))
+        formatmenu.Append(ed_glob.ID_COMMENT, _("Comment Lines") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_COMMENT),
+                          _("Comment the selected lines"))
         formatmenu.Append(ed_glob.ID_UNCOMMENT, _("Uncomment Lines") + \
-                          u"\tCtrl+2", _("Uncomment the selected lines"))
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_UNCOMMENT),
+                          _("Uncomment the selected lines"))
         formatmenu.AppendSeparator()
 
-        # FIXME: On Windows if Tab is bound to a menu item it is no longer
-        #        usable elsewhere such as in the stc control. On Mac/Gtk there
-        #        are not problems with it.
-        if wx.Platform != '__WXMSW__':
-            key = u"\tTab"
-        else:
-            key = u""
-        formatmenu.Append(ed_glob.ID_INDENT, _("Indent Lines") + key,
-                              _("Indent the selected lines"))
+
+        formatmenu.Append(ed_glob.ID_INDENT, _("Indent Lines") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_INDENT),
+                          _("Indent the selected lines"))
         formatmenu.Append(ed_glob.ID_UNINDENT, _("Unindent Lines") + \
-                          u"\tShift+Tab", _("Unindent the selected lines"))
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_UNINDENT),
+                          _("Unindent the selected lines"))
         formatmenu.AppendSeparator()
-        formatmenu.Append(ed_glob.ID_TO_UPPER,  _("Uppercase"),
+        formatmenu.Append(ed_glob.ID_TO_UPPER,  _("Uppercase") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TO_UPPER),
                           _("Convert selected text to all uppercase letters"))
-        formatmenu.Append(ed_glob.ID_TO_LOWER,  _("Lowercase"),
+        formatmenu.Append(ed_glob.ID_TO_LOWER,  _("Lowercase") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TO_LOWER),
                           _("Convert selected text to all lowercase letters"))
         formatmenu.AppendSeparator()
         formatmenu.Append(ed_glob.ID_USE_SOFTTABS,
-                          _("Use Soft Tabs") + '\tCtrl+Shift+I',
+                          _("Use Soft Tabs") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_USE_SOFTTABS),
                           _("Insert spaces instead of tab "
                             "characters with tab key"), wx.ITEM_CHECK)
-        formatmenu.Append(ed_glob.ID_WORD_WRAP, _("Word Wrap"),
-                               _("Wrap Text Horizontally"), wx.ITEM_CHECK)
+        formatmenu.Append(ed_glob.ID_WORD_WRAP, _("Word Wrap") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_WORD_WRAP),
+                          _("Wrap Text Horizontally"), wx.ITEM_CHECK)
         formatmenu.AppendSeparator()
-        whitespace = self._whitespaceformatmenu
-        whitespace.Append(ed_glob.ID_SPACE_TO_TAB, _("Spaces to Tabs"),
+
+        # Whitespace submenu
+        whitespace = self._menus['whitespaceformat'] = EdMenu()
+        whitespace.Append(ed_glob.ID_SPACE_TO_TAB, _("Spaces to Tabs") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_SPACE_TO_TAB),
                           _("Convert spaces to tabs in selected/all text"))
-        whitespace.Append(ed_glob.ID_TAB_TO_SPACE, _("Tabs to Spaces"),
+        whitespace.Append(ed_glob.ID_TAB_TO_SPACE, _("Tabs to Spaces") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TAB_TO_SPACE),
                           _("Convert tabs to spaces in selected/all text"))
-        whitespace.Append(ed_glob.ID_TRIM_WS, _("Trim Trailing Whitespace"),
+        whitespace.Append(ed_glob.ID_TRIM_WS, _("Trim Trailing Whitespace") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TRIM_WS),
                           _("Remove trailing whitespace"))
         formatmenu.AppendMenu(ed_glob.ID_WS_FORMAT, _("Whitespace"), whitespace,
                               _("Whitespace formating commands"))
-        lineformat = self._lineformatmenu
-        lineformat.Append(ed_glob.ID_EOL_MAC, _("Macintosh (\\r)"),
-                              _("Format all EOL characters to %s Mode") % \
-                              u"Macintosh (\\r)", wx.ITEM_CHECK)
-        lineformat.Append(ed_glob.ID_EOL_UNIX, _("Unix (\\n)"),
-                              _("Format all EOL characters to %s Mode") % \
-                              u"Unix (\\n)", wx.ITEM_CHECK)
-        lineformat.Append(ed_glob.ID_EOL_WIN, _("Windows (\\r\\n)"),
-                              _("Format all EOL characters to %s Mode") % \
-                              "Windows (\\r\\n)", wx.ITEM_CHECK)
+
+        # Line EOL formatting submenu
+        lineformat = self._menus['lineformat'] = EdMenu()
+        lineformat.Append(ed_glob.ID_EOL_MAC, _("Macintosh (\\r)") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_MAC),
+                          _("Format all EOL characters to %s Mode") % \
+                          u"Macintosh (\\r)", wx.ITEM_CHECK)
+        lineformat.Append(ed_glob.ID_EOL_UNIX, _("Unix (\\n)") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_UNIX),
+                          _("Format all EOL characters to %s Mode") % \
+                          u"Unix (\\n)", wx.ITEM_CHECK)
+        lineformat.Append(ed_glob.ID_EOL_WIN, _("Windows (\\r\\n)") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_WIN),
+                          _("Format all EOL characters to %s Mode") % \
+                          "Windows (\\r\\n)", wx.ITEM_CHECK)
         formatmenu.AppendMenu(ed_glob.ID_EOL_MODE, _("EOL Mode"), lineformat,
-                                  _("End of line character formatting"))
+                              _("End of line character formatting"))
+
+        # Attach to menubar
         self.Append(formatmenu, _("F&ormat"))
-        return formatmenu
+        self._menus['format'] = formatmenu
 
     def GenSettingsMenu(self):
         """Makes and attaches the settings menu
-        @return: the default settings menu
+        @return: None
 
         """
         settingsmenu = EdMenu()
-        settingsmenu.Append(ed_glob.ID_AUTOCOMP, _("Auto-Completion"),
+        settingsmenu.Append(ed_glob.ID_AUTOCOMP, _("Auto-Completion") + \
+                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_AUTOCOMP),
                             _("Use Auto Completion when available"), wx.ITEM_CHECK)
-        settingsmenu.Append(ed_glob.ID_AUTOINDENT, _("Auto-Indent"),
+        settingsmenu.Append(ed_glob.ID_AUTOINDENT, _("Auto-Indent") + \
+                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_AUTOINDENT),
                             _("Toggle Auto-Indentation functionality"),
                             wx.ITEM_CHECK)
-        settingsmenu.Append(ed_glob.ID_BRACKETHL, _("Bracket Highlighting"),
+        settingsmenu.Append(ed_glob.ID_BRACKETHL, _("Bracket Highlighting") + \
+                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_BRACKETHL),
                             _("Highlight Brackets/Braces"), wx.ITEM_CHECK)
-        settingsmenu.Append(ed_glob.ID_FOLDING, _("Code Folding"),
+        settingsmenu.Append(ed_glob.ID_FOLDING, _("Code Folding") + \
+                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_FOLDING),
                             _("Toggle Code Folding"), wx.ITEM_CHECK)
-        settingsmenu.Append(ed_glob.ID_SYNTAX, _("Syntax Highlighting"),
+        settingsmenu.Append(ed_glob.ID_SYNTAX, _("Syntax Highlighting") + \
+                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_SYNTAX),
                             _("Color Highlight Code Syntax"), wx.ITEM_CHECK)
+
         # Lexer Menu Appended later by main frame
         self.Append(settingsmenu, _("&Settings"))
-        return settingsmenu
+        self._menus['settings'] = settingsmenu
 
     def GenToolsMenu(self):
         """Makes and attaches the tools menu
-        @return: default tools menu
+        @return: None
 
         """
         toolsmenu = EdMenu()
-        toolsmenu.Append(ed_glob.ID_COMMAND, _("Editor Command") + u'\tCtrl+E',
+        toolsmenu.Append(ed_glob.ID_COMMAND, _("Editor Command") + \
+                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_COMMAND),
                          _("Goto command buffer"))
-        toolsmenu.Append(ed_glob.ID_KWHELPER, _("Keyword Helper") + u'\tCtrl+K',
+        toolsmenu.Append(ed_glob.ID_KWHELPER, _("Keyword Helper") + \
+                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_KWHELPER),
                          _("Provides a Contextual Help Menu Listing Standard "
                            "Keywords/Functions"))
-        toolsmenu.Append(ed_glob.ID_PLUGMGR, _("Plugin Manager"),
+        toolsmenu.Append(ed_glob.ID_PLUGMGR, _("Plugin Manager") + \
+                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PLUGMGR),
                          _("Manage, Download, and Install plugins"))
-        toolsmenu.Append(ed_glob.ID_STYLE_EDIT, _("Style Editor"),
+        toolsmenu.Append(ed_glob.ID_STYLE_EDIT, _("Style Editor") + \
+                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_STYLE_EDIT),
                          _("Edit the way syntax is highlighted"))
         toolsmenu.AppendSeparator()
 #         macro = EdMenu()
@@ -493,28 +785,45 @@ class EdMenuBar(wx.MenuBar):
 #                          _("Stop macro recording"))
 #         macro.Append(ed_glob.ID_MACRO_PLAY, "Play Macro", "Play Macro")
 #         toolsmenu.AppendMenu(wx.NewId(), _("Macros"), macro, _("Macro Tools"))
+
+        # Attach to menubar
         self.Append(toolsmenu, _("&Tools"))
-        return toolsmenu
+        self._menus['tools'] = toolsmenu
 
     def GenHelpMenu(self):
         """Makes and attaches the help menu
-        @return: default help menu
+        @return: None
 
         """
         helpmenu = EdMenu()
-        helpmenu.Append(ed_glob.ID_ABOUT, _("&About") + u"...", \
+        helpmenu.Append(ed_glob.ID_ABOUT, _("&About") + u"..." + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ABOUT),
                         _("About") + u"...")
-        helpmenu.Append(ed_glob.ID_HOMEPAGE, _("Project Homepage") + u"...",
+        helpmenu.Append(ed_glob.ID_HOMEPAGE, _("Project Homepage") + u"..." + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_HOMEPAGE),
                         _("Visit the project homepage %s") % ed_glob.HOME_PAGE)
         helpmenu.Append(ed_glob.ID_DOCUMENTATION,
-                        _("Online Documentation") + u"...",
+                        _("Online Documentation") + u"..." + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DOCUMENTATION),
                         _("Online project documentation and help guides"))
-        helpmenu.Append(ed_glob.ID_TRANSLATE, _("Translate Editra") + u"...",
+        helpmenu.Append(ed_glob.ID_TRANSLATE, _("Translate Editra") + u"..." + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TRANSLATE),
                         _("Editra translations project"))
-        helpmenu.Append(ed_glob.ID_CONTACT, _("Feedback"),
+        helpmenu.Append(ed_glob.ID_CONTACT, _("Feedback") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CONTACT),
                         _("Send bug reports and suggestions"))
+
+        # Attach to menubar
         self.Append(helpmenu, _("&Help"))
-        return helpmenu
+        self._menus['help'] = helpmenu
+
+    @classmethod
+    def GetKeyBinder(cls):
+        """Return the classes keybinder object
+        @return: KeyBinder
+
+        """
+        return cls.keybinder
 
     def GetMenuByName(self, namestr):
         """Find and return a menu by name
@@ -522,11 +831,61 @@ class EdMenuBar(wx.MenuBar):
         @return: menuitem or None if not found
 
         """
-        menu = "_%smenu" % namestr.lower()
-        if hasattr(self, menu):
-            return getattr(self, menu)
+        return self._menus.get(namestr.lower(), None)
+
+    def GetMenuMap(self):
+        """Get a mapping of all menus to (menu id, menu label)
+        @return: list of dict
+
+        """
+        menumap = list()
+        for menu in self.GetMenus():
+            menumap.append(WalkMenu(menu[0], menu[1], dict()))
+        return menumap
+
+    @classmethod
+    def NewKeyProfile(cls, pname):
+        """Make a new key profile that is a clone of the current one
+        @param pname: Name to give new profile
+
+        """
+        cls.keybinder.SetProfileName(pname)
+        cls.keybinder.SaveKeyProfile()
+
+    def OnLoadProfile(self, msg):
+        """Load and set the current key profile
+        @param msg: ed_msg.EDMSG_MENU_LOADPROFILE
+        @note: if message data is None the default bindings will be set
+
+        """
+        keyprof = msg.GetData()
+        if keyprof is not None:
+            self.SetKeyProfile(keyprof)
         else:
-            return None
+            EdMenuBar.keybinder.LoadDefaults()
+
+    def OnRebind(self, msg):
+        """Rebind all menu shortcuts when a rebind message is recieved
+        @param msg: ed_msg.EDMSG_MENU_REBIND
+
+        """
+        self.RebindKeys()
+
+    def RebindKeys(self):
+        """Reset all key bindings based on current binder profile"""
+        for menu in self.GetMenus():
+            for item in IterateMenuItems(menu[0]):
+                binding = EdMenuBar.keybinder.GetBinding(item.GetId())
+                clbl = item.GetText()
+                # Update the item if the shortcut has changed
+                if ('\t' in clbl and not clbl.endswith(binding)) or \
+                   ('\t' not in clbl and len(binding)):
+                    # wxBug? Getting the text of a menuitem is supposed to
+                    # return it with the accelerators but under gtk the string
+                    # has underscores '_' where it was supposed to have '&'
+                    if wx.Platform == '__WXGTK__':
+                        clbl = clbl.replace('_', '&', 1)
+                    item.SetText(clbl.split('\t')[0].strip() + binding)
 
     def ResetIcons(self):
         """Walk through each menu item in all of the bars menu and
@@ -538,8 +897,123 @@ class EdMenuBar(wx.MenuBar):
         for menu in self.GetMenus():
             WalkAndSetBitmaps(menu[0])
 
+    @classmethod
+    def SaveKeyProfile(cls):
+        """Save the current key profile"""
+        cls.keybinder.SaveKeyProfile()
+
+    def SetKeyProfile(self, pname):
+        """Set the current key profile and update the bindings
+        @param pname: Name of keyprofile to load
+
+        """
+        EdMenuBar.keybinder.LoadKeyProfile(pname)
+        self.RebindKeys()
+
 #-----------------------------------------------------------------------------#
-# Utility Functions
+
+#---- Private Objects/Functions ----#
+
+_DEFAULT_BINDING = { # File Menu
+                     ed_glob.ID_NEW : ("Ctrl", "N"),
+                     ed_glob.ID_NEW_WINDOW : ("Ctrl", "Shift", "N"),
+                     ed_glob.ID_OPEN : ("Ctrl", "O"),
+                     ed_glob.ID_CLOSE : ("Ctrl", "W"),
+                     ed_glob.ID_CLOSE_WINDOW : ("Ctrl", "Shift", "W"),
+                     ed_glob.ID_SAVE : ("Ctrl", "S"),
+                     ed_glob.ID_SAVEAS : ("Ctrl", "Shift", "S"),
+                     ed_glob.ID_PRINT_SU : ("Ctrl", "Shift", "P"),
+                     ed_glob.ID_PRINT : ("Ctrl", "P"),
+                     ed_glob.ID_EXIT : ("Ctrl", "Q"),
+
+                     # Edit Menu
+                     ed_glob.ID_UNDO : ("Ctrl", "Z"),
+                     ed_glob.ID_REDO : ("Ctrl", "Shift", "Z"),
+                     ed_glob.ID_CUT : ("Ctrl", "X"),
+                     ed_glob.ID_COPY : ("Ctrl", "C"),
+                     ed_glob.ID_PASTE : ("Ctrl", "V"),
+                     ed_glob.ID_SELECTALL : ("Ctrl", "A"),
+                     ed_glob.ID_LINE_AFTER : ("Ctrl", "L"),
+                     ed_glob.ID_LINE_BEFORE : ("Ctrl", "Shift", "L"),
+                     ed_glob.ID_CUT_LINE : ("Ctrl", "D"),
+                     ed_glob.ID_COPY_LINE : ("Ctrl", "Y"),
+                     ed_glob.ID_DUP_LINE : ("Ctrl", "Shift", "C"),
+                     ed_glob.ID_JOIN_LINES : ("Ctrl", "J"),
+                     ed_glob.ID_TRANSPOSE : ("Ctrl", "T"),
+                     ed_glob.ID_ADD_BM : ("Ctrl", "B"),
+                     ed_glob.ID_DEL_BM : ("Ctrl", "Shift", "B"),
+                     ed_glob.ID_FIND : ("Ctrl", "Shift", "F"),
+                     ed_glob.ID_FIND_REPLACE : ("Ctrl", "R"),
+                     ed_glob.ID_QUICK_FIND : ("Ctrl", "F"),
+
+                     # View Menu
+                     ed_glob.ID_ZOOM_IN : ("Ctrl", "+"),
+                     ed_glob.ID_ZOOM_OUT : ("Ctrl", "-"),
+                     ed_glob.ID_ZOOM_NORMAL : ("Ctrl", "0"),
+                     ed_glob.ID_GOTO_LINE : ("Ctrl", "G"),
+                     ed_glob.ID_NEXT_MARK : ("Alt", "Right"), # Win/Linux
+                     ed_glob.ID_PRE_MARK : ("Alt", "Left"), # Win/Linux
+
+                     # Format Menu
+                     ed_glob.ID_COMMENT : ("Ctrl", "1"),
+                     ed_glob.ID_UNCOMMENT : ("Ctrl", "2"),
+                     ed_glob.ID_INDENT : ("Tab",),
+                     ed_glob.ID_UNINDENT : ("Shift", "Tab"),
+                     ed_glob.ID_USE_SOFTTABS : ("Ctrl", "Shift", "I"),
+
+                     # Tools Menu
+                     ed_glob.ID_COMMAND : ("Ctrl", "E"),
+                     ed_glob.ID_KWHELPER : ("Ctrl", "K")
+                     }
+
+# Set some platform specific keybindigs
+if wx.Platform == '__WXMAC__':
+    _DEFAULT_BINDING[ed_glob.ID_NEXT_MARK] = ("Ctrl", "Right")
+    _DEFAULT_BINDING[ed_glob.ID_PRE_MARK] = ("Ctrl", "Left")
+elif wx.Platform == '__WXMSW__':
+     # FIXME: On Windows if Tab is bound to a menu item it is no longer
+     #        usable elsewhere such as in the stc control. On Mac/Gtk there
+     #        are not problems with it.
+    _DEFAULT_BINDING[ed_glob.ID_INDENT] = ("",)
+else:
+    pass
+
+def _FindStringRep(item_id):
+    """Find the string representation of the given id value
+    @param item_id: int
+    @return: string or None
+
+    """
+    for obj in dir(ed_glob):
+        if getattr(ed_glob, obj) == item_id:
+            return obj
+    else:
+        return None
+
+def _GetValueFromStr(item_str):
+    """Get the id value from the string representation of the object
+    @param item_str: items variable string
+    @return: int or None
+
+    """
+    return getattr(ed_glob, item_str, None)
+
+#---- Public Functions ----#
+
+def IterateMenuItems(menu):
+    """Recursively walk and yield menu items as the are found. Only menu
+    items are yielded, not submenus or separators.
+    @param menu: menu to iterate
+
+    """
+    for item in menu.GetMenuItems():
+        if item.IsSubMenu():
+            for subitem in IterateMenuItems(item.GetSubMenu()):
+                yield subitem
+        if not item.IsSeparator():
+            yield item
+        else:
+            continue
 
 def WalkAndSetBitmaps(menu):
     """Recursively walk a menu and its submenus setting bitmaps
@@ -557,3 +1031,32 @@ def WalkAndSetBitmaps(menu):
                 item.SetBitmap(wx.NullBitmap)
             else:
                 continue
+
+def WalkMenu(menu, label, collection):
+    """Recursively walk a menu and collect all its sub items
+    @param menu: wxMenu to walk
+    @param label: the menu's label
+    @param collection: dictionary to collect results in
+    @return: dict {menulabel : [menu id, (item1 id, label1),]}
+
+    """
+    if not collection.has_key(label):
+        collection[label] = list()
+
+    for item in menu.GetMenuItems():
+        if item.IsSubMenu():
+            ilbl = item.GetItemLabelText()
+            collection[ilbl] = [item.GetId(), ]
+            WalkMenu(item.GetSubMenu(), ilbl, collection)
+        elif item.IsSeparator():
+            pass
+        else:
+            lbl = item.GetItemLabelText().split('\t')[0].strip()
+            # wxBug? Even the methods that are supposed to return the text
+            # with out mnemonics or accelerators on gtk return the string with
+            # underscores where the mnemonics '&' are in the original strings
+            if wx.Platform == '__WXGTK__':
+                lbl = lbl.replace('_', '', 1)
+            collection[label].append((item.GetId(), lbl))
+
+    return collection

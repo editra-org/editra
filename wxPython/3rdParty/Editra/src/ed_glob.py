@@ -64,6 +64,7 @@ import wx
 # GetText is not available in 2.9 but GetItemLabel is not available pre 2.8.6
 if wx.VERSION < (2, 8, 6, 0, ''):
     wx.MenuItem.GetItemLabel = wx.MenuItem.GetText
+    wx.MenuItem.GetItemLabelText = wx.MenuItem.GetLabel
 
 #---- Configuration Locations ----#
 # Values set when main loads
