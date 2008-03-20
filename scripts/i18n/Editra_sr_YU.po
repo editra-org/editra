@@ -1,4 +1,4 @@
-# Simplified Chinese translation for editra
+# Serbian translation for editra
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the editra package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-19 21:14-0500\n"
-"PO-Revision-Date: 2008-03-02 01:25+0000\n"
-"Last-Translator: heccj <heccjj@gmail.com>\n"
-"Language-Team: Simplified Chinese <zh_CN@li.org>\n"
+"PO-Revision-Date: 2008-03-20 01:23+0000\n"
+"Last-Translator: Vladimir Lazic <vlazic@gmail.com>\n"
+"Language-Team: Serbian <sr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-03-06 12:12+0000\n"
+"X-Launchpad-Export-Date: 2008-03-20 02:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:267
 #, python-format
 msgid "%s Source File"
-msgstr "%s 源文件"
+msgstr "%s изворна датотека"
 
 #: ../../src/ed_main.py:444
 #, python-format
@@ -28,8 +28,8 @@ msgid ""
 "%s could not be found\n"
 "Perhaps its been moved or deleted"
 msgstr ""
-"%s 没有找到\n"
-"可能被移动或者删除"
+"%s не може да се пронађе\n"
+"Можда је премештена или обрисана"
 
 #: ../../src/ed_pages.py:689
 #, python-format
@@ -38,9 +38,9 @@ msgid ""
 "\n"
 "Would you like to save it again?"
 msgstr ""
-"%s 自最后一次保存起已被删除\n"
+"%s је био обрисан пре последњег чувања.\n"
 "\n"
-"要再次保存吗？"
+"Да ли желите да га поново сачувате?"
 
 #: ../../src/ed_pages.py:709
 #, python-format
@@ -49,141 +49,142 @@ msgid ""
 "\n"
 "Would you like to Reload it?"
 msgstr ""
-"%s 被其它应用程序更改。\n"
-"需要重新加载吗？"
+"%s је измењен у неком другом програму.\n"
+"\n"
+"Да ли желите да га наново учитате?"
 
 #: ../../src/ed_menu.py:756
 msgid "&About"
-msgstr "关于(&A)"
+msgstr "&О програму"
 
 #: ../../src/ed_menu.py:487
 msgid "&Copy"
-msgstr "复制(&C)"
+msgstr "&Умножи"
 
 #: ../../src/ed_menu.py:554
 msgid "&Edit"
-msgstr "编辑(&E)"
+msgstr "Ур&еђивање"
 
 #: ../../src/ed_menu.py:468
 msgid "&File"
-msgstr "文件(&F)"
+msgstr "&Датотека"
 
 #: ../../src/ed_menu.py:539
 msgid "&Find"
-msgstr "查找(&F)"
+msgstr "&Нађи"
 
 #: ../../src/ed_menu.py:619
 msgid "&Font"
-msgstr "字体(&F)"
+msgstr "&Фонт"
 
 #: ../../src/ed_menu.py:594
 msgid "&Goto Line"
-msgstr "跳到行(&G)"
+msgstr "&Иди на линију"
 
 #: ../../src/ed_main.py:135 ../../src/ed_menu.py:774
 msgid "&Help"
-msgstr "帮助(&H)"
+msgstr "&Помоћ"
 
 #: ../../src/ed_menu.py:408
 msgid "&New Tab"
-msgstr "新建标签(&N)"
+msgstr "&Нови језичак"
 
 #: ../../src/ed_menu.py:415
 msgid "&Open"
-msgstr "打开(&O)"
+msgstr "&Отвори"
 
 #: ../../src/ed_menu.py:490
 msgid "&Paste"
-msgstr "粘贴(&P)"
+msgstr "&Убаци"
 
 #: ../../src/ed_menu.py:459
 msgid "&Print"
-msgstr "打印(&P)"
+msgstr "Ш&тампај"
 
 #: ../../src/ed_menu.py:545
 msgid "&Quick Find"
-msgstr "快速查找(&Q)"
+msgstr "&Брза претрага"
 
 #: ../../src/ed_menu.py:433
 msgid "&Save"
-msgstr "保存(&S)"
+msgstr "&Сачувај"
 
 #: ../../src/ed_menu.py:715
 msgid "&Settings"
-msgstr "设置(&S)"
+msgstr "&Поставке"
 
 #: ../../src/ed_menu.py:605
 msgid "&Toolbar"
-msgstr "工具栏(&T)"
+msgstr "&Трака са алатима"
 
 #: ../../src/ed_menu.py:747
 msgid "&Tools"
-msgstr "工具(&T)"
+msgstr "&Алати"
 
 #: ../../src/ed_menu.py:477
 msgid "&Undo"
-msgstr "撤消(&U)"
+msgstr "&Опозови"
 
 #: ../../src/ed_menu.py:610
 msgid "&View"
-msgstr "查看(&V)"
+msgstr "П&реглед"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:248
 msgid "**Alias**"
-msgstr "**别名**"
+msgstr "**Алиас**"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:248
 msgid "**New Value**"
-msgstr "**新值**"
+msgstr "**Нова вредност**"
 
 #: ../../plugins/Launch/launch/launch.py:337 ../../src/dev_tool.py:397
 msgid "Abort"
-msgstr "终止"
+msgstr "Обустави"
 
 #: ../../src/ed_menu.py:758
 msgid "About"
-msgstr "关于"
+msgstr "О програму"
 
 #: ../../src/ed_menu.py:527
 msgid "Add Bookmark"
-msgstr "添加书签"
+msgstr "Додај обележивач"
 
 #: ../../src/ed_menu.py:529
 msgid "Add a bookmark to the current line"
-msgstr "添加书签到当前行"
+msgstr "Додај обележивач на тренутну линију"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:184
 msgid "Add a new executable"
-msgstr "添加新的可执行"
+msgstr "Додај нову извршну"
 
 #: ../../src/ed_menu.py:501
 msgid "Add a new line after the current line"
-msgstr "添加新行到当前行后"
+msgstr "Додај нову линију испод тренутне"
 
 #: ../../src/ed_menu.py:505
 msgid "Add a new line before the current line"
-msgstr "添加新行到行前"
+msgstr "Додај нову линију пре тренутне"
 
 #: ../../src/ed_menu.py:537
 msgid "Add and remove bookmarks"
-msgstr "添加移除书签"
+msgstr "Додај и уклони обележиваче"
 
 #: ../../src/prefdlg.py:200
 #, fuzzy
 msgid "Advanced"
-msgstr "已取消"
+msgstr "Отказано"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:179
 msgid "Alias"
-msgstr "别名"
+msgstr "Алијас"
 
 #: ../../src/ed_log.py:161 ../../src/ed_log.py:234
 msgid "All"
-msgstr "全部"
+msgstr "Све"
 
 #: ../../src/ed_search.py:177
 msgid "All Done"
-msgstr "完成所有"
+msgstr "Обављено"
 
 #: ../../src/Editra.py:367
 #, python-format
@@ -191,16 +192,16 @@ msgid ""
 "An updated version of Editra is available\n"
 "Would you like to download Editra %s now?"
 msgstr ""
-"发现Editra新版本\n"
-"现在下载 Editra %s 吗？"
+"Нова верзија је доступна\n"
+"Да ли желите да преузмете Editra %s сад?"
 
 #: ../../src/prefdlg.py:564
 msgid "AntiAliasing"
-msgstr "抗锯齿"
+msgstr "Ублажавање ивица (AntiAliasing)"
 
 #: ../../src/prefdlg.py:194
 msgid "Appearance"
-msgstr "外观"
+msgstr "Изглед"
 
 #: ../../src/prefdlg.py:1500
 msgid "Apply"
@@ -208,35 +209,35 @@ msgstr ""
 
 #: ../../src/style_editor.py:645
 msgid "Attributes"
-msgstr "属性"
+msgstr "Особине"
 
 #: ../../src/plugdlg.py:867
 msgid "Author"
-msgstr "作者"
+msgstr "Аутор"
 
 #: ../../src/ed_menu.py:697 ../../src/prefdlg.py:726
 msgid "Auto-Completion"
-msgstr "自动完成"
+msgstr "Аутоматска допуна"
 
 #: ../../src/ed_menu.py:700 ../../src/prefdlg.py:728
 msgid "Auto-Indent"
-msgstr "自动缩进"
+msgstr "Аутоматско увлачење"
 
 #: ../../src/perspective.py:80
 msgid "Automatically save/use window state from last session"
-msgstr "自动 保存/使用 最后一次会话的窗口状态"
+msgstr "Аутоматски сачувај/користи стање прозора задње сесије"
 
 #: ../../src/style_editor.py:634
 msgid "Background"
-msgstr "背景"
+msgstr "Позадина"
 
 #: ../../src/prefdlg.py:551
 msgid "Backspace Unindents"
-msgstr "退格取消缩进"
+msgstr "Бекспејс тастер поништава увлачење"
 
 #: ../../src/style_editor.py:194
 msgid "Base new theme on existing one"
-msgstr "新主题基于当前主题"
+msgstr "Нову тему базирај на већ постојећој"
 
 #: ../../src/prefdlg.py:1477
 msgid "Binding"
@@ -244,267 +245,267 @@ msgstr ""
 
 #: ../../src/ed_menu.py:536
 msgid "Bookmarks"
-msgstr "书签"
+msgstr "Обележивачи"
 
 #: ../../src/ed_menu.py:704 ../../src/prefdlg.py:708
 msgid "Bracket Highlighting"
-msgstr "高亮括号"
+msgstr "Наглашавање заграда"
 
 #: ../../src/style_editor.py:139
 msgid "Cancel"
-msgstr "取消"
+msgstr "Одустани"
 
 #: ../../src/updater.py:642
 msgid "Canceled"
-msgstr "已取消"
+msgstr "Отказано"
 
 #: ../../src/ed_menu.py:621
 msgid "Change Font Settings"
-msgstr "更改字体设置"
+msgstr "Измени подешавања фонта"
 
 #: ../../src/perspective.py:135
 #, python-format
 msgid "Change view to \"%s\""
-msgstr "视图改为 \"%s\""
+msgstr "Промени преглед у \"%s\""
 
 #: ../../src/style_editor.py:316
 #, python-format
 msgid "Changed color scheme to %s"
-msgstr "颜色方案改为 \"%s\""
+msgstr "Промењена је колорна шема у%s"
 
 #: ../../src/plugdlg.py:217
 msgid "Changes will take affect once the program has been restarted"
-msgstr "更改将会在程序重新启动后生效"
+msgstr "Измене ће бити уочене након рестартовања програма"
 
 #: ../../src/prefdlg.py:1250
 msgid "Check"
-msgstr "检查"
+msgstr "Провери"
 
 #: ../../src/prefdlg.py:383
 msgid "Check for updates on startup"
-msgstr "启动检查更新"
+msgstr "При покретању проверавај да ли су изашла унапређења"
 
 #: ../../src/prefdlg.py:403
 msgid "Check if on disk file has been modified by others"
-msgstr "检查文件是否被其它程序更改过"
+msgstr "Провери да ли је датотека са диска измењена од других"
 
 #: ../../src/ed_main.py:342
 msgid "Choose a File"
-msgstr "选择文件"
+msgstr "Изабери датотеку"
 
 #: ../../src/ed_main.py:514
 msgid "Choose a Save Location"
-msgstr "选择保存位置"
+msgstr "Изабери локацију где желиш да сачуваш"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:48
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:152
 msgid "Class Definitions"
-msgstr "类定义"
+msgstr "Дефиниције класа"
 
 #: ../../plugins/Launch/launch/launch.py:134 ../../src/ed_log.py:131
 msgid "Clear"
-msgstr "清除"
+msgstr "Очисти"
 
 #: ../../src/plugdlg.py:656
 msgid "Click on Install to install the plugins in the list"
-msgstr "点击 安装 以安装列表中的插件"
+msgstr "Клинки на Инсталирај да би инсталирао проширења са листе"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:178
 #: ../../plugins/Launch/launch/cfgdlg.py:182
 msgid "Click on an item to edit"
-msgstr "选择要编辑条目"
+msgstr "Кликни на ставку да би је изменио"
 
 #: ../../src/ed_menu.py:429
 msgid "Close All Pages"
-msgstr "关闭所有页面"
+msgstr "Затвори све документе"
 
 #: ../../src/ed_menu.py:424
 msgid "Close Current Page"
-msgstr "关闭当前页面"
+msgstr "Затвори тренутни документ"
 
 #: ../../src/ed_menu.py:422
 msgid "Close Page"
-msgstr "关闭页面"
+msgstr "Затвори документ"
 
 #: ../../src/ed_menu.py:426
 msgid "Close Window"
-msgstr "关闭窗口"
+msgstr "Затвори прозор"
 
 #: ../../src/ed_menu.py:431
 msgid "Close all open tabs"
-msgstr "关闭所有打开标签"
+msgstr "Затвори све отворене језичке"
 
 #: ../../src/ed_menu.py:428
 msgid "Close the current window"
-msgstr "关闭当前窗口"
+msgstr "Затвори текући прозор"
 
 #: ../../src/prefdlg.py:500
 msgid "Code"
-msgstr "代码"
+msgstr "Кôд"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:73
 msgid "Code Browser"
-msgstr "代码浏览器"
+msgstr "Прегледач кôда"
 
 #: ../../src/ed_menu.py:707 ../../src/prefdlg.py:710
 msgid "Code Folding"
-msgstr "代码折叠"
+msgstr "Сажимање кôда"
 
 #: ../../src/style_editor.py:618
 msgid "Color"
-msgstr "颜色"
+msgstr "Боја"
 
 #: ../../src/ed_menu.py:712
 msgid "Color Highlight Code Syntax"
-msgstr "颜色高亮代码语法"
+msgstr "Истицање бојом синтаксе кôда"
 
 #: ../../src/prefdlg.py:838
 msgid "Color Scheme"
-msgstr "配色方案"
+msgstr "Шема боја"
 
 #: ../../src/ed_cmdbar.py:181
 msgid "Command"
-msgstr "命令"
+msgstr "Наредба"
 
 #: ../../src/ed_menu.py:525
 msgid "Commands that affect an entire line"
-msgstr "作用于整行的命令"
+msgstr "Команде које се односе на читаву линију"
 
 #: ../../src/ed_menu.py:623
 msgid "Comment Lines"
-msgstr "注释行"
+msgstr "Коментариши линију"
 
 #: ../../src/ed_menu.py:625
 msgid "Comment the selected lines"
-msgstr "注释选定行"
+msgstr "Коментариши селектоване линије"
 
 #: ../../src/prefdlg.py:1069
 msgid "Configuration"
-msgstr "配置"
+msgstr "Поставке"
 
 #: ../../src/plugdlg.py:180
 msgid "Configure"
-msgstr "设置"
+msgstr "Подеси"
 
 #: ../../src/ed_menu.py:455
 msgid "Configure Printer"
-msgstr "设置打印机"
+msgstr "Подеси штампач"
 
 #: ../../src/ed_menu.py:644
 msgid "Convert selected text to all lowercase letters"
-msgstr "转换选定文本为小写"
+msgstr "Конвертуј селектован текст у мала слова"
 
 #: ../../src/ed_menu.py:641
 msgid "Convert selected text to all uppercase letters"
-msgstr "转换选定文本为大写"
+msgstr "Конвертуј селектован текст у велика слова"
 
 #: ../../src/ed_menu.py:660
 msgid "Convert spaces to tabs in selected/all text"
-msgstr "转换选定文本中的空格为制表符"
+msgstr "Конвертуј размаке у табулаторе у селектованом/свом тексту"
 
 #: ../../src/ed_menu.py:663
 msgid "Convert tabs to spaces in selected/all text"
-msgstr "转换选定文本中的制表符为空格"
+msgstr "Конвертуј табулаторе у размаке у селектованом/свом тексту"
 
 #: ../../src/ed_toolbar.py:88
 msgid "Copy"
-msgstr "复制"
+msgstr "Умножи"
 
 #: ../../src/ed_menu.py:512
 msgid "Copy Current Line"
-msgstr "复制当前行"
+msgstr "Умножи тренутну линију"
 
 #: ../../src/ed_menu.py:510
 msgid "Copy Line"
-msgstr "复制行"
+msgstr "Умножи линију"
 
 #: ../../src/ed_menu.py:489 ../../src/ed_toolbar.py:89
 msgid "Copy Selected Text to Clipboard"
-msgstr "复制选定文本到剪贴板"
+msgstr "Копирај селектован текст у списак исечака"
 
 #: ../../src/ed_main.py:1123
 msgid "Copyright"
-msgstr "版权"
+msgstr "Ауторска права"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:428
 #: ../../plugins/filebrowser/filebrowser/browser.py:516
 #, fuzzy, python-format
 msgid "Create Archive of \"%s\""
-msgstr "视图改为 \"%s\""
+msgstr "Промени преглед у \"%s\""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:174
 msgid "Created"
-msgstr "创建时间"
+msgstr "Направљено"
 
 #: ../../src/ed_menu.py:484
 msgid "Cu&t"
-msgstr "剪切(&t)"
+msgstr "&Исеци"
 
 #: ../../src/ed_toolbar.py:86
 msgid "Cut"
-msgstr "剪切"
+msgstr "Исеци"
 
 #: ../../src/ed_menu.py:509
 msgid "Cut Current Line"
-msgstr "剪切当前行"
+msgstr "Исеци тренутну линију"
 
 #: ../../src/ed_menu.py:507
 msgid "Cut Line"
-msgstr "剪切行"
+msgstr "Исеци линију"
 
 #: ../../src/ed_menu.py:486 ../../src/ed_toolbar.py:87
 msgid "Cut Selected Text from File"
-msgstr "从文件中剪切选定文件"
+msgstr "Исеци селектовани текст из датотеке"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:169 ../../src/prefdlg.py:1632
 #: ../../src/prefdlg.py:1633
 msgid "Default"
-msgstr "默认"
+msgstr "Подразумевано"
 
 #: ../../src/prefdlg.py:554
 msgid "Default EOL Mode"
-msgstr "默认行尾模式"
+msgstr "Подразумеван EOL мод"
 
 #: ../../src/prefdlg.py:701
 msgid "Default Lexer"
-msgstr "默认分析器"
+msgstr "Подразумеван режим истицања"
 
 #: ../../src/prefdlg.py:952
 msgid "Default Perspective"
-msgstr "默认透视"
+msgstr "Подразумеван преглед"
 
 #: ../../src/prefdlg.py:699
 msgid "Default highlighing for new documents"
-msgstr "新文档默认高亮"
+msgstr "Подразумеван режим истицања за нови документ"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:48
 msgid "Defines"
-msgstr "定义"
+msgstr "Дефинише"
 
 #: ../../src/prefdlg.py:1446
 #, fuzzy
 msgid "Delete"
-msgstr "默认"
+msgstr "Подразумевано"
 
 #: ../../src/perspective.py:236
 msgid "Delete Perspective"
-msgstr "删除透视"
+msgstr "Обриши преглед"
 
 #: ../../src/perspective.py:77
 msgid "Delete Saved View"
-msgstr "删除保存视图"
+msgstr "Обриши сачуван преглед"
 
 #: ../../src/plugdlg.py:866
 msgid "Description"
-msgstr "描述"
+msgstr "Опис"
 
 #: ../../src/prefdlg.py:372
 msgid "Disable Error Reporter"
-msgstr "停止错误报告"
+msgstr "Искључи пријављивање грешака"
 
 #: ../../src/plugdlg.py:123
 msgid "Do you wish to exit?"
-msgstr "要退出吗？"
+msgstr "Да ли желите да изађете?"
 
 #: ../../src/ed_pages.py:414
 #, python-format
@@ -513,108 +514,109 @@ msgid ""
 "\n"
 "Warning opening many files at once may cause the editor to temporarly  freeze."
 msgstr ""
-"要打开当前目录下的所有 %d 文件吗？\n"
-"警告：同时打开多个文件编辑器可能为暂时停顿。"
+"Да ли желите да отворите свих %d датотека из овог директоријума?\n"
+"\n"
+"Постоји опасност да се уређивач неочекивано понаша."
 
 #: ../../src/prefdlg.py:196
 msgid "Document"
-msgstr "文档"
+msgstr "Документ"
 
 #: ../../src/plugdlg.py:182 ../../src/plugdlg.py:357 ../../src/prefdlg.py:1251
 msgid "Download"
-msgstr "下载"
+msgstr "Преузимање"
 
 #: ../../src/plugdlg.py:387 ../../src/updater.py:670 ../../src/updater.py:676
 msgid "Downloaded"
-msgstr "已下载"
+msgstr "Преузето"
 
 #: ../../src/plugdlg.py:496 ../../src/updater.py:601
 msgid "Downloading"
-msgstr "正在下载"
+msgstr ""
 
 #: ../../src/updater.py:564
 #, python-format
 msgid "Downloading To: %s"
-msgstr "下载：%s"
+msgstr "Преузимам у: %s"
 
 #: ../../src/Editra.py:373 ../../src/prefdlg.py:1303
 msgid "Downloading Update"
-msgstr "正在下载更新"
+msgstr "Преузимам унапређења"
 
 #: ../../src/updater.py:562
 #, python-format
 msgid "Downloading: %s"
-msgstr "下载: %s"
+msgstr "Преузимам: %s"
 
 #: ../../src/plugdlg.py:201
 msgid "Downloads are incomplete"
-msgstr "下载完成"
+msgstr "Преузимања су некомплетна"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:427
 msgid "Duplicate"
-msgstr "克隆"
+msgstr "Дуплирај"
 
 #: ../../src/ed_menu.py:514
 msgid "Duplicate Line"
-msgstr "克隆行"
+msgstr "Дуплирај линију"
 
 #: ../../src/ed_menu.py:516
 msgid "Duplicate the current line"
-msgstr "克隆当前行"
+msgstr "Дуплирај тренутну линију"
 
 #: ../../src/ed_menu.py:463
 msgid "E&xit"
-msgstr "退出(&x)"
+msgstr "&Изађи"
 
 #: ../../src/ed_menu.py:684
 msgid "EOL Mode"
-msgstr "行结尾模式"
+msgstr "EOL мод"
 
 #: ../../src/ed_main.py:500
 #, python-format
 msgid "ERROR: %s"
-msgstr "错误： %s"
+msgstr "ГРЕШКА: %s"
 
 #: ../../src/ed_main.py:534
 #, python-format
 msgid "ERROR: Failed to save %s"
-msgstr "错误：保存 %s 失败"
+msgstr "ГРЕШКА: Грешка при чувању %s"
 
 #: ../../src/prefdlg.py:712
 msgid "Edge Guide"
-msgstr "边界线"
+msgstr "Десна маргина"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:417
 msgid "Edit"
-msgstr "编辑"
+msgstr "Уређивање"
 
 #: ../../src/ed_menu.py:551
 msgid "Edit Preferences / Settings"
-msgstr "编辑参数/设置"
+msgstr "Подесите поставке"
 
 #: ../../src/ed_menu.py:736
 msgid "Edit the way syntax is highlighted"
-msgstr "编辑语法高亮方式"
+msgstr "Изменте начин на који је синтакса истакнута"
 
 #: ../../src/ed_menu.py:591
 msgid "Editor"
-msgstr "编辑器"
+msgstr "Уређивач"
 
 #: ../../src/ed_menu.py:724
 msgid "Editor Command"
-msgstr "编辑器命令"
+msgstr "Наредбе уређивача"
 
 #: ../../src/prefdlg.py:354
 msgid "Editor Mode"
-msgstr "编辑器模式"
+msgstr "Мод уређивача"
 
 #: ../../src/ed_log.py:73
 msgid "Editra Log"
-msgstr "Editra 日志"
+msgstr "Editra лог"
 
 #: ../../src/style_editor.py:284
 msgid "Editra Style Sheet"
-msgstr "Editra 样式表"
+msgstr "Editra стилови"
 
 #: ../../src/ed_mdlg.py:42
 #, python-format
@@ -624,38 +626,38 @@ msgid ""
 "Error:\n"
 "%s"
 msgstr ""
-"Editra 无法打开 %s\n"
+"Editra не може да отвори %s\n"
 "\n"
-"错误：\n"
+"Грешка:\n"
 "%s"
 
 #: ../../src/ed_main.py:1113
 msgid "Editra is a programmers text editor."
-msgstr "Editra是程序员的编辑器。"
+msgstr "Editra је урешивач текста за програмере."
 
 #: ../../src/ed_menu.py:768
 msgid "Editra translations project"
-msgstr "Editra 翻译工程"
+msgstr "Пројект превођења Editra-е"
 
 #: ../../plugins/codebrowser/codebrowser/__init__.py:49
 msgid "Editra | CodeBrowser"
-msgstr "Editra | 代码浏览器"
+msgstr "Editra | Прегледач кôда"
 
 #: ../../src/prefdlg.py:730
 msgid "Enable Vi Emulation"
-msgstr "启用 Vi 仿真"
+msgstr "Укључи емулацију Vi уређивача"
 
 #: ../../src/ed_pages.py:281
 msgid "Encoding Error"
-msgstr "编码错误"
+msgstr "Грешка у кодирању (скупа знакова)"
 
 #: ../../src/ed_menu.py:685
 msgid "End of line character formatting"
-msgstr "行尾字符格式"
+msgstr "Начин форматирања карактера за крај линије"
 
 #: ../../src/style_editor.py:719
 msgid "Enter a hex color value"
-msgstr "输入十六进制颜色值"
+msgstr "Унеси хексадецималну вредност боје"
 
 #: ../../src/prefdlg.py:1618
 msgid "Enter the name of the new key profile"
@@ -663,22 +665,25 @@ msgstr ""
 
 #: ../../src/ed_pages.py:724 ../../src/plugdlg.py:755
 msgid "Error"
-msgstr "错误"
+msgstr "Грешка"
 
 #: ../../src/ed_mdlg.py:43
 msgid "Error Opening File"
-msgstr "打开文件错误"
+msgstr "Грешка при отварању датотеке"
 
 #: ../../src/dev_tool.py:394
 msgid "Error Traceback:"
-msgstr "错误跟踪："
+msgstr "Грешка вредност:"
 
 #: ../../src/dev_tool.py:390
 msgid ""
 "Error: Oh no something bad happend\n"
 "Help improve Editra by clicking on Report Error\n"
 "to send the Error Traceback shown below."
-msgstr "错误：为了提高Editra，请点击报告错误将错误信息提交。"
+msgstr ""
+"Грешка: нешто се лоше десило\n"
+"Молимо вас да побољшате Editra-у тако \n"
+"што ће те кликнути на Пошаљи грешку."
 
 #: ../../src/ed_main.py:1054
 #, python-format
@@ -687,44 +692,44 @@ msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:180
 msgid "Executable Commands"
-msgstr "可执行命令"
+msgstr "Извршне наредбе"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:154
 msgid "Executables"
-msgstr "可执行"
+msgstr "Извршне"
 
 #: ../../plugins/Launch/launch/launch.py:423
 msgid "Exit Code"
-msgstr "退出码"
+msgstr "Излазни код"
 
 #: ../../src/ed_menu.py:465
 msgid "Exit the Program"
-msgstr "退出程序"
+msgstr "Излаз из програма"
 
 #: ../../src/style_editor.py:140
 msgid "Export"
-msgstr "导出"
+msgstr "Извези"
 
 #: ../../src/style_editor.py:282
 msgid "Export Style Sheet"
-msgstr "导出样式表"
+msgstr "Извези свој стил истицања синтаксе кôда"
 
 #: ../../src/prefdlg.py:1778
 msgid "Extensions (space separated, no dots)"
-msgstr "扩展名（空格分隔，无点）"
+msgstr "Екстензије (раздвојене размаком, без тачака)"
 
 #: ../../src/ed_menu.py:688
 msgid "F&ormat"
-msgstr "格式(&o)"
+msgstr "Ф&ормат"
 
 #: ../../src/updater.py:683
 msgid "Failed"
-msgstr "失败"
+msgstr "Неуспело"
 
 #: ../../src/plugdlg.py:757
 #, python-format
 msgid "Failed to install %d plugins"
-msgstr "安装插件 %d 失败"
+msgstr "Грешка при инсталацији %d проширења"
 
 #: ../../src/ed_pages.py:721
 #, python-format
@@ -732,8 +737,8 @@ msgid ""
 "Failed to reload %s:\n"
 "Error: %s"
 msgstr ""
-"重载 %s 失败：\n"
-"错误： %s"
+"Грешка у поновном учитавању %s:\n"
+"Грешка: %s"
 
 #: ../../src/ed_mdlg.py:58
 #, python-format
@@ -743,262 +748,262 @@ msgid ""
 "Error:\n"
 "%s"
 msgstr ""
-"保存文件失败：%s\n"
+"Грешка причувању датотеке: %s\n"
 "\n"
-"错误：\n"
+"Грешка:\n"
 "%s"
 
 #: ../../src/ed_menu.py:769
 msgid "Feedback"
-msgstr "反馈"
+msgstr "Одговор"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:242
 msgid "File Browser"
-msgstr "文件浏览器"
+msgstr "Разгледач датотека"
 
 #: ../../src/prefdlg.py:388
 msgid "File History Length"
-msgstr "文件历史"
+msgstr "Скорашњих датотека за памћење"
 
 #: ../../src/ed_main.py:446
 msgid "File Not Found"
-msgstr "文件未找到"
+msgstr "Датотека није пронађена"
 
 #: ../../src/prefdlg.py:387
 msgid "File Settings"
-msgstr "文件设置"
+msgstr "Подешавања датотека"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:100
 msgid "File Stat Failed"
-msgstr "文件状态失败"
+msgstr "Грешка у читању информација о датотеци"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:149
 msgid "File Type"
-msgstr "文件类型"
+msgstr "Тип датотеке"
 
 #: ../../src/ed_pages.py:125
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
 msgstr ""
-"文件已经打开。\n"
-"要再次打开吗？"
+"Датотека је већ отворена.\n"
+"Да ли желите да је поново отворите?"
 
 #: ../../src/prefdlg.py:832
 msgid "Filetype Associations"
-msgstr "文件类型关联"
+msgstr "Типови датотека и њихове екстензије"
 
 #: ../../src/ed_log.py:123
 msgid "Filter"
-msgstr "过滤器"
+msgstr "Филтер"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:239
 #: ../../src/ed_toolbar.py:93
 msgid "Find"
-msgstr "查找"
+msgstr "Пронађи"
 
 #: ../../src/ed_menu.py:541 ../../src/ed_toolbar.py:93
 msgid "Find Text"
-msgstr "查找文本"
+msgstr "Пронађи текст"
 
 #: ../../src/ed_menu.py:544 ../../src/ed_toolbar.py:95
 msgid "Find and Replace Text"
-msgstr "查找替换文本"
+msgstr "Пронађи и замени текст"
 
 #: ../../src/ed_menu.py:542
 msgid "Find/R&eplace"
-msgstr "查找/替换(&e)"
+msgstr "Пронађи/З&амени"
 
 #: ../../src/ed_search.py:235 ../../src/ed_toolbar.py:94
 msgid "Find/Replace"
-msgstr "查找/替换"
+msgstr "Пронађи/Замени"
 
 #: ../../src/updater.py:680
 msgid "Finished"
-msgstr "已完成"
+msgstr "Завршено"
 
 #: ../../src/plugdlg.py:743
 msgid "Finished Installing Plugins"
-msgstr "完成插件安装"
+msgstr "Завршена је инсталација проширења"
 
 #: ../../src/plugdlg.py:390
 msgid "Finshed downloading plugins"
-msgstr "完成插件下载"
+msgstr "Завршена је преузимање проширења"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:255
 msgid "Folder"
-msgstr "文件夹"
+msgstr "Директоријум"
 
 #: ../../src/style_editor.py:666
 msgid "Font"
-msgstr "字体"
+msgstr "Фонт"
 
 #: ../../src/style_editor.py:661
 msgid "Font Settings"
-msgstr "字体设置"
+msgstr "Подешавања фонтова"
 
 #: ../../src/style_editor.py:622
 msgid "Foreground"
-msgstr "前景"
+msgstr "Предњи план"
 
 #: ../../src/prefdlg.py:598
 msgid "Format"
-msgstr "格式"
+msgstr "Формат"
 
 #: ../../src/ed_menu.py:674 ../../src/ed_menu.py:678 ../../src/ed_menu.py:682
 #, python-format
 msgid "Format all EOL characters to %s Mode"
-msgstr "将所有行尾符转为 %s 模式"
+msgstr "Формирај све EOL карактере у %s мод"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:48
 #, fuzzy
 msgid "Function Definitions"
-msgstr "函数定义"
+msgstr "Дефиниције финкција"
 
 #: ../../src/prefdlg.py:192 ../../src/prefdlg.py:499 ../../src/prefdlg.py:694
 msgid "General"
-msgstr "常规"
+msgstr "Опште"
 
 #: ../../src/generator.py:276 ../../src/generator.py:643
 #: ../../src/generator.py:835
 #, python-format
 msgid "Generate %s"
-msgstr "生成 %s"
+msgstr "Генериши %s"
 
 #: ../../src/generator.py:112
 msgid "Generate Code and Documents"
-msgstr "生成代码和文档"
+msgstr "Генериши кôд и документе"
 
 #: ../../src/generator.py:277 ../../src/generator.py:836
 #, python-format
 msgid "Generate a %s version of the current document"
-msgstr "生成当前文档的 %s 版本"
+msgstr "Генериши %s верзију тренутног документа"
 
 #: ../../src/generator.py:644
 #, python-format
 msgid "Generate an %s version of the current document"
-msgstr "生成当前文档的 %s 版本"
+msgstr "Генериши %s верзију тренутног документа"
 
 #: ../../src/generator.py:111
 msgid "Generator"
-msgstr "生成器"
+msgstr "Генератор"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:421
 msgid "Get Info"
-msgstr "获取信息"
+msgstr "Подаци"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 msgid "Global Variables"
-msgstr "全局变量"
+msgstr "Опште променљиве"
 
 #: ../../src/plugdlg.py:742
 msgid "Go to configuration page?"
-msgstr "跳到设置页吗？"
+msgstr "Иди на страну поставки?"
 
 #: ../../src/ed_cmdbar.py:158
 msgid "Goto Line"
-msgstr "跳到行"
+msgstr "Иди на линију"
 
 #: ../../src/ed_menu.py:596
 msgid "Goto Line Number"
-msgstr "跳到行号"
+msgstr "Иди на број линије"
 
 #: ../../src/ed_menu.py:726
 msgid "Goto command buffer"
-msgstr "跳到命令缓冲"
+msgstr "Иди на команде уређивача"
 
 #: ../../src/prefdlg.py:717
 msgid "Guide Column"
-msgstr "指示列"
+msgstr "Маргина колоне"
 
 #: ../../src/ed_menu.py:706
 msgid "Highlight Brackets/Braces"
-msgstr "高亮括"
+msgstr "Истицање заграда"
 
 #: ../../src/ed_main.py:1115
 msgid "Homepage"
-msgstr "主页"
+msgstr "Почетна страна"
 
 #: ../../src/prefdlg.py:933
 msgid "Icon Theme"
-msgstr "图标主题"
+msgstr "Тема икона"
 
 #: ../../src/prefdlg.py:979
 msgid "Icons"
-msgstr "图标"
+msgstr "Иконе"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 msgid "Identities"
-msgstr "身份"
+msgstr ""
 
 #: ../../src/ed_menu.py:632
 msgid "Indent Lines"
-msgstr "缩进"
+msgstr "Увуци линије"
 
 #: ../../src/ed_menu.py:634
 msgid "Indent the selected lines"
-msgstr "缩进选定行"
+msgstr "Увуци селектоване линије"
 
 #: ../../src/ed_menu.py:575 ../../src/prefdlg.py:722
 msgid "Indentation Guides"
-msgstr "缩进指示"
+msgstr "Маргине увучених линија"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:50
 msgid "Info"
-msgstr "信息"
+msgstr "Информације"
 
 #: ../../src/prefdlg.py:743
 msgid "Input Helpers"
-msgstr "输入助手"
+msgstr ""
 
 #: ../../src/ed_menu.py:649
 msgid "Insert spaces instead of tab characters with tab key"
-msgstr "空格代替 Tab 键"
+msgstr "Убаци размаке уместо табулатора са таб тастером"
 
 #: ../../src/plugdlg.py:184 ../../src/plugdlg.py:665
 msgid "Install"
-msgstr "安装"
+msgstr "Инсталирај"
 
 #: ../../src/plugdlg.py:672
 msgid ""
 "Install the plugins for all users\n"
 " **requires administrative privileges**"
 msgstr ""
-"为所有用户安装插件\n"
-" **需要管理员权限**"
+"Инсталирај проширења за све кориснике\n"
+" **захтева административне привилегије**"
 
 #: ../../src/plugdlg.py:669
 msgid "Install the plugins only for the current user"
-msgstr "只为当前用户安装插件"
+msgstr "Инсталирај проширења само за тренутног корисника"
 
 #: ../../src/plugdlg.py:759
 msgid "Installation Error"
-msgstr "安装错误"
+msgstr "Грешка при инсталацији"
 
 #: ../../src/prefdlg.py:1236
 msgid "Installed Version"
-msgstr "已安装版本"
+msgstr "Инсталирана верзија"
 
 #: ../../src/ed_pages.py:398
 #, python-format
 msgid "Invalid file: %s"
-msgstr "无效文件：%s"
+msgstr "Неисправна датотека: %s"
 
 #: ../../src/prefdlg.py:1736
 msgid "Item"
-msgstr "条目"
+msgstr "Ставка"
 
 #: ../../src/ed_menu.py:518
 msgid "Join Lines"
-msgstr "连接行"
+msgstr "Споји линије"
 
 #: ../../src/ed_menu.py:520
 msgid "Join the Selected Lines"
-msgstr "连接选定行"
+msgstr "Споји селектоване линије"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:96
 msgid "Jump to Saved Path"
-msgstr "转到保存路径"
+msgstr "Иди на сачувану путању"
 
 #: ../../src/prefdlg.py:1474
 msgid "Key"
@@ -1007,7 +1012,7 @@ msgstr ""
 #: ../../src/prefdlg.py:1441
 #, fuzzy
 msgid "Key Profile"
-msgstr "保存配置"
+msgstr "Сачувај профил"
 
 #: ../../src/prefdlg.py:1361
 msgid "Keybindings"
@@ -1015,109 +1020,109 @@ msgstr ""
 
 #: ../../src/ed_menu.py:727
 msgid "Keyword Helper"
-msgstr "关键字助手"
+msgstr "Помоћник за кључне речи"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:168
 msgid "Kind"
-msgstr "种类"
+msgstr "Врста"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 msgid "Labels"
-msgstr "标签"
+msgstr "Ознаке"
 
 #: ../../src/prefdlg.py:410
 msgid "Language"
-msgstr "语言"
+msgstr "Језик"
 
 #: ../../src/prefdlg.py:1242
 msgid "Latest Version"
-msgstr "最新版本"
+msgstr "Најновија верзија"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:84
 msgid "Launch Configuration"
-msgstr "装载配置"
+msgstr "Покрени поставке"
 
 #: ../../src/prefdlg.py:983
 msgid "Layout"
-msgstr "布局"
+msgstr "Размештај"
 
 #: ../../src/prefdlg.py:1776
 msgid "Lexer"
-msgstr "解析器"
+msgstr "Режим истицања"
 
 #: ../../src/ed_main.py:127
 msgid "Lexers"
-msgstr "解析器"
+msgstr "Режим истицања"
 
 #: ../../src/ed_main.py:1117
 msgid "License: wxWindows (see COPYING.txt for full license)"
-msgstr "许可：wxWindows(许可全文见 COPYING.txt)"
+msgstr "Лиценца: wxWindows (погледа COPYING.txt за муну лиценцу)"
 
 #: ../../src/ed_menu.py:524
 msgid "Line Edit"
-msgstr "行编辑"
+msgstr "Уређивање линије"
 
 #: ../../src/ed_stc.py:672
 #, python-format
 msgid "Line: %d  Column: %d"
-msgstr "行:%d 列:%d"
+msgstr "Линија: %d  Колона: %d"
 
 #: ../../src/prefdlg.py:375
 msgid "Load Last Session"
-msgstr "装入最后会话"
+msgstr "Учитај последњу сесију"
 
 #: ../../src/ed_menu.py:447
 msgid "Load Profile"
-msgstr "装入配置"
+msgstr "Учитај профил"
 
 #: ../../src/ed_main.py:573 ../../src/ed_menu.py:449
 msgid "Load a Custom Profile"
-msgstr "装入定制配置"
+msgstr "Учитај произвољан профил"
 
 #: ../../src/ed_menu.py:451
 msgid "Load and save custom Profiles"
-msgstr "装入并保存定制配置"
+msgstr "Учитај и сачувај произвољне профиле"
 
 #: ../../src/prefdlg.py:377
 msgid "Load files from last session on startup"
-msgstr "启动时载入最后会话的文件"
+msgstr "Отвори датотеке из последње сесије при покретању"
 
 #: ../../src/ed_main.py:580
 #, python-format
 msgid "Loaded Profile: %s"
-msgstr "载入配置： %s"
+msgstr "Учитан профил: %s"
 
 #: ../../src/prefdlg.py:408
 msgid "Locale Settings"
-msgstr "区域设置"
+msgstr "Поставке локала"
 
 #: ../../src/ed_menu.py:642
 msgid "Lowercase"
-msgstr "小写"
+msgstr "Мала слова"
 
 #: ../../src/ed_menu.py:672 ../../src/prefdlg.py:557
 msgid "Macintosh (\\r)"
-msgstr "Macintosh (\\r)"
+msgstr "Мекинтош (\\r)"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Macro Definitions"
-msgstr "宏定义"
+msgstr "Дефиниције макроа"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 msgid "Macros"
-msgstr "宏"
+msgstr "Макрои"
 
 #: ../../src/ed_menu.py:733
 msgid "Manage, Download, and Install plugins"
-msgstr "管理、下载和安装插件"
+msgstr "Подеси, преузми и инсталирај проширења"
 
 #: ../../src/ed_main.py:129
 msgid "Manually Set a Lexer/Syntax"
-msgstr "手动设置 解析器/语法"
+msgstr "Ручно постави истицања/синтаксу"
 
 #: ../../src/ed_cmdbar.py:221
 msgid "Match Case"
-msgstr "匹配"
+msgstr "Поклопи величину слова"
 
 #: ../../src/prefdlg.py:1457
 msgid "Menu"
@@ -1125,76 +1130,76 @@ msgstr ""
 
 #: ../../src/prefdlg.py:989
 msgid "Misc"
-msgstr "杂项"
+msgstr "Разно"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:148
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:176
 msgid "Modified"
-msgstr "已修改"
+msgstr "Мењан"
 
 #: ../../src/prefdlg.py:1468
 #, fuzzy
 msgid "Modifier 1"
-msgstr "已修改"
+msgstr "Мењан"
 
 #: ../../src/prefdlg.py:1471
 #, fuzzy
 msgid "Modifier 2"
-msgstr "已修改"
+msgstr "Мењан"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:430
 msgid "Move to "
-msgstr "移动到 "
+msgstr "Премести у "
 
 #: ../../src/prefdlg.py:198
 msgid "Network"
-msgstr "网络"
+msgstr "Мрежа"
 
 #: ../../src/ed_toolbar.py:77 ../../src/prefdlg.py:1444
 #: ../../src/style_editor.py:196
 msgid "New"
-msgstr "新建"
+msgstr "Ново"
 
 #: ../../src/ed_menu.py:411
 msgid "New &Window"
-msgstr "新窗口(&W)"
+msgstr "Нови &прозор"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:425
 msgid "New File"
-msgstr "新文件"
+msgstr "Нова датотека"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:424
 msgid "New Folder"
-msgstr "建立新文件夹"
+msgstr "Нови директоријум"
 
 #: ../../src/ed_menu.py:499
 msgid "New Line After"
-msgstr "在后面添加行"
+msgstr "Нова линија испод"
 
 #: ../../src/ed_menu.py:503
 msgid "New Line Before"
-msgstr "在前面添加行"
+msgstr "Нова линија пре"
 
 #: ../../src/prefdlg.py:1617
 #, fuzzy
 msgid "New Profile"
-msgstr "保存配置"
+msgstr "Сачувај профил"
 
 #: ../../src/ed_cmdbar.py:214
 msgid "Next"
-msgstr "下一个"
+msgstr "Следеће"
 
 #: ../../src/ed_menu.py:598
 msgid "Next Bookmark"
-msgstr "下一个书签"
+msgstr "Следећи обележивач"
 
 #: ../../src/plugdlg.py:317
 msgid "No Description Available"
-msgstr "无描述"
+msgstr "Нема доступног описа"
 
 #: ../../src/ed_pages.py:408
 msgid "No Valid Files to Open"
-msgstr "没有文件可打开"
+msgstr "Нема исправних датотека које се могу отворити"
 
 #: ../../src/prefdlg.py:1535
 msgid "None"
@@ -1202,305 +1207,305 @@ msgstr ""
 
 #: ../../src/style_editor.py:137
 msgid "Ok"
-msgstr "确定"
+msgstr "У реду"
 
 #: ../../src/ed_menu.py:763
 msgid "Online Documentation"
-msgstr "在线文档"
+msgstr "Документација на мрежи"
 
 #: ../../src/ed_menu.py:765
 msgid "Online project documentation and help guides"
-msgstr "在线文档及帮助"
+msgstr "Документација и помоћ на мрежи"
 
 #: ../../src/ed_menu.py:417 ../../src/ed_toolbar.py:78
 msgid "Open"
-msgstr "打开"
+msgstr "Отвори"
 
 #: ../../plugins/PyShell/pyshell/__init__.py:84
 msgid "Open A Python Shell"
-msgstr "打开 Python 命令行"
+msgstr "Отвори Питон конзолу"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:74
 msgid "Open Code Browser Sidepanel"
-msgstr "打开代码浏览器面板"
+msgstr "Отвори прегледач кôда у бочном панелу"
 
 #: ../../src/ed_pages.py:419
 msgid "Open Directory?"
-msgstr "要打开目录吗？"
+msgstr "Отвори директоријум?"
 
 #: ../../src/ed_pages.py:127
 msgid "Open File"
-msgstr "打开文件"
+msgstr "Отвори датотеку"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:243
 msgid "Open File Browser Sidepanel"
-msgstr "打开 文件浏览 面板"
+msgstr "Отвори прегледач датотека у бочном панелу"
 
 #: ../../src/ed_menu.py:419
 msgid "Open Recent"
-msgstr "打开最近"
+msgstr "Отвори скорашње"
 
 #: ../../src/prefdlg.py:397
 msgid "Open files in new windows by default"
-msgstr "默认在新窗口中打开文件"
+msgstr "Отвори датотеке у новом прозору"
 
 #: ../../src/ed_menu.py:547
 msgid "Open the Quick Find Bar"
-msgstr "打开快速搜索栏"
+msgstr "Отвори траку за брзу претрагу"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:418
 msgid "Open with "
-msgstr "打开用 "
+msgstr "Отвори са "
 
 #: ../../src/ed_pages.py:439
 #, python-format
 msgid "Opened file: %s"
-msgstr "已打开文件：%s"
+msgstr "Отворена датотека: %s"
 
 #: ../../src/ed_main.py:1051
 #, fuzzy, python-format
 msgid "Opening %s"
-msgstr "已打开文件：%s"
+msgstr "Отворена датотека: %s"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Packages"
-msgstr "软件包"
+msgstr "Пакети"
 
 #: ../../src/ed_menu.py:453
 msgid "Page Set&up"
-msgstr "页面设置(u)"
+msgstr ""
 
 #: ../../src/ed_print.py:190
 #, python-format
 msgid "Page: %d"
-msgstr "页：%d"
+msgstr ""
 
 #: ../../src/prefdlg.py:1133
 msgid "Password"
-msgstr "密码"
+msgstr ""
 
 #: ../../src/ed_toolbar.py:90
 msgid "Paste"
-msgstr "粘贴"
+msgstr ""
 
 #: ../../src/ed_menu.py:492 ../../src/ed_toolbar.py:91
 msgid "Paste Text from Clipboard to File"
-msgstr "从剪贴板粘贴"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:105
 msgid "Pathmarks"
-msgstr "路径标记"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:178
 msgid "Permissions"
-msgstr "权限"
+msgstr ""
 
 #: ../../src/perspective.py:218
 msgid "Perspective Name"
-msgstr "视图名"
+msgstr ""
 
 #: ../../src/perspective.py:235
 msgid "Perspective to Delete"
-msgstr "要删除视图"
+msgstr "Прегледи који се могу обрисати"
 
 #: ../../src/ed_main.py:123
 msgid "Perspectives"
-msgstr "视图"
+msgstr "Прегледи"
 
 #: ../../src/ed_main.py:1116
 msgid "Platform Info"
-msgstr "平台信息"
+msgstr "Опис платформе"
 
 #: ../../src/Editra.py:586
 msgid "Please check the preferences dialog to reset your preferences"
-msgstr "请在 参数选择 对话框中重置配置"
+msgstr "Молим проверите прозор подешавања  да би сте рестартовали подешавања"
 
 #: ../../src/plugdlg.py:865
 msgid "Plugin"
-msgstr "插件"
+msgstr "Проширење"
 
 #: ../../src/ed_main.py:801 ../../src/ed_menu.py:731
 msgid "Plugin Manager"
-msgstr "插件管理器"
+msgstr "Менаџер проширења"
 
 #: ../../src/prefdlg.py:1118
 msgid "Port Number"
-msgstr "端口号"
+msgstr "Број порта"
 
 #: ../../src/ed_menu.py:549
 msgid "Pr&eferences"
-msgstr "配置(&e)"
+msgstr "По&дешавања"
 
 #: ../../src/prefdlg.py:109
 msgid "Preferences - Editra"
-msgstr "参数设置 - Editra"
+msgstr "Подешавања Editra-е"
 
 #: ../../src/style_editor.py:130
 msgid "Preview"
-msgstr "预览"
+msgstr "Преглед"
 
 #: ../../src/ed_menu.py:458
 msgid "Preview Printout"
-msgstr "打印预览"
+msgstr "Преглед пред штампу"
 
 #: ../../src/ed_cmdbar.py:218
 msgid "Previous"
-msgstr "上一页"
+msgstr "Претходно"
 
 #: ../../src/ed_menu.py:601
 msgid "Previous Bookmark"
-msgstr "上一个书签"
+msgstr "Претходни обележивач"
 
 #: ../../src/prefdlg.py:578
 msgid "Primary Font"
-msgstr "主字体"
+msgstr "Основни фонт"
 
 #: ../../src/ed_toolbar.py:80
 msgid "Print"
-msgstr "打印"
+msgstr "Штампај"
 
 #: ../../src/ed_menu.py:461 ../../src/ed_toolbar.py:81
 msgid "Print Current File"
-msgstr "打印当前文件"
+msgstr "Штампај тренутну датотеку"
 
 #: ../../src/ed_menu.py:456
 msgid "Print Pre&view"
-msgstr "打印预览(&v)"
+msgstr "Прег&лед пред штампу"
 
 #: ../../src/ed_print.py:91
 msgid "Print Preview"
-msgstr "打印预览"
+msgstr "Преглед пред штампу"
 
 #: ../../src/prefdlg.py:362
 msgid "Printer Mode"
-msgstr "打印机模式"
+msgstr "Мод штампе"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Procedure Definitions"
-msgstr "过程定义"
+msgstr "Дефиниције процедура"
 
 #: ../../src/ed_main.py:554 ../../src/ed_main.py:575 ../../src/ed_menu.py:450
 msgid "Profile"
-msgstr "配置"
+msgstr "Профил"
 
 #: ../../src/ed_main.py:559
 #, python-format
 msgid "Profile Saved as: %s"
-msgstr "配置保存为：%s"
+msgstr "Профил сачуван као: %s"
 
 #: ../../src/Editra.py:588
 msgid "Profile Updated"
-msgstr "配置更新"
+msgstr "Профил унапређен"
 
 #: ../../plugins/Launch/launch/launch.py:103
 msgid "Program Executable Command"
-msgstr "可执行命令"
+msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Programs"
-msgstr "程序"
+msgstr "Програми"
 
 #: ../../src/ed_menu.py:759
 msgid "Project Homepage"
-msgstr "工程主页"
+msgstr "Веб адреса пројекта"
 
 #: ../../src/ed_menu.py:729
 msgid "Provides a Contextual Help Menu Listing Standard Keywords/Functions"
-msgstr "提供上下文帮助菜单列出标准关键字/函数"
+msgstr "Омогућава помоћни мени који приказује стандардне кључне речи/функције"
 
 #: ../../src/prefdlg.py:1102
 msgid "Proxy Settings"
-msgstr "代理设置"
+msgstr "Подешавања проксија"
 
 #: ../../src/prefdlg.py:1114
 msgid "Proxy URL"
-msgstr "代理地址"
+msgstr "УРЛ проксија"
 
 #: ../../src/iface.py:286
 msgid "Put an item on the Shelf"
-msgstr "添加条目"
+msgstr ""
 
 #: ../../src/updater.py:672
 #, python-format
 msgid "Rate: %.2f Kb/s"
-msgstr "速率：%.2fKb/s"
+msgstr "Брзина: %.2f Kb/s"
 
 #: ../../src/ed_search.py:314
 msgid "Recent Searches"
-msgstr "最近搜索"
+msgstr "Скорашње претраге"
 
 #: ../../src/ed_menu.py:420
 msgid "Recently Opened Files"
-msgstr "最近打开文件"
+msgstr "Скоро отваране датотеке"
 
 #: ../../src/ed_stc.py:1352
 msgid "Recording Finished"
-msgstr "录制完毕"
+msgstr "Снимање завршено"
 
 #: ../../src/ed_stc.py:1339
 msgid "Recording Macro"
-msgstr "录制宏"
+msgstr "Снимање макроа"
 
 #: ../../src/ed_menu.py:480 ../../src/ed_toolbar.py:84
 msgid "Redo"
-msgstr "重做"
+msgstr "Поврати"
 
 #: ../../src/ed_menu.py:482 ../../src/ed_toolbar.py:84
 msgid "Redo Last Undo"
-msgstr "重做最后撤销"
+msgstr "Враћање на претходни опозов акције"
 
 #: ../../src/ed_pages.py:712
 msgid "Reload File?"
-msgstr "重载文件？"
+msgstr "Поново учитај датотеку?"
 
 #: ../../src/prefdlg.py:400
 msgid "Remember File Position"
-msgstr "记住文件位置"
+msgstr "Запамти позицију датотеке"
 
 #: ../../src/prefdlg.py:961
 msgid "Remember Window Position on Exit"
-msgstr "退出时记住窗口位置"
+msgstr "Запамти позицију прозора при изласку"
 
 #: ../../src/prefdlg.py:958
 msgid "Remember Window Size on Exit"
-msgstr "退出时记住窗口大小"
+msgstr "Запамти димензије прозора при изласку"
 
 #: ../../src/ed_menu.py:533
 msgid "Remove All Bookmarks"
-msgstr "移除所有书签"
+msgstr "Уклони све обележиваче"
 
 #: ../../src/ed_menu.py:530
 msgid "Remove Bookmark"
-msgstr "移除书签"
+msgstr "Уклони обележивач"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:99
 msgid "Remove Saved Path"
-msgstr "移除保存路径"
+msgstr "Уклони сачуване путање"
 
 #: ../../src/prefdlg.py:1635
 #, fuzzy
 msgid "Remove a profile"
-msgstr "装入配置"
+msgstr "Учитај профил"
 
 #: ../../src/ed_menu.py:535
 msgid "Remove all bookmarks from the current document"
-msgstr "移除当前文档中所有书签"
+msgstr "Уклони све обележиваче из тренутне датотеке"
 
 #: ../../src/ed_menu.py:532
 msgid "Remove bookmark from current line"
-msgstr "移除当前行书签"
+msgstr "Уклони обележивач из тренутне линије"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:186
 msgid "Remove selection from list"
-msgstr "移除选定项"
+msgstr "Уклони селекцију из листе"
 
 #: ../../src/ed_menu.py:666
 msgid "Remove trailing whitespace"
-msgstr "移除结尾空格"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:422
 msgid "Rename"
-msgstr "重命名"
+msgstr "Преименуј"
 
 #: ../../src/ed_search.py:174
 #, python-format
@@ -1508,127 +1513,127 @@ msgid ""
 "Replace All Finished\n"
 "A Total of %d matches were replaced"
 msgstr ""
-"替换所有完毕\n"
-"一共替换 %d 个"
+"Замена је обављена\n"
+"Укупно је %d пронађених погодака замењено"
 
 #: ../../src/dev_tool.py:398
 msgid "Report Error"
-msgstr "报告错误"
+msgstr "Пријавите грешку"
 
 #: ../../src/ed_pages.py:692
 msgid "Resave File?"
-msgstr "要重新保存文件吗？"
+msgstr "Поново сачувај датотеку?"
 
 #: ../../src/plugdlg.py:577
 msgid "Retrieving Plugin List"
-msgstr "检索插件列表"
+msgstr "Захтевај листу проширења"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:419
 msgid "Reveal in "
-msgstr "显示于 "
+msgstr ""
 
 #: ../../src/prefdlg.py:852 ../../src/prefdlg.py:1499
 msgid "Revert to Default"
-msgstr "恢复默认"
+msgstr "Врати на основно"
 
 #: ../../plugins/Launch/launch/launch.py:126
 #: ../../plugins/Launch/launch/launch.py:343
 msgid "Run"
-msgstr "运行"
+msgstr "Покрени"
 
 #: ../../plugins/Launch/launch/__init__.py:63
 msgid "Run script from current buffer"
-msgstr "在当前缓冲中运行脚本"
+msgstr ""
 
 #: ../../src/ed_toolbar.py:79
 msgid "Save"
-msgstr "保存"
+msgstr "Сачувај"
 
 #: ../../src/ed_menu.py:436
 msgid "Save &As"
-msgstr "另存为(&A)"
+msgstr "Сачувај &као"
 
 #: ../../src/ed_menu.py:439
 msgid "Save All"
-msgstr "保存所有"
+msgstr "Сачувај све"
 
 #: ../../src/ed_menu.py:438
 msgid "Save As"
-msgstr "另存为"
+msgstr "Сачувај као"
 
 #: ../../src/ed_main.py:1079
 msgid "Save Changes?"
-msgstr "保存更改？"
+msgstr "Да ли да сачувам измене?"
 
 #: ../../src/ed_menu.py:435 ../../src/ed_toolbar.py:79
 msgid "Save Current File"
-msgstr "保存当前文件"
+msgstr "Сачувај тренутну датотеку"
 
 #: ../../src/ed_menu.py:446
 msgid "Save Current Settings to a New Profile"
-msgstr "保存当前设置为新配置"
+msgstr "Сачувај тренутна подешавања у нов профил"
 
 #: ../../src/perspective.py:75
 msgid "Save Current View"
-msgstr "保存当前视图"
+msgstr "Сачувај тренутни преглед"
 
 #: ../../src/ed_mdlg.py:59
 msgid "Save Error"
-msgstr "保存出错"
+msgstr "Грешка при снимању"
 
 #: ../../src/perspective.py:219
 msgid "Save Perspective"
-msgstr "保存视图"
+msgstr "Сачувај преглед"
 
 #: ../../src/ed_menu.py:444
 msgid "Save Profile"
-msgstr "保存配置"
+msgstr "Сачувај профил"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:94
 msgid "Save Selected Paths"
-msgstr "保存选定路径"
+msgstr "Сачувај селектоване путање"
 
 #: ../../src/style_editor.py:250
 msgid "Save Styles"
-msgstr "保存样式"
+msgstr "Сачувај стилове"
 
 #: ../../src/ed_menu.py:441
 msgid "Save all open pages"
-msgstr "保存所有打开页"
+msgstr "Сачувај све отворене датотеке"
 
 #: ../../src/perspective.py:76
 msgid "Save the current window layout"
-msgstr "保存当前窗口布局"
+msgstr "Сачувај тренутни изглед прозора"
 
 #: ../../src/ed_main.py:536
 #, python-format
 msgid "Saved File As: %s"
-msgstr "保存文件为:%s"
+msgstr "Датотека је сачувана као: %s"
 
 #: ../../src/ed_main.py:497
 #, python-format
 msgid "Saved File: %s"
-msgstr "保存文件: %s"
+msgstr "Датотека је сачувана: %s"
 
 #: ../../plugins/Launch/launch/launch.py:116
 msgid "Script Arguments"
-msgstr "脚本参数"
+msgstr "Аргументи скрипте"
 
 #: ../../src/prefdlg.py:585
 msgid "Secondary Font"
-msgstr "次字体"
+msgstr "Други фонт"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Sections"
-msgstr "区段"
+msgstr "Одељци"
 
 #: ../../src/ed_menu.py:494
 msgid "Select &All"
-msgstr "全选(&A)"
+msgstr "Изабери &све"
 
 #: ../../src/ed_menu.py:496
 msgid "Select All Text in Document"
-msgstr "选定文档所有文本"
+msgstr "Изабери сав текст у документу"
 
 #: ../../src/prefdlg.py:1634
 msgid "Select a profile to remove"
@@ -1636,182 +1641,182 @@ msgstr ""
 
 #: ../../src/plugdlg.py:405
 msgid "Select plugins to download"
-msgstr "选定要下载插件"
+msgstr "Изабери проширења које желиш да преузмеш"
 
 #: ../../src/plugdlg.py:363
 msgid "Select the desired plugins and then Click Download"
-msgstr "选定需要插件，点击下载按钮"
+msgstr "Изабери проширења која желиш па кликни преузми"
 
 #: ../../src/ed_menu.py:771
 msgid "Send bug reports and suggestions"
-msgstr "发送错误报告与建议"
+msgstr "Пошаљи листу грешака и сугестија"
 
 #: ../../src/prefdlg.py:1905
 msgid "Set Font"
-msgstr "设置字体"
+msgstr "Поставите фонт"
 
 #: ../../src/style_editor.py:175
 msgid "Set the preview file type"
-msgstr "设置预览文件类型"
+msgstr "Подеси тип прегледа"
 
 #: ../../src/prefdlg.py:590
 msgid "Sets a secondary font used for special regions when syntax highlighting is in use"
-msgstr "设置次字体用于颜色高亮时的特殊区域"
+msgstr "Подеси други фонт који се користи на специјалним местима при истицању синтаксе"
 
 #: ../../src/prefdlg.py:583
 msgid "Sets the main/default font of the document"
-msgstr "设置文档的主要/默认字体"
+msgstr "Подеси основни фонт документа"
 
 #: ../../plugins/Launch/launch/launch.py:96
 msgid "Settings"
-msgstr "设置"
+msgstr "Подешавања"
 
 #: ../../src/iface.py:285
 msgid "Shelf"
-msgstr "书架"
+msgstr ""
 
 #: ../../src/ed_menu.py:582 ../../src/ed_menu.py:584 ../../src/prefdlg.py:566
 msgid "Show EOL Markers"
-msgstr "显示行尾特殊字符"
+msgstr "Прикажи EOL ознаке"
 
 #: ../../src/ed_menu.py:579
 msgid "Show Edge Guide"
-msgstr "显示边界线"
+msgstr "Прикажи десну маргину"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:235
 msgid "Show Hidden Files"
-msgstr "显示隐藏文件"
+msgstr "Прикажи скривене датотеке"
 
 #: ../../src/ed_menu.py:577
 msgid "Show Indentation Guides"
-msgstr "显示缩进指示"
+msgstr "Прикажи маргине увучених линија"
 
 #: ../../src/ed_menu.py:587
 msgid "Show Line Number Margin"
-msgstr "显示行号边"
+msgstr "Прикажи део са бројевима линија"
 
 #: ../../src/ed_menu.py:585 ../../src/prefdlg.py:568
 msgid "Show Line Numbers"
-msgstr "显示行号"
+msgstr "Прикажи бројеве линија"
 
 #: ../../src/iface.py:174
 msgid "Show Shelf"
-msgstr "显示书架"
+msgstr ""
 
 #: ../../src/prefdlg.py:380
 msgid "Show Splash Screen"
-msgstr "显示启动屏"
+msgstr ""
 
 #: ../../src/ed_menu.py:607
 msgid "Show Toolbar"
-msgstr "显示工具栏"
+msgstr "Приказ траке са алатима"
 
 #: ../../src/ed_menu.py:588 ../../src/prefdlg.py:570
 msgid "Show Whitespace"
-msgstr "显示空格"
+msgstr "Прикажи размаке"
 
 #: ../../src/ed_menu.py:590
 msgid "Show Whitespace Markers"
-msgstr "显示空格标记"
+msgstr "Прикажи ознаку за размак"
 
 #: ../../src/iface.py:175
 msgid "Show the Shelf"
-msgstr "显示书架"
+msgstr ""
 
 #: ../../src/ed_menu.py:581
 msgid "Show the edge column guide"
-msgstr "显示边线"
+msgstr "Прикажи десну маргину у уређивачу"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:170
 #: ../../src/style_editor.py:678
 msgid "Size"
-msgstr "大小"
+msgstr "Величина"
 
 #: ../../src/style_editor.py:248
 msgid "Some styles have been changed would you like to save before exiting?"
-msgstr "样式已经更改，退出前要保存吗？"
+msgstr "Неки стилови су измењени да ли желите да их сачувате пре изласка?"
 
 #: ../../src/ed_menu.py:658
 msgid "Spaces to Tabs"
-msgstr "空格转为Tab"
+msgstr "Размаке у табулаторе"
 
 #: ../../src/ed_toolbar.py:77
 msgid "Start a New File"
-msgstr "新建文档"
+msgstr "Отвори нову датотеку"
 
 #: ../../src/style_editor.py:197
 msgid "Start a blank new style"
-msgstr "新建空白样式"
+msgstr "Направи празан нов стил"
 
 #: ../../src/ed_menu.py:410
 msgid "Start a new file in a new tab"
-msgstr "在新标签中新建文档"
+msgstr "Направи нову датотеку у новом језичку"
 
 #: ../../src/ed_menu.py:413
 msgid "Start a new file in a new window"
-msgstr "在新窗口中新建文档"
+msgstr "Направи нову датотеку у новом прозору"
 
 #: ../../src/prefdlg.py:353
 msgid "Startup Settings"
-msgstr "新建设置"
+msgstr "Подешавању при покретању"
 
 #: ../../src/updater.py:287
 msgid "Status Unknown"
-msgstr "状态未知"
+msgstr "Статус је непознат"
 
 #: ../../src/ed_menu.py:734 ../../src/style_editor.py:64
 msgid "Style Editor"
-msgstr "样式编辑器"
+msgstr "Уређивач стилова"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 #: ../../src/style_editor.py:214
 msgid "Style Tags"
-msgstr "样式标记"
+msgstr "Специфични стилови"
 
 #: ../../src/style_editor.py:190
 msgid "Style Theme"
-msgstr "样式主题"
+msgstr "Тема"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:52
 msgid "Subroutine Declarations"
-msgstr "子程序申明"
+msgstr "Декларације подрутина"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Subroutines"
-msgstr "子例程"
+msgstr "Подрутине"
 
 #: ../../src/plugdlg.py:741
 msgid "Successfully Installed Plugins"
-msgstr "成功安装插件"
+msgstr "Успешно инсталирана проширења"
 
 #: ../../src/syntax/syntax.py:220
 #, python-format
 msgid "Switch Lexer to %s"
-msgstr "切换到 %s 解析器"
+msgstr "Промени режим истицања у %s"
 
 #: ../../src/style_editor.py:172
 msgid "Syntax Files"
-msgstr "语法文件"
+msgstr "Синтаксне датотеке"
 
 #: ../../src/ed_menu.py:710 ../../src/prefdlg.py:501 ../../src/prefdlg.py:823
 msgid "Syntax Highlighting"
-msgstr "语法加亮"
+msgstr "Истицање синтаксе"
 
 #: ../../src/plugdlg.py:671
 msgid "System Directory"
-msgstr "系统目录"
+msgstr "Системски директоријум"
 
 #: ../../src/prefdlg.py:540
 msgid "Tab Width"
-msgstr "Tab宽"
+msgstr ""
 
 #: ../../src/ed_menu.py:661
 msgid "Tabs to Spaces"
-msgstr "Tab转换为空格"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:259
 msgid "Text Document"
-msgstr "文本文档"
+msgstr ""
 
 #: ../../src/ed_pages.py:279
 #, python-format
@@ -1820,9 +1825,6 @@ msgid ""
 "\n"
 "Would you like to open it as %s instead?"
 msgstr ""
-"文档无法用 %s 解码。\n"
-"\n"
-"要用 %s 打开吗？"
 
 #: ../../src/ed_main.py:1076
 #, python-format
@@ -1831,14 +1833,11 @@ msgid ""
 "\n"
 "Would you like to save the changes?"
 msgstr ""
-"文件\"%s\"被更改。\n"
-"\n"
-"要保存吗？"
 
 #: ../../src/ed_pages.py:406
 #, python-format
 msgid "There are no files that Editra can open in %s"
-msgstr "Editra 无法打开 %s"
+msgstr ""
 
 #: ../../src/plugdlg.py:658
 msgid ""
@@ -1846,255 +1845,252 @@ msgid ""
 "\n"
 "To remove an item select it and hit Delete or Backspace."
 msgstr ""
-"要添加新条目请拖放插件文件到列表中。\n"
-"\n"
-"要移除题目请选定后按 Delete 或者 Backspace 键。"
 
 #: ../../src/plugdlg.py:242
 msgid "To enable a plugin check the box next to its label"
-msgstr "选中标签启用插件"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:87
 #, python-format
 msgid "To open multiple files at once %s+Click to select the desired files/folders then hit Enter to open them all at once"
-msgstr "要一次打开多个文件，请按住 %s 键并用左键选定文件/目录，然后回车"
+msgstr ""
 
 #: ../../src/ed_menu.py:702
 msgid "Toggle Auto-Indentation functionality"
-msgstr "触发自动缩进"
+msgstr ""
 
 #: ../../src/ed_menu.py:709
 #, fuzzy
 msgid "Toggle Code Folding"
-msgstr "触发代码折叠"
+msgstr "Сажимање кôда"
 
 #: ../../src/ed_menu.py:592
 msgid "Toggle Editor View Options"
-msgstr "触发编辑器查看选项"
+msgstr ""
 
 #: ../../src/prefdlg.py:939
 msgid "Toolbar Icon Size"
-msgstr "工具栏图标大小"
+msgstr ""
 
 #: ../../src/ed_menu.py:766
 msgid "Translate Editra"
-msgstr "翻译Editra"
+msgstr ""
 
 #: ../../src/prefdlg.py:968
 msgid "Transparency"
-msgstr "透明"
+msgstr ""
 
 #: ../../src/ed_menu.py:521
 msgid "Transpose Line"
-msgstr "对调行"
+msgstr ""
 
 #: ../../src/ed_menu.py:523
 msgid "Transpose the current line with the previous one"
-msgstr "对调当前行和前一行"
+msgstr ""
 
 #: ../../src/ed_menu.py:664
 msgid "Trim Trailing Whitespace"
-msgstr "整理行尾空格"
+msgstr ""
 
 #: ../../src/prefdlg.py:575
 msgid "Turn off for better performance"
-msgstr "关闭以获得更好性能"
+msgstr ""
 
 #: ../../src/util.py:172
 msgid "Unable to open dropped file or text"
-msgstr "无法打开除去的文件和文本"
+msgstr ""
 
 #: ../../src/plugdlg.py:408
 msgid "Unable to retrieve plugin list"
-msgstr "无法检索插件列表"
+msgstr ""
 
 #: ../../src/updater.py:142
 msgid "Unable to retrieve version info"
-msgstr "无法检索版本信息"
+msgstr ""
 
 #: ../../src/ed_menu.py:626
 msgid "Uncomment Lines"
-msgstr "取消行注释"
+msgstr ""
 
 #: ../../src/ed_menu.py:628
 msgid "Uncomment the selected lines"
-msgstr "取消选定行注释"
+msgstr ""
 
 #: ../../src/ed_toolbar.py:83
 msgid "Undo"
-msgstr "撤销"
+msgstr ""
 
 #: ../../src/ed_menu.py:479 ../../src/ed_toolbar.py:83
 msgid "Undo Last Action"
-msgstr "撤销最后动作"
+msgstr ""
 
 #: ../../src/ed_menu.py:635
 msgid "Unindent Lines"
-msgstr "取消缩进"
+msgstr ""
 
 #: ../../src/ed_menu.py:637
 msgid "Unindent the selected lines"
-msgstr "取消选定行缩进"
+msgstr ""
 
 #: ../../src/ed_menu.py:676 ../../src/prefdlg.py:557
 msgid "Unix (\\n)"
-msgstr "Unix(\\n)"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:265
 #: ../../src/plugdlg.py:318 ../../src/plugdlg.py:319
 msgid "Unknown"
-msgstr "未知"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:556
 msgid "Untitled_File"
-msgstr "未命名文件"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:554
 msgid "Untitled_Folder"
-msgstr "未命名文件夹"
+msgstr ""
 
 #: ../../src/prefdlg.py:1070
 msgid "Update"
-msgstr "更新"
+msgstr ""
 
 #: ../../src/Editra.py:369
 msgid "Update Available"
-msgstr "有可用的更新"
+msgstr ""
 
 #: ../../src/ed_menu.py:639
 msgid "Uppercase"
-msgstr "大写"
+msgstr ""
 
 #: ../../src/ed_menu.py:699
 msgid "Use Auto Completion when available"
-msgstr "自动完成"
+msgstr ""
 
 #: ../../src/prefdlg.py:1108
 msgid "Use Proxy"
-msgstr "使用代理"
+msgstr ""
 
 #: ../../src/ed_menu.py:647
 msgid "Use Soft Tabs"
-msgstr "使用软Tab"
+msgstr ""
 
 #: ../../src/prefdlg.py:548
 msgid "Use Tabs Instead of Spaces"
-msgstr "Tab代替空格"
+msgstr ""
 
 #: ../../src/plugdlg.py:667
 msgid "User Directory"
-msgstr "用户目录"
+msgstr ""
 
 #: ../../src/prefdlg.py:1126
 msgid "Username"
-msgstr "用户名"
+msgstr ""
 
 #: ../../src/prefdlg.py:1737
 msgid "Value"
-msgstr "值"
+msgstr ""
 
 #: ../../src/plugdlg.py:868
 msgid "Version"
-msgstr "版本"
+msgstr ""
 
 #: ../../src/ed_log.py:74
 msgid "View Editra's console log"
-msgstr "查看Editra的控制台日志"
+msgstr ""
 
 #: ../../src/ed_menu.py:600
 msgid "View Line of Next Bookmark"
-msgstr "查看下一书签行"
+msgstr ""
 
 #: ../../src/ed_menu.py:603
 msgid "View Line of Previous Bookmark"
-msgstr "查看前一书签行"
+msgstr ""
 
 #: ../../src/prefdlg.py:563
 msgid "View Options"
-msgstr "查看选项"
+msgstr ""
 
 #: ../../src/ed_menu.py:761
 #, python-format
 msgid "Visit the project homepage %s"
-msgstr "工程主页 %s"
+msgstr ""
 
 #: ../../src/prefdlg.py:706
 msgid "Visual Helpers"
-msgstr "可视助手"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:172
 msgid "Where"
-msgstr "来自"
+msgstr ""
 
 #: ../../src/ed_main.py:552
 msgid "Where to Save Profile?"
-msgstr "配置保存位置？"
+msgstr ""
 
 #: ../../src/ed_menu.py:667
 msgid "Whitespace"
-msgstr "空格"
+msgstr ""
 
 #: ../../src/ed_menu.py:668
 msgid "Whitespace formating commands"
-msgstr "空格格式命令"
+msgstr ""
 
 #: ../../src/ed_menu.py:680 ../../src/prefdlg.py:558
 msgid "Windows (\\r\\n)"
-msgstr "Windows(\\r\\n)"
+msgstr ""
 
 #: ../../src/ed_menu.py:651 ../../src/prefdlg.py:572
 msgid "Word Wrap"
-msgstr "自动换行"
+msgstr ""
 
 #: ../../src/ed_menu.py:653
 msgid "Wrap Text Horizontally"
-msgstr "文本自动换行"
+msgstr ""
 
 #: ../../src/ed_main.py:1114
 #, python-format
 msgid "Written in 100%% Python."
-msgstr "用100%% Python 编写。"
+msgstr ""
 
 #: ../../src/Editra.py:584
 msgid "Your profile has been updated to the latest version"
-msgstr "配置更新到最新版本"
+msgstr ""
 
 #: ../../src/ed_menu.py:569 ../../src/ed_menu.py:571
 msgid "Zoom Default"
-msgstr "默认"
+msgstr ""
 
 #: ../../src/ed_menu.py:566 ../../src/ed_menu.py:568
 msgid "Zoom In"
-msgstr "放大"
+msgstr ""
 
 #: ../../src/ed_menu.py:563 ../../src/ed_menu.py:565
 msgid "Zoom Out"
-msgstr "缩小"
+msgstr ""
 
 #: ../../plugins/Launch/launch/launch.py:113
 msgid "args"
-msgstr "参数"
+msgstr ""
 
 #: ../../src/style_editor.py:649
 msgid "bold"
-msgstr "粗体"
+msgstr ""
 
 #: ../../src/style_editor.py:650
 msgid "eol"
-msgstr "行尾"
+msgstr ""
 
 #: ../../plugins/Launch/launch/launch.py:100
 msgid "exec"
-msgstr "执行"
+msgstr ""
 
 #: ../../plugins/Launch/launch/launch.py:308
 msgid "file"
-msgstr "文件"
+msgstr ""
 
 #: ../../src/style_editor.py:651
 msgid "italic"
-msgstr "斜体"
+msgstr ""
 
 #: ../../src/style_editor.py:652
 msgid "underline"
-msgstr "下划线"
+msgstr ""
