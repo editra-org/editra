@@ -49,7 +49,7 @@ STRINGS = ( _("Class Definitions"), _("Defines"), _("Function Definitions"),
             _("Global Variables"), _("Identities"), _("Labels"), _("Macros"),
             _("Macro Definitions"), _("Packages"), _("Procedure Definitions"),
             _("Programs"), _("Sections"), _("Style Tags"), _("Subroutines"),
-            _("Subroutine Declarations") )
+            _("Subroutine Declarations"), _("Task Definitions") )
 del STRINGS
 
 #--------------------------------------------------------------------------#
@@ -288,7 +288,6 @@ class CodeBrowserTree(wx.TreeCtrl):
             self._cdoc = None
             # Reset job id so that browser is properly cleared when any other
             # pending jobs are completed
-            self._cjob = 0
             self.DeleteChildren(self.root)
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
                                (self._mw.GetId(), False))

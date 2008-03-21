@@ -48,7 +48,12 @@ LOAD_MAP = { synglob.ID_LANG_ADA : TAGLIB + 'adatags',
              synglob.ID_LANG_PHP : TAGLIB + 'phptags',
              synglob.ID_LANG_PROPS : TAGLIB + 'conftags',
              synglob.ID_LANG_PYTHON : TAGLIB + 'pytags',
-             synglob.ID_LANG_TCL : TAGLIB + 'tcltags' }
+             synglob.ID_LANG_TCL : TAGLIB + 'tcltags',
+             synglob.ID_LANG_VERILOG : TAGLIB + 'verilogtags' }
+
+# Compatibility for older versions of Editra
+if hasattr(synglob, 'ID_LANG_SYSVERILOG'):
+    LOAD_MAP[synglob.ID_LANG_SYSVERILOG] = TAGLIB + 'verilogtags'
 
 #--------------------------------------------------------------------------#
 

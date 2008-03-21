@@ -41,7 +41,7 @@ def GenerateTags(buff):
     inphp = False        # Are we in a php section or not
     inclass = False      # Inside a class defintion
     incomment = False    # Inside a comment
-    infundef = False     # Inside a style definition {}
+    infundef = False     # Inside a function definition
     lastclass = None
     lastfun = None
     openb = 0            # Keep track of open brackets
