@@ -301,12 +301,16 @@ class KeyBinder(object):
         @param pname: name of key profile to load
 
         """
-        ppath = self.GetProfilePath(pname)
+        if pname is None:
+            ppath = None
+        else:
+            ppath = self.GetProfilePath(pname)
+
         keydict = dict()
         if ppath is not None and os.path.exists(ppath):
             reader = util.GetFileReader(ppath)
             if reader != -1:
-                util.Log("[ed_menu][info] Loading KeyProfile: %s" % ppath)
+                util.Log("[keybinder][info] Loading KeyProfile: %s" % ppath)
                 for line in reader:
                     parts = line.split('=', 1)
                     if len(parts) == 2:
@@ -322,18 +326,18 @@ class KeyBinder(object):
                 KeyBinder.cprofile = pname
                 return
             else:
-                util.Log("[ed_menu][err] Couldn't read %s" % ppath)
-        else:
+                util.Log("[keybinder][err] Couldn't read %s" % ppath)
+        elif pname is not None:
             # Fallback to default keybindings
-            util.Log("[ed_menu][err] Failed to load bindings from %s" % pname)
+            util.Log("[keybinder][err] Failed to load bindings from %s" % pname)
 
-        util.Log("[ed_menu][info] Loading Default Keybindings")
+        util.Log("[keybinder][info] Loading Default Keybindings")
         KeyBinder.LoadDefaults()
 
     def SaveKeyProfile(self):
         """Save the current key profile to disk"""
         if KeyBinder.cprofile is None:
-            util.Log("[ed_menu][warn] No keyprofile is set, cant save")
+            util.Log("[keybinder][warn] No keyprofile is set, cant save")
         else:
             ppath = self.GetProfilePath(KeyBinder.cprofile)
             writer = util.GetFileWriter(ppath)
@@ -346,7 +350,7 @@ class KeyBinder(object):
                 writer.writelines(sorted(itemlst))
                 writer.close()
             else:
-                util.Log("[ed_menu][err] Failed to open %s for writing" % ppath)
+                util.Log("[keybinder][err] Failed to open %s for writing" % ppath)
 
     @classmethod
     def SetBinding(cls, item_id, keys):
@@ -356,7 +360,7 @@ class KeyBinder(object):
 
         """
         if cls.cprofile is None:
-            util.Log("[ed_menu][warn] No keyprofile has been loaded yet")
+            util.Log("[keybinder][warn] No keyprofile has been loaded yet")
         else:
             if isinstance(keys, basestring):
                 keys = [ key.strip() for key in keys.split('+') ]
@@ -1044,19 +1048,26 @@ def WalkMenu(menu, label, collection):
         collection[label] = list()
 
     for item in menu.GetMenuItems():
+        i_id = item.GetId()
         if item.IsSubMenu():
-            ilbl = item.GetItemLabelText()
-            collection[ilbl] = [item.GetId(), ]
-            WalkMenu(item.GetSubMenu(), ilbl, collection)
+            # Ignore dynamically generated menus
+            if i_id not in (ed_glob.ID_FHIST, ed_glob.ID_LEXER,
+                            ed_glob.ID_SHELF, ed_glob.ID_PERSPECTIVES):
+                ilbl = item.GetItemLabelText()
+                collection[ilbl] = [i_id, ]
+                WalkMenu(item.GetSubMenu(), ilbl, collection)
+            else:
+                continue
         elif item.IsSeparator():
-            pass
-        else:
+            continue
+        elif _FindStringRep(i_id) is not None:
             lbl = item.GetItemLabelText().split('\t')[0].strip()
             # wxBug? Even the methods that are supposed to return the text
-            # with out mnemonics or accelerators on gtk return the string with
+            # without mnemonics or accelerators on gtk return the string with
             # underscores where the mnemonics '&' are in the original strings
             if wx.Platform == '__WXGTK__':
                 lbl = lbl.replace('_', '', 1)
-            collection[label].append((item.GetId(), lbl))
-
+            collection[label].append((i_id, lbl))
+        else:
+            continue
     return collection
