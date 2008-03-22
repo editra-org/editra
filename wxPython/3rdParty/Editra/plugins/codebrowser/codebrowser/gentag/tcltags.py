@@ -25,6 +25,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import taglib
+import parselib
 
 #--------------------------------------------------------------------------#
 
@@ -44,7 +45,7 @@ def GenerateTags(buff):
             continue
 
         # Check for Procedure defs
-        if line.startswith(u'proc'):
+        if parselib.IsToken(line, 0, u'proc'):
             parts = line.split()
             if len(parts) > 1 and parts[1].isalnum():
                 rtags.AddElement('procedure', taglib.Procedure(parts[1], lnum))

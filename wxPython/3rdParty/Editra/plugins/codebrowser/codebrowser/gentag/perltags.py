@@ -24,6 +24,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import taglib
+import parselib
 
 #--------------------------------------------------------------------------#
 
@@ -62,7 +63,7 @@ def GenerateTags(buff):
             continue
 
         # Check for subroutines
-        if llen > 3 and line.startswith('sub') and line[3].isspace():
+        if parselib.IsToken(line, 0, u'sub'):
             sub = ExtractSubroutine(line)
             if sub is not None:
                 if sub[0]:
@@ -71,7 +72,7 @@ def GenerateTags(buff):
                 else:
                     rtags.AddElement('subroutine',
                                      taglib.Function(sub[1], lnum, "subroutine"))
-        elif llen > 7 and line.startswith('package') and line[7].isspace():
+        elif parselib.IsToken(line, 0, u'package'):
             # Look for a package declaration
             parts = line.split()
             if line.endswith(u";") and len(parts) <= 3:
