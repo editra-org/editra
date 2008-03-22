@@ -9,16 +9,18 @@ Released: xx/xx/2008
 
 New:
 +Added support for the following filetypes
+  - haXe (Classes, Class Methods, Class Variables, Functions)
   - System Verilog (Classes, Tasks)
   - Verilog (Tasks)
 
 Bug Fixes:
 +Notebook syncronization on session load
++Inaccurate parsing of php classes
 
 #-----------------------------------------------------------------------------#
 
 Version 0.1
-Released: xx/xx/2008
+Released: 03/14/2008
 
 - Initial Release
   + Support for generating browsing trees for elements of the following languages
