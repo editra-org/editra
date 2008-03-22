@@ -57,19 +57,16 @@ def GenerateTags(buff):
             if secend != -1:
                 section = taglib.Section(line[1:secend], lnum)
                 rtags.AddElement('section', section)
-        elif line.startswith(u"function") and \
-              len(line) > 8 and line[8].isspace():
+        elif parselib.IsToken(line, 0, u'function'):
             name = parselib.GetFirstIdentifier(line[8:].strip())
             if name is not None:
                 rtags.AddFunction(taglib.Function(name, lnum))
-        elif line.startswith(u"procedure") and \
-              len(line) > 9 and line[9].isspace():
+        elif parselib.IsToken(line, 0, u'procedure'):
             name = parselib.GetFirstIdentifier(line[9:].strip())
             if name is not None:
                 rtags.AddElement('procedure',
                                  taglib.Function(name, lnum, 'procedure'))
-        elif line.startswith(u"#define") and \
-              len(line) > 7 and line[7].isspace():
+        elif parselib.IsToken(line, 0, u'#define'):
             name = parselib.GetFirstIdentifier(line[7:].strip())
             if name is not None:
                 rtags.AddVariable(taglib.Variable(name, lnum))

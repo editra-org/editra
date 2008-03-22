@@ -44,7 +44,7 @@ def GenerateTags(buff):
             continue
 
         # Check Regular Function Defs
-        if line.startswith(u'function') and len(line) > 8 and line[8].isspace():
+        if parselib.IsToken(line, 0, u'function'):
             parts = line.split()
             plen = len(parts)
             if plen >= 2 and parselib.IsGoodName(parts[1]):

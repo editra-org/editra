@@ -68,9 +68,7 @@ def GenerateTags(buff):
             # Look for tags
             if incomment:
                 idx += 1
-            elif line[idx:].startswith(u"class") and len(line[idx:]) > 5 and \
-                 line[idx+5].isspace() and \
-                 ((idx > 0 and line[idx-1].isspace()) or idx == 0):
+            elif parselib.IsToken(line, idx, u'class'):
                 idx += 5 # jump past class word
                 idx += (len(line[idx:]) - len(line[idx:].lstrip()))
                 cname = parselib.GetFirstIdentifier(line[idx:])
@@ -78,14 +76,10 @@ def GenerateTags(buff):
                     inclass = True
                     rtags.AddClass(taglib.Class(cname, lnum))
                 break # go to next line
-            elif inclass and line[idx:].startswith(u"endclass") and \
-                 ((len(line[idx:]) > 8 and line[idx+8].isspace()) or \
-                   len(line[idx:]) == 8):
+            elif inclass and parselib.IsToken(line, idx, u'endclass'):
                 inclass = False
                 break # go to next line
-            elif line[idx:].startswith(u"task") and len(line[idx:]) > 4 and \
-                 line[idx+4].isspace() and \
-                 ((idx > 0 and line[idx-1].isspace()) or idx == 0):
+            elif parselib.IsToken(line, idx, u'task'):
                 idx += 4
                 idx += (len(line[idx:]) - len(line[idx:].lstrip()))
                 tname = parselib.GetFirstIdentifier(line[idx:])
@@ -97,8 +91,7 @@ def GenerateTags(buff):
                     else:
                         rtags.AddFunction(taglib.Function(tname, lnum))
                 break # goto next line
-            elif intask and line[idx:].startswith(u"endtask") and \
-                 len(line[idx:]) > 7 and line[idx+7].isspace():
+            elif intask and parselib.IsToken(line, idx, u'endtask'):
                 intask = False
                 break # go to next line
             else:

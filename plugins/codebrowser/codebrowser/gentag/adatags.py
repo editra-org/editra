@@ -43,7 +43,7 @@ def GenerateTags(buff):
             continue
 
         # Check Regular Function Defs
-        if line.startswith(u'procedure') and len(line) > 9 and line[9].isspace():
+        if parselib.IsToken(line, 0, u'procedure'):
             name = parselib.GetFirstIdentifier(line[9:].strip())
             if name is not None:
                 rtags.AddElement('procedure',

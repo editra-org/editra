@@ -91,8 +91,7 @@ def GenerateTags(buff):
                     idx = idx + 1
             elif line[idx] == u"#":
                 break # Rest of line is comment so go to next line
-            elif line[idx:].startswith(u"class") and len(line[idx:]) > 5 and \
-                 (line[:idx].isspace() or not len(line[:idx])):
+            elif parselib.IsToken(line, idx, u'class'):
                 idx += 5
                 if line[idx].isspace():
                     if u'(' in line:
@@ -107,8 +106,7 @@ def GenerateTags(buff):
                     lastclass = dict(name=cname, indent=indent)
                     parents.append(dict(lastclass))
                     break # Go to next line
-            elif line[idx:].startswith(u"def") and len(line[idx:]) > 3 and \
-                 (line[:idx].isspace() or not len(line[:idx])):
+            elif parselib.IsToken(line, idx, u'def'):
                 # Function/Method Definition
                 idx += 3
                 fname = parselib.GetFirstIdentifier(line[idx:])
