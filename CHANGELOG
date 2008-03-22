@@ -15,12 +15,15 @@ DATE xx/xx/2008
 NEWS:
 
 NEW: [features/improvements]
-+Add highlighting support for System Verilog
++Configurable Keybindings and Keybinding editor
++Add highlighting support for System Verilog (w/ help from Tim Corcoran)
++Improved support for (Objective C
 +Add Serbian translation (contributed by Vladimir Lazic)
 
 BUG FIXES:
-+Typo in OCaml config module
++Typo in Caml config module
 +Misc UI consistancy issues
++Add missing Objective C sample file for highlighting editor
 
 #-----------------------------------------------------------------------------#
 
