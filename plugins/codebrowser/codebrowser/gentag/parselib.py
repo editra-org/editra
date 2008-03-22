@@ -60,3 +60,21 @@ def IsGoodName(name):
             else:
                 return False
     return True
+
+def IsToken(line, idx, name):
+    """Check if the given item is a token or not. The function will return
+    True if the item at the given index matches the name and is preceeded and
+    followed by whitespace. It will return False otherwise.
+    @param line: string to check
+    @param idx: index in string to look from
+    @param name: name of token to look for match
+    @return: bool
+
+    """
+    nchar = idx + len(name)
+    if line[idx:].startswith(name) and \
+       (idx == 0 or line[idx-1].isspace()) and \
+       (len(line) > nchar and line[nchar].isspace()):
+        return True
+    else:
+        return False
