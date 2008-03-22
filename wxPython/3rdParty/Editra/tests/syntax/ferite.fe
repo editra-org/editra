@@ -59,7 +59,7 @@ protocol C {
     function getY();
 }
 
-class A implementes C {
+class A implements C {
     function getX() { return "X"; }
     function getY() { return "Y"; }
 }
