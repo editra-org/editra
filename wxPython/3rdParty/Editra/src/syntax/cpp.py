@@ -68,7 +68,10 @@ CPP_TYPES = ("public protected private inline virtual explicit export bool "
              "wchar_t mutable class typename template namespace ")
 
 # Objective C
-OBJC_KEYWORDS = ("@interface @implementation @end self super false true")
+OBJC_KEYWORDS = ("@catch @interface @implementation @end @finally @private "
+                 "@protected @protocol @public @throw @try self super false "
+                 "true")
+
 OBJC_TYPES = ("id")
 
 #---- Syntax Style Specs ----#
