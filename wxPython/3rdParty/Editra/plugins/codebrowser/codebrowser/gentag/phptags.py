@@ -84,7 +84,7 @@ def GenerateTags(buff):
             # Look for tags
             if incomment:
                 idx += 1
-            elif line[idx] in u'{':
+            elif line[idx] == u'{':
                 idx += 1
                 openb += 1
                 # Class name must be followed by a {
@@ -109,8 +109,7 @@ def GenerateTags(buff):
                     lastfun = None
                 else:
                     pass
-            elif not infundef and line[idx:].startswith(u'class') \
-                 and llen > idx + 5 and line[idx+5].isspace():
+            elif not infundef and parselib.IsToken(line, idx, u'class'):
                 idx += 5
 
                 # Skip whitespace
@@ -120,10 +119,7 @@ def GenerateTags(buff):
                 if name is not None:
                     idx += len(name) # Move past the class name
                     lastclass = taglib.Class(name, lnum)
-                else:
-                    # Something must be wrong so skip ahead and keep going
-                    idx += 5
-            elif line[idx:].startswith(u'function') and llen > idx + 8 and line[idx+8].isspace():
+            elif parselib.IsToken(line, idx, u'function'):
                 idx += 8
 
                 # Skip whitespace
@@ -144,8 +140,7 @@ def GenerateTags(buff):
                         lastclass.AddMethod(taglib.Method(name, lnum, lastclass.GetName()))
                     else:
                         rtags.AddFunction(taglib.Function(name, lnum))
-            elif inclass and line[idx:].startswith(u'var') \
-                 and llen > idx + 3 and line[idx+3].isspace():
+            elif inclass and parselib.IsToken(line, idx, u'var'):
                 # Look for class variables
                 idx += 3
                 parts = line[idx:].split()
@@ -155,8 +150,6 @@ def GenerateTags(buff):
                         name = u'$' + name
                         lastclass.AddVariable(taglib.Variable(name, lnum, lastclass.GetName()))
                         idx += len(name)
-            elif line[idx] == u'=' and llen > idx + 1 and line[idx+1] != u'=':
-                break # jump to next line when we find an assigment
             else:
                 idx += 1
 
