@@ -46,8 +46,17 @@ def GenerateTags(buff):
     fn_indent = 0
     parens = 0          # Paren nesting count
     indocstring = False
+    ind_string = False  # Double quote string
+    ins_string = False  # Single quote string
     infunction = False
     lastclass = None
+
+    def NotInString():
+        """Return whether the current state of the parse is in a string
+        or not.
+
+        """
+        return not indocstring and not ind_string and not ins_string
 
     for lnum, line in enumerate(buff):
         indent = 0
@@ -60,7 +69,7 @@ def GenerateTags(buff):
                 idx += 3
 
             # If end of line or start of comment start next line
-            if idx == llen or line[idx] == u"#":
+            if idx == llen or (line[idx] == u"#" and NotInString()):
                 break
 
             # Check indent sensitive tokens
@@ -77,8 +86,18 @@ def GenerateTags(buff):
                         else:
                             lastclass = None
 
+                # Check for if in a string or not
+                if line[idx] == u"'" and not ind_string and \
+                   idx > 0 and line[idx-1] != "\\": # Single string
+                    ins_string = not ins_string
+                elif line[idx] == u'"' and not ins_string and \
+                     idx > 0 and line[idx-1] != "\\": # Double String
+                    ind_string = not ind_string
+                else:
+                    pass
+
             # Parse and look for elements to add to the DocStruct
-            if indocstring:
+            if indocstring or ins_string or ind_string:
                 # Token is in a docstring so ignore and move on
                 idx = idx + 1
             elif line[idx].isspace():
