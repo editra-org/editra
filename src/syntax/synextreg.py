@@ -100,6 +100,8 @@ ID_LANG_OBJC = _NewId()
 LANG_OBJC = u'Objective C'
 ID_LANG_PIKE = _NewId()
 LANG_PIKE = u'Pike'
+ID_LANG_VALA = _NewId()
+LANG_VALA = u'Vala'
 
 # Use LEX_CSS
 ID_LANG_CSS = _NewId()
@@ -322,6 +324,7 @@ EXT_MAP = {
            'sv svh'             : LANG_SYSVERILOG,
            'itcl tcl tk'        : LANG_TCL,
            'txt'                : LANG_TXT,
+           'vala'               : LANG_VALA,
            'bas cls ctl frm vb' : LANG_VB,
            'v'                  : LANG_VERILOG,
            'vh vhdl'            : LANG_VHDL,

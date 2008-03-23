@@ -1,20 +1,18 @@
 ###############################################################################
 # Name: cpp.py                                                                #
-# Purpose: Define C/CPP syntax for highlighting and other features            #
+# Purpose: Define C/CPP/ObjC/Vala syntax for highlighting and other features  #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: cpp.py                                                                #
-# @author: Cody Precord                                                       #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexter configuration file for C/C++ source files.                           #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: cpp.py                                                                
+@author: Cody Precord                                                       
+                                                                         
+SUMMARY:                                                                    
+Lexer configuration file for C/C++/Objective C/Vala source files.                           
+                                                                         
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -74,6 +72,18 @@ OBJC_KEYWORDS = ("@catch @interface @implementation @end @finally @private "
 
 OBJC_TYPES = ("id")
 
+# Vala Keywords
+VALA_KEYWORDS = ("abstract as base break case catch checked construct continue "
+                 "default delegate do else event false finally for foreach get "
+                 "goto if implicit interface internal is lock new operator out "
+                 "override params readonly ref return sealed set sizeof "
+                 "stackalloc this throw true try typeof unchecked using while")
+
+VALA_TYPES = ("bool byte char class const decimal double enum explicit extern "
+              "fixed float int long namespace private protected public sbyte "
+              "short static string struct uint ulong unichar unsafe ushort var "
+              "volatile void virtual")
+
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [ ('STC_C_DEFAULT', 'default_style'),
                  ('STC_C_COMMENT', 'comment_style'),
@@ -120,8 +130,12 @@ def Keywords(lang_id=0):
     elif lang_id == synglob.ID_LANG_OBJC:
         kw1_str.append(OBJC_KEYWORDS)
         kw2_str.append(OBJC_TYPES)
+    elif lang_id == synglob.ID_LANG_VALA:
+        kw1_str = [VALA_KEYWORDS]
+        kw2_str = [VALA_TYPES]
     else:
         pass
+
     keywords.append((0, " ".join(kw1_str)))
     keywords.append((1, " ".join(kw2_str)))
     keywords.append(DOC_KEYWORDS)
@@ -134,7 +148,8 @@ def SyntaxSpec(lang_id=0):
     """
     if lang_id in [ synglob.ID_LANG_C,
                     synglob.ID_LANG_CPP,
-                    synglob.ID_LANG_OBJC ]:
+                    synglob.ID_LANG_OBJC,
+                    synglob.ID_LANG_VALA ]:
         return SYNTAX_ITEMS
     else:
         return list()
@@ -146,7 +161,8 @@ def Properties(lang_id=0):
     """
     if lang_id in [ synglob.ID_LANG_C,
                     synglob.ID_LANG_CPP,
-                    synglob.ID_LANG_OBJC ]:
+                    synglob.ID_LANG_OBJC,
+                    synglob.ID_LANG_VALA ]:
         return [FOLD, FOLD_PRE]
     else:
         return list()
@@ -156,7 +172,9 @@ def CommentPattern(lang_id=0):
     @param lang_id: used to select a specific subset of comment pattern(s)
 
     """
-    if lang_id in [ synglob.ID_LANG_CPP, synglob.ID_LANG_OBJC ]:
+    if lang_id in [ synglob.ID_LANG_CPP,
+                    synglob.ID_LANG_OBJC,
+                    synglob.ID_LANG_VALA ]:
         return [u'//']
     else:
         return [u'/*', u'*/']
