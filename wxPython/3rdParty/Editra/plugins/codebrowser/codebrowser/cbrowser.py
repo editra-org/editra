@@ -249,7 +249,9 @@ class CodeBrowserTree(wx.TreeCtrl):
         # Make sure that the values that are being returned are the ones for
         # the currently active buffer.
         if evt.GetId() == self._cjob:
+            self.Freeze()
             self.UpdateAll(evt.GetValue())
+            self.Thaw()
             # Stop busy indicator
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
                                (self._mw.GetId(), 0, 0))
@@ -274,8 +276,8 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         page = self._GetCurrentCtrl()
         genfun = TagLoader.GetGenerator(page.GetLangId())
+        self._cjob += 1 # increment job Id
         if genfun is not None and self._ShouldUpdate():
-            self._cjob += 1
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
                                (self._mw.GetId(), True))
             # Start progress indicator in pulse mode
@@ -286,8 +288,6 @@ class CodeBrowserTree(wx.TreeCtrl):
             wx.CallLater(75, thread.start)
         else:
             self._cdoc = None
-            # Reset job id so that browser is properly cleared when any other
-            # pending jobs are completed
             self.DeleteChildren(self.root)
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
                                (self._mw.GetId(), False))

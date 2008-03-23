@@ -19,6 +19,7 @@ New:
 Bug Fixes:
 +Notebook syncronization on session load
 +Inaccurate parsing of php classes
++Flashing when updating tree on Windows
 
 #-----------------------------------------------------------------------------#
 
