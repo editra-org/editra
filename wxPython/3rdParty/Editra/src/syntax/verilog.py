@@ -72,13 +72,14 @@ USER_KW = (3, "")
 SV_KEYWORDS = ("alias always_comb always_ff always_latch assert assume "
                "automatic before bind bins binsof bit break constraint "
                "covergroup coverpoint clocking const context continue cover "
-               "cross dist do endgroup endinterface endprogram endproperty "
-               "endsequence expect export extends extern final first_match "
-               "foreach forkjoin iff ignore_bins illegal_bins import inside "
-               "interface intersect join_any join_none modport new null "
-               "package priority program property pure randcase randsequence "
-               "ref return sequence solve super this throughout timeprecision "
-               "timeunit type unique wait_order wildcard with within")
+               "cross dist do endgroup endinterface endpackage endprogram "
+               "endproperty endsequence expect export extends extern final "
+               "first_match foreach forkjoin iff ignore_bins illegal_bins "
+               "import inside interface intersect join_any join_none modport "
+               "new null package priority process program property pure "
+               "randcase randsequence ref return sequence solve super this "
+               "throughout timeprecision timeunit type unique wait_order "
+               "wildcard with within")
 
 SV_TYPES = ("byte chandle class endclass enum int local logic longint packed "
             "protected rand randc shortint shortreal static string struct "
