@@ -259,9 +259,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         lnum = self.GetCurrentLine()
         mark = -1
         if action == ed_glob.ID_ADD_BM:
-            self.MarkerAdd(lnum, MARK_MARGIN)
-        elif action == ed_glob.ID_DEL_BM:
-            self.MarkerDelete(lnum, MARK_MARGIN)
+            if self.MarkerGet(lnum):
+                self.MarkerDelete(lnum, MARK_MARGIN)
+            else:
+                self.MarkerAdd(lnum, MARK_MARGIN)
         elif action == ed_glob.ID_DEL_ALL_BM:
             self.MarkerDeleteAll(MARK_MARGIN)
         elif action == ed_glob.ID_NEXT_MARK:
@@ -276,6 +277,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             mark = self.MarkerPrevious(lnum, 1)
             if mark == -1:
                 mark = self.MarkerPrevious(self.GetLineCount(), 1)
+
         if mark != -1:
             self.GotoLine(mark)
 
@@ -1022,7 +1024,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     ed_glob.ID_NEXT_MARK : self.Bookmark,
                     ed_glob.ID_PRE_MARK  : self.Bookmark,
                     ed_glob.ID_ADD_BM    : self.Bookmark,
-                    ed_glob.ID_DEL_BM    : self.Bookmark,
                     ed_glob.ID_DEL_ALL_BM : self.Bookmark}
 
         if self.CallTipActive():

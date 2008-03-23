@@ -867,11 +867,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         menu_ids.extend([ID_SHOW_EOL, ID_SHOW_WS, ID_INDENT_GUIDES, ID_SYNTAX,
                          ID_WORD_WRAP, ID_BRACKETHL, ID_EOL_MAC, ID_EOL_UNIX,
                          ID_EOL_WIN, ID_NEXT_MARK, ID_PRE_MARK, ID_ADD_BM,
-                         ID_DEL_BM, ID_DEL_ALL_BM, ID_FOLDING, ID_AUTOCOMP,
-                         ID_SHOW_LN,  ID_AUTOINDENT, ID_TAB_TO_SPACE,
-                         ID_SPACE_TO_TAB, ID_TRIM_WS, ID_SHOW_EDGE,
-                         ID_MACRO_START, ID_MACRO_STOP, ID_MACRO_PLAY,
-                         ID_TO_LOWER, ID_TO_UPPER, ID_KWHELPER, ID_USE_SOFTTABS
+                         ID_DEL_ALL_BM, ID_FOLDING, ID_AUTOCOMP, ID_SHOW_LN,
+                         ID_AUTOINDENT, ID_TAB_TO_SPACE, ID_SPACE_TO_TAB,
+                         ID_TRIM_WS, ID_SHOW_EDGE, ID_MACRO_START,
+                         ID_MACRO_STOP, ID_MACRO_PLAY, ID_TO_LOWER,
+                         ID_TO_UPPER, ID_KWHELPER, ID_USE_SOFTTABS
                          ])
         menu_ids.extend(active_only)
 

@@ -17,7 +17,8 @@ NEWS:
 NEW: [features/improvements]
 +Configurable Keybindings and Keybinding editor
 +Add highlighting support for System Verilog (w/ help from Tim Corcoran)
-+Improved support for (Objective C
++Improved support for (Objective C)
++Combinded Add/Delete bookmark into single toggle action
 +Add Serbian translation (contributed by Vladimir Lazic)
 
 BUG FIXES:

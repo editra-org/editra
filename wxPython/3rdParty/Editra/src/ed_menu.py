@@ -571,12 +571,9 @@ class EdMenuBar(wx.MenuBar):
         editmenu.AppendMenu(ed_glob.ID_LINE_EDIT, _("Line Edit"), linemenu,
                             _("Commands that affect an entire line"))
         bookmenu = EdMenu()
-        bookmenu.Append(ed_glob.ID_ADD_BM, _("Add Bookmark") + \
+        bookmenu.Append(ed_glob.ID_ADD_BM, _("Toggle Bookmark") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_ADD_BM),
-                        _("Add a bookmark to the current line"))
-        bookmenu.Append(ed_glob.ID_DEL_BM, _("Remove Bookmark") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DEL_BM),
-                        _("Remove bookmark from current line"))
+                        _("Toggle bookmark of the current line"))
         bookmenu.Append(ed_glob.ID_DEL_ALL_BM, _("Remove All Bookmarks") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_DEL_ALL_BM),
                         _("Remove all bookmarks from the current document"))
@@ -945,7 +942,6 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_JOIN_LINES : ("Ctrl", "J"),
                      ed_glob.ID_TRANSPOSE : ("Ctrl", "T"),
                      ed_glob.ID_ADD_BM : ("Ctrl", "B"),
-                     ed_glob.ID_DEL_BM : ("Ctrl", "Shift", "B"),
                      ed_glob.ID_FIND : ("Ctrl", "Shift", "F"),
                      ed_glob.ID_FIND_REPLACE : ("Ctrl", "R"),
                      ed_glob.ID_QUICK_FIND : ("Ctrl", "F"),
