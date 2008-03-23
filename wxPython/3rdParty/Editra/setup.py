@@ -118,7 +118,7 @@ DATA_FILES = [("include/python2.5",
              ]
 
 DATA = [ "src/*.py", "src/syntax/*.py", "src/autocomp/*.py", "src/eclib/*.py",
-         "docs/*.txt", "pixmaps/*.png", "pixmaps/editra.ico", 'Editra', 
+         "docs/*.txt", "pixmaps/*.png", "pixmaps/*.ico", 'Editra', 
          "src/extern/*.py", "pixmaps/*.icns", "pixmaps/theme/Default/README", 
          "pixmaps/theme/Tango/AUTHOR", "pixmaps/theme/Tango/COPYING",
          "pixmaps/theme/Tango/toolbar/*.png", "pixmaps/theme/Tango/menu/*.png",
@@ -313,6 +313,6 @@ else:
         platforms = [ "Many" ],
         packages = [ NAME ],
         package_dir = { NAME : '.' },
-        package_data = { NAME : DATA},
+        package_data = { NAME : DATA },
         classifiers= CLASSIFIERS,
         )

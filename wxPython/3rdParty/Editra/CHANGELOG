@@ -21,7 +21,7 @@ NEW: [features/improvements]
  (haXe, Matlab, Octave, Scheme, System Verilog, Verilog)
 +Add highlighting support for System Verilog (w/ help from Tim Corcoran)
 +Add support for Vala
-+Improved support for (Camle, Objective C)
++Improved support for (Caml, Objective C)
 +Jump to matching Brace/Bracket command (default Ctrl+Shift+B)
 +Combinded Add/Delete bookmark into single toggle action
 +Add Serbian translation (contributed by Vladimir Lazic)
@@ -30,6 +30,7 @@ BUG FIXES:
 +Misc UI consistancy issues
 +Add missing Objective C sample file for highlighting editor
 +Using 16x16 size toolbar icons on OSX
++Missing editra.ico file on source installs under Windows
 
 #-----------------------------------------------------------------------------#
 
