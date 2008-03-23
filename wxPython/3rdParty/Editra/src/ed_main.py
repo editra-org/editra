@@ -165,6 +165,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
                                        # View Menu
                                        (ID_GOTO_LINE, self.OnCommandBar),
+                                       (ID_GOTO_MBRACE, self.DispatchToControl),
                                        (ID_VIEW_TOOL, self.OnViewTb),
 
                                        # Format Menu
@@ -217,6 +218,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      (ID_ZOOM_NORMAL, self.OnUpdateViewUI),
                                      (ID_ZOOM_IN, self.OnUpdateViewUI),
                                      (ID_ZOOM_OUT, self.OnUpdateViewUI),
+                                     (ID_GOTO_MBRACE, self.OnUpdateViewUI),
                                      (ID_VIEW_TOOL, self.OnUpdateViewUI),
                                      (ID_SHOW_WS, self.OnUpdateViewUI),
                                      (ID_SHOW_EDGE, self.OnUpdateViewUI),
@@ -871,7 +873,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                          ID_AUTOINDENT, ID_TAB_TO_SPACE, ID_SPACE_TO_TAB,
                          ID_TRIM_WS, ID_SHOW_EDGE, ID_MACRO_START,
                          ID_MACRO_STOP, ID_MACRO_PLAY, ID_TO_LOWER,
-                         ID_TO_UPPER, ID_KWHELPER, ID_USE_SOFTTABS
+                         ID_TO_UPPER, ID_KWHELPER, ID_USE_SOFTTABS,
+                         ID_GOTO_MBRACE
                          ])
         menu_ids.extend(active_only)
 
@@ -990,6 +993,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Enable(zoom < 18)
         elif e_id == ID_ZOOM_OUT:
             evt.Enable(zoom > -8)
+        elif e_id == ID_GOTO_MBRACE:
+            evt.Enable(-1 not in ctrl.GetBracePair())
         elif e_id == ID_VIEW_TOOL:
             evt.Check(self.GetToolBar().IsShown())
         elif e_id == ID_SHOW_WS:

@@ -309,6 +309,36 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         return [mark for mark in xrange(self.GetLineCount()) if self.MarkerGet(mark)]
 
+    def GetBracePair(self):
+        """Get a tuple of the positions in the buffer where the brace at the
+        current caret position and its match are. if a brace doesn't have a 
+        match it will return -1 for the missing brace.
+        @return: tuple (brace_at_caret, brace_opposite)
+
+        """
+        brace_at_caret = -1
+        brace_opposite = -1
+        char_before = None
+        caret_pos = self.GetCurrentPos()
+
+        if caret_pos > 0:
+            char_before = self.GetCharAt(caret_pos - 1)
+
+        # check before
+        if char_before and unichr(char_before) in "[]{}()<>":
+            brace_at_caret = caret_pos - 1
+
+        # check after
+        if brace_at_caret < 0:
+            char_after = self.GetCharAt(caret_pos)
+            if char_after and chr(char_after) in "[]{}()<>":
+                brace_at_caret = caret_pos
+
+        if brace_at_caret >= 0:
+            brace_opposite = self.BraceMatch(brace_at_caret)
+
+        return (brace_at_caret, brace_opposite)
+
     def Configure(self):
         """Configures the editors settings by using profile values
         @postcondition: all profile dependant attributes are configured
@@ -457,6 +487,20 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         return (self.GetCurrentLine() + 1, self.GetColumn(self.GetCurrentPos()))
+
+    def GotoBraceMatch(self):
+        """Jump the caret to the brace opposite of the one the caret is
+        currently at. If there is no match or the caret currently is not next
+        to a brace no action is taken.
+        @return: bool
+
+        """
+        cbrace, brace_opposite = self.GetBracePair()
+        if -1 in (cbrace, brace_opposite):
+            return False
+        else:
+            self.GotoPos(brace_opposite)
+            return True
 
     def GotoColumn(self, column):
         """Move caret to column of current line
@@ -818,27 +862,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @type evt: wx.stc.StyledTextEvent
 
         """
-        brace_at_caret = -1
-        brace_opposite = -1
-        char_before = None
-        caret_pos = self.GetCurrentPos()
-
-        if caret_pos > 0:
-            char_before = self.GetCharAt(caret_pos - 1)
-
-        # check before
-        if char_before and chr(char_before) in "[]{}()<>":
-            brace_at_caret = caret_pos - 1
-
-        # check after
-        if brace_at_caret < 0:
-            char_after = self.GetCharAt(caret_pos)
-            if char_after and chr(char_after) in "[]{}()<>":
-                brace_at_caret = caret_pos
-
-        if brace_at_caret >= 0:
-            brace_opposite = self.BraceMatch(brace_at_caret)
-
+        brace_at_caret, brace_opposite = self.GetBracePair()
         # CallAfter necessary to reduce CG warnings on Mac
         if brace_at_caret != -1  and brace_opposite == -1:
             wx.CallAfter(self.BraceBadLight, brace_at_caret)
@@ -1013,7 +1037,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_TRIM_WS : self.TrimWhitespace,
                   ed_glob.ID_MACRO_START : self.StartRecord,
                   ed_glob.ID_MACRO_STOP : self.StopRecord,
-                  ed_glob.ID_MACRO_PLAY : self.PlayMacro
+                  ed_glob.ID_MACRO_PLAY : self.PlayMacro,
+                  ed_glob.ID_GOTO_MBRACE : self.GotoBraceMatch
         }
 
         e_idmap = { ed_glob.ID_ZOOM_OUT : self.DoZoom,
