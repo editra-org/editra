@@ -482,7 +482,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             line = 0
         else:
             pass
+
+        self.SetYCaretPolicy(wx.stc.STC_CARET_STRICT, 0)
         wx.stc.StyledTextCtrl.GotoLine(self, line)
+        self.SetYCaretPolicy(wx.stc.STC_CARET_EVEN, 0)
 
     def SetCurrentCol(self, column):
         """Set the current column position on the currently line
