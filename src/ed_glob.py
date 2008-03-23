@@ -45,7 +45,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
             'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
-            'I18N_PAGE'
+            'I18N_PAGE', 'ID_GOTO_MBRACE'
 ]
 
 #---- Project Info ----#
@@ -167,6 +167,7 @@ ID_INDENT_GUIDES = wx.NewId()
 ID_VIEW_TOOL     = wx.NewId()
 ID_SHELF         = wx.NewId()
 ID_GOTO_LINE     = wx.NewId()
+ID_GOTO_MBRACE   = wx.NewId()
 ID_NEXT_MARK     = wx.ID_FORWARD
 ID_PRE_MARK      = wx.ID_BACKWARD
 
