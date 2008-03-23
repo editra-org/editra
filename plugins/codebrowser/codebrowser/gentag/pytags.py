@@ -58,6 +58,7 @@ def GenerateTags(buff):
         """
         return not indocstring and not ind_string and not ins_string
 
+    # Do the parse of the text
     for lnum, line in enumerate(buff):
         indent = 0
         idx = 0
@@ -98,7 +99,7 @@ def GenerateTags(buff):
 
             # Parse and look for elements to add to the DocStruct
             if indocstring or ins_string or ind_string:
-                # Token is in a docstring so ignore and move on
+                # Token is in a string so ignore and move on
                 idx = idx + 1
             elif line[idx].isspace():
                 # Get indent width for current scope
@@ -107,17 +108,11 @@ def GenerateTags(buff):
                     idx += indent
                 else:
                     # Non indent space
-                    idx = idx + 1
-            elif line[idx] == u"#":
-                break # Rest of line is comment so go to next line
-            elif parselib.IsToken(line, idx, u'class'):
+                    idx += 1
+            elif parselib.IsToken(line, idx, u'class') and u":" in line[idx:]:
                 idx += 5
-                if line[idx].isspace():
-                    if u'(' in line:
-                        cname = line[idx:].split('(')[0].strip()
-                    else:
-                        cname = line[idx:].split(':')[0].strip()
-
+                cname = parselib.GetFirstIdentifier(line[idx:])
+                if cname is not None:
                     if lastclass is None:
                         rtags.AddClass(taglib.Class(cname, lnum))
                     # TODO: check for classes defined within classes
@@ -125,7 +120,7 @@ def GenerateTags(buff):
                     lastclass = dict(name=cname, indent=indent)
                     parents.append(dict(lastclass))
                     break # Go to next line
-            elif parselib.IsToken(line, idx, u'def'):
+            elif parselib.IsToken(line, idx, u'def') and u":" in line[idx:]:
                 # Function/Method Definition
                 idx += 3
                 fname = parselib.GetFirstIdentifier(line[idx:])
@@ -144,7 +139,7 @@ def GenerateTags(buff):
                             # ignore this element.
                             pass
                     break
-            elif not infunction and line[idx] in (u"(", u")"):
+            elif not infunction and line[idx] in u"()":
                 # Track paren nesting to help with variable parsing
                 if line[idx] == u"(":
                     parens += 1
@@ -167,7 +162,7 @@ def GenerateTags(buff):
                             rtags.AddVariable(taglib.Variable(var[0], lnum))
             else:
                 # Nothing so skip ahead
-                idx = idx + 1
+                idx += 1
 
     # Return the document structure object
     return rtags
