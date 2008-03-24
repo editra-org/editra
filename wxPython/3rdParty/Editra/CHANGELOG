@@ -29,6 +29,7 @@ NEW: [features/improvements]
 BUG FIXES:
 +Misc UI consistancy issues
 +Add missing Objective C sample file for highlighting editor
++Add missing ActionScript sample file for highlighting editor
 +Using 16x16 size toolbar icons on OSX
 +Missing editra.ico file on source installs under Windows
 
