@@ -46,8 +46,7 @@ def GenerateTags(buff):
         while idx < len(line):
         
             # Skip Whitespace
-            while line[idx].isspace():
-                idx += 1
+            idx = parselib.SkipWhitespace(line, idx)
 
             # Check if valid item to add to document
             if c_element is not None and line[idx] == u'{':

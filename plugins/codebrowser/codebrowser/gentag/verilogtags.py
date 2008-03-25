@@ -54,7 +54,7 @@ def GenerateTags(buff):
         idx = 0
         while idx < len(line):
             # Skip any leading Whitespace
-            idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+            idx = parselib.SkipWhitespace(line, idx)
 
             # Check for coments
             if line[idx:].startswith(u'/*'):
