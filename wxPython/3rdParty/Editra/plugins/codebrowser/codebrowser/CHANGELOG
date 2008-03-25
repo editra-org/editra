@@ -15,11 +15,11 @@ New:
   - Scheme (Functions)
   - System Verilog (Classes, Tasks)
   - Verilog (Tasks)
-+Improved accuracy of python parser
 
 Bug Fixes:
 +Notebook syncronization on session load
 +Inaccurate parsing of php classes
++Missidentifying statements inside of strings as code in python parser
 +Flashing when updating tree on Windows
 
 #-----------------------------------------------------------------------------#
