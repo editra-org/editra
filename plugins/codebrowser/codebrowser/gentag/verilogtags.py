@@ -35,12 +35,17 @@ def GenerateTags(buff):
     """
     rtags = taglib.DocStruct()
     rtags.SetElementDescription('class', "Class Definitions")
-    rtags.SetElementDescription('function', "Task Definitions")
+    rtags.SetElementDescription('task', "Task Definitions")
+    rtags.SetElementDescription('function', "Function Definitions")
+    rtags.SetElementPriority('class', 3)
+    rtags.SetElementPriority('task', 2)
+    rtags.SetElementPriority('function', 1)
 
     # Variables to track parse state
     inclass = False      # Inside a class defintion
     incomment = False    # Inside a comment
     intask = False       # Inside a task definition
+    infunction = False   # Inside a function definition
 
     # Parse the text
     for lnum, line in enumerate(buff):
@@ -81,19 +86,35 @@ def GenerateTags(buff):
                 break # go to next line
             elif parselib.IsToken(line, idx, u'task'):
                 idx += 4
-                idx += (len(line[idx:]) - len(line[idx:].lstrip()))
-                tname = parselib.GetFirstIdentifier(line[idx:])
+                tname = parselib.GetTokenParenLeft(line[idx:])
                 if tname is not None:
                     intask = True
                     if inclass:
                         lclass = rtags.GetLastClass()
-                        lclass.AddMethod(taglib.Method(tname, lnum))
+                        task = taglib.Function(tname, lnum, 'task',
+                                               lclass.GetName())
+                        lclass.AddElement('task', task)
                     else:
-                        rtags.AddFunction(taglib.Function(tname, lnum))
+                        task = taglib.Function(tname, lnum, 'task')
+                        rtags.AddElement('task', task)
                 break # goto next line
+            elif parselib.IsToken(line, idx, u'function'):
+                idx += 8
+                fname = parselib.GetTokenParenLeft(line[idx:])
+                if fname is not None:
+                    infunction = True
+                    if inclass:
+                        lclass = rtags.GetLastClass()
+                        lclass.AddMethod(taglib.Method(fname, lnum))
+                    else:
+                        rtags.AddFunction(taglib.Function(fname, lnum))
+                break
             elif intask and parselib.IsToken(line, idx, u'endtask'):
                 intask = False
                 break # go to next line
+            elif infunction and parselib.IsToken(line, idx, 'endfunction'):
+                infunction = False
+                break
             else:
                 idx += 1
 
