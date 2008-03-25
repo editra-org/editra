@@ -47,8 +47,9 @@ _ = wx.GetTranslation
 # HACK for i18n scripts to pick up translation strings
 STRINGS = ( _("Class Definitions"), _("Defines"), _("Function Definitions"),
             _("Global Variables"), _("Identities"), _("Labels"), _("Macros"),
-            _("Macro Definitions"), _("Packages"), _("Procedure Definitions"),
-            _("Programs"), _("Sections"), _("Style Tags"), _("Subroutines"),
+            _("Macro Definitions"), _("Namespaces"), _("Packages"),
+            _("Procedure Definitions"), _("Programs"), _("Protocols"),
+            _("Sections"), _("Style Tags"), _("Subroutines"),
             _("Subroutine Declarations"), _("Task Definitions") )
 del STRINGS
 
@@ -113,6 +114,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.icons['procedure'] = self.icons['function']
         self.icons['task'] = imglst.Add(IconFile.GetBrickGo2Bitmap())
         self.icons['variable'] = imglst.Add(IconFile.GetBrickBitmap())
+        self.icons['namespace'] = imglst.Add(IconFile.GetBrickBricksBitmap())
         self.SetImageList(imglst)
         # NOTE: Must save reference to the image list or tree will crash!!!
         self.il = imglst
