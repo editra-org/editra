@@ -52,7 +52,7 @@ def GenerateTags(buff):
         idx = 0
         while idx < len(line):
             # Skip Whitespace
-            idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+            idx = parselib.SkipWhitespace(line, idx)
 
             # Check if in a <?php ?> block or not
             if line[idx:].startswith(u'<?php'):
@@ -110,28 +110,20 @@ def GenerateTags(buff):
                 else:
                     pass
             elif not infundef and parselib.IsToken(line, idx, u'class'):
-                idx += 5
-
                 # Skip whitespace
-                idx += (len(line[idx:]) - len(line[idx:].lstrip()))
-
+                idx = parselib.SkipWhitespace(line, idx + 5)
                 name = parselib.GetFirstIdentifier(line[idx:])
                 if name is not None:
                     idx += len(name) # Move past the class name
                     lastclass = taglib.Class(name, lnum)
             elif parselib.IsToken(line, idx, u'function'):
-                idx += 8
-
                 # Skip whitespace
-                idx += (len(line[idx:]) - len(line[idx:].lstrip()))
-
+                idx = parselib.SkipWhitespace(line, idx + 8)
                 name = parselib.GetFirstIdentifier(line[idx:])
                 if name is not None:
                     lastfun = name
-                    idx += len(name)
-
                     # Skip whitespace
-                    idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+                    idx = parselib.SkipWhitespace(line, idx + len(name))
 
                     if line[idx] != u'(':
                         continue

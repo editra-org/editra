@@ -52,7 +52,7 @@ def GenerateTags(buff):
         idx = 0
         while idx < len(line):
             # Skip Whitespace
-            idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+            idx = parselib.SkipWhitespace(line, idx)
 
             # Check for coments
             if line[idx:].startswith(u'/*'):
@@ -97,20 +97,16 @@ def GenerateTags(buff):
                 else:
                     pass
             elif not infundef and parselib.IsToken(line, idx, u'class'):
-                idx += 5
-
                 # Skip whitespace
-                idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+                idx = parselib.SkipWhitespace(line, idx + 5)
 
                 name = parselib.GetFirstIdentifier(line[idx:])
                 if name is not None:
                     idx += len(name) # Move past the class name
                     lastclass = taglib.Class(name, lnum)
             elif parselib.IsToken(line, idx, u'function'):
-                idx += 8
-
                 # Skip whitespace
-                idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+                idx = parselib.SkipWhitespace(line, idx + 8)
 
                 name = parselib.GetFirstIdentifier(line[idx:])
                 if name is not None:
@@ -118,7 +114,7 @@ def GenerateTags(buff):
                     idx += len(name)
 
                     # Skip whitespace
-                    idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+                    idx = parselib.SkipWhitespace(line, idx)
 
                     if line[idx] != u'(':
                         continue
@@ -129,8 +125,7 @@ def GenerateTags(buff):
                         rtags.AddFunction(taglib.Function(name, lnum))
             elif inclass and not infundef and parselib.IsToken(line, idx, u'var'):
                 # Look for class variables
-                idx += 3
-                idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+                idx = parselib.SkipWhitespace(line, idx + 3)
                 name = parselib.GetFirstIdentifier(line[idx:])
                 if name is not None and lastclass is not None:
                     lastclass.AddVariable(taglib.Variable(name, lnum, lastclass.GetName()))

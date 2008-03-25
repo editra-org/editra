@@ -105,3 +105,12 @@ def IsToken(line, idx, name):
         return True
     else:
         return False
+
+def SkipWhitespace(line, idx):
+    """Increment and return the index in the current line past any whitespace
+    @param line: string
+    @param idx: index to check from in line
+    @return: int
+
+    """
+    return idx + (len(line[idx:]) - len(line[idx:].lstrip()))

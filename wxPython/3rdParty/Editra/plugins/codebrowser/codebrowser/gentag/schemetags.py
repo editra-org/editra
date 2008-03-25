@@ -22,6 +22,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import taglib
+import parselib
 
 #--------------------------------------------------------------------------#
 
@@ -47,12 +48,10 @@ def GenerateTags(buff):
             idx += (len(line[idx:]) - len(line[idx:].lstrip()))
             if llen > idx and line[idx:].startswith(u'define') and \
                (llen > (idx + 6)) and line[idx+6].isspace():
-                idx += 6
-                idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+                idx = parselib.SkipWhitespace(line, idx + 6)
                 if llen > idx and line[idx] == u'(':
                     # function with parameters
-                    idx += 1
-                    idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+                    idx = parselib.SkipWhitespace(line, idx + 1)
                 name = GetIdentifierName(line[idx:])
                 if name is not None:
                     rtags.AddFunction(taglib.Function(name, lnum))
