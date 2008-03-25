@@ -74,8 +74,7 @@ def GenerateTags(buff):
             if incomment:
                 idx += 1
             elif parselib.IsToken(line, idx, u'class'):
-                idx += 5 # jump past class word
-                idx += (len(line[idx:]) - len(line[idx:].lstrip()))
+                idx = parselib.SkipWhitespace(line, idx + 5)
                 cname = parselib.GetFirstIdentifier(line[idx:])
                 if cname is not None:
                     inclass = True
