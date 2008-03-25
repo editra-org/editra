@@ -1,7 +1,8 @@
 // Syntax Highlighting Test File for Ferite
 // Comments are like this
-/* Multiline comments are
- * like this
+/** Multiline comments are like this
+ * @summary Documentation keyword
+ * \brief Another Doc keyword
  */
 
 // Hello World
