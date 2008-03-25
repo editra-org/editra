@@ -109,7 +109,7 @@ def GenerateTags(buff):
                 else:
                     # Non indent space
                     idx += 1
-            elif parselib.IsToken(line, idx, u'class') and u":" in line[idx:]:
+            elif parselib.IsToken(line, idx, u'class'):
                 idx += 5
                 cname = parselib.GetFirstIdentifier(line[idx:])
                 if cname is not None:
@@ -120,7 +120,7 @@ def GenerateTags(buff):
                     lastclass = dict(name=cname, indent=indent)
                     parents.append(dict(lastclass))
                     break # Go to next line
-            elif parselib.IsToken(line, idx, u'def') and u":" in line[idx:]:
+            elif parselib.IsToken(line, idx, u'def'):
                 # Function/Method Definition
                 idx += 3
                 fname = parselib.GetFirstIdentifier(line[idx:])
