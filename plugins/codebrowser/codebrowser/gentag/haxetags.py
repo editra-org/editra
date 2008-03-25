@@ -58,7 +58,7 @@ def GenerateTags(buff):
             if line[idx:].startswith(u'/*'):
                 idx += 2
                 incomment = True
-            elif line[idx:].startswith(u'//') or line[idx:].startswith(u'#'):
+            elif line[idx:].startswith(u'//'):
                 break # go to next line
             elif line[idx:].startswith(u'*/'):
                 idx += 2
@@ -111,10 +111,8 @@ def GenerateTags(buff):
                 name = parselib.GetFirstIdentifier(line[idx:])
                 if name is not None:
                     lastfun = name
-                    idx += len(name)
-
                     # Skip whitespace
-                    idx = parselib.SkipWhitespace(line, idx)
+                    idx = parselib.SkipWhitespace(line, idx + len(name))
 
                     if line[idx] != u'(':
                         continue
