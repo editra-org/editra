@@ -20,7 +20,7 @@ NEW: [features/improvements]
 +New version of CodeBrowser with added support for
  (haXe, Matlab, Octave, Scheme, System Verilog, Verilog)
 +Add highlighting support for System Verilog (w/ help from Tim Corcoran)
-+Add support for Vala
++Add support for (Vala, Squirrel)
 +Improved support for (Caml, Objective C)
 +Jump to matching Brace/Bracket command (default Ctrl+Shift+B)
 +Combinded Add/Delete bookmark into single toggle action

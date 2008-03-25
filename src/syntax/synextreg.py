@@ -100,6 +100,8 @@ ID_LANG_OBJC = _NewId()
 LANG_OBJC = u'Objective C'
 ID_LANG_PIKE = _NewId()
 LANG_PIKE = u'Pike'
+ID_LANG_SQUIRREL = _NewId()
+LANG_SQUIRREL = u'Squirrel'
 ID_LANG_VALA = _NewId()
 LANG_VALA = u'Vala'
 
@@ -320,6 +322,7 @@ EXT_MAP = {
            'rb rbw rbx'         : LANG_RUBY,
            'scm smd ss'         : LANG_SCHEME,
            'sql'                : LANG_SQL,
+           'nut'                : LANG_SQUIRREL,
            'st'                 : LANG_ST,
            'sv svh'             : LANG_SYSVERILOG,
            'itcl tcl tk'        : LANG_TCL,
