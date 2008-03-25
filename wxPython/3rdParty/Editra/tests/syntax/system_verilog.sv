@@ -1,61 +1,139 @@
-// Syntax highlighting test file for System Verilog
+// System Verilog Syntax Highlighting Test File
 // Comments are like this
 
-virtual class Display;
-integer v = 'b1010_1011_1100_1101;
+package oop;
 
- pure virtual task Print();
-    $display("v (dec) : ",v);
- endtask
+class BaseScoreboard;
+  string name;
+  bit[3:0] srce, dest;
+  int run_for_n_packets;  // max number of packets to transmit before giving up on coverage goals
+  static int pkts_checked = 0;
+  static int sent_pkt_count = 0;
+  static int recvd_pkt_count = 0;
+  Packet refPkts[$];
 
-endclass
+  function new(string name = "class", int run_for_n_packets ); 
+    if (TRACE_ON) $display("@%0d: %s.new() started", $time, name);
+    this.name = name;
+    this.run_for_n_packets = run_for_n_packets;
+  endfunction : new
 
-class HexDisplay extends Display ;
+  task report();
+    if (TRACE_ON) $display("@%0d: %s.report() started", $time, name);
+    $display("%0d packets sent, %0d packets sampled, %0d packets checked\n", 
+              sent_pkt_count, recvd_pkt_count, pkts_checked);
+  endtask : report
 
-  task Print(); // over-ridden method
-    $displayh("v (hex) : ",v);
+endclass : BaseScoreboard
+
+
+class Scoreboard extends BaseScoreboard;
+
+  covergroup router_cvg;
+    coverpoint srce;
+    coverpoint dest;
+    cross srce, dest;
+    option.at_least = 1;
+    option.auto_bin_max = 256;
+  endgroup
+
+  function new(string name = "class", int run_for_n_packets ); 
+    super.new(name, run_for_n_packets); 
+    router_cvg = new();
+  endfunction : new
+
+  task check(Packet pktrecvd);
+    int    index;
+    int    status;
+    string diff;
+    Packet pktsent;
+    if (TRACE_ON) $display("@%0d: %s.check() started", $time, name);
   endtask
 
-endclass
 
-class OctDisplay extends Display ;
+endclass : Scoreboard
 
-  task Print(); // over-ridden method
-    $displayo("v (oct) : ",v);
-  endtask
+endpackage : oop
 
-endclass
+/*****************************************************************************/
 
-class BinDisplay extends Display ;
+program test(io_if dutif, input bit clk);
 
-  task Print(); // over-ridden method
-    $displayb("v (bin) : ",v);
-  endtask
+import oop::*;
 
-endclass
+bit[3:0] srce, dest;
+reg[7:0] payload[$], pkt2cmp_payload[$];
 
-module poly5;
-
-HexDisplay hx = new();
-OctDisplay oc = new();
-BinDisplay bn = new();
-Display poly;
+Scoreboard sb;
 
 initial begin
- $display("\n\n");
+  DONE <= 0;
+  sb = new("sb", 2500); 
+  pkt2send = new();
+  pkt2send.pt_mode = 1;
+  do begin
+       fork
+         begin send(); end
+         begin recv(); end
+       join
+     end
+  repeat(10) @(posedge clk);
+end
 
- poly = hx;
- poly.Print();
+task automatic recv();
+  static int pkts_recvd = 0;
+  int i;
+  pktrecvd = new($psprintf("Pkt_recvd[%0d]", pkts_recvd++));
+  pktrecvd.payload = new[pkt2cmp_payload.size()];
+  for (i=0; i<pkt2cmp_payload.size(); i++)
+    pktrecvd.payload[i] = pkt2cmp_payload[i];
+  pktrecvd.dest = dest;
+endtask
 
- poly = oc;
- poly.Print();
+task automatic send();
+  int i;
+  payload.delete();
+  for (i=0; i<pkt2send.payload.size(); i++)
+    payload.push_back(pkt2send.payload[i]);
+  srce = pkt2send.srce;
+  dest = pkt2send.dest;
+endtask
 
- poly = bn;
- poly.Print();
+endprogram
 
- $display("\n\n\n");
+interface io(input clock, input bit[15:0] din, frame_n);
+bit [15:0] passthru;
 
- $finish;
- end
+sequence s_pass_thru_0 ;
+  frame_n[ 0] ##1 !frame_n[ 0] ##0 din[ 0] == 0 [*4];  // 0000
+endsequence
+
+property p_pass_thru_0 ;
+  @(posedge clk) fr_valid |-> s_pass_thru_0;
+endproperty
+
+assert property (p_pass_thru_0) $info("%m  OK"); 
+  else $error("%m Problem");
+endinterface
+
+sequence s_pass_thru_1 ;
+  frame_n[ 1] ##1 !frame_n[ 1] ##0 din[ 1] == 0 [*4];  // 0000
+endsequence
+
+property p_pass_thru_1 ;
+  @(posedge clk) fr_valid |-> s_pass_thru_1;
+endproperty
+
+assert property (p_pass_thru_1) $info("%m  OK"); 
+  else $error("%m Problem");
+endinterface
+
+module top;
+bit clk;
+bit[15:0] din;
+bit frame_n;
+
+io IF1 (.clk, .din, .frame_n);
+test TB1 (.clk, io_if(IF1) );
 
 endmodule
