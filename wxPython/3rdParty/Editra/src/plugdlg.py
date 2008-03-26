@@ -377,7 +377,12 @@ class DownloadPanel(wx.Panel):
 
     def _ResultCatcher(self, delayedResult):
         """Catches the results from the download worker threads"""
-        frame = self.GetGrandParent()
+        # Check if result has come after the window is dead
+        try:
+            frame = self.GetGrandParent()
+        except wx.PyDeadObjectError:
+            return
+
         self._eggcount = self._eggcount - 1
         try:
             result = delayedResult.get()
@@ -396,13 +401,15 @@ class DownloadPanel(wx.Panel):
 
     def _UpdateCatcher(self, delayedResult):
         """Catches the results from the download worker threads"""
-        frame = self.GetGrandParent()
         try:
+            frame = self.GetGrandParent()
             result = delayedResult.get()
             if len(result):
                 self._p_list = self.FormatPluginList(result)
                 self.PopulateList()
                 frame.SetStatusText(_("Select plugins to download"), 0)
+        except wx.PyDeadObjectError:
+            return
         except Exception, msg:
             util.Log("[plugdlg][err] Download failed " + str(msg))
             frame.SetStatusText(_("Unable to retrieve plugin list"), 0)
