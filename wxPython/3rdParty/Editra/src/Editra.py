@@ -26,6 +26,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import locale
 import time
 import getopt
 import wx
@@ -85,6 +86,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._windows = dict()
 
         # Setup Locale
+        locale.setlocale(locale.LC_ALL, '')
         self.locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
         if self.locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
             self.locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
