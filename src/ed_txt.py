@@ -21,6 +21,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import os
+import sys
 import re
 import codecs
 import locale
@@ -396,7 +397,7 @@ def FallbackReader(fname):
 
     """
     txt = None
-    for enc in ('utf-8', 'utf-16', 'latin-1', 'ascii'):
+    for enc in GetEncodings():
         try:
             handle = open(fname, 'rb')
             reader = codecs.getreader(enc)(handle)
@@ -409,3 +410,24 @@ def FallbackReader(fname):
             return (enc, txt)
 
     return (None, None)
+
+def GetEncodings():
+    """Get a list of possible encodings to try from the locale information
+    @return: list of strings
+
+    """
+    encodings = ['utf-8']
+    encodings.append(locale.getpreferredencoding())
+    encodings.append(locale.nl_langinfo(locale.CODESET))
+    encodings.append(locale.getlocale()[1])
+    encodings.append(locale.getdefaultlocale()[1])
+    encodings.append(sys.getfilesystemencoding())
+    encodings.append('latin-1')
+
+    # Clean the list for duplicates and None values
+    rlist = list()
+    for enc in encodings:
+        if enc is not None and len(enc) and enc not in rlist:
+            rlist.append(enc.lower())
+
+    return rlist
