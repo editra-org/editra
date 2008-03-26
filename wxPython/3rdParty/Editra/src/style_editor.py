@@ -494,6 +494,7 @@ class StyleEditor(wx.Dialog):
 
         """
         fname = file_lbl.replace(u" ", u"_").replace(u"/", u"_").lower()
+        fname = fname.replace('#', 'sharp')
         try:
             fname = glob.glob(ed_glob.CONFIG['TEST_DIR'] + fname + ".*")[0]
         except IndexError:
