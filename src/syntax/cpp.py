@@ -28,20 +28,19 @@ import synglob
 #---- Keyword Specifications ----#
 
 # C Keywords
-C_KEYWORDS = ("goto break return continue asm case default if else switch "
-              "while for do sizeof typeof")
+C_KEYWORDS = ("asm break case const continue default do else for goto return "
+              "if sizeof static switch typeof while")
 
 # C Types/Structures/Storage Classes
-C_TYPES = ("int long short char void signed unsigned float double "
-           "size_t ssize_t wchar_t ptrdiff_t sig_atomic_t fpos_t "
-           "clock_t time_t va_list jmp_buf FILE DIR div_t ldiv_t "
-           "mbstate_t wctrans_t wint_t wctype_t bool complex int8_t "
-           "int16_t int32_t int64_t uint8_t uint16_t uint32_t uint64_t "
-           "int_least8_t int_least16_t int_least32_t int_least64_t "
-           "uint_fast8_t uint_fast16_t uint_fast32_t uint_fast64_t "
-           "intptr_t uintptr_t intmax_t uintmax_t __label__ __complex__ "
-           "__volatile__ struct union enum typedef static register auto "
-           "volatile extern const inline __attribute__ ")
+C_TYPES = ("auto bool char clock_t complex div_t double enum extern float "
+           "fpos_t inline int int_least8_t int_least16_t int_least32_t "
+           "int_least64_t int8_t int16_t int32_t int64_t intmax_t intptr_t "
+           "jmp_buf ldiv_t long mbstate_t ptrdiff_t register sig_atomic_t "
+           "size_t ssize_t short signed struct typedef union time_t "
+           "uint_fast8_t uint_fast16_t uint_fast32_t uint_fast64_t uint8_t "
+           "uint16_t uint32_t uint64_t uintptr_t uintmax_t unsigned va_list "
+           "void volatile wchar_t wctrans_t wctype_t wint_t FILE DIR __label__ "
+           "__complex__ __volatile__ __attribute__ ")
 
 # C/CPP Documentation Keywords (includes Doxygen keywords)
 DOC_KEYWORDS = (2, "TODO FIXME XXX \\author \\brief \\bug \\callgraph "
@@ -53,17 +52,30 @@ DOC_KEYWORDS = (2, "TODO FIXME XXX \\author \\brief \\bug \\callgraph "
                    "\\retval \\section \\struct \\subpage \\subsection " 
                    "\\subsubsection \\test \\todo \\typedef \\union \\var "
                    "\\verbatim \\version \\warning \\$ \\@ \\~ \\< \\> \\# \\% "
-                   "HACK ")
+                   "HACK")
 
 # CPP Keyword Extensions
-CPP_KEYWORDS = ("new delete this friend using throw try catch opperator "
-                "typeid and bitor or xor compl bitand and_eq or_eq xor_eq "
-                "not not_eq const_cast static_cast dynamic_cast "
-                "reinterpret_cast true false ")
+CPP_KEYWORDS = ("and and_eq bitand bitor catch class compl const_cast delete "
+                "dynamic_cast false friend new not not_eq opperator or or_eq "
+                "private protected public reinterpret_cast static_cast this "
+                "throw try true typeid using xor xor_eq")
 
 # CPP Type/Structure/Storage Class Extensions
-CPP_TYPES = ("public protected private inline virtual explicit export bool "
-             "wchar_t mutable class typename template namespace ")
+CPP_TYPES = ("bool inline explicit export mutable namespace template typename "
+             "virtual wchar_t")
+
+# C# Keywords
+CSHARP_KW = ("abstract as base break case catch checked class const continue  "
+             "default delegate do else event explicit extern false finally "
+             "fixed for foreach goto if implicit in interface internal is lock "
+             "new null operator out override params readonly ref return sealed "
+             "sizeof stackalloc static switch this throw true try typeof "
+             "unchecked unsafe using while")
+
+# C# Types
+CSHARP_TYPES = ("bool byte char decimal double enum float int long "
+                "namespace object private protected public sbyte short string "
+                "struct uint ulong ushort virtual void volatile")
 
 # Objective C
 OBJC_KEYWORDS = ("@catch @interface @implementation @end @finally @private "
@@ -113,6 +125,8 @@ FOLD_PRE = ("styling.within.preprocessor", "0")
 FOLD_COM = ("fold.comment", "1")
 FOLD_COMP = ("fold.compact", "1")
 FOLD_ELSE = ("fold.at.else", "0")
+ALLOW_DOLLARS = ("lexer.cpp.allow.dollars", "1")
+
 #------------------------------------------------------------------------------#
 
 #---- Required Module Functions ----#
@@ -127,6 +141,9 @@ def Keywords(lang_id=0):
     if lang_id == synglob.ID_LANG_CPP:
         kw1_str.append(CPP_KEYWORDS)
         kw2_str.append(CPP_TYPES)
+    elif lang_id == synglob.ID_LANG_CSHARP:
+        kw1_str = [CSHARP_KW]
+        kw2_str = [CSHARP_TYPES]
     elif lang_id == synglob.ID_LANG_OBJC:
         kw1_str.append(OBJC_KEYWORDS)
         kw2_str.append(OBJC_TYPES)
@@ -148,6 +165,7 @@ def SyntaxSpec(lang_id=0):
     """
     if lang_id in [ synglob.ID_LANG_C,
                     synglob.ID_LANG_CPP,
+                    synglob.ID_LANG_CSHARP,
                     synglob.ID_LANG_OBJC,
                     synglob.ID_LANG_VALA ]:
         return SYNTAX_ITEMS
@@ -161,6 +179,7 @@ def Properties(lang_id=0):
     """
     if lang_id in [ synglob.ID_LANG_C,
                     synglob.ID_LANG_CPP,
+                    synglob.ID_LANG_CSHARP,
                     synglob.ID_LANG_OBJC,
                     synglob.ID_LANG_VALA ]:
         return [FOLD, FOLD_PRE]
@@ -173,6 +192,7 @@ def CommentPattern(lang_id=0):
 
     """
     if lang_id in [ synglob.ID_LANG_CPP,
+                    synglob.ID_LANG_CSHARP,
                     synglob.ID_LANG_OBJC,
                     synglob.ID_LANG_VALA ]:
         return [u'//']

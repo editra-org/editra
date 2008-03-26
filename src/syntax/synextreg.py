@@ -80,10 +80,12 @@ LANG_APACHE = u'Apache Conf'
 # Use LEX_CPP
 ID_LANG_AS = _NewId()
 LANG_AS = u'ActionScript'
-ID_LANG_C    = _NewId()
+ID_LANG_C = _NewId()
 LANG_C = u'C'
-ID_LANG_CPP  = _NewId()
+ID_LANG_CPP = _NewId()
 LANG_CPP = u'CPP'
+ID_LANG_CSHARP = _NewId()
+LANG_CSHARP = u'C#'
 ID_LANG_D = _NewId()
 LANG_D = u'D'
 ID_LANG_DOT = _NewId()
@@ -278,6 +280,7 @@ EXT_MAP = {
            'cfm cfc cfml dbm'   : LANG_COLDFUSION,
            'cc c++ cpp cxx hh h++ hpp hxx' : LANG_CPP,
            'csh'                : LANG_CSH,
+           'cs'                 : LANG_CSHARP,
            'css'                : LANG_CSS,
            'd'                  : LANG_D,
            'dot'                : LANG_DOT,
