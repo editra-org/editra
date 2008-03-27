@@ -3,20 +3,16 @@
 # Purpose: Define HTML syntax for highlighting and other features             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: html.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for HTML/DHTML/SGML.                             #
-#                                                                             #
-# @todo: Add Netscape/Microsoft Tag Extenstions (maybe)                       #
-# @todo: Styleing needs lots of tweaking                                      #
-#-----------------------------------------------------------------------------#
+FILE: html.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for HTML/DHTML/SGML.
+@todo: Add Netscape/Microsoft Tag Extenstions (maybe)
+@todo: Styleing needs lots of tweaking
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

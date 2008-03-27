@@ -3,17 +3,14 @@
 # Purpose: Define TCL/TK syntax for highlighting and other features           #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: tcl.py                                                                #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# @summary: Lexer configuration module for tcl                                #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: tcl.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for tcl
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

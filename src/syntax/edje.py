@@ -4,21 +4,16 @@
 #          interface language Edje and Edje Data Collection files.            #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: edje.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Edje. Edje is a interface definition language#
-# that is part of the Enlightenment Foundation Libraries for E17.             #
-#                                                                             #
-# @todo:                                                                      #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: edje.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Edje. Edje is a interface definition
+          language that is part of the Enlightenment Foundation Libraries for
+          E17.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Lexer configuration module for haXe web programming language
+@summary: Lexer configuration module for haXe web programming language
 
 """
 

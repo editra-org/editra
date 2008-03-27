@@ -3,20 +3,15 @@
 # Purpose: Define YAML syntax for highlighting and other features             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: yaml.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for YAML                                         #
-#                                                                             #
-# @todo: Maybe new custom style for text regions                              #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: yaml.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for YAML
+@todo: Maybe new custom style for text regions
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

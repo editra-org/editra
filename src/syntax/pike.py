@@ -3,15 +3,14 @@
 # Purpose: Define highlighting/syntax for Pike programming language           #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
 FILE: pike.py
-
-Defines syntax and highlighting settings for the Pike programming language. Pike
-is very similar in form to C/CPP so the Cpp lexer is used to provide the
-highlighting settings.
+@summary: Defines syntax and highlighting settings for the Pike programming
+          language. Pike is very similar in form to C/CPP so the Cpp lexer is
+          used to provide the highlighting settings.
 
 """
 

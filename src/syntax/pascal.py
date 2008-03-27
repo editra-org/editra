@@ -3,19 +3,15 @@
 # Purpose: Define Pascal syntax for highlighting and other features           #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: pascal.py                                                             #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Pacal.                                       #
-#                                                                             #
-# @todo: Add Support for Turbo Pascal                                         #
-#-----------------------------------------------------------------------------#
+FILE: pascal.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Pacal.
+@todo: Add Support for Turbo Pascal
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

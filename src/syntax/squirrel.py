@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Lexer configuration module for Squirrel Programming Language
+@summary: Lexer configuration module for Squirrel Programming Language
 
 """
 

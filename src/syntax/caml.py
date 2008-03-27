@@ -9,11 +9,7 @@
 """
 FILE: caml.py
 AUTHOR: Cody Precord
-
-SUMMARY:
-Lexer configuration module for Caml
-
-@todo:
+@summary: Lexer configuration module for Caml
 
 """
 

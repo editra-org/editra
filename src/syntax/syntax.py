@@ -168,10 +168,10 @@ class SyntaxMgr(object):
         return True
 
     def SyntaxData(self, ext):
-        """Fetches the language data based on a file extention string.
-        The file extension is used to look up the default lexer actions from the
-        EXT_REG dictionary.
-        @see L{synglob}
+        """Fetches the language data based on a file extention string. The file
+        extension is used to look up the default lexer actions from the EXT_REG
+        dictionary.
+        @see: L{synglob}
         @param ext: a string representing the file extension
         @return: Returns a Dictionary of Lexer Config Data
 

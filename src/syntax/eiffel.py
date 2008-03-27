@@ -9,10 +9,7 @@
 """
 FILE: eiffel.py
 AUTHOR: Cody Precord
-
-SUMMARY:
-Lexer configuration module for Eiffel
-
+@summary: Lexer configuration module for Eiffel
 @todo: look into why io.anything is highlighted as a number
 
 """

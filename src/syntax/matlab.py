@@ -3,20 +3,14 @@
 # Purpose: Define Matlab and Octave syntax for highlighting and other features#
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: matlab.py                                                             #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Matlab and Octave                            #
-#                                                                             #
-# @todo:                                                                      #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: matlab.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Matlab and Octave
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

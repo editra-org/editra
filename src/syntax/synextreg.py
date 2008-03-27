@@ -12,10 +12,8 @@
 """
 FILE: synextreg.py
 LANGUAGE: Python
-
-This module defines all supported language/filetype indentifiers and an
-extension register for mapping file extensions to filetypes.
-
+@summary: This module defines all supported language/filetype indentifiers and
+          an extension register for mapping file extensions to filetypes.
 @see: synglob.py for more details on how this data is used
 
 """

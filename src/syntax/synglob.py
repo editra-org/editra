@@ -9,12 +9,11 @@
 """
 FILE: synglob.py
 AUTHOR: Cody Precord
-
-SUMMARY:
-Provides configuration and basic API functionality to all the syntax
-modules. It also acts  as a configuration file for the syntax management code.
-When support for a new languages is added it must have a registration entry in
-the below L{LANG_MAP} dictionary in order to be loadable by the syntax module.
+@summary: Provides configuration and basic API functionality to all the syntax
+          modules. It also acts  as a configuration file for the syntax
+          management code. When support for a new languages is added it must
+          have a registration entry in the below L{LANG_MAP} dictionary in
+          order to be loadable by the syntax module.
 
 """
 

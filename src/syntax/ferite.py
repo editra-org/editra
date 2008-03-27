@@ -7,8 +7,7 @@
 ###############################################################################
 
 """
-Lexer configuration module for Ferite Scripting Language
-
+@summary: Lexer configuration module for Ferite Scripting Language
 
 """
 

@@ -7,13 +7,11 @@
 ###############################################################################
 
 """
-FILE: ruby.py                                                               
-AUTHOR: Cody Precord                                                        
-                                                                         
-SUMMARY:                                                                    
-Lexer configuration module for Ruby.                                        
-                                                                         
-@todo: Default Style Refinement.                                            
+FILE: ruby.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Ruby.
+@todo: Default Style Refinement.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -47,7 +45,7 @@ SYNTAX_ITEMS = [ ('STC_RB_BACKTICKS', 'scalar_style'),
                  ('STC_RB_ERROR', 'error_style'),
                  ('STC_RB_GLOBAL', 'global_style'),
                  ('STC_RB_HERE_DELIM', 'default_style'), # STYLE ME
-                 ('STC_RB_HERE_Q', 'here_style'), 
+                 ('STC_RB_HERE_Q', 'here_style'),
                  ('STC_RB_HERE_QQ', 'here_style'),
                  ('STC_RB_HERE_QX', 'here_style'),
                  ('STC_RB_IDENTIFIER', 'default_style'),

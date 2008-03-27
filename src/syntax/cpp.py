@@ -9,9 +9,7 @@
 """
 FILE: cpp.py                                                                
 @author: Cody Precord                                                       
-                                                                         
-SUMMARY:                                                                    
-Lexer configuration file for C/C++/Objective C/Vala source files.                           
+@summary: Lexer configuration file for C/C++/C#/Objective C/Vala source files.
                                                                          
 """
 
