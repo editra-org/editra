@@ -14,7 +14,7 @@
 
  USAGE:
  1) Windows:
-    - python setup.py py2exe --bundle 2
+    - python setup.py py2exe
 
  2) MacOSX:
     - python setup.py py2app
@@ -223,7 +223,9 @@ if __platform__ == "win32" and 'py2exe' in sys.argv:
     setup(
         name = NAME, 
         version = VERSION, 
-        options = {"py2exe" : {"compressed" : 1, "optimize" : 2, 
+        options = {"py2exe" : {"compressed" : 1,
+                               "optimize" : 2,
+                               "bundle_files" : 2,
                                "includes" : INCLUDES }},
         windows = [{"script": "src/Editra.py",
                     "icon_resources": [(0, ICON['Win'])], 
