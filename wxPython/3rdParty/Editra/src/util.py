@@ -9,10 +9,8 @@
 """
 FILE: util.py
 LANGUAGE: Python
-
-SUMMARY:
-This file contains various helper functions and utilities that the
-program uses. Basically a random library of misfit functions.
+@summary: This file contains various helper functions and utilities that the
+          program uses. Basically a random library of misfit functions.
 
 """
 

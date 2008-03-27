@@ -10,7 +10,6 @@
 FILE: ed_pages.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
-
 SUMMARY:
 This file defines the notebook for containing the text controls for
 for editing text in Editra. The note book is a custom sublclass of
@@ -19,6 +18,8 @@ of tabs between open editor windows. The notebook is also primarly in
 charge of opening files that are requested by the user and setting up the
 text control to use them. For more information on the text controls used
 in the notebook see ed_stc.py
+
+@summary: Editra's main notebook class
 
 """
 

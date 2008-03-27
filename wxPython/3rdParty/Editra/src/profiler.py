@@ -19,6 +19,8 @@ must not be put in the Profile as it will cause errors on load. Ths means
 that only builtin python types should be used and that a translation from
 that type to the required type should happen during run time.
 
+@summary: Editra's user profile management
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

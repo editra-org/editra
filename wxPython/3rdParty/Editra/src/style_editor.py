@@ -16,6 +16,8 @@ the editor when syntax highlighting is turned on. It does this by taking the
 data from the controls and formating it into an Editra Style Sheet that the 
 editor can load to configure the styles of the text.
 
+@summary: Gui for creating custom Editra Style Sheets
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

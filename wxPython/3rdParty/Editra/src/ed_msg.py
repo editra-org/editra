@@ -23,6 +23,8 @@ identify the message type by comparing them with the value of msg.GetType in a
 listener method. The third method is `Unsubscribe` which can be used to remove
 a listener from recieving messages.
 
+@summary: Message system api and message type definitions
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

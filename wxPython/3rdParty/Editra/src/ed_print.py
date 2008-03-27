@@ -3,7 +3,7 @@
 # Purpose: Editra's printer class                                             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -18,6 +18,8 @@ python module called STCPrinting written by Riaan Booysen.
 METHODS:
   - L{EdPrinter}: Class for managing printing and providing print dialogs
   - L{EdPrintout}: Scales and renders the given document to a printer.
+
+@summary: Printer Classes for printing text from an STC
 
 """
 

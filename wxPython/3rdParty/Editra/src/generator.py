@@ -19,6 +19,8 @@ intact from how the view is shown in the editor.
 It also provides a plugin interface that allows for plugins that wish to provide
 similar services for manipulating and transforming text.
 
+@summary: Editra's Generator interface and implementations
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

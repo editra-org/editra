@@ -1,5 +1,5 @@
 ###############################################################################
-# Name: ed_projinfo.py                                                        #
+# Name: info.py                                                               #
 # Purpose: Global project information                                         #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
@@ -12,6 +12,7 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
+#-----------------------------------------------------------------------------#
 
 AUTHOR = 'Cody Precord'
 VERSION = '0.2.90'

@@ -10,10 +10,10 @@
 FILE: ed_main.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
-
-SUMMARY:
 This module provides the L{MainWindow} class for Editra. The MainWindow is
 main Ui component of the editor that contains all the other components.
+
+@summary: MainWindow Component
 
 """
 
