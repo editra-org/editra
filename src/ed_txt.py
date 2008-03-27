@@ -417,10 +417,22 @@ def GetEncodings():
 
     """
     encodings = ['utf-8']
-    encodings.append(locale.getpreferredencoding())
-    encodings.append(locale.nl_langinfo(locale.CODESET))
-    encodings.append(locale.getlocale()[1])
-    encodings.append(locale.getdefaultlocale()[1])
+    try:
+        encodings.append(locale.getpreferredencoding())
+    except:
+        pass
+    try:
+        encodings.append(locale.nl_langinfo(locale.CODESET))
+    except:
+        pass
+    try:
+        encodings.append(locale.getlocale()[1])
+    except:
+        pass
+    try:
+        encodings.append(locale.getdefaultlocale()[1])
+    except:
+        pass
     encodings.append(sys.getfilesystemencoding())
     encodings.append('latin-1')
 
