@@ -7,10 +7,6 @@
 ###############################################################################
 
 """
-FILE: ed_statbar.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
 Custom StatusBar for Editra that contains a progress bar that responds to
 messages from ed_msg to display progress of different actions.
 

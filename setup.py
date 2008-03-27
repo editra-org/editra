@@ -10,20 +10,21 @@
 """
  Editra Setup Script
 
- @summary: Used for building the editra distribution files and installations
-
  USAGE:
- 1) Windows:
-    - python setup.py py2exe
+ 
+   1) Windows:
+      - python setup.py py2exe
 
- 2) MacOSX:
-    - python setup.py py2app
+   2) MacOSX:
+      - python setup.py py2app
 
- 3) Boil an Egg
-    - python setup.py bdist_egg
+   3) Boil an Egg
+      - python setup.py bdist_egg
 
- 4) Install as a python package
-    - python setup.py install
+   4) Install as a python package
+      - python setup.py install
+
+ @summary: Used for building the editra distribution files and installations
 
 """
 __author__ = "Cody Precord <cprecord@editra.org>"

@@ -14,6 +14,7 @@ random salt for the encryption/decryption, and I also threw in a little code
 obfustication just for fun ;-).
 
 USAGE:
+
 Encrypt:
   1. Get the password string to encrypt
   2. Generate a new random salt with os.urandom() or some other randomly 
@@ -29,14 +30,15 @@ Decrypt:
      Decrypt(encrypted_passwd, salt)
 
 EXAMPLE:
->>> salt = os.urandom(8)
->>> passwd = "HelloWorld"
->>> encrypted_passwd = Encrypt(passwd, salt)
->>> print encrypted_passwd
-eNoNysERADAIArCVUAFx/8XauzyTqTEtdKEXoQIWCbCZjaM74qhPlhK4f+BVPKTTyQP7JQ5i
->>> decrypted_passwd = Decrypt(passwd, salt)
->>> print decrypted_passwd
-HelloWorld
+
+  >>> salt = os.urandom(8)
+  >>> passwd = "HelloWorld"
+  >>> encrypted_passwd = Encrypt(passwd, salt)
+  >>> print encrypted_passwd
+  eNoNysERADAIArCVUAFx/8XauzyTqTEtdKEXoQIWCbCZjaM74qhPlhK4f+BVPKTTyQP7JQ5i
+  >>> decrypted_passwd = Decrypt(passwd, salt)
+  >>> print decrypted_passwd
+  HelloWorld
 
 Finally:
 This message will self destruct in 5 seconds ...

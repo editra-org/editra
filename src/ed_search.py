@@ -7,11 +7,9 @@
 ###############################################################################
 
 """
-FILE: ed_search
-AUTHOR: Cody Precord
-LANGUAGE: Python
-@summary: Provides various search controls and searching services for finding
-          text in a document.
+Provides various search controls and searching services for finding text in a
+document. The L{TextFinder} is a search service that can be used to search and
+highlight text in a StyledTextCtrl.
 
 """
 

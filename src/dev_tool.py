@@ -6,8 +6,8 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
-""" Editra Development Tools 
-@author: Cody Precord
+""" Editra Development Tools
+Tools and Utilities for debugging and helping with development of Editra.
 @summary: Utility function for debugging the editor
 
 """

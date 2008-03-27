@@ -8,9 +8,6 @@
 ###############################################################################
 
 """
-FILE: autocomp.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
 Provides an interface/service for getting autocompletion/calltip data
 into an stc control. This is a data provider only it does not do provide
 any UI functionality or calls. The user called object from this library

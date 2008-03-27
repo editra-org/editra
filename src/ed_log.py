@@ -11,7 +11,7 @@ Editra LogViewer
 
 This module provides classes for managing the log display and filtering of its
 messages. The module also exports an implementation of a shelf plugin for
-displaying a LogViewer in the Shelf.
+displaying a L{LogViewer} in the Shelf.
 
 """
 

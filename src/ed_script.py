@@ -7,10 +7,7 @@
 ###############################################################################
 
 """
-FILE: ed_script
-AUTHOR: Cody Precord <cprecord@editra.org>
-LANGUAGE: Python
-@summary: incomplete not used
+Incomplete not used
 
 """
 

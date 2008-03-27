@@ -7,12 +7,9 @@
 ###############################################################################
 
 """
-FILE: prefdlg.py
-LANGUAGE: Python
-SUMMARY:
-The classes and functions contained in this file are used for creating
-the preference dialog that allows for dynamically configuring most of the
-options and setting of the program by setting values in the Profile.
+The classes and functions contained in this file are used for creating the
+preference dialog that allows for dynamically configuring most of the options
+and setting of the program by setting values in the Profile.
 
 @summary: Editra's Preference Dialog
 

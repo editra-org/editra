@@ -7,11 +7,8 @@
 ###############################################################################
 
 """
-FILE: perspective.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-@summary: Provides a perspective management class for saving and loading custom
-          perspectives in the MainWindow.
+Provides a perspective management class for saving and loading custom
+perspectives in the MainWindow.
 
 """
 

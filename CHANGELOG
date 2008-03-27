@@ -26,6 +26,7 @@ NEW: [features/improvements]
 +Jump to matching Brace/Bracket command (default Ctrl+Shift+B)
 +Combinded Add/Delete bookmark into single toggle action
 +Add Serbian translation (contributed by Vladimir Lazic)
++Improved api documentation
 
 BUG FIXES:
 +Misc UI consistancy issues
