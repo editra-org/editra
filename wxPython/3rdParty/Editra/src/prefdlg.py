@@ -1455,13 +1455,13 @@ class KeyBindingPanel(wx.Panel):
 
         # Main Layout
         line_sz = wx.BoxSizer(wx.HORIZONTAL)
-        line_sz.AddMany([spacer,
+        line_sz.AddMany([(5, 1),
                          (wx.StaticLine(self, size=(-1, 1)), 1, wx.EXPAND),
-                         spacer])
+                         (5, 1)])
         line_sz2 = wx.BoxSizer(wx.HORIZONTAL)
-        line_sz2.AddMany([spacer,
+        line_sz2.AddMany([(5, 1),
                          (wx.StaticLine(self, size=(-1, 1)), 1, wx.EXPAND),
-                         spacer])
+                         (5, 1)])
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
         bsizer.AddMany([spacer, (wx.Button(self, wx.ID_REVERT,
                         _("Revert to Default")), 0, wx.ALIGN_LEFT),
