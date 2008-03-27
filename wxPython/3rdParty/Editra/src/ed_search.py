@@ -3,19 +3,17 @@
 # Purpose: Text searching services and utilities                              #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_search                                                          #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#     Provides various search controls and searching services for finding  #
-#  text in a document.                                                     #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_search
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+Provides various search controls and searching services for finding text in a
+document.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -43,7 +41,7 @@ class TextFinder(object):
     """
     def __init__(self, parent, getstc):
         """Initializes the Text Finding Service, the getstc argument
-        needs to be a function that returns reference to stc to perform 
+        needs to be a function that returns reference to stc to perform
         the search in.
         @param getstc: callable function that will return an stc
 
@@ -70,7 +68,7 @@ class TextFinder(object):
 
         """
         # Map of search flags
-        flag_map = {  wx.FR_MATCHCASE : wx.stc.STC_FIND_MATCHCASE, 
+        flag_map = {  wx.FR_MATCHCASE : wx.stc.STC_FIND_MATCHCASE,
                       wx.FR_WHOLEWORD : wx.stc.STC_FIND_WHOLEWORD,
                       wx.FR_MATCHCASE | wx.FR_WHOLEWORD : \
                                         wx.stc.STC_FIND_MATCHCASE | \
@@ -136,7 +134,7 @@ class TextFinder(object):
                 # Couldnt find it anywhere so set screen back to start position
                 pool.ScrollToLine(self._posinfo['scroll'])
                 pool.SetCurrentPos(self._posinfo['start'])
-                pool.SetSelection(self._posinfo['start'], 
+                pool.SetSelection(self._posinfo['start'],
                                   self._posinfo['start'])
                 wx.Bell() # alert user to unfound string
             else:
@@ -170,11 +168,11 @@ class TextFinder(object):
             pool.ScrollToLine(self._posinfo['scroll'])
             pool.SetCurrentPos(self._posinfo['start']) # Move cursor to start
             pool.SetSelection(self._posinfo['start'], self._posinfo['start'])
-            dlg = wx.MessageDialog(self._parent, 
+            dlg = wx.MessageDialog(self._parent,
                                    _("Replace All Finished\n"
                                      "A Total of %d matches were replaced") % \
-                                     replaced, 
-                                    _("All Done"), 
+                                     replaced,
+                                    _("All Done"),
                                     wx.OK | wx.ICON_INFORMATION)
             dlg.CenterOnParent()
             dlg.ShowModal()
@@ -299,7 +297,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         """
         wx.SearchCtrl.__init__(self, parent, id_, value, pos, size, style)
-        
+
         # Attributes
         self._parent     = parent
         # TEMP HACK
@@ -503,7 +501,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         # Dont do search for navigation keys
         if tmp == wx.EmptyString or evt.CmdDown() or \
-           e_key in [wx.WXK_COMMAND, wx.WXK_LEFT, wx.WXK_RIGHT, 
+           e_key in [wx.WXK_COMMAND, wx.WXK_LEFT, wx.WXK_RIGHT,
                      wx.WXK_UP, wx.WXK_DOWN]:
             return
 

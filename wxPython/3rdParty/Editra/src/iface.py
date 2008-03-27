@@ -11,13 +11,13 @@ FILE: iface.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
-  This module contains numerous plugin interfaces and the Extension points
+This module contains numerous plugin interfaces and the Extension points
 that they extend. Included below is a list of interfaces available in this
 module.
 
 Intefaces:
-  * ShelfI: Interface into the L{Shelf}
-  * MainWindowI: Interface into L{ed_main.MainWindow}
+  - ShelfI: Interface into the L{Shelf}
+  - MainWindowI: Interface into L{ed_main.MainWindow}
 
 """
 

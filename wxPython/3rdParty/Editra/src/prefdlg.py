@@ -461,9 +461,9 @@ class GeneralPanel(PrefPanelBase):
 
 class DocumentPanel(PrefPanelBase):
     """Creates a panel with controls for Editra's editing settings
-    @summary: Conatains a L{wx.Notebook} that contains a number of pages
-              with setting controls for how documents are handled by the
-              L{ed_stc.EditraStc} text control.
+    @summary: Contains a wx.Notebook that contains a number of pages with
+              setting controls for how documents are handled by the
+              ed_stc.EditraStc text control.
 
     """
     def __init__(self, parent):
@@ -1299,8 +1299,8 @@ class UpdatePage(wx.Panel):
 
 class AdvancedPanel(PrefPanelBase):
     """Creates a panel for holding advanced configuration options
-    @summary: Contains a L{wx.Notebook} that contains a number of pages
-              with setting controls for configuring the advanced configuration
+    @summary: Contains a wx.Notebook that contains a number of pages with
+              setting controls for configuring the advanced configuration
               options.
 
     """
@@ -1698,7 +1698,7 @@ class KeyBindingPanel(wx.Panel):
 
     def OnListBox(self, evt):
         """Handle listbox selections and update binding display
-        @param wx.CommandEvent
+        @param evt: wx.CommandEvent
 
         """
         if evt.GetId() == ID_MENU_ITEMS:
@@ -1837,9 +1837,9 @@ class ExChoice(wx.Choice):
         return val
 
 class PyFontPicker(wx.Panel):
-    """A slightly enhanced L{wx.FontPickerCtrl} that displays the
-    choosen font in the text control using the choosen font
-    as well as the font's size using nicer formatting.
+    """A slightly enhanced wx.FontPickerCtrl that displays the choosen font in
+    the text control using the choosen font as well as the font's size using
+    nicer formatting.
 
     """
     def __init__(self, parent, id_=wx.ID_ANY, default=wx.NullFont):

@@ -12,12 +12,11 @@ LANGUAGE: Python
 AUTHOR: Cody Precord
 
 SUMMARY:
- This is the main component of the editor that manages all the information
-of the on disk file that it represents in memory. It works with the
-L{ed_style.StyleManager} and L{syntax.syntax.SyntaxManager} to provide an
-editing pane that auto detects and configures itself for type of file that
-is in buffer to do highlighting and other language specific options such as
-commenting code.
+This is the main component of the editor that manages all the information
+of the on disk file that it represents in memory. It works with the StyleManager
+and SyntaxManager to provide an editing pane that auto detects and configures
+itself for type of file that is in buffer to do highlighting and other language
+specific options such as commenting code.
 
 """
 
@@ -57,9 +56,8 @@ NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
 #-------------------------------------------------------------------------#
 class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     """Defines a styled text control for editing text
-    @summary: Subclass of L{wx.stc.StyledTextCtrl} and
-              L{ed_style.StyleMgr}. Manages the documents display
-              and input.
+    @summary: Subclass of wx.stc.StyledTextCtrl and L{ed_style.StyleMgr}.
+              Manages the documents display and input.
 
     """
     ED_STC_MASK_MARKERS = ~wx.stc.STC_MASK_FOLDERS

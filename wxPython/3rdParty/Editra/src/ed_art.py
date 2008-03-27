@@ -3,21 +3,19 @@
 # Purpose: Provides artwork for Editra based on object ids                    #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_art.py                                                          #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#  Provides and ArtProvider class that works off of object ID's to return  #
-# an associated art resource. The provider works hand in hand with Editra's#
-# theme framework that allows for themes to be provided as plugins that    #
-# act as the resource providers for the ArtProvider.                       #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_art.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+Provides and ArtProvider class that works off of object ID's to return an
+associated art resource. The provider works hand in hand with Editra's theme
+framework that allows for themes to be provided as plugins that act as the
+resource providers for the ArtProvider.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -37,7 +35,7 @@ import ed_theme
 
 # Map for default system/wx provided graphic resources.
 # For toolbar ones fall back to ones provided by the default Tango theme
-DEFAULT = { 
+DEFAULT = {
             ed_glob.ID_ADD_BM  : wx.ART_ADD_BOOKMARK,
             ed_glob.ID_BIN_FILE : wx.ART_EXECUTABLE_FILE,
             ed_glob.ID_CDROM   : wx.ART_CDROM,
@@ -76,10 +74,10 @@ DEFAULT = {
 #--------------------------------------------------------------------------#
 
 class EditraArt(wx.ArtProvider):
-    """Editras Art Provider. Provides the mimetype images and loads any custom 
+    """Editras Art Provider. Provides the mimetype images and loads any custom
     user defined icon sets as well. Editra theme specific icons are looked up
     by passing an objects related id as a string to this providers CreateBitmap
-    function for it to talk to the theme resource provider. If the id is not 
+    function for it to talk to the theme resource provider. If the id is not
     a defined object ID it is simply ignored or passed to the the next
     ArtProvider in the chain to handle.
 
@@ -141,7 +139,7 @@ class EditraArt(wx.ArtProvider):
         elif art_id in syntax.SyntaxIds():
             # Dont fail when requesting mime type icons, fallback to the system
             # icon for a normal file in this case.
-            bmp = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, 
+            bmp = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE,
                                            wx.ART_MENU, (16, 16))
 
         if bmp.IsOk() and not bmp.IsNull():

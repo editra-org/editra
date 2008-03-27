@@ -4,24 +4,21 @@
 #          from the contents of a EdStc text buffer (i.e HTML, LaTeX, Rtf)    #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: generator.py                                                       #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#    Provides various methods and classes for generating code and          #
-# transforming code to different formats such as html, latex, rtf with all #
-# the styling and formating intact from how the view is shown in the       #
-# editor.                                                                  #
-#                                                                          #
-#    It also provides a plugin interface that allows for plugins that wish #
-# to provide similar services for manipulating and transforming text.      #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: generator.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+Provides various methods and classes for generating code and transforming code
+to different formats such as html, latex, rtf with all the styling and formating
+intact from how the view is shown in the editor.
+
+It also provides a plugin interface that allows for plugins that wish to provide
+similar services for manipulating and transforming text.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -119,7 +116,7 @@ class Generator(plugin.Plugin):
         @type txt_ctrl: EditraStc
         @return: the generated text
         @rtype: string
-        
+
         """
         gentext = None
         start = time.time()
@@ -134,7 +131,7 @@ class Generator(plugin.Plugin):
 class Html(plugin.Plugin):
     """Transforms the text from a given Editra stc to a fully
     styled html page. Inline CSS is generated and inserted into
-    the head of the Html to style the text regions by default 
+    the head of the Html to style the text regions by default
     unless requested to generate a separate sheet.
 
     """
@@ -196,7 +193,7 @@ class Html(plugin.Plugin):
                "<meta name=\"Generator\" content=\"Editra/%s\">\n" \
                "<meta http-equiv=\"content-type\" content=\"text/html; " \
                "charset=utf-8\">" \
-               "\n</head>" % (util.GetFileName(self.stc.GetFileName()), 
+               "\n</head>" % (util.GetFileName(self.stc.GetFileName()),
                               ed_glob.VERSION)
 
     def GenerateBody(self):
@@ -220,7 +217,7 @@ class Html(plugin.Plugin):
             s_item = StyleItem()
             s_item.SetAttrFromStr(self.stc.GetStyleByName(tag))
             self.css[tag] = CssItem(tag.split('_')[0], s_item)
- 
+
         # Optimizations
         stc = self.stc
         GetStyleAt = stc.GetStyleAt
@@ -481,7 +478,7 @@ class LaTeX(plugin.Plugin):
     """Creates a LaTeX document object from the contents of the
     supplied document reference.
     @todo: performance improvements and wordwrap in generated document
-    
+
     """
     plugin.Implements(GeneratorI)
     def __init__(self, plgmgr):
@@ -527,7 +524,7 @@ class LaTeX(plugin.Plugin):
 
         # Get Document start point info
         last_id = self._stc.GetStyleAt(parse_pos)
-        tmp = self.TransformText(self._stc.GetTextRange(parse_pos, 
+        tmp = self.TransformText(self._stc.GetTextRange(parse_pos,
                                                         parse_pos + 1))
         tag = self._stc.FindTagById(last_id)
         if tag != wx.EmptyString:
@@ -648,7 +645,7 @@ class LaTeX(plugin.Plugin):
         """Returns a comma separated rgb string representation
         of the input hex string. 1.0 = White, 0.0 = Black.
         @param hex_str: hex string to convert to latex rgb format
-        
+
         """
         r_hex = hex_str
         if r_hex[0] == u"#":
@@ -666,8 +663,8 @@ class LaTeX(plugin.Plugin):
         supplied StyleItem.
         @param cmd_name: name of command
         @param s_item: style item to create command for
-        @postcondition: new styling command is created and registered for use 
-        
+        @postcondition: new styling command is created and registered for use
+
         """
         cmd_name = self.CreateCmdName(cmd_name)
         if cmd_name in self._cmds:
@@ -711,7 +708,7 @@ class LaTeX(plugin.Plugin):
         escaping all special characters and sequences.
         @param txt: text to transform
         @return: txt with all special characters transformed
-        
+
         """
         ch_map = { "#" : "\\#", "$" : "\\$", "^" : "\\^",
                    "%" : "\\%", "&" : "\\&", "_" : "\\_",
@@ -728,10 +725,10 @@ class LaTeX(plugin.Plugin):
 #-----------------------------------------------------------------------------#
 
 class Rtf(plugin.Plugin):
-    """Generates a fully styled RTF document from the given text 
+    """Generates a fully styled RTF document from the given text
     controls contents.
     @todo: add support for bold/italic/underline and multiple fonts
-    
+
     """
     plugin.Implements(GeneratorI)
     def __init__(self, mgr):
@@ -813,7 +810,7 @@ class Rtf(plugin.Plugin):
         returning the RTF equvialent of the given stc_doc
         @param stc_doc: document to generate text from
         @return: document marked up in rtf
-    
+
         """
         self._stc = stc_doc
         return ('rtf', self._GenRtf())
@@ -832,7 +829,7 @@ class Rtf(plugin.Plugin):
         @return: menu entry item for this generator
 
         """
-        return wx.MenuItem(menu, self._id, _("Generate %s") % u"RTF", 
+        return wx.MenuItem(menu, self._id, _("Generate %s") % u"RTF",
                            _("Generate a %s version of the " \
                              "current document") % u"RTF")
 
@@ -861,7 +858,7 @@ class RtfColorTbl(object):
 
         """
         object.__init__(self)
-        
+
         # Attributes
         self._index = list() # manages the order of the tables keys
         self._tbl = dict()   # map of style item color vals to rtf defs

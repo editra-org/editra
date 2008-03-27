@@ -10,7 +10,7 @@
 Editra Control Library: EListMixins
 
 Class ListRowHighlighter:
-  This mixin class can be used to add automatic highlighting of alternate rows
+This mixin class can be used to add automatic highlighting of alternate rows
 in a ListCtrl.
 
 """

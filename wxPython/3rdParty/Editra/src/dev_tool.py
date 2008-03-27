@@ -42,23 +42,25 @@ def DEBUGP(statement):
     """Prints debug messages and broadcasts them on the log message channel.
     Subscribing a listener with any of the EDMSG_LOG_* types will recieve its
     messages from this method.
+
+      1. Formatting
+        - [object/module name][msg_type] message string
+
+      2. Message Type:
+        - [err]  : Notes an exception or error condition (high priority)
+        - [warn] : Notes a error that is not severe (medium priority)
+        - [info] : General information message (normal priority)
+        - [evt]  : Event related message (normal priority)
+
+    Example:
+      >>> DEBUGP("[ed_main][err] File failed to open")
+
     @param statement: Should be a formatted string that starts with two
                       identifier blocks. The first is used to indicate the
                       source of the message and is used as the primary means
                       of filtering. The second block is the type of message,
                       this is used to indicate the priority of the message and
                       is used as the secondary means of filtering.
-
-        1. Formatting
-            - [object/module name][msg_type] message string
-
-        2. Message Type:
-            - [err]  : Notes an exception or error condition (high priority)
-            - [warn] : Notes a error that is not severe (medium priority)
-            - [info] : General information message (normal priority)
-            - [evt]  : Event related message (normal priority)
-
-    @example: DEBUGP([ed_main][err] File failed to open)
 
     """
     # Create a LogMsg object from the statement string
@@ -159,42 +161,27 @@ class LogMsg:
 
     @property
     def Expired(self):
-        """Has this message already been retrieved
-        @return: bool
-
-        """
+        """Has this message already been retrieved"""
         return not self._ok
 
     @property
     def Origin(self):
-        """Where the message came from
-        @return: string
-
-        """
+        """Where the message came from"""
         return self._msg['msrc']
 
     @property
     def TimeStamp(self):
-        """Property for accessing timestamp
-        @return: long int
-
-        """
+        """Property for accessing timestamp"""
         return self._msg['tstamp']
 
     @property
     def Type(self):
-        """The messages level type
-        @return string (err, warn, info, evt)
-
-        """
+        """The messages level type"""
         return self._msg['lvl']
 
     @property
     def Value(self):
-        """Returns the message part of the log string
-        @return: string
-
-        """
+        """Returns the message part of the log string"""
         return self._msg['mstr']
 
 #-----------------------------------------------------------------------------#

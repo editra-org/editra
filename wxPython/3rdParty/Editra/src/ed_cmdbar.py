@@ -8,17 +8,15 @@
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_cmdbar.py                                                       #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#    This class creates a custom panel that can hide and show different    #
-# controls based an id value. The panel is generally between 24-32 pixels  #
-# in height but can grow to fit the controls inserted in it. The           #
-# the background is painted with a gradient using system defined colors.   #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_cmdbar.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+This class creates a custom panel that can hide and show different
+controls based an id value. The panel is generally between 24-32 pixels
+in height but can grow to fit the controls inserted in it. The
+the background is painted with a gradient using system defined colors.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -204,7 +202,7 @@ class CommandBar(wx.Panel):
         if wx.Platform == '__WXGTK__':
             spacer = (4, 4)
         v_sizer.Add(spacer)
-        search = ed_search.EdSearchCtrl(self, ID_SEARCH_CTRL, 
+        search = ed_search.EdSearchCtrl(self, ID_SEARCH_CTRL,
                                          menulen=5, size=(180, -1))
         v_sizer.Add(search, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
@@ -225,15 +223,15 @@ class CommandBar(wx.Panel):
             for win in [f_lbl, match_case, next_btn, pre_btn]:
                 win.SetFont(wx.SMALL_FONT)
 
-        ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
-                            ((5, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL), 
-                            ((8, 0)), 
+        ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL),
+                            ((5, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL),
+                            ((8, 0)),
                             (match_case, 0, wx.ALIGN_CENTER_VERTICAL)])
 
         t_sizer.Add(ctrl_sizer, 0, wx.ALIGN_CENTER_VERTICAL)
 
         h_sizer.AddMany([(f_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                         ((5, 5)), (v_sizer, 0, wx.ALIGN_CENTER_VERTICAL), 
+                         ((5, 5)), (v_sizer, 0, wx.ALIGN_CENTER_VERTICAL),
                          (t_sizer, 0, wx.ALIGN_CENTER_VERTICAL)])
         self._sizers['search'] = h_sizer
         self._sizers['h_sizer'].Add(h_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)
@@ -324,7 +322,7 @@ class CommandBar(wx.Panel):
                 ctrl = self.InstallCtrl(id_)
 
             # First Hide everything
-            for kid in (list(self._sizers['search'].GetChildren()) + 
+            for kid in (list(self._sizers['search'].GetChildren()) +
                         list(self._sizers['goto'].GetChildren()) +
                         list(self._sizers['cmd'].GetChildren())):
                 kid.Show(False)
@@ -371,7 +369,7 @@ class CommandBar(wx.Panel):
 class CommandExecuter(wx.SearchCtrl):
     """Part of the Vi emulation, opens a minibuffer to execute EX commands.
     @note: based on search ctrl so we get the nice roudned edges on wxmac.
-    
+
     """
     RE_GO_BUFFER = re.compile('[0-9]*[nN]{1,1}')
     RE_GO_WIN = re.compile('[0-9]*n[wW]{1,1}')
@@ -380,7 +378,7 @@ class CommandExecuter(wx.SearchCtrl):
 
     def __init__(self, parent, id_, size=wx.DefaultSize):
         """Initializes the CommandExecuter"""
-        wx.SearchCtrl.__init__(self, parent, id_, size=size, 
+        wx.SearchCtrl.__init__(self, parent, id_, size=size,
                                style=wx.TE_PROCESS_ENTER|wx.WANTS_CHARS)
 
         # Attributes
@@ -468,7 +466,7 @@ class CommandExecuter(wx.SearchCtrl):
         else:
             self.Clear()
             wx.Bell()
-            
+
     def CommandPush(self, cmd):
         """Push a command to the stack popping as necessary to
         keep stack size less than MAX (currently 25 commands).
@@ -515,7 +513,7 @@ class CommandExecuter(wx.SearchCtrl):
             cmd = 'wq'
 
         if cmd.startswith(u'w'):
-            frame.OnSave(wx.MenuEvent(wx.wxEVT_COMMAND_MENU_SELECTED, 
+            frame.OnSave(wx.MenuEvent(wx.wxEVT_COMMAND_MENU_SELECTED,
                                                      ed_glob.ID_SAVE))
             if self.RE_WGO_BUFFER.match(cmd):
                 self.GoBuffer(cmd[1:])
@@ -672,7 +670,7 @@ class CommandExecuter(wx.SearchCtrl):
             cstr = 'e '
         else:
             return
-            
+
         cmd = cmd.replace(cstr, u'', 1).strip()
         paths = self.GetPaths(cmd, cstr == 'e ')
         self._popup.SetChoices(paths)
@@ -689,7 +687,7 @@ class CommandExecuter(wx.SearchCtrl):
     def OnEnter(self, evt):
         """Get the currently entered command string and execute it.
         @postcondition: ctrl is cleared and command is executed
-        
+
         """
         if self._popup.IsShown():
             psel = self._popup.GetSelection()
@@ -790,13 +788,13 @@ class CommandExecuter(wx.SearchCtrl):
         @postcondition: Editor begins exit, confirming file saves
 
         """
-        wx.PostEvent(self.GetTopLevelParent(), 
+        wx.PostEvent(self.GetTopLevelParent(),
                      wx.CloseEvent(wx.wxEVT_CLOSE_WINDOW))
 
     def SetValue(self, value):
         """Overrides the controls default function to allow for automatic
         resizing of the control when text is added.
-        @param val: string to set value of control to
+        @param value: string to set value of control to
 
         """
         wx.SearchCtrl.SetValue(self, value)
@@ -887,10 +885,10 @@ class PopupList(wx.Frame):
         wx.Frame.__init__(self, parent, pos=pos, style=style)
 
         # Attributes
-        self._list = wx.ListBox(self, choices=choices, 
-                                style=wx.LC_REPORT | wx.LC_SINGLE_SEL | 
+        self._list = wx.ListBox(self, choices=choices,
+                                style=wx.LC_REPORT | wx.LC_SINGLE_SEL |
                                       wx.LC_NO_HEADER | wx.NO_BORDER)
-        
+
         # Layout
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self._list, 1, wx.EXPAND)
@@ -914,7 +912,7 @@ class PopupList(wx.Frame):
 
         """
         val = self._list.GetStringSelection()
-        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY, 
+        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
                                           self.GetId(), val, self._list)
         wx.PostEvent(self.GetParent(), evt)
         self.ActivateParent()
@@ -985,7 +983,7 @@ class PopupList(wx.Frame):
         """Handle a selection in list by posting the result to
         the parent.
         @param evt: Event that called this handler
-        
+
         """
         self.__PostEvent()
 
@@ -1044,7 +1042,7 @@ class PopupList(wx.Frame):
                 self._list.SetSelection(0)
                 self.ActivateParent()
         else:
-            matches = [item for item in self._list.GetItems() 
+            matches = [item for item in self._list.GetItems()
                        if item.startswith(prefix) ]
             if len(matches):
                 self._list.SetStringSelection(sorted(matches)[0])
@@ -1061,9 +1059,9 @@ class PopupWinList(wx.PopupWindow):
 
         # Attributes
         self._list = wx.ListBox(self, choices=choices, pos=(0, 0),
-                                style=wx.LC_REPORT | wx.LC_SINGLE_SEL | 
+                                style=wx.LC_REPORT | wx.LC_SINGLE_SEL |
                                       wx.LC_NO_HEADER | wx.NO_BORDER)
-        
+
         # Layout
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self._list, 0, wx.EXPAND)
@@ -1117,7 +1115,7 @@ class PopupWinList(wx.PopupWindow):
             if len(self._list.GetStrings()):
                 self._list.SetSelection(0)
         else:
-            matches = [item for item in self._list.GetItems() 
+            matches = [item for item in self._list.GetItems()
                        if item.startswith(prefix) ]
             if len(matches):
                 self._list.SetStringSelection(sorted(matches)[0])

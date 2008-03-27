@@ -3,31 +3,27 @@
 # Purpose: Global IDs/objects used throughout Editra                          #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_glob.py                                                         #
-# @author: Cody Precord                                                    #
-#                                                                          #
-# @summary:                                                                #
-#   This file contains variables that are or may be used in multiple       #
-#   files and libraries within the project. Its pupose is to create a      #
-#   globally accessable access point for all common variables in the       #
-#   project.                                                               #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_glob.py
+@author: Cody Precord
+
+@summary: This file contains variables that are or may be used in multiple files
+          and libraries within the project. Its pupose is to create a globally
+          accessable access point for all common variables in the project.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN', 
-            'ID_CLOSE', 'ID_CLOSEALL', 'ID_SAVE', 'ID_SAVEAS', 'ID_SAVEALL', 
-            'ID_SAVE_PROFILE', 'ID_LOAD_PROFILE', 'ID_PRINT', 'ID_PRINT_PRE', 
-            'ID_PRINT_SU', 'ID_EXIT', 'ID_UNDO', 'ID_REDO', 'ID_CUT', 
+__all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
+            'ID_CLOSE', 'ID_CLOSEALL', 'ID_SAVE', 'ID_SAVEAS', 'ID_SAVEALL',
+            'ID_SAVE_PROFILE', 'ID_LOAD_PROFILE', 'ID_PRINT', 'ID_PRINT_PRE',
+            'ID_PRINT_SU', 'ID_EXIT', 'ID_UNDO', 'ID_REDO', 'ID_CUT',
             'ID_COPY', 'ID_PASTE', 'ID_SELECTALL', 'ID_ADD_BM', 'ID_DEL_BM',
             'ID_DEL_ALL_BM', 'ID_LINE_AFTER', 'ID_LINE_BEFORE', 'ID_CUT_LINE',
             'ID_COPY_LINE', 'ID_JOIN_LINES', 'ID_TRANSPOSE', 'ID_FIND',

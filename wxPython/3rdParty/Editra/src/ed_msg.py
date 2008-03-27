@@ -12,7 +12,7 @@ FILE: ed_msg.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
-    This module provides a light wrapping of a slightly modified pubsub module
+This module provides a light wrapping of a slightly modified pubsub module
 to give it a lighter and simpler syntax for usage. It exports three main
 methods. The first `PostMessage` which is used to post a message for all
 interested listeners. The second `Subscribe` which allows an object to subscribe
@@ -174,19 +174,19 @@ def Subscribe(callback, msgtype=EDMSG_ALL):
     is a class object that has two attributes, one for the message type and the
     other for the message data. See below example for how these two values can
     be accessed.
+      >>> def MyCallback(msg):
+              print "Msg Type: ", msg.GetType(), "Msg Data: ", msg.GetData()
+
+      >>> class Foo:
+              def MyCallbackMeth(self, msg):
+                  print "Msg Type: ", msg.GetType(), "Msg Data: ", msg.GetData()
+
+      >>> Subscribe(MyCallback, EDMSG_SOMETHING)
+      >>> myfoo = Foo()
+      >>> Subscribe(myfoo.MyCallBackMeth, EDMSG_SOMETHING)
+
     @param callback: Callable function or bound method
     @keyword msgtype: Message to subscribe to (default to all)
-    @example:
-        def MyCallback(msg):
-            print "Msg Type: ", msg.GetType(), "Msg Data: ", msg.GetData()
-
-        class Foo:
-            def MyCallbackMeth(self, msg):
-                print "Msg Type: ", msg.GetType(), "Msg Data: ", msg.GetData()
-
-        Subscribe(MyCallback, EDMSG_SOMETHING)
-        myfoo = Foo()
-        Subscribe(myfoo.MyCallBackMeth, EDMSG_SOMETHING)
 
     """
     Publisher().subscribe(callback, msgtype)

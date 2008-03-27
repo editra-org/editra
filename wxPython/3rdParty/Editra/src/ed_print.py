@@ -7,21 +7,18 @@
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_print                                                           #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-# Provides a printer class can render the text from an stc into MemoryDC   #
-# that is used for printing. Much of the code for scaling in this file is  #
-# derived from a python module called STCPrinting written by               #
-# Riaan Booysen.                                                           #
-#                                                                          #
-# METHODS:                                                                 #
-# EdPrinter: Class for managing printing and providing print dialogs       #
-# EdPrintout: Scales and renders the given document to a printer.          #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_print
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+Provides a printer class can render the text from an stc into MemoryDC that is
+used for printing. Much of the code for scaling in this file is derived from a
+python module called STCPrinting written by Riaan Booysen.
+
+METHODS:
+  - L{EdPrinter}: Class for managing printing and providing print dialogs
+  - L{EdPrintout}: Scales and renders the given document to a printer.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -107,7 +104,7 @@ class EdPrinter:
             dlg_data = printer.GetPrintDialogData()
             self.print_data = wx.PrintData(dlg_data.GetPrintData())
         printout.Destroy()
-        
+
     def SetColourMode(self, mode_str):
         """Sets the color mode that the text is to be rendered with
         @param mode_str: mode to set the printer to use
@@ -162,7 +159,7 @@ class EdPrintout(wx.Printout):
 
         """
         line_height = self.stc.TextHeight(0)
-        
+
         # Calculate sizes
         dc = self.GetDC()
         dw, dh = dc.GetSizeTuple()
@@ -189,7 +186,7 @@ class EdPrintout(wx.Printout):
         # Page Number
         page_lbl = _("Page: %d") % page
         pg_lbl_w, pg_lbl_h = dc.GetTextExtent(page_lbl)
-        dc.DrawText(page_lbl, int(dw/scale/2 - pg_lbl_w/2), 
+        dc.DrawText(page_lbl, int(dw/scale/2 - pg_lbl_w/2),
                     int((text_area_h + margin_h) / scale + pg_lbl_h * 2))
 
         # Render the STC window into a DC for printing
@@ -200,11 +197,11 @@ class EdPrintout(wx.Printout):
         end_point = self.stc.FormatRange(True, start_pos, end_pos, dc, dc,
                                         wx.Rect(int(margin_w/scale),
                                                 int(margin_h/scale),
-                                                max_w, 
+                                                max_w,
                                                 int(text_area_h/scale)+1),
                                         wx.Rect(0, (page - 1) * \
                                                 self.lines_pp * \
-                                                line_height, max_w, 
+                                                line_height, max_w,
                                                 line_height * self.lines_pp))
 
         if end_point < end_pos:

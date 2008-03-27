@@ -15,17 +15,17 @@ obfustication just for fun ;-).
 
 USAGE:
 Encrypt:
-  1) Get the password string to encrypt
-  2) Generate a new random salt with os.urandom() or some other randomly 
+  1. Get the password string to encrypt
+  2. Generate a new random salt with os.urandom() or some other randomly 
      generated string for each password to use as an encryption key
-  3) Encrypt the password by calling Encrypt(password, salt)
-  4) Save the salt somewhere else
-  5) Write out the encrypted password to your config file
+  3. Encrypt the password by calling Encrypt(password, salt)
+  4. Save the salt somewhere else
+  5. Write out the encrypted password to your config file
 
 Decrypt:
-  1) Get the encrypted password string
-  2) Get the associated salt
-  3) Decrypt and get the orignal password by calling 
+  1. Get the encrypted password string
+  2. Get the associated salt
+  3. Decrypt and get the orignal password by calling 
      Decrypt(encrypted_passwd, salt)
 
 EXAMPLE:
@@ -39,7 +39,7 @@ eNoNysERADAIArCVUAFx/8XauzyTqTEtdKEXoQIWCbCZjaM74qhPlhK4f+BVPKTTyQP7JQ5i
 HelloWorld
 
 Finally:
-  This message will self destruct in 5 seconds ...
+This message will self destruct in 5 seconds ...
 
 """
 

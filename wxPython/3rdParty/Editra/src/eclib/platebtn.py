@@ -43,27 +43,28 @@ a solid color it may cause the control to loose its transparent appearance.
 Other attributes can be configured after the control has been created. The
 settings that are currently available are as follows:
 
-SetBitmap: Change/Add the bitmap at any time and the control will resize and
-           refresh to display it.
-SetLabelColor: Explicitly set text colors
-SetMenu: Set the button to have a popupmenu. When a menu is set a small drop
-         arrow will be drawn on the button that can then be clicked to show
-         a menu.
-SetPressColor: Use a custom highlight color
+  - SetBitmap: Change/Add the bitmap at any time and the control will resize and
+               refresh to display it.
+  - SetLabelColor: Explicitly set text colors
+  - SetMenu: Set the button to have a popupmenu. When a menu is set a small drop
+             arrow will be drawn on the button that can then be clicked to show
+             a menu.
+  - SetPressColor: Use a custom highlight color
 
 
 Overridden Methods Inherited from PyControl:
 
-SetFont: Changing the font is one way to set the size of the button, by default
-         the control will inherit its font from its parent.
+  - SetFont: Changing the font is one way to set the size of the button, by
+             default the control will inherit its font from its parent.
 
-SetWindowVariant: Setting the window variant will cause the control to resize to
-                  the corresponding variant size. However if the button is using
-                  a bitmap the bitmap will remain unchanged and only the font
-                  will be adjusted.
+  - SetWindowVariant: Setting the window variant will cause the control to
+                      resize to the corresponding variant size. However if the
+                      button is using a bitmap the bitmap will remain unchanged
+                      and only the font will be adjusted.
 
 Requirements:
-    This module requires python2.4 or higher and wxPython2.8 or higher
+  - python2.4 or higher
+  - wxPython2.8 or higher
 
 """
 

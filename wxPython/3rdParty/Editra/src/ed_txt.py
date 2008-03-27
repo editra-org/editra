@@ -316,7 +316,7 @@ class EdFile(object):
 # Utility Function
 def CheckBom(line):
     """Try to look for a bom byte at the begining of the given line
-    @param txt: line (first line) of a file
+    @param line: line (first line) of a file
     @return: encoding or None
 
     """
@@ -376,7 +376,7 @@ def EncodeString(string, encoding=None):
     default encoding will be used if None is given for the
     encoding.
     @param string: unicode object to encode into a string
-    @keyword: encoding to use for conversion
+    @keyword encoding: encoding to use for conversion
 
     """
     if not encoding:

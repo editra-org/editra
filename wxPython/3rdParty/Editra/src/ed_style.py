@@ -12,7 +12,7 @@ FILE: ed_style.py
 AUTHOR: Cody Precord                                                     
 LANGUAGE: Python                                                         
 SUMMARY:                                                                 
-  Provides a system for managing styles in the text control. Compiles the data
+Provides a system for managing styles in the text control. Compiles the data
 in an Editra Style Sheet to a format that Scintilla can understand. The
 specification of Editra Style Sheets that this module implements can be found
 either in the _docs_ folder of the source distribution or on Editra's home page
@@ -61,13 +61,13 @@ class StyleItem(object):
         @keyword size: Specifies font point size (int/formatted string)
 
         SPECIFICATION:
-          DATA FORMATS:
-            #123456       = hex color code
-            #123456,bold  = hex color code + extra style
-            Monaco        = Font Face Name
-            %(primary)s   = Format string to be swapped at runtime
-            10            = A font point size
-            %(size)s      = Format string to be swapped at runtime
+          - DATA FORMATS:
+            - #123456       = hex color code
+            - #123456,bold  = hex color code + extra style
+            - Monaco        = Font Face Name
+            - %(primary)s   = Format string to be swapped at runtime
+            - 10            = A font point size
+            - %(size)s      = Format string to be swapped at runtime
         """
         object.__init__(self)
         self.null = False

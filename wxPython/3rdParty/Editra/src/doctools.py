@@ -123,7 +123,6 @@ class DocPositionMgr(object):
     def WriteBook(self):
         """Writes the collection of files=pos to the config file
         @postcondition: in memory doc data is written out to disk
-        @fixme: fix unicode handling instead of trapping errors (UnicodeDecode)
 
         """
         writer = util.GetFileWriter(self.GetBook(), sys.getfilesystemencoding())
