@@ -19,6 +19,8 @@ Intefaces:
   - ShelfI: Interface into the L{Shelf}
   - MainWindowI: Interface into L{ed_main.MainWindow}
 
+@summary: Main Plugin interface defintions
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

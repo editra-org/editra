@@ -8,13 +8,12 @@
 ###############################################################################
 
 """
-FILE: plugdlg.py                                                         
-AUTHOR: Cody Precord                                                     
-LANGUAGE: Python                                                         
-SUMMARY:                                                                 
-Provides a dialog for downloading, installing and configuring plugins for 
-Editra.
-                                                                      
+FILE: plugdlg.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+@summary: Provides a dialog for downloading, installing and configuring plugins
+          or Editra.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -64,8 +63,8 @@ def MakeThemeTool(tool_id):
     base = wx.ArtProvider.GetBitmap(str(tool_id), wx.ART_TOOLBAR)
     Profile_Set('ICON_SZ', osize)
     if not base.IsOk() or base.GetSize() != (32, 32):
-        base = wx.ArtProvider.GetBitmap(wx.ART_WARNING, 
-                                        wx.ART_TOOLBAR, 
+        base = wx.ArtProvider.GetBitmap(wx.ART_WARNING,
+                                        wx.ART_TOOLBAR,
                                         size=(32, 32))
 
     over = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PLUGMGR), wx.ART_MENU)
@@ -79,7 +78,7 @@ def MakeThemeTool(tool_id):
         mdc.SelectObject(wx.NullBitmap)
 
     return base
-    
+
 #--------------------------------------------------------------------------#
 
 class PluginDialog(wx.Frame):
@@ -101,7 +100,7 @@ class PluginDialog(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.SetStatusBar(pstatbar.ProgressStatusBar(self, style=wx.SB_FLAT))
         self._nb = PluginPages(self)
-        
+
         # Layout Dialog
         sizer.Add(self._nb, 1, wx.EXPAND)
         self._title = title
@@ -178,11 +177,11 @@ class PluginPages(wx.Toolbook):
         self.SetImageList(self._imglst)
 
         # Add Pages
-        self.AddPage(self._config, _("Configure"), 
+        self.AddPage(self._config, _("Configure"),
                      imageId=self._imgind[CONFIG_PG])
-        self.AddPage(self._download, _("Download"), 
+        self.AddPage(self._download, _("Download"),
                      imageId=self._imgind[DOWNLOAD_PG])
-        self.AddPage(self._install, _("Install"), 
+        self.AddPage(self._install, _("Install"),
                      imageId=self._imgind[INSTALL_PG])
         self.SetSelection(CONFIG_PG)
 
@@ -236,10 +235,10 @@ class ConfigPanel(wx.Panel):
 
         # Attrtibutes
         self._list = PluginListCtrl(self)
-        
+
         # Layout Panel
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(wx.StaticText(self, wx.ID_ANY, 
+        sizer.Add(wx.StaticText(self, wx.ID_ANY,
                    _("To enable a plugin check the box next to its label")),
                    0, wx.ALIGN_CENTER_HORIZONTAL)
         sizer.Add((10, 10))
@@ -251,7 +250,7 @@ class ConfigPanel(wx.Panel):
 
     def GetItemIdentifier(self, name):
         """Gets the named item and returns its identifier. The
-        identifier is the combination of the name and version 
+        identifier is the combination of the name and version
         strings.
         @param name: name of item in list
         @type name: string
@@ -314,7 +313,7 @@ class ConfigPanel(wx.Panel):
             mod = sys.modules.get(item)
             pin = PluginData()
             pin.SetName(item)
-            pin.SetDescription(getattr(mod, '__doc__', 
+            pin.SetDescription(getattr(mod, '__doc__',
                                        _("No Description Available")))
             pin.SetAuthor(getattr(mod, '__author__', _("Unknown")))
             pin.SetVersion(str(getattr(mod, '__version__', _("Unknown"))))
@@ -598,7 +597,7 @@ def _GetPluginListData(url=PLUGIN_REPO):
     """Gets the list of plugins and their related meta data
     as a string and returns it.
     @return: list of data of available plugins from website
-    
+
     """
     text = u''
     try:
@@ -668,7 +667,7 @@ class InstallPanel(wx.Panel):
                              "and hit Delete or Backspace."))
         self._install = wx.ListBox(self, wx.ID_ANY, style=wx.LB_SORT)
         self._install.SetToolTip(toolt)
-        self._install.SetDropTarget(util.DropTargetFT(self._install, 
+        self._install.SetDropTarget(util.DropTargetFT(self._install,
                                                       None, self.OnDrop))
         self._instb = wx.Button(self, self.ID_INSTALL, _("Install"))
         self._instb.Disable()
@@ -685,7 +684,7 @@ class InstallPanel(wx.Panel):
 
         # Layout Panel
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.AddMany([(lbl, 0, wx.ALIGN_CENTER), 
+        sizer.AddMany([(lbl, 0, wx.ALIGN_CENTER),
                        (self._install, 1, wx.EXPAND),
                        ((5, 5))])
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -748,7 +747,7 @@ class InstallPanel(wx.Panel):
             grand_p = self.GetTopLevelParent()
             grand_p.SetStatusText(_("Successfully Installed Plugins"), 0)
             dlg = wx.MessageDialog(self, _("Go to configuration page?"),
-                                   _("Finished Installing Plugins"), 
+                                   _("Finished Installing Plugins"),
                                    style=wx.YES_NO | wx.CENTER | \
                                          wx.ICON_INFORMATION)
             result = dlg.ShowModal()
@@ -761,7 +760,7 @@ class InstallPanel(wx.Panel):
             self._instb.Disable()
         else:
             self.GetGrandParent().SetStatusText(_("Error"), 1)
-            dlg = wx.MessageDialog(self, 
+            dlg = wx.MessageDialog(self,
                                    _("Failed to install %d plugins") % \
                                    self._install.GetCount(),
                                    _("Installation Error"),
@@ -852,7 +851,7 @@ class InstallPanel(wx.Panel):
 
 #--------------------------------------------------------------------------#
 
-class PluginListCtrl(wx.ListCtrl, 
+class PluginListCtrl(wx.ListCtrl,
                      listmix.ListCtrlAutoWidthMixin,
                      listmix.CheckListCtrlMixin,
                      elistmix.ListRowHighlighter):
@@ -867,8 +866,8 @@ class PluginListCtrl(wx.ListCtrl,
         @param parent: parent window of this control
 
         """
-        wx.ListCtrl.__init__(self, parent, wx.ID_ANY, 
-                             wx.DefaultPosition, wx.DefaultSize, 
+        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
+                             wx.DefaultPosition, wx.DefaultSize,
                              style=wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES)
         elistmix.ListRowHighlighter.__init__(self)
 
@@ -900,7 +899,7 @@ class PluginListCtrl(wx.ListCtrl,
         @postcondition: checkbox is checked/unchecked and parent is notified
 
         """
-        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY, 
+        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
                                          index, flag, self)
         wx.PostEvent(self.GetParent(), evt)
         listmix.CheckListCtrlMixin.OnCheckItem(self, index, flag)
@@ -918,15 +917,15 @@ class PluginListCtrl(wx.ListCtrl,
             if pname < self.GetItemText(item):
                 self.InsertStringItem(item, pi_data.GetName().strip())
                 self.SetStringItem(item, 1, pi_data.GetDescription().strip())
-                self.SetStringItem(item, 2, re.sub(r"\<+.*\>", '', 
+                self.SetStringItem(item, 2, re.sub(r"\<+.*\>", '',
                                                    pi_data.GetAuthor().strip()))
                 self.SetStringItem(item, 3, pi_data.GetVersion().strip())
                 self.CheckItem(item, check)
                 break
         else:
-            self.Append((pi_data.GetName().strip(), 
-                         pi_data.GetDescription().strip(), 
-                         re.sub(r"\<+.*\>", '', pi_data.GetAuthor().strip()), 
+            self.Append((pi_data.GetName().strip(),
+                         pi_data.GetDescription().strip(),
+                         re.sub(r"\<+.*\>", '', pi_data.GetAuthor().strip()),
                          pi_data.GetVersion().strip()))
 
             self.CheckItem(self.GetItemCount()-1, check)

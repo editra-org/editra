@@ -11,11 +11,12 @@
 FILE: ed_cmdbar.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
-SUMMARY:
 This class creates a custom panel that can hide and show different
 controls based an id value. The panel is generally between 24-32 pixels
 in height but can grow to fit the controls inserted in it. The
 the background is painted with a gradient using system defined colors.
+
+@summary: The buffers CommandBar control with search/goto line/command entry
 
 """
 

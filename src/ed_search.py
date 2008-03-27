@@ -10,9 +10,8 @@
 FILE: ed_search
 AUTHOR: Cody Precord
 LANGUAGE: Python
-SUMMARY:
-Provides various search controls and searching services for finding text in a
-document.
+@summary: Provides various search controls and searching services for finding
+          text in a document.
 
 """
 

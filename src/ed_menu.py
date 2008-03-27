@@ -10,9 +10,10 @@
 FILE: ed_menu.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
-SUMMARY:
-Provides an advanced menu class for easily creating menus and setting their
-related bitmaps when available from Editra's ArtProvider.
+@summary: Provides an advanced menu class for easily creating menus and setting
+          their related bitmaps when available from Editra's ArtProvider. The
+          Keybinder class for managing keybindings and profiles is also provided
+          by this module.
 
 """
 

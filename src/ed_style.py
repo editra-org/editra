@@ -8,16 +8,19 @@
 ###############################################################################
 
 """
-FILE: ed_style.py                                                        
-AUTHOR: Cody Precord                                                     
-LANGUAGE: Python                                                         
-SUMMARY:                                                                 
+FILE: ed_style.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
 Provides a system for managing styles in the text control. Compiles the data
 in an Editra Style Sheet to a format that Scintilla can understand. The
 specification of Editra Style Sheets that this module implements can be found
 either in the _docs_ folder of the source distribution or on Editra's home page
 http://editra.org/?page=docs&doc=ess_spec.
-                                                                      
+
+@summary: Style management system for managing the syntax highlighting of all
+          buffers
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -47,11 +50,11 @@ class StyleItem(object):
     """A storage class for holding styling information
     @todo: The extra Attributes should be saved as a separate attribute in the
            StyleItem. This currenlty causes problems when customizing values in
-           the StyleEditor. Changing this is fairly easy in this class but it 
+           the StyleEditor. Changing this is fairly easy in this class but it
            will require changes to the StyleMgr and Editor as well.
 
     """
-    def __init__(self, fore=wx.EmptyString, back=wx.EmptyString, 
+    def __init__(self, fore=wx.EmptyString, back=wx.EmptyString,
                        face=wx.EmptyString, size=wx.EmptyString):
         """Initiliazes the Style Object.
 
@@ -183,7 +186,7 @@ class StyleItem(object):
     #---- Set Functions ----#
     def SetAttrFromStr(self, style_str):
         """Takes style string and sets the objects attributes
-        by parsing the string for the values. Only sets or 
+        by parsing the string for the values. Only sets or
         overwrites values does not zero out previously set values.
         Returning True if value(s) are set or false otherwise.
         @param style_str: style information string (i.e fore:#888444)
@@ -285,7 +288,7 @@ class StyleItem(object):
 
     def SetNamedAttr(self, attr, value):
         """Sets a StyleItem attribute by named string.
-        @note: This is not intended to be used for setting extra 
+        @note: This is not intended to be used for setting extra
                attributes such as bold, eol, ect..
         @param attr: a particular attribute to set (i.e fore, face, back, size)
         @param value: value to set the attribute to contain
@@ -304,7 +307,7 @@ class StyleItem(object):
 
 class StyleMgr(object):
     """Manages style definitions and provides them on request.
-    Also provides functionality for loading custom style sheets and 
+    Also provides functionality for loading custom style sheets and
     modifying styles during run time.
 
     """
@@ -345,7 +348,7 @@ class StyleMgr(object):
             if key in ('select_style', 'whitespace_style'):
                 sty_dict[key] = NullStyleItem()
             else:
-                sty_dict[key] = StyleItem("#000000", "#FFFFFF", 
+                sty_dict[key] = StyleItem("#000000", "#FFFFFF",
                                           "%(primary)s", "%(size)d")
         return sty_dict
 
@@ -365,18 +368,18 @@ class StyleMgr(object):
         if font is not None:
             mfont = font
         else:
-            mfont = wx.Font(10, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, 
+            mfont = wx.Font(10, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_NORMAL)
             Profile_Set('FONT1', mfont, 'font')
         primary = mfont.GetFaceName()
 
         font = Profile_Get('FONT2', 'font', None)
         if font is None:
-            font = wx.Font(10, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, 
+            font = wx.Font(10, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_NORMAL)
             Profile_Set('FONT2', font, 'font')
         secondary = font.GetFaceName()
-        faces = { 
+        faces = {
                   self.FONT_PRIMARY   : primary,
                   self.FONT_SECONDARY : secondary,
                   self.FONT_SIZE  : mfont.GetPointSize(),
@@ -431,7 +434,7 @@ class StyleMgr(object):
         @keyword hex: return a hex string or colour object
         @type hex: bool
         @return: wx.Colour of default style background or hex value
-        @rtype: wx.Colour or string 
+        @rtype: wx.Colour or string
 
         """
         back = self.GetItemByName('default_style').GetBack()
@@ -468,10 +471,10 @@ class StyleMgr(object):
 
         """
         if primary:
-            font = wx.FFont(self.fonts[self.FONT_SIZE], wx.DEFAULT, 
+            font = wx.FFont(self.fonts[self.FONT_SIZE], wx.DEFAULT,
                             face=self.fonts[self.FONT_PRIMARY])
         else:
-            font = wx.FFont(self.fonts[self.FONT_SIZE2], wx.DEFAULT, 
+            font = wx.FFont(self.fonts[self.FONT_SIZE2], wx.DEFAULT,
                             face=self.fonts[self.FONT_SECONDARY])
         return font
 
@@ -489,7 +492,7 @@ class StyleMgr(object):
             return wx.EmptyString
 
     def GetStyleSet(self):
-        """Returns the current set of styles or the default set if 
+        """Returns the current set of styles or the default set if
         there is no current set.
         @return: current style set dictionary
         @rtype: dict
@@ -600,7 +603,7 @@ class StyleMgr(object):
         # Tree Level 2 Build small trees of tag and style attributes
         # Tree Level 3 Branch tree into TAG => Attr => Value String
         for branch in style_tree:
-            tmp2 = [leaf.strip().split(u":") 
+            tmp2 = [leaf.strip().split(u":")
                     for leaf in branch[1].strip().split(u";")]
             if len(tmp2) and tmp2[-1][0] == wx.EmptyString:
                 tmp2.pop()
@@ -645,7 +648,7 @@ class StyleMgr(object):
             else:
                 style_str = wx.EmptyString
                 for attrib in style_dict[style_def]:
-                    values = [ val for val in attrib[1].split(u" ") 
+                    values = [ val for val in attrib[1].split(u" ")
                                if val != wx.EmptyString ]
                     if len(values) > 2:
                         self.LOG("[ed_style][warn] Only one extra " +
@@ -684,8 +687,8 @@ class StyleMgr(object):
                         value = values[0]
                     else:
                         continue
-                    
-                    style_str = u",".join([style_str, 
+
+                    style_str = u",".join([style_str,
                                            u":".join([attrib[0], value])])
 
                 if style_str != wx.EmptyString:
@@ -773,7 +776,7 @@ class StyleMgr(object):
 # Utility Functions
 def DefaultStyleDictionary():
     """This is the default style values that are used for styling
-    documents. Its used as a fallback for undefined values in a 
+    documents. Its used as a fallback for undefined values in a
     style sheet.
     @note: incomplete style sheets are merged against this set to ensure
            a full set of definitions is avaiable
@@ -812,7 +815,7 @@ def DefaultStyleDictionary():
          'number_style' : StyleItem("#DD0101"),
          'number2_style' : StyleItem("#DD0101,bold"),
          'operator_style' : StyleItem("#000000", face="%(primary)s,bold"),
-         'pre_style' : StyleItem("#AB39F2,bold"),               
+         'pre_style' : StyleItem("#AB39F2,bold"),
          'pre2_style' : StyleItem("#AB39F2,bold", "#FFFFFF"),
          'regex_style' : StyleItem("#008B8B"),
          'scalar_style' : StyleItem("#AB37F2,bold", face="%(secondary)s"),

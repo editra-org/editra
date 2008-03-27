@@ -14,6 +14,8 @@ SUMMARY:
 Custom StatusBar for Editra that contains a progress bar that responds to
 messages from ed_msg to display progress of different actions.
 
+@summary: Editra's StatusBar class
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

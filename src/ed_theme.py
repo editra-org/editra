@@ -15,6 +15,8 @@ Provide an interface for creating icon themes for Editra. This will allow for
 themes to be created, installed, and managed as plugins, which means that they
 can be installed as single file instead of dozens of individual image files.
 
+@summary: Editra's theme interface and implementation
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

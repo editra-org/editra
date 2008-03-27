@@ -10,11 +10,12 @@
 FILE: ed_art.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
-SUMMARY:
 Provides and ArtProvider class that works off of object ID's to return an
 associated art resource. The provider works hand in hand with Editra's theme
 framework that allows for themes to be provided as plugins that act as the
 resource providers for the ArtProvider.
+
+@summary: Editra's ArtProvider, supplies icons based off of object ids
 
 """
 

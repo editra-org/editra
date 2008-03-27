@@ -10,13 +10,12 @@
 FILE: ed_i18n.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
-SUMMARY: This file is a module for managing translations and the
-         internationalization of the program.
-
 METHODS:
   - L{GetAvailLocales}: Returns a list of canonical names of available locales
   - L{GetLocaleDict}: Returns a dictionary consisting of canonical names for
                       keys and language ids for values.
+@summary: This file is a module for managing translations and the
+          internationalization of the program.
 
 """
 

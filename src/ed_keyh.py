@@ -10,11 +10,11 @@
 FILE: ed_keyh.py
 LANGUAGE: Python
 AUTHOR: Cody Precord
-
-SUMMARY:
 This is the Vi Emulation key handler. When vi emulation is turned on in the
 preferences, it intercepts all keypresses in the ed_stc.EditraStc and interprets
 them accordingly. In the future other key handlers may be added.
+
+@summary: Custom keyhandler interface
 
 """
 

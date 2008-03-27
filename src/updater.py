@@ -18,6 +18,8 @@ by this module is the UpdateProgress bar it displays the progress of the
 network action and provides a higher level interface into the
 UpdateService.
 
+@summary: Utilities and controls for updating Editra
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

@@ -3,7 +3,7 @@
 # Purpose: Cryptography Library for encrypting/decrypting saved data          #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -40,6 +40,8 @@ HelloWorld
 
 Finally:
 This message will self destruct in 5 seconds ...
+
+@summary: Cryptographic routines for encrypting/decrypting text
 
 """
 
