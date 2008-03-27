@@ -3,20 +3,16 @@
 # Purpose: Provides python autocompletion lists and calltips for the editor   #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: pycomp.py                                                          #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#    Provides completion and calltip support for python documents. To      #
-# provide the completion lists and calltips a mix of parsing and           #
-# introspection is used to deduct the requested information.               #
-#                                                                          #
-#--------------------------------------------------------------------------#
+Provides completion and calltip support for python documents. To provide the
+completion lists and calltips a mix of parsing and introspection is used to
+deduct the requested information.
+
+@summary: Python autocompletion support
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

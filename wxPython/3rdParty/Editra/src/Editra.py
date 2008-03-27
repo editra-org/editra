@@ -8,11 +8,10 @@
 ###############################################################################
 
 """
-FILE:  Editra.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-@summary: This module defines the Editra Application object and the Main method
-          for running Editra.
+This module defines the Editra Application object and the Main method for
+running Editra.
+
+@summary: Editra's main application object and MainLoop
 
 """
 

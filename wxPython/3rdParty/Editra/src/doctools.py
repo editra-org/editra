@@ -7,11 +7,7 @@
 ###############################################################################
 
 """
-FILE: doctools.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-@summary: Provides helper functions and classes for managing documents and
-          their services.
+Provides helper functions and classes for managing documents and their services.
 
 """
 

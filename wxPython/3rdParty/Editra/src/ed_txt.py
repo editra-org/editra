@@ -7,10 +7,7 @@
 ###############################################################################
 
 """
-FILE: ed_txt.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-@summary: Text/Unicode handling functions and File wrapper class
+Text/Unicode handling functions and File wrapper class
 
 """
 

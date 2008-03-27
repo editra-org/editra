@@ -7,10 +7,6 @@
 ###############################################################################
 
 """
-FILE: ed_stc.py
-LANGUAGE: Python
-AUTHOR: Cody Precord
-SUMMARY:
 This is the main component of the editor that manages all the information
 of the on disk file that it represents in memory. It works with the StyleManager
 and SyntaxManager to provide an editing pane that auto detects and configures

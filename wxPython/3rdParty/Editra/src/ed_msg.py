@@ -8,20 +8,16 @@
 ###############################################################################
 
 """
-FILE: ed_msg.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
 This module provides a light wrapping of a slightly modified pubsub module
 to give it a lighter and simpler syntax for usage. It exports three main
-methods. The first `PostMessage` which is used to post a message for all
-interested listeners. The second `Subscribe` which allows an object to subscribe
-its own listener function for a particular message type, all of Editra's core
-message types are defined in this module using a naming convention that starts
-each identifier with `EDMSG_`. These identifier constants can be used to
-identify the message type by comparing them with the value of msg.GetType in a
-listener method. The third method is `Unsubscribe` which can be used to remove
-a listener from recieving messages.
+methods. The first L{PostMessage} which is used to post a message for all
+interested listeners. The second L{Subscribe} which allows an object to
+subscribe its own listener function for a particular message type, all of
+Editra's core message types are defined in this module using a naming
+convention that starts each identifier with I{EDMSG_}. These identifier
+constants can be used to identify the message type by comparing them with the
+value of msg.GetType in a listener method. The third method is L{Unsubscribe}
+which can be used to remove a listener from recieving messages.
 
 @summary: Message system api and message type definitions
 

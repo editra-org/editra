@@ -38,10 +38,6 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-FILE: plugin.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-@summary:
 This module provides the core functionality of the plugin system for Editra.
 Its design is influenced by the system used in the web based project management
 software Trac (trac.edgewall.org). To create a plugin plugin class must derive
@@ -58,6 +54,8 @@ hope to find a work around for in later revisions. Namely I dont like the fact
 that the plugins are loaded and kept in memory even when they are not activated.
 Although the footprint of the non activated plugin class members being held in
 memory is not likely to be very large.
+
+@summary: Plugin interface and mananger implementation
 
 """
 

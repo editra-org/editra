@@ -8,15 +8,11 @@
 ###############################################################################
 
 """
-FILE: ed_style.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
 Provides a system for managing styles in the text control. Compiles the data
 in an Editra Style Sheet to a format that Scintilla can understand. The
 specification of Editra Style Sheets that this module implements can be found
 either in the _docs_ folder of the source distribution or on Editra's home page
-http://editra.org/?page=docs&doc=ess_spec.
+U{http://editra.org/?page=docs&doc=ess_spec}.
 
 @summary: Style management system for managing the syntax highlighting of all
           buffers

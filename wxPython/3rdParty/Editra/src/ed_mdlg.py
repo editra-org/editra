@@ -7,9 +7,6 @@
 ###############################################################################
 
 """
-FILE: ed_msg.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
 This module provides a number of message dialogs that are commonly used
 throughout Editra. Its purpose is to promote reuse of the common dialogs for
 consistancy and reduction in redundant code.

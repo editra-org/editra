@@ -7,10 +7,7 @@
 ###############################################################################
 
 """
-FILE: ed_event.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-@summary: Provides custom events for the editors controls/objects to utilize
+Provides custom events for the editors controls/objects to utilize
 
 """
 

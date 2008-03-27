@@ -7,10 +7,6 @@
 ###############################################################################
 
 """
-FILE: ed_pages.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
 This file defines the notebook for containing the text controls for
 for editing text in Editra. The note book is a custom sublclass of
 FlatNotebook that allow for automatic page images and drag and dropping

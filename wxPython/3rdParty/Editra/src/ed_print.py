@@ -7,15 +7,11 @@
 ###############################################################################
 
 """
-FILE: ed_print
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
 Provides a printer class can render the text from an stc into MemoryDC that is
 used for printing. Much of the code for scaling in this file is derived from a
 python module called STCPrinting written by Riaan Booysen.
 
-METHODS:
+Classes:
   - L{EdPrinter}: Class for managing printing and providing print dialogs
   - L{EdPrintout}: Scales and renders the given document to a printer.
 

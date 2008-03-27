@@ -8,10 +8,6 @@
 ###############################################################################
 
 """
-FILE: generator.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
 Provides various methods and classes for generating code and transforming code
 to different formats such as html, latex, rtf with all the styling and formating
 intact from how the view is shown in the editor.

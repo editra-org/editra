@@ -7,13 +7,8 @@
 ###############################################################################
 
 """
-FILE: ed_toolbar.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
-This module creates Editra's toolbar. This toolbar is very simple and
-only adds automatic icon theming to whats already available in the
-base toolbar class.
+This module creates Editra's toolbar. This toolbar is very simple and only adds
+automatic icon theming to whats already available in the base toolbar class.
 
 @summary: Editra's ToolBar class
 

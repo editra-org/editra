@@ -7,11 +7,9 @@
 ###############################################################################
 
 """
-FILE: ed_glob.py
-@author: Cody Precord
-@summary: This file contains variables that are or may be used in multiple files
-          and libraries within the project. Its pupose is to create a globally
-          accessable access point for all common variables in the project.
+This file contains variables that are or may be used in multiple files and
+libraries within the project. Its pupose is to create a globally accessable
+access point for all common variables in the project.
 
 """
 

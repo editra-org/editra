@@ -9,13 +9,11 @@
 
 
 """
-FILE: Editra
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
-Launch script for the Editor. It first tries to look for Editra on the
+Main launch script for the Editor. It first tries to look for Editra on the
 local path and if it is not there it tries to import the Main method
 from where Editra would be installed if it was installed using disutils
+
+@summary: Editra's main launch script
 
 """
 

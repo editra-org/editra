@@ -6,9 +6,12 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 """Syntax data package
+
 Provides:
-  - keyword data
-  - syntax styling definitions
+  - Keyword Data
+  - Syntax styling definitions
+
+For all differn't file types and languages supported by Editra
 
 """
 __author__ = "Cody Precord <cprecord@editra.org>"
