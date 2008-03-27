@@ -358,7 +358,7 @@ def DecodeString(string, encoding=None):
     if not encoding:
         encoding = DEFAULT_ENCODING
 
-    if isinstance(string, types.UnicodeType):
+    if not isinstance(string, types.UnicodeType):
         try:
             rtxt = codecs.getdecoder(encoding)(string)[0]
         except Exception, msg:
@@ -367,6 +367,7 @@ def DecodeString(string, encoding=None):
             rtxt = string
         return rtxt
     else:
+        # The string is already unicode so just return it
         return string
 
 def EncodeString(string, encoding=None):
