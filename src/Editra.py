@@ -69,7 +69,7 @@ _ = wx.GetTranslation
 
 class Editra(wx.App, events.AppEventHandlerMixin):
     """The Editra Application Object
-    @see: L{wx.App}
+    @deprecated: L{GetMainWindow}
 
     """
     def __init__(self, *args, **kargs):
@@ -359,7 +359,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
     def OnNotify(self, evt):
         """Handle notification events
-        @param evt: L{ed_event.NotifyEvent}
+        @param evt: L{ed_event.NotificationEvent}
 
         """
         e_val = evt.GetValue()

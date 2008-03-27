@@ -12,7 +12,7 @@ FILE: plugdlg.py
 AUTHOR: Cody Precord                                                     
 LANGUAGE: Python                                                         
 SUMMARY:                                                                 
- Provides a dialog for downloading, installing and configuring plugins for 
+Provides a dialog for downloading, installing and configuring plugins for 
 Editra.
                                                                       
 """

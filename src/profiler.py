@@ -7,18 +7,17 @@
 ###############################################################################
 
 """
- FILE: profiler.py
- AUTHOR: Cody Precord
- LANGUAGE: Python
-
- @summary:
-   This module provides the profile object and support functions for
- loading and saving user preferences between sessions. The preferences are
- saved on disk as a cPickle, because of this no objects that cannot be
- resolved in the namespace of this module prior to starting the mainloop
- must not be put in the Profile as it will cause errors on load. Ths means
- that only builtin python types should be used and that a translation from
- that type to the required type should happen during run time.
+FILE: profiler.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+This module provides the profile object and support functions for
+loading and saving user preferences between sessions. The preferences are
+saved on disk as a cPickle, because of this no objects that cannot be
+resolved in the namespace of this module prior to starting the mainloop
+must not be put in the Profile as it will cause errors on load. Ths means
+that only builtin python types should be used and that a translation from
+that type to the required type should happen during run time.
 
 """
 

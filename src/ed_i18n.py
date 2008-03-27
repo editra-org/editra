@@ -3,22 +3,21 @@
 # Purpose: I18n utilities and services                                        #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_i18n.py                                                         #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY: This file is a module for managing translations and the         #
-#          internationalization of the program.                            #
-#                                                                          #
-# METHODS:                                                                 #
-# GetAvailLocales: Returns a list of canonical names of available locales  #
-# GetLocaleDict: Returns a dictionary consisting of canonical names for    #
-#                keys and language ids for values.                         #
-#--------------------------------------------------------------------------#
+FILE: ed_i18n.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY: This file is a module for managing translations and the
+         internationalization of the program.
+
+METHODS:
+  - L{GetAvailLocales}: Returns a list of canonical names of available locales
+  - L{GetLocaleDict}: Returns a dictionary consisting of canonical names for
+                      keys and language ids for values.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -44,7 +43,7 @@ OPT_DESCRIPT = 1
 #---- Helper Functions used by the classes in this module ----#
 def GetAvailLocales():
     """Gets a list of the available locales that have been installed
-    for the editor. Returning a list of strings that represent the 
+    for the editor. Returning a list of strings that represent the
     canonical names of each language.
     @return: list of all available local/languages available
 
@@ -58,8 +57,8 @@ def GetAvailLocales():
     return avail_loc
 
 def GetLocaleDict(loc_list, opt=OPT_NO_OP):
-    """Takes a list of cannonical locale names and by default returns a 
-    dictionary of available language values using the canonical name as 
+    """Takes a list of cannonical locale names and by default returns a
+    dictionary of available language values using the canonical name as
     the key. Supplying the Option OPT_DESCRIPT will return a dictionary
     of language id's with languages description as the key.
     @param loc_list: list of locals
@@ -80,11 +79,11 @@ def GetLocaleDict(loc_list, opt=OPT_NO_OP):
     return lang_dict
 
 def GetLangId(lang_n):
-    """Gets the ID of a language from the description string. If the 
+    """Gets the ID of a language from the description string. If the
     language cannot be found the function simply returns the default language
     @param lang_n: Canonical name of a language
     @return: wx.LANGUAGE_*** id of language
-    
+
     """
     lang_desc = GetLocaleDict(GetAvailLocales(), OPT_DESCRIPT)
     return lang_desc.get(lang_n, wx.LANGUAGE_DEFAULT)
@@ -103,8 +102,8 @@ class LangListCombo(wx.combo.BitmapComboBox):
         lang_ids = GetLocaleDict(GetAvailLocales()).values()
         lang_items = langlist.CreateLanguagesResourceLists(langlist.LC_ONLY, \
                                                            lang_ids)
-        wx.combo.BitmapComboBox.__init__(self, parent, id_, 
-                                         size=wx.Size(250, 26), 
+        wx.combo.BitmapComboBox.__init__(self, parent, id_,
+                                         size=wx.Size(250, 26),
                                          style=wx.CB_READONLY)
         for lang_d in lang_items[1]:
             bit_m = lang_items[0].GetBitmap(lang_items[1].index(lang_d))

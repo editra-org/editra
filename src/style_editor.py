@@ -11,10 +11,10 @@ FILE: style_editor.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
-  Provides an editor dialog for graphically editing how the text is
-presented in the editor when syntax highlighting is turned on. It does
-this by taking the data from the controls and formating it into an Editra
-Style Sheet that the editor can load to configure the styles of the text.
+Provides an editor dialog for graphically editing how the text is presented in 
+the editor when syntax highlighting is turned on. It does this by taking the 
+data from the controls and formating it into an Editra Style Sheet that the 
+editor can load to configure the styles of the text.
 
 """
 

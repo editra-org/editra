@@ -3,21 +3,18 @@
 # Purpose: Icon theme management for Editra                                   #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_theme.py                                                        #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#   Provide an interface for creating icon themes for Editra. This will    #
-#  allow for themes to be created, installed, and managed as plugins,      #
-#  which means that they can be installed as single file instead of        #
-#  dozens of individual image files.                                       #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_theme.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+Provide an interface for creating icon themes for Editra. This will allow for
+themes to be created, installed, and managed as plugins, which means that they
+can be installed as single file instead of dozens of individual image files.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -53,7 +50,7 @@ class ThemeI(plugin.Interface):
     def GetName(self):
         """Return the name of this theme. This is used to identify the
         theme when the provider looks for resources based on user preferences
-        
+
         @return: name string
 
         """

@@ -38,30 +38,27 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-#--------------------------------------------------------------------------#
-# FILE: plugin.py
-# AUTHOR: Cody Precord
-# LANGUAGE: Python
-# @summary:
-#    This module provides the core functionality of the plugin system for
-# Editra. Its design is influenced by the system used in the web based
-# project management software Trac (trac.edgewall.org). To create a plugin
-# plugin class must derive from Plugin and in the class definintion it
-# must state which Interface it Impliments. Interfaces are defined
-# throughout various locations in the core Editra code. The interface
-# defines the contract that the plugin needs to conform to. 
-#
-# Plugins consist of python egg files that can be created with the use of
-# the setuptools package.
-#
-#   There are some issues I dont like with how this is currently working
-# that I hope to find a work around for in later revisions. Namely I
-# dont like the fact that the plugins are loaded and kept in memory
-# even when they are not activated. Although the footprint of the non
-# activated plugin class members being held in memory is not likely to
-# be very large it seems like
-#
-#--------------------------------------------------------------------------#
+FILE: plugin.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+@summary:
+This module provides the core functionality of the plugin system for Editra.
+Its design is influenced by the system used in the web based project management
+software Trac (trac.edgewall.org). To create a plugin plugin class must derive
+from Plugin and in the class definintion it must state which Interface it
+Implements. Interfaces are defined throughout various locations in the core
+Editra code. The interface defines the contract that the plugin needs to
+conform to.
+
+Plugins consist of python egg files that can be created with the use of the
+setuptools package.
+
+There are some issues I dont like with how this is currently working that I
+hope to find a work around for in later revisions. Namely I dont like the fact
+that the plugins are loaded and kept in memory even when they are not activated.
+Although the footprint of the non activated plugin class members being held in
+memory is not likely to be very large.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

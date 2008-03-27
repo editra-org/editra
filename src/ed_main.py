@@ -370,7 +370,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     def GetNotebook(self):
         """Get the windows main notebook that contains the editing buffers
-        @return: reference to L{extern.flatnotebook.Flatnotebook} instance
+        @return: reference to L{extern.flatnotebook.FlatNotebook} instance
 
         """
         return self.nb

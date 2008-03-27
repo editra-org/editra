@@ -12,7 +12,7 @@ FILE: updater.py
 AUTHOR: Cody Precord
 LANGUAGE: Python
 SUMMARY:
-  Provides controls/services that are used in checking and downloading
+Provides controls/services that are used in checking and downloading
 updates for the editor if they are available. The main control exported
 by this module is the UpdateProgress bar it displays the progress of the
 network action and provides a higher level interface into the

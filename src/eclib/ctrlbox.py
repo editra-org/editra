@@ -2,8 +2,8 @@
 # Name: ctrlbox.py                                                            #
 # Purpose: Container Window helper class                                      #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# License: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
@@ -27,7 +27,6 @@ CTRLBAR_NAME_STR = u'EditraControlBar'
 CTRLBOX_NAME_STR = u'EditraControlBox'
 
 #-- Control Style Flags --#
-# ControlBox
 
 # ControlBar
 CTRLBAR_STYLE_DEFAULT  = 0
@@ -62,8 +61,10 @@ class ControlBox(wx.PyPanel):
         self.SetSizer(self._sizer)
         self.SetAutoLayout(True)
 
-    def CreateControlBar(self):
-        """Create a ControlBar
+    def CreateControlBar(self, pos=wx.TOP):
+        """Create a ControlBar at the given position if one does not
+        already exist.
+        @keyword pos: wx.TOP (default) or wx.BOTTOM
         @postcondition: A top aligned L{ControlBar} is created.
 
         """
@@ -168,8 +169,9 @@ class ControlBar(wx.PyPanel):
         @keyword stretch: The controls proportions 0 for normal, 1 for expand
 
         """
-        if wx.Platform == '__WXMAC__' and hasattr(control, 'SetWindowVariant'):
-            control.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+        if wx.Platform == '__WXMAC__':
+            if hasattr(control, 'SetWindowVariant'):
+                control.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
         if align == wx.ALIGN_LEFT:
             self._sizer.Add((5, 5), 0)

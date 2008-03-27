@@ -3,18 +3,16 @@
 # Purpose: Custom events used by Editra                                       #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#--------------------------------------------------------------------------#
-# FILE: ed_event.py                                                        #
-# AUTHOR: Cody Precord                                                     #
-# LANGUAGE: Python                                                         #
-# SUMMARY:                                                                 #
-#  Provides custom events for the editors controls/objects to utilize      #
-#                                                                          #
-#--------------------------------------------------------------------------#
+FILE: ed_event.py
+AUTHOR: Cody Precord
+LANGUAGE: Python
+SUMMARY:
+Provides custom events for the editors controls/objects to utilize
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
