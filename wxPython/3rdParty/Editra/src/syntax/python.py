@@ -3,17 +3,14 @@
 # Purpose: Define Python syntax for highlighting and other features           #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: python.py                                                             #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# @summary: Lexer configuration module for Python.                            #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: python.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Python.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

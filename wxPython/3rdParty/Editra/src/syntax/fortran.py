@@ -3,19 +3,15 @@
 # Purpose: Define Fortran 77/95 syntax for highlighting and other features    #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: fortran.py                                                            #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Fortran f77 and f95                          #
-#                                                                             #
-# @todo: check keywords more throughly                                        #
-#-----------------------------------------------------------------------------#
+FILE: fortran.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Fortran f77 and f95
+@todo: check keywords more throughly
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

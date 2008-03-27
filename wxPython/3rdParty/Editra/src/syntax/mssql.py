@@ -3,19 +3,15 @@
 # Purpose: Define Microsoft SQL syntax for highlighting and other features    #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: mssql.py                                                              #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Microsoft SQL.                               #
-#                                                                             #
-# @todo: too many to list                                                     #
-#-----------------------------------------------------------------------------#
+FILE: mssql.py                                                              
+AUTHOR: Cody Precord                                                        
+@summary: Lexer configuration module for Microsoft SQL.
+@todo: too many to list                                                     
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -24,7 +20,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Dependancies
-
+import synglob
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Specifications ----#
@@ -81,21 +77,31 @@ def SyntaxSpec(lang_id=0):
     @param lang_id: used for selecting a specific subset of syntax specs
 
     """
-    return SYNTAX_ITEMS
+    if lang_id == synglob.ID_LANG_MSSQL:
+        return SYNTAX_ITEMS
+    else:
+        return list()
 
 def Properties(lang_id=0):
     """Returns a list of Extra Properties to set
     @param lang_id: used to select a specific set of properties
 
     """
-    return [FOLD]
+    if lang_id == synglob.ID_LANG_MSSQL:
+        return [FOLD]
+    else:
+        return list()
 
 def CommentPattern(lang_id=0):
     """Returns a list of characters used to comment a block of code
     @param lang_id: used to select a specific subset of comment pattern(s)
 
     """
-    return [u'--']
+    if lang_id == synglob.ID_LANG_MSSQL:
+        return [u'--']
+    else:
+        return list()
+
 #---- End Required Module Functions ----#
 
 #---- Syntax Modules Internal Functions ----#

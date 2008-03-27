@@ -3,20 +3,15 @@
 # Purpose: Define Lout syntax for highlighting and other features             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: lout.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Lout                                         #
-#                                                                             #
-# @todo: style refinement                                                     #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: lout.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Lout
+@todo: style refinement
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

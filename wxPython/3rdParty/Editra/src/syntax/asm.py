@@ -3,19 +3,15 @@
 # Purpose: Define ASM syntax for highlighting and other features              #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: asm.py                                                                #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration file GNU Assembly Code                                  #
-#                                                                             #
-# @todo: Complete Keywords/Registers                                          #
-#-----------------------------------------------------------------------------#
+FILE: asm.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration file GNU Assembly Code
+@todo: Complete Keywords/Registers
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

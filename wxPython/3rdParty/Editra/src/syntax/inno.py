@@ -9,11 +9,7 @@
 """
 FILE: inno.py
 AUTHOR: Cody Preord
-
-SUMMARY:
-Lexer configuration module for Inno Setup Scripts
-
-@todo:
+@summary: Lexer configuration module for Inno Setup Scripts
 
 """
 

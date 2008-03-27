@@ -3,19 +3,15 @@
 # Purpose: Define 68k assembly syntax for highlighting and other features     #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: asm68k.py                                                             #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration file 68k Assembly Code                                  #
-#                                                                             #
-# @todo: more color configuration                                             #
-#-----------------------------------------------------------------------------#
+FILE: asm68k.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration file 68k Assembly Code
+@todo: more color configuration
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -52,7 +48,7 @@ ASM_REGISTER = (2, "a0 a1 a2 a3 a4 a5 a6 a7 d0 d1 d2 d3 d4 d5 d6 d7 pc sr "
 ASM_DIRECTIVES = (3, "ALIGN CHIP COMLINE COMMON DC DCB DS END EQU FEQU FAIL "
                      "FOPT IDNT LLEN MASK2 NAME NOOBJ OFFSET OPT ORG PLEN REG "
                      "RESTORE SAVE SECT SECTION SET SPC TTL XCOM XDEF XREF")
- 
+
 #---- Language Styling Specs ----#
 SYNTAX_ITEMS = [ ('STC_ASM_DEFAULT', 'default_style'),
                  ('STC_ASM_CHARACTER', 'char_style'),

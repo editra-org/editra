@@ -3,21 +3,16 @@
 # Purpose: Define Flagship syntax for highlighting and other features         #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: flagship.py                                                           #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for the Flagship programming language and other  #
-# XBase dialects.                                                             #
-#                                                                             #
-# @todo: Custom style defs                                                    #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: flagship.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for the Flagship programming language and
+          other XBase dialects.
+@todo: Custom style defs
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

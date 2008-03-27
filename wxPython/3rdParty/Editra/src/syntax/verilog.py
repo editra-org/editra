@@ -9,13 +9,9 @@
 """
 FILE: verilog.py
 AUTHOR: Cody Precord
-
-SUMMARY:
-Lexer configuration module for Verilog Hardware Description Language and System
-Verilog programming languages. Much help in creating this module from
-Tim Corcoran.
-
-@todo:
+@summary: Lexer configuration module for Verilog Hardware Description Language
+          and System Verilog programming languages. Much help in creating this
+          module from Tim Corcoran.
 
 """
 

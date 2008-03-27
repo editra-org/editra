@@ -3,19 +3,15 @@
 # Purpose: Define JavaScript syntax for highlighting and other features       #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: javascript.py                                                         #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for JavaScript.                                  #
-#                                                                             #
-# @todo: Having trouble with getting html embeded js to highlight             #
-#-----------------------------------------------------------------------------#
+FILE: javascript.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for JavaScript.
+@todo: Having trouble with getting html embeded js to highlight
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

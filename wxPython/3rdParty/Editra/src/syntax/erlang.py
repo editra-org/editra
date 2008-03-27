@@ -3,20 +3,15 @@
 # Purpose: Define Erlang syntax for highlighting and other features           #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: erlang.py                                                             #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Erlang Programming Language                  #
-#                                                                             #
-# @todo: better styling                                                       #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: erlang.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for the Erlang Programming Language
+@todo: better styling
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

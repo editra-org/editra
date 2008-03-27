@@ -9,7 +9,6 @@
 """
 FILE: perl.py
 AUTHOR: Cody Precord
-
 @summary: Lexer configuration module for Perl.
 
 """

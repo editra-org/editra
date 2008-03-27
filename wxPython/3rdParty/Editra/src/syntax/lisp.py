@@ -9,11 +9,9 @@
 """
 FILE: lisp.py
 AUTHOR: Cody Precord
-
-SUMMARY:
-Lexer configuration module for Lisp Files.
-
+@summary: Lexer configuration module for Lisp Files.
 @todo: Add Standard Variables
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

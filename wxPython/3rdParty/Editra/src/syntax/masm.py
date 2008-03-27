@@ -3,17 +3,14 @@
 # Purpose: Define MASM syntax for highlighting and other features             #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: masm.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# @summary: Lexer configuration file Microsoft Assembly Code                  #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: masm.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration file Microsoft Assembly Code
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

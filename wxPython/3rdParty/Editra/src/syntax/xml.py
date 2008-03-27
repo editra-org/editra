@@ -3,19 +3,15 @@
 # Purpose: Define XML syntax for highlighting and other features              #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: xml.py                                                                #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for XML Files.                                   #
-#                                                                             #
-# @todo: Almost Everything                                                    #
-#-----------------------------------------------------------------------------#
+FILE: xml.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for XML Files.
+@todo: Almost Everything
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

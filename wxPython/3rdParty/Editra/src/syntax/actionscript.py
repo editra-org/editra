@@ -8,10 +8,8 @@
 
 """
 FILE: actionscript.py                                                                
-@author: Cody Precord                                                       
-                                                                         
-SUMMARY:                                                                    
-Lexter configuration file for ActionScript                          
+AUTHOR: Cody Precord                                                       
+@summary: Lexer configuration file for ActionScript
                                                                          
 """
 

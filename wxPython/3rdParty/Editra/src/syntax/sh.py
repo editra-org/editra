@@ -4,18 +4,15 @@
 #          other features.                                                    #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: sh.py                                                                 #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# @summary: Lexer configuration file for Bourne, Bash, Kornshell and          #
-#           C-Shell scripts.                                                  #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: sh.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration file for Bourne, Bash, Kornshell and
+          C-Shell scripts.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

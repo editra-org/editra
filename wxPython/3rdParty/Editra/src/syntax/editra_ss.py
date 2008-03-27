@@ -4,18 +4,14 @@
 #          features.                                                          #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: editra_ss.py                                                          #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# @summary: Lexer configuration file for Editra Syntax Highlighter Style      #
-#           Sheets.                                                           #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: editra_ss.py                                                          
+AUTHOR: Cody Precord                                                        
+@summary: Lexer configuration file for Editra Syntax Highlighter Style Sheets.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

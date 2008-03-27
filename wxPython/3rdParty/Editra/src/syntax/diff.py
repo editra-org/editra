@@ -3,20 +3,15 @@
 # Purpose: Define Diff/Patch file syntax for highlighting and other features  #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: diff.py                                                               #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for diff files                                   #
-#                                                                             #
-# @todo:                                                                      #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: diff.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Diff/Patch files
+@todo:
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org"

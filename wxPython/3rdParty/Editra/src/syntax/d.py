@@ -4,20 +4,15 @@
 #          features.                                                          #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: d.py                                                                  #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for D programming language                       #
-#                                                                             #
-# @todo:                                                                      #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: d.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for D programming language
+@todo: When 2.9 is out switch to the dedicated D Lexer
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -48,7 +43,7 @@ DOC_KEYWORDS = (2, "TODO FIXME XXX \\author \\brief \\bug \\callgraph "
                    "\\endif \\endverbatim \\example \\exception \\file \\if "
                    "\\ifnot \\image \\include \\link \\mainpage \\name "
                    "\\namespace \\page \\par \\paragraph \\param \\return "
-                   "\\retval \\section \\struct \\subpage \\subsection " 
+                   "\\retval \\section \\struct \\subpage \\subsection "
                    "\\subsubsection \\test \\todo \\typedef \\union \\var "
                    "\\verbatim \\version \\warning \\$ \\@ \\~ \\< \\> \\# \\% "
                    "HACK ")

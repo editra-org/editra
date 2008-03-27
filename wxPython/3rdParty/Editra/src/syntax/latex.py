@@ -3,19 +3,15 @@
 # Purpose: Define TeX/LateX syntax for highlighting and other features        #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: latex.py                                                              #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration module for Tex/LaTex.                                   #
-#                                                                             #
-# @todo: Fairly poor needs lots of work.                                      #
-#-----------------------------------------------------------------------------#
+FILE: latex.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for Tex/LaTex.
+@todo: Fairly poor needs lots of work.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

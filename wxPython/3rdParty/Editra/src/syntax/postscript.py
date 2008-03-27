@@ -3,18 +3,15 @@
 # Purpose: Define Postscript syntax for highlighting and other features       #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: postscript.py                                                         #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# @summary: Lexer configuration module for PostScript. (case sensitive)       #
-# @todo: l3 keywords and ghostscript                                          #
-#                                                                             #
-#-----------------------------------------------------------------------------#
+FILE: postscript.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for PostScript. (case sensitive)
+@todo: l3 keywords and ghostscript
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

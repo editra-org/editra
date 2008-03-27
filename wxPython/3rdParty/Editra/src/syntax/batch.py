@@ -3,19 +3,15 @@
 # Purpose: Define DOS Batch syntax for highlighting and other features        #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# License: wxWindows License                                                  #
 ###############################################################################
 
 """
-#-----------------------------------------------------------------------------#
-# FILE: batch.py                                                              #
-# AUTHOR: Cody Precord                                                        #
-#                                                                             #
-# SUMMARY:                                                                    #
-# Lexer configuration file for dos/windows batch scripts.                     #
-#                                                                             #
-# @todo: incorportate winbat keywords                                         #
-#-----------------------------------------------------------------------------#
+FILE: batch.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration file for dos/windows batch scripts.
+@todo: incorportate winbat keywords
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -45,7 +41,7 @@ WINBAT_KEYWORDS = (0, "if then else endif break end return exit next while for "
                       "acc_read_95 acc_read_nt acc_write amc arrange ascending "
                       "attr_a attr_a attr_ci attr_ci attr_dc attr_dc attr_di "
                       "attr_di attr_dm attr_dm attr_h attr_h attr_ic attr_ic "
-                      "attr_p attr_p attr_ri attr_ri attr_ro attr_ro attr_sh " 
+                      "attr_p attr_p attr_ri attr_ri attr_ro attr_ro attr_sh "
                       "attr_sh attr_sy attr_sy attr_t attr_t attr_x attr_x "
                       "avogadro backscan boltzmann cancel capslock check "
                       "columnscommonformat cr crlf ctrl default default "
