@@ -27,6 +27,8 @@ import wx
 import wx.lib.mixins.listctrl as listmix
 import os
 import sys
+
+# Editra Libraries
 import ed_glob
 import profiler
 from profiler import Profile_Get, Profile_Set
@@ -37,6 +39,7 @@ import updater
 import util
 import syntax.syntax as syntax
 import ed_msg
+import eclib.elistmix as elistmix
 
 #----------------------------------------------------------------------------#
 # Globals
@@ -1708,10 +1711,10 @@ class KeyBindingPanel(wx.Panel):
             evt.Skip()
 
 #----------------------------------------------------------------------------#
-
 class ExtListCtrl(wx.ListCtrl,
                   listmix.ListCtrlAutoWidthMixin,
-                  listmix.TextEditMixin):
+                  listmix.TextEditMixin,
+                  elistmix.ListRowHighlighter):
     """Class to manage the file extension associations
     @summary: Creates a list control for showing file type to file extension
               associations as well as providing an interface to editing these
@@ -1732,6 +1735,9 @@ class ExtListCtrl(wx.ListCtrl,
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
+        elistmix.ListRowHighlighter.__init__(self)
+
+        # Setup
         self.InsertColumn(ExtListCtrl.FILE_COL, _("Lexer"))
         self.InsertColumn(ExtListCtrl.EXT_COL, \
                           _("Extensions (space separated, no dots)"))
@@ -1772,10 +1778,6 @@ class ExtListCtrl(wx.ListCtrl,
             self.SetStringItem(index, ExtListCtrl.FILE_COL, key)
             self.SetStringItem(index, ExtListCtrl.EXT_COL, \
                                u'  %s' % u' '.join(self._extreg[key]))
-            if not index % 2:
-                color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-                color = util.AdjustColour(color, 15)
-                self.SetItemBackgroundColour(index, color)
 
         self.SetColumnWidth(ExtListCtrl.FILE_COL, wx.LIST_AUTOSIZE)
         self.SetColumnWidth(ExtListCtrl.EXT_COL, wx.LIST_AUTOSIZE)

@@ -38,6 +38,7 @@ import ed_event
 import plugin
 import util
 import eclib.pstatbar as pstatbar
+import eclib.elistmix as elistmix
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -853,7 +854,8 @@ class InstallPanel(wx.Panel):
 
 class PluginListCtrl(wx.ListCtrl, 
                      listmix.ListCtrlAutoWidthMixin,
-                     listmix.CheckListCtrlMixin):
+                     listmix.CheckListCtrlMixin,
+                     elistmix.ListRowHighlighter):
     """Creates a list control for displaying plugins and configuring them."""
     PLUGIN_COL   = 0
     DESCRIPT_COL = 1
@@ -868,6 +870,7 @@ class PluginListCtrl(wx.ListCtrl,
         wx.ListCtrl.__init__(self, parent, wx.ID_ANY, 
                              wx.DefaultPosition, wx.DefaultSize, 
                              style=wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES)
+        elistmix.ListRowHighlighter.__init__(self)
 
         self.InsertColumn(self.PLUGIN_COL, _("Plugin"))
         self.InsertColumn(self.DESCRIPT_COL, _("Description"))
