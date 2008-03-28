@@ -864,7 +864,7 @@ class PluginListCtrl(wx.ListCtrl,
         """
         wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
                              wx.DefaultPosition, wx.DefaultSize,
-                             style=wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES)
+                             style=wx.LC_REPORT | wx.LC_VRULES)
         elistmix.ListRowHighlighter.__init__(self)
 
         self.InsertColumn(self.PLUGIN_COL, _("Plugin"))
