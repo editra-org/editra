@@ -67,8 +67,11 @@ class ListRowHighlighter:
 
             if dohlight:
                 if self._color is None:
-                    color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-                    color = AdjustColour(color, 33) # Lighten it a bit
+                    if wx.Platform in ['__WXGTK__', '__WXMSW__']:
+                        color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DLIGHT)
+                    else:
+                        color = wx.Colour(238, 255, 255)
+
                 else:
                     color = self._color
             else:
