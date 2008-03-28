@@ -551,7 +551,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: all margin markers are defined
 
         """
-        style = self.GetItemByName('folder_style')
+        style = self.GetItemByName('foldmargin_style')
         # The foreground/background settings for the marker column seem to
         # backwards from what the parameters take so use our Fore color for
         # the stcs back and visa versa for our Back color.

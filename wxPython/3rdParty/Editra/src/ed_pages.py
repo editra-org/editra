@@ -652,7 +652,7 @@ class EdPages(FNB.FlatNotebook):
                 title = u"*" + title
             if title != FNB.FlatNotebook.GetPageText(self, pg_num):
                 self.SetPageText(pg_num, title)
-                ftitle = "%s - file://%s" % (title, self.control.GetFileName())
+                ftitle = u"%s - file://%s" % (title, self.control.GetFileName())
                 self.frame.SetTitle(ftitle)
         except wx.PyDeadObjectError:
             pass
