@@ -8,15 +8,10 @@
 ###############################################################################
 
 """
-FILE: updater.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
-Provides controls/services that are used in checking and downloading
-updates for the editor if they are available. The main control exported
-by this module is the UpdateProgress bar it displays the progress of the
-network action and provides a higher level interface into the
-UpdateService.
+Provides controls/services that are used in checking and downloading updates
+for the editor if they are available. The main control exported by this module
+is the L{UpdateProgress} bar it displays the progress of the network action and
+provides a higher level interface into the L{UpdateService}.
 
 @summary: Utilities and controls for updating Editra
 

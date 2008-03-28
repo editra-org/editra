@@ -7,10 +7,7 @@
 ###############################################################################
 
 """
-FILE: util.py
-LANGUAGE: Python
-@summary: This file contains various helper functions and utilities that the
-          program uses. Basically a random library of misfit functions.
+This file contains various helper functions and utilities that the program uses.
 
 """
 
