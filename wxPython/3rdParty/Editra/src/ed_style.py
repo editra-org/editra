@@ -760,8 +760,11 @@ class StyleMgr(object):
                     return False
 
             self.style_set = name
-            tmp = MergeStyles(DefaultStyleDictionary(), style_dict)
-            StyleMgr.STYLES[name] = self.PackStyleSet(tmp)
+            # Set any undefined styles to match the default_style
+            for key in DefaultStyleDictionary().keys():
+                if key not in style_dict:
+                    style_dict[key] = style_dict['default_style']
+            StyleMgr.STYLES[name] = self.PackStyleSet(style_dict)
             return True
         else:
             self.LOG("[ed_style][err] SetStyles expects a " \
@@ -797,6 +800,7 @@ def DefaultStyleDictionary():
          'directive_style' : StyleItem("#0000FF,bold", face="%(secondary)s"),
          'dockey_style' : StyleItem("#0000FF"),
          'error_style' : StyleItem("#DD0101,bold", face="%(secondary)s"),
+         'folder_style' : StyleItem(back="#D1D1D1"),
          'funct_style' : StyleItem("#008B8B,italic"),
          'global_style' : StyleItem("#007F7F,bold", face="%(secondary)s"),
          'guide_style' : StyleItem("#838383"),
@@ -807,7 +811,6 @@ def DefaultStyleDictionary():
          'keyword3_style' : StyleItem("#008B8B,bold"),
          'keyword4_style' : StyleItem("#9D2424"),
          'marker_style' : StyleItem("#FFFFFF", "#000000"),
-         'folder_style' : StyleItem("#FFFFFF", "#000000"),
          'number_style' : StyleItem("#DD0101"),
          'number2_style' : StyleItem("#DD0101,bold"),
          'operator_style' : StyleItem("#000000", face="%(primary)s,bold"),

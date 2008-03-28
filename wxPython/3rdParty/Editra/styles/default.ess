@@ -4,6 +4,14 @@
  * License: wxWindows License
  */
 
+/* Main Style all others inherit from */
+default_style { 
+        fore: #000000; 
+        back: #F6F6F6; 
+        face: %(primary)s; 
+        size: %(size)d;
+}
+
 brace_good {
         fore: #FFFFFF;
         back: #0000FF bold;
@@ -38,13 +46,6 @@ array_style {
 btick_style { 
         fore: #8959F6 bold; 
         back: #FFFFFF;
-}
-
-default_style { 
-        fore: #000000; 
-        back: #F6F6F6; 
-        face: %(primary)s; 
-        size: %(size)d;
 }
 
 char_style { 
@@ -82,6 +83,10 @@ dockey_style {
 error_style { 
         fore: #DD0101 bold; 
         face: %(secondary)s;
+}
+
+folder_style { 
+        back: #D1D1D1;
 }
 
 funct_style { 
