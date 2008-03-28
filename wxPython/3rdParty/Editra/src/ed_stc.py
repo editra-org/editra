@@ -551,14 +551,14 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         style = self.GetItemByName('folder_style')
-        print "STYLE: ", style
-        back = style.GetFore() #self.GetDefaultForeColour()
-        print "BACK:", back
+        # The foreground/background settings for the marker column seem to
+        # backwards from what the parameters take so use our Fore color for
+        # the stcs back and visa versa for our Back color.
+        back = style.GetFore()
         rgb = util.HexToRGB(back[1:])
         back = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
 
-        fore = style.GetBack() #self.GetDefaultBackColour()
-        print "FORE:", fore
+        fore = style.GetBack()
         rgb = util.HexToRGB(fore[1:])
         fore = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
 
