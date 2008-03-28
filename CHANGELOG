@@ -27,6 +27,8 @@ NEW: [features/improvements]
 +Combinded Add/Delete bookmark into single toggle action
 +Add Serbian translation (contributed by Vladimir Lazic)
 +Improved api documentation
++Auto-(un)commenting support for Editra Style Sheets
++Fold Margin styling can be styled separate from rest of buffer
 
 BUG FIXES:
 +Misc UI consistancy issues

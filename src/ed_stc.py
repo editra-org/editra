@@ -130,9 +130,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Configure()
         self.UpdateBaseStyles()
 
-        ### Folder Marker Styles
-        self.DefineMarkers()
-
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
@@ -553,8 +550,18 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: all margin markers are defined
 
         """
-        back = self.GetDefaultForeColour()
-        fore = self.GetDefaultBackColour()
+        style = self.GetItemByName('folder_style')
+        print "STYLE: ", style
+        back = style.GetFore() #self.GetDefaultForeColour()
+        print "BACK:", back
+        rgb = util.HexToRGB(back[1:])
+        back = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
+
+        fore = style.GetBack() #self.GetDefaultBackColour()
+        print "FORE:", fore
+        rgb = util.HexToRGB(fore[1:])
+        fore = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
+
         self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPEN,
                           wx.stc.STC_MARK_BOXMINUS, fore, back)
         self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDER,
@@ -1925,7 +1932,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.LoadStyleSheet(self.GetStyleSheet(spec_style), force=True)
         self.UpdateBaseStyles()
         self.SetSyntax(self._code['syntax_set'])
-        self.DefineMarkers()
         self.Refresh()
 
     #---- End Style Definitions ----#
