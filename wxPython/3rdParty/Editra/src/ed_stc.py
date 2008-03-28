@@ -341,8 +341,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetUseAntiAliasing(_PGET('AALIASING'))
         self.SetUseTabs(_PGET('USETABS'))
         self.SetBackSpaceUnIndents(_PGET('BSUNINDENT'))
-        self.SetIndent(_PGET('TABWIDTH', 'int'))
+        self.SetIndent(_PGET('INDENTWIDTH', 'int'))
         self.SetTabWidth(_PGET('TABWIDTH', 'int'))
+#        self.SetTabIndents(True) # Add option for this too?
         self.SetIndentationGuides(_PGET('GUIDES'))
         self.SetEOLFromString(_PGET('EOL'))
         self.SetViewEOL(_PGET('SHOW_EOL'))
@@ -1885,7 +1886,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.StyleDefault()
-        self.SetMargins(0, 0)
+        self.SetMargins(4, 0)
         # Global default styles for all languages
         self.StyleSetSpec(0, self.GetStyleByName('default_style'))
         self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, \

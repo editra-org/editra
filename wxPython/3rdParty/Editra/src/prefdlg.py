@@ -530,6 +530,14 @@ class DocGenPanel(wx.Panel):
                           default=Profile_Get('TABWIDTH', 'str')), 0,
                         wx.ALIGN_CENTER_VERTICAL)])
 
+        indentsz = wx.BoxSizer(wx.HORIZONTAL)
+        indentsz.AddMany([(wx.StaticText(self, label=_("Indent Width") + u": "),
+                        0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
+                       (ExChoice(self, ed_glob.ID_PREF_INDENTW,
+                          choices=['2','3','4','5','6','7','8','9','10'],
+                          default=Profile_Get('INDENTWIDTH', 'str')), 0,
+                        wx.ALIGN_CENTER_VERTICAL)])
+
         ut_cb = wx.CheckBox(self, ed_glob.ID_PREF_TABS,
                             _("Use Tabs Instead of Spaces"))
         ut_cb.SetValue(Profile_Get('USETABS', 'bool', False))
@@ -573,13 +581,14 @@ class DocGenPanel(wx.Panel):
                                   "regions when syntax highlighting is in use"))
 
         # Layout
-        sizer = wx.FlexGridSizer(17, 2, 5, 5)
+        sizer = wx.FlexGridSizer(18, 2, 5, 5)
         sizer.AddGrowableCol(1, 1)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Format") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (ut_cb, 0),
                        ((5, 5), 0), (bsu_cb, 0),
                        ((5, 5), 0), (tabsz, 0),
+                       ((5, 5), 0), (indentsz, 0),
                        ((5, 5), 0), (eolsz, 0),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("View Options") + u": "),
@@ -642,7 +651,8 @@ class DocGenPanel(wx.Panel):
                     ed_glob.ID_PREF_UNINDENT, ed_glob.ID_EOL_MODE,
                     ed_glob.ID_PREF_AALIAS, ed_glob.ID_SHOW_EOL,
                     ed_glob.ID_SHOW_LN, ed_glob.ID_SHOW_WS,
-                    ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS]:
+                    ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS,
+                    ed_glob.ID_PREF_INDENTW]:
             Profile_Set(ed_glob.ID_2_PROF[e_id],
                         evt.GetEventObject().GetValue())
             wx.CallLater(25, DoUpdates)
