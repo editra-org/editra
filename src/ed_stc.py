@@ -1912,13 +1912,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             sback = sback.GetBack()
         else:
             sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        self.SetSelBackground(True, sback)
 
         wspace = self.GetItemByName('whitespace_style')
         if not wspace.IsNull():
             self.SetWhitespaceBackground(True, wspace.GetBack())
             self.SetWhitespaceForeground(True, wspace.GetFore())
 
-        self.SetSelBackground(True, sback)
         self.SetCaretForeground(self.GetDefaultForeColour())
         self.DefineMarkers()
         self.Colourise(0, -1)

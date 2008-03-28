@@ -763,7 +763,10 @@ class StyleMgr(object):
             # Set any undefined styles to match the default_style
             for key in DefaultStyleDictionary().keys():
                 if key not in style_dict:
-                    style_dict[key] = style_dict['default_style']
+                    if key in ['select_style', 'whitespace_style']:
+                        style_dict[key] = NullStyleItem()
+                    else:
+                        style_dict[key] = style_dict['default_style']
             StyleMgr.STYLES[name] = self.PackStyleSet(style_dict)
             return True
         else:
