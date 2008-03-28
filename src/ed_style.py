@@ -761,12 +761,15 @@ class StyleMgr(object):
 
             self.style_set = name
             # Set any undefined styles to match the default_style
-            for key in DefaultStyleDictionary().keys():
-                if key not in style_dict:
-                    if key in ['select_style', 'whitespace_style']:
-                        style_dict[key] = NullStyleItem()
+            for tag, item in DefaultStyleDictionary().iteritems():
+                if tag not in style_dict:
+                    if tag in ['select_style', 'whitespace_style']:
+                        style_dict[tag] = NullStyleItem()
+                    elif tag in ['folder_style']:
+                        style_dict[tag] = style_dict['default_style']
                     else:
-                        style_dict[key] = style_dict['default_style']
+                        style_dict[tag] = item
+
             StyleMgr.STYLES[name] = self.PackStyleSet(style_dict)
             return True
         else:
