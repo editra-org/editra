@@ -57,7 +57,7 @@ error_style {
                fore:#000000;
 }
 
-folder_style {
+foldmargin_style {
                fore:#000000;
 }
 

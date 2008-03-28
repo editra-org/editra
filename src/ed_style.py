@@ -765,7 +765,7 @@ class StyleMgr(object):
                 if tag not in style_dict:
                     if tag in ['select_style', 'whitespace_style']:
                         style_dict[tag] = NullStyleItem()
-                    elif tag in ['folder_style']:
+                    elif tag in ['foldmargin_style']:
                         style_dict[tag] = style_dict['default_style']
                     else:
                         style_dict[tag] = item
@@ -806,7 +806,7 @@ def DefaultStyleDictionary():
          'directive_style' : StyleItem("#0000FF,bold", face="%(secondary)s"),
          'dockey_style' : StyleItem("#0000FF"),
          'error_style' : StyleItem("#DD0101,bold", face="%(secondary)s"),
-         'folder_style' : StyleItem(back="#D1D1D1"),
+         'foldmargin_style' : StyleItem(back="#D1D1D1"),
          'funct_style' : StyleItem("#008B8B,italic"),
          'global_style' : StyleItem("#007F7F,bold", face="%(secondary)s"),
          'guide_style' : StyleItem("#838383"),

@@ -66,7 +66,7 @@ STANDARD TAGS:
         - directive_style: Style of directives
         - dockey_style: Style of documentation keywords
         - error_style: Style of errors
-        - folder_style: Style of code folding markers
+        - foldmargin_style: Style of code folding margin and markers
         - funct_style: Style of Functions
         - global_style: Style of global variables
         - guide_style: indentation guide style
@@ -146,7 +146,7 @@ SPECIAL TAGS:
 
         - calltip: Only Foreground and Background attributes are used
         - clear: Used internally any definitions will be ignored
-        - folder_style: Only Foreground and Background attributes are used
+        - foldmargin_style: Only Foreground and Background attributes are used
         - marker_style: Only Foreground and Background attributes are used
         - select_style: When defined only the Background attribute is used. If
                         this style is not defined then the default system colour

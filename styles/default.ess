@@ -85,7 +85,7 @@ error_style {
         face: %(secondary)s;
 }
 
-folder_style { 
+foldmargin_style {
         back: #D1D1D1;
 }
 
