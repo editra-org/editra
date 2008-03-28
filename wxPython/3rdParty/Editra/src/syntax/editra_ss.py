@@ -86,7 +86,7 @@ def CommentPattern(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_ESS:
-        return list()
+        return [u'/*', '*/']
     else:
         return list()
 #---- End Required Functions ----#
