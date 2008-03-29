@@ -831,7 +831,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         elif len(self._code['keywords']) > 1:
             pos = self.GetCurrentPos()
             pos2 = self.WordStartPosition(pos, True)
-            print pos, pos2
             self.AutoCompShow(pos - pos2, self._code['keywords'])
         return
 
