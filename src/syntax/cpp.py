@@ -41,16 +41,13 @@ C_TYPES = ("auto bool char clock_t complex div_t double enum extern float "
            "__complex__ __volatile__ __attribute__ ")
 
 # C/CPP Documentation Keywords (includes Doxygen keywords)
-DOC_KEYWORDS = (2, "TODO FIXME XXX \\author \\brief \\bug \\callgraph "
-                   "\\category \\class \\code \\date \\def \\depreciated \\dir "
-                   "\\dot \\dotfile \\else \\elseif \\em \\endcode \\enddot "
-                   "\\endif \\endverbatim \\example \\exception \\file \\if "
-                   "\\ifnot \\image \\include \\link \\mainpage \\name "
-                   "\\namespace \\page \\par \\paragraph \\param \\return "
-                   "\\retval \\section \\struct \\subpage \\subsection " 
-                   "\\subsubsection \\test \\todo \\typedef \\union \\var "
-                   "\\verbatim \\version \\warning \\$ \\@ \\~ \\< \\> \\# \\% "
-                   "HACK")
+DOC_KEYWORDS = (2, "TODO FIXME XXX author brief bug callgraph category class "
+                   "code date def depreciated dir dot dotfile else elseif em "
+                   "endcode enddot endif endverbatim example exception file if "
+                   "ifnot image include link mainpage name namespace page par "
+                   "paragraph param return retval section struct subpage "
+                   "subsection subsubsection test todo typedef union var "
+                   "verbatim version warning $ @ ~ < > # % HACK")
 
 # CPP Keyword Extensions
 CPP_KEYWORDS = ("and and_eq bitand bitor catch class compl const_cast delete "
