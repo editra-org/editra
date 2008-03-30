@@ -42,6 +42,7 @@ BUG FIXES:
 started in the PluginManager returns after the manager has been closed.
 +Fix bug in failing to convert file paths to unicode when opening from command
 line.
++Improper highlighting of documentation keywords
 
 #-----------------------------------------------------------------------------#
 
