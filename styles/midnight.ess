@@ -59,7 +59,7 @@ directive_style {
 }
 
 dockey_style {
-		fore: #0000FF;
+		fore: #00A6FF;
 }
 
 error_style {
