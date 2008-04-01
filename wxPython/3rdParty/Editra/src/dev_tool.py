@@ -192,6 +192,9 @@ def EnvironmentInfo():
 
     """
     info = list()
+    info.append("#---- Notes ----#")
+    info.append("Please provide additional information about the crash here")
+    info.extend(["", "", ""])
     info.append("#---- System Information ----#")
     info.append("%s Version: %s" % (ed_glob.PROG_NAME, ed_glob.VERSION))
     info.append("Operating System: %s" % wx.GetOsDescription())
