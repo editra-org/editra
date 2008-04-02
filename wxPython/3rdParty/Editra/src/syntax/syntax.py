@@ -29,6 +29,8 @@ In addition to the L{SyntaxMgr} there are also a number of other utility and
 convienience functions in this module for accessing data from other related
 objects such as the Extension Register.
 
+@summary: Main api access point for the syntax package.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

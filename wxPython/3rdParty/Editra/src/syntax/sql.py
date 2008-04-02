@@ -80,6 +80,8 @@ identified as valid characters of an (Oracle-)identifier.
 wxPython 2.8.7.1 does not use not use lexer version 1.75 yet - so SQL_PKG
 wil not work.
 
+@summary: Lexer configuration module for Oracle 10 PL/SQL
+
 """
 
 __author__ = "Thomas Keul <tgkeul@web.de>"
