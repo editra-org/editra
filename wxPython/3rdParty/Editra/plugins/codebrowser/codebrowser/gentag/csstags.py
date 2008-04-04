@@ -61,10 +61,10 @@ def GenerateTags(buff):
 #                c_tag = None
 
             # Check for coments
-            if line[idx] == u'/' and llen > idx and line[idx+1] == u'*':
+            if llen > idx+1 and line[idx] == u'/' and line[idx+1] == u'*':
                 idx += 2
                 incomment = True
-            elif line[idx] == u'*' and llen > idx and line[idx+1] == u'/':
+            elif llen > idx+1 and line[idx] == u'*' and line[idx+1] == u'/':
                 idx += 2
                 incomment = False
 
@@ -90,6 +90,7 @@ def GenerateTags(buff):
                             rtags.AddClass(taglib.Class(name, lnum))
                         else:
                             rtags.AddVariable(taglib.Variable(name, lnum))
+                        idx += len(name)
                 idx += 1
             else:
                 idx += 1
