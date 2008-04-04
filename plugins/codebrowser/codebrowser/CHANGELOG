@@ -22,6 +22,7 @@ Bug Fixes:
 +Inaccurate parsing of php classes
 +Missidentifying statements inside of strings as code in python parser
 +Flashing when updating tree on Windows
++CSS comment parsing
 
 #-----------------------------------------------------------------------------#
 
