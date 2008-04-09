@@ -62,6 +62,7 @@ _DEFAULTS = {
            'KEY_PROFILE': None,             # Keybinding profile
            'LANG'       : 'Default',        # UI language
            'LASTCHECK'  : 0,                # Last time update check was done
+           'MAXIMIZED'  : False,            # Was window maximized on exit
            'MODE'       : 'CODE',           # Overall editor mode
            'MYPROFILE'  : 'default.ppb',    # Path to profile file
            'OPEN_NW'    : False,            # Open files in new windows

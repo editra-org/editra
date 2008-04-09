@@ -682,6 +682,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self.Iconize(False)
 
         _PSET('WSIZE', self.GetSizeTuple())
+        _PSET('MAXIMIZED', self.IsMaximized())
         _PSET('WPOS', self.GetPositionTuple())
 
         self.LOG("[ed_main][evt] OnClose: Closing editor at pos=%s size=%s" % \
