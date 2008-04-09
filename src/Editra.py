@@ -594,8 +594,12 @@ def Main():
                                  wx.SPLASH_NO_TIMEOUT, 0, None, wx.ID_ANY)
         splash.Show()
 
-    frame = ed_main.MainWindow(None, wx.ID_ANY, profiler.Profile_Get('WSIZE'),
-                               ed_glob.PROG_NAME)
+    if profiler.Profile_Get('SET_WSIZE'):
+        wsize = profiler.Profile_Get('WSIZE')
+    else:
+        wsize = (700, 450)
+    frame = ed_main.MainWindow(None, wx.ID_ANY, wsize, ed_glob.PROG_NAME)
+    frame.Maximize(profiler.Profile_Get('MAXIMIZED'))
     editra_app.RegisterWindow(repr(frame), frame, True)
     editra_app.SetTopWindow(frame)
     frame.Show(True)
