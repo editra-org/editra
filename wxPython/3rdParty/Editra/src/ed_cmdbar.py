@@ -201,7 +201,7 @@ class CommandBar(wx.Panel):
             spacer = (4, 4)
         v_sizer.Add(spacer)
         search = ed_search.EdSearchCtrl(self, ID_SEARCH_CTRL,
-                                         menulen=5, size=(180, -1))
+                                        menulen=5, size=(180, 20))
         v_sizer.Add(search, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
         f_lbl = wx.StaticText(self, label=_("Find") + u": ")
