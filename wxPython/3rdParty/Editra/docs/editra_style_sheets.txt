@@ -57,6 +57,7 @@ STANDARD TAGS:
         - array_style: Style of arrays (currently used in perl documents)
         - btick_style: Style of Back Ticks
         - default_style: Style of all text not styled by other definitions
+        - caret_line: Sets caret line background highlight color
         - char_style: Style of characters (i.e 'c')
         - class_style: Style of class defs (i.e def MyClass)
         - class2_style: Currently unused
@@ -145,6 +146,7 @@ SPECIAL TAGS:
         here is an explanation of each.
 
         - calltip: Only Foreground and Background attributes are used
+        - caret_line: Only Background attribute is used
         - clear: Used internally any definitions will be ignored
         - foldmargin_style: Only Foreground and Background attributes are used
         - marker_style: Only Foreground and Background attributes are used
