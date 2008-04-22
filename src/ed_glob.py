@@ -38,7 +38,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
             'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
-            'I18N_PAGE', 'ID_GOTO_MBRACE'
+            'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE'
 ]
 
 #---- Project Info ----#
@@ -151,6 +151,7 @@ ID_SESSION       = wx.NewId()
 ID_ZOOM_OUT      = wx.ID_ZOOM_OUT
 ID_ZOOM_IN       = wx.ID_ZOOM_IN
 ID_ZOOM_NORMAL   = wx.ID_ZOOM_100
+ID_HLCARET_LINE  = wx.NewId()
 ID_SHOW_EDGE     = wx.NewId()
 ID_SHOW_EOL      = wx.NewId()
 ID_SHOW_LN       = wx.NewId()
@@ -261,6 +262,7 @@ ID_2_PROF = {
              ID_KWHELPER          : 'KWHELPER',
              ID_EOL_MODE          : 'EOL',
              ID_PREF_FHIST        : 'FHIST_LVL',
+             ID_HLCARET_LINE      : 'HLCARETLINE',
              ID_INDENT_GUIDES     : 'GUIDES',
              ID_KEY_PROFILES      : 'KEY_PROFILE',
              ID_PREF_LANG         : 'LANG',

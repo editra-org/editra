@@ -56,6 +56,7 @@ _DEFAULTS = {
            'FHIST_LVL'  : 9,                # Filehistory length (9 is max)
            'FFILTER'    : 0,                # Last file filter used
            'GUIDES'     : False,            # Use Indentation guides
+           'HLCARETLINE': False,            # Highlight Caret Line
            'ICONS'      : 'Tango',          # Icon Theme
            'ICON_SZ'    : (24, 24),         # Toolbar Icon Size
            'INDENTWIDTH': 4,                # Default indent width

@@ -34,6 +34,10 @@ calltip {
 		back:#009FFF;
 }
 
+caret_line {
+        back: #000FD6;
+}
+
 char_style {
         fore:#00CDCD;
 }
