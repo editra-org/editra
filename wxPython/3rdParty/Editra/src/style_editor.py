@@ -72,6 +72,7 @@ class StyleEditor(wx.Dialog):
         self.preview = ed_stc.EditraStc(self, wx.ID_ANY, size=(-1, 200),
                                         style=wx.SUNKEN_BORDER, use_dt=False)
         self.styles_orig = self.preview.GetStyleSet()
+        self.preview.SetCaretLineVisible(True)
         self.styles_new = DuplicateStyleDict(self.styles_orig)
         self.preview.SetStyles('preview', self.styles_new, True)
         self.OpenPreviewFile('cpp')

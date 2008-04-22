@@ -612,6 +612,10 @@ class EdMenuBar(wx.MenuBar):
                         _("Zoom Default"))
         viewmenu.AppendSeparator()
         viewedit = self._menus['viewedit'] = EdMenu()
+        viewedit.Append(ed_glob.ID_HLCARET_LINE, _("Highlight Caret Line") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_HLCARET_LINE),
+                        _("Highlight the background of the current line"),
+                        wx.ITEM_CHECK)
         viewedit.Append(ed_glob.ID_INDENT_GUIDES,
                         _("Indentation Guides") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_INDENT_GUIDES),

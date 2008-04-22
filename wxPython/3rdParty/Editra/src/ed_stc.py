@@ -341,6 +341,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetUseAntiAliasing(_PGET('AALIASING'))
         self.SetUseTabs(_PGET('USETABS'))
         self.SetBackSpaceUnIndents(_PGET('BSUNINDENT'))
+        self.SetCaretLineVisible(_PGET('HLCARETLINE'))
         self.SetIndent(_PGET('INDENTWIDTH', 'int'))
         self.SetTabWidth(_PGET('TABWIDTH', 'int'))
 #        self.SetTabIndents(True) # Add option for this too?
@@ -1083,6 +1084,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.LinesJoin()
         elif e_id == ed_glob.ID_INDENT_GUIDES:
             self.SetIndentationGuides(not bool(self.GetIndentationGuides()))
+        elif e_id == ed_glob.ID_HLCARET_LINE:
+            self.SetCaretLineVisible(not self.GetCaretLineVisible())
         elif e_id in syntax.SyntaxIds():
             f_ext = syntax.GetExtFromId(e_id)
             self.LOG("[ed_stc][evt] Manually Setting Lexer to %s" % str(f_ext))
@@ -1919,6 +1922,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetWhitespaceForeground(True, wspace.GetFore())
 
         self.SetCaretForeground(self.GetDefaultForeColour())
+        self.SetCaretLineBack(self.GetItemByName('caret_line').GetBack())
         self.DefineMarkers()
         self.Colourise(0, -1)
 

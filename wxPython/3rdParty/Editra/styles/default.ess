@@ -26,6 +26,10 @@ calltip {
         back: #FFFFB8;
 }
 
+caret_line {
+        back: #D8F8FF;
+}
+
 ctrl_char {
         fore: #000000;
         back: #F6F6F6; 

@@ -33,6 +33,7 @@ NEW: [features/improvements]
 +Fold Margin styling can be styled separate from rest of buffer
 +Add option to set Indent Width separatly from Tab Width
 +New bundled syntax highlighting style Dessert (contributed by Greg Allen)
++Option to highlight caret line
 
 BUG FIXES:
 +Misc UI consistancy issues

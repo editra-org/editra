@@ -712,6 +712,9 @@ class DocCodePanel(wx.Panel):
         edge_col = wx.BoxSizer(wx.HORIZONTAL)
         edge_col.AddMany([(edge_cb, 0, wx.ALIGN_CENTER_VERTICAL),
                           ((10, 5), 0), (edge_sp, 0, wx.ALIGN_CENTER_VERTICAL)])
+        hlcaret_cb = wx.CheckBox(self, ed_glob.ID_HLCARET_LINE,
+                                 _("Highlight Caret Line"))
+        hlcaret_cb.SetValue(Profile_Get("HLCARETLINE"))
         ind_cb = wx.CheckBox(self, ed_glob.ID_INDENT_GUIDES,
                              _("Indentation Guides"))
         ind_cb.SetValue(Profile_Get('GUIDES'))
@@ -725,7 +728,7 @@ class DocCodePanel(wx.Panel):
         vi_cb.SetValue(Profile_Get('VI_EMU'))
 
         # Layout the controls
-        sizer = wx.FlexGridSizer(12, 2, 5, 5)
+        sizer = wx.FlexGridSizer(13, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("General") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (dlex_sz, 0),
@@ -733,6 +736,7 @@ class DocCodePanel(wx.Panel):
                        (vis_lbl, 0), (br_cb, 0),
                        ((5, 5), 0), (fold_cb, 0),
                        ((5, 5), 0), (edge_col, 0, wx.ALIGN_CENTER_VERTICAL),
+                       ((5, 5), 0), (hlcaret_cb, 0),
                        ((5, 5), 0), (ind_cb, 0),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Input Helpers") + u": "),
@@ -755,7 +759,7 @@ class DocCodePanel(wx.Panel):
                     ed_glob.ID_INDENT_GUIDES, ed_glob.ID_FOLDING,
                     ed_glob.ID_AUTOCOMP, ed_glob.ID_AUTOINDENT,
                     ed_glob.ID_PREF_EDGE, ed_glob.ID_VI_MODE,
-                    ed_glob.ID_PREF_DLEXER):
+                    ed_glob.ID_PREF_DLEXER, ed_glob.ID_HLCARET_LINE):
             Profile_Set(ed_glob.ID_2_PROF[e_id],
                         evt.GetEventObject().GetValue())
             wx.CallLater(25, DoUpdates)
