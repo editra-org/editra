@@ -65,9 +65,10 @@ def GenerateTags(buff):
         llen = len(line)
         while idx < llen:
             # Check for docstrings
-            if llen >= idx + 3 and line[idx:idx+3] in ['"""', "'''"]:
+            if not (ind_string or ins_string) and llen >= idx + 3 and line[idx:idx+3] in ['"""', "'''"]:
                 indocstring = not indocstring
                 idx += 3
+                continue
 
             # If end of line or start of comment start next line
             if idx == llen or (line[idx] == u"#" and NotInString()):
@@ -91,14 +92,16 @@ def GenerateTags(buff):
                 if line[idx] == u"'" and not ind_string and \
                    idx > 0 and line[idx-1] != "\\": # Single string
                     ins_string = not ins_string
+                    idx += 1
                 elif line[idx] == u'"' and not ins_string and \
                      idx > 0 and line[idx-1] != "\\": # Double String
                     ind_string = not ind_string
+                    idx += 1
                 else:
                     pass
 
             # Parse and look for elements to add to the DocStruct
-            if indocstring or ins_string or ind_string:
+            if not NotInString():
                 # Token is in a string so ignore and move on
                 idx = idx + 1
             elif line[idx].isspace():
@@ -169,6 +172,21 @@ def GenerateTags(buff):
 
 #-----------------------------------------------------------------------------#
 # Utilities
+
+class PyFunction(taglib.Scope):
+    """Python Functions/Methods need to derive from scope as they can
+    contain definitions of other functions/methods
+
+    """
+    def __init__(self, name, line, obj="function", scope=None):
+        Scope.__init__(self, name, line, obj, scope)
+
+    def AddFunction(self, funct):
+        """Convinience method for adding a function to this functions
+        scope.
+
+        """
+        self.AddElement('function', method)
 
 def PopScopes(lst, indent):
     """Pop all parent scopes until the list only contains scopes that are
