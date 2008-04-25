@@ -15,6 +15,12 @@ print_help () {
 if [ "$ARG" = "-po" ]
 then
     env python2.5 mki18n.py -pv --domain=Editra
+    # Copy all .new files to override the originals
+    for fname in $(ls *.new); do
+        name=$(echo $fname | sed 's/.new//')
+        echo $name
+        mv $fname $name
+    done
 elif [ "$ARG" = "-mo" ]
 then
     env python2.5 mki18n.py -mv --domain=Editra --moTarget=../../locale
