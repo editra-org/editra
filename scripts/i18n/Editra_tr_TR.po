@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-07 02:58-0500\n"
+"POT-Creation-Date: 2008-04-25 12:11-0500\n"
 "PO-Revision-Date: 2008-04-01 17:29+0000\n"
 "Last-Translator: mustafa <myaykan@hotmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s Source File"
 msgstr "%s Kaynak Dosya"
 
-#: ../../src/ed_main.py:443
+#: ../../src/ed_main.py:444
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -31,7 +31,7 @@ msgstr ""
 "%s bulunamadi\n"
 "Dosya taşınmış veya silinmiş olabilir"
 
-#: ../../src/ed_pages.py:686
+#: ../../src/ed_pages.py:687
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -41,7 +41,7 @@ msgstr ""
 "%s son kayıttan sonra silindi\n"
 "Tekrar kaydetmek istermisiniz?"
 
-#: ../../src/ed_pages.py:706
+#: ../../src/ed_pages.py:707
 #, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -51,7 +51,7 @@ msgstr ""
 "%s başka bir uygulama tarafında değiştirildi\n"
 "Dosyayı tekrar yüklemek istermisiniz?"
 
-#: ../../src/ed_menu.py:799
+#: ../../src/ed_menu.py:803
 msgid "&About"
 msgstr "H&akkında"
 
@@ -71,15 +71,15 @@ msgstr "Dosya"
 msgid "&Find"
 msgstr "&Bul"
 
-#: ../../src/ed_menu.py:662
+#: ../../src/ed_menu.py:666
 msgid "&Font"
 msgstr "&Yazıtipi"
 
-#: ../../src/ed_menu.py:635
+#: ../../src/ed_menu.py:639
 msgid "&Goto Line"
 msgstr "& Satıra Git"
 
-#: ../../src/ed_main.py:132 ../../src/ed_menu.py:817
+#: ../../src/ed_main.py:132 ../../src/ed_menu.py:821
 msgid "&Help"
 msgstr "&Yardım"
 
@@ -107,15 +107,15 @@ msgstr ""
 msgid "&Save"
 msgstr "&Kaydet"
 
-#: ../../src/ed_menu.py:758
+#: ../../src/ed_menu.py:762
 msgid "&Settings"
 msgstr "Ayarla&r"
 
-#: ../../src/ed_menu.py:648
+#: ../../src/ed_menu.py:652
 msgid "&Toolbar"
 msgstr "&Araç çubuğu"
 
-#: ../../src/ed_menu.py:790
+#: ../../src/ed_menu.py:794
 msgid "&Tools"
 msgstr "&Araclar"
 
@@ -123,7 +123,7 @@ msgstr "&Araclar"
 msgid "&Undo"
 msgstr "&Geri al"
 
-#: ../../src/ed_menu.py:653
+#: ../../src/ed_menu.py:657
 msgid "&View"
 msgstr "Görünüm"
 
@@ -139,7 +139,7 @@ msgstr "**Yeni Değer**"
 msgid "Abort"
 msgstr "İptal"
 
-#: ../../src/ed_menu.py:801
+#: ../../src/ed_menu.py:805
 msgid "About"
 msgstr "Hakkında"
 
@@ -192,11 +192,11 @@ msgstr "AntiAliasing"
 msgid "Appearance"
 msgstr "Görünüm"
 
-#: ../../src/prefdlg.py:1480
+#: ../../src/prefdlg.py:1481
 msgid "Apply"
 msgstr "Uygula"
 
-#: ../../src/style_editor.py:644
+#: ../../src/style_editor.py:645
 msgid "Attributes"
 msgstr "Özellikler"
 
@@ -204,11 +204,11 @@ msgstr "Özellikler"
 msgid "Author"
 msgstr "Yazar"
 
-#: ../../src/ed_menu.py:740 ../../src/prefdlg.py:720
+#: ../../src/ed_menu.py:744 ../../src/prefdlg.py:723
 msgid "Auto-Completion"
 msgstr "Otomotik-Tamamlama"
 
-#: ../../src/ed_menu.py:743 ../../src/prefdlg.py:722
+#: ../../src/ed_menu.py:747 ../../src/prefdlg.py:725
 msgid "Auto-Indent"
 msgstr "Otomotik-Giriş"
 
@@ -216,7 +216,7 @@ msgstr "Otomotik-Giriş"
 msgid "Automatically save/use window state from last session"
 msgstr "En son oturumun pencere durumunu otomatik kaydet/kullan"
 
-#: ../../src/style_editor.py:633
+#: ../../src/style_editor.py:634
 msgid "Background"
 msgstr "Arkaplan"
 
@@ -224,11 +224,11 @@ msgstr "Arkaplan"
 msgid "Backspace Unindents"
 msgstr "Geriboşluk girişi azaltır"
 
-#: ../../src/style_editor.py:192
+#: ../../src/style_editor.py:193
 msgid "Base new theme on existing one"
 msgstr "Yeni tema mevcut olan tema üzerine kuruludur"
 
-#: ../../src/prefdlg.py:1454
+#: ../../src/prefdlg.py:1455
 msgid "Binding"
 msgstr "Bağlama"
 
@@ -236,11 +236,11 @@ msgstr "Bağlama"
 msgid "Bookmarks"
 msgstr "Yer imleri"
 
-#: ../../src/ed_menu.py:747 ../../src/prefdlg.py:703
+#: ../../src/ed_menu.py:751 ../../src/prefdlg.py:703
 msgid "Bracket Highlighting"
 msgstr "Her iki parantezide belirt"
 
-#: ../../src/style_editor.py:137
+#: ../../src/style_editor.py:138
 msgid "Cancel"
 msgstr "İptal"
 
@@ -248,7 +248,7 @@ msgstr "İptal"
 msgid "Canceled"
 msgstr "İptal edildi"
 
-#: ../../src/ed_menu.py:664
+#: ../../src/ed_menu.py:668
 msgid "Change Font Settings"
 msgstr "Font ayarlarını degiştir"
 
@@ -257,7 +257,7 @@ msgstr "Font ayarlarını degiştir"
 msgid "Change view to \"%s\""
 msgstr "\"%s\"  göre görünüm ayarını değiş"
 
-#: ../../src/style_editor.py:314
+#: ../../src/style_editor.py:315
 #, python-format
 msgid "Changed color scheme to %s"
 msgstr "Renk şemasını %s göre değiş"
@@ -270,7 +270,7 @@ msgstr "Bu diyalogdaki değişikliler sizin güncel profilinize kayıt edildi.  
 msgid "Changes will take affect once the program has been restarted"
 msgstr "Değişiklikler programın bir sonraki başlayışında etkili olacaktır"
 
-#: ../../src/prefdlg.py:1244
+#: ../../src/prefdlg.py:1248
 msgid "Check"
 msgstr "Kontrol et"
 
@@ -282,11 +282,11 @@ msgstr "Başlangıçta güncellemeleri kontrol et"
 msgid "Check if on disk file has been modified by others"
 msgstr "Diskteki dosyanın değişip değişmeğini kontrol et"
 
-#: ../../src/ed_main.py:341
+#: ../../src/ed_main.py:342
 msgid "Choose a File"
 msgstr "Dosya seç"
 
-#: ../../src/ed_main.py:513
+#: ../../src/ed_main.py:514
 msgid "Choose a Save Location"
 msgstr "Kaydetmek için bir yer seç"
 
@@ -340,19 +340,19 @@ msgstr "Kod"
 msgid "Code Browser"
 msgstr "Kaynak Gözatıcı"
 
-#: ../../src/ed_menu.py:750 ../../src/prefdlg.py:705
+#: ../../src/ed_menu.py:754 ../../src/prefdlg.py:705
 msgid "Code Folding"
 msgstr "Kod Gizleme"
 
-#: ../../src/style_editor.py:617
+#: ../../src/style_editor.py:618
 msgid "Color"
 msgstr "Renk"
 
-#: ../../src/ed_menu.py:755
+#: ../../src/ed_menu.py:759
 msgid "Color Highlight Code Syntax"
 msgstr "Kaynak kod renklendirmek"
 
-#: ../../src/prefdlg.py:832
+#: ../../src/prefdlg.py:836
 msgid "Color Scheme"
 msgstr "Renk Şeması"
 
@@ -364,15 +364,15 @@ msgstr "Komut"
 msgid "Commands that affect an entire line"
 msgstr "Tam bir satır komutlarını aktif yap"
 
-#: ../../src/ed_menu.py:666
+#: ../../src/ed_menu.py:670
 msgid "Comment Lines"
 msgstr "Satırlarları yorumlara"
 
-#: ../../src/ed_menu.py:668
+#: ../../src/ed_menu.py:672
 msgid "Comment the selected lines"
 msgstr "Seçili satıra yorum ekle"
 
-#: ../../src/prefdlg.py:1059
+#: ../../src/prefdlg.py:1063
 msgid "Configuration"
 msgstr "Yapılandırma"
 
@@ -384,19 +384,19 @@ msgstr "Yapılandır"
 msgid "Configure Printer"
 msgstr "Yazıcı yapılandır"
 
-#: ../../src/ed_menu.py:687
+#: ../../src/ed_menu.py:691
 msgid "Convert selected text to all lowercase letters"
 msgstr "Seçili yazıyı küçük harflere çevir"
 
-#: ../../src/ed_menu.py:684
+#: ../../src/ed_menu.py:688
 msgid "Convert selected text to all uppercase letters"
 msgstr "Seçili yazıyı büyük harflere çevir"
 
-#: ../../src/ed_menu.py:703
+#: ../../src/ed_menu.py:707
 msgid "Convert spaces to tabs in selected/all text"
 msgstr "Seçili alanda/tüm text de boşlukları tab karakterine çevir"
 
-#: ../../src/ed_menu.py:706
+#: ../../src/ed_menu.py:710
 msgid "Convert tabs to spaces in selected/all text"
 msgstr "Seçili alanda/tüm text de tab ları boşluğa karakterine çevir"
 
@@ -416,7 +416,7 @@ msgstr "Satır kopyala"
 msgid "Copy Selected Text to Clipboard"
 msgstr "Seçili texti panoya kopyala"
 
-#: ../../src/ed_main.py:1125
+#: ../../src/ed_main.py:1129
 msgid "Copyright"
 msgstr "Telif Hakkı"
 
@@ -462,7 +462,7 @@ msgstr "Standart-EOL-Modus"
 msgid "Default Lexer"
 msgstr "Standard-Renklendirme"
 
-#: ../../src/prefdlg.py:943
+#: ../../src/prefdlg.py:947
 msgid "Default Perspective"
 msgstr "Varsayılan Perspektif"
 
@@ -474,7 +474,7 @@ msgstr "Yeni doküman için varsayılan renklendirme"
 msgid "Defines"
 msgstr "Tanımlar"
 
-#: ../../src/prefdlg.py:1422
+#: ../../src/prefdlg.py:1424
 msgid "Delete"
 msgstr "Sil"
 
@@ -498,7 +498,7 @@ msgstr "Hata Raporunu Pasif Yap"
 msgid "Do you wish to exit?"
 msgstr "Kapatılsınmı?"
 
-#: ../../src/ed_pages.py:411
+#: ../../src/ed_pages.py:412
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -512,7 +512,7 @@ msgstr ""
 msgid "Document"
 msgstr "Belge"
 
-#: ../../src/plugdlg.py:178 ../../src/plugdlg.py:353 ../../src/prefdlg.py:1239
+#: ../../src/plugdlg.py:178 ../../src/plugdlg.py:353 ../../src/prefdlg.py:1243
 msgid "Download"
 msgstr "İndirme"
 
@@ -529,7 +529,7 @@ msgstr "İndiriliyor"
 msgid "Downloading To: %s"
 msgstr "%s buraya iniyor"
 
-#: ../../src/Editra.py:372 ../../src/prefdlg.py:1280
+#: ../../src/Editra.py:372 ../../src/prefdlg.py:1284
 msgid "Downloading Update"
 msgstr "Güncelleme İniyor"
 
@@ -558,16 +558,16 @@ msgstr "Güncel satırı çoğalt"
 msgid "E&xit"
 msgstr "Çı&kış"
 
-#: ../../src/ed_menu.py:727
+#: ../../src/ed_menu.py:731
 msgid "EOL Mode"
 msgstr "EOL Modu"
 
-#: ../../src/ed_main.py:499
+#: ../../src/ed_main.py:500
 #, python-format
 msgid "ERROR: %s"
 msgstr "Hata: %s"
 
-#: ../../src/ed_main.py:533
+#: ../../src/ed_main.py:534
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "HATA: %s kaydetme hatalı"
@@ -584,15 +584,15 @@ msgstr "Düzenle"
 msgid "Edit Preferences / Settings"
 msgstr "Seçenekleri / Ayarları Düzenle"
 
-#: ../../src/ed_menu.py:779
+#: ../../src/ed_menu.py:783
 msgid "Edit the way syntax is highlighted"
 msgstr "Renklendirme ayarlaması"
 
-#: ../../src/ed_menu.py:632
+#: ../../src/ed_menu.py:636
 msgid "Editor"
 msgstr "Editor"
 
-#: ../../src/ed_menu.py:767
+#: ../../src/ed_menu.py:771
 msgid "Editor Command"
 msgstr "Editor Komutu"
 
@@ -604,27 +604,27 @@ msgstr "Editor Modu"
 msgid "Editra Log"
 msgstr "Editra Geçmişi"
 
-#: ../../src/style_editor.py:282
+#: ../../src/style_editor.py:283
 msgid "Editra Style Sheet"
 msgstr "Editra Stil Dosyası"
 
-#: ../../src/ed_mdlg.py:40
-#, python-format
+#: ../../src/ed_mdlg.py:41
+#, fuzzy, python-format
 msgid ""
-"Editra could not open %s\n"
+"Editra could not open %(filename)s\n"
 "\n"
 "Error:\n"
-"%s"
+"%(errormsg)s"
 msgstr ""
 "%s açılmadı\n"
 "Hata:\n"
 "%s"
 
-#: ../../src/ed_main.py:1115
+#: ../../src/ed_main.py:1119
 msgid "Editra is a programmers text editor."
 msgstr "Editra Programcı text editörüdür"
 
-#: ../../src/ed_menu.py:811
+#: ../../src/ed_menu.py:815
 msgid "Editra translations project"
 msgstr "Editra çeviri projesi"
 
@@ -632,31 +632,31 @@ msgstr "Editra çeviri projesi"
 msgid "Editra | CodeBrowser"
 msgstr "Editra Kaynak Text Gözatıcı"
 
-#: ../../src/prefdlg.py:724
+#: ../../src/prefdlg.py:727
 msgid "Enable Vi Emulation"
 msgstr "Vi-Emulation Aktif Yap"
 
-#: ../../src/ed_pages.py:278
+#: ../../src/ed_pages.py:279
 msgid "Encoding Error"
 msgstr "Encode - Sifreleme Hatası"
 
-#: ../../src/ed_menu.py:728
+#: ../../src/ed_menu.py:732
 msgid "End of line character formatting"
 msgstr "Satır sonu karakter düzenle"
 
-#: ../../src/style_editor.py:718
+#: ../../src/style_editor.py:719
 msgid "Enter a hex color value"
 msgstr "Bir hex olarak renk değeri gir"
 
-#: ../../src/prefdlg.py:1618
+#: ../../src/prefdlg.py:1619
 msgid "Enter the name of the new key profile"
 msgstr "Yeni anahtar profil adını gir"
 
-#: ../../src/ed_pages.py:721 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:722 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "Hata"
 
-#: ../../src/ed_mdlg.py:41
+#: ../../src/ed_mdlg.py:43
 msgid "Error Opening File"
 msgstr "Dosya Açılış Hatası"
 
@@ -674,7 +674,7 @@ msgstr ""
 "\"Report Error\" tıklayarak Editra nın daha iyi olması için yardım edin\n"
 "ve aşağıdaki Error-Traceback göndermek suretiyle"
 
-#: ../../src/ed_main.py:1056
+#: ../../src/ed_main.py:1060
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr "Hata: %s açılamıyor"
@@ -695,19 +695,19 @@ msgstr "Çıkış Kodu"
 msgid "Exit the Program"
 msgstr "Uygulamayı Terket"
 
-#: ../../src/style_editor.py:138
+#: ../../src/style_editor.py:139
 msgid "Export"
 msgstr "Dışa Aktar"
 
-#: ../../src/style_editor.py:280
+#: ../../src/style_editor.py:281
 msgid "Export Style Sheet"
 msgstr "Stil Şema Dışa Aktar"
 
-#: ../../src/prefdlg.py:1754
+#: ../../src/prefdlg.py:1755
 msgid "Extensions (space separated, no dots)"
 msgstr "Ekler (ayrık boşluk, nokta yok )"
 
-#: ../../src/ed_menu.py:731
+#: ../../src/ed_menu.py:735
 msgid "F&ormat"
 msgstr "&Biçim"
 
@@ -720,28 +720,28 @@ msgstr "Başarısız"
 msgid "Failed to install %d plugins"
 msgstr "%d eklenti kurma hatası"
 
-#: ../../src/ed_pages.py:718
-#, python-format
+#: ../../src/ed_pages.py:720
+#, fuzzy, python-format
 msgid ""
-"Failed to reload %s:\n"
-"Error: %s"
+"Failed to reload %(filename)s:\n"
+"Error: %(errmsg)s"
 msgstr ""
 "%s yenidem yüklme başarısız oldu\n"
 "Hata: %s"
 
-#: ../../src/ed_mdlg.py:56
-#, python-format
+#: ../../src/ed_mdlg.py:60
+#, fuzzy, python-format
 msgid ""
-"Failed to save file: %s\n"
+"Failed to save file: %(filename)s\n"
 "\n"
 "Error:\n"
-"%s"
+"%(errormsg)s"
 msgstr ""
 "%s kaydetme hatası\n"
 "Hata:\n"
 "%s"
 
-#: ../../src/ed_menu.py:812
+#: ../../src/ed_menu.py:816
 msgid "Feedback"
 msgstr "Geri Bildirim"
 
@@ -753,7 +753,7 @@ msgstr "Dosya Yöneticisi"
 msgid "File History Length"
 msgstr "Geçmişte açılan dosyların sayısı"
 
-#: ../../src/ed_main.py:445
+#: ../../src/ed_main.py:446
 msgid "File Not Found"
 msgstr "Dosya Bulunamadı"
 
@@ -777,7 +777,7 @@ msgstr ""
 "Dosya zaten mevcut sayfalardan birinde acık\n"
 "Bu dosya tekrar açılsın mı?"
 
-#: ../../src/prefdlg.py:826
+#: ../../src/prefdlg.py:830
 msgid "Filetype Associations"
 msgstr "Dosya tipini  tanınır hale getir"
 
@@ -822,15 +822,15 @@ msgstr "Eklenti - Plugin İndirilmesi Tamalandı"
 msgid "Folder"
 msgstr "Klasör"
 
-#: ../../src/style_editor.py:665
+#: ../../src/style_editor.py:666
 msgid "Font"
 msgstr "Yazı Tipi"
 
-#: ../../src/style_editor.py:660
+#: ../../src/style_editor.py:661
 msgid "Font Settings"
 msgstr "Yazı Tipi Ayarları"
 
-#: ../../src/style_editor.py:621
+#: ../../src/style_editor.py:622
 msgid "Foreground"
 msgstr "Ön Alan"
 
@@ -838,7 +838,7 @@ msgstr "Ön Alan"
 msgid "Format"
 msgstr "Biçim"
 
-#: ../../src/ed_menu.py:717 ../../src/ed_menu.py:721 ../../src/ed_menu.py:725
+#: ../../src/ed_menu.py:721 ../../src/ed_menu.py:725 ../../src/ed_menu.py:729
 #, python-format
 msgid "Format all EOL characters to %s Mode"
 msgstr "Tüm EOL karakterler  %s içindedir"
@@ -847,7 +847,7 @@ msgstr "Tüm EOL karakterler  %s içindedir"
 msgid "Function Definitions"
 msgstr "Fonksiyon Tanımları"
 
-#: ../../src/prefdlg.py:188 ../../src/prefdlg.py:485 ../../src/prefdlg.py:730
+#: ../../src/prefdlg.py:188 ../../src/prefdlg.py:485 ../../src/prefdlg.py:733
 msgid "General"
 msgstr "Genel"
 
@@ -891,15 +891,15 @@ msgstr "Ayarlar penceresine git"
 msgid "Goto Line"
 msgstr "Satıra Git"
 
-#: ../../src/ed_menu.py:637
+#: ../../src/ed_menu.py:641
 msgid "Goto Line Number"
 msgstr "Satıra Numarasına Git"
 
-#: ../../src/ed_menu.py:638
+#: ../../src/ed_menu.py:642
 msgid "Goto Matching Brace"
 msgstr ""
 
-#: ../../src/ed_menu.py:769
+#: ../../src/ed_menu.py:773
 msgid "Goto command buffer"
 msgstr "Komut tamponuna git"
 
@@ -907,19 +907,29 @@ msgstr "Komut tamponuna git"
 msgid "Guide Column"
 msgstr "Sutun Klavuzu"
 
-#: ../../src/ed_menu.py:749
+#: ../../src/ed_menu.py:753
 msgid "Highlight Brackets/Braces"
 msgstr "Parantezleri/Parantezi Renkli Göster"
 
-#: ../../src/ed_main.py:1117
+#: ../../src/ed_menu.py:615 ../../src/prefdlg.py:716
+#, fuzzy
+msgid "Highlight Caret Line"
+msgstr "Parantezleri/Parantezi Renkli Göster"
+
+#: ../../src/ed_menu.py:617
+#, fuzzy
+msgid "Highlight the background of the current line"
+msgstr "Güncel satırın işaretimi düğmesi"
+
+#: ../../src/ed_main.py:1121
 msgid "Homepage"
 msgstr "Ana Sayfa"
 
-#: ../../src/prefdlg.py:924
+#: ../../src/prefdlg.py:928
 msgid "Icon Theme"
 msgstr "Simge Teması"
 
-#: ../../src/prefdlg.py:969
+#: ../../src/prefdlg.py:973
 msgid "Icons"
 msgstr "Simgeler"
 
@@ -927,7 +937,7 @@ msgstr "Simgeler"
 msgid "Identities"
 msgstr "Kimlikler"
 
-#: ../../src/ed_menu.py:675
+#: ../../src/ed_menu.py:679
 msgid "Indent Lines"
 msgstr "Satır Girintileme"
 
@@ -936,11 +946,11 @@ msgstr "Satır Girintileme"
 msgid "Indent Width"
 msgstr "Satır Girintileme"
 
-#: ../../src/ed_menu.py:677
+#: ../../src/ed_menu.py:681
 msgid "Indent the selected lines"
 msgstr "Seçili satırı girintile"
 
-#: ../../src/ed_menu.py:616 ../../src/prefdlg.py:716
+#: ../../src/ed_menu.py:620 ../../src/prefdlg.py:719
 msgid "Indentation Guides"
 msgstr "Girinti Klavuzları"
 
@@ -948,11 +958,11 @@ msgstr "Girinti Klavuzları"
 msgid "Info"
 msgstr "Bilgi"
 
-#: ../../src/prefdlg.py:738
+#: ../../src/prefdlg.py:742
 msgid "Input Helpers"
 msgstr "Yardımcılar Girişi"
 
-#: ../../src/ed_menu.py:692
+#: ../../src/ed_menu.py:696
 msgid "Insert spaces instead of tab characters with tab key"
 msgstr "Tab terine boşluk karakterini kullan"
 
@@ -976,11 +986,11 @@ msgstr "Eklentileri sadece şimdiki  kullanıcı için kur"
 msgid "Installation Error"
 msgstr "Kurulum Hatası"
 
-#: ../../src/prefdlg.py:1220
+#: ../../src/prefdlg.py:1224
 msgid "Installed Version"
 msgstr "Kurulu Sürüm"
 
-#: ../../src/ed_pages.py:395
+#: ../../src/ed_pages.py:396
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Geçersiz doya: %s"
@@ -997,19 +1007,19 @@ msgstr "Seçili satırları birleştir"
 msgid "Jump to Saved Path"
 msgstr "Kayırlı yolu - adresi değiş"
 
-#: ../../src/prefdlg.py:1450
+#: ../../src/prefdlg.py:1451
 msgid "Key"
 msgstr "Anahtar"
 
-#: ../../src/prefdlg.py:1418
+#: ../../src/prefdlg.py:1420
 msgid "Key Profile"
 msgstr "Anahtar Profili"
 
-#: ../../src/prefdlg.py:1333
+#: ../../src/prefdlg.py:1337
 msgid "Keybindings"
 msgstr "Tuş bağları"
 
-#: ../../src/ed_menu.py:770
+#: ../../src/ed_menu.py:774
 msgid "Keyword Helper"
 msgstr "Anahtar Kelime Yardımcısı"
 
@@ -1025,7 +1035,7 @@ msgstr "Etiketler"
 msgid "Language"
 msgstr "Dil"
 
-#: ../../src/prefdlg.py:1226
+#: ../../src/prefdlg.py:1230
 msgid "Latest Version"
 msgstr "Son Sürüm"
 
@@ -1033,11 +1043,11 @@ msgstr "Son Sürüm"
 msgid "Launch Configuration"
 msgstr "Çalışma Ayarları"
 
-#: ../../src/prefdlg.py:973
+#: ../../src/prefdlg.py:977
 msgid "Layout"
 msgstr "Düzen"
 
-#: ../../src/prefdlg.py:1752
+#: ../../src/prefdlg.py:1753
 msgid "Lexer"
 msgstr "Lexer - Sözcüksel Analizci"
 
@@ -1045,7 +1055,7 @@ msgstr "Lexer - Sözcüksel Analizci"
 msgid "Lexers"
 msgstr "Lexer - Sözcüksel Analizciler"
 
-#: ../../src/ed_main.py:1119
+#: ../../src/ed_main.py:1123
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr "wxWindows  Lisansı (Tam kayıt içi COPYING.txt bakınız)"
 
@@ -1053,7 +1063,7 @@ msgstr "wxWindows  Lisansı (Tam kayıt içi COPYING.txt bakınız)"
 msgid "Line Edit"
 msgstr "Satır Düzenleme"
 
-#: ../../src/ed_stc.py:724
+#: ../../src/ed_stc.py:725
 #, python-format
 msgid "Line: %d  Column: %d"
 msgstr "Satır: %d Sutun: %d"
@@ -1066,7 +1076,7 @@ msgstr "En son oturumu yükle"
 msgid "Load Profile"
 msgstr "Profili Yükle"
 
-#: ../../src/ed_main.py:572 ../../src/ed_menu.py:493
+#: ../../src/ed_main.py:573 ../../src/ed_menu.py:493
 msgid "Load a Custom Profile"
 msgstr "Özel bir profili yükle"
 
@@ -1078,7 +1088,7 @@ msgstr "Sahsi profili yükle ve kaydet"
 msgid "Load files from last session on startup"
 msgstr "Açılışta en son oturum kalan dosyaları yükle"
 
-#: ../../src/ed_main.py:579
+#: ../../src/ed_main.py:580
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr "%s: Profili Yüklendi"
@@ -1087,11 +1097,11 @@ msgstr "%s: Profili Yüklendi"
 msgid "Locale Settings"
 msgstr "Yerel Ayarlar"
 
-#: ../../src/ed_menu.py:685
+#: ../../src/ed_menu.py:689
 msgid "Lowercase"
 msgstr "&Küçük Harf"
 
-#: ../../src/ed_menu.py:715 ../../src/prefdlg.py:552
+#: ../../src/ed_menu.py:719 ../../src/prefdlg.py:552
 msgid "Macintosh (\\r)"
 msgstr "Macintosh Sistemi"
 
@@ -1103,7 +1113,7 @@ msgstr "Makro Tanımları"
 msgid "Macros"
 msgstr "Makrolar"
 
-#: ../../src/ed_menu.py:776
+#: ../../src/ed_menu.py:780
 msgid "Manage, Download, and Install plugins"
 msgstr "Eklenti yönet, indir ve kur"
 
@@ -1115,11 +1125,11 @@ msgstr "Lexer/Syntax elle ayarla"
 msgid "Match Case"
 msgstr "Küçük/Büyük Harf Duyarlı"
 
-#: ../../src/prefdlg.py:1435
+#: ../../src/prefdlg.py:1433
 msgid "Menu"
 msgstr ""
 
-#: ../../src/prefdlg.py:979
+#: ../../src/prefdlg.py:983
 msgid "Misc"
 msgstr "Çeşitli"
 
@@ -1128,15 +1138,15 @@ msgstr "Çeşitli"
 msgid "Modified"
 msgstr "Değiştirilmiş"
 
-#: ../../src/prefdlg.py:1442
+#: ../../src/prefdlg.py:1443
 msgid "Modifier 1"
 msgstr "Değiştirici 1"
 
-#: ../../src/prefdlg.py:1446
+#: ../../src/prefdlg.py:1447
 msgid "Modifier 2"
 msgstr "Değiştirici 2"
 
-#: ../../src/ed_menu.py:640
+#: ../../src/ed_menu.py:644
 msgid "Move caret matching brace"
 msgstr ""
 
@@ -1152,8 +1162,8 @@ msgstr ""
 msgid "Network"
 msgstr "Ağ"
 
-#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1421
-#: ../../src/style_editor.py:194
+#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1423
+#: ../../src/style_editor.py:195
 msgid "New"
 msgstr "Yeni"
 
@@ -1177,7 +1187,7 @@ msgstr "Arkaya Yeni Satır"
 msgid "New Line Before"
 msgstr "Öne Yeni Satır"
 
-#: ../../src/prefdlg.py:1617
+#: ../../src/prefdlg.py:1618
 msgid "New Profile"
 msgstr "Yeni Profil"
 
@@ -1185,7 +1195,7 @@ msgstr "Yeni Profil"
 msgid "Next"
 msgstr "Sonraki"
 
-#: ../../src/ed_menu.py:641
+#: ../../src/ed_menu.py:645
 msgid "Next Bookmark"
 msgstr "Sonraki Yer İmi"
 
@@ -1193,23 +1203,23 @@ msgstr "Sonraki Yer İmi"
 msgid "No Description Available"
 msgstr "Tanımlama Mevcut Değil"
 
-#: ../../src/ed_pages.py:405
+#: ../../src/ed_pages.py:406
 msgid "No Valid Files to Open"
 msgstr "Açmak için dosya geçerli değildir"
 
-#: ../../src/prefdlg.py:1516
+#: ../../src/prefdlg.py:1517
 msgid "None"
 msgstr "Hiçbiri"
 
-#: ../../src/style_editor.py:135
+#: ../../src/style_editor.py:136
 msgid "Ok"
 msgstr "Tamam"
 
-#: ../../src/ed_menu.py:806
+#: ../../src/ed_menu.py:810
 msgid "Online Documentation"
 msgstr "Çevrimiçi Belgeler"
 
-#: ../../src/ed_menu.py:808
+#: ../../src/ed_menu.py:812
 msgid "Online project documentation and help guides"
 msgstr "Çevrimiçi proje belgeleri bve yardım rehberleri"
 
@@ -1225,7 +1235,7 @@ msgstr "Bir Python  Dosyası Aç"
 msgid "Open Code Browser Sidepanel"
 msgstr "Kod Gözatıcısını Aç"
 
-#: ../../src/ed_pages.py:416
+#: ../../src/ed_pages.py:417
 msgid "Open Directory?"
 msgstr "Klasör Aç"
 
@@ -1253,12 +1263,12 @@ msgstr "Hızlı arama çubuğunu aç"
 msgid "Open with "
 msgstr "Beraber Aç "
 
-#: ../../src/ed_pages.py:436
+#: ../../src/ed_pages.py:437
 #, python-format
 msgid "Opened file: %s"
 msgstr "Açılan Dosya: %s"
 
-#: ../../src/ed_main.py:1053
+#: ../../src/ed_main.py:1057
 #, python-format
 msgid "Opening %s"
 msgstr "Açılan: %s"
@@ -1276,7 +1286,7 @@ msgstr "Kur Sayfası"
 msgid "Page: %d"
 msgstr "Sayfa: %d"
 
-#: ../../src/prefdlg.py:1120
+#: ../../src/prefdlg.py:1124
 msgid "Password"
 msgstr "Şifre"
 
@@ -1308,7 +1318,7 @@ msgstr "Silinecek Perspektif"
 msgid "Perspectives"
 msgstr "Perspektifler"
 
-#: ../../src/ed_main.py:1118
+#: ../../src/ed_main.py:1122
 msgid "Platform Info"
 msgstr "Platform Bilgisi"
 
@@ -1320,11 +1330,11 @@ msgstr "Ayarlarınızı geri almak için lütfen ayarlar penceresini kullanın."
 msgid "Plugin"
 msgstr "Eklenti"
 
-#: ../../src/ed_main.py:800 ../../src/ed_menu.py:774
+#: ../../src/ed_main.py:802 ../../src/ed_menu.py:778
 msgid "Plugin Manager"
 msgstr "Eklenti Yöneticisi"
 
-#: ../../src/prefdlg.py:1105
+#: ../../src/prefdlg.py:1109
 msgid "Port Number"
 msgstr "Port Numarası"
 
@@ -1336,7 +1346,7 @@ msgstr "Tercihler"
 msgid "Preferences - Editra"
 msgstr "Tercihler - Editra"
 
-#: ../../src/style_editor.py:128
+#: ../../src/style_editor.py:129
 msgid "Preview"
 msgstr "Ön İzleme"
 
@@ -1348,7 +1358,7 @@ msgstr "Yazıcı Çıktısı Ön İzleme"
 msgid "Previous"
 msgstr "Önceki"
 
-#: ../../src/ed_menu.py:644
+#: ../../src/ed_menu.py:648
 msgid "Previous Bookmark"
 msgstr "Önceki Yer İmi"
 
@@ -1380,11 +1390,11 @@ msgstr "Yazıcı Modu"
 msgid "Procedure Definitions"
 msgstr "Prosedür Tanımları"
 
-#: ../../src/ed_main.py:553 ../../src/ed_main.py:574 ../../src/ed_menu.py:494
+#: ../../src/ed_main.py:554 ../../src/ed_main.py:575 ../../src/ed_menu.py:494
 msgid "Profile"
 msgstr "Profil"
 
-#: ../../src/ed_main.py:558
+#: ../../src/ed_main.py:559
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr "Profil olarak kaydedildi: %s"
@@ -1401,7 +1411,7 @@ msgstr "Program Çalışabilir Komutu"
 msgid "Programs"
 msgstr "Programlar"
 
-#: ../../src/ed_menu.py:802
+#: ../../src/ed_menu.py:806
 msgid "Project Homepage"
 msgstr "Projenin İnternet Sayfası"
 
@@ -1409,15 +1419,15 @@ msgstr "Projenin İnternet Sayfası"
 msgid "Protocols"
 msgstr ""
 
-#: ../../src/ed_menu.py:772
+#: ../../src/ed_menu.py:776
 msgid "Provides a Contextual Help Menu Listing Standard Keywords/Functions"
 msgstr "İndeksli yardım menüsü standart anahtar kelimeler ve fonksiyonlar sunar"
 
-#: ../../src/prefdlg.py:1091
+#: ../../src/prefdlg.py:1095
 msgid "Proxy Settings"
 msgstr "Vekil Sunucu Ayarları"
 
-#: ../../src/prefdlg.py:1101
+#: ../../src/prefdlg.py:1105
 msgid "Proxy URL"
 msgstr "Vekil Sunucu URL"
 
@@ -1438,11 +1448,11 @@ msgstr "En Son Arananlar"
 msgid "Recently Opened Files"
 msgstr "En Son Açılan Dosyalar"
 
-#: ../../src/ed_stc.py:1383
+#: ../../src/ed_stc.py:1386
 msgid "Recording Finished"
 msgstr "Kayıt Tamamlandı"
 
-#: ../../src/ed_stc.py:1370
+#: ../../src/ed_stc.py:1373
 msgid "Recording Macro"
 msgstr "Makro Kayıt"
 
@@ -1454,7 +1464,7 @@ msgstr "Yinele"
 msgid "Redo Last Undo"
 msgstr "En son geri alınanı tekrarla"
 
-#: ../../src/ed_pages.py:709
+#: ../../src/ed_pages.py:710
 msgid "Reload File?"
 msgstr "Yeniden dosya yükle"
 
@@ -1462,11 +1472,11 @@ msgstr "Yeniden dosya yükle"
 msgid "Remember File Position"
 msgstr "Dosya pozisyonunu kaydet"
 
-#: ../../src/prefdlg.py:951
+#: ../../src/prefdlg.py:955
 msgid "Remember Window Position on Exit"
 msgstr "Çıkışta pencere pozisyonunu kaydet"
 
-#: ../../src/prefdlg.py:948
+#: ../../src/prefdlg.py:952
 msgid "Remember Window Size on Exit"
 msgstr "Çıkışta pencere boyutunu kaydet"
 
@@ -1486,7 +1496,7 @@ msgstr "Güncel dökümandan tüm yer imlerini sil"
 msgid "Remove selection from list"
 msgstr "Listeden seçili olanı sil"
 
-#: ../../src/ed_menu.py:709
+#: ../../src/ed_menu.py:713
 msgid "Remove trailing whitespace"
 msgstr "Gelen boşluk karakterini sil"
 
@@ -1507,7 +1517,7 @@ msgstr ""
 msgid "Report Error"
 msgstr "Hatayı Rapor  Et"
 
-#: ../../src/ed_pages.py:689
+#: ../../src/ed_pages.py:690
 msgid "Resave File?"
 msgstr "Dosyayı tekrar kaydet"
 
@@ -1519,7 +1529,7 @@ msgstr "Eklenti listesi sorgulanıyor"
 msgid "Reveal in "
 msgstr "İçinde göster "
 
-#: ../../src/prefdlg.py:843 ../../src/prefdlg.py:1478
+#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1479
 msgid "Revert to Default"
 msgstr "Eski duruma getir"
 
@@ -1548,7 +1558,7 @@ msgstr "Tümünü kaydet"
 msgid "Save As"
 msgstr "Farklı Kaydet"
 
-#: ../../src/ed_main.py:1081
+#: ../../src/ed_main.py:1085
 msgid "Save Changes?"
 msgstr "Değişiklikler kaydolsunmu ?"
 
@@ -1564,7 +1574,7 @@ msgstr "Güncel ayarları yeni bir profil içinde kaydet"
 msgid "Save Current View"
 msgstr "Şimdiki Görünümü Kaydet"
 
-#: ../../src/ed_mdlg.py:57
+#: ../../src/ed_mdlg.py:62
 msgid "Save Error"
 msgstr "Kaydetme Hatası"
 
@@ -1580,7 +1590,7 @@ msgstr "Profili Kaydet"
 msgid "Save Selected Paths"
 msgstr "Seçili Yolu Kaydet"
 
-#: ../../src/style_editor.py:248
+#: ../../src/style_editor.py:249
 msgid "Save Styles"
 msgstr "Stili Kaydet"
 
@@ -1592,12 +1602,12 @@ msgstr "Tüm açık sayfaları kaydet"
 msgid "Save the current window layout"
 msgstr "Güncel pencere düzenini kaydet"
 
-#: ../../src/ed_main.py:535
+#: ../../src/ed_main.py:536
 #, python-format
 msgid "Saved File As: %s"
 msgstr "Dosya %s olarak kaydedildi"
 
-#: ../../src/ed_main.py:496
+#: ../../src/ed_main.py:497
 #, python-format
 msgid "Saved File: %s"
 msgstr "Dosya kaydedildiÇ %s"
@@ -1630,15 +1640,15 @@ msgstr "Eklentileri indirmek için seçmek"
 msgid "Select the desired plugins and then Click Download"
 msgstr "İstenen eklentileri seçmek ve download üzerine tıklamak"
 
-#: ../../src/ed_menu.py:814
+#: ../../src/ed_menu.py:818
 msgid "Send bug reports and suggestions"
 msgstr "Hata raporu ve öneri gönder"
 
-#: ../../src/prefdlg.py:1872
+#: ../../src/prefdlg.py:1873
 msgid "Set Font"
 msgstr "Yazıtipini seçin"
 
-#: ../../src/style_editor.py:173
+#: ../../src/style_editor.py:174
 msgid "Set the preview file type"
 msgstr "Dosya tipini ön izleme için ayarla"
 
@@ -1658,11 +1668,11 @@ msgstr "Ayarlar"
 msgid "Shelf"
 msgstr "Raf"
 
-#: ../../src/ed_menu.py:623 ../../src/ed_menu.py:625 ../../src/prefdlg.py:560
+#: ../../src/ed_menu.py:627 ../../src/ed_menu.py:629 ../../src/prefdlg.py:560
 msgid "Show EOL Markers"
 msgstr "EOL Karakterlerini Göster"
 
-#: ../../src/ed_menu.py:620
+#: ../../src/ed_menu.py:624
 msgid "Show Edge Guide"
 msgstr "Kenar Çizgi Rehberini Göster"
 
@@ -1670,15 +1680,15 @@ msgstr "Kenar Çizgi Rehberini Göster"
 msgid "Show Hidden Files"
 msgstr "Gizli Dosyaları Göster"
 
-#: ../../src/ed_menu.py:618
+#: ../../src/ed_menu.py:622
 msgid "Show Indentation Guides"
 msgstr "Girinti rehberlerini Göster"
 
-#: ../../src/ed_menu.py:628
+#: ../../src/ed_menu.py:632
 msgid "Show Line Number Margin"
 msgstr "Satır Numara Kenarı Göster"
 
-#: ../../src/ed_menu.py:626 ../../src/prefdlg.py:562
+#: ../../src/ed_menu.py:630 ../../src/prefdlg.py:562
 msgid "Show Line Numbers"
 msgstr "Satır Numaralarını Göster"
 
@@ -1690,15 +1700,15 @@ msgstr "Paleti Göster"
 msgid "Show Splash Screen"
 msgstr "Açılış Ekranını Göster"
 
-#: ../../src/ed_menu.py:650
+#: ../../src/ed_menu.py:654
 msgid "Show Toolbar"
 msgstr "Araç Çubuğunu Göster"
 
-#: ../../src/ed_menu.py:629 ../../src/prefdlg.py:564
+#: ../../src/ed_menu.py:633 ../../src/prefdlg.py:564
 msgid "Show Whitespace"
 msgstr "Boşluk Karakterlerini Göster"
 
-#: ../../src/ed_menu.py:631
+#: ../../src/ed_menu.py:635
 msgid "Show Whitespace Markers"
 msgstr "Boşluk İzlerini Göster"
 
@@ -1706,20 +1716,20 @@ msgstr "Boşluk İzlerini Göster"
 msgid "Show the Shelf"
 msgstr "Paleti Göster"
 
-#: ../../src/ed_menu.py:622
+#: ../../src/ed_menu.py:626
 msgid "Show the edge column guide"
 msgstr "Sütun Rrehber Kenarı Göster"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:170
-#: ../../src/style_editor.py:677
+#: ../../src/style_editor.py:678
 msgid "Size"
 msgstr "Boyut"
 
-#: ../../src/style_editor.py:246
+#: ../../src/style_editor.py:247
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr "Bazı stiller değişti, çıkmadan önce kaydetmek istermisiniz?"
 
-#: ../../src/ed_menu.py:701
+#: ../../src/ed_menu.py:705
 msgid "Spaces to Tabs"
 msgstr "Boşlukları Tab Karakterine"
 
@@ -1727,7 +1737,7 @@ msgstr "Boşlukları Tab Karakterine"
 msgid "Start a New File"
 msgstr "Yeni Dosya Başlat"
 
-#: ../../src/style_editor.py:195
+#: ../../src/style_editor.py:196
 msgid "Start a blank new style"
 msgstr "Boş yeni bir tarz başlat"
 
@@ -1747,16 +1757,16 @@ msgstr "Başlat Seçenekleri"
 msgid "Status Unknown"
 msgstr "Bilinmeyen durum"
 
-#: ../../src/ed_menu.py:777 ../../src/style_editor.py:62
+#: ../../src/ed_menu.py:781 ../../src/style_editor.py:62
 msgid "Style Editor"
 msgstr "Editörü biçimlendir"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:52
-#: ../../src/style_editor.py:212
+#: ../../src/style_editor.py:213
 msgid "Style Tags"
 msgstr "Tarz etiketler"
 
-#: ../../src/style_editor.py:188
+#: ../../src/style_editor.py:189
 msgid "Style Theme"
 msgstr "Temayý biçimlendir"
 
@@ -1777,11 +1787,11 @@ msgstr "Eklentiler başarılı bir şekilde kuruldu"
 msgid "Switch Lexer to %s"
 msgstr "Lexer'i %s ye deşiştir"
 
-#: ../../src/style_editor.py:170
+#: ../../src/style_editor.py:171
 msgid "Syntax Files"
 msgstr "Sentaks Dosyaları"
 
-#: ../../src/ed_menu.py:753 ../../src/prefdlg.py:487 ../../src/prefdlg.py:817
+#: ../../src/ed_menu.py:757 ../../src/prefdlg.py:487 ../../src/prefdlg.py:821
 msgid "Syntax Highlighting"
 msgstr "Satır Işıklandırması"
 
@@ -1793,7 +1803,7 @@ msgstr "Sistem Dizini"
 msgid "Tab Width"
 msgstr "Sekme Genişliği"
 
-#: ../../src/ed_menu.py:704
+#: ../../src/ed_menu.py:708
 msgid "Tabs to Spaces"
 msgstr "Sekmeleri Boşluğa Çevir"
 
@@ -1805,17 +1815,17 @@ msgstr "Görev Tanımları"
 msgid "Text Document"
 msgstr "Metin Belgesi"
 
-#: ../../src/ed_pages.py:276
-#, python-format
+#: ../../src/ed_pages.py:277
+#, fuzzy, python-format
 msgid ""
-"The document could not be decoded with %s.\n"
+"The document could not be decoded with %(encoding1)s.\n"
 "\n"
-"Would you like to open it as %s instead?"
+"Would you like to open it as %(encoding2)s instead?"
 msgstr ""
 "Doküman, %s ile çözülenemedi. \n"
 "Bunun yerine %s ile  açmak istermisiniz?"
 
-#: ../../src/ed_main.py:1078
+#: ../../src/ed_main.py:1082
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -1825,7 +1835,7 @@ msgstr ""
 "En son kayıttan beri dosya %s değişti\n"
 "Değişiklikleri kaydetmek istermisiniz?"
 
-#: ../../src/ed_pages.py:403
+#: ../../src/ed_pages.py:404
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "Editra ile %s içinde açılabilecek bir dosya yoktur"
@@ -1848,7 +1858,7 @@ msgstr "Eklentiyi aktif etmek için çentikleyiniz"
 msgid "To open multiple files at once %s+Click to select the desired files/folders then hit Enter to open them all at once"
 msgstr "Birçok dosyayı / klasörleri aynı anda açmak için, %s ile seçip ve Enter tuşuna basınız."
 
-#: ../../src/ed_menu.py:745
+#: ../../src/ed_menu.py:749
 msgid "Toggle Auto-Indentation functionality"
 msgstr "Otomotik girinti aç / kapat"
 
@@ -1856,11 +1866,11 @@ msgstr "Otomotik girinti aç / kapat"
 msgid "Toggle Bookmark"
 msgstr "İşaretimi düğmesi"
 
-#: ../../src/ed_menu.py:752
+#: ../../src/ed_menu.py:756
 msgid "Toggle Code Folding"
 msgstr "Kod kıvrım düğmesi"
 
-#: ../../src/ed_menu.py:633
+#: ../../src/ed_menu.py:637
 msgid "Toggle Editor View Options"
 msgstr "Editör görünüm seçenekleri aç / kapat"
 
@@ -1868,15 +1878,15 @@ msgstr "Editör görünüm seçenekleri aç / kapat"
 msgid "Toggle bookmark of the current line"
 msgstr "Güncel satırın işaretimi düğmesi"
 
-#: ../../src/prefdlg.py:929
+#: ../../src/prefdlg.py:933
 msgid "Toolbar Icon Size"
 msgstr "Araç Çubuğu Simge Boyutu"
 
-#: ../../src/ed_menu.py:809
+#: ../../src/ed_menu.py:813
 msgid "Translate Editra"
 msgstr "Editra Tercüme Et"
 
-#: ../../src/prefdlg.py:959
+#: ../../src/prefdlg.py:963
 msgid "Transparency"
 msgstr "Şeffaflık"
 
@@ -1888,7 +1898,7 @@ msgstr ""
 msgid "Transpose the current line with the previous one"
 msgstr ""
 
-#: ../../src/ed_menu.py:707
+#: ../../src/ed_menu.py:711
 msgid "Trim Trailing Whitespace"
 msgstr ""
 
@@ -1908,11 +1918,11 @@ msgstr ""
 msgid "Unable to retrieve version info"
 msgstr ""
 
-#: ../../src/ed_menu.py:669
+#: ../../src/ed_menu.py:673
 msgid "Uncomment Lines"
 msgstr ""
 
-#: ../../src/ed_menu.py:671
+#: ../../src/ed_menu.py:675
 msgid "Uncomment the selected lines"
 msgstr ""
 
@@ -1924,15 +1934,15 @@ msgstr ""
 msgid "Undo Last Action"
 msgstr ""
 
-#: ../../src/ed_menu.py:678
+#: ../../src/ed_menu.py:682
 msgid "Unindent Lines"
 msgstr ""
 
-#: ../../src/ed_menu.py:680
+#: ../../src/ed_menu.py:684
 msgid "Unindent the selected lines"
 msgstr ""
 
-#: ../../src/ed_menu.py:719 ../../src/prefdlg.py:552
+#: ../../src/ed_menu.py:723 ../../src/prefdlg.py:552
 msgid "Unix (\\n)"
 msgstr ""
 
@@ -1949,7 +1959,7 @@ msgstr ""
 msgid "Untitled_Folder"
 msgstr ""
 
-#: ../../src/prefdlg.py:1060
+#: ../../src/prefdlg.py:1064
 msgid "Update"
 msgstr ""
 
@@ -1957,19 +1967,19 @@ msgstr ""
 msgid "Update Available"
 msgstr ""
 
-#: ../../src/ed_menu.py:682
+#: ../../src/ed_menu.py:686
 msgid "Uppercase"
 msgstr ""
 
-#: ../../src/ed_menu.py:742
+#: ../../src/ed_menu.py:746
 msgid "Use Auto Completion when available"
 msgstr ""
 
-#: ../../src/prefdlg.py:1096
+#: ../../src/prefdlg.py:1100
 msgid "Use Proxy"
 msgstr ""
 
-#: ../../src/ed_menu.py:690
+#: ../../src/ed_menu.py:694
 msgid "Use Soft Tabs"
 msgstr ""
 
@@ -1981,7 +1991,7 @@ msgstr ""
 msgid "User Directory"
 msgstr ""
 
-#: ../../src/prefdlg.py:1113
+#: ../../src/prefdlg.py:1117
 msgid "Username"
 msgstr ""
 
@@ -1993,11 +2003,11 @@ msgstr ""
 msgid "View Editra's console log"
 msgstr ""
 
-#: ../../src/ed_menu.py:643
+#: ../../src/ed_menu.py:647
 msgid "View Line of Next Bookmark"
 msgstr ""
 
-#: ../../src/ed_menu.py:646
+#: ../../src/ed_menu.py:650
 msgid "View Line of Previous Bookmark"
 msgstr ""
 
@@ -2005,7 +2015,7 @@ msgstr ""
 msgid "View Options"
 msgstr ""
 
-#: ../../src/ed_menu.py:804
+#: ../../src/ed_menu.py:808
 #, python-format
 msgid "Visit the project homepage %s"
 msgstr ""
@@ -2018,31 +2028,31 @@ msgstr ""
 msgid "Where"
 msgstr ""
 
-#: ../../src/ed_main.py:551
+#: ../../src/ed_main.py:552
 msgid "Where to Save Profile?"
 msgstr ""
 
-#: ../../src/ed_menu.py:710
+#: ../../src/ed_menu.py:714
 msgid "Whitespace"
 msgstr ""
 
-#: ../../src/ed_menu.py:711
+#: ../../src/ed_menu.py:715
 msgid "Whitespace formating commands"
 msgstr ""
 
-#: ../../src/ed_menu.py:723 ../../src/prefdlg.py:553
+#: ../../src/ed_menu.py:727 ../../src/prefdlg.py:553
 msgid "Windows (\\r\\n)"
 msgstr ""
 
-#: ../../src/ed_menu.py:694 ../../src/prefdlg.py:566
+#: ../../src/ed_menu.py:698 ../../src/prefdlg.py:566
 msgid "Word Wrap"
 msgstr ""
 
-#: ../../src/ed_menu.py:696
+#: ../../src/ed_menu.py:700
 msgid "Wrap Text Horizontally"
 msgstr ""
 
-#: ../../src/ed_main.py:1116
+#: ../../src/ed_main.py:1120
 #, python-format
 msgid "Written in 100%% Python."
 msgstr ""
@@ -2067,11 +2077,11 @@ msgstr ""
 msgid "args"
 msgstr ""
 
-#: ../../src/style_editor.py:648
+#: ../../src/style_editor.py:649
 msgid "bold"
 msgstr ""
 
-#: ../../src/style_editor.py:649
+#: ../../src/style_editor.py:650
 msgid "eol"
 msgstr ""
 
@@ -2083,10 +2093,10 @@ msgstr ""
 msgid "file"
 msgstr ""
 
-#: ../../src/style_editor.py:650
+#: ../../src/style_editor.py:651
 msgid "italic"
 msgstr ""
 
-#: ../../src/style_editor.py:651
+#: ../../src/style_editor.py:652
 msgid "underline"
 msgstr ""
