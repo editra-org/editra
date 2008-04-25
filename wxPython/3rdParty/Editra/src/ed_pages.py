@@ -272,11 +272,12 @@ class EdPages(FNB.FlatNotebook):
                 enc1 = ed_txt.DEFAULT_ENCODING
 
             if not self._ses_load:
+                errmap = dict(encoding1=enc1, encoding2=enc)
                 dlg = wx.MessageDialog(self,
-                                       _("The document could not be decoded with %s."
-                                         "\n\nWould you like to open it as %s instead?")
-                                       % (enc1, enc), _("Encoding Error"),
-                                       style=wx.YES_NO|wx.ICON_WARNING)
+                   _("The document could not be decoded with %(encoding1)s."
+                     "\n\nWould you like to open it as %(encoding2)s instead?")
+                   % errmap, _("Encoding Error"),
+                   style=wx.YES_NO|wx.ICON_WARNING)
                 dlg.CenterOnParent()
                 result = dlg.ShowModal()
 
@@ -714,10 +715,10 @@ def AskToReload(win, cfile):
     if result == wx.ID_YES:
         ret, rmsg = win.control.ReloadFile()
         if not ret:
+            errmap = dict(filename=cfile, errmsg=rmsg)
             mdlg = wx.MessageDialog(win.frame,
-                                    _("Failed to reload %s:\n"
-                                      "Error: %s") % \
-                                      (cfile, rmsg),
+                                    _("Failed to reload %(filename)s:\n"
+                                      "Error: %(errmsg)s") % errmsg,
                                     _("Error"),
                                     wx.OK | wx.ICON_ERROR)
             mdlg.ShowModal()

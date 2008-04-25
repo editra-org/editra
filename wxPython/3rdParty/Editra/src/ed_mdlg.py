@@ -36,9 +36,11 @@ def OpenErrorDlg(parent, fname, err):
     @param err: error message
 
     """
+    argmap = dict(filename=fname, errormsg=err)
     dlg = wx.MessageDialog(parent,
-                           _("Editra could not open %s\n\nError:\n%s") % \
-                           (fname, err), _("Error Opening File"),
+                           _("Editra could not open %(filename)s\n\n"
+                             "Error:\n%(errormsg)s") % \
+                           argmap, _("Error Opening File"),
                            style=wx.OK|wx.CENTER|wx.ICON_ERROR)
     dlg.CenterOnParent()
     result = dlg.ShowModal()
@@ -53,8 +55,11 @@ def SaveErrorDlg(parent, fname, err):
     @return: wxID_OK if dialog was shown and dismissed properly
 
     """
-    dlg = wx.MessageDialog(parent, _("Failed to save file: %s\n\nError:\n%s") %\
-                           (fname, err), _("Save Error"), wx.OK|wx.ICON_ERROR)
+    argmap = dict(filename=fname, errormsg=err)
+    dlg = wx.MessageDialog(parent,
+                           _("Failed to save file: %(filename)s\n\n"
+                             "Error:\n%(errormsg)s") % argmap,
+                           _("Save Error"), wx.OK|wx.ICON_ERROR)
     dlg.CenterOnParent()
     result = dlg.ShowModal()
     dlg.Destroy()
