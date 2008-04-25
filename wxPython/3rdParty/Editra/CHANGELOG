@@ -15,9 +15,12 @@ DATE 04/25/2008
 NEWS:
   This release adds support for customizable keybindings and a keybinding
 editor to the preferences dialog. The keybindings can be saved in muliple key
-profiles to allow for switching keybindings on the fly. The bundeld CodeBrowser
-plugin has also recieved an update to include a number of new languages and
-improvements to the previously existing ones.
+profiles to allow for switching keybindings on the fly.
+
+The bundled CodeBrowser plugin has recieved an update to include a number of
+new languages and improvements to the previously existing ones. The Projects
+plugin has also been updated to fix a number of bugs that were mostly visible
+on the Windows platform.
 
 NEW: [features/improvements]
 +Configurable Keybindings and Keybinding editor
