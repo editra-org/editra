@@ -30,7 +30,7 @@ DOSBAT_KEYWORDS = (0, "goto call exit if else for EQU NEQ LSS LEQ GTR GEQ "
                       "mkdir mode more move path pause popd print prompt pushd "
                       "rd rem ren rename replace restore rmdir set setlocal "
                       "shift sort start subst time title tree type ver verify "
-                      "vol xcopy")
+                      "vol xcopy errorlevel exists not")
 
 # WinBatch Keywords
 WINBAT_KEYWORDS = (0, "if then else endif break end return exit next while for "
