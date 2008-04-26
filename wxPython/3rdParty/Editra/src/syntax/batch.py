@@ -2,7 +2,7 @@
 # Name: batch.py                                                              #
 # Purpose: Define DOS Batch syntax for highlighting and other features        #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -22,15 +22,19 @@ __revision__ = "$Revision$"
 import synglob
 #-----------------------------------------------------------------------------#
 
-DOSBAT_KEYWORDS = (0, "goto call exit if else for EQU NEQ LSS LEQ GTR GEQ "
-                      "append assoc at attrib break cacls cd chcp chdir chkdsk "
-                      "chkntfs cls cmd color comp compact convert copy date "
-                      "del dir diskcomp diskcopy doskey echo endlocal erase fc "
-                      "find findstr format ftype graftabl help keyb label md "
-                      "mkdir mode more move path pause popd print prompt pushd "
-                      "rd rem ren rename replace restore rmdir set setlocal "
-                      "shift sort start subst time title tree type ver verify "
-                      "vol xcopy errorlevel exists not")
+DOSBAT_KEYWORDS = (0, "append arp assoc at atmadm attrib bootcfg break cacls "
+                      "call cd chcp chdir chkdsk chkntfs cls cmd color command "
+                      "comp compact control convert copy date debug defrag del "
+                      "delete dir diskcomp diskcopy doskey echo edit edlin "
+                      "else endlocal EQU erase errorlevel exists exit expand "
+                      "fc find findstr for format ftp ftype GEQ goto graftabl "
+                      "GTR help if ipconfig keyb label LEQ loadfix logoff LSS "
+                      "md mkdir mode more move nbtstat NEQ net netsh netstat "
+                      "nlsfunc not nslookup path pathping pause ping popd "
+                      "print prompt pushd rd rem ren rename replace restore "
+                      "rmdir route runas set setlocal setver share shift "
+                      "shutdown sort start subst time title telnet tracetr "
+                      "tree type ver verify vol xcopy ")
 
 # WinBatch Keywords
 WINBAT_KEYWORDS = (0, "if then else endif break end return exit next while for "
