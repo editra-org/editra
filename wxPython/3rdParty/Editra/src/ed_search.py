@@ -2,7 +2,7 @@
 # Name: ed_search.py                                                          #
 # Purpose: Text searching services and utilities                              #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2007,2008 Cody Precord <staff@editra.org>                    #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -108,6 +108,7 @@ class TextFinder(object):
                 # HACK to ensure selection is visible
                 sel = pool.GetSelection()
                 pool.SetSelection(sel[1], sel[0])
+                pool.EnsureVisible(pool.LineFromPosition(found))
             else:
                 # Try search from begining/end again
                 self.SetStart(pool)
