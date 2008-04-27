@@ -18,7 +18,6 @@ then
     # Copy all .new files to override the originals
     for fname in $(ls *.new); do
         name=$(echo $fname | sed 's/.new//')
-        echo $name
         mv $fname $name
     done
 elif [ "$ARG" = "-mo" ]
