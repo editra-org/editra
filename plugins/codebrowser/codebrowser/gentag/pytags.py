@@ -100,10 +100,10 @@ def GenerateTags(buff):
 
                 # Check for if in a string or not
                 if line[idx] == u"'" and not ind_string and \
-                   not IsEscaped(line, idx-1): # Single string
+                   not IsEscaped(line, idx): # Single string
                     ins_string = not ins_string
                 elif line[idx] == u'"' and not ins_string and \
-                     not IsEscaped(line, idx-1): # Double String
+                     not IsEscaped(line, idx): # Double String
                     ind_string = not ind_string
                 else:
                     pass
