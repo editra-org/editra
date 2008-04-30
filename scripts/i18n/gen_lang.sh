@@ -16,9 +16,11 @@ if [ "$ARG" = "-po" ]
 then
     env python2.5 mki18n.py -pv --domain=Editra
     # Copy all .new files to override the originals
-    for fname in $(ls *.new); do
-        name=$(echo $fname | sed 's/.new//')
-        mv $fname $name
+    for fname in $(ls); do
+        if ! [ -z $(echo $fname | grep '.*\.new') ]; then
+            name=$(echo $fname | sed 's/.new//')
+            mv $fname $name
+        fi
     done
 elif [ "$ARG" = "-mo" ]
 then
