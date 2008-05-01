@@ -189,16 +189,23 @@ class Class(Scope):
             rlist.append({obj:sorted(self.elements.get(obj, list()))})
         return rlist
 
+#---- Scopes ----#
 class Namespace(Scope):
     """Namespace Representation"""
     def __init__(self, name, line, scope=None):
         Scope.__init__(self, name, line, "namespace", scope)
+
+class Package(Scope):
+    """Package Method object"""
+    def __init__(self, name, line, scope=None):
+        Scope.__init__(self, name, line, "package", scope)
 
 class Section(Scope):
     """Section Representation"""
     def __init__(self, name, line, scope=None):
         Scope.__init__(self, name, line, "section", scope)
 
+#---- Code Objects ----#
 class Method(Code):
     """Class Method object"""
     def __init__(self, name, line, scope=None):

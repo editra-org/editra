@@ -77,7 +77,7 @@ def GenerateTags(buff):
             parts = line.split()
             if line.endswith(u";") and len(parts) <= 3:
                 name = parts[1].rstrip(u";")
-                rtags.AddElement('package', Package(name, lnum))
+                rtags.AddElement('package', taglib.Package(name, lnum))
         else:
             pass
 
@@ -85,10 +85,6 @@ def GenerateTags(buff):
 
 #-----------------------------------------------------------------------------#
 # Utilities
-class Package(taglib.Scope):
-    """Package Code Object"""
-    def __init__(self, name, line, scope=None):
-        taglib.Scope.__init__(self, name, line, "package", scope)
 
 def ExtractSubroutine(line):
     """Extract a subroutine defintion from a line, if no valid
