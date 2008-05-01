@@ -88,20 +88,27 @@ def IsGoodName(name, exchars='_'):
     else:
         return False
 
-def IsToken(line, idx, name):
+def IsToken(line, idx, name, ignorecase=False):
     """Check if the given item is a token or not. The function will return
     True if the item at the given index matches the name and is preceeded and
     followed by whitespace. It will return False otherwise.
     @param line: string to check
     @param idx: index in string to look from
     @param name: name of token to look for match
+    @keyword ignorecase: do case insensitive search
     @return: bool
 
     """
     nchar = idx + len(name)
-    if line[idx:].startswith(name) and \
-       (idx == 0 or line[idx-1].isspace()) and \
-       (len(line) > nchar and line[nchar].isspace()):
+    if not ignorecase:
+        tline = line
+    else:
+        tline = line.lower()
+        name = name.lower()
+
+    if tline[idx:].startswith(name) and \
+       (idx == 0 or tline[idx-1].isspace()) and \
+       (len(tline) > nchar and tline[nchar].isspace()):
         return True
     else:
         return False

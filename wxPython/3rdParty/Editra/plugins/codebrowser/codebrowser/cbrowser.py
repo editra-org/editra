@@ -113,6 +113,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.icons['subroutine'] = self.icons['function']
         self.icons['procedure'] = self.icons['function']
         self.icons['task'] = imglst.Add(IconFile.GetBrickGo2Bitmap())
+        self.icons['function2'] = self.icons['task']
         self.icons['variable'] = imglst.Add(IconFile.GetBrickBitmap())
         self.icons['namespace'] = imglst.Add(IconFile.GetBrickBricksBitmap())
         self.SetImageList(imglst)

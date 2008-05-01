@@ -8,7 +8,9 @@ Version 0.3
 Released: xx/xx/2008
 
 New:
-
++ Added support for the following filetypes
+  - SQL (Packages, Procedures, Functions)
+  - PL/SQL (Packages, Procedures, Functions)
 
 Bug Fixes:
 +Fixed some string parsing errors in the python parser
