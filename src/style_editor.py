@@ -309,11 +309,7 @@ class StyleEditor(wx.Dialog):
                 if sheet_path.startswith(ed_glob.CONFIG['STYLES_DIR']) or \
                    sheet_path.startswith(ed_glob.CONFIG['SYS_STYLES_DIR']):
                     # Update editor windows/buffer to use new style sheet
-                    Profile_Set('SYNTHEME', sheet)
-                    for mainw in wx.GetApp().GetMainWindows():
-                        mainw.nb.UpdateTextControls()
-                        mainw.SetStatusText(_("Changed color scheme to %s") % \
-                                            sheet, ed_glob.SB_INFO)
+                    UpdateBufferStyles(sheet)
         dlg.Destroy()
         return result
 
@@ -468,8 +464,13 @@ class StyleEditor(wx.Dialog):
 
         """
         self.LOG('[style_editor][evt] Ok Clicked Closing Window')
+
+
         result = self.DiffStyles()
         if result == wx.ID_NO:
+            # Get Current Selection to update buffers
+            csheet = self.FindWindowById(ed_glob.ID_PREF_SYNTHEME).GetStringSelection()
+            UpdateBufferStyles(csheet)
             evt.Skip()
         elif result == wx.ID_CANCEL:
             self.LOG('[style_editor][info] canceled closing')
@@ -917,3 +918,18 @@ def DuplicateStyleDict(style_dict):
         if not ok:
             new_dict[tag].null = True
     return new_dict
+
+def UpdateBufferStyles(sheet):
+    """Update the style used in all buffers
+    @sheet: Style sheet to use
+
+    """
+    # Only update if the sheet has changed
+    if sheet is None or sheet == Profile_Get('SYNTHEME'):
+        return
+
+    Profile_Set('SYNTHEME', sheet)
+    for mainw in wx.GetApp().GetMainWindows():
+        mainw.nb.UpdateTextControls('UpdateAllStyles')
+        mainw.SetStatusText(_("Changed color scheme to %s") % \
+                            sheet, ed_glob.SB_INFO)
