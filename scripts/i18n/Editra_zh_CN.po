@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-25 12:11-0500\n"
+"POT-Creation-Date: 2008-04-29 20:26-0500\n"
 "PO-Revision-Date: 2008-03-23 09:05+0000\n"
 "Last-Translator: heccj <heccjj@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -172,7 +172,7 @@ msgstr "别名"
 msgid "All"
 msgstr "全部"
 
-#: ../../src/ed_search.py:172
+#: ../../src/ed_search.py:173
 msgid "All Done"
 msgstr "完成所有"
 
@@ -785,7 +785,7 @@ msgstr "文件类型关联"
 msgid "Filter"
 msgstr "过滤器"
 
-#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:234
+#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:235
 #: ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "查找"
@@ -802,7 +802,7 @@ msgstr "查找替换文本"
 msgid "Find/R&eplace"
 msgstr "查找/替换(&e)"
 
-#: ../../src/ed_search.py:230 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:231 ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "查找/替换"
 
@@ -1440,7 +1440,7 @@ msgstr "添加条目"
 msgid "Rate: %.2f Kb/s"
 msgstr "速率：%.2fKb/s"
 
-#: ../../src/ed_search.py:309
+#: ../../src/ed_search.py:310
 msgid "Recent Searches"
 msgstr "最近搜索"
 
@@ -1504,7 +1504,7 @@ msgstr "移除结尾空格"
 msgid "Rename"
 msgstr "重命名"
 
-#: ../../src/ed_search.py:169
+#: ../../src/ed_search.py:170
 #, python-format
 msgid ""
 "Replace All Finished\n"

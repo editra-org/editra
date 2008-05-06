@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-25 12:11-0500\n"
+"POT-Creation-Date: 2008-04-29 20:26-0500\n"
 "PO-Revision-Date: 2008-03-23 11:01+0000\n"
 "Last-Translator: Vladimir Lazic <vlazic@gmail.com>\n"
 "Language-Team: Serbian <sr@li.org>\n"
@@ -173,7 +173,7 @@ msgstr "Алијас"
 msgid "All"
 msgstr "Све"
 
-#: ../../src/ed_search.py:172
+#: ../../src/ed_search.py:173
 msgid "All Done"
 msgstr "Обављено"
 
@@ -790,7 +790,7 @@ msgstr "Типови датотека и њихове екстензије"
 msgid "Filter"
 msgstr "Филтер"
 
-#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:234
+#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:235
 #: ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Пронађи"
@@ -807,7 +807,7 @@ msgstr "Пронађи и замени текст"
 msgid "Find/R&eplace"
 msgstr "Пронађи/З&амени"
 
-#: ../../src/ed_search.py:230 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:231 ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "Пронађи/Замени"
 
@@ -1445,7 +1445,7 @@ msgstr "Постави панелеу доњи панел"
 msgid "Rate: %.2f Kb/s"
 msgstr "Брзина: %.2f Kb/s"
 
-#: ../../src/ed_search.py:309
+#: ../../src/ed_search.py:310
 msgid "Recent Searches"
 msgstr "Скорашње претраге"
 
@@ -1509,7 +1509,7 @@ msgstr "Уклони сувишан празан простор"
 msgid "Rename"
 msgstr "Преименуј"
 
-#: ../../src/ed_search.py:169
+#: ../../src/ed_search.py:170
 #, python-format
 msgid ""
 "Replace All Finished\n"

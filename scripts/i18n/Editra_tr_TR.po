@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-25 12:11-0500\n"
+"POT-Creation-Date: 2008-04-29 20:26-0500\n"
 "PO-Revision-Date: 2008-04-01 17:29+0000\n"
 "Last-Translator: mustafa <myaykan@hotmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -171,7 +171,7 @@ msgstr "Takma Ad"
 msgid "All"
 msgstr "Tümü"
 
-#: ../../src/ed_search.py:172
+#: ../../src/ed_search.py:173
 msgid "All Done"
 msgstr "Hepsi tamamlandı"
 
@@ -785,7 +785,7 @@ msgstr "Dosya tipini  tanınır hale getir"
 msgid "Filter"
 msgstr "Süzceç"
 
-#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:234
+#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:235
 #: ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Bul"
@@ -802,7 +802,7 @@ msgstr "Metin Bul ve Değiştir"
 msgid "Find/R&eplace"
 msgstr "Bul/Değiştir"
 
-#: ../../src/ed_search.py:230 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:231 ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "Bul/Değiştir"
 
@@ -1440,7 +1440,7 @@ msgstr "Bir parça kaydet"
 msgid "Rate: %.2f Kb/s"
 msgstr "Hız: %.2f Kb/s"
 
-#: ../../src/ed_search.py:309
+#: ../../src/ed_search.py:310
 msgid "Recent Searches"
 msgstr "En Son Arananlar"
 
@@ -1504,7 +1504,7 @@ msgstr "Gelen boşluk karakterini sil"
 msgid "Rename"
 msgstr "Yeniden Adlandır"
 
-#: ../../src/ed_search.py:169
+#: ../../src/ed_search.py:170
 #, python-format
 msgid ""
 "Replace All Finished\n"

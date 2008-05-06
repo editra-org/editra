@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-25 12:11-0500\n"
+"POT-Creation-Date: 2008-04-29 20:26-0500\n"
 "PO-Revision-Date: 2008-04-01 02:36+0000\n"
 "Last-Translator: Cody Precord <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -174,7 +174,7 @@ msgstr "エイリアス"
 msgid "All"
 msgstr "全て"
 
-#: ../../src/ed_search.py:172
+#: ../../src/ed_search.py:173
 msgid "All Done"
 msgstr "完了しました"
 
@@ -798,7 +798,7 @@ msgstr "ファイル形式組合"
 msgid "Filter"
 msgstr "フィルター"
 
-#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:234
+#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:235
 #: ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "検索"
@@ -816,7 +816,7 @@ msgstr "テキストを検索と置換"
 msgid "Find/R&eplace"
 msgstr "置換"
 
-#: ../../src/ed_search.py:230 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:231 ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "置換"
 
@@ -1460,7 +1460,7 @@ msgstr ""
 msgid "Rate: %.2f Kb/s"
 msgstr "レート: %2f Kb/s"
 
-#: ../../src/ed_search.py:309
+#: ../../src/ed_search.py:310
 msgid "Recent Searches"
 msgstr "最近の検索"
 
@@ -1525,7 +1525,7 @@ msgstr "末尾の空白を削除する"
 msgid "Rename"
 msgstr "名前変更"
 
-#: ../../src/ed_search.py:169
+#: ../../src/ed_search.py:170
 #, python-format
 msgid ""
 "Replace All Finished\n"
