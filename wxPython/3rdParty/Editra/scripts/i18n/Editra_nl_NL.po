@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-25 12:11-0500\n"
+"POT-Creation-Date: 2008-04-29 20:26-0500\n"
 "PO-Revision-Date: 2008-03-12 06:49+0000\n"
 "Last-Translator: Gerard <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -172,7 +172,7 @@ msgstr "Alias"
 msgid "All"
 msgstr "Alles"
 
-#: ../../src/ed_search.py:172
+#: ../../src/ed_search.py:173
 msgid "All Done"
 msgstr "Alles gereed"
 
@@ -787,7 +787,7 @@ msgstr "Bestandtype associatie"
 msgid "Filter"
 msgstr "Filter"
 
-#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:234
+#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:235
 #: ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Zoek..."
@@ -804,7 +804,7 @@ msgstr "Tekst zoeken en vervangen"
 msgid "Find/R&eplace"
 msgstr "Zoek/&Replace"
 
-#: ../../src/ed_search.py:230 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:231 ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "Zoek/Vervang..."
 
@@ -1447,7 +1447,7 @@ msgstr "Plaats een item op het paneel"
 msgid "Rate: %.2f Kb/s"
 msgstr "Snelheid: %.2f Kb/s"
 
-#: ../../src/ed_search.py:309
+#: ../../src/ed_search.py:310
 msgid "Recent Searches"
 msgstr "Recente zoekopdrachten"
 
@@ -1511,7 +1511,7 @@ msgstr "Verwijder naloop spaties/tabs"
 msgid "Rename"
 msgstr "Hernoem"
 
-#: ../../src/ed_search.py:169
+#: ../../src/ed_search.py:170
 #, python-format
 msgid ""
 "Replace All Finished\n"
