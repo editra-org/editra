@@ -177,7 +177,7 @@ def Properties(lang_id=0):
                     synglob.ID_LANG_CSHARP,
                     synglob.ID_LANG_OBJC,
                     synglob.ID_LANG_VALA ]:
-        return [FOLD, FOLD_PRE]
+        return [FOLD, FOLD_PRE, FOLD_COM]
     else:
         return list()
 

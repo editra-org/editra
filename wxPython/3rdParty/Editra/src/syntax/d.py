@@ -130,7 +130,7 @@ def Properties(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_D:
-        return [FOLD, FOLD_PRE]
+        return [FOLD, FOLD_PRE, FOLD_COM]
     else:
         return list()
 
