@@ -511,7 +511,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type evt: wxMenuEvent
 
         """
-        dlg = wx.FileDialog(self, _("Choose a Save Location"), '',
+        if page:
+            ctrl = page
+        else:
+            ctrl = self.nb.GetCurrentCtrl()
+
+        dlg = wx.FileDialog(self, _("Choose a Save Location"),
+                            os.path.dirname(ctrl.GetFileName()),
                             title.lstrip("*"),
                             ''.join(syntax.GenFileFilters()),
                             wx.SAVE | wx.OVERWRITE_PROMPT)
@@ -519,11 +525,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             dlg.Destroy()
-
-            if page:
-                ctrl = page
-            else:
-                ctrl = self.nb.GetCurrentCtrl()
 
             result = ctrl.SaveFile(path)
             fname = util.GetFileName(ctrl.GetFileName())
