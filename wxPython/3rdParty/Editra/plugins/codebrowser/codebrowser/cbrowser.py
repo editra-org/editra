@@ -88,11 +88,13 @@ class CodeBrowserTree(wx.TreeCtrl):
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_SAVED)
+        ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
 
     def __del__(self):
         """Unsubscribe from messages on del"""
         ed_msg.Unsubscribe(self.OnUpdateTree)
         ed_msg.Unsubscribe(self.OnThemeChange)
+        ed_msg.Unsubscribe(self.OnUpdateFont)
 
     def _GetCurrentCtrl(self):
         """Get the current buffer"""
@@ -259,6 +261,12 @@ class CodeBrowserTree(wx.TreeCtrl):
             # Stop busy indicator
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
                                (self._mw.GetId(), 0, 0))
+
+    def OnUpdateFont(self, msg):
+        """Update the ui font when a message comes saying to do so."""
+        font = msg.GetData()
+        if isinstance(font, wx.Font) and not font.IsNull():
+            self.SetFont(font)
 
     def OnUpdateMenu(self, evt):
         """UpdateUI handler for the panels menu item, to update the check
