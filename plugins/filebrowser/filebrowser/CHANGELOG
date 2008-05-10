@@ -2,6 +2,11 @@ FileBrowser Plugin for Editra
 Author: Cody Precord
 License: wxWindows
 
+Version 0.8:
+
+    - Syncronize path in tree with currently selected notebook page
+    - Fix some translation strings
+
 Version 0.7:
 
     - Syncronize icons with theme changes in Editra

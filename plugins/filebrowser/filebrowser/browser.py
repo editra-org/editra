@@ -51,16 +51,17 @@ ID_FILEBROWSE = wx.NewId()
 FILEMAN_CMD = util.GetFileManagerCmd()
 if wx.Platform == '__WXMAC__':
     FILEMAN = 'Finder'
-    TRASH = 'Trash'
-    DIFF_CMD = 'opendiff'
 elif wx.Platform == '__WXMSW__':
     FILEMAN = 'Explorer'
-    TRASH = 'Recycle Bin'
-    DIFF_CMD = None
 else: # Other/Linux
     FILEMAN = FILEMAN_CMD.title()
-    TRASH = 'Trash'
-    DIFF_CMD = None
+
+def TrashString():
+    """Get the trash description string"""
+    if wx.Platform == '__WXMSW__':
+        return _("Move to Recycle Bin")
+    else:
+        return _("Move to Trash")
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
@@ -122,6 +123,10 @@ class BrowserMenuBar(wx.Panel):
         # Due to transparency issues dont do painting on gtk
         if wx.Platform != '__WXGTK__':
             self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+    def __del__(self):
+        """Unsubscribe from messages"""
+        ed_msg.Unsubscribe(self.OnThemeChanged)
 
     # XXX maybe change to list the more recently added items near the top
     def AddItem(self, label):
@@ -390,8 +395,14 @@ class FileBrowser(wx.GenericDirCtrl):
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnMenu)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
+        ed_msg.Subscribe(self.OnPageChange, ed_msg.EDMSG_UI_NB_CHANGED)
 #         self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnDragStart)
 #         self.Bind(wx.EVT_TREE_END_DRAG, self.OnDragEnd)
+
+    def __del__(self):
+        """Unsubscribe from messages"""
+        ed_msg.Unsubscribe(self.OnThemeChanged)
+        ed_msg.Unsubscribe(self.OnPageChange)
 
     def _SetupIcons(self):
         """If a custom theme is in use by Editra set the icons of the
@@ -427,7 +438,7 @@ class FileBrowser(wx.GenericDirCtrl):
                  (ID_DUPLICATE, _("Duplicate"), None),
                  (ID_ARCHIVE, _("Create Archive of \"%s\"") % '', None),
                  (wx.ID_SEPARATOR, '', None),
-                 (ID_DELETE, _("Move to " + TRASH), ed_glob.ID_DELETE),
+                 (ID_DELETE, TrashString(), ed_glob.ID_DELETE),
                 ]
 
         for item in items:
@@ -594,6 +605,24 @@ class FileBrowser(wx.GenericDirCtrl):
         else:
             files = [ fname for fname in files if not os.path.isdir(fname) ]
         self.OpenFiles(files)
+
+    def OnPageChange(self, msg):
+        """Syncronize selection with the notebook page changes
+        @param msg: MessageObject
+        @todo: check if message is from a page closing and avoid updates
+
+        """
+        
+        nbdata = msg.GetData()
+        page = nbdata[0].GetPage(nbdata[1])
+        path = page.GetFileName()
+        if path:
+            style = self.GetTreeStyle()
+            self.SetTreeStyle(wx.TR_SINGLE)
+            self.Refresh()
+            self.SetPath(path)
+            self.SetTreeStyle(style)
+            self.Refresh()
 
     def OnThemeChanged(self, msg):
         """Update the icons when the icon theme has changed
