@@ -16,7 +16,9 @@ NEWS:
 
 
 NEW: [features/improvements]
-
++Multi-line comments are foldable in C/CPP/D
++New version of FileBrowser
++Interface font is configurable
 
 BUG FIXES:
 +Add missing keywords for DOS Batch scripts

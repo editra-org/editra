@@ -32,6 +32,7 @@ import util
 import profiler
 import ed_toolbar
 import ed_event
+import ed_msg
 import ed_pages
 import ed_menu
 import ed_print
@@ -268,6 +269,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # Set Perspective
         self.SetPerspective(_PGET('DEFAULT_VIEW'))
         self._mgr.Update()
+        ed_msg.PostMessage(ed_msg.EDMSG_DSP_FONT,
+                           _PGET('FONT3', 'font', wx.NORMAL_FONT))
 
     __name__ = u"MainWindow"
 
