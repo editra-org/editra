@@ -914,6 +914,7 @@ class AppearancePanel(PrefPanelBase):
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_SLIDER, self.OnSetTransparent, \
                   id=ed_glob.ID_TRANSPARENCY)
+        self.Bind(ed_event.EVT_NOTIFY, self.OnFontChange)
 
     def _DoLayout(self):
         """Add and layout the widgets
@@ -955,20 +956,18 @@ class AppearancePanel(PrefPanelBase):
                             _("Remember Window Position on Exit"))
         wp_cb.SetValue(Profile_Get('SET_WPOS'))
 
+        # Font
+        fnt = Profile_Get('FONT3', 'font', wx.NORMAL_FONT)
+        fpick = PyFontPicker(self, wx.ID_ANY, fnt)
+        fpick.SetToolTipString(_("Main display font for various UI components"))
+
         # Misc
         trans_size = (-1, -1)
         if wx.Platform == '__WXGTK__':
             trans_size = (200, 15)
-        tsizer = wx.BoxSizer(wx.HORIZONTAL)
-        tsizer.AddMany([(wx.StaticText(self, label=_("Transparency") + u": "),
-                         0), ((5, 5), 0),
-                        (wx.Slider(self, ed_glob.ID_TRANSPARENCY,
-                                   Profile_Get('ALPHA'), 100, 255,
-                                   size=trans_size, style=wx.SL_HORIZONTAL | \
-                                   wx.SL_AUTOTICKS | wx.SL_LABELS), 0)])
 
         # Layout
-        sizer = wx.FlexGridSizer(10, 2, 5, 5)
+        sizer = wx.FlexGridSizer(13, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Icons") + u": "), 0,
                         wx.ALIGN_CENTER_VERTICAL), (iconsz, 0),
@@ -980,8 +979,15 @@ class AppearancePanel(PrefPanelBase):
                        ((5, 5), 0), (ws_cb, 0),
                        ((5, 5), 0), (wp_cb, 0),
                        ((10, 10), 0), ((10, 10), 0),
-                       (wx.StaticText(self, label=_("Misc") + u": "), 0),
-                       (tsizer, 0),
+                       (wx.StaticText(self, label=_("Transparency") + u": "), 0),
+                       (wx.Slider(self, ed_glob.ID_TRANSPARENCY,
+                                   Profile_Get('ALPHA'), 100, 255,
+                                   size=trans_size, style=wx.SL_HORIZONTAL | \
+                                   wx.SL_AUTOTICKS | wx.SL_LABELS), 0, wx.EXPAND),
+                       ((10, 10), 0), ((10, 10), 0),
+                       (wx.StaticText(self, label=_("Display Font") + u": "),
+                        0, wx.ALIGN_CENTER_VERTICAL),
+                       (fpick, 1, wx.EXPAND),
                        ((10, 10), 0), ((10, 10), 0),
                        ])
 
@@ -1023,6 +1029,14 @@ class AppearancePanel(PrefPanelBase):
                 main_win.SetPerspective(Profile_Get('DEFAULT_VIEW'))
         else:
             evt.Skip()
+
+    @staticmethod
+    def OnFontChange(evt):
+        """Send out update messages fo rdisplay font changes"""
+        font = evt.GetValue()
+        if isinstance(font, wx.Font) and not font.IsNull():
+            Profile_Set('FONT3', font, 'font')
+            ed_msg.PostMessage(ed_msg.EDMSG_DSP_FONT, font)
 
     @staticmethod
     def OnSetTransparent(evt):

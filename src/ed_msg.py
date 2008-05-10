@@ -153,6 +153,9 @@ EDMSG_MENU_LOADPROFILE = EDMSG_MENU + ('load',)
 # resources from the ArtProvider.
 EDMSG_THEME_CHANGED = EDMSG_ALL + ('theme',)
 
+# Signal that the font preferences for the ui have changed (msgdata == font)
+EDMSG_DSP_FONT = EDMSG_ALL + ('dfont',)
+
 #--------------------------------------------------------------------------#
 # Public Api
 

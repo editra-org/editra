@@ -90,6 +90,7 @@ _DEFAULTS = {
            'WSIZE'      : (700, 450)        # Mainwindow size
           #FONT1 created at runtime by ed_styles as primary font
           #FONT2 created at runtime by ed_styles as secondary font
+          #FONT3 Standard Font by UI, added to profile when customized
 }
 
 #--------------------------------------------------------------------------#
