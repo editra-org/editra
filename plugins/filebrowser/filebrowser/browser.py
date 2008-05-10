@@ -265,9 +265,13 @@ class BrowserPane(wx.Panel):
         self.Bind(wx.EVT_MENU, self.OnMenu)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
+        # Messages
+        ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
+
     def __del__(self):
         """Save the config before we get destroyed"""
         self._config.Save()
+        ed_msg.Unsubscribe(self.OnUpdateFont)
 
     def OnCheck(self, evt):
         """Toggles visibility of hidden files on and off"""
@@ -347,6 +351,14 @@ class BrowserPane(wx.Panel):
             mgr.Update()
         else:
             evt.Skip()
+
+    def OnUpdateFont(self, msg):
+        """Update the ui font when a message comes saying to do so."""
+        font = msg.GetData()
+        if isinstance(font, wx.Font) and not font.IsNull():
+            for child in (self, self._browser, self._browser.GetTreeCtrl()):
+                if hasattr(child, 'SetFont'):
+                    child.SetFont(font)
 
     def OnUpdateMenu(self, evt):
         """UpdateUI handler for the panels menu item, to update the check
