@@ -23,6 +23,7 @@ NEW: [features/improvements]
 BUG FIXES:
 +Add missing keywords for DOS Batch scripts
 +Ensure text that is folded becomes visible when searching for it
++Save All action now properly updates tab status
 
 #-----------------------------------------------------------------------------#
 
