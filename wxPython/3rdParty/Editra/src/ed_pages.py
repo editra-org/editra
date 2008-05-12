@@ -641,7 +641,7 @@ class EdPages(FNB.FlatNotebook):
     def OnUpdatePageText(self, evt):
         """Update the title text of the current page
         @param evt: event that called this handler
-        @type evt: stc.EVT_STC_MODIFY
+        @type evt: stc.EVT_STC_MODIFY (unused)
         @note: this method must complete its work very fast it gets
                called everytime a character is entered or removed from
                the document.

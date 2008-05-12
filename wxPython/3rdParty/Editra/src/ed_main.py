@@ -479,14 +479,16 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         e_id = evt.GetId()
         ctrls = list()
         if e_id == ID_SAVE:
-            ctrls = [(self.nb.GetPageText(self.nb.GetSelection()),
-                     self.nb.GetCurrentCtrl())]
+            page = self.nb.GetSelection()
+            ctrls = [(self.nb.GetPageText(page),
+                      self.nb.GetCurrentCtrl(), page)]
         elif e_id == ID_SAVEALL:
+            # Collect all open editor buffers
             for page in xrange(self.nb.GetPageCount()):
                 if issubclass(self.nb.GetPage(page).__class__,
                                            wx.stc.StyledTextCtrl):
                     ctrls.append((self.nb.GetPageText(page),
-                                  self.nb.GetPage(page)))
+                                  self.nb.GetPage(page), page))
         else:
             evt.Skip()
             return
@@ -498,6 +500,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 result = ctrl[1].SaveFile(fpath)
                 if result:
                     self.PushStatusText(_("Saved File: %s") % fname, SB_INFO)
+                    if e_id == ID_SAVEALL:
+                        if ctrl[2] != self.nb.GetSelection():
+                            self.nb.SetPageText(ctrl[2], fname)
+                        else:
+                            self.nb.OnUpdatePageText(None)
                 else:
                     err = ctrl[1].GetDocument().GetLastError()
                     self.PushStatusText(_("ERROR: %s") % err, SB_INFO)
