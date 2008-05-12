@@ -320,7 +320,7 @@ class GeneralPanel(PrefPanelBase):
         self.SetToolTipString(_("Changes made in this dialog are saved in your "
                                 "current profile. Some Items such as Language "
                                 "require the program to be restarted before "
-                                "taking affect."))
+                                "taking effect."))
         self.__DoLayout()
 
         # Event Handlers
