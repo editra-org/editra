@@ -369,7 +369,7 @@ def GetFileManagerCmd():
     """Get the file manager open command for the current os. Under linux
     it will check for nautilus and konqueror and return which one it finds
     first or 'nautilus' (Gnome) if it finds neither.
-    @return: string command
+    @return: string
 
     """
     if wx.Platform == '__WXMAC__':
@@ -377,7 +377,9 @@ def GetFileManagerCmd():
     elif wx.Platform == '__WXMSW__':
         return 'explorer'
     else:
-        for cmd in ('nautilus', 'konqueror'):
+        # Check for common linux filemanagers returning first one found
+        #          Gnome/ubuntu KDE/kubuntu  xubuntu
+        for cmd in ('nautilus', 'konqueror', 'Thunar'):
             result = os.system("which %s > /dev/null" % cmd)
             if result == 0:
                 return cmd
