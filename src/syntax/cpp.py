@@ -38,7 +38,7 @@ C_TYPES = ("auto bool char clock_t complex div_t double enum extern float "
            "uint_fast8_t uint_fast16_t uint_fast32_t uint_fast64_t uint8_t "
            "uint16_t uint32_t uint64_t uintptr_t uintmax_t unsigned va_list "
            "void volatile wchar_t wctrans_t wctype_t wint_t FILE DIR __label__ "
-           "__complex__ __volatile__ __attribute__ ")
+           "__complex__ __volatile__ __attribute__")
 
 # C/CPP Documentation Keywords (includes Doxygen keywords)
 DOC_KEYWORDS = (2, "TODO FIXME XXX author brief bug callgraph category class "
