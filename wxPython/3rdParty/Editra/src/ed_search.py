@@ -151,15 +151,20 @@ class TextFinder(object):
             self.SetScroll(pool) # Save scroll pos
             pool.SetTargetStart(0)
             pool.SetTargetEnd(pool.GetLength())
-            pool.SetSearchFlags(flag_map[s_flags - wx.FR_DOWN] | \
+            pool.SetSearchFlags(flag_map[max(0, s_flags - wx.FR_DOWN)] | \
                                 wx.stc.STC_FIND_REGEXP)
             replaced = 0
+            fail = 0
             pool.BeginUndoAction()
-            while pool.SearchInTarget(query) > 0:
-                pool.SetSelection(pool.GetTargetStart(), pool.GetTargetEnd())
-                pool.ReplaceSelection(replacestring)
+            while fail < 2: #pool.SearchInTarget(query) > 0:
+                # HACK if the search pattern is at the begining of the buffer
+                #      the search will fail the first time. So check twice
+                #      before giving up. ?Scintilla Bug?
+                if pool.SearchInTarget(query) < 0:
+                    fail += 1
+                    continue
+                pool.ReplaceTarget(replacestring)
                 replaced += 1
-                pool.SetTargetStart(pool.GetTargetStart() + len(replacestring))
                 pool.SetTargetEnd(pool.GetLength())
             pool.EndUndoAction()
 
