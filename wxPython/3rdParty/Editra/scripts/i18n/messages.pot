@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-14 22:17-0500\n"
+"POT-Creation-Date: 2008-05-15 18:27-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,7 +164,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: ../../src/ed_search.py:173
+#: ../../src/ed_search.py:178
 msgid "All Done"
 msgstr ""
 
@@ -765,7 +765,7 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:235
+#: ../../src/ed_cmdbar.py:207 ../../src/ed_search.py:240
 #: ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr ""
@@ -782,7 +782,7 @@ msgstr ""
 msgid "Find/R&eplace"
 msgstr ""
 
-#: ../../src/ed_search.py:231 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:236 ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr ""
 
@@ -1419,7 +1419,7 @@ msgstr ""
 msgid "Rate: %.2f Kb/s"
 msgstr ""
 
-#: ../../src/ed_search.py:310
+#: ../../src/ed_search.py:315
 msgid "Recent Searches"
 msgstr ""
 
@@ -1483,7 +1483,7 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: ../../src/ed_search.py:170
+#: ../../src/ed_search.py:175
 #, python-format
 msgid ""
 "Replace All Finished\n"
