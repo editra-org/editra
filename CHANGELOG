@@ -20,6 +20,7 @@ NEW: [features/improvements]
 +New version of FileBrowser
 +Interface font is configurable
 +Add Norwegian Nynorsk Translation (contributed by JoNNeMaNN)
++Add French Translation
 
 BUG FIXES:
 +Add missing keywords for DOS Batch scripts
