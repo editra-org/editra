@@ -634,6 +634,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             style = (_PGET('SYNTHEME', 'str') + u".ess").lower()
         else:
             style = _PGET('SYNTHEME', 'str').lower()
+
+        # Get Correct Filename if it exists
+        for sheet in util.GetResourceFiles('styles', False, True, title=False):
+            if sheet.lower() == style.lower():
+                style = sheet
+                break
+
         user = os.path.join(ed_glob.CONFIG['STYLES_DIR'], style)
         sysp = os.path.join(ed_glob.CONFIG['SYS_STYLES_DIR'], style)
         if os.path.exists(user):
