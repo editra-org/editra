@@ -336,6 +336,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: all profile dependant attributes are configured
 
         """
+#        self.SetControlCharSymbol(172)
         self.SetWrapMode(_PGET('WRAP', 'bool'))
         self.SetViewWhiteSpace(_PGET('SHOW_WS', 'bool'))
         self.SetUseAntiAliasing(_PGET('AALIASING'))
@@ -1782,6 +1783,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetProperties(props)
         # Set Comment Pattern
         self._code['comment'] = comment
+
+        # Notify that lexer has changed
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER)
         return True
 
     def SetKeyWords(self, kw_lst):
