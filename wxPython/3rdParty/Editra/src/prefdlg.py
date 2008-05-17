@@ -879,7 +879,7 @@ class DocSyntaxPanel(wx.Panel):
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
 
             for mainw in wx.GetApp().GetMainWindows():
-                mainw.nb.UpdateTextControls()
+                mainw.nb.UpdateTextControls('UpdateAllStyles')
 
         elif e_id == ed_glob.ID_SYNTAX:
             val = e_obj.GetValue()

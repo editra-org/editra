@@ -28,6 +28,7 @@ BUG FIXES:
 +Save All action now properly updates tab status
 +Replace All failing when begining of buffer matches search pattern.
 +Replace All with Up flag set causing error to be raised
++Unable to load style sheets with mixed case lettering on gtk
 
 #-----------------------------------------------------------------------------#
 
