@@ -134,6 +134,10 @@ EDMSG_PROGRESS_STATE = EDMSG_UI_ALL + ('progbar', 'state')
 # msgdata == ((x, y), keycode)
 EDMSG_UI_STC_KEYUP = EDMSG_UI_ALL + ('stc', 'keyup')
 
+# Lexer Changed
+# msgdata == None
+EDMSG_UI_STC_LEXER = EDMSG_UI_ALL + ('stc', 'lexer')
+
 #---- End UI Action Messages ----#
 
 #---- Menu Messages ----#

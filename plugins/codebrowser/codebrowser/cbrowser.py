@@ -88,7 +88,12 @@ class CodeBrowserTree(wx.TreeCtrl):
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_SAVED)
-        ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
+
+        # Backwards compatibility
+        if hasattr(ed_msg, 'EDMSG_UI_STC_LEXER') and \
+           hasattr(ed_msg, 'EDMSG_DSP_FONT'):
+            ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
+            ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_STC_LEXER)
 
     def __del__(self):
         """Unsubscribe from messages on del"""
