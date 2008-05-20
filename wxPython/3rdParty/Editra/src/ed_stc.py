@@ -22,11 +22,13 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-------------------------------------------------------------------------#
-# Dependencies
+# Imports
 
 import os
 import re
 import wx, wx.stc
+
+# Local Imports
 import ed_event
 import ed_glob
 from profiler import Profile_Get as _PGET
@@ -36,6 +38,7 @@ import util
 import ed_style
 import ed_msg
 import ed_txt
+import ed_menu
 from ed_keyh import KeyHandler, ViKeyHandler
 
 #-------------------------------------------------------------------------#
@@ -130,6 +133,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Configure()
         self.UpdateBaseStyles()
 
+        # Other Settings
+        self.UsePopUp(False)
+
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
@@ -137,6 +143,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+
+        # Context Menu Events
+        self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Undo(), id=wx.ID_UNDO)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Redo(), id=wx.ID_REDO)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Cut(), id=wx.ID_CUT)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Copy(), id=wx.ID_COPY)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Paste(), id=wx.ID_PASTE)
+        self.Bind(wx.EVT_MENU, lambda evt: self.SelectAll(), id=wx.ID_SELECTALL)
 
        #---- End Init ----#
 
@@ -406,6 +421,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     if len(self._code['comment']) > 1:
                         nchars = nchars - len(self._code['comment'][1])
                     self.GotoPos(sel[0] + nchars)
+
+    def CanCopy(self):
+        """Check if copy/cut is possible"""
+        return self.GetSelectionStart() != self.GetSelectionEnd()
 
     def ConvertCase(self, upper=False):
         """Converts the case of the selected text to either all lower
@@ -717,6 +736,24 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             evt.Skip()
         return
+
+    def OnContextMenu(self, evt):
+        """Show the right click context menu
+        @param evt: EVT_CONTEXT_MENU
+
+        """
+        menu = ed_menu.EdMenu()
+        menu.Append(wx.ID_UNDO, _("Undo"))
+        menu.Append(wx.ID_REDO, _("Redo"))
+        menu.AppendSeparator()
+        menu.Append(wx.ID_CUT, _("Cut"))
+        menu.Append(wx.ID_COPY, _("Copy"))
+        menu.Append(wx.ID_PASTE, _("Paste"))
+        menu.AppendSeparator()
+        menu.Append(wx.ID_SELECTALL, _("Select All"))
+#        menu.AppendSeparator()
+#        menu.Append(wx.ID_SETUP, _("Preferences"))
+        self.PopupMenu(menu)
 
     def OnKeyUp(self, evt):
         """Update status bar of window
