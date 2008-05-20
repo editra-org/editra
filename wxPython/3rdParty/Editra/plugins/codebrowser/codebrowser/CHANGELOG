@@ -14,6 +14,7 @@ New:
 
 Bug Fixes:
 +Fixed some string parsing errors in the python parser
++Fix improper parsing of comments in Editra Style Sheets
 
 #-----------------------------------------------------------------------------#
 

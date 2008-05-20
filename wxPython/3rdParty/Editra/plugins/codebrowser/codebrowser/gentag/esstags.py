@@ -54,10 +54,10 @@ def GenerateTags(buff):
                 c_element = None
 
             # Check for coments
-            if line[idx] == u'/' and llen > idx and line[idx+1] == u'*':
+            if not incomment and line[idx:].startswith('/*'):
                 idx += 2
                 incomment = True
-            elif line[idx] == u'*' and llen > idx and line[idx+1] == u'/':
+            elif incomment and line[idx:].startswith('*/'):
                 idx += 2
                 incomment = False
 
