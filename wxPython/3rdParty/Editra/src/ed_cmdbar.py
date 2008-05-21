@@ -107,7 +107,11 @@ class CommandBar(wx.Panel):
 
         # Bind Events
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        # Don't paint the gradient on gtk due to transparency
+        # issues with some controls
+        if wx.Platform != '__WXGTK__':
+            self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
 
