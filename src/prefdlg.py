@@ -955,6 +955,10 @@ class AppearancePanel(PrefPanelBase):
         wp_cb = wx.CheckBox(self, ed_glob.ID_PREF_WPOS, \
                             _("Remember Window Position on Exit"))
         wp_cb.SetValue(Profile_Get('SET_WPOS'))
+        sb_cb = wx.CheckBox(self, ed_glob.ID_SHOW_SB, _("Show Status Bar"))
+        sb_cb.SetValue(Profile_Get('STATBAR'))
+        tb_cb = wx.CheckBox(self, ed_glob.ID_VIEW_TOOL, _("Show Toolbar"))
+        tb_cb.SetValue(Profile_Get('TOOLBAR'))
 
         # Font
         fnt = Profile_Get('FONT3', 'font', wx.NORMAL_FONT)
@@ -967,7 +971,7 @@ class AppearancePanel(PrefPanelBase):
             trans_size = (200, 15)
 
         # Layout
-        sizer = wx.FlexGridSizer(13, 2, 5, 5)
+        sizer = wx.FlexGridSizer(15, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Icons") + u": "), 0,
                         wx.ALIGN_CENTER_VERTICAL), (iconsz, 0),
@@ -978,6 +982,8 @@ class AppearancePanel(PrefPanelBase):
                         (perspec_sz, 0, wx.ALIGN_CENTER_VERTICAL),
                        ((5, 5), 0), (ws_cb, 0),
                        ((5, 5), 0), (wp_cb, 0),
+                       ((5, 5), 0), (sb_cb, 0),
+                       ((5, 5), 0), (tb_cb, 0),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Transparency") + u": "), 0),
                        (wx.Slider(self, ed_glob.ID_TRANSPARENCY,
@@ -1002,9 +1008,20 @@ class AppearancePanel(PrefPanelBase):
 
         """
         e_id = evt.GetId()
-        if e_id in [ed_glob.ID_PREF_WPOS, ed_glob.ID_PREF_WSIZE]:
-            Profile_Set(ed_glob.ID_2_PROF[e_id],
-                        evt.GetEventObject().GetValue())
+        evalue = evt.GetEventObject().GetValue()
+        if e_id in (ed_glob.ID_PREF_WPOS, ed_glob.ID_PREF_WSIZE):
+            Profile_Set(ed_glob.ID_2_PROF[e_id], evalue)
+        elif e_id in (ed_glob.ID_SHOW_SB, ed_glob.ID_VIEW_TOOL):
+            Profile_Set(ed_glob.ID_2_PROF[e_id], evalue)
+            if e_id == ed_glob.ID_SHOW_SB:
+                fun = 'GetStatusBar'
+            else:
+                fun = 'GetToolBar'
+
+            # Update Window(s)
+            for mainw in wx.GetApp().GetMainWindows():
+                getattr(mainw, fun)().Show(evalue)
+                mainw.SendSizeEvent()
         else:
             evt.Skip()
 

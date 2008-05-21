@@ -649,6 +649,9 @@ class EdMenuBar(wx.MenuBar):
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRE_MARK),
                         _("View Line of Previous Bookmark"))
         viewmenu.AppendSeparator()
+        viewmenu.Append(ed_glob.ID_SHOW_SB, ("Status &Bar") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_SB),
+                        _("Show Status Bar"), wx.ITEM_CHECK)
         viewmenu.Append(ed_glob.ID_VIEW_TOOL, _("&Toolbar") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_VIEW_TOOL),
                         _("Show Toolbar"), wx.ITEM_CHECK)

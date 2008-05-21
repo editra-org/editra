@@ -38,7 +38,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
             'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
-            'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE'
+            'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE', 'ID_SHOW_SB'
 ]
 
 #---- Project Info ----#
@@ -164,6 +164,7 @@ ID_SHOW_WS       = wx.NewId()
 ID_SHOW_SHELF    = wx.NewId()
 ID_PERSPECTIVES  = wx.NewId()
 ID_INDENT_GUIDES = wx.NewId()
+ID_SHOW_SB       = wx.NewId()
 ID_VIEW_TOOL     = wx.NewId()
 ID_SHELF         = wx.NewId()
 ID_GOTO_LINE     = wx.NewId()
@@ -296,7 +297,9 @@ ID_2_PROF = {
              ID_PREF_MODE         : 'MODE',
              ID_PRINT_MODE        : 'PRINT_MODE',
              ID_NEW_WINDOW        : 'OPEN_NW',
-             ID_VI_MODE           : 'VI_EMU'
+             ID_SHOW_SB           : 'STATBAR',
+             ID_VI_MODE           : 'VI_EMU',
+             ID_VIEW_TOOL         : 'TOOLBAR'
 }
 
 # Default Plugins

@@ -90,6 +90,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         #---- Status bar on bottom of window ----#
         self.SetStatusBar(ed_statbar.EdStatBar(self))
+        self.GetStatusBar().Show(_PGET('STATBAR', default=True))
 
         #---- End Statusbar Setup ----#
 
@@ -164,6 +165,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        # View Menu
                                        (ID_GOTO_LINE, self.OnCommandBar),
                                        (ID_GOTO_MBRACE, self.DispatchToControl),
+                                       (ID_SHOW_SB, self.OnShowStatusBar),
                                        (ID_VIEW_TOOL, self.OnViewTb),
 
                                        # Format Menu
@@ -218,6 +220,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      (ID_ZOOM_OUT, self.OnUpdateViewUI),
                                      (ID_GOTO_MBRACE, self.OnUpdateViewUI),
                                      (ID_HLCARET_LINE, self.OnUpdateViewUI),
+                                     (ID_SHOW_SB, self.OnUpdateViewUI),
                                      (ID_VIEW_TOOL, self.OnUpdateViewUI),
                                      (ID_SHOW_WS, self.OnUpdateViewUI),
                                      (ID_SHOW_EDGE, self.OnUpdateViewUI),
@@ -725,6 +728,19 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     #---- End File Menu Functions ----#
 
     #---- View Menu Functions ----#
+    def OnShowStatusBar(self, evt):
+        """Toggles visibility of status bar
+        @param evt: wxMenuEvent
+
+        """
+        if evt.GetId() == ID_SHOW_SB:
+            show = not self.GetStatusBar().IsShown()
+            _PSET('STATBAR', show)
+            self.GetStatusBar().Show(show)
+            self.SendSizeEvent()
+        else:
+            evt.Skip()
+
     def OnViewTb(self, evt):
         """Toggles visibility of toolbar
         @param evt: Event fired that called this handler
@@ -1007,6 +1023,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Enable(-1 not in ctrl.GetBracePair())
         elif e_id == ID_HLCARET_LINE:
             evt.Check(ctrl.GetCaretLineVisible())
+        elif e_id == ID_SHOW_SB:
+            evt.Check(self.GetStatusBar().IsShown())
         elif e_id == ID_VIEW_TOOL:
             evt.Check(self.GetToolBar().IsShown())
         elif e_id == ID_SHOW_WS:

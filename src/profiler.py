@@ -78,12 +78,13 @@ _DEFAULTS = {
            'SHOW_EOL'   : False,            # Show EOL markers
            'SHOW_LN'    : True,             # Show Line Numbers
            'SHOW_WS'    : False,            # Show whitespace markers
+           'STATBAR'    : True,             # Show Status Bar
            'SYNTAX'     : True,             # Use Syntax Highlighting
            'SYNTHEME'   : 'Default',        # Syntax Highlight color scheme
            'TABWIDTH'   : 8,                # Tab width
            'THEME'      : 'DEFAULT',        # For future use
            'TOOLBAR'    : True,             # Show Toolbar
-           'USETABS'    : False,             # Use tabs instead of spaces
+           'USETABS'    : False,            # Use tabs instead of spaces
            'USE_PROXY'  : False,            # Use Proxy server settings?
            'VI_EMU'     : False,            # Use Vi emulation mode
            'WRAP'       : False,            # Use Wordwrap
