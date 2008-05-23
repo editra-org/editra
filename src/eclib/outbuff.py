@@ -80,6 +80,11 @@ OPB_STYLE_WARN    = 2  # Default Red text styling
 OPB_STYLE_ERROR   = 3  # Default Red/Hotspot text styling
 OPB_STYLE_MAX     = 3  # Highest style byte used by outputbuffer
 
+# All Styles
+OPB_ALL_STYLES = (wx.stc.STC_STYLE_DEFAULT, wx.stc.STC_STYLE_CONTROLCHAR,
+                  OPB_STYLE_DEFAULT, OPB_STYLE_ERROR, OPB_STYLE_INFO,
+                  OPB_STYLE_WARN)
+
 #--------------------------------------------------------------------------#
 
 # Event for notifying that the proces has started running
@@ -132,6 +137,10 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self._updating = threading.Condition(self._mutex)
         self._updates = list()
         self._timer = wx.Timer(self)
+        self._colors = dict(defaultb=(255, 255, 255), defaultf=(0, 0, 0),
+                            errorb=(255, 255, 255), errorf=(255, 0, 0),
+                            infob=(255, 255, 255), infof=(0, 0, 255),
+                            warnb=(255, 255, 255), warnf=(255, 0, 0))
 
         # Setup
         self.__ConfigureSTC()
@@ -194,11 +203,12 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
                 fsize = 11
             else:
                 fsize = 10
+
             font = wx.Font(fsize, wx.FONTFAMILY_MODERN, 
                            wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
         style = (font.GetFaceName(), font.GetPointSize(), "#FFFFFF")
         wx.stc.StyledTextCtrl.SetFont(self, font)
-        
+
         # Custom Styles
         self.StyleSetSpec(OPB_STYLE_DEFAULT, 
                           "face:%s,size:%d,fore:#000000,back:%s" % style)
@@ -269,6 +279,62 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         """
         pass
 
+    def GetDefaultBackground(self):
+        """Get the default text style background color
+        @return: wx.Colour
+
+        """
+        return wx.Colour(*self._colors['defaultb'])
+
+    def GetDefaultForeground(self):
+        """Get the default text style foreground color
+        @return: wx.Colour
+
+        """
+        return wx.Colour(*self._colors['defaultf'])
+
+    def GetErrorBackground(self):
+        """Get the error text style background color
+        @return: wx.Colour
+
+        """
+        return wx.Colour(*self._colors['errorb'])
+
+    def GetErrorForeground(self):
+        """Get the error text style foreground color
+        @return: wx.Colour
+
+        """
+        return wx.Colour(*self._colors['errorf'])
+
+    def GetInfoBackground(self):
+        """Get the info text style background color
+        @return: wx.Colour
+
+        """
+        return wx.Colour(*self._colors['infob'])
+
+    def GetInfoForeground(self):
+        """Get the info text style foreground color
+        @return: wx.Colour
+
+        """
+        return wx.Colour(*self._colors['infof'])
+
+    def GetWarningBackground(self):
+        """Get the warning text style background color
+        @return: wx.Colour
+
+        """
+        return wx.Colour(*self._colors['warnb'])
+
+    def GetWarningForeground(self):
+        """Get the warning text style foreground color
+        @return: wx.Colour
+
+        """
+        return wx.Colour(*self._colors['warnf'])
+
     def IsRunning(self):
         """Return whether the buffer is running and ready for output
         @return: bool
@@ -290,12 +356,73 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         else:
             pass
 
+    def SetDefaultColor(self, fore=None, back=None):
+        """Set the colors for the default text style
+        @keyword fore: Foreground Color
+        @keyword back: Background Color
+
+        """
+        if fore is not None:
+            self.StyleSetForeground(wx.stc.STC_STYLE_DEFAULT, fore)
+            self.StyleSetForeground(wx.stc.STC_STYLE_CONTROLCHAR, fore)
+            self.StyleSetForeground(OPB_STYLE_DEFAULT, fore)
+            self._colors['defaultf'] = fore.Get()
+
+        if back is not None:
+            self.StyleSetBackground(wx.stc.STC_STYLE_DEFAULT, back)
+            self.StyleSetBackground(wx.stc.STC_STYLE_CONTROLCHAR, back)
+            self.StyleSetBackground(OPB_STYLE_DEFAULT, back)
+            self._colors['defaultb'] = back.Get()
+
+    def SetErrorColor(self, fore=None, back=None):
+        """Set color for error text
+        @keyword fore: Foreground Color
+        @keyword back: Background Color
+
+        """
+        if fore is not None:
+            self.StyleSetForeground(OPB_STYLE_ERROR, fore)
+            self._colors['errorf'] = fore.Get()
+
+        if back is not None:
+            self.StyleSetBackground(OPB_STYLE_ERROR, back)
+            self._colors['errorb'] = back.Get()
+
+    def SetInfoColor(self, fore=None, back=None):
+        """Set color for info text
+        @keyword fore: Foreground Color
+        @keyword back: Background Color
+
+        """
+        if fore is not None:
+            self.StyleSetForeground(OPB_STYLE_INFO, fore)
+            self._colors['infof'] = fore.Get()
+
+        if back is not None:
+            self.StyleSetBackground(OPB_STYLE_INFO, back)
+            self._colors['infob'] = back.Get()
+
+    def SetWarningColor(self, fore=None, back=None):
+        """Set color for warning text
+        @keyword fore: Foreground Color
+        @keyword back: Background Color
+
+        """
+        if fore is not None:
+            self.StyleSetForeground(OPB_STYLE_WARN, fore)
+            self._colors['warnf'] = fore.Get()
+
+        if back is not None:
+            self.StyleSetBackground(OPB_STYLE_WARN, back)
+            self._colors['warnb'] = back.Get()
+
     def SetFont(self, font):
         """Set the font used by all text in the buffer
         @param font: wxFont
 
         """
-        self.__SetupStyles(font)
+        for style in OPB_ALL_STYLES:
+            self.StyleSetFont(style, font)
 
     def SetText(self, text):
         """Set the text that is shown in the buffer
