@@ -5,8 +5,16 @@
 
 #-----------------------------------------------------------------------------#
 
+Version: 0.3
+Date: 0x/xx/2008
+
++Option to automatically clear buffer between runs
++All text colors are configurable
+
+#-----------------------------------------------------------------------------#
+
 Version: 0.2
-Date: xx/xx/2008
+Date: 03/14/2008
 
 + Use aliases for command names
 + Use Primary Font from Profile settings for output
