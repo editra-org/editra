@@ -21,18 +21,19 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import glob
 import wx
-import wx.lib.colourselect as  csel
+
+# Editra Imports
 import ed_glob
 from profiler import Profile_Get, Profile_Set
 import ed_stc
 from ed_style import StyleItem
-import ed_event
 import util
 import syntax.syntax as syntax
+import eclib.colorsetter as colorsetter
 
 # Function Aliases
 _ = wx.GetTranslation
@@ -154,7 +155,7 @@ class StyleEditor(wx.Dialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_LISTBOX, self.OnListBox)
-        self.Bind(ed_event.EVT_NOTIFY, self.OnColor)
+        self.Bind(colorsetter.EVT_COLORSETTER, self.OnColor)
         self.preview.Bind(wx.EVT_LEFT_UP, self.OnTextRegion)
         self.preview.Bind(wx.EVT_KEY_UP, self.OnTextRegion)
     #--- End Init ---#
@@ -539,7 +540,7 @@ class StyleEditor(wx.Dialog):
                 ctrl.SetValue(val_map[sid])
             elif c_type == "wxChoice":
                 ctrl.SetStringSelection(val_map[sid])
-            elif isinstance(ctrl, ColourSetter):
+            elif isinstance(ctrl, colorsetter.ColorSetter):
                 ctrl.SetLabel(val_map[sid][:7])
                 ctrl.SetValue(wx.Color(int(val_map[sid][1:3], 16),
                                        int(val_map[sid][3:5], 16),
@@ -565,7 +566,7 @@ class StyleEditor(wx.Dialog):
             val = ctrl.GetValue()
         elif ctrl_t == 'wxChoice':
             val = ctrl.GetStringSelection()
-        elif isinstance(ctrl, ColourSetter):
+        elif isinstance(ctrl, colorsetter.ColorSetter):
             val = ctrl.GetLabel()
         else:
             return False
@@ -621,7 +622,7 @@ class SettingsPanel(wx.Panel):
         # Foreground
         fground_sizer = wx.BoxSizer(wx.HORIZONTAL)
         fground_lbl = wx.StaticText(self, label=_("Foreground") + u": ")
-        fground_sel = ColourSetter(self, ID_FORE_COLOR, "#000000")
+        fground_sel = colorsetter.ColorSetter(self, ID_FORE_COLOR, wx.BLACK)
         fground_sizer.AddMany([((5, 5)),
                                (fground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
                                ((2, 2), 1, wx.EXPAND),
@@ -633,7 +634,7 @@ class SettingsPanel(wx.Panel):
         # Background
         bground_sizer = wx.BoxSizer(wx.HORIZONTAL)
         bground_lbl = wx.StaticText(self, label=_("Background") + u": ")
-        bground_sel = ColourSetter(self, ID_BACK_COLOR, "#FFFFFF")
+        bground_sel = colorsetter.ColorSetter(self, ID_BACK_COLOR, wx.WHITE)
         bground_sizer.AddMany([((5, 5)),
                                (bground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
                                ((2, 2), 1, wx.EXPAND),
@@ -697,210 +698,6 @@ class SettingsPanel(wx.Panel):
         self.SetAutoLayout(True)
 
 #-----------------------------------------------------------------------------#
-class ColourSetter(wx.Panel):
-    """Control for setting and selecting a color to describe the
-    various styling of the text control.
-
-    """
-    def __init__(self, parent, id_, label=wx.EmptyString):
-        """Create the control, it is a composite of a colourSelect and
-        and a text control.
-        @keyword label: the hex string value to go in the text portion
-
-        """
-        wx.Panel.__init__(self, parent, id_)
-
-        # Attributes
-        self._label = label
-        self._txt = wx.TextCtrl(self, value=label,
-                                style=wx.TE_CENTER,
-                                validator=HexValidator())
-        txtheight = self._txt.GetTextExtent('#000000')[1]
-        self._txt.SetMaxSize((-1, txtheight + 4))
-        self._txt.SetToolTip(wx.ToolTip(_("Enter a hex color value")))
-        self._cbtn = csel.ColourSelect(self, colour=util.HexToRGB(label),
-                                       size=(20, 20))
-
-        self._DoLayout()
-
-        # Event Handlers
-        self.Bind(csel.EVT_COLOURSELECT, self.OnColour)
-        self._txt.Bind(wx.EVT_KEY_UP, self.OnTextChange)
-        self._txt.Bind(wx.EVT_TEXT_PASTE, self.OnTextChange)
-        self._txt.Bind(wx.EVT_KEY_DOWN, self.OnValidateTxt)
-        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI)
-
-    def __PostEvent(self):
-        """Notify the parent window of any value changes to the control"""
-        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY, self.GetId())
-        wx.PostEvent(self.GetParent(), evt)
-
-    def _DoLayout(self):
-        """Layout the controls"""
-        sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(self._txt, 0, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)
-        sizer.Add((5, 5), 0)
-        sizer.Add(self._cbtn, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        self.SetSizer(sizer)
-
-    def GetColour(self):
-        """Returns the colour value of the control
-        @return: wxColour object
-
-        """
-        return self._cbtn.GetValue()
-
-    def GetLabel(self):
-        """Gets the hex value from the text control
-        @return: string '#123456'
-        @note: ensures a full 6 digit hex value is returned, padding
-               with zero's where necessary
-
-        """
-        hexstr = self._txt.GetValue()
-        hexstr = hexstr.replace('#', '').replace(' ', '')
-        hexstr = '#' + hexstr + ('0' * (6 - len(hexstr)))
-        return hexstr
-
-    def OnColour(self, evt):
-        """Update the button and text control value
-        when a choice is made in the colour dialog.
-        @param evt: EVT_COLOURSELECT
-
-        """
-        e_val = evt.GetValue()[0:3]
-        red = hex(e_val[0])
-        green = hex(e_val[1])
-        blue = hex(e_val[2])
-        hex_str = "#%s%s%s" % (red[2:].zfill(2).upper(),
-                               green[2:].zfill(2).upper(),
-                               blue[2:].zfill(2).upper())
-        self._txt.SetValue(hex_str)
-        self._cbtn.SetValue(wx.Color(e_val[0], e_val[1], e_val[2]))
-        self.__PostEvent()
-
-    def OnTextChange(self, evt=None):
-        """Catch when text changes in the text control and update
-        button accordingly.
-        @keyword evt: event that called this handler
-
-        """
-        cpos = self._txt.GetInsertionPoint()
-        hexstr = self._txt.GetValue().replace('#', '').strip()
-        valid = ''
-        for char in hexstr:
-            if char in '0123456789abcdefABCDEF':
-                valid = valid + char
-
-        if len(valid) > 6:
-            valid = valid[:6]
-
-        valid = '#' + valid
-        self._txt.SetValue(valid)
-        self._txt.SetInsertionPoint(cpos)
-        valid = valid + (u'0' * (6 - len(valid)))
-        self._cbtn.SetValue(util.HexToRGB(valid))
-        self.__PostEvent()
-
-    def OnUpdateUI(self, evt):
-        """Cleanup any bad characters and formating in the display
-        @param evt: UpdateUI
-
-        """
-        ret = u''
-        for char in self._txt.GetValue().replace('#', ''):
-            if char in '0123456789abcdefABCDEF':
-                ret = ret + char
-
-        if ret != self._txt.GetValue():
-            cpos = self._txt.GetInsertionPoint()
-            self._txt.SetValue(u'#' + ret)
-            self._txt.SetInsertionPoint(cpos)
-
-    def OnValidateTxt(self, evt):
-        """Validate text to ensure only valid hex characters are entered
-        @param evt: wxEVT_KEY_DOWN
-
-        """
-        code = evt.GetKeyCode()
-        if code in [wx.WXK_DELETE, wx.WXK_BACK, wx.WXK_LEFT, wx.WXK_RIGHT] or \
-           evt.CmdDown():
-            evt.Skip()
-            return
-
-        key = unichr(code)
-        if (key.isdigit() and evt.ShiftDown()) or \
-           evt.AltDown() or evt.MetaDown():
-            return
-
-        if key in "0123456789ABCDEFabcdef#" and \
-           (len(self._txt.GetValue().lstrip("#")) < 6 or \
-            self._txt.GetStringSelection()):
-            evt.Skip()
-
-    def SetLabel(self, label):
-        """Set the label value of the text control
-        @param label: hex string to set label to
-
-        """
-        self._txt.SetValue(label)
-        self.OnTextChange()
-
-    def SetValue(self, colour):
-        """Set the color value of the button
-        @param colour: wxColour or 3 tuple to set colour value to
-
-        """
-        self._cbtn.SetValue(colour)
-        red, green, blue = colour[0:3]
-        hex_str = "#%s%s%s" % (hex(red)[2:].zfill(2).upper(),
-                               hex(green)[2:].zfill(2).upper(),
-                               hex(blue)[2:].zfill(2).upper())
-        self._txt.SetValue(hex_str)
-        self.__PostEvent()
-
-class HexValidator(wx.PyValidator):
-    """Validate Hex strings for the color setter"""
-    def __init__(self):
-        """Initialize the validator
-
-        """
-        wx.PyValidator.__init__(self)
-
-        # Event Handlers
-        self.Bind(wx.EVT_CHAR, self.OnChar)
-
-    def Clone(self):
-        """Clones the current validator
-        @return: clone of this object
-
-        """
-        return HexValidator()
-
-    def Validate(self, win):
-        """Validate an window value
-        @param win: window to validate
-
-        """
-        return win.GetValue() in '#0123456789abcdefABCDEF'
-
-    def OnChar(self, event):
-        """Process values as they are entered into the control
-        @param event: event that called this handler
-
-        """
-        key = event.GetKeyCode()
-        if event.CmdDown() or key < wx.WXK_SPACE or key == wx.WXK_DELETE or \
-           key > 255 or chr(key) in '0123456789abcdefABCDEF':
-            event.Skip()
-            return
-
-        if not wx.Validator_IsSilent():
-            wx.Bell()
-
-        return
-
-#-----------------------------------------------------------------------------#
 # Utility funtcions
 def DuplicateStyleDict(style_dict):
     """Duplicates the style dictionary to make a true copy of
@@ -914,8 +711,8 @@ def DuplicateStyleDict(style_dict):
     new_dict = dict()
     for tag in style_dict:
         new_dict[tag] = StyleItem()
-        ok = new_dict[tag].SetAttrFromStr(unicode(style_dict[tag]))
-        if not ok:
+        is_ok = new_dict[tag].SetAttrFromStr(unicode(style_dict[tag]))
+        if not is_ok:
             new_dict[tag].null = True
     return new_dict
 
