@@ -17,6 +17,8 @@ __revision__ = "$Revision$"
 import sys
 import wx
 import wx.lib.mixins.listctrl as listmix
+#import wx.lib.colourselect as colourselect
+import eclib.colorsetter as colorsetter
 import cStringIO
 import zlib
 
@@ -24,13 +26,37 @@ import zlib
 import handlers
 
 # Editra Libraries
+from profiler import Profile_Get, Profile_Set
 import ed_msg
 import util
 
 #-----------------------------------------------------------------------------#
 # Globals
+
+# Profile Key
+LAUNCH_PREFS = 'Launch.Prefs'
+
+# General Panel
 ID_LANGUAGE = wx.NewId()
 ID_EXECUTABLES = wx.NewId()
+
+# Misc Panel
+ID_AUTOCLEAR = wx.NewId()
+
+# Color Buttons
+ID_DEF_BACK = wx.NewId()
+ID_DEF_FORE = wx.NewId()
+ID_INFO_BACK = wx.NewId()
+ID_INFO_FORE = wx.NewId()
+ID_ERR_BACK = wx.NewId()
+ID_ERR_FORE = wx.NewId()
+ID_WARN_BACK = wx.NewId()
+ID_WARN_FORE = wx.NewId()
+
+COLOR_MAP = { ID_DEF_BACK : 'defaultb', ID_DEF_FORE : 'defaultf',
+              ID_ERR_BACK : 'errorb',   ID_ERR_FORE : 'errorf',
+              ID_INFO_BACK : 'infob',   ID_INFO_FORE : 'infof',
+              ID_WARN_BACK : 'warnb',   ID_WARN_FORE : 'warnf'}
 
 # Message Types
 EDMSG_LAUNCH_CFG_EXIT = ed_msg.EDMSG_ALL + ('launch', 'cfg', 'exit')
@@ -99,12 +125,16 @@ class ConfigDialog(wx.Frame):
     def __DoLayout(self):
         """Layout the dialog"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-        panel = ConfigPanel(self)
-        sizer.Add(panel, 1, wx.EXPAND)
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        noteb = wx.Notebook(self)
+        noteb.AddPage(ConfigPanel(noteb), _("General"))
+        noteb.AddPage(MiscPanel(noteb), _("Misc"))
+        hsizer.AddMany([((5, 5), 0), (noteb, 1, wx.EXPAND), ((5, 5), 0)])
+        sizer.AddMany([((5, 5), 0), (hsizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
         self.SetInitialSize()
-        self.SetMinSize((400, 300))
+        self.SetMinSize((420, 345))
 
     def GetLangId(self):
         return self.ftype
@@ -137,7 +167,7 @@ class ConfigPanel(wx.Panel):
         msizer = wx.BoxSizer(wx.VERTICAL)
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
-        ftype = self.GetParent().GetLangId()
+        ftype = self.GetTopLevelParent().GetLangId()
         ftype = handlers.GetHandlerById(ftype).GetName()
         htypes = GetHandlerTypes()
         lang_ch = wx.Choice(self, ID_LANGUAGE, choices=htypes)
@@ -324,6 +354,112 @@ class ConfigPanel(wx.Panel):
         elist = self.FindWindowById(ID_EXECUTABLES)
         for exe in items:
             elist.Append(exe)
+
+#-----------------------------------------------------------------------------#
+
+class MiscPanel(wx.Panel):
+    """Misc settings panel"""
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+
+        # Attributes
+
+        # Layout
+        self.__DoLayout()
+
+        # Event Handlers
+        self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
+        self.Bind(colorsetter.EVT_COLORSETTER, self.OnColor)
+
+    def __DoLayout(self):
+        """Layout the controls"""
+        msizer = wx.BoxSizer(wx.VERTICAL)
+
+        # Launch Config
+        cfg = Profile_Get(LAUNCH_PREFS, default=dict())
+
+        # Actions Configuration
+        clear_cb = wx.CheckBox(self, ID_AUTOCLEAR,
+                               _("Automatically clear buffer between runs"))
+        clear_cb.SetValue(cfg.get('autoclear', False))
+
+        # Colors
+        colors = dict()
+        for btn in COLOR_MAP.iteritems():
+            cbtn = colorsetter.ColorSetter(self, btn[0], color=cfg.get(btn[1]))
+            colors[btn[0]] = cbtn
+
+        sbox = wx.StaticBox(self, label=_("Text Colors"))
+        boxsz = wx.StaticBoxSizer(sbox, wx.VERTICAL)
+        flexg = wx.FlexGridSizer(5, 5, 5, 5)
+        flexg.AddGrowableCol(1, 1)
+        flexg.AddGrowableCol(3, 1)
+        flexg.AddMany([# First Row
+                       ((5, 5), 0), ((5, 5), 1),
+                       (wx.StaticText(self, label=_("Foreground")), 0,
+                        wx.ALIGN_CENTER),
+                       ((5, 5), 1),
+                       (wx.StaticText(self, label=_("Background")), 0,
+                        wx.ALIGN_CENTER),
+                       # Second Row
+                       (wx.StaticText(self, label=_("Plain Text") + u":"), 0,
+                        wx.ALIGN_CENTER_VERTICAL),
+                       ((5, 5), 1),
+                       (colors[ID_DEF_FORE], 0, wx.EXPAND),
+                       ((5, 5), 1),
+                       (colors[ID_DEF_BACK], 0, wx.EXPAND),
+                       # Third Row
+                       (wx.StaticText(self, label=_("Error Text") + u":"), 0,
+                        wx.ALIGN_CENTER_VERTICAL),
+                       ((5, 5), 1),
+                       (colors[ID_ERR_FORE], 0, wx.EXPAND),
+                       ((5, 5), 1),
+                       (colors[ID_ERR_BACK], 0, wx.EXPAND),
+                       # Fourth Row
+                       (wx.StaticText(self, label=_("Info Text") + u":"), 0,
+                        wx.ALIGN_CENTER_VERTICAL),
+                       ((5, 5), 1),
+                       (colors[ID_INFO_FORE], 0, wx.EXPAND),
+                       ((5, 5), 1),
+                       (colors[ID_INFO_BACK], 0, wx.EXPAND),
+                       # Fifth Row
+                       (wx.StaticText(self, label=_("Warning Text") + u":"), 0,
+                        wx.ALIGN_CENTER_VERTICAL),
+                       ((5, 5), 1),
+                       (colors[ID_WARN_FORE], 0, wx.EXPAND),
+                       ((5, 5), 1),
+                       (colors[ID_WARN_BACK], 0, wx.EXPAND)])
+        boxsz.Add(flexg, 0, wx.EXPAND)
+
+        # Layout
+        msizer.AddMany([((5, 5), 0),
+                        (wx.StaticText(self, label=("Actions") + u":"), 0),
+                        ((5, 5), 0), (clear_cb, 0),
+                        ((10, 10), 0), (wx.StaticLine(self), 0, wx.EXPAND),
+                        ((10, 10), 0),
+                        (boxsz, 1, wx.EXPAND)])
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer.AddMany([((5, 5), 0), (msizer, 1, wx.EXPAND), ((5, 5), 0)])
+        self.SetSizer(hsizer)
+
+    def OnCheck(self, evt):
+        """Handle checkbox events"""
+        e_id = evt.GetId()
+        e_val = evt.GetEventObject().GetValue()
+        cfg = Profile_Get(LAUNCH_PREFS, default=dict())
+        if e_id == ID_AUTOCLEAR:
+            cfg['autoclear'] = e_val
+        else:
+            evt.Skip()
+
+    def OnColor(self, evt):
+        """Handle color change events"""
+        e_id = evt.GetId()
+        color = COLOR_MAP.get(e_id, None)
+        if color is not None:
+            Profile_Get(LAUNCH_PREFS)[color] = evt.GetValue().Get()
+        else:
+            evt.Skip()
 
 #-----------------------------------------------------------------------------#
 

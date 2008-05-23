@@ -41,6 +41,7 @@ ID_RUN = wx.NewId()
 
 # Profile Settings Key
 LAUNCH_KEY = 'Launch.Config'
+#LAUNCH_PREFS = 'Launch.Prefs' # defined in cfgdlg
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
@@ -60,12 +61,27 @@ class LaunchWindow(ctrlbox.ControlBox):
                             cfile='', clang=0,
                             last='', lastlang=0,
                             prelang=0)
+        self._prefs = Profile_Get('Launch.Prefs', default=None)
 
         # Setup
         self.__DoLayout()
         hstate = Profile_Get(LAUNCH_KEY)
         if hstate is not None:
             handlers.SetState(hstate)
+        if self._prefs is None:
+            Profile_Set('Launch.Prefs',
+                        dict(autoclear=False,
+                             defaultf=self._buffer.GetDefaultForeground().Get(),
+                             defaultb=self._buffer.GetDefaultBackground().Get(),
+                             errorf=self._buffer.GetErrorForeground().Get(),
+                             errorb=self._buffer.GetErrorBackground().Get(),
+                             infof=self._buffer.GetInfoForeground().Get(),
+                             infob=self._buffer.GetInfoBackground().Get(),
+                             warnf=self._buffer.GetWarningForeground().Get(),
+                             warnb=self._buffer.GetWarningBackground().Get()))
+            self._prefs = Profile_Get('Launch.Prefs')
+
+        self.UpdateBufferColors()
         cbuffer = self._mw.GetNotebook().GetCurrentCtrl()
         self.SetupControlBar(cbuffer)
 
@@ -192,6 +208,9 @@ class LaunchWindow(ctrlbox.ControlBox):
             else:
                 win.Raise()
         elif e_id == ID_RUN:
+            if self._prefs.get('autoclear'):
+                self._buffer.Clear()
+
             self.SetProcessRunning(not self._busy)
             if self._busy:
                 util.Log("[Launch][info] Starting process")
@@ -220,6 +239,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         util.Log("[Launch][info] Saving config to profile")
         self.RefreshControlBar()
         Profile_Set(LAUNCH_KEY, handlers.GetState())
+        self.UpdateBufferColors()
 
     def OnFileOpened(self, msg):
         """Reset state when a file open message is recieved
@@ -369,6 +389,22 @@ class LaunchWindow(ctrlbox.ControlBox):
 
             # Refresh the control bars view
             self.RefreshControlBar()
+
+    def UpdateBufferColors(self):
+        """Update the buffers colors"""
+        colors = dict()
+        for color in ('defaultf', 'defaultb', 'errorf', 'errorb',
+                      'infof', 'infob', 'warnf', 'warnb'):
+            val = self._prefs.get(color, None)
+            if val is not None:
+                colors[color] = wx.Color(*val)
+            else:
+                colors[color] = val
+
+        self._buffer.SetDefaultColor(colors['defaultf'], colors['defaultb'])
+        self._buffer.SetErrorColor(colors['errorf'], colors['errorb'])
+        self._buffer.SetInfoColor(colors['infof'], colors['infob'])
+        self._buffer.SetWarningColor(colors['warnf'], colors['warnb'])
 
 #-----------------------------------------------------------------------------#
 
