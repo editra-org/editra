@@ -751,8 +751,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         menu.Append(wx.ID_PASTE, _("Paste"))
         menu.AppendSeparator()
         menu.Append(wx.ID_SELECTALL, _("Select All"))
-#        menu.AppendSeparator()
-#        menu.Append(wx.ID_SETUP, _("Preferences"))
         self.PopupMenu(menu)
 
     def OnKeyUp(self, evt):
