@@ -712,11 +712,14 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         key_code = evt.GetKeyCode()
+        cpos = self.GetCurrentPos()
         if self.key_handler.ProcessKey(key_code):
             # The key handler handled this keypress, we don't need to insert
             # the character into the buffer.
             pass
-        elif not self._config['autocomp']:
+        elif not self._config['autocomp'] or \
+             self.IsString(cpos) or \
+             self.IsComment(cpos):
             evt.Skip()
             return
         elif key_code in self._code['compsvc'].GetAutoCompKeys():
@@ -1277,6 +1280,14 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         return self._config['brackethl']
 
+    def IsComment(self, pos):
+        """Is the given position in a comment region of the current buffer
+        @param pos: int position in buffer
+        @return: bool
+
+        """
+        return 'comment' in self.FindTagById(self.GetStyleAt(pos))
+
     def IsFoldingOn(self):
         """Returns whether code folding is being used by this
         control or not.
@@ -1300,6 +1311,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         return self.recording
+
+    def IsString(self, pos):
+        """Is the given position in a string region of the current buffer
+        @param pos: int position in buffer
+        @return: bool
+
+        """
+        style = self.GetStyleAt(pos)
+        return self.FindTagById(style) in ('string_style', 'char_style')
 
     def LinesJoin(self):
         """Join lines in target and compress whitespace
