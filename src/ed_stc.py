@@ -925,25 +925,34 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         if evt.GetMargin() == FOLD_MARGIN:
-            if evt.GetShift() and evt.GetControl():
+            if evt.GetShift() and \
+               (evt.GetControl() or (wx.Platform == '__WXMAC__' and evt.GetAlt())):
                 self.FoldAll()
             else:
                 line_clicked = self.LineFromPosition(evt.GetPosition())
-                if self.GetFoldLevel(line_clicked) & \
-                   wx.stc.STC_FOLDLEVELHEADERFLAG:
+                level = self.GetFoldLevel(line_clicked)
+                if level & wx.stc.STC_FOLDLEVELHEADERFLAG:
+
+                    # Expand node and all Subnodes
                     if evt.GetShift():
                         self.SetFoldExpanded(line_clicked, True)
-                        self.Expand(line_clicked, True, True, 1)
-                    elif evt.GetControl():
+                        self.Expand(line_clicked, True, True, 100, level)
+                    elif evt.GetControl() or \
+                        (wx.Platform == '__WXMAC__' and evt.GetAlt()):
+                        # Contract all subnodes of clicked one
+                        # Note: using Alt as Ctrl can not be recieved for
+                        # clicks on mac (Scintilla Bug).
                         if self.GetFoldExpanded(line_clicked):
                             self.SetFoldExpanded(line_clicked, False)
-                            self.Expand(line_clicked, False, True, 0)
+                            self.Expand(line_clicked, False, True, 0, level)
                         else:
+                            # Expand all subnodes
                             self.SetFoldExpanded(line_clicked, True)
-                            self.Expand(line_clicked, True, True, 100)
+                            self.Expand(line_clicked, True, True, 100, level)
                     else:
                         self.ToggleFold(line_clicked)
         elif evt.GetMargin() == MARK_MARGIN:
+            # Bookmarks ect...
             line_clicked = self.LineFromPosition(evt.GetPosition())
             if self.MarkerGet(line_clicked):
                 self.MarkerDelete(line_clicked, MARK_MARGIN)
@@ -992,10 +1001,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         line = line + 1
 
         while line <= last_child:
-            if force and not (vis_levels > 0):
-                self.HideLines(line, line)
+            if force:
+                if vis_levels > 0:
+                    self.ShowLines(line, line)
+                else:
+                    self.HideLines(line, line)
             else:
-                if do_expand or vis_levels > 0:
+                if do_expand:
                     self.ShowLines(line, line)
 
             if level == -1:
@@ -1006,10 +1018,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     self.SetFoldExpanded(line, vis_levels > 1)
                     line = self.Expand(line, do_expand, force, vis_levels - 1)
                 else:
-                    if do_expand and self.GetFoldExpanded(line):
-                        line = self.Expand(line, True, force, vis_levels - 1)
-                    else:
-                        line = self.Expand(line, False, force, vis_levels - 1)
+                    if do_expand:
+                        if self.GetFoldExpanded(line):
+                            self.SetFoldExpanded(line, True)
+                    line = self.Expand(line, do_expand, force, vis_levels - 1)
             else:
                 line = line + 1
         return line
