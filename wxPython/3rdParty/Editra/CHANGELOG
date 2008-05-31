@@ -36,6 +36,8 @@ BUG FIXES:
 +Replace All with Up flag set causing error to be raised
 +Unable to load style sheets with mixed case lettering on gtk
 +Don't try to provide autocomp/calltips when in a comment or string
++Shift+Click on a contracted node in fold margin now properly expands all sublevels
++Ctrl(Alt on Mac)+Click now properly does a recursive toggle of nodes
 
 #-----------------------------------------------------------------------------#
 
