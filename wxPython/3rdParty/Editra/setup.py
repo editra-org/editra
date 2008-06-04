@@ -240,7 +240,7 @@ if __platform__ == "win32" and 'py2exe' in sys.argv:
         name = NAME,
         version = VERSION,
         options = {"py2exe" : {"compressed" : 1,
-                               "optimize" : 2,
+                               "optimize" : 1,
                                "bundle_files" : 2,
                                "includes" : INCLUDES }},
         windows = [{"script": "src/Editra.py",
