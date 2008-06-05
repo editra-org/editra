@@ -23,7 +23,7 @@ if setup != None:
         license="wxWindows",
         url="http://editra.org",
         platforms=["Linux", "OS X", "Windows"],
-        packages=['codebrowser'],
+        packages=['codebrowser',],
         package_data={'codebrowser' : ['gentag/*.py']},
         entry_points='''
         [Editra.plugins]
