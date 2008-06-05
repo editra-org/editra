@@ -206,19 +206,15 @@ class Section(Scope):
         Scope.__init__(self, name, line, "section", scope)
 
 #---- Code Objects ----#
-class Method(Code):
-    """Class Method object"""
+class Method(Scope):
+    """Method Object"""
     def __init__(self, name, line, scope=None):
-        Code.__init__(self, name, line, "method", scope)
+        Scope.__init__(self, name, line, "method", scope)
 
-class Function(Code):
-    """General Function Object, to create a function like object with
-    a differen't type identifier, change the obj parameter to set the
-    element type property.
-
-    """
-    def __init__(self, name, line, obj="function", scope=None):
-        Code.__init__(self, name, line, obj, scope)
+class Function(Scope):
+    """Function Object"""
+    def __init__(self, name, line, scope=None):
+        Scope.__init__(self, name, line, "function", scope)
 
 class Macro(Code):
     """Macro Object"""

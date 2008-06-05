@@ -573,6 +573,13 @@ def Main():
     # We are ready to run so fire up the config and launch the app
     profile_updated = InitConfig()
 
+    # Put extern subpackage on path so that bundled external dependancies
+    # can be found if needed.
+    if not hasattr(sys, 'frozen'):
+        epath = os.path.join(os.path.dirname(__file__), 'extern')
+        if os.path.exists(epath):
+            sys.path.append(epath)
+
     # Create Application
     dev_tool.DEBUGP("[main][info] Initializing Application...")
     editra_app = Editra(False)

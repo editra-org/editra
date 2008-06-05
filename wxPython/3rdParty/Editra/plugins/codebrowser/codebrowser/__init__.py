@@ -56,6 +56,14 @@ class CodeBrowser(plugin.Plugin):
         """Pass even handler for menu item to main window for management"""
         return [(cbrowser.ID_CODEBROWSER, self._codebrowser.OnShowBrowser)]
 
+    def GetMinVersion(self):
+        """Get the minimum version of Editra that this plugin is compatible
+        with.
+        @note: overridden from Plugin
+
+        """
+        return "0.3.15"
+
     def GetUIHandlers(self):
         """Pass Ui handlers to main window for management"""
         return [(cbrowser.ID_CODEBROWSER, self._codebrowser.OnUpdateMenu)]

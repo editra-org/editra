@@ -8,6 +8,7 @@ Version 0.3
 Released: xx/xx/2008
 
 New:
++ Use Pygments library to aid in parsing
 + Added support for the following filetypes
   - SQL (Packages, Procedures, Functions)
   - PL/SQL (Packages, Procedures, Functions)
