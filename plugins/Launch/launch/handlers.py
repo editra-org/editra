@@ -521,7 +521,7 @@ class PikeHandler(FileTypeHandler):
 
 class PerlHandler(FileTypeHandler):
     """FileTypeHandler for Perl scripts"""
-    RE_PERL_ERROR = re.compile(r'[a-zA-Z]+ error at (.+) line ([0-9]+),.*')
+    RE_PERL_ERROR = re.compile(r'.+ at (.+) line ([0-9]+)[,\.].*')
     def __init__(self):
         FileTypeHandler.__init__(self)
         self.commands = dict(perl='perl')
