@@ -1384,6 +1384,8 @@ KEYS = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+', 'Left',
         'Right', 'Down', 'Up', 'Home', 'End', 'Tab']
+KEYS.extend(["F" + str(x) for x in range(1, 13)])
+
 if wx.Platform == '__WXMSW__':
     KEYS.remove('Tab')
 KEYS.sort()
@@ -1710,6 +1712,7 @@ class KeyBindingPanel(wx.Panel):
             if not len(csel):
                 csel = None
             self.binder.LoadKeyProfile(csel)
+            Profile_Set('KEY_PROFILE', csel)
             self.EnableControls(csel is not None)
         elif e_id == ID_MENUS:
             mi_listbx = self.FindWindowById(ID_MENU_ITEMS)

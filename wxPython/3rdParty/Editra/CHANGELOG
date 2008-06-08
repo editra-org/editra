@@ -38,6 +38,7 @@ BUG FIXES:
 +Don't try to provide autocomp/calltips when in a comment or string
 +Shift+Click on a contracted node in fold margin now properly expands all sublevels
 +Ctrl(Alt on Mac)+Click now properly does a recursive toggle of nodes
++Fix bug in not being able to revert key profile to default
 
 #-----------------------------------------------------------------------------#
 
