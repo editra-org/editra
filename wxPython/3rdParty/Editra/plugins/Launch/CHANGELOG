@@ -9,7 +9,8 @@ Version: 0.3
 Date: 0x/xx/2008
 
 +Option to automatically clear buffer between runs
-+All text colors are configurable
++Output text colors are configurable
++Fix error hotspot highlighting from perl ouput
 
 #-----------------------------------------------------------------------------#
 
