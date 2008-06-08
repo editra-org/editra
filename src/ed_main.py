@@ -269,7 +269,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self.LOG("[ed_main][info] Loading Generator plugins")
         generator.Generator(plgmgr).InstallMenu(menbar.GetMenuByName("tools"))
 
-        # Set Perspective
+        # Set Perspective and other UI settings
         self.SetPerspective(_PGET('DEFAULT_VIEW'))
         self._mgr.Update()
         ed_msg.PostMessage(ed_msg.EDMSG_DSP_FONT,
@@ -326,6 +326,32 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         for win in wx.GetApp().GetMainWindows():
             if hasattr(win, 'filehistory'):
                 win.filehistory.AddFileToHistory(fname)
+
+    def AddMenuHandler(self, menu_id, handler):
+        """Add a menu event handler to the handler stack
+        @param menu_id: Menu item id
+        @param handler: Handler callable
+        @postcondition: handler is added only if its not already in the set
+
+        """
+        for item in self._handlers['menu']:
+            if item[0] == menu_id:
+                return
+        else:
+            self._handlers['menu'].append((menu_id, handler))
+
+    def AddUIHandler(self, menu_id, handler):
+        """Add a UpdateUI event handler to the handler stack
+        @param menu_id: Menu item id
+        @param handler: Handler callable
+        @postcondition: handler is added only if its not already in the set
+
+        """
+        for item in self._handlers['ui']:
+            if item[0] == menu_id:
+                return
+        else:
+            self._handlers['ui'].append((menu_id, handler))
 
     def DoOpen(self, evt, fname=u''):
         """ Do the work of opening a file and placing it
