@@ -216,6 +216,14 @@ class Plugin(object):
         """
         pass
 
+    def IsInstalled(self):
+        """Return whether the plugins L{InstallHook} method has been called
+        or not already.
+        @return: bool
+
+        """
+        return False
+
 #-----------------------------------------------------------------------------#
 
 class PluginData(object):
