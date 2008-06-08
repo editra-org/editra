@@ -504,7 +504,6 @@ class EdPages(FNB.FlatNotebook):
         if fname == "":
             fname = self.GetPageText(pgid)
         self.frame.SetTitle("%s - file://%s" % (util.GetFileName(fname), fname))
-#        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pgid))
 
     def OnPageChanged(self, evt):
         """Actions to do after a page change
