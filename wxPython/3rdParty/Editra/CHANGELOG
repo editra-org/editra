@@ -19,7 +19,7 @@ NEW: [features/improvements]
 +Multi-line comments are foldable in C/CPP/D
 +New version of CodeBrowser
 +New version of FileBrowser
-+New version of Launch
++New version of Launch (add shortcut, custom colors, auto clear option)
 +Interface font is configurable
 +Add Norwegian Nynorsk Translation (contributed by JoNNeMaNN)
 +Add French Translation
