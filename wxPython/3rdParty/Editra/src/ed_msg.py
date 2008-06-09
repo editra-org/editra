@@ -31,6 +31,7 @@ __all__ = ['PostMessage', 'Subscribe', 'Unsubscribe']
 
 #--------------------------------------------------------------------------#
 # Dependancies
+from wx import PyDeadObjectError
 from extern.pubsub import Publisher
 
 #--------------------------------------------------------------------------#
@@ -205,5 +206,85 @@ def Unsubscribe(callback, messages=None):
 
     """
     Publisher().unsubscribe(callback, messages)
+
+#-----------------------------------------------------------------------------#
+
+class NullValue:
+    """Null value to signify that a callback method should be skipped or that
+    no callback could answer the request.
+
+    """
+    def __int__(self):
+        return 0
+
+    def __nonzero__(self):
+        return False
+
+def RegisterCallback(callback, msgtype):
+    """Register a callback method for the given message type
+    @param callback: callable
+    @param msgtype: message type
+
+    """
+    if isinstance(msgtype, tuple):
+        mtype = '.'.join(msgtype)
+    else:
+        mtype = msgtype
+
+    if not _CALLBACK_REGISTRY.has_key(mtype):
+        _CALLBACK_REGISTRY[mtype] = list()
+
+    if callback not in _CALLBACK_REGISTRY[mtype]:
+        _CALLBACK_REGISTRY[mtype].append(callback)
+
+def RequestResult(msgtype, args=list()):
+    """Request a return value result from a registered function/method.
+    If multiple callbacks have been registered for the given msgtype, the
+    first callback to return a non-NullValue will be used for the return
+    value. If L{NullValue} is returned then no callback could answer the
+    call.
+    @param msgtype: Request message
+    @keyword args: Arguments to pass to the callback
+
+    """
+    if isinstance(msgtype, tuple):
+        mtype = '.'.join(msgtype)
+    else:
+        mtype = msgtype
+
+    to_remove = list()
+    rval = NullValue()
+    for idx, meth in enumerate(_CALLBACK_REGISTRY.get(mtype, list())):
+        try:
+            if len(args):
+                rval = meth(args)
+            else:
+                rval = meth()
+        except PyDeadObjectError:
+            to_remove.append(meth)
+
+        if not isinstance(rval, NullValue):
+            break
+
+    # Remove any dead objects that may have been found
+    for val in reversed(to_remove):
+        try:
+            _CALLBACK_REGISTRY.get(mtype, list()).pop(val)
+        except:
+            pass
+
+    return rval
+
+def UnRegisterCallback(callback):
+    """Un-Register a callback method
+    @param callback: callable
+
+    """
+    for key, val in _CALLBACK_REGISTRY.iteritems():
+        if callback in val:
+            _CALLBACK_REGISTRY[key].remove(callback)
+
+# Callback Registry for storing the methods sent in with RegisterCallback
+_CALLBACK_REGISTRY = {}
 
 #-----------------------------------------------------------------------------#
