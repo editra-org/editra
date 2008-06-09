@@ -131,6 +131,16 @@ class ShelfI(plugin.Interface):
         """
         raise NotImplementedError
 
+    def InstallComponents(self, mainw):
+        """Called by the Shelf when the plugin is created to allow it
+        to install any extra components that it may have that fall outside
+        the normal interface. This method is optional and does not need
+        to be implimented if it is not needed.
+        @param mainw: MainWindow Instance
+
+        """
+        pass
+
     def IsStockable(self):
         """Return whether this item type is stockable. The shelf saves
         what pages it had open the last time the program was run and then
@@ -144,12 +154,12 @@ class ShelfI(plugin.Interface):
 
 #-----------------------------------------------------------------------------#
 
-SHELF_NAME = u'Shelf'
 class Shelf(plugin.Plugin):
     """Plugin that creates a notebook for holding the various Shelf items
     implemented by L{ShelfI}.
 
     """
+    SHELF_NAME = u'Shelf'
     observers = plugin.ExtensionPoint(ShelfI)
 
     def __init__(self, pmgr):
@@ -226,25 +236,6 @@ class Shelf(plugin.Plugin):
                      for item in self.observers]
         return handlers
 
-    def UpdateShelfMenuUI(self, evt):
-        """Enable/Disable shelf items based on whether they support
-        muliple instances or not.
-        @param evt: wxEVT_UPDATEUI
-
-        """
-        item = self.GetItemById(evt.GetId())
-        if item is None:
-            evt.Skip()
-            return
-
-        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        evt.SetUpdateInterval(200)
-        count = self.GetCount(item.GetName())
-        if count and not item.AllowMultiple():
-            evt.Enable(False)
-        else:
-            evt.Enable(True)
-
     def Init(self, parent):
         """Mixes the shelf into the parent window
         @param parent: Reference to MainWindow
@@ -253,7 +244,7 @@ class Shelf(plugin.Plugin):
         # First check if the parent has an instance already
         self._parent = parent
         mgr = parent.GetFrameManager()
-        if mgr.GetPane(SHELF_NAME).IsOk():
+        if mgr.GetPane(Shelf.SHELF_NAME).IsOk():
             return
 
         self._shelf = FNB.FlatNotebook(parent,
@@ -261,16 +252,16 @@ class Shelf(plugin.Plugin):
                                              FNB.FNB_X_ON_TAB | \
                                              FNB.FNB_BACKGROUND_GRADIENT | \
                                              FNB.FNB_NODRAG)
-        mgr.AddPane(self._shelf, wx.aui.AuiPaneInfo().Name(SHELF_NAME).\
+        mgr.AddPane(self._shelf, wx.aui.AuiPaneInfo().Name(Shelf.SHELF_NAME).\
                             Caption("Shelf").Bottom().Layer(0).\
                             CloseButton(True).MaximizeButton(False).\
                             BestSize(wx.Size(500,250)))
 
         # Hide the pane and let the perspective manager take care of it
-        mgr.GetPane(SHELF_NAME).Hide()
+        mgr.GetPane(Shelf.SHELF_NAME).Hide()
         mgr.Update()
 
-        # Install Menu and bind event handler
+        # Install Shelf menu under View and bind event handlers
         view = parent.GetMenuBar().GetMenuByName("view")
         menu = self._GetMenu()
         pos = 0
@@ -281,6 +272,7 @@ class Shelf(plugin.Plugin):
 
         view.InsertMenu(pos + 1, ed_glob.ID_SHELF, _("Shelf"), 
                         menu, _("Put an item on the Shelf"))
+
         for item in menu.GetMenuItems():
             if item.IsSeparator():
                 continue
@@ -288,6 +280,12 @@ class Shelf(plugin.Plugin):
 
         if menu.GetMenuItemCount() < 3:
             view.Enable(ed_glob.ID_SHELF, False)
+
+        # Check for any other plugin specific install needs
+        for observer in self.observers:
+            if not observer.IsInstalled() and \
+               hasattr(observer, 'InstallComponents'):
+                observer.InstallComponents(parent)
 
         self.StockShelf(Profile_Get('SHELF_ITEMS', 'list', []))
 
@@ -301,7 +299,7 @@ class Shelf(plugin.Plugin):
             return
 
         mgr = self._parent.GetFrameManager()
-        pane = mgr.GetPane(SHELF_NAME)
+        pane = mgr.GetPane(Shelf.SHELF_NAME)
         if not pane.IsShown():
             pane.Show()
             mgr.Update()
@@ -382,7 +380,7 @@ class Shelf(plugin.Plugin):
             return
 
         mgr = self._parent.GetFrameManager()
-        pane = mgr.GetPane(SHELF_NAME)
+        pane = mgr.GetPane(Shelf.SHELF_NAME)
         if pane.IsOk():
             pane.Hide()
             mgr.Update()
@@ -396,7 +394,7 @@ class Shelf(plugin.Plugin):
             return
 
         mgr = self._parent.GetFrameManager()
-        pane = mgr.GetPane(SHELF_NAME)
+        pane = mgr.GetPane(Shelf.SHELF_NAME)
         if pane.IsOk():
             return pane.IsShown()
         else:
@@ -416,7 +414,7 @@ class Shelf(plugin.Plugin):
             else:
                 self.EnsureShelfVisible()
                 mgr = self._parent.GetFrameManager()
-                pane = mgr.GetPane(SHELF_NAME)
+                pane = mgr.GetPane(Shelf.SHELF_NAME)
                 if pane is not None:
                     page = pane.window.GetCurrentPage()
                     if hasattr(page, 'SetFocus'):
@@ -484,5 +482,24 @@ class Shelf(plugin.Plugin):
                 itemid = self.GetItemId(item)
                 if itemid:
                     self.PutItemOnShelf(itemid)
+
+    def UpdateShelfMenuUI(self, evt):
+        """Enable/Disable shelf items based on whether they support
+        muliple instances or not.
+        @param evt: wxEVT_UPDATEUI
+
+        """
+        item = self.GetItemById(evt.GetId())
+        if item is None:
+            evt.Skip()
+            return
+
+        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        evt.SetUpdateInterval(200)
+        count = self.GetCount(item.GetName())
+        if count and not item.AllowMultiple():
+            evt.Enable(False)
+        else:
+            evt.Enable(True)
 
 #--------------------------------------------------------------------------#
