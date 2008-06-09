@@ -970,7 +970,8 @@ _DEFAULT_BINDING = { # File Menu
 
                      # Tools Menu
                      ed_glob.ID_COMMAND : ("Ctrl", "E"),
-                     ed_glob.ID_KWHELPER : ("Ctrl", "K")
+                     ed_glob.ID_KWHELPER : ("Ctrl", "K"),
+                     ed_glob.ID_RUN_LAUNCH : ("F5")
                      }
 
 # Set some platform specific keybindigs
