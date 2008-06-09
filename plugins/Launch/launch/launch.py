@@ -43,6 +43,12 @@ ID_RUN = wx.NewId()
 LAUNCH_KEY = 'Launch.Config'
 #LAUNCH_PREFS = 'Launch.Prefs' # defined in cfgdlg
 
+# Custom Messages
+MSG_RUN_LAUNCH = ('launch', 'run')
+
+# Value reqest messages
+REQUEST_ACTIVE = 'Launch.IsActive'
+
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
@@ -57,6 +63,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         self._slbl = None # Created in __DoLayout
         self._worker = None
         self._busy = False
+        self._isready = False
         self._config = dict(file='', lang=0,
                             cfile='', clang=0,
                             last='', lastlang=0,
@@ -91,11 +98,15 @@ class LaunchWindow(ctrlbox.ControlBox):
         ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnConfigExit, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
+        ed_msg.Subscribe(self.OnRunMsg, MSG_RUN_LAUNCH)
+        ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
 
     def __del__(self):
         ed_msg.Unsubscribe(self.OnPageChanged)
         ed_msg.Unsubscribe(self.OnThemeChanged)
         ed_msg.Unsubscribe(self.OnConfigExit)
+        ed_msg.Unsubscribe(self.OnRunMsg)
+        ed_msg.UnRegisterCallback(self.CanLaunch)
         super(LaunchWindow).__del__()
 
     def __DoLayout(self):
@@ -161,6 +172,7 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         """
         def IsMainWin(win):
+            """Check if the given window is a main window"""
             return getattr(tlw, '__name__', '') == 'MainWindow'
 
         tlw = self.GetTopLevelParent()
@@ -172,6 +184,22 @@ class LaunchWindow(ctrlbox.ControlBox):
                 return tlw
 
         return None
+
+    def _CanLaunch(self):
+        """Method to use with RegisterCallback for getting status"""
+        val = self.CanLaunch()
+        if not val:
+            val = ed_msg.NullValue()
+        return val
+
+    def CanLaunch(self):
+        """Can the launch window run or not
+        @return: bool
+
+        """
+        parent = self.GetParent()
+        return parent.GetCurrentPage() == self and \
+               parent.GetParent().IsActive() and self._isready
 
     def GetFile(self):
         """Get the file that is currently set to be run
@@ -208,24 +236,8 @@ class LaunchWindow(ctrlbox.ControlBox):
             else:
                 win.Raise()
         elif e_id == ID_RUN:
-            if self._prefs.get('autoclear'):
-                self._buffer.Clear()
-
-            self.SetProcessRunning(not self._busy)
-            if self._busy:
-                util.Log("[Launch][info] Starting process")
-                handler = handlers.GetHandlerById(self._config['lang'])
-                cmd = self.FindWindowById(ID_EXECUTABLE).GetStringSelection()
-                cmd = handler.GetCommand(cmd)
-                path, fname = os.path.split(self._config['file'])
-                args = self.FindWindowById(ID_ARGS).GetValue().split()
-                self._worker = outbuff.ProcessThread(self._buffer, cmd, fname,
-                                                     args, path,
-                                                     handler.GetEnvironment())
-                self._worker.start()
-            else:
-                self._worker.Abort()
-                self._worker = None
+            # May be run or abort depending on current state
+            self.StartStopProcess()
         elif e_id == wx.ID_CLEAR:
             self._buffer.Clear()
         else:
@@ -272,6 +284,15 @@ class LaunchWindow(ctrlbox.ControlBox):
         if hasattr(ctrl, 'GetFileName'):
             self.SetupControlBar(ctrl)
 
+    def OnRunMsg(self, msg):
+        """Run or abort a launch process if this is the current 
+        launch window.
+        @param msg: MSG_RUN_LAUNCH
+
+        """
+        if self.CanLaunch():
+            self.StartStopProcess()
+
     def OnThemeChanged(self, msg):
         """Update icons when the theme has been changed
         @param msg: Message Object
@@ -308,15 +329,39 @@ class LaunchWindow(ctrlbox.ControlBox):
             exe_ch.Enable()
             args_txt.Enable()
             run_btn.Enable()
+            self._isready = True
             if self._config['lang'] == self._config['prelang'] and len(csel):
                 exe_ch.SetStringSelection(csel)
             else:
                 exe_ch.SetStringSelection(handler.GetDefault())
             self.GetControlBar().Layout()
         else:
+            self._isready = False
             run_btn.Disable()
             args_txt.Disable()
             exe_ch.Disable()
+
+    def StartStopProcess(self):
+        """Run or abort the context of the current process if possible"""
+        if self._prefs.get('autoclear'):
+            self._buffer.Clear()
+
+        self.SetProcessRunning(not self._busy)
+        if self._busy:
+            util.Log("[Launch][info] Starting process")
+            handler = handlers.GetHandlerById(self._config['lang'])
+            cmd = self.FindWindowById(ID_EXECUTABLE).GetStringSelection()
+            cmd = handler.GetCommand(cmd)
+            path, fname = os.path.split(self._config['file'])
+            args = self.FindWindowById(ID_ARGS).GetValue().split()
+            self._worker = outbuff.ProcessThread(self._buffer, cmd, fname,
+                                                 args, path,
+                                                 handler.GetEnvironment())
+            self._worker.start()
+        else:
+            util.Log("[Launch][info] Aborting process")
+            self._worker.Abort()
+            self._worker = None
 
     def SetFile(self, fname):
         """Set the script file that will be run

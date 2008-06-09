@@ -6,8 +6,9 @@
 #-----------------------------------------------------------------------------#
 
 Version: 0.3
-Date: 0x/xx/2008
+Date: 06/08/2008
 
++Add shortcut for running Launch (defaults to F5)
 +Option to automatically clear buffer between runs
 +Output text colors are configurable
 +Fix error hotspot highlighting from perl ouput
