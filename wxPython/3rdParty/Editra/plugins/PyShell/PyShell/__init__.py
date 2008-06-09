@@ -50,9 +50,7 @@ class PyShell(plugin.Plugin):
         if font.IsOk() and len(font.GetFaceName()):
             fonts['mono'] = font.GetFaceName()
             fonts['size'] = font.GetPointSize()
-            if fonts['size'] < 11:
-                fonts['size'] = 11
-            fonts['lnsize'] = fonts['size'] - 1
+            fonts['lnsize'] = max(0, fonts['size'] - 1)
 
         font = Profile_Get('FONT2', 'font', wx.Font(11, wx.FONTFAMILY_SWISS, 
                                                         wx.FONTSTYLE_NORMAL, 
