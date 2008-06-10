@@ -33,12 +33,6 @@ from pygments import highlight
 from pygments.token import Token
 from pygments.lexers import get_lexer_by_name
 from pygments.formatter import Formatter
-#import exception
-
-#--------------------------------------------------------------------------#
-
-class TokenNotFound(Exception):
-    pass
 
 #--------------------------------------------------------------------------#
 
@@ -64,29 +58,6 @@ class PyFormatter(Formatter):
 
         self.getCFV(code_lines)
 
-    def _findToken(self, line, searchToken, searchValue=None):
-        """Find if the token exists in the line
-        @param line: line of code
-        @param searchToken: Token to look for
-        @return: bool
-
-        """
-        for t, v in line:
-            if t == searchToken:
-                if searchValue != None:
-                    if searchValue == v:
-                        return True
-                else:
-                    return True
-
-        return False
-
-    def _getValue(self, line, searchToken):
-        for t, v in line:
-            if t == searchToken:
-                return v
-        raise TokenNotFound()
-
     def _getLevel(self, line):
         t, v = line[0]
         if t == Token.Text:
@@ -94,7 +65,7 @@ class PyFormatter(Formatter):
         return 0
 
     def insertClass(self, line, num, container_list):
-        cname = self._getValue(line, Token.Name.Class)
+        cname = parselib.GetTokenValue(line, Token.Name.Class)
         clevel = self._getLevel(line)
 
         ctag = None
@@ -115,7 +86,7 @@ class PyFormatter(Formatter):
             container_list.append((clevel, cname, ctag))
 
     def insertFunction(self, line, num, container_list):
-        fname = self._getValue(line, Token.Name.Function)
+        fname = parselib.GetTokenValue(line, Token.Name.Function)
         flevel = self._getLevel(line)
 
         ftag = None
@@ -147,18 +118,18 @@ class PyFormatter(Formatter):
             try:
                 # FUNCTION
                 #
-                if self._findToken(line, Token.Keyword, "def"):
+                if parselib.HasToken(line, Token.Keyword, "def"):
                     self.insertFunction(line, num, container_list)
 
                 # CLASS
                 #
-                elif self._findToken(line, Token.Keyword, "class"):
+                elif parselib.HasToken(line, Token.Keyword, "class"):
                     self.insertClass(line, num, container_list)
 
                 # Global Variable Only
                 #
-                elif self._findToken(line, Token.Operator, "="):
-                    vname = self._getValue(line, Token.Name);
+                elif parselib.HasToken(line, Token.Operator, "="):
+                    vname = parselib.GetTokenValue(line, Token.Name);
                     flevel = self._getLevel(line)
 
                     if flevel == 0:
@@ -166,7 +137,7 @@ class PyFormatter(Formatter):
                             self.rtags.AddVariable(taglib.Variable(vname, num))
                             vset.add(vname)
 
-            except TokenNotFound:
+            except parselib.TokenNotFound:
                 pass
         return self.rtags
 
@@ -180,10 +151,8 @@ def GenerateTags(buff):
     @return: taglib.DocStruct
 
     """
-    code = buff.read()
-    lexer = get_lexer_by_name("python")
     formatter = PyFormatter()
-    highlight( code, lexer, formatter)
+    highlight(buff.read(), get_lexer_by_name("python"), formatter)
     return formatter.getTags()
 
 #-----------------------------------------------------------------------------#
