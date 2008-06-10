@@ -212,9 +212,13 @@ class Method(Scope):
         Scope.__init__(self, name, line, "method", scope)
 
 class Function(Scope):
-    """Function Object"""
-    def __init__(self, name, line, scope=None):
-        Scope.__init__(self, name, line, "function", scope)
+    """General Function Object, to create a function like object with
+    a differen't type identifier, change the obj parameter to set the
+    element type property.
+
+    """
+    def __init__(self, name, line, obj="function", scope=None):
+        Scope.__init__(self, name, line, obj, scope)
 
 class Macro(Code):
     """Macro Object"""
