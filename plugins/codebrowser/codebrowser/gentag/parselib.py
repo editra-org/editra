@@ -21,6 +21,38 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
+
+class TokenNotFound(Exception):
+    """Parsing exception"""
+    pass
+
+#--------------------------------------------------------------------------#
+# Helper functions for modules using pygments
+
+def GetTokenValue(line, searchToken):
+    """Get the value associated with the given token type in the line"""
+    for token, value in line:
+        if token == searchToken:
+            return value
+    raise TokenNotFound()
+
+def HasToken(line, searchToken, searchValue=None):
+    """Find if the token exists in the line
+    @param line: line of code
+    @param searchToken: Token to look for
+    @return: bool
+
+    """
+    for token, value in line:
+        if token == searchToken:
+            if searchValue != None:
+                if searchValue == value.strip():
+                    return True
+            else:
+                return True
+    return False
+
+#--------------------------------------------------------------------------#
 # Function Definitions
 
 def GetFirstIdentifier(line):
