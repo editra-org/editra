@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-28 23:35-0500\n"
+"POT-Creation-Date: 2008-06-09 20:07-0500\n"
 "PO-Revision-Date: 2008-05-14 18:09+0000\n"
 "Last-Translator: JoNNeMaNN <jonstodle@gmail.com>\n"
 "Language-Team: Norwegian Nynorsk <nn@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s Source File"
 msgstr "%s Kjeldefil"
 
-#: ../../src/ed_main.py:450
+#: ../../src/ed_main.py:476
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -31,7 +31,7 @@ msgstr ""
 "%s vart ikkje funnen\n"
 "Kanskje ho har vorte flytta/sletta"
 
-#: ../../src/ed_pages.py:688
+#: ../../src/ed_pages.py:687
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -42,7 +42,7 @@ msgstr ""
 "\n"
 "Vil du lagre igjen?"
 
-#: ../../src/ed_pages.py:708
+#: ../../src/ed_pages.py:707
 #, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -137,7 +137,7 @@ msgstr "**Alias**"
 msgid "**New Value**"
 msgstr "**Ny verdi**"
 
-#: ../../plugins/Launch/launch/launch.py:357 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:402 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "Avbryt"
 
@@ -194,7 +194,7 @@ msgstr "AntiAliasing"
 msgid "Appearance"
 msgstr "Utsjånad"
 
-#: ../../src/prefdlg.py:1512
+#: ../../src/prefdlg.py:1514
 msgid "Apply"
 msgstr "Utfør"
 
@@ -234,7 +234,7 @@ msgstr "Tilbakeslag sletter innrykk"
 msgid "Base new theme on existing one"
 msgstr "Baser nytt tema på det gjeldande"
 
-#: ../../src/prefdlg.py:1486
+#: ../../src/prefdlg.py:1488
 msgid "Binding"
 msgstr "Binding"
 
@@ -288,11 +288,11 @@ msgstr "Sjå etter oppdateringar ved start"
 msgid "Check if on disk file has been modified by others"
 msgstr "Sjekk om diskfila har vorte endra av andre"
 
-#: ../../src/ed_main.py:348
+#: ../../src/ed_main.py:374
 msgid "Choose a File"
 msgstr "Vel ei fil"
 
-#: ../../src/ed_main.py:532
+#: ../../src/ed_main.py:558
 msgid "Choose a Save Location"
 msgstr "Vel ein lagringsstad"
 
@@ -301,7 +301,7 @@ msgstr "Vel ein lagringsstad"
 msgid "Class Definitions"
 msgstr "Klassedefinisjon"
 
-#: ../../plugins/Launch/launch/launch.py:150 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:161 ../../src/ed_log.py:131
 msgid "Clear"
 msgstr "Rense"
 
@@ -422,7 +422,7 @@ msgstr "Kopier linje"
 msgid "Copy Selected Text to Clipboard"
 msgstr "Kopier veld tekst til utklippstavla"
 
-#: ../../src/ed_main.py:1158
+#: ../../src/ed_main.py:1184
 msgid "Copyright"
 msgstr "Kopirett"
 
@@ -480,7 +480,7 @@ msgstr "Standard utheving i nye dokument"
 msgid "Defines"
 msgstr "Definerer"
 
-#: ../../src/prefdlg.py:1455
+#: ../../src/prefdlg.py:1457
 msgid "Delete"
 msgstr "Slett"
 
@@ -573,12 +573,12 @@ msgstr "E&xit"
 msgid "EOL Mode"
 msgstr "EOL-modus"
 
-#: ../../src/ed_main.py:513
+#: ../../src/ed_main.py:539
 #, python-format
 msgid "ERROR: %s"
 msgstr "FEIL: %s"
 
-#: ../../src/ed_main.py:548
+#: ../../src/ed_main.py:574
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "FEIL: Klarte ikkje lagre %s"
@@ -628,7 +628,7 @@ msgid ""
 "%(errormsg)s"
 msgstr ""
 
-#: ../../src/ed_main.py:1148
+#: ../../src/ed_main.py:1174
 msgid "Editra is a programmers text editor."
 msgstr "Editra er tekstbehandlaren til programmeraren."
 
@@ -652,11 +652,11 @@ msgstr "Kodingsfeil"
 msgid "End of line character formatting"
 msgstr "Linjeslutt tegnformatering"
 
-#: ../../src/prefdlg.py:1650
+#: ../../src/prefdlg.py:1652
 msgid "Enter the name of the new key profile"
 msgstr "Skriv inn namnet på ny nykkelprofil"
 
-#: ../../src/ed_pages.py:723 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:722 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "Feil"
 
@@ -683,7 +683,7 @@ msgstr ""
 "Hjelp med å forbetre ved å klikke Rapporter feil\n"
 "for å sende Feil-tilbaketråkket nedanfor."
 
-#: ../../src/ed_main.py:1089
+#: ../../src/ed_main.py:1115
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr "Feil: Kunne ikkje opne %s"
@@ -696,7 +696,7 @@ msgstr "Kjørbare kommandoar"
 msgid "Executables"
 msgstr "Kjørbare"
 
-#: ../../plugins/Launch/launch/launch.py:459
+#: ../../plugins/Launch/launch/launch.py:504
 msgid "Exit Code"
 msgstr "Avslutt kode"
 
@@ -712,7 +712,7 @@ msgstr "Eksporter"
 msgid "Export Style Sheet"
 msgstr "Eksporter stilark"
 
-#: ../../src/prefdlg.py:1786
+#: ../../src/prefdlg.py:1789
 msgid "Extensions (space separated, no dots)"
 msgstr "Utvidingar (delt med opphald, ingen punktum)"
 
@@ -729,7 +729,7 @@ msgstr "Feila"
 msgid "Failed to install %d plugins"
 msgstr "Feila å installere %d instikk"
 
-#: ../../src/ed_pages.py:721
+#: ../../src/ed_pages.py:720
 #, python-format
 msgid ""
 "Failed to reload %(filename)s:\n"
@@ -759,7 +759,7 @@ msgstr "Filutforskar"
 msgid "File History Length"
 msgstr "Filhistorielengde"
 
-#: ../../src/ed_main.py:452
+#: ../../src/ed_main.py:478
 msgid "File Not Found"
 msgstr "Fil ikkje funnen"
 
@@ -926,7 +926,7 @@ msgstr "Uthev gåseaugelinje"
 msgid "Highlight the background of the current line"
 msgstr "Uthev bakgrunnen til gjeldande linje"
 
-#: ../../src/ed_main.py:1150
+#: ../../src/ed_main.py:1176
 msgid "Homepage"
 msgstr "Heimeside"
 
@@ -1016,11 +1016,11 @@ msgstr "Foren velde linjer"
 msgid "Jump to Saved Path"
 msgstr "Hopp til lagra sti"
 
-#: ../../src/prefdlg.py:1482
+#: ../../src/prefdlg.py:1484
 msgid "Key"
 msgstr "Nykkel"
 
-#: ../../src/prefdlg.py:1451
+#: ../../src/prefdlg.py:1453
 msgid "Key Profile"
 msgstr "Nykkelprofil"
 
@@ -1056,7 +1056,7 @@ msgstr "Oppstartsval"
 msgid "Layout"
 msgstr "Plan"
 
-#: ../../src/prefdlg.py:1784
+#: ../../src/prefdlg.py:1787
 msgid "Lexer"
 msgstr "Lexer"
 
@@ -1064,7 +1064,7 @@ msgstr "Lexer"
 msgid "Lexers"
 msgstr "Lexers"
 
-#: ../../src/ed_main.py:1152
+#: ../../src/ed_main.py:1178
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr "Lisens: wxWindows (se COPYING.txt for full lisens)"
 
@@ -1085,7 +1085,7 @@ msgstr "Last sist sesjon"
 msgid "Load Profile"
 msgstr "Last profil"
 
-#: ../../src/ed_main.py:587 ../../src/ed_menu.py:493
+#: ../../src/ed_main.py:613 ../../src/ed_menu.py:493
 msgid "Load a Custom Profile"
 msgstr "Last ein tilpassa profil"
 
@@ -1097,7 +1097,7 @@ msgstr "Last og lagre tilpassa profilar"
 msgid "Load files from last session on startup"
 msgstr "Last filer frå sist sesjon ved oppstart"
 
-#: ../../src/ed_main.py:594
+#: ../../src/ed_main.py:620
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr "Lasta profil: %s"
@@ -1138,7 +1138,7 @@ msgstr "Vel ein Lexer/Syntaks sjølv"
 msgid "Match Case"
 msgstr "Same storleik"
 
-#: ../../src/prefdlg.py:1464
+#: ../../src/prefdlg.py:1466
 msgid "Menu"
 msgstr "Meny"
 
@@ -1151,11 +1151,11 @@ msgstr ""
 msgid "Modified"
 msgstr "Endra"
 
-#: ../../src/prefdlg.py:1474
+#: ../../src/prefdlg.py:1476
 msgid "Modifier 1"
 msgstr "Modifikator 1"
 
-#: ../../src/prefdlg.py:1478
+#: ../../src/prefdlg.py:1480
 msgid "Modifier 2"
 msgstr "Modifikator 2"
 
@@ -1179,7 +1179,7 @@ msgstr "Namneområde"
 msgid "Network"
 msgstr "Nettverk"
 
-#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1454
+#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1456
 #: ../../src/style_editor.py:196
 msgid "New"
 msgstr "Ny"
@@ -1204,7 +1204,7 @@ msgstr "Ny linje etter"
 msgid "New Line Before"
 msgstr "Ny linje før"
 
-#: ../../src/prefdlg.py:1649
+#: ../../src/prefdlg.py:1651
 msgid "New Profile"
 msgstr "Ny profil"
 
@@ -1224,7 +1224,7 @@ msgstr "Inga skildring tilgjengeleg"
 msgid "No Valid Files to Open"
 msgstr "Ingen gydlege filer"
 
-#: ../../src/prefdlg.py:1548
+#: ../../src/prefdlg.py:1550
 msgid "None"
 msgstr "Iingen"
 
@@ -1244,7 +1244,7 @@ msgstr "Prosjektdokumentasjon og hjelpeguide på nett"
 msgid "Open"
 msgstr "Opne"
 
-#: ../../plugins/PyShell/pyshell/__init__.py:84
+#: ../../plugins/PyShell/pyshell/__init__.py:82
 msgid "Open A Python Shell"
 msgstr "Opne eit Pythonskal"
 
@@ -1285,7 +1285,7 @@ msgstr "Opne med "
 msgid "Opened file: %s"
 msgstr "Opna fila: %s"
 
-#: ../../src/ed_main.py:1086
+#: ../../src/ed_main.py:1112
 #, python-format
 msgid "Opening %s"
 msgstr "Opnar %s"
@@ -1340,11 +1340,11 @@ msgstr "Perspektiv"
 msgid "Plain Text"
 msgstr "Finn tekst"
 
-#: ../../src/ed_main.py:1151
+#: ../../src/ed_main.py:1177
 msgid "Platform Info"
 msgstr "Platforminfo"
 
-#: ../../src/Editra.py:585
+#: ../../src/Editra.py:592
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr "Gå til innstillingsdialongen for å setje tilbake innstillingane"
 
@@ -1352,7 +1352,7 @@ msgstr "Gå til innstillingsdialongen for å setje tilbake innstillingane"
 msgid "Plugin"
 msgstr "Instikk"
 
-#: ../../src/ed_main.py:829 ../../src/ed_menu.py:781
+#: ../../src/ed_main.py:855 ../../src/ed_menu.py:781
 msgid "Plugin Manager"
 msgstr "Innstikkshandterar"
 
@@ -1412,20 +1412,20 @@ msgstr "Skrivermodus"
 msgid "Procedure Definitions"
 msgstr "Prosedyredefinisjonar"
 
-#: ../../src/ed_main.py:568 ../../src/ed_main.py:589 ../../src/ed_menu.py:494
+#: ../../src/ed_main.py:594 ../../src/ed_main.py:615 ../../src/ed_menu.py:494
 msgid "Profile"
 msgstr "Profil"
 
-#: ../../src/ed_main.py:573
+#: ../../src/ed_main.py:599
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr "Profil lagra som: %s"
 
-#: ../../src/Editra.py:587
+#: ../../src/Editra.py:594
 msgid "Profile Updated"
 msgstr "Profil oppdatert"
 
-#: ../../plugins/Launch/launch/launch.py:119
+#: ../../plugins/Launch/launch/launch.py:130
 msgid "Program Executable Command"
 msgstr "Programmer kjørbar kommando"
 
@@ -1453,7 +1453,7 @@ msgstr "Proxyinnstillingar"
 msgid "Proxy URL"
 msgstr "Proxy-URL"
 
-#: ../../src/iface.py:283
+#: ../../src/iface.py:274
 msgid "Put an item on the Shelf"
 msgstr "Set ein ting på hylla"
 
@@ -1470,11 +1470,11 @@ msgstr "Nylege søk"
 msgid "Recently Opened Files"
 msgstr "Nyleg opna filer"
 
-#: ../../src/ed_stc.py:1449
+#: ../../src/ed_stc.py:1461
 msgid "Recording Finished"
 msgstr "Opptak ferdig"
 
-#: ../../src/ed_stc.py:1436
+#: ../../src/ed_stc.py:1448
 msgid "Recording Macro"
 msgstr "Tar opp makro"
 
@@ -1486,7 +1486,7 @@ msgstr "Gjer om"
 msgid "Redo Last Undo"
 msgstr "Gjer om siste angre"
 
-#: ../../src/ed_pages.py:711
+#: ../../src/ed_pages.py:710
 msgid "Reload File?"
 msgstr "Laste fil på ny?"
 
@@ -1539,7 +1539,7 @@ msgstr ""
 msgid "Report Error"
 msgstr "Rapporter feil"
 
-#: ../../src/ed_pages.py:691
+#: ../../src/ed_pages.py:690
 msgid "Resave File?"
 msgstr "Lagre fil på ny?"
 
@@ -1551,18 +1551,23 @@ msgstr "Hentar innstikkliste"
 msgid "Reveal in "
 msgstr "Syn i "
 
-#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1510
+#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1512
 msgid "Revert to Default"
 msgstr "Set til standard"
 
-#: ../../plugins/Launch/launch/launch.py:142
-#: ../../plugins/Launch/launch/launch.py:363
+#: ../../plugins/Launch/launch/__init__.py:81
+#: ../../plugins/Launch/launch/launch.py:153
+#: ../../plugins/Launch/launch/launch.py:408
 msgid "Run"
 msgstr "Kjør"
 
-#: ../../plugins/Launch/launch/__init__.py:63
+#: ../../plugins/Launch/launch/__init__.py:66
 msgid "Run script from current buffer"
 msgstr "Kjør skript frå gjeldande buffer"
+
+#: ../../plugins/Launch/launch/__init__.py:83
+msgid "Run the file associated with the current buffer in Launch"
+msgstr ""
 
 #: ../../src/ed_toolbar.py:73
 msgid "Save"
@@ -1580,7 +1585,7 @@ msgstr "Lagre alle"
 msgid "Save As"
 msgstr "Lagre som"
 
-#: ../../src/ed_main.py:1114
+#: ../../src/ed_main.py:1140
 msgid "Save Changes?"
 msgstr "Lagre endringar?"
 
@@ -1624,17 +1629,17 @@ msgstr "Lagre alle opne sider"
 msgid "Save the current window layout"
 msgstr "Lagre denne vindaugeplanen"
 
-#: ../../src/ed_main.py:550
+#: ../../src/ed_main.py:576
 #, python-format
 msgid "Saved File As: %s"
 msgstr "Lagra fila som: %s"
 
-#: ../../src/ed_main.py:505
+#: ../../src/ed_main.py:531
 #, python-format
 msgid "Saved File: %s"
 msgstr "Lagra fila: %s"
 
-#: ../../plugins/Launch/launch/launch.py:132
+#: ../../plugins/Launch/launch/launch.py:143
 msgid "Script Arguments"
 msgstr "Skriptargument"
 
@@ -1671,7 +1676,7 @@ msgstr "Vel ynskja innstikk og klikk deretter Last ned"
 msgid "Send bug reports and suggestions"
 msgstr "Send feilrapportar og forslag"
 
-#: ../../src/prefdlg.py:1904
+#: ../../src/prefdlg.py:1907
 msgid "Set Font"
 msgstr "Vel skriftstil"
 
@@ -1687,11 +1692,11 @@ msgstr "Vel ein biskrifttype som vert brukt på spesielle stadar kor syntaksen e
 msgid "Sets the main/default font of the document"
 msgstr "Vel hovud-/standardskriftstilen til dokumentet"
 
-#: ../../plugins/Launch/launch/launch.py:112
+#: ../../plugins/Launch/launch/launch.py:123
 msgid "Settings"
 msgstr "Innstillingar"
 
-#: ../../src/iface.py:282
+#: ../../src/iface.py:273
 msgid "Shelf"
 msgstr "Hylle"
 
@@ -1719,7 +1724,7 @@ msgstr "Syn linjenummermargin"
 msgid "Show Line Numbers"
 msgstr "Syn linjenummer"
 
-#: ../../src/iface.py:171
+#: ../../src/iface.py:181
 msgid "Show Shelf"
 msgstr "syn hylle"
 
@@ -1744,7 +1749,7 @@ msgstr "Syn mellomrom"
 msgid "Show Whitespace Markers"
 msgstr "Syn mellomrom-markørar"
 
-#: ../../src/iface.py:172
+#: ../../src/iface.py:182
 msgid "Show the Shelf"
 msgstr "Syn hylla"
 
@@ -1860,7 +1865,7 @@ msgid ""
 "Would you like to open it as %(encoding2)s instead?"
 msgstr ""
 
-#: ../../src/ed_main.py:1111
+#: ../../src/ed_main.py:1137
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -2070,7 +2075,7 @@ msgstr "Finn tekst"
 msgid "Where"
 msgstr ""
 
-#: ../../src/ed_main.py:566
+#: ../../src/ed_main.py:592
 msgid "Where to Save Profile?"
 msgstr ""
 
@@ -2094,12 +2099,12 @@ msgstr ""
 msgid "Wrap Text Horizontally"
 msgstr ""
 
-#: ../../src/ed_main.py:1149
+#: ../../src/ed_main.py:1175
 #, python-format
 msgid "Written in 100%% Python."
 msgstr ""
 
-#: ../../src/Editra.py:583
+#: ../../src/Editra.py:590
 msgid "Your profile has been updated to the latest version"
 msgstr ""
 
@@ -2115,7 +2120,7 @@ msgstr ""
 msgid "Zoom Out"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:129
+#: ../../plugins/Launch/launch/launch.py:140
 msgid "args"
 msgstr ""
 
@@ -2127,11 +2132,11 @@ msgstr ""
 msgid "eol"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:116
+#: ../../plugins/Launch/launch/launch.py:127
 msgid "exec"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:328
+#: ../../plugins/Launch/launch/launch.py:373
 msgid "file"
 msgstr ""
 

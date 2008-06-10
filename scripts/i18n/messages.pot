@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-28 23:35-0500\n"
+"POT-Creation-Date: 2008-06-09 20:07-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,14 +21,14 @@ msgstr ""
 msgid "%s Source File"
 msgstr ""
 
-#: ../../src/ed_main.py:450
+#: ../../src/ed_main.py:476
 #, python-format
 msgid ""
 "%s could not be found\n"
 "Perhaps its been moved or deleted"
 msgstr ""
 
-#: ../../src/ed_pages.py:688
+#: ../../src/ed_pages.py:687
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -36,7 +36,7 @@ msgid ""
 "Would you like to save it again?"
 msgstr ""
 
-#: ../../src/ed_pages.py:708
+#: ../../src/ed_pages.py:707
 #, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -128,7 +128,7 @@ msgstr ""
 msgid "**New Value**"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:357 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:402 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr ""
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "Appearance"
 msgstr ""
 
-#: ../../src/prefdlg.py:1512
+#: ../../src/prefdlg.py:1514
 msgid "Apply"
 msgstr ""
 
@@ -223,7 +223,7 @@ msgstr ""
 msgid "Base new theme on existing one"
 msgstr ""
 
-#: ../../src/prefdlg.py:1486
+#: ../../src/prefdlg.py:1488
 msgid "Binding"
 msgstr ""
 
@@ -277,11 +277,11 @@ msgstr ""
 msgid "Check if on disk file has been modified by others"
 msgstr ""
 
-#: ../../src/ed_main.py:348
+#: ../../src/ed_main.py:374
 msgid "Choose a File"
 msgstr ""
 
-#: ../../src/ed_main.py:532
+#: ../../src/ed_main.py:558
 msgid "Choose a Save Location"
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr ""
 msgid "Class Definitions"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:150 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:161 ../../src/ed_log.py:131
 msgid "Clear"
 msgstr ""
 
@@ -411,7 +411,7 @@ msgstr ""
 msgid "Copy Selected Text to Clipboard"
 msgstr ""
 
-#: ../../src/ed_main.py:1158
+#: ../../src/ed_main.py:1184
 msgid "Copyright"
 msgstr ""
 
@@ -469,7 +469,7 @@ msgstr ""
 msgid "Defines"
 msgstr ""
 
-#: ../../src/prefdlg.py:1455
+#: ../../src/prefdlg.py:1457
 msgid "Delete"
 msgstr ""
 
@@ -559,12 +559,12 @@ msgstr ""
 msgid "EOL Mode"
 msgstr ""
 
-#: ../../src/ed_main.py:513
+#: ../../src/ed_main.py:539
 #, python-format
 msgid "ERROR: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:548
+#: ../../src/ed_main.py:574
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr ""
@@ -614,7 +614,7 @@ msgid ""
 "%(errormsg)s"
 msgstr ""
 
-#: ../../src/ed_main.py:1148
+#: ../../src/ed_main.py:1174
 msgid "Editra is a programmers text editor."
 msgstr ""
 
@@ -638,11 +638,11 @@ msgstr ""
 msgid "End of line character formatting"
 msgstr ""
 
-#: ../../src/prefdlg.py:1650
+#: ../../src/prefdlg.py:1652
 msgid "Enter the name of the new key profile"
 msgstr ""
 
-#: ../../src/ed_pages.py:723 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:722 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr ""
 
@@ -665,7 +665,7 @@ msgid ""
 "to send the Error Traceback shown below."
 msgstr ""
 
-#: ../../src/ed_main.py:1089
+#: ../../src/ed_main.py:1115
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr ""
@@ -678,7 +678,7 @@ msgstr ""
 msgid "Executables"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:459
+#: ../../plugins/Launch/launch/launch.py:504
 msgid "Exit Code"
 msgstr ""
 
@@ -694,7 +694,7 @@ msgstr ""
 msgid "Export Style Sheet"
 msgstr ""
 
-#: ../../src/prefdlg.py:1786
+#: ../../src/prefdlg.py:1789
 msgid "Extensions (space separated, no dots)"
 msgstr ""
 
@@ -711,7 +711,7 @@ msgstr ""
 msgid "Failed to install %d plugins"
 msgstr ""
 
-#: ../../src/ed_pages.py:721
+#: ../../src/ed_pages.py:720
 #, python-format
 msgid ""
 "Failed to reload %(filename)s:\n"
@@ -739,7 +739,7 @@ msgstr ""
 msgid "File History Length"
 msgstr ""
 
-#: ../../src/ed_main.py:452
+#: ../../src/ed_main.py:478
 msgid "File Not Found"
 msgstr ""
 
@@ -904,7 +904,7 @@ msgstr ""
 msgid "Highlight the background of the current line"
 msgstr ""
 
-#: ../../src/ed_main.py:1150
+#: ../../src/ed_main.py:1176
 msgid "Homepage"
 msgstr ""
 
@@ -991,11 +991,11 @@ msgstr ""
 msgid "Jump to Saved Path"
 msgstr ""
 
-#: ../../src/prefdlg.py:1482
+#: ../../src/prefdlg.py:1484
 msgid "Key"
 msgstr ""
 
-#: ../../src/prefdlg.py:1451
+#: ../../src/prefdlg.py:1453
 msgid "Key Profile"
 msgstr ""
 
@@ -1031,7 +1031,7 @@ msgstr ""
 msgid "Layout"
 msgstr ""
 
-#: ../../src/prefdlg.py:1784
+#: ../../src/prefdlg.py:1787
 msgid "Lexer"
 msgstr ""
 
@@ -1039,7 +1039,7 @@ msgstr ""
 msgid "Lexers"
 msgstr ""
 
-#: ../../src/ed_main.py:1152
+#: ../../src/ed_main.py:1178
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr ""
 
@@ -1060,7 +1060,7 @@ msgstr ""
 msgid "Load Profile"
 msgstr ""
 
-#: ../../src/ed_main.py:587 ../../src/ed_menu.py:493
+#: ../../src/ed_main.py:613 ../../src/ed_menu.py:493
 msgid "Load a Custom Profile"
 msgstr ""
 
@@ -1072,7 +1072,7 @@ msgstr ""
 msgid "Load files from last session on startup"
 msgstr ""
 
-#: ../../src/ed_main.py:594
+#: ../../src/ed_main.py:620
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr ""
@@ -1113,7 +1113,7 @@ msgstr ""
 msgid "Match Case"
 msgstr ""
 
-#: ../../src/prefdlg.py:1464
+#: ../../src/prefdlg.py:1466
 msgid "Menu"
 msgstr ""
 
@@ -1126,11 +1126,11 @@ msgstr ""
 msgid "Modified"
 msgstr ""
 
-#: ../../src/prefdlg.py:1474
+#: ../../src/prefdlg.py:1476
 msgid "Modifier 1"
 msgstr ""
 
-#: ../../src/prefdlg.py:1478
+#: ../../src/prefdlg.py:1480
 msgid "Modifier 2"
 msgstr ""
 
@@ -1154,7 +1154,7 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1454
+#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1456
 #: ../../src/style_editor.py:196
 msgid "New"
 msgstr ""
@@ -1179,7 +1179,7 @@ msgstr ""
 msgid "New Line Before"
 msgstr ""
 
-#: ../../src/prefdlg.py:1649
+#: ../../src/prefdlg.py:1651
 msgid "New Profile"
 msgstr ""
 
@@ -1199,7 +1199,7 @@ msgstr ""
 msgid "No Valid Files to Open"
 msgstr ""
 
-#: ../../src/prefdlg.py:1548
+#: ../../src/prefdlg.py:1550
 msgid "None"
 msgstr ""
 
@@ -1219,7 +1219,7 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: ../../plugins/PyShell/pyshell/__init__.py:84
+#: ../../plugins/PyShell/pyshell/__init__.py:82
 msgid "Open A Python Shell"
 msgstr ""
 
@@ -1260,7 +1260,7 @@ msgstr ""
 msgid "Opened file: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:1086
+#: ../../src/ed_main.py:1112
 #, python-format
 msgid "Opening %s"
 msgstr ""
@@ -1314,11 +1314,11 @@ msgstr ""
 msgid "Plain Text"
 msgstr ""
 
-#: ../../src/ed_main.py:1151
+#: ../../src/ed_main.py:1177
 msgid "Platform Info"
 msgstr ""
 
-#: ../../src/Editra.py:585
+#: ../../src/Editra.py:592
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr ""
 
@@ -1326,7 +1326,7 @@ msgstr ""
 msgid "Plugin"
 msgstr ""
 
-#: ../../src/ed_main.py:829 ../../src/ed_menu.py:781
+#: ../../src/ed_main.py:855 ../../src/ed_menu.py:781
 msgid "Plugin Manager"
 msgstr ""
 
@@ -1386,20 +1386,20 @@ msgstr ""
 msgid "Procedure Definitions"
 msgstr ""
 
-#: ../../src/ed_main.py:568 ../../src/ed_main.py:589 ../../src/ed_menu.py:494
+#: ../../src/ed_main.py:594 ../../src/ed_main.py:615 ../../src/ed_menu.py:494
 msgid "Profile"
 msgstr ""
 
-#: ../../src/ed_main.py:573
+#: ../../src/ed_main.py:599
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr ""
 
-#: ../../src/Editra.py:587
+#: ../../src/Editra.py:594
 msgid "Profile Updated"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:119
+#: ../../plugins/Launch/launch/launch.py:130
 msgid "Program Executable Command"
 msgstr ""
 
@@ -1427,7 +1427,7 @@ msgstr ""
 msgid "Proxy URL"
 msgstr ""
 
-#: ../../src/iface.py:283
+#: ../../src/iface.py:274
 msgid "Put an item on the Shelf"
 msgstr ""
 
@@ -1444,11 +1444,11 @@ msgstr ""
 msgid "Recently Opened Files"
 msgstr ""
 
-#: ../../src/ed_stc.py:1449
+#: ../../src/ed_stc.py:1461
 msgid "Recording Finished"
 msgstr ""
 
-#: ../../src/ed_stc.py:1436
+#: ../../src/ed_stc.py:1448
 msgid "Recording Macro"
 msgstr ""
 
@@ -1460,7 +1460,7 @@ msgstr ""
 msgid "Redo Last Undo"
 msgstr ""
 
-#: ../../src/ed_pages.py:711
+#: ../../src/ed_pages.py:710
 msgid "Reload File?"
 msgstr ""
 
@@ -1511,7 +1511,7 @@ msgstr ""
 msgid "Report Error"
 msgstr ""
 
-#: ../../src/ed_pages.py:691
+#: ../../src/ed_pages.py:690
 msgid "Resave File?"
 msgstr ""
 
@@ -1523,17 +1523,22 @@ msgstr ""
 msgid "Reveal in "
 msgstr ""
 
-#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1510
+#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1512
 msgid "Revert to Default"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:142
-#: ../../plugins/Launch/launch/launch.py:363
+#: ../../plugins/Launch/launch/__init__.py:81
+#: ../../plugins/Launch/launch/launch.py:153
+#: ../../plugins/Launch/launch/launch.py:408
 msgid "Run"
 msgstr ""
 
-#: ../../plugins/Launch/launch/__init__.py:63
+#: ../../plugins/Launch/launch/__init__.py:66
 msgid "Run script from current buffer"
+msgstr ""
+
+#: ../../plugins/Launch/launch/__init__.py:83
+msgid "Run the file associated with the current buffer in Launch"
 msgstr ""
 
 #: ../../src/ed_toolbar.py:73
@@ -1552,7 +1557,7 @@ msgstr ""
 msgid "Save As"
 msgstr ""
 
-#: ../../src/ed_main.py:1114
+#: ../../src/ed_main.py:1140
 msgid "Save Changes?"
 msgstr ""
 
@@ -1596,17 +1601,17 @@ msgstr ""
 msgid "Save the current window layout"
 msgstr ""
 
-#: ../../src/ed_main.py:550
+#: ../../src/ed_main.py:576
 #, python-format
 msgid "Saved File As: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:505
+#: ../../src/ed_main.py:531
 #, python-format
 msgid "Saved File: %s"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:132
+#: ../../plugins/Launch/launch/launch.py:143
 msgid "Script Arguments"
 msgstr ""
 
@@ -1642,7 +1647,7 @@ msgstr ""
 msgid "Send bug reports and suggestions"
 msgstr ""
 
-#: ../../src/prefdlg.py:1904
+#: ../../src/prefdlg.py:1907
 msgid "Set Font"
 msgstr ""
 
@@ -1658,11 +1663,11 @@ msgstr ""
 msgid "Sets the main/default font of the document"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:112
+#: ../../plugins/Launch/launch/launch.py:123
 msgid "Settings"
 msgstr ""
 
-#: ../../src/iface.py:282
+#: ../../src/iface.py:273
 msgid "Shelf"
 msgstr ""
 
@@ -1690,7 +1695,7 @@ msgstr ""
 msgid "Show Line Numbers"
 msgstr ""
 
-#: ../../src/iface.py:171
+#: ../../src/iface.py:181
 msgid "Show Shelf"
 msgstr ""
 
@@ -1714,7 +1719,7 @@ msgstr ""
 msgid "Show Whitespace Markers"
 msgstr ""
 
-#: ../../src/iface.py:172
+#: ../../src/iface.py:182
 msgid "Show the Shelf"
 msgstr ""
 
@@ -1829,7 +1834,7 @@ msgid ""
 "Would you like to open it as %(encoding2)s instead?"
 msgstr ""
 
-#: ../../src/ed_main.py:1111
+#: ../../src/ed_main.py:1137
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -2032,7 +2037,7 @@ msgstr ""
 msgid "Where"
 msgstr ""
 
-#: ../../src/ed_main.py:566
+#: ../../src/ed_main.py:592
 msgid "Where to Save Profile?"
 msgstr ""
 
@@ -2056,12 +2061,12 @@ msgstr ""
 msgid "Wrap Text Horizontally"
 msgstr ""
 
-#: ../../src/ed_main.py:1149
+#: ../../src/ed_main.py:1175
 #, python-format
 msgid "Written in 100%% Python."
 msgstr ""
 
-#: ../../src/Editra.py:583
+#: ../../src/Editra.py:590
 msgid "Your profile has been updated to the latest version"
 msgstr ""
 
@@ -2077,7 +2082,7 @@ msgstr ""
 msgid "Zoom Out"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:129
+#: ../../plugins/Launch/launch/launch.py:140
 msgid "args"
 msgstr ""
 
@@ -2089,11 +2094,11 @@ msgstr ""
 msgid "eol"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:116
+#: ../../plugins/Launch/launch/launch.py:127
 msgid "exec"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:328
+#: ../../plugins/Launch/launch/launch.py:373
 msgid "file"
 msgstr ""
 

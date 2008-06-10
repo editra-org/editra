@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-28 23:35-0500\n"
+"POT-Creation-Date: 2008-06-09 20:07-0500\n"
 "PO-Revision-Date: 2008-04-30 04:26+0000\n"
 "Last-Translator: mustafa <myaykan@hotmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s Source File"
 msgstr "%s Kaynak Dosya"
 
-#: ../../src/ed_main.py:450
+#: ../../src/ed_main.py:476
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -31,7 +31,7 @@ msgstr ""
 "%s bulunamadi\n"
 "Dosya taşınmış veya silinmiş olabilir"
 
-#: ../../src/ed_pages.py:688
+#: ../../src/ed_pages.py:687
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -41,7 +41,7 @@ msgstr ""
 "%s son kayıttan sonra silindi\n"
 "Tekrar kaydetmek istermisiniz?"
 
-#: ../../src/ed_pages.py:708
+#: ../../src/ed_pages.py:707
 #, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -135,7 +135,7 @@ msgstr "**Başka isim**"
 msgid "**New Value**"
 msgstr "**Yeni Değer**"
 
-#: ../../plugins/Launch/launch/launch.py:357 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:402 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "İptal"
 
@@ -192,7 +192,7 @@ msgstr "AntiAliasing"
 msgid "Appearance"
 msgstr "Görünüm"
 
-#: ../../src/prefdlg.py:1512
+#: ../../src/prefdlg.py:1514
 msgid "Apply"
 msgstr "Uygula"
 
@@ -232,7 +232,7 @@ msgstr "Geriboşluk girişi azaltır"
 msgid "Base new theme on existing one"
 msgstr "Yeni tema mevcut olan tema üzerine kuruludur"
 
-#: ../../src/prefdlg.py:1486
+#: ../../src/prefdlg.py:1488
 msgid "Binding"
 msgstr "Bağlama"
 
@@ -286,11 +286,11 @@ msgstr "Başlangıçta güncellemeleri kontrol et"
 msgid "Check if on disk file has been modified by others"
 msgstr "Diskteki dosyanın değişip değişmeğini kontrol et"
 
-#: ../../src/ed_main.py:348
+#: ../../src/ed_main.py:374
 msgid "Choose a File"
 msgstr "Dosya seç"
 
-#: ../../src/ed_main.py:532
+#: ../../src/ed_main.py:558
 msgid "Choose a Save Location"
 msgstr "Kaydetmek için bir yer seç"
 
@@ -299,7 +299,7 @@ msgstr "Kaydetmek için bir yer seç"
 msgid "Class Definitions"
 msgstr "Sınıf tanımları"
 
-#: ../../plugins/Launch/launch/launch.py:150 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:161 ../../src/ed_log.py:131
 msgid "Clear"
 msgstr "Temizle"
 
@@ -420,7 +420,7 @@ msgstr "Satır kopyala"
 msgid "Copy Selected Text to Clipboard"
 msgstr "Seçili texti panoya kopyala"
 
-#: ../../src/ed_main.py:1158
+#: ../../src/ed_main.py:1184
 msgid "Copyright"
 msgstr "Telif Hakkı"
 
@@ -478,7 +478,7 @@ msgstr "Yeni doküman için varsayılan renklendirme"
 msgid "Defines"
 msgstr "Tanımlar"
 
-#: ../../src/prefdlg.py:1455
+#: ../../src/prefdlg.py:1457
 msgid "Delete"
 msgstr "Sil"
 
@@ -570,12 +570,12 @@ msgstr "Çı&kış"
 msgid "EOL Mode"
 msgstr "EOL Modu"
 
-#: ../../src/ed_main.py:513
+#: ../../src/ed_main.py:539
 #, python-format
 msgid "ERROR: %s"
 msgstr "Hata: %s"
 
-#: ../../src/ed_main.py:548
+#: ../../src/ed_main.py:574
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "HATA: %s kaydetme hatalı"
@@ -625,7 +625,7 @@ msgid ""
 "%(errormsg)s"
 msgstr ""
 
-#: ../../src/ed_main.py:1148
+#: ../../src/ed_main.py:1174
 msgid "Editra is a programmers text editor."
 msgstr "Editra Programcı text editörüdür"
 
@@ -649,11 +649,11 @@ msgstr "Encode - Sifreleme Hatası"
 msgid "End of line character formatting"
 msgstr "Satır sonu karakter düzenle"
 
-#: ../../src/prefdlg.py:1650
+#: ../../src/prefdlg.py:1652
 msgid "Enter the name of the new key profile"
 msgstr "Yeni anahtar profil adını gir"
 
-#: ../../src/ed_pages.py:723 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:722 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "Hata"
 
@@ -680,7 +680,7 @@ msgstr ""
 "\"Report Error\" tıklayarak Editra nın daha iyi olması için yardım edin\n"
 "ve aşağıdaki Error-Traceback göndermek suretiyle"
 
-#: ../../src/ed_main.py:1089
+#: ../../src/ed_main.py:1115
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr "Hata: %s açılamıyor"
@@ -693,7 +693,7 @@ msgstr "Çalışabilen komut"
 msgid "Executables"
 msgstr "Çalışabilen Dosyalar"
 
-#: ../../plugins/Launch/launch/launch.py:459
+#: ../../plugins/Launch/launch/launch.py:504
 msgid "Exit Code"
 msgstr "Çıkış Kodu"
 
@@ -709,7 +709,7 @@ msgstr "Dışa Aktar"
 msgid "Export Style Sheet"
 msgstr "Stil Şema Dışa Aktar"
 
-#: ../../src/prefdlg.py:1786
+#: ../../src/prefdlg.py:1789
 msgid "Extensions (space separated, no dots)"
 msgstr "Ekler (ayrık boşluk, nokta yok )"
 
@@ -726,7 +726,7 @@ msgstr "Başarısız"
 msgid "Failed to install %d plugins"
 msgstr "%d eklenti kurma hatası"
 
-#: ../../src/ed_pages.py:721
+#: ../../src/ed_pages.py:720
 #, python-format
 msgid ""
 "Failed to reload %(filename)s:\n"
@@ -754,7 +754,7 @@ msgstr "Dosya Yöneticisi"
 msgid "File History Length"
 msgstr "Geçmişte açılan dosyların sayısı"
 
-#: ../../src/ed_main.py:452
+#: ../../src/ed_main.py:478
 msgid "File Not Found"
 msgstr "Dosya Bulunamadı"
 
@@ -921,7 +921,7 @@ msgstr ""
 msgid "Highlight the background of the current line"
 msgstr ""
 
-#: ../../src/ed_main.py:1150
+#: ../../src/ed_main.py:1176
 msgid "Homepage"
 msgstr "Ana Sayfa"
 
@@ -1011,11 +1011,11 @@ msgstr "Seçili satırları birleştir"
 msgid "Jump to Saved Path"
 msgstr "Kayırlı yolu - adresi değiş"
 
-#: ../../src/prefdlg.py:1482
+#: ../../src/prefdlg.py:1484
 msgid "Key"
 msgstr "Anahtar"
 
-#: ../../src/prefdlg.py:1451
+#: ../../src/prefdlg.py:1453
 msgid "Key Profile"
 msgstr "Anahtar Profili"
 
@@ -1051,7 +1051,7 @@ msgstr "Çalışma Ayarları"
 msgid "Layout"
 msgstr "Düzen"
 
-#: ../../src/prefdlg.py:1784
+#: ../../src/prefdlg.py:1787
 msgid "Lexer"
 msgstr "Lexer - Sözcüksel Analizci"
 
@@ -1059,7 +1059,7 @@ msgstr "Lexer - Sözcüksel Analizci"
 msgid "Lexers"
 msgstr "Lexer - Sözcüksel Analizciler"
 
-#: ../../src/ed_main.py:1152
+#: ../../src/ed_main.py:1178
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr "wxWindows  Lisansı (Tam kayıt içi COPYING.txt bakınız)"
 
@@ -1080,7 +1080,7 @@ msgstr "En son oturumu yükle"
 msgid "Load Profile"
 msgstr "Profili Yükle"
 
-#: ../../src/ed_main.py:587 ../../src/ed_menu.py:493
+#: ../../src/ed_main.py:613 ../../src/ed_menu.py:493
 msgid "Load a Custom Profile"
 msgstr "Özel bir profili yükle"
 
@@ -1092,7 +1092,7 @@ msgstr "Sahsi profili yükle ve kaydet"
 msgid "Load files from last session on startup"
 msgstr "Açılışta en son oturum kalan dosyaları yükle"
 
-#: ../../src/ed_main.py:594
+#: ../../src/ed_main.py:620
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr "%s: Profili Yüklendi"
@@ -1133,7 +1133,7 @@ msgstr "Lexer/Syntax elle ayarla"
 msgid "Match Case"
 msgstr "Küçük/Büyük Harf Duyarlı"
 
-#: ../../src/prefdlg.py:1464
+#: ../../src/prefdlg.py:1466
 msgid "Menu"
 msgstr ""
 
@@ -1146,11 +1146,11 @@ msgstr ""
 msgid "Modified"
 msgstr "Değiştirilmiş"
 
-#: ../../src/prefdlg.py:1474
+#: ../../src/prefdlg.py:1476
 msgid "Modifier 1"
 msgstr "Değiştirici 1"
 
-#: ../../src/prefdlg.py:1478
+#: ../../src/prefdlg.py:1480
 msgid "Modifier 2"
 msgstr "Değiştirici 2"
 
@@ -1174,7 +1174,7 @@ msgstr ""
 msgid "Network"
 msgstr "Ağ"
 
-#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1454
+#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1456
 #: ../../src/style_editor.py:196
 msgid "New"
 msgstr "Yeni"
@@ -1199,7 +1199,7 @@ msgstr "Arkaya Yeni Satır"
 msgid "New Line Before"
 msgstr "Öne Yeni Satır"
 
-#: ../../src/prefdlg.py:1649
+#: ../../src/prefdlg.py:1651
 msgid "New Profile"
 msgstr "Yeni Profil"
 
@@ -1219,7 +1219,7 @@ msgstr "Tanımlama Mevcut Değil"
 msgid "No Valid Files to Open"
 msgstr "Açmak için dosya geçerli değildir"
 
-#: ../../src/prefdlg.py:1548
+#: ../../src/prefdlg.py:1550
 msgid "None"
 msgstr "Hiçbiri"
 
@@ -1239,7 +1239,7 @@ msgstr "Çevrimiçi proje belgeleri bve yardım rehberleri"
 msgid "Open"
 msgstr "Aç"
 
-#: ../../plugins/PyShell/pyshell/__init__.py:84
+#: ../../plugins/PyShell/pyshell/__init__.py:82
 msgid "Open A Python Shell"
 msgstr "Bir Python  Dosyası Aç"
 
@@ -1280,7 +1280,7 @@ msgstr "Beraber Aç "
 msgid "Opened file: %s"
 msgstr "Açılan Dosya: %s"
 
-#: ../../src/ed_main.py:1086
+#: ../../src/ed_main.py:1112
 #, python-format
 msgid "Opening %s"
 msgstr "Açılan: %s"
@@ -1335,11 +1335,11 @@ msgstr "Perspektifler"
 msgid "Plain Text"
 msgstr "Metin Bul"
 
-#: ../../src/ed_main.py:1151
+#: ../../src/ed_main.py:1177
 msgid "Platform Info"
 msgstr "Platform Bilgisi"
 
-#: ../../src/Editra.py:585
+#: ../../src/Editra.py:592
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr "Ayarlarınızı geri almak için lütfen ayarlar penceresini kullanın."
 
@@ -1347,7 +1347,7 @@ msgstr "Ayarlarınızı geri almak için lütfen ayarlar penceresini kullanın."
 msgid "Plugin"
 msgstr "Eklenti"
 
-#: ../../src/ed_main.py:829 ../../src/ed_menu.py:781
+#: ../../src/ed_main.py:855 ../../src/ed_menu.py:781
 msgid "Plugin Manager"
 msgstr "Eklenti Yöneticisi"
 
@@ -1407,20 +1407,20 @@ msgstr "Yazıcı Modu"
 msgid "Procedure Definitions"
 msgstr "Prosedür Tanımları"
 
-#: ../../src/ed_main.py:568 ../../src/ed_main.py:589 ../../src/ed_menu.py:494
+#: ../../src/ed_main.py:594 ../../src/ed_main.py:615 ../../src/ed_menu.py:494
 msgid "Profile"
 msgstr "Profil"
 
-#: ../../src/ed_main.py:573
+#: ../../src/ed_main.py:599
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr "Profil olarak kaydedildi: %s"
 
-#: ../../src/Editra.py:587
+#: ../../src/Editra.py:594
 msgid "Profile Updated"
 msgstr "Profil Güncelleşti"
 
-#: ../../plugins/Launch/launch/launch.py:119
+#: ../../plugins/Launch/launch/launch.py:130
 msgid "Program Executable Command"
 msgstr "Program Çalışabilir Komutu"
 
@@ -1448,7 +1448,7 @@ msgstr "Vekil Sunucu Ayarları"
 msgid "Proxy URL"
 msgstr "Vekil Sunucu URL"
 
-#: ../../src/iface.py:283
+#: ../../src/iface.py:274
 msgid "Put an item on the Shelf"
 msgstr "Bir parça kaydet"
 
@@ -1465,11 +1465,11 @@ msgstr "En Son Arananlar"
 msgid "Recently Opened Files"
 msgstr "En Son Açılan Dosyalar"
 
-#: ../../src/ed_stc.py:1449
+#: ../../src/ed_stc.py:1461
 msgid "Recording Finished"
 msgstr "Kayıt Tamamlandı"
 
-#: ../../src/ed_stc.py:1436
+#: ../../src/ed_stc.py:1448
 msgid "Recording Macro"
 msgstr "Makro Kayıt"
 
@@ -1481,7 +1481,7 @@ msgstr "Yinele"
 msgid "Redo Last Undo"
 msgstr "En son geri alınanı tekrarla"
 
-#: ../../src/ed_pages.py:711
+#: ../../src/ed_pages.py:710
 msgid "Reload File?"
 msgstr "Yeniden dosya yükle"
 
@@ -1534,7 +1534,7 @@ msgstr ""
 msgid "Report Error"
 msgstr "Hatayı Rapor  Et"
 
-#: ../../src/ed_pages.py:691
+#: ../../src/ed_pages.py:690
 msgid "Resave File?"
 msgstr "Dosyayı tekrar kaydet"
 
@@ -1546,18 +1546,23 @@ msgstr "Eklenti listesi sorgulanıyor"
 msgid "Reveal in "
 msgstr "İçinde göster "
 
-#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1510
+#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1512
 msgid "Revert to Default"
 msgstr "Eski duruma getir"
 
-#: ../../plugins/Launch/launch/launch.py:142
-#: ../../plugins/Launch/launch/launch.py:363
+#: ../../plugins/Launch/launch/__init__.py:81
+#: ../../plugins/Launch/launch/launch.py:153
+#: ../../plugins/Launch/launch/launch.py:408
 msgid "Run"
 msgstr "Çalıştır"
 
-#: ../../plugins/Launch/launch/__init__.py:63
+#: ../../plugins/Launch/launch/__init__.py:66
 msgid "Run script from current buffer"
 msgstr "Güncel tampondan script çalıştır"
+
+#: ../../plugins/Launch/launch/__init__.py:83
+msgid "Run the file associated with the current buffer in Launch"
+msgstr ""
 
 #: ../../src/ed_toolbar.py:73
 msgid "Save"
@@ -1575,7 +1580,7 @@ msgstr "Tümünü kaydet"
 msgid "Save As"
 msgstr "Farklı Kaydet"
 
-#: ../../src/ed_main.py:1114
+#: ../../src/ed_main.py:1140
 msgid "Save Changes?"
 msgstr "Değişiklikler kaydolsunmu ?"
 
@@ -1619,17 +1624,17 @@ msgstr "Tüm açık sayfaları kaydet"
 msgid "Save the current window layout"
 msgstr "Güncel pencere düzenini kaydet"
 
-#: ../../src/ed_main.py:550
+#: ../../src/ed_main.py:576
 #, python-format
 msgid "Saved File As: %s"
 msgstr "Dosya %s olarak kaydedildi"
 
-#: ../../src/ed_main.py:505
+#: ../../src/ed_main.py:531
 #, python-format
 msgid "Saved File: %s"
 msgstr "Dosya kaydedildiÇ %s"
 
-#: ../../plugins/Launch/launch/launch.py:132
+#: ../../plugins/Launch/launch/launch.py:143
 msgid "Script Arguments"
 msgstr "Script Argümanları"
 
@@ -1666,7 +1671,7 @@ msgstr "İstenen eklentileri seçmek ve download üzerine tıklamak"
 msgid "Send bug reports and suggestions"
 msgstr "Hata raporu ve öneri gönder"
 
-#: ../../src/prefdlg.py:1904
+#: ../../src/prefdlg.py:1907
 msgid "Set Font"
 msgstr "Yazıtipini seçin"
 
@@ -1682,11 +1687,11 @@ msgstr "Highlighting aktif olduğu zaman özel ülkeler için ikincil bir font a
 msgid "Sets the main/default font of the document"
 msgstr "Doküman için standart bir font ayarla"
 
-#: ../../plugins/Launch/launch/launch.py:112
+#: ../../plugins/Launch/launch/launch.py:123
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: ../../src/iface.py:282
+#: ../../src/iface.py:273
 msgid "Shelf"
 msgstr "Raf"
 
@@ -1714,7 +1719,7 @@ msgstr "Satır Numara Kenarı Göster"
 msgid "Show Line Numbers"
 msgstr "Satır Numaralarını Göster"
 
-#: ../../src/iface.py:171
+#: ../../src/iface.py:181
 msgid "Show Shelf"
 msgstr "Paleti Göster"
 
@@ -1739,7 +1744,7 @@ msgstr "Boşluk Karakterlerini Göster"
 msgid "Show Whitespace Markers"
 msgstr "Boşluk İzlerini Göster"
 
-#: ../../src/iface.py:172
+#: ../../src/iface.py:182
 msgid "Show the Shelf"
 msgstr "Paleti Göster"
 
@@ -1855,7 +1860,7 @@ msgid ""
 "Would you like to open it as %(encoding2)s instead?"
 msgstr ""
 
-#: ../../src/ed_main.py:1111
+#: ../../src/ed_main.py:1137
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -2063,7 +2068,7 @@ msgstr "Metin Bul"
 msgid "Where"
 msgstr ""
 
-#: ../../src/ed_main.py:566
+#: ../../src/ed_main.py:592
 msgid "Where to Save Profile?"
 msgstr ""
 
@@ -2087,12 +2092,12 @@ msgstr ""
 msgid "Wrap Text Horizontally"
 msgstr ""
 
-#: ../../src/ed_main.py:1149
+#: ../../src/ed_main.py:1175
 #, python-format
 msgid "Written in 100%% Python."
 msgstr ""
 
-#: ../../src/Editra.py:583
+#: ../../src/Editra.py:590
 msgid "Your profile has been updated to the latest version"
 msgstr ""
 
@@ -2108,7 +2113,7 @@ msgstr ""
 msgid "Zoom Out"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:129
+#: ../../plugins/Launch/launch/launch.py:140
 msgid "args"
 msgstr ""
 
@@ -2120,11 +2125,11 @@ msgstr ""
 msgid "eol"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:116
+#: ../../plugins/Launch/launch/launch.py:127
 msgid "exec"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:328
+#: ../../plugins/Launch/launch/launch.py:373
 msgid "file"
 msgstr ""
 

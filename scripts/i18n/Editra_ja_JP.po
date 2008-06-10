@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-28 23:35-0500\n"
+"POT-Creation-Date: 2008-06-09 20:07-0500\n"
 "PO-Revision-Date: 2008-04-01 02:36+0000\n"
 "Last-Translator: Cody Precord <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s Source File"
 msgstr "%sのソースファイル"
 
-#: ../../src/ed_main.py:450
+#: ../../src/ed_main.py:476
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -31,7 +31,7 @@ msgstr ""
 "%sは見つかりません。\n"
 "移動されたか、削除されたかもしれません。"
 
-#: ../../src/ed_pages.py:688
+#: ../../src/ed_pages.py:687
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -42,7 +42,7 @@ msgstr ""
 "\n"
 "もう一度保存しますか？"
 
-#: ../../src/ed_pages.py:708
+#: ../../src/ed_pages.py:707
 #, fuzzy, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -137,7 +137,7 @@ msgstr "**別名**"
 msgid "**New Value**"
 msgstr "**新しい値**"
 
-#: ../../plugins/Launch/launch/launch.py:357 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:402 ../../src/dev_tool.py:387
 #, fuzzy
 msgid "Abort"
 msgstr "中止"
@@ -193,7 +193,7 @@ msgstr "アンチエイリアス"
 msgid "Appearance"
 msgstr "外観"
 
-#: ../../src/prefdlg.py:1512
+#: ../../src/prefdlg.py:1514
 msgid "Apply"
 msgstr "適用"
 
@@ -234,7 +234,7 @@ msgstr ""
 msgid "Base new theme on existing one"
 msgstr "現状のテーマを使って新しいテーマを作成する"
 
-#: ../../src/prefdlg.py:1486
+#: ../../src/prefdlg.py:1488
 msgid "Binding"
 msgstr "バインディング"
 
@@ -288,11 +288,11 @@ msgstr ""
 msgid "Check if on disk file has been modified by others"
 msgstr "他のユーザーに修正されたかどうか確認する"
 
-#: ../../src/ed_main.py:348
+#: ../../src/ed_main.py:374
 msgid "Choose a File"
 msgstr "ファイルを選択する"
 
-#: ../../src/ed_main.py:532
+#: ../../src/ed_main.py:558
 msgid "Choose a Save Location"
 msgstr "保存場所を選ぶ"
 
@@ -301,7 +301,7 @@ msgstr "保存場所を選ぶ"
 msgid "Class Definitions"
 msgstr "クラスの定義"
 
-#: ../../plugins/Launch/launch/launch.py:150 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:161 ../../src/ed_log.py:131
 msgid "Clear"
 msgstr "クリア"
 
@@ -427,7 +427,7 @@ msgstr "行をコピー"
 msgid "Copy Selected Text to Clipboard"
 msgstr "選択したテキストをクリップボードにコピー"
 
-#: ../../src/ed_main.py:1158
+#: ../../src/ed_main.py:1184
 msgid "Copyright"
 msgstr "Copyright"
 
@@ -487,7 +487,7 @@ msgstr ""
 msgid "Defines"
 msgstr "定義"
 
-#: ../../src/prefdlg.py:1455
+#: ../../src/prefdlg.py:1457
 msgid "Delete"
 msgstr "削除"
 
@@ -583,12 +583,12 @@ msgstr "終了"
 msgid "EOL Mode"
 msgstr "EOLモード"
 
-#: ../../src/ed_main.py:513
+#: ../../src/ed_main.py:539
 #, python-format
 msgid "ERROR: %s"
 msgstr "エラー: %s"
 
-#: ../../src/ed_main.py:548
+#: ../../src/ed_main.py:574
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "エラー：%sを保存に失敗しました"
@@ -638,7 +638,7 @@ msgid ""
 "%(errormsg)s"
 msgstr ""
 
-#: ../../src/ed_main.py:1148
+#: ../../src/ed_main.py:1174
 msgid "Editra is a programmers text editor."
 msgstr ""
 
@@ -663,11 +663,11 @@ msgstr "エンコーディングエラー"
 msgid "End of line character formatting"
 msgstr ""
 
-#: ../../src/prefdlg.py:1650
+#: ../../src/prefdlg.py:1652
 msgid "Enter the name of the new key profile"
 msgstr ""
 
-#: ../../src/ed_pages.py:723 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:722 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "エラー"
 
@@ -693,7 +693,7 @@ msgstr ""
 "エラーが発生しました。\n"
 "エラーを報告する"
 
-#: ../../src/ed_main.py:1089
+#: ../../src/ed_main.py:1115
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr ""
@@ -706,7 +706,7 @@ msgstr "実行可能 なコマンド"
 msgid "Executables"
 msgstr "実行ファイル"
 
-#: ../../plugins/Launch/launch/launch.py:459
+#: ../../plugins/Launch/launch/launch.py:504
 msgid "Exit Code"
 msgstr "終了コード"
 
@@ -723,7 +723,7 @@ msgstr "エキスポート"
 msgid "Export Style Sheet"
 msgstr "スタイルシートをエクスポート"
 
-#: ../../src/prefdlg.py:1786
+#: ../../src/prefdlg.py:1789
 #, fuzzy
 msgid "Extensions (space separated, no dots)"
 msgstr "ファイル拡張子（空白で区切られた、ドットなしい）"
@@ -741,7 +741,7 @@ msgstr "失敗しました"
 msgid "Failed to install %d plugins"
 msgstr "%dプラグインをインストールするのに失敗しました"
 
-#: ../../src/ed_pages.py:721
+#: ../../src/ed_pages.py:720
 #, fuzzy, python-format
 msgid ""
 "Failed to reload %(filename)s:\n"
@@ -775,7 +775,7 @@ msgstr "ファイルブラウザ"
 msgid "File History Length"
 msgstr "ファイルの履歴"
 
-#: ../../src/ed_main.py:452
+#: ../../src/ed_main.py:478
 msgid "File Not Found"
 msgstr "ファイルが見つかりません"
 
@@ -948,7 +948,7 @@ msgstr "現在の行をカット"
 msgid "Highlight the background of the current line"
 msgstr "現在の行を重複する"
 
-#: ../../src/ed_main.py:1150
+#: ../../src/ed_main.py:1176
 msgid "Homepage"
 msgstr "ホームページ"
 
@@ -1039,11 +1039,11 @@ msgstr "選択された行をひとつにする"
 msgid "Jump to Saved Path"
 msgstr ""
 
-#: ../../src/prefdlg.py:1482
+#: ../../src/prefdlg.py:1484
 msgid "Key"
 msgstr "キー"
 
-#: ../../src/prefdlg.py:1451
+#: ../../src/prefdlg.py:1453
 msgid "Key Profile"
 msgstr "キーのプロフィール"
 
@@ -1079,7 +1079,7 @@ msgstr "ランチの構成"
 msgid "Layout"
 msgstr "レイアウト"
 
-#: ../../src/prefdlg.py:1784
+#: ../../src/prefdlg.py:1787
 msgid "Lexer"
 msgstr "レクサー"
 
@@ -1087,7 +1087,7 @@ msgstr "レクサー"
 msgid "Lexers"
 msgstr "レクサー"
 
-#: ../../src/ed_main.py:1152
+#: ../../src/ed_main.py:1178
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr ""
 
@@ -1109,7 +1109,7 @@ msgstr "最後のセッション荷重"
 msgid "Load Profile"
 msgstr "プロファイルを読み込む"
 
-#: ../../src/ed_main.py:587 ../../src/ed_menu.py:493
+#: ../../src/ed_main.py:613 ../../src/ed_menu.py:493
 msgid "Load a Custom Profile"
 msgstr "カスタムプロファイルを読み込む"
 
@@ -1121,7 +1121,7 @@ msgstr "カスタム設定を読み込み、保存する"
 msgid "Load files from last session on startup"
 msgstr "次回スタートするとき、前回の終了時のファイルを読み込む"
 
-#: ../../src/ed_main.py:594
+#: ../../src/ed_main.py:620
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr "%sのプロフィールをロードした"
@@ -1162,7 +1162,7 @@ msgstr "手動でレクサー・シンタックスを設定する"
 msgid "Match Case"
 msgstr "大文字と小文字の区別"
 
-#: ../../src/prefdlg.py:1464
+#: ../../src/prefdlg.py:1466
 msgid "Menu"
 msgstr "メニュー"
 
@@ -1176,11 +1176,11 @@ msgstr "その他"
 msgid "Modified"
 msgstr "修正後"
 
-#: ../../src/prefdlg.py:1474
+#: ../../src/prefdlg.py:1476
 msgid "Modifier 1"
 msgstr "修飾 1"
 
-#: ../../src/prefdlg.py:1478
+#: ../../src/prefdlg.py:1480
 msgid "Modifier 2"
 msgstr "修飾 2"
 
@@ -1204,7 +1204,7 @@ msgstr ""
 msgid "Network"
 msgstr "ネットワーク"
 
-#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1454
+#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1456
 #: ../../src/style_editor.py:196
 msgid "New"
 msgstr "新規作成"
@@ -1229,7 +1229,7 @@ msgstr "この行の後に新しい行を挿入する"
 msgid "New Line Before"
 msgstr "この行の前に新しい行を挿入する"
 
-#: ../../src/prefdlg.py:1649
+#: ../../src/prefdlg.py:1651
 msgid "New Profile"
 msgstr "新規プロファイル"
 
@@ -1249,7 +1249,7 @@ msgstr "説明なしで利用可能"
 msgid "No Valid Files to Open"
 msgstr ""
 
-#: ../../src/prefdlg.py:1548
+#: ../../src/prefdlg.py:1550
 msgid "None"
 msgstr "なし"
 
@@ -1269,7 +1269,7 @@ msgstr ""
 msgid "Open"
 msgstr "開く"
 
-#: ../../plugins/PyShell/pyshell/__init__.py:84
+#: ../../plugins/PyShell/pyshell/__init__.py:82
 msgid "Open A Python Shell"
 msgstr "Pythonのシェルを開く"
 
@@ -1311,7 +1311,7 @@ msgstr ""
 msgid "Opened file: %s"
 msgstr "%sを開きました"
 
-#: ../../src/ed_main.py:1086
+#: ../../src/ed_main.py:1112
 #, python-format
 msgid "Opening %s"
 msgstr "%s を開いています"
@@ -1367,11 +1367,11 @@ msgstr "視る"
 msgid "Plain Text"
 msgstr "テキストを検索"
 
-#: ../../src/ed_main.py:1151
+#: ../../src/ed_main.py:1177
 msgid "Platform Info"
 msgstr "プラットフォーム情報"
 
-#: ../../src/Editra.py:585
+#: ../../src/Editra.py:592
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr ""
 
@@ -1379,7 +1379,7 @@ msgstr ""
 msgid "Plugin"
 msgstr "プラグイン"
 
-#: ../../src/ed_main.py:829 ../../src/ed_menu.py:781
+#: ../../src/ed_main.py:855 ../../src/ed_menu.py:781
 msgid "Plugin Manager"
 msgstr "プラグインマネージャ"
 
@@ -1439,20 +1439,20 @@ msgstr "プリンタのモード"
 msgid "Procedure Definitions"
 msgstr "手続きの定義"
 
-#: ../../src/ed_main.py:568 ../../src/ed_main.py:589 ../../src/ed_menu.py:494
+#: ../../src/ed_main.py:594 ../../src/ed_main.py:615 ../../src/ed_menu.py:494
 msgid "Profile"
 msgstr "プロフィール"
 
-#: ../../src/ed_main.py:573
+#: ../../src/ed_main.py:599
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr ""
 
-#: ../../src/Editra.py:587
+#: ../../src/Editra.py:594
 msgid "Profile Updated"
 msgstr "プロフィールを更新した"
 
-#: ../../plugins/Launch/launch/launch.py:119
+#: ../../plugins/Launch/launch/launch.py:130
 msgid "Program Executable Command"
 msgstr ""
 
@@ -1480,7 +1480,7 @@ msgstr "プロキシ設定"
 msgid "Proxy URL"
 msgstr "プロキシのURL"
 
-#: ../../src/iface.py:283
+#: ../../src/iface.py:274
 msgid "Put an item on the Shelf"
 msgstr ""
 
@@ -1497,11 +1497,11 @@ msgstr "最近の検索"
 msgid "Recently Opened Files"
 msgstr "最近オープンしたファイル"
 
-#: ../../src/ed_stc.py:1449
+#: ../../src/ed_stc.py:1461
 msgid "Recording Finished"
 msgstr ""
 
-#: ../../src/ed_stc.py:1436
+#: ../../src/ed_stc.py:1448
 #, fuzzy
 msgid "Recording Macro"
 msgstr "マクロ記録中"
@@ -1514,7 +1514,7 @@ msgstr "やり直す"
 msgid "Redo Last Undo"
 msgstr ""
 
-#: ../../src/ed_pages.py:711
+#: ../../src/ed_pages.py:710
 msgid "Reload File?"
 msgstr "ファイルをリロードしますか？"
 
@@ -1566,7 +1566,7 @@ msgstr ""
 msgid "Report Error"
 msgstr "エラーを報告書する"
 
-#: ../../src/ed_pages.py:691
+#: ../../src/ed_pages.py:690
 msgid "Resave File?"
 msgstr ""
 
@@ -1578,17 +1578,22 @@ msgstr ""
 msgid "Reveal in "
 msgstr ""
 
-#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1510
+#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1512
 msgid "Revert to Default"
 msgstr "デフォルトに戻す"
 
-#: ../../plugins/Launch/launch/launch.py:142
-#: ../../plugins/Launch/launch/launch.py:363
+#: ../../plugins/Launch/launch/__init__.py:81
+#: ../../plugins/Launch/launch/launch.py:153
+#: ../../plugins/Launch/launch/launch.py:408
 msgid "Run"
 msgstr "実行"
 
-#: ../../plugins/Launch/launch/__init__.py:63
+#: ../../plugins/Launch/launch/__init__.py:66
 msgid "Run script from current buffer"
+msgstr ""
+
+#: ../../plugins/Launch/launch/__init__.py:83
+msgid "Run the file associated with the current buffer in Launch"
 msgstr ""
 
 #: ../../src/ed_toolbar.py:73
@@ -1607,7 +1612,7 @@ msgstr "すべて保存"
 msgid "Save As"
 msgstr "別名で保存"
 
-#: ../../src/ed_main.py:1114
+#: ../../src/ed_main.py:1140
 msgid "Save Changes?"
 msgstr "変更を保存する?"
 
@@ -1652,17 +1657,17 @@ msgstr ""
 msgid "Save the current window layout"
 msgstr ""
 
-#: ../../src/ed_main.py:550
+#: ../../src/ed_main.py:576
 #, python-format
 msgid "Saved File As: %s"
 msgstr "別名で保存する: %s"
 
-#: ../../src/ed_main.py:505
+#: ../../src/ed_main.py:531
 #, python-format
 msgid "Saved File: %s"
 msgstr "保存されているファイル: %s"
 
-#: ../../plugins/Launch/launch/launch.py:132
+#: ../../plugins/Launch/launch/launch.py:143
 msgid "Script Arguments"
 msgstr "スクリプト引数"
 
@@ -1700,7 +1705,7 @@ msgstr ""
 msgid "Send bug reports and suggestions"
 msgstr ""
 
-#: ../../src/prefdlg.py:1904
+#: ../../src/prefdlg.py:1907
 msgid "Set Font"
 msgstr "フォントを使用する"
 
@@ -1716,11 +1721,11 @@ msgstr ""
 msgid "Sets the main/default font of the document"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:112
+#: ../../plugins/Launch/launch/launch.py:123
 msgid "Settings"
 msgstr "設定"
 
-#: ../../src/iface.py:282
+#: ../../src/iface.py:273
 msgid "Shelf"
 msgstr ""
 
@@ -1749,7 +1754,7 @@ msgstr ""
 msgid "Show Line Numbers"
 msgstr "行番号の表示"
 
-#: ../../src/iface.py:171
+#: ../../src/iface.py:181
 msgid "Show Shelf"
 msgstr ""
 
@@ -1775,7 +1780,7 @@ msgstr "空白を示す"
 msgid "Show Whitespace Markers"
 msgstr ""
 
-#: ../../src/iface.py:172
+#: ../../src/iface.py:182
 msgid "Show the Shelf"
 msgstr ""
 
@@ -1892,7 +1897,7 @@ msgid ""
 "Would you like to open it as %(encoding2)s instead?"
 msgstr ""
 
-#: ../../src/ed_main.py:1111
+#: ../../src/ed_main.py:1137
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -2100,7 +2105,7 @@ msgstr "テキストを検索"
 msgid "Where"
 msgstr "どこ"
 
-#: ../../src/ed_main.py:566
+#: ../../src/ed_main.py:592
 msgid "Where to Save Profile?"
 msgstr ""
 
@@ -2125,12 +2130,12 @@ msgstr "行を折り返し"
 msgid "Wrap Text Horizontally"
 msgstr "テキストを水平に包む"
 
-#: ../../src/ed_main.py:1149
+#: ../../src/ed_main.py:1175
 #, python-format
 msgid "Written in 100%% Python."
 msgstr "100%%のPythonで書かれています"
 
-#: ../../src/Editra.py:583
+#: ../../src/Editra.py:590
 msgid "Your profile has been updated to the latest version"
 msgstr ""
 
@@ -2147,7 +2152,7 @@ msgstr "拡大する"
 msgid "Zoom Out"
 msgstr "縮小する"
 
-#: ../../plugins/Launch/launch/launch.py:129
+#: ../../plugins/Launch/launch/launch.py:140
 msgid "args"
 msgstr "args"
 
@@ -2159,11 +2164,11 @@ msgstr "ボールド"
 msgid "eol"
 msgstr "eol"
 
-#: ../../plugins/Launch/launch/launch.py:116
+#: ../../plugins/Launch/launch/launch.py:127
 msgid "exec"
 msgstr "実行"
 
-#: ../../plugins/Launch/launch/launch.py:328
+#: ../../plugins/Launch/launch/launch.py:373
 msgid "file"
 msgstr "ファイル"
 
