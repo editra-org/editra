@@ -24,6 +24,7 @@ NEW: [features/improvements]
 +Add Norwegian Nynorsk Translation (contributed by JoNNeMaNN)
 +Add French Translation
 +Add Brazilian Portuguese Translation (contributed by Ricardo Crudo)
++Add Ukrainian Translation (contributed by Igor Chomko)
 +New bundled style sheet 'Mocha'
 +Improved context menu behavior
 +Can toggle status bar visibility
