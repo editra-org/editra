@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-11 18:41-0500\n"
-"PO-Revision-Date: 2008-05-02 15:56+0000\n"
-"Last-Translator: Balaam's Miracle <Unknown>\n"
+"POT-Creation-Date: 2008-06-12 21:55-0500\n"
+"PO-Revision-Date: 2008-06-11 18:12+0000\n"
+"Last-Translator: Gerard <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-05-28 15:40+0000\n"
+"X-Launchpad-Export-Date: 2008-06-12 22:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:267
@@ -129,7 +129,9 @@ msgstr "&Weergave"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:278
 msgid "**Alias**"
-msgstr "**Alias**"
+msgstr ""
+"Copy text   \t\r\n"
+"**Alias**"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:278
 msgid "**New Value**"
@@ -214,7 +216,7 @@ msgstr "Automatisch inspringen"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:383
 msgid "Automatically clear buffer between runs"
-msgstr ""
+msgstr "Leeg buffer tussen uitvoeringen"
 
 #: ../../src/perspective.py:74
 msgid "Automatically save/use window state from last session"
@@ -268,7 +270,7 @@ msgstr "Wijzig kleuren thema in \"%s\""
 
 #: ../../src/prefdlg.py:320
 msgid "Changes made in this dialog are saved in your current profile. Some Items such as Language require the program to be restarted before taking effect."
-msgstr ""
+msgstr "Wijzigingen gemaakt in dit dialoogvenster worden opgeslagen in uw huidige profiel. Sommige items zoals Taal vereisen een herstart van het programma om de wijzigingen door te voeren."
 
 #: ../../src/plugdlg.py:213
 msgid "Changes will take affect once the program has been restarted"
@@ -500,7 +502,7 @@ msgstr "Zet foutmeldings rapportage uit"
 
 #: ../../src/prefdlg.py:994
 msgid "Display Font"
-msgstr ""
+msgstr "Lettertype voor weergave"
 
 #: ../../src/plugdlg.py:119
 msgid "Do you wish to exit?"
@@ -631,7 +633,9 @@ msgstr ""
 
 #: ../../src/ed_main.py:1174
 msgid "Editra is a programmers text editor."
-msgstr "Editra is een text verwerker voor programmeurs"
+msgstr ""
+"Copy text   \t\r\n"
+"Editra is een text verwerker voor programmeurs"
 
 #: ../../src/ed_menu.py:818
 msgid "Editra translations project"
@@ -666,9 +670,8 @@ msgid "Error Opening File"
 msgstr "Fout bij openen van bestand"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:412
-#, fuzzy
 msgid "Error Text"
-msgstr "Fout"
+msgstr "Fout tekst"
 
 #: ../../src/dev_tool.py:384
 msgid "Error Traceback:"
@@ -968,9 +971,8 @@ msgid "Info"
 msgstr "Informatie:"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:419
-#, fuzzy
 msgid "Info Text"
-msgstr "Tekst zoeken"
+msgstr "Informatie tekst"
 
 #: ../../src/prefdlg.py:742
 msgid "Input Helpers"
@@ -1129,7 +1131,7 @@ msgstr "Macro's"
 
 #: ../../src/prefdlg.py:966
 msgid "Main display font for various UI components"
-msgstr ""
+msgstr "Standaard weergavelettertype voor verschillende gebruikersinterfacecomponenten"
 
 #: ../../src/ed_menu.py:783
 msgid "Manage, Download, and Install plugins"
@@ -1149,7 +1151,7 @@ msgstr "Menu"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:131
 msgid "Misc"
-msgstr ""
+msgstr "Overige"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:148
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:176
@@ -1170,11 +1172,11 @@ msgstr "Verplaats cursor naar complementerende haak"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:62
 msgid "Move to Recycle Bin"
-msgstr ""
+msgstr "Naar prullenbak verplaatsen"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:64
 msgid "Move to Trash"
-msgstr ""
+msgstr "Naar prullenbak verplaatsen"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Namespaces"
@@ -1341,9 +1343,8 @@ msgid "Perspectives"
 msgstr "Perspectieven"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:405
-#, fuzzy
 msgid "Plain Text"
-msgstr "Tekst zoeken"
+msgstr "Platte tekst"
 
 #: ../../src/ed_main.py:1177
 msgid "Platform Info"
@@ -1351,7 +1352,7 @@ msgstr "Platform informatie"
 
 #: ../../src/Editra.py:592
 msgid "Please check the preferences dialog to reset your preferences"
-msgstr "Controleer de voorkeuren dialoog voor eventuele aanpassingen"
+msgstr "Controleer de voorkeuren dialoog voor eventuele aanpassingen."
 
 #: ../../src/plugdlg.py:870
 msgid "Plugin"
@@ -1572,7 +1573,7 @@ msgstr "Start script uit huidige buffer"
 
 #: ../../plugins/Launch/launch/__init__.py:83
 msgid "Run the file associated with the current buffer in Launch"
-msgstr ""
+msgstr "Voer het bestand uit gekopppeld aan de huidige uitvoer buffer"
 
 #: ../../src/ed_toolbar.py:73
 msgid "Save"
@@ -1661,9 +1662,8 @@ msgid "Select &All"
 msgstr "&Alles selecteren"
 
 #: ../../src/ed_stc.py:756
-#, fuzzy
 msgid "Select All"
-msgstr "&Alles selecteren"
+msgstr "Alles selecteren"
 
 #: ../../src/ed_menu.py:540
 msgid "Select All Text in Document"
@@ -1738,9 +1738,8 @@ msgid "Show Splash Screen"
 msgstr "Opstart scherm weergeven"
 
 #: ../../src/ed_menu.py:654 ../../src/prefdlg.py:958
-#, fuzzy
 msgid "Show Status Bar"
-msgstr "Opstart scherm weergeven"
+msgstr "Geef statusbalk weer"
 
 #: ../../src/ed_menu.py:657 ../../src/prefdlg.py:960
 msgid "Show Toolbar"
@@ -1854,9 +1853,8 @@ msgid "Task Definitions"
 msgstr "Taak definities"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:392
-#, fuzzy
 msgid "Text Colors"
-msgstr "Kleur"
+msgstr "Tekstkleuren"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:259
 msgid "Text Document"
@@ -2075,9 +2073,8 @@ msgid "Visual Helpers"
 msgstr "Weergave ondersteuning"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:426
-#, fuzzy
 msgid "Warning Text"
-msgstr "Tekst zoeken"
+msgstr "Waarschuwingstekst"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:172
 msgid "Where"
@@ -2155,6 +2152,3 @@ msgstr "cursief"
 #: ../../src/style_editor.py:654
 msgid "underline"
 msgstr "onderstrepen"
-
-#~ msgid "Enter a hex color value"
-#~ msgstr "Voer een hexadecimale kleurwaarde in"
