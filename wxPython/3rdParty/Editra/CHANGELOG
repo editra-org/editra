@@ -16,6 +16,7 @@ NEWS:
 
 
 NEW: [features/improvements]
++New application icon (designed by Kurt Schelin)
 +Multi-line comments are foldable in C/CPP/D
 +New version of CodeBrowser
 +New version of FileBrowser
