@@ -14,11 +14,21 @@ DATE 0x/xx/2008
 
 NEWS:
 
+This release was originally intended to be a minor bug fix release but has
+expanded to include a number of new features and additions as well. The most
+visual change is the new application icon that was designed and submitted to
+the community forum by Kurt Schelin. 
+
+All of the bundled plugins have recieved overhauls and updates. From this
+version when the bundled plugins are updated the will only be available with
+the updated Editra code as they are often only compatible with the most recent
+release.
+
 
 NEW: [features/improvements]
 +New application icon (designed by Kurt Schelin)
 +Multi-line comments are foldable in C/CPP/D
-+New version of CodeBrowser
++New version of CodeBrowser (improved python, added sql)
 +New version of FileBrowser
 +New version of Launch (add shortcut, custom colors, auto clear option)
 +Interface font is configurable
