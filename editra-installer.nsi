@@ -10,10 +10,10 @@
 
 ; Global Variables
 !define PRODUCT_NAME "Editra"
-!define PRODUCT_VERSION "0.3.0"
+!define PRODUCT_VERSION "0.3.15"
 !define PRODUCT_PUBLISHER "Cody Precord"
 !define PRODUCT_WEB_SITE "http://editra.org"
-!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Editra.exe"
+!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
@@ -65,7 +65,7 @@ SetCompressor lzma
 ;---- Constants
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "editra.win32.${PRODUCT_VERSION}.exe"
-InstallDir "$PROGRAMFILES\Editra"
+InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
@@ -110,7 +110,7 @@ Section "Editra Core" SEC01
   SectionIn RO 1 2
 
   ; Check that Editra is not running before starting to copy the files
-  FindProcDLL::FindProc "Editra.exe"
+  FindProcDLL::FindProc "${PRODUCT_NAME}.exe"
   StrCmp $R0 0 continueInstall
     MessageBox MB_ICONSTOP|MB_OK "${PRODUCT_NAME} is still running please close all running instances and try to install again"
     Abort
@@ -122,8 +122,8 @@ Section "Editra Core" SEC01
   File /r ".\*.*"
 
   ; Add the shortcuts to the start menu and desktop
-  CreateDirectory "$SMPROGRAMS\Editra"
-  CreateShortCut "$SMPROGRAMS\Editra\Editra.lnk" "$INSTDIR\Editra.exe"
+  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Editra.lnk" "$INSTDIR\Editra.exe"
   CreateShortCut "$DESKTOP\Editra.lnk" "$INSTDIR\Editra.exe"
 SectionEnd
 
@@ -147,8 +147,8 @@ SectionEnd
 ; Make/Install Shortcut links
 Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  CreateShortCut "$SMPROGRAMS\Editra\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
-  CreateShortCut "$SMPROGRAMS\Editra\Uninstall.lnk" "$INSTDIR\uninst.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
 
 ; Post installation setup
@@ -190,12 +190,12 @@ Section Uninstall
   RmDir /r "$INSTDIR\"
 
   ; Remove all shortcuts
-  Delete "$SMPROGRAMS\Editra\Uninstall.lnk"
-  Delete "$SMPROGRAMS\Editra\Website.lnk"
-  Delete "$SMPROGRAMS\Editra\Editra.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Editra.lnk"
   Delete "$DESKTOP\Editra.lnk"
   Delete "$QUICKLAUNCH\Editra.lnk"
-  RMDir "$SMPROGRAMS\Editra"
+  RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
 
   ; Cleanup Registry
   DeleteRegKey HKCR "*\shell\OpenWithEditra"
