@@ -2,8 +2,8 @@
 # Name: FileIcon.py                                                           #
 # Purpose: Icon resources for filebrowser                                     #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
-# Licence: wxWindows Licence                                                  #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows Licence                                                  #
 ###############################################################################
 
 """
@@ -23,31 +23,37 @@ __revision__ = "$Revision$"
 from extern.embeddedimage import PyEmbeddedImage
 
 Image = PyEmbeddedImage(
-    "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")
-
+    "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")
