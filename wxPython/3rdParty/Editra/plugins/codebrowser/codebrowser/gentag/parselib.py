@@ -30,7 +30,7 @@ class TokenNotFound(Exception):
 # Helper functions for modules using pygments
 
 def GetTokenValue(line, searchToken):
-    """Get the value associated with the given token type in the line
+    """Get the first value associated with the given token type in the line
     will raise TokenNotFound if the value cannot be found
     @return: string
 
