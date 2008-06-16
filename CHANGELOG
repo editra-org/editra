@@ -8,6 +8,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.3.xx
+DATE 0x/xx/2008
+14th Alpha Release
+
+NEWS:
+
+
+NEW: [features/improvements]
+
+
+BUG FIXES:
++Add missing Portuguese locale files to setup script
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.3.15
 DATE 06/15/2008
 13th Alpha Release
