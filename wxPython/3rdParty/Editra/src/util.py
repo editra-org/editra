@@ -175,14 +175,15 @@ class DropTargetFT(wx.PyDropTarget):
             if len(files) > 0 and self._data['fcallb'] is not None:
                 self._data['fcallb'](files)
             elif(len(text) > 0):
-                if SetClipboardText(text):
-                    win = self.window
-                    pos = win.PositionFromPointClose(x_cord, y_cord)
-                    if pos != wx.stc.STC_INVALID_POSITION:
-                        win.SetSelection(pos, pos)
-                        win.Paste()
-                    else:
-                        drag_result = wx.DragCancel
+                if hasattr(self.window, 'PositionFromPointClose'):
+                    pos = self.window.PositionFromPointClose(x_cord, y_cord)
+                else:
+                    pos = wx.stc.STC_INVALID_POSITION
+
+                if pos != wx.stc.STC_INVALID_POSITION:
+                    self.window.InsertText(pos, text)
+                else:
+                    drag_result = wx.DragCancel
         self.InitObjects()
         return drag_result
 
@@ -207,17 +208,20 @@ class DropTargetFT(wx.PyDropTarget):
 # Used for holding the primary selection on mac/msw
 FAKE_CLIPBOARD = None
 
-def GetClipboardText():
+def GetClipboardText(primary=False):
     """Get the primary selection from the clipboard if there is one
     @return: str or None
 
     """
-    if wx.Platform == '__WXGTK__':
+    if primary and wx.Platform == '__WXGTK__':
         wx.TheClipboard.UsePrimarySelection(True)
-    else:
+    elif primary:
         # Fake the primary selection on mac/msw
         global FAKE_CLIPBOARD
         return FAKE_CLIPBOARD
+    else:
+        pass
+
     text_obj = wx.TextDataObject()
     rtxt = None
     if wx.TheClipboard.Open():
@@ -225,7 +229,7 @@ def GetClipboardText():
             rtxt = text_obj.GetText()
         wx.TheClipboard.Close()
 
-    if wx.Platform == '__WXGTK__':
+    if primary and wx.Platform == '__WXGTK__':
         wx.TheClipboard.UsePrimarySelection(False)
     return rtxt
 
@@ -235,13 +239,16 @@ def SetClipboardText(txt, primary=False):
     @keyword primary: Set txt as primary selection (x11)
 
     """
+    # Check if using primary selection
     if primary and wx.Platform == '__WXGTK__':
         wx.TheClipboard.UsePrimarySelection(True)
-    else:
+    elif primary:
         # Fake the primary selection on mac/msw
         global FAKE_CLIPBOARD
         FAKE_CLIPBOARD = txt
         return True
+    else:
+        pass
 
     data_o = wx.TextDataObject()
     data_o.SetText(txt)
