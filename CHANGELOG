@@ -20,6 +20,7 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script
++Fix some clipboard and dnd bugs
 
 #-----------------------------------------------------------------------------#
 
