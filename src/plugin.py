@@ -71,6 +71,7 @@ import wx
 
 # Editra Libraries
 import ed_glob
+from ed_txt import DecodeString
 import util
 from profiler import CalcVersionValue
 
@@ -424,7 +425,7 @@ class PluginManager(object):
 
         """
         if pkg_resources != None:
-            path = [ pname.encode(sys.getfilesystemencoding()) 
+            path = [ DecodeString(pname, sys.getfilesystemencoding())
                      for pname in path ]
             env = pkg_resources.Environment(path)
         else:
