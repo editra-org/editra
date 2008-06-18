@@ -134,6 +134,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.UpdateBaseStyles()
 
         # Other Settings
+        self._menu = MakeMenu()
         self.UsePopUp(False)
 
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
@@ -145,7 +146,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
 
         # Context Menu Events
-        self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
+        self.Bind(wx.EVT_CONTEXT_MENU, lambda evt: self.PopupMenu(self._menu))
         self.Bind(wx.EVT_MENU, lambda evt: self.Undo(), id=wx.ID_UNDO)
         self.Bind(wx.EVT_MENU, lambda evt: self.Redo(), id=wx.ID_REDO)
         self.Bind(wx.EVT_MENU, lambda evt: self.Cut(), id=wx.ID_CUT)
@@ -739,22 +740,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             evt.Skip()
         return
-
-    def OnContextMenu(self, evt):
-        """Show the right click context menu
-        @param evt: EVT_CONTEXT_MENU
-
-        """
-        menu = ed_menu.EdMenu()
-        menu.Append(wx.ID_UNDO, _("Undo"))
-        menu.Append(wx.ID_REDO, _("Redo"))
-        menu.AppendSeparator()
-        menu.Append(wx.ID_CUT, _("Cut"))
-        menu.Append(wx.ID_COPY, _("Copy"))
-        menu.Append(wx.ID_PASTE, _("Paste"))
-        menu.AppendSeparator()
-        menu.Append(wx.ID_SELECTALL, _("Select All"))
-        self.PopupMenu(menu)
 
     def OnKeyUp(self, evt):
         """Update status bar of window
@@ -2019,3 +2004,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     #---- End Style Definitions ----#
 
 #-----------------------------------------------------------------------------#
+
+def MakeMenu():
+    """Make the buffers context menu"""
+    menu = ed_menu.EdMenu()
+    menu.Append(wx.ID_UNDO, _("Undo"))
+    menu.Append(wx.ID_REDO, _("Redo"))
+    menu.AppendSeparator()
+    menu.Append(wx.ID_CUT, _("Cut"))
+    menu.Append(wx.ID_COPY, _("Copy"))
+    menu.Append(wx.ID_PASTE, _("Paste"))
+    menu.AppendSeparator()
+    menu.Append(wx.ID_SELECTALL, _("Select All"))
+    return menu
