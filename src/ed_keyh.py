@@ -299,7 +299,8 @@ class ViKeyHandler(KeyHandler):
                 repeat = int(repeat)
 
             if rcmd[-1] not in u'bBeEGhHlLMwW$|{}0':
-                self.stc.GotoLine(cline)
+                # Go to start of line
+                self.stc.SetCurrentPos(self.stc.GetLineStartPosition(cline))
                 if repeat != 1 or rcmd not in u'>><<':
                     self.stc.SetSelectionStart(self.stc.GetCurrentPos())
                     self.stc.SetSelectionEnd(self.stc.PositionFromLine(cline + repeat))

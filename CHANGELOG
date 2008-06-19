@@ -22,6 +22,7 @@ a search action.
 BUG FIXES:
 +Add missing Portuguese locale files to setup script
 +Fix some clipboard and dnd bugs
++Fix window scrolling issue when executing some vi commands
 
 #-----------------------------------------------------------------------------#
 
