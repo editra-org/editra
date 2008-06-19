@@ -473,6 +473,22 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         return self._code['lang_id']
 
+    def GetLineStartPosition(self, line):
+        """Get the starting position of the given line
+        @param line: int
+        @return: int
+
+        """
+        if line > 0:
+            spos = self.GetLineEndPosition(line-1)
+            if self.GetLine(line).endswith("\r\n"):
+                spos += 2
+            else:
+                spos += 1
+        else:
+            spos = 0
+        return spos
+
     def GetLastVisibleLine(self):
         """Return what the last visible line is
         @return: int
