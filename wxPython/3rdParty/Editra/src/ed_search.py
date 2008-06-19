@@ -51,6 +51,30 @@ class TextFinder(object):
         self._data        = wx.FindReplaceData()
         self._data.SetFlags(wx.FR_DOWN)
 
+    def GetClientString(self, multiline=False):
+        """Get the selected text in the current client buffer. By default
+        it will only return the selected text if its on a single line.
+        @keyword multiline: Return text if it is multiple lines
+        @return: wx.stc.StyledTextCtrl
+
+        """
+        buffer =  self.FetchPool()
+        start, end = buffer.GetSelection()
+        rtext = buffer.GetSelectedText()
+        if start != end:
+            sline = buffer.LineFromPosition(start)
+            eline = buffer.LineFromPosition(end)
+            if not multiline and (sline != eline):
+                rtext = u''
+        return rtext
+
+    def GetClientSelection(self):
+        """Get the selected text from the client buffer if any
+        @return: string
+
+        """
+        return self.FetchPool().GetSelectedText()
+
     def GetData(self):
         """Return the FindReplace data
         @return: search data
@@ -230,6 +254,12 @@ class TextFinder(object):
             self._find_dlg.Destroy()
             self._find_dlg = None
 
+        # Check for a selection in the buffer and load that text if
+        # there is any and it is at most one line.
+        query = self.GetClientString()
+        if len(query):
+            self.SetQueryString(query)
+
         e_id = evt.GetId()
         if e_id == ed_glob.ID_FIND_REPLACE:
             self._find_dlg = wx.FindReplaceDialog(self._parent, self._data, \
@@ -329,6 +359,13 @@ class EdSearchCtrl(wx.SearchCtrl):
         self.Bind(wx.EVT_MENU, self.OnHistMenu)
 
     #---- Functions ----#
+    def AutoSetQuery(self, multiline=False):
+        """Autoload a selected string from the controls client buffer"""
+        query = self.FindService.GetClientString(multiline)
+        if len(query):
+            self.FindService.SetQueryString(query)
+            self.SetValue(query)
+
     def ClearSearchFlag(self, flag):
         """Clears a previously set search flag
         @param flag: flag to clear from search data

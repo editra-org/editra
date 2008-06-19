@@ -332,6 +332,7 @@ class CommandBar(wx.Panel):
             if id_ == ID_SEARCH_CTRL:
                 for kid in self._sizers['search'].GetChildren():
                     kid.Show(True)
+                self.FindWindowById(ID_SEARCH_CTRL).AutoSetQuery()
                 self._sizers['search'].Layout()
             elif id_ == ID_LINE_CTRL:
                 for kid in self._sizers['goto'].GetChildren():
