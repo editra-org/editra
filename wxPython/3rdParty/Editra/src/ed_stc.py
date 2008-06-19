@@ -1396,6 +1396,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Set the buffers filename attributes from the given path"""
         self.file.SetPath(path)
 
+    def SetFocus(self):
+        """Set the focus to the window"""
+        wx.stc.StyledTextCtrl.SetFocus(self)
+        # HACK fix issue where setting the focus requires a
+        # click from the mouse under msw. ?wxBug?
+        if wx.Platform == '__WXMSW__':
+            evt = wx.FocusEvent(wx.wxEVT_SET_FOCUS, self.GetId())
+            wx.PostEvent(self, evt)
+
     def SetModTime(self, modtime):
         """Set the value of the files last modtime"""
         self.file.SetModtime(modtime)
