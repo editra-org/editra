@@ -518,6 +518,7 @@ class EdPages(FNB.FlatNotebook):
         self.LOG("[ed_pages][info] It has file named: %s" % \
                  self.control.GetFileName())
         self.control.PostPositionEvent()
+        self.EnsureVisible(cpage)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, cpage))
 
     def OnPageClosing(self, evt):
