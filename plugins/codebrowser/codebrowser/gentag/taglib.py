@@ -205,7 +205,6 @@ class Section(Scope):
     def __init__(self, name, line, scope=None):
         Scope.__init__(self, name, line, "section", scope)
 
-#---- Code Objects ----#
 class Method(Scope):
     """Method Object"""
     def __init__(self, name, line, scope=None):
@@ -219,6 +218,8 @@ class Function(Scope):
     """
     def __init__(self, name, line, obj="function", scope=None):
         Scope.__init__(self, name, line, obj, scope)
+
+#---- Code Objects ----#
 
 class Macro(Code):
     """Macro Object"""
@@ -234,6 +235,11 @@ class Variable(Code):
     """Variable object"""
     def __init__(self, name, line, scope=None):
         Code.__init__(self, name, line, "variable", scope)
+
+class Struct(Code):
+    """Struct object"""
+    def __init__(self, name, line, scope=None):
+        Code.__init__(self, name, line, "struct", scope)
 
 #-----------------------------------------------------------------------------#
 # Top level code representation object. All tag generators should return an
