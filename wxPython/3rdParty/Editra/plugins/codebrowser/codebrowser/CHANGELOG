@@ -4,8 +4,19 @@
 
 #-----------------------------------------------------------------------------#
 
-Version 0.3
+Version 0.4
 Released: xx/xx/2008
+
+New:
++Add C Support (Macros, Functions)
+
+Bug Fixes:
+
+
+#-----------------------------------------------------------------------------#
+
+Version 0.3
+Released: 06/15/2008
 
 New:
 + Use Pygments library to aid in parsing

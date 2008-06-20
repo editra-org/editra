@@ -34,6 +34,7 @@ TAGLIB = 'gentag.'
 LOAD_MAP = { synglob.ID_LANG_ADA : TAGLIB + 'adatags',
              synglob.ID_LANG_BASH : TAGLIB + 'shtags',
              synglob.ID_LANG_BATCH : TAGLIB + 'batchtags',
+             synglob.ID_LANG_C : TAGLIB + 'ctags',
              synglob.ID_LANG_CSH : TAGLIB + 'shtags',
              synglob.ID_LANG_CSS : TAGLIB + 'csstags',
              synglob.ID_LANG_ESS : TAGLIB + 'esstags',
