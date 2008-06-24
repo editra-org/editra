@@ -960,6 +960,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_GOTO_MBRACE : ("Ctrl", "Shift", "B"),
                      ed_glob.ID_NEXT_MARK : ("Alt", "Right"), # Win/Linux
                      ed_glob.ID_PRE_MARK : ("Alt", "Left"), # Win/Linux
+                     ed_glob.ID_SHOW_SHELF : ("Ctrl", "Alt", "S"),
 
                      # Format Menu
                      ed_glob.ID_COMMENT : ("Ctrl", "1"),
@@ -1056,7 +1057,7 @@ def WalkMenu(menu, label, collection):
         if item.IsSubMenu():
             # Ignore dynamically generated menus
             if i_id not in (ed_glob.ID_FHIST, ed_glob.ID_LEXER,
-                            ed_glob.ID_SHELF, ed_glob.ID_PERSPECTIVES):
+                             ed_glob.ID_PERSPECTIVES):
                 ilbl = item.GetItemLabelText()
                 collection[ilbl] = [i_id, ]
                 WalkMenu(item.GetSubMenu(), ilbl, collection)

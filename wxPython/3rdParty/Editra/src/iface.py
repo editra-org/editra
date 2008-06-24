@@ -178,7 +178,8 @@ class Shelf(plugin.Plugin):
 
         """
         menu = ed_menu.EdMenu()
-        menu.Append(ed_glob.ID_SHOW_SHELF, _("Show Shelf") + "\tCtrl+Alt+S", 
+        menu.Append(ed_glob.ID_SHOW_SHELF, _("Show Shelf") + \
+                    ed_menu.EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_SHELF), 
                     _("Show the Shelf"))
         menu.AppendSeparator()
         menu_items = list()
