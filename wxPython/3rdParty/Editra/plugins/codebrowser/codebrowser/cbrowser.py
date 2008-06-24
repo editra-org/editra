@@ -41,6 +41,7 @@ import IconFile
 # Globals
 ID_CODEBROWSER = wx.NewId()
 ID_BROWSER = wx.NewId()
+ID_GOTO_ELEMENT = wx.NewId()
 PANE_NAME = u"CodeBrowser"
 _ = wx.GetTranslation
 
@@ -63,6 +64,8 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         # Attributes
         self._mw = parent
+        self._menu = None
+        self._selected = None
         self._cjob = 0
         self._cdoc = None   # Current DocStruct
         self.icons = dict()
@@ -83,6 +86,8 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
+        self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
+        self.Bind(wx.EVT_MENU, self.OnMenu)
         self.Bind(EVT_JOB_FINISHED, self.OnTagsReady)
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
@@ -232,16 +237,49 @@ class CodeBrowserTree(wx.TreeCtrl):
         for key in self.nodes.keys():
             self.nodes[key] = None
 
+    def GotoElement(self, tree_id):
+        """Navigate the cursor to the element identified in the
+        code browser tree.
+        @param tree_id: Tree Id
+
+        """
+        line = self.GetPyData(tree_id)
+        if line is not None:
+            ctrl = self._mw.GetNotebook().GetCurrentCtrl()
+            ctrl.GotoLine(line)
+            ctrl.SetFocus()
+
     def OnActivated(self, evt):
         """Handle when an item is clicked on
         @param evt: wx.TreeEvent
 
         """
-        line = self.GetItemPyData(evt.GetItem())
-        if line is not None:
-            ctrl = self._mw.GetNotebook().GetCurrentCtrl()
-            ctrl.GotoLine(line)
-            ctrl.SetFocus()
+        tree_id = evt.GetItem()
+        if tree_id is not None:
+            self.GotoElement(tree_id)
+
+    def OnContext(self, evt):
+        """Show the context menu when an item is clicked on"""
+        if self._menu is not None:
+            self._menu.Destroy()
+            self._menu = None
+
+        tree_id = evt.GetItem()
+        data = self.GetPyData(tree_id)
+        if data is not None:
+            self._selected = tree_id # Store the selected
+            self._menu = wx.Menu()
+            txt = self.GetItemText(self._selected).split('[')[0].strip()
+            self._menu.Append(ID_GOTO_ELEMENT, _("Goto \"%s\"") % txt)
+            self.PopupMenu(self._menu)
+
+    def OnMenu(self, evt):
+        """Handle the context menu events"""
+        if evt.GetId() == ID_GOTO_ELEMENT:
+            if self._selected is not None:
+                self.GotoElement(self._selected)
+        else:
+            evt.Skip()
 
     def OnThemeChange(self, msg):
         """Update the images when Editra's theme changes
