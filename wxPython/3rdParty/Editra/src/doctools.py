@@ -42,6 +42,7 @@ class DocPositionMgr(object):
         self._records = dict()
         if Profile_Get('SAVE_POS'):
             self.LoadBook(book_path)
+            print type(book_path)
 
     def AddRecord(self, vals):
         """Adds a record to the dictionary from a list of the
@@ -85,7 +86,10 @@ class DocPositionMgr(object):
                 tfile = util.GetFileWriter(book)
                 tfile.close()
             except (IOError, OSError):
-                util.Log("[docpositionmgr][err] failed to load book")
+                util.Log("[docpositionmgr][err] failed to load book: %s" % book)
+                return False
+            except AttributeError:
+                util.Log("[docpositionmgr][err] Failed to create: %s" % book)
                 return False
 
         reader = util.GetFileReader(book, sys.getfilesystemencoding())
