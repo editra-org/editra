@@ -51,7 +51,7 @@ def GenerateTags(buff):
     pat = re.compile(r"([A-Za-z0-9_]+[ \t\r\n]+)+([A-Za-z0-9_]+)[ \t\r\n]*\([^)]+\)[ \t\r\n]*\{")
     for match in re.finditer(pat, txt):
         fname = match.group(2)
-        if fname not in kwords:
+        if fname and fname not in kwords:
             line = txt.count('\n', 0, match.start(2))
             rtags.AddFunction(taglib.Function(fname, line))
 
