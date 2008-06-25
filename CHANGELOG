@@ -18,11 +18,13 @@ NEWS:
 NEW: [features/improvements]
 +Automatically fill search field with selected text in buffer when performing
 a search action.
++Show Shelf menu command keybinding is now configurable
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script
 +Fix some clipboard and dnd bugs
 +Fix window scrolling issue when executing some vi commands
++Fix error when creating file position cache file fails
 
 #-----------------------------------------------------------------------------#
 
