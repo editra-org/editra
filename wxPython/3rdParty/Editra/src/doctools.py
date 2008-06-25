@@ -42,7 +42,6 @@ class DocPositionMgr(object):
         self._records = dict()
         if Profile_Get('SAVE_POS'):
             self.LoadBook(book_path)
-            print type(book_path)
 
     def AddRecord(self, vals):
         """Adds a record to the dictionary from a list of the
