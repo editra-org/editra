@@ -125,12 +125,18 @@ class ConfigDialog(wx.Frame):
     def __DoLayout(self):
         """Layout the dialog"""
         sizer = wx.BoxSizer(wx.VERTICAL)
+
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
-        noteb = wx.Notebook(self)
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        panel = wx.Panel(self)
+        noteb = wx.Notebook(panel)
         noteb.AddPage(ConfigPanel(noteb), _("General"))
         noteb.AddPage(MiscPanel(noteb), _("Misc"))
         hsizer.AddMany([((5, 5), 0), (noteb, 1, wx.EXPAND), ((5, 5), 0)])
-        sizer.AddMany([((5, 5), 0), (hsizer, 1, wx.EXPAND), ((10, 10), 0)])
+        vsizer.AddMany([((5, 5), 0), (hsizer, 1, wx.EXPAND), ((10, 10), 0)])
+        panel.SetSizer(vsizer)
+
+        sizer.Add(panel, 1, wx.EXPAND)
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
         self.SetInitialSize()
