@@ -4,6 +4,7 @@ License: wxWindows
 
 Version 0.8:
 
+    - Add Bookmark Selected Paths command to context menu
     - Syncronize path in tree with currently selected notebook page
     - Fix some translation strings
 
