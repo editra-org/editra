@@ -2,7 +2,7 @@
 # Name: ed_menu.py                                                            #
 # Purpose: Editra's Menubar and Menu related classes                          #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2007-2008 Cody Precord <staff@editra.org>                    #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -642,6 +642,7 @@ class EdMenuBar(wx.MenuBar):
         viewmenu.Append(ed_glob.ID_GOTO_MBRACE, _("Goto Matching Brace") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_MBRACE),
                         _("Move caret matching brace"))
+        viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_NEXT_MARK, _("Next Bookmark") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEXT_MARK),
                         _("View Line of Next Bookmark"))
