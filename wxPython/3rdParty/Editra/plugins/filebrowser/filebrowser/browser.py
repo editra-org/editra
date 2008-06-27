@@ -66,11 +66,12 @@ def TrashString():
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
+ID_MARK_PATH = wx.NewId()
+ID_OPEN_MARK = wx.NewId()
+ID_REMOVE_MARK = wx.NewId()
+
 class BrowserMenuBar(wx.Panel):
     """Creates a menubar with """
-    ID_MARK_PATH = wx.NewId()
-    ID_OPEN_MARK = wx.NewId()
-    ID_REMOVE_MARK = wx.NewId()
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, style=wx.NO_BORDER)
@@ -92,12 +93,10 @@ class BrowserMenuBar(wx.Panel):
 
         # Build Menus
         menu = ed_menu.EdMenu()
-        menu.Append(self.ID_MARK_PATH, _("Save Selected Paths"))
-        menu.AppendMenu(self.ID_OPEN_MARK, 
-                        _("Jump to Saved Path"), self._saved)
+        menu.Append(ID_MARK_PATH, _("Save Selected Paths"))
+        menu.AppendMenu(ID_OPEN_MARK, _("Jump to Saved Path"), self._saved)
         menu.AppendSeparator()
-        menu.AppendMenu(self.ID_REMOVE_MARK, 
-                        _("Remove Saved Path"), self._rmpath)
+        menu.AppendMenu(ID_REMOVE_MARK, _("Remove Saved Path"), self._rmpath)
 
         # Button
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
@@ -296,7 +295,7 @@ class BrowserPane(wx.Panel):
         e_id = evt.GetId()
         o_ids = self._menbar.GetOpenIds()
         d_ids = self._menbar.GetRemoveIds()
-        if e_id == self._menbar.ID_MARK_PATH:
+        if e_id == ID_MARK_PATH:
             items = self._browser.GetPaths()
             for item in items:
                 self._menbar.AddItem(item)
@@ -440,6 +439,9 @@ class FileBrowser(wx.GenericDirCtrl):
         items = [(ID_EDIT, _("Edit"), None),
                  (ID_OPEN, _("Open with " + FILEMAN), ed_glob.ID_OPEN),
                  (ID_REVEAL, _("Reveal in " + FILEMAN), None),
+                 (wx.ID_SEPARATOR, '', None),
+                 (ID_MARK_PATH, _("Bookmark Selected Path(s)"),
+                  ed_glob.ID_ADD_BM),
                  (wx.ID_SEPARATOR, '', None),
                  (ID_GETINFO, _("Get Info"), None),
                  (ID_RENAME, _("Rename"), None),

@@ -3,13 +3,13 @@
 # Name: __init__.py                                                           #
 # Purpose: FileBrowser Plugin                                                 #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2007-2008 Cody Precord <staff@editra.org>                    #
 # Licence: wxWindows Licence                                                  #
 ###############################################################################
 # Plugin Meta
 """Adds a File Browser Sidepanel"""
 __author__ = "Cody Precord"
-__version__ = "0.7"
+__version__ = "0.8"
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -47,7 +47,7 @@ class FileBrowserPanel(plugin.Plugin):
             mgr = self._mw.GetFrameManager()
             mgr.AddPane(self._filebrowser, 
                         wx.aui.AuiPaneInfo().Name(browser.PANE_NAME).\
-                            Caption("Editra | File Browser").Left().Layer(1).\
+                            Caption("File Browser").Left().Layer(1).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(215, 350)))
             mgr.Update()
