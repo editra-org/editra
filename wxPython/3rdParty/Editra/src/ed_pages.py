@@ -366,7 +366,9 @@ class EdPages(FNB.FlatNotebook):
                  notebook.
 
         """
-        return [self.GetPage(page) for page in xrange(self.GetPageCount())]
+        pages = [self.GetPage(page) for page in xrange(self.GetPageCount())]
+        return [page for page in pages 
+                if getattr(page, '__name__', '') == "EditraTextCtrl"]
 
     def HasFileOpen(self, fpath):
         """Checks if one of the currently active buffers has
