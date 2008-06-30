@@ -1713,6 +1713,8 @@ class KeyBindingPanel(wx.Panel):
                 csel = None
             self.binder.LoadKeyProfile(csel)
             Profile_Set('KEY_PROFILE', csel)
+            ed_msg.PostMessage(ed_msg.EDMSG_MENU_REBIND)
+            self.menub.SaveKeyProfile()
             self.EnableControls(csel is not None)
         elif e_id == ID_MENUS:
             mi_listbx = self.FindWindowById(ID_MENU_ITEMS)
