@@ -56,10 +56,29 @@ class KeyHandler:
         """
         return u'NULL'
 
-    def ProcessKey(self, key_code):
-        """Process the key and return True if it was processed and
-        false if it was not.
+    def PreProcessKey(self, key_code, ctrldown=False,
+                      cmddown=False, shiftdown=False, altdown=False):
+        """Pre process any keys before they get to the char handler
         @param key_code: Raw keycode
+        @keyword ctrldown: Is the control key down
+        @keyword cmddown: Is the Command key down (Mac osx)
+        @keyword shiftdown: Is the Shift key down
+        @keyword altdown: Is the Alt key down
+        @return: bool
+
+        """
+        return False
+
+    def ProcessKey(self, key_code, ctrldown=False,
+                   cmddown=False, shiftdown=False, altdown=False):
+        """Process the key and return True if it was processed and
+        false if it was not. The key is recieved at EVT_CHAR.
+        @param key_code: Raw keycode
+        @keyword ctrldown: Is the control key down
+        @keyword cmddown: Is the Command key down (Mac osx)
+        @keyword shiftdown: Is the Shift key down
+        @keyword altdown: Is the Alt key down
+        @return: bool
 
         """
         return False
@@ -109,14 +128,44 @@ class ViKeyHandler(KeyHandler):
                                    msg, ed_glob.SB_BUFF)
         wx.PostEvent(self.stc.GetTopLevelParent(), evt)
 
-    def ProcessKey(self, key_code):
+    def PreProcessKey(self, key_code, ctrldown=False,
+                      cmddown=False, shiftdown=False, altdown=False):
+        """Pre process any keys before they get to the char handler
+        @param key_code: Raw keycode
+        @keyword ctrldown: Is the control key down
+        @keyword cmddown: Is the Command key down (Mac osx)
+        @keyword shiftdown: Is the Shift key down
+        @keyword altdown: Is the Alt key down
+        @return: bool
+
+        """
+        if not shiftdown and key_code == wx.WXK_ESCAPE:
+            # If Vi emulation is active go into Normal mode and
+            # pass the key event to the char handler by not processing
+            # the key.
+            self.SetMode(ViKeyHandler.NORMAL)
+            return False
+        elif (ctrldown or cmddown) and key_code == ord('['):
+            self.SetMode(ViKeyHandler.NORMAL)
+            return True
+        else:
+            return False
+
+    def ProcessKey(self, key_code, ctrldown=False,
+                   cmddown=False, shiftdown=False, altdown=False):
         """Processes vi commands
+        @param key_code: Raw key code
+        @keyword cmddown: Command/Ctrl key is down
+        @keyword shiftdown: Shift Key is down
+        @keyword altdown : Alt key is down
         @todo: complete rewrite, this was initially intended as a quick hack
                put together for testing but now has implemented everything.
 
         """
-        if self.mode == ViKeyHandler.INSERT:
+        if self.mode == ViKeyHandler.INSERT or ctrldown or cmddown or altdown:
             return False
+
+        # Add key to cache
         self.cmdcache = self.cmdcache + unichr(key_code)
 
         if not len(self.cmdcache):
