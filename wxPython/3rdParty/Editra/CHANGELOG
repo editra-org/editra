@@ -16,6 +16,7 @@ NEWS:
 
 
 NEW: [features/improvements]
++Add support for using container lexers to extend supported languages
 +Automatically fill search field with selected text in buffer when performing
 a search action.
 +Show Shelf menu command keybinding is now configurable

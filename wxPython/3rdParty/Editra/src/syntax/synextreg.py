@@ -262,6 +262,9 @@ LANG_PROPS = u'Properties'
 ID_LANG_YAML = _NewId()
 LANG_YAML = u'YAML'
 
+# Use LEX_CONTAINER
+
+
 #---- End Language Identifier Keys ----#
 
 # Default extensions to file type mapping
