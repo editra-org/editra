@@ -111,6 +111,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           keywords=[ ' ' ],
                           syntax_set=list(),
                           comment=list(),
+                          clexer=None,      # Container lexer method
                           lang_id=0)        # Language ID from syntax module
 
         # Set Up Margins
@@ -626,11 +627,20 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         Id. If not found it returns an empty string.
         @param style_id: id of tag to look for
         @return: style tag string
+        @todo: change syntax modules to all use ids
 
         """
         for data in self._code['syntax_set']:
-            if style_id == getattr(wx.stc, data[0]):
+            # If its a standard lexer the style id will be stored as
+            # a string. If its a container lexer it is the id.
+            if isinstance(data[0], basestring):
+                s_id = getattr(wx.stc, data[0])
+            else:
+                s_id = data[0]
+
+            if style_id == s_id:
                 return data[1]
+
         return 'default_style'
 
     def GetAutoComplete(self):
@@ -792,6 +802,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self._macro.append(mac)
 #             if mac[0] != 2170:
 #                 self._macro.append(mac)
+        else:
+            evt.Skip()
+
+    def OnStyleNeeded(self, evt):
+        """Perform custom styling when registered for a container lexer"""
+        if self._code['clexer'] is not None:
+            self._code['clexer'](self, self.GetEndStyled(), evt.GetPosition())
         else:
             evt.Skip()
 
@@ -1048,7 +1065,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         # If syntax auto detection fails from file extension try to
         # see if there is an interpreter line that can be parsed.
-        if self.GetLexer() in [0, wx.stc.STC_LEX_NULL]:
+        if self.GetLexer() == wx.stc.STC_LEX_NULL:
             interp = self.GetLine(0)
             if interp != wx.EmptyString:
                 interp = interp.split(u"/")[-1]
@@ -1421,6 +1438,26 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if wx.Platform == '__WXMSW__':
             evt = wx.FocusEvent(wx.wxEVT_SET_FOCUS, self.GetId())
             wx.PostEvent(self, evt)
+
+    def SetLexer(self, lexer):
+        """Set the buffers lexer
+        @param lexer: lexer to use
+        @note: Overrides StyledTextCtrl.SetLexer
+
+        """
+        if lexer == wx.stc.STC_LEX_CONTAINER:
+            # If setting a container lexer only bind the event if it hasn't
+            # been done yet.
+            if self._code['clexer'] is None:
+                self.Bind(wx.stc.EVT_STC_STYLENEEDED, self.OnStyleNeeded)
+        else:
+            # If changing from a container lexer to a non container
+            # lexer we need to unbind the event.
+            if self._code['clexer'] is not None:
+                self.Unbind(wx.stc.EVT_STC_STYLENEEDED)
+                self._code['clexer'] = None
+
+        wx.stc.StyledTextCtrl.SetLexer(self, lexer)
 
     def SetModTime(self, modtime):
         """Set the value of the files last modtime"""
@@ -1822,6 +1859,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         lexer = syn_data[syntax.LEXER]
         # Check for special cases
+        # TODO: add fetch method to check if container lexer requires extra
+        #       style bytes beyond the default 5.
         if lexer in [ wx.stc.STC_LEX_HTML, wx.stc.STC_LEX_XML]:
             self.SetStyleBits(7)
         elif lexer == wx.stc.STC_LEX_NULL:
@@ -1858,6 +1897,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.LOG("[ed_stc][err] No Comment Pattern to set")
             comment = []
 
+        try:
+            clexer = syn_data[syntax.CLEXER]
+        except KeyError:
+            self.LOG("[ed_stc][err] No Container Lexer to set")
+            clexer = None
+
         # Set Lexer
         self.SetLexer(lexer)
         # Set Keywords
@@ -1868,6 +1913,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetProperties(props)
         # Set Comment Pattern
         self._code['comment'] = comment
+        # Set the Container Lexer Method
+        self._code['clexer'] = clexer
 
         # Notify that lexer has changed
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER)
@@ -1913,19 +1960,22 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 self.LOG("[ed_stc][warn] Error setting syntax spec")
                 continue
             else:
-                if not isinstance(syn[0], basestring) or \
-                   not hasattr(wx.stc, syn[0]):
-                    self.LOG("[ed_stc][warn] Unknown syntax region: %s" % \
-                             str(syn[0]))
-                    continue
-                elif not isinstance(syn[1], basestring):
-                    self.LOG("[ed_stc][warn] Poorly formated styletag: %s" % \
-                             str(syn[1]))
-                    continue
+                if self.GetLexer() == wx.stc.STC_LEX_CONTAINER:
+                    self.StyleSetSpec(syn[0], self.GetStyleByName(syn[1]))
                 else:
-                    self.StyleSetSpec(getattr(wx.stc, syn[0]), \
-                                      self.GetStyleByName(syn[1]))
-                    valid_settings.append(syn)
+                    if not isinstance(syn[0], basestring) or \
+                       not hasattr(wx.stc, syn[0]):
+                        self.LOG("[ed_stc][warn] Unknown syntax region: %s" % \
+                                 str(syn[0]))
+                        continue
+                    elif not isinstance(syn[1], basestring):
+                        self.LOG("[ed_stc][warn] Poorly formated styletag: %s" % \
+                                 str(syn[1]))
+                        continue
+                    else:
+                        self.StyleSetSpec(getattr(wx.stc, syn[0]), \
+                                          self.GetStyleByName(syn[1]))
+                valid_settings.append(syn)
         self._code['syntax_set'] = valid_settings
         return True
 

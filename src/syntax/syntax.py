@@ -58,6 +58,7 @@ SYNSPEC    = 2    # Highligter specs
 PROPERTIES = 3    # Extra Properties
 LANGUAGE   = 4    # Language ID
 COMMENT    = 5    # Gets the comment characters pattern
+CLEXER     = 6    # Container Lexer Styler Method
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
@@ -199,6 +200,11 @@ class SyntaxMgr(object):
         syn_data[PROPERTIES] = mod.Properties(lex_cfg[LANG_ID])
         syn_data[LANGUAGE] = lex_cfg[LANG_ID]
         syn_data[COMMENT] = mod.CommentPattern(lex_cfg[LANG_ID])
+        if syn_data[LEXER] == wx.stc.STC_LEX_CONTAINER:
+            syn_data[CLEXER] = mod.StyleText
+        else:
+            syn_data[CLEXER] = None
+
         return syn_data
 
 
