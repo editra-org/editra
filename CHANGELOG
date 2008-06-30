@@ -19,6 +19,7 @@ NEW: [features/improvements]
 +Automatically fill search field with selected text in buffer when performing
 a search action.
 +Show Shelf menu command keybinding is now configurable
++Some Vi emulation improvements
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script

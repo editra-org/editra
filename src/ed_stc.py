@@ -156,7 +156,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
        #---- End Init ----#
 
-    __name__ = u"EditraTextCtrl"
+    @property
+    def __name__(self):
+        return u"EditraTextCtrl"
 
     #---- Protected Member Functions ----#
     def _BuildMacro(self):
@@ -694,15 +696,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         k_code = evt.GetKeyCode()
-        if not evt.ShiftDown() and \
-           self.key_handler.GetHandlerName() == u'VI' and \
-           k_code == wx.WXK_ESCAPE:
-            # If Vi emulation is active go into Normal mode and
-            # pass the key event to OnChar
-            self.key_handler.SetMode(ViKeyHandler.NORMAL)
-            evt.Skip()
-            return
-        elif k_code == wx.WXK_RETURN:
+        if self.key_handler.PreProcessKey(k_code, evt.ControlDown(),
+                                          evt.CmdDown(), evt.ShiftDown(),
+                                          evt.AltDown()):
+            return                
+
+        if k_code == wx.WXK_RETURN:
 
             if self._config['autoindent'] and not self.AutoCompActive():
                 if self.GetSelectedText():
@@ -730,7 +729,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         key_code = evt.GetKeyCode()
         cpos = self.GetCurrentPos()
-        if self.key_handler.ProcessKey(key_code):
+        if self.key_handler.ProcessKey(key_code, evt.ControlDown(),
+                                       evt.CmdDown(), evt.ShiftDown(),
+                                       evt.AltDown()):
             # The key handler handled this keypress, we don't need to insert
             # the character into the buffer.
             pass
