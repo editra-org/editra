@@ -174,7 +174,6 @@ scalar2_style {
 
 string_style { 
         fore: #FF3AFF bold;
-        back: #FFFFFF;
 }
 
 stringeol_style { 
