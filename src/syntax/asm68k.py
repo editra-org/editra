@@ -31,7 +31,7 @@ ASM_CPU_INST = (0, "andi and as b beq bg b bl bne bge bpl bchg bclr bfchg "
                    "dbls dblt dbne dbpl dbra eori eor exg extb ext illegaljmp "
                    "jsr lea link ls mm movea movec movem movep moveq moves "
                    "move nbcd negx neg nop not ori or pack pea reset ro rox rt "
-                   "sbcd seq sne spl swap tas trap tst unlk unpk")
+                   "sbcd seq sne spl swap tas trap tst unlk unpk abcd")
 
 ASM_MATH_INST = (1, "adda addi addq addx add div mul suba subi subq subx sub "
                     "tdiv")
