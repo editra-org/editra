@@ -121,7 +121,7 @@ EDMSG_UI_NB_CLOSED = EDMSG_UI_NB + ('pgclosed',)
 
 # Post message to show the progress indicator of the MainWindow
 # msgdata == (frame id, True / False)
-EDMSG_PROGRESS_SHOW = EDMSG_UI_ALL + ('progbar', 'show')
+EDMSG_PROGRESS_SHOW = EDMSG_UI_ALL + ('statbar', 'progbar', 'show')
 
 # Post this message to manipulate the state of the MainWindows status bar
 # progress indicator. The message data should be a three tuple of the recipient
@@ -129,7 +129,11 @@ EDMSG_PROGRESS_SHOW = EDMSG_UI_ALL + ('progbar', 'show')
 # values are 0 then the bar will be hidden. If both are negative the bar will 
 # be set into pulse mode. This message can safely be sent from background 
 # threads.
-EDMSG_PROGRESS_STATE = EDMSG_UI_ALL + ('progbar', 'state')
+EDMSG_PROGRESS_STATE = EDMSG_UI_ALL + ('statbar', 'progbar', 'state')
+
+# Set the status text
+# msgdata == (field id, text)
+EDMSG_UI_SB_TXT = EDMSG_UI_ALL + ('statbar', 'text')
 
 ## Text Buffer
 # msgdata == ((x, y), keycode)

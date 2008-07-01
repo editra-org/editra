@@ -45,6 +45,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         # Messages
         ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_PROGRESS_SHOW)
         ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_PROGRESS_STATE)
+        ed_msg.Subscribe(self.OnUpdateText, ed_msg.EDMSG_UI_SB_TXT)
 #        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENING)
 #        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENED)
 
@@ -84,3 +85,13 @@ class EdStatBar(pstatbar.ProgressStatusBar):
             # Data is the file path
             self.SetRange(util.GetFileSize(mdata))
             self.Start(75)
+
+    def OnUpdateText(self, msg):
+        """Update the status bar text based on the recieved message
+        @param msg: Message Object
+
+        """
+        # Only process if this status bar is in the active window and shown
+        if self.GetTopLevelParent().IsActive() and self.IsShown():
+            field, txt = msg.GetData()
+            self.SetStatusText(txt, field)
