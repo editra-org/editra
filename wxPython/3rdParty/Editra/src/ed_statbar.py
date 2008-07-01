@@ -52,6 +52,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
     def __del__(self):
         """Unsubscribe from messages"""
         ed_msg.Unsubscribe(self.OnProgress)
+        ed_msg.Unsubscribe(self.OnUpdateText)
         pstatbar.ProgressStatusBar.__del__(self)
 
     def OnProgress(self, msg):
