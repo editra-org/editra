@@ -263,7 +263,8 @@ ID_LANG_YAML = _NewId()
 LANG_YAML = u'YAML'
 
 # Use LEX_CONTAINER
-
+ID_LANG_MAKO = _NewId()
+LANG_MAKO = u'Mako'
 
 #---- End Language Identifier Keys ----#
 
@@ -308,6 +309,7 @@ EXT_MAP = {
            'lt'                 : LANG_LOUT,
            'lua'                : LANG_LUA,
            'mak makefile'       : LANG_MAKE,
+           'mako'               : LANG_MAKO,
            'asm masm'           : LANG_MASM,
            'matlab'             : LANG_MATLAB,
            'mssql'              : LANG_MSSQL,
