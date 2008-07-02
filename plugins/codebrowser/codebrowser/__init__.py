@@ -46,7 +46,7 @@ class CodeBrowser(plugin.Plugin):
             mgr = self._mw.GetFrameManager()
             mgr.AddPane(self._codebrowser, 
                         wx.aui.AuiPaneInfo().Name(cbrowser.PANE_NAME).\
-                            Caption(_("Editra | CodeBrowser")).\
+                            Caption(_("CodeBrowser")).\
                             Top().Right().Layer(0).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(215, 350)))
