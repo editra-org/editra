@@ -634,7 +634,7 @@ class StyleMgr(object):
             if len(tmp[style_def]) == 0:
                 style_dict.pop(style_def)
 
-        # Validate leaf values and format into stylestring
+        # Validate leaf values and format into style string
         for style_def in style_dict:
             if not style_def[0][0].isalpha():
                 self.LOG("[ed_style][err] The style def %s is not a "
@@ -696,6 +696,11 @@ class StyleMgr(object):
             if isinstance(value, basestring):
                 new_item.SetAttrFromStr(value)
             style_dict[key] = new_item
+
+        # For any undefined tags load them as empty items
+        for key in DefaultStyleDictionary().keys():
+            if key not in style_dict:
+                style_dict[key] = StyleItem()
 
         return style_dict
 
