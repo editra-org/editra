@@ -17,7 +17,7 @@ NEWS:
 
 NEW: [features/improvements]
 +Add support for using container lexers to extend supported languages
-+Add support for highlighting Mako templates
++Add support for highlighting Mako and Django templates
 +Automatically fill search field with selected text in buffer when performing
 a search action.
 +Show Shelf menu command keybinding is now configurable
