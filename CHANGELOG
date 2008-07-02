@@ -22,12 +22,14 @@ NEW: [features/improvements]
 a search action.
 +Show Shelf menu command keybinding is now configurable
 +Some Vi emulation improvements
++Improve notebook tab scrolling
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script
 +Fix some clipboard and dnd bugs
 +Fix window scrolling issue when executing some vi commands
 +Fix error when creating file position cache file fails
++Fix some Style Editor issues
 
 #-----------------------------------------------------------------------------#
 
