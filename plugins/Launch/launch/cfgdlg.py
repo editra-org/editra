@@ -380,6 +380,8 @@ class MiscPanel(wx.Panel):
     def __DoLayout(self):
         """Layout the controls"""
         msizer = wx.BoxSizer(wx.VERTICAL)
+        sbox = wx.StaticBox(self, label=_("Text Colors"))
+        boxsz = wx.StaticBoxSizer(sbox, wx.VERTICAL)
 
         # Launch Config
         cfg = Profile_Get(LAUNCH_PREFS, default=dict())
@@ -395,8 +397,6 @@ class MiscPanel(wx.Panel):
             cbtn = colorsetter.ColorSetter(self, btn[0], color=cfg.get(btn[1]))
             colors[btn[0]] = cbtn
 
-        sbox = wx.StaticBox(self, label=_("Text Colors"))
-        boxsz = wx.StaticBoxSizer(sbox, wx.VERTICAL)
         flexg = wx.FlexGridSizer(5, 5, 5, 5)
         flexg.AddGrowableCol(1, 1)
         flexg.AddGrowableCol(3, 1)
