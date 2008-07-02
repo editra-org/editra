@@ -106,6 +106,24 @@ class ColorSetter(wx.Panel):
         evt = ColorSetterEvent(csEVT_COLORSETTER, self.GetId(), value)
         wx.PostEvent(self.GetParent(), evt)
 
+    def __UpdateValues(self):
+        """Update the values based on the current state of the text control"""
+        cpos = self._txt.GetInsertionPoint()
+        hexstr = self._txt.GetValue().replace('#', '').strip()
+        valid = ''
+        for char in hexstr:
+            if char in '0123456789abcdefABCDEF':
+                valid = valid + char
+
+        if len(valid) > 6:
+            valid = valid[:6]
+
+        valid = '#' + valid
+        self._txt.SetValue(valid)
+        self._txt.SetInsertionPoint(cpos)
+        valid = valid + (u'0' * (6 - len(valid)))
+        self._cbtn.SetValue(HexToRGB(valid))
+
     def _DoLayout(self):
         """Layout the controls"""
         sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -156,21 +174,7 @@ class ColorSetter(wx.Panel):
         @keyword evt: event that called this handler
 
         """
-        cpos = self._txt.GetInsertionPoint()
-        hexstr = self._txt.GetValue().replace('#', '').strip()
-        valid = ''
-        for char in hexstr:
-            if char in '0123456789abcdefABCDEF':
-                valid = valid + char
-
-        if len(valid) > 6:
-            valid = valid[:6]
-
-        valid = '#' + valid
-        self._txt.SetValue(valid)
-        self._txt.SetInsertionPoint(cpos)
-        valid = valid + (u'0' * (6 - len(valid)))
-        self._cbtn.SetValue(HexToRGB(valid))
+        self.__UpdateValues()
         self.__PostEvent()
 
     def OnUpdateUI(self, evt):
@@ -215,7 +219,7 @@ class ColorSetter(wx.Panel):
 
         """
         self._txt.SetValue(label)
-        self.OnTextChange()
+        self.__UpdateValues()
 
     def SetValue(self, colour):
         """Set the color value of the button
