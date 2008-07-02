@@ -791,7 +791,7 @@ def DefaultStyleDictionary():
         {'brace_good' : StyleItem("#FFFFFF", "#0000FF,bold"),
          'brace_bad'  : StyleItem(back="#FF0000,bold"),
          'calltip'    : StyleItem("#404040", "#FFFFB8"),
-         'caret_line' : StyleItem(back="D8F8FF"),
+         'caret_line' : StyleItem(back="#D8F8FF"),
          'ctrl_char'  : StyleItem(),
          'line_num'   : StyleItem(back="#C0C0C0", face="%(secondary)s", \
                                   size="%(size3)d"),
