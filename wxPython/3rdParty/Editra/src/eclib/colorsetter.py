@@ -228,8 +228,8 @@ class ColorSetter(wx.Panel):
                                hex(green)[2:].zfill(2).upper(),
                                hex(blue)[2:].zfill(2).upper())
         self._txt.SetValue(hex_str)
-        self.__PostEvent()
 
+#-----------------------------------------------------------------------------#
 
 class HexValidator(wx.PyValidator):
     """Validate Hex strings for the color setter"""
