@@ -263,6 +263,8 @@ ID_LANG_YAML = _NewId()
 LANG_YAML = u'YAML'
 
 # Use LEX_CONTAINER
+ID_LANG_DJANGO = _NewId()
+LANG_DJANGO = u'Django'
 ID_LANG_MAKO = _NewId()
 LANG_MAKO = u'Mako'
 
@@ -285,8 +287,9 @@ EXT_MAP = {
            'cs'                 : LANG_CSHARP,
            'css'                : LANG_CSS,
            'd'                  : LANG_D,
-           'dot'                : LANG_DOT,
            'patch diff'         : LANG_DIFF,
+           'django'             : LANG_DJANGO,
+           'dot'                : LANG_DOT,
            'edc'                : LANG_EDJE,
            'e'                  : LANG_EIFFEL,
            'erl'                : LANG_ERLANG,
@@ -309,7 +312,7 @@ EXT_MAP = {
            'lt'                 : LANG_LOUT,
            'lua'                : LANG_LUA,
            'mak makefile'       : LANG_MAKE,
-           'mako'               : LANG_MAKO,
+           'mao mako'           : LANG_MAKO,
            'asm masm'           : LANG_MASM,
            'matlab'             : LANG_MATLAB,
            'mssql'              : LANG_MSSQL,
