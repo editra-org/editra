@@ -29,7 +29,7 @@ BUG FIXES:
 +Fix some clipboard and dnd bugs
 +Fix window scrolling issue when executing some vi commands
 +Fix error when creating file position cache file fails
-+Fix some Style Editor issues
++Fix numerous Style Editor bugs
 
 #-----------------------------------------------------------------------------#
 

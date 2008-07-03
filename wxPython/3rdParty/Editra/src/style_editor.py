@@ -304,6 +304,8 @@ class StyleEditor(wx.Dialog):
                 ss_c = self.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
                 ss_c.SetItems(util.GetResourceFiles(u'styles', get_all=True))
                 ss_c.SetStringSelection(sheet)
+                ss_c.Enable()
+                self.FindWindowById(wx.ID_NEW).SetValue(False)
                 self.styles_orig = self.styles_new
                 self.styles_new = DuplicateStyleDict(self.styles_orig)
 
@@ -370,7 +372,7 @@ class StyleEditor(wx.Dialog):
                 self.styles_orig = self.preview.BlankStyleDictionary()
                 self.styles_new = DuplicateStyleDict(self.styles_orig)
                 self.preview.SetStyles('preview', self.styles_new, nomerge=True)
-                self.preview.UpdateBaseStyles()
+                self.preview.UpdateAllStyles('preview')
 
                 # For some reason this causes the text display to refresh
                 # properly when nothing else would work.
