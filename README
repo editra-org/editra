@@ -29,7 +29,7 @@ libraries installed.
 
 Required for all systems:
 Python 2.4 and higher ( http://python.org )
-wxPython 2.8 ( http://wxpython.org )
+wxPython 2.8 ( http://wxpython.org ) (Unicode version suggested)
 setuptools 0.6 or higher (http://peak.telecommunity.com/DevCenter/setuptools)
 #----------------------------------------------------------------------------#
 
