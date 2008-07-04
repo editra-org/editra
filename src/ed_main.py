@@ -696,6 +696,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             result = self.nb.ClosePage()
             if result == wx.ID_CANCEL:
                 self._exiting = False
+                ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
+                                   (self.nb, self.nb.GetSelection()))
                 return True
             controls -= 1
 
