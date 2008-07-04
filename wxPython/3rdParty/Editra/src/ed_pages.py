@@ -130,7 +130,7 @@ class EdPages(FNB.FlatNotebook):
                 for page in xrange(self.GetPageCount()):
                     ctrl = self.GetPage(page)
                     if path == ctrl.GetFileName():
-                        self.SetSelection(page)
+                        self.ChangePage(page)
                         break
         elif os.path.exists(path) and not os.path.isfile(path):
             result = wx.ID_NO
@@ -493,19 +493,26 @@ class EdPages(FNB.FlatNotebook):
                   "%d to Page: %d\n" % pages)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGING, (self,) + pages)
 
-    def ChangePage(self, pgid):
+    def ChangePage(self, pg_num):
         """Change the page and focus to the the given page id
-        @param pgid: Page number to change to
+        @param pg_num: Page number to change 
 
         """
-        window = self.GetPage(pgid) # returns current stc
+        if self.GetSelection() != pg_num:
+            self.SetSelection(pg_num)
+
+        # Get the window that is the current page
+        window = self.GetPage(pg_num)
         window.SetFocus()
         self.control = window
         fname = self.control.GetFileName()
 
+        # Update Frame Title
         if fname == "":
-            fname = self.GetPageText(pgid)
+            fname = self.GetPageText(pg_num)
         self.frame.SetTitle("%s - file://%s" % (util.GetFileName(fname), fname))
+        if not self.frame.IsExiting():
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pg_num))
 
     def OnPageChanged(self, evt):
         """Actions to do after a page change
@@ -521,7 +528,6 @@ class EdPages(FNB.FlatNotebook):
                  self.control.GetFileName())
         self.control.PostPositionEvent()
         self.EnsureVisible(cpage)
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, cpage))
 
     def OnPageClosing(self, evt):
         """Checks page status to flag warnings before closing
@@ -606,15 +612,6 @@ class EdPages(FNB.FlatNotebook):
                 self._index[lang_id] = imglst.Add(wx.ArtProvider.\
                                               GetBitmap(lang_id, wx.ART_MENU))
         FNB.FlatNotebook.SetPageImage(self, pg_num, self._index[lang_id])
-
-    def SetSelection(self, pgnum):
-        """Set the currently selected page
-        @param pgnum: page number index
-
-        """
-        csel = self.GetSelection()
-        FNB.FlatNotebook.SetSelection(self, pgnum)
-        self.ChangePage(pgnum)
 
     def UpdateAllImages(self):
         """Reload and Reset all images in the notebook pages and
