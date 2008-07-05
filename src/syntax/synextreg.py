@@ -328,7 +328,7 @@ EXT_MAP = {
            'ini inf reg url cfg cnf' : LANG_PROPS,
            'ai ps'              : LANG_PS,
            'py pyw python'      : LANG_PYTHON,
-           'rb rbw rbx'         : LANG_RUBY,
+           'rake rb rbw rbx gemspec' : LANG_RUBY,
            'scm smd ss'         : LANG_SCHEME,
            'sql'                : LANG_SQL,
            'nut'                : LANG_SQUIRREL,
