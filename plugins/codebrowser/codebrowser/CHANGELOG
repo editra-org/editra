@@ -9,6 +9,7 @@ Released: xx/xx/2008
 
 New:
 +Add C Support (Macros, Functions)
++Add Ruby Support (Classes, Modules, Functions, Methods)
 
 Bug Fixes:
 
