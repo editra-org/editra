@@ -68,6 +68,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         self._menu = None
         self._selected = None
         self._cjob = 0
+        self._lastjob = u'' # Name of file in last sent out job
         self._cdoc = None   # Current DocStruct
         self.icons = dict()
         self.il = None
@@ -299,6 +300,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         # Make sure that the values that are being returned are the ones for
         # the currently active buffer.
         if evt.GetId() == self._cjob:
+            self._lastjob = u''
             self.Freeze()
             self.UpdateAll(evt.GetValue())
             self.Thaw()
@@ -331,8 +333,18 @@ class CodeBrowserTree(wx.TreeCtrl):
             return
 
         page = self._GetCurrentCtrl()
+
+        # If document job is same as current don't start a new one
+        if self._lastjob == page.GetFileName():
+            return
+        else:
+            self._lastjob = page.GetFileName()
+
+        # Get the generator method
         genfun = TagLoader.GetGenerator(page.GetLangId())
         self._cjob += 1 # increment job Id
+
+        # Check if we need to do updates
         if genfun is not None and self._ShouldUpdate():
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
                                (self._mw.GetId(), True))
