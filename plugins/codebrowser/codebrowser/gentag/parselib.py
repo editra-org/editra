@@ -38,13 +38,14 @@ def GetTokenValue(line, searchToken):
     for token, value in line:
         if token == searchToken:
             return value
-    raise TokenNotFound()
+    raise TokenNotFound, "GetTokenValue: Not found: %s" % str(searchToken)
 
 def HasToken(line, searchToken, searchValue=None):
-    """Find if the token exists in the line
+    """Find if the token exists in the line.
     @param line: line of code
     @param searchToken: Token to look for
     @return: bool
+    @note: use sparingly as this can be slow
 
     """
     for token, value in line:
