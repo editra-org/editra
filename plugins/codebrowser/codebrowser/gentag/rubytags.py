@@ -15,6 +15,9 @@ SUMMARY:
 It supports parsing for global and class variables, class, method, and function
 definitions.
 
+@todo: improve scoping, currently its just a best effort check
+@todo: needs performance improvements, currently it can get a little slow
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -62,7 +65,7 @@ class RbFormatter(Formatter):
                          Token.Literal.String.Heredoc,
                          Token.Literal.String.Other):
                 continue
-            elif ttype == Token.Text and value.isspace():
+            elif value.isspace():
                 continue
             else:
                 current_line.append((ttype, value))
@@ -84,12 +87,17 @@ class RbFormatter(Formatter):
                 for token, value in line:
                     if token == Token.Keyword:
                         if value == "end":
-                            endcount -= 1
-                            if endcount == len(containers) - 1 and len(containers):
+                            endcount = max(endcount - 1, 0)
+                            ccount = len(containers)
+                            dcount = endcount - ccount
+                            if ccount == 1:
+                                if not endcount:
+                                    containers.pop()
+                            elif ccount > 1 and dcount == ccount or dcount < 0:
                                 containers.pop()
-                        elif value in "begin case do for if unless until":
+                        elif value in "begin case do for if unless until while":
                             # These items require an end clause
-                            endcount += 1
+                            endcount = endcount + 1
                         elif value == "def":
                             nspace, fname = GetRubyFunction(line)
                             if endcount and len(containers):
@@ -100,7 +108,7 @@ class RbFormatter(Formatter):
                                     containers[-1].AddElement('method', meth)
                             else:
                                 self.rtags.AddFunction(taglib.Function(fname, lnum))
-                            endcount += 1
+                            endcount = endcount + 1
                         elif value == "class":
                             cname = parselib.GetTokenValue(line, Token.Name.Class)
                             cobj = taglib.Class(cname, lnum)
@@ -110,7 +118,7 @@ class RbFormatter(Formatter):
                             else:
                                 self.rtags.AddClass(cobj)
                             containers.append(cobj)
-                            endcount += 1
+                            endcount = endcount + 1
                         elif value == "module":
                             mname = parselib.GetTokenValue(line, Token.Name.Namespace)
                             mobj = taglib.Module(mname, lnum)
@@ -120,10 +128,10 @@ class RbFormatter(Formatter):
                             else:
                                 self.rtags.AddElement('module', mobj)
                             containers.append(mobj)
-                            endcount += 1
-                        else:
-                            continue
-                        break
+                            endcount = endcount + 1
+                        elif value == "raise":
+                            break
+                        continue
                     else:
                         continue
             except parselib.TokenNotFound, msg:
@@ -139,7 +147,7 @@ class RbFormatter(Formatter):
         @param meth: Method object
 
         """
-        for cobj in self.rtags.GetClasses():
+        for cobj in self.rtags.GetScopes():
             if cobj.GetName() == nspace:
                 cobj.AddElement('method', meth)
                 break
@@ -179,11 +187,11 @@ def GetRubyFunction(line):
     fname = u''
     nspace = None
     for token, value in line:
-        if token == Token.Name.Function:
+        if token in (Token.Name.Function, Token.Name.Class) and nspace is None:
             fname = value
-        elif token == Token.Operator and value == u"::":
+        elif token == Token.Operator and value in (u"::", u"."):
             nspace = fname
-        elif token == Token.Name and nspace is not None:
+        elif token in (Token.Name, Token.Name.Function) and nspace is not None:
             fname = value
             break
     return (nspace, fname)
