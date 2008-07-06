@@ -34,7 +34,6 @@ import ed_msg
 import ed_menu
 import syntax.syntax
 import util
-from profiler import Profile_Get, Profile_Set
 from eclib import platebtn
 
 # Local Imports
@@ -104,7 +103,6 @@ class BrowserMenuBar(wx.Panel):
                                           style=platebtn.PB_STYLE_NOBG)
         self.menub.SetToolTipString(_("Pathmarks"))
         self.menub.SetMenu(menu)
-
 
         # Layout bar
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -272,6 +270,10 @@ class BrowserPane(wx.Panel):
         self._config.Save()
         ed_msg.Unsubscribe(self.OnUpdateFont)
 
+    def GetMainWindow(self):
+        """Get the MainWindow that owns this panel"""
+        return self._mw
+
     def OnCheck(self, evt):
         """Toggles visibility of hidden files on and off"""
         e_id = evt.GetId()
@@ -394,6 +396,7 @@ class FileBrowser(wx.GenericDirCtrl):
         self._tree = self.GetTreeCtrl()
         self._treeId = 0                # id of TreeItem that was last rclicked
         self._fmenu = self._MakeMenu()
+        self._drag_img = None
         
         # Set custom styles
         self._tree.SetWindowStyle(self._tree.GetWindowStyle() | wx.TR_MULTIPLE)
@@ -407,8 +410,9 @@ class FileBrowser(wx.GenericDirCtrl):
         self.Bind(wx.EVT_MENU, self.OnMenu)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnPageChange, ed_msg.EDMSG_UI_NB_CHANGED)
-#         self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnDragStart)
-#         self.Bind(wx.EVT_TREE_END_DRAG, self.OnDragEnd)
+#        self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnDragStart)
+#        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnDragging)
+#        self.Bind(wx.EVT_TREE_END_DRAG, self.OnDragEnd)
 
     def __del__(self):
         """Unsubscribe from messages"""
@@ -665,12 +669,43 @@ class FileBrowser(wx.GenericDirCtrl):
             win.GetNotebook().OnDrop(to_open)
 
       # TODO implement drag and drop from the control to the editor
-#     def OnDragEnd(self, evt):
-#         evt.Skip()
+#    def OnDragStart(self, evt):
+#        """Start dragging a file from the tree"""
+#        item = self._tree.GetSelection()
+#        img = self._imglst.GetBitmap(self._tree.GetItemImage(item))
+#        lbl = self._tree.GetItemText(item)
+#        fdo = wx.FileDataObject()
+#        fdo.AddFile(self.GetPath())
+#        self._drag_img = FileDragImage(self._tree, lbl, img, fdo)
+#        mw = self.GetParent().GetMainWindow()
+#        self._drag_img.BeginDrag(wx.GetMousePosition(), self,
+#                                 rect=mw.GetClientRect())
+#        self._drag_img.Show()
+#        self._drag_img.Move(wx.GetMousePosition())
 
-#     def OnDragStart(self, evt):
-#         print evt.GetLabel()
-#         evt.Skip()
+#    def OnDragging(self, evt):
+#        """Move the drag image"""
+#        if evt.Dragging() and self._drag_img is not None:
+#            self._drag_img.Move(evt.GetPosition())#wx.GetMousePosition())
+#        elif self._drag_img is not None and evt.LeftUp():
+#            print "LEFTUP"
+#            self._drag_img.EndDrag()
+#            self._drag_img.Destroy()
+#            self._drag_img = None
+#        else:
+#            evt.Skip()
+
+#    def OnDragEnd(self, evt):
+#        """End the drag"""
+#        print "END DRAG"
+#        if self._drag_img is not None:
+#            self._drag_img.EndDrag()
+#            self._drag_img.Destroy()
+#            self._drag_img = None
+#        else:
+#            evt.Skip()
+
+#        evt.Skip()
 
 #     def SelectPath(self, path):
 #         """Selects the given path"""
@@ -695,6 +730,8 @@ class FileBrowser(wx.GenericDirCtrl):
 
 #-----------------------------------------------------------------------------#
 
+# TODO maybe switch to storing this info in the user profile instead of
+#      managing it here.
 class PathMarkConfig(object):
     """Manages the saving of pathmarks to make them usable from
     one session to the next.
@@ -837,6 +874,7 @@ def MakeArchive(path):
     return (ok, name)
 
 #-----------------------------------------------------------------------------#
+
 class OpenerThread(threading.Thread):
     """Job runner thread for opening files with the systems filemanager"""
     def __init__(self, files):
@@ -847,3 +885,70 @@ class OpenerThread(threading.Thread):
         """Do the work of opeing the files"""
         for fname in self._files:
             subprocess.call([FILEMAN_CMD, fname])
+
+#-----------------------------------------------------------------------------#
+
+class FileDragImage(wx.DragImage):
+    def __init__(self, treeCtrl, lbl, img, fdo):
+        """Create the drag image
+        @param treeCtrl: Tree control drag started from
+        @param lbl: drag image label
+        @param img: file image
+
+        """
+        bmp = self.MakeBitmap(treeCtrl, lbl, img)
+        wx.DragImage.__init__(self, bmp, wx.StockCursor(wx.CURSOR_COPY_ARROW))
+
+    def MakeBitmap(self, treeCtrl, lbl, img):
+        """Draw and create the drag image
+        @param treeCtrl: tree control drag started from
+        @param lbl: label to draw
+        @param img: image to draw
+
+        """
+        memory = wx.MemoryDC()
+
+        # Calculate Sizes
+        img_sz = img.GetSize()
+        txt_sz = treeCtrl.GetTextExtent(lbl)
+        bitmap = wx.EmptyBitmap(img_sz[0] + 7 + txt_sz[0],
+                                max(img_sz[1], txt_sz[1]) + 2)
+        memory.SelectObject(bitmap)
+
+        if wx.Platform == '__WXMAC__':
+            memory.SetBackground(wx.TRANSPARENT_BRUSH)
+        else:
+            backcolour = treeCtrl.GetBackgroundColour()
+            r, g, b = int(backcolour.Red()), int(backcolour.Green()), int(backcolour.Blue())
+            backcolour = ((r >> 1) + 20, (g >> 1) + 20, (b >> 1) + 20)
+            backcolour = wx.Colour(backcolour[0], backcolour[1], backcolour[2])
+            memory.SetBackground(wx.Brush(backcolour))
+
+        memory.SetBackgroundMode(wx.TRANSPARENT)
+        memory.SetFont(treeCtrl.GetFont())
+        memory.SetTextForeground(treeCtrl.GetForegroundColour())
+        memory.Clear()
+
+        memory.DrawBitmap(img, 2, 1, True)
+
+        textrect = wx.Rect(2 + img_sz[1] + 3, 2, txt_sz[0], txt_sz[1])
+        memory.DrawLabel(lbl, textrect)
+
+        memory.SelectObject(wx.NullBitmap)
+
+        # Gtk and Windows unfortunatly don't do so well with transparent
+        # drawing so this hack corrects the image to have a transparent
+        # background.
+        if wx.Platform != '__WXMAC__':
+            timg = bitmap.ConvertToImage()
+            if not timg.HasAlpha():
+                timg.InitAlpha()
+            for y in xrange(timg.GetHeight()):
+                for x in xrange(timg.GetWidth()):
+                    pix = wx.Colour(timg.GetRed(x, y),
+                                    timg.GetGreen(x, y),
+                                    timg.GetBlue(x, y))
+                    if pix == self._backgroundColour:
+                        timg.SetAlpha(x, y, 0)
+            bitmap = timg.ConvertToBitmap()
+        return bitmap
