@@ -302,6 +302,15 @@ class DocStruct(Scope):
         """
         return sorted(self.GetElementType('function'))
 
+    def GetScopes(self):
+        """Get all Scope type elements in this document object."""
+        relem = list()
+        for elem in self.GetElements():
+            for obj in elem.values():
+                if len(obj) and isinstance(obj[0], Scope):
+                    relem.extend(obj)
+        return relem
+
     def GetVariables(self):
         """Get all global variables defined in a document and 
         return them as a sorted list.
