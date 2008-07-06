@@ -12,7 +12,7 @@ New:
 +Add Ruby Support (Classes, Modules, Functions, Methods)
 
 Bug Fixes:
-
++Prevent multiple duplicate jobs from being dispatched at startup
 
 #-----------------------------------------------------------------------------#
 
