@@ -298,24 +298,24 @@ class EdPages(FNB.FlatNotebook):
             control.Show()
             self.control = control
 
-        # Pass directory and file name info to control object to save reference
-        self.control.SetModTime(util.GetFileModTime(path2file))
-        self.frame.AddFileToHistory(path2file)
-        if new_pg:
-            self.AddPage(self.control, filename)
-
-        self.frame.SetTitle("%s - file://%s" % (filename,
-                                                self.control.GetFileName()))
-        self.SetPageText(self.GetSelection(), filename)
-        self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
-
         # Setup Document
+        self.control.SetModTime(util.GetFileModTime(path2file))
         self.control.FindLexer()
         self.control.CheckEOL()
         self.control.EmptyUndoBuffer()
 
         if Profile_Get('SAVE_POS'):
             self.control.GotoPos(self.DocMgr.GetPos(self.control.GetFileName()))
+
+        # Add the buffer to the notebook
+        if new_pg:
+            self.AddPage(self.control, filename)
+
+        self.frame.SetTitle("%s - file://%s" % (filename,
+                                                self.control.GetFileName()))
+        self.frame.AddFileToHistory(path2file)
+        self.SetPageText(self.GetSelection(), filename)
+        self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
 
         # Set tab image
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
