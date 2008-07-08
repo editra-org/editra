@@ -23,6 +23,7 @@ a search action.
 +Show Shelf menu command keybinding is now configurable
 +Some Vi emulation improvements
 +Improve notebook tab scrolling
++Improved Python auto-indentation
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script

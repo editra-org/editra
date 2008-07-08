@@ -112,6 +112,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           syntax_set=list(),
                           comment=list(),
                           clexer=None,      # Container lexer method
+                          indenter=None,    # Auto indenter
                           lang_id=0)        # Language ID from syntax module
 
         # Set Up Margins
@@ -247,18 +248,26 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: proper type of white space is added from current pos
                         to match that of indentation in above line
         """
-        line = self.GetCurrentLine()
-        text = self.GetTextRange(self.PositionFromLine(line), \
-                                 self.GetCurrentPos())
-        if text.strip() == u'':
-            self.AddText(self.GetEOLChar() + text)
-            self.EnsureCaretVisible()
-            return
-        indent = self.GetLineIndentation(line)
-        i_space = indent / self.GetTabWidth()
-        ndent = self.GetEOLChar() + self.GetIndentChar() * i_space
-        self.AddText(ndent + \
-                     ((indent - (self.GetTabWidth() * i_space)) * u' '))
+        cpos = self.GetCurrentPos()
+
+        # Check if a special purpose indenter has been registered
+        if self._code['indenter'] is not None:
+            txt = self._code['indenter'](self, cpos, self.GetIndentChar())
+            txt = txt.replace('\n', self.GetEOLChar())
+        else:
+            # Default Indenter
+            line = self.GetCurrentLine()
+            text = self.GetTextRange(self.PositionFromLine(line), cpos)
+            if text.strip() == u'':
+                self.AddText(self.GetEOLChar() + text)
+                self.EnsureCaretVisible()
+                return
+            indent = self.GetLineIndentation(line)
+            i_space = indent / self.GetTabWidth()
+            ndent = self.GetEOLChar() + self.GetIndentChar() * i_space
+            txt = ndent + ((indent - (self.GetTabWidth() * i_space)) * u' ')
+
+        self.AddText(txt)
         self.EnsureCaretVisible()
 
     def Bookmark(self, action):
@@ -1903,6 +1912,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.LOG("[ed_stc][err] No Container Lexer to set")
             clexer = None
 
+        try:
+            indenter = syn_data[syntax.INDENTER]
+        except KeyError:
+            self.LOG("[ed_stc][err] No Auto-Indenter")
+            indenter = None
+
         # Set Lexer
         self.SetLexer(lexer)
         # Set Keywords
@@ -1915,6 +1930,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self._code['comment'] = comment
         # Set the Container Lexer Method
         self._code['clexer'] = clexer
+        # Auto-indenter function
+        self._code['indenter'] = indenter
 
         # Notify that lexer has changed
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER)

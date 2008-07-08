@@ -59,6 +59,7 @@ PROPERTIES = 3    # Extra Properties
 LANGUAGE   = 4    # Language ID
 COMMENT    = 5    # Gets the comment characters pattern
 CLEXER     = 6    # Container Lexer Styler Method
+INDENTER   = 7    # Auto-indenter method
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
@@ -204,9 +205,9 @@ class SyntaxMgr(object):
             syn_data[CLEXER] = mod.StyleText
         else:
             syn_data[CLEXER] = None
+        syn_data[INDENTER] = getattr(mod, 'AutoIndenter', None)
 
         return syn_data
-
 
 #-----------------------------------------------------------------------------#
 
