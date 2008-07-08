@@ -91,6 +91,7 @@ def AutoIndenter(stc, pos, ichar):
     @param stc: EditraStyledTextCtrl
     @param pos: current carat position
     @param ichar: Indentation character
+    @return: string
 
     """
     rtxt = u''
