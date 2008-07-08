@@ -86,6 +86,36 @@ def CommentPattern(lang_id=0):
     """
     return [u'#']
 
+def AutoIndenter(stc, pos, ichar):
+    """Auto indent python code
+    @param stc: EditraStyledTextCtrl
+    @param pos: current carat position
+    @param ichar: Indentation character
+
+    """
+    rtxt = u''
+    line = stc.GetCurrentLine()
+    tabw = stc.GetTabWidth()
+    text = stc.GetTextRange(stc.PositionFromLine(line), pos)
+
+    if text.strip() == u'':
+        rtxt = stc.GetEOLChar() + text
+    else:
+        indent = stc.GetLineIndentation(line)
+        i_space = indent / tabw
+        ndent = u"\n" + ichar * i_space
+        rtxt = ndent + ((indent - (tabw * i_space)) * u' ')
+
+    tokens = text.strip().split()
+    if len(tokens) > 1 and \
+       tokens[0] in "def if for while class" and\
+       tokens[-1].endswith(":"):
+        rtxt += ichar
+
+    return rtxt
+
+    
+
 #---- End Required Module Functions ----#
 
 #---- Syntax Modules Internal Functions ----#
