@@ -86,7 +86,7 @@ DATA_FILES = [("include/python2.5",
                            "pixmaps/editra.icns", "pixmaps/editra_doc.icns",
                            "pixmaps/editra_doc.png"]),
               ("pixmaps/theme/Default", ["pixmaps/theme/Default/README"]),
-               ("pixmaps/theme/Tango",["pixmaps/theme/Tango/AUTHORS",
+              ("pixmaps/theme/Tango",["pixmaps/theme/Tango/AUTHORS",
                                       "pixmaps/theme/Tango/COPYING"]),
               ("pixmaps/theme/Tango/toolbar",
                glob.glob("pixmaps/theme/Tango/toolbar/*.png")),
@@ -285,6 +285,14 @@ elif __platform__ == "darwin" and 'py2app' in sys.argv:
                                            CFBundleTypeRole="Editor"
                                           ),
                                      ],
+             CFBundleTypeMIMETypes = ['text/plain',],
+             CFBundleDevelopmentRegion = 'English',
+# TODO Causes errors with the system menu translations and text rendering
+#             CFBundleLocalizations = ['English', 'Spanish', 'French', 'Japanese'],
+#             ['de_DE', 'en_US', 'es_ES', 'fr_FR',
+#                                      'it_IT', 'ja_JP', 'nl_NL', 'nn_NO',
+#                                      'pt_BR', 'ru_RU', 'sr_YU', 'tr_TR',
+#                                      'uk_UA', 'zh_CN'],
        #      NSAppleScriptEnabled="YES",
              NSHumanReadableCopyright = u"Copyright %s 2005-%d" % (AUTHOR, YEAR)
              )
@@ -295,6 +303,8 @@ elif __platform__ == "darwin" and 'py2app' in sys.argv:
                        includes = INCLUDES,
                        plist = PLIST)
 
+    # Add extra mac specific files
+    DATA_FILES.append("scripts/editramac.sh")
 
     # Put extern package on path for py2app
     sys.path.append(os.path.abspath('src/extern'))
