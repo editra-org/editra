@@ -94,28 +94,3 @@ class ListRowHighlighter:
 
         """
         self._mode = mode
-
-#--------------------------------------------------------------------------#
-# Utilities
-def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
-    """ Brighten/Darken input colour by percent and adjust alpha
-    channel if needed. Returns the modified color.
-    @param color: color object to adjust
-    @type color: wx.Color
-    @param percent: percent to adjust +(brighten) or -(darken)
-    @type percent: int
-    @keyword alpha: Value to adjust alpha channel to
-
-    """
-    radj, gadj, badj = [ int(val * (abs(percent) / 100.))
-                         for val in color.Get() ]
-
-    if percent < 0:
-        radj, gadj, badj = [ val * -1 for val in [radj, gadj, badj] ]
-    else:
-        radj, gadj, badj = [ val or percent for val in [radj, gadj, badj] ]
-
-    red = min(color.Red() + radj, 255)
-    green = min(color.Green() + gadj, 255)
-    blue = min(color.Blue() + badj, 255)
-    return wx.Colour(red, green, blue, alpha)
