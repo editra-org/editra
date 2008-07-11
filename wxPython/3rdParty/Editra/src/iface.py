@@ -249,10 +249,12 @@ class Shelf(plugin.Plugin):
             return
 
         self._shelf = FNB.FlatNotebook(parent,
-                                       style=FNB.FNB_FF2 | \
-                                             FNB.FNB_X_ON_TAB | \
-                                             FNB.FNB_BACKGROUND_GRADIENT | \
-                                             FNB.FNB_NODRAG)
+                                       style=FNB.FNB_FF2 |
+                                             FNB.FNB_X_ON_TAB |
+                                             FNB.FNB_BACKGROUND_GRADIENT |
+                                             FNB.FNB_NODRAG |
+                                             FNB.FNB_BOTTOM |
+                                             FNB.FNB_NO_X_BUTTON)
         mgr.AddPane(self._shelf, wx.aui.AuiPaneInfo().Name(Shelf.SHELF_NAME).\
                             Caption("Shelf").Bottom().Layer(0).\
                             CloseButton(True).MaximizeButton(False).\
