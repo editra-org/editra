@@ -120,7 +120,8 @@ class LogViewer(ctrlbox.ControlBox):
 
         # View Choice
         self._srcfilter = wx.Choice(ctrlbar, wx.ID_ANY, choices=[])
-        ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("Filter") + ":"))
+        ctrlbar.AddControl(wx.StaticText(ctrlbar,
+                                         label=_("Show output from") + ":"))
         ctrlbar.AddControl(self._srcfilter)
 
         # Clear Button
