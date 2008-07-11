@@ -680,7 +680,7 @@ class CommandExecuter(wx.SearchCtrl):
         if len(paths):
             pos = self.GetScreenPosition().Get()
             extent = self.GetTextExtent(cstr)
-            self._popup.SetPosition((pos[0] + extent[0], pos[1] + extent[1]))
+            self._popup.SetPosition((pos[0] + extent[0], pos[1] + extent[1] + 7))
             self._popup.SetBestSelection(cmd)
             if not self._popup.IsShown():
                 self._popup.Show()
@@ -893,6 +893,8 @@ class PopupList(wx.Frame):
                                       wx.LC_NO_HEADER | wx.NO_BORDER)
 
         # Layout
+        self._list.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+        self.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self._list, 1, wx.EXPAND)
         self.SetSizer(sizer)
