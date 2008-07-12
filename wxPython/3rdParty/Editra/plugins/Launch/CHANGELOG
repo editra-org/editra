@@ -6,8 +6,9 @@
 #-----------------------------------------------------------------------------#
 
 Version 0.4
-Date: xx/xx/2008
+Date: 07/11/2008
 
++Files of same type are now selectable without changing the buffer
 +Fix some layout issues on Windows
 
 #-----------------------------------------------------------------------------#
