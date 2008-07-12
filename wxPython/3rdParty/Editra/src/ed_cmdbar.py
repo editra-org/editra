@@ -433,9 +433,9 @@ class CommandExecuter(wx.SearchCtrl):
         """
         ext = self.GetTextExtent(self.GetValue())[0]
         curr_w, curr_h = self.GetClientSizeTuple()
-        if ext > curr_w * .85:
-            max_w = self.GetParent().GetClientSize().GetWidth() * .75
-            nwidth = min(ext * 1.18, max_w)
+        if ext > curr_w * .5:
+            max_w = self.GetParent().GetClientSize().GetWidth() * .8
+            nwidth = min(ext * 1.3, max_w)
             self.SetClientSize((nwidth, curr_h))
         elif ((curr_w > ext * 1.18) and curr_w > 150):
             nwidth = max(ext * 1.18, 150)
