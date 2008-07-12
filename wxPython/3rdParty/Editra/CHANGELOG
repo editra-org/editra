@@ -18,15 +18,21 @@ NEWS:
 NEW: [features/improvements]
 +Add support for using container lexers to extend supported languages
 +Add support for highlighting Mako and Django templates
++New version of CodeBrowser (Adds C and Ruby Support)
++New version of Launch (file to run can be selected without buffer change)
++Minor updates to FileBrowser
 +Automatically fill search field with selected text in buffer when performing
 a search action.
 +Show Shelf menu command keybinding is now configurable
 +Some Vi emulation improvements
-+Improve notebook tab scrolling
++More responsive notebook tab scrolling
 +Improved Python auto-indentation
 +Opening files after program launch will now be opened in the running instance
 instead of creating a separate running instance using the user preference
 settings for opening new files in tabs or windows.
++Updated translations
++Shelf window tabs are now shown on the bottom to keep the shelf controls
+closer to the editor buffer.
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script
