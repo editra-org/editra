@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-08 19:47-0500\n"
+"POT-Creation-Date: 2008-07-11 21:02-0500\n"
 "PO-Revision-Date: 2008-06-09 15:31+0000\n"
 "Last-Translator: Alejandro Rochette <Unknown>\n"
 "Language-Team: Spanish<Spanish>\n"
@@ -136,7 +136,7 @@ msgstr "**Alias**"
 msgid "**New Value**"
 msgstr "**Nuevo Valor**"
 
-#: ../../plugins/Launch/launch/launch.py:407 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "Abortar"
 
@@ -168,7 +168,7 @@ msgstr "Avanzado"
 msgid "Alias"
 msgstr "Alias"
 
-#: ../../src/ed_log.py:161 ../../src/ed_log.py:234
+#: ../../src/ed_log.py:162 ../../src/ed_log.py:235
 msgid "All"
 msgstr "Todo"
 
@@ -176,7 +176,7 @@ msgstr "Todo"
 msgid "All Done"
 msgstr "Todo Hecho"
 
-#: ../../src/Editra.py:366
+#: ../../src/Editra.py:441
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -305,7 +305,7 @@ msgstr "Selecciona un lugar para guardar"
 msgid "Class Definitions"
 msgstr "Definiciones de Clase"
 
-#: ../../plugins/Launch/launch/launch.py:162 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
 msgid "Clear"
 msgstr "Limpiar"
 
@@ -548,7 +548,7 @@ msgstr "Descargando"
 msgid "Downloading To: %s"
 msgstr "Descargando en: %s"
 
-#: ../../src/Editra.py:372 ../../src/prefdlg.py:1315
+#: ../../src/Editra.py:447 ../../src/prefdlg.py:1315
 msgid "Downloading Update"
 msgstr "Descargando Actualización"
 
@@ -706,7 +706,7 @@ msgstr "Comandos Ejecutables"
 msgid "Executables"
 msgstr "Ejecutables"
 
-#: ../../plugins/Launch/launch/launch.py:525
+#: ../../plugins/Launch/launch/launch.py:534
 msgid "Exit Code"
 msgstr "Código de Salida"
 
@@ -796,10 +796,6 @@ msgstr ""
 #: ../../src/prefdlg.py:830
 msgid "Filetype Associations"
 msgstr "Asociaciones de tipos de archivos"
-
-#: ../../src/ed_log.py:123
-msgid "Filter"
-msgstr "Filtro"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:270
 #: ../../src/ed_toolbar.py:87
@@ -1366,7 +1362,7 @@ msgstr "Buscar texto"
 msgid "Platform Info"
 msgstr "Información de plataforma"
 
-#: ../../src/Editra.py:592
+#: ../../src/Editra.py:674
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr "Por favor revise el cuadro de diálogo de las preferencias para resetearlas."
 
@@ -1443,11 +1439,11 @@ msgstr "Perfil"
 msgid "Profile Saved as: %s"
 msgstr "Perfil guardado como: %s"
 
-#: ../../src/Editra.py:594
+#: ../../src/Editra.py:676
 msgid "Profile Updated"
 msgstr "Perfil actualizado"
 
-#: ../../plugins/Launch/launch/launch.py:131
+#: ../../plugins/Launch/launch/launch.py:132
 msgid "Program Executable Command"
 msgstr "Comando Ejecutable del Programa"
 
@@ -1475,7 +1471,7 @@ msgstr "Configuración de proxy"
 msgid "Proxy URL"
 msgstr "URL del Proxy"
 
-#: ../../src/iface.py:275
+#: ../../src/iface.py:277
 msgid "Put an item on the Shelf"
 msgstr "Poner un elemento en el estante"
 
@@ -1579,8 +1575,8 @@ msgid "Revert to Default"
 msgstr "Restablecer predefinidos"
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:154
-#: ../../plugins/Launch/launch/launch.py:413
+#: ../../plugins/Launch/launch/launch.py:155
+#: ../../plugins/Launch/launch/launch.py:422
 msgid "Run"
 msgstr "Ejecutar"
 
@@ -1664,7 +1660,7 @@ msgstr "Guardar archivo como: %s"
 msgid "Saved File: %s"
 msgstr "Archivo guardado: %s"
 
-#: ../../plugins/Launch/launch/launch.py:144
+#: ../../plugins/Launch/launch/launch.py:145
 msgid "Script Arguments"
 msgstr "Argumentos del script"
 
@@ -1719,11 +1715,11 @@ msgstr "Establece una fuente secundaria utilizada para regiones especiales cuand
 msgid "Sets the main/default font of the document"
 msgstr "Establece la fuente principal/por defecto para el documento"
 
-#: ../../plugins/Launch/launch/launch.py:124
+#: ../../plugins/Launch/launch/launch.py:125
 msgid "Settings"
 msgstr "Preferencias"
 
-#: ../../src/iface.py:274
+#: ../../src/iface.py:276
 msgid "Shelf"
 msgstr "Estante"
 
@@ -1775,6 +1771,10 @@ msgstr "Mostrar espacios en blanco"
 #: ../../src/ed_menu.py:635
 msgid "Show Whitespace Markers"
 msgstr "Mostrar espacios en blanco"
+
+#: ../../src/ed_log.py:124
+msgid "Show output from"
+msgstr ""
 
 #: ../../src/iface.py:183
 msgid "Show the Shelf"
@@ -2034,7 +2034,7 @@ msgstr ""
 msgid "Update"
 msgstr "Actualizar"
 
-#: ../../src/Editra.py:368
+#: ../../src/Editra.py:443
 msgid "Update Available"
 msgstr "Actualización disponible"
 
@@ -2133,7 +2133,7 @@ msgstr "Ajustar líneas horizontalmente"
 msgid "Written in 100%% Python."
 msgstr "Escrito 100%% en Python"
 
-#: ../../src/Editra.py:590
+#: ../../src/Editra.py:672
 msgid "Your profile has been updated to the latest version"
 msgstr "Tu perfil se ha actualizado a la última versión"
 
@@ -2149,7 +2149,7 @@ msgstr "Aumentar zoom"
 msgid "Zoom Out"
 msgstr "Decrementar zoom"
 
-#: ../../plugins/Launch/launch/launch.py:141
+#: ../../plugins/Launch/launch/launch.py:142
 msgid "args"
 msgstr "args"
 
@@ -2161,7 +2161,7 @@ msgstr "negrita"
 msgid "eol"
 msgstr "fin de línea"
 
-#: ../../plugins/Launch/launch/launch.py:128
+#: ../../plugins/Launch/launch/launch.py:129
 msgid "exec"
 msgstr "ejecutar"
 
@@ -2209,6 +2209,9 @@ msgstr "subrayado"
 
 #~ msgid "File"
 #~ msgstr "Archivo"
+
+#~ msgid "Filter"
+#~ msgstr "Filtro"
 
 #~ msgid "Help"
 #~ msgstr "Ayuda"

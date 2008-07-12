@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-08 19:47-0500\n"
+"POT-Creation-Date: 2008-07-11 21:02-0500\n"
 "PO-Revision-Date: 2008-03-23 09:05+0000\n"
 "Last-Translator: heccj <heccjj@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -136,7 +136,7 @@ msgstr "**别名**"
 msgid "**New Value**"
 msgstr "**新值**"
 
-#: ../../plugins/Launch/launch/launch.py:407 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "终止"
 
@@ -168,7 +168,7 @@ msgstr "高级"
 msgid "Alias"
 msgstr "别名"
 
-#: ../../src/ed_log.py:161 ../../src/ed_log.py:234
+#: ../../src/ed_log.py:162 ../../src/ed_log.py:235
 msgid "All"
 msgstr "全部"
 
@@ -176,7 +176,7 @@ msgstr "全部"
 msgid "All Done"
 msgstr "完成所有"
 
-#: ../../src/Editra.py:366
+#: ../../src/Editra.py:441
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -305,7 +305,7 @@ msgstr "选择保存位置"
 msgid "Class Definitions"
 msgstr "类定义"
 
-#: ../../plugins/Launch/launch/launch.py:162 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
 msgid "Clear"
 msgstr "清除"
 
@@ -548,7 +548,7 @@ msgstr "正在下载"
 msgid "Downloading To: %s"
 msgstr "下载：%s"
 
-#: ../../src/Editra.py:372 ../../src/prefdlg.py:1315
+#: ../../src/Editra.py:447 ../../src/prefdlg.py:1315
 msgid "Downloading Update"
 msgstr "正在下载更新"
 
@@ -697,7 +697,7 @@ msgstr "可执行命令"
 msgid "Executables"
 msgstr "可执行"
 
-#: ../../plugins/Launch/launch/launch.py:525
+#: ../../plugins/Launch/launch/launch.py:534
 msgid "Exit Code"
 msgstr "退出码"
 
@@ -785,10 +785,6 @@ msgstr ""
 #: ../../src/prefdlg.py:830
 msgid "Filetype Associations"
 msgstr "文件类型关联"
-
-#: ../../src/ed_log.py:123
-msgid "Filter"
-msgstr "过滤器"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:270
 #: ../../src/ed_toolbar.py:87
@@ -1352,7 +1348,7 @@ msgstr "查找文本"
 msgid "Platform Info"
 msgstr "平台信息"
 
-#: ../../src/Editra.py:592
+#: ../../src/Editra.py:674
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr "请在 参数选择 对话框中重置配置"
 
@@ -1429,11 +1425,11 @@ msgstr "配置"
 msgid "Profile Saved as: %s"
 msgstr "配置保存为：%s"
 
-#: ../../src/Editra.py:594
+#: ../../src/Editra.py:676
 msgid "Profile Updated"
 msgstr "配置更新"
 
-#: ../../plugins/Launch/launch/launch.py:131
+#: ../../plugins/Launch/launch/launch.py:132
 msgid "Program Executable Command"
 msgstr "可执行命令"
 
@@ -1461,7 +1457,7 @@ msgstr "代理设置"
 msgid "Proxy URL"
 msgstr "代理地址"
 
-#: ../../src/iface.py:275
+#: ../../src/iface.py:277
 msgid "Put an item on the Shelf"
 msgstr "添加条目"
 
@@ -1565,8 +1561,8 @@ msgid "Revert to Default"
 msgstr "恢复默认"
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:154
-#: ../../plugins/Launch/launch/launch.py:413
+#: ../../plugins/Launch/launch/launch.py:155
+#: ../../plugins/Launch/launch/launch.py:422
 msgid "Run"
 msgstr "运行"
 
@@ -1648,7 +1644,7 @@ msgstr "保存文件为:%s"
 msgid "Saved File: %s"
 msgstr "保存文件: %s"
 
-#: ../../plugins/Launch/launch/launch.py:144
+#: ../../plugins/Launch/launch/launch.py:145
 msgid "Script Arguments"
 msgstr "脚本参数"
 
@@ -1701,11 +1697,11 @@ msgstr "设置次字体用于颜色高亮时的特殊区域"
 msgid "Sets the main/default font of the document"
 msgstr "设置文档的主要/默认字体"
 
-#: ../../plugins/Launch/launch/launch.py:124
+#: ../../plugins/Launch/launch/launch.py:125
 msgid "Settings"
 msgstr "设置"
 
-#: ../../src/iface.py:274
+#: ../../src/iface.py:276
 msgid "Shelf"
 msgstr "书架"
 
@@ -1757,6 +1753,10 @@ msgstr "显示空格"
 #: ../../src/ed_menu.py:635
 msgid "Show Whitespace Markers"
 msgstr "显示空格标记"
+
+#: ../../src/ed_log.py:124
+msgid "Show output from"
+msgstr ""
 
 #: ../../src/iface.py:183
 msgid "Show the Shelf"
@@ -2014,7 +2014,7 @@ msgstr "未命名文件夹"
 msgid "Update"
 msgstr "更新"
 
-#: ../../src/Editra.py:368
+#: ../../src/Editra.py:443
 msgid "Update Available"
 msgstr "有可用的更新"
 
@@ -2113,7 +2113,7 @@ msgstr "文本自动换行"
 msgid "Written in 100%% Python."
 msgstr "用100%% Python 编写。"
 
-#: ../../src/Editra.py:590
+#: ../../src/Editra.py:672
 msgid "Your profile has been updated to the latest version"
 msgstr "配置更新到最新版本"
 
@@ -2129,7 +2129,7 @@ msgstr "放大"
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: ../../plugins/Launch/launch/launch.py:141
+#: ../../plugins/Launch/launch/launch.py:142
 msgid "args"
 msgstr "参数"
 
@@ -2141,7 +2141,7 @@ msgstr "粗体"
 msgid "eol"
 msgstr "行尾"
 
-#: ../../plugins/Launch/launch/launch.py:128
+#: ../../plugins/Launch/launch/launch.py:129
 msgid "exec"
 msgstr "执行"
 
@@ -2158,6 +2158,9 @@ msgstr "下划线"
 
 #~ msgid "Enter a hex color value"
 #~ msgstr "输入十六进制颜色值"
+
+#~ msgid "Filter"
+#~ msgstr "过滤器"
 
 #~ msgid "file"
 #~ msgstr "文件"

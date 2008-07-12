@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-08 19:47-0500\n"
+"POT-Creation-Date: 2008-07-11 21:02-0500\n"
 "PO-Revision-Date: 2008-05-14 18:09+0000\n"
 "Last-Translator: JoNNeMaNN <jonstodle@gmail.com>\n"
 "Language-Team: Norwegian Nynorsk <nn@li.org>\n"
@@ -137,7 +137,7 @@ msgstr "**Alias**"
 msgid "**New Value**"
 msgstr "**Ny verdi**"
 
-#: ../../plugins/Launch/launch/launch.py:407 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "Avbryt"
 
@@ -169,7 +169,7 @@ msgstr "Avansert"
 msgid "Alias"
 msgstr "Alias"
 
-#: ../../src/ed_log.py:161 ../../src/ed_log.py:234
+#: ../../src/ed_log.py:162 ../../src/ed_log.py:235
 msgid "All"
 msgstr "Alle"
 
@@ -177,7 +177,7 @@ msgstr "Alle"
 msgid "All Done"
 msgstr "Ferdig"
 
-#: ../../src/Editra.py:366
+#: ../../src/Editra.py:441
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -306,7 +306,7 @@ msgstr "Vel ein lagringsstad"
 msgid "Class Definitions"
 msgstr "Klassedefinisjon"
 
-#: ../../plugins/Launch/launch/launch.py:162 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
 msgid "Clear"
 msgstr "Rense"
 
@@ -550,7 +550,7 @@ msgstr "Lastar ned"
 msgid "Downloading To: %s"
 msgstr "Lastar ned til: %s"
 
-#: ../../src/Editra.py:372 ../../src/prefdlg.py:1315
+#: ../../src/Editra.py:447 ../../src/prefdlg.py:1315
 msgid "Downloading Update"
 msgstr "Lastar ned oppdatering"
 
@@ -702,7 +702,7 @@ msgstr "Kjørbare kommandoar"
 msgid "Executables"
 msgstr "Kjørbare"
 
-#: ../../plugins/Launch/launch/launch.py:525
+#: ../../plugins/Launch/launch/launch.py:534
 msgid "Exit Code"
 msgstr "Avslutt kode"
 
@@ -792,10 +792,6 @@ msgstr ""
 #: ../../src/prefdlg.py:830
 msgid "Filetype Associations"
 msgstr "Filtypeassosiasjon"
-
-#: ../../src/ed_log.py:123
-msgid "Filter"
-msgstr "Filtrer"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:270
 #: ../../src/ed_toolbar.py:87
@@ -1359,7 +1355,7 @@ msgstr "Finn tekst"
 msgid "Platform Info"
 msgstr "Platforminfo"
 
-#: ../../src/Editra.py:592
+#: ../../src/Editra.py:674
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr "Gå til innstillingsdialongen for å setje tilbake innstillingane"
 
@@ -1436,11 +1432,11 @@ msgstr "Profil"
 msgid "Profile Saved as: %s"
 msgstr "Profil lagra som: %s"
 
-#: ../../src/Editra.py:594
+#: ../../src/Editra.py:676
 msgid "Profile Updated"
 msgstr "Profil oppdatert"
 
-#: ../../plugins/Launch/launch/launch.py:131
+#: ../../plugins/Launch/launch/launch.py:132
 msgid "Program Executable Command"
 msgstr "Programmer kjørbar kommando"
 
@@ -1468,7 +1464,7 @@ msgstr "Proxyinnstillingar"
 msgid "Proxy URL"
 msgstr "Proxy-URL"
 
-#: ../../src/iface.py:275
+#: ../../src/iface.py:277
 msgid "Put an item on the Shelf"
 msgstr "Set ein ting på hylla"
 
@@ -1572,8 +1568,8 @@ msgid "Revert to Default"
 msgstr "Set til standard"
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:154
-#: ../../plugins/Launch/launch/launch.py:413
+#: ../../plugins/Launch/launch/launch.py:155
+#: ../../plugins/Launch/launch/launch.py:422
 msgid "Run"
 msgstr "Kjør"
 
@@ -1655,7 +1651,7 @@ msgstr "Lagra fila som: %s"
 msgid "Saved File: %s"
 msgstr "Lagra fila: %s"
 
-#: ../../plugins/Launch/launch/launch.py:144
+#: ../../plugins/Launch/launch/launch.py:145
 msgid "Script Arguments"
 msgstr "Skriptargument"
 
@@ -1708,11 +1704,11 @@ msgstr "Vel ein biskrifttype som vert brukt på spesielle stadar kor syntaksen e
 msgid "Sets the main/default font of the document"
 msgstr "Vel hovud-/standardskriftstilen til dokumentet"
 
-#: ../../plugins/Launch/launch/launch.py:124
+#: ../../plugins/Launch/launch/launch.py:125
 msgid "Settings"
 msgstr "Innstillingar"
 
-#: ../../src/iface.py:274
+#: ../../src/iface.py:276
 msgid "Shelf"
 msgstr "Hylle"
 
@@ -1764,6 +1760,10 @@ msgstr "Syn mellomrom"
 #: ../../src/ed_menu.py:635
 msgid "Show Whitespace Markers"
 msgstr "Syn mellomrom-markørar"
+
+#: ../../src/ed_log.py:124
+msgid "Show output from"
+msgstr ""
 
 #: ../../src/iface.py:183
 msgid "Show the Shelf"
@@ -2021,7 +2021,7 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: ../../src/Editra.py:368
+#: ../../src/Editra.py:443
 msgid "Update Available"
 msgstr ""
 
@@ -2120,7 +2120,7 @@ msgstr ""
 msgid "Written in 100%% Python."
 msgstr ""
 
-#: ../../src/Editra.py:590
+#: ../../src/Editra.py:672
 msgid "Your profile has been updated to the latest version"
 msgstr ""
 
@@ -2136,7 +2136,7 @@ msgstr ""
 msgid "Zoom Out"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:141
+#: ../../plugins/Launch/launch/launch.py:142
 msgid "args"
 msgstr ""
 
@@ -2148,7 +2148,7 @@ msgstr ""
 msgid "eol"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:128
+#: ../../plugins/Launch/launch/launch.py:129
 msgid "exec"
 msgstr ""
 
@@ -2165,3 +2165,6 @@ msgstr ""
 
 #~ msgid "Enter a hex color value"
 #~ msgstr "Skriv inn hexfargeverdi"
+
+#~ msgid "Filter"
+#~ msgstr "Filtrer"

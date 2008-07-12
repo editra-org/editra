@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-08 19:47-0500\n"
+"POT-Creation-Date: 2008-07-11 21:02-0500\n"
 "PO-Revision-Date: 2008-02-17 14:45+0000\n"
 "Last-Translator: slav0nic <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "**New Value**"
 msgstr "***Новая переменная***"
 
-#: ../../plugins/Launch/launch/launch.py:407 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "Прервать"
 
@@ -169,7 +169,7 @@ msgstr ""
 msgid "Alias"
 msgstr ""
 
-#: ../../src/ed_log.py:161 ../../src/ed_log.py:234
+#: ../../src/ed_log.py:162 ../../src/ed_log.py:235
 msgid "All"
 msgstr "Все"
 
@@ -177,7 +177,7 @@ msgstr "Все"
 msgid "All Done"
 msgstr "Все готово"
 
-#: ../../src/Editra.py:366
+#: ../../src/Editra.py:441
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -304,7 +304,7 @@ msgstr "Выбрать Местное сохранение"
 msgid "Class Definitions"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:162 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
 msgid "Clear"
 msgstr "Очистить"
 
@@ -549,7 +549,7 @@ msgstr "Загрузка данных"
 msgid "Downloading To: %s"
 msgstr "Загрузка данных с: %s"
 
-#: ../../src/Editra.py:372 ../../src/prefdlg.py:1315
+#: ../../src/Editra.py:447 ../../src/prefdlg.py:1315
 msgid "Downloading Update"
 msgstr "Загрузка обновления"
 
@@ -700,7 +700,7 @@ msgstr ""
 msgid "Executables"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:525
+#: ../../plugins/Launch/launch/launch.py:534
 msgid "Exit Code"
 msgstr "Код выхода"
 
@@ -788,10 +788,6 @@ msgstr ""
 #: ../../src/prefdlg.py:830
 msgid "Filetype Associations"
 msgstr "Ассоциация файлов"
-
-#: ../../src/ed_log.py:123
-msgid "Filter"
-msgstr "Фильтр"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:270
 #: ../../src/ed_toolbar.py:87
@@ -1355,7 +1351,7 @@ msgstr "Найти текст"
 msgid "Platform Info"
 msgstr ""
 
-#: ../../src/Editra.py:592
+#: ../../src/Editra.py:674
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr ""
 
@@ -1432,11 +1428,11 @@ msgstr "Профиль"
 msgid "Profile Saved as: %s"
 msgstr "Профиль сохранен как: %s"
 
-#: ../../src/Editra.py:594
+#: ../../src/Editra.py:676
 msgid "Profile Updated"
 msgstr "Профиль обновлен"
 
-#: ../../plugins/Launch/launch/launch.py:131
+#: ../../plugins/Launch/launch/launch.py:132
 msgid "Program Executable Command"
 msgstr ""
 
@@ -1464,7 +1460,7 @@ msgstr "Настройки прокси"
 msgid "Proxy URL"
 msgstr ""
 
-#: ../../src/iface.py:275
+#: ../../src/iface.py:277
 msgid "Put an item on the Shelf"
 msgstr "Задавать вопрос о Shelf"
 
@@ -1568,8 +1564,8 @@ msgid "Revert to Default"
 msgstr "Вернуть по умолчанию"
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:154
-#: ../../plugins/Launch/launch/launch.py:413
+#: ../../plugins/Launch/launch/launch.py:155
+#: ../../plugins/Launch/launch/launch.py:422
 msgid "Run"
 msgstr "Выполнить"
 
@@ -1651,7 +1647,7 @@ msgstr "Файл сохранен как: %s"
 msgid "Saved File: %s"
 msgstr "Файл сохранен: %s"
 
-#: ../../plugins/Launch/launch/launch.py:144
+#: ../../plugins/Launch/launch/launch.py:145
 msgid "Script Arguments"
 msgstr ""
 
@@ -1704,11 +1700,11 @@ msgstr "Устанавливить вторичный шрифт для спец
 msgid "Sets the main/default font of the document"
 msgstr "Устанавить общие/по умолчанию шрифты в документе"
 
-#: ../../plugins/Launch/launch/launch.py:124
+#: ../../plugins/Launch/launch/launch.py:125
 msgid "Settings"
 msgstr "Установки"
 
-#: ../../src/iface.py:274
+#: ../../src/iface.py:276
 msgid "Shelf"
 msgstr ""
 
@@ -1763,6 +1759,10 @@ msgstr "Показать пробелы"
 #, fuzzy
 msgid "Show Whitespace Markers"
 msgstr "Показать символы пробелов"
+
+#: ../../src/ed_log.py:124
+msgid "Show output from"
+msgstr ""
 
 #: ../../src/iface.py:183
 msgid "Show the Shelf"
@@ -2021,7 +2021,7 @@ msgstr ""
 msgid "Update"
 msgstr "Обновить"
 
-#: ../../src/Editra.py:368
+#: ../../src/Editra.py:443
 msgid "Update Available"
 msgstr ""
 
@@ -2120,7 +2120,7 @@ msgstr "Переносить текст по горизонтали"
 msgid "Written in 100%% Python."
 msgstr ""
 
-#: ../../src/Editra.py:590
+#: ../../src/Editra.py:672
 msgid "Your profile has been updated to the latest version"
 msgstr "Ваш профиль был обновлен до последней версии"
 
@@ -2136,7 +2136,7 @@ msgstr "Приблизить"
 msgid "Zoom Out"
 msgstr "Отдалить"
 
-#: ../../plugins/Launch/launch/launch.py:141
+#: ../../plugins/Launch/launch/launch.py:142
 msgid "args"
 msgstr ""
 
@@ -2148,7 +2148,7 @@ msgstr "жирный"
 msgid "eol"
 msgstr "eol"
 
-#: ../../plugins/Launch/launch/launch.py:128
+#: ../../plugins/Launch/launch/launch.py:129
 msgid "exec"
 msgstr ""
 
@@ -2162,6 +2162,9 @@ msgstr "подчеркивание"
 
 #~ msgid "Enter a hex color value"
 #~ msgstr "Введите шестнадцатеричный цвет"
+
+#~ msgid "Filter"
+#~ msgstr "Фильтр"
 
 #~ msgid "file"
 #~ msgstr "файл"
