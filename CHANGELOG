@@ -24,6 +24,9 @@ a search action.
 +Some Vi emulation improvements
 +Improve notebook tab scrolling
 +Improved Python auto-indentation
++Opening files after program launch will now be opened in the running instance
+instead of creating a separate running instance using the user preference
+settings for opening new files in tabs or windows.
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script
