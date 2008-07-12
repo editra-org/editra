@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-08 19:47-0500\n"
+"POT-Creation-Date: 2008-07-11 21:02-0500\n"
 "PO-Revision-Date: 2008-06-11 18:12+0000\n"
 "Last-Translator: Gerard <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "**New Value**"
 msgstr "**Nieuwe waarde**"
 
-#: ../../plugins/Launch/launch/launch.py:407 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "Onderbreek"
 
@@ -169,7 +169,7 @@ msgstr "Geavanceerd"
 msgid "Alias"
 msgstr "Alias"
 
-#: ../../src/ed_log.py:161 ../../src/ed_log.py:234
+#: ../../src/ed_log.py:162 ../../src/ed_log.py:235
 msgid "All"
 msgstr "Alles"
 
@@ -177,7 +177,7 @@ msgstr "Alles"
 msgid "All Done"
 msgstr "Alles gereed"
 
-#: ../../src/Editra.py:366
+#: ../../src/Editra.py:441
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -306,7 +306,7 @@ msgstr "Kies een Opslaan locatie"
 msgid "Class Definitions"
 msgstr "Class definities"
 
-#: ../../plugins/Launch/launch/launch.py:162 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
 msgid "Clear"
 msgstr "Wissen"
 
@@ -550,7 +550,7 @@ msgstr "Downloaden"
 msgid "Downloading To: %s"
 msgstr "Downloaden naar: %s"
 
-#: ../../src/Editra.py:372 ../../src/prefdlg.py:1315
+#: ../../src/Editra.py:447 ../../src/prefdlg.py:1315
 msgid "Downloading Update"
 msgstr "Update downloaden"
 
@@ -706,7 +706,7 @@ msgstr "Uitvoerbare commando's"
 msgid "Executables"
 msgstr "Opstartbare bestanden"
 
-#: ../../plugins/Launch/launch/launch.py:525
+#: ../../plugins/Launch/launch/launch.py:534
 msgid "Exit Code"
 msgstr "Afsluit code"
 
@@ -800,10 +800,6 @@ msgstr ""
 #: ../../src/prefdlg.py:830
 msgid "Filetype Associations"
 msgstr "Bestandtype associatie"
-
-#: ../../src/ed_log.py:123
-msgid "Filter"
-msgstr "Filter"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:270
 #: ../../src/ed_toolbar.py:87
@@ -1365,7 +1361,7 @@ msgstr "Platte tekst"
 msgid "Platform Info"
 msgstr "Platform informatie"
 
-#: ../../src/Editra.py:592
+#: ../../src/Editra.py:674
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr "Controleer de voorkeuren dialoog voor eventuele aanpassingen."
 
@@ -1442,11 +1438,11 @@ msgstr "Profiel"
 msgid "Profile Saved as: %s"
 msgstr "Profiel opgeslagen als: %s"
 
-#: ../../src/Editra.py:594
+#: ../../src/Editra.py:676
 msgid "Profile Updated"
 msgstr "Profiel begewerkt"
 
-#: ../../plugins/Launch/launch/launch.py:131
+#: ../../plugins/Launch/launch/launch.py:132
 msgid "Program Executable Command"
 msgstr "Programma commando"
 
@@ -1474,7 +1470,7 @@ msgstr "Proxy instellingen"
 msgid "Proxy URL"
 msgstr "Proxy URL"
 
-#: ../../src/iface.py:275
+#: ../../src/iface.py:277
 msgid "Put an item on the Shelf"
 msgstr "Plaats een item op het paneel"
 
@@ -1578,8 +1574,8 @@ msgid "Revert to Default"
 msgstr "Herstel naar standaard"
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:154
-#: ../../plugins/Launch/launch/launch.py:413
+#: ../../plugins/Launch/launch/launch.py:155
+#: ../../plugins/Launch/launch/launch.py:422
 msgid "Run"
 msgstr "Starten"
 
@@ -1661,7 +1657,7 @@ msgstr "Bestand opgeslagen als: %s"
 msgid "Saved File: %s"
 msgstr "Bestand opgeslagen: %s"
 
-#: ../../plugins/Launch/launch/launch.py:144
+#: ../../plugins/Launch/launch/launch.py:145
 msgid "Script Arguments"
 msgstr "Script parameters"
 
@@ -1713,11 +1709,11 @@ msgstr "Stel een secundair lettertype in for speciale taal gebieden indien kleur
 msgid "Sets the main/default font of the document"
 msgstr "Stelt het standaard lettertype in van het het document"
 
-#: ../../plugins/Launch/launch/launch.py:124
+#: ../../plugins/Launch/launch/launch.py:125
 msgid "Settings"
 msgstr "Instellingen"
 
-#: ../../src/iface.py:274
+#: ../../src/iface.py:276
 msgid "Shelf"
 msgstr "Paneel"
 
@@ -1768,6 +1764,10 @@ msgstr "Witruimte markering"
 #: ../../src/ed_menu.py:635
 msgid "Show Whitespace Markers"
 msgstr "Witruimte markering"
+
+#: ../../src/ed_log.py:124
+msgid "Show output from"
+msgstr ""
 
 #: ../../src/iface.py:183
 msgid "Show the Shelf"
@@ -2027,7 +2027,7 @@ msgstr "naamloze_Map"
 msgid "Update"
 msgstr "Bijwerken"
 
-#: ../../src/Editra.py:368
+#: ../../src/Editra.py:443
 msgid "Update Available"
 msgstr "Update Beschikbaar"
 
@@ -2125,7 +2125,7 @@ msgstr "Tekst Horizontaal omlopen"
 msgid "Written in 100%% Python."
 msgstr "Geschreven in 100%% Python."
 
-#: ../../src/Editra.py:590
+#: ../../src/Editra.py:672
 msgid "Your profile has been updated to the latest version"
 msgstr "Je profiel is geupgrade naar de laatste versie"
 
@@ -2141,7 +2141,7 @@ msgstr "Inzoomen"
 msgid "Zoom Out"
 msgstr "Uitzoomen"
 
-#: ../../plugins/Launch/launch/launch.py:141
+#: ../../plugins/Launch/launch/launch.py:142
 msgid "args"
 msgstr "parameters"
 
@@ -2153,7 +2153,7 @@ msgstr "vet"
 msgid "eol"
 msgstr "einde regel"
 
-#: ../../plugins/Launch/launch/launch.py:128
+#: ../../plugins/Launch/launch/launch.py:129
 msgid "exec"
 msgstr "voer uit"
 
@@ -2167,6 +2167,9 @@ msgstr "onderstrepen"
 
 #~ msgid "Editra | CodeBrowser"
 #~ msgstr "Editra | Code verkenner"
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
 
 #~ msgid "file"
 #~ msgstr "bestand"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-08 19:47-0500\n"
+"POT-Creation-Date: 2008-07-11 21:02-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,7 +128,7 @@ msgstr ""
 msgid "**New Value**"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:407 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr ""
 
@@ -160,7 +160,7 @@ msgstr ""
 msgid "Alias"
 msgstr ""
 
-#: ../../src/ed_log.py:161 ../../src/ed_log.py:234
+#: ../../src/ed_log.py:162 ../../src/ed_log.py:235
 msgid "All"
 msgstr ""
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "All Done"
 msgstr ""
 
-#: ../../src/Editra.py:366
+#: ../../src/Editra.py:441
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -294,7 +294,7 @@ msgstr ""
 msgid "Class Definitions"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:162 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
 msgid "Clear"
 msgstr ""
 
@@ -534,7 +534,7 @@ msgstr ""
 msgid "Downloading To: %s"
 msgstr ""
 
-#: ../../src/Editra.py:372 ../../src/prefdlg.py:1315
+#: ../../src/Editra.py:447 ../../src/prefdlg.py:1315
 msgid "Downloading Update"
 msgstr ""
 
@@ -682,7 +682,7 @@ msgstr ""
 msgid "Executables"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:525
+#: ../../plugins/Launch/launch/launch.py:534
 msgid "Exit Code"
 msgstr ""
 
@@ -767,10 +767,6 @@ msgstr ""
 
 #: ../../src/prefdlg.py:830
 msgid "Filetype Associations"
-msgstr ""
-
-#: ../../src/ed_log.py:123
-msgid "Filter"
 msgstr ""
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:270
@@ -1331,7 +1327,7 @@ msgstr ""
 msgid "Platform Info"
 msgstr ""
 
-#: ../../src/Editra.py:592
+#: ../../src/Editra.py:674
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr ""
 
@@ -1408,11 +1404,11 @@ msgstr ""
 msgid "Profile Saved as: %s"
 msgstr ""
 
-#: ../../src/Editra.py:594
+#: ../../src/Editra.py:676
 msgid "Profile Updated"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:131
+#: ../../plugins/Launch/launch/launch.py:132
 msgid "Program Executable Command"
 msgstr ""
 
@@ -1440,7 +1436,7 @@ msgstr ""
 msgid "Proxy URL"
 msgstr ""
 
-#: ../../src/iface.py:275
+#: ../../src/iface.py:277
 msgid "Put an item on the Shelf"
 msgstr ""
 
@@ -1542,8 +1538,8 @@ msgid "Revert to Default"
 msgstr ""
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:154
-#: ../../plugins/Launch/launch/launch.py:413
+#: ../../plugins/Launch/launch/launch.py:155
+#: ../../plugins/Launch/launch/launch.py:422
 msgid "Run"
 msgstr ""
 
@@ -1625,7 +1621,7 @@ msgstr ""
 msgid "Saved File: %s"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:144
+#: ../../plugins/Launch/launch/launch.py:145
 msgid "Script Arguments"
 msgstr ""
 
@@ -1677,11 +1673,11 @@ msgstr ""
 msgid "Sets the main/default font of the document"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:124
+#: ../../plugins/Launch/launch/launch.py:125
 msgid "Settings"
 msgstr ""
 
-#: ../../src/iface.py:274
+#: ../../src/iface.py:276
 msgid "Shelf"
 msgstr ""
 
@@ -1731,6 +1727,10 @@ msgstr ""
 
 #: ../../src/ed_menu.py:635
 msgid "Show Whitespace Markers"
+msgstr ""
+
+#: ../../src/ed_log.py:124
+msgid "Show output from"
 msgstr ""
 
 #: ../../src/iface.py:183
@@ -1982,7 +1982,7 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: ../../src/Editra.py:368
+#: ../../src/Editra.py:443
 msgid "Update Available"
 msgstr ""
 
@@ -2080,7 +2080,7 @@ msgstr ""
 msgid "Written in 100%% Python."
 msgstr ""
 
-#: ../../src/Editra.py:590
+#: ../../src/Editra.py:672
 msgid "Your profile has been updated to the latest version"
 msgstr ""
 
@@ -2096,7 +2096,7 @@ msgstr ""
 msgid "Zoom Out"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:141
+#: ../../plugins/Launch/launch/launch.py:142
 msgid "args"
 msgstr ""
 
@@ -2108,7 +2108,7 @@ msgstr ""
 msgid "eol"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:128
+#: ../../plugins/Launch/launch/launch.py:129
 msgid "exec"
 msgstr ""
 

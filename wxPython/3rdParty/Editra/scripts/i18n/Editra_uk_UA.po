@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-08 19:47-0500\n"
+"POT-Creation-Date: 2008-07-11 21:02-0500\n"
 "PO-Revision-Date: 2008-07-08 21:08+0200\n"
 "Last-Translator: Igor Chomko <igorchomko@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,7 +132,7 @@ msgstr "**Аліас**"
 msgid "**New Value**"
 msgstr "**Нова змінна**"
 
-#: ../../plugins/Launch/launch/launch.py:407 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "Відмінити"
 
@@ -164,7 +164,7 @@ msgstr "Докладніші"
 msgid "Alias"
 msgstr "Аліас"
 
-#: ../../src/ed_log.py:161 ../../src/ed_log.py:234
+#: ../../src/ed_log.py:162 ../../src/ed_log.py:235
 msgid "All"
 msgstr "Усі"
 
@@ -172,7 +172,7 @@ msgstr "Усі"
 msgid "All Done"
 msgstr "Все Зроблено"
 
-#: ../../src/Editra.py:366
+#: ../../src/Editra.py:441
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -301,7 +301,7 @@ msgstr "Обрати місце збереження"
 msgid "Class Definitions"
 msgstr "Визначення Класу"
 
-#: ../../plugins/Launch/launch/launch.py:162 ../../src/ed_log.py:131
+#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
 msgid "Clear"
 msgstr "Очистити"
 
@@ -545,7 +545,7 @@ msgstr "Завантаження"
 msgid "Downloading To: %s"
 msgstr "Завантаження до: %s"
 
-#: ../../src/Editra.py:372 ../../src/prefdlg.py:1315
+#: ../../src/Editra.py:447 ../../src/prefdlg.py:1315
 msgid "Downloading Update"
 msgstr "Поновлення завантаження"
 
@@ -702,7 +702,7 @@ msgstr "Команди на виконання"
 msgid "Executables"
 msgstr "Виконувані"
 
-#: ../../plugins/Launch/launch/launch.py:525
+#: ../../plugins/Launch/launch/launch.py:534
 msgid "Exit Code"
 msgstr "Вийти з коду"
 
@@ -796,10 +796,6 @@ msgstr ""
 #: ../../src/prefdlg.py:830
 msgid "Filetype Associations"
 msgstr "Асоціації типів файлів"
-
-#: ../../src/ed_log.py:123
-msgid "Filter"
-msgstr "Фільтр"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:270
 #: ../../src/ed_toolbar.py:87
@@ -1361,7 +1357,7 @@ msgstr "Простий текст"
 msgid "Platform Info"
 msgstr "Інформація щодо платформи"
 
-#: ../../src/Editra.py:592
+#: ../../src/Editra.py:674
 msgid "Please check the preferences dialog to reset your preferences"
 msgstr "Перевірте,будь-ласка, діалог налаштувань для перезавантаження ваших преференцій"
 
@@ -1438,11 +1434,11 @@ msgstr "Профіль"
 msgid "Profile Saved as: %s"
 msgstr "Профіль збережено як: %s"
 
-#: ../../src/Editra.py:594
+#: ../../src/Editra.py:676
 msgid "Profile Updated"
 msgstr "Профіль оновлено"
 
-#: ../../plugins/Launch/launch/launch.py:131
+#: ../../plugins/Launch/launch/launch.py:132
 msgid "Program Executable Command"
 msgstr "Команда на виконання програми"
 
@@ -1470,7 +1466,7 @@ msgstr "Установки Проксі"
 msgid "Proxy URL"
 msgstr " URL Проксі"
 
-#: ../../src/iface.py:275
+#: ../../src/iface.py:277
 msgid "Put an item on the Shelf"
 msgstr "Покласти елемент на цю Поличку"
 
@@ -1574,8 +1570,8 @@ msgid "Revert to Default"
 msgstr "Повернутися до По замовчуванню"
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:154
-#: ../../plugins/Launch/launch/launch.py:413
+#: ../../plugins/Launch/launch/launch.py:155
+#: ../../plugins/Launch/launch/launch.py:422
 msgid "Run"
 msgstr "Виконати"
 
@@ -1657,7 +1653,7 @@ msgstr "Зберегти файл як: %s"
 msgid "Saved File: %s"
 msgstr "Збережений файл: %s"
 
-#: ../../plugins/Launch/launch/launch.py:144
+#: ../../plugins/Launch/launch/launch.py:145
 msgid "Script Arguments"
 msgstr "Аргументи скрипта"
 
@@ -1709,11 +1705,11 @@ msgstr "Встановлює вторинні шрифти,що використ
 msgid "Sets the main/default font of the document"
 msgstr "Встановлює головний/по замовчуванню шрифт документа"
 
-#: ../../plugins/Launch/launch/launch.py:124
+#: ../../plugins/Launch/launch/launch.py:125
 msgid "Settings"
 msgstr "Установки"
 
-#: ../../src/iface.py:274
+#: ../../src/iface.py:276
 msgid "Shelf"
 msgstr "Поличка"
 
@@ -1764,6 +1760,10 @@ msgstr "Показати пробільний символ"
 #: ../../src/ed_menu.py:635
 msgid "Show Whitespace Markers"
 msgstr "Показати Маркери Символу пробілу"
+
+#: ../../src/ed_log.py:124
+msgid "Show output from"
+msgstr ""
 
 #: ../../src/iface.py:183
 msgid "Show the Shelf"
@@ -2023,7 +2023,7 @@ msgstr "Папка_без назви"
 msgid "Update"
 msgstr "Оновити"
 
-#: ../../src/Editra.py:368
+#: ../../src/Editra.py:443
 msgid "Update Available"
 msgstr "Оновлення наявне"
 
@@ -2121,7 +2121,7 @@ msgstr "Огорнути текст горизонтально"
 msgid "Written in 100%% Python."
 msgstr "Написано на 100%% Python."
 
-#: ../../src/Editra.py:590
+#: ../../src/Editra.py:672
 msgid "Your profile has been updated to the latest version"
 msgstr "Ваш профіль було оновлено до наступної версії"
 
@@ -2137,7 +2137,7 @@ msgstr "Збільшити масштаб зображення"
 msgid "Zoom Out"
 msgstr "Зменшити масштаб зображення"
 
-#: ../../plugins/Launch/launch/launch.py:141
+#: ../../plugins/Launch/launch/launch.py:142
 msgid "args"
 msgstr "args"
 
@@ -2149,7 +2149,7 @@ msgstr "жирний"
 msgid "eol"
 msgstr "eol"
 
-#: ../../plugins/Launch/launch/launch.py:128
+#: ../../plugins/Launch/launch/launch.py:129
 msgid "exec"
 msgstr "exec"
 
@@ -2163,6 +2163,9 @@ msgstr "підкреслення"
 
 #~ msgid "Editra | CodeBrowser"
 #~ msgstr "Editra | Браузер кодування"
+
+#~ msgid "Filter"
+#~ msgstr "Фільтр"
 
 #~ msgid "file"
 #~ msgstr "файл"
