@@ -251,7 +251,6 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         """
         if evt.GetId() == self._chFiles.GetId():
-            print "SET IT"
             self.SetFile(self._fnames[evt.GetSelection()])
         else:
             evt.Skip()
