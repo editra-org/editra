@@ -60,7 +60,8 @@ class LaunchWindow(ctrlbox.ControlBox):
         # Attributes
         self._mw = self.__FindMainWindow()
         self._buffer = OutputDisplay(self)
-        self._slbl = None # Created in __DoLayout
+        self._fnames = list()
+        self._chFiles = None # Created in __DoLayout
         self._worker = None
         self._busy = False
         self._isready = False
@@ -94,6 +95,7 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_CHOICE, self.OnChoice)
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
@@ -132,8 +134,8 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         # Script Label
         ctrlbar.AddControl((5, 5), wx.ALIGN_LEFT)
-        self._slbl = wx.StaticText(ctrlbar, label="")
-        ctrlbar.AddControl(self._slbl, wx.ALIGN_LEFT)
+        self._chFiles = wx.Choice(ctrlbar, choices=[''])
+        ctrlbar.AddControl(self._chFiles, wx.ALIGN_LEFT)
 
         # Args
         ctrlbar.AddControl((5, 5), wx.ALIGN_LEFT)
@@ -243,6 +245,17 @@ class LaunchWindow(ctrlbox.ControlBox):
         else:
             evt.Skip()
 
+    def OnChoice(self, evt):
+        """Handle events from the Choice controls
+        @param evt: wx.CommandEvent
+
+        """
+        if evt.GetId() == self._chFiles.GetId():
+            print "SET IT"
+            self.SetFile(self._fnames[evt.GetSelection()])
+        else:
+            evt.Skip()
+
     def OnConfigExit(self, msg):
         """Update current state when the config dialog has been closed
         @param msg: Message Object
@@ -262,11 +275,14 @@ class LaunchWindow(ctrlbox.ControlBox):
         if not self._mw.IsActive():
             return
 
+        # Update the file choice control
+        self._config['lang'] = GetLangIdFromMW(self._mw)
+        self.UpdateCurrentFiles(self._config['lang'])
+
         fname = msg.GetData()
         self.SetFile(fname)
 
         # Setup filetype settings
-        self._config['lang'] = GetLangIdFromMW(self._mw)
         self.RefreshControlBar()
 
     def OnPageChanged(self, msg):
@@ -281,6 +297,7 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         mval = msg.GetData()
         ctrl = mval[0].GetCurrentCtrl()
+        self.UpdateCurrentFiles(ctrl.GetLangId())
         if hasattr(ctrl, 'GetFileName'):
             self.SetupControlBar(ctrl)
 
@@ -326,9 +343,8 @@ class LaunchWindow(ctrlbox.ControlBox):
         exe_ch.SetItems(cmds)
         util.Log("[Launch][info] Found commands %s" % str(cmds))
         if handler.GetName() != handlers.DEFAULT_HANDLER and len(self.GetFile()):
-            exe_ch.Enable()
-            args_txt.Enable()
-            run_btn.Enable()
+            for ctrl in (exe_ch, args_txt, run_btn, self._chFiles):
+                ctrl.Enable()
             self._isready = True
             if self._config['lang'] == self._config['prelang'] and len(csel):
                 exe_ch.SetStringSelection(csel)
@@ -337,9 +353,8 @@ class LaunchWindow(ctrlbox.ControlBox):
             self.GetControlBar().Layout()
         else:
             self._isready = False
-            run_btn.Disable()
-            args_txt.Disable()
-            exe_ch.Disable()
+            for ctrl in (exe_ch, args_txt, run_btn, self._chFiles):
+                ctrl.Disable()
 
     def StartStopProcess(self):
         """Run or abort the context of the current process if possible"""
@@ -368,9 +383,9 @@ class LaunchWindow(ctrlbox.ControlBox):
         @param fname: file path
 
         """
+        # Set currently selected file
         self._config['file'] = fname
-        sname = os.path.split(fname)[1]
-        self._slbl.SetLabel(_("file") + ": " + sname)
+        self._chFiles.SetStringSelection(os.path.split(fname)[1])
         self.GetControlBar().Layout()
 
     def SetLangId(self, langid):
@@ -450,6 +465,22 @@ class LaunchWindow(ctrlbox.ControlBox):
         self._buffer.SetErrorColor(colors['errorf'], colors['errorb'])
         self._buffer.SetInfoColor(colors['infof'], colors['infob'])
         self._buffer.SetWarningColor(colors['warnf'], colors['warnb'])
+
+    def UpdateCurrentFiles(self, lang_id):
+        """Update the current set of open files that are of the same
+        type.
+        @param lang_id: Editra filetype id
+        @postcondition: all open files that are of the same type are set
+                        and stored in the file choice control.
+
+        """
+        self._fnames = list()
+        for txt_ctrl in self._mw.GetNotebook().GetTextControls():
+            if lang_id == txt_ctrl.GetLangId():
+                self._fnames.append(txt_ctrl.GetFileName())
+
+        self._chFiles.SetItems(os.path.basename(fname)
+                               for fname in self._fnames)
 
 #-----------------------------------------------------------------------------#
 
