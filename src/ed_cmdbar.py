@@ -418,6 +418,11 @@ class CommandExecuter(wx.SearchCtrl):
 
         self.Bind(wx.EVT_TEXT_ENTER, self.OnEnter)
         self.Bind(ed_event.EVT_NOTIFY, self.OnPopupNotify)
+        ed_msg.Subscribe(self._UpdateCwd, ed_msg.EDMSG_UI_NB_CHANGED)
+        ed_msg.Subscribe(self._UpdateCwd, ed_msg.EDMSG_FILE_SAVED)
+
+    def __del__(self):
+        ed_msg.Unsubscribe(self._UpdateCwd)
 
     def _AdjustSize(self):
         """Checks width of text as its added and dynamically resizes
@@ -448,6 +453,20 @@ class CommandExecuter(wx.SearchCtrl):
             self.AppendText(val.replace(cval[-1], '', 1))
         else:
             self.SetValue(" ".join([cval[0], val]))
+        self.SetInsertionPoint(self.GetLastPosition())
+
+    def _UpdateCwd(self, msg=None):
+        """Update the current working directory to that of the current
+        buffer.
+
+        """
+        # Only Update if we are the currently active window
+        tlp = self.GetTopLevelParent()
+        if tlp.IsActive():
+            ctrl = tlp.GetNotebook().GetCurrentCtrl()
+            fname = ctrl.GetFileName()
+            if len(fname):
+                self._curdir = os.path.dirname(fname)
 
     def ChangeDir(self, cmd):
         """Change to a directory based on cd command
@@ -686,6 +705,7 @@ class CommandExecuter(wx.SearchCtrl):
                 self._popup.Show()
         else:
             self._popup.Hide()
+        self.SetInsertionPoint(self.GetLastPosition())
 
     def OnEnter(self, evt):
         """Get the currently entered command string and execute it.
@@ -876,7 +896,7 @@ class LineCtrl(wx.SearchCtrl):
 #-----------------------------------------------------------------------------#
 # TODO: merge the common parts of these two classes into a single base class
 
-class PopupList(wx.Frame):
+class PopupList(wx.MiniFrame):
     def __init__(self, parent, choices=list(), pos=wx.DefaultPosition):
 
         style = wx.FRAME_NO_TASKBAR | wx.FRAME_FLOAT_ON_PARENT
@@ -885,7 +905,7 @@ class PopupList(wx.Frame):
         else:
             style = style | wx.SIMPLE_BORDER
 
-        wx.Frame.__init__(self, parent, pos=pos, style=style)
+        wx.MiniFrame.__init__(self, parent, pos=pos, style=style)
 
         # Attributes
         self._list = wx.ListBox(self, choices=choices,
@@ -903,6 +923,7 @@ class PopupList(wx.Frame):
         self.SetAutoLayout(True)
 
         # Event Handlers
+        self.Bind(wx.EVT_CHAR, lambda evt: parent.GetEventHandler().ProcessEvent(evt))
         self.Bind(wx.EVT_SET_FOCUS, self.OnFocus)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnSelection)
         self.Bind(wx.EVT_SIZE, self.OnSize)
