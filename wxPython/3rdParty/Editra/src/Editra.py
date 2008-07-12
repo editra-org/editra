@@ -23,6 +23,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import base64
 import locale
 import time
 import getopt
@@ -55,11 +56,15 @@ import ed_txt
 import ed_event
 import updater
 import plugin
+import ed_ipc
 import extern.events as events
 
 #--------------------------------------------------------------------------#
 # Global Variables
 ID_UPDATE_CHECK = wx.NewId()
+
+# Commands (here temporarly)
+APP_CMD_OPEN_WINDOW = u"Editra.OpenWindow"
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -81,16 +86,6 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._log = dev_tool.DEBUGP
         self._lock = False
         self._windows = dict()
-
-        # Setup Locale
-        locale.setlocale(locale.LC_ALL, '')
-        self.locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
-        if self.locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
-            self.locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
-            self.locale.AddCatalog(ed_glob.PROG_NAME)
-        else:
-            del self.locale
-            self.locale = None
 
         # Setup Plugins after locale as they may have resource that need to
         # be loaded.
@@ -117,9 +112,50 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         """
         self.SetAppName(ed_glob.PROG_NAME)
+
         self._log = dev_tool.DEBUGP
         self._log("[app][info] Editra is Initializing")
 
+        # Setup the instance checker
+        instance_name = u"%s-%s" % (self.GetAppName(), wx.GetUserId())
+        self._isfirst = False            # Is the first instance
+        self._instance = wx.SingleInstanceChecker(instance_name)
+        if self._instance.IsAnotherRunning():
+            try:
+                opts, args = getopt.getopt(sys.argv[1:], "dhv",
+                                           ['debug', 'help', 'version'])
+            except getopt.GetoptError, msg:
+                self._log("[app][err] %s" % str(msg))
+                args = list()
+
+            if not len(args):
+                args.append(APP_CMD_OPEN_WINDOW)
+
+            ed_ipc.SendCommands(args, profiler.Profile_Get('SESSION_KEY'))
+        else:
+            self._log("[app][info] Starting Ipc server...")
+            # Set the session key and save it to the users profile so
+            # that other instances can access the server
+            key = unicode(base64.b64encode(os.urandom(8), 'zZ'))
+            key = wx.GetUserName() + key
+            profiler.Profile_Set('SESSION_KEY', key)
+            path = profiler.Profile_Get('MYPROFILE')
+            profiler.Profile().Write(path)
+            self._server = ed_ipc.EdIpcServer(self, profiler.Profile_Get('SESSION_KEY'))
+            self._server.start()
+            self._isfirst = True
+
+        # Setup Locale
+        locale.setlocale(locale.LC_ALL, '')
+        self.locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
+        if self.locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
+            self.locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
+            self.locale.AddCatalog(ed_glob.PROG_NAME)
+        else:
+            del self.locale
+            self.locale = None
+
+        # Setup the Error Reporter
         if profiler.Profile_Get('REPORTER', 'bool', True):
             sys.excepthook = dev_tool.ExceptionHook
 
@@ -128,8 +164,18 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self.Bind(wx.EVT_MENU, self.OnNewWindow, id=ed_glob.ID_NEW_WINDOW)
         self.Bind(wx.EVT_MENU, self.OnCloseWindow)
         self.Bind(ed_event.EVT_NOTIFY, self.OnNotify)
+        self.Bind(ed_ipc.EVT_COMMAND_RECV, self.OnCommandRecieved)
 
         return True
+
+    def Destroy(self):
+        """Destroy the application"""
+        try:
+            # Cleanup the instance checker
+            del self._instance
+        except AttributeError:
+            pass
+        wx.App.Destroy(self)
 
     def Exit(self, force=False):
         """Exit the program
@@ -140,7 +186,17 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._pluginmgr.WritePluginConfig()
         profiler.Profile().Write(profiler.Profile_Get('MYPROFILE'))
         if not self._lock or force:
-            wx.App.Exit(self)
+            if hasattr(self, 'server'):
+                self.server.ShutDown()
+
+            try:
+                # Cleanup the instance checker
+                del self._instance
+            except AttributeError:
+                pass
+
+            # Exit the app
+            wx.App.ExitMainLoop(self)
 
     def GetLocaleObject(self):
         """Get the locale object owned by this app. Use this method to add
@@ -238,6 +294,13 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """
         return self._lock
 
+    def IsOnlyInstance(self):   
+        """Check if this app is the the first instance that is running
+        @return: bool
+
+        """
+        return self._isfirst
+
     def Lock(self):
         """Locks the app from exiting
         @postcondition: program is locked from exiting
@@ -316,6 +379,18 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             self.OpenNewWindow(caller=frame)
         else:
             evt.Skip()
+
+    def OnCommandRecieved(self, evt):
+        """Recieve commands from the IPC server"""
+        cmds = evt.GetValue()
+        if len(cmds) == 1 and cmds[0] == APP_CMD_OPEN_WINDOW:
+            self.OpenNewWindow()
+        elif len(cmds):
+            for fname in evt.GetValue():
+                if len(fname):
+                    self.MacOpenFile(fname)
+        else:
+            pass
 
     def OnCloseWindow(self, evt):
         """Close the currently active window
@@ -583,6 +658,13 @@ def Main():
     # Create Application
     dev_tool.DEBUGP("[main][info] Initializing Application...")
     editra_app = Editra(False)
+
+    # Check if this is the only instance, if its not exit since
+    # any of the opening commands have already been passed to the
+    # master instance
+    if not editra_app.IsOnlyInstance():
+        editra_app.Destroy()
+        os._exit(0)
 
     if profile_updated:
         # Make sure window iniliazes to default position

@@ -72,6 +72,7 @@ _DEFAULTS = {
            'REPORTER'   : True,             # Error Reporter is Active
            'SAVE_POS'   : True,             # Remember Carat positions
            'SAVE_SESSION' : False,          # Load previous session on startup
+           'SESSION_KEY' : '',              # Ipc Session Server Key
            'SET_WPOS'   : True,             # Remember window position
            'SET_WSIZE'  : True,             # Remember mainwindow size on exit
            'SHOW_EDGE'  : True,             # Show Edge Guide
