@@ -114,6 +114,7 @@ class EdPages(FNB.FlatNotebook):
         to reopen the file again the function will return True else it will
         return False.
         @param path: file to check for
+        @return: bool
 
         """
         result = wx.ID_YES
@@ -127,11 +128,7 @@ class EdPages(FNB.FlatNotebook):
             result = mdlg.ShowModal()
             mdlg.Destroy()
             if result == wx.ID_NO:
-                for page in xrange(self.GetPageCount()):
-                    ctrl = self.GetPage(page)
-                    if path == ctrl.GetFileName():
-                        self.ChangePage(page)
-                        break
+                self.GotoPage(path)
         elif os.path.exists(path) and not os.path.isfile(path):
             result = wx.ID_NO
         else:
@@ -208,16 +205,25 @@ class EdPages(FNB.FlatNotebook):
         """
         self.UpdateAllImages()
 
-    def OpenPage(self, path, filename):
+    def OpenPage(self, path, filename, quiet=False):
         """Open a File Inside of a New Page
         @param path: files base path
         @param filename: name of file to open
+        @keyword quiet: Open/Switch to the file quietly if
+                        it is already open.
 
         """
         path2file = os.path.join(path, filename)
 
         # Check if file needs to be opened
-        if not self._NeedOpen(path2file):
+        # TODO: these steps could be combined together with some
+        #       refactoring of the _NeedOpen method. Requires extra
+        #       testing though to check for dependancies on current
+        #       behavior.
+        if quiet and self.HasFileOpen(path2file):
+            self.GotoPage(path2file)
+            return
+        elif not self._NeedOpen(path2file):
             return
 
         # Create new control to place text on if necessary
@@ -340,6 +346,17 @@ class EdPages(FNB.FlatNotebook):
         control.SetFocus()
         self.control = control
         return current_page
+
+    def GotoPage(self, fname):
+        """Go to the page containing the buffer with the given file.
+        @param fname: file path (string)
+
+        """
+        for page in xrange(self.GetPageCount()):
+            ctrl = self.GetPage(page)
+            if fname == ctrl.GetFileName():
+                self.ChangePage(page)
+                break
 
     def GetPageText(self, pg_num):
         """Gets the tab text from the given page number, stripping
