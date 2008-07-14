@@ -427,8 +427,6 @@ class CommandExecuter(wx.SearchCtrl):
     def _AdjustSize(self):
         """Checks width of text as its added and dynamically resizes
         the control as needed.
-        @postcondition: control is resized to fit the text in it upto a max
-                        width of 75 percent of the client space available.
 
         """
         ext = self.GetTextExtent(self.GetValue())[0]
@@ -436,7 +434,11 @@ class CommandExecuter(wx.SearchCtrl):
         if ext > curr_w * .5:
             max_w = self.GetParent().GetClientSize().GetWidth() * .8
             nwidth = min(ext * 1.3, max_w)
+            pwidth = self._popup.GetBestSize()[0]
+            if pwidth > nwidth:
+                nwidth = pwidth
             self.SetClientSize((nwidth, curr_h))
+            self._popup.SetSize((nwidth, -1))
         elif ((curr_w > ext * 1.18) and curr_w > 150):
             nwidth = max(ext * 1.18, 150)
             self.SetClientSize((nwidth, curr_h))
@@ -1097,13 +1099,7 @@ class PopupWinList(wx.PopupWindow):
         self.SetAutoLayout(True)
 
         # Event Handlers
-#         self.Bind(wx.EVT_SET_FOCUS, self.OnFocus)
-#         self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnSelection)
-#         self.Bind(wx.EVT_SIZE, self.OnSize)
-#         self._list.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-
-#         self._list.SetFocus()
-#         self.Hide()
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def AdvanceSelection(self, down=True):
         """Advance the selection in the list
@@ -1128,6 +1124,12 @@ class PopupWinList(wx.PopupWindow):
 
         """
         return self._list.GetStringSelection()
+
+    def OnSize(self, evt):
+        csz = self.GetClientSize()
+        csz.SetWidth(csz.x + wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X))
+        self._list.SetSize(csz)
+        evt.Skip()
 
     def SetBestSelection(self, prefix):
         """Set the selection to the one that bests matches the
