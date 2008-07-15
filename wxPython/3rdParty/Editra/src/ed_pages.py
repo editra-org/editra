@@ -735,7 +735,7 @@ def AskToReload(win, cfile):
             errmap = dict(filename=cfile, errmsg=rmsg)
             mdlg = wx.MessageDialog(win.frame,
                                     _("Failed to reload %(filename)s:\n"
-                                      "Error: %(errmsg)s") % errmsg,
+                                      "Error: %(errmsg)s") % errmap,
                                     _("Error"),
                                     wx.OK | wx.ICON_ERROR)
             mdlg.ShowModal()
