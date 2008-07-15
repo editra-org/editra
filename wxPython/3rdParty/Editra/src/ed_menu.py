@@ -484,6 +484,10 @@ class EdMenuBar(wx.MenuBar):
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVEALL),
                         _("Save all open pages"))
         filemenu.AppendSeparator()
+        filemenu.Append(ed_glob.ID_REVERT_FILE, _("Revert to Saved") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_REVERT_FILE),
+                        _("Revert file to last save point"))
+        filemenu.AppendSeparator()
         pmenu = EdMenu()
         pmenu.Append(ed_glob.ID_SAVE_PROFILE, _("Save Profile") + \
                      EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVE_PROFILE),
