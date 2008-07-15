@@ -1109,6 +1109,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         e_map = { ed_glob.ID_COPY  : self.Copy, ed_glob.ID_CUT  : self.Cut,
                   ed_glob.ID_PASTE : self.Paste, ed_glob.ID_UNDO : self.Undo,
                   ed_glob.ID_REDO  : self.Redo, ed_glob.ID_INDENT : self.Tab,
+                  ed_glob.ID_REVERT_FILE : self.RevertToSaved,
                   ed_glob.ID_KWHELPER: self.ShowKeywordHelp,
                   ed_glob.ID_CUT_LINE : self.LineCut,
                   ed_glob.ID_COPY_LINE : self.LineCopy,

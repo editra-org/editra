@@ -38,7 +38,8 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
             'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
-            'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE', 'ID_SHOW_SB'
+            'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE', 'ID_SHOW_SB',
+            'ID_REVERT_FILE'
 ]
 
 #---- Project Info ----#
@@ -92,6 +93,7 @@ ID_CLOSE_WINDOW  = wx.NewId()
 ID_SAVE          = wx.ID_SAVE
 ID_SAVEAS        = wx.ID_SAVEAS
 ID_SAVEALL       = wx.NewId()
+ID_REVERT_FILE   = wx.ID_REVERT_TO_SAVED
 ID_SAVE_PROFILE  = wx.NewId()
 ID_LOAD_PROFILE  = wx.NewId()
 ID_PRINT         = wx.ID_PRINT

@@ -33,6 +33,8 @@ settings for opening new files in tabs or windows.
 +Updated translations
 +Shelf window tabs are now shown on the bottom to keep the shelf controls
 closer to the editor buffer.
++Add Revert to Saved menu action for reverting a file back to the last save
+point.
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script

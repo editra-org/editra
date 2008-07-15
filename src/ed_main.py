@@ -147,6 +147,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_SAVE, self.OnSave),
                                        (ID_SAVEAS, self.OnSaveAs),
                                        (ID_SAVEALL, self.OnSave),
+                                       (ID_REVERT_FILE, self.DispatchToControl),
                                        (ID_SAVE_PROFILE, self.OnSaveProfile),
                                        (ID_LOAD_PROFILE, self.OnLoadProfile),
                                        (ID_EXIT, wx.GetApp().OnExit),
@@ -193,7 +194,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                   id=wx.ID_FILE1, id2=wx.ID_FILE9)
 
         # Update UI Handlers
-        self._handlers['ui'].extend([# Edit Menu
+        self._handlers['ui'].extend([# File Menu
+                                     (ID_REVERT_FILE, self.OnUpdateFileUI),
+                                     # Edit Menu
                                      (ID_COPY, self.OnUpdateClipboardUI),
                                      (ID_CUT, self.OnUpdateClipboardUI),
                                      (ID_PASTE, self.OnUpdateClipboardUI),
@@ -929,7 +932,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                          ID_TRIM_WS, ID_SHOW_EDGE, ID_MACRO_START,
                          ID_MACRO_STOP, ID_MACRO_PLAY, ID_TO_LOWER,
                          ID_TO_UPPER, ID_KWHELPER, ID_USE_SOFTTABS,
-                         ID_GOTO_MBRACE, ID_HLCARET_LINE
+                         ID_GOTO_MBRACE, ID_HLCARET_LINE, ID_REVERT_FILE
                          ])
         menu_ids.extend(active_only)
 
@@ -940,6 +943,24 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         return
 
     # Menu Update Handlers
+    def OnUpdateFileUI(self, evt):
+        """Update filemenu items
+        @param evt: EVT_UPDATE_UI
+
+        """
+        if not self.IsActive():
+            return
+
+        e_id = evt.GetId()
+        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+        # Slow the update interval to reduce overhead
+        evt.SetUpdateInterval(160)
+        if e_id == ID_REVERT_FILE:
+            ctrl = self.nb.GetCurrentCtrl()
+            evt.Enable(ctrl.GetModify())
+        else:
+            evt.Skip()
+
     def OnUpdateClipboardUI(self, evt):
         """Update clipboard related menu/toolbar items
         @param evt: EVT_UPDATE_UI
