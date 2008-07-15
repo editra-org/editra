@@ -152,7 +152,8 @@ class EdIpcServer(threading.Thread):
 def SendCommands(cmds, key):
     """Send commands to the running instance of Editra
     @param cmds: List of command strings
-    @param key: Server authentication key
+    @param key: Server session authentication key
+    @return: bool
 
     """
     if not len(cmds):
@@ -164,17 +165,19 @@ def SendCommands(cmds, key):
     # Append the message end clause
     cmds.append(MSGEND)
 
-    # Setup the client socket
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect((socket.gethostname(), EDPORT))
-
-    # Server expects commands delimited by ;
-    client.send(u";".join(cmds))
     try:
-        self.socket.shutdown(socket.SHUT_RDWR)
+        # Setup the client socket
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.connect((socket.gethostname(), EDPORT))
+
+        # Server expects commands delimited by ;
+        client.send(u";".join(cmds))
+        client.shutdown(socket.SHUT_RDWR)
+        client.close()
     except:
-        pass
-    client.close()
+        return False
+    else:
+        return True
 
 #--------------------------------------------------------------------------#
 # Test
