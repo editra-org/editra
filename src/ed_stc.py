@@ -1789,7 +1789,32 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 return True, ''
         else:
             self.LOG("[ed_stc][err] %s does not exists, cant reload." % cfile)
-            return False, "%s does not exist" % cfile
+            return False, _("%s does not exist") % cfile
+
+    def RevertFile(self):
+        """Revert all the changes made to the file since it was opened
+        @postcondition: undo history is re-wound to initial state and file
+                        is re-saved if it has an on disk file.
+
+        """
+        self.Freeze()
+        while self.CanUndo():
+            self.Undo()
+        self.Thaw()
+
+        fname = self.GetFileName()
+        if len(fname):
+            self.SaveFile(fname)
+
+    def RevertToSaved(self):
+        """Revert the current buffer back to the last save point"""
+        self.Freeze()
+        while self.CanUndo():
+            if self.GetModify():
+                self.Undo()
+            else:
+                break
+        self.Thaw()
 
     def SaveFile(self, path):
         """Save buffers contents to disk
