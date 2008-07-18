@@ -226,6 +226,7 @@ class ProgressStatusBar(wx.StatusBar):
         @keyword rate: rate to update progress bar in msec
 
         """
+        self.__Reposition()
         bfield = self.GetFieldsCount() - 1
         self.tmp = self.GetStatusText(bfield)
         self.SetStatusText('', bfield) # Clear the progress field
