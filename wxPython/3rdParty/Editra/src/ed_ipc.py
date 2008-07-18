@@ -11,6 +11,37 @@ Classes and utilities for handling IPC between running instances of Editra. The
 IPC is done through sockets using the TCP protocol. Message packets have a
 specified format and authentication method that is described in L{EdIpcServer}.
 
+Remote Control Protocol:
+
+This server and its relationship with the main application object allows for
+some limited remote control of Editra. The server's basic message protocol
+requirements are as follows.
+
+SESSION_KEY;message1;message2;...;MSGEND
+
+Where the SESSION_KEY is the unique authentication key created by the app that
+started the server. This key is stored in the user profile and only valid for
+the current running session of Editra. The MSGEND indicator is the L{MSGEND}
+string defined in this file (*EDEND*). If both of these parts of the message
+are found and correct the server will forward the messages that are packed in
+between to the app.
+
+Message Format:
+
+Currently the types of messages that the app will process come in the following
+two formats.
+
+  1) Send a file path or name to open the file. If the file is already open
+     then that tab will be set as the current tab.
+
+  2) To control the currently selected buffer commands must be formatted as
+     follows. Cmd.EditraStc::MethodName the first part of the string is used
+     to identify this is a command being issued from the server, the second part
+     identifies what object the command is to be called on. The identification
+     string is separated from the command by :: and finally the command is the
+     string representation of the actual method to call on the buffer.
+
+@example: SESSION_KEY;Cmd.EditraStc::Revert;/usr/home/foo/test.py;MSGEND
 @summary: Editra's IPC Library
 
 """
@@ -19,7 +50,7 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------#
 # Imports
 import wx
 import threading
@@ -27,32 +58,32 @@ import socket
 import time
 #import select
 
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------#
 # Globals
 
 # Port choosing algorithm ;)
 EDPORT = 10 * int('ed', 16) + sum(ord(x) for x in "itr") + int('a', 16) 
 MSGEND = u"*EDEND*"
 
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------#
 
 edEVT_COMMAND_RECV = wx.NewEventType()
 EVT_COMMAND_RECV = wx.PyEventBinder(edEVT_COMMAND_RECV, 1)
 class IpcServerEvent(wx.PyCommandEvent):
     """Event to signal the server has recieved some commands"""
-    def __init__(self, etype, eid, value=None):
+    def __init__(self, etype, eid, values=None):
         """Creates the event object"""
         wx.PyCommandEvent.__init__(self, etype, eid)
-        self._value = value
+        self._value = values
 
-    def GetValue(self):
-        """Returns the value from the event.
+    def GetCommands(self):
+        """Returns the list of commands sent to the server
         @return: the value of this event
 
         """
         return self._value
 
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------#
 
 class EdIpcServer(threading.Thread):
     """Create an instance of IPC server for Editra. IPC is handled through
@@ -132,11 +163,12 @@ class EdIpcServer(threading.Thread):
             # the input and dispatch to the app.
             if recieved.startswith(self.__key) and recieved.endswith(MSGEND):
                 recieved = recieved.replace(self.__key, u'', 1)
+                # Get the separate commands
                 cmds = [ cmd
                          for cmd in recieved.rstrip(MSGEND).split(u";")
                          if len(cmd) ]
 
-                evt = IpcServerEvent(edEVT_COMMAND_RECV, -1, cmds)
+                evt = IpcServerEvent(edEVT_COMMAND_RECV, wx.ID_ANY, cmds)
                 wx.CallAfter(wx.PostEvent, self.app, evt)
 
         # Shutdown Server
@@ -147,7 +179,7 @@ class EdIpcServer(threading.Thread):
 
         self.socket.close()
 
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------#
 
 def SendCommands(cmds, key):
     """Send commands to the running instance of Editra
@@ -179,7 +211,7 @@ def SendCommands(cmds, key):
     else:
         return True
 
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------#
 # Test
 if __name__ == '__main__':
     ID_GO = wx.NewId()

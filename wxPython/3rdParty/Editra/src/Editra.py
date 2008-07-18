@@ -57,6 +57,7 @@ import ed_event
 import updater
 import plugin
 import ed_ipc
+import ed_msg
 import extern.events as events
 
 #--------------------------------------------------------------------------#
@@ -246,6 +247,19 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         return awin
 
+    def GetCurrentBuffer(self):
+        """Get the current buffer from the active window or None
+        @return: EditraStc
+
+        """
+        win = self.GetTopWindow()
+        if getattr(win, '__name__', None) != u"MainWindow":
+            win = self.GetActiveWindow()
+            if win is None:
+                return win
+                
+        return win.GetNotebook().GetCurrentCtrl()
+
     def GetMainWindows(self):
         """Returns a list of all open main windows
         @return: list of L{MainWindow} instances of this app (list may be empty)
@@ -381,16 +395,28 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             evt.Skip()
 
     def OnCommandRecieved(self, evt):
-        """Recieve commands from the IPC server"""
-        cmds = evt.GetValue()
-        if len(cmds) == 1 and cmds[0] == APP_CMD_OPEN_WINDOW:
-            self.OpenNewWindow()
-        elif len(cmds):
-            for fname in evt.GetValue():
-                if len(fname):
-                    self.MacOpenFile(fname)
-        else:
-            pass
+        """Recieve commands from the IPC server
+        @todo: move command processing into own module
+
+        """
+        cmds = evt.GetCommands()
+        for cmdstr in cmds:
+            if u"::" in cmdstr:
+                target, cmd = cmdstr.split(u"::")
+                if target == u"Cmd.EditraStc":
+                    cbuf = self.GetCurrentBuffer()
+                    if cbuf is not None and hasattr(cbuf, cmd):
+                        try:
+                            getattr(cbuf, cmd)()
+                        except:
+                            self._log("[app][err] Invalid Command %s" % cmdstr)
+            else:
+                if cmdstr == APP_CMD_OPEN_WINDOW:
+                    self.OpenNewWindow()
+                elif len(cmdstr):
+                    self.MacOpenFile(cmdstr)
+                else:
+                    self._log("[app][warn] Unknown Command %s" % cmdstr)
 
     def OnCloseWindow(self, evt):
         """Close the currently active window
