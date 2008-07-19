@@ -21,19 +21,21 @@ import os
 import sys
 import webbrowser
 import wx
+import wx.lib.scrolledpanel as scrolled
 
 sys.path.insert(0, os.path.abspath('../../'))
 import src.eclib.platebtn as platebtn
 
 #-----------------------------------------------------------------------------#
 
-class TestPanel(wx.Panel):
+class TestPanel(scrolled.ScrolledPanel):
     def __init__(self, parent, log):
         self.log = log
-        wx.Panel.__init__(self, parent)
+        scrolled.ScrolledPanel.__init__(self, parent, wx.ID_ANY, size=(500,500))
 
         # Layout
         self.__DoLayout()
+        self.SetupScrolling()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
@@ -56,9 +58,7 @@ class TestPanel(wx.Panel):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.AddMany([(p1, 0, wx.EXPAND), (p2, 0, wx.EXPAND), 
                        (p3, 0, wx.EXPAND)])
-        hsizer = wx.BoxSizer(wx.HORIZONTAL)
-        hsizer.Add(sizer, 1, wx.EXPAND)
-        self.SetSizer(hsizer)
+        self.SetSizer(sizer)
         self.SetAutoLayout(True)
 
     def __LayoutPanel(self, panel, label, exstyle=False):
@@ -181,6 +181,17 @@ class TestPanel(wx.Panel):
         self.log.write("BUTTON CLICKED: Id: %d, Label: %s" % \
                        (evt.GetId(), evt.GetEventObject().LabelText))
 
+    def OnChildFocus(self, evt):
+        """Override ScrolledPanel.OnChildFocus to prevent erratic
+        scrolling on wxMac.
+
+        """
+        if wx.Platform != '__WXMAC__':
+            evt.Skip()
+
+        child = evt.GetWindow()
+        self.ScrollChildIntoView(child)
+
     def OnMenu(self, evt):
         """Events from button menus"""
         self.log.write("MENU SELECTED: %d" % evt.GetId())
@@ -228,8 +239,7 @@ class TestLog:
 
 #----------------------------------------------------------------------
 
-overview = """
-"""
+overview = __doc__
 
 #----------------------------------------------------------------------
 # Icon Data
