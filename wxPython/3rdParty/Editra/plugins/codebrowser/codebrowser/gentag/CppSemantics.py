@@ -2,17 +2,15 @@
 
 import taglib
 
-#from pygments import highlight
 from pygments.token import Token
-#from pygments.lexers import get_lexer_by_name
-#from pygments.lexer import RegexLexer, bygroups, using, this, include
-#from pygments.formatter import Formatter
 
 def DebugWrite( msg ):
     """ Conditionally be able to turn on debug messages.
     """
-    if ( 0 ):
-        print msg 
+    import syslog
+
+    if ( 1 ):
+        syslog.syslog( msg ) 
 
 #--------------------------------------------------------------------------#
 
@@ -319,18 +317,6 @@ class CppSemantics( object ):
             return True
         return False
 
-
-#     def action_memvar( self, token, value, num, parms ):
-#         """ Found member variable, pop id, and add rtag
-#         """
-#         varid, next_state = parms
-#         self.state = next_state
-#         value = self.ids[varid][-1]
-#         del self.ids[varid][-1]
-#         self.rtags.AddVariable(taglib.Variable(value, num))
-#         return True
-
-
     # match token and value so that you go get the next_state
     def action_match( self, token, value, num, parms ):
         """ If match token, value then move to state
@@ -381,7 +367,8 @@ class CppSemantics( object ):
         
 
         for idx, step in enumerate( self.states[self.state] ):
-            #print "%s %s" % (self.state, None)
+            DebugWrite( "%s %s" % (self.state, None) )
+
             action = step[0]
             parms = step[1:]
             result =  action( token, value, num, parms )

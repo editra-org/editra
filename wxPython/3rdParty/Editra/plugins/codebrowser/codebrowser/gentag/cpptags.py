@@ -38,12 +38,6 @@ import StringIO
 
 #--------------------------------------------------------------------------#
 
-# class TokenNotFound(Exception):
-#     """ """
-#     pass
-
-#--------------------------------------------------------------------------#
-
 class CppFormatter(Formatter):
     """ Do a little preprocessing, and pass list of tokens and lines
     to CppSemantics class.
@@ -84,35 +78,6 @@ class CppFormatter(Formatter):
         for token, value, num in current_line:
             state_machine.Feed( token, value, num )
         return state_machine.rtags
-        
-
-#     def _findToken(self, line, searchToken, searchValue=None):
-#         """Find if the token exists in the line
-#         @param line: line of code
-#         @param searchToken: Token to look for
-#         @return: bool
-
-#         """
-#         for t, v in line:
-#             if t == searchToken:
-#                 if searchValue != None:
-#                     if searchValue == v:
-#                         return True
-#                 else:
-#                     return True
-
-#         return False
-
-#     def _getValue(self, line, searchToken):
-#         for t, v in line:
-#             if t == searchToken:
-#                 return v
-#         raise TokenNotFound()
-
-
-
-#     def getTags(self):
-#         return self.rtags
 
 #-----------------------------------------------------------------------------#
 
