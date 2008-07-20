@@ -20,8 +20,8 @@ For example usage of these classes see ed_log and the Editra's Launch plugin
 Class OutputBuffer:
 This is the main class exported by ths module. It provides a readonly output
 display buffer that when used with the other classes in this module provides an
-easy way to display continous output from other processes and threads. It 
-provides two methods for subclasses to override if they wish to perform custom 
+easy way to display continous output from other processes and threads. It
+provides two methods for subclasses to override if they wish to perform custom
 handling.
 
   - Override the ApplyStyles method to do any processing and coloring of the
@@ -45,9 +45,15 @@ be overridden in subclasses to perform extra processing.
                    processes exit code as a parameter.
 
 Class ProcessThread:
-Thread class for running subprocesses and posting the output to an 
+Thread class for running subprocesses and posting the output to an
 L{OutputBuffer} via events.
-       
+
+
+Requirements:
+  * wxPython 2.8
+  * Macintosh/Linux/Unix Python 2.4+
+  * Windows Python 2.5+ (ctypes is needed)
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -55,18 +61,24 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import sys
+import time
+import errno
 import signal
-import subprocess
 import threading
+import subprocess
 import wx
 import wx.stc
 
-# Needed for killing processes on windows
-if sys.platform.startswith('win'):
+# Platform specific modules needed for killing processes
+if subprocess.mswindows:
+    import msvcrt
     import ctypes
+else:
+    import select
+    import fcntl
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -125,7 +137,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
     styleing and filtering output are also available.
 
     """
-    def __init__(self, parent, id=wx.ID_ANY, 
+    def __init__(self, parent, id=wx.ID_ANY,
                  pos=wx.DefaultPosition,
                  size=wx.DefaultSize,
                  style=wx.BORDER_SUNKEN,
@@ -155,7 +167,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
             self._timer.Stop()
 
     def __ConfigureSTC(self):
-        """Setup the stc to behave/appear as we want it to 
+        """Setup the stc to behave/appear as we want it to
         and define all styles used for giving the output context.
         @todo: make more of this configurable
 
@@ -168,7 +180,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetUndoCollection(False) # Don't keep undo history
         self.SetReadOnly(True)
         self.SetCaretWidth(0)
-        
+
         #self.SetEndAtLastLine(False)
         self.SetVisiblePolicy(1, wx.stc.STC_VISIBLE_STRICT)
 
@@ -204,19 +216,19 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
             else:
                 fsize = 10
 
-            font = wx.Font(fsize, wx.FONTFAMILY_MODERN, 
+            font = wx.Font(fsize, wx.FONTFAMILY_MODERN,
                            wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
         style = (font.GetFaceName(), font.GetPointSize(), "#FFFFFF")
         wx.stc.StyledTextCtrl.SetFont(self, font)
 
         # Custom Styles
-        self.StyleSetSpec(OPB_STYLE_DEFAULT, 
+        self.StyleSetSpec(OPB_STYLE_DEFAULT,
                           "face:%s,size:%d,fore:#000000,back:%s" % style)
         self.StyleSetSpec(OPB_STYLE_INFO,
                           "face:%s,size:%d,fore:#0000FF,back:%s" % style)
         self.StyleSetSpec(OPB_STYLE_WARN,
                           "face:%s,size:%d,fore:#FF0000,back:%s" % style)
-        self.StyleSetSpec(OPB_STYLE_ERROR, 
+        self.StyleSetSpec(OPB_STYLE_ERROR,
                           "face:%s,size:%d,fore:#FF0000,back:%s" % style)
         self.StyleSetHotSpot(OPB_STYLE_ERROR, True)
 
@@ -235,7 +247,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
     #---- Public Member Functions ----#
     def AppendUpdate(self, value):
         """Buffer output before adding to window. This method can safely be
-        called from non gui threads to add updates to the buffer. 
+        called from non gui threads to add updates to the buffer.
         @param value: update string to append to stack
 
         """
@@ -340,7 +352,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         @return: bool
 
         """
-        return self._timer.IsRunning()        
+        return self._timer.IsRunning()
 
     def OnTimer(self, evt):
         """Process and display text from the update buffer
@@ -493,7 +505,7 @@ class ProcessBufferMixin:
 
     def DoProcessExit(self, code=0):
         """Override this method to do any post processing after the running
-        task has exited. Typically this is a good place to call 
+        task has exited. Typically this is a good place to call
         L{OutputBuffer.Stop} to stop the buffers timer.
         @keyword code: Exit code of program
 
@@ -550,28 +562,68 @@ class ProcessThread(threading.Thread):
 
         # Attributes
         self.abort = False          # Abort Process
+        self._proc = None           # Process handle
         self._parent = parent       # Parent Window/Event Handler
         self._cwd = cwd             # Path at which to run from
         self._cmd = dict(cmd=command, file=fname, args=args)
         self._env = env
 
-    def __DoOneRead(self, proc):
+    def __DoOneRead(self):
         """Read one line of output and post results.
         @param proc: process to read from
         @return: bool (True if more), (False if not)
 
         """
-        try:
-            result = proc.stdout.readline()
-        except (IOError, OSError):
-            return False
+        if subprocess.mswindows:
+            # Windows nonblocking pipe read implementation
+            read = u''
+            try:
+                handle = msvcrt.get_osfhandle(self._proc.stdout.fileno())
+                avail = ctypes.c_long()
+                ctypes.windll.kernel32.PeekNamedPipe(handle, None, 0, 0,
+                                                     ctypes.byref(avail), None)
+                if avail.value > 0:
+                    read = self._proc.stdout.readline()
+                    if read.endswith(os.linesep):
+                        read = read[:-1 * len(os.linesep)] + "\n"
+                else:
+                    if self._proc.poll() is None:
+                        time.sleep(1)
+                        return True
+                    else:
+                        # Process has Exited
+                        return False
+            except ValueError:
+                return False
+            except (subprocess.pywintypes.error, Exception), msg:
+                if msg[0] in (109, errno.ESHUTDOWN):
+                    return False
 
-        if result == "" or result == None:
-            return False
+        else:
+            # OSX and Unix nonblocking pipe read implementation
+            if self._proc.stdout is None:
+                return False
+
+            flags = fcntl.fcntl(self._proc.stdout, fcntl.F_GETFL)
+            if not self._proc.stdout.closed:
+                fcntl.fcntl(self._proc.stdout,
+                            fcntl.F_SETFL,
+                            flags| os.O_NONBLOCK)
+
+            try:
+                if not select.select([self._proc.stdout], [], [], 1)[0]:
+                    return True
+
+                read = self._proc.stdout.readline()
+                if read == '':
+                    return False
+            finally:
+                if not self._proc.stdout.closed:
+                    fcntl.fcntl(self._proc.stdout, fcntl.F_SETFL, flags)
 
         # Ignore encoding errors and return an empty line instead
         try:
-            result = result.decode(sys.getfilesystemencoding())
+            result = read.decode(sys.getfilesystemencoding())
         except UnicodeDecodeError:
             result = os.linesep
 
@@ -590,15 +642,16 @@ class ProcessThread(threading.Thread):
             return
 
         if wx.Platform != '__WXMSW__':
-            # Try to be 'nice' the first time if that fails be more forcefull
             try:
-                os.kill(pid, signal.SIGABRT)
-            except OSError:
+                self._proc.stdout.close()
+                self._proc.stdout = None
                 os.kill(pid, signal.SIGKILL)
+            except OSError:
+                return
 
             os.waitpid(pid, os.WNOHANG)
         else:
-            # 1 == Terminate
+            # 1 == PROCESS_TERMINATE
             handle = ctypes.windll.kernel32.OpenProcess(1, False, pid)
             ctypes.windll.kernel32.TerminateProcess(handle, -1)
             ctypes.windll.kernel32.CloseHandle(handle)
@@ -618,10 +671,11 @@ class ProcessThread(threading.Thread):
         command = u' '.join([item.strip() for item in [self._cmd['cmd'],
                                                        self._cmd['file'],
                                                        self._cmd['args']]])
-        
-        proc = subprocess.Popen(command.strip(), stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT, shell=True,
-                                cwd=self._cwd, env=self._env)
+
+        use_shell = not subprocess.mswindows
+        self._proc = subprocess.Popen(command.strip(), stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT, shell=use_shell,
+                                      cwd=self._cwd, env=self._env)
 
         evt = OutputBufferEvent(edEVT_PROCESS_START,
                                 self._parent.GetId(),
@@ -631,23 +685,24 @@ class ProcessThread(threading.Thread):
         # Read from stdout while there is output from process
         while True:
             if self.abort:
-                self.__KillPid(proc.pid)
-                self.__DoOneRead(proc)
+                self.__KillPid(self._proc.pid)
+                self.__DoOneRead()
+                more = False
                 break
             else:
                 more = False
                 try:
-                    more = self.__DoOneRead(proc)
+                    more = self.__DoOneRead()
                 except wx.PyDeadObjectError:
                     # Our parent window is dead so kill process and return
-                    self.__KillPid(proc.pid)
+                    self.__KillPid(self._proc.pid)
                     return
 
                 if not more:
                     break
 
         try:
-            result = proc.wait()
+            result = self._proc.wait()
         except OSError:
             result = -1
 
