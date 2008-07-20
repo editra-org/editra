@@ -49,7 +49,7 @@ class FakeRTags( object ):
 class TestCppSemantics( TestCase ):
     
     def setUp( self ):
-        self.lexer = get_lexer_by_name( "cpp" )
+        self.lexer = get_lexer_by_name( "cpp", stripnl = False )
         self.formatter = CFormatter()
         
     def testSimpleClass( self ):
