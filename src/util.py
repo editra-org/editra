@@ -386,7 +386,7 @@ def GetFileManagerCmd():
     else:
         # Check for common linux filemanagers returning first one found
         #          Gnome/ubuntu KDE/kubuntu  xubuntu
-        for cmd in ('nautilus', 'konqueror', 'Thunar'):
+        for cmd in ('xdg-open', 'nautilus', 'konqueror', 'Thunar'):
             result = os.system("which %s > /dev/null" % cmd)
             if result == 0:
                 return cmd
