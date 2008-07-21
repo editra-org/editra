@@ -47,10 +47,6 @@ class ListRowHighlighter:
         self._mode = mode
 
         # Event Handlers
-        # TODO: instead of updating all rows it would be better for
-        #       performance reasons to only update the item before and
-        #       all the items after the changed item if its near the bottom
-        #       and visa versa if the item is near the top of the list.
         self.Bind(wx.EVT_LIST_INSERT_ITEM, lambda evt: self.RefreshRows())
         self.Bind(wx.EVT_LIST_DELETE_ITEM, lambda evt: self.RefreshRows())
 
