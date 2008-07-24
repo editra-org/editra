@@ -160,7 +160,10 @@ EDMSG_MENU_LOADPROFILE = EDMSG_MENU + ('load',)
 #---- Misc Messages ----#
 # Signal that the icon theme has changed. Respond to this to update icon
 # resources from the ArtProvider.
-EDMSG_THEME_CHANGED = EDMSG_ALL + ('theme',)
+EDMSG_THEME_CHANGED = EDMSG_ALL + ('theme',) # All theme listeners
+
+# Update the theme the notebook specifically to the current preferences
+EDMSG_THEME_NOTEBOOK = EDMSG_ALL + ('nb', 'theme')
 
 # Signal that the font preferences for the ui have changed (msgdata == font)
 EDMSG_DSP_FONT = EDMSG_ALL + ('dfont',)

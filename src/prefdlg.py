@@ -936,6 +936,9 @@ class AppearancePanel(PrefPanelBase):
                            (ExChoice(self, ed_glob.ID_PREF_ICONSZ,
                                      ['16', '24', '32'],
                              str(Profile_Get('ICON_SZ', 'size_tuple')[0])), 0)])
+        tabicon_cb = wx.CheckBox(self, ed_glob.ID_PREF_TABICON,
+                                 _("Show Icons on Tabs"))
+        tabicon_cb.SetValue(Profile_Get('TABICONS'))
 
         # Layout Section
         mainw = wx.GetApp().GetActiveWindow()
@@ -971,11 +974,12 @@ class AppearancePanel(PrefPanelBase):
             trans_size = (200, 15)
 
         # Layout
-        sizer = wx.FlexGridSizer(15, 2, 5, 5)
+        sizer = wx.FlexGridSizer(16, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Icons") + u": "), 0,
                         wx.ALIGN_CENTER_VERTICAL), (iconsz, 0),
                        ((5, 5), 0), (tbiconsz, 0),
+                       ((5, 5), 0), (tabicon_cb, 0),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Layout") + u": "), 0,
                         wx.ALIGN_CENTER_VERTICAL),
@@ -1011,6 +1015,9 @@ class AppearancePanel(PrefPanelBase):
         evalue = evt.GetEventObject().GetValue()
         if e_id in (ed_glob.ID_PREF_WPOS, ed_glob.ID_PREF_WSIZE):
             Profile_Set(ed_glob.ID_2_PROF[e_id], evalue)
+        elif e_id == ed_glob.ID_PREF_TABICON:
+            Profile_Set(ed_glob.ID_2_PROF[e_id], evalue)
+            ed_msg.PostMessage(ed_msg.EDMSG_THEME_NOTEBOOK)
         elif e_id in (ed_glob.ID_SHOW_SB, ed_glob.ID_VIEW_TOOL):
             Profile_Set(ed_glob.ID_2_PROF[e_id], evalue)
             if e_id == ed_glob.ID_SHOW_SB:

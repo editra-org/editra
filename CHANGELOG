@@ -36,6 +36,7 @@ settings for opening new files in tabs or windows.
 closer to the editor buffer.
 +Add Revert to Saved menu action for reverting a file back to the last save
 point.
++Option for hiding and showing tab icons
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script

@@ -148,6 +148,7 @@ ID_PREF_WPOS     = wx.NewId()
 ID_PREF_ICON     = wx.NewId()
 ID_PREF_ICONSZ   = wx.NewId()
 ID_PREF_MODE     = wx.NewId()
+ID_PREF_TABICON  = wx.NewId()
 ID_PRINT_MODE    = wx.NewId()
 ID_TRANSPARENCY  = wx.NewId()
 ID_PREF_SPOS     = wx.NewId()
@@ -282,6 +283,7 @@ ID_2_PROF = {
              ID_PREF_SYNTHEME     : 'SYNTHEME',
              ID_PREF_TABS         : 'USETABS',
              ID_PREF_UNINDENT     : 'BSUNINDENT',
+             ID_PREF_TABICON      : 'TABICONS',
              ID_PREF_TABW         : 'TABWIDTH',
              ID_PREF_INDENTW      : 'INDENTWIDTH',
              ID_SESSION           : 'SAVE_SESSION',

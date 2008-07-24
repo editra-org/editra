@@ -100,6 +100,7 @@ class EdPages(FNB.FlatNotebook):
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
+        ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_NOTEBOOK)
 
         # Add a blank page
         self.NewPage()
@@ -619,6 +620,9 @@ class EdPages(FNB.FlatNotebook):
         @param lang_id: language id of file type to get mime image for
 
         """
+        if not Profile_Get('TABICONS'):
+            return
+
         imglst = self.GetImageList()
         if not self._index.has_key(lang_id):
             bmp = wx.ArtProvider.GetBitmap(lang_id, wx.ART_MENU)
@@ -636,14 +640,21 @@ class EdPages(FNB.FlatNotebook):
         @postcondition: all images in control are updated
 
         """
-        imglst = self.GetImageList()
-        for lang, index in self._index.iteritems():
-            bmp = wx.ArtProvider.GetBitmap(str(lang), wx.ART_MENU)
-            if bmp.IsNull():
-                self._index.setdefault(lang, \
-                                       self._index[synglob.ID_LANG_TXT])
-            else:
-                imglst.Replace(index, bmp)
+        if not Profile_Get('TABICONS'):
+            for page in xrange(self.GetPageCount()):
+                FNB.FlatNotebook.SetPageImage(self, page, -1)
+        else:
+            imglst = self.GetImageList()
+            for lang, index in self._index.iteritems():
+                bmp = wx.ArtProvider.GetBitmap(str(lang), wx.ART_MENU)
+                if bmp.IsNull():
+                    self._index.setdefault(lang, \
+                                           self._index[synglob.ID_LANG_TXT])
+                else:
+                    imglst.Replace(index, bmp)
+
+            for page in xrange(self.GetPageCount()):
+                self.SetPageImage(page, str(self.GetPage(page).GetLangId()))
 
         self.Refresh()
 

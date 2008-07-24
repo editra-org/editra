@@ -82,6 +82,7 @@ _DEFAULTS = {
            'STATBAR'    : True,             # Show Status Bar
            'SYNTAX'     : True,             # Use Syntax Highlighting
            'SYNTHEME'   : 'Default',        # Syntax Highlight color scheme
+           'TABICONS'   : True,             # Show Tab Icons
            'TABWIDTH'   : 8,                # Tab width
            'THEME'      : 'DEFAULT',        # For future use
            'TOOLBAR'    : True,             # Show Toolbar
