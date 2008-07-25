@@ -1300,7 +1300,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if self.GetUseTabs():
             return u'\t'
         else:
-            return u' ' * self.GetTabWidth()
+            return u' ' * self.GetIndent()
 
     def GetEOLModeId(self):
         """Gets the id of the eol format

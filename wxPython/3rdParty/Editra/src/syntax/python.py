@@ -87,7 +87,8 @@ def CommentPattern(lang_id=0):
     return [u'#']
 
 def AutoIndenter(stc, pos, ichar):
-    """Auto indent python code
+    """Auto indent python code. uses \n the text buffer will
+    handle any eol character formatting.
     @param stc: EditraStyledTextCtrl
     @param pos: current carat position
     @param ichar: Indentation character
@@ -96,26 +97,28 @@ def AutoIndenter(stc, pos, ichar):
     """
     rtxt = u''
     line = stc.GetCurrentLine()
-    tabw = stc.GetTabWidth()
     text = stc.GetTextRange(stc.PositionFromLine(line), pos)
 
-    if text.strip() == u'':
-        rtxt = stc.GetEOLChar() + text
+    if text.isspace():
+        rtxt = '\n'
     else:
         indent = stc.GetLineIndentation(line)
+        if ichar == u"\t":
+            tabw = stc.GetTabWidth()
+        else:
+            tabw = stc.GetIndent()
+
         i_space = indent / tabw
         ndent = u"\n" + ichar * i_space
         rtxt = ndent + ((indent - (tabw * i_space)) * u' ')
 
-    tokens = text.strip().split()
-    if len(tokens) > 1 and \
-       tokens[0] in "def if for while class" and\
-       tokens[-1].endswith(":"):
-        rtxt += ichar
+    tokens = [token for token in text.strip().split() if len(token.strip())]
+    print tokens
+    if len(tokens) and tokens[-1].endswith(":"):
+        if tokens[0].rstrip(u":") in u"def if elif else for while class":
+            rtxt += ichar
 
     return rtxt
-
-    
 
 #---- End Required Module Functions ----#
 
