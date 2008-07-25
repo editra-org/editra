@@ -137,9 +137,7 @@ class ControlBar(wx.PyPanel):
 
         # Setup
         msizer = wx.BoxSizer(wx.VERTICAL)
-        spacer = (2, 2)
-        if wx.Platform == '__WXGTK__':
-            spacer = (0, 0)
+        spacer = (0, 0)
         msizer.Add(spacer, 0)
         msizer.Add(self._sizer, 1, wx.EXPAND)
         msizer.Add(spacer, 0)
@@ -253,10 +251,10 @@ class ControlBar(wx.PyPanel):
         @param bottom: Bottom maring in pixels
 
         """
-        spacer = (top, bottom)
         sizer = self.GetSizer()
-        sizer.GetItem(0).SetSpacer(spacer)
-        sizer.GetItem(2).SetSpacer(spacer)
+        sizer.GetItem(0).SetSpacer((top, top))
+        sizer.GetItem(2).SetSpacer((bottom, bottom))
+        sizer.Layout()
 
     def SetWindowStyle(self, style):
         """Set the style flags of this window
@@ -293,24 +291,38 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
 #--------------------------------------------------------------------------#
 # Test
 if __name__ == '__main__':
-    app = wx.App(False)
 
     # Setup Display
-    frame = wx.Frame(None, title="Test ControlBox")
-    fsizer = wx.BoxSizer(wx.VERTICAL)
-    cbox = ControlBox(frame)
-    cbox.CreateControlBar()
-    cbar = cbox.GetControlBar()
-    cbar.AddTool(wx.ID_ANY, wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16, 16)), "hello world")
-    cbar.AddTool(wx.ID_ANY, wx.ArtProvider.GetBitmap(wx.ART_WARNING, wx.ART_MENU, (16, 16)), "warning")
-    cbar.AddStretchSpacer()
-    cbar.AddControl(wx.Choice(cbar, wx.ID_ANY, choices=[str(x) for x in range(10)]), wx.ALIGN_RIGHT)
-    cbar.AddControl(wx.Button(cbar, label="Hello"), wx.ALIGN_RIGHT)
-    cbox.SetWindow(wx.TextCtrl(cbox, style=wx.TE_MULTILINE))
+    def MakeTestFrame():
+        frame = wx.Frame(None, title="Test ControlBox")
+        fsizer = wx.BoxSizer(wx.VERTICAL)
+
+        cbox = ControlBox(frame)
+        cbox.CreateControlBar()
+
+        cbar = cbox.GetControlBar()
+        cbar.AddTool(wx.ID_ANY, wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16, 16)), "hello world")
+        cbar.AddTool(wx.ID_ANY, wx.ArtProvider.GetBitmap(wx.ART_WARNING, wx.ART_MENU, (16, 16)), "warning")
+        cbar.AddStretchSpacer()
+        cbar.AddControl(wx.Choice(cbar, wx.ID_ANY, choices=[str(x) for x in range(10)]), wx.ALIGN_RIGHT)
+        cbar.AddControl(wx.Button(cbar, label="New Frame"), wx.ALIGN_RIGHT)
+
+        cbox.SetWindow(wx.TextCtrl(cbox, style=wx.TE_MULTILINE))
+        cbox.Bind(EVT_CTRLBAR, OnControlBar)
+        cbox.Bind(wx.EVT_BUTTON, OnButton)
+
+        fsizer.Add(cbox, 1, wx.EXPAND)
+        return frame
 
     def OnControlBar(evt):
         print "ControlBarEvent", evt.GetId()
-    cbox.Bind(EVT_CTRLBAR, OnControlBar)
 
-    frame.Show()
-    app.MainLoop()
+    def OnButton(evt):
+        print "Button tool clicked"
+        frame = MakeTestFrame()
+        frame.Show()
+
+    APP = wx.App(False)
+    FRAME = MakeTestFrame()
+    FRAME.Show()
+    APP.MainLoop()
