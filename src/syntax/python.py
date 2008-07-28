@@ -20,6 +20,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Dependancies
 import keyword
+import inspect
 
 #-----------------------------------------------------------------------------#
 
@@ -28,10 +29,20 @@ import keyword
 # Python Keywords
 KEYWORDS = keyword.kwlist
 KEYWORDS.extend(['True', 'False', 'None', 'self'])
-PY_KW = (0, " ".join(KEYWORDS))
+PY_KW = (0, u" ".join(KEYWORDS))
 
-# Highlighted Identifiers
-PY_ID = (1, "")
+# Highlighted builtins
+# TODO: find out why treating __builtins__ like a module here does
+#       not work. It works if 'print __builtins__' but not with
+#       using the dir() method. When this is done it just inspected
+#       as a dict.
+try:
+    BUILTINS = [b for b in __builtins__
+                if inspect.isbuiltin(__builtins__.get(b, None))]
+except:
+    BUILTINS = list()
+
+PY_BIN = (1, u" ".join(sorted(BUILTINS)))
 
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [ ('STC_P_DEFAULT', 'default_style'),
@@ -49,7 +60,7 @@ SYNTAX_ITEMS = [ ('STC_P_DEFAULT', 'default_style'),
                  ('STC_P_TRIPLE', 'string_style'),
                  ('STC_P_TRIPLEDOUBLE', 'string_style'),
                  ('STC_P_WORD', 'keyword_style'),
-                 ('STC_P_WORD2', 'default_style')]
+                 ('STC_P_WORD2', 'userkw_style')]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
@@ -63,7 +74,7 @@ def Keywords(lang_id=0):
     @param lang_id: used to select specific subset of keywords
 
     """
-    return [PY_KW]
+    return [PY_KW, PY_BIN]
 
 def SyntaxSpec(lang_id=0):
     """Syntax Specifications
@@ -112,8 +123,7 @@ def AutoIndenter(stc, pos, ichar):
         ndent = u"\n" + ichar * i_space
         rtxt = ndent + ((indent - (tabw * i_space)) * u' ')
 
-    tokens = [token for token in text.strip().split() if len(token.strip())]
-    print tokens
+    tokens = [token for token in text.strip().split() if len(token)]
     if len(tokens) and tokens[-1].endswith(":"):
         if tokens[0].rstrip(u":") in u"def if elif else for while class":
             rtxt += ichar
