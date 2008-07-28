@@ -11,6 +11,8 @@ Provides various search controls and searching services for finding text in a
 document. The L{TextFinder} is a search service that can be used to search and
 highlight text in a StyledTextCtrl.
 
+@summary: Text searching and result ui
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -18,10 +20,16 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
+import re
 import wx
+
+# Local imports
 import ed_glob
 from profiler import Profile_Get
+import eclib.ctrlbox as ctrlbox
+import eclib.outbuff as outbuff
+import eclib.platebtn as platebtn
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -577,3 +585,86 @@ class EdSearchCtrl(wx.SearchCtrl):
             evt.Skip()
 
     #---- End Event Handlers ----#
+
+#-----------------------------------------------------------------------------#
+
+class SearchResultScreen(ctrlbox.ControlBox):
+    """Screen for displaying search results and navigating to them"""
+    def __init__(self, parent):
+        """Create the result screen
+        @param parent: parent window
+
+        """
+        ctrlbox.ControlBox.__init__(self, parent)
+
+        # Attributes
+        self._list = SearchResultsList(self)
+
+        # Setup
+        ctrlbar = ctrlbox.ControlBar(self)
+        ctrlbar.AddStretchSpacer()
+        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
+        if cbmp.IsNull() or not cbmp.IsOk():
+            cbmp = None
+        clear = platebtn.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
+                                     cbmp, style=platebtn.PB_STYLE_NOBG)
+        ctrlbar.AddControl(clear, wx.ALIGN_LEFT)
+
+        # Layout
+        self.SetWindow(self._list)
+
+        # Event Handlers
+        self.Bind(wx.EVT_BUTTON, lambda evt: self._list.Clear(), wx.ID_CLEAR)
+
+#-----------------------------------------------------------------------------#
+
+class SearchResultList(outbuff.OutputBuffer):
+    STY_SEARCH_MATCH = outbuff.OPB_STYLE_MAX + 1
+    RE_FIND_MATCH = re.compile('(.+?) line\: ([0-9]+) .+?')
+    def __init__(self, parent):
+        outbuff.OutputBuffer.__init__(self, parent)
+
+        # Attributes
+        
+
+        # Setup
+        font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN, 
+                                                    wx.FONTSTYLE_NORMAL, 
+                                                    wx.FONTWEIGHT_NORMAL))
+        self.SetFont(font)
+        style = (font.GetFaceName(), font.GetPointSize(), "#FFFFFF")
+        self.StyleSetSpec(SearchResultList.STY_SEARCH_MATCH,
+                          "face:%s,size:%d,fore:#000000,back:%s" % style)
+        self.StyleSetHotSpot(SearchResultList.STY_SEARCH_MATCH, True)
+
+    def ApplyStyles(self, start, txt):
+        """Set a hotspot for each search result
+        Search matches strings should be formatted as follows
+        /file/name (line) match string
+        @param start: long
+        @param txt: string
+
+        """
+        self.StartStyling(start, 0x1f)
+        if SearchResultList.RE_FIND_MATCH(txt):
+            self.SetStyling(len(txt), SearchResultList.STY_SEARCH_MATCH)
+        else:
+            self.SetStyling(len(txt), outbuff.OPB_STYLE_DEFAULT)
+
+    def DoHotspotClicked(self, pos, line):
+        """Handle a click on a hotspot
+        @param pos: long
+        @param line: int
+
+        """
+        txt = self.GetLine(line)
+        match = SearchResultList.RE_FIND_MATCH.match(txt)
+        if match is not None:
+            groups = match.groups()
+            if len(groups) == 2:
+                fname, lnum = groups
+                print fname, lnum
+
+#-----------------------------------------------------------------------------#
+  
+  
