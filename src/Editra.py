@@ -631,6 +631,64 @@ def InitConfig():
     return profile_updated
 
 #--------------------------------------------------------------------------#
+def PrintHelp():
+    """Print command line help
+    @postcondition: Help is printed and program exits
+
+    """
+    print ("Editra - %s - Developers Text Editor\n"
+       "Cody Precord (2005-2008)\n\n"
+       "usage: Editra [arguments] [files... ]\n\n"
+       "Short Arguments:\n"
+       "  -d         Turn on console debugging\n"
+       "  -D         Turn off console debugging (overrides preferences)\n"
+       "  -h         Show this help message\n"
+       "  -v         Print version number and exit\n"
+       "\nLong Arguments:\n"
+       "  --debug    Turn on console debugging\n"
+       "  --help     Show this help message\n"
+       "  --auth     Print the ipc server info\n"
+       "  --version  Print version number and exit\n"
+      ) % ed_glob.VERSION
+    os._exit(0)
+
+#--------------------------------------------------------------------------#
+
+def ProcessCommandLine():
+    """Process the command line switches
+    @return: tuple ([switches,], [args,])
+
+    """
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "dhvD",
+                                   ['debug', 'help', 'version', 'auth'])
+    except getopt.GetoptError, msg:
+        return list(), list()
+
+    # Process command line options
+    opts = [opt[0] for opt in opts if len(opt) == 2]
+    for opt in list(opts):
+        if opt in ['-h', '--help']:
+            PrintHelp()
+        elif opt in ['-v', '--version']:
+            print "%s - v%s - Developers Editor" % (ed_glob.PROG_NAME, \
+                                                    ed_glob.VERSION)
+            os._exit(0)
+        elif opt in ['-d', '--debug'] and '-D' not in opts:
+            ed_glob.DEBUG = True
+            opts.remove(opt)
+        elif opt == '-D':
+            ed_glob.DEBUG = False
+        else:
+            pass
+
+    if '-D' in opts:
+        opts.remove('-D')
+
+    # Return any unprocessed arguments
+    return opts, args
+
+#--------------------------------------------------------------------------#
 
 def Main():
     """Configures and Runs an instance of Editra
@@ -638,38 +696,7 @@ def Main():
               an instance of Editra and starts the main loop.
 
     """
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "dhv",
-                                   ['debug', 'help', 'version'])
-    except getopt.GetoptError, msg:
-        dev_tool.DEBUGP("[main][err] %s" % str(msg))
-        opts = list()
-        args = list()
-
-    # Process command line options
-    if len(opts):
-        if True in [x[0] in ['-h', '--help'] for x in opts]:
-            print ("Editra - %s - Developers Text Editor\n"
-                   "Cody Precord (2005-2007)\n\n"
-                   "usage: Editra [arguments] [files... ]\n\n"
-                   "Short Arguments:\n"
-                   "  -d         Turn on console debugging\n"
-                   "  -h         Show this help message\n"
-                   "  -v         Print version number and exit\n"
-                   "\nLong Arguments:\n"
-                   "  --debug    Turn on console debugging\n"
-                   "  --help     Show this help message\n"
-                   "  --version  Print version number and exit\n"
-                  ) % ed_glob.VERSION
-            os._exit(0)
-
-        if True in [x[0] in ['-v', '--version'] for x in opts]:
-            print "%s - v%s - Developers Editor" % (ed_glob.PROG_NAME, \
-                                                    ed_glob.VERSION)
-            os._exit(0)
-
-        if True in [x[0] in ['-d', '--debug'] for x in opts]:
-            ed_glob.DEBUG = True
+    opts, args = ProcessCommandLine()
 
     # We are ready to run so fire up the config and launch the app
     profile_updated = InitConfig()
@@ -682,13 +709,20 @@ def Main():
             sys.path.append(epath)
 
     # Create Application
-    dev_tool.DEBUGP("[main][info] Initializing Application...")
+    dev_tool.DEBUGP("[main][app] Initializing application...")
     editra_app = Editra(False)
+
+    # Print ipc server authentication info
+    if '--auth' in opts:
+        opts.remove('--auth')
+        print "port=%d,key=%s" % (ed_ipc.EDPORT,
+                                  profiler.Profile_Get('SESSION_KEY'))
 
     # Check if this is the only instance, if its not exit since
     # any of the opening commands have already been passed to the
     # master instance
     if not editra_app.IsOnlyInstance():
+        dev_tool.DEBUGP("[main][info] Second instance exiting...")
         editra_app.Destroy()
         os._exit(0)
 
@@ -697,12 +731,12 @@ def Main():
         profiler.Profile_Del('WPOS')
         wx.MessageBox(_("Your profile has been updated to the latest "
                         "version") + u"\n" + \
-                      _("Please check the preferences dialog to reset "
+                      _("Please check the preferences dialog to check "
                         "your preferences"),
                       _("Profile Updated"))
 
     # Splash a warning if version is not a final version
-    if profiler.Profile_Get('APPSPLASH') and int(ed_glob.VERSION[0]) < 1:
+    if profiler.Profile_Get('APPSPLASH'):
         import edimage
         splash_img = edimage.splashwarn.GetBitmap()
         splash = wx.SplashScreen(splash_img, wx.SPLASH_CENTRE_ON_PARENT | \
