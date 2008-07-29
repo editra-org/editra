@@ -587,6 +587,7 @@ def InitConfig():
             if mode == 'GUI_DEBUG':
                 profiler.Profile_Set('MODE', 'DEBUG')
 
+            profiler.Profile_Del('LASTCHECK')
             #---- End Temporary Profile Adaptions ----#
 
             # Write out updated profile
@@ -769,10 +770,7 @@ def Main():
 
     # Do update check, only check if its been more than a day since the last
     # check
-    tval = sum(time.localtime(time.time())[:3])
-    if profiler.Profile_Get('CHECKUPDATE', default=True) and \
-       tval - profiler.Profile_Get('LASTCHECK', 'int', default=0) > 1:
-        profiler.Profile_Set('LASTCHECK', tval)
+    if profiler.Profile_Get('CHECKUPDATE', default=True):
         uthread = updater.UpdateThread(editra_app, ID_UPDATE_CHECK)
         uthread.start()
 
