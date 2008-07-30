@@ -1,0 +1,30 @@
+###############################################################################
+# Name:                                                                       #
+# Purpose:                                                                    #
+# Author: AUTHOR <email address>                                              #
+# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# License: wxWindows License                                                  #
+###############################################################################
+
+__author__ = ""
+__svnid__ = "$Id: Exp $"
+__revision__ = "$Revision:  $"
+
+#-----------------------------------------------------------------------------#
+# Imports
+import unittest
+
+#-----------------------------------------------------------------------------#
+# Test Class
+
+class TestMYTEST(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+#-----------------------------------------------------------------------------#
+
+if __name__ == '__main__':
+    unittest.main()
