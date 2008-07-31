@@ -342,6 +342,8 @@ class StyleMgr(object):
         # Get the Style Set
         if custom != wx.EmptyString and self.LoadStyleSheet(custom):
             self.LOG("[ed_style][info] Loaded custom style sheet %s" % custom)
+        elif custom == wx.EmptyString:
+            self.SetStyles('default', DefaultStyleDictionary())
         else:
             self.LOG("[ed_style][err] Failed to import styles from %s" % custom)
 
@@ -763,9 +765,14 @@ class StyleMgr(object):
         """Sets the value of style tag by name
         @param style_tag: desired tag name of style definition
         @param value: style item to set tag to
+        @return: bool
 
         """
+        if not isinstance(value, StyleItem):
+            return False
+
         StyleMgr.STYLES[self.style_set][style_tag] = value
+        return True
 
     def SetStyles(self, name, style_dict, nomerge=False):
         """Sets the managers style data and returns True on success.
