@@ -32,7 +32,7 @@ import util
 from profiler import Profile_Get, Profile_Set
 
 # Globals
-STY_ATTRIBUTES     = u"face fore back size"
+STY_ATTRIBUTES     = u"face fore back size modifiers"
 STY_EX_ATTRIBUTES  = u"eol bold italic underline"
 
 # Parser Values
@@ -51,29 +51,39 @@ class StyleItem(object):
 
     """
     def __init__(self, fore=wx.EmptyString, back=wx.EmptyString,
-                       face=wx.EmptyString, size=wx.EmptyString):
+                       face=wx.EmptyString, size=wx.EmptyString,
+                       ex=list()):
         """Initiliazes the Style Object.
 
         @keyword fore: Specifies the forground color (hex string)
         @keyword face: Specifies the font face (string face name)
         @keyword back: Specifies the background color (hex string)
         @keyword size: Specifies font point size (int/formatted string)
+        @keyword ex: Specify modifiers
 
         SPECIFICATION:
           - DATA FORMATS:
             - #123456       = hex color code
-            - #123456,bold  = hex color code + extra style
             - Monaco        = Font Face Name
             - %(primary)s   = Format string to be swapped at runtime
             - 10            = A font point size
             - %(size)s      = Format string to be swapped at runtime
+            - ex            = bold underline italic eol
+
         """
         object.__init__(self)
+
+        # Attributes
         self.null = False
-        self.fore = fore        # Foreground color hex code
-        self.face = face        # Font face name
-        self.back = back        # Background color hex code
-        self.size = size        # Font point size
+        self.fore = u""        # Foreground color hex code
+        self.face = u""        # Font face name
+        self.back = u""        # Background color hex code
+        self.size = u""        # Font point size
+        self._exattr = list()   # Extra attributes
+
+        for attr, value in (("fore", fore), ("face", face),
+                            ("back", back), ("size", size)):
+            self.SetNamedAttr(attr, value)
 
     def __eq__(self, si2):
         """Defines the == operator for the StyleItem Class
@@ -86,24 +96,25 @@ class StyleItem(object):
 
     def __str__(self):
         """Converts StyleItem to a string
-        @note: this return string is in a format that can be accepted by
+        @note: This return string is in a format that can be accepted by
                Scintilla. No spaces may be in the string after the ':'.
         @return: string representation of the StyleItem
 
         """
-        style_str = wx.EmptyString
+        style_str = list()
         if self.fore:
-            style_str = u"fore:%s," % self.fore
+            style_str.append(u"fore:%s" % self.fore)
         if self.back:
-            style_str += u"back:%s," % self.back
+            style_str.append(u"back:%s" % self.back)
         if self.face:
-            style_str += u"face:%s," % self.face
+            style_str.append(u"face:%s" % self.face)
         if self.size:
-            style_str += u"size:%s," % str(self.size)
+            style_str.append(u"size:%s" % str(self.size))
+        if len(self._exattr): 
+            style_str.append(u"modifiers:" +  u','.join(self._exattr))
 
-        if len(style_str) and style_str[-1] == u',':
-            style_str = style_str[0:-1]
-        return style_str
+        style_str = u",".join(style_str)
+        return style_str.rstrip(u",")
 
     #---- Get Functions ----#
     def GetAsList(self):
@@ -117,6 +128,9 @@ class StyleItem(object):
             val = getattr(self, attr, None)
             if val not in ( None, wx.EmptyString ):
                 retval.append(attr + ':' + val)
+
+        if len(self._exattr):
+            retval.append("modifiers:" + u",".join(self._exattr))
         return retval
 
     def GetBack(self):
@@ -124,28 +138,35 @@ class StyleItem(object):
         @return: style items background attribute
 
         """
-        return self.back.split(',')[0]
+        return self.back
 
     def GetFace(self):
         """Returns the value of the face attribute
         @return: style items font face attribute
 
         """
-        return self.face.split(',')[0]
+        return self.face
 
     def GetFore(self):
         """Returns the value of the fore attribute
         @return: style items foreground attribute
 
         """
-        return self.fore.split(',')[0]
+        return self.fore
 
     def GetSize(self):
         """Returns the value of the size attribute as a string
         @return: style items font size attribute
 
         """
-        return self.size.split(',')[0]
+        return self.size
+
+    def GetModifiers(self):
+        """Get teh modifiers string
+        @return: string
+
+        """
+        return ",".join(self._exattr)
 
     def GetNamedAttr(self, attr):
         """Get the value of the named attribute
@@ -178,6 +199,7 @@ class StyleItem(object):
         self.null = True
         for attr in ('fore', 'face', 'back', 'size'):
             setattr(self, attr, '')
+        self._exattr = list()
 
     #---- Set Functions ----#
     def SetAttrFromStr(self, style_str):
@@ -195,12 +217,14 @@ class StyleItem(object):
             attrib = atom.split(u':')
             if len(attrib) == 2 and attrib[0] in STY_ATTRIBUTES:
                 last_set = attrib[0]
-                setattr(self, attrib[0], attrib[1])
-            elif attrib[0] in STY_EX_ATTRIBUTES and last_set != wx.EmptyString:
-                l_val = getattr(self, last_set)
-                setattr(self, last_set, u",".join([l_val, attrib[0]]))
+                if last_set == "modifiers":
+                    self.SetExAttr(attrib[1])
+                else:
+                    setattr(self, attrib[0], attrib[1])
             else:
-                pass
+                for attr in attrib:
+                    if attr in STY_EX_ATTRIBUTES:
+                        self.SetExAttr(attr)
 
         return last_set != wx.EmptyString
 
@@ -211,10 +235,9 @@ class StyleItem(object):
 
         """
         self.null = False
-        if back is None or ex == wx.EmptyString:
-            self.back = back
-        else:
-            self.back = u"%s,%s" % (back, ex)
+        self.back = back
+        if ex and ex not in self._exattr:
+            self._exattr.append(ex)
 
     def SetFace(self, face, ex=wx.EmptyString):
         """Sets the Face Value
@@ -222,10 +245,9 @@ class StyleItem(object):
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
-        if face is None or ex == wx.EmptyString:
-            self.face = face
-        else:
-            self.face = u"%s,%s" % (face, ex)
+        self.face = face
+        if ex and ex not in self._exattr:
+            self._exattr.append(ex)
 
     def SetFore(self, fore, ex=wx.EmptyString):
         """Sets the Foreground Value
@@ -234,10 +256,9 @@ class StyleItem(object):
 
         """
         self.null = False
-        if fore is None or ex == wx.EmptyString:
-            self.fore = fore
-        else:
-            self.fore = u"%s,%s" % (fore, ex)
+        self.fore = fore
+        if ex and ex not in self._exattr:
+            self._exattr.append(ex)
 
     def SetSize(self, size, ex=wx.EmptyString):
         """Sets the Font Size Value
@@ -247,10 +268,9 @@ class StyleItem(object):
 
         """
         self.null = False
-        if size is None or ex == wx.EmptyString:
-            self.size = size
-        else:
-            self.size = u"%s,%s" % (str(size), ex)
+        self.size = str(size)
+        if ex and ex not in self._exattr:
+            self._exattr.append(ex)
 
     def SetExAttr(self, ex_attr, add=True):
         """Adds an extra text attribute to a StyleItem. Currently
@@ -264,23 +284,15 @@ class StyleItem(object):
         """
         # Get currently set attributes
         self.null = False
-        cur_str = self.__str__()
-        if not add:
-            cur_str = cur_str.replace(u',' + ex_attr, wx.EmptyString)
-            self.SetAttrFromStr(cur_str)
+        if ex_attr not in STY_EX_ATTRIBUTES:
+            return
+
+        if add and ex_attr not in self._exattr:
+            self._exattr.append(ex_attr)
+        elif not add and ex_attr in self._exattr:
+            self._exattr.remove(ex_attr)
         else:
-            if u',' + ex_attr not in cur_str:
-                attr_map = { u"fore" : self.GetFore(),
-                             u"back" : self.GetBack(),
-                             u"face" : self.GetFace(),
-                             u"size" : self.GetSize()
-                           }
-                for key in attr_map:
-                    if len(attr_map[key]) and u"," not in attr_map[key]:
-                        setattr(self, key, u",".join([attr_map[key], ex_attr]))
-                        break
-            else:
-                pass
+            pass
 
     def SetNamedAttr(self, attr, value):
         """Sets a StyleItem attribute by named string.
@@ -293,11 +305,12 @@ class StyleItem(object):
         self.null = False
         cur_val = getattr(self, attr, None)
         if cur_val is not None:
-            if u"," in cur_val:
-                tmp = cur_val.split(u",")
-                tmp[0] = value
-                value = u",".join(tmp)
-        setattr(self, attr, value)
+            if u"," in value:
+                modifiers = value.split(u",")
+                value = modifiers.pop(0)
+                for ex in modifiers:
+                    self.SetExAttr(ex)
+            setattr(self, attr, value)
 
 #-----------------------------------------------------------------------------#
 
@@ -461,9 +474,9 @@ class StyleMgr(object):
                 val = unicode(StyleMgr.STYLES[self.style_set][name]) % self.fonts
                 item = StyleItem()
                 item.SetAttrFromStr(val)
-                return item
             else:
-                return StyleMgr.STYLES[self.style_set][name]
+                item = StyleMgr.STYLES[self.style_set][name]
+            return item
         else:
             return StyleItem()
 
@@ -490,7 +503,8 @@ class StyleMgr(object):
 
         """
         if self.HasNamedStyle(name):
-            return unicode(self.GetItemByName(name))
+            stystr = unicode(self.GetItemByName(name))
+            return stystr.replace("modifiers:", "")
         else:
             return wx.EmptyString
 
@@ -652,18 +666,13 @@ class StyleMgr(object):
                     raise SyntaxError, "%s is an invalid name" % style_def[0]
             else:
                 style_str = wx.EmptyString
+                # Check each definition and validate its items
                 for attrib in style_dict[style_def]:
                     values = [ val for val in attrib[1].split(u" ")
                                if val != wx.EmptyString ]
-                    if len(values) > 2:
-                        self.LOG("[ed_style][warn] Only one extra " +
-                                 "attribute can be set per style. See " +
-                                 style_def + " => " + attrib[0])
-                        if strict:
-                            raise SyntaxWarning
 
-                    # Validate values
                     v1ok = v2ok = False
+                    # Check that colors are a hex string
                     if attrib[0] in "fore back" and RE_HEX_STR.match(values[0]):
                         v1ok = True
                     elif len(values) and attrib[0] == "size":
@@ -674,17 +683,30 @@ class StyleMgr(object):
                                      " the value %s is invalid." % \
                                      (attrib[0], values[0]))
                     elif len(values) and attrib[0] == "face":
-                        if len(values) == 2 and \
-                           values[1] not in STY_EX_ATTRIBUTES:
-                            values = [u' '.join(values)]
+                        # Font names may have spaces in them so join the
+                        # name of the font into one item.
+                        if len(values) > 1 and values[1] not in STY_EX_ATTRIBUTES:
+                            tmp = list()
+                            for val in list(values):
+                                if val not in STY_EX_ATTRIBUTES:
+                                    tmp.append(val)
+                                    values.remove(val)
+                                else:
+                                    break
+                            values = [u' '.join(tmp),] + values
                         v1ok = True
 
-                    if len(values) == 2 and values[1] in STY_EX_ATTRIBUTES:
-                        v2ok = True
-                    elif len(values) == 2:
-                        self.LOG("[ed_style][warn] Unknown extra " + \
-                                 "attribute '" + values[1] + \
-                                 "' in attribute: " + attrib[0])
+                    # Check extra attributes
+                    if len(values) > 1:
+                        for value in values[1:]:
+                            if value not in STY_EX_ATTRIBUTES:
+                                v2ok = False
+                                self.LOG("[ed_style][warn] Unknown extra " + \
+                                         "attribute '" + values[1] + \
+                                         "' in attribute: " + attrib[0])
+                                break
+                            else:
+                                v2ok = True
 
                     if v1ok and v2ok:
                         value = u",".join(values)
@@ -705,11 +727,6 @@ class StyleMgr(object):
             if isinstance(value, basestring):
                 new_item.SetAttrFromStr(value)
             style_dict[key] = new_item
-
-        # For any undefined tags load them as empty items
-#        for key in DefaultStyleDictionary().keys():
-#            if key not in style_dict:
-#                style_dict[key] = StyleItem()
 
         return style_dict
 
@@ -805,49 +822,58 @@ def DefaultStyleDictionary():
 
     """
     def_dict = \
-        {'brace_good' : StyleItem("#FFFFFF", "#0000FF,bold"),
-         'brace_bad'  : StyleItem(back="#FF0000,bold"),
+        {'brace_good' : StyleItem("#FFFFFF", "#0000FF", ex=["bold",]),
+         'brace_bad'  : StyleItem(back="#FF0000", ex=["bold",]),
          'calltip'    : StyleItem("#404040", "#FFFFB8"),
          'caret_line' : StyleItem(back="#D8F8FF"),
          'ctrl_char'  : StyleItem(),
          'line_num'   : StyleItem(back="#C0C0C0", face="%(secondary)s", \
                                   size="%(size3)d"),
-         'array_style': StyleItem("#EE8B02,bold", face="%(secondary)s"),
-         'btick_style': StyleItem("#8959F6,bold", size="%(size)d"),
+         'array_style': StyleItem("#EE8B02",
+                                  face="%(secondary)s",
+                                  ex=["bold",]),
+         'btick_style': StyleItem("#8959F6", size="%(size)d", ex=["bold",]),
          'default_style': StyleItem("#000000", "#F6F6F6", \
                                     "%(primary)s", "%(size)d"),
          'char_style' : StyleItem("#FF3AFF"),
-         'class_style' : StyleItem("#2E8B57,bold"),
-         'class2_style' : StyleItem("#2E8B57,bold"),
+         'class_style' : StyleItem("#2E8B57", ex=["bold",]),
+         'class2_style' : StyleItem("#2E8B57", ex=["bold",]),
          'comment_style' : StyleItem("#838383"),
-         'decor_style' : StyleItem("#BA0EEA italic", face="%(secondary)s"),
-         'directive_style' : StyleItem("#0000FF,bold", face="%(secondary)s"),
+         'decor_style' : StyleItem("#BA0EEA", face="%(secondary)s",
+                                   ex=["italic",]),
+         'directive_style' : StyleItem("#0000FF", face="%(secondary)s",
+                                       ex=["bold",]),
          'dockey_style' : StyleItem("#0000FF"),
-         'error_style' : StyleItem("#DD0101,bold", face="%(secondary)s"),
+         'error_style' : StyleItem("#DD0101", face="%(secondary)s",
+                                    ex=["bold",]),
          'foldmargin_style' : StyleItem(back="#D1D1D1"),
-         'funct_style' : StyleItem("#008B8B,italic"),
-         'global_style' : StyleItem("#007F7F,bold", face="%(secondary)s"),
+         'funct_style' : StyleItem("#008B8B", ex=["italic",]),
+         'global_style' : StyleItem("#007F7F", face="%(secondary)s",
+                                    ex=["bold",]),
          'guide_style' : StyleItem("#838383"),
-         'here_style' : StyleItem("#CA61CA,bold", face="%(secondary)s"),
+         'here_style' : StyleItem("#CA61CA", face="%(secondary)s",
+                                  ex=["bold",]),
          'ideol_style' : StyleItem("#E0C0E0", face="%(secondary)s"),
-         'keyword_style' : StyleItem("#A52B2B,bold"),
-         'keyword2_style' : StyleItem("#2E8B57,bold"),
-         'keyword3_style' : StyleItem("#008B8B,bold"),
+         'keyword_style' : StyleItem("#A52B2B", ex=["bold",]),
+         'keyword2_style' : StyleItem("#2E8B57", ex=["bold",]),
+         'keyword3_style' : StyleItem("#008B8B", ex=["bold",]),
          'keyword4_style' : StyleItem("#9D2424"),
          'marker_style' : StyleItem("#FFFFFF", "#000000"),
          'number_style' : StyleItem("#DD0101"),
-         'number2_style' : StyleItem("#DD0101,bold"),
-         'operator_style' : StyleItem("#000000", face="%(primary)s,bold"),
-         'pre_style' : StyleItem("#AB39F2,bold"),
-         'pre2_style' : StyleItem("#AB39F2,bold", "#FFFFFF"),
+         'number2_style' : StyleItem("#DD0101", ex=["bold",]),
+         'operator_style' : StyleItem("#000000", face="%(primary)s",
+                                      ex=["bold",]),
+         'pre_style' : StyleItem("#AB39F2", ex=["bold",]),
+         'pre2_style' : StyleItem("#AB39F2", "#FFFFFF", ex=["bold",]),
          'regex_style' : StyleItem("#008B8B"),
-         'scalar_style' : StyleItem("#AB37F2,bold", face="%(secondary)s"),
+         'scalar_style' : StyleItem("#AB37F2", face="%(secondary)s",
+                                    ex=["bold",]),
          'scalar2_style' : StyleItem("#AB37F2", face="%(secondary)s"),
          'select_style' : NullStyleItem(), # Use system default colour
-         'string_style' : StyleItem("#FF3AFF,bold"),
-         'stringeol_style' : StyleItem("#000000,bold", "#EEC0EE,eol", \
-                                       "%(secondary)s"),
-         'unknown_style' : StyleItem("#FFFFFF,bold", "#DD0101,eol"),
+         'string_style' : StyleItem("#FF3AFF", ex=["bold",]),
+         'stringeol_style' : StyleItem("#000000", "#EEC0EE", \
+                                       "%(secondary)s", ["bold", "eol"]),
+         'unknown_style' : StyleItem("#FFFFFF", "#DD0101", ex=["bold", "eol"]),
          'userkw_style' : StyleItem(),
          'whitespace_style' : StyleItem('#838383')
          }
