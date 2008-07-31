@@ -340,6 +340,12 @@ class StyleEditor(wx.Dialog):
                 stage1 = ''.join((stage1, attr, u':',
                                   ival.replace(',', ' '), u';'))
 
+            # Add any modifiers to the modifier tag
+            modifiers = item.GetModifiers()
+            if len(modifiers):
+                stage1 += (u"modifiers:" + modifiers + u";").replace(',', ' ')
+
+            # If the StyleItem had any set attributes add it to the stylesheet
             if len(stage1):
                 sty_sheet.append(tag + u" {\n")
                 stage2 = u"\t\t" + stage1[0:-1].replace(u";", u";\n\t\t") + u";"
