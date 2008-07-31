@@ -26,7 +26,7 @@ import ed_style
 class StyleItemTest(unittest.TestCase):
     def setUp(self):
         self.item = ed_style.StyleItem("#FF0000,bold", "#000000", "Times", "10")
-        self.itemstr = "fore:#FF0000,bold,back:#000000,face:Times,size:10"
+        self.itemstr = "fore:#FF0000,back:#000000,face:Times,size:10,modifiers:bold"
 
     def tearDown(self):
         pass
@@ -53,7 +53,8 @@ class StyleItemTest(unittest.TestCase):
     def testGetAsList(self):
         """Test getting the style item attributes as a list"""
         itemlst = self.item.GetAsList()
-        self.assertTrue(len(itemlst) == 4, "GetAsList didn't return all items")
+        ilen = len(itemlst)
+        self.assertTrue(ilen == 5, "Lenght Was: %d" % ilen)
 
     def testGetBack(self):
         """Test retrieving the background color"""
@@ -70,6 +71,10 @@ class StyleItemTest(unittest.TestCase):
     def testGetSize(self):
         """Test retrieving the background color"""
         self.assertEquals(self.item.GetSize(), "10")
+
+    def testGetModifiers(self):
+        """Test retrieving the extra modifier attributes"""
+        self.assertEquals(self.item.GetModifiers(), "bold")
 
     def testGetNamedAttr(self):
         """Test GetNamedAttr"""
