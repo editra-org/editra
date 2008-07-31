@@ -12,11 +12,11 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import sys
 import os
 import unittest
 
 # Module to test
-import sys
 sys.path.insert(0, os.path.abspath("../../src"))
 import ed_style
 
