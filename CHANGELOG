@@ -37,6 +37,9 @@ closer to the editor buffer.
 +Add Revert to Saved menu action for reverting a file back to the last save
 point.
 +Option for hiding and showing tab icons
++Highlighting of Python builtins can be enabled by defining userkw_style
++Add support for multiple modifiers per style item in Editra Style Sheets.
++Add some unittests
 
 BUG FIXES:
 +Add missing Portuguese locale files to setup script
@@ -44,6 +47,7 @@ BUG FIXES:
 +Fix window scrolling issue when executing some vi commands
 +Fix error when creating file position cache file fails
 +Fix numerous Style Editor bugs
++Fix failure to abort processes running in Launch under some conditions
 
 #-----------------------------------------------------------------------------#
 
