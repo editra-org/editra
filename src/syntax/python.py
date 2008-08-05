@@ -41,6 +41,8 @@ try:
                 if inspect.isbuiltin(__builtins__.get(b, None))]
 except:
     BUILTINS = list()
+BUILTINS.extend(['int', 'hex', 'long', 'float'])
+BUILTINS = list(set(BUILTINS))
 
 PY_BIN = (1, u" ".join(sorted(BUILTINS)))
 
