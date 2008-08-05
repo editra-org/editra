@@ -162,11 +162,18 @@ class StyleItem(object):
         return self.size
 
     def GetModifiers(self):
-        """Get teh modifiers string
+        """Get the modifiers string
         @return: string
 
         """
-        return ",".join(self._exattr)
+        return ",".join(self.GetModifierList())
+
+    def GetModifierList(self):
+        """Get the list of modifiers
+        @return: list
+
+        """
+        return self._exattr
 
     def GetNamedAttr(self, attr):
         """Get the value of the named attribute
