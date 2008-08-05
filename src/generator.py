@@ -20,19 +20,22 @@ similar services for manipulating and transforming text.
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__cvsid__ = "$Id$"
+__svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import wx
 import wx.stc
+import time
+
+# Editra Libraries
 import ed_glob
 import ed_menu
 from ed_style import StyleItem
 import util
 import plugin
-import time
+
 #--------------------------------------------------------------------------#
 # Globals
 _ = wx.GetTranslation
@@ -74,6 +77,8 @@ class GeneratorI(plugin.Interface):
 
         """
         pass
+
+#-----------------------------------------------------------------------------#
 
 class Generator(plugin.Plugin):
     """Plugin Interface Extension Point for Generator
@@ -124,7 +129,7 @@ class Generator(plugin.Plugin):
         util.Log("[generator][info] Generation time %f" % (time.time() - start))
         return gentext
 
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------#
 
 class Html(plugin.Plugin):
     """Transforms the text from a given Editra stc to a fully
@@ -310,6 +315,8 @@ class Html(plugin.Plugin):
         text = text.replace("\"", "&quot;")
         return text
 
+#-----------------------------------------------------------------------------#
+
 class CssItem(object):
     """Converts an Edtira StyleItem to a Css item for use in
     generating html.
@@ -327,6 +334,8 @@ class CssItem(object):
 
         """
         object.__init__(self)
+
+        # Attributes
         self._tag = class_tag
         self._back = style_item.GetBack()
         self._fore = style_item.GetFore()
@@ -334,6 +343,7 @@ class CssItem(object):
         self._size = style_item.GetSize()
         # List of additional style specs
         self._decor = self.ExtractDecorators()
+        self._decor.extend(style_item.GetModifierList())
 
     def __eq__(self, css2):
         """Defines the == operator for the CssItem class
@@ -342,10 +352,7 @@ class CssItem(object):
         @rtype: bool
 
         """
-        if self.__str__() == str(css2):
-            return True
-        else:
-            return False
+        return self.__str__() == str(css2):
 
     def __str__(self):
         """Outputs the css item as a formatted css block
@@ -485,6 +492,8 @@ class LaTeX(plugin.Plugin):
 
         """
         plugin.Plugin.__init__(self, plgmgr)
+
+        # Attributes
         self._stc = None
         self._id = ed_glob.ID_TEX_GEN
         self._dstyle = StyleItem()
@@ -736,6 +745,8 @@ class Rtf(plugin.Plugin):
 
         """
         plugin.Plugin.__init__(self, mgr)
+
+        # Attributes
         self._stc = None
         self._id = ed_glob.ID_RTF_GEN
         self._colortbl = RtfColorTbl()
@@ -843,6 +854,8 @@ class Rtf(plugin.Plugin):
         for char in text:
             tmp = tmp + chmap.get(char, char)
         return tmp
+
+#-----------------------------------------------------------------------------#
 
 class RtfColorTbl(object):
     """A storage class to help with generating the color table for
