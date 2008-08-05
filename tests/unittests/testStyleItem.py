@@ -76,6 +76,10 @@ class StyleItemTest(unittest.TestCase):
         """Test retrieving the extra modifier attributes"""
         self.assertEquals(self.item.GetModifiers(), "bold")
 
+    def testGetModifierList(self):
+        """Test retrieving the extra modifier attributes list"""
+        self.assertEquals(self.item.GetModifierList()[0], "bold")
+
     def testGetNamedAttr(self):
         """Test GetNamedAttr"""
         self.assertEquals(self.item.GetNamedAttr("fore"), self.item.GetFore())
