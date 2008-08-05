@@ -658,6 +658,7 @@ class StyleMgr(object):
         for style_def in tmp:
             if len(tmp[style_def]) == 0:
                 style_dict.pop(style_def)
+        del tmp
 
         # Validate leaf values and format into style string
         for style_def in style_dict:
@@ -670,7 +671,7 @@ class StyleMgr(object):
                 style_str = wx.EmptyString
                 # Check each definition and validate its items
                 for attrib in style_dict[style_def]:
-                    values = [ val for val in attrib[1].split(u" ")
+                    values = [ val for val in attrib[1].split()
                                if val != wx.EmptyString ]
 
                     v1ok = v2ok = False
@@ -697,12 +698,13 @@ class StyleMgr(object):
                                     break
                             values = [u' '.join(tmp),] + values
                         v1ok = True
+                    elif len(values) and attrib[0] == "modifiers":
+                        v1ok = True
 
                     # Check extra attributes
                     if len(values) > 1:
                         for value in values[1:]:
                             if value not in STY_EX_ATTRIBUTES:
-                                v2ok = False
                                 self.LOG("[ed_style][warn] Unknown extra " + \
                                          "attribute '" + values[1] + \
                                          "' in attribute: " + attrib[0])
