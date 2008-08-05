@@ -136,8 +136,10 @@ class StyleEditor(wx.Dialog):
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)
         ok_b = wx.Button(self, wx.ID_OK, _("Ok"))
         ok_b.SetDefault()
-        b_sizer.AddMany([(wx.Button(self, wx.ID_CANCEL, _("Cancel"))),
-                         (wx.Button(self, wx.ID_SAVE, _("Export"))), (ok_b)])
+        b_sizer.AddMany([(wx.Button(self, wx.ID_CANCEL, _("Cancel")), 0),
+                         ((5, 5), 0),
+                         (wx.Button(self, wx.ID_SAVE, _("Export")), 0),
+                         ((5, 5), 0), (ok_b, 0)])
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT |
                   wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
 
