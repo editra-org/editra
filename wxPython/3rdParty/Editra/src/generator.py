@@ -352,7 +352,7 @@ class CssItem(object):
         @rtype: bool
 
         """
-        return self.__str__() == str(css2):
+        return self.__str__() == str(css2)
 
     def __str__(self):
         """Outputs the css item as a formatted css block
