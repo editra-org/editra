@@ -16,6 +16,15 @@ array_style {
 		face: %(secondary)s;
 }
 
+brace_good {
+        fore: #FFFFFF;
+        back: #0000FF bold;
+}
+
+brace_bad {
+        back: #FF0000 bold;
+}
+
 btick_style {
 		fore: #8959F6 bold;
 }
