@@ -8,11 +8,18 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.3.xx
+VERSION 0.3.37
 DATE 0x/xx/2008
 14th Alpha Release
 
 NEWS:
+
+This release adds a number of new features and is the start of a platform for
+future enhancements. The main items added in this round are the enhancements to
+the syntax management system to allow for extension through custom lexers and 
+providing language specific auto-indentation support. The ground work of an
+IPC server has also been added to allow for interprocess communication and some
+remote control support for controlling Editra from other applications.
 
 
 NEW: [features/improvements]
