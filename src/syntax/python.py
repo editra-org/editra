@@ -26,6 +26,9 @@ import inspect
 
 #---- Keyword Specifications ----#
 
+# Indenter keywords
+INDENT_KW = u"def if elif else for while class try except finally"
+
 # Python Keywords
 KEYWORDS = keyword.kwlist
 KEYWORDS.extend(['True', 'False', 'None', 'self'])
@@ -127,7 +130,7 @@ def AutoIndenter(stc, pos, ichar):
 
     tokens = [token for token in text.strip().split() if len(token)]
     if len(tokens) and tokens[-1].endswith(":"):
-        if tokens[0].rstrip(u":") in u"def if elif else for while class":
+        if tokens[0].rstrip(u":") in INDENT_KW:
             rtxt += ichar
 
     return rtxt
