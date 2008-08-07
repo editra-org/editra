@@ -104,6 +104,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
 
     def __del__(self):
+        ed_msg.Unsubscribe(self.OnFileOpened)
         ed_msg.Unsubscribe(self.OnPageChanged)
         ed_msg.Unsubscribe(self.OnThemeChanged)
         ed_msg.Unsubscribe(self.OnConfigExit)
