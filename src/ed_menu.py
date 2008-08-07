@@ -460,10 +460,10 @@ class EdMenuBar(wx.MenuBar):
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_OPEN),
                         _("Open"))
         ## Setup File History in the File Menu
-        filemenu.AppendMenu(ed_glob.ID_FHIST, _("Open Recent"),
+        filemenu.AppendMenu(ed_glob.ID_FHIST, _("Open &Recent"),
                             filehist, _("Recently Opened Files"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_CLOSE, _("Close Page") + \
+        filemenu.Append(ed_glob.ID_CLOSE, _("&Close Page") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSE),
                         _("Close Current Page"))
         filemenu.Append(ed_glob.ID_CLOSE_WINDOW,
