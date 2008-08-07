@@ -117,33 +117,39 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._log = dev_tool.DEBUGP
         self._log("[app][info] Editra is Initializing")
 
-        # Setup the instance checker
-        instance_name = u"%s-%s" % (self.GetAppName(), wx.GetUserId())
-        self._isfirst = False            # Is the first instance
-        self._instance = wx.SingleInstanceChecker(instance_name)
-        if self._instance.IsAnotherRunning():
-            try:
-                opts, args = getopt.getopt(sys.argv[1:], "dhv",
-                                           ['debug', 'help', 'version'])
-            except getopt.GetoptError, msg:
-                self._log("[app][err] %s" % str(msg))
-                args = list()
+        self._isfirst = False # Is the first instance
+        self._instance = None
 
-            if not len(args):
-                args.append(APP_CMD_OPEN_WINDOW)
+        if ed_glob.SINGLE:
+            # Setup the instance checker
+            instance_name = u"%s-%s" % (self.GetAppName(), wx.GetUserId())
+            self._instance = wx.SingleInstanceChecker(instance_name)
+            if self._instance.IsAnotherRunning():
+                try:
+                    opts, args = getopt.getopt(sys.argv[1:], "dhv",
+                                               ['debug', 'help', 'version'])
+                except getopt.GetoptError, msg:
+                    self._log("[app][err] %s" % str(msg))
+                    args = list()
 
-            ed_ipc.SendCommands(args, profiler.Profile_Get('SESSION_KEY'))
+                if not len(args):
+                    args.append(APP_CMD_OPEN_WINDOW)
+
+                rval = ed_ipc.SendCommands(args, profiler.Profile_Get('SESSION_KEY'))
+            else:
+                self._log("[app][info] Starting Ipc server...")
+                # Set the session key and save it to the users profile so
+                # that other instances can access the server
+                key = unicode(base64.b64encode(os.urandom(8), 'zZ'))
+                key = wx.GetUserName() + key
+                profiler.Profile_Set('SESSION_KEY', key)
+                profiler.Profile_Set('ISBINARY', hasattr(sys, 'frozen'))
+                path = profiler.Profile_Get('MYPROFILE')
+                profiler.Profile().Write(path)
+                self._server = ed_ipc.EdIpcServer(self, profiler.Profile_Get('SESSION_KEY'))
+                self._server.start()
+                self._isfirst = True
         else:
-            self._log("[app][info] Starting Ipc server...")
-            # Set the session key and save it to the users profile so
-            # that other instances can access the server
-            key = unicode(base64.b64encode(os.urandom(8), 'zZ'))
-            key = wx.GetUserName() + key
-            profiler.Profile_Set('SESSION_KEY', key)
-            path = profiler.Profile_Get('MYPROFILE')
-            profiler.Profile().Write(path)
-            self._server = ed_ipc.EdIpcServer(self, profiler.Profile_Get('SESSION_KEY'))
-            self._server.start()
             self._isfirst = True
 
         # Setup Locale
@@ -645,6 +651,7 @@ def PrintHelp():
        "  -D         Turn off console debugging (overrides preferences)\n"
        "  -h         Show this help message\n"
        "  -v         Print version number and exit\n"
+       "  -S         Disable single instance checker\n"
        "\nLong Arguments:\n"
        "  --debug    Turn on console debugging\n"
        "  --help     Show this help message\n"
@@ -661,7 +668,7 @@ def ProcessCommandLine():
 
     """
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "dhvD",
+        opts, args = getopt.getopt(sys.argv[1:], "dhvDS",
                                    ['debug', 'help', 'version', 'auth'])
     except getopt.GetoptError, msg:
         return list(), list()
@@ -680,11 +687,12 @@ def ProcessCommandLine():
             opts.remove(opt)
         elif opt == '-D':
             ed_glob.DEBUG = False
+            opts.remove('-D')
+        elif opt == '-S':
+            ed_glob.SINGLE = False # Disable single instance checker
+            opts.remove(opt)
         else:
             pass
-
-    if '-D' in opts:
-        opts.remove('-D')
 
     # Return any unprocessed arguments
     return opts, args
