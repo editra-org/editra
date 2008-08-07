@@ -34,11 +34,11 @@ from util import Log
 # Default encoding to use when nothing is specified
 # Use utf-8 where available else fallback to the system
 # encoding
-DEFAULT_ENCODING = 'utf-8'
+DEFAULT_ENCODING = locale.getpreferredencoding()
 try:
     codecs.lookup(DEFAULT_ENCODING)
 except LookupError:
-    DEFAULT_ENCODING = locale.getpreferredencoding()
+    DEFAULT_ENCODING = 'utf-8'
 
 # File Helper Functions
 BOM = { 'utf-8' : codecs.BOM_UTF8,
@@ -389,7 +389,7 @@ def EncodeString(string, encoding=None):
         return string
 
 def FallbackReader(fname):
-    """Guess then encoding of a file by brute force by trying one
+    """Guess the encoding of a file by brute force by trying one
     encoding after the next until something succeeds.
     @param fname: file path to read from
 
@@ -414,11 +414,14 @@ def GetEncodings():
     @return: list of strings
 
     """
-    encodings = ['utf-8']
+    encodings = list()
     try:
         encodings.append(locale.getpreferredencoding())
     except:
         pass
+    
+    encodings.append('utf-8')
+
     try:
         encodings.append(locale.nl_langinfo(locale.CODESET))
     except:
