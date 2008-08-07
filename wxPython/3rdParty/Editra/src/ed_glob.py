@@ -80,6 +80,7 @@ CONFIG = {
 }
 
 DEBUG = False
+SINGLE = True
 
 #---- Object ID's ----#
 # File Menu IDs

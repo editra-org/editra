@@ -60,6 +60,7 @@ _DEFAULTS = {
            'ICONS'      : 'Tango',          # Icon Theme
            'ICON_SZ'    : (24, 24),         # Toolbar Icon Size
            'INDENTWIDTH': 4,                # Default indent width
+           'ISBINARY'   : False,            # Is this instance a binary
            'KEY_PROFILE': None,             # Keybinding profile
            'LANG'       : 'Default',        # UI language
            'LASTCHECK'  : 0,                # Last time update check was done
