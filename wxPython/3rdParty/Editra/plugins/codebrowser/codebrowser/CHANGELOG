@@ -8,6 +8,17 @@ Version 0.4
 Released: 07/11/2008
 
 New:
+
+
+Bug Fixes:
++Php browser now properly supports short tags <? as well as the long tag <?php
+
+#-----------------------------------------------------------------------------#
+
+Version 0.4
+Released: 07/11/2008
+
+New:
 +Add C Support (Macros, Functions)
 +Add Ruby Support (Classes, Modules, Functions, Methods)
 

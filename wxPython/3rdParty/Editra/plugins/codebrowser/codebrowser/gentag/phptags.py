@@ -55,8 +55,10 @@ def GenerateTags(buff):
             idx = parselib.SkipWhitespace(line, idx)
 
             # Check if in a <?php ?> block or not
-            if line[idx:].startswith(u'<?php'):
-                idx += 5
+            if line[idx:].startswith(u'<?'):
+                idx += 2
+                if line[idx:].startswith(u'php'):
+                    idx += 5
                 inphp = True
             elif line[idx:].startswith(u'?>'):
                 idx += 2
