@@ -41,3 +41,9 @@
 ../../src/syntax/syntax.py
 ../../src/updater.py
 ../../src/util.py
+../../src/eclib/colorsetter.py
+../../src/eclib/ctrlbox.py
+../../src/eclib/elistmix.py
+../../src/eclib/outbuff.py
+../../src/eclib/platebtn.py
+../../src/eclib/pstatbar.py
