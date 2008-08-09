@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 17:57-0500\n"
+"POT-Creation-Date: 2008-08-09 14:49-0500\n"
 "PO-Revision-Date: 2008-08-05 07:56+0000\n"
 "Last-Translator: Ihor Chomko <igorchomko@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,6 +56,11 @@ msgstr ""
 #: ../../src/ed_menu.py:811
 msgid "&About"
 msgstr "&Про"
+
+#: ../../src/ed_menu.py:466
+#, fuzzy
+msgid "&Close Page"
+msgstr "Закрити сторінку"
 
 #: ../../src/ed_menu.py:535
 msgid "&Copy"
@@ -137,7 +142,7 @@ msgstr "**Аліас**"
 msgid "**New Value**"
 msgstr "**Нова змінна**"
 
-#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:417 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "Відмінити"
 
@@ -177,7 +182,7 @@ msgstr "Всі"
 msgid "All Done"
 msgstr "Все Зроблено"
 
-#: ../../src/Editra.py:467
+#: ../../src/Editra.py:473
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -198,7 +203,7 @@ msgstr "Вигляд"
 msgid "Apply"
 msgstr "Застосувати"
 
-#: ../../src/style_editor.py:652
+#: ../../src/style_editor.py:654
 msgid "Attributes"
 msgstr "Атрибути"
 
@@ -222,7 +227,7 @@ msgstr "Автоматично очищати буфер поміж запуск
 msgid "Automatically save/use window state from last session"
 msgstr "Автоматично зберігати/використовувати стан вікна після останньої сесії"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:408 ../../src/style_editor.py:641
+#: ../../plugins/Launch/launch/cfgdlg.py:408 ../../src/style_editor.py:643
 msgid "Background"
 msgstr "Тло"
 
@@ -230,7 +235,7 @@ msgstr "Тло"
 msgid "Backspace Unindents"
 msgstr "Безвідступні Реверси"
 
-#: ../../src/style_editor.py:194
+#: ../../src/style_editor.py:196
 msgid "Base new theme on existing one"
 msgstr "Створити нову тему на основі існуючої"
 
@@ -267,7 +272,7 @@ msgstr "Змінити налаштування шрифтів"
 msgid "Change view to \"%s\""
 msgstr "Змінити вигляд до \"%s\""
 
-#: ../../src/style_editor.py:736
+#: ../../src/style_editor.py:738
 #, python-format
 msgid "Changed color scheme to %s"
 msgstr "Змінити палітру кольорів до %s"
@@ -305,7 +310,7 @@ msgstr "Обрати місце збереження"
 msgid "Class Definitions"
 msgstr "Визначення Класу"
 
-#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
+#: ../../plugins/Launch/launch/launch.py:164 ../../src/ed_log.py:132
 #: ../../src/ed_search.py:609
 msgid "Clear"
 msgstr "Очистити"
@@ -326,10 +331,6 @@ msgstr "Закрити всі сторінки"
 #: ../../src/ed_menu.py:468
 msgid "Close Current Page"
 msgstr "Закрити наявну сторінку"
-
-#: ../../src/ed_menu.py:466
-msgid "Close Page"
-msgstr "Закрити сторінку"
 
 #: ../../src/ed_menu.py:470
 msgid "Close Window"
@@ -359,7 +360,7 @@ msgstr "Згортання коду"
 msgid "CodeBrowser"
 msgstr "Браузер Кодів"
 
-#: ../../src/style_editor.py:625
+#: ../../src/style_editor.py:627
 msgid "Color"
 msgstr "Колір"
 
@@ -549,7 +550,7 @@ msgstr "Завантаження"
 msgid "Downloading To: %s"
 msgstr "Завантаження до: %s"
 
-#: ../../src/Editra.py:473 ../../src/prefdlg.py:1322
+#: ../../src/Editra.py:479 ../../src/prefdlg.py:1322
 msgid "Downloading Update"
 msgstr "Поновлення завантаження"
 
@@ -624,7 +625,7 @@ msgstr "Режим редактора"
 msgid "Editra Log"
 msgstr "Журнал Editra"
 
-#: ../../src/style_editor.py:284
+#: ../../src/style_editor.py:286
 msgid "Editra Style Sheet"
 msgstr "Карта стилів Editra"
 
@@ -662,6 +663,10 @@ msgstr "Помилка кодування"
 #: ../../src/ed_menu.py:740
 msgid "End of line character formatting"
 msgstr "Кінець форматування шрифтів лінійки"
+
+#: ../../src/eclib/colorsetter.py:89
+msgid "Enter a hex color value"
+msgstr ""
 
 #: ../../src/prefdlg.py:1659
 msgid "Enter the name of the new key profile"
@@ -710,7 +715,7 @@ msgstr "Виконувані команди"
 msgid "Executables"
 msgstr "Виконувані"
 
-#: ../../plugins/Launch/launch/launch.py:534
+#: ../../plugins/Launch/launch/launch.py:535
 msgid "Exit Code"
 msgstr "Вийти з коду"
 
@@ -718,11 +723,11 @@ msgstr "Вийти з коду"
 msgid "Exit the Program"
 msgstr "Вийти з Програми"
 
-#: ../../src/style_editor.py:140
+#: ../../src/style_editor.py:141
 msgid "Export"
 msgstr "Експортувати"
 
-#: ../../src/style_editor.py:282
+#: ../../src/style_editor.py:284
 msgid "Export Style Sheet"
 msgstr "Експортувати Карту Стилів"
 
@@ -842,15 +847,15 @@ msgstr "Завершено завантаження додатків"
 msgid "Folder"
 msgstr "Папка"
 
-#: ../../src/style_editor.py:673
+#: ../../src/style_editor.py:675
 msgid "Font"
 msgstr "Шрифт"
 
-#: ../../src/style_editor.py:668
+#: ../../src/style_editor.py:670
 msgid "Font Settings"
 msgstr "Установки шрифтів"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:405 ../../src/style_editor.py:629
+#: ../../plugins/Launch/launch/cfgdlg.py:405 ../../src/style_editor.py:631
 msgid "Foreground"
 msgstr "Переднє тло"
 
@@ -872,27 +877,27 @@ msgstr "Визначення функції"
 msgid "General"
 msgstr "Загальні"
 
-#: ../../src/generator.py:271 ../../src/generator.py:638
-#: ../../src/generator.py:830
+#: ../../src/generator.py:276 ../../src/generator.py:647
+#: ../../src/generator.py:841
 #, python-format
 msgid "Generate %s"
 msgstr "Згенерувати %s"
 
-#: ../../src/generator.py:107
+#: ../../src/generator.py:112
 msgid "Generate Code and Documents"
 msgstr "Згенерувати код і документи"
 
-#: ../../src/generator.py:272 ../../src/generator.py:831
+#: ../../src/generator.py:277 ../../src/generator.py:842
 #, python-format
 msgid "Generate a %s version of the current document"
 msgstr "Згенерувати %s версію наявного документу"
 
-#: ../../src/generator.py:639
+#: ../../src/generator.py:648
 #, python-format
 msgid "Generate an %s version of the current document"
 msgstr "Згенерувати %s версію наявного документу"
 
-#: ../../src/generator.py:106
+#: ../../src/generator.py:111
 msgid "Generator"
 msgstr "Генератор"
 
@@ -1202,7 +1207,7 @@ msgid "Network"
 msgstr "Мережа"
 
 #: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1463
-#: ../../src/style_editor.py:196
+#: ../../src/style_editor.py:198
 msgid "New"
 msgstr "Новий"
 
@@ -1266,6 +1271,11 @@ msgstr "Мережева проектна документація та допо
 msgid "Open"
 msgstr "Відкрити"
 
+#: ../../src/ed_menu.py:463
+#, fuzzy
+msgid "Open &Recent"
+msgstr "Відкрити недавні"
+
 #: ../../plugins/PyShell/pyshell/__init__.py:82
 msgid "Open A Python Shell"
 msgstr "Відкрити оболонку Python"
@@ -1285,10 +1295,6 @@ msgstr "Відкрити файл"
 #: ../../plugins/filebrowser/filebrowser/browser.py:245
 msgid "Open File Browser Sidepanel"
 msgstr "Відкрити бокову Панель Браузера файлів"
-
-#: ../../src/ed_menu.py:463
-msgid "Open Recent"
-msgstr "Відкрити недавні"
 
 #: ../../src/prefdlg.py:378
 msgid "Open files in new windows by default"
@@ -1365,7 +1371,7 @@ msgstr "Простий текст"
 msgid "Platform Info"
 msgstr "Інформація щодо платформи"
 
-#: ../../src/Editra.py:735
+#: ../../src/Editra.py:743
 #, fuzzy
 msgid "Please check the preferences dialog to check your preferences"
 msgstr "Перевірте,будь-ласка, діалог налаштувань для перезавантаження ваших преференцій"
@@ -1443,11 +1449,11 @@ msgstr "Профіль"
 msgid "Profile Saved as: %s"
 msgstr "Профіль збережено як: %s"
 
-#: ../../src/Editra.py:737
+#: ../../src/Editra.py:745
 msgid "Profile Updated"
 msgstr "Профіль оновлено"
 
-#: ../../plugins/Launch/launch/launch.py:132
+#: ../../plugins/Launch/launch/launch.py:133
 msgid "Program Executable Command"
 msgstr "Команда на виконання програми"
 
@@ -1588,8 +1594,8 @@ msgid "Revert to Saved"
 msgstr "Повернутися до По замовчуванню"
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:155
-#: ../../plugins/Launch/launch/launch.py:422
+#: ../../plugins/Launch/launch/launch.py:156
+#: ../../plugins/Launch/launch/launch.py:423
 msgid "Run"
 msgstr "Виконати"
 
@@ -1649,7 +1655,7 @@ msgstr "Зберегти профіль"
 msgid "Save Selected Paths"
 msgstr "Зберегти обрані шляхи"
 
-#: ../../src/style_editor.py:250
+#: ../../src/style_editor.py:252
 msgid "Save Styles"
 msgstr "Зберегти стилі"
 
@@ -1671,7 +1677,7 @@ msgstr "Зберегти файл як: %s"
 msgid "Saved File: %s"
 msgstr "Збережений файл: %s"
 
-#: ../../plugins/Launch/launch/launch.py:145
+#: ../../plugins/Launch/launch/launch.py:146
 msgid "Script Arguments"
 msgstr "Аргументи скрипта"
 
@@ -1711,7 +1717,7 @@ msgstr "Надашліть повідомлення про недоліки,а �
 msgid "Set Font"
 msgstr "Встановити шрифт"
 
-#: ../../src/style_editor.py:175
+#: ../../src/style_editor.py:177
 msgid "Set the preview file type"
 msgstr "Встановіть попередній тип файлу"
 
@@ -1723,7 +1729,7 @@ msgstr "Встановлює вторинні шрифти,що використ
 msgid "Sets the main/default font of the document"
 msgstr "Встановлює головний/по замовчуванню шрифт документа"
 
-#: ../../plugins/Launch/launch/launch.py:125
+#: ../../plugins/Launch/launch/launch.py:126
 msgid "Settings"
 msgstr "Установки"
 
@@ -1797,11 +1803,11 @@ msgid "Show the edge column guide"
 msgstr "Показати направляючого країв стовпця"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:170
-#: ../../src/style_editor.py:685
+#: ../../src/style_editor.py:687
 msgid "Size"
 msgstr "Розмір"
 
-#: ../../src/style_editor.py:248
+#: ../../src/style_editor.py:250
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr "Деякі стилі було змінено.Бажаєте зберегти зміни перед виходом?"
 
@@ -1813,7 +1819,7 @@ msgstr "Пробіли до Табуляторів"
 msgid "Start a New File"
 msgstr "Запустити новий файл"
 
-#: ../../src/style_editor.py:197
+#: ../../src/style_editor.py:199
 msgid "Start a blank new style"
 msgstr "Запустити порожній новий стиль"
 
@@ -1838,11 +1844,11 @@ msgid "Style Editor"
 msgstr "Редактор стилю"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:53
-#: ../../src/style_editor.py:214
+#: ../../src/style_editor.py:216
 msgid "Style Tags"
 msgstr "Теги стилю"
 
-#: ../../src/style_editor.py:190
+#: ../../src/style_editor.py:192
 msgid "Style Theme"
 msgstr "Тема стилю"
 
@@ -1863,7 +1869,7 @@ msgstr "Успішно встановлені додатки"
 msgid "Switch Lexer to %s"
 msgstr "Переключити лексичний аналізатор на %s"
 
-#: ../../src/style_editor.py:172
+#: ../../src/style_editor.py:174
 msgid "Syntax Files"
 msgstr "Файли синтаксису"
 
@@ -2045,7 +2051,7 @@ msgstr "Папка_без назви"
 msgid "Update"
 msgstr "Оновити"
 
-#: ../../src/Editra.py:469
+#: ../../src/Editra.py:475
 msgid "Update Available"
 msgstr "Доступне оновлення"
 
@@ -2143,7 +2149,7 @@ msgstr "Огорнути текст горизонтально"
 msgid "Written in 100%% Python."
 msgstr "Написано на 100%% Python."
 
-#: ../../src/Editra.py:733
+#: ../../src/Editra.py:741
 msgid "Your profile has been updated to the latest version"
 msgstr "Ваш профіль було оновлено до наступної версії"
 
@@ -2159,27 +2165,27 @@ msgstr "Збільшити масштаб зображення"
 msgid "Zoom Out"
 msgstr "Зменшити масштаб зображення"
 
-#: ../../plugins/Launch/launch/launch.py:142
+#: ../../plugins/Launch/launch/launch.py:143
 msgid "args"
 msgstr "args"
 
-#: ../../src/style_editor.py:656
+#: ../../src/style_editor.py:658
 msgid "bold"
 msgstr "жирний"
 
-#: ../../src/style_editor.py:657
+#: ../../src/style_editor.py:659
 msgid "eol"
 msgstr "eol"
 
-#: ../../plugins/Launch/launch/launch.py:129
+#: ../../plugins/Launch/launch/launch.py:130
 msgid "exec"
 msgstr "exec"
 
-#: ../../src/style_editor.py:658
+#: ../../src/style_editor.py:660
 msgid "italic"
 msgstr "курсив"
 
-#: ../../src/style_editor.py:659
+#: ../../src/style_editor.py:661
 msgid "underline"
 msgstr "підкреслення"
 

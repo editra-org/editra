@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 17:57-0500\n"
+"POT-Creation-Date: 2008-08-09 14:49-0500\n"
 "PO-Revision-Date: 2008-06-09 15:31+0000\n"
 "Last-Translator: Alejandro Rochette <Unknown>\n"
 "Language-Team: Spanish<Spanish>\n"
@@ -60,6 +60,11 @@ msgstr ""
 #: ../../src/ed_menu.py:811
 msgid "&About"
 msgstr "&Acerca de"
+
+#: ../../src/ed_menu.py:466
+#, fuzzy
+msgid "&Close Page"
+msgstr "Cerrar Página"
 
 #: ../../src/ed_menu.py:535
 msgid "&Copy"
@@ -141,7 +146,7 @@ msgstr "**Alias**"
 msgid "**New Value**"
 msgstr "**Nuevo Valor**"
 
-#: ../../plugins/Launch/launch/launch.py:416 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:417 ../../src/dev_tool.py:387
 msgid "Abort"
 msgstr "Abortar"
 
@@ -181,7 +186,7 @@ msgstr "Todo"
 msgid "All Done"
 msgstr "Todo Hecho"
 
-#: ../../src/Editra.py:467
+#: ../../src/Editra.py:473
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -202,7 +207,7 @@ msgstr "Apariencia"
 msgid "Apply"
 msgstr "Aplicar"
 
-#: ../../src/style_editor.py:652
+#: ../../src/style_editor.py:654
 msgid "Attributes"
 msgstr "Atributos"
 
@@ -226,7 +231,7 @@ msgstr ""
 msgid "Automatically save/use window state from last session"
 msgstr "Automáticamente guardar/usar el estado de la ventana de la última sesión"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:408 ../../src/style_editor.py:641
+#: ../../plugins/Launch/launch/cfgdlg.py:408 ../../src/style_editor.py:643
 msgid "Background"
 msgstr "Fondo"
 
@@ -234,7 +239,7 @@ msgstr "Fondo"
 msgid "Backspace Unindents"
 msgstr ""
 
-#: ../../src/style_editor.py:194
+#: ../../src/style_editor.py:196
 msgid "Base new theme on existing one"
 msgstr "Basar el nuevo tema en uno existente"
 
@@ -272,7 +277,7 @@ msgstr "Cambiar Preferencias de Fuentes"
 msgid "Change view to \"%s\""
 msgstr "Cambio miras a \"% s\""
 
-#: ../../src/style_editor.py:736
+#: ../../src/style_editor.py:738
 #, python-format
 msgid "Changed color scheme to %s"
 msgstr "Ha cambiado el esquema de color a %s"
@@ -310,7 +315,7 @@ msgstr "Selecciona un lugar para guardar"
 msgid "Class Definitions"
 msgstr "Definiciones de Clase"
 
-#: ../../plugins/Launch/launch/launch.py:163 ../../src/ed_log.py:132
+#: ../../plugins/Launch/launch/launch.py:164 ../../src/ed_log.py:132
 #: ../../src/ed_search.py:609
 msgid "Clear"
 msgstr "Limpiar"
@@ -331,10 +336,6 @@ msgstr "Cerrar Todas las Páginas"
 #: ../../src/ed_menu.py:468
 msgid "Close Current Page"
 msgstr "Cerrar Página Actual"
-
-#: ../../src/ed_menu.py:466
-msgid "Close Page"
-msgstr "Cerrar Página"
 
 #: ../../src/ed_menu.py:470
 msgid "Close Window"
@@ -365,7 +366,7 @@ msgstr "Plegado de Código"
 msgid "CodeBrowser"
 msgstr "Explorador de Código"
 
-#: ../../src/style_editor.py:625
+#: ../../src/style_editor.py:627
 msgid "Color"
 msgstr "Color"
 
@@ -554,7 +555,7 @@ msgstr "Descargando"
 msgid "Downloading To: %s"
 msgstr "Descargando en: %s"
 
-#: ../../src/Editra.py:473 ../../src/prefdlg.py:1322
+#: ../../src/Editra.py:479 ../../src/prefdlg.py:1322
 msgid "Downloading Update"
 msgstr "Descargando Actualización"
 
@@ -630,7 +631,7 @@ msgstr "Modo Editor"
 msgid "Editra Log"
 msgstr "Bitácora de Editra"
 
-#: ../../src/style_editor.py:284
+#: ../../src/style_editor.py:286
 msgid "Editra Style Sheet"
 msgstr "Hoja de Estilo de Editra"
 
@@ -667,6 +668,11 @@ msgstr "Error de codificado"
 #: ../../src/ed_menu.py:740
 msgid "End of line character formatting"
 msgstr "Formateo de caracter de fin de línea"
+
+#: ../../src/eclib/colorsetter.py:89
+#, fuzzy
+msgid "Enter a hex color value"
+msgstr "Introduzca un valor de color hexadecimal"
 
 #: ../../src/prefdlg.py:1659
 msgid "Enter the name of the new key profile"
@@ -712,7 +718,7 @@ msgstr "Comandos Ejecutables"
 msgid "Executables"
 msgstr "Ejecutables"
 
-#: ../../plugins/Launch/launch/launch.py:534
+#: ../../plugins/Launch/launch/launch.py:535
 msgid "Exit Code"
 msgstr "Código de Salida"
 
@@ -720,11 +726,11 @@ msgstr "Código de Salida"
 msgid "Exit the Program"
 msgstr "Salir del Programa"
 
-#: ../../src/style_editor.py:140
+#: ../../src/style_editor.py:141
 msgid "Export"
 msgstr "Exportar"
 
-#: ../../src/style_editor.py:282
+#: ../../src/style_editor.py:284
 msgid "Export Style Sheet"
 msgstr "Exportar Hoja de Estilo"
 
@@ -840,15 +846,15 @@ msgstr "Se terminó de descargar plugins"
 msgid "Folder"
 msgstr "Carpeta"
 
-#: ../../src/style_editor.py:673
+#: ../../src/style_editor.py:675
 msgid "Font"
 msgstr "Fuente"
 
-#: ../../src/style_editor.py:668
+#: ../../src/style_editor.py:670
 msgid "Font Settings"
 msgstr "Ajustes de fuentes"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:405 ../../src/style_editor.py:629
+#: ../../plugins/Launch/launch/cfgdlg.py:405 ../../src/style_editor.py:631
 msgid "Foreground"
 msgstr "Primer plano"
 
@@ -870,27 +876,27 @@ msgstr ""
 msgid "General"
 msgstr "General"
 
-#: ../../src/generator.py:271 ../../src/generator.py:638
-#: ../../src/generator.py:830
+#: ../../src/generator.py:276 ../../src/generator.py:647
+#: ../../src/generator.py:841
 #, python-format
 msgid "Generate %s"
 msgstr "Generar %s"
 
-#: ../../src/generator.py:107
+#: ../../src/generator.py:112
 msgid "Generate Code and Documents"
 msgstr "Generar código y documentos"
 
-#: ../../src/generator.py:272 ../../src/generator.py:831
+#: ../../src/generator.py:277 ../../src/generator.py:842
 #, python-format
 msgid "Generate a %s version of the current document"
 msgstr "Generar una versión %s del documento actual"
 
-#: ../../src/generator.py:639
+#: ../../src/generator.py:648
 #, python-format
 msgid "Generate an %s version of the current document"
 msgstr "Generar una versión %s del documento actual"
 
-#: ../../src/generator.py:106
+#: ../../src/generator.py:111
 msgid "Generator"
 msgstr "Generador"
 
@@ -1202,7 +1208,7 @@ msgid "Network"
 msgstr "Red"
 
 #: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1463
-#: ../../src/style_editor.py:196
+#: ../../src/style_editor.py:198
 msgid "New"
 msgstr "Nuevo"
 
@@ -1266,6 +1272,11 @@ msgstr "Documentación del proyecto y guías de ayuda en línea"
 msgid "Open"
 msgstr "Abrir"
 
+#: ../../src/ed_menu.py:463
+#, fuzzy
+msgid "Open &Recent"
+msgstr "Abrir reciente"
+
 #: ../../plugins/PyShell/pyshell/__init__.py:82
 msgid "Open A Python Shell"
 msgstr "Abrir una shell Python"
@@ -1285,10 +1296,6 @@ msgstr "Abrir archivo"
 #: ../../plugins/filebrowser/filebrowser/browser.py:245
 msgid "Open File Browser Sidepanel"
 msgstr "Abrir panel navegador de archivos"
-
-#: ../../src/ed_menu.py:463
-msgid "Open Recent"
-msgstr "Abrir reciente"
 
 #: ../../src/prefdlg.py:378
 msgid "Open files in new windows by default"
@@ -1368,7 +1375,7 @@ msgstr "Buscar texto"
 msgid "Platform Info"
 msgstr "Información de plataforma"
 
-#: ../../src/Editra.py:735
+#: ../../src/Editra.py:743
 #, fuzzy
 msgid "Please check the preferences dialog to check your preferences"
 msgstr "Por favor revise el cuadro de diálogo de las preferencias para resetearlas."
@@ -1446,11 +1453,11 @@ msgstr "Perfil"
 msgid "Profile Saved as: %s"
 msgstr "Perfil guardado como: %s"
 
-#: ../../src/Editra.py:737
+#: ../../src/Editra.py:745
 msgid "Profile Updated"
 msgstr "Perfil actualizado"
 
-#: ../../plugins/Launch/launch/launch.py:132
+#: ../../plugins/Launch/launch/launch.py:133
 msgid "Program Executable Command"
 msgstr "Comando Ejecutable del Programa"
 
@@ -1591,8 +1598,8 @@ msgid "Revert to Saved"
 msgstr "Restablecer predefinidos"
 
 #: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:155
-#: ../../plugins/Launch/launch/launch.py:422
+#: ../../plugins/Launch/launch/launch.py:156
+#: ../../plugins/Launch/launch/launch.py:423
 msgid "Run"
 msgstr "Ejecutar"
 
@@ -1654,7 +1661,7 @@ msgstr "Guardar perfil"
 msgid "Save Selected Paths"
 msgstr "Guardar rutas seleccionadas"
 
-#: ../../src/style_editor.py:250
+#: ../../src/style_editor.py:252
 msgid "Save Styles"
 msgstr "Guardar estilos"
 
@@ -1676,7 +1683,7 @@ msgstr "Guardar archivo como: %s"
 msgid "Saved File: %s"
 msgstr "Archivo guardado: %s"
 
-#: ../../plugins/Launch/launch/launch.py:145
+#: ../../plugins/Launch/launch/launch.py:146
 msgid "Script Arguments"
 msgstr "Argumentos del script"
 
@@ -1718,7 +1725,7 @@ msgstr "Enviar reportes de fallos y sugerencias"
 msgid "Set Font"
 msgstr "Establecer fuente"
 
-#: ../../src/style_editor.py:175
+#: ../../src/style_editor.py:177
 #, fuzzy
 msgid "Set the preview file type"
 msgstr "Establecer la vista previa del tipo de archivo"
@@ -1731,7 +1738,7 @@ msgstr "Establece una fuente secundaria utilizada para regiones especiales cuand
 msgid "Sets the main/default font of the document"
 msgstr "Establece la fuente principal/por defecto para el documento"
 
-#: ../../plugins/Launch/launch/launch.py:125
+#: ../../plugins/Launch/launch/launch.py:126
 msgid "Settings"
 msgstr "Preferencias"
 
@@ -1806,11 +1813,11 @@ msgid "Show the edge column guide"
 msgstr "Mostrar la guía de columna de margen"
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:170
-#: ../../src/style_editor.py:685
+#: ../../src/style_editor.py:687
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../../src/style_editor.py:248
+#: ../../src/style_editor.py:250
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr "Algunos estilos han cambiado ¿Quieres guardarlos antes de salir?"
 
@@ -1822,7 +1829,7 @@ msgstr "Espacios a tabuladores"
 msgid "Start a New File"
 msgstr "Comenzar un nuevo archivo"
 
-#: ../../src/style_editor.py:197
+#: ../../src/style_editor.py:199
 #, fuzzy
 msgid "Start a blank new style"
 msgstr "Iniciar un estilo nuevo en blanco"
@@ -1849,11 +1856,11 @@ msgid "Style Editor"
 msgstr "Editor de estilos"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:53
-#: ../../src/style_editor.py:214
+#: ../../src/style_editor.py:216
 msgid "Style Tags"
 msgstr "Etiquetas de estilo"
 
-#: ../../src/style_editor.py:190
+#: ../../src/style_editor.py:192
 msgid "Style Theme"
 msgstr "Tema de estilo"
 
@@ -1874,7 +1881,7 @@ msgstr "Plugins instalados exitosamente"
 msgid "Switch Lexer to %s"
 msgstr "Cambiar léxico a %s"
 
-#: ../../src/style_editor.py:172
+#: ../../src/style_editor.py:174
 msgid "Syntax Files"
 msgstr "Archivos de sintaxis"
 
@@ -2055,7 +2062,7 @@ msgstr ""
 msgid "Update"
 msgstr "Actualizar"
 
-#: ../../src/Editra.py:469
+#: ../../src/Editra.py:475
 msgid "Update Available"
 msgstr "Actualización disponible"
 
@@ -2154,7 +2161,7 @@ msgstr "Ajustar líneas horizontalmente"
 msgid "Written in 100%% Python."
 msgstr "Escrito 100%% en Python"
 
-#: ../../src/Editra.py:733
+#: ../../src/Editra.py:741
 msgid "Your profile has been updated to the latest version"
 msgstr "Tu perfil se ha actualizado a la última versión"
 
@@ -2170,27 +2177,27 @@ msgstr "Aumentar zoom"
 msgid "Zoom Out"
 msgstr "Decrementar zoom"
 
-#: ../../plugins/Launch/launch/launch.py:142
+#: ../../plugins/Launch/launch/launch.py:143
 msgid "args"
 msgstr "args"
 
-#: ../../src/style_editor.py:656
+#: ../../src/style_editor.py:658
 msgid "bold"
 msgstr "negrita"
 
-#: ../../src/style_editor.py:657
+#: ../../src/style_editor.py:659
 msgid "eol"
 msgstr "fin de línea"
 
-#: ../../plugins/Launch/launch/launch.py:129
+#: ../../plugins/Launch/launch/launch.py:130
 msgid "exec"
 msgstr "ejecutar"
 
-#: ../../src/style_editor.py:658
+#: ../../src/style_editor.py:660
 msgid "italic"
 msgstr "cursiva"
 
-#: ../../src/style_editor.py:659
+#: ../../src/style_editor.py:661
 msgid "underline"
 msgstr "subrayado"
 
@@ -2220,10 +2227,6 @@ msgstr "subrayado"
 
 #~ msgid "Editra | CodeBrowser"
 #~ msgstr "Editra | Explorador de Código"
-
-#, fuzzy
-#~ msgid "Enter a hex color value"
-#~ msgstr "Introduzca un valor de color hexadecimal"
 
 #~ msgid "Exit"
 #~ msgstr "Salir"
