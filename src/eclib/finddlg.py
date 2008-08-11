@@ -42,7 +42,7 @@ AFR_REGEX       = 8
 # Search Location Parameters (NOTE: must be kept in sync with Lookin List)
 LOCATION_CURRENT_DOC = 0
 LOCATION_OPEN_DOCS   = 1
-LOCATION_IN_FILES    = 3
+LOCATION_IN_FILES    = 2
 
 # Control Names
 FindBoxName = "EdFindBox"
@@ -424,7 +424,8 @@ class FindPanel(wx.Panel):
 
         # Buttons
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
-        bsizer.Add((100, 1), 1)
+        self._sizers['fspacer'] = bsizer.Add((100, 1), 1)
+        self._sizers['frspacer'] = bsizer.Add((50, 1), 1)
         for bid, blbl in [(wx.ID_FIND, _("Find")),
                           (wx.ID_REPLACE, _("Replace")),
                           (ID_FIND_ALL, _("Find All")),
@@ -458,17 +459,23 @@ class FindPanel(wx.Panel):
 
         """
         if find:
-            show = (wx.ID_FIND, ID_FIND_ALL)
-            hide = (wx.ID_REPLACE, ID_REPLACE_ALL)
+            show = (wx.ID_FIND, ID_FIND_ALL, 'fspacer')
+            hide = (wx.ID_REPLACE, ID_REPLACE_ALL, 'frspacer')
         else:
-            show = (wx.ID_REPLACE, ID_REPLACE_ALL)
-            hide = (ID_FIND_ALL,)
+            show = (wx.ID_REPLACE, ID_REPLACE_ALL, 'frspacer')
+            hide = (ID_FIND_ALL, 'fspacer')
 
         for ctrl in show:
-            self._sizers[ctrl].ShowItems(True)
+            if isinstance(ctrl, basestring):
+                self._sizers[ctrl].Show(True)
+            else:
+                self._sizers[ctrl].ShowItems(True)
 
         for ctrl in hide:
-            self._sizers[ctrl].ShowItems(False)
+            if isinstance(ctrl, basestring):
+                self._sizers[ctrl].Show(False)
+            else:
+                self._sizers[ctrl].ShowItems(False)
 
     def ClearFlag(self, flag):
         """Clear a search flag
@@ -487,12 +494,20 @@ class FindPanel(wx.Panel):
         etype = EVENT_MAP.get(eid, None)
         if etype is not None:
             evt = FindEvent(etype, eid, self._fdata.GetFlags())
-            evt.SetSearchType(min(3, self._lookin.GetSelection()))
+            lookin_idx = self._lookin.GetSelection()
+            stype = min(LOCATION_IN_FILES, max(LOCATION_CURRENT_DOC, lookin_idx))
+            evt.SetSearchType(stype)
             evt.SetFindString(self._ftxt.GetValue())
+
             if self._mode == AFR_REPLACEDIALOG:
                 evt.SetReplaceString(self._rtxt.GetValue())
             else:
                 evt.SetReplaceString(None)
+
+            if stype >= LOCATION_IN_FILES:
+                print self._paths
+                evt.SetDirectory(self._paths.get(lookin_idx, u''))
+
             wx.PostEvent(self.GetParent(), evt)
             return True
         else:
