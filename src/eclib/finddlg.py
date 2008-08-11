@@ -383,7 +383,7 @@ class FindPanel(wx.Panel):
         # Search Field
         fhsizer = wx.BoxSizer(wx.HORIZONTAL)
         fhsizer.Add(self._ftxt, 1, wx.EXPAND)
-        topvsizer.AddMany([(findlbl, 0, wx.ALIGN_LEFT), ((5, 5), 0),
+        topvsizer.AddMany([(findlbl, 0, wx.ALIGN_LEFT), ((3, 3), 0),
                           (fhsizer, 0, wx.EXPAND), ((5, 5), 0)])
 
         # Replace field
@@ -392,7 +392,7 @@ class FindPanel(wx.Panel):
         rlbl = wx.StaticText(self, ID_REPLACE_LBL, _("Replace with") + u":")
         self._sizers[ID_REPLACE_LBL] = wx.BoxSizer(wx.VERTICAL)
         self._sizers[ID_REPLACE_LBL].AddMany([(rlbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                                             ((5, 5), 0), (rhsizer, 0, wx.EXPAND)])
+                                             ((3, 3), 0), (rhsizer, 0, wx.EXPAND)])
         topvsizer.AddMany([(self._sizers[ID_REPLACE_LBL], 0, wx.EXPAND),
                            ((5, 5), 0)])
 
@@ -403,15 +403,16 @@ class FindPanel(wx.Panel):
                        (dirbtn, 0)])
         topvsizer.AddMany([(wx.StaticText(self, label=_("Look in") + u":"),
                             0, wx.ALIGN_LEFT),
-                           ((5, 5), 0), (li_sz, 0, wx.EXPAND),
+                           ((3, 3), 0), (li_sz, 0, wx.EXPAND),
                            ((5, 5), 0)])
 
         # Search Direction Box
         dbox = wx.StaticBox(self, label=_("Direction"))
         dboxsz = wx.StaticBoxSizer(dbox, wx.HORIZONTAL)
         dboxsz.AddMany([(wx.RadioButton(self, wx.ID_UP, _("Up")), 0),
-                        ((5, 5), 1),
-                        (wx.RadioButton(self, wx.ID_DOWN, _("Down")), 0)])
+                        ((20, 5), 0),
+                        (wx.RadioButton(self, wx.ID_DOWN, _("Down")), 0),
+                        ((5, 5), 1)])
 
         # Search Options Box
         statbox = wx.StaticBox(self, label=_("Find Options"))
@@ -537,9 +538,7 @@ class FindPanel(wx.Panel):
                  wx.ID_UP : AFR_UP }
         eid = evt.GetId()
         eobj = evt.GetEventObject()
-        print "OPTION"
         if eid in fmap:
-            print "GOT IT"
             if eobj.GetValue():
                 self.SetFlag(fmap[eid])
             else:
