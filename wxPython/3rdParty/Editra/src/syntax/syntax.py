@@ -222,7 +222,7 @@ def GenLexerMenu():
     for key in synglob.LANG_MAP:
         f_types[key] = synglob.LANG_MAP[key][LANG_ID]
     f_order = list(f_types)
-    f_order.sort()
+    f_order.sort(NoCaseCmp)
 
     for lang in f_order:
         lex_menu.Append(f_types[lang], lang, 
@@ -246,7 +246,7 @@ def GenFileFilters():
     for key in f_dict:
         tmp = u" (%s)|%s|" % (f_dict[key][1:], f_dict[key][1:])
         filters.append(key + tmp)
-    filters.sort()
+    filters.sort(NoCaseCmp)
     filters.insert(0, u"All Files (*)|*|")
     filters[-1] = filters[-1][:-1] # IMPORTANT trim last '|' from item in list
     return filters
@@ -313,3 +313,14 @@ def GetTypeFromExt(ext):
 
     """
     return ExtensionRegister().FileTypeFromExt(ext)
+
+#-----------------------------------------------------------------------------#
+# Utility
+def NoCaseCmp(x, y):
+    """Case insensitive sort method"""
+    if x.lower() < y.lower():
+        return -1
+    elif x.lower() > y.lower():
+        return 1
+    else:
+        return 0
