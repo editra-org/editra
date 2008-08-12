@@ -167,6 +167,8 @@ ID_LANG_LISP = _NewId()
 LANG_LISP = u'Lisp'
 ID_LANG_SCHEME = _NewId()
 LANG_SCHEME = u'Scheme'
+ID_LANG_NEWLISP = _NewId()
+LANG_NEWLISP = u'newLISP'
 
 # Use LEX_LOUT
 ID_LANG_LOUT = _NewId()
@@ -308,7 +310,8 @@ EXT_MAP = {
            'kix'                : LANG_KIX,
            'ksh'                : LANG_KSH,
            'aux tex sty'        : LANG_LATEX,
-           'cl lisp lsp'        : LANG_LISP,
+           'cl lisp'            : LANG_LISP,
+           'lsp'                : LANG_NEWLISP,
            'lt'                 : LANG_LOUT,
            'lua'                : LANG_LUA,
            'mak makefile'       : LANG_MAKE,

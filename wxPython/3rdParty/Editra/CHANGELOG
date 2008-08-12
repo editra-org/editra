@@ -8,6 +8,19 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.3.xx
+DATE 0x/0x/2008
+15th Alpha Release
+
+NEWS:
+
+NEW: [features/improvements]
++Add support for newLISP (from Jeff)
+
+BUG FIXES:
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.3.38
 DATE 08/07/2008
 14th Alpha Release
