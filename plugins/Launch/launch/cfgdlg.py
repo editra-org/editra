@@ -7,7 +7,8 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
-"""Configuration Dialog"""
+"""Launch Configuration Dialog"""
+
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
@@ -17,8 +18,6 @@ __revision__ = "$Revision$"
 import sys
 import wx
 import wx.lib.mixins.listctrl as listmix
-#import wx.lib.colourselect as colourselect
-import eclib.colorsetter as colorsetter
 import cStringIO
 import zlib
 
@@ -26,6 +25,8 @@ import zlib
 import handlers
 
 # Editra Libraries
+import eclib.colorsetter as colorsetter
+import eclib.elistmix as elistmix
 from profiler import Profile_Get, Profile_Set
 import ed_msg
 import util
@@ -471,38 +472,14 @@ class MiscPanel(wx.Panel):
 
 class AutoWidthListCtrl(listmix.ListCtrlAutoWidthMixin,
                         listmix.TextEditMixin,
+                        elistmix.ListRowHighlighter,
                         wx.ListCtrl):
     """Auto-width adjusting list for showing editing the commands"""
     def __init__(self, *args, **kwargs):
         wx.ListCtrl.__init__(self, *args, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
-
-    def Append(self, entry):
-        """Append an entry to the list
-        @param entry: entry to add
-
-        """
-        wx.ListCtrl.Append(self, entry)
-        self.ColorRow(self.GetItemCount() - 1)
-        
-    def ColorRow(self, index):
-        """Color the given index
-        @param index: list index
-
-        """
-        if index % 2:
-            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-            color = util.AdjustColour(color, 15)
-            self.SetItemBackgroundColour(index, color)
-
-    def SetStringItem(self, index, col, label, imageId=-1):
-        """Set the item in the list at the given index and colorize
-        the row if it is an odd one.
-
-        """
-        wx.ListCtrl.SetStringItem(self, index, col, label, imageId=imageId)
-        self.ColorRow(index)
+        elistmix.ListRowHighlighter.__init__(self)
 
 #-----------------------------------------------------------------------------#
 
