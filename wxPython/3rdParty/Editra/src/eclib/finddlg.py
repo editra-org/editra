@@ -11,6 +11,8 @@ Editra Control Library: Advanced Find Replace Dialog
 
 Advanced find dialog class
 
+@todo: Make Look In location configurable
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -30,14 +32,21 @@ import platebtn
 # Globals
 
 # Style Flags
-AFR_DEFAULT       = 0
-AFR_REPLACEDIALOG = 1
+AFR_STYLE_FINDDIALOG    = 0
+AFR_STYLE_REPLACEDIALOG = 1
+AFR_STYLE_NON_FLOATING  = 2
 
-# Search Flags
+# FindReplaceData Flags
 AFR_UP          = 1
 AFR_WHOLEWORD   = 2
 AFR_MATCHCASE   = 4
 AFR_REGEX       = 8
+AFR_NOLOOKIN    = 16
+AFR_NOUPDOWN    = 32
+AFR_NOWHOLEWORD = 64
+AFR_NOMATCHCASE = 128
+AFR_NOREGEX     = 256
+AFR_NOOPTIONS   = 512
 
 # Search Location Parameters (NOTE: must be kept in sync with Lookin List)
 LOCATION_CURRENT_DOC = 0
@@ -60,15 +69,6 @@ ID_REPLACE_ALL = wx.NewId()
 ID_CHOOSE_DIR = wx.NewId()
 
 _ = wx.GetTranslation
-
-from wx.lib.embeddedimage import PyEmbeddedImage
-
-Dot = PyEmbeddedImage(
-    "iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABHNCSVQICAgIfAhkiAAAAH1J"
-    "REFUKJHt0K0NwlAAReHv0Z8nCxMAG3SEbkBHYQQkbMMo4JCVyOJIk1IERaBIKgnH3Nyboy5/"
-    "fpH5l/65RVaRNtJmlJCzjQyR49vLaSJDTj2D4SUXKALV6NVjbiCjDCwhUCXQc0lY49yxxz2l"
-    "wQKHntODa0rADbupX0znCbjbFaNn/o8tAAAAAElFTkSuQmCC")
-GetDotBitmap = Dot.GetBitmap
 
 #--------------------------------------------------------------------------#
 
@@ -209,9 +209,95 @@ class FindEvent(wx.PyCommandEvent):
 
 #--------------------------------------------------------------------------#
 
-class AdvFindReplaceDlg(wx.MiniFrame):
+def AdvFindReplaceDlg(parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
+    """Advanced FindReplaceDialog
+    @param parent: parent
+    @param fdata: FindReplaceData
+    @param title: Dialog Title
+    @keyword style: Dialog Style and type
+
+    """
+    if style & AFR_STYLE_NON_FLOATING:
+        dlg = FindReplaceDlg(parent, fdata, title, style)
+    else:
+        dlg = MiniFindReplaceDlg(parent, fdata, title, style)
+    return dlg
+
+#--------------------------------------------------------------------------#
+
+class FindReplaceDlgBase:
+    """Mixin Base class for deriving FindReplaceDialogs"""
+    def __init__(self, parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
+        """Create the base object"""
+        # Attributes
+        self._box = FindBox(self, fdata, style=style)
+        self._panel = self._box.GetWindow()
+
+        # Layout
+        self.__DoLayout()
+
+    def __DoLayout(self):
+        """Layout the dialog"""
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        vsizer.Add(self._box, 1, wx.EXPAND)
+        self.SetSizer(vsizer)
+        self.SetAutoLayout(True)
+        self.Fit()
+
+    def GetDialogMode(self):
+        """Get the current mode of the dialog
+        @return: AFR_STYLE_FINDDIALOG or AFR_STYLE_REPLACEDIALOG
+
+        """
+        return self._panel.GetPanelMode()
+
+    def SetFlag(self, flag):
+        """Set a search dialog flag.
+        @param flags: AFR_*
+
+        """
+        self._panel.SetFlag(flags)
+
+    def SetFindBitmap(self, bmp):
+        """Set the find Bitmap
+        @param bmp: wx.Bitmap
+
+        """
+        self._box.SetFindBitmap(bmp)
+
+    def SetFlag(self, flag):
+        """Set a search dialog flag.
+        @param flags: AFR_*
+
+        """
+        self._panel.SetFlag(flags)
+
+    def SetFlags(self, flags):
+        """Set the search dialog flags.
+        @param flags: bitmask of AFR_ values
+
+        """
+        self._panel.SetFlags(flags)
+
+    def SetReplaceBitmap(self, bmp):
+        """Set the replace bitmap
+        @param bmp: wx.Bitmap
+
+        """
+        self._box.SetReplaceBitmap(bmp)
+
+    def SetSearchDirectory(self, path):
+        """Set the directory selection for find in files
+        @param path: path to set for lookin data
+
+        """
+        self._panel.SetLookinSelection(path)
+
+#--------------------------------------------------------------------------#
+
+class MiniFindReplaceDlg(wx.MiniFrame, FindReplaceDlgBase):
     """Advanced Find Replace Dialog"""
-    def __init__(self, parent, fdata, title, style=AFR_DEFAULT):
+    def __init__(self, parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
         """Create the Dialog
         @param parent: Parent Window
         @param fdata: wx.FindReplaceData
@@ -221,34 +307,23 @@ class AdvFindReplaceDlg(wx.MiniFrame):
         """
         wx.MiniFrame.__init__(self, parent, wx.ID_ANY, title,
                               style=wx.DEFAULT_DIALOG_STYLE)
+        FindReplaceDlgBase.__init__(self, parent, fdata, title, style)
 
-        # Attributes
-        self._panel = FindBox(self, fdata)
+#--------------------------------------------------------------------------#
 
-        # Layout
-        self.__DoLayout()
-
-    def __DoLayout(self):
-        """Layout the dialog"""
-        vsizer = wx.BoxSizer(wx.VERTICAL)
-        vsizer.Add(self._panel, 1, wx.EXPAND)
-        self.SetSizer(vsizer)
-        self.SetAutoLayout(True)
-        self.Fit()
-
-    def SetFindBitmap(self, bmp):
-        """Set the find Bitmap
-        @param bmp: wx.Bitmap
+class FindReplaceDlg(wx.Dialog, FindReplaceDlgBase):
+    """Advanced Find Replace Dialog"""
+    def __init__(self, parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
+        """Create the Dialog
+        @param parent: Parent Window
+        @param fdata: wx.FindReplaceData
+        @param title: Dialog Title
+        @keyword style: Dialog Style
 
         """
-        self._panel.SetFindBitmap(bmp)
-
-    def SetReplaceBitmap(self, bmp):
-        """Set the replace bitmap
-        @param bmp: wx.Bitmap
-
-        """
-        self._panel.SetReplaceBitmap(bmp)
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, title,
+                           style=wx.DEFAULT_DIALOG_STYLE)
+        FindReplaceDlgBase.__init__(self, parent, fdata, title, style)
 
 #--------------------------------------------------------------------------#
 
@@ -258,16 +333,17 @@ class FindBox(ctrlbox.ControlBox):
 
     """
     def __init__(self, parent, fdata, id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.TAB_TRAVERSAL|wx.NO_BORDER,
+                 size=wx.DefaultSize, style=AFR_STYLE_FINDDIALOG,
                  name=FindBoxName):
         """Create the container box
         @param fdata: wx.FindReplaceData
 
         """
-        ctrlbox.ControlBox.__init__(self, parent, id, pos, size, style, name)
+        ctrlbox.ControlBox.__init__(self, parent, id, pos, size,
+                                    wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
 
         # Attributes
-        self._fpanel = FindPanel(self, fdata)
+        self._fpanel = FindPanel(self, fdata, style=style)
         ctrlbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
         bmp = wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_MENU)
         self.find = platebtn.PlateButton(ctrlbar, label=_("Find"), bmp=bmp,
@@ -327,7 +403,8 @@ class FindBox(ctrlbox.ControlBox):
 class FindPanel(wx.Panel):
     """Find controls panel"""
     def __init__(self, parent, fdata, id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=AFR_DEFAULT, name=FindPanelName):
+                 size=wx.DefaultSize, style=AFR_STYLE_FINDDIALOG,
+                 name=FindPanelName):
         """Create the panel
         @param fdata: wx.FindReplaceData
 
@@ -342,6 +419,7 @@ class FindPanel(wx.Panel):
         self._rtxt = wx.TextCtrl(self)
         locations = [_("Current Document"), _("Open Documents")]
         self._lookin = wx.Choice(self, ID_LOOKIN, choices=locations)
+        self._lookin.SetSelection(0)
         self._sizers = dict()
         self._paths = dict()
         self._fdata = fdata
@@ -349,13 +427,13 @@ class FindPanel(wx.Panel):
         # Layout
         self.__DoLayout()
         self.SetInitialSize()
+        self._ConfigureControls()
 
-        if style & AFR_REPLACEDIALOG:
+        # Setup
+        if self._mode & AFR_STYLE_REPLACEDIALOG:
             self.SetFindMode(False)
         else:
             self.SetFindMode(True)
-
-        self._ConfigureControls()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnChooseDir, id=ID_CHOOSE_DIR)
@@ -397,30 +475,37 @@ class FindPanel(wx.Panel):
                            ((5, 5), 0)])
 
         # Look in field
+        self._sizers['look'] = wx.BoxSizer(wx.VERTICAL)
         li_sz = wx.BoxSizer(wx.HORIZONTAL)
         dirbtn = wx.Button(self, ID_CHOOSE_DIR, u"...", style=wx.BU_EXACTFIT)
         li_sz.AddMany([(self._lookin, 1, wx.EXPAND), ((5, 5), 0),
-                       (dirbtn, 0)])
-        topvsizer.AddMany([(wx.StaticText(self, label=_("Look in") + u":"),
-                            0, wx.ALIGN_LEFT),
-                           ((3, 3), 0), (li_sz, 0, wx.EXPAND),
-                           ((5, 5), 0)])
+                                     (dirbtn, 0)])
+        li_lbl = wx.StaticText(self, label=_("Look in") + u":")
+        self._sizers['look'].AddMany([(li_lbl, 0, wx.ALIGN_LEFT),
+                                      ((3, 3), 0),
+                                      (li_sz, 0, wx.EXPAND),
+                                      ((5, 5), 0)])
+        topvsizer.Add(self._sizers['look'], 0, wx.EXPAND)
 
         # Search Direction Box
+        self._sizers['dir'] = wx.BoxSizer(wx.VERTICAL)
         dbox = wx.StaticBox(self, label=_("Direction"))
         dboxsz = wx.StaticBoxSizer(dbox, wx.HORIZONTAL)
         dboxsz.AddMany([(wx.RadioButton(self, wx.ID_UP, _("Up")), 0),
                         ((20, 5), 0),
                         (wx.RadioButton(self, wx.ID_DOWN, _("Down")), 0),
                         ((5, 5), 1)])
+        self._sizers['dir'].AddMany([((5, 5), 0), (dboxsz, 0, wx.EXPAND)])
 
         # Search Options Box
+        self._sizers['opt'] = wx.BoxSizer(wx.VERTICAL)
         statbox = wx.StaticBox(self, label=_("Find Options"))
         sboxsz = wx.StaticBoxSizer(statbox, wx.VERTICAL)
         for cid, clbl in [(ID_MATCH_CASE, _("Match case")),
                           (ID_WHOLE_WORD, _("Whole word")),
                           (ID_REGEX, _("Regular expression"))]:
             sboxsz.AddMany([((3, 3), 0), (wx.CheckBox(self, cid, clbl), 0)])
+        self._sizers['opt'].AddMany([((5, 5), 0), (sboxsz, 0, wx.EXPAND)])
 
         # Buttons
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -436,9 +521,9 @@ class FindPanel(wx.Panel):
             bsizer.Add(self._sizers[bid], 0)
 
         # Final Layout
-        vsizer.AddMany([((5, 5), 0), (topvsizer, 0, wx.EXPAND), ((5, 5), 0),
-                        (dboxsz, 0, wx.EXPAND), ((5, 5), 0),
-                        (sboxsz, 0, wx.EXPAND), ((10, 10), 0),
+        vsizer.AddMany([((5, 5), 0), (topvsizer, 0, wx.EXPAND),
+                        (self._sizers['dir'], 0, wx.EXPAND),
+                        (self._sizers['opt'], 0, wx.EXPAND), ((10, 10), 0),
                         (bsizer, 0), ((10, 10), 0)])
         hsizer.AddMany([((10, 10), 0), (vsizer, 0, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(hsizer)
@@ -452,6 +537,12 @@ class FindPanel(wx.Panel):
         self.FindWindowById(ID_REGEX).SetValue(flags & AFR_REGEX)
         self.FindWindowById(wx.ID_DOWN).SetValue(not (flags & AFR_UP))
         self.FindWindowById(wx.ID_UP).SetValue(flags & AFR_UP)
+        self.ShowLookinCombo(not (flags & AFR_NOLOOKIN))
+        self.ShowDirectionBox(not (flags & AFR_NOUPDOWN))
+        self.ShowOptionsBox(not (flags & AFR_NOOPTIONS))
+        self.FindWindowById(ID_WHOLE_WORD).Enable(not (flags & AFR_NOWHOLEWORD))
+        self.FindWindowById(ID_MATCH_CASE).Enable(not (flags & AFR_NOMATCHCASE))
+        self.FindWindowById(ID_REGEX).Enable(not (flags & AFR_NOREGEX))
 
     def _ShowButtons(self, find=True):
         """Toggle the visiblity of a button set
@@ -477,6 +568,33 @@ class FindPanel(wx.Panel):
             else:
                 self._sizers[ctrl].ShowItems(False)
 
+    def AddLookinPath(self, path):
+        """Add a path to the lookin path collection
+        @param path: string
+        @return: index of the items location
+
+        """
+        if not len(path):
+            return None
+
+        items = self._lookin.GetItems()
+        the_dir = u''
+        for dname in reversed(path.split(os.sep)):
+            if len(dname):
+                the_dir = dname
+                break
+        else:
+            return
+
+        if the_dir not in items:
+            self._paths[len(items)] = path
+            self._lookin.Append(the_dir)
+            rval = self._lookin.GetCount()
+        else:
+            rval = items.index(the_dir)
+
+        return rval
+
     def ClearFlag(self, flag):
         """Clear a search flag
         @param flag: AFR_*
@@ -484,7 +602,7 @@ class FindPanel(wx.Panel):
         """
         flags = self._fdata.GetFlags()
         flags &= ~flag 
-        self._fdata.SetFlags(flags)
+        self.SetFlags(flags)
 
     def FireEvent(self, eid):
         """Fire an event
@@ -499,19 +617,25 @@ class FindPanel(wx.Panel):
             evt.SetSearchType(stype)
             evt.SetFindString(self._ftxt.GetValue())
 
-            if self._mode == AFR_REPLACEDIALOG:
+            if self._mode & AFR__STYLE_REPLACEDIALOG:
                 evt.SetReplaceString(self._rtxt.GetValue())
             else:
                 evt.SetReplaceString(None)
 
             if stype >= LOCATION_IN_FILES:
-                print self._paths
                 evt.SetDirectory(self._paths.get(lookin_idx, u''))
 
             wx.PostEvent(self.GetParent(), evt)
             return True
         else:
             return False
+
+    def GetPanelMode(self):
+        """Get the current display mode of the panel
+        @return: AFR_STYLE_FINDDIALOG or AFR_STYLE_REPLACEDIALOG
+
+        """
+        return self._mode
 
     def OnChooseDir(self, evt):
         """Open the choose directory dialog for selecting what
@@ -524,20 +648,7 @@ class FindPanel(wx.Panel):
             if dlg.ShowModal() == wx.ID_OK:
                 path = dlg.GetPath()
                 if path is not None and len(path):
-                    items = self._lookin.GetItems()
-                    the_dir = u''
-                    for dname in reversed(path.split(os.sep)):
-                        if len(dname):
-                            the_dir = dname
-                            break
-                    else:
-                        return
-
-                    if the_dir not in items:
-                        self._paths[len(items)] = path
-                        self._lookin.Append(the_dir)
-
-                    self._lookin.SetStringSelection(the_dir)
+                    self.SetLookinSelection(path)
             dlg.Destroy()
         else:
             evt.Skip()
@@ -579,11 +690,11 @@ class FindPanel(wx.Panel):
         if find:
             self._rtxt.Hide()
             self._sizers[ID_REPLACE_LBL].ShowItems(False)
-            self._mode = AFR_DEFAULT
+            self._mode = AFR_STYLE_FINDDIALOG
         else:
             self._rtxt.Show()
             self._sizers[ID_REPLACE_LBL].ShowItems(True)
-            self._mode = AFR_REPLACEDIALOG
+            self._mode = AFR_STYLE_REPLACEDIALOG
 
         self._ShowButtons(find)
         self.Layout()
@@ -595,7 +706,52 @@ class FindPanel(wx.Panel):
         """
         flags = self._fdata.GetFlags()
         flags |= flag
+        self.SetFlags(flags)
+
+    def SetFlags(self, flags):
+        """Set the search flags
+        @param flags: Bitmask of AFR_* values
+
+        """
         self._fdata.SetFlags(flags)
+        self._ConfigureControls()
+
+    def SetLookinSelection(self, path):
+        """Set the selection of the lookin control. If the given
+        path is not already stored it will be added.
+        @param path: string
+
+        """
+        idx = self.AddLookinPath(path)
+        if idx is not None:
+            self._lookin.SetSelection(idx)
+
+    def ShowDirectionBox(self, show=True):
+        """Show or hide the Direction group box
+        @keyword show: bool
+
+        """
+        if 'dir' in self._sizers:
+            self._sizers['dir'].ShowItems(show)
+            self.Layout()
+
+    def ShowLookinCombo(self, show=True):
+        """Show the lookin choice and directory chooser control
+        @keyword show: bool
+
+        """
+        if 'look' in self._sizers:
+            self._sizers['look'].ShowItems(show)
+            self.Layout()
+
+    def ShowOptionsBox(self, show=True):
+        """Show the find options group box
+        @keyword show: bool
+
+        """
+        if 'opt' in self._sizers:
+            self._sizers['opt'].ShowItems(show)
+            self.Layout()
 
 #--------------------------------------------------------------------------#
 
@@ -604,7 +760,8 @@ if __name__ == '__main__':
     app = wx.App(False)
     frame = wx.Frame(None)
     data = wx.FindReplaceData(AFR_MATCHCASE|AFR_REGEX)
-    fdlg = AdvFindReplaceDlg(frame, data, "Find Replace Test")
+    fdlg = AdvFindReplaceDlg(frame, data, "Find Replace Test",
+                             AFR_STYLE_REPLACEDIALOG)
 
     bmp = wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_MENU)
     fdlg.SetFindBitmap(bmp)
