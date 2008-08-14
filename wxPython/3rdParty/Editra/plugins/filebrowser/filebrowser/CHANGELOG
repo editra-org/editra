@@ -2,6 +2,10 @@ FileBrowser Plugin for Editra
 Author: Cody Precord
 License: wxWindows
 
+Version 0.9:
+
+    - Syncronize browser to file when first shown
+
 Version 0.8:
 
     - Add Bookmark Selected Paths command to context menu

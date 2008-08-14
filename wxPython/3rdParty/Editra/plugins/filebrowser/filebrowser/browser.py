@@ -349,6 +349,10 @@ class BrowserPane(wx.Panel):
                 pane.Hide()
             else:
                 pane.Show()
+                cbuff = self._mw.GetNotebook().GetCurrentCtrl()
+                path = cbuff.GetFileName()
+                if path:
+                    self._browser.GotoPath(path)
             mgr.Update()
         else:
             evt.Skip()
@@ -416,8 +420,8 @@ class FileBrowser(wx.GenericDirCtrl):
 
     def __del__(self):
         """Unsubscribe from messages"""
-        ed_msg.Unsubscribe(self.OnThemeChanged)
         ed_msg.Unsubscribe(self.OnPageChange)
+        ed_msg.Unsubscribe(self.OnThemeChanged)
 
     def _SetupIcons(self):
         """If a custom theme is in use by Editra set the icons of the
@@ -534,6 +538,18 @@ class FileBrowser(wx.GenericDirCtrl):
         """Returns the trees current style"""
         return self._tree.GetWindowStyle()
 
+    def GotoPath(self, path):
+        """Move the selection to the given path
+        @param path: string:
+
+        """
+        style = self.GetTreeStyle()
+        self.SetTreeStyle(wx.TR_SINGLE)
+        self.Refresh()
+        self.SetPath(path)
+        self.SetTreeStyle(style)
+        self.Refresh()        
+
     def OnContext(self, evt):
         """Show the popup context menu"""
         self._fmenu.Destroy()
@@ -635,12 +651,7 @@ class FileBrowser(wx.GenericDirCtrl):
         page = nbdata[0].GetPage(nbdata[1])
         path = page.GetFileName()
         if path:
-            style = self.GetTreeStyle()
-            self.SetTreeStyle(wx.TR_SINGLE)
-            self.Refresh()
-            self.SetPath(path)
-            self.SetTreeStyle(style)
-            self.Refresh()
+            self.GotoPath(path)
 
     def OnThemeChanged(self, msg):
         """Update the icons when the icon theme has changed
