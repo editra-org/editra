@@ -292,6 +292,20 @@ def GetExtFromId(ext_id):
     ftype = synglob.GetDescriptionFromId(ext_id)
     return extreg[ftype][0]
 
+def GetFtypeDisplayName(lang_id):
+    """Get the file type display string for the given lang_id
+    @param lang_id: ID_LANG_*
+    @todo: make file types translatable
+
+    """
+    for item in dir(synglob):
+        if item.startswith("ID_LANG"):
+            if getattr(synglob, item) == lang_id:
+                return getattr(synglob, item[3:], u"Plain Text")
+    else:
+        return u"Plain Text"
+
+
 def GetIdFromExt(ext):
     """Get the language id from the given file extension
     @param ext: file extension (no dot)
