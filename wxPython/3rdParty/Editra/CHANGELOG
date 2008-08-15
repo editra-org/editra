@@ -20,6 +20,9 @@ NEW: [features/improvements]
 +Add Czech translation (contributed by Tomas Fryda)
 
 BUG FIXES:
++Properly update titlebar and other contexts when page change is initiated from
+an error hotspot in Launch window.
++Fix source installer not installing pygments package
 
 #-----------------------------------------------------------------------------#
 
