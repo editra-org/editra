@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-09 14:49-0500\n"
+"POT-Creation-Date: 2008-08-14 19:10-0500\n"
 "PO-Revision-Date: 2008-02-17 14:45+0000\n"
 "Last-Translator: slav0nic <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -36,7 +36,7 @@ msgstr ""
 msgid "%s does not exist"
 msgstr ""
 
-#: ../../src/ed_pages.py:715
+#: ../../src/ed_pages.py:718
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -47,7 +47,7 @@ msgstr ""
 "\n"
 "Вы хотите сохранить его снова?"
 
-#: ../../src/ed_pages.py:735
+#: ../../src/ed_pages.py:738
 #, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -139,11 +139,11 @@ msgstr ""
 msgid "&View"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:284
+#: ../../plugins/Launch/launch/cfgdlg.py:285
 msgid "**Alias**"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:284
+#: ../../plugins/Launch/launch/cfgdlg.py:285
 msgid "**New Value**"
 msgstr "***Новая переменная***"
 
@@ -155,7 +155,7 @@ msgstr "Прервать"
 msgid "About"
 msgstr "О программе"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:220
+#: ../../plugins/Launch/launch/cfgdlg.py:221
 msgid "Add a new executable"
 msgstr ""
 
@@ -175,7 +175,7 @@ msgstr "Добавить и удалить закладки"
 msgid "Advanced"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:215
+#: ../../plugins/Launch/launch/cfgdlg.py:216
 msgid "Alias"
 msgstr ""
 
@@ -222,7 +222,7 @@ msgstr "Автозавершение"
 msgid "Auto-Indent"
 msgstr "Автоидентификация"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:391
+#: ../../plugins/Launch/launch/cfgdlg.py:392
 msgid "Automatically clear buffer between runs"
 msgstr ""
 
@@ -230,7 +230,7 @@ msgstr ""
 msgid "Automatically save/use window state from last session"
 msgstr "Автоматически сохранять/восстанавливать состояние окна из последней сессии"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:408 ../../src/style_editor.py:643
+#: ../../plugins/Launch/launch/cfgdlg.py:409 ../../src/style_editor.py:643
 msgid "Background"
 msgstr "Фон"
 
@@ -246,7 +246,7 @@ msgstr "Основывать новую тему на существующей"
 msgid "Binding"
 msgstr ""
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:447
+#: ../../plugins/filebrowser/filebrowser/browser.py:451
 #, fuzzy
 msgid "Bookmark Selected Path(s)"
 msgstr "Сохранить выделенные пути"
@@ -315,7 +315,7 @@ msgid "Class Definitions"
 msgstr ""
 
 #: ../../plugins/Launch/launch/launch.py:164 ../../src/ed_log.py:132
-#: ../../src/ed_search.py:609
+#: ../../src/ed_search.py:697
 msgid "Clear"
 msgstr "Очистить"
 
@@ -323,8 +323,8 @@ msgstr "Очистить"
 msgid "Click on Install to install the plugins in the list"
 msgstr "Нажмите на кнопку \"Установить\" для установки плагинов в списке"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:214
-#: ../../plugins/Launch/launch/cfgdlg.py:218
+#: ../../plugins/Launch/launch/cfgdlg.py:215
+#: ../../plugins/Launch/launch/cfgdlg.py:219
 msgid "Click on an item to edit"
 msgstr ""
 
@@ -442,8 +442,8 @@ msgstr "Копировать выбранный текст в буфер обм�
 msgid "Copyright"
 msgstr ""
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:457
-#: ../../plugins/filebrowser/filebrowser/browser.py:545
+#: ../../plugins/filebrowser/filebrowser/browser.py:461
+#: ../../plugins/filebrowser/filebrowser/browser.py:561
 #, python-format
 msgid "Create Archive of \"%s\""
 msgstr ""
@@ -472,7 +472,7 @@ msgstr "Вырезать строку"
 msgid "Cut Selected Text from File"
 msgstr "Вырезать выделенный текст из файла"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:205
+#: ../../plugins/Launch/launch/cfgdlg.py:206
 msgid "Default"
 msgstr "По умолчанию"
 
@@ -524,7 +524,7 @@ msgstr ""
 msgid "Do you wish to exit?"
 msgstr ""
 
-#: ../../src/ed_pages.py:432
+#: ../../src/ed_pages.py:435
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -569,7 +569,7 @@ msgstr "Загрузка: %s"
 msgid "Downloads are incomplete"
 msgstr "Загрузки являются неполными"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:456
+#: ../../plugins/filebrowser/filebrowser/browser.py:460
 msgid "Duplicate"
 msgstr ""
 
@@ -603,7 +603,7 @@ msgstr "ОШИБКА: Ошибка при сохранении %s"
 msgid "Edge Guide"
 msgstr "Руководство по ошибкам"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:443
+#: ../../plugins/filebrowser/filebrowser/browser.py:447
 msgid "Edit"
 msgstr "Правка"
 
@@ -656,7 +656,7 @@ msgstr ""
 msgid "Enable Vi Emulation"
 msgstr "Включить эмуляцию Vi"
 
-#: ../../src/ed_pages.py:286
+#: ../../src/ed_pages.py:289
 msgid "Encoding Error"
 msgstr "Ошибка кодировки"
 
@@ -672,7 +672,7 @@ msgstr "Введите шестнадцатеричный цвет"
 msgid "Enter the name of the new key profile"
 msgstr ""
 
-#: ../../src/ed_pages.py:750 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:753 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "Ошибка"
 
@@ -680,7 +680,7 @@ msgstr "Ошибка"
 msgid "Error Opening File"
 msgstr "Ошибка открытия файла"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:418
+#: ../../plugins/Launch/launch/cfgdlg.py:419
 #, fuzzy
 msgid "Error Text"
 msgstr "Ошибка"
@@ -703,11 +703,11 @@ msgstr ""
 msgid "Error: Unable to open %s"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:216
+#: ../../plugins/Launch/launch/cfgdlg.py:217
 msgid "Executable Commands"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:190
+#: ../../plugins/Launch/launch/cfgdlg.py:191
 msgid "Executables"
 msgstr ""
 
@@ -744,7 +744,7 @@ msgstr "Произошёл сбой"
 msgid "Failed to install %d plugins"
 msgstr "Ошибка при установки %d плагинов"
 
-#: ../../src/ed_pages.py:748
+#: ../../src/ed_pages.py:751
 #, python-format
 msgid ""
 "Failed to reload %(filename)s:\n"
@@ -784,7 +784,7 @@ msgstr "Файловые установки"
 msgid "File Stat Failed"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:185
+#: ../../plugins/Launch/launch/cfgdlg.py:186
 msgid "File Type"
 msgstr "Тип файла"
 
@@ -801,7 +801,7 @@ msgid "Filetype Associations"
 msgstr "Ассоциация файлов"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:278
-#: ../../src/ed_toolbar.py:87
+#: ../../src/ed_search.py:358 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Найти"
 
@@ -817,7 +817,8 @@ msgstr "Найти и заменить текст"
 msgid "Find/R&eplace"
 msgstr ""
 
-#: ../../src/ed_search.py:274 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:274 ../../src/ed_search.py:354
+#: ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "Найти/Заменить"
 
@@ -845,7 +846,7 @@ msgstr "Шрифт"
 msgid "Font Settings"
 msgstr "Установки шрифтов"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:405 ../../src/style_editor.py:631
+#: ../../plugins/Launch/launch/cfgdlg.py:406 ../../src/style_editor.py:631
 msgid "Foreground"
 msgstr "Передний план"
 
@@ -862,7 +863,7 @@ msgstr "Формат всех EOL символов в %s Режим"
 msgid "Function Definitions"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:133 ../../src/prefdlg.py:188
+#: ../../plugins/Launch/launch/cfgdlg.py:134 ../../src/prefdlg.py:188
 #: ../../src/prefdlg.py:485 ../../src/prefdlg.py:733
 msgid "General"
 msgstr "Основные"
@@ -891,7 +892,7 @@ msgstr "Генерировать %s версию текущего докумен
 msgid "Generator"
 msgstr "Генератор"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:450
+#: ../../plugins/filebrowser/filebrowser/browser.py:454
 msgid "Get Info"
 msgstr "Получить информацию"
 
@@ -976,7 +977,7 @@ msgstr "Отступы руководства"
 msgid "Info"
 msgstr "Информация"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:425
+#: ../../plugins/Launch/launch/cfgdlg.py:426
 #, fuzzy
 msgid "Info Text"
 msgstr "Найти текст"
@@ -1013,7 +1014,7 @@ msgstr "Ошибка при установки"
 msgid "Installed Version"
 msgstr "Версия установлена"
 
-#: ../../src/ed_pages.py:416
+#: ../../src/ed_pages.py:419
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Поврежденный файл: %s"
@@ -1062,7 +1063,7 @@ msgstr "Язык"
 msgid "Latest Version"
 msgstr "Последняйшая версия"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:110
+#: ../../plugins/Launch/launch/cfgdlg.py:111
 msgid "Launch Configuration"
 msgstr ""
 
@@ -1156,7 +1157,7 @@ msgstr "С учётом регистра"
 msgid "Menu"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:134
+#: ../../plugins/Launch/launch/cfgdlg.py:135
 msgid "Misc"
 msgstr ""
 
@@ -1206,11 +1207,11 @@ msgstr "Создать"
 msgid "New &Window"
 msgstr ""
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:454
+#: ../../plugins/filebrowser/filebrowser/browser.py:458
 msgid "New File"
 msgstr "Новый файл"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:453
+#: ../../plugins/filebrowser/filebrowser/browser.py:457
 msgid "New Folder"
 msgstr "Новая директория"
 
@@ -1238,7 +1239,7 @@ msgstr "Следующая закладка"
 msgid "No Description Available"
 msgstr "Нет доступного описания"
 
-#: ../../src/ed_pages.py:426
+#: ../../src/ed_pages.py:429
 msgid "No Valid Files to Open"
 msgstr "Нет подходящих файлов для открытия"
 
@@ -1275,7 +1276,7 @@ msgstr "Открыть Python Shell"
 msgid "Open Code Browser Sidepanel"
 msgstr ""
 
-#: ../../src/ed_pages.py:437
+#: ../../src/ed_pages.py:440
 msgid "Open Directory?"
 msgstr "Открыть каталог?"
 
@@ -1295,11 +1296,11 @@ msgstr "Открывать файлы в новом окне по умолчан
 msgid "Open the Quick Find Bar"
 msgstr "Открыть Панель быстрого поиска"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:444
+#: ../../plugins/filebrowser/filebrowser/browser.py:448
 msgid "Open with "
 msgstr ""
 
-#: ../../src/ed_pages.py:457
+#: ../../src/ed_pages.py:460
 #, python-format
 msgid "Opened file: %s"
 msgstr "Открыт файл: %s"
@@ -1354,7 +1355,7 @@ msgstr "Перспектива на удаление"
 msgid "Perspectives"
 msgstr "Перспективы"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:411
+#: ../../plugins/Launch/launch/cfgdlg.py:412
 #, fuzzy
 msgid "Plain Text"
 msgstr "Найти текст"
@@ -1481,7 +1482,7 @@ msgstr "Задавать вопрос о Shelf"
 msgid "Rate: %.2f Kb/s"
 msgstr "Скорость: %.2f Kb/s"
 
-#: ../../src/ed_search.py:353
+#: ../../src/ed_search.py:441
 msgid "Recent Searches"
 msgstr "Недавние поисковые запросы"
 
@@ -1506,7 +1507,7 @@ msgstr "Повторить"
 msgid "Redo Last Undo"
 msgstr "Вернуть последние откаты"
 
-#: ../../src/ed_pages.py:738
+#: ../../src/ed_pages.py:741
 msgid "Reload File?"
 msgstr "Перезагрузить файл?"
 
@@ -1534,7 +1535,7 @@ msgstr "Удалить сохраненный путь"
 msgid "Remove all bookmarks from the current document"
 msgstr "Удалить все закладки для текущего документа"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:222
+#: ../../plugins/Launch/launch/cfgdlg.py:223
 msgid "Remove selection from list"
 msgstr ""
 
@@ -1542,7 +1543,7 @@ msgstr ""
 msgid "Remove trailing whitespace"
 msgstr "Удалить в конце"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:451
+#: ../../plugins/filebrowser/filebrowser/browser.py:455
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -1559,7 +1560,7 @@ msgstr ""
 msgid "Report Error"
 msgstr "Отчет об ошибках"
 
-#: ../../src/ed_pages.py:718
+#: ../../src/ed_pages.py:721
 msgid "Resave File?"
 msgstr "Пересохранить файл?"
 
@@ -1567,7 +1568,7 @@ msgstr "Пересохранить файл?"
 msgid "Retrieving Plugin List"
 msgstr "Получить список плагинов"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:445
+#: ../../plugins/filebrowser/filebrowser/browser.py:449
 msgid "Reveal in "
 msgstr ""
 
@@ -1890,7 +1891,7 @@ msgstr "Табуляции в пробелы"
 msgid "Task Definitions"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:383
+#: ../../plugins/Launch/launch/cfgdlg.py:384
 #, fuzzy
 msgid "Text Colors"
 msgstr "Цвет"
@@ -1899,7 +1900,7 @@ msgstr "Цвет"
 msgid "Text Document"
 msgstr "Текстовый документ"
 
-#: ../../src/ed_pages.py:284
+#: ../../src/ed_pages.py:287
 #, python-format
 msgid ""
 "The document could not be decoded with %(encoding1)s.\n"
@@ -1918,7 +1919,7 @@ msgstr ""
 "\n"
 "Вы хотите сохранить изменения?"
 
-#: ../../src/ed_pages.py:424
+#: ../../src/ed_pages.py:427
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "Нет файлов, которые может открыть Editra в %s"
@@ -2035,11 +2036,11 @@ msgstr "Unix (\\n)"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:585
+#: ../../plugins/filebrowser/filebrowser/browser.py:601
 msgid "Untitled_File"
 msgstr ""
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:583
+#: ../../plugins/filebrowser/filebrowser/browser.py:599
 msgid "Untitled_Folder"
 msgstr ""
 
@@ -2108,7 +2109,7 @@ msgstr "Посетить домашнюю страницу проекта %s"
 msgid "Visual Helpers"
 msgstr "Графический помощник"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:432
+#: ../../plugins/Launch/launch/cfgdlg.py:433
 #, fuzzy
 msgid "Warning Text"
 msgstr "Найти текст"
