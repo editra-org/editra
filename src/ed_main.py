@@ -407,7 +407,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @return: reference to L{extern.flatnotebook.FlatNotebook} instance
 
         """
-        return self.nb
+        return getattr(self, 'nb', None)
 
     def GetShelf(self):
         """Get this windows Shelf
