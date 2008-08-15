@@ -256,7 +256,10 @@ ID_WEB               = wx.NewId()
 # Statusbar IDs
 SB_INFO          = 0
 SB_BUFF          = 1
-SB_ROWCOL        = 2
+SB_LEXER         = 2
+SB_READONLY      = 3
+SB_ENCODING      = 4
+SB_ROWCOL        = 5
 
 #---- Objects ----#
 
