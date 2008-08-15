@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-09 14:49-0500\n"
+"POT-Creation-Date: 2008-08-14 19:10-0500\n"
 "PO-Revision-Date: 2008-07-10 03:12+0000\n"
 "Last-Translator: Cody Precord <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -36,7 +36,7 @@ msgstr ""
 msgid "%s does not exist"
 msgstr ""
 
-#: ../../src/ed_pages.py:715
+#: ../../src/ed_pages.py:718
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -47,7 +47,7 @@ msgstr ""
 "\n"
 "もう一度保存しますか？"
 
-#: ../../src/ed_pages.py:735
+#: ../../src/ed_pages.py:738
 #, fuzzy, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -139,11 +139,11 @@ msgstr "元に戻す"
 msgid "&View"
 msgstr "参照"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:284
+#: ../../plugins/Launch/launch/cfgdlg.py:285
 msgid "**Alias**"
 msgstr "**別名**"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:284
+#: ../../plugins/Launch/launch/cfgdlg.py:285
 msgid "**New Value**"
 msgstr "**新しい値**"
 
@@ -156,7 +156,7 @@ msgstr "中止"
 msgid "About"
 msgstr "バージョン情報"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:220
+#: ../../plugins/Launch/launch/cfgdlg.py:221
 msgid "Add a new executable"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgstr "ブックマークを追加・削除する"
 msgid "Advanced"
 msgstr "高度な設定"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:215
+#: ../../plugins/Launch/launch/cfgdlg.py:216
 msgid "Alias"
 msgstr "エイリアス"
 
@@ -223,7 +223,7 @@ msgstr "オートコンプリート"
 msgid "Auto-Indent"
 msgstr "自動インデント"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:391
+#: ../../plugins/Launch/launch/cfgdlg.py:392
 msgid "Automatically clear buffer between runs"
 msgstr ""
 
@@ -231,7 +231,7 @@ msgstr ""
 msgid "Automatically save/use window state from last session"
 msgstr "自動的にウィンドウのサイズを保存する"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:408 ../../src/style_editor.py:643
+#: ../../plugins/Launch/launch/cfgdlg.py:409 ../../src/style_editor.py:643
 msgid "Background"
 msgstr "背景"
 
@@ -248,7 +248,7 @@ msgstr "現状のテーマを使って新しいテーマを作成する"
 msgid "Binding"
 msgstr "バインディング"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:447
+#: ../../plugins/filebrowser/filebrowser/browser.py:451
 msgid "Bookmark Selected Path(s)"
 msgstr ""
 
@@ -316,7 +316,7 @@ msgid "Class Definitions"
 msgstr "クラスの定義"
 
 #: ../../plugins/Launch/launch/launch.py:164 ../../src/ed_log.py:132
-#: ../../src/ed_search.py:609
+#: ../../src/ed_search.py:697
 msgid "Clear"
 msgstr "クリア"
 
@@ -324,8 +324,8 @@ msgstr "クリア"
 msgid "Click on Install to install the plugins in the list"
 msgstr "プラグインをインストールします、インストールボタンをクリックしてください"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:214
-#: ../../plugins/Launch/launch/cfgdlg.py:218
+#: ../../plugins/Launch/launch/cfgdlg.py:215
+#: ../../plugins/Launch/launch/cfgdlg.py:219
 msgid "Click on an item to edit"
 msgstr "修正するアイテムをクリックしてください"
 
@@ -446,8 +446,8 @@ msgstr "選択したテキストをクリップボードにコピー"
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:457
-#: ../../plugins/filebrowser/filebrowser/browser.py:545
+#: ../../plugins/filebrowser/filebrowser/browser.py:461
+#: ../../plugins/filebrowser/filebrowser/browser.py:561
 #, python-format
 msgid "Create Archive of \"%s\""
 msgstr "%sアーカイブを作成する"
@@ -477,7 +477,7 @@ msgstr "行をカット"
 msgid "Cut Selected Text from File"
 msgstr "選択したテキストをファイルからカット"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:205
+#: ../../plugins/Launch/launch/cfgdlg.py:206
 msgid "Default"
 msgstr "デフォルト"
 
@@ -531,7 +531,7 @@ msgstr ""
 msgid "Do you wish to exit?"
 msgstr "終了しますか？"
 
-#: ../../src/ed_pages.py:432
+#: ../../src/ed_pages.py:435
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -577,7 +577,7 @@ msgstr "ダウンロード中：%s"
 msgid "Downloads are incomplete"
 msgstr "ダウンロードが不完全"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:456
+#: ../../plugins/filebrowser/filebrowser/browser.py:460
 msgid "Duplicate"
 msgstr "複製"
 
@@ -611,7 +611,7 @@ msgstr "エラー：%sを保存に失敗しました"
 msgid "Edge Guide"
 msgstr "エッジガイド"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:443
+#: ../../plugins/filebrowser/filebrowser/browser.py:447
 msgid "Edit"
 msgstr "編集"
 
@@ -665,7 +665,7 @@ msgstr "Editraの翻訳プロジェクト"
 msgid "Enable Vi Emulation"
 msgstr "Viのエミュレーションを有効"
 
-#: ../../src/ed_pages.py:286
+#: ../../src/ed_pages.py:289
 msgid "Encoding Error"
 msgstr "エンコーディングエラー"
 
@@ -681,7 +681,7 @@ msgstr ""
 msgid "Enter the name of the new key profile"
 msgstr ""
 
-#: ../../src/ed_pages.py:750 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:753 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "エラー"
 
@@ -689,7 +689,7 @@ msgstr "エラー"
 msgid "Error Opening File"
 msgstr "ファイルを開くときにエラー"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:418
+#: ../../plugins/Launch/launch/cfgdlg.py:419
 msgid "Error Text"
 msgstr "エラーテキスト"
 
@@ -711,11 +711,11 @@ msgstr ""
 msgid "Error: Unable to open %s"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:216
+#: ../../plugins/Launch/launch/cfgdlg.py:217
 msgid "Executable Commands"
 msgstr "実行可能 なコマンド"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:190
+#: ../../plugins/Launch/launch/cfgdlg.py:191
 msgid "Executables"
 msgstr "実行ファイル"
 
@@ -754,7 +754,7 @@ msgstr "失敗しました"
 msgid "Failed to install %d plugins"
 msgstr "%dプラグインをインストールするのに失敗しました"
 
-#: ../../src/ed_pages.py:748
+#: ../../src/ed_pages.py:751
 #, python-format
 msgid ""
 "Failed to reload %(filename)s:\n"
@@ -794,7 +794,7 @@ msgstr "ファイルの設定"
 msgid "File Stat Failed"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:185
+#: ../../plugins/Launch/launch/cfgdlg.py:186
 msgid "File Type"
 msgstr "ファイルタイプ"
 
@@ -812,7 +812,7 @@ msgid "Filetype Associations"
 msgstr "ファイル形式組合"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:278
-#: ../../src/ed_toolbar.py:87
+#: ../../src/ed_search.py:358 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "検索"
 
@@ -829,7 +829,8 @@ msgstr "テキストを検索と置換"
 msgid "Find/R&eplace"
 msgstr "置換"
 
-#: ../../src/ed_search.py:274 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:274 ../../src/ed_search.py:354
+#: ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "置換"
 
@@ -859,7 +860,7 @@ msgstr "フォント"
 msgid "Font Settings"
 msgstr "フォントの設定"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:405 ../../src/style_editor.py:631
+#: ../../plugins/Launch/launch/cfgdlg.py:406 ../../src/style_editor.py:631
 msgid "Foreground"
 msgstr "前景"
 
@@ -876,7 +877,7 @@ msgstr ""
 msgid "Function Definitions"
 msgstr "関数の定義"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:133 ../../src/prefdlg.py:188
+#: ../../plugins/Launch/launch/cfgdlg.py:134 ../../src/prefdlg.py:188
 #: ../../src/prefdlg.py:485 ../../src/prefdlg.py:733
 msgid "General"
 msgstr "一般"
@@ -905,7 +906,7 @@ msgstr ""
 msgid "Generator"
 msgstr "ジェネレータ"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:450
+#: ../../plugins/filebrowser/filebrowser/browser.py:454
 msgid "Get Info"
 msgstr "情報の取得"
 
@@ -992,7 +993,7 @@ msgstr "インデントガイド"
 msgid "Info"
 msgstr "情報"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:425
+#: ../../plugins/Launch/launch/cfgdlg.py:426
 msgid "Info Text"
 msgstr ""
 
@@ -1026,7 +1027,7 @@ msgstr "インストールエラー"
 msgid "Installed Version"
 msgstr "インストール済バージョン"
 
-#: ../../src/ed_pages.py:416
+#: ../../src/ed_pages.py:419
 #, python-format
 msgid "Invalid file: %s"
 msgstr "無効なファイル：%s"
@@ -1075,7 +1076,7 @@ msgstr "言語"
 msgid "Latest Version"
 msgstr "最新バージョン"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:110
+#: ../../plugins/Launch/launch/cfgdlg.py:111
 msgid "Launch Configuration"
 msgstr "ランチの構成"
 
@@ -1170,7 +1171,7 @@ msgstr "大文字と小文字の区別"
 msgid "Menu"
 msgstr "メニュー"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:134
+#: ../../plugins/Launch/launch/cfgdlg.py:135
 #, fuzzy
 msgid "Misc"
 msgstr "その他"
@@ -1221,11 +1222,11 @@ msgstr "新規作成"
 msgid "New &Window"
 msgstr "新しいウィンドウ"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:454
+#: ../../plugins/filebrowser/filebrowser/browser.py:458
 msgid "New File"
 msgstr "新しいファイル"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:453
+#: ../../plugins/filebrowser/filebrowser/browser.py:457
 msgid "New Folder"
 msgstr "新しいフォルダ"
 
@@ -1253,7 +1254,7 @@ msgstr "次のブックマーク"
 msgid "No Description Available"
 msgstr "説明なしで利用可能"
 
-#: ../../src/ed_pages.py:426
+#: ../../src/ed_pages.py:429
 msgid "No Valid Files to Open"
 msgstr ""
 
@@ -1290,7 +1291,7 @@ msgstr "Pythonのシェルを開く"
 msgid "Open Code Browser Sidepanel"
 msgstr ""
 
-#: ../../src/ed_pages.py:437
+#: ../../src/ed_pages.py:440
 msgid "Open Directory?"
 msgstr "ディレクトリーを開きますか？"
 
@@ -1310,11 +1311,11 @@ msgstr ""
 msgid "Open the Quick Find Bar"
 msgstr ""
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:444
+#: ../../plugins/filebrowser/filebrowser/browser.py:448
 msgid "Open with "
 msgstr ""
 
-#: ../../src/ed_pages.py:457
+#: ../../src/ed_pages.py:460
 #, python-format
 msgid "Opened file: %s"
 msgstr "%sを開きました"
@@ -1370,7 +1371,7 @@ msgstr ""
 msgid "Perspectives"
 msgstr "視る"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:411
+#: ../../plugins/Launch/launch/cfgdlg.py:412
 msgid "Plain Text"
 msgstr "プレーンテキスト"
 
@@ -1496,7 +1497,7 @@ msgstr ""
 msgid "Rate: %.2f Kb/s"
 msgstr "レート: %2f Kb/s"
 
-#: ../../src/ed_search.py:353
+#: ../../src/ed_search.py:441
 msgid "Recent Searches"
 msgstr "最近の検索"
 
@@ -1522,7 +1523,7 @@ msgstr "やり直す"
 msgid "Redo Last Undo"
 msgstr ""
 
-#: ../../src/ed_pages.py:738
+#: ../../src/ed_pages.py:741
 msgid "Reload File?"
 msgstr "ファイルをリロードしますか？"
 
@@ -1550,7 +1551,7 @@ msgstr ""
 msgid "Remove all bookmarks from the current document"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:222
+#: ../../plugins/Launch/launch/cfgdlg.py:223
 msgid "Remove selection from list"
 msgstr ""
 
@@ -1558,7 +1559,7 @@ msgstr ""
 msgid "Remove trailing whitespace"
 msgstr "末尾の空白を削除する"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:451
+#: ../../plugins/filebrowser/filebrowser/browser.py:455
 msgid "Rename"
 msgstr "名前変更"
 
@@ -1574,7 +1575,7 @@ msgstr ""
 msgid "Report Error"
 msgstr "エラーを報告書する"
 
-#: ../../src/ed_pages.py:718
+#: ../../src/ed_pages.py:721
 msgid "Resave File?"
 msgstr ""
 
@@ -1582,7 +1583,7 @@ msgstr ""
 msgid "Retrieving Plugin List"
 msgstr ""
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:445
+#: ../../plugins/filebrowser/filebrowser/browser.py:449
 msgid "Reveal in "
 msgstr ""
 
@@ -1904,7 +1905,7 @@ msgstr "タブを空白に"
 msgid "Task Definitions"
 msgstr "タスクの定義"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:383
+#: ../../plugins/Launch/launch/cfgdlg.py:384
 msgid "Text Colors"
 msgstr "テキストの色"
 
@@ -1912,7 +1913,7 @@ msgstr "テキストの色"
 msgid "Text Document"
 msgstr "文書ドキュメント"
 
-#: ../../src/ed_pages.py:284
+#: ../../src/ed_pages.py:287
 #, python-format
 msgid ""
 "The document could not be decoded with %(encoding1)s.\n"
@@ -1928,7 +1929,7 @@ msgid ""
 "Would you like to save the changes?"
 msgstr ""
 
-#: ../../src/ed_pages.py:424
+#: ../../src/ed_pages.py:427
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr ""
@@ -2046,11 +2047,11 @@ msgstr "Unix (\\n)"
 msgid "Unknown"
 msgstr "不明"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:585
+#: ../../plugins/filebrowser/filebrowser/browser.py:601
 msgid "Untitled_File"
 msgstr "無題ファイル"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:583
+#: ../../plugins/filebrowser/filebrowser/browser.py:599
 msgid "Untitled_Folder"
 msgstr "無題フォルダ"
 
@@ -2119,7 +2120,7 @@ msgstr ""
 msgid "Visual Helpers"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:432
+#: ../../plugins/Launch/launch/cfgdlg.py:433
 msgid "Warning Text"
 msgstr "警告テキスト"
 

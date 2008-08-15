@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-09 14:49-0500\n"
+"POT-Creation-Date: 2008-08-14 19:10-0500\n"
 "PO-Revision-Date: 2008-08-07 15:03+0000\n"
 "Last-Translator: shaohao <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -36,7 +36,7 @@ msgstr ""
 msgid "%s does not exist"
 msgstr ""
 
-#: ../../src/ed_pages.py:715
+#: ../../src/ed_pages.py:718
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -47,7 +47,7 @@ msgstr ""
 "\n"
 "要再次保存吗？"
 
-#: ../../src/ed_pages.py:735
+#: ../../src/ed_pages.py:738
 #, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -138,11 +138,11 @@ msgstr "撤消(&U)"
 msgid "&View"
 msgstr "查看(&V)"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:284
+#: ../../plugins/Launch/launch/cfgdlg.py:285
 msgid "**Alias**"
 msgstr "**别名**"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:284
+#: ../../plugins/Launch/launch/cfgdlg.py:285
 msgid "**New Value**"
 msgstr "**新值**"
 
@@ -154,7 +154,7 @@ msgstr "终止"
 msgid "About"
 msgstr "关于"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:220
+#: ../../plugins/Launch/launch/cfgdlg.py:221
 msgid "Add a new executable"
 msgstr "添加新的可执行"
 
@@ -174,7 +174,7 @@ msgstr "添加移除书签"
 msgid "Advanced"
 msgstr "高级"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:215
+#: ../../plugins/Launch/launch/cfgdlg.py:216
 msgid "Alias"
 msgstr "别名"
 
@@ -223,7 +223,7 @@ msgstr "自动完成"
 msgid "Auto-Indent"
 msgstr "自动缩进"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:391
+#: ../../plugins/Launch/launch/cfgdlg.py:392
 msgid "Automatically clear buffer between runs"
 msgstr "自动清除实例间的缓冲区"
 
@@ -231,7 +231,7 @@ msgstr "自动清除实例间的缓冲区"
 msgid "Automatically save/use window state from last session"
 msgstr "自动 保存/使用 最后一次会话的窗口状态"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:408 ../../src/style_editor.py:643
+#: ../../plugins/Launch/launch/cfgdlg.py:409 ../../src/style_editor.py:643
 msgid "Background"
 msgstr "背景"
 
@@ -247,7 +247,7 @@ msgstr "新主题基于当前主题"
 msgid "Binding"
 msgstr "绑定"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:447
+#: ../../plugins/filebrowser/filebrowser/browser.py:451
 msgid "Bookmark Selected Path(s)"
 msgstr "书签选择路径"
 
@@ -315,7 +315,7 @@ msgid "Class Definitions"
 msgstr "类定义"
 
 #: ../../plugins/Launch/launch/launch.py:164 ../../src/ed_log.py:132
-#: ../../src/ed_search.py:609
+#: ../../src/ed_search.py:697
 msgid "Clear"
 msgstr "清除"
 
@@ -323,8 +323,8 @@ msgstr "清除"
 msgid "Click on Install to install the plugins in the list"
 msgstr "点击 安装 以安装列表中的插件"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:214
-#: ../../plugins/Launch/launch/cfgdlg.py:218
+#: ../../plugins/Launch/launch/cfgdlg.py:215
+#: ../../plugins/Launch/launch/cfgdlg.py:219
 msgid "Click on an item to edit"
 msgstr "选择要编辑条目"
 
@@ -440,8 +440,8 @@ msgstr "复制选定文本到剪贴板"
 msgid "Copyright"
 msgstr "版权"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:457
-#: ../../plugins/filebrowser/filebrowser/browser.py:545
+#: ../../plugins/filebrowser/filebrowser/browser.py:461
+#: ../../plugins/filebrowser/filebrowser/browser.py:561
 #, python-format
 msgid "Create Archive of \"%s\""
 msgstr "为\"%s\"生成归档"
@@ -470,7 +470,7 @@ msgstr "剪切行"
 msgid "Cut Selected Text from File"
 msgstr "从文件中剪切选定文件"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:205
+#: ../../plugins/Launch/launch/cfgdlg.py:206
 msgid "Default"
 msgstr "默认"
 
@@ -522,7 +522,7 @@ msgstr "显示字体"
 msgid "Do you wish to exit?"
 msgstr "要退出吗？"
 
-#: ../../src/ed_pages.py:432
+#: ../../src/ed_pages.py:435
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -566,7 +566,7 @@ msgstr "下载: %s"
 msgid "Downloads are incomplete"
 msgstr "下载完成"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:456
+#: ../../plugins/filebrowser/filebrowser/browser.py:460
 msgid "Duplicate"
 msgstr "克隆"
 
@@ -600,7 +600,7 @@ msgstr "错误：保存 %s 失败"
 msgid "Edge Guide"
 msgstr "边界线"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:443
+#: ../../plugins/filebrowser/filebrowser/browser.py:447
 msgid "Edit"
 msgstr "编辑"
 
@@ -657,7 +657,7 @@ msgstr "Editra 翻译工程"
 msgid "Enable Vi Emulation"
 msgstr "启用 Vi 仿真"
 
-#: ../../src/ed_pages.py:286
+#: ../../src/ed_pages.py:289
 msgid "Encoding Error"
 msgstr "编码错误"
 
@@ -673,7 +673,7 @@ msgstr ""
 msgid "Enter the name of the new key profile"
 msgstr "输入新关键配置名称"
 
-#: ../../src/ed_pages.py:750 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:753 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "错误"
 
@@ -681,7 +681,7 @@ msgstr "错误"
 msgid "Error Opening File"
 msgstr "打开文件错误"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:418
+#: ../../plugins/Launch/launch/cfgdlg.py:419
 msgid "Error Text"
 msgstr "错误文本"
 
@@ -701,11 +701,11 @@ msgstr "错误：为了提高Editra，请点击报告错误将错误信息提交
 msgid "Error: Unable to open %s"
 msgstr "错误：不能打开 %s"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:216
+#: ../../plugins/Launch/launch/cfgdlg.py:217
 msgid "Executable Commands"
 msgstr "可执行命令"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:190
+#: ../../plugins/Launch/launch/cfgdlg.py:191
 msgid "Executables"
 msgstr "可执行"
 
@@ -742,7 +742,7 @@ msgstr "失败"
 msgid "Failed to install %d plugins"
 msgstr "安装插件 %d 失败"
 
-#: ../../src/ed_pages.py:748
+#: ../../src/ed_pages.py:751
 #, python-format
 msgid ""
 "Failed to reload %(filename)s:\n"
@@ -788,7 +788,7 @@ msgstr "文件设置"
 msgid "File Stat Failed"
 msgstr "文件状态失败"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:185
+#: ../../plugins/Launch/launch/cfgdlg.py:186
 msgid "File Type"
 msgstr "文件类型"
 
@@ -805,7 +805,7 @@ msgid "Filetype Associations"
 msgstr "文件类型关联"
 
 #: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:278
-#: ../../src/ed_toolbar.py:87
+#: ../../src/ed_search.py:358 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "查找"
 
@@ -821,7 +821,8 @@ msgstr "查找替换文本"
 msgid "Find/R&eplace"
 msgstr "查找/替换(&e)"
 
-#: ../../src/ed_search.py:274 ../../src/ed_toolbar.py:88
+#: ../../src/ed_search.py:274 ../../src/ed_search.py:354
+#: ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "查找/替换"
 
@@ -849,7 +850,7 @@ msgstr "字体"
 msgid "Font Settings"
 msgstr "字体设置"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:405 ../../src/style_editor.py:631
+#: ../../plugins/Launch/launch/cfgdlg.py:406 ../../src/style_editor.py:631
 msgid "Foreground"
 msgstr "前景"
 
@@ -866,7 +867,7 @@ msgstr "将所有行尾符转为 %s 模式"
 msgid "Function Definitions"
 msgstr "函数定义"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:133 ../../src/prefdlg.py:188
+#: ../../plugins/Launch/launch/cfgdlg.py:134 ../../src/prefdlg.py:188
 #: ../../src/prefdlg.py:485 ../../src/prefdlg.py:733
 msgid "General"
 msgstr "常规"
@@ -895,7 +896,7 @@ msgstr "生成当前文档的 %s 版本"
 msgid "Generator"
 msgstr "生成器"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:450
+#: ../../plugins/filebrowser/filebrowser/browser.py:454
 msgid "Get Info"
 msgstr "获取信息"
 
@@ -980,7 +981,7 @@ msgstr "缩进指示"
 msgid "Info"
 msgstr "信息"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:425
+#: ../../plugins/Launch/launch/cfgdlg.py:426
 msgid "Info Text"
 msgstr "信息文本"
 
@@ -1016,7 +1017,7 @@ msgstr "安装错误"
 msgid "Installed Version"
 msgstr "已安装版本"
 
-#: ../../src/ed_pages.py:416
+#: ../../src/ed_pages.py:419
 #, python-format
 msgid "Invalid file: %s"
 msgstr "无效文件：%s"
@@ -1065,7 +1066,7 @@ msgstr "语言"
 msgid "Latest Version"
 msgstr "最新版本"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:110
+#: ../../plugins/Launch/launch/cfgdlg.py:111
 msgid "Launch Configuration"
 msgstr "装载配置"
 
@@ -1159,7 +1160,7 @@ msgstr "匹配"
 msgid "Menu"
 msgstr "菜单"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:134
+#: ../../plugins/Launch/launch/cfgdlg.py:135
 msgid "Misc"
 msgstr "杂项"
 
@@ -1209,11 +1210,11 @@ msgstr "新建"
 msgid "New &Window"
 msgstr "新窗口(&W)"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:454
+#: ../../plugins/filebrowser/filebrowser/browser.py:458
 msgid "New File"
 msgstr "新文件"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:453
+#: ../../plugins/filebrowser/filebrowser/browser.py:457
 msgid "New Folder"
 msgstr "建立新文件夹"
 
@@ -1241,7 +1242,7 @@ msgstr "下一个书签"
 msgid "No Description Available"
 msgstr "无描述"
 
-#: ../../src/ed_pages.py:426
+#: ../../src/ed_pages.py:429
 msgid "No Valid Files to Open"
 msgstr "没有文件可打开"
 
@@ -1278,7 +1279,7 @@ msgstr "打开 Python 命令行"
 msgid "Open Code Browser Sidepanel"
 msgstr "打开代码浏览器面板"
 
-#: ../../src/ed_pages.py:437
+#: ../../src/ed_pages.py:440
 msgid "Open Directory?"
 msgstr "要打开目录吗？"
 
@@ -1298,11 +1299,11 @@ msgstr "默认在新窗口中打开文件"
 msgid "Open the Quick Find Bar"
 msgstr "打开快速搜索栏"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:444
+#: ../../plugins/filebrowser/filebrowser/browser.py:448
 msgid "Open with "
 msgstr "打开用 "
 
-#: ../../src/ed_pages.py:457
+#: ../../src/ed_pages.py:460
 #, python-format
 msgid "Opened file: %s"
 msgstr "已打开文件：%s"
@@ -1357,7 +1358,7 @@ msgstr "要删除视图"
 msgid "Perspectives"
 msgstr "视图"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:411
+#: ../../plugins/Launch/launch/cfgdlg.py:412
 msgid "Plain Text"
 msgstr "纯文本"
 
@@ -1484,7 +1485,7 @@ msgstr "添加条目"
 msgid "Rate: %.2f Kb/s"
 msgstr "速率：%.2fKb/s"
 
-#: ../../src/ed_search.py:353
+#: ../../src/ed_search.py:441
 msgid "Recent Searches"
 msgstr "最近搜索"
 
@@ -1509,7 +1510,7 @@ msgstr "重做"
 msgid "Redo Last Undo"
 msgstr "重做最后撤销"
 
-#: ../../src/ed_pages.py:738
+#: ../../src/ed_pages.py:741
 msgid "Reload File?"
 msgstr "重载文件？"
 
@@ -1537,7 +1538,7 @@ msgstr "移除保存路径"
 msgid "Remove all bookmarks from the current document"
 msgstr "移除当前文档中所有书签"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:222
+#: ../../plugins/Launch/launch/cfgdlg.py:223
 msgid "Remove selection from list"
 msgstr "移除选定项"
 
@@ -1545,7 +1546,7 @@ msgstr "移除选定项"
 msgid "Remove trailing whitespace"
 msgstr "移除结尾空格"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:451
+#: ../../plugins/filebrowser/filebrowser/browser.py:455
 msgid "Rename"
 msgstr "重命名"
 
@@ -1562,7 +1563,7 @@ msgstr ""
 msgid "Report Error"
 msgstr "报告错误"
 
-#: ../../src/ed_pages.py:718
+#: ../../src/ed_pages.py:721
 msgid "Resave File?"
 msgstr "要重新保存文件吗？"
 
@@ -1570,7 +1571,7 @@ msgstr "要重新保存文件吗？"
 msgid "Retrieving Plugin List"
 msgstr "检索插件列表"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:445
+#: ../../plugins/filebrowser/filebrowser/browser.py:449
 msgid "Reveal in "
 msgstr "显示于 "
 
@@ -1887,7 +1888,7 @@ msgstr "Tab转换为空格"
 msgid "Task Definitions"
 msgstr "任务定义"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:383
+#: ../../plugins/Launch/launch/cfgdlg.py:384
 msgid "Text Colors"
 msgstr "文本颜色"
 
@@ -1895,7 +1896,7 @@ msgstr "文本颜色"
 msgid "Text Document"
 msgstr "文本文档"
 
-#: ../../src/ed_pages.py:284
+#: ../../src/ed_pages.py:287
 #, python-format
 msgid ""
 "The document could not be decoded with %(encoding1)s.\n"
@@ -1917,7 +1918,7 @@ msgstr ""
 "\n"
 "要保存吗？"
 
-#: ../../src/ed_pages.py:424
+#: ../../src/ed_pages.py:427
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "Editra 无法打开 %s"
@@ -2034,11 +2035,11 @@ msgstr "Unix(\\n)"
 msgid "Unknown"
 msgstr "未知"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:585
+#: ../../plugins/filebrowser/filebrowser/browser.py:601
 msgid "Untitled_File"
 msgstr "未命名文件"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:583
+#: ../../plugins/filebrowser/filebrowser/browser.py:599
 msgid "Untitled_Folder"
 msgstr "未命名文件夹"
 
@@ -2107,7 +2108,7 @@ msgstr "工程主页 %s"
 msgid "Visual Helpers"
 msgstr "可视助手"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:432
+#: ../../plugins/Launch/launch/cfgdlg.py:433
 msgid "Warning Text"
 msgstr "警告文本"
 
