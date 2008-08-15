@@ -758,7 +758,7 @@ def _OpenToLine(fname, line, mainw):
     buffers = [ page.GetFileName() for page in nb.GetTextControls() ]
     if fname in buffers:
         page = buffers.index(fname)
-        nb.SetSelection(page)
+        nb.ChangePage(page)
         nb.GetPage(page).GotoLine(line)
     else:
         nb.OnDrop([fname])
