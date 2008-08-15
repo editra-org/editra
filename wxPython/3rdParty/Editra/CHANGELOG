@@ -15,6 +15,7 @@ DATE 0x/0x/2008
 NEWS:
 
 NEW: [features/improvements]
++Show Filetype and Encoding information in statusbar
 +Add support for newLISP (from Jeff)
 +Add Czech translation (contributed by Tomas Fryda)
 

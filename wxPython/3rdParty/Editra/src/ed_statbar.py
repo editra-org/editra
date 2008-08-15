@@ -26,6 +26,7 @@ import wx
 import ed_glob
 import ed_msg
 import util
+from syntax.syntax import GetFtypeDisplayName
 import eclib.pstatbar as pstatbar
 
 #--------------------------------------------------------------------------#
@@ -39,13 +40,17 @@ class EdStatBar(pstatbar.ProgressStatusBar):
 
         # Setup
         self._pid = parent.GetId() # Save parents id for filtering msgs
-        self.SetFieldsCount(3) # Info, vi stuff, line/progress
-        self.SetStatusWidths([-1, 90, 155])
+        self._widths = list()
+        self.SetFieldsCount(6) # Info, vi stuff, line/progress
+        self.SetStatusWidths([-1, 90, 40, 40, 40, 155])
 
         # Messages
         ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_PROGRESS_SHOW)
         ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_PROGRESS_STATE)
         ed_msg.Subscribe(self.OnUpdateText, ed_msg.EDMSG_UI_SB_TXT)
+        ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_UI_NB_CHANGED)
+        ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_FILE_SAVED)
+        ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_UI_STC_LEXER)
 #        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENING)
 #        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENED)
 
@@ -53,7 +58,38 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         """Unsubscribe from messages"""
         ed_msg.Unsubscribe(self.OnProgress)
         ed_msg.Unsubscribe(self.OnUpdateText)
+        ed_msg.Unsubscribe(self.OnUpdateDoc)
         pstatbar.ProgressStatusBar.__del__(self)
+
+    def AdjustFieldWidths(self):
+        """Adust each field width of status bar basing on the field text
+        @return: None
+
+        """
+        widths = []
+        # Calculate required widths
+        # NOTE: Order of fields is important
+        for field in [ed_glob.SB_BUFF,
+                      ed_glob.SB_LEXER,
+                      ed_glob.SB_READONLY,
+                      ed_glob.SB_ENCODING,
+                      ed_glob.SB_ROWCOL]:
+            width = self.GetTextExtent(self.GetStatusText(field))[0]
+            widths.append(width)
+
+        # Adjust widths
+        widths = [width + 15 for width in widths]
+        widths.insert(0, -1)
+        for idx, width in enumerate(list(widths)):
+            if width == 15:
+                widths[idx] = 0
+
+        if widths[-1] < 155:
+            widths[-1] = 155
+
+        if widths != self._widths:
+            self._widths = widths
+            self.SetStatusWidths(self._widths)
 
     def OnProgress(self, msg):
         """Set the progress bar's state
@@ -87,6 +123,13 @@ class EdStatBar(pstatbar.ProgressStatusBar):
             self.SetRange(util.GetFileSize(mdata))
             self.Start(75)
 
+    def OnUpdateDoc(self, msg):
+        """Update document related fields
+        @param msg: Message Object
+
+        """
+        self.UpdateFields()
+
     def OnUpdateText(self, msg):
         """Update the status bar text based on the recieved message
         @param msg: Message Object
@@ -95,4 +138,49 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         # Only process if this status bar is in the active window and shown
         if self.GetTopLevelParent().IsActive() and self.IsShown():
             field, txt = msg.GetData()
+            self.UpdateFields()
             self.SetStatusText(txt, field)
+
+    def PushStatusText(self, txt, field):
+        """Set the status text
+        @param txt: Text to put in bar
+        @param field: int
+
+        """
+        pstatbar.ProgressStatusBar.PushStatusText(self, txt, field)
+        self.AdjustFieldWidths()
+
+    def SetStatusText(self, txt, field):
+        """Set the status text
+        @param txt: Text to put in bar
+        @param field: int
+
+        """
+        pstatbar.ProgressStatusBar.SetStatusText(self, txt, field)
+        self.AdjustFieldWidths()
+
+
+    def UpdateFields(self):
+        """Update document fields based on the currently selected
+        document in the editor.
+        @postcondition: encoding and lexer fields are updated
+        @todo: update when readonly hooks are implemented
+
+        """
+        nb = self.GetParent().GetNotebook()
+        if nb is None:
+            return
+
+        cbuff = nb.GetCurrentCtrl()
+        doc = cbuff.GetDocument()
+        pstatbar.ProgressStatusBar.SetStatusText(self, doc.GetEncoding(),
+                                                 ed_glob.SB_ENCODING)
+        pstatbar.ProgressStatusBar.SetStatusText(self,
+                                                 GetFtypeDisplayName(cbuff.GetLangId()),
+                                                 ed_glob.SB_LEXER)
+#        pstatbar.ProgressStatusBar.SetStatusText(self,
+#                                                 ,
+#                                                 ed_glob.SB_READONLY)
+
+        self.AdjustFieldWidths()
+
