@@ -136,6 +136,10 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                     args.append(APP_CMD_OPEN_WINDOW)
 
                 rval = ed_ipc.SendCommands(args, profiler.Profile_Get('SESSION_KEY'))
+                # If sending the command failed then let the editor startup
+                # a new instance
+                if not rval:
+                    self._isfirst = True
             else:
                 self._log("[app][info] Starting Ipc server...")
                 # Set the session key and save it to the users profile so
@@ -146,8 +150,13 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 profiler.Profile_Set('ISBINARY', hasattr(sys, 'frozen'))
                 path = profiler.Profile_Get('MYPROFILE')
                 profiler.Profile().Write(path)
-                self._server = ed_ipc.EdIpcServer(self, profiler.Profile_Get('SESSION_KEY'))
-                self._server.start()
+                try:
+                    self._server = ed_ipc.EdIpcServer(self, profiler.Profile_Get('SESSION_KEY'))
+                    self._server.start()
+                except Exception, msg:
+                    self._log("[app][err] Failed to start ipc server")
+                    self._log("[app][err] %s" % str(msg))
+                    self._server = None
                 self._isfirst = True
         else:
             self._isfirst = True
