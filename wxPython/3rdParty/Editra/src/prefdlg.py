@@ -219,9 +219,12 @@ class PrefTools(wx.Toolbook):
             width = psz.GetWidth()
         else:
             width = tbw
+
+        page.Freeze()
         parent.SetClientSize((width, psz.GetHeight() + tbh))
         parent.SendSizeEvent()
         parent.Layout()
+        page.Thaw()
         if evt is not None:
             evt.Skip()
 
@@ -489,6 +492,14 @@ class DocumentPanel(PrefPanelBase):
         msizer = wx.BoxSizer(wx.VERTICAL)
         msizer.AddMany([(sizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
+
+    def GetSize(self):
+        """Get the size of the panel
+        @return: wx.Size
+
+        """
+        sz = PrefPanelBase.GetSize(self)
+        return wx.Size(sz[0] + 35, sz[1])
 
 class DocGenPanel(wx.Panel):
     """Panel used for general document settings in the DocumentPanel's
@@ -798,7 +809,6 @@ class DocSyntaxPanel(wx.Panel):
 
         # Attributes
         self._elist = ExtListCtrl(self)
-        self._elist.LoadList()
         self._elist.SetMinSize((425, 200))
 
         # Layout page
@@ -1789,7 +1799,6 @@ class ExtListCtrl(wx.ListCtrl,
                                    wx.LC_VRULES | wx.BORDER)
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
-        listmix.TextEditMixin.__init__(self)
         elistmix.ListRowHighlighter.__init__(self)
 
         # Setup
@@ -1798,6 +1807,8 @@ class ExtListCtrl(wx.ListCtrl,
                           _("Extensions (space separated, no dots)"))
         self._extreg = syntax.ExtensionRegister()
         self._editing = None
+        self.LoadList()
+        listmix.TextEditMixin.__init__(self)
 
     def CloseEditor(self, evt=None):
         """Update list and extension register after edit window
