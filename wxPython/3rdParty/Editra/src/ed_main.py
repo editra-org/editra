@@ -394,6 +394,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self.LOG("[ed_main][info] CMD Open File: %s" % fname)
             self.nb.OpenPage(util.GetPathName(fname),
                              util.GetFileName(fname), quiet=True)
+            self.Raise()
 
     def GetFrameManager(self):
         """Returns the manager for this frame

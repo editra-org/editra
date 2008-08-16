@@ -341,8 +341,6 @@ class EdPages(FNB.FlatNotebook):
         if current_page < 0:
             return current_page
 
-        self.LOG("[ed_pages][info] Current Page = %d" % current_page)
-
         control = self.GetPage(current_page)
         control.SetFocus()
         self.control = control
