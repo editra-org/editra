@@ -126,7 +126,7 @@ class EdIpcServer(threading.Thread):
         global EDPORT
         while True:
             try:
-                self.socket.bind((socket.gethostname(), EDPORT))
+                self.socket.bind(('127.0.0.1', EDPORT))
                 break
             except:
                 EDPORT += 1
@@ -159,7 +159,7 @@ class EdIpcServer(threading.Thread):
                 if recieved.endswith(MSGEND):
                     break
 
-            # If message key is correct and the message is ended process
+            # If message key is correct and the message is ended, process
             # the input and dispatch to the app.
             if recieved.startswith(self.__key) and recieved.endswith(MSGEND):
                 recieved = recieved.replace(self.__key, u'', 1)
@@ -200,7 +200,7 @@ def SendCommands(cmds, key):
     try:
         # Setup the client socket
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect((socket.gethostname(), EDPORT))
+        client.connect(('127.0.0.1', EDPORT))
 
         # Server expects commands delimited by ;
         client.send(u";".join(cmds))
