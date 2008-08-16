@@ -1092,6 +1092,7 @@ class TabNavigatorWindow(wx.Dialog):
 
         self._selectedItem = -1
         self._indexMap = []
+        self._sel = 0
         
         if icon is None:
             self._bmp = GetMondrianBitmap()
@@ -1226,10 +1227,14 @@ class TabNavigatorWindow(wx.Dialog):
 
         bk = self.GetParent()
         self._selectedItem = self._listBox.GetSelection()
-        iter = self._indexMap[self._selectedItem]
-        bk._pages.FireEvent(iter)
+        self._sel = self._indexMap[self._selectedItem]
         self.EndModal(wx.ID_OK)
         
+
+    def GetSelection(self):
+        """Get the index of the selected page"""
+        return self._sel
+
 
     def OnPanelPaint(self, event):
         """Handles the wx.EVT_PAINT event for L{TabNavigatorWindow} top panel. """
@@ -3453,6 +3458,7 @@ class FlatNotebook(wx.PyPanel):
                     self._popupWin = TabNavigatorWindow(self, self._naviIcon)
                     self._popupWin.SetReturnCode(wx.ID_OK)
                     self._popupWin.ShowModal()
+                    self._pages.FireEvent(self._popupWin.GetSelection())
                     self._popupWin.Destroy()
                     self._popupWin = None
                 else:
