@@ -251,12 +251,13 @@ class FindReplaceDlgBase:
         """
         return self._panel.GetPanelMode()
 
-    def SetFlag(self, flag):
-        """Set a search dialog flag.
-        @param flags: AFR_*
+    def SetData(self, data):
+        """Set the dialogs FindReplaceData
+        @param data: FindReplaceData
+        @note: causes updates in dialog
 
         """
-        self._panel.SetFlag(flags)
+        self._panel.SetData(data)
 
     def SetFindBitmap(self, bmp):
         """Set the find Bitmap
@@ -612,12 +613,13 @@ class FindPanel(wx.Panel):
         etype = EVENT_MAP.get(eid, None)
         if etype is not None:
             evt = FindEvent(etype, eid, self._fdata.GetFlags())
+            evt.SetEventObject(self)
             lookin_idx = self._lookin.GetSelection()
             stype = min(LOCATION_IN_FILES, max(LOCATION_CURRENT_DOC, lookin_idx))
             evt.SetSearchType(stype)
             evt.SetFindString(self._ftxt.GetValue())
 
-            if self._mode & AFR__STYLE_REPLACEDIALOG:
+            if self._mode & AFR_STYLE_REPLACEDIALOG:
                 evt.SetReplaceString(self._rtxt.GetValue())
             else:
                 evt.SetReplaceString(None)
@@ -680,6 +682,11 @@ class FindPanel(wx.Panel):
         @param evt: wx.UpdateUIEvent
 
         """
+        if evt.GetId() == wx.ID_FIND:
+            if self._lookin.GetSelection() == LOCATION_CURRENT_DOC:
+                evt.SetText(_("Find"))
+            else:
+                evt.SetText(_("Find All"))
         evt.Enable(len(self._ftxt.GetValue()))
 
     def SetFindMode(self, find=True):
@@ -698,6 +705,16 @@ class FindPanel(wx.Panel):
 
         self._ShowButtons(find)
         self.Layout()
+
+    def SetData(self, data):
+        """Set the FindReplaceData and update the dialog with that data
+        @param data: wxFindReplaceData
+
+        """
+        self._data.Destroy()
+        self._data = None
+        self._data = data
+        self._ConfigureControls()
 
     def SetFlag(self, flag):
         """Set a search flag
