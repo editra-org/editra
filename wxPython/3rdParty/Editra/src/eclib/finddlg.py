@@ -414,7 +414,7 @@ class FindPanel(wx.Panel):
                           wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
 
         # Attributes
-        # TODO: change to combo box when wxMac has native implementation
+        # TODO: change to editable combo box when wxMac has native widget
         self._mode = style
         self._ftxt = wx.TextCtrl(self)
         self._rtxt = wx.TextCtrl(self)
@@ -424,6 +424,7 @@ class FindPanel(wx.Panel):
         self._sizers = dict()
         self._paths = dict()
         self._fdata = fdata
+        self._lastSearch = u''
 
         # Layout
         self.__DoLayout()
@@ -611,13 +612,19 @@ class FindPanel(wx.Panel):
 
         """
         etype = EVENT_MAP.get(eid, None)
+        query = self._ftxt.GetValue()
+        if eid == wx.ID_FIND:
+            if self._lastSearch == query:
+                etype = edEVT_FIND_NEXT
+            self._lastSearch = query
+
         if etype is not None:
             evt = FindEvent(etype, eid, self._fdata.GetFlags())
             evt.SetEventObject(self)
             lookin_idx = self._lookin.GetSelection()
             stype = min(LOCATION_IN_FILES, max(LOCATION_CURRENT_DOC, lookin_idx))
             evt.SetSearchType(stype)
-            evt.SetFindString(self._ftxt.GetValue())
+            evt.SetFindString(query)
 
             if self._mode & AFR_STYLE_REPLACEDIALOG:
                 evt.SetReplaceString(self._rtxt.GetValue())
@@ -792,6 +799,7 @@ if __name__ == '__main__':
         print "Match Case: ", evt.IsMatchCase()
         print "Regular Expression:", evt.IsRegEx()
         print "Search Up:", evt.IsUp()
+        print "EvtType:", evt.GetEventType()
 
     frame.Bind(EVT_FIND, OnFind)
     frame.Bind(EVT_FIND_ALL, OnFind)
