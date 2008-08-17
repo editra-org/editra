@@ -268,16 +268,9 @@ def FilterFiles(file_list):
 
     """
     good = list()
+    checker = FileTypeChecker()
     for path in file_list:
-        # Filter out directories and some common filetypes that can't
-        # be opened.
-        if not os.path.exists(path) or os.path.isdir(path) or \
-           GetExtension(path).lower() in ['gz', 'tar', 'bz2', 'zip', 'rar',
-                                          'ace', 'png', 'jpg', 'gif', 'jpeg',
-                                          'bmp', 'exe', 'pyc', 'pyo', 'psd',
-                                          'a', 'o', 'dll', 'ico', 'icns']:
-            continue
-        else:
+        if not checker.IsBinary(path):
             good.append(path)
     return good
 
@@ -762,6 +755,51 @@ def SetWindowIcon(window):
             window.SetIcon(wx.Icon(ed_icon, wx.BITMAP_TYPE_PNG))
     finally:
         pass
+
+#-----------------------------------------------------------------------------#
+
+class FileTypeChecker(object):
+    """File type checker and recognizer"""
+    TXTCHARS = ''.join(map(chr, [7,8,9,10,12,13,27] + range(0x20, 0x100)))
+    ALLBYTES = ''.join(map(chr, range(256)))
+
+    def __init__(self, preread=4096):
+        """Create the FileTypeChecker
+        @keyword preread: number of bytes to read for checking file type
+
+        """
+        object.__init__(self)
+
+        # Attributes
+        self._preread = preread
+
+    def _GetHandle(self, fname):
+        """Get a file handle for reading
+        @param fname: filename
+        @return: file object or None
+
+        """
+        try:
+            handle = open(fname, 'rb')
+        except:
+            handle = None
+        return handle
+
+    def IsBinary(self, fname):
+        """Is the file made up of binary data
+        @param fname: filename to check
+        @return: bool
+
+        """
+        handle = self._GetHandle(fname)
+        if handle is not None:
+            bytes = handle.read(self._preread)
+            handle.close()
+            nontext = bytes.translate(FileTypeChecker.ALLBYTES,
+                                      FileTypeChecker.TXTCHARS)
+            return bool(nontext)
+        else:
+            return False
 
 #-----------------------------------------------------------------------------#
 
