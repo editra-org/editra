@@ -373,6 +373,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             fdir = self.GetNotebook().GetCurrentCtrl().GetFileName()
             if len(fdir):
                 fdir = os.path.dirname(fdir)
+            elif not hasattr(sys, 'frozen'):
+                fdir = os.curdir
 
             dlg = wx.FileDialog(self, _("Choose a File"), fdir, "",
                                 ''.join(syntax.GenFileFilters()),
