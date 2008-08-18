@@ -1440,6 +1440,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Set the buffers filename attributes from the given path"""
         self.file.SetPath(path)
 
+    def SetFocus(self):
+        """Set the focus to this control
+        @note: overriden as a hack for msw
+
+        """
+        wx.stc.StyledTextCtrl.SetFocus(self)
+        if wx.Platform == '__WXMSW__':
+            wx.PostEvent(self, wx.FocusEvent(wx.wxEVT_SET_FOCUS, self.GetId()))
+
     def SetLexer(self, lexer):
         """Set the buffers lexer
         @param lexer: lexer to use
