@@ -464,14 +464,15 @@ class FindPanel(wx.Panel):
         fhsizer = wx.BoxSizer(wx.HORIZONTAL)
         fhsizer.Add(self._ftxt, 1, wx.EXPAND)
         topvsizer.AddMany([(findlbl, 0, wx.ALIGN_LEFT), ((3, 3), 0),
-                          (fhsizer, 0, wx.EXPAND), ((5, 5), 0)])
+                          (fhsizer, 0, wx.EXPAND)])
 
         # Replace field
         rhsizer = wx.BoxSizer(wx.HORIZONTAL)
         rhsizer.Add(self._rtxt, 1, wx.EXPAND)
         rlbl = wx.StaticText(self, ID_REPLACE_LBL, _("Replace with") + u":")
         self._sizers[ID_REPLACE_LBL] = wx.BoxSizer(wx.VERTICAL)
-        self._sizers[ID_REPLACE_LBL].AddMany([(rlbl, 0, wx.ALIGN_CENTER_VERTICAL),
+        self._sizers[ID_REPLACE_LBL].AddMany([((5, 5), 0),
+                                             (rlbl, 0, wx.ALIGN_CENTER_VERTICAL),
                                              ((3, 3), 0), (rhsizer, 0, wx.EXPAND)])
         topvsizer.AddMany([(self._sizers[ID_REPLACE_LBL], 0, wx.EXPAND),
                            ((5, 5), 0)])
@@ -480,8 +481,8 @@ class FindPanel(wx.Panel):
         self._sizers['look'] = wx.BoxSizer(wx.VERTICAL)
         li_sz = wx.BoxSizer(wx.HORIZONTAL)
         dirbtn = wx.Button(self, ID_CHOOSE_DIR, u"...", style=wx.BU_EXACTFIT)
-        li_sz.AddMany([(self._lookin, 1, wx.EXPAND), ((5, 5), 0),
-                                     (dirbtn, 0)])
+        li_sz.AddMany([(self._lookin, 1, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
+                       (dirbtn, 0, wx.ALIGN_CENTER_VERTICAL)])
         li_lbl = wx.StaticText(self, label=_("Look in") + u":")
         self._sizers['look'].AddMany([(li_lbl, 0, wx.ALIGN_LEFT),
                                       ((3, 3), 0),
@@ -518,7 +519,7 @@ class FindPanel(wx.Panel):
                           (ID_FIND_ALL, _("Find All")),
                           (ID_REPLACE_ALL, _("Replace All"))]:
             self._sizers[bid] = wx.BoxSizer(wx.HORIZONTAL)
-            self._sizers[bid].Add((5, 5), 0)
+            self._sizers[bid].Add((3, 3), 0)
             self._sizers[bid].Add(wx.Button(self, bid, blbl), 0, wx.ALIGN_RIGHT)
             bsizer.Add(self._sizers[bid], 0)
 
