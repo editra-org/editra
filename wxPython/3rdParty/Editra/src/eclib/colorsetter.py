@@ -23,10 +23,13 @@ import wx.lib.colourselect as csel
 
 #-----------------------------------------------------------------------------#
 # Globals
+# NOTE: # is expected at end
+HEX_CHARS = "0123456789ABCDEFabcdef#"
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
+# Utility
 def HexToRGB(hex_str):
     """Returns a list of red/green/blue values from a
     hex string.
@@ -43,6 +46,8 @@ def HexToRGB(hex_str):
     green = int(hexval[2:4], 16)
     blue = int(hexval[4:], 16)
     return [red, green, blue]
+
+#-----------------------------------------------------------------------------#
 
 csEVT_COLORSETTER = wx.NewEventType()
 EVT_COLORSETTER = wx.PyEventBinder(csEVT_COLORSETTER, 1)
@@ -63,8 +68,8 @@ class ColorSetterEvent(wx.PyCommandEvent):
 #-----------------------------------------------------------------------------#
 
 class ColorSetter(wx.Panel):
-    """Control for setting and selecting a color to describe the
-    various styling of the text control.
+    """Control for setting a hex color value or selecting it from a 
+    Color Dialog.
 
     """
     def __init__(self, parent, id_, color=wx.NullColor):
@@ -87,8 +92,7 @@ class ColorSetter(wx.Panel):
         txtheight = self._txt.GetTextExtent('#000000')[1]
         self._txt.SetMaxSize((-1, txtheight + 4))
         self._txt.SetToolTip(wx.ToolTip(_("Enter a hex color value")))
-        self._cbtn = csel.ColourSelect(self, colour=color,
-                                       size=(20, 20))
+        self._cbtn = csel.ColourSelect(self, colour=color, size=(20, 20))
         self._DoLayout()
 
         # Event Handlers
@@ -108,11 +112,12 @@ class ColorSetter(wx.Panel):
 
     def __UpdateValues(self):
         """Update the values based on the current state of the text control"""
+        self._txt.Freeze()
         cpos = self._txt.GetInsertionPoint()
         hexstr = self._txt.GetValue().replace('#', '').strip()
         valid = ''
         for char in hexstr:
-            if char in '0123456789abcdefABCDEF':
+            if char in HEX_CHARS[:-1]:
                 valid = valid + char
 
         if len(valid) > 6:
@@ -123,6 +128,7 @@ class ColorSetter(wx.Panel):
         self._txt.SetInsertionPoint(cpos)
         valid = valid + (u'0' * (6 - len(valid)))
         self._cbtn.SetValue(HexToRGB(valid))
+        self._txt.Thaw()
 
     def _DoLayout(self):
         """Layout the controls"""
@@ -158,14 +164,10 @@ class ColorSetter(wx.Panel):
 
         """
         e_val = evt.GetValue()[0:3]
-        red = hex(e_val[0])
-        green = hex(e_val[1])
-        blue = hex(e_val[2])
-        hex_str = "#%s%s%s" % (red[2:].zfill(2).upper(),
-                               green[2:].zfill(2).upper(),
-                               blue[2:].zfill(2).upper())
+        red, green, blue = (hex(val)[2:].upper() for val in e_val)
+        hex_str = "#%s%s%s" % (red.zfill(2), green.zfill(2), blue.zfill(2))
         self._txt.SetValue(hex_str)
-        self._cbtn.SetValue(wx.Color(e_val[0], e_val[1], e_val[2]))
+        self._cbtn.SetValue(wx.Color(*e_val))
         self.__PostEvent()
 
     def OnTextChange(self, evt=None):
@@ -176,21 +178,6 @@ class ColorSetter(wx.Panel):
         """
         self.__UpdateValues()
         self.__PostEvent()
-
-    def OnUpdateUI(self, evt):
-        """Cleanup any bad characters and formating in the display
-        @param evt: UpdateUI
-
-        """
-        ret = u''
-        for char in self._txt.GetValue().replace('#', ''):
-            if char in '0123456789abcdefABCDEF':
-                ret = ret + char
-
-        if ret != self._txt.GetValue():
-            cpos = self._txt.GetInsertionPoint()
-            self._txt.SetValue(u'#' + ret)
-            self._txt.SetInsertionPoint(cpos)
 
     def OnValidateTxt(self, evt):
         """Validate text to ensure only valid hex characters are entered
@@ -208,7 +195,7 @@ class ColorSetter(wx.Panel):
            evt.AltDown() or evt.MetaDown():
             return
 
-        if key in "0123456789ABCDEFabcdef#" and \
+        if key in HEX_CHARS and \
            (len(self._txt.GetValue().lstrip("#")) < 6 or \
             self._txt.GetStringSelection()):
             evt.Skip()
@@ -221,16 +208,14 @@ class ColorSetter(wx.Panel):
         self._txt.SetValue(label)
         self.__UpdateValues()
 
-    def SetValue(self, colour):
+    def SetValue(self, color):
         """Set the color value of the button
-        @param colour: wxColour or 3 tuple to set colour value to
+        @param colour: wxColor or 3 tuple to set color value to
 
         """
-        self._cbtn.SetValue(colour)
-        red, green, blue = colour[0:3]
-        hex_str = "#%s%s%s" % (hex(red)[2:].zfill(2).upper(),
-                               hex(green)[2:].zfill(2).upper(),
-                               hex(blue)[2:].zfill(2).upper())
+        self._cbtn.SetValue(color)
+        red, green, blue = (hex(val)[2:].zfill(2).upper() for val in color[0:3])
+        hex_str = "#%s%s%s" % (red, green, blue)
         self._txt.SetValue(hex_str)
 
 #-----------------------------------------------------------------------------#
@@ -258,7 +243,11 @@ class HexValidator(wx.PyValidator):
         @param win: window to validate
 
         """
-        return win.GetValue() in '#0123456789abcdefABCDEF'
+        for char in val:
+            if char not in HEX_CHARS:
+                return False
+        else:
+            return True
 
     def OnChar(self, event):
         """Process values as they are entered into the control
@@ -267,7 +256,7 @@ class HexValidator(wx.PyValidator):
         """
         key = event.GetKeyCode()
         if event.CmdDown() or key < wx.WXK_SPACE or key == wx.WXK_DELETE or \
-           key > 255 or chr(key) in '0123456789abcdefABCDEF':
+           key > 255 or chr(key) in HEX_CHARS[:-1]:
             event.Skip()
             return
 
