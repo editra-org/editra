@@ -68,7 +68,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         self._mgr = wx.aui.AuiManager(flags=wx.aui.AUI_MGR_DEFAULT | \
                                       wx.aui.AUI_MGR_TRANSPARENT_DRAG | \
-                                      wx.aui.AUI_MGR_TRANSPARENT_HINT)
+                                      wx.aui.AUI_MGR_TRANSPARENT_HINT |
+                                      wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE)
         self._mgr.SetManagedWindow(self)
         viewmgr.PerspectiveManager.__init__(self, self._mgr, \
                                             CONFIG['CACHE_DIR'])
