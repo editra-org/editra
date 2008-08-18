@@ -9,9 +9,28 @@
 """
 Editra Control Library: Advanced Find Replace Dialog
 
-Advanced find dialog class
+The AdvancedFindReplaceDialog is a custom FindReplaceDlg that functions
+similarly to the standard wx.FindReplaceDialog but provides more search
+configuration and presentation options. 
 
-@todo: Make Look In location configurable
+The following items are the options that the AdvancedFindReplaceDialog offers
+over the basic FindReplaceDialog.
+
+  * Hide/Show each option or section indvidually (basic dialog only disables them)
+  * Multi-Find/Replace event action for Find All / Replace All actions
+  * Switch dialog from Find mode to Replace mode or visa-versa once its already
+    been created.
+  * Options for specifiying the location to look in
+  * Regular Expression option
+  * Use standard dialog or a floating MiniFrame (default)
+
+Requirements:
+python 2.4+
+wxPython 2.8+
+eclib.platebtn
+eclib.ctrlbox
+
+@todo: Make Look In location strings configurable
 
 """
 
@@ -94,7 +113,11 @@ EVENT_MAP = { wx.ID_FIND : edEVT_FIND,
               ID_REPLACE_ALL : edEVT_REPLACE_ALL }
 
 class FindEvent(wx.PyCommandEvent):
-    """Event to signal that text needs updating"""
+    """Event sent by the FindReplaceDialog that contains all
+    options of the FindReplaceData and requested action of the
+    find dialog
+
+    """
     def __init__(self, etype, eid, flags=0):
         """Creates the event object
         @keyword flags: Find/Replace flags
@@ -210,11 +233,12 @@ class FindEvent(wx.PyCommandEvent):
 #--------------------------------------------------------------------------#
 
 def AdvFindReplaceDlg(parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
-    """Advanced FindReplaceDialog
+    """Advanced FindReplaceDialog. Create and return the requested dialog type
     @param parent: parent
     @param fdata: FindReplaceData
     @param title: Dialog Title
     @keyword style: Dialog Style and type
+    @note: this is a function not a class
 
     """
     if style & AFR_STYLE_NON_FLOATING:
@@ -297,7 +321,10 @@ class FindReplaceDlgBase:
 #--------------------------------------------------------------------------#
 
 class MiniFindReplaceDlg(wx.MiniFrame, FindReplaceDlgBase):
-    """Advanced Find Replace Dialog"""
+    """Advanced Find Replace Dialog this version of the dialog uses a 
+    MiniFrame that will float on top of its parent
+
+    """
     def __init__(self, parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
         """Create the Dialog
         @param parent: Parent Window
@@ -313,7 +340,10 @@ class MiniFindReplaceDlg(wx.MiniFrame, FindReplaceDlgBase):
 #--------------------------------------------------------------------------#
 
 class FindReplaceDlg(wx.Dialog, FindReplaceDlgBase):
-    """Advanced Find Replace Dialog"""
+    """Advanced Find Replace Dialog this version of the dialog uses a standard
+    dialog window.
+
+    """
     def __init__(self, parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
         """Create the Dialog
         @param parent: Parent Window
@@ -330,7 +360,8 @@ class FindReplaceDlg(wx.Dialog, FindReplaceDlgBase):
 
 class FindBox(ctrlbox.ControlBox):
     """Container box that allows for switching the L{FindPanel}'s mode
-    through the ui
+    through the ui. Contains a L{FindPanel} and two PlateButtons for switching
+    the mode.
 
     """
     def __init__(self, parent, fdata, id=wx.ID_ANY, pos=wx.DefaultPosition,
@@ -372,12 +403,8 @@ class FindBox(ctrlbox.ControlBox):
 
         """
         eobj = evt.GetEventObject()
-        if eobj == self.find:
-            self._fpanel.SetFindMode(True)
-            self.Layout()
-            self.GetParent().Fit()
-        elif eobj == self.replace:
-            self._fpanel.SetFindMode(False)
+        if eobj in (self.find, self.replace):
+            self._fpanel.SetFindMode(eobj == self.find)
             self.Layout()
             self.GetParent().Fit()
         else:
@@ -415,6 +442,7 @@ class FindPanel(wx.Panel):
 
         # Attributes
         # TODO: change to editable combo box when wxMac has native widget
+        #       so that we can set a search history to choose from.       
         self._mode = style
         self._ftxt = wx.TextCtrl(self)
         self._rtxt = wx.TextCtrl(self)
@@ -432,10 +460,7 @@ class FindPanel(wx.Panel):
         self._ConfigureControls()
 
         # Setup
-        if self._mode & AFR_STYLE_REPLACEDIALOG:
-            self.SetFindMode(False)
-        else:
-            self.SetFindMode(True)
+        self.SetFindMode(not (self._mode & AFR_STYLE_REPLACEDIALOG))
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnChooseDir, id=ID_CHOOSE_DIR)
@@ -522,6 +547,7 @@ class FindPanel(wx.Panel):
             self._sizers[bid].Add((3, 3), 0)
             self._sizers[bid].Add(wx.Button(self, bid, blbl), 0, wx.ALIGN_RIGHT)
             bsizer.Add(self._sizers[bid], 0)
+        self.FindWindowById(wx.ID_FIND).SetDefault()
 
         # Final Layout
         vsizer.AddMany([((5, 5), 0), (topvsizer, 0, wx.EXPAND),
@@ -690,11 +716,6 @@ class FindPanel(wx.Panel):
         @param evt: wx.UpdateUIEvent
 
         """
-        if evt.GetId() == wx.ID_FIND:
-            if self._lookin.GetSelection() == LOCATION_CURRENT_DOC:
-                evt.SetText(_("Find"))
-            else:
-                evt.SetText(_("Find All"))
         evt.Enable(len(self._ftxt.GetValue()))
 
     def SetFindMode(self, find=True):
@@ -702,13 +723,11 @@ class FindPanel(wx.Panel):
         @param find: Set Find Mode or Replace Mode
 
         """
+        self._rtxt.Show(not find)
+        self._sizers[ID_REPLACE_LBL].ShowItems(not find)
         if find:
-            self._rtxt.Hide()
-            self._sizers[ID_REPLACE_LBL].ShowItems(False)
             self._mode = AFR_STYLE_FINDDIALOG
         else:
-            self._rtxt.Show()
-            self._sizers[ID_REPLACE_LBL].ShowItems(True)
             self._mode = AFR_STYLE_REPLACEDIALOG
 
         self._ShowButtons(find)
