@@ -618,7 +618,7 @@ class FindPanel(wx.Panel):
         if the_dir not in items:
             self._paths[len(items)] = path
             self._lookin.Append(the_dir)
-            rval = self._lookin.GetCount()
+            rval = self._lookin.GetCount() - 1
         else:
             rval = items.index(the_dir)
 
@@ -798,34 +798,3 @@ class FindPanel(wx.Panel):
             self.Layout()
 
 #--------------------------------------------------------------------------#
-
-# Test
-if __name__ == '__main__':
-    app = wx.App(False)
-    frame = wx.Frame(None)
-    data = wx.FindReplaceData(AFR_MATCHCASE|AFR_REGEX)
-    fdlg = AdvFindReplaceDlg(frame, data, "Find Replace Test",
-                             AFR_STYLE_REPLACEDIALOG)
-
-    bmp = wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_MENU)
-    fdlg.SetFindBitmap(bmp)
-
-    def OnFind(evt):
-        print "Search String:", evt.GetFindString()
-        print "Replace String:", evt.GetReplaceString()
-        print "Location:", evt.GetDirectory()
-        print "Search Type:", evt.GetSearchType()
-        print "Whole Word:", evt.IsWholeWord()
-        print "Match Case: ", evt.IsMatchCase()
-        print "Regular Expression:", evt.IsRegEx()
-        print "Search Up:", evt.IsUp()
-        print "EvtType:", evt.GetEventType()
-
-    frame.Bind(EVT_FIND, OnFind)
-    frame.Bind(EVT_FIND_ALL, OnFind)
-    frame.Bind(EVT_FIND_NEXT, OnFind)
-    frame.Bind(EVT_REPLACE, OnFind)
-    frame.Bind(EVT_REPLACE_ALL, OnFind)
-    frame.Show()
-    fdlg.Show()
-    app.MainLoop()
