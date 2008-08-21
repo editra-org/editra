@@ -410,6 +410,9 @@ class SearchController:
 
 class SearchEngine:
     """Text Search Engine
+    All Search* methods are iterable generators
+    All Find* methods do a complete search and return the match collection
+    @summary: Text Search Engine
     @todo: Add file filter support
 
     """
@@ -430,7 +433,8 @@ class SearchEngine:
         self._matchcase = matchcase
         self._wholeword = wholeword
         self._query = query
-        self._regex = self._CompileRegex()
+        self._regex = u''
+        self._CompileRegex()
 
     def _CompileRegex(self):
         """Prepare and compile the regex object based on the current state
@@ -443,7 +447,7 @@ class SearchEngine:
             tmp = EscapeRegEx(tmp)
         if self._wholeword:
             tmp = "\\s%s\\s" % tmp
-        return re.compile(tmp)
+        self._regex = re.compile(tmp)
 
     def SearchInBuffer(self, sbuffer):
         """Search in the buffer
@@ -494,7 +498,7 @@ class SearchEngine:
         return
 
     def SearchInFiles(self, flist):
-        """Search in a list of files and yeild results as they are found.
+        """Search in a list of files and yield results as they are found.
         @param flist: list of file names
 
         """
@@ -503,9 +507,10 @@ class SearchEngine:
                 yield match
         return
 
-    def SearchInString(self, sstring):
+    def SearchInString(self, sstring, startpos=0):
         """Search in a string
         @param sstring: string to search in
+        @keyword startpos: search start position
 
         """
 
@@ -527,7 +532,7 @@ class SearchEngine:
     def SetQuery(self, query):
         """Set the search query"""
         self._query = query
-        self._regex = self._CompileRegex()
+        self._CompileRegex()
 
 #-----------------------------------------------------------------------------#
 
@@ -937,6 +942,7 @@ class SearchResultList(outbuff.OutputBuffer):
 
 if __name__ == '__main__':
     import sys
-    engine = SearchEngine('def [a-zA-Z]+\(')
-    for x in engine.SearchInDirectory(sys.argv[1]):
+    engine = SearchEngine('ParseStyleData')
+    arg = u' '.join(sys.argv[1:])
+    for x in engine.SearchInDirectory(arg):
         print x.rstrip()
