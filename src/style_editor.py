@@ -336,6 +336,9 @@ class StyleEditor(wx.Dialog):
             stage1 = wx.EmptyString
             for attr in ('fore', 'back', 'face', 'size'):
                 ival = item.GetNamedAttr(attr)
+                if attr in ('fore', 'back'):
+                    ival = ival.upper()
+
                 if ival is None or ival == ditem.GetNamedAttr(attr):
                     continue
 
