@@ -25,7 +25,7 @@ import synglob
 #---- Keyword Specifications ----#
 
 # Editra Style Sheet Keywords
-ESS_KEYWORDS = (0, "fore back face size eol bold italic")
+ESS_KEYWORDS = (0, "fore back face size eol bold italic modifiers")
 
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [ ('STC_CSS_DEFAULT', 'default_style'),
