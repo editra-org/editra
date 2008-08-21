@@ -161,23 +161,31 @@ class StyleMgrTest(unittest.TestCase):
 
     def testStyleSetFont(self):
         """Test setting the font of the current style"""
+        native = wx.SMALL_FONT.GetNativeFontInfo()
+        native_s = native.ToString()
+
         self.mgr.SetStyleFont(wx.SMALL_FONT, primary=True)
-        self.assertEquals(wx.SMALL_FONT, self.mgr.GetStyleFont(primary=True))
+        font = self.mgr.GetStyleFont(primary=True)
+        nset = font.GetNativeFontInfo()
+        self.assertEquals(native_s, nset.ToString())
 
         self.mgr.SetStyleFont(wx.SMALL_FONT, primary=False)
-        self.assertEquals(wx.SMALL_FONT, self.mgr.GetStyleFont(primary=False))
+        font = self.mgr.GetStyleFont(primary=False)
+        nset = font.GetNativeFontInfo()
+        self.assertEquals(native_s, nset.ToString())
 
     def testSetStyleTag(self):
         """Test setting of individual style tags"""
         item = ed_style.StyleItem()
-        item.SetAttrFromStr(",".join(self.bstr))
+        fdict = dict(primary='Courier New', size=10)
+        item.SetAttrFromStr(",".join(self.bstr) % fdict)
         self.assertTrue(self.mgr.SetStyleTag('default_style', item),
                         "Failed to set default style")
         citem = self.mgr.GetItemByName('default_style')
         self.assertEquals(citem, item,
                           "SetStyleTag incorrectly set the data\n"
                           "%s != %s" % (citem, item))
-        self.assertFalse(self.mgr.SetStyleTag('default_style'), self.bstr,
+        self.assertFalse(self.mgr.SetStyleTag('default_style', self.bstr),
                          "SetStyleTag allowed setting of a list!")
 
 #-----------------------------------------------------------------------------#
