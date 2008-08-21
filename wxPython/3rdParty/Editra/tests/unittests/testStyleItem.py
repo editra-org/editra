@@ -27,6 +27,9 @@ class StyleItemTest(unittest.TestCase):
     def setUp(self):
         self.item = ed_style.StyleItem("#FF0000,bold", "#000000", "Times", "10")
         self.itemstr = "fore:#FF0000,back:#000000,face:Times,size:10,modifiers:bold"
+        self.item2 = ed_style.StyleItem("#FF0000")
+        self.itemstr2 = "fore:#FF0000"
+        self.null = ed_style.NullStyleItem()
 
     def tearDown(self):
         pass
@@ -54,31 +57,41 @@ class StyleItemTest(unittest.TestCase):
         """Test getting the style item attributes as a list"""
         itemlst = self.item.GetAsList()
         ilen = len(itemlst)
-        self.assertTrue(ilen == 5, "Lenght Was: %d" % ilen)
+        self.assertTrue(ilen == 5, "Length Was: %d" % ilen)
+        itemlst = self.item2.GetAsList()
+        ilen = len(itemlst)
+        self.assertTrue(ilen == 1, "Length Was: %d" % ilen)
+        self.assertTrue(len(self.null.GetAsList()) == 0, "Null Item had values")
 
     def testGetBack(self):
         """Test retrieving the background color"""
         self.assertEquals(self.item.GetBack(), "#000000")
+        self.assertEquals(self.null.GetBack(), u'')
 
     def testGetFore(self):
         """Test retrieving the background color"""
         self.assertEquals(self.item.GetFore(), "#FF0000")
+        self.assertEquals(self.null.GetFore(), u'')
 
     def testGetFace(self):
         """Test retrieving the background color"""
         self.assertEquals(self.item.GetFace(), "Times")
+        self.assertEquals(self.null.GetFace(), u'')
 
     def testGetSize(self):
         """Test retrieving the background color"""
         self.assertEquals(self.item.GetSize(), "10")
+        self.assertEquals(self.null.GetSize(), u'')
 
     def testGetModifiers(self):
         """Test retrieving the extra modifier attributes"""
         self.assertEquals(self.item.GetModifiers(), "bold")
+        self.assertEquals(self.null.GetModifiers(), u'')
 
     def testGetModifierList(self):
         """Test retrieving the extra modifier attributes list"""
         self.assertEquals(self.item.GetModifierList()[0], "bold")
+        self.assertEquals(self.null.GetModifierList(), list())
 
     def testGetNamedAttr(self):
         """Test GetNamedAttr"""
@@ -91,11 +104,15 @@ class StyleItemTest(unittest.TestCase):
         """Test Null check"""
         self.assertFalse(self.item.IsNull())
         self.assertTrue(ed_style.NullStyleItem().IsNull())
+        self.assertTrue(self.null.IsNull())
+        self.null.SetFore("#000000")
+        self.assertFalse(self.null.IsNull())
 
     def testIsOk(self):
         """Test checker for if an item is Ok"""
         self.assertTrue(self.item.IsOk())
         self.assertFalse(ed_style.StyleItem().IsOk())
+        self.assertFalse(self.null.IsOk())
 
     def testNullify(self):
         """Test nullifying a style item"""
@@ -103,6 +120,7 @@ class StyleItemTest(unittest.TestCase):
         self.assertFalse(item.IsNull(), "Item is already null")
         item.Nullify()
         self.assertTrue(item.IsNull(), "Item was not nullified")
+        self.assertEquals(str(item), u'')
 
     def testSetAttrFromString(self):
         """Test Setting attributes from a formatted string"""
@@ -111,8 +129,41 @@ class StyleItemTest(unittest.TestCase):
         self.assertEquals(self.item, item,
                           "%s != %s" % (str(self.item), str(item)))
 
-    #TODO: add set item tests after next revision of ed_style
-#    def testSet
+    def testSetBack(self):
+        """Test setting the background colour attribute"""
+        self.item.SetBack("#797979")
+        self.assertEquals(self.item.GetBack(), "#797979")
+        self.item.SetBack(None)
+        self.assertEquals(self.item.GetBack(), "")
+
+    def testSetFore(self):
+        """Test setting the foreground colour attribute"""
+        self.item.SetFore("#898989")
+        self.assertEquals(self.item.GetFore(), "#898989")
+        self.item.SetFore(None)
+        self.assertEquals(self.item.GetFore(), "")
+
+    def testSetFace(self):
+        """Test setting the font attribute"""
+        self.item.SetFace("TestFont")
+        self.assertEquals(self.item.GetFace(), "TestFont")
+        self.item.SetFace(None)
+        self.assertEquals(self.item.GetFace(), "")
+
+    def testSetSize(self):
+        """Test setting the font size attribute"""
+        self.item.SetSize(20)
+        self.assertEquals(self.item.GetSize(), "20")
+        self.item.SetSize(None)
+        self.assertEquals(self.item.GetSize(), "")
+
+    def testSetNamedAttr(self):
+        """Test setting an attribute by name"""
+        self.item.SetNamedAttr('face', 'FakeFont')
+        self.assertEquals(self.item.GetFace(), "FakeFont")
+        self.item.SetNamedAttr('fore', None)
+        self.assertEquals(self.item.GetFore(), "")
+
 #-----------------------------------------------------------------------------#
 
 if __name__ == '__main__':

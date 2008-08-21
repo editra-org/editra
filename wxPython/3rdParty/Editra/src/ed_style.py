@@ -242,6 +242,8 @@ class StyleItem(object):
 
         """
         self.null = False
+        if back is None:
+            back = u''
         self.back = back
         if ex and ex not in self._exattr:
             self._exattr.append(ex)
@@ -252,6 +254,9 @@ class StyleItem(object):
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
+        self.null = False
+        if face is None:
+            face = u''
         self.face = face
         if ex and ex not in self._exattr:
             self._exattr.append(ex)
@@ -263,6 +268,8 @@ class StyleItem(object):
 
         """
         self.null = False
+        if fore is None:
+            fore = u''
         self.fore = fore
         if ex and ex not in self._exattr:
             self._exattr.append(ex)
@@ -275,6 +282,8 @@ class StyleItem(object):
 
         """
         self.null = False
+        if size is None:
+            size = u''
         self.size = str(size)
         if ex and ex not in self._exattr:
             self._exattr.append(ex)
@@ -306,10 +315,13 @@ class StyleItem(object):
         @note: This is not intended to be used for setting extra
                attributes such as bold, eol, ect..
         @param attr: a particular attribute to set (i.e fore, face, back, size)
-        @param value: value to set the attribute to contain
+        @param value: value to set the attribute to contain. None to clear the
+                      value.
 
         """
         self.null = False
+        if value is None:
+            value = u''
         cur_val = getattr(self, attr, None)
         if cur_val is not None:
             if u"," in value:
