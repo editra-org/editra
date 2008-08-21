@@ -758,7 +758,7 @@ def SetWindowIcon(window):
 
 #-----------------------------------------------------------------------------#
 
-class FileTypeChecker(object):
+class FileTypeChecker:
     """File type checker and recognizer"""
     TXTCHARS = ''.join(map(chr, [7,8,9,10,12,13,27] + range(0x20, 0x100)))
     ALLBYTES = ''.join(map(chr, range(256)))
@@ -768,8 +768,6 @@ class FileTypeChecker(object):
         @keyword preread: number of bytes to read for checking file type
 
         """
-        object.__init__(self)
-
         # Attributes
         self._preread = preread
 
@@ -800,6 +798,16 @@ class FileTypeChecker(object):
             return bool(nontext)
         else:
             return False
+
+    def IsReadableText(self, fname):
+        """Is the given path readable as text
+        @param fname: filename
+
+        """
+        f_ok = False
+        if os.access(fname, os.R_OK):
+            f_ok = not self.IsBinary(fname)
+        return f_ok
 
 #-----------------------------------------------------------------------------#
 
