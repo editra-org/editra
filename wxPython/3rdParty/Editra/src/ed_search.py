@@ -21,15 +21,25 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Imports
+import os
 import re
+import types
+import threading
 import wx
 
 # Local imports
 import ed_glob
+import ed_txt
+from util import FileTypeChecker
 from profiler import Profile_Get
 import eclib.ctrlbox as ctrlbox
 import eclib.outbuff as outbuff
 import eclib.platebtn as platebtn
+import eclib.finddlg as finddlg
+
+#--------------------------------------------------------------------------#
+# Globals
+RESULT_TEMPLATE = u"%(fname)s (%(lnum)d): %(match)s"
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -320,6 +330,264 @@ class TextFinder(object):
         """
         self._posinfo['start'] = pool.GetCurrentPos()
         return True
+
+#-----------------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------------#
+class SearchController:
+    """Controls the interface to the text search engine"""
+    def __init__(self, owner, getbuff):
+        """Create the controller
+        @param owner: View that owns this controller
+        @param getbuff: Callable to retrieve the buffer
+
+        """
+        # Attributes
+        self._parent      = owner
+        self._find_dlg    = None
+        self._posinfo = dict(scroll=0, start=0, found=0)
+        self.FetchPool    = getstc
+        self._data        = wx.FindReplaceData()
+        self._data.SetFlags(wx.FR_DOWN)
+
+    def _CreateNewDialog(self, eid):
+        """Create and set the controlers find dialog
+        @param eid: Dialog Type Id
+
+        """
+        if e_id == ed_glob.ID_FIND_REPLACE:
+            dlg = finddlg.AdvFindReplaceDlg(self._parent, self._data,
+                                            _("Find/Replace"),
+                                            finddlg.AFR_STYLE_REPLACEDIALOG)
+        elif e_id == ed_glob.ID_FIND:
+            dlg =  finddlg.AdvFindReplaceDlg(self._parent, self._data,
+                                             _("Find"))
+        else:
+            dlg = None
+        return dlg
+
+    def _UpdateDialogState(self, eid):
+        """Update the state of the existing dialog"""
+        if self._finddlg is None:
+            self._finddlg = self._CreateNewDialog(eid)
+        else:
+            self._finddlg
+
+    def GetData(self):
+        """Get the contollers FindReplaceData
+        @return: wx.FindReplaceData
+
+        """
+        return self._data
+
+    def OnShowFindDlg(self, evt):
+        """Catches the Find events and shows the appropriate find dialog
+        @param evt: event that called this handler
+        @postcondition: find dialog is shown
+
+        """
+        # Check for a selection in the buffer and load that text if
+        # there is any and it is at most one line.
+        query = self.GetClientString()
+        if len(query):
+            self.SetQueryString(query)
+
+        eid = evt.GetId()
+        # Dialog is not currently open
+        if self._finddlg is None:
+            self._find_dlg = self._CreateNewDialog(eid)
+            if self._finddlg is None:
+                evt.Skip()
+                return
+            self._find_dlg.CenterOnParent()
+            self._find_dlg.Show()
+        else:
+            # Dialog is open already so just update it
+            self._UpdateDialogState(eid)
+            self._find_dlg.Raise()
+
+#-----------------------------------------------------------------------------#
+
+class SearchEngine:
+    """Text Search Engine
+    @todo: Add file filter support
+
+    """
+    def __init__(self, query, regex=True, down=True,
+                 matchcase=True, wholeword=False):
+        """Initialize a search engine object
+        @param query: search string
+        @keyword regex: Is a regex search
+        @keyword down: Search down or up
+        @keyword matchcase: Match case
+        @keyword wholeword: Match whole word
+
+        """
+
+        # Attributes
+        self._isregex = regex
+        self._next = down
+        self._matchcase = matchcase
+        self._wholeword = wholeword
+        self._query = query
+        self._regex = self._CompileRegex()
+
+    def _CompileRegex(self):
+        """Prepare and compile the regex object based on the current state
+        and settings of the engine.
+        @return: re pattern object
+
+        """
+        tmp = str(self._query)
+        if not self._isregex:
+            tmp = EscapeRegEx(tmp)
+        if self._wholeword:
+            tmp = "\\s%s\\s" % tmp
+        return re.compile(tmp)
+
+    def SearchInBuffer(self, sbuffer):
+        """Search in the buffer
+        @param sbuffer: buffer like object
+
+        """
+        
+
+    def SearchInDirectory(self, directory, recursive=True):
+        """Search in all the files found in the given directory
+        @param directory: directory path
+        @keyword recursive: search recursivly
+
+        """
+        paths = [os.path.join(directory, fname)
+                for fname in os.listdir(directory) if not fname.startswith('.')]
+        for path in paths:
+            if recursive and os.path.isdir(path):
+                for match in self.SearchInDirectory(path, recursive):
+                    yield match
+            else:
+                for match in self.SearchInFile(path):
+                    yield match
+        return
+
+    def SearchInFile(self, fname):
+        """Search in a file for all lines with matches of the set query and
+        yield the results as they are found.
+        @param fname: filename
+
+        """
+        results = list()
+        fchecker = FileTypeChecker()
+        if fchecker.IsReadableText(fname):
+            try:
+                fobj = open(fname, 'rb')
+            except (IOError, OSError):
+                return
+
+            flag = 0
+            if not self._matchcase:
+                flag = re.IGNORECASE
+
+            for lnum, line in enumerate(fobj):
+                if re.search(self._regex, line, flag) is not None:
+                    yield FormatResult(fname, lnum, line)
+            fobj.close()
+        return
+
+    def SearchInFiles(self, flist):
+        """Search in a list of files and yeild results as they are found.
+        @param flist: list of file names
+
+        """
+        for fname in flist:
+            for match in self.SearchInFile(fname):
+                yield match
+        return
+
+    def SearchInString(self, sstring):
+        """Search in a string
+        @param sstring: string to search in
+
+        """
+
+    def SetFlags(self, isregex=None, matchcase=None, wholeword=None, down=None):
+        """Set the search engine flags. Leaving the parameter set to None
+        will not change the flag. Setting it to non None will change the value.
+        @keyword isregex: is regex search
+        @keyword matchcase: matchcase search
+        @keyword wholeword: wholeword search
+        @keyword down: search down or up
+
+        """
+        for attr, val in (('_isregex', isregex), ('_matchcase', matchcase),
+                          ('_wholeword', wholeword), ('_next', down)):
+            if val is not None:
+                setattr(self, attr, val)
+        self._regex = self._CompileRegex()
+
+    def SetQuery(self, query):
+        """Set the search query"""
+        self._query = query
+        self._regex = self._CompileRegex()
+
+#-----------------------------------------------------------------------------#
+
+class SearchThread(threading.Thread):
+    """Worker thread for doing searches on multiple files and buffers"""
+    def __init__(self, target, query):
+        """Create the search thread
+        @param target: Search method to execute, should be a generator
+        @param query: search queary string
+
+        """
+        threading.Thread.__init__(self)
+
+        # Attributes
+        self._query = query
+        self.target = target
+        self._exit = False
+        
+    def run(self):
+        """Do the search and post the results"""
+        for match in self.target():
+            #TODO post results
+            if self._exit:
+                break
+
+    def CancelSearch(self):
+        """Cancel the current search
+        @postcondition: Thread exits
+
+        """
+        self._exit = True
+
+#-----------------------------------------------------------------------------#
+
+def EscapeRegEx(regex):
+    """Escape all special regex characters in the given string
+    @param regex: string
+    @return: string
+
+    """
+    for char in u"\\[](){}+*$^?":
+        regex = regex.replace(char, "\\%s" % char)
+    return regex
+
+def FormatResult(fname, lnum, match):
+    """Format the search result string
+    @return: string
+    @todo: better unicode handling
+
+    """
+    fname = ed_txt.DecodeString(fname, sys.getfilesystemencoding())
+    if not isinstance(fname, types.UnicodeType):
+        fname = _("DECODING ERROR")
+
+    match = ed_txt.DecodeString(match)
+    if not isinstance(match, types.UnicodeType):
+        match = _("DECODING ERROR")
+    else:
+        match = u" " + match.lstrip()
+    return RESULT_TEMPLATE % dict(fname=fname, lnum=lnum, match=match)
 
 #-----------------------------------------------------------------------------#
 
@@ -620,7 +888,7 @@ class SearchResultScreen(ctrlbox.ControlBox):
 
 class SearchResultList(outbuff.OutputBuffer):
     STY_SEARCH_MATCH = outbuff.OPB_STYLE_MAX + 1
-    RE_FIND_MATCH = re.compile('(.+?) line\: ([0-9]+) .+?')
+    RE_FIND_MATCH = re.compile('(.+?) ([0-9]+)\: .+?')
     def __init__(self, parent):
         outbuff.OutputBuffer.__init__(self, parent)
 
@@ -666,5 +934,9 @@ class SearchResultList(outbuff.OutputBuffer):
                 print fname, lnum
 
 #-----------------------------------------------------------------------------#
-  
-  
+
+if __name__ == '__main__':
+    import sys
+    engine = SearchEngine('def [a-zA-Z]+\(')
+    for x in engine.SearchInDirectory(sys.argv[1]):
+        print x.rstrip()
