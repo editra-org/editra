@@ -9,18 +9,18 @@ using GLib;
 
 //! \summary Documentation keyword
 public class Sample : Object {
-        public Sample () {
-        }
+    public Sample () {
+    }
 
-        public void run () {
-                stdout.printf ("Hello World\n");
-                stdout.printf ("Unclosed string);
-                stdout.printf ('a'); // <- Char
-        }
+    public void run () {
+            stdout.printf ("Hello World\n");
+            stdout.printf ("Unclosed string);
+            stdout.printf ('a'); // <- Char
+    }
 
-        static int main (string[] args) {
-                var sample = new Sample ();
-                sample.run ();
-                return 0;
-        }
+    static int main (string[] args) {
+            var sample = new Sample ();
+            sample.run ();
+            return 0;
+    }
 }
