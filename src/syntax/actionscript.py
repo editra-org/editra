@@ -18,7 +18,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
-# Dependencies
+# Local Imports
 import synglob
 import cpp
 
@@ -98,6 +98,8 @@ def CommentPattern(lang_id=0):
         return list()
 
 #---- End Required Functions ----#
+
+AutoIndenter = cpp.AutoIndenter
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString():
