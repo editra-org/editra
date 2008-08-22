@@ -16,7 +16,8 @@ NEWS:
 
 NEW: [features/improvements]
 +Improved auto-indent functionality for (C, CPP, D, Objective C, C#, Pike, Java,
- JavaScript, ActionScript, Vala, haXe, Ferite, PHP, CSS, Editra Style Sheets).
+ JavaScript, ActionScript, Vala, haXe, Ferite, PHP, CSS, Editra Style Sheets,
+ Ruby).
 +Show Filetype and Encoding information in statusbar
 +Add support for newLISP (from Jeff)
 +Add Czech translation (contributed by Tomas Fryda)
