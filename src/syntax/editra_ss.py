@@ -19,7 +19,10 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Local Imports
 import synglob
+from css import AutoIndenter
+
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Specifications ----#
