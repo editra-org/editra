@@ -695,7 +695,8 @@ class StyleMgr(object):
 
                     v1ok = v2ok = False
                     # Check that colors are a hex string
-                    if attrib[0] in "fore back" and RE_HEX_STR.match(values[0]):
+                    if len(values) and \
+                       attrib[0] in "fore back" and RE_HEX_STR.match(values[0]):
                         v1ok = True
                     elif len(values) and attrib[0] == "size":
                         if RE_ESS_SCALAR.match(values[0]) or values[0].isdigit():
