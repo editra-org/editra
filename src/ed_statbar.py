@@ -78,10 +78,10 @@ class EdStatBar(pstatbar.ProgressStatusBar):
             widths.append(width)
 
         # Adjust widths
-        widths = [width + 15 for width in widths]
+        widths = [width + 20 for width in widths]
         widths.insert(0, -1)
         for idx, width in enumerate(list(widths)):
-            if width == 15:
+            if width == 20:
                 widths[idx] = 0
 
         if widths[-1] < 155:
