@@ -18,7 +18,10 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Local Imports
 import synglob
+from cpp import AutoIndenter
+
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Definitions ----#
