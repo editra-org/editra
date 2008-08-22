@@ -15,6 +15,7 @@ DATE 0x/0x/2008
 NEWS:
 
 NEW: [features/improvements]
++New Syntax Highlighting Scheme 'BlackBoard'
 +Improved auto-indent functionality for
     - ActionScript        - C              - CPP
     - CSS                 - C#             - D
@@ -23,7 +24,7 @@ NEW: [features/improvements]
     - JavaScript          - Objective C    - PHP
     - Pike                - Ruby           - Squirrel
     - TCL/Tk              - Vala
-+Show Filetype and Encoding information in statusbar
++Show Filetype and Encoding information in statusbar (from shaohao)
 +Add support for newLISP (from Jeff)
 +Add Czech translation (contributed by Tomas Fryda)
 
@@ -31,6 +32,10 @@ BUG FIXES:
 +Properly update titlebar and other contexts when page change is initiated from
 an error hotspot in Launch window.
 +Fix source installer not installing pygments package
++Fix focus not getting set to text buffer when switching tabs with ctrl+tab on
+Windows.
++Fix some issues with the ipc server failing to connect
++Fix some export issues in the Style Editor
 
 #-----------------------------------------------------------------------------#
 
