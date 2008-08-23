@@ -92,6 +92,9 @@ _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 
 # Events
+edEVT_FIND_CLOSE = wx.NewEventType()
+EVT_FIND_CLOSE = wx.PyEventBinder(edEVT_FIND_CLOSE, 1)
+
 edEVT_FIND = wx.NewEventType()
 EVT_FIND = wx.PyEventBinder(edEVT_FIND, 1)
 
@@ -250,15 +253,23 @@ def AdvFindReplaceDlg(parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
 #--------------------------------------------------------------------------#
 
 class FindReplaceDlgBase:
-    """Mixin Base class for deriving FindReplaceDialogs"""
+    """Mixin Base class for deriving FindReplaceDialogs.
+    @note: The mixin must be initialized after the class its being mixed into
+
+    """
     def __init__(self, parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
         """Create the base object"""
         # Attributes
         self._box = FindBox(self, fdata, style=style)
         self._panel = self._box.GetWindow()
-
+        self._accl = wx.AcceleratorTable([(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CLOSE),])
+        self.SetAcceleratorTable(self._accl)
+        
         # Layout
         self.__DoLayout()
+
+        # Event handlers
+        self.Bind(wx.EVT_MENU, lambda evt: self._SendCloseEvent(), id=wx.ID_CLOSE)
 
     def __DoLayout(self):
         """Layout the dialog"""
@@ -267,6 +278,16 @@ class FindReplaceDlgBase:
         self.SetSizer(vsizer)
         self.SetAutoLayout(True)
         self.Fit()
+
+    def _SendCloseEvent(self):
+        """Send a dialog close event and hide the dialog"""
+        evt = FindEvent(edEVT_FIND_CLOSE, self.GetId())
+        wx.PostEvent(self.GetParent(), evt)
+        self.Hide()
+
+    def GetData(self):
+        """Get the FindReplaceData used by this dialog"""
+        return self._panel.GetData()
 
     def GetDialogMode(self):
         """Get the current mode of the dialog
@@ -311,12 +332,19 @@ class FindReplaceDlgBase:
         """
         self._box.SetReplaceBitmap(bmp)
 
-    def SetSearchDirectory(self, path):
+    def SetFindDirectory(self, path):
         """Set the directory selection for find in files
         @param path: path to set for lookin data
 
         """
         self._panel.SetLookinSelection(path)
+
+    def SetFindString(self, query):
+        """Set the find controls search string
+        @param query: string
+
+        """
+        self._panel.SetFindString(query)
 
 #--------------------------------------------------------------------------#
 
@@ -337,6 +365,9 @@ class MiniFindReplaceDlg(wx.MiniFrame, FindReplaceDlgBase):
                               style=wx.DEFAULT_DIALOG_STYLE)
         FindReplaceDlgBase.__init__(self, parent, fdata, title, style)
 
+        # Event handlers
+        self.Bind(wx.EVT_CLOSE, lambda evt: self._SendCloseEvent())
+
 #--------------------------------------------------------------------------#
 
 class FindReplaceDlg(wx.Dialog, FindReplaceDlgBase):
@@ -355,6 +386,9 @@ class FindReplaceDlg(wx.Dialog, FindReplaceDlgBase):
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title,
                            style=wx.DEFAULT_DIALOG_STYLE)
         FindReplaceDlgBase.__init__(self, parent, fdata, title, style)
+
+        # Event handlers
+        self.Bind(wx.EVT_CLOSE, lambda evt: self._SendCloseEvent())
 
 #--------------------------------------------------------------------------#
 
@@ -666,6 +700,13 @@ class FindPanel(wx.Panel):
         else:
             return False
 
+    def GetData(self):
+        """Get the FindReplaceData used by this panel
+        @return: wx.FindReplaceData
+
+        """
+        return self._fdata
+
     def GetPanelMode(self):
         """Get the current display mode of the panel
         @return: AFR_STYLE_FINDDIALOG or AFR_STYLE_REPLACEDIALOG
@@ -732,6 +773,14 @@ class FindPanel(wx.Panel):
 
         self._ShowButtons(find)
         self.Layout()
+
+    def SetFindString(self, query):
+        """Set the find fields string
+        @param query: string
+
+        """
+        self._ftxt.SetValue(query)
+        self._data.SetFindString(query)
 
     def SetData(self, data):
         """Set the FindReplaceData and update the dialog with that data
