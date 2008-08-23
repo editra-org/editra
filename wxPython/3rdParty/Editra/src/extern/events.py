@@ -100,25 +100,29 @@ class AppEventHandlerMixin:
             self.uihandlers[eventID] = self.pushed_uihandlers[eventID]
 
     def HandleEvent(self, event):
-        id = event.GetId()
-        if id in self.handlers:
-            handler = self.handlers[id]
+        e_id = event.GetId()
+        if e_id in self.handlers:
+            handler = self.handlers[e_id]
             try:
                 if handler:
                     return handler(event)
             except wx.PyDeadObjectError:
-                self.RemoveHandlerForID(id)
+                self.RemoveHandlerForID(e_id)
+        else:
+            event.Skip()
 
         return False
 
     def HandleUpdateUIEvent(self, event):
-        id = event.GetId()
-        if id in self.uihandlers:
-            handler = self.uihandlers[id]
+        e_id = event.GetId()
+        if e_id in self.uihandlers:
+            handler = self.uihandlers[e_id]
             try:
                 if handler:
                     return handler(event)
             except wx.PyDeadObjectError:
-                self.RemoveUIHandlerForID(id)
+                self.RemoveUIHandlerForID(e_id)
+        else:
+            event.Skip()
 
         return False
