@@ -304,6 +304,13 @@ class FindReplaceDlgBase:
         """
         self._panel.SetData(data)
 
+    def SetDialogMode(self, mode):
+        """Set the dialog mode between find and find/replace
+        @param mode: AFR_STYLE_FINDDIALOG or AFR_STYLE_REPLACEDIALOG
+
+        """
+        self._box.SetBoxMode(mode == AFR_STYLE_FINDDIALOG)
+
     def SetFindBitmap(self, bmp):
         """Set the find Bitmap
         @param bmp: wx.Bitmap
@@ -438,9 +445,7 @@ class FindBox(ctrlbox.ControlBox):
         """
         eobj = evt.GetEventObject()
         if eobj in (self.find, self.replace):
-            self._fpanel.SetFindMode(eobj == self.find)
-            self.Layout()
-            self.GetParent().Fit()
+            self.SetBoxMode(eobj == self.find)
         else:
             evt.Skip()
 
@@ -451,6 +456,15 @@ class FindBox(ctrlbox.ControlBox):
         """
         self.find.SetBitmap(bmp)
         self.GetControlBar().Layout()
+
+    def SetBoxMode(self, find=True):
+        """Set the box to find or find/replace mode
+        @keyword find: set to find mode
+
+        """
+        self._fpanel.SetFindMode(find)
+        self.Layout()
+        self.GetParent().Fit()
 
     def SetReplaceBitmap(self, bmp):
         """Set the bitmap of the Replace Button
