@@ -519,6 +519,7 @@ class FindPanel(wx.Panel):
                   lambda evt: self.FireEvent(evt.GetId()) or evt.Skip())
         self.Bind(wx.EVT_CHECKBOX, self.OnOption)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnOption)
+        self.Bind(wx.EVT_CHOICE, lambda evt: self._UpdateDefaultBtn())
         for bid in (wx.ID_FIND, wx.ID_REPLACE, ID_FIND_ALL, ID_REPLACE_ALL):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=bid)
 
@@ -649,6 +650,28 @@ class FindPanel(wx.Panel):
             else:
                 self._sizers[ctrl].ShowItems(False)
 
+    def _UpdateDefaultBtn(self):
+        """Change the default button depending on what the search context
+        has been changed to.
+
+        """
+        find = self.FindWindowById(wx.ID_FIND)
+        find_all = self.FindWindowById(ID_FIND_ALL)
+        replace = self.FindWindowById(wx.ID_REPLACE)
+        replace_all = self.FindWindowById(ID_REPLACE_ALL)
+
+        if self._lookin.GetSelection() > LOCATION_CURRENT_DOC:
+            if self._mode == AFR_STYLE_FINDDIALOG:
+                find_all.SetDefault()
+            else:
+                replace_all.SetDefault()
+            find.Disable()
+            replace.Disable()
+        else:
+            find.SetDefault()
+            find.Enable()
+            replace.Enable()
+
     def AddLookinPath(self, path):
         """Add a path to the lookin path collection
         @param path: string
@@ -773,12 +796,16 @@ class FindPanel(wx.Panel):
             evt.Skip()
 
     def OnUpdateUI(self, evt):
-        """Enable and disable buttons depending on state of find entry
-        box.
+        """Enable and disable buttons depending on state of find entry box.
         @param evt: wx.UpdateUIEvent
 
         """
-        evt.Enable(len(self._ftxt.GetValue()))
+        if evt.GetId() in (wx.ID_FIND, wx.ID_REPLACE) and \
+           self._lookin.GetSelection() > LOCATION_CURRENT_DOC:
+            evt.Enable(False)
+        else:
+            txt = len(self._ftxt.GetValue())
+            evt.Enable(txt)
 
     def SetFindMode(self, find=True):
         """Set the mode of the dialog Replace
@@ -792,6 +819,7 @@ class FindPanel(wx.Panel):
         else:
             self._mode = AFR_STYLE_REPLACEDIALOG
 
+        self._UpdateDefaultBtn()
         self._ShowButtons(find)
         self.Layout()
 
