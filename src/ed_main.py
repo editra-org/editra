@@ -157,10 +157,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_PRINT_SU, self.OnPrint),
 
                                        # Edit Menu
-                                       (ID_FIND,
-                                        self.nb.FindService.OnShowFindDlg),
-                                       (ID_FIND_REPLACE,
-                                        self.nb.FindService.OnShowFindDlg),
                                        (ID_QUICK_FIND, self.OnCommandBar),
                                        (ID_PREF, OnPreferences),
 
@@ -217,21 +213,17 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      (ID_AUTOINDENT, self.OnUpdateSettingsUI),
                                      (ID_SYNTAX, self.OnUpdateSettingsUI),
                                      (ID_FOLDING, self.OnUpdateSettingsUI),
-                                     (ID_BRACKETHL, self.OnUpdateSettingsUI),
-                                     # View Menu
-                                     (ID_ZOOM_NORMAL, self.OnUpdateViewUI),
-                                     (ID_ZOOM_IN, self.OnUpdateViewUI),
-                                     (ID_ZOOM_OUT, self.OnUpdateViewUI),
-                                     (ID_GOTO_MBRACE, self.OnUpdateViewUI),
-                                     (ID_HLCARET_LINE, self.OnUpdateViewUI),
-                                     (ID_SHOW_SB, self.OnUpdateViewUI),
-                                     (ID_VIEW_TOOL, self.OnUpdateViewUI),
-                                     (ID_SHOW_WS, self.OnUpdateViewUI),
-                                     (ID_SHOW_EDGE, self.OnUpdateViewUI),
-                                     (ID_SHOW_EOL, self.OnUpdateViewUI),
-                                     (ID_SHOW_LN, self.OnUpdateViewUI),
-                                     (ID_INDENT_GUIDES, self.OnUpdateViewUI)
-                                    ])
+                                     (ID_BRACKETHL, self.OnUpdateSettingsUI)])
+
+        # View Menu
+        self._handlers['ui'].extend([(m_id, self.OnUpdateViewUI)
+                                      for m_id in [ID_ZOOM_NORMAL, ID_ZOOM_IN,
+                                                   ID_ZOOM_OUT, ID_GOTO_MBRACE,
+                                                   ID_HLCARET_LINE, ID_SHOW_SB,
+                                                   ID_VIEW_TOOL, ID_SHOW_WS,
+                                                   ID_SHOW_EDGE, ID_SHOW_EOL,
+                                                   ID_SHOW_LN, ID_INDENT_GUIDES,
+                                                   ]])
 
         # Lexer Menu
         self._handlers['ui'].extend([(l_id, self.OnUpdateLexerUI)
@@ -249,11 +241,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self.Bind(ed_event.EVT_STATUS, self.OnStatus)
 
         # Find Dialog
-        self.Bind(wx.EVT_FIND, self.nb.FindService.OnFind)
-        self.Bind(wx.EVT_FIND_NEXT, self.nb.FindService.OnFind)
-        self.Bind(wx.EVT_FIND_REPLACE, self.nb.FindService.OnFind)
-        self.Bind(wx.EVT_FIND_REPLACE_ALL, self.nb.FindService.OnFind)
-        self.Bind(wx.EVT_FIND_CLOSE, self.nb.FindService.OnFindClose)
+        self._handlers['menu'].extend(self.nb.GetMenuHandlers())
 
         #---- End other event actions ----#
 
@@ -292,7 +280,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         app = wx.GetApp()
         if evt.GetActive():
+
+            # Slow the update interval to reduce overhead
+            wx.UpdateUIEvent.SetUpdateInterval(160)
+            wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
             self.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
+
             for handler in self._handlers['menu']:
                 app.AddHandlerForID(*handler)
 
@@ -301,17 +294,17 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         else:
             self.SetExtraStyle(0)
 
-            # Hack set update ui events back to proccess all here in case
+            # HACK set update ui events back to proccess all here in case
             # opened dialog needs them. Not sure why this is necessary but it
             # is the only solution I could find to fix the external find
             # dialogs so that there buttons become enabled when typing in the
             # text control.
             #
             # If the windows that took the active position is another mainwindow
-            # it will set the events back to UPDATE_UI_PROCESS_SPECIFED to
+            # it will set the events back to UPDATE_UI_PROCESS_SPECIFIED to
             # prevent all the toolbars/menu items of each window from updating
             # when they dont need to.
-            wx.UpdateUIEvent().SetMode(wx.UPDATE_UI_PROCESS_ALL)
+            wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_ALL)
             for handler in self._handlers['menu']:
                 app.RemoveHandlerForID(handler[0])
 
@@ -956,9 +949,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
-        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        # Slow the update interval to reduce overhead
-        evt.SetUpdateInterval(160)
         if e_id == ID_REVERT_FILE:
             ctrl = self.nb.GetCurrentCtrl()
             evt.Enable(ctrl.GetModify())
@@ -974,9 +964,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
-        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        # Slow the update interval to reduce overhead
-        evt.SetUpdateInterval(160)
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_UNDO:
             evt.Enable(ctrl.CanUndo())
@@ -998,8 +985,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
-        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        evt.SetUpdateInterval(300)
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_USE_SOFTTABS:
             evt.Check(not bool(ctrl.GetUseTabs()))
@@ -1021,8 +1006,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
-        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        evt.SetUpdateInterval(400)
         if e_id in syntax.SyntaxIds():
             lang = self.nb.GetCurrentCtrl().GetLangId()
             evt.Check(lang == evt.GetId())
@@ -1038,8 +1021,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
-        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        evt.SetUpdateInterval(300)
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_AUTOCOMP:
             evt.Check(ctrl.GetAutoComplete())
@@ -1063,8 +1044,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
-        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        evt.SetUpdateInterval(300)
         ctrl = self.nb.GetCurrentCtrl()
         zoom = ctrl.GetZoom()
         if e_id == ID_ZOOM_NORMAL:
@@ -1118,7 +1097,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         import webbrowser
-
         e_id = evt.GetId()
         if e_id == ID_HOMEPAGE:
             page = HOME_PAGE
