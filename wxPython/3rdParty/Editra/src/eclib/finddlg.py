@@ -121,7 +121,7 @@ class FindEvent(wx.PyCommandEvent):
     find dialog
 
     """
-    def __init__(self, etype, eid, flags=0):
+    def __init__(self, etype, eid=wx.ID_ANY, flags=0):
         """Creates the event object
         @keyword flags: Find/Replace flags
 
