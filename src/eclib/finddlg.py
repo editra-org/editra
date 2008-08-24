@@ -281,6 +281,9 @@ class FindReplaceDlgBase:
 
     def _SendCloseEvent(self):
         """Send a dialog close event and hide the dialog"""
+        data = self._panel.GetData()
+        data.SetFindString(self._panel._ftxt.GetValue())
+        data.SetReplaceString(self._panel._rtxt.GetValue())
         evt = FindEvent(edEVT_FIND_CLOSE, self.GetId())
         wx.PostEvent(self.GetParent(), evt)
         self.Hide()
@@ -492,8 +495,8 @@ class FindPanel(wx.Panel):
         # TODO: change to editable combo box when wxMac has native widget
         #       so that we can set a search history to choose from.       
         self._mode = style
-        self._ftxt = wx.TextCtrl(self)
-        self._rtxt = wx.TextCtrl(self)
+        self._ftxt = wx.TextCtrl(self, value=fdata.GetFindString())
+        self._rtxt = wx.TextCtrl(self, value=fdata.GetReplaceString())
         locations = [_("Current Document"), _("Open Documents")]
         self._lookin = wx.Choice(self, ID_LOOKIN, choices=locations)
         self._lookin.SetSelection(0)
@@ -609,6 +612,7 @@ class FindPanel(wx.Panel):
     def _ConfigureControls(self):
         """Configure the state of the controls based on the FindReplaceData"""
         flags = self._fdata.GetFlags()
+        self._ftxt.SelectAll()
         self.FindWindowById(ID_MATCH_CASE).SetValue(flags & AFR_MATCHCASE)
         self.FindWindowById(ID_WHOLE_WORD).SetValue(flags & AFR_WHOLEWORD)
         self.FindWindowById(ID_REGEX).SetValue(flags & AFR_REGEX)
@@ -692,6 +696,7 @@ class FindPanel(wx.Panel):
             if self._lastSearch == query:
                 etype = edEVT_FIND_NEXT
             self._lastSearch = query
+            self._fdata.SetFindString(query)
 
         if etype is not None:
             evt = FindEvent(etype, eid, self._fdata.GetFlags())
@@ -702,7 +707,9 @@ class FindPanel(wx.Panel):
             evt.SetFindString(query)
 
             if self._mode & AFR_STYLE_REPLACEDIALOG:
-                evt.SetReplaceString(self._rtxt.GetValue())
+                rstring = self._rtxt.GetValue()
+                self._fdata.SetReplaceString(rstring)
+                evt.SetReplaceString(rstring)
             else:
                 evt.SetReplaceString(None)
 
