@@ -150,7 +150,6 @@ class ShelfI(plugin.Interface):
 
         """
         return True
-        
 
 #-----------------------------------------------------------------------------#
 
@@ -453,8 +452,7 @@ class Shelf(plugin.Plugin):
 
         name = item.GetName()
         if self.ItemIsOnShelf(name) and \
-            not item.AllowMultiple() or \
-            self._shelf is None:
+            not item.AllowMultiple() or self._shelf is None:
             return
         else:
             self.EnsureShelfVisible()
@@ -473,6 +471,20 @@ class Shelf(plugin.Plugin):
             if self._shelf.GetPageText(page).startswith(item_name):
                 return True
         return False
+
+    def RaiseItem(self, item_name):
+        """Set the selection in the notebook to be the that of the first
+        instance of item_name that is found in the shelf.
+        @param item_name: ShelfI name
+        @return: reference to the selected page or None if no instance is
+
+        """
+        for page in xrange(self._shelf.GetPageCount()):
+            if self._shelf.GetPageText(page).startswith(item_name):
+                self._shelf.SetSelection(page)
+                return self._shelf.GetPage(page)
+        else:
+            return None
 
     def StockShelf(self, i_list):
         """Fill the shelf by opening an ordered list of items
