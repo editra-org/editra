@@ -497,8 +497,6 @@ class Shelf(plugin.Plugin):
             evt.Skip()
             return
 
-        evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-        evt.SetUpdateInterval(200)
         count = self.GetCount(item.GetName())
         if count and not item.AllowMultiple():
             evt.Enable(False)

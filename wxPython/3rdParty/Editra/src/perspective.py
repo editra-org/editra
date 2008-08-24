@@ -258,8 +258,6 @@ class PerspectiveManager(object):
         e_id = evt.GetId()
         if e_id in self._ids + [ID_AUTO_PERSPECTIVE]:
             evt.Check(self._menu.GetLabel(e_id) == self._currview)
-            evt.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-            evt.SetUpdateInterval(500)
         else:
             evt.Skip()
 

@@ -336,21 +336,27 @@ class TextFinder(object):
 #-----------------------------------------------------------------------------#
 class SearchController:
     """Controls the interface to the text search engine"""
-    def __init__(self, owner, getbuff):
+    def __init__(self, owner, getstc):
         """Create the controller
         @param owner: View that owns this controller
-        @param getbuff: Callable to retrieve the buffer
+        @param getstc: Callable to get the current buffer with
 
         """
         # Attributes
-        self._parent      = owner
-        self._find_dlg    = None
-        self._posinfo = dict(scroll=0, start=0, found=0)
-        self.FetchPool    = getstc
-        self._data        = wx.FindReplaceData()
-        self._data.SetFlags(wx.FR_DOWN)
+        self._parent   = owner
+        self._stc      = getstc
+        self._finddlg  = None
+        self._posinfo  = dict(scroll=0, start=0, found=0)
+        self._data     = wx.FindReplaceData()
 
-    def _CreateNewDialog(self, eid):
+        # Event handlers
+        self._parent.Bind(finddlg.EVT_FIND, self.OnFind)
+        self._parent.Bind(finddlg.EVT_FIND_NEXT, self.OnFind)
+        self._parent.Bind(finddlg.EVT_REPLACE, self.OnReplace)
+        self._parent.Bind(finddlg.EVT_REPLACE_ALL, self.OnReplaceAll)
+        self._parent.Bind(finddlg.EVT_FIND_CLOSE, self.OnFindClose)
+
+    def _CreateNewDialog(self, e_id):
         """Create and set the controlers find dialog
         @param eid: Dialog Type Id
 
@@ -366,12 +372,36 @@ class SearchController:
             dlg = None
         return dlg
 
-    def _UpdateDialogState(self, eid):
+    def _UpdateDialogState(self, e_id):
         """Update the state of the existing dialog"""
         if self._finddlg is None:
-            self._finddlg = self._CreateNewDialog(eid)
+            self._finddlg = self._CreateNewDialog(e_id)
         else:
-            self._finddlg
+            mode = self._finddlg.GetDialogMode()
+            if e_id == ed_glob.ID_FIND and mode != finddlg.AFR_STYLE_FINDDIALOG:
+                self._finddlg.SetDialogMode(finddlg.AFR_STYLE_FINDDIALOG)
+            elif e_id == ed_glob.ID_FIND_REPLACE and \
+                 mode != finddlg.AFR_STYLE_REPLACEDIALOG:
+                self._finddlg.SetDialogMode(finddlg.AFR_STYLE_REPLACEDIALOG)
+            else:
+                pass
+
+    def GetClientString(self, multiline=False):
+        """Get the selected text in the current client buffer. By default
+        it will only return the selected text if its on a single line.
+        @keyword multiline: Return text if it is multiple lines
+        @return: string
+
+        """
+        cbuff = self._stc()
+        start, end = cbuff.GetSelection()
+        rtext = cbuff.GetSelectedText()
+        if start != end:
+            sline = cbuff.LineFromPosition(start)
+            eline = cbuff.LineFromPosition(end)
+            if not multiline and (sline != eline):
+                rtext = u''
+        return rtext
 
     def GetData(self):
         """Get the contollers FindReplaceData
@@ -379,6 +409,105 @@ class SearchController:
 
         """
         return self._data
+
+    def GetLastFound(self):
+        """Returns the position value of the last found search item
+        if the last search resulted in nothing being found then the
+        return value will -1.
+        @return: position of last search opperation
+        @rtype: int
+
+        """
+        return self._posinfo['found']
+
+    def OnFind(self, evt):
+        """Do an incremental search in the currently set buffer
+        @param evt: EVT_FIND, EVT_FIND_NEXT
+
+        """
+        stc = self._stc()
+
+        # Create the search engine
+        # XXX: may be inefficent to copy whole buffer each time for files
+        #      that are large.
+        isdown = not evt.IsUp()
+        engine = SearchEngine(evt.GetFindString(), evt.IsRegEx(),
+                              isdown, evt.IsMatchCase(), evt.IsWholeWord())
+        engine.SetSearchPool(stc.GetText())
+
+        # Get the search start position
+        if evt.GetEventType() == finddlg.edEVT_FIND:
+            spos = self._posinfo['found']
+        else:
+            spos = stc.GetCurrentPos()
+
+        # Do the find
+        match = engine.Find(spos)
+        if match is not None:
+            start, end = match
+            if isdown:
+                stc.SetSelection(start + spos, end + spos)
+            else:
+                stc.SetSelection(end, start)
+            stc.EnsureCaretVisible()
+            self._posinfo['found'] = start
+        else:
+            # try search from top again
+            if isdown:
+                match = engine.Find(0)
+            else:
+                match = engine.Find(-1)
+
+            if match is not None:
+                self._posinfo['found'] = match[0]
+                match = list(match)
+                if not isdown:
+                    match.reverse()
+                stc.SetSelection(match[0], match[1])
+                stc.EnsureCaretVisible()
+            else:
+                # TODO notify of not found
+                self._posinfo['found'] = -1
+
+    def OnFindClose(self, evt):
+        """Destroy Find Dialog After Cancel is clicked in it
+        @param evt: event that called this handler
+
+        """
+        if self._finddlg is not None:
+            self._finddlg.Destroy()
+        self._finddlg = None
+        evt.Skip()
+
+    def OnReplace(self, evt):
+        """Replace the selected text in the current buffer
+        @param evt: finddlg.EVT_REPLACE
+
+        """
+        replacestring = evt.GetReplaceString()
+        self._stc().ReplaceSelection(replacestring)
+
+    def OnReplaceAll(self, evt):
+        """Replace all instance of the search string with the given
+        replace string for the given search context.
+
+        """
+        smode = evt.GetSearchType()
+        rstring = evt.GetReplaceString()
+        engine = SearchEngine(evt.GetFindString(), evt.IsRegEx(),
+                              True, evt.IsMatchCase(), evt.IsWholeWord())
+
+        if smode == finddlg.LOCATION_CURRENT_DOC:
+            stc = self._stc()
+            engine.SetSearchPool(stc.GetText())
+            matches = engine.FindAll()
+            if matches is not None:
+                self.ReplaceInStc(stc, matches, rstring)
+            # TODO report number of items replaced
+        elif smode == finddlg.LOCATION_OPEN_DOCS:
+            pass
+        elif smode == finddlg.LOCATION_IN_FILES:
+            pass
 
     def OnShowFindDlg(self, evt):
         """Catches the Find events and shows the appropriate find dialog
@@ -395,16 +524,48 @@ class SearchController:
         eid = evt.GetId()
         # Dialog is not currently open
         if self._finddlg is None:
-            self._find_dlg = self._CreateNewDialog(eid)
+            self._finddlg = self._CreateNewDialog(eid)
             if self._finddlg is None:
                 evt.Skip()
                 return
-            self._find_dlg.CenterOnParent()
-            self._find_dlg.Show()
+            self._finddlg.CenterOnParent()
+            self._finddlg.Show()
+#            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
         else:
             # Dialog is open already so just update it
             self._UpdateDialogState(eid)
-            self._find_dlg.Raise()
+            self._finddlg.Raise()
+
+    @staticmethod
+    def ReplaceInStc(stc, matches, rstring):
+        """Replace the strings at the position in the given StyledTextCtrl
+        @param stc: StyledTextCtrl
+        @param matches: list of tuples [(s1, e1), (s2, e2)]
+        @param rstring: Replace string
+
+        """
+        stc.BeginUndoAction()
+        for start, end in reversed(matches):
+            stc.SetTargetStart(start)
+            stc.SetTargetEnd(end)
+            stc.ReplaceTarget(rstring)
+        stc.EndUndoAction()
+
+    def SetQueryString(self, query):
+        """Sets the search query value
+        @param query: string to search for
+
+        """
+        self._data.SetFindString(query)
+
+    def SetSearchFlags(self, flags):
+        """Set the find services search flags
+        @param flags: bitmask of parameters to set
+
+        """
+        self._data.SetFlags(flags)
+        if self._finddlg is not None:
+            self._finddlg.SetData(self._data)
 
 #-----------------------------------------------------------------------------#
 
@@ -426,7 +587,6 @@ class SearchEngine:
         @keyword wholeword: Match whole word
 
         """
-
         # Attributes
         self._isregex = regex
         self._next = down
@@ -434,12 +594,13 @@ class SearchEngine:
         self._wholeword = wholeword
         self._query = query
         self._regex = u''
+        self._pool = u''
         self._CompileRegex()
 
     def _CompileRegex(self):
         """Prepare and compile the regex object based on the current state
         and settings of the engine.
-        @return: re pattern object
+        @postcondition: the engines regular expression is created
 
         """
         tmp = str(self._query)
@@ -447,7 +608,64 @@ class SearchEngine:
             tmp = EscapeRegEx(tmp)
         if self._wholeword:
             tmp = "\\s%s\\s" % tmp
-        self._regex = re.compile(tmp)
+
+        if self._matchcase:
+            self._regex = re.compile(tmp)
+        else:
+            self._regex = re.compile(tmp, re.IGNORECASE)
+
+    def Find(self, spos=0):
+        """Find the next match based on the state of the search engine
+        @keyword spos: search start position
+        @return: tuple (match start pos, match end pos) or None if no match
+        @prerequisite: L{SetSearchPool} has been called to set search string
+
+        """
+        if self._next:
+            return self.FindNext(spos)
+        else:
+            if spos == 0:
+                spos = -1
+            return self.FindPrev(spos)
+
+    def FindAll(self):
+        """Find all the matches in the current context
+        @return: list of tuples [(start1, end1), (start2, end2), ]
+
+        """
+        matches = [match for match in re.finditer(self._regex, self._pool)]
+        if len(matches):
+            matches = [match.span() for match in matches]
+            return matches
+        return None
+
+    def FindNext(self, spos=0):
+        """Find the next match of the query starting at spos
+        @keyword spos: search start position in string
+        @return: tuple (match start pos, match end pos) or None if no match
+        @prerequisite: L{SetSearchPool} has been called to set the string to
+                       search in.
+
+        """
+        if spos < len(self._pool):
+            match = re.search(self._regex, self._pool[spos:])
+            if match is not None:
+                return match.span()
+        return None
+
+    def FindPrev(self, spos=-1):
+        """Find the previous match of the query starting at spos
+        @param pool: string to search in
+        @keyword spos: search start position in string
+        @return: tuple (match start pos, match end pos)
+
+        """
+        if spos+1 < len(self._pool):
+            matches = [match for match in re.finditer(self._regex, self._pool[:spos])]
+            if len(matches):
+                lmatch = matches[-1]
+                return (lmatch.start(), lmatch.end())
+        return None
 
     def SearchInBuffer(self, sbuffer):
         """Search in the buffer
@@ -529,8 +747,19 @@ class SearchEngine:
                 setattr(self, attr, val)
         self._regex = self._CompileRegex()
 
+    def SetSearchPool(self, pool):
+        """Set the search pool used by the Find methods
+        @param pool: string to search in
+
+        """
+        del self._pool
+        self._pool = pool
+
     def SetQuery(self, query):
-        """Set the search query"""
+        """Set the search query
+        @param query: string
+
+        """
         self._query = query
         self._CompileRegex()
 
@@ -615,8 +844,8 @@ class EdSearchCtrl(wx.SearchCtrl):
         # Attributes
         self._parent     = parent
         # TEMP HACK
-        self.FindService = self.GetTopLevelParent().nb.FindService
-        self._flags      = wx.FR_DOWN
+        self.FindService = self.GetTopLevelParent().nb._searchctrl
+        self._flags      = 0
         self._recent     = list()        # The History List
         self._last       = None
         self.rmenu       = wx.Menu()
@@ -659,21 +888,21 @@ class EdSearchCtrl(wx.SearchCtrl):
         @keyword next: search next or previous
 
         """
-        s_cmd = wx.wxEVT_COMMAND_FIND
-        if next:
-            self.SetSearchFlag(wx.FR_DOWN)
+        s_cmd = finddlg.edEVT_FIND
+        if not next:
+            self.SetSearchFlag(finddlg.AFR_UP)
         else:
-            if wx.FR_DOWN & self._flags:
-                self.ClearSearchFlag(wx.FR_DOWN)
+            if finddlg.AFR_UP & self._flags:
+                self.ClearSearchFlag(finddlg.AFR_UP)
 
         if self.GetValue() == self._last:
-            s_cmd = wx.wxEVT_COMMAND_FIND_NEXT
+            s_cmd = finddlg.edEVT_FIND_NEXT
         self.InsertHistoryItem(self.GetValue())
 
+        evt = finddlg.FindEvent(s_cmd, flags=self._flags)
         self._last = self.GetValue()
-        self.FindService.SetQueryString(self.GetValue())
-        self.FindService.SetSearchFlags(self._flags)
-        self.FindService.OnFind(wx.FindDialogEvent(s_cmd))
+        evt.SetFindString(self.GetValue())
+        self.FindService.OnFind(evt)
 
         # Give feedback on whether text was found or not
         if self.FindService.GetLastFound() < 0 and len(self.GetValue()) > 0:
@@ -746,8 +975,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         """
         data = self.GetSearchData()
         if data != None:
-            if wx.FR_MATCHCASE & data.GetFlags():
-                return True
+            return bool(finddlg.AFR_MATCHCASE & data.GetFlags())
         return False
 
     def IsSearchPrevious(self):
@@ -759,9 +987,8 @@ class EdSearchCtrl(wx.SearchCtrl):
         """
         data = self.GetSearchData()
         if data != None:
-            if wx.FR_DOWN & data.GetFlags():
-                return False
-        return True
+            return bool(finddlg.AFR_UP & data.GetFlags())
+        return False
 
     def IsWholeWord(self):
         """Returns True if the search control is set to search
@@ -772,8 +999,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         """
         data = self.GetSearchData()
         if data != None:
-            if wx.FR_WHOLEWORD & data.GetFlags():
-                return True
+            return bool(finddlg.AFR_WHOLEWORD & data.GetFlags())
         return False
 
     def SetHistory(self, hist_list):

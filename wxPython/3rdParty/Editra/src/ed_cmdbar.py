@@ -22,19 +22,22 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import sys
 import cStringIO, zlib
 import glob
 import re
 import wx
+
+# Local Imports
 import util
 import ed_glob
 import ed_search
 import ed_event
 import ed_msg
 import eclib.platebtn as platebtn
+import eclib.finddlg as finddlg
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -253,9 +256,9 @@ class CommandBar(wx.Panel):
                 search = self.FindWindowById(ID_SEARCH_CTRL)
                 if search != None:
                     if ctrl.GetValue():
-                        search.SetSearchFlag(wx.FR_MATCHCASE)
+                        search.SetSearchFlag(finddlg.AFR_MATCHCASE)
                     else:
-                        search.ClearSearchFlag(wx.FR_MATCHCASE)
+                        search.ClearSearchFlag(finddlg.AFR_MATCHCASE)
         else:
             evt.Skip()
 

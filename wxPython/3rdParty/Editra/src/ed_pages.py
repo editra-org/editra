@@ -71,7 +71,7 @@ class EdPages(FNB.FlatNotebook):
 
         # Notebook attributes
         self.LOG = wx.GetApp().GetLog()
-        self.FindService = ed_search.TextFinder(self, self.GetCurrentCtrl)
+        self._searchctrl = ed_search.SearchController(self, self.GetCurrentCtrl)
         self.DocMgr = doctools.DocPositionMgr(ed_glob.CONFIG['CACHE_DIR'] + \
                                               os.sep + u'positions')
         self.pg_num = -1              # Track new pages (aka untitled docs)
@@ -99,6 +99,8 @@ class EdPages(FNB.FlatNotebook):
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnUpdatePageText)
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
+
+        # Message handlers
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_NOTEBOOK)
 
@@ -158,6 +160,16 @@ class EdPages(FNB.FlatNotebook):
             fname = buff.GetFileName()
             if fname != wx.EmptyString:
                 rlist.append(fname)
+        return rlist
+
+    def GetMenuHandlers(self):
+        """Get the (id, evt_handler) tuples that this window should
+        handle.
+        @return: list of tuples
+
+        """
+        rlist = [(ed_glob.ID_FIND, self._searchctrl.OnShowFindDlg),
+                 (ed_glob.ID_FIND_REPLACE, self._searchctrl.OnShowFindDlg)]
         return rlist
 
     def LoadSessionFiles(self):
