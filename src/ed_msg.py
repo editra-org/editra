@@ -157,6 +157,13 @@ EDMSG_MENU_LOADPROFILE = EDMSG_MENU + ('load',)
 
 #---- End Menu Messages ----#
 
+#---- Search Results Messages ----#
+# Message to request a search job
+# msgdata == (callable, args)
+EDMSG_START_SEARCH = EDMSG_ALL + ('find',)
+
+#---- End Search Results Messages ----#
+
 #---- Misc Messages ----#
 # Signal that the icon theme has changed. Respond to this to update icon
 # resources from the ArtProvider.
@@ -167,6 +174,8 @@ EDMSG_THEME_NOTEBOOK = EDMSG_ALL + ('nb', 'theme')
 
 # Signal that the font preferences for the ui have changed (msgdata == font)
 EDMSG_DSP_FONT = EDMSG_ALL + ('dfont',)
+
+#---- End Misc Messages ----#
 
 #--------------------------------------------------------------------------#
 # Public Api

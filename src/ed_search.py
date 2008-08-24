@@ -22,6 +22,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Imports
 import os
+import sys
 import re
 import types
 import threading
@@ -30,6 +31,9 @@ import wx
 # Local imports
 import ed_glob
 import ed_txt
+import ed_msg
+import plugin
+import iface
 from util import FileTypeChecker
 from profiler import Profile_Get
 import eclib.ctrlbox as ctrlbox
@@ -62,6 +66,7 @@ class SearchController:
         # Event handlers
         self._parent.Bind(finddlg.EVT_FIND, self.OnFind)
         self._parent.Bind(finddlg.EVT_FIND_NEXT, self.OnFind)
+        self._parent.Bind(finddlg.EVT_FIND_ALL, self.OnFindAll)
         self._parent.Bind(finddlg.EVT_REPLACE, self.OnReplace)
         self._parent.Bind(finddlg.EVT_REPLACE_ALL, self.OnReplaceAll)
         self._parent.Bind(finddlg.EVT_FIND_CLOSE, self.OnFindClose)
@@ -178,6 +183,26 @@ class SearchController:
             else:
                 # TODO notify of not found
                 self._posinfo['found'] = -1
+
+    def OnFindAll(self, evt):
+        """Find all results for the given query and display results in a
+        L{FindResultsScreen} in the Shelf.
+
+        """
+        smode = evt.GetSearchType()
+        engine = SearchEngine(evt.GetFindString(), evt.IsRegEx(),
+                              True, evt.IsMatchCase(), evt.IsWholeWord())
+
+        if smode == finddlg.LOCATION_CURRENT_DOC:
+            stc = self._stc()
+            fname = stc.GetFileName()
+            if len(fname):
+                ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
+                                   (engine.SearchInFile, fname))
+        elif smode == finddlg.LOCATION_OPEN_DOCS:
+            pass
+        elif smode == finddlg.LOCATION_IN_FILES:
+            pass
 
     def OnFindClose(self, evt):
         """Destroy Find Dialog After Cancel is clicked in it
@@ -475,37 +500,6 @@ class SearchEngine:
 
 #-----------------------------------------------------------------------------#
 
-class SearchThread(threading.Thread):
-    """Worker thread for doing searches on multiple files and buffers"""
-    def __init__(self, target, query):
-        """Create the search thread
-        @param target: Search method to execute, should be a generator
-        @param query: search queary string
-
-        """
-        threading.Thread.__init__(self)
-
-        # Attributes
-        self._query = query
-        self.target = target
-        self._exit = False
-        
-    def run(self):
-        """Do the search and post the results"""
-        for match in self.target():
-            #TODO post results
-            if self._exit:
-                break
-
-    def CancelSearch(self):
-        """Cancel the current search
-        @postcondition: Thread exits
-
-        """
-        self._exit = True
-
-#-----------------------------------------------------------------------------#
-
 def EscapeRegEx(regex):
     """Escape all special regex characters in the given string
     @param regex: string
@@ -531,7 +525,7 @@ def FormatResult(fname, lnum, match):
         match = _("DECODING ERROR")
     else:
         match = u" " + match.lstrip()
-    return RESULT_TEMPLATE % dict(fname=fname, lnum=lnum, match=match)
+    return RESULT_TEMPLATE % dict(fname=fname, lnum=lnum+1, match=match)
 
 #-----------------------------------------------------------------------------#
 
@@ -797,6 +791,82 @@ class EdSearchCtrl(wx.SearchCtrl):
 
 #-----------------------------------------------------------------------------#
 
+class EdFindResults(plugin.Plugin):
+    """Shelf interface implementation for the find results"""
+    plugin.Implements(iface.ShelfI)
+    ID_FIND_RESULTS = wx.NewId()
+    SUBSCRIBED = False
+    RESULT_SCREENS = list()
+
+    def __init__(self, pmgr):
+        """Create the FindResults plugin
+        @param pmgr: This plugins manager
+
+        """
+        if not EdFindResults.SUBSCRIBED:
+            ed_msg.Subscribe(EdFindResults.StartResultsScreen,
+                             ed_msg.EDMSG_START_SEARCH)
+            EdFindResults.SUBSCRIBED = True
+
+#    def __del__(self):
+#        if EdFindResults.SUBSCRIBED:
+#            print "UNSUBSCRIBE"
+#            ed_msg.Unsubscribe(self.StartResultsScreen)
+
+    @property
+    def __name__(self):
+        return u'Find Results'
+
+    def AllowMultiple(self):
+        """Find Results allows multiple instances"""
+        return True
+
+    def CreateItem(self, parent):
+        """Returns a log viewr panel"""
+        screen = SearchResultScreen(parent)
+        EdFindResults.RESULT_SCREENS.append(screen)
+        return screen
+
+    def GetId(self):
+        """Plugin menu identifier ID"""
+        return EdFindResults.ID_FIND_RESULTS
+
+    def GetMenuEntry(self, menu):
+        """Get the menu entry for the log viewer
+        @param menu: the menu items parent menu
+
+        """
+        return wx.MenuItem(menu, EdFindResults.ID_FIND_RESULTS,
+                           _("Find Results"), _("Show a find results screen"))
+
+    def GetName(self):
+        """Return the name of this control"""
+        return EdFindResults.__name__
+
+    def IsStockable(self):
+        """EdLogViewer can be saved in the shelf preference stack"""
+        return False
+
+    @classmethod
+    def StartResultsScreen(cls, msg):
+        """Start a search in an existing window or open a new one
+        @param cls: this class
+        @param msg: message object
+
+        """
+        smethod, args = msg.GetData()
+        win = wx.GetApp().GetActiveWindow()
+        if win is not None:
+            shelf = win.GetShelf()
+            screen = shelf.RaiseItem(cls.__name__)
+            if screen is None:
+                shelf.PutItemOnShelf(cls.ID_FIND_RESULTS)
+                shelf_nb = shelf.GetWindow()
+                screen = shelf_nb.GetCurrentPage()
+            screen.StartSearch(smethod, args)
+
+#-----------------------------------------------------------------------------#
+
 class SearchResultScreen(ctrlbox.ControlBox):
     """Screen for displaying search results and navigating to them"""
     def __init__(self, parent):
@@ -807,7 +877,8 @@ class SearchResultScreen(ctrlbox.ControlBox):
         ctrlbox.ControlBox.__init__(self, parent)
 
         # Attributes
-        self._list = SearchResultsList(self)
+        self._job = None
+        self._list = SearchResultList(self)
 
         # Setup
         ctrlbar = ctrlbox.ControlBar(self)
@@ -820,16 +891,29 @@ class SearchResultScreen(ctrlbox.ControlBox):
         ctrlbar.AddControl(clear, wx.ALIGN_LEFT)
 
         # Layout
+        self.SetControlBar(ctrlbar)
         self.SetWindow(self._list)
 
         # Event Handlers
-        self.Bind(wx.EVT_BUTTON, lambda evt: self._list.Clear(), wx.ID_CLEAR)
+        self.Bind(wx.EVT_BUTTON, lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
+
+    def StartSearch(self, searchmeth, args):
+        """Start a search with the given method and display the results
+        @param searchmeth: callable
+
+        """
+        if self._job is not None:
+            self._job.Cancel()
+
+        self._list.Clear()
+        self._job = outbuff.TaskThread(self._list, searchmeth, args)
+        self._job.start()
 
 #-----------------------------------------------------------------------------#
 
 class SearchResultList(outbuff.OutputBuffer):
     STY_SEARCH_MATCH = outbuff.OPB_STYLE_MAX + 1
-    RE_FIND_MATCH = re.compile('(.+?) ([0-9]+)\: .+?')
+    RE_FIND_MATCH = re.compile('(.+) \(([0-9]+)\)\: .+')
     def __init__(self, parent):
         outbuff.OutputBuffer.__init__(self, parent)
 
@@ -846,6 +930,10 @@ class SearchResultList(outbuff.OutputBuffer):
                           "face:%s,size:%d,fore:#000000,back:%s" % style)
         self.StyleSetHotSpot(SearchResultList.STY_SEARCH_MATCH, True)
 
+        # Event Handlers
+        self.Bind(outbuff.EVT_TASK_START, lambda evt: self.Start(250))
+        self.Bind(outbuff.EVT_TASK_COMPLETE, lambda evt: self.Stop())
+
     def ApplyStyles(self, start, txt):
         """Set a hotspot for each search result
         Search matches strings should be formatted as follows
@@ -855,24 +943,49 @@ class SearchResultList(outbuff.OutputBuffer):
 
         """
         self.StartStyling(start, 0x1f)
-        if SearchResultList.RE_FIND_MATCH(txt):
+        if re.match(SearchResultList.RE_FIND_MATCH, txt):
             self.SetStyling(len(txt), SearchResultList.STY_SEARCH_MATCH)
         else:
             self.SetStyling(len(txt), outbuff.OPB_STYLE_DEFAULT)
 
-    def DoHotspotClicked(self, pos, line):
+    def DoHotSpotClicked(self, pos, line):
         """Handle a click on a hotspot
         @param pos: long
         @param line: int
 
         """
         txt = self.GetLine(line)
-        match = SearchResultList.RE_FIND_MATCH.match(txt)
+        match = re.match(SearchResultList.RE_FIND_MATCH, txt)
         if match is not None:
             groups = match.groups()
             if len(groups) == 2:
                 fname, lnum = groups
-                print fname, lnum
+                if lnum.isdigit():
+                    lnum = int(lnum) - 1
+                else:
+                    lnum = 0
+                self._OpenToLine(fname, lnum)
+
+    @staticmethod
+    def _OpenToLine(fname, line):
+        """Open the given filename to the given line number
+        @param fname: File name to open, relative paths will be converted to abs
+                      paths.
+        @param line: Line number to set the cursor to after opening the file
+        @param mainw: MainWindow instance to open the file in
+
+        """
+        mainw = wx.GetApp().GetActiveWindow()
+        nb = mainw.GetNotebook()
+        buffers = [ page.GetFileName() for page in nb.GetTextControls() ]
+        if fname in buffers:
+            page = buffers.index(fname)
+            nb.ChangePage(page)
+            cpage = nb.GetPage(page)
+            cpage.GotoLine(line)
+        else:
+            nb.OnDrop([fname])
+            nb.GetPage(nb.GetSelection()).GotoLine(line)
 
 #-----------------------------------------------------------------------------#
 
