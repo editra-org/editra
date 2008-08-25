@@ -15,7 +15,7 @@ DATE 0x/0x/2008
 NEWS:
 
 NEW: [features/improvements]
-+Add Find All option
++Add Find All feature (Current Document, All open documents, in files)
 +New Syntax Highlighting Scheme 'BlackBoard'
 +Improved auto-indent functionality for
     - ActionScript        - C              - CPP
