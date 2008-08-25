@@ -199,10 +199,18 @@ class SearchController:
             if len(fname):
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                    (engine.SearchInFile, fname))
+            else:
+                engine.SetSearchPool(stc.GetText())
+                ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH, (engine.FindAll))
         elif smode == finddlg.LOCATION_OPEN_DOCS:
-            pass
+            files = [fname.GetFileName()
+                     for fname in self._parent.GetTextControls()]
+            ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
+                               (engine.SearchInFiles, files))
         elif smode == finddlg.LOCATION_IN_FILES:
-            pass
+            path = evt.GetDirectory()
+            ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
+                               (engine.SearchInDirectory, path))
 
     def OnFindClose(self, evt):
         """Destroy Find Dialog After Cancel is clicked in it
