@@ -681,21 +681,22 @@ class FindPanel(wx.Panel):
         if not len(path):
             return None
 
-        items = self._lookin.GetItems()
+        # If its a path we already have then just return its index
+        if path in self._paths.values():
+            for idx, pname in self._paths.iteritems():
+                if path == pname:
+                    return idx
+
+        # Get the short directory name
         the_dir = u''
         for dname in reversed(path.split(os.sep)):
             if len(dname):
                 the_dir = dname
                 break
-        else:
-            return
 
-        if the_dir not in items:
-            self._paths[len(items)] = path
-            self._lookin.Append(the_dir)
-            rval = self._lookin.GetCount() - 1
-        else:
-            rval = items.index(the_dir)
+        self._paths[self._lookin.GetCount()] = path
+        self._lookin.Append(the_dir)
+        rval = self._lookin.GetCount() - 1
 
         return rval
 
