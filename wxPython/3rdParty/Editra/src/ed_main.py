@@ -530,11 +530,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 result = ctrl[1].SaveFile(fpath)
                 if result:
                     self.PushStatusText(_("Saved File: %s") % fname, SB_INFO)
-                    if e_id == ID_SAVEALL:
-                        if ctrl[2] != self.nb.GetSelection():
-                            self.nb.SetPageText(ctrl[2], fname)
-                        else:
-                            self.nb.OnUpdatePageText(None)
                 else:
                     err = ctrl[1].GetDocument().GetLastError()
                     self.PushStatusText(_("ERROR: %s") % err, SB_INFO)
