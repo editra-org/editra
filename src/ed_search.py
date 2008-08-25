@@ -148,7 +148,7 @@ class SearchController:
         return self._posinfo['found']
 
     def OnFind(self, evt):
-        """Do an incremental search in the currently set buffer
+        """Do an incremental search in the currently buffer
         @param evt: EVT_FIND, EVT_FIND_NEXT
 
         """
@@ -178,12 +178,19 @@ class SearchController:
                 stc.SetSelection(end, start)
             stc.EnsureCaretVisible()
             self._posinfo['found'] = start
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                               (ed_glob.SB_INFO, u""))
         else:
             # try search from top again
             if isdown:
                 match = engine.Find(0)
+                ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                                  (ed_glob.SB_INFO, _("Search wrapped to top")))
             else:
                 match = engine.Find(-1)
+                ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                                  (ed_glob.SB_INFO,
+                                  _("Search wrapped to bottom")))
 
             if match is not None:
                 self._posinfo['found'] = match[0]
@@ -193,8 +200,10 @@ class SearchController:
                 stc.SetSelection(match[0], match[1])
                 stc.EnsureCaretVisible()
             else:
-                # TODO notify of not found
                 self._posinfo['found'] = -1
+                ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                                  (ed_glob.SB_INFO,
+                                  _("\"%s\" was not found") % engine.GetQuery()))
 
     def OnFindAll(self, evt):
         """Find all results for the given query and display results in a
@@ -433,6 +442,13 @@ class SearchEngine:
                 lmatch = matches[-1]
                 return (lmatch.start(), lmatch.end())
         return None
+
+    def GetQuery(self):
+        """Get the raw query string used by the search engine
+        @return: string
+
+        """
+        return self._query
 
     def SearchInBuffer(self, sbuffer):
         """Search in the buffer
