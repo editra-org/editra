@@ -85,6 +85,18 @@ class SearchController:
                                              _("Find"))
         else:
             dlg = None
+
+        # Change the icons to use ones from Editra's ArtProvider
+        if dlg is not None:
+            find = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FIND), wx.ART_MENU)
+            replace = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FIND_REPLACE),
+                                               wx.ART_MENU)
+            if find is not None and find.IsOk():
+                dlg.SetFindBitmap(find)
+
+            if replace is not None and replace.IsOk():
+                dlg.SetReplaceBitmap(replace)
+
         return dlg
 
     def _UpdateDialogState(self, e_id):
