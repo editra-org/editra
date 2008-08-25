@@ -260,7 +260,12 @@ class SearchController:
                 self.ReplaceInStc(stc, matches, rstring)
             # TODO report number of items replaced
         elif smode == finddlg.LOCATION_OPEN_DOCS:
-            pass
+            for ctrl in self._parent.GetTextControls():
+                engine.SetSearchPool(ctrl.GetText())
+                matches = engine.FindAll()
+                if matches is not None:
+                    self.ReplaceInStc(ctrl, matches, rstring)
+            # TODO report number of items replaced
         elif smode == finddlg.LOCATION_IN_FILES:
             pass
 
