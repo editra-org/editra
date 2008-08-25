@@ -61,7 +61,7 @@ class SearchController:
         self._stc      = getstc
         self._finddlg  = None
         self._posinfo  = dict(scroll=0, start=0, found=0)
-        self._data     = wx.FindReplaceData()
+        self._data     = wx.FindReplaceData(finddlg.AFR_RECURSIVE)
 
         # Event handlers
         self._parent.Bind(finddlg.EVT_FIND, self.OnFind)
