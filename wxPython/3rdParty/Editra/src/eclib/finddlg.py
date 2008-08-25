@@ -806,6 +806,7 @@ class FindPanel(wx.Panel):
         fmap = { ID_MATCH_CASE : AFR_MATCHCASE,
                  ID_WHOLE_WORD : AFR_WHOLEWORD,
                  ID_REGEX : AFR_REGEX,
+                 ID_RECURSE : AFR_RECURSIVE,
                  wx.ID_UP : AFR_UP }
         eid = evt.GetId()
         eobj = evt.GetEventObject()
