@@ -298,7 +298,7 @@ class SearchController:
             if self._finddlg is None:
                 evt.Skip()
                 return
-            self._finddlg.CenterOnParent()
+            self._finddlg.SetTransparent(240)
             self._finddlg.Show()
 #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
         else:
