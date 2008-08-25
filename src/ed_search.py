@@ -210,7 +210,7 @@ class SearchController:
             fname = stc.GetFileName()
             if len(fname):
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
-                                   (engine.SearchInFile, fname))
+                                   (engine.SearchInFile, [fname,], dict()))
             else:
                 engine.SetSearchPool(stc.GetTextRaw())
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH, (engine.FindAll))
@@ -218,11 +218,12 @@ class SearchController:
             files = [fname.GetFileName()
                      for fname in self._parent.GetTextControls()]
             ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
-                               (engine.SearchInFiles, files))
+                               (engine.SearchInFiles, [files,], dict()))
         elif smode == finddlg.LOCATION_IN_FILES:
             path = evt.GetDirectory()
             ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
-                               (engine.SearchInDirectory, path))
+                               (engine.SearchInDirectory,
+                                [path,], dict(recursive=evt.IsRecursive())))
 
     def OnFindClose(self, evt):
         """Destroy Find Dialog After Cancel is clicked in it
@@ -888,7 +889,6 @@ class EdFindResults(plugin.Plugin):
         @param msg: message object
 
         """
-        smethod, args = msg.GetData()
         win = wx.GetApp().GetActiveWindow()
         if win is not None:
             shelf = win.GetShelf()
@@ -897,7 +897,11 @@ class EdFindResults(plugin.Plugin):
                 shelf.PutItemOnShelf(cls.ID_FIND_RESULTS)
                 shelf_nb = shelf.GetWindow()
                 screen = shelf_nb.GetCurrentPage()
-            screen.StartSearch(smethod, args)
+            data = msg.GetData()
+            if len(data) > 1:
+                screen.StartSearch(data[0], *data[1], **data[2])
+            else:
+                screen.StartSearch(data[0])
 
 #-----------------------------------------------------------------------------#
 
@@ -990,7 +994,7 @@ class SearchResultScreen(ctrlbox.ControlBox):
             self._job.Cancel()
         self._cancelb.Disable()
 
-    def StartSearch(self, searchmeth, args):
+    def StartSearch(self, searchmeth, *args, **kwargs):
         """Start a search with the given method and display the results
         @param searchmeth: callable
 
@@ -999,7 +1003,7 @@ class SearchResultScreen(ctrlbox.ControlBox):
             self._job.Cancel()
 
         self._list.Clear()
-        self._job = outbuff.TaskThread(self._list, searchmeth, args)
+        self._job = outbuff.TaskThread(self._list, searchmeth, *args, **kwargs)
         self._job.start()
         self._cancelb.Enable()
 

@@ -159,7 +159,8 @@ EDMSG_MENU_LOADPROFILE = EDMSG_MENU + ('load',)
 
 #---- Search Results Messages ----#
 # Message to request a search job
-# msgdata == (callable, args)
+# msgdata == (callable, args, kwargs)
+# msgdata == (callable)
 EDMSG_START_SEARCH = EDMSG_ALL + ('find',)
 
 #---- End Search Results Messages ----#
