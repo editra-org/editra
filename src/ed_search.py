@@ -160,7 +160,7 @@ class SearchController:
         isdown = not evt.IsUp()
         engine = SearchEngine(evt.GetFindString(), evt.IsRegEx(),
                               isdown, evt.IsMatchCase(), evt.IsWholeWord())
-        engine.SetSearchPool(stc.GetText())
+        engine.SetSearchPool(stc.GetTextRaw())
 
         # Get the search start position
         if evt.GetEventType() == finddlg.edEVT_FIND:
@@ -212,7 +212,7 @@ class SearchController:
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                    (engine.SearchInFile, fname))
             else:
-                engine.SetSearchPool(stc.GetText())
+                engine.SetSearchPool(stc.GetTextRaw())
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH, (engine.FindAll))
         elif smode == finddlg.LOCATION_OPEN_DOCS:
             files = [fname.GetFileName()
@@ -254,14 +254,14 @@ class SearchController:
 
         if smode == finddlg.LOCATION_CURRENT_DOC:
             stc = self._stc()
-            engine.SetSearchPool(stc.GetText())
+            engine.SetSearchPool(stc.GetTextRaw())
             matches = engine.FindAll()
             if matches is not None:
                 self.ReplaceInStc(stc, matches, rstring)
             # TODO report number of items replaced
         elif smode == finddlg.LOCATION_OPEN_DOCS:
             for ctrl in self._parent.GetTextControls():
-                engine.SetSearchPool(ctrl.GetText())
+                engine.SetSearchPool(ctrl.GetTextRaw())
                 matches = engine.FindAll()
                 if matches is not None:
                     self.ReplaceInStc(ctrl, matches, rstring)
@@ -352,6 +352,7 @@ class SearchEngine:
         self._next = down
         self._matchcase = matchcase
         self._wholeword = wholeword
+        self._unicode = False
         self._query = query
         self._regex = u''
         self._pool = u''
@@ -370,9 +371,14 @@ class SearchEngine:
             tmp = "\\s%s\\s" % tmp
 
         if self._matchcase:
-            self._regex = re.compile(tmp)
+            flags = 0
         else:
-            self._regex = re.compile(tmp, re.IGNORECASE)
+            flags = re.IGNORECASE
+
+        if self._unicode:
+            flags |= re.UNICODE
+            
+        self._regex = re.compile(tmp, flags)
 
     def Find(self, spos=0):
         """Find the next match based on the state of the search engine
@@ -514,6 +520,9 @@ class SearchEngine:
         """
         del self._pool
         self._pool = pool
+        if isinstance(self._pool, types.UnicodeType):
+            self._unicode = True
+            self._CompileRegex()
 
     def SetQuery(self, query):
         """Set the search query
@@ -1060,10 +1069,12 @@ class SearchResultList(outbuff.OutputBuffer):
             page = buffers.index(fname)
             nb.ChangePage(page)
             cpage = nb.GetPage(page)
-            cpage.GotoLine(line)
         else:
             nb.OnDrop([fname])
-            nb.GetPage(nb.GetSelection()).GotoLine(line)
+            cpage = nb.GetPage(nb.GetSelection())
+
+        cpage.GotoLine(line)
+        cpage.SetFocus()
 
 #-----------------------------------------------------------------------------#
 
