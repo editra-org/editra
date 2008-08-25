@@ -686,23 +686,27 @@ class EdPages(FNB.FlatNotebook):
         """
         try:
             e_id = evt.GetId()
-            if e_id == self.GetCurrentPage().GetId():
+            if self.control.GetId() == e_id:
                 pg_num = self.GetSelection()
                 title = self.GetPageText(pg_num)
                 if self.control.GetModify():
                     title = u"*" + title
+
+                # Only Update if the text has changed
                 if title != FNB.FlatNotebook.GetPageText(self, pg_num):
                     self.SetPageText(pg_num, title)
                     ftitle = u"%s - file://%s" % (title, self.control.GetFileName())
                     self.frame.SetTitle(ftitle)
             else:
-                for page in xrange(self.GetPageCount()):
-                    if e_id == self.GetPage(page).GetId():
+                # A background page has changed
+                for page in range(self.GetPageCount()):
+                    control = self.GetPage(page)
+                    if control.GetId() == e_id:
                         title = self.GetPageText(page)
-                        if self.control.GetModify():
+                        if control.GetModify():
                             title = u"*" + title
-                            if title != FNB.FlatNotebook.GetPageText(self, page):
-                                self.SetPageText(page, title)
+                        if title != FNB.FlatNotebook.GetPageText(self, page):
+                            self.SetPageText(page, title)
         except wx.PyDeadObjectError:
             pass
 
