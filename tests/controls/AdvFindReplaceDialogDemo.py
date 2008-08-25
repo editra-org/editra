@@ -31,6 +31,7 @@ ID_REPLACE = wx.NewId()
 ID_NOOPTS  = wx.NewId()
 ID_REGEX   = wx.NewId()
 ID_NOLOOK  = wx.NewId()
+ID_NOWHOLEW = wx.NewId()
 ID_MINIMAL = wx.NewId()
 
 #-----------------------------------------------------------------------------#
@@ -54,13 +55,17 @@ DIALOG_MAP = {ID_DEFAULT : (wx.FindReplaceData(),
               ID_NOLOOK  : (wx.FindReplaceData(finddlg.AFR_NOLOOKIN),
                             finddlg.AFR_STYLE_FINDDIALOG,
                             "Lookin Hidden"),
+              ID_NOWHOLEW : (wx.FindReplaceData(finddlg.AFR_NOWHOLEWORD),
+                             finddlg.AFR_STYLE_FINDDIALOG,
+                             "Whole Word Disabled"),
               ID_MINIMAL : (wx.FindReplaceData(finddlg.AFR_NOLOOKIN|finddlg.AFR_NOOPTIONS|finddlg.AFR_NOUPDOWN),
                             finddlg.AFR_STYLE_FINDDIALOG,
                             "All Options Hidden")}
 
 BUTTONS = zip(DIALOG_MAP.keys(),
               ("Default", "Non-Floating", "Replace Dialog", "Options Hidden",
-               "Regular Expression", "Lookin Hidden", "Minimal"))
+               "Regular Expression", "Lookin Hidden", "Whole Word Disabled",
+               "Minimal"))
 
 #-----------------------------------------------------------------------------#
 

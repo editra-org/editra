@@ -60,12 +60,13 @@ AFR_UP          = 1
 AFR_WHOLEWORD   = 2
 AFR_MATCHCASE   = 4
 AFR_REGEX       = 8
-AFR_NOLOOKIN    = 16
-AFR_NOUPDOWN    = 32
-AFR_NOWHOLEWORD = 64
-AFR_NOMATCHCASE = 128
-AFR_NOREGEX     = 256
-AFR_NOOPTIONS   = 512
+AFR_RECURSIVE   = 16
+AFR_NOLOOKIN    = 32
+AFR_NOUPDOWN    = 64
+AFR_NOWHOLEWORD = 128
+AFR_NOMATCHCASE = 256
+AFR_NOREGEX     = 512
+AFR_NOOPTIONS   = 1024
 
 # Search Location Parameters (NOTE: must be kept in sync with Lookin List)
 LOCATION_CURRENT_DOC = 0
@@ -83,6 +84,7 @@ ID_REPLACE_LBL = wx.NewId()
 ID_MATCH_CASE = wx.NewId()
 ID_WHOLE_WORD = wx.NewId()
 ID_REGEX = wx.NewId()
+ID_RECURSE = wx.NewId()
 ID_FIND_ALL = wx.NewId()
 ID_REPLACE_ALL = wx.NewId()
 ID_CHOOSE_DIR = wx.NewId()
@@ -211,6 +213,13 @@ class FindEvent(wx.PyCommandEvent):
 
         """
         return bool(self._flags & AFR_MATCHCASE)
+
+    def IsRecursive(self):
+        """Is the search option for recursive directory search enabled
+        @return: bool
+
+        """
+        return bool(self._flags & AFR_RECURSIVE)
 
     def IsRegEx(self):
         """Is RegEx enabled in the dialog
@@ -519,7 +528,7 @@ class FindPanel(wx.Panel):
                   lambda evt: self.FireEvent(evt.GetId()) or evt.Skip())
         self.Bind(wx.EVT_CHECKBOX, self.OnOption)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnOption)
-        self.Bind(wx.EVT_CHOICE, lambda evt: self._UpdateDefaultBtn())
+        self.Bind(wx.EVT_CHOICE, lambda evt: self._UpdateContext(), id=ID_LOOKIN)
         for bid in (wx.ID_FIND, wx.ID_REPLACE, ID_FIND_ALL, ID_REPLACE_ALL):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=bid)
 
@@ -583,7 +592,8 @@ class FindPanel(wx.Panel):
         sboxsz = wx.StaticBoxSizer(statbox, wx.VERTICAL)
         for cid, clbl in [(ID_MATCH_CASE, _("Match case")),
                           (ID_WHOLE_WORD, _("Whole word")),
-                          (ID_REGEX, _("Regular expression"))]:
+                          (ID_REGEX, _("Regular expression")),
+                          (ID_RECURSE, _("Search Recursively"))]:
             sboxsz.AddMany([((3, 3), 0), (wx.CheckBox(self, cid, clbl), 0)])
         self._sizers['opt'].AddMany([((5, 5), 0), (sboxsz, 0, wx.EXPAND)])
 
@@ -625,6 +635,10 @@ class FindPanel(wx.Panel):
         self.FindWindowById(ID_WHOLE_WORD).Enable(not (flags & AFR_NOWHOLEWORD))
         self.FindWindowById(ID_MATCH_CASE).Enable(not (flags & AFR_NOMATCHCASE))
         self.FindWindowById(ID_REGEX).Enable(not (flags & AFR_NOREGEX))
+        in_files = bool(self._lookin.GetSelection() >= LOCATION_IN_FILES)
+        recurse = self.FindWindowById(ID_RECURSE)
+        recurse.SetValue(flags & AFR_RECURSIVE)
+        recurse.Enable(in_files)
 
     def _ShowButtons(self, find=True):
         """Toggle the visiblity of a button set
@@ -649,6 +663,14 @@ class FindPanel(wx.Panel):
                 self._sizers[ctrl].Show(False)
             else:
                 self._sizers[ctrl].ShowItems(False)
+
+    def _UpdateContext(self):
+        """Update available dialog options based on the selected search context
+
+        """
+        self._UpdateDefaultBtn()
+        in_files = bool(self._lookin.GetSelection() >= LOCATION_IN_FILES)
+        self.FindWindowById(ID_RECURSE).Enable(in_files)
 
     def _UpdateDefaultBtn(self):
         """Change the default button depending on what the search context
@@ -771,6 +793,7 @@ class FindPanel(wx.Panel):
                 path = dlg.GetPath()
                 if path is not None and len(path):
                     self.SetLookinSelection(path)
+                self._UpdateContext()
             dlg.Destroy()
         else:
             evt.Skip()
