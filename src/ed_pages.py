@@ -685,14 +685,24 @@ class EdPages(FNB.FlatNotebook):
 
         """
         try:
-            pg_num = self.GetSelection()
-            title = self.GetPageText(pg_num)
-            if self.control.GetModify():
-                title = u"*" + title
-            if title != FNB.FlatNotebook.GetPageText(self, pg_num):
-                self.SetPageText(pg_num, title)
-                ftitle = u"%s - file://%s" % (title, self.control.GetFileName())
-                self.frame.SetTitle(ftitle)
+            e_id = evt.GetId()
+            if e_id == self.GetCurrentPage().GetId():
+                pg_num = self.GetSelection()
+                title = self.GetPageText(pg_num)
+                if self.control.GetModify():
+                    title = u"*" + title
+                if title != FNB.FlatNotebook.GetPageText(self, pg_num):
+                    self.SetPageText(pg_num, title)
+                    ftitle = u"%s - file://%s" % (title, self.control.GetFileName())
+                    self.frame.SetTitle(ftitle)
+            else:
+                for page in xrange(self.GetPageCount()):
+                    if e_id == self.GetPage(page).GetId():
+                        title = self.GetPageText(page)
+                        if self.control.GetModify():
+                            title = u"*" + title
+                            if title != FNB.FlatNotebook.GetPageText(self, page):
+                                self.SetPageText(page, title)
         except wx.PyDeadObjectError:
             pass
 
