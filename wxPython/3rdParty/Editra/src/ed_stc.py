@@ -1840,7 +1840,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if result:
             self.SetSavePoint()
             self.SetModTime(util.GetFileModTime(path))
-            self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_MODIFIED))
+            self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_MODIFIED,
+                                                   self.GetId()))
             self.SetFileName(path)
 
         wx.CallAfter(ed_msg.PostMessage,
