@@ -866,7 +866,7 @@ class EdFindResults(plugin.Plugin):
 
     def GetName(self):
         """Return the name of this control"""
-        return EdFindResults.__name__
+        return self.__name__
 
     def IsStockable(self):
         """EdLogViewer can be saved in the shelf preference stack"""
@@ -904,23 +904,82 @@ class SearchResultScreen(ctrlbox.ControlBox):
         # Attributes
         self._job = None
         self._list = SearchResultList(self)
+        self._cancelb = None
+        self._clearb = None
 
-        # Setup
-        ctrlbar = ctrlbox.ControlBar(self)
+        # Layout
+        self.__DoLayout()
+        self._cancelb.Disable()
+
+        # Event Handlers
+        self.Bind(wx.EVT_BUTTON, lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
+        self.Bind(wx.EVT_BUTTON, lambda evt: self.CancelSearch(), id=wx.ID_CANCEL)
+        self._list.Bind(outbuff.EVT_TASK_START, lambda evt: self._list.Start(250))
+        self._list.Bind(outbuff.EVT_TASK_COMPLETE, self.OnTaskComplete)
+
+        # Message Handlers
+        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
+
+    def __del__(self):
+        ed_msg.Unsubscribe(self.OnThemeChange)
+
+    def __DoLayout(self):
+        """Layout and setup the results screen ui"""
+        ctrlbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        if wx.Platform == '__WXGTK__':
+            ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+
         ctrlbar.AddStretchSpacer()
+
+        # Cancel Button
+        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_STOP), wx.ART_MENU)
+        if cbmp.IsNull() or not cbmp.IsOk():
+            cbmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR,
+                                            wx.ART_MENU, (16, 16))
+        cancel = platebtn.PlateButton(ctrlbar, wx.ID_CANCEL, _("Cancel"),
+                                      cbmp, style=platebtn.PB_STYLE_NOBG)
+        self._cancelb = cancel
+        ctrlbar.AddControl(cancel, wx.ALIGN_RIGHT)
+
+        # Clear Button
         cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
         if cbmp.IsNull() or not cbmp.IsOk():
             cbmp = None
         clear = platebtn.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
                                      cbmp, style=platebtn.PB_STYLE_NOBG)
-        ctrlbar.AddControl(clear, wx.ALIGN_LEFT)
+        self._clearb = clear
+        ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
 
-        # Layout
+        ctrlbar.SetVMargin(1, 1)
         self.SetControlBar(ctrlbar)
         self.SetWindow(self._list)
 
-        # Event Handlers
-        self.Bind(wx.EVT_BUTTON, lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
+    def OnTaskComplete(self, evt):
+        """Update when task is complete
+        @param evt: UpdateBufferEvent
+
+        """
+        self._list.Stop()
+        self._cancelb.Disable()
+
+    def OnThemeChange(self, msg):
+        """Update the button icons after the theme has changed
+        @param msg: Message Object
+
+        """
+        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
+        self._clearb.SetBitmap(cbmp)
+        self._clearb.Refresh()
+
+        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_STOP), wx.ART_MENU)
+        self._cancelb.SetBitmap(cbmp)
+        self._cancelb.Refresh()
+
+    def CancelSearch(self):
+        """Cancel the currently running search"""
+        if self._job is not None:
+            self._job.Cancel()
+        self._cancelb.Disable()
 
     def StartSearch(self, searchmeth, args):
         """Start a search with the given method and display the results
@@ -933,6 +992,7 @@ class SearchResultScreen(ctrlbox.ControlBox):
         self._list.Clear()
         self._job = outbuff.TaskThread(self._list, searchmeth, args)
         self._job.start()
+        self._cancelb.Enable()
 
 #-----------------------------------------------------------------------------#
 
@@ -941,9 +1001,6 @@ class SearchResultList(outbuff.OutputBuffer):
     RE_FIND_MATCH = re.compile('(.+) \(([0-9]+)\)\: .+')
     def __init__(self, parent):
         outbuff.OutputBuffer.__init__(self, parent)
-
-        # Attributes
-        
 
         # Setup
         font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN, 
@@ -954,10 +1011,6 @@ class SearchResultList(outbuff.OutputBuffer):
         self.StyleSetSpec(SearchResultList.STY_SEARCH_MATCH,
                           "face:%s,size:%d,fore:#000000,back:%s" % style)
         self.StyleSetHotSpot(SearchResultList.STY_SEARCH_MATCH, True)
-
-        # Event Handlers
-        self.Bind(outbuff.EVT_TASK_START, lambda evt: self.Start(250))
-        self.Bind(outbuff.EVT_TASK_COMPLETE, lambda evt: self.Stop())
 
     def ApplyStyles(self, start, txt):
         """Set a hotspot for each search result
