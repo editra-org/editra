@@ -243,6 +243,7 @@ ID_FLOPPY            = wx.NewId()
 ID_FOLDER            = wx.NewId()
 ID_HARDDISK          = wx.NewId()
 ID_KEY_PROFILES      = wx.NewId()
+ID_LOGGER            = wx.NewId()
 ID_PACKAGE           = wx.NewId()
 ID_PYSHELL           = wx.NewId()
 ID_REFRESH           = wx.ID_REFRESH
