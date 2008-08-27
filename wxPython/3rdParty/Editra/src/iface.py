@@ -477,8 +477,9 @@ class Shelf(plugin.Plugin):
                     index = self._imgidx[item_id]
                 else:
                     bmp = item.GetBitmap()
-                    index = self._imglst.Add(item.GetBitmap())
-                    self._imgidx[item_id] = index
+                    if bmp.IsOk():
+                        index = self._imglst.Add(bmp)
+                        self._imgidx[item_id] = index
 
             self.AddItem(item.CreateItem(self._shelf), name, index)
 

@@ -56,6 +56,14 @@ class Launch(plugin.Plugin):
         util.Log("[Launch][info] Creating Launch instance for Shelf")
         return launch.LaunchWindow(parent)
 
+    def GetBitmap(self):
+        """Get the tab bitmap
+        @return: wx.Bitmap
+
+        """
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_BIN_FILE), wx.ART_MENU)
+        return bmp
+
     def GetId(self):
         """The unique identifier of this plugin"""
         return self.ID_LAUNCH
