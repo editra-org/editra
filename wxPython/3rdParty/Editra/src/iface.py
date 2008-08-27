@@ -23,9 +23,11 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import re
 import wx
+
+# Local Imports
 import plugin
 from extern import flatnotebook as FNB
 from profiler import Profile_Get
@@ -220,8 +222,10 @@ class Shelf(plugin.Plugin):
 
         """
         self._shelf.AddPage(item,
-                            u"%s - %d" % (name, self._open.get(name, 0)), imgid)
-        if imgid >= 0:
+                            u"%s - %d" % (name, self._open.get(name, 0)))
+
+        # Set the tab icon
+        if imgid >= 0 and Profile_Get('TABICONS', default=True):
             self._shelf.SetPageImage(self._shelf.GetPageCount()-1, imgid)
         self._open[name] = self._open.get(name, 0) + 1
 
