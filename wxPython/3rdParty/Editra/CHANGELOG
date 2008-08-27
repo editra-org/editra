@@ -27,8 +27,10 @@ NEW: [features/improvements]
     - Pike                - Ruby           - Squirrel
     - TCL/Tk              - Vala
 +Show Filetype and Encoding information in statusbar (from shaohao)
++Double click on statusbar line/column section opens goto line control (shaohao)
 +Add support for newLISP (from Jeff)
 +Add Czech translation (contributed by Tomas Fryda)
++Numerous general Ui improvements
 
 BUG FIXES:
 +Properly update titlebar and other contexts when page change is initiated from

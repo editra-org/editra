@@ -392,6 +392,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                              util.GetFileName(fname), quiet=True)
             self.Raise()
 
+    def GetCommandbar(self):
+        """Get this windows command bar
+        @return: ed_cmdbar.CommandBar
+
+        """
+        return self._cmdbar
+
     def GetFrameManager(self):
         """Returns the manager for this frame
         @return: Reference to the AuiMgr of this window
@@ -1075,15 +1082,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         e_id = evt.GetId()
-        if e_id == ID_QUICK_FIND:
-            self._cmdbar.Show(ed_cmdbar.ID_SEARCH_CTRL)
-        elif e_id == ID_GOTO_LINE:
-            self._cmdbar.Show(ed_cmdbar.ID_LINE_CTRL)
-        elif e_id == ID_COMMAND:
-            self._cmdbar.Show(ed_cmdbar.ID_CMD_CTRL)
+        ctrld = { ID_QUICK_FIND : ed_cmdbar.ID_SEARCH_CTRL,
+                  ID_GOTO_LINE : ed_cmdbar.ID_LINE_CTRL,
+                  ID_COMMAND : ed_cmdbar.ID_CMD_CTRL }
+        if e_id in ctrld:
+            self.ShowCommandCtrl(ctrld[e_id])
         else:
             evt.Skip()
-        self.sizer.Layout()
 
     def OnHelp(self, evt):
         """Handles help related menu events
@@ -1115,12 +1120,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         except:
             self.PushStatusText(_("Error: Unable to open %s") % page, SB_INFO)
 
-    def ShowCommandCtrl(self):
+    def ShowCommandCtrl(self, ctrl_id):
         """Open the Commandbar in command mode.
-        @todo: check if this is necessary
+        @param ctrl_id: control id to show
 
         """
-        self._cmdbar.Show(ed_cmdbar.ID_CMD_CTRL)
+        self._cmdbar.Show(ctrl_id)
         self.sizer.Layout()
 
     def ModifySave(self):
