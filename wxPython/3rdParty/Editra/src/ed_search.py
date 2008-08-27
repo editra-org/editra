@@ -878,6 +878,14 @@ class EdFindResults(plugin.Plugin):
         EdFindResults.RESULT_SCREENS.append(screen)
         return screen
 
+    def GetBitmap(self):
+        """Get the find results bitmap
+        @return: wx.Bitmap
+
+        """
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FIND), wx.ART_MENU)
+        return bmp
+
     def GetId(self):
         """Plugin menu identifier ID"""
         return EdFindResults.ID_FIND_RESULTS
