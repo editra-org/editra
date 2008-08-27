@@ -106,6 +106,14 @@ class ShelfI(plugin.Interface):
         """
         raise NotImplementedError
 
+    def GetBitmap(self):
+        """Get the bitmap to show in the shelf for this item
+        @return: wx.Bitmap
+        @note: this method is optional
+
+        """
+        return wx.NullBitmap
+
     def GetId(self):
         """Return the id that identifies this item (same as the menuid)
         @return: Item ID
@@ -170,6 +178,8 @@ class Shelf(plugin.Plugin):
         self._shelf = None
         self._parent = None
         self._open = dict()
+        self._imgidx = dict()
+        self._imglst = wx.ImageList(16, 16)
 
     def _GetMenu(self):
         """Return the menu of this object
@@ -200,7 +210,7 @@ class Shelf(plugin.Plugin):
             menu.AppendItem(item[1])
         return menu
 
-    def AddItem(self, item, name):
+    def AddItem(self, item, name, imgid=-1):
         """Add an item to the shelfs notebook. This is usefull for interacting
         with the Shelf from outside its interface. It may be necessary to
         call L{EnsureShelfVisible} before or after adding an item if you wish
@@ -209,7 +219,10 @@ class Shelf(plugin.Plugin):
         @param name: Items name used for page text in notebook
 
         """
-        self._shelf.AddPage(item, u"%s - %d" % (name, self._open.get(name, 0)))
+        self._shelf.AddPage(item,
+                            u"%s - %d" % (name, self._open.get(name, 0)), imgid)
+        if imgid >= 0:
+            self._shelf.SetPageImage(self._shelf.GetPageCount()-1, imgid)
         self._open[name] = self._open.get(name, 0) + 1
 
     def CanStockItem(self, item_name):
@@ -254,6 +267,7 @@ class Shelf(plugin.Plugin):
                                              FNB.FNB_NODRAG |
                                              FNB.FNB_BOTTOM |
                                              FNB.FNB_NO_X_BUTTON)
+        self._shelf.SetImageList(self._imglst)
         mgr.AddPane(self._shelf, wx.aui.AuiPaneInfo().Name(Shelf.SHELF_NAME).\
                             Caption("Shelf").Bottom().Layer(0).\
                             CloseButton(True).MaximizeButton(False).\
@@ -456,7 +470,17 @@ class Shelf(plugin.Plugin):
             return
         else:
             self.EnsureShelfVisible()
-            self.AddItem(item.CreateItem(self._shelf), name)
+            item_id = item.GetId()
+            index = -1
+            if hasattr(item, 'GetBitmap'):
+                if item_id in self._imgidx:
+                    index = self._imgidx[item_id]
+                else:
+                    bmp = item.GetBitmap()
+                    index = self._imglst.Add(item.GetBitmap())
+                    self._imgidx[item_id] = index
+
+            self.AddItem(item.CreateItem(self._shelf), name, index)
 
     def ItemIsOnShelf(self, item_name):
         """Check if at least one instance of a given item

@@ -15,6 +15,9 @@ __version__ = "0.5"
 # Imports
 import wx
 from wx.py import shell
+
+# Local Imports
+import ed_glob
 import iface
 from profiler import Profile_Get
 import plugin
@@ -73,6 +76,14 @@ class PyShell(plugin.Plugin):
         pyshell = shell.Shell(parent, locals=dict())
         pyshell.setStyles(self.__SetupFonts())
         return pyshell
+
+    def GetBitmap(self):
+        """Get the bitmap for representing this control in the ui
+        @return: wx.Bitmap
+
+        """
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PYSHELL), wx.ART_MENU)
+        return bmp
 
     def GetId(self):
         return self.ID_PYSHELL
