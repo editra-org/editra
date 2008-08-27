@@ -845,7 +845,6 @@ class EdSearchCtrl(wx.SearchCtrl):
 class EdFindResults(plugin.Plugin):
     """Shelf interface implementation for the find results"""
     plugin.Implements(iface.ShelfI)
-    ID_FIND_RESULTS = wx.NewId()
     SUBSCRIBED = False
     RESULT_SCREENS = list()
 
@@ -888,14 +887,14 @@ class EdFindResults(plugin.Plugin):
 
     def GetId(self):
         """Plugin menu identifier ID"""
-        return EdFindResults.ID_FIND_RESULTS
+        return ed_glob.ID_FIND_RESULTS
 
     def GetMenuEntry(self, menu):
         """Get the menu entry for the log viewer
         @param menu: the menu items parent menu
 
         """
-        return wx.MenuItem(menu, EdFindResults.ID_FIND_RESULTS,
+        return wx.MenuItem(menu, ed_glob.ID_FIND_RESULTS,
                            _("Find Results"), _("Show a find results screen"))
 
     def GetName(self):
@@ -918,7 +917,7 @@ class EdFindResults(plugin.Plugin):
             shelf = win.GetShelf()
             screen = shelf.RaiseItem(u"Find Results")
             if screen is None or screen.GetDisplayedLines() > 3:
-                shelf.PutItemOnShelf(cls.ID_FIND_RESULTS)
+                shelf.PutItemOnShelf(ed_glob.ID_FIND_RESULTS)
                 shelf_nb = shelf.GetWindow()
                 screen = shelf_nb.GetCurrentPage()
             data = msg.GetData()
