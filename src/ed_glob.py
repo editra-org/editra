@@ -239,6 +239,7 @@ ID_DOCPROP           = wx.NewId()
 ID_DOWN              = wx.ID_DOWN
 ID_DOWNLOAD_DLG      = wx.NewId()
 ID_FILE              = wx.ID_FILE
+ID_FIND_RESULTS      = wx.NewId()
 ID_FLOPPY            = wx.NewId()
 ID_FOLDER            = wx.NewId()
 ID_HARDDISK          = wx.NewId()
