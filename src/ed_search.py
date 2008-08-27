@@ -916,8 +916,8 @@ class EdFindResults(plugin.Plugin):
         win = wx.GetApp().GetActiveWindow()
         if win is not None:
             shelf = win.GetShelf()
-            screen = shelf.RaiseItem(cls.__name__)
-            if screen is None:
+            screen = shelf.RaiseItem(u"Find Results")
+            if screen is None or screen.GetDisplayedLines() > 3:
                 shelf.PutItemOnShelf(cls.ID_FIND_RESULTS)
                 shelf_nb = shelf.GetWindow()
                 screen = shelf_nb.GetCurrentPage()
@@ -990,6 +990,10 @@ class SearchResultScreen(ctrlbox.ControlBox):
         ctrlbar.SetVMargin(1, 1)
         self.SetControlBar(ctrlbar)
         self.SetWindow(self._list)
+
+    def GetDisplayedLines(self):
+        """Get the number of lines displayed in the output window"""
+        return self._list.GetLineCount()
 
     def OnTaskComplete(self, evt):
         """Update when task is complete
