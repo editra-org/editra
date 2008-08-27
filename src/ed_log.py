@@ -47,7 +47,6 @@ SHOW_ALL_MSG = 'ALL'
 class EdLogViewer(plugin.Plugin):
     """Shelf interface implementation for the log viewer"""
     plugin.Implements(iface.ShelfI)
-    ID_LOGGER = wx.NewId()
 
     @property
     def __name__(self):
@@ -61,16 +60,24 @@ class EdLogViewer(plugin.Plugin):
         """Returns a log viewr panel"""
         return LogViewer(parent)
 
+    def GetBitmap(self):
+        """Get the log viewers tab icon
+        @return: wx.Bitmap
+
+        """
+        bmp = wx.ArtProvider.GetBitmap(str(self.GetId()), wx.ART_MENU)
+        return bmp
+
     def GetId(self):
         """Plugin menu identifier ID"""
-        return self.ID_LOGGER
+        return ed_glob.ID_LOGGER
 
     def GetMenuEntry(self, menu):
         """Get the menu entry for the log viewer
         @param menu: the menu items parent menu
 
         """
-        return wx.MenuItem(menu, self.ID_LOGGER, _("Editra Log"),
+        return wx.MenuItem(menu, ed_glob.ID_LOGGER, _("Editra Log"),
                            _("View Editra's console log"))
 
     def GetName(self):
