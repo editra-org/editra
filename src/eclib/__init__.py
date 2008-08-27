@@ -24,5 +24,5 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
 
-__all__ = ['colorsetter', 'ctrlbox', 'elistmix', 'finddlg',
+__all__ = ['colorsetter', 'ctrlbox', 'elistmix', 'encdlg', 'finddlg',
            'outbuff', 'platebtn', 'pstatbar']
