@@ -20,9 +20,11 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import wx
+
+# Local Imports
 import ed_glob
 import util
 import plugin
@@ -209,6 +211,7 @@ ART = { ed_glob.ID_ABOUT  : u'about.png',
         ed_glob.ID_PREF    : u'pref.png',
         ed_glob.ID_PRINT   : u'print.png',
         ed_glob.ID_PRINT_PRE : u'printpre.png',
+        ed_glob.ID_PYSHELL : u'pyshell.png',
         ed_glob.ID_REDO    : u'redo.png',
         ed_glob.ID_REFRESH : u'refresh.png',
         ed_glob.ID_RTF_GEN : u'rtf_gen.png',
