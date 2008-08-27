@@ -28,6 +28,7 @@ import wx, wx.stc
 import ed_event
 import ed_glob
 import ed_stc
+import ed_cmdbar
 
 # Vi command patterns
 VI_DCMD_RIGHT = '[bBcdeEGhHlLMwWy|{}$<>]'
@@ -180,7 +181,7 @@ class ViKeyHandler(KeyHandler):
         mw = self.stc.GetTopLevelParent()
         if u':' in cmd:
             self.cmdcache = u''
-            mw.ShowCommandCtrl()
+            mw.ShowCommandCtrl(ed_cmdbar.ID_CMD_CTRL)
 
         # Single key commands
         if len(cmd) == 1 and (cmd in 'AHILmM0^$nia/?:'):
@@ -205,9 +206,7 @@ class ViKeyHandler(KeyHandler):
                 self.stc.GotoPos(cpos + 1)
             elif cmd in u'/?':
                 if mw is not None:
-                    evt = wx.MenuEvent(wx.wxEVT_COMMAND_MENU_SELECTED,
-                                       ed_glob.ID_QUICK_FIND)
-                    wx.PostEvent(mw, evt)
+                    mw.ShowCommandCtrl(ed_cmdbar.ID_SEARCH_CTRL)
 
             if cmd in u'aAiI':
                 self.SetMode(ViKeyHandler.INSERT)

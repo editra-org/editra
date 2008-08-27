@@ -19,13 +19,14 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import wx
 
 # Editra Libraries
 import ed_glob
-import ed_msg
 import util
+import ed_msg
+import ed_cmdbar
 from syntax.syntax import GetFtypeDisplayName
 import eclib.pstatbar as pstatbar
 
@@ -43,6 +44,9 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         self._widths = list()
         self.SetFieldsCount(6) # Info, vi stuff, line/progress
         self.SetStatusWidths([-1, 90, 40, 40, 40, 155])
+
+        # Event Handlers
+        self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
 
         # Messages
         ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_PROGRESS_SHOW)
@@ -90,6 +94,19 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         if widths != self._widths:
             self._widths = widths
             self.SetStatusWidths(self._widths)
+
+    def OnLeftDClick(self, evt):
+        """Handlers mouse left double click on status bar
+        @param evt: Event fired that called this handler
+        @type evt: 
+        @note: Assumes parent is MainWindow instance
+
+        """
+        pt = evt.GetPosition()
+        if self.GetFieldRect(ed_glob.SB_ROWCOL).Contains(pt):
+            self.GetParent().ShowCommandCtrl(ed_cmdbar.ID_LINE_CTRL)
+        else:
+            evt.Skip()
 
     def OnProgress(self, msg):
         """Set the progress bar's state
