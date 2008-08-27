@@ -439,10 +439,10 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         """
         if evt.GetId() in [ed_glob.ID_CLOSE, ed_glob.ID_CLOSE_WINDOW]:
-            for window in self._windows.values():
-                if hasattr(window[0], 'IsActive') and window[0].IsActive():
-                    if hasattr(window[0], 'Close'):
-                        window[0].Close()
+            for window in wx.GetTopLevelWindows():
+                if hasattr(window, 'IsActive') and window.IsActive():
+                    if hasattr(window, 'Close'):
+                        window.Close()
                     break
         else:
             evt.Skip()
