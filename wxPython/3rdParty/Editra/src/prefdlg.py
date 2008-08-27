@@ -110,6 +110,8 @@ class PreferencesDialog(wx.Frame):
         self.SetTransparent(Profile_Get('ALPHA', 'int', 255))
 
         # Attributes
+        self._accel = wx.AcceleratorTable([(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CLOSE)])
+        self.SetAcceleratorTable(self._accel)
         self._tbook = PrefTools(self)
         sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -121,6 +123,7 @@ class PreferencesDialog(wx.Frame):
         wx.GetApp().RegisterWindow(repr(self), self, True)
 
         # Bind Events
+        self.Bind(wx.EVT_MENU, lambda evt: self.Close(), id=wx.ID_CLOSE)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_SHOW, self.OnShow)
 
