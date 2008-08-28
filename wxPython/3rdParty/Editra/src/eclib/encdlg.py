@@ -120,7 +120,7 @@ class EncodingPanel(wx.Panel):
         vsizer = wx.BoxSizer(wx.VERTICAL)
         caption = wx.StaticText(self, label=self._msg)
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
-        bsizer.AddMany([((75, 10), 1, wx.EXPAND),
+        bsizer.AddMany([((100, 10), 1, wx.EXPAND),
                         (wx.Button(self, wx.ID_OK), 0, wx.ALIGN_CENTER_VERTICAL),
                         ((5, 5), 0),
                         (wx.Button(self, wx.ID_CANCEL), 0, wx.ALIGN_CENTER_VERTICAL),
