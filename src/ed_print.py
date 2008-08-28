@@ -24,26 +24,31 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import wx
 import wx.stc
+
+# Editra Imports
+import ed_glob
 import util
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
+
 # Globals
-COLOURMODES = { 'black_white'    : wx.stc.STC_PRINT_BLACKONWHITE,
-                'colour_white'   : wx.stc.STC_PRINT_COLOURONWHITE,
-                'colour_default' : wx.stc.STC_PRINT_COLOURONWHITEDEFAULTBG,
-                'inverse'        : wx.stc.STC_PRINT_INVERTLIGHT,
-                'normal'         : wx.stc.STC_PRINT_NORMAL }
+COLOURMODES = { ed_glob.PRINT_BLACK_WHITE : wx.stc.STC_PRINT_BLACKONWHITE,
+                ed_glob.PRINT_COLOR_WHITE : wx.stc.STC_PRINT_COLOURONWHITE,
+                ed_glob.PRINT_COLOR_DEF   : wx.stc.STC_PRINT_COLOURONWHITEDEFAULTBG,
+                ed_glob.PRINT_INVERT      : wx.stc.STC_PRINT_INVERTLIGHT,
+                ed_glob.PRINT_NORMAL      : wx.stc.STC_PRINT_NORMAL }
+
 #--------------------------------------------------------------------------#
 class EdPrinter:
     """Printer Class for the editor
     @note: current font size is fixed at 12 point for printing
 
     """
-    def __init__(self, parent, stc_callable, mode='normal'):
+    def __init__(self, parent, stc_callable, mode=ed_glob.PRINT_NORMAL):
         """Initializes the Printer, the stc_callable parameter
         must be a callable function that returns an STC instance object
         @param stc_callable: function to get current stc document
@@ -103,15 +108,15 @@ class EdPrinter:
             self.print_data = wx.PrintData(dlg_data.GetPrintData())
         printout.Destroy()
 
-    def SetColourMode(self, mode_str):
+    def SetColourMode(self, mode):
         """Sets the color mode that the text is to be rendered with
-        @param mode_str: mode to set the printer to use
+        @param mode: mode to set the printer to use
         @return: whether mode was set or not
         @rtype: boolean
 
         """
-        if COLOURMODES.has_key(mode_str):
-            self.print_mode = mode_str
+        if COLOURMODES.has_key(mode):
+            self.print_mode = mode
             ret = True
         else:
             ret = False

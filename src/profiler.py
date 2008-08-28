@@ -24,12 +24,14 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import sys
 import cPickle
 import wx
-from ed_glob import CONFIG, PROG_NAME, VERSION
+
+# Editra Imports
+from ed_glob import CONFIG, PROG_NAME, VERSION, PRINT_BLACK_WHITE
 import util
 import dev_tool
 
@@ -68,7 +70,7 @@ _DEFAULTS = {
            'MODE'       : 'CODE',           # Overall editor mode
            'MYPROFILE'  : 'default.ppb',    # Path to profile file
            'OPEN_NW'    : False,            # Open files in new windows
-           'PRINT_MODE' : 'BLACK/WHITE',    # Printer rendering mode
+           'PRINT_MODE' : PRINT_BLACK_WHITE,# Printer rendering mode
            'PROXY_SETTINGS' : dict(),       # Proxy Server Settings
            'REPORTER'   : True,             # Error Reporter is Active
            'SAVE_POS'   : True,             # Remember Carat positions

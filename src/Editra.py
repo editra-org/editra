@@ -602,7 +602,12 @@ def InitConfig():
             if mode == 'GUI_DEBUG':
                 profiler.Profile_Set('MODE', 'DEBUG')
 
+            # This key has been removed so clean it from old profiles
             profiler.Profile_Del('LASTCHECK')
+
+            # Print modes don't use strings anymore
+            if isinstance(profiler.Profile_Get('PRINT_MODE'), basestring):
+                profiler.Profile_Set('PRINT_MODE', ed_glob.PRINT_BLACK_WHITE)
             #---- End Temporary Profile Adaptions ----#
 
             # Write out updated profile

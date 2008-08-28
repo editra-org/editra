@@ -308,8 +308,7 @@ class GeneralPanel(wx.Panel):
         psizer.AddMany([(wx.StaticText(self, label=_("Printer Mode") + u": "),
                          0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                         (ExChoice(self, ed_glob.ID_PRINT_MODE,
-                                  choices=['Black/White', 'Colour/White',
-                                         'Colour/Default', 'Inverse', 'Normal'],
+                                  choices=GetPrintModeStrings(),
                                   default=Profile_Get('PRINT_MODE')),
                          0, wx.ALIGN_CENTER_VERTICAL)])
 
@@ -406,14 +405,16 @@ class GeneralPanel(wx.Panel):
         @note: Also handles the Language ComboBox
 
         """
-        util.Log("[prefldg][evt] General Page: Choice event caught")
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
-        if e_id in [ed_glob.ID_PREF_MODE, ed_glob.ID_PRINT_MODE,
-                    ed_glob.ID_PREF_FHIST, ed_glob.ID_PREF_LANG]:
+        if e_id in [ed_glob.ID_PREF_MODE,
+                    ed_glob.ID_PREF_FHIST,
+                    ed_glob.ID_PREF_LANG]:
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
             if e_id == ed_glob.ID_PREF_MODE:
                 ed_glob.DEBUG = ('DEBUG' in e_obj.GetValue())
+        elif e_id == ed_glob.ID_PRINT_MODE:
+            Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetSelection())
         else:
             evt.Skip()
 
@@ -1847,8 +1848,10 @@ class ExChoice(wx.Choice):
             for ind in range(len(choices)):
                 choices[ind] = str(choices[ind])
         wx.Choice.__init__(self, parent, cid, choices=choices)
-        if default != None:
+        if default != None and isinstance(default, basestring):
             self.SetStringSelection(default)
+        elif default is not None:
+            self.SetSelection(default)
 
     def GetValue(self):
         """Gets the Selected Value
@@ -1955,6 +1958,18 @@ class PyFontPicker(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 # Utility Functions
+
+def GetPrintModeStrings():
+    """Get the strings for describing the print modes
+    @note: defined in a function so translations can take place at runtime
+    @note: Order must be kept in sync with the PRINT_ vals in ed_glob
+
+    """
+    return [_('Black/White'),       # PRINT_BLACK_WHITE
+            _('Colour/White'),      # PRINT_COLOR_WHITE
+            _('Colour/Default'),    # PRINT_COLOR_DEF
+            _('Inverse'),           # PRINT_INVERSE
+            _('Normal')]            # PRINT_NORMAL
 
 def DoUpdates():
     """Update all open text controls"""
