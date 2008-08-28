@@ -1900,6 +1900,9 @@ class FNBRenderer:
             rect.SetWidth(rect.GetWidth() + 3)
             rect.SetX(rect.GetX() - 2)
 
+        if pageContainer.GetParent().GetWindowStyleFlag() & FNB_BOTTOM:
+            rect.SetY(rect.GetY() + 3)
+
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
         dc.SetPen(self._focusPen)
         dc.DrawRoundedRectangleRect(rect, 2)
