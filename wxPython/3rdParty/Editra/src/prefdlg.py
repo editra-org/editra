@@ -263,53 +263,7 @@ class PrefTools(wx.Toolbook):
 
 #-----------------------------------------------------------------------------#
 
-class PrefPanelBase(wx.Panel):
-    """Base of all preference panels
-    @summary: Provides a panel with a painted background
-
-    """
-    def __init__(self, parent, style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER):
-        """Default Constructor
-        @param parent: The panels parent
-
-        """
-        wx.Panel.__init__(self, parent, style=style)
-
-        # Event Handlers
-        if wx.Platform == '__WXMAC__':
-            self.Bind(wx.EVT_PAINT, self.OnPaint)
-
-    def OnPaint(self, evt):
-        """Paints the panels background
-        @param evt: Event that called this handler
-
-        """
-        # This is odd but I have recieved a number of error reports where
-        # wx is being reported as None in this function requires more
-        # investigation as I cannot reproduce
-        if 'wx' not in globals() or wx is None:
-            evt.Skip()
-            return
-
-        dc = wx.PaintDC(self)
-        gc = wx.GraphicsContext.Create(dc)
-        col1 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        brush = gc.CreateBrush(wx.Brush(util.AdjustColour(col1, 5)))
-        rect = self.GetRect()
-
-        # Create the background path
-        path = gc.CreatePath()
-        path.AddRectangle(0, 0, rect.width, rect.height)
-
-        gc.SetPen(wx.Pen(util.AdjustColour(col1, -10), 1))
-        gc.SetBrush(brush)
-        gc.DrawPath(path)
-
-        evt.Skip()
-
-#-----------------------------------------------------------------------------#
-
-class GeneralPanel(PrefPanelBase):
+class GeneralPanel(wx.Panel):
     """Creates a panel with controls for Editra's general settings
     @summary: Panel with a number of controls that affect the users
               global profile setting for how Editra should operate.
@@ -320,13 +274,15 @@ class GeneralPanel(PrefPanelBase):
         @param parent: Parent window of this panel
 
         """
-        PrefPanelBase.__init__(self, parent)
+        wx.Panel.__init__(self, parent)
 
         # Attributes
         self.SetToolTipString(_("Changes made in this dialog are saved in your "
                                 "current profile. Some Items such as Language "
                                 "require the program to be restarted before "
                                 "taking effect."))
+
+        # Layout
         self.__DoLayout()
 
         # Event Handlers
@@ -463,7 +419,7 @@ class GeneralPanel(PrefPanelBase):
 
 #-----------------------------------------------------------------------------#
 
-class DocumentPanel(PrefPanelBase):
+class DocumentPanel(wx.Panel):
     """Creates a panel with controls for Editra's editing settings
     @summary: Contains a wx.Notebook that contains a number of pages with
               setting controls for how documents are handled by the
@@ -475,7 +431,7 @@ class DocumentPanel(PrefPanelBase):
         @param parent: Parent window of this panel
 
         """
-        PrefPanelBase.__init__(self, parent)
+        wx.Panel.__init__(self, parent)
 
         # Attributes
         self._DoLayout()
@@ -501,7 +457,7 @@ class DocumentPanel(PrefPanelBase):
         @return: wx.Size
 
         """
-        sz = PrefPanelBase.GetSize(self)
+        sz = wx.Panel.GetSize(self)
         return wx.Size(sz[0] + 35, sz[1])
 
 class DocGenPanel(wx.Panel):
@@ -906,7 +862,7 @@ class DocSyntaxPanel(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class AppearancePanel(PrefPanelBase):
+class AppearancePanel(wx.Panel):
     """Creates a panel with controls for Editra's appearance settings
     @summary: contains all the controls for configuring the appearance
               related settings in Editra.
@@ -917,7 +873,7 @@ class AppearancePanel(PrefPanelBase):
         @param parent: Parent window of this panel
 
         """
-        PrefPanelBase.__init__(self, parent)
+        wx.Panel.__init__(self, parent)
 
         # Layout
         self._DoLayout()
@@ -1094,11 +1050,11 @@ class AppearancePanel(PrefPanelBase):
 
 #-----------------------------------------------------------------------------#
 
-class NetworkPanel(PrefPanelBase):
+class NetworkPanel(wx.Panel):
     """Network related configration options"""
     def __init__(self, parent):
         """Create the panel"""
-        PrefPanelBase.__init__(self, parent)
+        wx.Panel.__init__(self, parent)
 
         # Layout
         self.__DoLayout()
@@ -1360,7 +1316,7 @@ class UpdatePage(wx.Panel):
 #-----------------------------------------------------------------------------#
 # Advanced Page
 
-class AdvancedPanel(PrefPanelBase):
+class AdvancedPanel(wx.Panel):
     """Creates a panel for holding advanced configuration options
     @summary: Contains a wx.Notebook that contains a number of pages with
               setting controls for configuring the advanced configuration
@@ -1372,7 +1328,7 @@ class AdvancedPanel(PrefPanelBase):
         @param parent: Parent window of this panel
 
         """
-        PrefPanelBase.__init__(self, parent)
+        wx.Panel.__init__(self, parent)
 
         # Layout
         self.__DoLayout()
