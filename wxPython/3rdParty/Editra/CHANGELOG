@@ -31,6 +31,7 @@ NEW: [features/improvements]
 +Add support for newLISP (from Jeff)
 +Add Czech translation (contributed by Tomas Fryda)
 +Numerous general Ui improvements
++Add right click context menu to tab area for access to some quick file options
 
 BUG FIXES:
 +Properly update titlebar and other contexts when page change is initiated from
