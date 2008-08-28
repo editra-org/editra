@@ -41,6 +41,7 @@ import doctools
 import ed_msg
 import ed_txt
 import ed_mdlg
+import ed_menu
 from extern import flatnotebook as FNB
 
 #--------------------------------------------------------------------------#
@@ -79,6 +80,7 @@ class EdPages(FNB.FlatNotebook):
         self.frame = self.GetTopLevelParent() # MainWindow
         self._index = dict()          # image list index
         self._ses_load = False
+        self._menu = None
 
         # Set Additional Style Parameters
         self.SetNonActiveTabTextColour(wx.Colour(102, 102, 102))
@@ -98,6 +100,7 @@ class EdPages(FNB.FlatNotebook):
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CLOSED, self.OnPageClosed)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnUpdatePageText)
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_CONTEXT_MENU, self.OnTabMenu)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
 
         # Message handlers
@@ -108,6 +111,27 @@ class EdPages(FNB.FlatNotebook):
         self.NewPage()
 
     #---- End Init ----#
+
+    def OnTabMenu(self, evt):
+        """Show the tab context menu"""
+        # Destroy any existing menu
+        if self._menu is not None:
+            self._menu.Destroy()
+            self._menu = None
+        cidx = self.GetSelection()
+        ptxt = self.GetPageText(cidx)
+
+        # Construct the menu
+        self._menu = ed_menu.EdMenu()
+        self._menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
+        self._menu.AppendSeparator()
+        self._menu.Append(ed_glob.ID_NEW, _("New Tab"))
+        self._menu.AppendSeparator()
+        self._menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
+        self._menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
+        #self._menu.AppendSeparator()
+        
+        self.PopupMenu(self._menu)
 
     #---- Function Definitions ----#
     def _NeedOpen(self, path):
