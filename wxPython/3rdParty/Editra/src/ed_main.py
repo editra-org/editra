@@ -654,8 +654,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         e_id = evt.GetId()
         printer = ed_print.EdPrinter(self, self.nb.GetCurrentCtrl)
-        printer.SetColourMode(_PGET('PRINT_MODE', "str").\
-                              replace(u'/', u'_').lower())
+        printer.SetColourMode(_PGET('PRINT_MODE'))
         if e_id == ID_PRINT:
             printer.Print()
         elif e_id == ID_PRINT_PRE:

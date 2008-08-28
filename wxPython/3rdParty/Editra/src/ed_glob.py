@@ -264,6 +264,13 @@ SB_READONLY      = 3
 SB_ENCODING      = 4
 SB_ROWCOL        = 5
 
+# Print Mode Identifiers
+PRINT_BLACK_WHITE = 0
+PRINT_COLOR_WHITE = 1
+PRINT_COLOR_DEF   = 2
+PRINT_INVERT      = 3
+PRINT_NORMAL      = 4
+
 #---- Objects ----#
 
 # Dictionary to map object ids to Profile keys
