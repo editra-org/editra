@@ -46,7 +46,7 @@ BOM = { 'utf-8' : codecs.BOM_UTF8,
 # Regex for extracting magic comments from source files
 # i.e *-* coding: utf-8 *-*, encoding=utf-8, ect...
 # The first group from this expression will be the encoding.
-RE_MAGIC_COMMENT = re.compile("coding[:=]\s*([-\w.]+)")
+RE_MAGIC_COMMENT = re.compile("coding[:=]\s*\"*([-\w.]+)\"*")
 
 #--------------------------------------------------------------------------#
 
