@@ -33,6 +33,7 @@ NEW: [features/improvements]
 +Add Czech translation (contributed by Tomas Fryda)
 +Numerous general Ui improvements
 +Add right click context menu to tab area for access to some quick file options
++Add To Uppercase and To Lowercase items to text buffer context menu
 
 BUG FIXES:
 +Properly update titlebar and other contexts when page change is initiated from
