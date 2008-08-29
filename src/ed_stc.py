@@ -149,12 +149,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         # Context Menu Events
         self.Bind(wx.EVT_CONTEXT_MENU, lambda evt: self.PopupMenu(self._menu))
-        self.Bind(wx.EVT_MENU, lambda evt: self.Undo(), id=wx.ID_UNDO)
-        self.Bind(wx.EVT_MENU, lambda evt: self.Redo(), id=wx.ID_REDO)
-        self.Bind(wx.EVT_MENU, lambda evt: self.Cut(), id=wx.ID_CUT)
-        self.Bind(wx.EVT_MENU, lambda evt: self.Copy(), id=wx.ID_COPY)
-        self.Bind(wx.EVT_MENU, lambda evt: self.Paste(), id=wx.ID_PASTE)
-        self.Bind(wx.EVT_MENU, lambda evt: self.SelectAll(), id=wx.ID_SELECTALL)
 
        #---- End Init ----#
 
@@ -2128,12 +2122,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 def MakeMenu():
     """Make the buffers context menu"""
     menu = ed_menu.EdMenu()
-    menu.Append(wx.ID_UNDO, _("Undo"))
-    menu.Append(wx.ID_REDO, _("Redo"))
+    menu.Append(ed_glob.ID_UNDO, _("Undo"))
+    menu.Append(ed_glob.ID_REDO, _("Redo"))
     menu.AppendSeparator()
-    menu.Append(wx.ID_CUT, _("Cut"))
-    menu.Append(wx.ID_COPY, _("Copy"))
-    menu.Append(wx.ID_PASTE, _("Paste"))
+    menu.Append(ed_glob.ID_CUT, _("Cut"))
+    menu.Append(ed_glob.ID_COPY, _("Copy"))
+    menu.Append(ed_glob.ID_PASTE, _("Paste"))
     menu.AppendSeparator()
-    menu.Append(wx.ID_SELECTALL, _("Select All"))
+    menu.Append(ed_glob.ID_TO_UPPER, _("To Uppercase"))
+    menu.Append(ed_glob.ID_TO_LOWER, _("To Lowercase"))
+    menu.AppendSeparator()
+    menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
     return menu
