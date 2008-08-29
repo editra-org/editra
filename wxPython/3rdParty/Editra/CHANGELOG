@@ -23,10 +23,10 @@ NEW: [features/improvements]
     - ActionScript        - C              - CPP
     - CSS                 - C#             - D
     - Editra Style Sheets - Ferite         - Fortran 77
-    - Fortran 95          - haXe           - Java
-    - JavaScript          - Objective C    - PHP
-    - Pike                - Ruby           - Squirrel
-    - TCL/Tk              - Vala
+    - Fortran 95          - haXe           - Inno Setup Scripts
+    - Java                - JavaScript     - Objective C
+    - PHP                 - Pike           - Ruby
+    - Squirrel            - TCL/Tk         - Vala
 +Show Filetype and Encoding information in statusbar (from shaohao)
 +Double click on statusbar line/column section opens goto line control (shaohao)
 +Add support for newLISP (from Jeff)
