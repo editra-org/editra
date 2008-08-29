@@ -23,6 +23,8 @@ __revision__ = "$Revision$"
 # Dependancies
 import wx
 import wx.lib.mixins.listctrl as listmix
+import locale
+import encodings
 import os
 import sys
 
@@ -525,6 +527,15 @@ class DocGenPanel(wx.Panel):
                                  default=Profile_Get('EOL')),
                         0, wx.ALIGN_CENTER_VERTICAL)])
 
+        # Encoding options
+        d_encoding = Profile_Get('ENCODING',
+                                  default=locale.getpreferredencoding())
+        d_encoding = encodings.normalize_encoding(d_encoding)
+        enc_ch = ExChoice(self, ed_glob.ID_PREF_ENCODING,
+                          choices=util.GetAllEncodings(),
+                          default=d_encoding)
+        enc_ch.SetToolTipString(_("Encoding to try when auto detection fails"))
+
         # View Options
         aa_cb = wx.CheckBox(self, ed_glob.ID_PREF_AALIAS, _("AntiAliasing"))
         aa_cb.SetValue(Profile_Get('AALIASING'))
@@ -552,7 +563,7 @@ class DocGenPanel(wx.Panel):
                                   "regions when syntax highlighting is in use"))
 
         # Layout
-        sizer = wx.FlexGridSizer(18, 2, 5, 5)
+        sizer = wx.FlexGridSizer(20, 2, 5, 5)
         sizer.AddGrowableCol(1, 1)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Format") + u": "),
@@ -561,6 +572,9 @@ class DocGenPanel(wx.Panel):
                        ((5, 5), 0), (tabsz, 0),
                        ((5, 5), 0), (indentsz, 0),
                        ((5, 5), 0), (eolsz, 0),
+                       ((10, 10), 0), ((10, 10), 0),
+                       (wx.StaticText(self, label=_("Prefered Encoding") + u":"),
+                        0), (enc_ch, 1),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("View Options") + u": "),
                         0), (aa_cb, 0),
@@ -623,10 +637,13 @@ class DocGenPanel(wx.Panel):
                     ed_glob.ID_PREF_AALIAS, ed_glob.ID_SHOW_EOL,
                     ed_glob.ID_SHOW_LN, ed_glob.ID_SHOW_WS,
                     ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS,
-                    ed_glob.ID_PREF_INDENTW]:
+                    ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_ENCODING]:
             Profile_Set(ed_glob.ID_2_PROF[e_id],
                         evt.GetEventObject().GetValue())
-            wx.CallLater(25, DoUpdates)
+
+            # Do updates for everything but text encoding
+            if e_id != ed_glob.ID_PREF_ENCODING:
+                wx.CallLater(25, DoUpdates)
         else:
             evt.Skip()
 

@@ -224,6 +224,7 @@ class EdPages(FNB.FlatNotebook):
         self.GetTopLevelParent().Freeze()
         self.pg_num += 1
         self.control = ed_stc.EditraStc(self, wx.ID_ANY)
+        self.control.SetEncoding(Profile_Get('ENCODING'))
         self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
         self.AddPage(self.control, u"Untitled - %d" % self.pg_num)
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))

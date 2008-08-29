@@ -171,6 +171,10 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             del self.locale
             self.locale = None
 
+        # Check and set encoding if necessary
+        if not profiler.Profile_Get('ENCODING'):
+            profiler.Profile_Set('ENCODING', locale.getpreferredencoding())
+
         # Setup the Error Reporter
         if profiler.Profile_Get('REPORTER', 'bool', True):
             sys.excepthook = dev_tool.ExceptionHook

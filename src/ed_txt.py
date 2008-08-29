@@ -16,7 +16,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import sys
 import re
@@ -25,15 +25,14 @@ import locale
 import types
 from StringIO import StringIO
 
-# Local Editra Libs
+# Local Imports
 from util import Log
+from profiler import Profile_Get
 
 #--------------------------------------------------------------------------#
 # Globals
 
-# Default encoding to use when nothing is specified
-# Use utf-8 where available else fallback to the system
-# encoding
+# The default fallback encoding
 DEFAULT_ENCODING = locale.getpreferredencoding()
 try:
     codecs.lookup(DEFAULT_ENCODING)
@@ -43,9 +42,6 @@ except LookupError:
 # File Helper Functions
 BOM = { 'utf-8' : codecs.BOM_UTF8,
         'utf-16' : codecs.BOM }
-
-#ENC = [ 'utf-8', 'utf-16', 'latin-1', 'ascii' ]
-#        'utf-32-be', 'utf-32-le', 
 
 # Regex for extracting magic comments from source files
 # i.e *-* coding: utf-8 *-*, encoding=utf-8, ect...
@@ -79,7 +75,7 @@ class EdFile(object):
         # Attribtues
         self._handle = None
         self._magic = dict(comment=None, bad=False)
-        self.encoding = DEFAULT_ENCODING
+        self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
         self.open = False
         self.path = path
         self.bom = None
@@ -244,7 +240,7 @@ class EdFile(object):
         """Reset all attributes of this file"""
         self._handle = None
         self._magic = dict(comment=None, bad=False)
-        self.encoding = DEFAULT_ENCODING
+        self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
         self.open = False
         self.path = ''
         self.bom = None
@@ -256,6 +252,8 @@ class EdFile(object):
         @param enc: encoding to change to
 
         """
+        if enc is None:
+            enc = DEFAULT_ENCODING
         self.encoding = enc
 
     def SetPath(self, path):
@@ -415,6 +413,8 @@ def GetEncodings():
 
     """
     encodings = list()
+    encodings.append(Profile_Get('ENCODING', None))
+
     try:
         encodings.append(locale.getpreferredencoding())
     except:
