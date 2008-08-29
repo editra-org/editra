@@ -300,6 +300,7 @@ class SearchController:
                 return
             self._finddlg.SetTransparent(240)
             self._finddlg.Show()
+            self._finddlg.SetFocus()
 #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
         else:
             # Dialog is open already so just update it
@@ -950,7 +951,7 @@ class SearchResultScreen(ctrlbox.ControlBox):
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
         self.Bind(wx.EVT_BUTTON, lambda evt: self.CancelSearch(), id=wx.ID_CANCEL)
-        self._list.Bind(outbuff.EVT_TASK_START, lambda evt: self._list.Start(250))
+        self._list.Bind(outbuff.EVT_TASK_START, self.OnTaskStart)
         self._list.Bind(outbuff.EVT_TASK_COMPLETE, self.OnTaskComplete)
 
         # Message Handlers
@@ -994,13 +995,29 @@ class SearchResultScreen(ctrlbox.ControlBox):
         """Get the number of lines displayed in the output window"""
         return self._list.GetLineCount()
 
+    def OnTaskStart(self, evt):
+        """Start accepting results from the search thread
+        @param evt: UpdateBufferEvent
+
+        """
+        start = u">>> %s" % _("Search Started")
+        self._list.SetStartEndText(start + os.linesep)
+        self._list.Start(250)
+
     def OnTaskComplete(self, evt):
         """Update when task is complete
         @param evt: UpdateBufferEvent
 
         """
-        self._list.Stop()
         self._cancelb.Disable()
+        self._list.Stop()
+        wx.YieldIfNeeded() # Let the update buffer be flushed
+
+        # Add our end message
+        lines = max(0, self._list.GetLineCount() - 2)
+        msg = _("Search Complete: %d matching lines where found") % lines
+        end = u">>> %s" % msg
+        self._list.SetStartEndText(end + os.linesep)
 
     def OnThemeChange(self, msg):
         """Update the button icons after the theme has changed
@@ -1106,6 +1123,19 @@ class SearchResultList(outbuff.OutputBuffer):
 
         cpage.GotoLine(line)
         cpage.SetFocus()
+
+    def SetStartEndText(self, txt):
+        """Add a start task or end task message to the output. Styled in
+        Info style.
+        @param txt: text to add
+
+        """
+        self.SetReadOnly(False)
+        cpos = self.GetLength()
+        self.AppendText(txt)
+        self.StartStyling(cpos, 0x1f)
+        self.SetStyling(self.GetLength() - cpos, outbuff.OPB_STYLE_INFO)
+        self.SetReadOnly(True)
 
 #-----------------------------------------------------------------------------#
 
