@@ -20,6 +20,7 @@ __revision__ = "$Revision$"
 import os
 import sys
 import stat
+import encodings
 import codecs
 import urllib2
 import wx
@@ -665,6 +666,17 @@ def GetResourceFiles(resource, trim=True, get_all=False,
         rec_list.sort()
         
         return list(set(rec_list))
+
+def GetAllEncodings():
+    """Get all encodings found on the system
+    @return: list of strings
+
+    """
+    elist = encodings.aliases.aliases.values()
+    elist = list(set(elist))
+    elist.sort()
+    elist = [ enc for enc in elist if not enc.endswith('codec') ]
+    return elist
 
 def Log(msg):
     """Push the message to the apps log

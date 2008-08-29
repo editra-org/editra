@@ -138,6 +138,7 @@ ID_PREF_CHKMOD   = wx.NewId()
 ID_PREF_CHKUPDATE = wx.NewId()
 ID_PREF_DLEXER   = wx.NewId()
 ID_PREF_EDGE     = wx.NewId()
+ID_PREF_ENCODING = wx.NewId()
 ID_PREF_SYNTHEME = wx.NewId()
 ID_PREF_TABS     = wx.NewId()
 ID_PREF_UNINDENT = wx.NewId()
@@ -294,6 +295,7 @@ ID_2_PROF = {
              ID_REPORTER          : 'REPORTER',
              ID_SYNTAX            : 'SYNTAX',
              ID_PREF_DLEXER       : 'DEFAULT_LEX',
+             ID_PREF_ENCODING     : 'ENCODING',
              ID_PREF_SYNTHEME     : 'SYNTHEME',
              ID_PREF_TABS         : 'USETABS',
              ID_PREF_UNINDENT     : 'BSUNINDENT',

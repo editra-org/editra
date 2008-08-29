@@ -53,6 +53,7 @@ _DEFAULTS = {
            'DEFAULT'    : False,            # No longer used I believe
            'DEFAULT_VIEW' : 'Automatic',    # Default Perspective
            'EDGE'       : 80,               # Edge guide column
+           'ENCODING'   : None,             # Prefered text encoding
            'EOL'        : 'Unix (\\n)',     # EOL mode
            'FHIST'      : list(),           # List of history files
            'FHIST_LVL'  : 9,                # Filehistory length (9 is max)
