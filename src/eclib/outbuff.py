@@ -773,6 +773,7 @@ class TaskThread(threading.Thread):
         # Notify that task is begining
         evt = OutputBufferEvent(edEVT_TASK_START, self._parent.GetId())
         wx.PostEvent(self._parent, evt)
+        time.sleep(.5) # Give the event a chance to be processed
 
         # Run the task and post the results
         for result in self.task(*self._args, **self._kwargs):
