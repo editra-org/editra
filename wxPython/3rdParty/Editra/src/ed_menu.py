@@ -487,6 +487,9 @@ class EdMenuBar(wx.MenuBar):
         filemenu.Append(ed_glob.ID_REVERT_FILE, _("Revert to Saved") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_REVERT_FILE),
                         _("Revert file to last save point"))
+        filemenu.Append(ed_glob.ID_RELOAD_ENC, _("Reload with Encoding") + \
+                        u"..." + EdMenuBar.keybinder.GetBinding(ed_glob.ID_RELOAD_ENC),
+                        _("Reload the file with a specified encoding"))
         filemenu.AppendSeparator()
         pmenu = EdMenu()
         pmenu.Append(ed_glob.ID_SAVE_PROFILE, _("Save Profile") + \
