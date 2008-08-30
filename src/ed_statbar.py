@@ -56,7 +56,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_FILE_SAVED)
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_UI_STC_LEXER)
 #        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENING)
-#        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENED)
+        ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_FILE_OPENED)
 
     def __del__(self):
         """Unsubscribe from messages"""

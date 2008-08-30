@@ -18,6 +18,7 @@ NEW: [features/improvements]
 +Add Find All feature (Current Document, All open documents, in files)
 +Add Replace All (Current Document, All open documents)
 +Option to set prefered encoding to use when detecting/guessing fails
++Action for reloading file with a specified encoding
 +New Syntax Highlighting Scheme 'BlackBoard'
 +Improved auto-indent functionality for
     - ActionScript        - C              - CPP

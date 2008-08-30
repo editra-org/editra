@@ -44,6 +44,7 @@ import generator
 import plugin
 import perspective as viewmgr
 import iface
+import eclib.encdlg as encdlg
 
 # Function Aliases
 _ = wx.GetTranslation
@@ -149,6 +150,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_SAVEAS, self.OnSaveAs),
                                        (ID_SAVEALL, self.OnSave),
                                        (ID_REVERT_FILE, self.DispatchToControl),
+                                       (ID_RELOAD_ENC, self.OnReloadWithEnc),
                                        (ID_SAVE_PROFILE, self.OnSaveProfile),
                                        (ID_LOAD_PROFILE, self.OnLoadProfile),
                                        (ID_EXIT, wx.GetApp().OnExit),
@@ -193,6 +195,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # Update UI Handlers
         self._handlers['ui'].extend([# File Menu
                                      (ID_REVERT_FILE, self.OnUpdateFileUI),
+                                     (ID_RELOAD_ENC, self.OnUpdateFileUI),
                                      # Edit Menu
                                      (ID_COPY, self.OnUpdateClipboardUI),
                                      (ID_CUT, self.OnUpdateClipboardUI),
@@ -940,6 +943,34 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Skip()
         return
 
+    def OnReloadWithEnc(self, evt):
+        """Reload the current file with a specified encoding
+        @param evt: wx.MenuEvent
+
+        """
+        if evt.GetId() == ID_RELOAD_ENC:
+            ctrl = self.nb.GetCurrentCtrl()
+            doc = ctrl.GetDocument()
+            cenc = doc.GetEncoding()
+            dlg = encdlg.EncodingDialog(self.GetNotebook(),
+                                        msg=_("Select an encoding to reload the file with"),
+                                        title=_("Reload with Encoding"),
+                                        default=cenc)
+            dlg.CenterOnParent()
+
+            if dlg.ShowModal() == wx.ID_OK:
+                nenc = dlg.GetEncoding()
+                doc.SetEncoding(nenc)
+                success = ctrl.ReloadFile()[0]
+                if not success:
+                    msg= _("Failed to reload the file with: %(encoding)s") % dict(encoding=nenc)
+                    wx.MessageBox(msg, style=wx.OK|wx.ICON_ERROR)
+                    doc.SetEncoding(cenc)
+                    ctrl.ReloadFile()
+            dlg.Destroy()
+        else:
+            evt.Skip()
+
     # Menu Update Handlers
     def OnUpdateFileUI(self, evt):
         """Update filemenu items
@@ -950,9 +981,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
+        ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_REVERT_FILE:
-            ctrl = self.nb.GetCurrentCtrl()
             evt.Enable(ctrl.GetModify())
+        elif e_id == ID_RELOAD_ENC:
+            evt.Enable(len(ctrl.GetFileName()))
         else:
             evt.Skip()
 

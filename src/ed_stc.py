@@ -1781,6 +1781,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 return False, msg
             else:
                 self.GotoPos(cpos)
+                ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.GetFileName())
                 return True, ''
         else:
             self.LOG("[ed_stc][err] %s does not exists, cant reload." % cfile)
