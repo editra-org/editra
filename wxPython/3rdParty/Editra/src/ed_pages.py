@@ -241,8 +241,16 @@ class EdPages(FNB.FlatNotebook):
 
         """
         rlist = [(ed_glob.ID_FIND, self._searchctrl.OnShowFindDlg),
-                 (ed_glob.ID_FIND_REPLACE, self._searchctrl.OnShowFindDlg)]
+                 (ed_glob.ID_FIND_REPLACE, self._searchctrl.OnShowFindDlg),
+                 (ed_glob.ID_FIND_NEXT, self._searchctrl.OnFind)]
         return rlist
+
+    def GetUiHandlers(self):
+        """Get the update ui handlers that this window supplies
+        @return: list of tuples
+
+        """
+        return [(ed_glob.ID_FIND_NEXT, self._searchctrl.OnUpdateFindUI),]
 
     def LoadSessionFiles(self):
         """Load files from saved session data in profile

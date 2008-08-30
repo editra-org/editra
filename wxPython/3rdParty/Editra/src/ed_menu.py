@@ -593,6 +593,9 @@ class EdMenuBar(wx.MenuBar):
         editmenu.Append(ed_glob.ID_QUICK_FIND, _("&Quick Find") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_QUICK_FIND),
                         _("Open the Quick Find Bar"))
+        editmenu.Append(ed_glob.ID_FIND_NEXT, _("Find Next") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_NEXT),
+                        _("Goto the next match"))
         editmenu.AppendSeparator()
         editmenu.Append(ed_glob.ID_PREF, _("Pr&eferences") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PREF),
@@ -957,6 +960,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_TRANSPOSE : ("Ctrl", "T"),
                      ed_glob.ID_ADD_BM : ("Ctrl", "B"),
                      ed_glob.ID_FIND : ("Ctrl", "Shift", "F"),
+                     ed_glob.ID_FIND_NEXT : ("F3"),
                      ed_glob.ID_FIND_REPLACE : ("Ctrl", "R"),
                      ed_glob.ID_QUICK_FIND : ("Ctrl", "F"),
 
@@ -987,6 +991,8 @@ _DEFAULT_BINDING = { # File Menu
 if wx.Platform == '__WXMAC__':
     _DEFAULT_BINDING[ed_glob.ID_NEXT_MARK] = ("Ctrl", "Right")
     _DEFAULT_BINDING[ed_glob.ID_PRE_MARK] = ("Ctrl", "Left")
+    _DEFAULT_BINDING[ed_glob.ID_FIND_NEXT] = ("Ctrl", "G")
+    _DEFAULT_BINDING[ed_glob.ID_GOTO_LINE] = ("Ctrl", "Shift", "E")
 elif wx.Platform == '__WXMSW__':
      # FIXME: On Windows if Tab is bound to a menu item it is no longer
      #        usable elsewhere such as in the stc control. On Mac/Gtk there

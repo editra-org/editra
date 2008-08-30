@@ -39,7 +39,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
             'ID_CLOSE_WINDOW', 'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
             'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE', 'ID_SHOW_SB',
-            'ID_REVERT_FILE', 'ID_RELOAD_ENC'
+            'ID_REVERT_FILE', 'ID_RELOAD_ENC', 'ID_FIND_NEXT'
 ]
 
 #---- Project Info ----#
@@ -123,6 +123,7 @@ ID_DUP_LINE      = wx.NewId()
 ID_JOIN_LINES    = wx.NewId()
 ID_TRANSPOSE     = wx.NewId()
 ID_FIND          = wx.ID_FIND
+ID_FIND_NEXT     = wx.NewId()
 ID_FIND_REPLACE  = wx.ID_REPLACE
 # Using the system ids automatically disables the menus items
 # when the dialog is open which is not wanted
