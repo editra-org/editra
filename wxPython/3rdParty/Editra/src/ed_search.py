@@ -300,7 +300,6 @@ class SearchController:
                 return
             self._finddlg.SetTransparent(240)
             self._finddlg.Show()
-            self._finddlg.SetFocus()
 #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
         else:
             # Dialog is open already so just update it
@@ -479,6 +478,7 @@ class SearchEngine:
         """Search in a file for all lines with matches of the set query and
         yield the results as they are found.
         @param fname: filename
+        @todo: unicode handling
 
         """
         results = list()
@@ -488,6 +488,9 @@ class SearchEngine:
                 fobj = open(fname, 'rb')
             except (IOError, OSError):
                 return
+            else:
+                # Special token to signify start of a search
+                yield (None, fname)
 
             flag = 0
             if not self._matchcase:
@@ -1009,10 +1012,15 @@ class SearchResultScreen(ctrlbox.ControlBox):
         @param evt: UpdateBufferEvent
 
         """
-        self._cancelb.Disable()
         self._list.Stop()
-        wx.YieldIfNeeded() # Let the update buffer be flushed
+        self._cancelb.Disable()
+        # Update statusbar to show search is complete
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                           (ed_glob.SB_INFO, _("Search complete")))
 
+        # Let the update buffer be flushed
+        wx.YieldIfNeeded()
+ 
         # Add our end message
         lines = max(0, self._list.GetLineCount() - 2)
         msg = _("Search Complete: %d matching lines where found") % lines
@@ -1069,6 +1077,18 @@ class SearchResultList(outbuff.OutputBuffer):
                           "face:%s,size:%d,fore:#000000,back:%s" % style)
         self.StyleSetHotSpot(SearchResultList.STY_SEARCH_MATCH, True)
 
+    def AppendUpdate(self, value):
+        """Do a little filtering of updates as they arrive
+        @param value: search result from search method
+
+        """
+        if isinstance(value, basestring):
+            outbuff.OutputBuffer.AppendUpdate(self, value)
+        else:
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                               (ed_glob.SB_INFO,
+                                _("Searching in : %s") % value[1]))
+
     def ApplyStyles(self, start, txt):
         """Set a hotspot for each search result
         Search matches strings should be formatted as follows
@@ -1101,6 +1121,19 @@ class SearchResultList(outbuff.OutputBuffer):
                     lnum = 0
                 self._OpenToLine(fname, lnum)
 
+    def SetStartEndText(self, txt):
+        """Add a start task or end task message to the output. Styled in
+        Info style.
+        @param txt: text to add
+
+        """
+        self.SetReadOnly(False)
+        cpos = self.GetLength()
+        self.AppendText(txt)
+        self.StartStyling(cpos, 0x1f)
+        self.SetStyling(self.GetLength() - cpos, outbuff.OPB_STYLE_INFO)
+        self.SetReadOnly(True)
+
     @staticmethod
     def _OpenToLine(fname, line):
         """Open the given filename to the given line number
@@ -1123,19 +1156,6 @@ class SearchResultList(outbuff.OutputBuffer):
 
         cpage.GotoLine(line)
         cpage.SetFocus()
-
-    def SetStartEndText(self, txt):
-        """Add a start task or end task message to the output. Styled in
-        Info style.
-        @param txt: text to add
-
-        """
-        self.SetReadOnly(False)
-        cpos = self.GetLength()
-        self.AppendText(txt)
-        self.StartStyling(cpos, 0x1f)
-        self.SetStyling(self.GetLength() - cpos, outbuff.OPB_STYLE_INFO)
-        self.SetReadOnly(True)
 
 #-----------------------------------------------------------------------------#
 

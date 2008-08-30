@@ -29,6 +29,7 @@ import ed_msg
 import ed_cmdbar
 from syntax.syntax import GetFtypeDisplayName
 import eclib.pstatbar as pstatbar
+from extern.decorlib import anythread
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -147,16 +148,27 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         """
         self.UpdateFields()
 
+    @anythread
+    def DoUpdateText(self, msg):
+        """Thread safe update of status text. Proxy for OnUpdateText because
+        pubsub seems to have issues with passing decorator methods for
+        listeners.
+        @param msg: Message Object
+
+        """
+        # Only process if this status bar is in the active window and shown
+        parent = self.GetTopLevelParent()
+        if (parent.IsActive() or wx.GetApp().GetTopWindow() == parent):
+            field, txt = msg.GetData()
+            self.UpdateFields()
+            self.SetStatusText(txt, field)
+
     def OnUpdateText(self, msg):
         """Update the status bar text based on the recieved message
         @param msg: Message Object
 
         """
-        # Only process if this status bar is in the active window and shown
-        if self.GetTopLevelParent().IsActive() and self.IsShown():
-            field, txt = msg.GetData()
-            self.UpdateFields()
-            self.SetStatusText(txt, field)
+        self.DoUpdateText(msg)
 
     def PushStatusText(self, txt, field):
         """Set the status text
