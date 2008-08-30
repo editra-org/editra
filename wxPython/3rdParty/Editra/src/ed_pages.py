@@ -42,6 +42,7 @@ import ed_msg
 import ed_txt
 import ed_mdlg
 import ed_menu
+import eclib.encdlg as encdlg
 from extern import flatnotebook as FNB
 
 #--------------------------------------------------------------------------#
@@ -134,6 +135,53 @@ class EdPages(FNB.FlatNotebook):
         self.PopupMenu(self._menu)
 
     #---- Function Definitions ----#
+    def _HandleEncodingError(self, control):
+        """Handle trying to reload the file the file with a different encoding
+        Until it suceeds or gives up.
+        @param control: stc
+        @return: bool
+
+        """
+        # Loop while the load fails prompting to try a new encoding
+        tried = None
+        fname = control.GetFileName().strip(os.sep)
+        fname = fname.split(os.sep)[-1]
+        while True:
+            doc = control.GetDocument()
+            doc.ClearLastError()
+            if tried is None:
+                enc = doc.GetEncoding()
+                if enc is None:
+                    enc = ed_txt.DEFAULT_ENCODING
+            else:
+                enc = tried
+
+            msg = _("The correct encoding of '%s' could not be determined.\n\n"
+                    "Choose an encoding and select Ok to open the file with the chosen encoding.\n"
+                    "Click Cancel to abort opening the file") % fname
+            dlg = encdlg.EncodingDialog(self, msg=msg,
+                                        title=_("Choose an Encoding"),
+                                        default=enc)
+            dlg.CenterOnParent()
+            result = dlg.ShowModal()
+            enc = dlg.GetEncoding()
+            dlg.Destroy()
+
+            # Don't want to open it in another encoding
+            if result == wx.ID_CANCEL:
+                return False
+            else:
+                control.SetEncoding(enc)
+                tried = enc
+                ok = control.LoadFile(control.GetFileName())
+                if ok:
+                    return True
+                else:
+                    # Artifically add a short pause, because if its not there
+                    # the dialog will be shown again so fast it wont seem
+                    # like reloading the file was even tried.
+                    wx.Sleep(1)
+
     def _NeedOpen(self, path):
         """Check if a file needs to be opened. If the file is already open in
         the notebook a dialog will be opened to ask if the user wants to reopen
@@ -307,29 +355,16 @@ class EdPages(FNB.FlatNotebook):
             result = True
 
         # Check if there was encoding errors
+        if not result and not self._ses_load:
+            result = self._HandleEncodingError(control)
+
+        # Cleanup after errors
         if not result:
-            doc = control.GetDocument()
-            doc.ClearLastError()
-            enc = doc.GetEncoding()
-            enc1 = doc.GetMagic()
-            if enc1 is None:
-                enc1 = ed_txt.DEFAULT_ENCODING
-
-            if not self._ses_load:
-                errmap = dict(encoding1=enc1, encoding2=enc)
-                dlg = wx.MessageDialog(self,
-                   _("The document could not be decoded with %(encoding1)s."
-                     "\n\nWould you like to open it as %(encoding2)s instead?")
-                   % errmap, _("Encoding Error"),
-                   style=wx.YES_NO|wx.ICON_WARNING)
-                dlg.CenterOnParent()
-                result = dlg.ShowModal()
-
-        # Don't want to open it in another encoding
-        if result == wx.ID_NO or not result:
             if new_pg:
+                # We created a new one so destroy it
                 control.Destroy()
             else:
+                # We where using an existing buffer so reset it
                 control.SetText('')
                 control.SetDocument(ed_txt.EdFile())
                 control.SetSavePoint()
@@ -343,7 +378,6 @@ class EdPages(FNB.FlatNotebook):
             self.control = control
 
         # Setup Document
-        self.control.SetModTime(util.GetFileModTime(path2file))
         self.control.FindLexer()
         self.control.CheckEOL()
         self.control.EmptyUndoBuffer()

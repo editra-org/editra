@@ -41,8 +41,8 @@ class EncodingDialog(wx.Dialog):
 
     """
     def __init__(self, parent, id=wx.ID_ANY, msg=u'', title=u'',
-                  elist=None,default=u'',
-                  style=wx.DEFAULT_DIALOG_STYLE, pos=wx.DefaultPosition):
+                  elist=None, default=u'',
+                  style=wx.CAPTION, pos=wx.DefaultPosition):
         """Create the encoding dialog
         @keyword msg: Dialog Message
         @keyword title: Dialog Title
@@ -120,15 +120,25 @@ class EncodingPanel(wx.Panel):
         vsizer = wx.BoxSizer(wx.VERTICAL)
         caption = wx.StaticText(self, label=self._msg)
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
-        bsizer.AddMany([((100, 10), 1, wx.EXPAND),
-                        (wx.Button(self, wx.ID_OK), 0, wx.ALIGN_CENTER_VERTICAL),
-                        ((5, 5), 0),
-                        (wx.Button(self, wx.ID_CANCEL), 0, wx.ALIGN_CENTER_VERTICAL),
-                        ((5, 5), 0)])
-        vsizer.AddMany([((10, 10), 0), (caption, 0), ((5, 5), 0),
-                        (self._encs, 1, wx.EXPAND), ((10, 10), 0), (bsizer, 1),
+        ok_b = wx.Button(self, wx.ID_OK)
+        ok_b.SetDefault()
+        bsizer.AddMany([((10, 10), 0),
+                        (ok_b, 0, wx.ALIGN_LEFT),
+                        ((100, 5), 1, wx.EXPAND),
+                        (wx.Button(self, wx.ID_CANCEL), 0, wx.ALIGN_RIGHT),
                         ((10, 10), 0)])
-        hsizer.AddMany([((10, 10), 0), (vsizer, 1), ((10, 10), 0)])
+        vsizer.AddMany([((10, 10), 0), (caption, 0), ((20, 20), 0),
+                        (self._encs, 1, wx.EXPAND), ((10, 10), 0),
+                        (bsizer, 1, wx.EXPAND),
+                        ((10, 10), 0)])
+
+        icon = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_MESSAGE_BOX, (64, 64))
+        statbmp = wx.StaticBitmap(self, bitmap=icon)
+        bmpsz = wx.BoxSizer(wx.VERTICAL)
+        bmpsz.AddMany([((10, 10), 0), (statbmp, 0, wx.ALIGN_CENTER_VERTICAL),
+                       ((10, 30), 0, wx.EXPAND)])
+        hsizer.AddMany([((10, 10), 0), (bmpsz, 0, wx.ALIGN_TOP),
+                        ((10, 10), 0), (vsizer, 1), ((10, 10), 0)])
 
         self.SetSizer(hsizer)
         self.SetInitialSize()
