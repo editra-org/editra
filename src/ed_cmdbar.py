@@ -875,6 +875,10 @@ class LineCtrl(wx.SearchCtrl):
             for child in self.GetChildren():
                 if isinstance(child, wx.TextCtrl):
                     child.SetValidator(util.IntValidator(0, 65535))
+                    child.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+                    break
+        else:
+            self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
 
         # Event management
         self.Bind(wx.EVT_TEXT_ENTER, self.OnInput)
@@ -897,6 +901,20 @@ class LineCtrl(wx.SearchCtrl):
         doc.GotoLine(val)
         doc.SetFocus()
         self.GetParent().Hide()
+
+    def OnKeyUp(self, evt):
+        """Handle keyup events"""
+        if evt.GetEventType() != wx.wxEVT_KEY_UP:
+            evt.Skip()
+            return
+
+        e_key = evt.GetKeyCode()
+        if e_key == wx.WXK_ESCAPE:
+            # TODO change to more safely determine the context
+            # Currently control is only used in command bar
+            self.GetParent().Hide()
+        else:
+            evt.Skip()
 
 #-----------------------------------------------------------------------------#
 # TODO: merge the common parts of these two classes into a single base class

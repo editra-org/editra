@@ -44,6 +44,7 @@ an error hotspot in Launch window.
 Windows.
 +Fix some issues with the ipc server failing to connect
 +Fix some export issues in the Style Editor
++Escape will properly hide the goto line control when it has focus
 
 #-----------------------------------------------------------------------------#
 
