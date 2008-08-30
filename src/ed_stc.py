@@ -1465,7 +1465,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def SetModTime(self, modtime):
         """Set the value of the files last modtime"""
-        self.file.SetModtime(modtime)
+        self.file.SetModTime(modtime)
 
     def SetViEmulationMode(self, use_vi):
         """Activate/Deactivate Vi eumulation mode

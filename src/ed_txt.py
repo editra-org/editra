@@ -26,7 +26,7 @@ import types
 from StringIO import StringIO
 
 # Local Imports
-from util import Log
+from util import Log, GetFileModTime
 from profiler import Profile_Get
 
 #--------------------------------------------------------------------------#
@@ -232,6 +232,7 @@ class EdFile(object):
                 txt = txt.replace(self.bom, u'', 1)
 
             Log("[ed_txt][info] Decoded %s with %s" % (self.path, self.encoding))
+            self.SetModTime(GetFileModTime(self.path))
             return txt
         else:
             raise ReadError, self.last_err
@@ -263,7 +264,7 @@ class EdFile(object):
         """
         self.path = path
 
-    def SetModtime(self, mtime):
+    def SetModTime(self, mtime):
         """Set the modtime of this file
         @param mtime: long int to set modtime to
 
