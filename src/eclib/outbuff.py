@@ -762,9 +762,9 @@ class TaskThread(threading.Thread):
         threading.Thread.__init__(self)
 
         # Attributes
-        self.cancel = False         # Abort Process
+        self.cancel = False         # Abort task
         self._parent = parent       # Parent Window/Event Handler
-        self.task = task            # Path at which to run from
+        self.task = task            # Task method to run
         self._args = args
         self._kwargs = kwargs
 
