@@ -147,18 +147,37 @@ class SearchController:
         """
         return self._posinfo['found']
 
+    def OnUpdateFindUI(self, evt):
+        """Update ui handler for find related controls
+        @param evt: updateui event
+
+        """
+        if evt.GetId() == ed_glob.ID_FIND_NEXT:
+            evt.Enable(len(self.GetData().GetFindString()))
+        else:
+            evt.Skip()
+
     def OnFind(self, evt):
         """Do an incremental search in the currently buffer
         @param evt: EVT_FIND, EVT_FIND_NEXT
 
         """
+        data = self.GetData()
+
+        # Find next from menu event
+        if evt.GetEventType() == wx.wxEVT_COMMAND_MENU_SELECTED:
+            evt = finddlg.FindEvent(finddlg.edEVT_FIND_NEXT,
+                                    flags=data.GetFlags())
+            evt.SetFindString(data.GetFindString())
+
         stc = self._stc()
+        data.SetFindString(evt.GetFindString())
 
         # Create the search engine
         # XXX: may be inefficent to copy whole buffer each time for files
         #      that are large.
         isdown = not evt.IsUp()
-        engine = SearchEngine(evt.GetFindString(), evt.IsRegEx(),
+        engine = SearchEngine(data.GetFindString(), evt.IsRegEx(),
                               isdown, evt.IsMatchCase(), evt.IsWholeWord())
         engine.SetSearchPool(stc.GetTextRaw())
 

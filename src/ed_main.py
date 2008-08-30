@@ -245,6 +245,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Find Dialog
         self._handlers['menu'].extend(self.nb.GetMenuHandlers())
+        self._handlers['ui'].extend(self.nb.GetUiHandlers())
 
         #---- End other event actions ----#
 
