@@ -308,6 +308,15 @@ class FindReplaceDlgBase:
         """
         return self._panel.GetPanelMode()
 
+    def RefreshFindReplaceFields(self):
+        """Refresh the values of the Find and Replace fields with the
+        values that are currently in the FindReplaceData.
+
+        """
+        data = self.GetData()
+        self._panel.SetFindString(data.GetFindString())
+        self._panel.SetReplaceString(data.GetReplaceString())
+
     def SetData(self, data):
         """Set the dialogs FindReplaceData
         @param data: FindReplaceData
@@ -364,6 +373,13 @@ class FindReplaceDlgBase:
 
         """
         self._panel.SetFindString(query)
+
+    def SetReplaceString(self, rstring):
+        """Set the replace controls search string
+        @param query: string
+
+        """
+        self._panel.SetReplaceString(rstring)
 
 #--------------------------------------------------------------------------#
 
@@ -854,16 +870,16 @@ class FindPanel(wx.Panel):
 
         """
         self._ftxt.SetValue(query)
-        self._data.SetFindString(query)
+        self._fdata.SetFindString(query)
 
     def SetData(self, data):
         """Set the FindReplaceData and update the dialog with that data
         @param data: wxFindReplaceData
 
         """
-        self._data.Destroy()
-        self._data = None
-        self._data = data
+        self._fdata.Destroy()
+        self._fdata = None
+        self._fdata = data
         self._ConfigureControls()
 
     def SetFlag(self, flag):
@@ -892,6 +908,14 @@ class FindPanel(wx.Panel):
         idx = self.AddLookinPath(path)
         if idx is not None:
             self._lookin.SetSelection(idx)
+
+    def SetReplaceString(self, rstring):
+        """Set the replace fields string
+        @param rstring: string
+
+        """
+        self._rtxt.SetValue(rstring)
+        self._fdata.SetReplaceString(rstring)
 
     def ShowDirectionBox(self, show=True):
         """Show or hide the Direction group box
