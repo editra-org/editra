@@ -136,7 +136,8 @@ DATA_FILES = [("include/python2.5",
              ]
 
 DATA = [ "src/*.py", "src/syntax/*.py", "src/autocomp/*.py", "src/eclib/*.py",
-         "docs/*.txt", "pixmaps/*.png", "pixmaps/*.ico", 'Editra',
+         "docs/*.txt", "pixmaps/*.png", "pixmaps/*.ico", "pixmaps/*.icns",
+         'Editra',
          "src/extern/*.py", "src/extern/pygments/*.py",
          "src/extern/pygments/formatters/*.py",
          "src/extern/pygments/lexers/*.py", "src/extern/pygments/styles/*.py",
