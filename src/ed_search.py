@@ -113,6 +113,9 @@ class SearchController:
             else:
                 pass
 
+        # Update the text that should be shown in the find replace fields
+        self._finddlg.RefreshFindReplaceFields()
+
     def GetClientString(self, multiline=False):
         """Get the selected text in the current client buffer. By default
         it will only return the selected text if its on a single line.
