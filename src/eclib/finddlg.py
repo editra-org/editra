@@ -279,6 +279,8 @@ class FindReplaceDlgBase:
 
         # Event handlers
         self.Bind(wx.EVT_MENU, lambda evt: self._SendCloseEvent(), id=wx.ID_CLOSE)
+        self.Bind(wx.EVT_SET_FOCUS,
+                  lambda evt: self._panel.SetFocus() and evt.Skip())
 
     def __DoLayout(self):
         """Layout the dialog"""
@@ -547,6 +549,7 @@ class FindPanel(wx.Panel):
         self.Bind(wx.EVT_CHOICE, lambda evt: self._UpdateContext(), id=ID_LOOKIN)
         for bid in (wx.ID_FIND, wx.ID_REPLACE, ID_FIND_ALL, ID_REPLACE_ALL):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=bid)
+        self._ftxt.Bind(wx.EVT_SET_FOCUS, lambda evt: self._ftxt.SelectAll())
 
     def __DoLayout(self):
         """Layout the panel"""
