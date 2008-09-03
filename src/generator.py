@@ -95,6 +95,7 @@ class Generator(plugin.Plugin):
         @type menu: wx.Menu
 
         """
+        # Fetch all the menu items for each generator object
         menu_items = list()
         for observer in self.observers:
             try:
@@ -104,6 +105,7 @@ class Generator(plugin.Plugin):
             except Exception, msg:
                 util.Log("[generator][err] %s" % str(msg))
 
+        # Construct the menu
         menu_items.sort()
         genmenu = ed_menu.EdMenu()
         for item in menu_items:
@@ -123,6 +125,8 @@ class Generator(plugin.Plugin):
         """
         gentext = None
         start = time.time()
+        # Find the correct generator and run its generate method on the
+        # given text control.
         for observer in self.observers:
             if observer.GetId() == e_id:
                 gentext = observer.Generate(txt_ctrl)
@@ -158,13 +162,18 @@ class Html(plugin.Plugin):
         @return: string version of html object
 
         """
+        # Assemble the embedded html
         style = "<style type=\"text/css\">\n%s</style>"
         css = wx.EmptyString
         for key in self.css:
             css += str(self.css[key]) + "\n"
         css = css % self.stc.GetFontDictionary()
         style = style % css
+
+        # Insert the css into the head
         head = self.head.replace('</head>', style + "\n</head>")
+
+        # Assemble the body of the html
         html = "<html>\n%s\n%s\n</html>"
         html = html % (head, self.body)
         return html
@@ -250,14 +259,16 @@ class Html(plugin.Plugin):
                     s_item = StyleItem()
                     s_item.SetAttrFromStr(stc.GetStyleByName(tag))
                     self.css[tag] = CssItem(tag.split('_')[0], s_item)
+
+        # Case for unstyled documents
         if len(html) == 0:
-            # Case for unstyled documents
             s_item = StyleItem()
             s_item.SetAttrFromStr(stc.GetStyleByName('default_style'))
             self.css['default_style'] = CssItem('default', s_item)
             html.append(self.TransformText(stc.GetText()))
         else:
             self.OptimizeCss()
+
         return "<body class=\"default\">\n<pre>\n%s\n</pre>\n</body>" % \
                                                                    "".join(html)
 
@@ -282,10 +293,15 @@ class Html(plugin.Plugin):
         @postcondition: css is optimized to remove any redundant entries
 
         """
+        # Must have the default style defined
         if not self.css.has_key('default_style'):
             return
+
+        # Don't style operators. This is to optimize the html size
         if self.css.has_key('operator_style'):
             self.css.pop('operator_style')
+
+        # All other css elements will inheirit from the default
         default = self.css['default_style']
         for key in self.css:
             if key == 'default_style':
@@ -317,7 +333,7 @@ class Html(plugin.Plugin):
 
 #-----------------------------------------------------------------------------#
 
-class CssItem(object):
+class CssItem:
     """Converts an Edtira StyleItem to a Css item for use in
     generating html.
 
@@ -333,7 +349,6 @@ class CssItem(object):
         @see: L{ed_style}
 
         """
-        object.__init__(self)
 
         # Attributes
         self._tag = class_tag
@@ -341,6 +356,7 @@ class CssItem(object):
         self._fore = style_item.GetFore()
         self._font = style_item.GetFace()
         self._size = style_item.GetSize()
+
         # List of additional style specs
         self._decor = self.ExtractDecorators()
         self._decor.extend(style_item.GetModifierList())
@@ -359,6 +375,7 @@ class CssItem(object):
         @return: CssItem as a string
 
         """
+        # Generate the main style attribures
         css = ".%s {\n%s}"
         css_body = wx.EmptyString
         if self._font != wx.EmptyString:
@@ -373,6 +390,8 @@ class CssItem(object):
         if self._back != wx.EmptyString:
             back = self._back.split(',')
             css_body += u"\tbackground-color: %s;\n" % back[0]
+
+        # Add additional style modifiers
         for item in self._decor:
             if item == u'bold':
                 css_body += u"\tfont-weight: %s;\n" % item
@@ -382,6 +401,8 @@ class CssItem(object):
                 css_body += u"\ttext-decoration: %s;\n" % item
             else:
                 pass
+
+        # Format the tag and body into the css def
         if css_body != wx.EmptyString:
             return css % (self._tag, css_body)
         else:
@@ -583,8 +604,9 @@ class LaTeX(plugin.Plugin):
                     self.RegisterStyleCmd(tag, stc.GetItemByName(tag))
                 tmp = list()
                 start = parse_pos
+
+        # Case for unstyled documents
         if tex == wx.EmptyString:
-            # Case for unstyled documents
             tex.append(self.TransformText(stc.GetText()))
         return "\\begin{document}\n%s\n\\end{document}" % "".join(tex)
 
@@ -609,6 +631,7 @@ class LaTeX(plugin.Plugin):
         @return: the LaTeX document preamble
 
         """
+        # Preamble template
         pre = ("%% \iffalse meta-comment\n"
                "%%\n%% Generated by Editra %s\n"
                "%% This is generator is Very Experimental.\n"
@@ -623,9 +646,13 @@ class LaTeX(plugin.Plugin):
                "\\usepackage{color}\n"
                "\\usepackage{alltt}\n"
                "\\usepackage{times}\n") % ed_glob.VERSION
+
+        # Set the background color
         pre += ("\\pagecolor[rgb]{%s}\n" % \
                 self.HexToRGB(self._dstyle.GetBack()))
         pre += "\\parindent=0in\n\n"
+
+        # Insert all styling commands
         pre += "%% Begin Styling Command Definitions"
         for cmd in self._cmds:
             pre += ("\n" + self._cmds[cmd])
@@ -674,6 +701,8 @@ class LaTeX(plugin.Plugin):
 
         """
         cmd_name = self.CreateCmdName(cmd_name)
+
+        # If we already made a command for this style return
         if cmd_name in self._cmds:
             return
 
@@ -766,8 +795,11 @@ class Rtf(plugin.Plugin):
         @return: generated rtf marked up text
 
         """
-        if not self._stc:
+        # Buffer hasn't been set
+        if self._stc is None:
             return u''
+
+        # Optimizations
         stc = self._stc
         def_fore = stc.GetDefaultForeColour(as_hex=True)
         self._colortbl.AddColor(def_fore)
@@ -786,9 +818,12 @@ class Rtf(plugin.Plugin):
         AddColor = self._colortbl.AddColor
         GetColorIndex = self._colortbl.GetColorIndex
         GetStyleAt = stc.GetStyleAt
+
+        # Parse all characters/style bytes in document
         for parse_pos in xrange(last_pos + 1):
             sty_id = GetStyleAt(parse_pos)
             end = parse_pos
+
             # If style has changed build the previous section
             if sty_id != last_id:
                 tag = stc.FindTagById(last_id)
@@ -808,6 +843,7 @@ class Rtf(plugin.Plugin):
                                self.TransformText(stc.GetTextRange(start, end)))
                 start = end
             last_id = sty_id
+
         head = "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 %s;}}" % \
                 stc.GetDefaultFont().GetFaceName()
         return u"%s%s%s}" % (head, self._colortbl, "".join(tmp_txt))
@@ -857,7 +893,7 @@ class Rtf(plugin.Plugin):
 
 #-----------------------------------------------------------------------------#
 
-class RtfColorTbl(object):
+class RtfColorTbl:
     """A storage class to help with generating the color table for
     the Rtf Generator Class.
     @see: Rtf
@@ -868,8 +904,6 @@ class RtfColorTbl(object):
         @summary: creates an object for managing an rtf documents color table
 
         """
-        object.__init__(self)
-
         # Attributes
         self._index = list() # manages the order of the tables keys
         self._tbl = dict()   # map of style item color vals to rtf defs
