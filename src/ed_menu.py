@@ -960,7 +960,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_TRANSPOSE : ("Ctrl", "T"),
                      ed_glob.ID_ADD_BM : ("Ctrl", "B"),
                      ed_glob.ID_FIND : ("Ctrl", "Shift", "F"),
-                     ed_glob.ID_FIND_NEXT : ("F3"),
+                     ed_glob.ID_FIND_NEXT : ("F3",),
                      ed_glob.ID_FIND_REPLACE : ("Ctrl", "R"),
                      ed_glob.ID_QUICK_FIND : ("Ctrl", "F"),
 
