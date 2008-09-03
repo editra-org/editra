@@ -14,7 +14,9 @@ DATE 0x/0x/2008
 
 NEWS:
 
+
 NEW: [features/improvements]
++New find/replace dialog
 +Add Find All feature (Current Document, All open documents, in files)
 +Add Replace All (Current Document, All open documents)
 +Shortcut for Find Next (OSX: Cmd+G, Other: F3)
@@ -36,6 +38,7 @@ NEW: [features/improvements]
 +Numerous general Ui improvements
 +Add right click context menu to tab area for access to some quick file options
 +Add To Uppercase and To Lowercase items to text buffer context menu
++Shelf tabs can have icons in them
 
 BUG FIXES:
 +Properly update titlebar and other contexts when page change is initiated from
@@ -46,6 +49,7 @@ Windows.
 +Fix some issues with the ipc server failing to connect
 +Fix some export issues in the Style Editor
 +Escape will properly hide the goto line control when it has focus
++Add missing mac icons to source bundles
 
 #-----------------------------------------------------------------------------#
 
