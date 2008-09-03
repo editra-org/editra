@@ -115,6 +115,11 @@ class EdPages(FNB.FlatNotebook):
 
     def OnTabMenu(self, evt):
         """Show the tab context menu"""
+        # Make sure the click isn't coming from a child window
+        if evt.GetEventObject() != self:
+            evt.Skip()
+            return
+
         # Destroy any existing menu
         if self._menu is not None:
             self._menu.Destroy()
