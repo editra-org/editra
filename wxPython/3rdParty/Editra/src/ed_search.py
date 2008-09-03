@@ -115,6 +115,7 @@ class SearchController:
 
         # Update the text that should be shown in the find replace fields
         self._finddlg.RefreshFindReplaceFields()
+        self._finddlg.SetFocus()
 
     def GetClientString(self, multiline=False):
         """Get the selected text in the current client buffer. By default
@@ -322,11 +323,13 @@ class SearchController:
                 return
             self._finddlg.SetTransparent(240)
             self._finddlg.Show()
+            self._finddlg.SetFocus()
 #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
         else:
             # Dialog is open already so just update it
             self._UpdateDialogState(eid)
             self._finddlg.Raise()
+            self._finddlg.SetFocus()
 
     @staticmethod
     def ReplaceInStc(stc, matches, rstring):
