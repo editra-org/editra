@@ -20,7 +20,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import re
 import wx
@@ -111,12 +111,13 @@ class LogViewer(ctrlbox.ControlBox):
         self.Bind(wx.EVT_BUTTON,
                   lambda evt: self._buffer.Clear(), id=wx.ID_CLEAR)
         self.Bind(wx.EVT_CHOICE, self.OnChoice, self._srcfilter)
+
+        # Message Handlers
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
     def __del__(self):
         """Cleanup and unsubscribe from messages"""
         ed_msg.Unsubscribe(self.OnThemeChange)
-        super(LogViewer).__del__()
 
     def __DoLayout(self):
         """Layout the log viewer window"""
@@ -228,7 +229,9 @@ class LogBuffer(outbuff.OutputBuffer):
             sty_s = start + group.start()
             sty_e = start + group.end()
             self.StartStyling(sty_s, 0xff)
-            self.SetStyling(sty_e - sty_s, self.ERROR_STYLE)
+
+            # Highlight error messages with ERROR_STYLE
+            self.SetStyling(sty_e - sty_s, LogBuffer.ERROR_STYLE)
 
     def SetFilter(self, src):
         """Set the level of what is shown in the display
@@ -260,7 +263,7 @@ class LogBuffer(outbuff.OutputBuffer):
         if self._filter == SHOW_ALL_MSG:
             self.AppendUpdate(unicode(logmsg) + os.linesep)
         elif self._filter == logmsg.Origin:
-            msg = "[%s][%s]%s" % (logmsg.ClockTime, logmsg.Type, logmsg.Value)
+            msg = u"[%s][%s]%s" % (logmsg.ClockTime, logmsg.Type, logmsg.Value)
             self.AppendUpdate(msg + os.linesep)
         else:
             pass

@@ -25,7 +25,6 @@ import os
 import sys
 import re
 import types
-import threading
 import wx
 
 # Local imports
@@ -323,13 +322,12 @@ class SearchController:
                 return
             self._finddlg.SetTransparent(240)
             self._finddlg.Show()
-            self._finddlg.SetFocus()
 #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
         else:
             # Dialog is open already so just update it
             self._UpdateDialogState(eid)
             self._finddlg.Raise()
-            self._finddlg.SetFocus()
+        self._finddlg.SetFocus()
 
     @staticmethod
     def ReplaceInStc(stc, matches, rstring):
@@ -506,7 +504,6 @@ class SearchEngine:
         @todo: unicode handling
 
         """
-        results = list()
         fchecker = FileTypeChecker()
         if fchecker.IsReadableText(fname):
             try:
@@ -836,7 +833,6 @@ class EdSearchCtrl(wx.SearchCtrl):
                      wx.WXK_UP, wx.WXK_DOWN]:
             return
 
-        s_cmd = wx.wxEVT_COMMAND_FIND
         if e_key == wx.WXK_RETURN or e_key == wx.WXK_F3:
             if evt.ShiftDown():
                 self.DoSearch(next=False)
@@ -977,8 +973,10 @@ class SearchResultScreen(ctrlbox.ControlBox):
         self._cancelb.Disable()
 
         # Event Handlers
-        self.Bind(wx.EVT_BUTTON, lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
-        self.Bind(wx.EVT_BUTTON, lambda evt: self.CancelSearch(), id=wx.ID_CANCEL)
+        self.Bind(wx.EVT_BUTTON,
+                  lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
+        self.Bind(wx.EVT_BUTTON,
+                  lambda evt: self.CancelSearch(), id=wx.ID_CANCEL)
         self._list.Bind(outbuff.EVT_TASK_START, self.OnTaskStart)
         self._list.Bind(outbuff.EVT_TASK_COMPLETE, self.OnTaskComplete)
 
@@ -1087,6 +1085,12 @@ class SearchResultScreen(ctrlbox.ControlBox):
 #-----------------------------------------------------------------------------#
 
 class SearchResultList(outbuff.OutputBuffer):
+    """Outputbuffer for listing matching lines from the search results that
+    a L{SearchEngine} dispatches. The matching lines are turned into hotspots
+    that allow them to be clicked on for instant navigation to the matching
+    line.
+
+    """
     STY_SEARCH_MATCH = outbuff.OPB_STYLE_MAX + 1
     RE_FIND_MATCH = re.compile('(.+) \(([0-9]+)\)\: .+')
     def __init__(self, parent):
@@ -1129,7 +1133,7 @@ class SearchResultList(outbuff.OutputBuffer):
             self.SetStyling(len(txt), outbuff.OPB_STYLE_DEFAULT)
 
     def DoHotSpotClicked(self, pos, line):
-        """Handle a click on a hotspot
+        """Handle a click on a hotspot and open the file to the matched line
         @param pos: long
         @param line: int
 
@@ -1169,24 +1173,17 @@ class SearchResultList(outbuff.OutputBuffer):
 
         """
         mainw = wx.GetApp().GetActiveWindow()
-        nb = mainw.GetNotebook()
-        buffers = [ page.GetFileName() for page in nb.GetTextControls() ]
+        nbook = mainw.GetNotebook()
+        buffers = [ page.GetFileName() for page in nbook.GetTextControls() ]
         if fname in buffers:
             page = buffers.index(fname)
-            nb.ChangePage(page)
-            cpage = nb.GetPage(page)
+            nbook.ChangePage(page)
+            cpage = nbook.GetPage(page)
         else:
-            nb.OnDrop([fname])
-            cpage = nb.GetPage(nb.GetSelection())
+            nbook.OnDrop([fname])
+            cpage = nbook.GetPage(nbook.GetSelection())
 
         cpage.GotoLine(line)
         cpage.SetFocus()
 
 #-----------------------------------------------------------------------------#
-
-if __name__ == '__main__':
-    import sys
-    engine = SearchEngine('ParseStyleData')
-    arg = u' '.join(sys.argv[1:])
-    for x in engine.SearchInDirectory(arg):
-        print x.rstrip()

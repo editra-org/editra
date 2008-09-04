@@ -22,12 +22,14 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import wx
 import wx.lib.langlistctrl as langlist
 import wx.combo
 import glob
+
+# Editra Imports
 import ed_glob
 
 #----------------------------------------------------------------------------#
