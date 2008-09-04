@@ -248,7 +248,9 @@ def AdvFindReplaceDlg(parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
     """Advanced FindReplaceDialog. Create and return the requested dialog type
     @param parent: parent
     @param fdata: FindReplaceData
-    @param title: Dialog Title
+    @param title: Dialog Title. Pass a single string to set the title for both
+                  modes of the dialog or a tuple of two strings to set the title
+                  for (find, replace) modes.
     @keyword style: Dialog Style and type
     @note: this is a function not a class
 
@@ -267,8 +269,17 @@ class FindReplaceDlgBase:
 
     """
     def __init__(self, parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
-        """Create the base object"""
+        """Create the base object
+        @param title: string or tuple (findstr, replacestr)
+
+        """
         # Attributes
+        if isinstance(title, basestring):
+            self._ftitle = title
+            self._rtitle = title
+        else:
+            self._ftitle, self._rtitle = title[:2]
+
         self._box = FindBox(self, fdata, style=style)
         self._panel = self._box.GetWindow()
         self._accl = wx.AcceleratorTable([(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CLOSE),])
@@ -276,8 +287,13 @@ class FindReplaceDlgBase:
         
         # Layout
         self.__DoLayout()
+        tmp_title = self._ftitle
+        if style & AFR_STYLE_REPLACEDIALOG:
+            tmp_title = self._rtitle
+        self.SetTitle(tmp_title)
 
         # Event handlers
+#        self.Bind(_EVT_MODE_CHANGE, self._OnModeChange)
         self.Bind(wx.EVT_MENU, lambda evt: self._SendCloseEvent(), id=wx.ID_CLOSE)
         self.Bind(wx.EVT_SET_FOCUS,
                   lambda evt: self._panel.SetFocus() and evt.Skip())
@@ -298,6 +314,14 @@ class FindReplaceDlgBase:
         evt = FindEvent(edEVT_FIND_CLOSE, self.GetId())
         wx.PostEvent(self.GetParent(), evt)
         self.Hide()
+
+    def _OnModeChange(self, evt):
+        """Update the the dialog when the mode changes"""
+        self.Fit()
+        title = self._ftitle
+        if self.GetDialogMode() != AFR_STYLE_FINDDIALOG:
+            title = self._rtitle
+        self.SetTitle(title)
 
     def GetData(self):
         """Get the FindReplaceData used by this dialog"""
@@ -394,11 +418,13 @@ class MiniFindReplaceDlg(wx.MiniFrame, FindReplaceDlgBase):
         """Create the Dialog
         @param parent: Parent Window
         @param fdata: wx.FindReplaceData
-        @param title: Dialog Title
+        @param title: Dialog Title. Pass a single string to set the title for
+                      both modes of the dialog or a tuple of two strings to set
+                      the title for (find, replace) modes.
         @keyword style: Dialog Style
 
         """
-        wx.MiniFrame.__init__(self, parent, wx.ID_ANY, title,
+        wx.MiniFrame.__init__(self, parent, wx.ID_ANY, u'',
                               style=wx.DEFAULT_DIALOG_STYLE)
         FindReplaceDlgBase.__init__(self, parent, fdata, title, style)
 
@@ -416,11 +442,13 @@ class FindReplaceDlg(wx.Dialog, FindReplaceDlgBase):
         """Create the Dialog
         @param parent: Parent Window
         @param fdata: wx.FindReplaceData
-        @param title: Dialog Title
+        @param title: Dialog Title can be a string to set the title for both
+                      modes or a tuple of two strings to set the (find, replace)
+                      mode titles.
         @keyword style: Dialog Style
 
         """
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, title,
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, u'',
                            style=wx.DEFAULT_DIALOG_STYLE)
         FindReplaceDlgBase.__init__(self, parent, fdata, title, style)
 
@@ -494,7 +522,8 @@ class FindBox(ctrlbox.ControlBox):
         """
         self._fpanel.SetFindMode(find)
         self.Layout()
-        self.GetParent().Fit()
+        evt = _DlgModeChange(self.GetId(), _edEVT_MODE_CHANGE)
+        wx.PostEvent(self.GetParent(), evt)
 
     def SetReplaceBitmap(self, bmp):
         """Set the bitmap of the Replace Button
@@ -946,5 +975,16 @@ class FindPanel(wx.Panel):
         if 'opt' in self._sizers:
             self._sizers['opt'].ShowItems(show)
             self.Layout()
+
+#--------------------------------------------------------------------------#
+# Private Module Api
+
+_edEVT_MODE_CHANGE = wx.NewEventType()
+_EVT_MODE_CHANGE = wx.PyEventBinder(_edEVT_MODE_CHANGE, 1)
+
+class _DlgModeChange(wx.PyEvent):
+    def __init__(self, winid=wx.ID_ANY, etype=wx.wxEVT_NULL):
+        """Create the Event"""
+        wx.PyEvent.__init__(self, winid, etype)
 
 #--------------------------------------------------------------------------#
