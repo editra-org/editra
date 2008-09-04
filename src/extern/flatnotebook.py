@@ -4850,7 +4850,7 @@ class PageContainer(wx.Panel):
         # Calculate the approximate size of the popupmenu for setting the
         # position of the menu when its shown.
         # Account for extra padding on left/right of text on mac menus
-        if wx.Platform == '__WXMAC__':
+        if wx.Platform in ['__WXMAC__', '__WXMSW__']:
             longest += 32
 
         # Bitmap width + padding
