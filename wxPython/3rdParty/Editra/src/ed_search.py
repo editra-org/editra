@@ -77,11 +77,11 @@ class SearchController:
         """
         if e_id == ed_glob.ID_FIND_REPLACE:
             dlg = finddlg.AdvFindReplaceDlg(self._parent, self._data,
-                                            _("Find/Replace"),
+                                            (_("Find"), _("Find/Replace")),
                                             finddlg.AFR_STYLE_REPLACEDIALOG)
         elif e_id == ed_glob.ID_FIND:
             dlg =  finddlg.AdvFindReplaceDlg(self._parent, self._data,
-                                             _("Find"))
+                                             (_("Find"), _("Find/Replace")))
         else:
             dlg = None
 
