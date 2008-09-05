@@ -50,6 +50,9 @@ Windows.
 +Fix some export issues in the Style Editor
 +Escape will properly hide the goto line control when it has focus
 +Add missing mac icons to source bundles
++Bookmark margin getting over flow from line number margin when the number of
+lines in the document exceeds 10,000.
++Full line number not being visible when lines exceed 1,000,000
 
 #-----------------------------------------------------------------------------#
 

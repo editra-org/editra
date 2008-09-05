@@ -54,6 +54,7 @@ SPACECHARS = " \t\r\n"
 NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
            "0123456789_./\?[]{}<>!@#$%^&*():=-+\"';,"
 #-------------------------------------------------------------------------#
+
 class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     """Defines a styled text control for editing text
     @summary: Subclass of wx.stc.StyledTextCtrl and L{ed_style.StyleMgr}.
@@ -101,9 +102,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Command/Settings Attributes
         self._config = dict(autocomp=_PGET('AUTO_COMP'),
                             autoindent=_PGET('AUTO_INDENT'),
-                            brackethl=_PGET("BRACKETHL"),
+                            brackethl=_PGET('BRACKETHL'),
                             folding=_PGET('CODE_FOLD'),
-                            highlight=_PGET("SYNTAX"))
+                            highlight=_PGET('SYNTAX'))
 
         # Code Related Objects
         self._code = dict(compsvc=autocomp.AutoCompService(self),
@@ -925,6 +926,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @type evt: wx.stc.StyledTextEvent
 
         """
+        # Adjust line number margin width to expand as needed when line
+        # number width over fills the area.
+        lines = self.GetLineCount()
+        mwidth = self.GetTextExtent(str(lines))[0]
+        self.SetMarginWidth(NUM_MARGIN, max(30, mwidth + 8))
+
         wx.PostEvent(self.GetParent(), evt)
 
     def OnUpdateUI(self, evt):
