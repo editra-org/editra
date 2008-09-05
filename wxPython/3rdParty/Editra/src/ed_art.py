@@ -120,7 +120,7 @@ class EditraArt(wx.ArtProvider):
             # to be scaled down as scaling up degrades quality.
             if client == wx.ART_TOOLBAR and not wx.Platform == '__WXMAC__':
                 if size == wx.DefaultSize:
-                    size = Profile_Get('ICON_SZ', 'size_tuple')
+                    size = Profile_Get('ICON_SZ', default=(24, 24))
                 img = wx.ImageFromBitmap(bmp)
                 img_sz = img.GetSize()
                 if size[0] < img_sz[0]:
