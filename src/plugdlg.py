@@ -54,7 +54,7 @@ def MakeThemeTool(tool_id):
     @todo: why does drawing a bitmap overlay on gtk not draw on transparent area
 
     """
-    osize = Profile_Get('ICON_SZ', 'size_tuple', (24, 24))
+    osize = Profile_Get('ICON_SZ', default=(24, 24))
     Profile_Set('ICON_SZ', (32, 32))
     base = wx.ArtProvider.GetBitmap(str(tool_id), wx.ART_TOOLBAR)
     Profile_Set('ICON_SZ', osize)
