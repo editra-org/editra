@@ -293,7 +293,7 @@ class FindReplaceDlgBase:
         self.SetTitle(tmp_title)
 
         # Event handlers
-#        self.Bind(_EVT_MODE_CHANGE, self._OnModeChange)
+        self.Bind(_EVT_MODE_CHANGE, self._OnModeChange)
         self.Bind(wx.EVT_MENU, lambda evt: self._SendCloseEvent(), id=wx.ID_CLOSE)
         self.Bind(wx.EVT_SET_FOCUS,
                   lambda evt: self._panel.SetFocus() and evt.Skip())
