@@ -371,7 +371,7 @@ class SearchEngine:
 
     """
     def __init__(self, query, regex=True, down=True,
-                 matchcase=True, wholeword=False):
+                  matchcase=True, wholeword=False):
         """Initialize a search engine object
         @param query: search string
         @keyword regex: Is a regex search
@@ -400,6 +400,7 @@ class SearchEngine:
         tmp = str(self._query)
         if not self._isregex:
             tmp = EscapeRegEx(tmp)
+
         if self._wholeword:
             tmp = "\\s%s\\s" % tmp
 
@@ -472,6 +473,27 @@ class SearchEngine:
 
         """
         return self._query
+
+    def IsMatchCase(self):
+        """Is the engine set to a case sensitive search
+        @return: bool
+
+        """
+        return self._matchcase
+
+    def IsRegEx(self):
+        """Is the engine searching with the query as a regular expression
+        @return: bool
+
+        """
+        return self._isregex
+
+    def IsWholeWord(self):
+        """Is the engine set to search for wholeword matches
+        @return: bool
+
+        """
+        return self._wholeword
 
     def SearchInBuffer(self, sbuffer):
         """Search in the buffer
