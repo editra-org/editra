@@ -9,6 +9,7 @@ Version 0.5
 Date: xx/xx/2008
 
 +Fix highlighting error in config dialog
++Add support for (newLisp,)
 
 #-----------------------------------------------------------------------------#
 
