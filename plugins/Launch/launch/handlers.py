@@ -441,6 +441,20 @@ class LuaHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class NewLispHandler(FileTypeHandler):
+    """FileTypeHandler for newLisp"""
+
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(newlisp='newlisp')
+        self.default = 'newlisp'
+
+    @property
+    def __name__(self):
+        return 'newLisp'
+
+#-----------------------------------------------------------------------------#
+
 class NSISHandler(FileTypeHandler):
     """FileTypeHandler for NSIS scripts"""
     RE_NSIS_ERROR = re.compile(r'Error .* "(.+)" on line ([0-9]+) ')
@@ -694,7 +708,7 @@ class TCLHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 # Handler Object Dictionary
-# Create an instance of each Handler to use as a persistant object
+# Create an instance of each Handler to use as a persistent object
 HANDLERS = { 0 : FileTypeHandler(), # Null Hanlder
             synglob.ID_LANG_ADA : AdaHandler(),
             synglob.ID_LANG_BASH : BashHandler(),
@@ -705,6 +719,7 @@ HANDLERS = { 0 : FileTypeHandler(), # Null Hanlder
             synglob.ID_LANG_HASKELL : HaskellHandler(),
             synglob.ID_LANG_HAXE : HaxeHandler(),
             synglob.ID_LANG_LUA : LuaHandler(),
+            synglob.ID_LANG_NEWLISP : NewLispHandler(),
             synglob.ID_LANG_NSIS : NSISHandler(),
             synglob.ID_LANG_PERL : PerlHandler(),
             synglob.ID_LANG_PHP : PhpHandler(),
