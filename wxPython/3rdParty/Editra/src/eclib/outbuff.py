@@ -656,8 +656,13 @@ class ProcessThread(threading.Thread):
         if wx.Platform != '__WXMSW__':
             try:
                 self._proc.stdout.close()
+            except Exception, msg:
+                pass
+            finally:
                 self._proc.stdout = None
-                os.kill(pid, signal.SIGKILL)
+
+            try:
+                os.kill(pid, signal.SIGTERM)
             except OSError:
                 return
 
