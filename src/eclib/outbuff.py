@@ -662,7 +662,7 @@ class ProcessThread(threading.Thread):
                 self._proc.stdout = None
 
             try:
-                os.kill(pid, signal.SIGTERM)
+                os.kill(pid, signal.SIGKILL)
             except OSError:
                 return
 
