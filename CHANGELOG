@@ -34,6 +34,7 @@ NEW: [features/improvements]
 +Show Filetype and Encoding information in statusbar (from shaohao)
 +Double click on statusbar line/column section opens goto line control (shaohao)
 +Add support for newLISP (from Jeff)
++Add R and S highlighting support
 +Add Czech translation (contributed by Tomas Fryda)
 +Numerous general Ui improvements
 +Add right click context menu to tab area for access to some quick file options

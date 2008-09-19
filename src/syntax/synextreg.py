@@ -113,7 +113,7 @@ LANG_ESS = u'Editra Style Sheet'
 
 # Use LEX_EIFFEL
 ID_LANG_EIFFEL = _NewId()
-LANG_EIFFEL = u"Eiffel"
+LANG_EIFFEL = u'Eiffel'
 
 # Use LEX_ERLANG
 ID_LANG_ERLANG = _NewId()
@@ -206,7 +206,7 @@ LANG_PYTHON = u'Python'
 
 # Use LEX_MATLAB
 ID_LANG_MATLAB = _NewId()
-LANG_MATLAB = u"Matlab"
+LANG_MATLAB = u'Matlab'
 
 # Use LEX_RUBY
 ID_LANG_RUBY = _NewId()
@@ -269,6 +269,10 @@ ID_LANG_DJANGO = _NewId()
 LANG_DJANGO = u'Django'
 ID_LANG_MAKO = _NewId()
 LANG_MAKO = u'Mako'
+ID_LANG_R = _NewId()
+LANG_R = u'R'
+ID_LANG_S = _NewId()
+LANG_S = u'S'
 
 #---- End Language Identifier Keys ----#
 
@@ -331,7 +335,9 @@ EXT_MAP = {
            'ini inf reg url cfg cnf' : LANG_PROPS,
            'ai ps'              : LANG_PS,
            'py pyw python'      : LANG_PYTHON,
+           'r'                  : LANG_R,        
            'rake rb rbw rbx gemspec' : LANG_RUBY,
+           's'                  : LANG_S,
            'scm smd ss'         : LANG_SCHEME,
            'sql'                : LANG_SQL,
            'nut'                : LANG_SQUIRREL,
