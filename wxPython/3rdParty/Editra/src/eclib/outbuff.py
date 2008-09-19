@@ -708,8 +708,13 @@ class ProcessThread(threading.Thread):
                                                        self._cmd['args']]])
 
         use_shell = not subprocess.mswindows
+        if use_shell:
+            preexec_fn = os.setsid
+        else:
+            preexec_fn = None
+
         self._proc = subprocess.Popen(command.strip(), stdout=subprocess.PIPE,
-                                      preexec_fn=os.setsid,
+                                      preexec_fn=preexec_fn,
                                       stderr=subprocess.STDOUT, shell=use_shell,
                                       cwd=self._cwd, env=self._env)
 
