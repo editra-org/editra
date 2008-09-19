@@ -150,7 +150,7 @@ class SyntaxMgr(object):
             try:
                 self._loaded[modname] = __import__(modname, globals(), 
                                                    locals(), [''])
-            except ImportError:
+            except ImportError, msg:
                 return False
         return True
 
