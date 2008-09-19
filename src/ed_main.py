@@ -551,7 +551,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 if ret_val:
                     self.AddFileToHistory(ctrl[1].GetFileName())
 
-    def OnSaveAs(self, evt, title='', page=None):
+    def OnSaveAs(self, evt, title=u'', page=None):
         """Save File Using a new/different name
         @param evt: Event fired that called this handler
         @type evt: wxMenuEvent
@@ -561,6 +561,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             ctrl = page
         else:
             ctrl = self.nb.GetCurrentCtrl()
+
+        if title == u'':
+            title = os.path.split(ctrl.GetFileName())[1]
 
         dlg = wx.FileDialog(self, _("Choose a Save Location"),
                             os.path.dirname(ctrl.GetFileName()),
