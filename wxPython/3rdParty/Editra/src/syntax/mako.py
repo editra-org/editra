@@ -121,8 +121,8 @@ def StyleText(stc, start, end):
 
         tlen = len(txt)
         if tlen:
-            stc.SetStyling(len(txt), style)
-        cpos += len(txt)
+            stc.SetStyling(tlen, style)
+        cpos += tlen
         stc.StartStyling(cpos, 0x1f)
 
 #-----------------------------------------------------------------------------#
