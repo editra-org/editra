@@ -37,6 +37,7 @@ NEW: [features/improvements]
 +Add Czech translation (contributed by Tomas Fryda)
 +Numerous general Ui improvements
 +Add right click context menu to tab area for access to some quick file options
++Add Copy Full Path option (in tab context menu) to copy path of selected tab
 +Add To Uppercase and To Lowercase items to text buffer context menu
 +Shelf tabs can have icons in them
 
