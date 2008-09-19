@@ -580,6 +580,9 @@ class ProcessThread(threading.Thread):
         self._cmd = dict(cmd=command, file=fname, args=args)
         self._env = env
 
+        # Setup
+        self.setDaemon(True)
+
     def __DoOneRead(self):
         """Read one line of output and post results.
         @param proc: process to read from
@@ -654,6 +657,7 @@ class ProcessThread(threading.Thread):
             return
 
         if wx.Platform != '__WXMSW__':
+            # Close output pipe(s)
             try:
                 self._proc.stdout.close()
             except Exception, msg:
@@ -661,12 +665,26 @@ class ProcessThread(threading.Thread):
             finally:
                 self._proc.stdout = None
 
+            # Try to kill the group
             try:
-                os.kill(pid, signal.SIGKILL)
-            except OSError:
-                return
+                pgid = os.getpgid(pid)
+                os.killpg(pgid, signal.SIGKILL)
+            except OSError, msg:
+                pass
 
-            os.waitpid(pid, os.WNOHANG)
+            # If still alive shoot it again
+            if self._proc.poll() != None:
+                try:
+                    os.kill(-pid, signal.SIGKILL)
+                except OSError, msg:
+                    pass
+
+            # Try and wait for it to cleanup
+            try:
+                os.waitpid(-pid, os.WNOHANG)
+            except OSError, msg:
+                pass
+
         else:
             # 1 == PROCESS_TERMINATE
             handle = ctypes.windll.kernel32.OpenProcess(1, False, pid)
@@ -691,6 +709,7 @@ class ProcessThread(threading.Thread):
 
         use_shell = not subprocess.mswindows
         self._proc = subprocess.Popen(command.strip(), stdout=subprocess.PIPE,
+                                      preexec_fn=os.setsid,
                                       stderr=subprocess.STDOUT, shell=use_shell,
                                       cwd=self._cwd, env=self._env)
 
