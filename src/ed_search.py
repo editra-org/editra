@@ -233,8 +233,12 @@ class SearchController:
 
         """
         smode = evt.GetSearchType()
-        engine = SearchEngine(evt.GetFindString(), evt.IsRegEx(),
-                              True, evt.IsMatchCase(), evt.IsWholeWord())
+        query = evt.GetFindString()
+        if not query:
+            return
+
+        engine = SearchEngine(query, evt.IsRegEx(), True,
+                              evt.IsMatchCase(), evt.IsWholeWord())
 
         if smode == finddlg.LOCATION_CURRENT_DOC:
             stc = self._stc()
@@ -299,7 +303,20 @@ class SearchController:
                     self.ReplaceInStc(ctrl, matches, rstring)
             # TODO report number of items replaced
         elif smode == finddlg.LOCATION_IN_FILES:
-            pass
+            dlg = wx.MessageDialog(self._parent,
+                                   _("Warning this cannot be undone!"),
+                                   _("Do Replace All?"),
+                                   style=wx.ICON_WARNING|wx.OK|wx.CANCEL|wx.CENTER)
+            result = dlg.ShowModal()
+            dlg.Destroy()
+            if result == wx.ID_OK:
+                pass
+#                path = evt.GetDirectory()
+#                ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
+#                                   (engine.SearchInDirectory,
+#                                    [path,], dict(recursive=evt.IsRecursive())))
+            else:
+                return
 
     def OnShowFindDlg(self, evt):
         """Catches the Find events and shows the appropriate find dialog
