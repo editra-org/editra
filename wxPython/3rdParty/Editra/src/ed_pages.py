@@ -101,7 +101,7 @@ class EdPages(FNB.FlatNotebook):
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CLOSED, self.OnPageClosed)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnUpdatePageText)
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
-        self.Bind(wx.EVT_CONTEXT_MENU, self.OnTabMenu)
+        self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU, self.OnTabMenu)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
 
         # Message handlers
@@ -112,32 +112,6 @@ class EdPages(FNB.FlatNotebook):
         self.NewPage()
 
     #---- End Init ----#
-
-    def OnTabMenu(self, evt):
-        """Show the tab context menu"""
-        # Make sure the click isn't coming from a child window
-        if evt.GetEventObject() != self:
-            evt.Skip()
-            return
-
-        # Destroy any existing menu
-        if self._menu is not None:
-            self._menu.Destroy()
-            self._menu = None
-        cidx = self.GetSelection()
-        ptxt = self.GetPageText(cidx)
-
-        # Construct the menu
-        self._menu = ed_menu.EdMenu()
-        self._menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
-        self._menu.AppendSeparator()
-        self._menu.Append(ed_glob.ID_NEW, _("New Tab"))
-        self._menu.AppendSeparator()
-        self._menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
-        self._menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
-        #self._menu.AppendSeparator()
-        
-        self.PopupMenu(self._menu)
 
     #---- Function Definitions ----#
     def _HandleEncodingError(self, control):
@@ -247,7 +221,8 @@ class EdPages(FNB.FlatNotebook):
         """
         rlist = [(ed_glob.ID_FIND, self._searchctrl.OnShowFindDlg),
                  (ed_glob.ID_FIND_REPLACE, self._searchctrl.OnShowFindDlg),
-                 (ed_glob.ID_FIND_NEXT, self._searchctrl.OnFind)]
+                 (ed_glob.ID_FIND_NEXT, self._searchctrl.OnFind),
+                 (ed_glob.ID_COPY_PATH, self.OnCopyTabPath)]
         return rlist
 
     def GetUiHandlers(self):
@@ -296,6 +271,40 @@ class EdPages(FNB.FlatNotebook):
         ext_lst = ext_reg.get(dlexer, ['txt', ])
         self.control.FindLexer(ext_lst[0])
         self.GetTopLevelParent().Thaw()
+
+    def OnCopyTabPath(self, evt):
+        """Copy the path of the selected tab to the clipboard.
+        @param evt: wxMenuEvent
+
+        """
+        if evt.GetId() == ed_glob.ID_COPY_PATH:
+            path = self.control.GetFileName()
+            if path is not None:
+                util.SetClipboardText(path)
+        else:
+            evt.Skip()
+
+    def OnTabMenu(self, evt):
+        """Show the tab context menu"""
+        # Destroy any existing menu
+        if self._menu is not None:
+            self._menu.Destroy()
+            self._menu = None
+        cidx = self.GetSelection()
+        ptxt = self.GetPageText(cidx)
+
+        # Construct the menu
+        self._menu = ed_menu.EdMenu()
+        self._menu.Append(ed_glob.ID_NEW, _("New Tab"))
+        self._menu.AppendSeparator()
+        self._menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
+        self._menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
+        self._menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
+        self._menu.AppendSeparator()
+        self._menu.Append(ed_glob.ID_COPY_PATH, _("Copy Full Path"))
+        #self._menu.AppendSeparator()
+        
+        self.PopupMenu(self._menu)
 
     def OnThemeChanged(self, msg):
         """Update icons when the theme has changed
