@@ -304,8 +304,10 @@ class SearchController:
             # TODO report number of items replaced
         elif smode == finddlg.LOCATION_IN_FILES:
             dlg = wx.MessageDialog(self._parent,
-                                   _("Warning this cannot be undone!"),
-                                   _("Do Replace All?"),
+                                   _("Sorry will be ready for next version"),
+                                   _("Not implemented"),
+#                                   _("Warning this cannot be undone!"),
+#                                   _("Do Replace All?"),
                                    style=wx.ICON_WARNING|wx.OK|wx.CANCEL|wx.CENTER)
             result = dlg.ShowModal()
             dlg.Destroy()
