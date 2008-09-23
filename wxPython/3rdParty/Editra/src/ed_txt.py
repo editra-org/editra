@@ -36,7 +36,7 @@ from profiler import Profile_Get
 DEFAULT_ENCODING = locale.getpreferredencoding()
 try:
     codecs.lookup(DEFAULT_ENCODING)
-except LookupError:
+except (LookupError, TypeError):
     DEFAULT_ENCODING = 'utf-8'
 
 # File Helper Functions
