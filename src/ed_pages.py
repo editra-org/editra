@@ -102,6 +102,7 @@ class EdPages(FNB.FlatNotebook):
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnUpdatePageText)
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU, self.OnTabMenu)
+        self.Bind(wx.EVT_MENU, self.OnCopyTabPath, id=ed_glob.ID_COPY_PATH)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
 
         # Message handlers
@@ -221,8 +222,7 @@ class EdPages(FNB.FlatNotebook):
         """
         rlist = [(ed_glob.ID_FIND, self._searchctrl.OnShowFindDlg),
                  (ed_glob.ID_FIND_REPLACE, self._searchctrl.OnShowFindDlg),
-                 (ed_glob.ID_FIND_NEXT, self._searchctrl.OnFind),
-                 (ed_glob.ID_COPY_PATH, self.OnCopyTabPath)]
+                 (ed_glob.ID_FIND_NEXT, self._searchctrl.OnFind)]
         return rlist
 
     def GetUiHandlers(self):
