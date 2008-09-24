@@ -40,6 +40,8 @@ import util
 #--------------------------------------------------------------------------#
 # Globals
 RE_VERSION = re.compile('<\s*span id\="VERSION"[^>]*>(.*?)<\s*/span\s*>')
+RE_CURL = re.compile('<\s*a id\="CURRENT"\s*href=\"(.*?)\"[^>]*>.*?<\s*/a\s*>')
+DL_VERSION = ed_glob.HOME_PAGE + "/version.php"
 DL_REQUEST = ed_glob.HOME_PAGE + "/?page=download&dist=%s"
 DL_LIN = 'SRC'          # This may need to change in future
 DL_MAC = 'Macintosh'
@@ -105,7 +107,7 @@ class UpdateService(object):
             dist = DL_SRC
 
         url = self.GetPageText(DL_REQUEST % dist)
-        url = re.findall(RE_VERSION, url)
+        url = re.findall(RE_CURL, url)
         if len(url):
             url = url[0]
         else:
@@ -493,16 +495,16 @@ class UpdateProgress(wx.Gauge, UpdateService):
             return
 
         try:
-            result = delayedResult.get()
             if jid == self.ID_CHECKING:
                 mevt = ed_event.UpdateTextEvent(ed_event.edEVT_UPDATE_TEXT, \
                                                 self.ID_CHECKING)
                 wx.PostEvent(self.GetParent(), mevt)
             elif jid == self.ID_DOWNLOADING:
+                result = delayedResult.get()
                 self._dl_result = result
             else:
                 pass
-        except (OSError, IOError), msg:
+        except (OSError, IOError, UnicodeDecodeError), msg:
             self.LOG("[updater][err] UpdateProgress: Error on thread exit")
             self.LOG("[updater][err] UpdateProgress: error = %s" % str(msg))
 
@@ -576,8 +578,8 @@ class DownloadDialog(wx.Frame):
         bmp = wx.StaticBitmap(panel, wx.ID_ANY, bmp)
         self._sizer.AddMany([(bmp, (1, 1), (3, 2)),
                              (dl_file, (1, 4), (1, 4)),
-                             (dl_loc, (2, 4), (1, 4))])
-
+                             (dl_loc, (2, 4), (1, 4)),
+                             ((15, 15), (3, 5), (1, 1))])
         self._sizer.Add(self._progress, (4, 1), (1, 10), wx.EXPAND)
 
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -664,14 +666,11 @@ class DownloadDialog(wx.Frame):
             self._proghist.append(prog[0])
             speed = self.CalcDownRate()
             if self._progress.IsDownloading():
-                self.SetStatusText(_("Downloaded") + ": " + str(prog[0]) + \
-                                    u"/" + str(prog[1]) + u" | " + \
-                                    _("Rate: %.2f Kb/s") % speed,
-                                    self.SB_DOWNLOADED)
+                self.SetStatusText(_("Rate: %.2f Kb/s") % speed,
+                                   self.SB_DOWNLOADED)
             else:
                 self.LOG("[updater][evt] DownloadDialog:: Download finished")
-                self.SetStatusText(_("Downloaded") + ": " + str(prog[0]) + \
-                                    u"/" + str(prog[1]), self.SB_DOWNLOADED)
+                self.SetStatusText(u'', self.SB_DOWNLOADED)
                 if self._progress.GetDownloadResult():
                     self.LOG("[updater][info] DownloadDialog: Download Successful")
                     self.SetStatusText(_("Finished"), self.SB_INFO)
