@@ -374,8 +374,13 @@ def GetLoader():
            should be.
 
     """
-    loader = os.path.join(wx.GetHomeDir(), u"." + PROG_NAME,
-                          u"profiles", u".loader2")
+    cbase = CONFIG['CONFIG_BASE']
+    if cbase is None:
+        loader = os.path.join(wx.GetHomeDir(), u"." + PROG_NAME,
+                              u"profiles", u".loader2")
+    else:
+        loader = os.path.join(cbase, u"profiles", u".loader2")
+
     return loader
 
 def GetProfileStr():
