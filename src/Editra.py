@@ -586,9 +586,22 @@ def InitConfig():
     @postcondition: all configuration data is set
 
     """
-    ed_glob.CONFIG['PROFILE_DIR'] = util.ResolvConfigDir("profiles")
+    # Look for a profile directory on the system level. If this directory exists
+    # Use it instead of the user one. This will allow for running Editra from
+    # a portable drive or for system administrators to enforce settings on a
+    # system installed version.
+    config_base = util.ResolvConfigDir(u'.Editra', True)
+    if os.path.exists(config_base):
+        ed_glob.CONFIG['CONFIG_BASE'] = config_base
+        ed_glob.CONFIG['PROFILE_DIR'] = os.path.join(config_base, u"profiles")
+        ed_glob.CONFIG['PROFILE_DIR'] += os.sep
+    else:
+        ed_glob.CONFIG['PROFILE_DIR'] = util.ResolvConfigDir("profiles")
+
+    # Check for if config directory exists and if profile is from the current
+    # running version of Editra.
     profile_updated = False
-    if util.HasConfigDir():
+    if util.HasConfigDir() and os.path.exists(ed_glob.CONFIG['PROFILE_DIR']):
         if profiler.ProfileIsCurrent():
             profiler.Profile().Load(profiler.GetProfileStr())
         else:

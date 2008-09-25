@@ -68,6 +68,7 @@ if wx.VERSION >= (2, 9, 0, 0, ''):
 #---- Configuration Locations ----#
 # Values set when main loads
 CONFIG = {
+          'CONFIG_BASE' : None, # Set if config base is in nonstandard location
           'CACHE_DIR'   : "",   # Holds temp data about documents
           'PROFILE_DIR' : "",   # User Profile Directory
           'PLUGIN_DIR'  : "",   # User Plugin Dir

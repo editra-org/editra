@@ -483,8 +483,14 @@ def HasConfigDir(loc=u""):
     @return: whether config dir in question exists on an expected path
 
     """
-    if os.path.exists(u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
-                                        ed_glob.PROG_NAME, os.sep, loc)):
+    cbase = ed_glob.CONFIG['CONFIG_BASE']
+    if cbase is None:
+        to_check = u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
+                                     ed_glob.PROG_NAME, os.sep, loc)
+    else:
+        to_check = cbase + os.sep + loc
+
+    if os.path.exists(to_check):
         return True
     else:
         return False
@@ -494,7 +500,12 @@ def MakeConfigDir(name):
     @param name: name of config directory to make in user config dir
 
     """
-    config_dir = wx.GetHomeDir() + os.sep + u"." + ed_glob.PROG_NAME
+    cbase = ed_glob.CONFIG['CONFIG_BASE']
+    if cbase is None:
+        config_dir = wx.GetHomeDir() + os.sep + u"." + ed_glob.PROG_NAME
+    else:
+        config_dir = cbase
+
     try:
         os.mkdir(config_dir + os.sep + name)
     except (OSError, IOError):
@@ -507,7 +518,11 @@ def CreateConfigDir():
 
     """
     #---- Resolve Paths ----#
-    config_dir = u"%s%s.%s" % (wx.GetHomeDir(), os.sep, ed_glob.PROG_NAME)
+    cbase = ed_glob.CONFIG['CONFIG_BASE']
+    if cbase is None:
+        config_dir = u"%s%s.%s" % (wx.GetHomeDir(), os.sep, ed_glob.PROG_NAME)
+    else:
+        config_dir = cbase
     profile_dir = u"%s%sprofiles" % (config_dir, os.sep)
     dest_file = u"%s%sdefault.ppb" % (profile_dir, os.sep)
     ext_cfg = ["cache", "styles", "plugins"]
@@ -542,10 +557,17 @@ def ResolvConfigDir(config_dir, sys_only=False):
 
     """
     if not sys_only:
-        # Try to look for a user dir
-        user_config = u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
-                                        ed_glob.PROG_NAME, os.sep,
-                                        config_dir)
+        # If the Config Base has already been determined use it instead of doing
+        # a full search.
+        cbase = ed_glob.CONFIG['CONFIG_BASE']
+        if cbase is None:
+            # Try to look for a user dir
+            user_config = u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
+                                            ed_glob.PROG_NAME, os.sep,
+                                            config_dir)
+        else:
+            user_config = os.path.normpath(cbase + os.sep + config_dir)
+
         if os.path.exists(user_config):
             return user_config + os.sep
 
