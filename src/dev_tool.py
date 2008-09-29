@@ -226,7 +226,11 @@ def EnvironmentInfo():
                     if ext not in ftypes:
                         ftypes.append(ext)
         else:
-            info.append(u"%s=%s" % (key, str(val)))
+            try:
+                info.append(u"%s=%s" % (key, str(val)))
+            except UnicodeDecodeError:
+                continue
+
     info.append(u"FTYPES=%s" % str(ftypes))
     info.append("#---- End Runtime Variables ----#")
 
@@ -245,12 +249,10 @@ def ExceptionHook(exctype, value, trace):
     print ftrace
 
     # If abort has been set and we get here again do a more forcefull shutdown
-    
     if ErrorDialog.ABORT:
         os._exit(1)
 
     # Prevent multiple reporter dialogs from opening at once
-    
     if not ErrorDialog.REPORTER_ACTIVE and not ErrorDialog.ABORT:
         ErrorDialog(ftrace)
 
