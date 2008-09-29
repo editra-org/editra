@@ -70,8 +70,10 @@ class Launch(plugin.Plugin):
 
     def GetMenuEntry(self, menu):
         """This plugins menu entry"""
-        return wx.MenuItem(menu, self.ID_LAUNCH, self.__name__, 
+        item = wx.MenuItem(menu, self.ID_LAUNCH, self.__name__, 
                            _("Run script from current buffer"))
+        item.SetBitmap(self.GetBitmap())
+        return item
 
     def GetMinVersion(self):
         return "3.15"
