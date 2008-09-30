@@ -161,6 +161,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self._updating = threading.Condition(self._mutex)
         self._updates = list()
         self._timer = wx.Timer(self)
+        self._line_buffer = -1                
         self._colors = dict(defaultb=(255, 255, 255), defaultf=(0, 0, 0),
                             errorb=(255, 255, 255), errorf=(255, 0, 0),
                             infob=(255, 255, 255), infof=(0, 0, 255),
@@ -215,6 +216,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self._updates = self._updates[ind:]
         self.ApplyStyles(start, txt)
         self.SetReadOnly(True)
+        self.RefreshBufferedLines()
         self._updating.release()
 
     def __SetupStyles(self, font=None):
@@ -380,6 +382,24 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         else:
             pass
 
+    def RefreshBufferedLines(self):
+        """Refresh and readjust the lines in the buffer to fit the current
+        line buffering limits.
+        @poscondition: Oldest lines are removed until we are back within the
+                       buffer limit bounds.
+
+        """
+        if self._line_buffer < 0:
+            return
+
+        while self.GetLineCount() > self._line_buffer:
+            self.SetCurrentPos(0)
+            self.SetReadOnly(False)
+            self.LineDelete()
+            self.SetReadOnly(True)
+
+        self.SetCurrentPos(self.GetLength())
+
     def SetDefaultColor(self, fore=None, back=None):
         """Set the colors for the default text style
         @keyword fore: Foreground Color
@@ -447,6 +467,14 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         """
         for style in OPB_ALL_STYLES:
             self.StyleSetFont(style, font)
+
+    def SetLineBuffering(self, num):
+        """Set how many lines the buffer should keep for display.
+        @param num: int (-1 == unlimited)
+
+        """
+        self._line_buffer = num
+        self.RefreshBufferedLines()
 
     def SetText(self, text):
         """Set the text that is shown in the buffer
