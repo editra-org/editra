@@ -408,6 +408,7 @@ class SearchEngine:
         self._query = query
         self._regex = u''
         self._pool = u''
+        self._filters = None            # File Filters
         self._CompileRegex()
 
     def _CompileRegex(self):
