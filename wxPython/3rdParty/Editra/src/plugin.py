@@ -427,7 +427,10 @@ class PluginManager(object):
         if pkg_resources != None:
             path = [ DecodeString(pname, sys.getfilesystemencoding())
                      for pname in path ]
-            env = pkg_resources.Environment(path)
+            try:
+                env = pkg_resources.Environment(path)
+            except UnicodeDecodeError, msg:
+                self.LOG("[pluginmgr][err] %s" % msg)
         else:
             self.LOG("[pluginmgr][warn] setup tools is not installed")
             env = dict()
