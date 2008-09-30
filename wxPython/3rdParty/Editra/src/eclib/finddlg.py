@@ -56,17 +56,17 @@ AFR_STYLE_REPLACEDIALOG = 1
 AFR_STYLE_NON_FLOATING  = 2
 
 # FindReplaceData Flags
-AFR_UP          = 1
-AFR_WHOLEWORD   = 2
-AFR_MATCHCASE   = 4
-AFR_REGEX       = 8
-AFR_RECURSIVE   = 16
-AFR_NOLOOKIN    = 32
-AFR_NOUPDOWN    = 64
-AFR_NOWHOLEWORD = 128
-AFR_NOMATCHCASE = 256
-AFR_NOREGEX     = 512
-AFR_NOOPTIONS   = 1024
+AFR_UP          = 1             # Set dialogs Search Up flag
+AFR_WHOLEWORD   = 2             # Set dialogs whole word search flag
+AFR_MATCHCASE   = 4             # Set dialogs match case search flag
+AFR_REGEX       = 8             # Set dialogs use regular expression flag
+AFR_RECURSIVE   = 16            # Set dialogs recursive directory search flag
+AFR_NOLOOKIN    = 32            # Hide the Looking combobox in the dialog
+AFR_NOUPDOWN    = 64            # Hide the Direction options in the dialog
+AFR_NOWHOLEWORD = 128           # Hide the Whole Word option in the dialog
+AFR_NOMATCHCASE = 256           # Hide the Match Case option in the dialog
+AFR_NOREGEX     = 512           # Hide the Regular Expression option
+AFR_NOOPTIONS   = 1024          # Hide all options in the dialog
 
 # Search Location Parameters (NOTE: must be kept in sync with Lookin List)
 LOCATION_CURRENT_DOC = 0
