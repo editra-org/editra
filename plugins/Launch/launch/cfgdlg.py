@@ -208,15 +208,13 @@ class ConfigPanel(wx.Panel):
                         (def_ch, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
 
         # Executables List
-        exelist = AutoWidthListCtrl(self, ID_EXECUTABLES,
-                                    style=wx.LC_EDIT_LABELS|\
-                                          wx.BORDER|\
-                                          wx.LC_REPORT)
-        exelist.SetToolTipString(_("Click on an item to edit"))
-        exelist.InsertColumn(0, _("Alias"))
-        exelist.InsertColumn(1, _("Executable Commands"))
+        exelist = CommandListCtrl(self, ID_EXECUTABLES,
+                                  style=wx.LC_EDIT_LABELS|\
+                                        wx.BORDER|wx.LC_REPORT)
+#        exelist.SetToolTipString(_("Click on an item to edit"))
+#        exelist.InsertColumn(0, _("Alias"))
+#        exelist.InsertColumn(1, _("Executable Commands"))
         self.SetListItems(chandler.GetCommands())
-        exelist.SetToolTipString(_("Click on an item to edit"))
         addbtn = wx.BitmapButton(self, wx.ID_ADD, GetPlusBitmap())
         addbtn.SetToolTipString(_("Add a new executable"))
         delbtn = wx.BitmapButton(self, wx.ID_REMOVE, GetMinusBitmap())
@@ -470,16 +468,58 @@ class MiscPanel(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class AutoWidthListCtrl(listmix.ListCtrlAutoWidthMixin,
-                        listmix.TextEditMixin,
-                        elistmix.ListRowHighlighter,
-                        wx.ListCtrl):
+class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
+                      listmix.TextEditMixin,
+                      elistmix.ListRowHighlighter,
+#                      listmix.CheckListCtrlMixin,
+                      wx.ListCtrl):
     """Auto-width adjusting list for showing editing the commands"""
     def __init__(self, *args, **kwargs):
         wx.ListCtrl.__init__(self, *args, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
-        listmix.TextEditMixin.__init__(self)
+#        listmix.CheckListCtrlMixin.__init__(self)
         elistmix.ListRowHighlighter.__init__(self)
+
+        self.SetToolTipString(_("Click on an item to edit"))
+#        pcol = _("Dir")
+#        self.InsertColumn(0, pcol)
+        self.InsertColumn(0, _("Alias"))
+        self.InsertColumn(1, _("Executable Commands"))
+#        self.SetColumnWidth(0, self.GetTextExtent(pcol)[0] + 5)
+
+        listmix.TextEditMixin.__init__(self)
+
+#    def Append(self, entry):
+#        """Append a row to the list. Overrides ListCtrl.Append to allow
+#        for setting a bool on the first object to check or uncheck the
+#        checkbox on the first column.
+#        @param entry: tuple (bool, string, string)
+
+#        """
+#        check, alias, cmd = entry
+#        wx.ListCtrl.Append(self, ('', alias, cmd))
+#        self.CheckItem(self.GetItemCount() - 1, check)
+
+#    def OpenEditor(self, col, row):
+#        """Disable the editor for the first column
+#        @param col: Column to edit
+#        @param row: Row to edit
+
+#        """
+#        if col != 0:
+#            listmix.TextEditMixin.OpenEditor(self, col, row)
+#        else:
+#            # Handle the checkbox click
+#            self.CheckItem(row, not self.IsChecked(row))
+
+#    def OnCheckItem(self, index, flag):
+#        """Override CheckListMixin to update handlers
+#        @param index: list index
+#        @param flag: check or uncheck
+
+#        """
+#        parent = self.GetParent()
+#        parent.UpdateCurrentHandler(index)
 
 #-----------------------------------------------------------------------------#
 
