@@ -176,6 +176,7 @@ class LogViewer(ctrlbox.ControlBox):
 class LogBuffer(outbuff.OutputBuffer):
     """Buffer for displaying log messages that are sent on Editra's
     log channel.
+    @todo: make line buffering configurable through interface
 
     """
     RE_WARN_MSG = re.compile(r'\[err\]|\[error\]|\[warn\]')
@@ -187,6 +188,7 @@ class LogBuffer(outbuff.OutputBuffer):
         # Attributes
         self._filter = SHOW_ALL_MSG
         self._srcs = list()
+        self.SetLineBuffering(2000)
 
         # Setup
         font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN, 

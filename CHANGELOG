@@ -44,6 +44,7 @@ NEW: [features/improvements]
 +Make configuration directory able to be placed in the installation location so
 that user configuration settings can be portable if the app is installed on a
 usb drive.
++Limit number of lines buffered by Editra Log to save memory
 
 BUG FIXES:
 +Properly update titlebar and other contexts when page change is initiated from
