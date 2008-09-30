@@ -31,7 +31,6 @@ _ = wx.GetTranslation
 class PyShell(plugin.Plugin):
     """Adds a PyShell to the Shelf"""
     plugin.Implements(iface.ShelfI)
-    ID_PYSHELL = wx.NewId()
     __name__ = u'PyShell'
 
     def __SetupFonts(self):
@@ -86,10 +85,10 @@ class PyShell(plugin.Plugin):
         return bmp
 
     def GetId(self):
-        return self.ID_PYSHELL
+        return ed_glob.ID_PYSHELL
 
     def GetMenuEntry(self, menu):
-        return wx.MenuItem(menu, self.ID_PYSHELL, self.__name__, 
+        return wx.MenuItem(menu, ed_glob.ID_PYSHELL, self.__name__, 
                                         _("Open A Python Shell"))
 
     def GetName(self):
