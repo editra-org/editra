@@ -61,6 +61,8 @@ class SearchController:
         self._finddlg  = None
         self._posinfo  = dict(scroll=0, start=0, found=0)
         self._data     = wx.FindReplaceData(finddlg.AFR_RECURSIVE)
+        self._li_choices = list()
+        self._li_sel   = 0
 
         # Event handlers
         self._parent.Bind(finddlg.EVT_FIND, self.OnFind)
@@ -95,6 +97,9 @@ class SearchController:
 
             if replace is not None and replace.IsOk():
                 dlg.SetReplaceBitmap(replace)
+
+            dlg.SetLookinChoices(self._li_choices)
+            dlg.SetLookinSelection(self._li_sel)
 
         return dlg
 
@@ -266,7 +271,13 @@ class SearchController:
 
         """
         if self._finddlg is not None:
+            # Save the lookin values for next time dialog is shown
+            self._li_choices = self._finddlg.GetLookinChoices()
+            self._li_sel = self._finddlg.GetLookinSelection()
+
+            # Destroy it
             self._finddlg.Destroy()
+
         self._finddlg = None
         evt.Skip()
 

@@ -334,6 +334,20 @@ class FindReplaceDlgBase:
         """
         return self._panel.GetPanelMode()
 
+    def GetLookinChoices(self):
+        """Get the set choices from the looking choice list
+        @return: list of strings
+
+        """
+        return self._panel.GetLookinChoices()
+
+    def GetLookinSelection(self):
+        """Get the index of the selected item in the lookin choice list
+        @return: int
+
+        """
+        return self._panel.GetLookinSelection()
+
     def RefreshFindReplaceFields(self):
         """Refresh the values of the Find and Replace fields with the
         values that are currently in the FindReplaceData.
@@ -378,6 +392,20 @@ class FindReplaceDlgBase:
 
         """
         self._panel.SetFlags(flags)
+
+    def SetLookinChoices(self, paths):
+        """Set the looking choices
+        @param paths: list of strings
+
+        """
+        self._panel.SetLookinChoices(paths)
+
+    def SetLookinSelection(self, sel):
+        """Set the looking choices selection
+        @param sel: int
+
+        """
+        self._panel.SetLookinSelection(sel)
 
     def SetReplaceBitmap(self, bmp):
         """Set the replace bitmap
@@ -742,6 +770,8 @@ class FindPanel(wx.Panel):
             find.Enable()
             replace.Enable()
 
+    #------------------------------------------------------#
+
     def AddLookinPath(self, path):
         """Add a path to the lookin path collection
         @param path: string
@@ -822,6 +852,23 @@ class FindPanel(wx.Panel):
         """
         return self._fdata
 
+    def GetLookinChoices(self):
+        """Get the looking choices
+        @return: list of strings
+
+        """
+        choices = list()
+        for key in sorted(self._paths.keys()):
+            choices.append(self._paths[key])
+        return choices
+
+    def GetLookinSelection(self):
+        """Get the index of the currently selected lookin choice
+        @return: int
+
+        """
+        return self._lookin.GetSelection()
+
     def GetPanelMode(self):
         """Get the current display mode of the panel
         @return: AFR_STYLE_FINDDIALOG or AFR_STYLE_REPLACEDIALOG
@@ -840,7 +887,8 @@ class FindPanel(wx.Panel):
             if dlg.ShowModal() == wx.ID_OK:
                 path = dlg.GetPath()
                 if path is not None and len(path):
-                    self.SetLookinSelection(path)
+                    idx = self.AddLookinPath(path)
+                    self.SetLookinSelection(idx)
                 self._UpdateContext()
             dlg.Destroy()
         else:
@@ -931,14 +979,20 @@ class FindPanel(wx.Panel):
         self._fdata.SetFlags(flags)
         self._ConfigureControls()
 
-    def SetLookinSelection(self, path):
-        """Set the selection of the lookin control. If the given
-        path is not already stored it will be added.
-        @param path: string
+    def SetLookinChoices(self, paths):
+        """Set the looking choices
+        @param paths: list of strings
 
         """
-        idx = self.AddLookinPath(path)
-        if idx is not None:
+        for path in paths:
+            self.AddLookinPath(path)
+
+    def SetLookinSelection(self, idx):
+        """Set the selection of the lookin control.
+        @param idx: int
+
+        """
+        if idx <= self._lookin.GetCount():
             self._lookin.SetSelection(idx)
 
     def SetReplaceString(self, rstring):
