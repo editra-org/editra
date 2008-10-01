@@ -99,6 +99,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
+        ed_msg.Subscribe(self.OnLexerChange, ed_msg.EDMSG_UI_STC_LEXER)
         ed_msg.Subscribe(self.OnConfigExit, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
         ed_msg.Subscribe(self.OnRunMsg, MSG_RUN_LAUNCH)
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
@@ -285,6 +286,26 @@ class LaunchWindow(ctrlbox.ControlBox):
         # Setup filetype settings
         self.RefreshControlBar()
 
+    def OnLexerChange(self, msg):
+        """Update the status of the currently associated file
+        when a file is saved. Used for updating after a file type has
+        changed due to a save action.
+        @param msg: Message object
+
+        """
+        if not self._mw.IsActive():
+            return
+
+        mdata = msg.GetData()
+        # For backwards compatibility with older message format
+        if mdata is None:
+            return
+
+        fname, ftype = msg.GetData()
+        if ftype != self._config['lang']:
+            self.UpdateCurrentFiles(ftype)
+            self.SetControlBarState(fname, ftype)
+
     def OnPageChanged(self, msg):
         """Update the status of the currently associated file
         when the page changes in the main notebook.
@@ -438,7 +459,9 @@ class LaunchWindow(ctrlbox.ControlBox):
         """
         fname = ctrl.GetFileName()
         lang_id = ctrl.GetLangId()
+        self.SetControlBarState(fname, lang_id)
 
+    def SetControlBarState(self, fname, lang_id):
         # Don't update the bars status if the buffer is busy
         if self._buffer.IsRunning():
             self._config['cfile'] = fname
