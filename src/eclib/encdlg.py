@@ -78,6 +78,13 @@ class EncodingDialog(wx.Dialog):
         """
         return self._encpanel.GetEncoding()
 
+    def SetBitmap(self, bmp):
+        """Set the bitmap used in the dialog
+        @param bmp: wx.Bitmap
+
+        """
+        self._encpanel.SetBitmap(bmp)
+
 #--------------------------------------------------------------------------#
 
 class EncodingPanel(wx.Panel):
@@ -95,6 +102,7 @@ class EncodingPanel(wx.Panel):
         self._msg = msg
         self._encs = wx.Choice(self, wx.ID_ANY)
         self._selection = default
+        self._bmp = None
 
         # Setup
         if elist is None:
@@ -133,9 +141,9 @@ class EncodingPanel(wx.Panel):
                         ((10, 10), 0)])
 
         icon = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_MESSAGE_BOX, (64, 64))
-        statbmp = wx.StaticBitmap(self, bitmap=icon)
+        self._bmp = wx.StaticBitmap(self, bitmap=icon)
         bmpsz = wx.BoxSizer(wx.VERTICAL)
-        bmpsz.AddMany([((10, 10), 0), (statbmp, 0, wx.ALIGN_CENTER_VERTICAL),
+        bmpsz.AddMany([((10, 10), 0), (self._bmp, 0, wx.ALIGN_CENTER_VERTICAL),
                        ((10, 30), 0, wx.EXPAND)])
         hsizer.AddMany([((10, 10), 0), (bmpsz, 0, wx.ALIGN_TOP),
                         ((10, 10), 0), (vsizer, 1), ((10, 10), 0)])
@@ -161,6 +169,14 @@ class EncodingPanel(wx.Panel):
             self._selection = self._encs.GetStringSelection()
         else:
             evt.Skip()
+
+    def SetBitmap(self, bmp):
+        """Set the dialogs bitmap
+        @param bmp: wx.Bitmap
+
+        """
+        self._bmp.SetBitmap(bmp)
+        self.Layout()
 
 #--------------------------------------------------------------------------#
 # Utilities
