@@ -479,8 +479,12 @@ class LaunchWindow(ctrlbox.ControlBox):
             if lang_id == txt_ctrl.GetLangId():
                 self._fnames.append(txt_ctrl.GetFileName())
 
-        self._chFiles.SetItems(os.path.basename(fname)
-                               for fname in self._fnames)
+        items = [ os.path.basename(fname) for fname in self._fnames ]
+        try:
+            self._chFiles.SetItems(items)
+        except TypeError:
+            util.Log("[Launch][err] UpdateCurrent Files: " + str(items))
+            self._chFiles.SetItems([''])
 
 #-----------------------------------------------------------------------------#
 
