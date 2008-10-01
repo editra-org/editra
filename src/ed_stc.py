@@ -1963,7 +1963,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self._code['indenter'] = indenter
 
         # Notify that lexer has changed
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER,
+                           (self.GetFileName(), self.GetLangId()))
         return True
 
     def SetKeyWords(self, kw_lst):

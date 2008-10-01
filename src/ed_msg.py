@@ -140,7 +140,7 @@ EDMSG_UI_SB_TXT = EDMSG_UI_ALL + ('statbar', 'text')
 EDMSG_UI_STC_KEYUP = EDMSG_UI_ALL + ('stc', 'keyup')
 
 # Lexer Changed
-# msgdata == None
+# msgdata == (filename, filetype id)
 EDMSG_UI_STC_LEXER = EDMSG_UI_ALL + ('stc', 'lexer')
 
 #---- End UI Action Messages ----#
