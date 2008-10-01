@@ -45,6 +45,7 @@ NEW: [features/improvements]
 that user configuration settings can be portable if the app is installed on a
 usb drive.
 +Limit number of lines buffered by Editra Log to save memory
++New version of Launch plugin (support for html, newLisp, Inno Setup Scripts)
 
 BUG FIXES:
 +Properly update titlebar and other contexts when page change is initiated from
