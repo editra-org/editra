@@ -6,7 +6,7 @@
 #-----------------------------------------------------------------------------#
 
 Version 0.5
-Date: xx/xx/2008
+Date: 09/30/2008
 
 +Add support for (HTML, Inno Setup Scripts, newLisp)
 +Fix highlighting error in config dialog
