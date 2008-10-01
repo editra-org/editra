@@ -397,6 +397,45 @@ class HaxeHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class HTMLHandler(FileTypeHandler):
+    """FileTypeHandler for HTML"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        if u'darwin' in sys.platform:
+            self.commands = dict(Safari='open -a Safari.app',
+                                 Camino='open -a Camino.app',
+                                 Firefox='open -a Firefox.app',
+                                 Opera='open -a Opera.app')
+            self.default = 'Safari'
+        elif sys.platform.startswith('win'):
+            self.commands = dict(ie='iexplorer.exe',
+                                 firefox='firefox.exe',
+                                 opera='opera.exe')
+            self.default = 'ie'
+        else:
+            self.commands = dict(firefox='firefox',
+                                 opera='opera')
+            self.default = 'firefox'
+
+    @property
+    def __name__(self):
+        return 'html'
+
+#-----------------------------------------------------------------------------#
+
+class InnoSetupHandler(FileTypeHandler):
+    """FileTypeHandler for Inno Setup Scripts"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(iscc='iscc.exe', Compil32='Compil32.exe /cc')
+        self.default = 'iscc'
+
+    @property
+    def __name__(self):
+        return 'inno setup script'
+
+#-----------------------------------------------------------------------------#
+
 class KornHandler(FileTypeHandler):
     """FileTypeHandler for Korn Shell scripts"""
     def __init__(self):
@@ -451,7 +490,7 @@ class NewLispHandler(FileTypeHandler):
 
     @property
     def __name__(self):
-        return 'newLisp'
+        return 'newlisp'
 
 #-----------------------------------------------------------------------------#
 
@@ -718,6 +757,8 @@ HANDLERS = { 0 : FileTypeHandler(), # Null Hanlder
             synglob.ID_LANG_KSH : KornHandler(),
             synglob.ID_LANG_HASKELL : HaskellHandler(),
             synglob.ID_LANG_HAXE : HaxeHandler(),
+            synglob.ID_LANG_HTML : HTMLHandler(),
+            synglob.ID_LANG_INNO : InnoSetupHandler(),
             synglob.ID_LANG_LUA : LuaHandler(),
             synglob.ID_LANG_NEWLISP : NewLispHandler(),
             synglob.ID_LANG_NSIS : NSISHandler(),
