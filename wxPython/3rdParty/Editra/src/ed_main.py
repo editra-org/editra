@@ -960,6 +960,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                         msg=_("Select an encoding to reload the file with"),
                                         title=_("Reload with Encoding"),
                                         default=cenc)
+            bmp = wx.ArtProvider.GetBitmap(str(ID_DOCPROP), wx.ART_OTHER)
+            if bmp.IsOk():
+                dlg.SetBitmap(bmp)
             dlg.CenterOnParent()
 
             if dlg.ShowModal() == wx.ID_OK:
