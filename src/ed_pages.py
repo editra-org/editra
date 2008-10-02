@@ -142,6 +142,10 @@ class EdPages(FNB.FlatNotebook):
             dlg = encdlg.EncodingDialog(self, msg=msg,
                                         title=_("Choose an Encoding"),
                                         default=enc)
+            bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOCPROP),
+                                           wx.ART_OTHER)
+            if bmp.IsOk():
+                dlg.SetBitmap(bmp)
             dlg.CenterOnParent()
             result = dlg.ShowModal()
             enc = dlg.GetEncoding()
