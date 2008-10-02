@@ -81,6 +81,18 @@ class ThemeI(plugin.Interface):
         """
         return wx.NullBitmap
 
+    def GetOtherBitmap(self, bmp_id):
+        """Get the bitmap from the 'other' icon resources. Valid id's are
+        identified by a mapping in the ART dictionary.
+        
+        If this theme does not have a resource to provide for this
+        object return a wx.NullBitmap.
+
+        @return: wx.Bitmap
+
+        """
+        return wx.NullBitmap
+
     def GetToolbarBitmap(self, bmp_id):
         """Get the toolbar bitmap associated with the object id. The
         toolbar icons must be returned as a 32x32 pixel bitmap any
@@ -134,6 +146,8 @@ class BitmapProvider(plugin.Plugin):
             bmp = theme.GetToolbarBitmap(bmp_id)
         elif client == wx.ART_MENU:
             bmp = theme.GetMenuBitmap(bmp_id)
+        elif client == wx.ART_OTHER:
+            bmp = theme.GetOtherBitmap(bmp_id)
         else:
             pass
 
@@ -160,6 +174,12 @@ class BitmapProvider(plugin.Plugin):
         if prov is not None:
             if client == wx.ART_MENU:
                 bmp = prov.GetMenuBitmap(bmp_id)
+            elif client == wx.ART_OTHER:
+                # Backwards compatibility for older interface
+                if hasattr(prov, 'GetOtherBitmap'):
+                    bmp = prov.GetOtherBitmap(bmp_id)
+                else:
+                    bmp = wx.NullBitmap
             else:
                 bmp = prov.GetToolbarBitmap(bmp_id)
 
@@ -279,7 +299,11 @@ class TangoTheme(plugin.Plugin):
         @rtype: string
 
         """
-        clients = {wx.ART_MENU : u"menu", wx.ART_TOOLBAR : u"toolbar"}
+        clients = { wx.ART_MENU : u"menu",
+                    wx.ART_TOOLBAR : u"toolbar",
+                    wx.ART_OTHER : u"other" }
+
+        # Get the path
         if ed_glob.CONFIG['THEME_DIR'] == u'':
             theme = util.ResolvConfigDir(os.path.join("pixmaps", "theme"))
             ed_glob.CONFIG['THEME_DIR'] = theme
@@ -293,7 +317,6 @@ class TangoTheme(plugin.Plugin):
                                 clients.get(client, u"menu"))
 
         path += os.sep
-
         if os.path.exists(path):
             return path
         else:
@@ -342,13 +365,27 @@ class TangoTheme(plugin.Plugin):
 
         return wx.NullBitmap
 
+    def GetOtherBitmap(self, bmp_id):
+        """Get a other catagory bitmap.
+        @param bmp_id: Id of art resource
+
+        """
+        if bmp_id in ART:
+            path = self.__GetArtPath(wx.ART_OTHER, mime=False)
+            if path is not None:
+                path = path + ART[bmp_id]
+                if os.path.exists(path):
+                    return wx.Bitmap(path, wx.BITMAP_TYPE_PNG)
+
+        return wx.NullBitmap
+
     def GetToolbarBitmap(self, bmp_id):
         """Get a toolbar bitmap
         @param bmp_id: Id of bitmap to look for
         @return: wx.NullBitmap or a 32x32 bitmap
 
         """
-        if ART.has_key(bmp_id):
+        if bmp_id in ART:
             path = self.__GetArtPath(wx.ART_TOOLBAR, mime=False)
             if path is not None:
                 path = path + ART[bmp_id]
