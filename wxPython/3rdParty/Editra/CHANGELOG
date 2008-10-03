@@ -8,6 +8,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.x.xx
+DATE 1x/xx/2008
+16th Alpha Release
+
+NEWS:
+
+
+NEW: [features/improvements]
++Automatically expire status bar info messages after 10 seconds
+
+BUG FIXES:
+
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.3.80
 DATE 10/02/2008
 15th Alpha Release

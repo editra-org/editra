@@ -37,6 +37,11 @@ from extern.decorlib import anythread
 #--------------------------------------------------------------------------#
 
 class EdStatBar(pstatbar.ProgressStatusBar):
+    """Custom status bar that handles dynamic field width adjustment and
+    automatic expiration of status messages.
+
+    """
+    ID_CLEANUP_TIMER = wx.NewId()
     def __init__(self, parent):
         pstatbar.ProgressStatusBar.__init__(self, parent, style=wx.ST_SIZEGRIP)
 
@@ -45,9 +50,12 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         self._widths = list()
         self.SetFieldsCount(6) # Info, vi stuff, line/progress
         self.SetStatusWidths([-1, 90, 40, 40, 40, 155])
+        self._cleanup_timer = wx.Timer(self, EdStatBar.ID_CLEANUP_TIMER)
 
         # Event Handlers
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
+        self.Bind(wx.EVT_TIMER, self.OnExpireMessage,
+                  id=EdStatBar.ID_CLEANUP_TIMER)
 
         # Messages
         ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_PROGRESS_SHOW)
@@ -95,6 +103,16 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         if widths != self._widths:
             self._widths = widths
             self.SetStatusWidths(self._widths)
+
+    def OnExpireMessage(self, evt):
+        """Handle Expiring the status message when the oneshot timer
+        tells us it has expired.
+
+        """
+        if evt.GetId() == EdStatBar.ID_CLEANUP_TIMER:
+            wx.StatusBar.SetStatusText(self, u'', ed_glob.SB_INFO)
+        else:
+            evt.Skip()
 
     def OnLeftDClick(self, evt):
         """Handlers mouse left double click on status bar
@@ -179,6 +197,12 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         pstatbar.ProgressStatusBar.PushStatusText(self, txt, field)
         self.AdjustFieldWidths()
 
+        # Start the expiration countdown
+        if self._cleanup_timer.IsRunning():
+            self._cleanup_timer.Stop()
+        self._cleanup_timer.Start(10000, True)
+
+
     def SetStatusText(self, txt, field):
         """Set the status text
         @param txt: Text to put in bar
@@ -187,6 +211,11 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         """
         pstatbar.ProgressStatusBar.SetStatusText(self, txt, field)
         self.AdjustFieldWidths()
+
+        # Start the expiration countdown
+        if self._cleanup_timer.IsRunning():
+            self._cleanup_timer.Stop()
+        self._cleanup_timer.Start(10000, True)
 
 
     def UpdateFields(self):
