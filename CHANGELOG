@@ -8,12 +8,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.3.xx
-DATE 0x/0x/2008
+VERSION 0.3.80
+DATE 10/02/2008
 15th Alpha Release
 
 NEWS:
+This release includes a number of major feature enhancements and bug fixes.
+Most notably is the all new text searching and replacing feature. The entire
+search backend was rewritten from scratch to to make a number of new searching,
+replaceing, and file grepping features availble. Whole directories of files
+can be grepped for matches, new convinient key shortcuts, and an improved ui
+with a number of new configuration options are just the begining.
 
+A large number of supported languages also now have improved auto-indent
+support. Added support for some new programming languages, and much much, more.
+See the below changelog for more details.
 
 NEW: [features/improvements]
 +New find/replace dialog
