@@ -270,7 +270,7 @@ if __platform__ == "win32" and 'py2exe' in sys.argv:
                     "other_resources" : [(RT_MANIFEST, 1,
                                           MANIFEST_TEMPLATE % dict(prog=NAME))],
                   }],
-        description = DESCRIPTION,
+        description = NAME,
         author = AUTHOR,
         author_email = AUTHOR_EMAIL,
         maintainer = AUTHOR,
