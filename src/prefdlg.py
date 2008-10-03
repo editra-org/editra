@@ -529,8 +529,14 @@ class DocGenPanel(wx.Panel):
 
         # Encoding options
         d_encoding = Profile_Get('ENCODING',
-                                  default=locale.getpreferredencoding())
+                                 'str',
+                                 default=locale.getpreferredencoding())
+        if d_encoding is None:
+            d_encoding = 'utf-8'
+            Profile_Set('ENCODING', d_encoding)
+
         d_encoding = encodings.normalize_encoding(d_encoding)
+
         enc_ch = ExChoice(self, ed_glob.ID_PREF_ENCODING,
                           choices=util.GetAllEncodings(),
                           default=d_encoding)

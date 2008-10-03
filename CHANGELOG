@@ -19,7 +19,7 @@ NEW: [features/improvements]
 +Automatically expire status bar info messages after 10 seconds
 
 BUG FIXES:
-
++Fix case where encoding can be None in when initializing the preference dialog
 
 #-----------------------------------------------------------------------------#
 
