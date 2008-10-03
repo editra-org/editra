@@ -422,6 +422,8 @@ class PluginManager(object):
         in path list
         @param path: path(s) to scan for extension points
         @type path: list of path strings
+        @todo: Figure out why decoding the path with getfilesystemencoding
+               fails on some systems.
 
         """
         if pkg_resources != None:
