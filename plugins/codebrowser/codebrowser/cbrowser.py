@@ -275,6 +275,24 @@ class CodeBrowserTree(wx.TreeCtrl):
             self._menu.Append(ID_GOTO_ELEMENT, _("Goto \"%s\"") % txt)
             self.PopupMenu(self._menu)
 
+    def OnCompareItems(self, item1, item2):
+        """Compare two tree items for sorting.
+        @param item1: wx.TreeItem
+        @param item2: wx.TreeItem
+        @return: -1, 0, 1
+
+        """
+        txt1 = self.GetItemText(item1).lower()
+        txt2 = self.GetItemText(item2).lower()
+#        txt1 = self.GetPyData(item1)
+#        txt2 = self.GetPyData(item2)
+        if txt1 < txt2:
+            return -1
+        elif txt1 == txt2:
+            return 0
+        else:
+            return 1
+
     def OnMenu(self, evt):
         """Handle the context menu events"""
         if evt.GetId() == ID_GOTO_ELEMENT:
