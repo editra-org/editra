@@ -165,6 +165,8 @@ class EdStatBar(pstatbar.ProgressStatusBar):
 
         """
         self.UpdateFields()
+        if msg.GetType() == ed_msg.EDMSG_UI_NB_CHANGED:
+            wx.StatusBar.SetStatusText(self, u'', ed_glob.SB_INFO)
 
     @anythread
     def DoUpdateText(self, msg):
