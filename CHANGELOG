@@ -23,6 +23,7 @@ BUG FIXES:
 +Fix some issues with switching search direction
 +F3 causing search to skip every other match when search bar has focus
 +Fix bug in updating status after a conrol object was already deleted
++Fix bug related to ? being in keyword helper lists for some languages
 
 #-----------------------------------------------------------------------------#
 
