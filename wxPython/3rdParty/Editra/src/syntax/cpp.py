@@ -48,9 +48,9 @@ DOC_KEYWORDS = (2, "TODO FIXME XXX author brief bug callgraph category class "
                    "code date def depreciated dir dot dotfile else elseif em "
                    "endcode enddot endif endverbatim example exception file if "
                    "ifnot image include link mainpage name namespace page par "
-                   "paragraph param return retval section struct subpage "
-                   "subsection subsubsection test todo typedef union var "
-                   "verbatim version warning $ @ ~ < > # % HACK")
+                   "paragraph param pre post return retval section struct "
+                   "subpage subsection subsubsection test todo typedef union "
+                   "var verbatim version warning $ @ ~ < > # % HACK")
 
 # CPP Keyword Extensions
 CPP_KEYWORDS = ("and and_eq bitand bitor catch class compl const_cast delete "
@@ -113,7 +113,7 @@ SYNTAX_ITEMS = [ ('STC_C_DEFAULT', 'default_style'),
                  ('STC_C_STRING', 'string_style'),
                  ('STC_C_STRINGEOL', 'stringeol_style'),
                  ('STC_C_UUID', 'pre_style'),
-                 ('STC_C_VERBATIM', "number2_style"),
+                 ('STC_C_VERBATIM', 'number2_style'),
                  ('STC_C_WORD', 'keyword_style'),
                  ('STC_C_WORD2', 'keyword2_style') ]
 
