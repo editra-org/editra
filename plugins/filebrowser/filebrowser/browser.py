@@ -519,7 +519,11 @@ class FileBrowser(wx.GenericDirCtrl):
 
             if wx.Platform == '__WXMAC__':
                 if path[0] != "/":
-                    path.pop(0)
+                    if path == 'Macintosh HD':
+                        path.pop(0)
+                    else:
+                        path.insert(0, 'Volumes')
+
             r_txt = os.path.sep
         return r_txt + os.sep.join(path)
 
