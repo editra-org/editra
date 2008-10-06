@@ -1991,6 +1991,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         kwlist = self._code['keywords'].split()    # Split into a list of words
         kwlist = list(set(kwlist))                 # Uniqueify the list
         kwlist.sort()                              # Sort into alphbetical order
+        # Can't have ? in scintilla autocomp list unless specifying an image
+        if '?' in kwlist:
+            kwlist.remove('?')
         self._code['keywords'] = " ".join(kwlist)  # Put back into a string
         return True
 
