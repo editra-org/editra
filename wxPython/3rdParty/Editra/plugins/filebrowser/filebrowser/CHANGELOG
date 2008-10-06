@@ -2,6 +2,10 @@ FileBrowser Plugin for Editra
 Author: Cody Precord
 License: wxWindows
 
+Version 1.0:
+
+    - Fix not being able to open files on drives mounted to Volumes on OSX
+
 Version 0.9:
 
     - Syncronize browser to file when first shown
