@@ -231,16 +231,20 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         if nb is None:
             return
 
-        cbuff = nb.GetCurrentCtrl()
-        doc = cbuff.GetDocument()
-        pstatbar.ProgressStatusBar.SetStatusText(self, doc.GetEncoding(),
-                                                 ed_glob.SB_ENCODING)
-        pstatbar.ProgressStatusBar.SetStatusText(self,
-                                                 GetFtypeDisplayName(cbuff.GetLangId()),
-                                                 ed_glob.SB_LEXER)
-#        pstatbar.ProgressStatusBar.SetStatusText(self,
-#                                                 ,
-#                                                 ed_glob.SB_READONLY)
+        try:
+            cbuff = nb.GetCurrentCtrl()
+            doc = cbuff.GetDocument()
+            pstatbar.ProgressStatusBar.SetStatusText(self, doc.GetEncoding(),
+                                                     ed_glob.SB_ENCODING)
+            pstatbar.ProgressStatusBar.SetStatusText(self,
+                                                     GetFtypeDisplayName(cbuff.GetLangId()),
+                                                     ed_glob.SB_LEXER)
+    #        pstatbar.ProgressStatusBar.SetStatusText(self,
+    #                                                 ,
+    #                                                 ed_glob.SB_READONLY)
 
-        self.AdjustFieldWidths()
+            self.AdjustFieldWidths()
+        except wx.PyDeadObjectError:
+            # May be called asyncronasly after the control is already dead
+            return
 
