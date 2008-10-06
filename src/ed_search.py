@@ -59,7 +59,7 @@ class SearchController:
         self._parent   = owner
         self._stc      = getstc
         self._finddlg  = None
-        self._posinfo  = dict(scroll=0, start=0, found=0)
+        self._posinfo  = dict(scroll=0, start=0, found=0, ldir=None)
         self._data     = wx.FindReplaceData(finddlg.AFR_RECURSIVE)
         self._li_choices = list()
         self._li_sel   = 0
@@ -189,11 +189,24 @@ class SearchController:
                               isdown, evt.IsMatchCase(), evt.IsWholeWord())
         engine.SetSearchPool(stc.GetTextRaw())
 
+        # Check if the direction changed
+        ldir = self._posinfo['ldir']
+        if isdown:
+            self._posinfo['ldir'] = 'down'
+        else:
+            self._posinfo['ldir'] = 'up'
+
         # Get the search start position
         if evt.GetEventType() == finddlg.edEVT_FIND:
             spos = self._posinfo['found']
         else:
             spos = stc.GetCurrentPos()
+            if ldir != self._posinfo['ldir']:
+                start, end = stc.GetSelection()
+                if ldir == 'down':
+                    spos = start
+                else:
+                    spos = end
 
         # Do the find
         match = engine.Find(spos)

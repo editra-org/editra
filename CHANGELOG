@@ -20,6 +20,8 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Fix case where encoding can be None in when initializing the preference dialog
++Fix some issues with switching search direction
++F3 causing search to skip every other match when search bar has focus
 
 #-----------------------------------------------------------------------------#
 
