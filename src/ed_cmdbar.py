@@ -64,6 +64,7 @@ ID_SEARCH_CTRL = wx.NewId()
 ID_SEARCH_NEXT = wx.NewId()
 ID_SEARCH_PRE = wx.NewId()
 ID_MATCH_CASE = wx.NewId()
+ID_REGEX = wx.NewId()
 ID_LINE_CTRL = wx.NewId()
 ID_CMD_CTRL = wx.NewId()
 
@@ -223,15 +224,22 @@ class CommandBar(wx.Panel):
 
         match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
         match_case.SetValue(search.IsMatchCase())
+
+        regex_cb = wx.CheckBox(self, ID_REGEX, _("Regex"))
+        regex_cb.SetValue(search.IsRegEx())
+
+        # Use the small size controls on osx
         if wx.Platform == '__WXMAC__':
             t_sizer.Add((5, 5))
-            for win in [f_lbl, match_case, next_btn, pre_btn]:
+            for win in (f_lbl, match_case, next_btn, pre_btn, regex_cb):
                 win.SetFont(wx.SMALL_FONT)
 
         ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL),
                             ((5, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL),
                             ((8, 0)),
-                            (match_case, 0, wx.ALIGN_CENTER_VERTICAL)])
+                            (match_case, 0, wx.ALIGN_CENTER_VERTICAL),
+                            ((5, 5), 0),
+                            (regex_cb, 0, wx.ALIGN_CENTER_VERTICAL)])
 
         t_sizer.Add(ctrl_sizer, 0, wx.ALIGN_CENTER_VERTICAL)
 
@@ -250,15 +258,20 @@ class CommandBar(wx.Panel):
 
         """
         e_id = evt.GetId()
-        if e_id == ID_MATCH_CASE:
+        if e_id in (ID_MATCH_CASE, ID_REGEX):
             ctrl = self.FindWindowById(e_id)
             if ctrl != None:
                 search = self.FindWindowById(ID_SEARCH_CTRL)
+                if e_id == ID_MATCH_CASE:
+                    flag = finddlg.AFR_MATCHCASE
+                else:
+                    flag = finddlg.AFR_REGEX
+
                 if search != None:
                     if ctrl.GetValue():
-                        search.SetSearchFlag(finddlg.AFR_MATCHCASE)
+                        search.SetSearchFlag(flag)
                     else:
-                        search.ClearSearchFlag(finddlg.AFR_MATCHCASE)
+                        search.ClearSearchFlag(flag)
         else:
             evt.Skip()
 
