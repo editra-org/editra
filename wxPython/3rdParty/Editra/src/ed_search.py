@@ -182,11 +182,19 @@ class SearchController:
         data.SetFindString(evt.GetFindString())
 
         # Create the search engine
-        # XXX: may be inefficent to copy whole buffer each time for files
-        #      that are large.
         isdown = not evt.IsUp()
         engine = SearchEngine(data.GetFindString(), evt.IsRegEx(),
                               isdown, evt.IsMatchCase(), evt.IsWholeWord())
+
+        # Check if expression was valid or not
+        if engine.GetQueryObject() is None:
+            wx.MessageBox(_("Invalid expression \"%s\"") % engine.GetQuery(),
+                          _("Regex Compile Error"),
+                          style=wx.OK|wx.CENTER|wx.ICON_ERROR)
+            return
+
+        # XXX: may be inefficent to copy whole buffer each time for files
+        #      that are large.
         engine.SetSearchPool(stc.GetTextRaw())
 
         # Check if the direction changed
@@ -455,8 +463,11 @@ class SearchEngine:
 
         if self._unicode:
             flags |= re.UNICODE
-            
-        self._regex = re.compile(tmp, flags)
+
+        try:
+            self._regex = re.compile(tmp, flags)
+        except:
+            self._regex = None
 
     def Find(self, spos=0):
         """Find the next match based on the state of the search engine
@@ -465,6 +476,9 @@ class SearchEngine:
         @prerequisite: L{SetSearchPool} has been called to set search string
 
         """
+        if self._regex is None:
+            return None
+
         if self._next:
             return self.FindNext(spos)
         else:
@@ -477,6 +491,9 @@ class SearchEngine:
         @return: list of tuples [(start1, end1), (start2, end2), ]
 
         """
+        if self._regex is None:
+            return None
+
         matches = [match for match in re.finditer(self._regex, self._pool)]
         if len(matches):
             matches = [match.span() for match in matches]
@@ -491,6 +508,9 @@ class SearchEngine:
                        search in.
 
         """
+        if self._regex is None:
+            return None
+
         if spos < len(self._pool):
             match = re.search(self._regex, self._pool[spos:])
             if match is not None:
@@ -504,6 +524,9 @@ class SearchEngine:
         @return: tuple (match start pos, match end pos)
 
         """
+        if self._regex is None:
+            return None
+
         if spos+1 < len(self._pool):
             matches = [match for match in re.finditer(self._regex, self._pool[:spos])]
             if len(matches):
@@ -517,6 +540,14 @@ class SearchEngine:
 
         """
         return self._query
+
+    def GetQueryObject(self):
+        """Get the regex object used for the search. Will return None if
+        there was an error in creating the object.
+        @return: pattern object
+
+        """
+        return self._regex
 
     def IsMatchCase(self):
         """Is the engine set to a case sensitive search
@@ -552,6 +583,9 @@ class SearchEngine:
         @keyword recursive: search recursivly
 
         """
+        if self._regex is None:
+            return
+
         paths = [os.path.join(directory, fname)
                 for fname in os.listdir(directory) if not fname.startswith('.')]
         for path in paths:
@@ -570,6 +604,9 @@ class SearchEngine:
         @todo: unicode handling
 
         """
+        if self._regex is None:
+            return
+
         fchecker = FileTypeChecker()
         if fchecker.IsReadableText(fname):
             try:
@@ -595,6 +632,9 @@ class SearchEngine:
         @param flist: list of file names
 
         """
+        if self._regex is None:
+            return
+
         for fname in flist:
             for match in self.SearchInFile(fname):
                 yield match
