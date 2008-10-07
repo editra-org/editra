@@ -768,7 +768,12 @@ class EdSearchCtrl(wx.SearchCtrl):
         @param flag: flag to clear from search data
 
         """
-        self._flags ^= flag
+        data = self.GetSearchData()
+        if data is not None:
+            c_flags = data.GetFlags()
+            c_flags ^= flag
+            self._flags = c_flags
+            data.SetFlags(self._flags)
 
     def DoSearch(self, next=True):
         """Do the search and move the selection
@@ -861,8 +866,20 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         """
         data = self.GetSearchData()
-        if data != None:
+        if data is not None:
             return bool(finddlg.AFR_MATCHCASE & data.GetFlags())
+        return False
+
+    def IsRegEx(self):
+        """Returns True if the search control is set to search
+        in regular expression mode.
+        @return: whether search is using regular expressions or not
+        @rtype: boolean
+
+        """
+        data = self.GetSearchData()
+        if data is not None:
+            return bool(finddlg.AFR_REGEX & data.GetFlags())
         return False
 
     def IsSearchPrevious(self):
@@ -873,7 +890,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         """
         data = self.GetSearchData()
-        if data != None:
+        if data is not None:
             return bool(finddlg.AFR_UP & data.GetFlags())
         return False
 
@@ -885,7 +902,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         """
         data = self.GetSearchData()
-        if data != None:
+        if data is not None:
             return bool(finddlg.AFR_WHOLEWORD & data.GetFlags())
         return False
 
@@ -904,7 +921,12 @@ class EdSearchCtrl(wx.SearchCtrl):
         @param flags: search flag to add
 
         """
-        self._flags |= flags
+        data = self.GetSearchData()
+        if data is not None:
+            c_flags = data.GetFlags()
+            c_flags |= flags
+            self._flags = c_flags
+            data.SetFlags(self._flags)
 
     #---- End Functions ----#
 
@@ -925,7 +947,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             self.GetParent().Hide()
             return
         elif e_key == wx.WXK_SHIFT:
-            self.SetSearchFlag(wx.FR_DOWN)
+            self.ClearSearchFlag(finddlg.AFR_UP)
             return
         else:
             pass
@@ -948,7 +970,10 @@ class EdSearchCtrl(wx.SearchCtrl):
             else:
                 self.DoSearch(next=True)
         else:
-            self.DoSearch(next=True)
+            # Don't do incremental searches when the RegEx flag is set in order
+            # to avoid errors in compiling the expression
+            if not self.IsRegEx():
+                self.DoSearch(next=True)
 
     def OnCancel(self, evt):
         """Cancels the Search Query

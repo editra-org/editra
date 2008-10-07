@@ -16,6 +16,7 @@ NEWS:
 
 
 NEW: [features/improvements]
++Add option for enable/disable regex search in quick find bar
 +Automatically expire status bar info messages after 10 seconds
 
 BUG FIXES:
