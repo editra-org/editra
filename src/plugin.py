@@ -178,11 +178,12 @@ class Plugin(object):
     def __name__(self):
         return 'EdPlugin'
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, pluginmgr):
         """Only one instance of each plugin is allowed to exist
         per manager. If an instance of this plugin has already be
         initialized, that instance will be returned. If not this will
         initialize a new instance of the plugin.
+        @keyword mgr: Plugin Manager instance
         @return: a new class object or an existing instance if one
                  exists.
 
@@ -193,7 +194,6 @@ class Plugin(object):
             self.pluginmgr = self
             return self
 
-        pluginmgr = args[0]
         self = pluginmgr.GetPlugins().get(cls)
         if self is None:
             self = super(Plugin, cls).__new__(cls)
