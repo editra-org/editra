@@ -84,9 +84,9 @@ class SyntaxMgr(object):
         @keyword config: path of config file to load file extension config from
 
         """
-        if self.first:
+        if SyntaxMgr.first:
             object.__init__(self)
-            self.first = False
+            SyntaxMgr.first = False
             self._extreg = ExtensionRegister()
             self._config = config
             if self._config:
@@ -95,14 +95,14 @@ class SyntaxMgr(object):
                 self._extreg.LoadDefault()
             self._loaded = dict()
 
-    def __new__(cls, *args, **kargs):
+    def __new__(cls, config=None):
         """Ensure only a single instance is shared amongst
         all objects.
         @return: class instance
 
         """
-        if not cls.instance:
-            cls.instance = object.__new__(cls, *args, **kargs)
+        if cls.instance is None:
+            cls.instance = object.__new__(cls)
         return cls.instance
 
     def _ExtToMod(self, ext):
