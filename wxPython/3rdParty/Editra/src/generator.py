@@ -148,7 +148,7 @@ class Html(plugin.Plugin):
         @param mgr: This generators plugin manager
 
         """
-        plugin.Plugin.__init__(self, mgr)
+        plugin.Plugin.__init__(self)
 
         # Attributes
         self._id = ed_glob.ID_HTML_GEN
@@ -512,7 +512,7 @@ class LaTeX(plugin.Plugin):
         @param plgmgr: pluginmanger for this object
 
         """
-        plugin.Plugin.__init__(self, plgmgr)
+        plugin.Plugin.__init__(self)
 
         # Attributes
         self._stc = None
@@ -773,7 +773,7 @@ class Rtf(plugin.Plugin):
         @param mgr: plugin manager of this object
 
         """
-        plugin.Plugin.__init__(self, mgr)
+        plugin.Plugin.__init__(self)
 
         # Attributes
         self._stc = None
