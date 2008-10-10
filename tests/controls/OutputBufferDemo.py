@@ -104,7 +104,7 @@ class TestPanel(wx.Panel):
         elif e_id == ID_START:
             # Spawn a new ProcessThread
             combo = self.FindWindowById(ID_COMMAND)
-            self._buff.StartProcess('%s' % combo.GetValue())
+            self._buff.StartProcess(u'%s' % combo.GetValue())
             self.UpdateProcs()
         else:
             evt.Skip()
@@ -286,7 +286,8 @@ if __name__ == '__main__':
         frame.CreateStatusBar()
         frame.SetSizer(sizer)
         frame.SetInitialSize()
-        frame.SetStatusText("OutputBuffer test")
+        frame.SetStatusText("OutputBufferDemo: wxPython %s, Python %s" % \
+                            (wx.__version__, u".".join(str(x) for x in sys.version_info)))
         frame.Show()
         app.MainLoop()
     else:

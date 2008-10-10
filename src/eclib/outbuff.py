@@ -189,6 +189,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetMarginWidth(0, 0)
         self.SetMarginWidth(1, 0)
 
+        # To improve performance at cost of memory cache the document layout
         self.SetLayoutCache(wx.stc.STC_CACHE_DOCUMENT)
         self.SetUndoCollection(False) # Don't keep undo history
         self.SetReadOnly(True)
@@ -261,7 +262,8 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
     #---- Public Member Functions ----#
     def AppendUpdate(self, value):
         """Buffer output before adding to window. This method can safely be
-        called from non gui threads to add updates to the buffer.
+        called from non gui threads to add updates to the buffer, that will
+        be displayed durning the next idle period.
         @param value: update string to append to stack
 
         """
@@ -641,7 +643,6 @@ class ProcessThread(threading.Thread):
             except (subprocess.pywintypes.error, Exception), msg:
                 if msg[0] in (109, errno.ESHUTDOWN):
                     return False
-
         else:
             # OSX and Unix nonblocking pipe read implementation
             if self._proc.stdout is None:
@@ -651,14 +652,17 @@ class ProcessThread(threading.Thread):
             if not self._proc.stdout.closed:
                 fcntl.fcntl(self._proc.stdout,
                             fcntl.F_SETFL,
-                            flags| os.O_NONBLOCK)
+                            flags|os.O_NONBLOCK)
 
             try:
-                if not select.select([self._proc.stdout], [], [], 1)[0]:
-                    return True
+                try:
+                    if not select.select([self._proc.stdout], [], [], 1)[0]:
+                        return True
 
-                read = self._proc.stdout.readline()
-                if read == '':
+                    read = self._proc.stdout.readline()
+                    if read == '':
+                        return False
+                except IOError:
                     return False
             finally:
                 if not self._proc.stdout.closed:
@@ -671,7 +675,7 @@ class ProcessThread(threading.Thread):
             result = os.linesep
 
         evt = OutputBufferEvent(edEVT_UPDATE_TEXT, self._parent.GetId(), result)
-        wx.CallAfter(wx.PostEvent, self._parent, evt)
+        wx.PostEvent(self._parent, evt)
         return True
 
     def __KillPid(self, pid):
@@ -696,13 +700,12 @@ class ProcessThread(threading.Thread):
 
             # Try to kill the group
             try:
-                pgid = os.getpgid(pid)
-                os.killpg(pgid, signal.SIGKILL)
+                os.kill(pid, signal.SIGKILL)
             except OSError, msg:
                 pass
 
             # If still alive shoot it again
-            if self._proc.poll() != None:
+            if self._proc.poll() is not None:
                 try:
                     os.kill(-pid, signal.SIGKILL)
                 except OSError, msg:
@@ -710,7 +713,7 @@ class ProcessThread(threading.Thread):
 
             # Try and wait for it to cleanup
             try:
-                os.waitpid(-pid, os.WNOHANG)
+                os.waitpid(pid, os.WNOHANG)
             except OSError, msg:
                 pass
 
@@ -737,20 +740,17 @@ class ProcessThread(threading.Thread):
                                                        self._cmd['args']]])
 
         use_shell = not subprocess.mswindows
-        if use_shell:
-            preexec_fn = os.setsid
-        else:
-            preexec_fn = None
-
-        self._proc = subprocess.Popen(command.strip(), stdout=subprocess.PIPE,
-                                      preexec_fn=preexec_fn,
-                                      stderr=subprocess.STDOUT, shell=use_shell,
-                                      cwd=self._cwd, env=self._env)
+        self._proc = subprocess.Popen(command.strip(),
+                                      stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT,
+                                      shell=use_shell,
+                                      cwd=self._cwd,
+                                      env=self._env)
 
         evt = OutputBufferEvent(edEVT_PROCESS_START,
                                 self._parent.GetId(),
                                 command.strip())
-        wx.CallAfter(wx.PostEvent, self._parent, evt)
+        wx.PostEvent(self._parent, evt)
 
         # Read from stdout while there is output from process
         while True:
@@ -779,7 +779,7 @@ class ProcessThread(threading.Thread):
         # Notify that proccess has exited
         # Pack the exit code as the events value
         evt = OutputBufferEvent(edEVT_PROCESS_EXIT, self._parent.GetId(), result)
-        wx.CallAfter(wx.PostEvent, self._parent, evt)
+        wx.PostEvent(self._parent, evt)
 
     def SetArgs(self, args):
         """Set the args to pass to the command
