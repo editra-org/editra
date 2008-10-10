@@ -62,10 +62,10 @@ DIALOG_MAP = {ID_DEFAULT : (wx.FindReplaceData(),
                             finddlg.AFR_STYLE_FINDDIALOG,
                             "All Options Hidden")}
 
-BUTTONS = zip(DIALOG_MAP.keys(),
-              ("Default", "Non-Floating", "Replace Dialog", "Options Hidden",
-               "Regular Expression", "Lookin Hidden", "Whole Word Disabled",
-               "Minimal"))
+BUTTONS = [(ID_DEFAULT, "Default"), (ID_DIALOG, "Non-Floating"),
+           (ID_REPLACE, "Replace Dialog"), (ID_NOOPTS, "Options Hidden"),
+           (ID_REGEX, "Regular Expression"), (ID_NOLOOK, "Lookin Hidden"),
+           (ID_NOWHOLEW, "Whole Word Disabled"), (ID_MINIMAL, "Minimal")]
 
 #-----------------------------------------------------------------------------#
 
@@ -98,14 +98,16 @@ class TestPanel(wx.Panel):
             btn = wx.Button(self, bid, lbl)
             fsizer.Add(btn, 0)
             fsizer.Add((5, 5), 0)
-        self.SetSizer(fsizer)
+        msizer = wx.BoxSizer(wx.HORIZONTAL)
+        msizer.AddMany([((10, 10), 0), (fsizer, 0, wx.EXPAND), ((10, 10), 0)])
+        self.SetSizer(msizer)
         self.SetAutoLayout(True)
 
     def OnButton(self, evt):
         """Show a dialog"""
         e_id = evt.GetId()
         if e_id in DIALOG_MAP:
-            self.data, style, title = DIALOG_MAP.get(e_id)
+            self.data, style, title = DIALOG_MAP[e_id]
             self.dlg = finddlg.AdvFindReplaceDlg(self, self.data, title, style)
             self.dlg.Show()
         else:
@@ -150,7 +152,8 @@ if __name__ == '__main__':
         sizer.Add(TestPanel(frame, TestLog()), 1, wx.EXPAND)
         frame.CreateStatusBar()
         frame.SetSizer(sizer)
-        frame.SetInitialSize(wx.Size(300, 300))
+        frame.SetInitialSize(wx.Size(350, 350))
+        frame.CenterOnParent()
         frame.Show()
         app.MainLoop()
     else:
