@@ -285,9 +285,10 @@ if __name__ == '__main__':
         sizer.Add(TestPanel(frame, TestLog()), 1, wx.EXPAND)
         frame.CreateStatusBar()
         frame.SetSizer(sizer)
-        frame.SetInitialSize()
+        frame.SetInitialSize((500, 500))
         frame.SetStatusText("OutputBufferDemo: wxPython %s, Python %s" % \
                             (wx.__version__, u".".join(str(x) for x in sys.version_info)))
+        frame.CenterOnParent()
         frame.Show()
         app.MainLoop()
     else:
