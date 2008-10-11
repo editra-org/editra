@@ -105,13 +105,14 @@ class LaunchWindow(ctrlbox.ControlBox):
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
 
     def __del__(self):
-        ed_msg.Unsubscribe(self.OnFileOpened)
         ed_msg.Unsubscribe(self.OnPageChanged)
+        ed_msg.Unsubscribe(self.OnFileOpened)
         ed_msg.Unsubscribe(self.OnThemeChanged)
+        ed_msg.Unsubscribe(self.OnLexerChange)
         ed_msg.Unsubscribe(self.OnConfigExit)
         ed_msg.Unsubscribe(self.OnRunMsg)
-        ed_msg.UnRegisterCallback(self.CanLaunch)
-        super(LaunchWindow).__del__()
+        ed_msg.UnRegisterCallback(self._CanLaunch)
+        super(LaunchWindow, self).__del__()
 
     def __DoLayout(self):
         """Layout the window"""
