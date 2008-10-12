@@ -29,6 +29,14 @@ import time
 import getopt
 import wx
 
+# The event handler mixin is now part of wxPython proper, but there hasn't
+# been an official release with it yet, so try to import the official module
+# but fallback to our own copy if it fails.
+try:
+    import wx.lib.eventStack as events
+except:
+    import extern.events as events
+
 # Due to some methods that were added in 2.8.3 being used in a large number
 # of places Editra has become incompatable with wxPython 2.8.1.1 and earlier.
 # TODO: add a message dialog to display this, or look into the cause of the
@@ -58,7 +66,6 @@ import updater
 import plugin
 import ed_ipc
 import ed_msg
-import extern.events as events
 
 #--------------------------------------------------------------------------#
 # Global Variables
