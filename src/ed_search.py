@@ -34,7 +34,7 @@ import ed_msg
 import plugin
 import iface
 from util import FileTypeChecker
-from profiler import Profile_Get
+from profiler import Profile_Get, Profile_Set
 import eclib.ctrlbox as ctrlbox
 import eclib.outbuff as outbuff
 import eclib.platebtn as platebtn
@@ -296,6 +296,15 @@ class SearchController:
             self._li_choices = self._finddlg.GetLookinChoices()
             self._li_sel = self._finddlg.GetLookinSelection()
 
+            # Store in profile. Only save most recent 5 in history
+            if len(self._li_choices) > 5:
+                choices = self._li_choices[-5:]
+            else:
+                choices = self._li_choices
+            choices.reverse()
+
+            Profile_Set('SEARCH_LOC', choices)
+
             # Destroy it
             self._finddlg.Destroy()
 
@@ -394,6 +403,14 @@ class SearchController:
             stc.SetTargetEnd(end)
             stc.ReplaceTarget(rstring)
         stc.EndUndoAction()
+
+    def SetLookinChoices(self, choices):
+        """Set the list of locations to use for the recent search
+        locations.
+        @param choices: list of strings
+
+        """
+        self._li_choices = choices
 
     def SetQueryString(self, query):
         """Sets the search query value
