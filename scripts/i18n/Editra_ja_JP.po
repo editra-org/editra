@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-14 19:10-0500\n"
+"POT-Creation-Date: 2008-10-13 21:33-0500\n"
 "PO-Revision-Date: 2008-07-10 03:12+0000\n"
 "Last-Translator: Cody Precord <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -17,12 +17,17 @@ msgstr ""
 "X-Launchpad-Export-Date: 2008-08-05 22:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
+#: ../../src/ed_search.py:254
+#, python-format
+msgid "\"%s\" was not found"
+msgstr ""
+
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:267
 #, python-format
 msgid "%s Source File"
 msgstr "%sのソースファイル"
 
-#: ../../src/ed_main.py:480
+#: ../../src/ed_main.py:488
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -31,12 +36,12 @@ msgstr ""
 "%sは見つかりません。\n"
 "移動されたか、削除されたかもしれません。"
 
-#: ../../src/ed_stc.py:1793
+#: ../../src/ed_stc.py:1795
 #, python-format
 msgid "%s does not exist"
 msgstr ""
 
-#: ../../src/ed_pages.py:718
+#: ../../src/ed_pages.py:825
 #, python-format
 msgid ""
 "%s has been deleted since its last save point.\n"
@@ -47,7 +52,7 @@ msgstr ""
 "\n"
 "もう一度保存しますか？"
 
-#: ../../src/ed_pages.py:738
+#: ../../src/ed_pages.py:845
 #, fuzzy, python-format
 msgid ""
 "%s has been modified by another application.\n"
@@ -58,7 +63,7 @@ msgstr ""
 "\n"
 "最新のファイルを開きますか？"
 
-#: ../../src/ed_menu.py:811
+#: ../../src/ed_menu.py:817
 msgid "&About"
 msgstr "バージョン情報"
 
@@ -67,31 +72,31 @@ msgstr "バージョン情報"
 msgid "&Close Page"
 msgstr "ページを閉じ"
 
-#: ../../src/ed_menu.py:535
+#: ../../src/ed_menu.py:538
 msgid "&Copy"
 msgstr "コピー"
 
-#: ../../src/ed_menu.py:599
+#: ../../src/ed_menu.py:605
 msgid "&Edit"
 msgstr "編集"
 
-#: ../../src/ed_menu.py:516
+#: ../../src/ed_menu.py:519
 msgid "&File"
 msgstr "ファイル"
 
-#: ../../src/ed_menu.py:584
+#: ../../src/ed_menu.py:587
 msgid "&Find"
 msgstr "検索"
 
-#: ../../src/ed_menu.py:674
+#: ../../src/ed_menu.py:680
 msgid "&Font"
 msgstr "フォント"
 
-#: ../../src/ed_menu.py:643
+#: ../../src/ed_menu.py:649
 msgid "&Goto Line"
 msgstr "指定行へジャンプ"
 
-#: ../../src/ed_main.py:134 ../../src/ed_menu.py:829
+#: ../../src/ed_main.py:136 ../../src/ed_menu.py:835
 msgid "&Help"
 msgstr "ヘルプ"
 
@@ -103,15 +108,15 @@ msgstr "新規タブ"
 msgid "&Open"
 msgstr "開く"
 
-#: ../../src/ed_menu.py:538
+#: ../../src/ed_menu.py:541
 msgid "&Paste"
 msgstr "貼り付け"
 
-#: ../../src/ed_menu.py:507
+#: ../../src/ed_menu.py:510
 msgid "&Print"
 msgstr "印刷"
 
-#: ../../src/ed_menu.py:590
+#: ../../src/ed_menu.py:593
 msgid "&Quick Find"
 msgstr ""
 
@@ -119,95 +124,91 @@ msgstr ""
 msgid "&Save"
 msgstr "保存"
 
-#: ../../src/ed_menu.py:770
+#: ../../src/ed_menu.py:776
 msgid "&Settings"
 msgstr "設定"
 
-#: ../../src/ed_menu.py:660
+#: ../../src/ed_menu.py:666
 msgid "&Toolbar"
 msgstr "ツールバー"
 
-#: ../../src/ed_menu.py:802
+#: ../../src/ed_menu.py:808
 msgid "&Tools"
 msgstr "ツール"
 
-#: ../../src/ed_menu.py:525
+#: ../../src/ed_menu.py:528
 msgid "&Undo"
 msgstr "元に戻す"
 
-#: ../../src/ed_menu.py:665
+#: ../../src/ed_menu.py:671
 msgid "&View"
 msgstr "参照"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:285
+#: ../../plugins/Launch/launch/cfgdlg.py:283
 msgid "**Alias**"
 msgstr "**別名**"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:285
+#: ../../plugins/Launch/launch/cfgdlg.py:283
 msgid "**New Value**"
 msgstr "**新しい値**"
 
-#: ../../plugins/Launch/launch/launch.py:417 ../../src/dev_tool.py:387
+#: ../../plugins/Launch/launch/launch.py:439 ../../src/dev_tool.py:389
 #, fuzzy
 msgid "Abort"
 msgstr "中止"
 
-#: ../../src/ed_menu.py:813
+#: ../../src/ed_menu.py:819
 msgid "About"
 msgstr "バージョン情報"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:221
+#: ../../plugins/Launch/launch/cfgdlg.py:219
 msgid "Add a new executable"
 msgstr ""
 
-#: ../../src/ed_menu.py:549
+#: ../../src/ed_menu.py:552
 msgid "Add a new line after the current line"
 msgstr "この行の後に新しい行を追加する"
 
-#: ../../src/ed_menu.py:553
+#: ../../src/ed_menu.py:556
 msgid "Add a new line before the current line"
 msgstr "この行の前に新しい行を追加する"
 
-#: ../../src/ed_menu.py:582
+#: ../../src/ed_menu.py:585
 msgid "Add and remove bookmarks"
 msgstr "ブックマークを追加・削除する"
 
-#: ../../src/prefdlg.py:196
+#: ../../src/prefdlg.py:201
 msgid "Advanced"
 msgstr "高度な設定"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:216
+#: ../../plugins/Launch/launch/cfgdlg.py:486
 msgid "Alias"
 msgstr "エイリアス"
 
-#: ../../src/ed_log.py:162 ../../src/ed_log.py:235
+#: ../../src/ed_log.py:170 ../../src/ed_log.py:247
 msgid "All"
 msgstr "全て"
 
-#: ../../src/ed_search.py:210
-msgid "All Done"
-msgstr "完了しました"
-
-#: ../../src/Editra.py:473
+#: ../../src/Editra.py:493
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
 "Would you like to download Editra %s now?"
 msgstr ""
 
-#: ../../src/prefdlg.py:558
+#: ../../src/prefdlg.py:546
 msgid "AntiAliasing"
 msgstr "アンチエイリアス"
 
-#: ../../src/prefdlg.py:190
+#: ../../src/prefdlg.py:195
 msgid "Appearance"
 msgstr "外観"
 
-#: ../../src/prefdlg.py:1521
+#: ../../src/prefdlg.py:1514
 msgid "Apply"
 msgstr "適用"
 
-#: ../../src/style_editor.py:654
+#: ../../src/style_editor.py:657
 msgid "Attributes"
 msgstr "属性"
 
@@ -215,15 +216,15 @@ msgstr "属性"
 msgid "Author"
 msgstr "著者"
 
-#: ../../src/ed_menu.py:752 ../../src/prefdlg.py:723
+#: ../../src/ed_menu.py:758 ../../src/prefdlg.py:717
 msgid "Auto-Completion"
 msgstr "オートコンプリート"
 
-#: ../../src/ed_menu.py:755 ../../src/prefdlg.py:725
+#: ../../src/ed_menu.py:761 ../../src/prefdlg.py:719
 msgid "Auto-Indent"
 msgstr "自動インデント"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:392
+#: ../../plugins/Launch/launch/cfgdlg.py:390
 msgid "Automatically clear buffer between runs"
 msgstr ""
 
@@ -231,11 +232,11 @@ msgstr ""
 msgid "Automatically save/use window state from last session"
 msgstr "自動的にウィンドウのサイズを保存する"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:409 ../../src/style_editor.py:643
+#: ../../plugins/Launch/launch/cfgdlg.py:407 ../../src/style_editor.py:646
 msgid "Background"
 msgstr "背景"
 
-#: ../../src/prefdlg.py:545
+#: ../../src/prefdlg.py:518
 msgid "Backspace Unindents"
 msgstr ""
 
@@ -244,31 +245,35 @@ msgstr ""
 msgid "Base new theme on existing one"
 msgstr "現状のテーマを使って新しいテーマを作成する"
 
-#: ../../src/prefdlg.py:1495
+#: ../../src/prefdlg.py:1488
 msgid "Binding"
 msgstr "バインディング"
+
+#: ../../src/prefdlg.py:1991
+msgid "Black/White"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:451
 msgid "Bookmark Selected Path(s)"
 msgstr ""
 
-#: ../../src/ed_menu.py:581
+#: ../../src/ed_menu.py:584
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
-#: ../../src/ed_menu.py:759 ../../src/prefdlg.py:703
+#: ../../src/ed_menu.py:765 ../../src/prefdlg.py:697
 msgid "Bracket Highlighting"
 msgstr "カッコをハイライトする"
 
-#: ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1153 ../../src/style_editor.py:139
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../../src/updater.py:639
+#: ../../src/updater.py:641
 msgid "Canceled"
 msgstr "キャンセルされました"
 
-#: ../../src/ed_menu.py:676
+#: ../../src/ed_menu.py:682
 msgid "Change Font Settings"
 msgstr "フォント設定を変える"
 
@@ -277,12 +282,12 @@ msgstr "フォント設定を変える"
 msgid "Change view to \"%s\""
 msgstr "%sのビューに変更して"
 
-#: ../../src/style_editor.py:738
+#: ../../src/style_editor.py:741
 #, fuzzy, python-format
 msgid "Changed color scheme to %s"
 msgstr "カラー設定を%sに変える"
 
-#: ../../src/prefdlg.py:320
+#: ../../src/prefdlg.py:282
 msgid "Changes made in this dialog are saved in your current profile. Some Items such as Language require the program to be restarted before taking effect."
 msgstr ""
 
@@ -290,15 +295,15 @@ msgstr ""
 msgid "Changes will take affect once the program has been restarted"
 msgstr "変更するにはプログラムを再起動する必要があります"
 
-#: ../../src/prefdlg.py:1286
+#: ../../src/prefdlg.py:1279
 msgid "Check"
 msgstr "チェック"
 
-#: ../../src/prefdlg.py:364
+#: ../../src/prefdlg.py:327
 msgid "Check for updates on startup"
 msgstr "起動時にアップデートをチェックする"
 
-#: ../../src/prefdlg.py:384
+#: ../../src/prefdlg.py:347
 msgid "Check if on disk file has been modified by others"
 msgstr "他のユーザーに修正されたかどうか確認する"
 
@@ -306,17 +311,22 @@ msgstr "他のユーザーに修正されたかどうか確認する"
 msgid "Choose a File"
 msgstr "ファイルを選択する"
 
-#: ../../src/ed_main.py:562
+#: ../../src/ed_main.py:568
 msgid "Choose a Save Location"
 msgstr "保存場所を選ぶ"
+
+#: ../../src/ed_pages.py:144
+#, fuzzy
+msgid "Choose an Encoding"
+msgstr "ファイルを選択する"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:170
 msgid "Class Definitions"
 msgstr "クラスの定義"
 
-#: ../../plugins/Launch/launch/launch.py:164 ../../src/ed_log.py:132
-#: ../../src/ed_search.py:697
+#: ../../plugins/Launch/launch/launch.py:166 ../../src/ed_log.py:140
+#: ../../src/ed_search.py:1162
 msgid "Clear"
 msgstr "クリア"
 
@@ -324,10 +334,19 @@ msgstr "クリア"
 msgid "Click on Install to install the plugins in the list"
 msgstr "プラグインをインストールします、インストールボタンをクリックしてください"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:215
-#: ../../plugins/Launch/launch/cfgdlg.py:219
+#: ../../plugins/Launch/launch/cfgdlg.py:483
 msgid "Click on an item to edit"
 msgstr "修正するアイテムをクリックしてください"
+
+#: ../../src/ed_pages.py:306
+#, python-format
+msgid "Close \"%s\""
+msgstr ""
+
+#: ../../src/ed_pages.py:307
+#, fuzzy
+msgid "Close All"
+msgstr "全てのページを閉じ"
 
 #: ../../src/ed_menu.py:473
 #, fuzzy
@@ -351,7 +370,7 @@ msgstr "全てのタブを閉じ"
 msgid "Close the current window"
 msgstr "このウィンドウを閉じます"
 
-#: ../../src/prefdlg.py:486
+#: ../../src/prefdlg.py:451
 msgid "Code"
 msgstr "コード"
 
@@ -359,7 +378,7 @@ msgstr "コード"
 msgid "Code Browser"
 msgstr "コードブラウザ"
 
-#: ../../src/ed_menu.py:762 ../../src/prefdlg.py:705
+#: ../../src/ed_menu.py:768 ../../src/prefdlg.py:699
 msgid "Code Folding"
 msgstr "コードをたたむ"
 
@@ -367,37 +386,46 @@ msgstr "コードをたたむ"
 msgid "CodeBrowser"
 msgstr "コードブラウザ"
 
-#: ../../src/style_editor.py:627
+#: ../../src/style_editor.py:630
 msgid "Color"
 msgstr "色"
 
-#: ../../src/ed_menu.py:767
+#: ../../src/ed_menu.py:773
 msgid "Color Highlight Code Syntax"
 msgstr "コードシンタックスをハイライトする"
 
-#: ../../src/prefdlg.py:836
+#: ../../src/prefdlg.py:829
 msgid "Color Scheme"
 msgstr "カラースキーム"
 
-#: ../../src/ed_cmdbar.py:181
+#: ../../src/prefdlg.py:1993
+#, fuzzy
+msgid "Colour/Default"
+msgstr "初期設定に戻す"
+
+#: ../../src/prefdlg.py:1992
+msgid "Colour/White"
+msgstr ""
+
+#: ../../src/ed_cmdbar.py:185
 msgid "Command"
 msgstr "コマンド"
 
-#: ../../src/ed_menu.py:573
+#: ../../src/ed_menu.py:576
 #, fuzzy
 msgid "Commands that affect an entire line"
 msgstr "行のコマンド"
 
-#: ../../src/ed_menu.py:678
+#: ../../src/ed_menu.py:684
 #, fuzzy
 msgid "Comment Lines"
 msgstr "コメント行"
 
-#: ../../src/ed_menu.py:680
+#: ../../src/ed_menu.py:686
 msgid "Comment the selected lines"
 msgstr "選択したの行をコメントする"
 
-#: ../../src/prefdlg.py:1101
+#: ../../src/prefdlg.py:1094
 msgid "Configuration"
 msgstr "設定"
 
@@ -405,49 +433,53 @@ msgstr "設定"
 msgid "Configure"
 msgstr "設定"
 
-#: ../../src/ed_menu.py:503
+#: ../../src/ed_menu.py:506
 msgid "Configure Printer"
 msgstr "プリンタの設定"
 
-#: ../../src/ed_menu.py:699
+#: ../../src/ed_menu.py:705
 msgid "Convert selected text to all lowercase letters"
 msgstr "すべての選択したテキストを小文字に変換する"
 
-#: ../../src/ed_menu.py:696
+#: ../../src/ed_menu.py:702
 msgid "Convert selected text to all uppercase letters"
 msgstr "すべての選択したテキストを大文字に変換する"
 
-#: ../../src/ed_menu.py:715
+#: ../../src/ed_menu.py:721
 msgid "Convert spaces to tabs in selected/all text"
 msgstr ""
 
-#: ../../src/ed_menu.py:718
+#: ../../src/ed_menu.py:724
 msgid "Convert tabs to spaces in selected/all text"
 msgstr ""
 
-#: ../../src/ed_stc.py:2134 ../../src/ed_toolbar.py:82
+#: ../../src/ed_stc.py:2141 ../../src/ed_toolbar.py:82
 msgid "Copy"
 msgstr "コピー"
 
-#: ../../src/ed_menu.py:560
+#: ../../src/ed_menu.py:563
 msgid "Copy Current Line"
 msgstr "現在の行をコピー"
 
-#: ../../src/ed_menu.py:558
+#: ../../src/ed_pages.py:309
+msgid "Copy Full Path"
+msgstr ""
+
+#: ../../src/ed_menu.py:561
 msgid "Copy Line"
 msgstr "行をコピー"
 
-#: ../../src/ed_menu.py:537 ../../src/ed_toolbar.py:83
+#: ../../src/ed_menu.py:540 ../../src/ed_toolbar.py:83
 #, fuzzy
 msgid "Copy Selected Text to Clipboard"
 msgstr "選択したテキストをクリップボードにコピー"
 
-#: ../../src/ed_main.py:1208
+#: ../../src/ed_main.py:1229
 msgid "Copyright"
 msgstr "Copyright"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:461
-#: ../../plugins/filebrowser/filebrowser/browser.py:561
+#: ../../plugins/filebrowser/filebrowser/browser.py:565
 #, python-format
 msgid "Create Archive of \"%s\""
 msgstr "%sアーカイブを作成する"
@@ -456,45 +488,49 @@ msgstr "%sアーカイブを作成する"
 msgid "Created"
 msgstr "作成日時"
 
-#: ../../src/ed_menu.py:532
+#: ../../src/ed_menu.py:535
 msgid "Cu&t"
 msgstr "切り取り"
 
-#: ../../src/ed_stc.py:2133 ../../src/ed_toolbar.py:80
+#: ../../src/ed_stc.py:2140 ../../src/ed_toolbar.py:80
 msgid "Cut"
 msgstr "カット"
 
-#: ../../src/ed_menu.py:557
+#: ../../src/ed_menu.py:560
 msgid "Cut Current Line"
 msgstr "現在の行をカット"
 
-#: ../../src/ed_menu.py:555
+#: ../../src/ed_menu.py:558
 msgid "Cut Line"
 msgstr "行をカット"
 
-#: ../../src/ed_menu.py:534 ../../src/ed_toolbar.py:81
+#: ../../src/ed_menu.py:537 ../../src/ed_toolbar.py:81
 #, fuzzy
 msgid "Cut Selected Text from File"
 msgstr "選択したテキストをファイルからカット"
+
+#: ../../src/ed_search.py:721 ../../src/ed_search.py:725
+msgid "DECODING ERROR"
+msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:206
 msgid "Default"
 msgstr "デフォルト"
 
-#: ../../src/prefdlg.py:549
+#: ../../src/prefdlg.py:522
 msgid "Default EOL Mode"
 msgstr "ＥＯＬモードをディフォルトにする"
 
-#: ../../src/prefdlg.py:696
+#: ../../src/prefdlg.py:690
 msgid "Default Lexer"
 msgstr "デフォルトレクサー"
 
-#: ../../src/prefdlg.py:951
+#: ../../src/prefdlg.py:944
 #, fuzzy
 msgid "Default Perspective"
 msgstr "デフォルトの視点"
 
-#: ../../src/prefdlg.py:694
+#: ../../src/prefdlg.py:688
 msgid "Default highlighing for new documents"
 msgstr ""
 
@@ -502,7 +538,7 @@ msgstr ""
 msgid "Defines"
 msgstr "定義"
 
-#: ../../src/prefdlg.py:1464
+#: ../../src/prefdlg.py:1457
 msgid "Delete"
 msgstr "削除"
 
@@ -519,11 +555,11 @@ msgstr "保存したビューを削除する"
 msgid "Description"
 msgstr "説明"
 
-#: ../../src/prefdlg.py:355
+#: ../../src/prefdlg.py:318
 msgid "Disable Error Reporter"
 msgstr "エラーレポーターを無効する"
 
-#: ../../src/prefdlg.py:998
+#: ../../src/prefdlg.py:991
 msgid "Display Font"
 msgstr ""
 
@@ -531,7 +567,7 @@ msgstr ""
 msgid "Do you wish to exit?"
 msgstr "終了しますか？"
 
-#: ../../src/ed_pages.py:435
+#: ../../src/ed_pages.py:528
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -542,33 +578,33 @@ msgstr ""
 "\n"
 "警告：たくさんのファイルを一度に開くと、エディターの動きが遅くなるかもしれません。"
 
-#: ../../src/prefdlg.py:192
+#: ../../src/prefdlg.py:197
 msgid "Document"
 msgstr "ドキュメント"
 
-#: ../../src/plugdlg.py:178 ../../src/plugdlg.py:353 ../../src/prefdlg.py:1281
+#: ../../src/plugdlg.py:178 ../../src/plugdlg.py:353 ../../src/prefdlg.py:1274
 msgid "Download"
 msgstr "ダウンロード"
 
-#: ../../src/plugdlg.py:388 ../../src/updater.py:667 ../../src/updater.py:673
+#: ../../src/plugdlg.py:388
 msgid "Downloaded"
 msgstr "ダウンロードが完了しました"
 
-#: ../../src/plugdlg.py:499 ../../src/updater.py:598
+#: ../../src/plugdlg.py:499 ../../src/updater.py:600
 msgid "Downloading"
 msgstr "ダウンロード中"
 
-#: ../../src/updater.py:561
+#: ../../src/updater.py:563
 #, python-format
 msgid "Downloading To: %s"
 msgstr "ファイルを%sへダウンロードしています"
 
-#: ../../src/Editra.py:479 ../../src/prefdlg.py:1322
+#: ../../src/Editra.py:499 ../../src/prefdlg.py:1315
 #, fuzzy
 msgid "Downloading Update"
 msgstr "更新のダウンロード"
 
-#: ../../src/updater.py:559
+#: ../../src/updater.py:561
 #, python-format
 msgid "Downloading: %s"
 msgstr "ダウンロード中：%s"
@@ -581,33 +617,33 @@ msgstr "ダウンロードが不完全"
 msgid "Duplicate"
 msgstr "複製"
 
-#: ../../src/ed_menu.py:562
+#: ../../src/ed_menu.py:565
 msgid "Duplicate Line"
 msgstr "重複線"
 
-#: ../../src/ed_menu.py:564
+#: ../../src/ed_menu.py:567
 msgid "Duplicate the current line"
 msgstr "現在の行を重複する"
 
-#: ../../src/ed_menu.py:511
+#: ../../src/ed_menu.py:514
 msgid "E&xit"
 msgstr "終了"
 
-#: ../../src/ed_menu.py:739
+#: ../../src/ed_menu.py:745
 msgid "EOL Mode"
 msgstr "EOLモード"
 
-#: ../../src/ed_main.py:543
+#: ../../src/ed_main.py:546
 #, python-format
 msgid "ERROR: %s"
 msgstr "エラー: %s"
 
-#: ../../src/ed_main.py:578
+#: ../../src/ed_main.py:584
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "エラー：%sを保存に失敗しました"
 
-#: ../../src/prefdlg.py:707
+#: ../../src/prefdlg.py:701
 msgid "Edge Guide"
 msgstr "エッジガイド"
 
@@ -615,27 +651,27 @@ msgstr "エッジガイド"
 msgid "Edit"
 msgstr "編集"
 
-#: ../../src/ed_menu.py:596
+#: ../../src/ed_menu.py:602
 msgid "Edit Preferences / Settings"
 msgstr "設定を編集する"
 
-#: ../../src/ed_menu.py:791
+#: ../../src/ed_menu.py:797
 msgid "Edit the way syntax is highlighted"
 msgstr ""
 
-#: ../../src/ed_menu.py:640
+#: ../../src/ed_menu.py:646
 msgid "Editor"
 msgstr "エディター"
 
-#: ../../src/ed_menu.py:779
+#: ../../src/ed_menu.py:785
 msgid "Editor Command"
 msgstr "エディターコマンド"
 
-#: ../../src/prefdlg.py:338
+#: ../../src/prefdlg.py:302
 msgid "Editor Mode"
 msgstr "エディターモード"
 
-#: ../../src/ed_log.py:73
+#: ../../src/ed_log.py:80
 msgid "Editra Log"
 msgstr "Editraのログ"
 
@@ -652,36 +688,36 @@ msgid ""
 "%(errormsg)s"
 msgstr ""
 
-#: ../../src/ed_main.py:1198
+#: ../../src/ed_main.py:1219
 msgid "Editra is a programmers text editor."
 msgstr ""
 
-#: ../../src/ed_menu.py:823
+#: ../../src/ed_menu.py:829
 msgid "Editra translations project"
 msgstr "Editraの翻訳プロジェクト"
 
-#: ../../src/prefdlg.py:727
+#: ../../src/prefdlg.py:721
 #, fuzzy
 msgid "Enable Vi Emulation"
 msgstr "Viのエミュレーションを有効"
 
-#: ../../src/ed_pages.py:289
-msgid "Encoding Error"
-msgstr "エンコーディングエラー"
+#: ../../src/prefdlg.py:543
+msgid "Encoding to try when auto detection fails"
+msgstr ""
 
-#: ../../src/ed_menu.py:740
+#: ../../src/ed_menu.py:746
 msgid "End of line character formatting"
 msgstr ""
 
-#: ../../src/eclib/colorsetter.py:89
+#: ../../src/eclib/colorsetter.py:94
 msgid "Enter a hex color value"
 msgstr ""
 
-#: ../../src/prefdlg.py:1659
+#: ../../src/prefdlg.py:1652
 msgid "Enter the name of the new key profile"
 msgstr ""
 
-#: ../../src/ed_pages.py:753 ../../src/plugdlg.py:758
+#: ../../src/ed_pages.py:860 ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "エラー"
 
@@ -689,15 +725,15 @@ msgstr "エラー"
 msgid "Error Opening File"
 msgstr "ファイルを開くときにエラー"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:419
+#: ../../plugins/Launch/launch/cfgdlg.py:417
 msgid "Error Text"
 msgstr "エラーテキスト"
 
-#: ../../src/dev_tool.py:384
+#: ../../src/dev_tool.py:386
 msgid "Error Traceback:"
 msgstr "エラーのトレースバック"
 
-#: ../../src/dev_tool.py:380
+#: ../../src/dev_tool.py:382
 msgid ""
 "Error: Oh no something bad happend\n"
 "Help improve Editra by clicking on Report Error\n"
@@ -706,12 +742,12 @@ msgstr ""
 "エラーが発生しました。\n"
 "エラーを報告する"
 
-#: ../../src/ed_main.py:1139
+#: ../../src/ed_main.py:1160
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:217
+#: ../../plugins/Launch/launch/cfgdlg.py:487
 msgid "Executable Commands"
 msgstr "実行可能 なコマンド"
 
@@ -719,11 +755,11 @@ msgstr "実行可能 なコマンド"
 msgid "Executables"
 msgstr "実行ファイル"
 
-#: ../../plugins/Launch/launch/launch.py:535
+#: ../../plugins/Launch/launch/launch.py:563
 msgid "Exit Code"
 msgstr "終了コード"
 
-#: ../../src/ed_menu.py:513
+#: ../../src/ed_menu.py:516
 #, fuzzy
 msgid "Exit the Program"
 msgstr "プログラムを終了"
@@ -736,16 +772,16 @@ msgstr "エキスポート"
 msgid "Export Style Sheet"
 msgstr "スタイルシートをエクスポート"
 
-#: ../../src/prefdlg.py:1798
+#: ../../src/prefdlg.py:1790
 #, fuzzy
 msgid "Extensions (space separated, no dots)"
 msgstr "ファイル拡張子（空白で区切られた、ドットなしい）"
 
-#: ../../src/ed_menu.py:743
+#: ../../src/ed_menu.py:749
 msgid "F&ormat"
 msgstr "書式"
 
-#: ../../src/updater.py:680
+#: ../../src/updater.py:679
 msgid "Failed"
 msgstr "失敗しました"
 
@@ -754,11 +790,16 @@ msgstr "失敗しました"
 msgid "Failed to install %d plugins"
 msgstr "%dプラグインをインストールするのに失敗しました"
 
-#: ../../src/ed_pages.py:751
+#: ../../src/ed_pages.py:858
 #, python-format
 msgid ""
 "Failed to reload %(filename)s:\n"
 "Error: %(errmsg)s"
+msgstr ""
+
+#: ../../src/ed_main.py:973
+#, python-format
+msgid "Failed to reload the file with: %(encoding)s"
 msgstr ""
 
 #: ../../src/ed_mdlg.py:60
@@ -770,7 +811,7 @@ msgid ""
 "%(errormsg)s"
 msgstr ""
 
-#: ../../src/ed_menu.py:824
+#: ../../src/ed_menu.py:830
 msgid "Feedback"
 msgstr "フィードバック"
 
@@ -778,15 +819,15 @@ msgstr "フィードバック"
 msgid "File Browser"
 msgstr "ファイルブラウザ"
 
-#: ../../src/prefdlg.py:370
+#: ../../src/prefdlg.py:333
 msgid "File History Length"
 msgstr "ファイルの履歴"
 
-#: ../../src/ed_main.py:482
+#: ../../src/ed_main.py:490
 msgid "File Not Found"
 msgstr "ファイルが見つかりません"
 
-#: ../../src/prefdlg.py:408
+#: ../../src/prefdlg.py:371
 msgid "File Settings"
 msgstr "ファイルの設定"
 
@@ -798,7 +839,7 @@ msgstr ""
 msgid "File Type"
 msgstr "ファイルタイプ"
 
-#: ../../src/ed_pages.py:124
+#: ../../src/ed_pages.py:183
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
@@ -806,35 +847,45 @@ msgstr ""
 "ファイルは既に開かれています\n"
 "もう一度開きますか？"
 
-#: ../../src/prefdlg.py:830
+#: ../../src/prefdlg.py:823
 #, fuzzy
 msgid "Filetype Associations"
 msgstr "ファイル形式組合"
 
-#: ../../src/ed_cmdbar.py:211 ../../src/ed_search.py:278
-#: ../../src/ed_search.py:358 ../../src/ed_toolbar.py:87
+#: ../../src/ed_cmdbar.py:215 ../../src/ed_search.py:82
+#: ../../src/ed_search.py:86 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "検索"
 
-#: ../../src/ed_menu.py:586 ../../src/ed_toolbar.py:87
+#: ../../src/ed_menu.py:596
+#, fuzzy
+msgid "Find Next"
+msgstr "テキストを検索"
+
+#: ../../src/ed_search.py:1074
+#, fuzzy
+msgid "Find Results"
+msgstr "テキストを検索"
+
+#: ../../src/ed_menu.py:589 ../../src/ed_toolbar.py:87
 msgid "Find Text"
 msgstr "テキストを検索"
 
-#: ../../src/ed_menu.py:589 ../../src/ed_toolbar.py:89
+#: ../../src/ed_menu.py:592 ../../src/ed_toolbar.py:89
 #, fuzzy
 msgid "Find and Replace Text"
 msgstr "テキストを検索と置換"
 
-#: ../../src/ed_menu.py:587
+#: ../../src/ed_menu.py:590
 msgid "Find/R&eplace"
 msgstr "置換"
 
-#: ../../src/ed_search.py:274 ../../src/ed_search.py:354
+#: ../../src/ed_search.py:82 ../../src/ed_search.py:86
 #: ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "置換"
 
-#: ../../src/updater.py:677
+#: ../../src/updater.py:676
 #, fuzzy
 msgid "Finished"
 msgstr "完成"
@@ -852,23 +903,23 @@ msgstr "プラグインのダウンロードを終了しました"
 msgid "Folder"
 msgstr "フォルダ"
 
-#: ../../src/style_editor.py:675
+#: ../../src/style_editor.py:678
 msgid "Font"
 msgstr "フォント"
 
-#: ../../src/style_editor.py:670
+#: ../../src/style_editor.py:673
 msgid "Font Settings"
 msgstr "フォントの設定"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:406 ../../src/style_editor.py:631
+#: ../../plugins/Launch/launch/cfgdlg.py:404 ../../src/style_editor.py:634
 msgid "Foreground"
 msgstr "前景"
 
-#: ../../src/prefdlg.py:587
+#: ../../src/prefdlg.py:575
 msgid "Format"
 msgstr "形式"
 
-#: ../../src/ed_menu.py:729 ../../src/ed_menu.py:733 ../../src/ed_menu.py:737
+#: ../../src/ed_menu.py:735 ../../src/ed_menu.py:739 ../../src/ed_menu.py:743
 #, python-format
 msgid "Format all EOL characters to %s Mode"
 msgstr ""
@@ -877,32 +928,32 @@ msgstr ""
 msgid "Function Definitions"
 msgstr "関数の定義"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:134 ../../src/prefdlg.py:188
-#: ../../src/prefdlg.py:485 ../../src/prefdlg.py:733
+#: ../../plugins/Launch/launch/cfgdlg.py:134 ../../src/prefdlg.py:193
+#: ../../src/prefdlg.py:450 ../../src/prefdlg.py:727
 msgid "General"
 msgstr "一般"
 
-#: ../../src/generator.py:276 ../../src/generator.py:647
-#: ../../src/generator.py:841
+#: ../../src/generator.py:287 ../../src/generator.py:674
+#: ../../src/generator.py:877
 #, fuzzy, python-format
 msgid "Generate %s"
 msgstr "%sを作る"
 
-#: ../../src/generator.py:112
+#: ../../src/generator.py:114
 msgid "Generate Code and Documents"
 msgstr "コードとドキュメントを生成する"
 
-#: ../../src/generator.py:277 ../../src/generator.py:842
+#: ../../src/generator.py:288 ../../src/generator.py:878
 #, python-format
 msgid "Generate a %s version of the current document"
 msgstr ""
 
-#: ../../src/generator.py:648
+#: ../../src/generator.py:675
 #, python-format
 msgid "Generate an %s version of the current document"
 msgstr ""
 
-#: ../../src/generator.py:111
+#: ../../src/generator.py:113
 msgid "Generator"
 msgstr "ジェネレータ"
 
@@ -923,47 +974,51 @@ msgstr "設定のページに行きますか？"
 msgid "Goto \"%s\""
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:158
+#: ../../src/ed_cmdbar.py:162
 msgid "Goto Line"
 msgstr "指定行へジャンプ"
 
-#: ../../src/ed_menu.py:645
+#: ../../src/ed_menu.py:651
 msgid "Goto Line Number"
 msgstr "指定行へジャンプ"
 
-#: ../../src/ed_menu.py:646
+#: ../../src/ed_menu.py:652
 msgid "Goto Matching Brace"
 msgstr ""
 
-#: ../../src/ed_menu.py:781
+#: ../../src/ed_menu.py:787
 msgid "Goto command buffer"
 msgstr ""
 
-#: ../../src/prefdlg.py:711
+#: ../../src/ed_menu.py:598
+msgid "Goto the next match"
+msgstr ""
+
+#: ../../src/prefdlg.py:705
 msgid "Guide Column"
 msgstr "ガイドのコラム"
 
-#: ../../src/ed_menu.py:761
+#: ../../src/ed_menu.py:767
 msgid "Highlight Brackets/Braces"
 msgstr ""
 
-#: ../../src/ed_menu.py:619 ../../src/prefdlg.py:716
+#: ../../src/ed_menu.py:625 ../../src/prefdlg.py:710
 msgid "Highlight Caret Line"
 msgstr "キャレットの行をハイライトする"
 
-#: ../../src/ed_menu.py:621
+#: ../../src/ed_menu.py:627
 msgid "Highlight the background of the current line"
 msgstr ""
 
-#: ../../src/ed_main.py:1200
+#: ../../src/ed_main.py:1221
 msgid "Homepage"
 msgstr "ホームページ"
 
-#: ../../src/prefdlg.py:929
+#: ../../src/prefdlg.py:922
 msgid "Icon Theme"
 msgstr "アイコンのテーマ"
 
-#: ../../src/prefdlg.py:979
+#: ../../src/prefdlg.py:972
 msgid "Icons"
 msgstr "アイコン"
 
@@ -971,21 +1026,21 @@ msgstr "アイコン"
 msgid "Identities"
 msgstr "個人情報"
 
-#: ../../src/ed_menu.py:687
+#: ../../src/ed_menu.py:693
 #, fuzzy
 msgid "Indent Lines"
 msgstr "行をインデント"
 
-#: ../../src/prefdlg.py:534
+#: ../../src/prefdlg.py:507
 msgid "Indent Width"
 msgstr "インデントの幅"
 
-#: ../../src/ed_menu.py:689
+#: ../../src/ed_menu.py:695
 #, fuzzy
 msgid "Indent the selected lines"
 msgstr "選択したの行をインデントする"
 
-#: ../../src/ed_menu.py:624 ../../src/prefdlg.py:719
+#: ../../src/ed_menu.py:630 ../../src/prefdlg.py:713
 msgid "Indentation Guides"
 msgstr "インデントガイド"
 
@@ -993,15 +1048,15 @@ msgstr "インデントガイド"
 msgid "Info"
 msgstr "情報"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:426
+#: ../../plugins/Launch/launch/cfgdlg.py:424
 msgid "Info Text"
 msgstr ""
 
-#: ../../src/prefdlg.py:742
+#: ../../src/prefdlg.py:736
 msgid "Input Helpers"
 msgstr "入力ヘルパー"
 
-#: ../../src/ed_menu.py:704
+#: ../../src/ed_menu.py:710
 msgid "Insert spaces instead of tab characters with tab key"
 msgstr ""
 
@@ -1023,20 +1078,29 @@ msgstr "現在のユーザーのみ使用できるようにプラグインをイ
 msgid "Installation Error"
 msgstr "インストールエラー"
 
-#: ../../src/prefdlg.py:1262
+#: ../../src/prefdlg.py:1255
 msgid "Installed Version"
 msgstr "インストール済バージョン"
 
-#: ../../src/ed_pages.py:419
+#: ../../src/ed_search.py:191
+#, fuzzy, python-format
+msgid "Invalid expression \"%s\""
+msgstr "無効なファイル：%s"
+
+#: ../../src/ed_pages.py:512
 #, python-format
 msgid "Invalid file: %s"
 msgstr "無効なファイル：%s"
 
-#: ../../src/ed_menu.py:566
+#: ../../src/prefdlg.py:1994
+msgid "Inverse"
+msgstr ""
+
+#: ../../src/ed_menu.py:569
 msgid "Join Lines"
 msgstr "行を結合"
 
-#: ../../src/ed_menu.py:568
+#: ../../src/ed_menu.py:571
 msgid "Join the Selected Lines"
 msgstr "選択された行をひとつにする"
 
@@ -1044,19 +1108,19 @@ msgstr "選択された行をひとつにする"
 msgid "Jump to Saved Path"
 msgstr ""
 
-#: ../../src/prefdlg.py:1491
+#: ../../src/prefdlg.py:1484
 msgid "Key"
 msgstr "キー"
 
-#: ../../src/prefdlg.py:1460
+#: ../../src/prefdlg.py:1453
 msgid "Key Profile"
 msgstr "キーのプロフィール"
 
-#: ../../src/prefdlg.py:1375
+#: ../../src/prefdlg.py:1368
 msgid "Keybindings"
 msgstr "キーバインディング"
 
-#: ../../src/ed_menu.py:782
+#: ../../src/ed_menu.py:788
 msgid "Keyword Helper"
 msgstr "キーワードヘルパー"
 
@@ -1068,11 +1132,11 @@ msgstr "種類"
 msgid "Labels"
 msgstr "ラベル"
 
-#: ../../src/prefdlg.py:390
+#: ../../src/prefdlg.py:353
 msgid "Language"
 msgstr "言語"
 
-#: ../../src/prefdlg.py:1268
+#: ../../src/prefdlg.py:1261
 msgid "Latest Version"
 msgstr "最新バージョン"
 
@@ -1080,66 +1144,66 @@ msgstr "最新バージョン"
 msgid "Launch Configuration"
 msgstr "ランチの構成"
 
-#: ../../src/prefdlg.py:984
+#: ../../src/prefdlg.py:977
 msgid "Layout"
 msgstr "レイアウト"
 
-#: ../../src/prefdlg.py:1796
+#: ../../src/prefdlg.py:1788
 msgid "Lexer"
 msgstr "レクサー"
 
-#: ../../src/ed_main.py:126
+#: ../../src/ed_main.py:128
 msgid "Lexers"
 msgstr "レクサー"
 
-#: ../../src/ed_main.py:1202
+#: ../../src/ed_main.py:1223
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr ""
 
-#: ../../src/ed_menu.py:572
+#: ../../src/ed_menu.py:575
 msgid "Line Edit"
 msgstr "行編集"
 
-#: ../../src/ed_stc.py:792
+#: ../../src/ed_stc.py:787
 #, python-format
 msgid "Line: %d  Column: %d"
 msgstr "行: %d 列: %d"
 
-#: ../../src/prefdlg.py:357
+#: ../../src/prefdlg.py:320
 #, fuzzy
 msgid "Load Last Session"
 msgstr "最後のセッション荷重"
 
-#: ../../src/ed_menu.py:495
+#: ../../src/ed_menu.py:498
 msgid "Load Profile"
 msgstr "プロファイルを読み込む"
 
-#: ../../src/ed_main.py:617 ../../src/ed_menu.py:497
+#: ../../src/ed_main.py:623 ../../src/ed_menu.py:500
 msgid "Load a Custom Profile"
 msgstr "カスタムプロファイルを読み込む"
 
-#: ../../src/ed_menu.py:499
+#: ../../src/ed_menu.py:502
 msgid "Load and save custom Profiles"
 msgstr "カスタム設定を読み込み、保存する"
 
-#: ../../src/prefdlg.py:359
+#: ../../src/prefdlg.py:322
 msgid "Load files from last session on startup"
 msgstr "次回スタートするとき、前回の終了時のファイルを読み込む"
 
-#: ../../src/ed_main.py:624
+#: ../../src/ed_main.py:630
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr "%sのプロフィールをロードした"
 
-#: ../../src/prefdlg.py:414
+#: ../../src/prefdlg.py:377
 msgid "Locale Settings"
 msgstr "ロケールの設定"
 
-#: ../../src/ed_menu.py:697
+#: ../../src/ed_menu.py:703
 msgid "Lowercase"
 msgstr "小文字"
 
-#: ../../src/ed_menu.py:727 ../../src/prefdlg.py:552
+#: ../../src/ed_menu.py:733 ../../src/prefdlg.py:525
 msgid "Macintosh (\\r)"
 msgstr "Macintosh (\\r)"
 
@@ -1151,23 +1215,23 @@ msgstr "マクロ定義"
 msgid "Macros"
 msgstr "マクロ"
 
-#: ../../src/prefdlg.py:969
+#: ../../src/prefdlg.py:962
 msgid "Main display font for various UI components"
 msgstr ""
 
-#: ../../src/ed_menu.py:788
+#: ../../src/ed_menu.py:794
 msgid "Manage, Download, and Install plugins"
 msgstr ""
 
-#: ../../src/ed_main.py:128
+#: ../../src/ed_main.py:130
 msgid "Manually Set a Lexer/Syntax"
 msgstr "手動でレクサー・シンタックスを設定する"
 
-#: ../../src/ed_cmdbar.py:221
+#: ../../src/ed_cmdbar.py:225
 msgid "Match Case"
 msgstr "大文字と小文字の区別"
 
-#: ../../src/prefdlg.py:1473
+#: ../../src/prefdlg.py:1466
 msgid "Menu"
 msgstr "メニュー"
 
@@ -1181,11 +1245,11 @@ msgstr "その他"
 msgid "Modified"
 msgstr "修正後"
 
-#: ../../src/prefdlg.py:1483
+#: ../../src/prefdlg.py:1476
 msgid "Modifier 1"
 msgstr "修飾 1"
 
-#: ../../src/prefdlg.py:1487
+#: ../../src/prefdlg.py:1480
 msgid "Modifier 2"
 msgstr "修飾 2"
 
@@ -1193,7 +1257,7 @@ msgstr "修飾 2"
 msgid "Modules"
 msgstr "モジュール"
 
-#: ../../src/ed_menu.py:648
+#: ../../src/ed_menu.py:654
 msgid "Move caret matching brace"
 msgstr ""
 
@@ -1209,11 +1273,11 @@ msgstr "ごみ箱に移動"
 msgid "Namespaces"
 msgstr "名前空間"
 
-#: ../../src/prefdlg.py:194
+#: ../../src/prefdlg.py:199
 msgid "Network"
 msgstr "ネットワーク"
 
-#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1463
+#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1456
 #: ../../src/style_editor.py:198
 msgid "New"
 msgstr "新規作成"
@@ -1230,23 +1294,28 @@ msgstr "新しいファイル"
 msgid "New Folder"
 msgstr "新しいフォルダ"
 
-#: ../../src/ed_menu.py:547
+#: ../../src/ed_menu.py:550
 msgid "New Line After"
 msgstr "この行の後に新しい行を挿入する"
 
-#: ../../src/ed_menu.py:551
+#: ../../src/ed_menu.py:554
 msgid "New Line Before"
 msgstr "この行の前に新しい行を挿入する"
 
-#: ../../src/prefdlg.py:1658
+#: ../../src/prefdlg.py:1651
 msgid "New Profile"
 msgstr "新規プロファイル"
 
-#: ../../src/ed_cmdbar.py:214
+#: ../../src/ed_pages.py:303
+#, fuzzy
+msgid "New Tab"
+msgstr "新規タブ"
+
+#: ../../src/ed_cmdbar.py:218
 msgid "Next"
 msgstr "次へ"
 
-#: ../../src/ed_menu.py:650
+#: ../../src/ed_menu.py:656
 msgid "Next Bookmark"
 msgstr "次のブックマーク"
 
@@ -1254,23 +1323,32 @@ msgstr "次のブックマーク"
 msgid "No Description Available"
 msgstr "説明なしで利用可能"
 
-#: ../../src/ed_pages.py:429
+#: ../../src/ed_pages.py:522
 msgid "No Valid Files to Open"
 msgstr ""
 
-#: ../../src/prefdlg.py:1557
+#: ../../src/prefdlg.py:1550
 msgid "None"
 msgstr "なし"
+
+#: ../../src/prefdlg.py:1995
+#, fuzzy
+msgid "Normal"
+msgstr "形式"
+
+#: ../../src/ed_search.py:349
+msgid "Not implemented"
+msgstr ""
 
 #: ../../src/style_editor.py:137
 msgid "Ok"
 msgstr "Ok"
 
-#: ../../src/ed_menu.py:818
+#: ../../src/ed_menu.py:824
 msgid "Online Documentation"
 msgstr "オンラインドキュメント"
 
-#: ../../src/ed_menu.py:820
+#: ../../src/ed_menu.py:826
 msgid "Online project documentation and help guides"
 msgstr ""
 
@@ -1283,7 +1361,7 @@ msgstr "開く"
 msgid "Open &Recent"
 msgstr "最近開かれたファイル"
 
-#: ../../plugins/PyShell/pyshell/__init__.py:82
+#: ../../plugins/PyShell/pyshell/__init__.py:92
 msgid "Open A Python Shell"
 msgstr "Pythonのシェルを開く"
 
@@ -1291,11 +1369,11 @@ msgstr "Pythonのシェルを開く"
 msgid "Open Code Browser Sidepanel"
 msgstr ""
 
-#: ../../src/ed_pages.py:440
+#: ../../src/ed_pages.py:533
 msgid "Open Directory?"
 msgstr "ディレクトリーを開きますか？"
 
-#: ../../src/ed_pages.py:126
+#: ../../src/ed_pages.py:185
 msgid "Open File"
 msgstr "ファイルを開く"
 
@@ -1303,11 +1381,11 @@ msgstr "ファイルを開く"
 msgid "Open File Browser Sidepanel"
 msgstr ""
 
-#: ../../src/prefdlg.py:378
+#: ../../src/prefdlg.py:341
 msgid "Open files in new windows by default"
 msgstr ""
 
-#: ../../src/ed_menu.py:592
+#: ../../src/ed_menu.py:595
 msgid "Open the Quick Find Bar"
 msgstr ""
 
@@ -1315,12 +1393,12 @@ msgstr ""
 msgid "Open with "
 msgstr ""
 
-#: ../../src/ed_pages.py:460
+#: ../../src/ed_pages.py:553
 #, python-format
 msgid "Opened file: %s"
 msgstr "%sを開きました"
 
-#: ../../src/ed_main.py:1136
+#: ../../src/ed_main.py:1157
 #, python-format
 msgid "Opening %s"
 msgstr "%s を開いています"
@@ -1329,24 +1407,24 @@ msgstr "%s を開いています"
 msgid "Packages"
 msgstr "パッケージ"
 
-#: ../../src/ed_menu.py:501
+#: ../../src/ed_menu.py:504
 msgid "Page Set&up"
 msgstr "ページ設定"
 
-#: ../../src/ed_print.py:185
+#: ../../src/ed_print.py:190
 #, python-format
 msgid "Page: %d"
 msgstr "ページ： %d"
 
-#: ../../src/prefdlg.py:1162
+#: ../../src/prefdlg.py:1155
 msgid "Password"
 msgstr "パスワード"
 
-#: ../../src/ed_stc.py:2135 ../../src/ed_toolbar.py:84
+#: ../../src/ed_stc.py:2142 ../../src/ed_toolbar.py:84
 msgid "Paste"
 msgstr "貼り付け"
 
-#: ../../src/ed_menu.py:540 ../../src/ed_toolbar.py:85
+#: ../../src/ed_menu.py:543 ../../src/ed_toolbar.py:85
 msgid "Paste Text from Clipboard to File"
 msgstr ""
 
@@ -1367,19 +1445,19 @@ msgstr ""
 msgid "Perspective to Delete"
 msgstr ""
 
-#: ../../src/ed_main.py:122
+#: ../../src/ed_main.py:124
 msgid "Perspectives"
 msgstr "視る"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:412
+#: ../../plugins/Launch/launch/cfgdlg.py:410
 msgid "Plain Text"
 msgstr "プレーンテキスト"
 
-#: ../../src/ed_main.py:1201
+#: ../../src/ed_main.py:1222
 msgid "Platform Info"
 msgstr "プラットフォーム情報"
 
-#: ../../src/Editra.py:743
+#: ../../src/Editra.py:781
 msgid "Please check the preferences dialog to check your preferences"
 msgstr ""
 
@@ -1387,19 +1465,24 @@ msgstr ""
 msgid "Plugin"
 msgstr "プラグイン"
 
-#: ../../src/ed_main.py:861 ../../src/ed_menu.py:786
+#: ../../src/ed_main.py:866 ../../src/ed_menu.py:792
 msgid "Plugin Manager"
 msgstr "プラグインマネージャ"
 
-#: ../../src/prefdlg.py:1147
+#: ../../src/prefdlg.py:1140
 msgid "Port Number"
 msgstr "ポート番号"
 
-#: ../../src/ed_menu.py:594
+#: ../../src/ed_menu.py:600
 msgid "Pr&eferences"
 msgstr "環境設定"
 
-#: ../../src/prefdlg.py:106
+#: ../../src/prefdlg.py:582
+#, fuzzy
+msgid "Prefered Encoding"
+msgstr "環境設定"
+
+#: ../../src/prefdlg.py:108
 msgid "Preferences - Editra"
 msgstr "環境設定 - Editra"
 
@@ -1407,19 +1490,19 @@ msgstr "環境設定 - Editra"
 msgid "Preview"
 msgstr "プレビュー"
 
-#: ../../src/ed_menu.py:506
+#: ../../src/ed_menu.py:509
 msgid "Preview Printout"
 msgstr "プリントアウトのプレビュー"
 
-#: ../../src/ed_cmdbar.py:218
+#: ../../src/ed_cmdbar.py:222
 msgid "Previous"
 msgstr "前へ"
 
-#: ../../src/ed_menu.py:653
+#: ../../src/ed_menu.py:659
 msgid "Previous Bookmark"
 msgstr "前のブックマーク"
 
-#: ../../src/prefdlg.py:601
+#: ../../src/prefdlg.py:592
 msgid "Primary Font"
 msgstr "プライマリフォント"
 
@@ -1427,19 +1510,19 @@ msgstr "プライマリフォント"
 msgid "Print"
 msgstr "プリント"
 
-#: ../../src/ed_menu.py:509 ../../src/ed_toolbar.py:75
+#: ../../src/ed_menu.py:512 ../../src/ed_toolbar.py:75
 msgid "Print Current File"
 msgstr "現在のファイルを印刷する"
 
-#: ../../src/ed_menu.py:504
+#: ../../src/ed_menu.py:507
 msgid "Print Pre&view"
 msgstr "印刷プレビュー"
 
-#: ../../src/ed_print.py:86
+#: ../../src/ed_print.py:91
 msgid "Print Preview"
 msgstr "印刷プレビュー"
 
-#: ../../src/prefdlg.py:346
+#: ../../src/prefdlg.py:310
 msgid "Printer Mode"
 msgstr "プリンタのモード"
 
@@ -1447,20 +1530,20 @@ msgstr "プリンタのモード"
 msgid "Procedure Definitions"
 msgstr "手続きの定義"
 
-#: ../../src/ed_main.py:598 ../../src/ed_main.py:619 ../../src/ed_menu.py:498
+#: ../../src/ed_main.py:604 ../../src/ed_main.py:625 ../../src/ed_menu.py:501
 msgid "Profile"
 msgstr "プロフィール"
 
-#: ../../src/ed_main.py:603
+#: ../../src/ed_main.py:609
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr ""
 
-#: ../../src/Editra.py:745
+#: ../../src/Editra.py:783
 msgid "Profile Updated"
 msgstr "プロフィールを更新した"
 
-#: ../../plugins/Launch/launch/launch.py:133
+#: ../../plugins/Launch/launch/launch.py:135
 msgid "Program Executable Command"
 msgstr ""
 
@@ -1468,7 +1551,7 @@ msgstr ""
 msgid "Programs"
 msgstr "プログラム"
 
-#: ../../src/ed_menu.py:814
+#: ../../src/ed_menu.py:820
 msgid "Project Homepage"
 msgstr "プロジェクトのホームページ"
 
@@ -1476,19 +1559,19 @@ msgstr "プロジェクトのホームページ"
 msgid "Protocols"
 msgstr "プロトコル"
 
-#: ../../src/ed_menu.py:784
+#: ../../src/ed_menu.py:790
 msgid "Provides a Contextual Help Menu Listing Standard Keywords/Functions"
 msgstr ""
 
-#: ../../src/prefdlg.py:1133
+#: ../../src/prefdlg.py:1126
 msgid "Proxy Settings"
 msgstr "プロキシ設定"
 
-#: ../../src/prefdlg.py:1143
+#: ../../src/prefdlg.py:1136
 msgid "Proxy URL"
 msgstr "プロキシのURL"
 
-#: ../../src/iface.py:277
+#: ../../src/iface.py:294
 msgid "Put an item on the Shelf"
 msgstr ""
 
@@ -1497,7 +1580,7 @@ msgstr ""
 msgid "Rate: %.2f Kb/s"
 msgstr "レート: %2f Kb/s"
 
-#: ../../src/ed_search.py:441
+#: ../../src/ed_search.py:759
 msgid "Recent Searches"
 msgstr "最近の検索"
 
@@ -1505,41 +1588,57 @@ msgstr "最近の検索"
 msgid "Recently Opened Files"
 msgstr "最近オープンしたファイル"
 
-#: ../../src/ed_stc.py:1519
+#: ../../src/ed_stc.py:1520
 msgid "Recording Finished"
 msgstr ""
 
-#: ../../src/ed_stc.py:1506
+#: ../../src/ed_stc.py:1507
 #, fuzzy
 msgid "Recording Macro"
 msgstr "マクロ記録中"
 
-#: ../../src/ed_menu.py:528 ../../src/ed_stc.py:2131
+#: ../../src/ed_menu.py:531 ../../src/ed_stc.py:2138
 #: ../../src/ed_toolbar.py:78
 msgid "Redo"
 msgstr "やり直す"
 
-#: ../../src/ed_menu.py:530 ../../src/ed_toolbar.py:78
+#: ../../src/ed_menu.py:533 ../../src/ed_toolbar.py:78
 msgid "Redo Last Undo"
 msgstr ""
 
-#: ../../src/ed_pages.py:741
+#: ../../src/ed_cmdbar.py:228
+msgid "Regex"
+msgstr ""
+
+#: ../../src/ed_search.py:192
+msgid "Regex Compile Error"
+msgstr ""
+
+#: ../../src/ed_pages.py:848
 msgid "Reload File?"
 msgstr "ファイルをリロードしますか？"
 
-#: ../../src/prefdlg.py:381
+#: ../../src/ed_menu.py:492
+msgid "Reload the file with a specified encoding"
+msgstr ""
+
+#: ../../src/ed_main.py:961 ../../src/ed_menu.py:490
+msgid "Reload with Encoding"
+msgstr ""
+
+#: ../../src/prefdlg.py:344
 msgid "Remember File Position"
 msgstr "ファイルの位置を覚えて"
 
-#: ../../src/prefdlg.py:959
+#: ../../src/prefdlg.py:952
 msgid "Remember Window Position on Exit"
 msgstr ""
 
-#: ../../src/prefdlg.py:956
+#: ../../src/prefdlg.py:949
 msgid "Remember Window Size on Exit"
 msgstr ""
 
-#: ../../src/ed_menu.py:578
+#: ../../src/ed_menu.py:581
 msgid "Remove All Bookmarks"
 msgstr "すべてのブックマークを削除"
 
@@ -1547,15 +1646,15 @@ msgstr "すべてのブックマークを削除"
 msgid "Remove Saved Path"
 msgstr ""
 
-#: ../../src/ed_menu.py:580
+#: ../../src/ed_menu.py:583
 msgid "Remove all bookmarks from the current document"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:223
+#: ../../plugins/Launch/launch/cfgdlg.py:221
 msgid "Remove selection from list"
 msgstr ""
 
-#: ../../src/ed_menu.py:721
+#: ../../src/ed_menu.py:727
 msgid "Remove trailing whitespace"
 msgstr "末尾の空白を削除する"
 
@@ -1563,19 +1662,12 @@ msgstr "末尾の空白を削除する"
 msgid "Rename"
 msgstr "名前変更"
 
-#: ../../src/ed_search.py:207
-#, python-format
-msgid ""
-"Replace All Finished\n"
-"A Total of %d matches were replaced"
-msgstr ""
-
-#: ../../src/dev_tool.py:388
+#: ../../src/dev_tool.py:390
 #, fuzzy
 msgid "Report Error"
 msgstr "エラーを報告書する"
 
-#: ../../src/ed_pages.py:721
+#: ../../src/ed_pages.py:828
 msgid "Resave File?"
 msgstr ""
 
@@ -1591,7 +1683,7 @@ msgstr ""
 msgid "Revert file to last save point"
 msgstr ""
 
-#: ../../src/prefdlg.py:847 ../../src/prefdlg.py:1519
+#: ../../src/prefdlg.py:840 ../../src/prefdlg.py:1512
 msgid "Revert to Default"
 msgstr "デフォルトに戻す"
 
@@ -1600,23 +1692,28 @@ msgstr "デフォルトに戻す"
 msgid "Revert to Saved"
 msgstr "デフォルトに戻す"
 
-#: ../../plugins/Launch/launch/__init__.py:81
-#: ../../plugins/Launch/launch/launch.py:156
-#: ../../plugins/Launch/launch/launch.py:423
+#: ../../plugins/Launch/launch/__init__.py:91
+#: ../../plugins/Launch/launch/launch.py:158
+#: ../../plugins/Launch/launch/launch.py:445
 msgid "Run"
 msgstr "実行"
 
-#: ../../plugins/Launch/launch/__init__.py:66
+#: ../../plugins/Launch/launch/__init__.py:74
 msgid "Run script from current buffer"
 msgstr ""
 
-#: ../../plugins/Launch/launch/__init__.py:83
+#: ../../plugins/Launch/launch/__init__.py:93
 msgid "Run the file associated with the current buffer in Launch"
 msgstr ""
 
 #: ../../src/ed_toolbar.py:73
 msgid "Save"
 msgstr "保存"
+
+#: ../../src/ed_pages.py:305
+#, fuzzy, python-format
+msgid "Save \"%s\""
+msgstr "別名で保存"
 
 #: ../../src/ed_menu.py:480
 msgid "Save &As"
@@ -1630,7 +1727,7 @@ msgstr "すべて保存"
 msgid "Save As"
 msgstr "別名で保存"
 
-#: ../../src/ed_main.py:1164
+#: ../../src/ed_main.py:1185
 msgid "Save Changes?"
 msgstr "変更を保存する?"
 
@@ -1638,7 +1735,7 @@ msgstr "変更を保存する?"
 msgid "Save Current File"
 msgstr "現在のファイルに保存する"
 
-#: ../../src/ed_menu.py:494
+#: ../../src/ed_menu.py:497
 msgid "Save Current Settings to a New Profile"
 msgstr ""
 
@@ -1654,7 +1751,7 @@ msgstr "保存のエラ"
 msgid "Save Perspective"
 msgstr ""
 
-#: ../../src/ed_menu.py:492
+#: ../../src/ed_menu.py:495
 msgid "Save Profile"
 msgstr "プロファイルを保存"
 
@@ -1675,21 +1772,47 @@ msgstr ""
 msgid "Save the current window layout"
 msgstr ""
 
-#: ../../src/ed_main.py:580
+#: ../../src/ed_main.py:586
 #, python-format
 msgid "Saved File As: %s"
 msgstr "別名で保存する: %s"
 
-#: ../../src/ed_main.py:535
+#: ../../src/ed_main.py:543
 #, python-format
 msgid "Saved File: %s"
 msgstr "保存されているファイル: %s"
 
-#: ../../plugins/Launch/launch/launch.py:146
+#: ../../plugins/Launch/launch/launch.py:148
 msgid "Script Arguments"
 msgstr "スクリプト引数"
 
-#: ../../src/prefdlg.py:604
+#: ../../src/ed_search.py:1200
+#, python-format
+msgid "Search Complete: %d matching lines where found"
+msgstr ""
+
+#: ../../src/ed_search.py:1180
+msgid "Search Started"
+msgstr ""
+
+#: ../../src/ed_search.py:1193
+msgid "Search complete"
+msgstr ""
+
+#: ../../src/ed_search.py:241
+msgid "Search wrapped to bottom"
+msgstr ""
+
+#: ../../src/ed_search.py:236
+msgid "Search wrapped to top"
+msgstr ""
+
+#: ../../src/ed_search.py:1270
+#, python-format
+msgid "Searching in : %s"
+msgstr ""
+
+#: ../../src/prefdlg.py:595
 msgid "Secondary Font"
 msgstr "二次フォント"
 
@@ -1697,18 +1820,22 @@ msgstr "二次フォント"
 msgid "Sections"
 msgstr "セクション"
 
-#: ../../src/ed_menu.py:542
+#: ../../src/ed_menu.py:545
 msgid "Select &All"
 msgstr "すべて選択"
 
-#: ../../src/ed_stc.py:2137
+#: ../../src/ed_stc.py:2147
 msgid "Select All"
 msgstr "すべて選択"
 
-#: ../../src/ed_menu.py:544
+#: ../../src/ed_menu.py:547
 #, fuzzy
 msgid "Select All Text in Document"
 msgstr "すべてのテキストを選択する"
+
+#: ../../src/ed_main.py:960
+msgid "Select an encoding to reload the file with"
+msgstr ""
 
 #: ../../src/plugdlg.py:406
 msgid "Select plugins to download"
@@ -1718,11 +1845,11 @@ msgstr ""
 msgid "Select the desired plugins and then Click Download"
 msgstr ""
 
-#: ../../src/ed_menu.py:826
+#: ../../src/ed_menu.py:832
 msgid "Send bug reports and suggestions"
 msgstr ""
 
-#: ../../src/prefdlg.py:1916
+#: ../../src/prefdlg.py:1912
 msgid "Set Font"
 msgstr "フォントを使用する"
 
@@ -1730,27 +1857,27 @@ msgstr "フォントを使用する"
 msgid "Set the preview file type"
 msgstr ""
 
-#: ../../src/prefdlg.py:580
+#: ../../src/prefdlg.py:568
 msgid "Sets a secondary font used for special regions when syntax highlighting is in use"
 msgstr ""
 
-#: ../../src/prefdlg.py:575
+#: ../../src/prefdlg.py:563
 msgid "Sets the main/default font of the document"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:126
+#: ../../plugins/Launch/launch/launch.py:128
 msgid "Settings"
 msgstr "設定"
 
-#: ../../src/iface.py:276
+#: ../../src/iface.py:293
 msgid "Shelf"
 msgstr "シェルフ"
 
-#: ../../src/ed_menu.py:631 ../../src/ed_menu.py:633 ../../src/prefdlg.py:560
+#: ../../src/ed_menu.py:637 ../../src/ed_menu.py:639 ../../src/prefdlg.py:548
 msgid "Show EOL Markers"
 msgstr "ショーeolマーカー"
 
-#: ../../src/ed_menu.py:628
+#: ../../src/ed_menu.py:634
 msgid "Show Edge Guide"
 msgstr "ショーエッジガイド"
 
@@ -1758,63 +1885,67 @@ msgstr "ショーエッジガイド"
 msgid "Show Hidden Files"
 msgstr "隠しファイルを表示"
 
-#: ../../src/prefdlg.py:940
+#: ../../src/prefdlg.py:933
 #, fuzzy
 msgid "Show Icons on Tabs"
 msgstr "スペースをタブに変換"
 
-#: ../../src/ed_menu.py:626
+#: ../../src/ed_menu.py:632
 #, fuzzy
 msgid "Show Indentation Guides"
 msgstr "インデントガイドの表示"
 
-#: ../../src/ed_menu.py:636
+#: ../../src/ed_menu.py:642
 msgid "Show Line Number Margin"
 msgstr ""
 
-#: ../../src/ed_menu.py:634 ../../src/prefdlg.py:562
+#: ../../src/ed_menu.py:640 ../../src/prefdlg.py:550
 msgid "Show Line Numbers"
 msgstr "行番号の表示"
 
-#: ../../src/iface.py:181
+#: ../../src/iface.py:192
 msgid "Show Shelf"
 msgstr ""
 
-#: ../../src/prefdlg.py:361
+#: ../../src/prefdlg.py:324
 #, fuzzy
 msgid "Show Splash Screen"
 msgstr "スプラッシュ画面を表示する"
 
-#: ../../src/ed_menu.py:659 ../../src/prefdlg.py:961
+#: ../../src/ed_menu.py:665 ../../src/prefdlg.py:954
 msgid "Show Status Bar"
 msgstr "ステータスバーを表示"
 
-#: ../../src/ed_menu.py:662 ../../src/prefdlg.py:963
+#: ../../src/ed_menu.py:668 ../../src/prefdlg.py:956
 msgid "Show Toolbar"
 msgstr "ツールバーを表示"
 
-#: ../../src/ed_menu.py:637 ../../src/prefdlg.py:564
+#: ../../src/ed_menu.py:643 ../../src/prefdlg.py:552
 msgid "Show Whitespace"
 msgstr "空白を示す"
 
-#: ../../src/ed_menu.py:639
+#: ../../src/ed_menu.py:645
 msgid "Show Whitespace Markers"
 msgstr ""
 
-#: ../../src/ed_log.py:124
+#: ../../src/ed_search.py:1074
+msgid "Show a find results screen"
+msgstr ""
+
+#: ../../src/ed_log.py:132
 msgid "Show output from"
 msgstr ""
 
-#: ../../src/iface.py:183
+#: ../../src/iface.py:194
 msgid "Show the Shelf"
 msgstr ""
 
-#: ../../src/ed_menu.py:630
+#: ../../src/ed_menu.py:636
 msgid "Show the edge column guide"
 msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:170
-#: ../../src/style_editor.py:687
+#: ../../src/style_editor.py:690
 msgid "Size"
 msgstr "サイズ"
 
@@ -1822,7 +1953,11 @@ msgstr "サイズ"
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr ""
 
-#: ../../src/ed_menu.py:713
+#: ../../src/ed_search.py:348
+msgid "Sorry will be ready for next version"
+msgstr ""
+
+#: ../../src/ed_menu.py:719
 msgid "Spaces to Tabs"
 msgstr "スペースをタブに変換"
 
@@ -1842,16 +1977,16 @@ msgstr ""
 msgid "Start a new file in a new window"
 msgstr ""
 
-#: ../../src/prefdlg.py:400
+#: ../../src/prefdlg.py:363
 #, fuzzy
 msgid "Startup Settings"
 msgstr "起動時の設定"
 
-#: ../../src/updater.py:284
+#: ../../src/updater.py:286
 msgid "Status Unknown"
 msgstr "ステータス不明"
 
-#: ../../src/ed_menu.py:789 ../../src/style_editor.py:63
+#: ../../src/ed_menu.py:795 ../../src/style_editor.py:63
 msgid "Style Editor"
 msgstr "スタイルエディタ"
 
@@ -1885,7 +2020,7 @@ msgstr ""
 msgid "Syntax Files"
 msgstr "構文のファイル"
 
-#: ../../src/ed_menu.py:765 ../../src/prefdlg.py:487 ../../src/prefdlg.py:821
+#: ../../src/ed_menu.py:771 ../../src/prefdlg.py:452 ../../src/prefdlg.py:814
 msgid "Syntax Highlighting"
 msgstr "文法ハイライト"
 
@@ -1893,11 +2028,11 @@ msgstr "文法ハイライト"
 msgid "System Directory"
 msgstr "システムディレクトリ"
 
-#: ../../src/prefdlg.py:526
+#: ../../src/prefdlg.py:499
 msgid "Tab Width"
 msgstr "タブの幅"
 
-#: ../../src/ed_menu.py:716
+#: ../../src/ed_menu.py:722
 msgid "Tabs to Spaces"
 msgstr "タブを空白に"
 
@@ -1905,7 +2040,7 @@ msgstr "タブを空白に"
 msgid "Task Definitions"
 msgstr "タスクの定義"
 
-#: ../../plugins/Launch/launch/cfgdlg.py:384
+#: ../../plugins/Launch/launch/cfgdlg.py:382
 msgid "Text Colors"
 msgstr "テキストの色"
 
@@ -1913,15 +2048,16 @@ msgstr "テキストの色"
 msgid "Text Document"
 msgstr "文書ドキュメント"
 
-#: ../../src/ed_pages.py:287
+#: ../../src/ed_pages.py:140
 #, python-format
 msgid ""
-"The document could not be decoded with %(encoding1)s.\n"
+"The correct encoding of '%s' could not be determined.\n"
 "\n"
-"Would you like to open it as %(encoding2)s instead?"
+"Choose an encoding and select Ok to open the file with the chosen encoding.\n"
+"Click Cancel to abort opening the file"
 msgstr ""
 
-#: ../../src/ed_main.py:1161
+#: ../../src/ed_main.py:1182
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -1929,10 +2065,20 @@ msgid ""
 "Would you like to save the changes?"
 msgstr ""
 
-#: ../../src/ed_pages.py:427
+#: ../../src/ed_pages.py:520
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr ""
+
+#: ../../src/ed_stc.py:2145
+#, fuzzy
+msgid "To Lowercase"
+msgstr "小文字"
+
+#: ../../src/ed_stc.py:2144
+#, fuzzy
+msgid "To Uppercase"
+msgstr "大文字"
 
 #: ../../src/plugdlg.py:661
 msgid ""
@@ -1950,56 +2096,56 @@ msgstr ""
 msgid "To open multiple files at once %s+Click to select the desired files/folders then hit Enter to open them all at once"
 msgstr ""
 
-#: ../../src/ed_menu.py:757
+#: ../../src/ed_menu.py:763
 msgid "Toggle Auto-Indentation functionality"
 msgstr ""
 
-#: ../../src/ed_menu.py:575
+#: ../../src/ed_menu.py:578
 msgid "Toggle Bookmark"
 msgstr ""
 
-#: ../../src/ed_menu.py:764
+#: ../../src/ed_menu.py:770
 msgid "Toggle Code Folding"
 msgstr ""
 
-#: ../../src/ed_menu.py:641
+#: ../../src/ed_menu.py:647
 msgid "Toggle Editor View Options"
 msgstr ""
 
-#: ../../src/ed_menu.py:577
+#: ../../src/ed_menu.py:580
 msgid "Toggle bookmark of the current line"
 msgstr ""
 
-#: ../../src/prefdlg.py:934
+#: ../../src/prefdlg.py:927
 msgid "Toolbar Icon Size"
 msgstr "アイコンのサイズ"
 
-#: ../../src/ed_menu.py:821
+#: ../../src/ed_menu.py:827
 msgid "Translate Editra"
 msgstr "Editraを翻訳する"
 
-#: ../../src/prefdlg.py:992
+#: ../../src/prefdlg.py:985
 msgid "Transparency"
 msgstr "透明"
 
-#: ../../src/ed_menu.py:569
+#: ../../src/ed_menu.py:572
 #, fuzzy
 msgid "Transpose Line"
 msgstr "行を転置する"
 
-#: ../../src/ed_menu.py:571
+#: ../../src/ed_menu.py:574
 msgid "Transpose the current line with the previous one"
 msgstr ""
 
-#: ../../src/ed_menu.py:719
+#: ../../src/ed_menu.py:725
 msgid "Trim Trailing Whitespace"
 msgstr ""
 
-#: ../../src/prefdlg.py:568
+#: ../../src/prefdlg.py:556
 msgid "Turn off for better performance"
 msgstr ""
 
-#: ../../src/util.py:167
+#: ../../src/util.py:168
 msgid "Unable to open dropped file or text"
 msgstr ""
 
@@ -2007,38 +2153,38 @@ msgstr ""
 msgid "Unable to retrieve plugin list"
 msgstr ""
 
-#: ../../src/updater.py:139
+#: ../../src/updater.py:141
 msgid "Unable to retrieve version info"
 msgstr ""
 
-#: ../../src/ed_menu.py:681
+#: ../../src/ed_menu.py:687
 #, fuzzy
 msgid "Uncomment Lines"
 msgstr "行のコメントを外して"
 
-#: ../../src/ed_menu.py:683
+#: ../../src/ed_menu.py:689
 #, fuzzy
 msgid "Uncomment the selected lines"
 msgstr "選択したの行をコメントを外して"
 
-#: ../../src/ed_stc.py:2130 ../../src/ed_toolbar.py:77
+#: ../../src/ed_stc.py:2137 ../../src/ed_toolbar.py:77
 msgid "Undo"
 msgstr "元に戻す"
 
-#: ../../src/ed_menu.py:527 ../../src/ed_toolbar.py:77
+#: ../../src/ed_menu.py:530 ../../src/ed_toolbar.py:77
 msgid "Undo Last Action"
 msgstr "一つ前の操作に戻す"
 
-#: ../../src/ed_menu.py:690
+#: ../../src/ed_menu.py:696
 #, fuzzy
 msgid "Unindent Lines"
 msgstr "行を逆インデントする"
 
-#: ../../src/ed_menu.py:692
+#: ../../src/ed_menu.py:698
 msgid "Unindent the selected lines"
 msgstr ""
 
-#: ../../src/ed_menu.py:731 ../../src/prefdlg.py:552
+#: ../../src/ed_menu.py:737 ../../src/prefdlg.py:525
 msgid "Unix (\\n)"
 msgstr "Unix (\\n)"
 
@@ -2047,39 +2193,39 @@ msgstr "Unix (\\n)"
 msgid "Unknown"
 msgstr "不明"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:601
+#: ../../plugins/filebrowser/filebrowser/browser.py:605
 msgid "Untitled_File"
 msgstr "無題ファイル"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:599
+#: ../../plugins/filebrowser/filebrowser/browser.py:603
 msgid "Untitled_Folder"
 msgstr "無題フォルダ"
 
-#: ../../src/prefdlg.py:1102
+#: ../../src/prefdlg.py:1095
 msgid "Update"
 msgstr "更新する"
 
-#: ../../src/Editra.py:475
+#: ../../src/Editra.py:495
 msgid "Update Available"
 msgstr "アップデートできます"
 
-#: ../../src/ed_menu.py:694
+#: ../../src/ed_menu.py:700
 msgid "Uppercase"
 msgstr "大文字"
 
-#: ../../src/ed_menu.py:754
+#: ../../src/ed_menu.py:760
 msgid "Use Auto Completion when available"
 msgstr ""
 
-#: ../../src/prefdlg.py:1138
+#: ../../src/prefdlg.py:1131
 msgid "Use Proxy"
 msgstr "プロキシを使用する"
 
-#: ../../src/ed_menu.py:702
+#: ../../src/ed_menu.py:708
 msgid "Use Soft Tabs"
 msgstr ""
 
-#: ../../src/prefdlg.py:542
+#: ../../src/prefdlg.py:515
 msgid "Use Tabs Instead of Spaces"
 msgstr ""
 
@@ -2087,7 +2233,7 @@ msgstr ""
 msgid "User Directory"
 msgstr "ユーザーのディレクトリ"
 
-#: ../../src/prefdlg.py:1155
+#: ../../src/prefdlg.py:1148
 msgid "Username"
 msgstr "ユーザー名"
 
@@ -2095,32 +2241,32 @@ msgstr "ユーザー名"
 msgid "Version"
 msgstr "ヴァージョン"
 
-#: ../../src/ed_log.py:74
+#: ../../src/ed_log.py:81
 msgid "View Editra's console log"
 msgstr ""
 
-#: ../../src/ed_menu.py:652
+#: ../../src/ed_menu.py:658
 msgid "View Line of Next Bookmark"
 msgstr ""
 
-#: ../../src/ed_menu.py:655
+#: ../../src/ed_menu.py:661
 msgid "View Line of Previous Bookmark"
 msgstr ""
 
-#: ../../src/prefdlg.py:594
+#: ../../src/prefdlg.py:585
 msgid "View Options"
 msgstr "表示オプション"
 
-#: ../../src/ed_menu.py:816
+#: ../../src/ed_menu.py:822
 #, python-format
 msgid "Visit the project homepage %s"
 msgstr ""
 
-#: ../../src/prefdlg.py:701
+#: ../../src/prefdlg.py:695
 msgid "Visual Helpers"
 msgstr ""
 
-#: ../../plugins/Launch/launch/cfgdlg.py:433
+#: ../../plugins/Launch/launch/cfgdlg.py:431
 msgid "Warning Text"
 msgstr "警告テキスト"
 
@@ -2128,76 +2274,82 @@ msgstr "警告テキスト"
 msgid "Where"
 msgstr "どこ"
 
-#: ../../src/ed_main.py:596
+#: ../../src/ed_main.py:602
 msgid "Where to Save Profile?"
 msgstr ""
 
-#: ../../src/ed_menu.py:722
+#: ../../src/ed_menu.py:728
 msgid "Whitespace"
 msgstr "空白"
 
-#: ../../src/ed_menu.py:723
+#: ../../src/ed_menu.py:729
 msgid "Whitespace formating commands"
 msgstr ""
 
-#: ../../src/ed_menu.py:735 ../../src/prefdlg.py:553
+#: ../../src/ed_menu.py:741 ../../src/prefdlg.py:526
 msgid "Windows (\\r\\n)"
 msgstr "Windows (\\r\\n)"
 
-#: ../../src/ed_menu.py:706 ../../src/prefdlg.py:566
+#: ../../src/ed_menu.py:712 ../../src/prefdlg.py:554
 msgid "Word Wrap"
 msgstr "行を折り返し"
 
-#: ../../src/ed_menu.py:708
+#: ../../src/ed_menu.py:714
 #, fuzzy
 msgid "Wrap Text Horizontally"
 msgstr "テキストを水平に包む"
 
-#: ../../src/ed_main.py:1199
+#: ../../src/ed_main.py:1220
 #, python-format
 msgid "Written in 100%% Python."
 msgstr "100%%のPythonで書かれています"
 
-#: ../../src/Editra.py:741
+#: ../../src/Editra.py:779
 msgid "Your profile has been updated to the latest version"
 msgstr ""
 
-#: ../../src/ed_menu.py:614 ../../src/ed_menu.py:616
+#: ../../src/ed_menu.py:620 ../../src/ed_menu.py:622
 #, fuzzy
 msgid "Zoom Default"
 msgstr "初期設定に戻す"
 
-#: ../../src/ed_menu.py:611 ../../src/ed_menu.py:613
+#: ../../src/ed_menu.py:617 ../../src/ed_menu.py:619
 msgid "Zoom In"
 msgstr "拡大する"
 
-#: ../../src/ed_menu.py:608 ../../src/ed_menu.py:610
+#: ../../src/ed_menu.py:614 ../../src/ed_menu.py:616
 msgid "Zoom Out"
 msgstr "縮小する"
 
-#: ../../plugins/Launch/launch/launch.py:143
+#: ../../plugins/Launch/launch/launch.py:145
 msgid "args"
 msgstr "args"
 
-#: ../../src/style_editor.py:658
+#: ../../src/style_editor.py:661
 msgid "bold"
 msgstr "ボールド"
 
-#: ../../src/style_editor.py:659
+#: ../../src/style_editor.py:662
 msgid "eol"
 msgstr "eol"
 
-#: ../../plugins/Launch/launch/launch.py:130
+#: ../../plugins/Launch/launch/launch.py:132
 msgid "exec"
 msgstr "実行"
 
-#: ../../src/style_editor.py:660
+#: ../../src/style_editor.py:663
 msgid "italic"
 msgstr "イタリック"
 
-#: ../../src/style_editor.py:661
+#: ../../src/style_editor.py:664
 msgid "underline"
 msgstr "下線"
+
+#~ msgid "All Done"
+#~ msgstr "完了しました"
+
+#~ msgid "Encoding Error"
+#~ msgstr "エンコーディングエラー"
 
 #~ msgid "Filter"
 #~ msgstr "フィルター"
