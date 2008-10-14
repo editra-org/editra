@@ -274,7 +274,7 @@ class SearchController:
                                    (engine.SearchInFile, [fname,], dict()))
             else:
                 engine.SetSearchPool(stc.GetTextRaw())
-                ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH, (engine.FindAll))
+                ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH, (engine.FindAll,))
         elif smode == finddlg.LOCATION_OPEN_DOCS:
             files = [fname.GetFileName()
                      for fname in self._parent.GetTextControls()]
@@ -509,13 +509,13 @@ class SearchEngine:
 
         """
         if self._regex is None:
-            return None
+            return list()
 
         matches = [match for match in re.finditer(self._regex, self._pool)]
         if len(matches):
             matches = [match.span() for match in matches]
             return matches
-        return None
+        return list()
 
     def FindNext(self, spos=0):
         """Find the next match of the query starting at spos
@@ -1098,8 +1098,10 @@ class EdFindResults(plugin.Plugin):
                 screen = shelf_nb.GetCurrentPage()
             data = msg.GetData()
             if len(data) > 1:
+                # Doing a file search operation
                 screen.StartSearch(data[0], *data[1], **data[2])
             else:
+                # Doing a buffer find operation (in memory)
                 screen.StartSearch(data[0])
 
 #-----------------------------------------------------------------------------#
