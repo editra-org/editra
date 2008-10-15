@@ -25,6 +25,7 @@ import os
 import sys
 import re
 import types
+from StringIO import StringIO
 import wx
 
 # Local imports
@@ -274,7 +275,7 @@ class SearchController:
                                    (engine.SearchInFile, [fname,], dict()))
             else:
                 engine.SetSearchPool(stc.GetTextRaw())
-                ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH, (engine.FindAll,))
+                ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH, (engine.FindAllLines,))
         elif smode == finddlg.LOCATION_OPEN_DOCS:
             files = [fname.GetFileName()
                      for fname in self._parent.GetTextControls()]
@@ -511,11 +512,30 @@ class SearchEngine:
         if self._regex is None:
             return list()
 
-        matches = [match for match in re.finditer(self._regex, self._pool)]
+        matches = [ match for match in re.finditer(self._regex, self._pool) ]
         if len(matches):
             matches = [match.span() for match in matches]
             return matches
         return list()
+
+    def FindAllLines(self):
+        """Find all the matches in the current context
+        @return: list of strings
+
+        """
+        rlist = list()
+        if self._regex is None:
+            return rlist
+
+        flag = 0
+        if not self._matchcase:
+            flag = re.IGNORECASE
+
+        for lnum, line in enumerate(StringIO(self._pool)):
+            if self._regex.search(line, flag) is not None:
+                rlist.append(FormatResult(_("Untitled"), lnum, line))
+
+        return rlist
 
     def FindNext(self, spos=0):
         """Find the next match of the query starting at spos
@@ -639,7 +659,7 @@ class SearchEngine:
                 flag = re.IGNORECASE
 
             for lnum, line in enumerate(fobj):
-                if re.search(self._regex, line, flag) is not None:
+                if self._regex.search(line, flag) is not None:
                     yield FormatResult(fname, lnum, line)
             fobj.close()
         return
