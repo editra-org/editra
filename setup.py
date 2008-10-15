@@ -70,6 +70,7 @@ CLASSIFIERS = [
             'Natural Language :: Russian',
             'Natural Language :: Serbian',
             'Natural Language :: Spanish',
+            'Natural Language :: Turkish',
             'Natural Language :: Ukranian',
             'Operating System :: MacOS :: MacOS X',
             'Operating System :: Microsoft :: Windows',
