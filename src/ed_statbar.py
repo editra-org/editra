@@ -28,7 +28,7 @@ import util
 import ed_msg
 import ed_cmdbar
 from syntax.syntax import GetFtypeDisplayName
-import eclib.pstatbar as pstatbar
+from eclib.pstatbar import ProgressStatusBar
 from extern.decorlib import anythread
 
 #--------------------------------------------------------------------------#
@@ -36,14 +36,14 @@ from extern.decorlib import anythread
 
 #--------------------------------------------------------------------------#
 
-class EdStatBar(pstatbar.ProgressStatusBar):
+class EdStatBar(ProgressStatusBar):
     """Custom status bar that handles dynamic field width adjustment and
     automatic expiration of status messages.
 
     """
     ID_CLEANUP_TIMER = wx.NewId()
     def __init__(self, parent):
-        pstatbar.ProgressStatusBar.__init__(self, parent, style=wx.ST_SIZEGRIP)
+        ProgressStatusBar.__init__(self, parent, style=wx.ST_SIZEGRIP)
 
         # Setup
         self._pid = parent.GetId() # Save parents id for filtering msgs
@@ -72,7 +72,26 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         ed_msg.Unsubscribe(self.OnProgress)
         ed_msg.Unsubscribe(self.OnUpdateText)
         ed_msg.Unsubscribe(self.OnUpdateDoc)
-        pstatbar.ProgressStatusBar.__del__(self)
+        ProgressStatusBar.__del__(self)
+
+    def __SetStatusText(self, txt, field):
+        """Safe method to use for setting status text with
+        CallAfter.
+        @param txt: string
+        @param field: int
+
+        """
+        try:
+            ProgressStatusBar.SetStatusText(self, txt, field)
+            self.AdjustFieldWidths()
+
+            if field == ed_glob.SB_INFO:
+                # Start the expiration countdown
+                if self._cleanup_timer.IsRunning():
+                    self._cleanup_timer.Stop()
+                self._cleanup_timer.Start(10000, True)
+        except wx.PyDeadObjectError:
+            pass
 
     def AdjustFieldWidths(self):
         """Adust each field width of status bar basing on the field text
@@ -110,7 +129,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
 
         """
         if evt.GetId() == EdStatBar.ID_CLEANUP_TIMER:
-            wx.StatusBar.SetStatusText(self, u'', ed_glob.SB_INFO)
+            wx.CallAfter(self.__SetStatusText, u'', ed_glob.SB_INFO)
         else:
             evt.Skip()
 
@@ -154,7 +173,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
             self.StopBusy()
         elif mtype == ed_msg.EDMSG_FILE_OPENING:
             # Clear any text from the progress field
-            self.SetStatusText('', ed_glob.SB_ROWCOL)
+            wx.CallAfter(self.__SetStatusText, u'', ed_glob.SB_ROWCOL)
             # Data is the file path
             self.SetRange(util.GetFileSize(mdata))
             self.Start(75)
@@ -166,7 +185,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         """
         self.UpdateFields()
         if msg.GetType() == ed_msg.EDMSG_UI_NB_CHANGED:
-            wx.StatusBar.SetStatusText(self, u'', ed_glob.SB_INFO)
+            wx.CallAfter(self.__SetStatusText, u'', ed_glob.SB_INFO)
 
     @anythread
     def DoUpdateText(self, msg):
@@ -181,7 +200,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         if (parent.IsActive() or wx.GetApp().GetTopWindow() == parent):
             field, txt = msg.GetData()
             self.UpdateFields()
-            self.SetStatusText(txt, field)
+            wx.CallAfter(self.__SetStatusText, txt, field)
 
     def OnUpdateText(self, msg):
         """Update the status bar text based on the recieved message
@@ -196,14 +215,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         @param field: int
 
         """
-        pstatbar.ProgressStatusBar.PushStatusText(self, txt, field)
-        self.AdjustFieldWidths()
-
-        # Start the expiration countdown
-        if self._cleanup_timer.IsRunning():
-            self._cleanup_timer.Stop()
-        self._cleanup_timer.Start(10000, True)
-
+        wx.CallAfter(self.__SetStatusText, txt, field)
 
     def SetStatusText(self, txt, field):
         """Set the status text
@@ -211,14 +223,7 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         @param field: int
 
         """
-        pstatbar.ProgressStatusBar.SetStatusText(self, txt, field)
-        self.AdjustFieldWidths()
-
-        # Start the expiration countdown
-        if self._cleanup_timer.IsRunning():
-            self._cleanup_timer.Stop()
-        self._cleanup_timer.Start(10000, True)
-
+        wx.CallAfter(self.__SetStatusText, txt, field)
 
     def UpdateFields(self):
         """Update document fields based on the currently selected
@@ -234,16 +239,15 @@ class EdStatBar(pstatbar.ProgressStatusBar):
         try:
             cbuff = nb.GetCurrentCtrl()
             doc = cbuff.GetDocument()
-            pstatbar.ProgressStatusBar.SetStatusText(self, doc.GetEncoding(),
-                                                     ed_glob.SB_ENCODING)
-            pstatbar.ProgressStatusBar.SetStatusText(self,
-                                                     GetFtypeDisplayName(cbuff.GetLangId()),
-                                                     ed_glob.SB_LEXER)
+            wx.CallAfter(self.__SetStatusText, doc.GetEncoding(),
+                         ed_glob.SB_ENCODING)
+            wx.CallAfter(self.__SetStatusText,
+                         GetFtypeDisplayName(cbuff.GetLangId()),
+                         ed_glob.SB_LEXER)
+
     #        pstatbar.ProgressStatusBar.SetStatusText(self,
     #                                                 ,
     #                                                 ed_glob.SB_READONLY)
-
-            self.AdjustFieldWidths()
         except wx.PyDeadObjectError:
             # May be called asyncronasly after the control is already dead
             return
