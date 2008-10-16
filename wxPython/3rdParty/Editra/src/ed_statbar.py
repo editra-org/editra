@@ -75,8 +75,7 @@ class EdStatBar(ProgressStatusBar):
         ProgressStatusBar.__del__(self)
 
     def __SetStatusText(self, txt, field):
-        """Safe method to use for setting status text with
-        CallAfter.
+        """Safe method to use for setting status text with CallAfter.
         @param txt: string
         @param field: int
 
