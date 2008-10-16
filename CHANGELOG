@@ -19,6 +19,7 @@ NEW: [features/improvements]
 +Add option for enable/disable regex search in quick find bar
 +Automatically expire status bar info messages after 10 seconds
 +Persist 5 most recent search locations between sessions
++Add option to auto-trim trailing whitespace when saving file
 
 BUG FIXES:
 +Fix case where encoding can be None in when initializing the preference dialog

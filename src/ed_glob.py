@@ -137,6 +137,7 @@ ID_PREF          = wx.ID_PREFERENCES
 # Prefrence Dlg Ids
 ID_PREF_LANG     = wx.NewId()
 ID_PREF_AALIAS   = wx.NewId()
+ID_PREF_AUTOTRIM = wx.NewId()
 ID_PREF_CHKMOD   = wx.NewId()
 ID_PREF_CHKUPDATE = wx.NewId()
 ID_PREF_DLEXER   = wx.NewId()
@@ -298,6 +299,7 @@ ID_2_PROF = {
              ID_PREF_LANG         : 'LANG',
              ID_REPORTER          : 'REPORTER',
              ID_SYNTAX            : 'SYNTAX',
+             ID_PREF_AUTOTRIM     : 'AUTO_TRIM_WS',
              ID_PREF_DLEXER       : 'DEFAULT_LEX',
              ID_PREF_ENCODING     : 'ENCODING',
              ID_PREF_SYNTHEME     : 'SYNTHEME',

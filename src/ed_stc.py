@@ -1833,6 +1833,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.file.SetPath(path)
             self.LOG("[ed_stc][info] Writing file %s, with encoding %s" % \
                      (path, self.file.GetEncoding()))
+
+            if _PGET('AUTO_TRIM_WS', 'bool', False):
+                self.TrimWhitespace()
+
             self.file.Write(self.GetText())
         except Exception, msg:
             result = False
