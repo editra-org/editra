@@ -44,6 +44,7 @@ _DEFAULTS = {
            'APPSPLASH'  : True,             # Show splash at startup
            'AUTO_COMP'  : True,             # Use Auto-comp if available
            'AUTO_INDENT': True,             # Use Auto Indent
+           'AUTO_TRIM_WS' : False,          # Trim whitespace on save
            'BRACKETHL'  : True,             # Use bracket highlighting
            'BSUNINDENT' : True,             # Backspace Unindents
            'CHECKMOD'   : True,             # Auto check file for file mod

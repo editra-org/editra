@@ -511,6 +511,9 @@ class DocGenPanel(wx.Panel):
                           default=Profile_Get('INDENTWIDTH', 'str')), 0,
                         wx.ALIGN_CENTER_VERTICAL)])
 
+        at_cb = wx.CheckBox(self, ed_glob.ID_PREF_AUTOTRIM,
+                            _("Automatically trim whitespace on save"))
+        at_cb.SetValue(Profile_Get('AUTO_TRIM_WS', 'bool', False))
         ut_cb = wx.CheckBox(self, ed_glob.ID_PREF_TABS,
                             _("Use Tabs Instead of Spaces"))
         ut_cb.SetValue(Profile_Get('USETABS', 'bool', False))
@@ -569,11 +572,12 @@ class DocGenPanel(wx.Panel):
                                   "regions when syntax highlighting is in use"))
 
         # Layout
-        sizer = wx.FlexGridSizer(20, 2, 5, 5)
+        sizer = wx.FlexGridSizer(21, 2, 5, 5)
         sizer.AddGrowableCol(1, 1)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Format") + u": "),
-                        0, wx.ALIGN_CENTER_VERTICAL), (ut_cb, 0),
+                        0, wx.ALIGN_CENTER_VERTICAL), (at_cb, 0),
+                       ((5, 5), 0), (ut_cb, 0),
                        ((5, 5), 0), (bsu_cb, 0),
                        ((5, 5), 0), (tabsz, 0),
                        ((5, 5), 0), (indentsz, 0),
@@ -643,12 +647,13 @@ class DocGenPanel(wx.Panel):
                     ed_glob.ID_PREF_AALIAS, ed_glob.ID_SHOW_EOL,
                     ed_glob.ID_SHOW_LN, ed_glob.ID_SHOW_WS,
                     ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS,
-                    ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_ENCODING]:
+                    ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_ENCODING,
+                    ed_glob.ID_PREF_AUTOTRIM ]:
             Profile_Set(ed_glob.ID_2_PROF[e_id],
                         evt.GetEventObject().GetValue())
 
             # Do updates for everything but text encoding
-            if e_id != ed_glob.ID_PREF_ENCODING:
+            if e_id not in (ed_glob.ID_PREF_ENCODING, ed_glob.ID_PREF_AUTOTRIM):
                 wx.CallLater(25, DoUpdates)
         else:
             evt.Skip()
