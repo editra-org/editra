@@ -1530,6 +1530,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         txt = u''
         cpos = self.GetCurrentPos()
         cline = self.GetCurrentLine()
+        marks = self.GetBookmarks()
+
+        # Begin stripping trailing whitespace
+        # TODO do this withough replacing the text just strip from in the
+        #      buffer.
+        self.BeginUndoAction()
         for line in xrange(self.GetLineCount()):
             tmp = self.GetLine(line)
             if len(tmp):
@@ -1548,6 +1554,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 cpos = npos - ((cpos - next) - 1)
             txt = txt + tmp.rstrip() + eol
         self.SetText(txt)
+        self.EndUndoAction()
+
+        # Replace bookmarks and position
+        for mark in marks:
+            self.MarkerAdd(mark, MARK_MARGIN)
         self.GotoPos(cpos)
 
     def FoldingOnOff(self, switch=None):
