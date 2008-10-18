@@ -7,14 +7,7 @@
 ###############################################################################
 
 """
-This file defines the notebook for containing the text controls for
-for editing text in Editra. The note book is a custom sublclass of
-FlatNotebook that allow for automatic page images and drag and dropping
-of tabs between open editor windows. The notebook is also primarly in
-charge of opening files that are requested by the user and setting up the
-text control to use them. For more information on the text controls used
-in the notebook see ed_stc.py
-
+This class implements Editra's main notebook control.
 @summary: Editra's main notebook class
 
 """
@@ -32,12 +25,11 @@ import wx
 # Editra Libraries
 import ed_glob
 from profiler import Profile_Get
-import ed_stc
+import ed_editv
 import syntax.synglob as synglob
 import syntax.syntax as syntax
 import ed_search
 import util
-import doctools
 import ed_msg
 import ed_txt
 import ed_mdlg
@@ -73,10 +65,10 @@ class EdPages(FNB.FlatNotebook):
 
         # Notebook attributes
         self.LOG = wx.GetApp().GetLog()
+        self.DocMgr = ed_editv.EdEditorView.DOCMGR
         self._searchctrl = ed_search.SearchController(self, self.GetCurrentCtrl)
-        self._searchctrl.SetLookinChoices(Profile_Get('SEARCH_LOC', default=list()))
-        self.DocMgr = doctools.DocPositionMgr(ed_glob.CONFIG['CACHE_DIR'] + \
-                                              os.sep + u'positions')
+        self._searchctrl.SetLookinChoices(Profile_Get('SEARCH_LOC',
+                                                      default=list()))
         self.pg_num = -1              # Track new pages (aka untitled docs)
         self.control = None
         self.frame = self.GetTopLevelParent() # MainWindow
@@ -235,7 +227,7 @@ class EdPages(FNB.FlatNotebook):
         @return: list of tuples
 
         """
-        return [(ed_glob.ID_FIND_NEXT, self._searchctrl.OnUpdateFindUI),]
+        return [(ed_glob.ID_FIND_NEXT, self._searchctrl.OnUpdateFindUI), ]
 
     def LoadSessionFiles(self):
         """Load files from saved session data in profile
@@ -264,7 +256,7 @@ class EdPages(FNB.FlatNotebook):
         """
         self.GetTopLevelParent().Freeze()
         self.pg_num += 1
-        self.control = ed_stc.EditraStc(self, wx.ID_ANY)
+        self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
         self.control.SetEncoding(Profile_Get('ENCODING'))
         self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
         self.AddPage(self.control, u"Untitled - %d" % self.pg_num)
@@ -345,13 +337,13 @@ class EdPages(FNB.FlatNotebook):
         if self.GetPageCount():
             if self.control.GetModify() or self.control.GetLength() or \
                self.control.GetFileName() != u'':
-                control = ed_stc.EditraStc(self, wx.ID_ANY)
+                control = ed_editv.EdEditorView(self, wx.ID_ANY)
                 control.Hide()
             else:
                 new_pg = False
                 control = self.control
         else:
-            control = ed_stc.EditraStc(self, wx.ID_ANY)
+            control = ed_editv.EdEditorView(self, wx.ID_ANY)
             control.Hide()
 
         # Open file and get contents
@@ -409,15 +401,14 @@ class EdPages(FNB.FlatNotebook):
         self.control.CheckEOL()
         self.control.EmptyUndoBuffer()
 
-        if Profile_Get('SAVE_POS'):
-            self.control.GotoPos(self.DocMgr.GetPos(self.control.GetFileName()))
+#        if Profile_Get('SAVE_POS'):
+#            self.control.GotoPos(self.DocMgr.GetPos(self.control.GetFileName()))
 
         # Add the buffer to the notebook
         if new_pg:
             self.AddPage(self.control, filename)
 
-        self.frame.SetTitle("%s - file://%s" % (filename,
-                                                self.control.GetFileName()))
+        self.frame.SetTitle(self.control.GetTitleString())
         self.frame.AddFileToHistory(path2file)
         self.SetPageText(self.GetSelection(), filename)
         self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
@@ -481,8 +472,7 @@ class EdPages(FNB.FlatNotebook):
 
         """
         pages = [self.GetPage(page) for page in xrange(self.GetPageCount())]
-        return [page for page in pages 
-                if getattr(page, '__name__', '') == "EditraTextCtrl"]
+        return [page for page in pages if page.GetName() == "EditraTextCtrl"]
 
     def HasFileOpen(self, fpath):
         """Checks if one of the currently active buffers has
@@ -560,17 +550,10 @@ class EdPages(FNB.FlatNotebook):
         @type evt: wx.IdleEvent
 
         """
-        if wx.GetApp().IsActive() and \
-           Profile_Get('CHECKMOD') and self.GetPageCount():
-            cfile = self.control.GetFileName()
-            lmod = util.GetFileModTime(cfile)
-            if self.control.GetModTime() and \
-               not lmod and not os.path.exists(cfile):
-                wx.CallAfter(PromptToReSave, self, cfile)
-            elif self.control.GetModTime() < lmod:
-                wx.CallAfter(AskToReload, self, cfile)
-            else:
-                return False
+        if wx.GetApp().IsActive() and self.GetPageCount():
+            page = self.GetCurrentPage()
+            if page is not None:
+                page.DoOnIdle()
 
     def OnLeftUp(self, evt):
         """Traps clicks sent to page close buttons and
@@ -624,7 +607,7 @@ class EdPages(FNB.FlatNotebook):
         # Update Frame Title
         if fname == "":
             fname = self.GetPageText(pg_num)
-        self.frame.SetTitle("%s - file://%s" % (util.GetFileName(fname), fname))
+        self.frame.SetTitle(self.control.GetTitleString())
         if not self.frame.IsExiting():
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pg_num))
 
@@ -651,8 +634,8 @@ class EdPages(FNB.FlatNotebook):
         """
         self.LOG("[ed_pages][evt] Closing Page: #%d" % self.GetSelection())
         page = self.GetCurrentPage()
-        if len(page.GetFileName()) > 1:
-            self.DocMgr.AddRecord([page.GetFileName(), page.GetCurrentPos()])
+        if page is not None:
+            page.DoTabClosing()
         evt.Skip()
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSING,
                            (self, self.GetSelection()))
@@ -781,7 +764,7 @@ class EdPages(FNB.FlatNotebook):
                 # Only Update if the text has changed
                 if title != FNB.FlatNotebook.GetPageText(self, pg_num):
                     self.SetPageText(pg_num, title)
-                    ftitle = u"%s - file://%s" % (title, self.control.GetFileName())
+                    ftitle = self.control.GetTitleString()
                     self.frame.SetTitle(ftitle)
             else:
                 # A background page has changed
@@ -811,55 +794,3 @@ class EdPages(FNB.FlatNotebook):
                 control.Configure()
 
 #---- End Function Definitions ----#
-
-#-----------------------------------------------------------------------------#
-
-#---- Utility Function Definitions ----#
-def PromptToReSave(win, cfile):
-    """Show a dialog prompting to resave the current file
-    @param win: Window to prompt dialog on top of
-    @param cfile: the file in question
-
-    """
-    mdlg = wx.MessageDialog(win.frame,
-                            _("%s has been deleted since its "
-                              "last save point.\n\nWould you "
-                              "like to save it again?") % cfile,
-                            _("Resave File?"),
-                            wx.YES_NO | wx.ICON_INFORMATION)
-    mdlg.CenterOnParent()
-    result = mdlg.ShowModal()
-    mdlg.Destroy()
-    if result == wx.ID_YES:
-        result = win.control.SaveFile(cfile)
-    else:
-        win.control.SetModTime(0)
-
-def AskToReload(win, cfile):
-    """Show a dialog asking if the file should be reloaded
-    @param win: Window to prompt dialog on top of
-    @param cfile: the file to prompt for a reload of
-
-    """
-    mdlg = wx.MessageDialog(win.frame,
-                            _("%s has been modified by another "
-                              "application.\n\nWould you like "
-                              "to Reload it?") % cfile,
-                              _("Reload File?"),
-                              wx.YES_NO | wx.ICON_INFORMATION)
-    mdlg.CenterOnParent()
-    result = mdlg.ShowModal()
-    mdlg.Destroy()
-    if result == wx.ID_YES:
-        ret, rmsg = win.control.ReloadFile()
-        if not ret:
-            errmap = dict(filename=cfile, errmsg=rmsg)
-            mdlg = wx.MessageDialog(win.frame,
-                                    _("Failed to reload %(filename)s:\n"
-                                      "Error: %(errmsg)s") % errmap,
-                                    _("Error"),
-                                    wx.OK | wx.ICON_ERROR)
-            mdlg.ShowModal()
-            mdlg.Destroy()
-    else:
-        win.control.SetModTime(util.GetFileModTime(cfile))
