@@ -16,9 +16,11 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import sys
+
+# Editra Libraries
 import util
 from profiler import Profile_Get
 
@@ -32,14 +34,24 @@ class DocPositionMgr(object):
     @note: saves config to ~/.Editra/cache/
 
     """
-    def __init__(self, book_path):
+    def __init__(self):
         """Creates the position manager object
-        @param book_path: path to on disk data file
 
         """
         object.__init__(self)
-        self._book = book_path
+
+        # Attributes
+        self._init = False
+        self._book = None
         self._records = dict()
+
+    def InitPositionCache(self, book_path):
+        """Initialize and load the on disk document position cache.
+        @param book_path: path to on disk cache
+
+        """
+        self._init = True
+        self._book = book_path
         if Profile_Get('SAVE_POS'):
             self.LoadBook(book_path)
 
@@ -70,6 +82,13 @@ class DocPositionMgr(object):
 
         """
         return self._records.get(name, 0)
+
+    def IsInitialized(self):
+        """Has the cache been initialized
+        @return: bool
+
+        """
+        return self._init
 
     def LoadBook(self, book):
         """Loads a set of records from an on disk dictionary

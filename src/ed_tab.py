@@ -88,6 +88,7 @@ class EdTabBase(object):
         """Set the notebooks title text for this tab"""
         obj_id = self.GetId()
 
+        # Find which page we are and update the text
         for page in range(self._nb.GetPageCount()):
             ctrl = self._nb.GetPage(page)
             if ctrl.GetId() == obj_id:
@@ -97,3 +98,4 @@ class EdTabBase(object):
             # TODO: notify of error?
             pass
 
+#--------------------------------------------------------------------------#
