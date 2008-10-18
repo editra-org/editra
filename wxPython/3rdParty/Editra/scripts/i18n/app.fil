@@ -12,9 +12,12 @@
 ../../src/dev_tool.py
 ../../src/doctools.py
 ../../src/ed_cmdbar.py
+../../src/ed_crypt.py
 ../../src/ed_event.py
 ../../src/ed_glob.py
 ../../src/ed_i18n.py
+../../src/ed_ipc.py
+../../src/ed_keyh.py
 ../../src/ed_log.py
 ../../src/ed_main.py
 ../../src/ed_mdlg.py
@@ -23,11 +26,13 @@
 ../../src/ed_pages.py
 ../../src/ed_print.py
 ../../src/ed_search.py
+../../src/ed_statbar.py
 ../../src/ed_stc.py 
 ../../src/ed_style.py
-../../src/ed_txt.py
+../../src/ed_tab.py
 ../../src/ed_theme.py
 ../../src/ed_toolbar.py
+../../src/ed_txt.py
 ../../src/Editra.py
 ../../src/generator.py
 ../../src/iface.py

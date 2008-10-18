@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-13 21:33-0500\n"
+"POT-Creation-Date: 2008-10-18 14:37-0500\n"
 "PO-Revision-Date: 2008-06-26 03:49+0000\n"
 "Last-Translator: Vladimir Lazic <vlazic@gmail.com>\n"
 "Language-Team: Serbian <sr@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Launchpad-Export-Date: 2008-07-12 01:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../../src/ed_search.py:254
+#: ../../src/ed_search.py:258
 #, python-format
 msgid "\"%s\" was not found"
 msgstr ""
@@ -36,32 +36,10 @@ msgstr ""
 "%s не може да се пронађе\n"
 "Можда је премештена или обрисана"
 
-#: ../../src/ed_stc.py:1795
+#: ../../src/ed_stc.py:1818
 #, python-format
 msgid "%s does not exist"
 msgstr ""
-
-#: ../../src/ed_pages.py:825
-#, python-format
-msgid ""
-"%s has been deleted since its last save point.\n"
-"\n"
-"Would you like to save it again?"
-msgstr ""
-"%s је био обрисан пре последњег чувања.\n"
-"\n"
-"Да ли желите да га поново сачувате?"
-
-#: ../../src/ed_pages.py:845
-#, python-format
-msgid ""
-"%s has been modified by another application.\n"
-"\n"
-"Would you like to Reload it?"
-msgstr ""
-"%s је измењен у неком другом програму.\n"
-"\n"
-"Да ли желите да га наново учитате?"
 
 #: ../../src/ed_menu.py:817
 msgid "&About"
@@ -197,7 +175,7 @@ msgstr ""
 "Нова верзија је доступна\n"
 "Да ли желите да преузмете Editra %s сад?"
 
-#: ../../src/prefdlg.py:546
+#: ../../src/prefdlg.py:549
 msgid "AntiAliasing"
 msgstr "Ублажавање ивица (AntiAliasing)"
 
@@ -205,7 +183,7 @@ msgstr "Ублажавање ивица (AntiAliasing)"
 msgid "Appearance"
 msgstr "Изглед"
 
-#: ../../src/prefdlg.py:1514
+#: ../../src/prefdlg.py:1519
 msgid "Apply"
 msgstr "Примени"
 
@@ -217,11 +195,11 @@ msgstr "Особине"
 msgid "Author"
 msgstr "Аутор"
 
-#: ../../src/ed_menu.py:758 ../../src/prefdlg.py:717
+#: ../../src/ed_menu.py:758 ../../src/prefdlg.py:722
 msgid "Auto-Completion"
 msgstr "Аутоматска допуна"
 
-#: ../../src/ed_menu.py:761 ../../src/prefdlg.py:719
+#: ../../src/ed_menu.py:761 ../../src/prefdlg.py:724
 msgid "Auto-Indent"
 msgstr "Аутоматско увлачење"
 
@@ -233,11 +211,15 @@ msgstr "Аутоматски чисти бафер између покретањ
 msgid "Automatically save/use window state from last session"
 msgstr "Аутоматски сачувај/користи стање прозора задње сесије"
 
+#: ../../src/prefdlg.py:515
+msgid "Automatically trim whitespace on save"
+msgstr ""
+
 #: ../../plugins/Launch/launch/cfgdlg.py:407 ../../src/style_editor.py:646
 msgid "Background"
 msgstr "Позадина"
 
-#: ../../src/prefdlg.py:518
+#: ../../src/prefdlg.py:521
 msgid "Backspace Unindents"
 msgstr "Бекспејс тастер поништава увлачење"
 
@@ -245,11 +227,11 @@ msgstr "Бекспејс тастер поништава увлачење"
 msgid "Base new theme on existing one"
 msgstr "Нову тему базирај на већ постојећој"
 
-#: ../../src/prefdlg.py:1488
+#: ../../src/prefdlg.py:1493
 msgid "Binding"
 msgstr "Увезивање"
 
-#: ../../src/prefdlg.py:1991
+#: ../../src/prefdlg.py:1996
 msgid "Black/White"
 msgstr ""
 
@@ -261,11 +243,11 @@ msgstr ""
 msgid "Bookmarks"
 msgstr "Обележивачи"
 
-#: ../../src/ed_menu.py:765 ../../src/prefdlg.py:697
+#: ../../src/ed_menu.py:765 ../../src/prefdlg.py:702
 msgid "Bracket Highlighting"
 msgstr "Наглашавање заграда"
 
-#: ../../src/ed_search.py:1153 ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1178 ../../src/style_editor.py:139
 msgid "Cancel"
 msgstr "Одустани"
 
@@ -295,7 +277,7 @@ msgstr "Измене направљене у овом дијалогу су са
 msgid "Changes will take affect once the program has been restarted"
 msgstr "Измене ће бити уочене након рестартовања програма"
 
-#: ../../src/prefdlg.py:1279
+#: ../../src/prefdlg.py:1284
 msgid "Check"
 msgstr "Провери"
 
@@ -315,7 +297,7 @@ msgstr "Изабери датотеку"
 msgid "Choose a Save Location"
 msgstr "Изабери локацију где желиш да сачуваш"
 
-#: ../../src/ed_pages.py:144
+#: ../../src/ed_pages.py:142
 #, fuzzy
 msgid "Choose an Encoding"
 msgstr "Изабери датотеку"
@@ -326,7 +308,7 @@ msgid "Class Definitions"
 msgstr "Дефиниције класа"
 
 #: ../../plugins/Launch/launch/launch.py:166 ../../src/ed_log.py:140
-#: ../../src/ed_search.py:1162
+#: ../../src/ed_search.py:1187
 msgid "Clear"
 msgstr "Очисти"
 
@@ -338,12 +320,12 @@ msgstr "Клинки на Инсталирај да би инсталирао п
 msgid "Click on an item to edit"
 msgstr "Кликни на ставку да би је изменио"
 
-#: ../../src/ed_pages.py:306
+#: ../../src/ed_pages.py:304
 #, python-format
 msgid "Close \"%s\""
 msgstr ""
 
-#: ../../src/ed_pages.py:307
+#: ../../src/ed_pages.py:305
 #, fuzzy
 msgid "Close All"
 msgstr "Затвори све документе"
@@ -376,7 +358,7 @@ msgstr "Кôд"
 msgid "Code Browser"
 msgstr "Прегледач кôда"
 
-#: ../../src/ed_menu.py:768 ../../src/prefdlg.py:699
+#: ../../src/ed_menu.py:768 ../../src/prefdlg.py:704
 msgid "Code Folding"
 msgstr "Сажимање кôда"
 
@@ -392,16 +374,16 @@ msgstr "Боја"
 msgid "Color Highlight Code Syntax"
 msgstr "Истицање бојом синтаксе кôда"
 
-#: ../../src/prefdlg.py:829
+#: ../../src/prefdlg.py:834
 msgid "Color Scheme"
 msgstr "Шема боја"
 
-#: ../../src/prefdlg.py:1993
+#: ../../src/prefdlg.py:1998
 #, fuzzy
 msgid "Colour/Default"
 msgstr "Основно увећање"
 
-#: ../../src/prefdlg.py:1992
+#: ../../src/prefdlg.py:1997
 msgid "Colour/White"
 msgstr ""
 
@@ -421,7 +403,7 @@ msgstr "Коментариши линију"
 msgid "Comment the selected lines"
 msgstr "Коментариши селектоване линије"
 
-#: ../../src/prefdlg.py:1094
+#: ../../src/prefdlg.py:1099
 msgid "Configuration"
 msgstr "Поставке"
 
@@ -449,7 +431,7 @@ msgstr "Конвертуј размаке у табулаторе у селек�
 msgid "Convert tabs to spaces in selected/all text"
 msgstr "Конвертуј табулаторе у размаке у селектованом/свом тексту"
 
-#: ../../src/ed_stc.py:2141 ../../src/ed_toolbar.py:82
+#: ../../src/ed_stc.py:2168 ../../src/ed_toolbar.py:82
 msgid "Copy"
 msgstr "Умножи"
 
@@ -457,7 +439,7 @@ msgstr "Умножи"
 msgid "Copy Current Line"
 msgstr "Умножи тренутну линију"
 
-#: ../../src/ed_pages.py:309
+#: ../../src/ed_pages.py:307
 msgid "Copy Full Path"
 msgstr ""
 
@@ -487,7 +469,7 @@ msgstr "Направљено"
 msgid "Cu&t"
 msgstr "&Исеци"
 
-#: ../../src/ed_stc.py:2140 ../../src/ed_toolbar.py:80
+#: ../../src/ed_stc.py:2167 ../../src/ed_toolbar.py:80
 msgid "Cut"
 msgstr "Исеци"
 
@@ -503,7 +485,7 @@ msgstr "Исеци линију"
 msgid "Cut Selected Text from File"
 msgstr "Исеци селектовани текст из датотеке"
 
-#: ../../src/ed_search.py:721 ../../src/ed_search.py:725
+#: ../../src/ed_search.py:744 ../../src/ed_search.py:748
 msgid "DECODING ERROR"
 msgstr ""
 
@@ -511,19 +493,19 @@ msgstr ""
 msgid "Default"
 msgstr "Подразумевано"
 
-#: ../../src/prefdlg.py:522
+#: ../../src/prefdlg.py:525
 msgid "Default EOL Mode"
 msgstr "Подразумеван EOL мод"
 
-#: ../../src/prefdlg.py:690
+#: ../../src/prefdlg.py:695
 msgid "Default Lexer"
 msgstr "Подразумеван режим истицања"
 
-#: ../../src/prefdlg.py:944
+#: ../../src/prefdlg.py:949
 msgid "Default Perspective"
 msgstr "Подразумеван преглед"
 
-#: ../../src/prefdlg.py:688
+#: ../../src/prefdlg.py:693
 msgid "Default highlighing for new documents"
 msgstr "Подразумеван режим истицања за нови документ"
 
@@ -531,7 +513,7 @@ msgstr "Подразумеван режим истицања за нови до�
 msgid "Defines"
 msgstr "Дефинише"
 
-#: ../../src/prefdlg.py:1457
+#: ../../src/prefdlg.py:1462
 msgid "Delete"
 msgstr "Обриши"
 
@@ -551,7 +533,7 @@ msgstr "Опис"
 msgid "Disable Error Reporter"
 msgstr "Искључи пријављивање грешака"
 
-#: ../../src/prefdlg.py:991
+#: ../../src/prefdlg.py:996
 msgid "Display Font"
 msgstr "Фонт"
 
@@ -559,7 +541,7 @@ msgstr "Фонт"
 msgid "Do you wish to exit?"
 msgstr "Да ли желите да изађете?"
 
-#: ../../src/ed_pages.py:528
+#: ../../src/ed_pages.py:526
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -574,7 +556,7 @@ msgstr ""
 msgid "Document"
 msgstr "Документ"
 
-#: ../../src/plugdlg.py:178 ../../src/plugdlg.py:353 ../../src/prefdlg.py:1274
+#: ../../src/plugdlg.py:178 ../../src/plugdlg.py:353 ../../src/prefdlg.py:1279
 msgid "Download"
 msgstr "Преузимање"
 
@@ -591,7 +573,7 @@ msgstr "Преузимам"
 msgid "Downloading To: %s"
 msgstr "Преузимам у: %s"
 
-#: ../../src/Editra.py:499 ../../src/prefdlg.py:1315
+#: ../../src/Editra.py:499 ../../src/prefdlg.py:1320
 msgid "Downloading Update"
 msgstr "Преузимам унапређења"
 
@@ -634,7 +616,7 @@ msgstr "ГРЕШКА: %s"
 msgid "ERROR: Failed to save %s"
 msgstr "ГРЕШКА: Грешка при чувању %s"
 
-#: ../../src/prefdlg.py:701
+#: ../../src/prefdlg.py:706
 msgid "Edge Guide"
 msgstr "Десна маргина"
 
@@ -691,11 +673,11 @@ msgstr "Editra је урешивач текста за програмере."
 msgid "Editra translations project"
 msgstr "Пројект превођења Editra-е"
 
-#: ../../src/prefdlg.py:721
+#: ../../src/prefdlg.py:726
 msgid "Enable Vi Emulation"
 msgstr "Укључи емулацију Vi уређивача"
 
-#: ../../src/prefdlg.py:543
+#: ../../src/prefdlg.py:546
 msgid "Encoding to try when auto detection fails"
 msgstr ""
 
@@ -707,11 +689,11 @@ msgstr "Начин форматирања карактера за крај ли�
 msgid "Enter a hex color value"
 msgstr ""
 
-#: ../../src/prefdlg.py:1652
+#: ../../src/prefdlg.py:1657
 msgid "Enter the name of the new key profile"
 msgstr "Унеси име новог профила"
 
-#: ../../src/ed_pages.py:860 ../../src/plugdlg.py:758
+#: ../../src/plugdlg.py:758
 msgid "Error"
 msgstr "Грешка"
 
@@ -766,7 +748,7 @@ msgstr "Извези"
 msgid "Export Style Sheet"
 msgstr "Извези свој стил истицања синтаксе кôда"
 
-#: ../../src/prefdlg.py:1790
+#: ../../src/prefdlg.py:1795
 msgid "Extensions (space separated, no dots)"
 msgstr "Екстензије (раздвојене размаком, без тачака)"
 
@@ -782,15 +764,6 @@ msgstr "Неуспело"
 #, python-format
 msgid "Failed to install %d plugins"
 msgstr "Грешка при инсталацији %d проширења"
-
-#: ../../src/ed_pages.py:858
-#, python-format
-msgid ""
-"Failed to reload %(filename)s:\n"
-"Error: %(errmsg)s"
-msgstr ""
-"Грешка при поновном отварању %(filename)s:\n"
-"Грешка: %(errmsg)s"
 
 #: ../../src/ed_main.py:973
 #, fuzzy, python-format
@@ -840,7 +813,7 @@ msgstr "Грешка у читању информација о датотеци"
 msgid "File Type"
 msgstr "Тип датотеке"
 
-#: ../../src/ed_pages.py:183
+#: ../../src/ed_pages.py:181
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
@@ -848,12 +821,12 @@ msgstr ""
 "Датотека је већ отворена.\n"
 "Да ли желите да је поново отворите?"
 
-#: ../../src/prefdlg.py:823
+#: ../../src/prefdlg.py:828
 msgid "Filetype Associations"
 msgstr "Типови датотека и њихове екстензије"
 
-#: ../../src/ed_cmdbar.py:215 ../../src/ed_search.py:82
-#: ../../src/ed_search.py:86 ../../src/ed_toolbar.py:87
+#: ../../src/ed_cmdbar.py:215 ../../src/ed_search.py:83
+#: ../../src/ed_search.py:87 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Пронађи"
 
@@ -862,7 +835,7 @@ msgstr "Пронађи"
 msgid "Find Next"
 msgstr "Пронађи текст"
 
-#: ../../src/ed_search.py:1074
+#: ../../src/ed_search.py:1097
 #, fuzzy
 msgid "Find Results"
 msgstr "Пронађи текст"
@@ -879,7 +852,7 @@ msgstr "Пронађи и замени текст"
 msgid "Find/R&eplace"
 msgstr "Пронађи/З&амени"
 
-#: ../../src/ed_search.py:82 ../../src/ed_search.py:86
+#: ../../src/ed_search.py:83 ../../src/ed_search.py:87
 #: ../../src/ed_toolbar.py:88
 msgid "Find/Replace"
 msgstr "Пронађи/Замени"
@@ -912,7 +885,7 @@ msgstr "Подешавања фонтова"
 msgid "Foreground"
 msgstr "Предњи план"
 
-#: ../../src/prefdlg.py:575
+#: ../../src/prefdlg.py:578
 msgid "Format"
 msgstr "Формат"
 
@@ -926,7 +899,7 @@ msgid "Function Definitions"
 msgstr "Дефиниције функција"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:134 ../../src/prefdlg.py:193
-#: ../../src/prefdlg.py:450 ../../src/prefdlg.py:727
+#: ../../src/prefdlg.py:450 ../../src/prefdlg.py:732
 msgid "General"
 msgstr "Опште"
 
@@ -991,7 +964,7 @@ msgstr "Иди на команде уређивача"
 msgid "Goto the next match"
 msgstr ""
 
-#: ../../src/prefdlg.py:705
+#: ../../src/prefdlg.py:710
 msgid "Guide Column"
 msgstr "Маргина колоне"
 
@@ -999,7 +972,7 @@ msgstr "Маргина колоне"
 msgid "Highlight Brackets/Braces"
 msgstr "Истицање заграда"
 
-#: ../../src/ed_menu.py:625 ../../src/prefdlg.py:710
+#: ../../src/ed_menu.py:625 ../../src/prefdlg.py:715
 msgid "Highlight Caret Line"
 msgstr ""
 
@@ -1011,11 +984,11 @@ msgstr "Осенчи позадину тренунте линије"
 msgid "Homepage"
 msgstr "Почетна страна"
 
-#: ../../src/prefdlg.py:922
+#: ../../src/prefdlg.py:927
 msgid "Icon Theme"
 msgstr "Тема икона"
 
-#: ../../src/prefdlg.py:972
+#: ../../src/prefdlg.py:977
 msgid "Icons"
 msgstr "Иконе"
 
@@ -1035,7 +1008,7 @@ msgstr ""
 msgid "Indent the selected lines"
 msgstr "Увуци селектоване линије"
 
-#: ../../src/ed_menu.py:630 ../../src/prefdlg.py:713
+#: ../../src/ed_menu.py:630 ../../src/prefdlg.py:718
 msgid "Indentation Guides"
 msgstr "Маргине увучених линија"
 
@@ -1047,7 +1020,7 @@ msgstr "Информације"
 msgid "Info Text"
 msgstr ""
 
-#: ../../src/prefdlg.py:736
+#: ../../src/prefdlg.py:741
 msgid "Input Helpers"
 msgstr "При куцању"
 
@@ -1075,21 +1048,21 @@ msgstr "Инсталирај проширења само за тренутног
 msgid "Installation Error"
 msgstr "Грешка при инсталацији"
 
-#: ../../src/prefdlg.py:1255
+#: ../../src/prefdlg.py:1260
 msgid "Installed Version"
 msgstr "Инсталирана верзија"
 
-#: ../../src/ed_search.py:191
+#: ../../src/ed_search.py:192
 #, fuzzy, python-format
 msgid "Invalid expression \"%s\""
 msgstr "Неисправна датотека: %s"
 
-#: ../../src/ed_pages.py:512
+#: ../../src/ed_pages.py:510
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Неисправна датотека: %s"
 
-#: ../../src/prefdlg.py:1994
+#: ../../src/prefdlg.py:1999
 msgid "Inverse"
 msgstr ""
 
@@ -1105,15 +1078,15 @@ msgstr "Споји селектоване линије"
 msgid "Jump to Saved Path"
 msgstr "Иди на сачувану путању"
 
-#: ../../src/prefdlg.py:1484
+#: ../../src/prefdlg.py:1489
 msgid "Key"
 msgstr "Тастер"
 
-#: ../../src/prefdlg.py:1453
+#: ../../src/prefdlg.py:1458
 msgid "Key Profile"
 msgstr ""
 
-#: ../../src/prefdlg.py:1368
+#: ../../src/prefdlg.py:1373
 msgid "Keybindings"
 msgstr ""
 
@@ -1133,7 +1106,7 @@ msgstr "Ознаке"
 msgid "Language"
 msgstr "Језик"
 
-#: ../../src/prefdlg.py:1261
+#: ../../src/prefdlg.py:1266
 msgid "Latest Version"
 msgstr "Најновија верзија"
 
@@ -1141,11 +1114,11 @@ msgstr "Најновија верзија"
 msgid "Launch Configuration"
 msgstr "Покрени поставке"
 
-#: ../../src/prefdlg.py:977
+#: ../../src/prefdlg.py:982
 msgid "Layout"
 msgstr "Размештај"
 
-#: ../../src/prefdlg.py:1788
+#: ../../src/prefdlg.py:1793
 msgid "Lexer"
 msgstr "Режим истицања"
 
@@ -1199,7 +1172,7 @@ msgstr "Поставке локала"
 msgid "Lowercase"
 msgstr "Мала слова"
 
-#: ../../src/ed_menu.py:733 ../../src/prefdlg.py:525
+#: ../../src/ed_menu.py:733 ../../src/prefdlg.py:528
 msgid "Macintosh (\\r)"
 msgstr "Мекинтош (\\r)"
 
@@ -1211,7 +1184,7 @@ msgstr "Дефиниције макроа"
 msgid "Macros"
 msgstr "Макрои"
 
-#: ../../src/prefdlg.py:962
+#: ../../src/prefdlg.py:967
 msgid "Main display font for various UI components"
 msgstr "Главни фонт за разне компоненте интерфејса"
 
@@ -1227,7 +1200,7 @@ msgstr "Ручно постави истицања/синтаксу"
 msgid "Match Case"
 msgstr "Поклопи величину слова"
 
-#: ../../src/prefdlg.py:1466
+#: ../../src/prefdlg.py:1471
 msgid "Menu"
 msgstr "Мени"
 
@@ -1240,11 +1213,11 @@ msgstr "Разно"
 msgid "Modified"
 msgstr "Мењан"
 
-#: ../../src/prefdlg.py:1476
+#: ../../src/prefdlg.py:1481
 msgid "Modifier 1"
 msgstr ""
 
-#: ../../src/prefdlg.py:1480
+#: ../../src/prefdlg.py:1485
 msgid "Modifier 2"
 msgstr ""
 
@@ -1272,7 +1245,7 @@ msgstr ""
 msgid "Network"
 msgstr "Мрежа"
 
-#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1456
+#: ../../src/ed_toolbar.py:71 ../../src/prefdlg.py:1461
 #: ../../src/style_editor.py:198
 msgid "New"
 msgstr "Ново"
@@ -1297,11 +1270,11 @@ msgstr "Нова линија испод"
 msgid "New Line Before"
 msgstr "Нова линија пре"
 
-#: ../../src/prefdlg.py:1651
+#: ../../src/prefdlg.py:1656
 msgid "New Profile"
 msgstr "Нови профил"
 
-#: ../../src/ed_pages.py:303
+#: ../../src/ed_pages.py:301
 #, fuzzy
 msgid "New Tab"
 msgstr "&Нови језичак"
@@ -1318,20 +1291,20 @@ msgstr "Следећи обележивач"
 msgid "No Description Available"
 msgstr "Нема доступног описа"
 
-#: ../../src/ed_pages.py:522
+#: ../../src/ed_pages.py:520
 msgid "No Valid Files to Open"
 msgstr "Нема исправних датотека које се могу отворити"
 
-#: ../../src/prefdlg.py:1550
+#: ../../src/prefdlg.py:1555
 msgid "None"
 msgstr "Ништа"
 
-#: ../../src/prefdlg.py:1995
+#: ../../src/prefdlg.py:2000
 #, fuzzy
 msgid "Normal"
 msgstr "Формат"
 
-#: ../../src/ed_search.py:349
+#: ../../src/ed_search.py:353
 msgid "Not implemented"
 msgstr ""
 
@@ -1364,11 +1337,11 @@ msgstr "Отвори Питон конзолу"
 msgid "Open Code Browser Sidepanel"
 msgstr "Отвори прегледач кôда у бочном панелу"
 
-#: ../../src/ed_pages.py:533
+#: ../../src/ed_pages.py:531
 msgid "Open Directory?"
 msgstr "Отвори директоријум?"
 
-#: ../../src/ed_pages.py:185
+#: ../../src/ed_pages.py:183
 msgid "Open File"
 msgstr "Отвори датотеку"
 
@@ -1388,7 +1361,7 @@ msgstr "Отвори траку за брзу претрагу"
 msgid "Open with "
 msgstr "Отвори са "
 
-#: ../../src/ed_pages.py:553
+#: ../../src/ed_pages.py:551
 #, python-format
 msgid "Opened file: %s"
 msgstr "Отворена датотека: %s"
@@ -1411,11 +1384,11 @@ msgstr "Поставке с&тране"
 msgid "Page: %d"
 msgstr "Страна: %d"
 
-#: ../../src/prefdlg.py:1155
+#: ../../src/prefdlg.py:1160
 msgid "Password"
 msgstr "Лозинка"
 
-#: ../../src/ed_stc.py:2142 ../../src/ed_toolbar.py:84
+#: ../../src/ed_stc.py:2169 ../../src/ed_toolbar.py:84
 msgid "Paste"
 msgstr "Убаци"
 
@@ -1464,7 +1437,7 @@ msgstr "Проширење"
 msgid "Plugin Manager"
 msgstr "Менаџер проширења"
 
-#: ../../src/prefdlg.py:1140
+#: ../../src/prefdlg.py:1145
 msgid "Port Number"
 msgstr "Број порта"
 
@@ -1472,7 +1445,7 @@ msgstr "Број порта"
 msgid "Pr&eferences"
 msgstr "По&дешавања"
 
-#: ../../src/prefdlg.py:582
+#: ../../src/prefdlg.py:586
 #, fuzzy
 msgid "Prefered Encoding"
 msgstr "По&дешавања"
@@ -1497,7 +1470,7 @@ msgstr "Претходно"
 msgid "Previous Bookmark"
 msgstr "Претходни обележивач"
 
-#: ../../src/prefdlg.py:592
+#: ../../src/prefdlg.py:596
 msgid "Primary Font"
 msgstr "Основни фонт"
 
@@ -1558,11 +1531,11 @@ msgstr "Протоколи"
 msgid "Provides a Contextual Help Menu Listing Standard Keywords/Functions"
 msgstr "Омогућава помоћни мени који приказује стандардне кључне речи/функције"
 
-#: ../../src/prefdlg.py:1126
+#: ../../src/prefdlg.py:1131
 msgid "Proxy Settings"
 msgstr "Подешавања проксија"
 
-#: ../../src/prefdlg.py:1136
+#: ../../src/prefdlg.py:1141
 msgid "Proxy URL"
 msgstr "УРЛ проксија"
 
@@ -1575,7 +1548,7 @@ msgstr "Постави панелеу доњи панел"
 msgid "Rate: %.2f Kb/s"
 msgstr "Брзина: %.2f Kb/s"
 
-#: ../../src/ed_search.py:759
+#: ../../src/ed_search.py:782
 msgid "Recent Searches"
 msgstr "Скорашње претраге"
 
@@ -1591,7 +1564,7 @@ msgstr "Снимање завршено"
 msgid "Recording Macro"
 msgstr "Снимање макроа"
 
-#: ../../src/ed_menu.py:531 ../../src/ed_stc.py:2138
+#: ../../src/ed_menu.py:531 ../../src/ed_stc.py:2165
 #: ../../src/ed_toolbar.py:78
 msgid "Redo"
 msgstr "Поврати"
@@ -1604,13 +1577,9 @@ msgstr "Враћање на претходни опозов акције"
 msgid "Regex"
 msgstr ""
 
-#: ../../src/ed_search.py:192
+#: ../../src/ed_search.py:193
 msgid "Regex Compile Error"
 msgstr ""
-
-#: ../../src/ed_pages.py:848
-msgid "Reload File?"
-msgstr "Поново учитај датотеку?"
 
 #: ../../src/ed_menu.py:492
 msgid "Reload the file with a specified encoding"
@@ -1624,11 +1593,11 @@ msgstr ""
 msgid "Remember File Position"
 msgstr "Запамти позицију датотеке"
 
-#: ../../src/prefdlg.py:952
+#: ../../src/prefdlg.py:957
 msgid "Remember Window Position on Exit"
 msgstr "Запамти позицију прозора при изласку"
 
-#: ../../src/prefdlg.py:949
+#: ../../src/prefdlg.py:954
 msgid "Remember Window Size on Exit"
 msgstr "Запамти димензије прозора при изласку"
 
@@ -1660,10 +1629,6 @@ msgstr "Преименуј"
 msgid "Report Error"
 msgstr "Пријавите грешку"
 
-#: ../../src/ed_pages.py:828
-msgid "Resave File?"
-msgstr "Поново сачувај датотеку?"
-
 #: ../../src/plugdlg.py:580
 msgid "Retrieving Plugin List"
 msgstr "Захтевај листу проширења"
@@ -1676,7 +1641,7 @@ msgstr "Прикажи у "
 msgid "Revert file to last save point"
 msgstr ""
 
-#: ../../src/prefdlg.py:840 ../../src/prefdlg.py:1512
+#: ../../src/prefdlg.py:845 ../../src/prefdlg.py:1517
 msgid "Revert to Default"
 msgstr "Врати на основно"
 
@@ -1703,7 +1668,7 @@ msgstr ""
 msgid "Save"
 msgstr "Сачувај"
 
-#: ../../src/ed_pages.py:305
+#: ../../src/ed_pages.py:303
 #, fuzzy, python-format
 msgid "Save \"%s\""
 msgstr "Сачувај као"
@@ -1778,33 +1743,33 @@ msgstr "Датотека је сачувана: %s"
 msgid "Script Arguments"
 msgstr "Аргументи скрипте"
 
-#: ../../src/ed_search.py:1200
+#: ../../src/ed_search.py:1225
 #, python-format
 msgid "Search Complete: %d matching lines where found"
 msgstr ""
 
-#: ../../src/ed_search.py:1180
+#: ../../src/ed_search.py:1205
 msgid "Search Started"
 msgstr ""
 
-#: ../../src/ed_search.py:1193
+#: ../../src/ed_search.py:1218
 msgid "Search complete"
 msgstr ""
 
-#: ../../src/ed_search.py:241
+#: ../../src/ed_search.py:243
 msgid "Search wrapped to bottom"
 msgstr ""
 
-#: ../../src/ed_search.py:236
+#: ../../src/ed_search.py:238
 msgid "Search wrapped to top"
 msgstr ""
 
-#: ../../src/ed_search.py:1270
+#: ../../src/ed_search.py:1295
 #, python-format
 msgid "Searching in : %s"
 msgstr ""
 
-#: ../../src/prefdlg.py:595
+#: ../../src/prefdlg.py:599
 msgid "Secondary Font"
 msgstr "Други фонт"
 
@@ -1816,7 +1781,7 @@ msgstr "Одељци"
 msgid "Select &All"
 msgstr "Изабери &све"
 
-#: ../../src/ed_stc.py:2147
+#: ../../src/ed_stc.py:2174
 msgid "Select All"
 msgstr "Изабери све"
 
@@ -1840,7 +1805,7 @@ msgstr "Изабери проширења која желиш па кликни 
 msgid "Send bug reports and suggestions"
 msgstr "Пошаљи листу грешака и сугестија"
 
-#: ../../src/prefdlg.py:1912
+#: ../../src/prefdlg.py:1917
 msgid "Set Font"
 msgstr "Поставите фонт"
 
@@ -1848,11 +1813,11 @@ msgstr "Поставите фонт"
 msgid "Set the preview file type"
 msgstr "Подеси тип прегледа"
 
-#: ../../src/prefdlg.py:568
+#: ../../src/prefdlg.py:571
 msgid "Sets a secondary font used for special regions when syntax highlighting is in use"
 msgstr "Подеси други фонт који се користи на специјалним местима при истицању синтаксе"
 
-#: ../../src/prefdlg.py:563
+#: ../../src/prefdlg.py:566
 msgid "Sets the main/default font of the document"
 msgstr "Подеси основни фонт документа"
 
@@ -1864,7 +1829,7 @@ msgstr "Подешавања"
 msgid "Shelf"
 msgstr "Доњи панел"
 
-#: ../../src/ed_menu.py:637 ../../src/ed_menu.py:639 ../../src/prefdlg.py:548
+#: ../../src/ed_menu.py:637 ../../src/ed_menu.py:639 ../../src/prefdlg.py:551
 msgid "Show EOL Markers"
 msgstr "Прикажи EOL ознаке"
 
@@ -1876,7 +1841,7 @@ msgstr "Прикажи десну маргину"
 msgid "Show Hidden Files"
 msgstr "Прикажи скривене датотеке"
 
-#: ../../src/prefdlg.py:933
+#: ../../src/prefdlg.py:938
 #, fuzzy
 msgid "Show Icons on Tabs"
 msgstr "Размаке у табулаторе"
@@ -1889,7 +1854,7 @@ msgstr "Прикажи маргине увучених линија"
 msgid "Show Line Number Margin"
 msgstr "Прикажи део са бројевима линија"
 
-#: ../../src/ed_menu.py:640 ../../src/prefdlg.py:550
+#: ../../src/ed_menu.py:640 ../../src/prefdlg.py:553
 msgid "Show Line Numbers"
 msgstr "Прикажи бројеве линија"
 
@@ -1901,15 +1866,15 @@ msgstr "Прикажи доњи панел"
 msgid "Show Splash Screen"
 msgstr "Прикажи уводни екран"
 
-#: ../../src/ed_menu.py:665 ../../src/prefdlg.py:954
+#: ../../src/ed_menu.py:665 ../../src/prefdlg.py:959
 msgid "Show Status Bar"
 msgstr ""
 
-#: ../../src/ed_menu.py:668 ../../src/prefdlg.py:956
+#: ../../src/ed_menu.py:668 ../../src/prefdlg.py:961
 msgid "Show Toolbar"
 msgstr "Приказ траке са алатима"
 
-#: ../../src/ed_menu.py:643 ../../src/prefdlg.py:552
+#: ../../src/ed_menu.py:643 ../../src/prefdlg.py:555
 msgid "Show Whitespace"
 msgstr "Прикажи размаке"
 
@@ -1917,7 +1882,7 @@ msgstr "Прикажи размаке"
 msgid "Show Whitespace Markers"
 msgstr "Прикажи ознаку за размак"
 
-#: ../../src/ed_search.py:1074
+#: ../../src/ed_search.py:1097
 msgid "Show a find results screen"
 msgstr ""
 
@@ -1942,7 +1907,7 @@ msgstr "Величина"
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr "Неки стилови су измењени да ли желите да их сачувате пре изласка?"
 
-#: ../../src/ed_search.py:348
+#: ../../src/ed_search.py:352
 msgid "Sorry will be ready for next version"
 msgstr ""
 
@@ -2008,7 +1973,7 @@ msgstr "Промени режим истицања у %s"
 msgid "Syntax Files"
 msgstr "Синтаксне датотеке"
 
-#: ../../src/ed_menu.py:771 ../../src/prefdlg.py:452 ../../src/prefdlg.py:814
+#: ../../src/ed_menu.py:771 ../../src/prefdlg.py:452 ../../src/prefdlg.py:819
 msgid "Syntax Highlighting"
 msgstr "Истицање синтаксе"
 
@@ -2036,7 +2001,7 @@ msgstr "Боје текста"
 msgid "Text Document"
 msgstr "Текстуални документ"
 
-#: ../../src/ed_pages.py:140
+#: ../../src/ed_pages.py:138
 #, python-format
 msgid ""
 "The correct encoding of '%s' could not be determined.\n"
@@ -2056,17 +2021,17 @@ msgstr ""
 "\n"
 "Да ли желите да сачувате измене?"
 
-#: ../../src/ed_pages.py:520
+#: ../../src/ed_pages.py:518
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "Нема датотека које Editra може да отвори у %s"
 
-#: ../../src/ed_stc.py:2145
+#: ../../src/ed_stc.py:2172
 #, fuzzy
 msgid "To Lowercase"
 msgstr "Мала слова"
 
-#: ../../src/ed_stc.py:2144
+#: ../../src/ed_stc.py:2171
 #, fuzzy
 msgid "To Uppercase"
 msgstr "Велика слова"
@@ -2110,7 +2075,7 @@ msgstr "Подешања везана за уређивач текста"
 msgid "Toggle bookmark of the current line"
 msgstr "Додавање или уклањање обележивача у тренутној линији"
 
-#: ../../src/prefdlg.py:927
+#: ../../src/prefdlg.py:932
 msgid "Toolbar Icon Size"
 msgstr "Величина икона на траци са алатима"
 
@@ -2118,7 +2083,7 @@ msgstr "Величина икона на траци са алатима"
 msgid "Translate Editra"
 msgstr "Преведи Editra-у"
 
-#: ../../src/prefdlg.py:985
+#: ../../src/prefdlg.py:990
 msgid "Transparency"
 msgstr "Провидност"
 
@@ -2134,7 +2099,7 @@ msgstr "Замени тренутну линију са претходном"
 msgid "Trim Trailing Whitespace"
 msgstr "Уклони сувишан празан простор"
 
-#: ../../src/prefdlg.py:556
+#: ../../src/prefdlg.py:559
 msgid "Turn off for better performance"
 msgstr "Искључи зарад бољих перформанси"
 
@@ -2158,7 +2123,7 @@ msgstr "Уклони коментаре из линије"
 msgid "Uncomment the selected lines"
 msgstr "Уколни коментаре из селектованих линија"
 
-#: ../../src/ed_stc.py:2137 ../../src/ed_toolbar.py:77
+#: ../../src/ed_stc.py:2164 ../../src/ed_toolbar.py:77
 msgid "Undo"
 msgstr "Поништи"
 
@@ -2174,7 +2139,7 @@ msgstr "Поништи увученост линија"
 msgid "Unindent the selected lines"
 msgstr "Поништи увученост селектованих линија"
 
-#: ../../src/ed_menu.py:737 ../../src/prefdlg.py:525
+#: ../../src/ed_menu.py:737 ../../src/prefdlg.py:528
 msgid "Unix (\\n)"
 msgstr "Уникс (\\n)"
 
@@ -2182,6 +2147,11 @@ msgstr "Уникс (\\n)"
 #: ../../src/plugdlg.py:314 ../../src/plugdlg.py:315
 msgid "Unknown"
 msgstr "Непознато"
+
+#: ../../src/ed_search.py:539
+#, fuzzy
+msgid "Untitled"
+msgstr "Нова_Датотека"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:605
 msgid "Untitled_File"
@@ -2191,7 +2161,7 @@ msgstr "Нова_Датотека"
 msgid "Untitled_Folder"
 msgstr "Нов_Директоријум"
 
-#: ../../src/prefdlg.py:1095
+#: ../../src/prefdlg.py:1100
 msgid "Update"
 msgstr "Освежи"
 
@@ -2207,7 +2177,7 @@ msgstr "Велика слова"
 msgid "Use Auto Completion when available"
 msgstr "Користи аутоматску допуну када је доступна"
 
-#: ../../src/prefdlg.py:1131
+#: ../../src/prefdlg.py:1136
 msgid "Use Proxy"
 msgstr "Користи прокси"
 
@@ -2215,7 +2185,7 @@ msgstr "Користи прокси"
 msgid "Use Soft Tabs"
 msgstr "Размаци уместо табулатора"
 
-#: ../../src/prefdlg.py:515
+#: ../../src/prefdlg.py:518
 msgid "Use Tabs Instead of Spaces"
 msgstr "Користи табулатор уместо размака"
 
@@ -2223,7 +2193,7 @@ msgstr "Користи табулатор уместо размака"
 msgid "User Directory"
 msgstr "Кориснички директоријум"
 
-#: ../../src/prefdlg.py:1148
+#: ../../src/prefdlg.py:1153
 msgid "Username"
 msgstr "Корисничко име"
 
@@ -2243,7 +2213,7 @@ msgstr "Прикажи линију следећег обележивача"
 msgid "View Line of Previous Bookmark"
 msgstr "Прикажи линију претходног обележивача"
 
-#: ../../src/prefdlg.py:585
+#: ../../src/prefdlg.py:589
 msgid "View Options"
 msgstr "Опције приказа"
 
@@ -2252,7 +2222,7 @@ msgstr "Опције приказа"
 msgid "Visit the project homepage %s"
 msgstr "Посети сајт пројекта %s"
 
-#: ../../src/prefdlg.py:695
+#: ../../src/prefdlg.py:700
 msgid "Visual Helpers"
 msgstr "Визуелни помоћници"
 
@@ -2276,11 +2246,11 @@ msgstr "Празан простор"
 msgid "Whitespace formating commands"
 msgstr "Опције форматирања празног простора"
 
-#: ../../src/ed_menu.py:741 ../../src/prefdlg.py:526
+#: ../../src/ed_menu.py:741 ../../src/prefdlg.py:529
 msgid "Windows (\\r\\n)"
 msgstr "Виндовс (\\r\\n)"
 
-#: ../../src/ed_menu.py:712 ../../src/prefdlg.py:554
+#: ../../src/ed_menu.py:712 ../../src/prefdlg.py:557
 msgid "Word Wrap"
 msgstr "Прелом текста"
 
@@ -2333,14 +2303,42 @@ msgstr "курзив"
 msgid "underline"
 msgstr "подвуци"
 
+#~ msgid ""
+#~ "%s has been deleted since its last save point.\n"
+#~ "\n"
+#~ "Would you like to save it again?"
+#~ msgstr ""
+#~ "%s је био обрисан пре последњег чувања.\n"
+#~ "\n"
+#~ "Да ли желите да га поново сачувате?"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s је измењен у неком другом програму.\n"
+#~ "\n"
+#~ "Да ли желите да га наново учитате?"
+
 #~ msgid "All Done"
 #~ msgstr "Обављено"
 
 #~ msgid "Encoding Error"
 #~ msgstr "Грешка у кодирању (скупа знакова)"
 
+#~ msgid ""
+#~ "Failed to reload %(filename)s:\n"
+#~ "Error: %(errmsg)s"
+#~ msgstr ""
+#~ "Грешка при поновном отварању %(filename)s:\n"
+#~ "Грешка: %(errmsg)s"
+
 #~ msgid "Filter"
 #~ msgstr "Филтер"
+
+#~ msgid "Reload File?"
+#~ msgstr "Поново учитај датотеку?"
 
 #~ msgid ""
 #~ "Replace All Finished\n"
@@ -2348,3 +2346,6 @@ msgstr "подвуци"
 #~ msgstr ""
 #~ "Замена је обављена\n"
 #~ "Укупно је %d пронађених погодака замењено"
+
+#~ msgid "Resave File?"
+#~ msgstr "Поново сачувај датотеку?"
