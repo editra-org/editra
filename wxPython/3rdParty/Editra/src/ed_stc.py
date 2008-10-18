@@ -1527,39 +1527,51 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: all trailing whitespace is removed from document
 
         """
-        txt = u''
         cpos = self.GetCurrentPos()
         cline = self.GetCurrentLine()
-        marks = self.GetBookmarks()
+        cline_len = len(self.GetLine(cline))
+        s_len = self.GetLength()
+        epos = cline_len - (self.GetLineEndPosition(cline) - cpos)
 
         # Begin stripping trailing whitespace
-        # TODO do this withough replacing the text just strip from in the
-        #      buffer.
         self.BeginUndoAction()
-        for line in xrange(self.GetLineCount()):
+        for line in xrange(self.GetLineCount() + 1):
+            eol = u''
             tmp = self.GetLine(line)
-            if len(tmp):
-                eol = tmp[-1]
+            tlen = len(tmp)
+            if tlen:
+                if "\r\n" in tmp:
+                    eol = "\r\n"
+                elif "\n" in tmp:
+                    eol = "\n"
+                else:
+                    eol = tmp[-1]
+
                 if not eol.isspace():
+                    continue
+                elif eol in u' \t':
                     eol = u''
             else:
-                eol = u''
-            if line == cline:
-                npos = cpos - (abs(len(self.GetTextRange(0, \
-                                       self.GetLineEndPosition(cline-1))) - \
-                                   len(txt)) + 1)
-                next = cpos - 1
-                while self.GetTextRange(next, cpos).isspace() and next > 0:
-                    next = next - 1
-                cpos = npos - ((cpos - next) - 1)
-            txt = txt + tmp.rstrip() + eol
-        self.SetText(txt)
+                continue
+
+            # Strip the extra whitespace from the line
+            end = self.GetLineEndPosition(line) + len(eol)
+            start = max(end - tlen, 0)
+            self.SetTargetStart(start)
+            self.SetTargetEnd(end)
+            self.ReplaceTarget(tmp.rstrip() + eol)
         self.EndUndoAction()
 
-        # Replace bookmarks and position
-        for mark in marks:
-            self.MarkerAdd(mark, MARK_MARGIN)
-        self.GotoPos(cpos)
+        # Restore carat position
+        cline_len = len(self.GetLine(cline))
+        end = self.GetLineEndPosition(cline)
+        if epos >= cline_len:
+            epos = end
+        else:
+            start = max(end - cline_len, 0)
+            epos += start
+
+        self.GotoPos(epos)
 
     def FoldingOnOff(self, switch=None):
         """Turn code folding on and off
