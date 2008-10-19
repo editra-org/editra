@@ -28,7 +28,11 @@ import ed_stc
 import ed_tab
 from doctools import DocPositionMgr
 from profiler import Profile_Get
-from util import GetFileModTime
+from util import GetFileModTime, Log
+
+#--------------------------------------------------------------------------#
+
+_ = wx.GetTranslation
 
 #--------------------------------------------------------------------------#
 
@@ -71,11 +75,12 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         pass
 
     def DoTabSelected(self):
-        """Called when the page is selected in the notebook"""
-        pass
+        """Performs updates that need to happen when this tab is selected"""
+        Log("[ed_editv][info] Tab has file: %s" % self.GetFileName())
+        self.PostPositionEvent()
 
     def GetName(self):
-        """Get the unique name for this tab control.
+        """Gets the unique name for this tab control.
         @return: (unicode) string
 
         """
@@ -97,7 +102,13 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         @return: bool
 
         """
-        return True
+        result = True
+        if self.GetModify():
+            # TODO: Move this method down from the frame to here
+            result = self.GetTopLevelParent().ModifySave()
+            result = result in (wx.ID_OK, wx.ID_NO)
+
+        return result
 
     def PromptToReSave(self, cfile):
         """Show a dialog prompting to resave the current file
