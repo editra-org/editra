@@ -227,6 +227,7 @@ class SearchController:
                 stc.SetSelection(end, start)
             stc.EnsureCaretVisible()
             self._posinfo['found'] = start
+
             ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
                                (ed_glob.SB_INFO, u""))
         else:
@@ -242,7 +243,9 @@ class SearchController:
                                   _("Search wrapped to bottom")))
 
             if match is not None:
-                self._posinfo['found'] = match[0]
+                start, end = match
+                self._posinfo['found'] = start
+
                 match = list(match)
                 if not isdown:
                     match.reverse()
@@ -549,7 +552,7 @@ class SearchEngine:
             return None
 
         if spos < len(self._pool):
-            match = re.search(self._regex, self._pool[spos:])
+            match = self._regex.search(self._pool[spos:])
             if match is not None:
                 return match.span()
         return None
