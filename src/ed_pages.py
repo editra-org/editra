@@ -238,12 +238,16 @@ class EdPages(FNB.FlatNotebook):
         """
         self._ses_load = True
         files = Profile_Get('LAST_SESSION')
+
+        # Open the files from the profile
         if files is not None:
             for fname in files:
                 if os.path.exists(fname) and os.access(fname, os.R_OK):
                     self.OpenPage(os.path.dirname(fname),
                                   os.path.basename(fname))
-                    self.Update() # Give feedback as files are loaded
+                    # Give feedback as files are loaded
+                    self.Update()
+
         self._ses_load = False
 
         if self.GetPageCount() == 0:
@@ -259,7 +263,7 @@ class EdPages(FNB.FlatNotebook):
         self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
         self.control.SetEncoding(Profile_Get('ENCODING'))
         self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
-        self.AddPage(self.control, u"Untitled - %d" % self.pg_num)
+        self.AddPage(self.control, _("Untitled - %d") % self.pg_num)
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
 
         # Set the control up the the preferred default lexer
