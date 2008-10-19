@@ -55,15 +55,7 @@ from info import *
 import wx
 
 #---- WX Compatibility Hacks ----#
-# GetText is not available in 2.9 but GetItemLabel is not available pre 2.8.6
-if wx.VERSION < (2, 8, 6, 0, ''):
-    wx.MenuItem.GetItemLabel = wx.MenuItem.GetText
-    wx.MenuItem.GetItemLabelText = wx.MenuItem.GetLabel
-
-# HACK temporary bandaid to allow the the program to run until a replacement
-#      for this method can be found.
-if wx.VERSION >= (2, 9, 0, 0, ''):
-    wx.Brush.MacSetTheme = lambda x, y: x
+import wxcompat
 
 #---- Configuration Locations ----#
 # Values set when main loads
