@@ -283,7 +283,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             win = self.GetActiveWindow()
             if win is None:
                 return win
-                
+
         return win.GetNotebook().GetCurrentCtrl()
 
     def GetMainWindows(self):
@@ -334,7 +334,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """
         return self._lock
 
-    def IsOnlyInstance(self):   
+    def IsOnlyInstance(self):
         """Check if this app is the the first instance that is running
         @return: bool
 

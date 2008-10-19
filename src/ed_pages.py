@@ -254,7 +254,7 @@ class EdPages(FNB.FlatNotebook):
         @postcondition: a new page with an untitled document is opened
 
         """
-        self.GetTopLevelParent().Freeze()
+        self.Freeze()
         self.pg_num += 1
         self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
         self.control.SetEncoding(Profile_Get('ENCODING'))
@@ -267,7 +267,7 @@ class EdPages(FNB.FlatNotebook):
         ext_reg = syntax.ExtensionRegister()
         ext_lst = ext_reg.get(dlexer, ['txt', ])
         self.control.FindLexer(ext_lst[0])
-        self.GetTopLevelParent().Thaw()
+        self.Thaw()
 
     def OnCopyTabPath(self, evt):
         """Copy the path of the selected tab to the clipboard.
@@ -401,8 +401,8 @@ class EdPages(FNB.FlatNotebook):
         self.control.CheckEOL()
         self.control.EmptyUndoBuffer()
 
-#        if Profile_Get('SAVE_POS'):
-#            self.control.GotoPos(self.DocMgr.GetPos(self.control.GetFileName()))
+        if Profile_Get('SAVE_POS'):
+            self.control.GotoPos(self.DocMgr.GetPos(self.control.GetFileName()))
 
         # Add the buffer to the notebook
         if new_pg:
@@ -602,12 +602,11 @@ class EdPages(FNB.FlatNotebook):
         window = self.GetPage(pg_num)
         window.SetFocus()
         self.control = window
-        fname = self.control.GetFileName()
 
         # Update Frame Title
-        if fname == "":
-            fname = self.GetPageText(pg_num)
         self.frame.SetTitle(self.control.GetTitleString())
+
+        # Only post page changes when the change is not from the app exiting
         if not self.frame.IsExiting():
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pg_num))
 
@@ -621,9 +620,11 @@ class EdPages(FNB.FlatNotebook):
         self.ChangePage(cpage)
         evt.Skip()
         self.LOG("[ed_pages][evt] Page Changed to %d" % cpage)
-        self.LOG("[ed_pages][info] It has file named: %s" % \
-                 self.control.GetFileName())
-        self.control.PostPositionEvent()
+        
+        # Call the tab specific selection handler
+        page = self.GetCurrentPage()
+        page.DoTabSelected()
+
         self.EnsureVisible(cpage)
 
     def OnPageClosing(self, evt):
@@ -633,9 +634,12 @@ class EdPages(FNB.FlatNotebook):
 
         """
         self.LOG("[ed_pages][evt] Closing Page: #%d" % self.GetSelection())
+
+        # Call the tab specific close handler
         page = self.GetCurrentPage()
         if page is not None:
             page.DoTabClosing()
+
         evt.Skip()
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSING,
                            (self, self.GetSelection()))
@@ -665,29 +669,26 @@ class EdPages(FNB.FlatNotebook):
 
     def ClosePage(self):
         """Closes Currently Selected Page
-        @postcondition: currently selected page is closed
+        @return: bool
 
         """
+        self.Freeze()
         self.GoCurrentPage()
+        page = self.GetCurrentPage()
         pg_num = self.GetSelection()
-        result = wx.ID_OK
+        result = True
 
-        if self.control.GetModify():
-            result = self.frame.ModifySave()
-            if result != wx.ID_CANCEL:
-                self.DeletePage(pg_num)
-                self.GoCurrentPage()
-            else:
-                pass
-        else:
+        if page.CanCloseTab():
             self.DeletePage(pg_num)
             self.GoCurrentPage()
+        else:
+            False
 
-        # TODO this causes some flashing
         frame = self.GetTopLevelParent()
         if not self.GetPageCount() and \
            hasattr(frame, 'IsExiting') and not frame.IsExiting():
             self.NewPage()
+        self.Thaw()
         return result
 
     def SetPageImage(self, pg_num, lang_id):
@@ -699,6 +700,7 @@ class EdPages(FNB.FlatNotebook):
         @param lang_id: language id of file type to get mime image for
 
         """
+        # Only set icons when enabled in preferences
         if not Profile_Get('TABICONS'):
             return
 
@@ -719,10 +721,12 @@ class EdPages(FNB.FlatNotebook):
         @postcondition: all images in control are updated
 
         """
+        # If icons preference has been disabled then clear all icons
         if not Profile_Get('TABICONS'):
             for page in xrange(self.GetPageCount()):
                 FNB.FlatNotebook.SetPageImage(self, page, -1)
         else:
+            # Reload the image list with new icons from the ArtProvider
             imglst = self.GetImageList()
             for lang, index in self._index.iteritems():
                 bmp = wx.ArtProvider.GetBitmap(str(lang), wx.ART_MENU)
