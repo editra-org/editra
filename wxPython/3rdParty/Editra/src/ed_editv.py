@@ -93,6 +93,12 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         """
         fname = self.GetFileName()
         title = os.path.split(fname)[-1]
+
+        # Its an unsaved buffer
+        if not len(title):
+            title = _("Untitled - %d") % self.GetParent().pg_num
+            fname = title
+
         if self.GetModify():
             title = u"*" + title
         return u"%s - file://%s" % (title, fname)
