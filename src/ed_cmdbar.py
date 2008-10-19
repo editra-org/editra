@@ -94,18 +94,11 @@ class CommandBar(wx.Panel):
                             cmd=wx.BoxSizer())
 
         # Install Controls
-        v_sizer = wx.BoxSizer(wx.VERTICAL)
         self._sizers['h_sizer'].Add((8, 8))
-        bstyle = wx.BU_EXACTFIT
-        if wx.Platform == '__WXGTK__':
-            bstyle = wx.NO_BORDER
-
-        self.close_b = wx.BitmapButton(self, ID_CLOSE_BUTTON, \
-                                       XButton.GetBitmap(), style=bstyle)
+        self.close_b = platebtn.PlateButton(self, ID_CLOSE_BUTTON,
+                                            bmp=XButton.GetBitmap())
         self._sizers['h_sizer'].Add(self.close_b, 0, wx.ALIGN_CENTER_VERTICAL)
-        self._sizers['h_sizer'].Add((12, 12))
-        v_sizer.Add((2, 2))
-        self._sizers['h_sizer'].Add(v_sizer)
+        self._sizers['h_sizer'].Add((5, 5))
         self.SetSizer(self._sizers['h_sizer'])
         self.SetAutoLayout(True)
 
