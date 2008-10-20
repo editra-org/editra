@@ -930,7 +930,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # number width over fills the area.
         lines = self.GetLineCount()
         mwidth = self.GetTextExtent(str(lines))[0]
-        self.SetMarginWidth(NUM_MARGIN, max(15, mwidth + 2))
+
+        if wx.Platform == '__WXMAC__':
+            adj = 2
+        else:
+            adj = 8
+
+        self.SetMarginWidth(NUM_MARGIN, max(15, mwidth + adj))
 
         wx.PostEvent(self.GetParent(), evt)
 
