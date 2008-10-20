@@ -96,7 +96,8 @@ class CommandBar(wx.Panel):
         # Install Controls
         self._sizers['h_sizer'].Add((8, 8))
         self.close_b = platebtn.PlateButton(self, ID_CLOSE_BUTTON,
-                                            bmp=XButton.GetBitmap())
+                                            bmp=XButton.GetBitmap(),
+                                            style=platebtn.PB_STYLE_NOBG)
         self._sizers['h_sizer'].Add(self.close_b, 0, wx.ALIGN_CENTER_VERTICAL)
         self._sizers['h_sizer'].Add((5, 5))
         self.SetSizer(self._sizers['h_sizer'])
