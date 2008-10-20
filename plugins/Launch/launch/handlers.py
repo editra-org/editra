@@ -632,7 +632,7 @@ class PythonHandler(FileTypeHandler):
 
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = dict(python='python', pylint='pylint')
+        self.commands = dict(python='python -u', pylint='pylint')
         self.default = 'python'
 
     @property
