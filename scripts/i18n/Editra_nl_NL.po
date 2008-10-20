@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-18 14:37-0500\n"
+"POT-Creation-Date: 2008-10-19 21:19-0500\n"
 "PO-Revision-Date: 2008-07-12 10:08+0000\n"
 "Last-Translator: Gerard <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -295,7 +295,7 @@ msgstr "Kies een bestand"
 msgid "Choose a Save Location"
 msgstr "Kies een Opslaan locatie"
 
-#: ../../src/ed_pages.py:142
+#: ../../src/ed_pages.py:136
 #, fuzzy
 msgid "Choose an Encoding"
 msgstr "Kies een bestand"
@@ -318,12 +318,12 @@ msgstr "Klik op installeren om de plugins uit de lijst te installeren"
 msgid "Click on an item to edit"
 msgstr "Klik op een object om te bewerken"
 
-#: ../../src/ed_pages.py:304
+#: ../../src/ed_pages.py:302
 #, fuzzy, python-format
 msgid "Close \"%s\""
 msgstr "Ga naar \"%s\""
 
-#: ../../src/ed_pages.py:305
+#: ../../src/ed_pages.py:303
 #, fuzzy
 msgid "Close All"
 msgstr "Sluit alles pagina's"
@@ -385,7 +385,7 @@ msgstr "Normale zoom"
 msgid "Colour/White"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:185
+#: ../../src/ed_cmdbar.py:178
 msgid "Command"
 msgstr "Commando"
 
@@ -437,7 +437,7 @@ msgstr "Kopiëren"
 msgid "Copy Current Line"
 msgstr "Kopiëer huidige regel"
 
-#: ../../src/ed_pages.py:307
+#: ../../src/ed_pages.py:305
 msgid "Copy Full Path"
 msgstr ""
 
@@ -539,7 +539,7 @@ msgstr "Lettertype voor weergave"
 msgid "Do you wish to exit?"
 msgstr "Wil je afsluiten?"
 
-#: ../../src/ed_pages.py:526
+#: ../../src/ed_pages.py:522
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -810,7 +810,7 @@ msgstr "Niet geslaagd bestands status op te vragen"
 msgid "File Type"
 msgstr "Bestandstype"
 
-#: ../../src/ed_pages.py:181
+#: ../../src/ed_pages.py:175
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
@@ -822,7 +822,7 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "Bestandtype associatie"
 
-#: ../../src/ed_cmdbar.py:215 ../../src/ed_search.py:83
+#: ../../src/ed_cmdbar.py:208 ../../src/ed_search.py:83
 #: ../../src/ed_search.py:87 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Zoek..."
@@ -941,7 +941,7 @@ msgstr "Ga naar de configuratie pagina"
 msgid "Goto \"%s\""
 msgstr "Ga naar \"%s\""
 
-#: ../../src/ed_cmdbar.py:162
+#: ../../src/ed_cmdbar.py:155
 msgid "Goto Line"
 msgstr "Ga naar regel"
 
@@ -1054,7 +1054,7 @@ msgstr "Huidige versie"
 msgid "Invalid expression \"%s\""
 msgstr "Incorrrect bestand: %s"
 
-#: ../../src/ed_pages.py:510
+#: ../../src/ed_pages.py:506
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Incorrrect bestand: %s"
@@ -1193,7 +1193,7 @@ msgstr "Beheer, download en installeren van plugins"
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Kies handmatig een taal/Kleuren schema"
 
-#: ../../src/ed_cmdbar.py:225
+#: ../../src/ed_cmdbar.py:218
 msgid "Match Case"
 msgstr "Hoofdlettergevoelig"
 
@@ -1271,12 +1271,12 @@ msgstr "Nieuwe regel voor huidige"
 msgid "New Profile"
 msgstr "Nieuw Profiel"
 
-#: ../../src/ed_pages.py:301
+#: ../../src/ed_pages.py:299
 #, fuzzy
 msgid "New Tab"
 msgstr "&Nieuw tabblad"
 
-#: ../../src/ed_cmdbar.py:218
+#: ../../src/ed_cmdbar.py:211
 msgid "Next"
 msgstr "Volgende"
 
@@ -1288,7 +1288,7 @@ msgstr "Volgende bladwijzer"
 msgid "No Description Available"
 msgstr "Geen beschrijving beschikbaar"
 
-#: ../../src/ed_pages.py:520
+#: ../../src/ed_pages.py:516
 msgid "No Valid Files to Open"
 msgstr "Geen bestanden om te openen"
 
@@ -1334,11 +1334,11 @@ msgstr "Open een Python shell"
 msgid "Open Code Browser Sidepanel"
 msgstr "Open Code Browser paneel"
 
-#: ../../src/ed_pages.py:531
+#: ../../src/ed_pages.py:527
 msgid "Open Directory?"
 msgstr "Directorie openen"
 
-#: ../../src/ed_pages.py:183
+#: ../../src/ed_pages.py:177
 msgid "Open File"
 msgstr "Open Bestand"
 
@@ -1358,7 +1358,7 @@ msgstr "Open the snel vind balk"
 msgid "Open with "
 msgstr "Open met "
 
-#: ../../src/ed_pages.py:551
+#: ../../src/ed_pages.py:547
 #, python-format
 msgid "Opened file: %s"
 msgstr "Geopend bestand : %s"
@@ -1459,7 +1459,7 @@ msgstr "Voorbeeld"
 msgid "Preview Printout"
 msgstr "Afdruk voorbeeld"
 
-#: ../../src/ed_cmdbar.py:222
+#: ../../src/ed_cmdbar.py:215
 msgid "Previous"
 msgstr "Vorige"
 
@@ -1570,7 +1570,7 @@ msgstr "Opnieuw"
 msgid "Redo Last Undo"
 msgstr "Herhaal laatste annulering"
 
-#: ../../src/ed_cmdbar.py:228
+#: ../../src/ed_cmdbar.py:221
 msgid "Regex"
 msgstr ""
 
@@ -1665,7 +1665,7 @@ msgstr "Voer het bestand uit gekopppeld aan de huidige uitvoer buffer"
 msgid "Save"
 msgstr "Opslaan"
 
-#: ../../src/ed_pages.py:303
+#: ../../src/ed_pages.py:301
 #, fuzzy, python-format
 msgid "Save \"%s\""
 msgstr "Opslaan als"
@@ -1998,7 +1998,7 @@ msgstr "Tekstkleuren"
 msgid "Text Document"
 msgstr "Tekst document"
 
-#: ../../src/ed_pages.py:138
+#: ../../src/ed_pages.py:132
 #, python-format
 msgid ""
 "The correct encoding of '%s' could not be determined.\n"
@@ -2018,7 +2018,7 @@ msgstr ""
 "\n"
 "Wil je de wijzigingen bewaren?"
 
-#: ../../src/ed_pages.py:518
+#: ../../src/ed_pages.py:514
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "Er zijn geen bestanden die Editra kan openen in %s"
@@ -2148,6 +2148,11 @@ msgstr "Onbekend"
 #: ../../src/ed_search.py:539
 #, fuzzy
 msgid "Untitled"
+msgstr "Naamloos_Bestand"
+
+#: ../../src/ed_pages.py:266
+#, fuzzy, python-format
+msgid "Untitled - %d"
 msgstr "Naamloos_Bestand"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:605

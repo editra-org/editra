@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-18 14:37-0500\n"
+"POT-Creation-Date: 2008-10-19 21:19-0500\n"
 "PO-Revision-Date: 2008-06-26 03:49+0000\n"
 "Last-Translator: Vladimir Lazic <vlazic@gmail.com>\n"
 "Language-Team: Serbian <sr@li.org>\n"
@@ -297,7 +297,7 @@ msgstr "Изабери датотеку"
 msgid "Choose a Save Location"
 msgstr "Изабери локацију где желиш да сачуваш"
 
-#: ../../src/ed_pages.py:142
+#: ../../src/ed_pages.py:136
 #, fuzzy
 msgid "Choose an Encoding"
 msgstr "Изабери датотеку"
@@ -320,12 +320,12 @@ msgstr "Клинки на Инсталирај да би инсталирао п
 msgid "Click on an item to edit"
 msgstr "Кликни на ставку да би је изменио"
 
-#: ../../src/ed_pages.py:304
+#: ../../src/ed_pages.py:302
 #, python-format
 msgid "Close \"%s\""
 msgstr ""
 
-#: ../../src/ed_pages.py:305
+#: ../../src/ed_pages.py:303
 #, fuzzy
 msgid "Close All"
 msgstr "Затвори све документе"
@@ -387,7 +387,7 @@ msgstr "Основно увећање"
 msgid "Colour/White"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:185
+#: ../../src/ed_cmdbar.py:178
 msgid "Command"
 msgstr "Наредба"
 
@@ -439,7 +439,7 @@ msgstr "Умножи"
 msgid "Copy Current Line"
 msgstr "Умножи тренутну линију"
 
-#: ../../src/ed_pages.py:307
+#: ../../src/ed_pages.py:305
 msgid "Copy Full Path"
 msgstr ""
 
@@ -541,7 +541,7 @@ msgstr "Фонт"
 msgid "Do you wish to exit?"
 msgstr "Да ли желите да изађете?"
 
-#: ../../src/ed_pages.py:526
+#: ../../src/ed_pages.py:522
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -813,7 +813,7 @@ msgstr "Грешка у читању информација о датотеци"
 msgid "File Type"
 msgstr "Тип датотеке"
 
-#: ../../src/ed_pages.py:181
+#: ../../src/ed_pages.py:175
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
@@ -825,7 +825,7 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "Типови датотека и њихове екстензије"
 
-#: ../../src/ed_cmdbar.py:215 ../../src/ed_search.py:83
+#: ../../src/ed_cmdbar.py:208 ../../src/ed_search.py:83
 #: ../../src/ed_search.py:87 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Пронађи"
@@ -944,7 +944,7 @@ msgstr "Иди на страну поставки?"
 msgid "Goto \"%s\""
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:162
+#: ../../src/ed_cmdbar.py:155
 msgid "Goto Line"
 msgstr "Иди на линију"
 
@@ -1057,7 +1057,7 @@ msgstr "Инсталирана верзија"
 msgid "Invalid expression \"%s\""
 msgstr "Неисправна датотека: %s"
 
-#: ../../src/ed_pages.py:510
+#: ../../src/ed_pages.py:506
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Неисправна датотека: %s"
@@ -1196,7 +1196,7 @@ msgstr "Подеси, преузми и инсталирај проширења"
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Ручно постави истицања/синтаксу"
 
-#: ../../src/ed_cmdbar.py:225
+#: ../../src/ed_cmdbar.py:218
 msgid "Match Case"
 msgstr "Поклопи величину слова"
 
@@ -1274,12 +1274,12 @@ msgstr "Нова линија пре"
 msgid "New Profile"
 msgstr "Нови профил"
 
-#: ../../src/ed_pages.py:301
+#: ../../src/ed_pages.py:299
 #, fuzzy
 msgid "New Tab"
 msgstr "&Нови језичак"
 
-#: ../../src/ed_cmdbar.py:218
+#: ../../src/ed_cmdbar.py:211
 msgid "Next"
 msgstr "Следеће"
 
@@ -1291,7 +1291,7 @@ msgstr "Следећи обележивач"
 msgid "No Description Available"
 msgstr "Нема доступног описа"
 
-#: ../../src/ed_pages.py:520
+#: ../../src/ed_pages.py:516
 msgid "No Valid Files to Open"
 msgstr "Нема исправних датотека које се могу отворити"
 
@@ -1337,11 +1337,11 @@ msgstr "Отвори Питон конзолу"
 msgid "Open Code Browser Sidepanel"
 msgstr "Отвори прегледач кôда у бочном панелу"
 
-#: ../../src/ed_pages.py:531
+#: ../../src/ed_pages.py:527
 msgid "Open Directory?"
 msgstr "Отвори директоријум?"
 
-#: ../../src/ed_pages.py:183
+#: ../../src/ed_pages.py:177
 msgid "Open File"
 msgstr "Отвори датотеку"
 
@@ -1361,7 +1361,7 @@ msgstr "Отвори траку за брзу претрагу"
 msgid "Open with "
 msgstr "Отвори са "
 
-#: ../../src/ed_pages.py:551
+#: ../../src/ed_pages.py:547
 #, python-format
 msgid "Opened file: %s"
 msgstr "Отворена датотека: %s"
@@ -1462,7 +1462,7 @@ msgstr "Преглед"
 msgid "Preview Printout"
 msgstr "Преглед пред штампу"
 
-#: ../../src/ed_cmdbar.py:222
+#: ../../src/ed_cmdbar.py:215
 msgid "Previous"
 msgstr "Претходно"
 
@@ -1573,7 +1573,7 @@ msgstr "Поврати"
 msgid "Redo Last Undo"
 msgstr "Враћање на претходни опозов акције"
 
-#: ../../src/ed_cmdbar.py:228
+#: ../../src/ed_cmdbar.py:221
 msgid "Regex"
 msgstr ""
 
@@ -1668,7 +1668,7 @@ msgstr ""
 msgid "Save"
 msgstr "Сачувај"
 
-#: ../../src/ed_pages.py:303
+#: ../../src/ed_pages.py:301
 #, fuzzy, python-format
 msgid "Save \"%s\""
 msgstr "Сачувај као"
@@ -2001,7 +2001,7 @@ msgstr "Боје текста"
 msgid "Text Document"
 msgstr "Текстуални документ"
 
-#: ../../src/ed_pages.py:138
+#: ../../src/ed_pages.py:132
 #, python-format
 msgid ""
 "The correct encoding of '%s' could not be determined.\n"
@@ -2021,7 +2021,7 @@ msgstr ""
 "\n"
 "Да ли желите да сачувате измене?"
 
-#: ../../src/ed_pages.py:518
+#: ../../src/ed_pages.py:514
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "Нема датотека које Editra може да отвори у %s"
@@ -2151,6 +2151,11 @@ msgstr "Непознато"
 #: ../../src/ed_search.py:539
 #, fuzzy
 msgid "Untitled"
+msgstr "Нова_Датотека"
+
+#: ../../src/ed_pages.py:266
+#, fuzzy, python-format
+msgid "Untitled - %d"
 msgstr "Нова_Датотека"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:605

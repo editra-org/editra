@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-18 14:37-0500\n"
+"POT-Creation-Date: 2008-10-19 21:19-0500\n"
 "PO-Revision-Date: 2008-08-08 04:38+0000\n"
 "Last-Translator: gasolin <Unknown>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
@@ -299,7 +299,7 @@ msgstr "選擇檔案"
 msgid "Choose a Save Location"
 msgstr "選擇儲存位置"
 
-#: ../../src/ed_pages.py:142
+#: ../../src/ed_pages.py:136
 #, fuzzy
 msgid "Choose an Encoding"
 msgstr "選擇檔案"
@@ -322,12 +322,12 @@ msgstr "點擊安裝鈕來安裝列表中的套件"
 msgid "Click on an item to edit"
 msgstr "點選要編輯的項目"
 
-#: ../../src/ed_pages.py:304
+#: ../../src/ed_pages.py:302
 #, fuzzy, python-format
 msgid "Close \"%s\""
 msgstr "跳轉到 \"%s\""
 
-#: ../../src/ed_pages.py:305
+#: ../../src/ed_pages.py:303
 #, fuzzy
 msgid "Close All"
 msgstr "關閉所有頁面"
@@ -389,7 +389,7 @@ msgstr "預設"
 msgid "Colour/White"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:185
+#: ../../src/ed_cmdbar.py:178
 msgid "Command"
 msgstr "命令"
 
@@ -441,7 +441,7 @@ msgstr "複製"
 msgid "Copy Current Line"
 msgstr "複製本行"
 
-#: ../../src/ed_pages.py:307
+#: ../../src/ed_pages.py:305
 msgid "Copy Full Path"
 msgstr ""
 
@@ -544,7 +544,7 @@ msgstr "顯示字型"
 msgid "Do you wish to exit?"
 msgstr "要結束了嗎?"
 
-#: ../../src/ed_pages.py:526
+#: ../../src/ed_pages.py:522
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -818,7 +818,7 @@ msgstr "檔案狀態失敗"
 msgid "File Type"
 msgstr "檔案類型"
 
-#: ../../src/ed_pages.py:181
+#: ../../src/ed_pages.py:175
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
@@ -830,7 +830,7 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "檔案類型關連"
 
-#: ../../src/ed_cmdbar.py:215 ../../src/ed_search.py:83
+#: ../../src/ed_cmdbar.py:208 ../../src/ed_search.py:83
 #: ../../src/ed_search.py:87 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "尋找"
@@ -949,7 +949,7 @@ msgstr "前往配置頁面?"
 msgid "Goto \"%s\""
 msgstr "跳轉到 \"%s\""
 
-#: ../../src/ed_cmdbar.py:162
+#: ../../src/ed_cmdbar.py:155
 msgid "Goto Line"
 msgstr "跳至行"
 
@@ -1062,7 +1062,7 @@ msgstr "已安裝版本"
 msgid "Invalid expression \"%s\""
 msgstr "無效檔案: %s"
 
-#: ../../src/ed_pages.py:510
+#: ../../src/ed_pages.py:506
 #, python-format
 msgid "Invalid file: %s"
 msgstr "無效檔案: %s"
@@ -1201,7 +1201,7 @@ msgstr "管理, 下載, 和安裝插件"
 msgid "Manually Set a Lexer/Syntax"
 msgstr "手動設定解析器/語法"
 
-#: ../../src/ed_cmdbar.py:225
+#: ../../src/ed_cmdbar.py:218
 msgid "Match Case"
 msgstr "符合大小寫"
 
@@ -1279,12 +1279,12 @@ msgstr "在前面新增一行"
 msgid "New Profile"
 msgstr "新增設定檔"
 
-#: ../../src/ed_pages.py:301
+#: ../../src/ed_pages.py:299
 #, fuzzy
 msgid "New Tab"
 msgstr "新增分頁(&N)"
 
-#: ../../src/ed_cmdbar.py:218
+#: ../../src/ed_cmdbar.py:211
 msgid "Next"
 msgstr "下一個"
 
@@ -1296,7 +1296,7 @@ msgstr "下一標記"
 msgid "No Description Available"
 msgstr "沒有描述"
 
-#: ../../src/ed_pages.py:520
+#: ../../src/ed_pages.py:516
 msgid "No Valid Files to Open"
 msgstr "沒有合法的檔案可開啟"
 
@@ -1342,11 +1342,11 @@ msgstr "開啟 Python 命令行"
 msgid "Open Code Browser Sidepanel"
 msgstr "開啟源碼瀏覽器面板"
 
-#: ../../src/ed_pages.py:531
+#: ../../src/ed_pages.py:527
 msgid "Open Directory?"
 msgstr "開啟目錄?"
 
-#: ../../src/ed_pages.py:183
+#: ../../src/ed_pages.py:177
 msgid "Open File"
 msgstr "開啟檔案"
 
@@ -1366,7 +1366,7 @@ msgstr "開啟快速搜尋欄"
 msgid "Open with "
 msgstr "打開用 "
 
-#: ../../src/ed_pages.py:551
+#: ../../src/ed_pages.py:547
 #, python-format
 msgid "Opened file: %s"
 msgstr "打開檔案: %s"
@@ -1467,7 +1467,7 @@ msgstr "預覽"
 msgid "Preview Printout"
 msgstr "預覽列印"
 
-#: ../../src/ed_cmdbar.py:222
+#: ../../src/ed_cmdbar.py:215
 msgid "Previous"
 msgstr "上一個"
 
@@ -1578,7 +1578,7 @@ msgstr "復原"
 msgid "Redo Last Undo"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:228
+#: ../../src/ed_cmdbar.py:221
 msgid "Regex"
 msgstr ""
 
@@ -1672,7 +1672,7 @@ msgstr ""
 msgid "Save"
 msgstr "儲存"
 
-#: ../../src/ed_pages.py:303
+#: ../../src/ed_pages.py:301
 #, fuzzy, python-format
 msgid "Save \"%s\""
 msgstr "另存新檔"
@@ -2004,7 +2004,7 @@ msgstr "文字顏色"
 msgid "Text Document"
 msgstr "文字檔"
 
-#: ../../src/ed_pages.py:138
+#: ../../src/ed_pages.py:132
 #, python-format
 msgid ""
 "The correct encoding of '%s' could not be determined.\n"
@@ -2021,7 +2021,7 @@ msgid ""
 "Would you like to save the changes?"
 msgstr ""
 
-#: ../../src/ed_pages.py:518
+#: ../../src/ed_pages.py:514
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr ""
@@ -2147,6 +2147,11 @@ msgstr "未知"
 
 #: ../../src/ed_search.py:539
 msgid "Untitled"
+msgstr ""
+
+#: ../../src/ed_pages.py:266
+#, python-format
+msgid "Untitled - %d"
 msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:605

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-18 14:37-0500\n"
+"POT-Creation-Date: 2008-10-19 21:19-0500\n"
 "PO-Revision-Date: 2008-04-30 04:26+0000\n"
 "Last-Translator: mustafa <myaykan@hotmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -298,7 +298,7 @@ msgstr "Dosya seç"
 msgid "Choose a Save Location"
 msgstr "Kaydetmek için bir yer seç"
 
-#: ../../src/ed_pages.py:142
+#: ../../src/ed_pages.py:136
 #, fuzzy
 msgid "Choose an Encoding"
 msgstr "Dosya seç"
@@ -321,12 +321,12 @@ msgstr "Listedeki eklentileri kurmak için kur tuşuna basınız"
 msgid "Click on an item to edit"
 msgstr "Düzenlemek içi bir kayıt üzerine tıklayın"
 
-#: ../../src/ed_pages.py:304
+#: ../../src/ed_pages.py:302
 #, python-format
 msgid "Close \"%s\""
 msgstr ""
 
-#: ../../src/ed_pages.py:305
+#: ../../src/ed_pages.py:303
 #, fuzzy
 msgid "Close All"
 msgstr "Tüm sayfaları kapat"
@@ -389,7 +389,7 @@ msgstr "Varsayılan"
 msgid "Colour/White"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:185
+#: ../../src/ed_cmdbar.py:178
 msgid "Command"
 msgstr "Komut"
 
@@ -441,7 +441,7 @@ msgstr "Kopyala"
 msgid "Copy Current Line"
 msgstr "Güncel satırı kopyala"
 
-#: ../../src/ed_pages.py:307
+#: ../../src/ed_pages.py:305
 msgid "Copy Full Path"
 msgstr ""
 
@@ -543,7 +543,7 @@ msgstr ""
 msgid "Do you wish to exit?"
 msgstr "Kapatılsınmı?"
 
-#: ../../src/ed_pages.py:526
+#: ../../src/ed_pages.py:522
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -805,7 +805,7 @@ msgstr "Dosya durumu hatalı"
 msgid "File Type"
 msgstr "Dosya Türü"
 
-#: ../../src/ed_pages.py:181
+#: ../../src/ed_pages.py:175
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
@@ -817,7 +817,7 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "Dosya tipini  tanınır hale getir"
 
-#: ../../src/ed_cmdbar.py:215 ../../src/ed_search.py:83
+#: ../../src/ed_cmdbar.py:208 ../../src/ed_search.py:83
 #: ../../src/ed_search.py:87 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Bul"
@@ -936,7 +936,7 @@ msgstr "Ayarlar penceresine git"
 msgid "Goto \"%s\""
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:162
+#: ../../src/ed_cmdbar.py:155
 msgid "Goto Line"
 msgstr "Satıra Git"
 
@@ -1050,7 +1050,7 @@ msgstr "Kurulu Sürüm"
 msgid "Invalid expression \"%s\""
 msgstr "Geçersiz doya: %s"
 
-#: ../../src/ed_pages.py:510
+#: ../../src/ed_pages.py:506
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Geçersiz doya: %s"
@@ -1189,7 +1189,7 @@ msgstr "Eklenti yönet, indir ve kur"
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Lexer/Syntax elle ayarla"
 
-#: ../../src/ed_cmdbar.py:225
+#: ../../src/ed_cmdbar.py:218
 msgid "Match Case"
 msgstr "Küçük/Büyük Harf Duyarlı"
 
@@ -1267,12 +1267,12 @@ msgstr "Öne Yeni Satır"
 msgid "New Profile"
 msgstr "Yeni Profil"
 
-#: ../../src/ed_pages.py:301
+#: ../../src/ed_pages.py:299
 #, fuzzy
 msgid "New Tab"
 msgstr "&Yeni Sekme"
 
-#: ../../src/ed_cmdbar.py:218
+#: ../../src/ed_cmdbar.py:211
 msgid "Next"
 msgstr "Sonraki"
 
@@ -1284,7 +1284,7 @@ msgstr "Sonraki Yer İmi"
 msgid "No Description Available"
 msgstr "Tanımlama Mevcut Değil"
 
-#: ../../src/ed_pages.py:520
+#: ../../src/ed_pages.py:516
 msgid "No Valid Files to Open"
 msgstr "Açmak için dosya geçerli değildir"
 
@@ -1330,11 +1330,11 @@ msgstr "Bir Python  Dosyası Aç"
 msgid "Open Code Browser Sidepanel"
 msgstr "Kod Gözatıcısını Aç"
 
-#: ../../src/ed_pages.py:531
+#: ../../src/ed_pages.py:527
 msgid "Open Directory?"
 msgstr "Klasör Aç"
 
-#: ../../src/ed_pages.py:183
+#: ../../src/ed_pages.py:177
 msgid "Open File"
 msgstr "Dosya Aç"
 
@@ -1354,7 +1354,7 @@ msgstr "Hızlı arama çubuğunu aç"
 msgid "Open with "
 msgstr "Beraber Aç "
 
-#: ../../src/ed_pages.py:551
+#: ../../src/ed_pages.py:547
 #, python-format
 msgid "Opened file: %s"
 msgstr "Açılan Dosya: %s"
@@ -1456,7 +1456,7 @@ msgstr "Ön İzleme"
 msgid "Preview Printout"
 msgstr "Yazıcı Çıktısı Ön İzleme"
 
-#: ../../src/ed_cmdbar.py:222
+#: ../../src/ed_cmdbar.py:215
 msgid "Previous"
 msgstr "Önceki"
 
@@ -1567,7 +1567,7 @@ msgstr "Yinele"
 msgid "Redo Last Undo"
 msgstr "En son geri alınanı tekrarla"
 
-#: ../../src/ed_cmdbar.py:228
+#: ../../src/ed_cmdbar.py:221
 msgid "Regex"
 msgstr ""
 
@@ -1662,7 +1662,7 @@ msgstr ""
 msgid "Save"
 msgstr "Kaydet"
 
-#: ../../src/ed_pages.py:303
+#: ../../src/ed_pages.py:301
 #, fuzzy, python-format
 msgid "Save \"%s\""
 msgstr "Farklı Kaydet"
@@ -1998,7 +1998,7 @@ msgstr "Renk"
 msgid "Text Document"
 msgstr "Metin Belgesi"
 
-#: ../../src/ed_pages.py:138
+#: ../../src/ed_pages.py:132
 #, python-format
 msgid ""
 "The correct encoding of '%s' could not be determined.\n"
@@ -2017,7 +2017,7 @@ msgstr ""
 "En son kayıttan beri dosya %s değişti\n"
 "Değişiklikleri kaydetmek istermisiniz?"
 
-#: ../../src/ed_pages.py:518
+#: ../../src/ed_pages.py:514
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "Editra ile %s içinde açılabilecek bir dosya yoktur"
@@ -2145,6 +2145,11 @@ msgstr ""
 
 #: ../../src/ed_search.py:539
 msgid "Untitled"
+msgstr ""
+
+#: ../../src/ed_pages.py:266
+#, python-format
+msgid "Untitled - %d"
 msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:605

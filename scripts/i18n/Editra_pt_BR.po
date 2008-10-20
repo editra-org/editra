@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-18 14:37-0500\n"
+"POT-Creation-Date: 2008-10-19 21:19-0500\n"
 "PO-Revision-Date: 2008-08-06 11:30+0000\n"
 "Last-Translator: Ricardo Crudo <ricardo.crudo@yahoo.com.br>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -297,7 +297,7 @@ msgstr "Escolha um Arquivo"
 msgid "Choose a Save Location"
 msgstr "Escolha um local para Salvar"
 
-#: ../../src/ed_pages.py:142
+#: ../../src/ed_pages.py:136
 #, fuzzy
 msgid "Choose an Encoding"
 msgstr "Escolha um Arquivo"
@@ -320,12 +320,12 @@ msgstr "Clique em Instalar para instalar os plugins na lista"
 msgid "Click on an item to edit"
 msgstr "Clique um item para editar"
 
-#: ../../src/ed_pages.py:304
+#: ../../src/ed_pages.py:302
 #, fuzzy, python-format
 msgid "Close \"%s\""
 msgstr "Ir para \"%s\""
 
-#: ../../src/ed_pages.py:305
+#: ../../src/ed_pages.py:303
 #, fuzzy
 msgid "Close All"
 msgstr "Fechar todas as páginas"
@@ -387,7 +387,7 @@ msgstr "Zoom padrão"
 msgid "Colour/White"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:185
+#: ../../src/ed_cmdbar.py:178
 msgid "Command"
 msgstr "Comando"
 
@@ -439,7 +439,7 @@ msgstr "Copiar"
 msgid "Copy Current Line"
 msgstr "Copiar linha atual"
 
-#: ../../src/ed_pages.py:307
+#: ../../src/ed_pages.py:305
 msgid "Copy Full Path"
 msgstr ""
 
@@ -541,7 +541,7 @@ msgstr "Fonte"
 msgid "Do you wish to exit?"
 msgstr "Você deseja sair?"
 
-#: ../../src/ed_pages.py:526
+#: ../../src/ed_pages.py:522
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -813,7 +813,7 @@ msgstr "Arquivo Estático Falhou"
 msgid "File Type"
 msgstr "Tipo de Arquivo"
 
-#: ../../src/ed_pages.py:181
+#: ../../src/ed_pages.py:175
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
@@ -825,7 +825,7 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "Associações de tipos de arquivos"
 
-#: ../../src/ed_cmdbar.py:215 ../../src/ed_search.py:83
+#: ../../src/ed_cmdbar.py:208 ../../src/ed_search.py:83
 #: ../../src/ed_search.py:87 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Localizar"
@@ -944,7 +944,7 @@ msgstr "Ir para a página de configurações"
 msgid "Goto \"%s\""
 msgstr "Ir para \"%s\""
 
-#: ../../src/ed_cmdbar.py:162
+#: ../../src/ed_cmdbar.py:155
 msgid "Goto Line"
 msgstr "Ir para a linha"
 
@@ -1057,7 +1057,7 @@ msgstr "Versão instalada"
 msgid "Invalid expression \"%s\""
 msgstr "Arquivo inválido: %s"
 
-#: ../../src/ed_pages.py:510
+#: ../../src/ed_pages.py:506
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Arquivo inválido: %s"
@@ -1196,7 +1196,7 @@ msgstr "Administrar, Baixar e Instalar plugins"
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Configurar manualmente um Lexer"
 
-#: ../../src/ed_cmdbar.py:225
+#: ../../src/ed_cmdbar.py:218
 msgid "Match Case"
 msgstr "Diferenciar Maiúsculas de Minúsculas"
 
@@ -1274,12 +1274,12 @@ msgstr "Nova linha antes"
 msgid "New Profile"
 msgstr "Novo Perfil"
 
-#: ../../src/ed_pages.py:301
+#: ../../src/ed_pages.py:299
 #, fuzzy
 msgid "New Tab"
 msgstr "&Nova aba"
 
-#: ../../src/ed_cmdbar.py:218
+#: ../../src/ed_cmdbar.py:211
 msgid "Next"
 msgstr "Próximo"
 
@@ -1291,7 +1291,7 @@ msgstr "Próximo marcador"
 msgid "No Description Available"
 msgstr "Nenhuma descrição disponível"
 
-#: ../../src/ed_pages.py:520
+#: ../../src/ed_pages.py:516
 msgid "No Valid Files to Open"
 msgstr "Nenhum arquivo válido para abertura"
 
@@ -1337,11 +1337,11 @@ msgstr "Abrir um Shell Python"
 msgid "Open Code Browser Sidepanel"
 msgstr "Abrir painel lateral Code Browser"
 
-#: ../../src/ed_pages.py:531
+#: ../../src/ed_pages.py:527
 msgid "Open Directory?"
 msgstr "Abrir pasta?"
 
-#: ../../src/ed_pages.py:183
+#: ../../src/ed_pages.py:177
 msgid "Open File"
 msgstr "Abrir arquivo"
 
@@ -1361,7 +1361,7 @@ msgstr "Abre a barra de procura rápida"
 msgid "Open with "
 msgstr "Abrir com "
 
-#: ../../src/ed_pages.py:551
+#: ../../src/ed_pages.py:547
 #, python-format
 msgid "Opened file: %s"
 msgstr "Arquivo aberto: %s"
@@ -1462,7 +1462,7 @@ msgstr "Visualizar"
 msgid "Preview Printout"
 msgstr "Visualizar impressão"
 
-#: ../../src/ed_cmdbar.py:222
+#: ../../src/ed_cmdbar.py:215
 msgid "Previous"
 msgstr "Anterior"
 
@@ -1573,7 +1573,7 @@ msgstr "Refazer"
 msgid "Redo Last Undo"
 msgstr "Refazer último desfazer"
 
-#: ../../src/ed_cmdbar.py:228
+#: ../../src/ed_cmdbar.py:221
 msgid "Regex"
 msgstr ""
 
@@ -1668,7 +1668,7 @@ msgstr "Rodar o arquivo associado com o buffer atual em execução"
 msgid "Save"
 msgstr "Salvar"
 
-#: ../../src/ed_pages.py:303
+#: ../../src/ed_pages.py:301
 #, fuzzy, python-format
 msgid "Save \"%s\""
 msgstr "Salvar como"
@@ -2001,7 +2001,7 @@ msgstr "Cores de Texto"
 msgid "Text Document"
 msgstr "Documento de texto"
 
-#: ../../src/ed_pages.py:138
+#: ../../src/ed_pages.py:132
 #, python-format
 msgid ""
 "The correct encoding of '%s' could not be determined.\n"
@@ -2021,7 +2021,7 @@ msgstr ""
 "\n"
 "Gostaria de salvar as alterações?"
 
-#: ../../src/ed_pages.py:518
+#: ../../src/ed_pages.py:514
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "Não há nenhum arquivo que o Editra pode abrir em %s"
@@ -2151,6 +2151,11 @@ msgstr "Desconhecido"
 #: ../../src/ed_search.py:539
 #, fuzzy
 msgid "Untitled"
+msgstr "Arquivo_Desconhecido"
+
+#: ../../src/ed_pages.py:266
+#, fuzzy, python-format
+msgid "Untitled - %d"
 msgstr "Arquivo_Desconhecido"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:605
