@@ -22,3 +22,11 @@ proc printArguments args {
       puts $arg
    }
 }
+
+proc foo::xxxx {} {
+    set a xxxxxxxxxxxx
+}
+proc foo_bar {} {
+    set b xxxxxxx
+}
+
