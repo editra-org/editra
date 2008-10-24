@@ -4043,7 +4043,7 @@ class PageContainer(wx.Panel):
         where, tabIdx = self.HitTest(event.GetPosition())
         
         # Make sure selected tab has focus
-        self.SetFocus()
+#        self.SetFocus()
 
         if where == FNB_LEFT_ARROW:
             self.RotateLeft()
