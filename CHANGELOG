@@ -30,6 +30,8 @@ BUG FIXES:
 +Fix bug related to ? being in keyword helper lists for some languages
 +Handle invalid regular expressions in find dialog
 +Fix a number of bugs in the new Find All search features
++Fix not being able to open files mounted to /Volumes on osx
++Fix issue of window scrolling horizontally when restoring cursor position
 
 #-----------------------------------------------------------------------------#
 
