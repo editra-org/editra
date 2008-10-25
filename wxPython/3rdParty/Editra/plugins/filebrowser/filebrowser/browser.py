@@ -630,18 +630,7 @@ class FileBrowser(wx.GenericDirCtrl):
         files = self.GetPaths()
         item = self._SCommand(self.GetPath)
         if os.path.isdir(item):
-            # Unlike Mac/Gtk, need to skip the event here to allow for
-            # expanding paths with double clicks. This however disables the
-            # ability to use Return as a key for expanding. It also doesn't
-            # seem to be possible to tell whether the activation event was
-            # caused by a double click or a key sequence.
-            if wx.Platform == '__WXMSW__':
-                evt.Skip()
-            else:
-                if self.IsExpanded(item):
-                    self.Collapse(item)
-                else:
-                    self.ExpandPath(item)
+            evt.Skip()
             return
         else:
             files = [ fname for fname in files if not os.path.isdir(fname) ]
