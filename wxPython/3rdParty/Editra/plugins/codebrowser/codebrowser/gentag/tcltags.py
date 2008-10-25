@@ -14,8 +14,6 @@ SUMMARY:
   Generate a DocStruct object that captures the structure of a Tcl Scripts.
 Currently supports searching for Procedure definitions.
 
-TODO: Add support for namespace parsing?
-
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -47,8 +45,17 @@ def GenerateTags(buff):
         # Check for Procedure defs
         if parselib.IsToken(line, 0, u'proc'):
             parts = line.split()
-            if len(parts) > 1 and parts[1].isalnum():
-                rtags.AddElement('procedure', taglib.Procedure(parts[1], lnum))
+            if len(parts) > 1:
+                name = parts[1]
+                if u"::" in name:
+                    spaces = name.split("::")
+                    space_l = rtags.GetElement('namespace', spaces[0])
+                    if space_l == None:
+                        space_l = taglib.Namespace(spaces[0], lnum)
+                        rtags.AddElement('namespace', space_l)
+                    space_l.AddElement('procedure', taglib.Procedure(spaces[-1], lnum))
+                else:
+                    rtags.AddElement('procedure', taglib.Procedure(parts[1], lnum))
 
     return rtags
 

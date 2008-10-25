@@ -58,7 +58,10 @@ class Code(object):
         self.scope = scope
 
     def __eq__(self, other):
-        return self.name == other.name
+        if type(other) != type(self):
+            return self.name == other
+        else:
+            return self.name == other.name
 
     def __gt__(self, other):
         return self.name > other.name
@@ -114,6 +117,20 @@ class Scope(Code):
         self.elements[obj].append(element)
         if not self.prio.has_key(obj):
             self.prio[obj] = 0
+
+    def GetElement(self, etype, ename):
+        """Get the named element
+        @param etype: string element type
+        @param ename: name of the object
+        @return: string or None
+
+        """
+        elist = self.GetElementType(etype)
+        for element in elist:
+            if element.GetName() == ename:
+                return element
+        else:
+            return None
 
     def GetElementDescription(self, obj):
         """Get the description of a given element

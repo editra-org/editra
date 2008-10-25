@@ -8,7 +8,7 @@ Version 0.5
 Released: 0x/xx/2008
 
 New:
-
++Improved support for TCL/Tk (Namespaces)
 
 Bug Fixes:
 +Php browser now properly supports short tags <? as well as the long tag <?php
