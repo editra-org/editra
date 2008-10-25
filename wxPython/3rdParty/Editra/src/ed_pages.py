@@ -406,7 +406,9 @@ class EdPages(FNB.FlatNotebook):
         self.control.EmptyUndoBuffer()
 
         if Profile_Get('SAVE_POS'):
-            self.control.GotoPos(self.DocMgr.GetPos(self.control.GetFileName()))
+            pos = self.DocMgr.GetPos(self.control.GetFileName())
+            self.control.GotoPos(pos)
+            self.control.ScrollToColumn(0)
 
         # Add the buffer to the notebook
         if new_pg:
