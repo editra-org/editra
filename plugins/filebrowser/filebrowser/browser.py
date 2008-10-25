@@ -638,7 +638,10 @@ class FileBrowser(wx.GenericDirCtrl):
             if wx.Platform == '__WXMSW__':
                 evt.Skip()
             else:
-                self.ExpandPath(item)
+                if self.IsExpanded(item):
+                    self.Collapse(item)
+                else:
+                    self.ExpandPath(item)
             return
         else:
             files = [ fname for fname in files if not os.path.isdir(fname) ]
