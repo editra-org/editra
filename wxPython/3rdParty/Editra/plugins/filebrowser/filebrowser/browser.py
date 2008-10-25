@@ -233,6 +233,8 @@ class BrowserPane(wx.Panel):
         self._config = PathMarkConfig(ed_glob.CONFIG['CACHE_DIR'])
         for item in self._config.GetItemLabels():
             self._menbar.AddItem(item)
+
+        # Setup hidden files checkbox
         self._showh_cb = wx.CheckBox(self, self.ID_SHOW_HIDDEN, 
                                      _("Show Hidden Files"))
         self._showh_cb.SetValue(False)
@@ -248,13 +250,18 @@ class BrowserPane(wx.Panel):
 
         # Layout Pane
         self._sizer.AddMany([(self._menbar, 0, wx.EXPAND),
-                             (self._browser, 1, wx.EXPAND),
-                             ((2, 2))])
-        cb_sz = wx.BoxSizer(wx.HORIZONTAL)
-        cb_sz.Add((4, 4))
-        cb_sz.Add(self._showh_cb, 0, wx.ALIGN_LEFT)
-        self._sizer.Add(cb_sz, 0, wx.ALIGN_LEFT)
-        self._sizer.Add((3, 3))
+                             (self._browser, 1, wx.EXPAND)])
+
+        # TODO: an unresolved bug in msw version the show hidden files
+        #       option causes a hard crash.
+        if wx.Platform != '__WXMSW__':
+            cb_sz = wx.BoxSizer(wx.HORIZONTAL)
+            cb_sz.Add((4, 4))
+            cb_sz.Add(self._showh_cb, 0, wx.ALIGN_LEFT)
+            self._sizer.AddMany([((2, 2),), (cb_sz, 0, wx.ALIGN_LEFT), ((2, 2),)])
+        else:
+            self._showh_cb.Hide()
+
         self.SetSizer(self._sizer)
 
         # Event Handlers
@@ -407,6 +414,13 @@ class FileBrowser(wx.GenericDirCtrl):
         self._tree.Refresh()
         self._imglst = self._tree.GetImageList()
         self._SetupIcons()
+
+        # Use the small variant of the choice control on osx
+        if wx.Platform == '__WXMAC__':
+            for child in self.GetChildren():
+                if isinstance(child, wx.Choice):
+                    child.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+                    break
 
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnOpen)
