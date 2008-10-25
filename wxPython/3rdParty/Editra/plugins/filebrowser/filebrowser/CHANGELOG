@@ -5,6 +5,7 @@ License: wxWindows
 Version 1.0:
 
     - Fix not being able to open files on drives mounted to Volumes on OSX
+    - Fix expanding/contracting folders with double click on Gtk/OSX
 
 Version 0.9:
 
