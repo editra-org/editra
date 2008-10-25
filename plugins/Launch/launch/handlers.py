@@ -340,6 +340,19 @@ class CSHHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class DHandler(FileTypeHandler):
+    """FileTypeHandler for D"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(dmd='dmd -run')
+        self.default = 'dmd'
+
+    @property
+    def __name__(self):
+        return 'd'
+
+#-----------------------------------------------------------------------------#
+
 class FeriteHandler(FileTypeHandler):
     """FileTypeHandler for Ferite"""
     def __init__(self):
@@ -753,6 +766,7 @@ HANDLERS = { 0 : FileTypeHandler(), # Null Hanlder
             synglob.ID_LANG_BASH : BashHandler(),
             synglob.ID_LANG_BOO : BooHandler(),
             synglob.ID_LANG_CSH : CSHHandler(),
+            synglob.ID_LANG_D   : DHandler(),
             synglob.ID_LANG_FERITE : FeriteHandler(),
             synglob.ID_LANG_KSH : KornHandler(),
             synglob.ID_LANG_HASKELL : HaskellHandler(),
