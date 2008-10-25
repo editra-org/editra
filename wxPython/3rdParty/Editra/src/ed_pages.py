@@ -678,7 +678,8 @@ class EdPages(FNB.FlatNotebook):
         @return: bool
 
         """
-        self.Freeze()
+        frame = self.GetTopLevelParent()
+        frame.Freeze()
         self.GoCurrentPage()
         page = self.GetCurrentPage()
         pg_num = self.GetSelection()
@@ -690,11 +691,10 @@ class EdPages(FNB.FlatNotebook):
         else:
             False
 
-        frame = self.GetTopLevelParent()
         if not self.GetPageCount() and \
            hasattr(frame, 'IsExiting') and not frame.IsExiting():
             self.NewPage()
-        self.Thaw()
+        frame.Thaw()
         return result
 
     def SetPageImage(self, pg_num, lang_id):
