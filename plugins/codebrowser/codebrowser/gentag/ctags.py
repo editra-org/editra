@@ -32,6 +32,11 @@ import parselib
 
 #--------------------------------------------------------------------------#
 
+RE_METH = re.compile(r"([A-Za-z0-9_]+\s+)+([*A-Za-z0-9_::]+)\s*\([^)]*\)\s*(const)*\s*\{")
+RE_DEF = re.compile(r"#define[ \t]+([A-Za-z0-9_]+)")
+
+#--------------------------------------------------------------------------#
+
 def GenerateTags(buff):
     """Create a DocStruct object that represents the structure of a C source
     file.
@@ -47,17 +52,24 @@ def GenerateTags(buff):
     kwords = ("if else for while switch case")
     txt = buff.read()
 
-    # Get function defintions
-    pat = re.compile(r"([A-Za-z0-9_]+[ \t\r\n]+)+([A-Za-z0-9_]+)[ \t\r\n]*\([^)]+\)[ \t\r\n]*\{")
-    for match in re.finditer(pat, txt):
+    # Get class/method/function defintions
+    for match in RE_METH.finditer(txt):
         fname = match.group(2)
         if fname and fname not in kwords:
             line = txt.count('\n', 0, match.start(2))
-            rtags.AddFunction(taglib.Function(fname, line))
+            if u"::" in fname:
+                scopes = fname.split("::")
+                cname = scopes[0].lstrip('*')
+                cobj = rtags.GetElement('class', cname)
+                if cobj == None:
+                    cobj = taglib.Class(cname, line)
+                    rtags.AddClass(cobj)
+                cobj.AddMethod(taglib.Method(u'::'.join(scopes[1:]), line))
+            else:
+                rtags.AddFunction(taglib.Function(fname, line))
 
     # Find all Macro defintions
-    pat = re.compile(r"#define[ \t]+([A-Za-z0-9_]+)")
-    for match in re.finditer(pat, txt):
+    for match in RE_DEF.finditer(txt):
         line = txt.count('\n', 0, match.start(1))
         rtags.AddElement('macro', taglib.Macro(match.group(1), line))
 

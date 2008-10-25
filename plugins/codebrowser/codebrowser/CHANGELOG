@@ -8,6 +8,7 @@ Version 0.5
 Released: 0x/xx/2008
 
 New:
++Add some basic support for C++
 +Improved support for TCL/Tk (Namespaces)
 
 Bug Fixes:
