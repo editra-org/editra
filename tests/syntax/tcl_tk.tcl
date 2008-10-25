@@ -30,3 +30,6 @@ proc foo_bar {} {
     set b xxxxxxx
 }
 
+proc foo::yyyy {} {
+    set a bbbbbbb
+}
