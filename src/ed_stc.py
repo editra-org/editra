@@ -51,8 +51,9 @@ NUM_MARGIN  = 1
 FOLD_MARGIN = 2
 
 SPACECHARS = " \t\r\n"
-NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
-           "0123456789_./\?[]{}<>!@#$%^&*():=-+\"';,"
+NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+OPERATORS = "./\?[]{}<>!@#$%^&*():=-+\"';,"
+
 #-------------------------------------------------------------------------#
 
 class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
