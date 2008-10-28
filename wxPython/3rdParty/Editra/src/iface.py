@@ -515,6 +515,21 @@ class Shelf(plugin.Plugin):
         else:
             return None
 
+    def RaiseWindow(self, window):
+        """Set the selection in the notebook to be the that of the given
+        window. Mostly used internally by items implementing L{ShelfI}.
+        @param window: Window object
+        @return: reference to the selected page or None if no instance is
+
+        """
+        for page in xrange(self._shelf.GetPageCount()):
+            ctrl = self._shelf.GetPage(page)
+            if window == ctrl:
+                self._shelf.SetSelection(page)
+                return ctrl
+        else:
+            return None
+
     def StockShelf(self, i_list):
         """Fill the shelf by opening an ordered list of items
         @param i_list: List of named L{ShelfI} instances
