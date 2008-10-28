@@ -761,28 +761,28 @@ class TCLHandler(FileTypeHandler):
 #-----------------------------------------------------------------------------#
 # Handler Object Dictionary
 # Create an instance of each Handler to use as a persistent object
-HANDLERS = { 0 : FileTypeHandler(), # Null Hanlder
-            synglob.ID_LANG_ADA : AdaHandler(),
-            synglob.ID_LANG_BASH : BashHandler(),
-            synglob.ID_LANG_BOO : BooHandler(),
-            synglob.ID_LANG_CSH : CSHHandler(),
-            synglob.ID_LANG_D   : DHandler(),
-            synglob.ID_LANG_FERITE : FeriteHandler(),
-            synglob.ID_LANG_KSH : KornHandler(),
+HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
+            synglob.ID_LANG_ADA     : AdaHandler(),
+            synglob.ID_LANG_BASH    : BashHandler(),
+            synglob.ID_LANG_BOO     : BooHandler(),
+            synglob.ID_LANG_CSH     : CSHHandler(),
+            synglob.ID_LANG_D       : DHandler(),
+            synglob.ID_LANG_FERITE  : FeriteHandler(),
+            synglob.ID_LANG_KSH     : KornHandler(),
             synglob.ID_LANG_HASKELL : HaskellHandler(),
-            synglob.ID_LANG_HAXE : HaxeHandler(),
-            synglob.ID_LANG_HTML : HTMLHandler(),
-            synglob.ID_LANG_INNO : InnoSetupHandler(),
-            synglob.ID_LANG_LUA : LuaHandler(),
+            synglob.ID_LANG_HAXE    : HaxeHandler(),
+            synglob.ID_LANG_HTML    : HTMLHandler(),
+            synglob.ID_LANG_INNO    : InnoSetupHandler(),
+            synglob.ID_LANG_LUA     : LuaHandler(),
             synglob.ID_LANG_NEWLISP : NewLispHandler(),
-            synglob.ID_LANG_NSIS : NSISHandler(),
-            synglob.ID_LANG_PERL : PerlHandler(),
-            synglob.ID_LANG_PHP : PhpHandler(),
-            synglob.ID_LANG_PIKE : PikeHandler(),
-            synglob.ID_LANG_PS   : PostScriptHandler(),
-            synglob.ID_LANG_PYTHON : PythonHandler(),
-            synglob.ID_LANG_RUBY : RubyHandler(),
-            synglob.ID_LANG_TCL : TCLHandler() }
+            synglob.ID_LANG_NSIS    : NSISHandler(),
+            synglob.ID_LANG_PERL    : PerlHandler(),
+            synglob.ID_LANG_PHP     : PhpHandler(),
+            synglob.ID_LANG_PIKE    : PikeHandler(),
+            synglob.ID_LANG_PS      : PostScriptHandler(),
+            synglob.ID_LANG_PYTHON  : PythonHandler(),
+            synglob.ID_LANG_RUBY    : RubyHandler(),
+            synglob.ID_LANG_TCL     : TCLHandler() }
 
 #-----------------------------------------------------------------------------#
 # Local utility functions
