@@ -58,9 +58,9 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             cfile = self.GetFileName()
             lmod = GetFileModTime(cfile)
             if self.GetModTime() and not lmod and not os.path.exists(cfile):
-                wx.CallAfter(self.PromptToReSave, self, cfile)
+                wx.CallAfter(self.PromptToReSave, cfile)
             elif self.GetModTime() < lmod:
-                wx.CallAfter(self.AskToReload, self, cfile)
+                wx.CallAfter(self.AskToReload, cfile)
             else:
                 pass
 
@@ -135,7 +135,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         else:
             self.SetModTime(0)
 
-    def AskToReload(win, cfile):
+    def AskToReload(self, cfile):
         """Show a dialog asking if the file should be reloaded
         @param win: Window to prompt dialog on top of
         @param cfile: the file to prompt for a reload of
