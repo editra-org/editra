@@ -359,10 +359,10 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         window = self.GetTopWindow()
         if getattr(window, '__name__', '') == "MainWindow":
             try:
+                self._log("[app][info] MacOpenFile Fired")
                 encoding = sys.getfilesystemencoding()
                 window.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN,
                               ed_txt.DecodeString(filename, encoding))
-                self._log("[app][info] MacOpenFile Fired")
             except Exception, msg:
                 self._log("[app][err] Failed to open drop file: %s" % str(msg))
                 pass
