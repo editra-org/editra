@@ -203,8 +203,7 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         """
         parent = self.GetParent()
-        return parent.GetCurrentPage() == self and \
-               parent.GetParent().IsActive() and self._isready
+        return parent.GetParent().IsActive() and self._isready
 
     def GetFile(self):
         """Get the file that is currently set to be run
@@ -330,6 +329,8 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         """
         if self.CanLaunch():
+            shelf = self._mw.GetShelf()
+            shelf.RaiseWindow(self)
             self.StartStopProcess()
 
     def OnThemeChanged(self, msg):
