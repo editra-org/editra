@@ -635,6 +635,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetFoldMarginHiColour(True, fore)
         self.SetFoldMarginColour(True, fore)
 
+    def DeleteRight(self):
+        """Delete the selection, or if there is no selection, then
+        delete the character to the right of the cursor.
+
+        """
+        if self.GetSelectionStart() == self.GetSelectionEnd():
+            self.SetCurrentPos(self.GetCurrentPos()+1)
+        self.DeleteBack()
+
     def FindTagById(self, style_id):
         """Find the style tag that is associated with the given
         Id. If not found it returns an empty string.
