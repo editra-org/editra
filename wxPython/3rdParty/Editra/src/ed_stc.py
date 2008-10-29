@@ -54,6 +54,9 @@ SPACECHARS = " \t\r\n"
 NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 OPERATORS = "./\?[]{}<>!@#$%^&*():=-+\"';,"
 
+ALT_SHIFT = wx.stc.STC_SCMOD_ALT|wx.stc.STC_SCMOD_SHIFT
+CTRL_SHIFT = wx.stc.STC_SCMOD_CTRL|wx.stc.STC_SCMOD_SHIFT
+
 #-------------------------------------------------------------------------#
 
 class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
@@ -136,6 +139,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Set Default Styles used by all documents
         self.Configure()
         self.UpdateBaseStyles()
+
+        # Set Mac specific keybindings
+        if wx.Platform == '__WXMAC__':
+            for keys in _GetMacKeyBindings():
+                self.CmdKeyAssign(*keys)
 
         # Other Settings
         self._menu = MakeMenu()
@@ -711,12 +719,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         k_code = evt.GetKeyCode()
+        shift_down = evt.ShiftDown()
         if self.key_handler.PreProcessKey(k_code, evt.ControlDown(),
-                                          evt.CmdDown(), evt.ShiftDown(),
+                                          evt.CmdDown(), shift_down,
                                           evt.AltDown()):
             return                
 
-        if k_code == wx.WXK_RETURN:
+        if wx.Platform == '__WXMAC__' and \
+           (k_code in (wx.WXK_DELETE, wx.WXK_BACK) and shift_down):
+            self.DeleteRight()
+        elif k_code == wx.WXK_RETURN:
 
             if self._config['autoindent'] and not self.AutoCompActive():
                 if self.GetSelectedText():
@@ -2180,3 +2192,50 @@ def MakeMenu():
     menu.AppendSeparator()
     menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
     return menu
+
+def _GetMacKeyBindings():
+    """Returns a list of 3-element tuples defining the standard key
+    bindings for Mac text editors -- i.e., the behavior of option-arrow,
+    shift-delete, and so on.  Each tuple consists of:
+        (key code, modifier keys, STC action)
+    """
+    # a good reference for these: http://www.yellowbrain.com/stc/keymap.html
+    return [
+            # move/select/delete by word
+            (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_ALT, 
+             wx.stc.STC_CMD_WORDLEFT),
+            (wx.stc.STC_KEY_RIGHT, wx.stc.STC_SCMOD_ALT, 
+             wx.stc.STC_CMD_WORDRIGHT),
+            (wx.stc.STC_KEY_LEFT, ALT_SHIFT, wx.stc.STC_CMD_WORDLEFTEXTEND),
+            (wx.stc.STC_KEY_RIGHT, ALT_SHIFT, wx.stc.STC_CMD_WORDRIGHTEXTEND),
+            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_ALT,
+             wx.stc.STC_CMD_DELWORDLEFT),
+            (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_ALT,
+             wx.stc.STC_CMD_DELWORDRIGHT),
+            (wx.stc.STC_KEY_BACK, ALT_SHIFT, wx.stc.STC_CMD_DELWORDRIGHT),
+            (wx.stc.STC_KEY_DELETE, ALT_SHIFT, wx.stc.STC_CMD_DELWORDLEFT),
+            
+            # move/select/delete by line
+            (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_CTRL,
+             wx.stc.STC_CMD_VCHOME),
+            (wx.stc.STC_KEY_LEFT, CTRL_SHIFT, wx.stc.STC_CMD_VCHOMEEXTEND),
+            (wx.stc.STC_KEY_RIGHT, wx.stc.STC_SCMOD_CTRL,
+             wx.stc.STC_CMD_LINEEND),
+            (wx.stc.STC_KEY_RIGHT, CTRL_SHIFT, wx.stc.STC_CMD_LINEENDEXTEND),
+            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_CTRL,
+             wx.stc.STC_CMD_DELLINELEFT),
+            (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_CTRL,
+             wx.stc.STC_CMD_DELLINERIGHT),
+            (wx.stc.STC_KEY_BACK, CTRL_SHIFT, wx.stc.STC_CMD_DELLINERIGHT),
+            (wx.stc.STC_KEY_DELETE, CTRL_SHIFT, wx.stc.STC_CMD_DELLINELEFT),
+            
+            # by-character deletion behavior
+            (wx.stc.STC_KEY_BACK, 0, wx.stc.STC_CMD_DELETEBACK),
+            (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_SHIFT, wx.stc.STC_CMD_DELETEBACK),
+
+            # NOTE: the following two are a special case, since Scintilla doesn't have
+            # a forward-delete action.  So here we just cancel any tip our auto-c
+            # completion display, and then implement forward-delete in OnKeyDown.
+            (wx.stc.STC_KEY_DELETE, 0, wx.stc.STC_CMD_CANCEL),
+            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_SHIFT, wx.stc.STC_CMD_CANCEL),
+            ]
