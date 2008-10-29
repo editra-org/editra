@@ -635,13 +635,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetFoldMarginHiColour(True, fore)
         self.SetFoldMarginColour(True, fore)
 
-    def DeleteRight(self):
+    def DeleteForward(self):
         """Delete the selection, or if there is no selection, then
         delete the character to the right of the cursor.
 
         """
         if self.GetSelectionStart() == self.GetSelectionEnd():
-            self.SetCurrentPos(self.GetCurrentPos()+1)
+            self.SetCurrentPos(self.GetCurrentPos() + 1)
         self.DeleteBack()
 
     def FindTagById(self, style_id):
@@ -729,14 +729,18 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         k_code = evt.GetKeyCode()
         shift_down = evt.ShiftDown()
-        if self.key_handler.PreProcessKey(k_code, evt.ControlDown(),
-                                          evt.CmdDown(), shift_down,
-                                          evt.AltDown()):
+        alt_down = evt.AltDown()
+        ctrl_down = evt.ControlDown()
+        cmd_down = evt.CmdDown()
+
+        if self.key_handler.PreProcessKey(k_code, ctrl_down,
+                                          cmd_down, shift_down, alt_down):
             return                
 
         if wx.Platform == '__WXMAC__' and \
-           (k_code in (wx.WXK_DELETE, wx.WXK_BACK) and shift_down):
-            self.DeleteRight()
+           (k_code == wx.WXK_BACK and shift_down) and \
+           not (alt_down or ctrl_down or cmd_down):
+            self.DeleteForward()
         elif k_code == wx.WXK_RETURN:
 
             if self._config['autoindent'] and not self.AutoCompActive():
@@ -2208,9 +2212,9 @@ def _GetMacKeyBindings():
     shift-delete, and so on.  Each tuple consists of:
         (key code, modifier keys, STC action)
     """
-    # a good reference for these: http://www.yellowbrain.com/stc/keymap.html
+    # A good reference for these: http://www.yellowbrain.com/stc/keymap.html
     return [
-            # move/select/delete by word
+            # Move/select/delete by word
             (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_ALT, 
              wx.stc.STC_CMD_WORDLEFT),
             (wx.stc.STC_KEY_RIGHT, wx.stc.STC_SCMOD_ALT, 
@@ -2224,7 +2228,7 @@ def _GetMacKeyBindings():
             (wx.stc.STC_KEY_BACK, ALT_SHIFT, wx.stc.STC_CMD_DELWORDRIGHT),
             (wx.stc.STC_KEY_DELETE, ALT_SHIFT, wx.stc.STC_CMD_DELWORDLEFT),
             
-            # move/select/delete by line
+            # Move/select/delete by line
             (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_CTRL,
              wx.stc.STC_CMD_VCHOME),
             (wx.stc.STC_KEY_LEFT, CTRL_SHIFT, wx.stc.STC_CMD_VCHOMEEXTEND),
@@ -2238,13 +2242,17 @@ def _GetMacKeyBindings():
             (wx.stc.STC_KEY_BACK, CTRL_SHIFT, wx.stc.STC_CMD_DELLINERIGHT),
             (wx.stc.STC_KEY_DELETE, CTRL_SHIFT, wx.stc.STC_CMD_DELLINELEFT),
             
-            # by-character deletion behavior
-            (wx.stc.STC_KEY_BACK, 0, wx.stc.STC_CMD_DELETEBACK),
-            (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_SHIFT, wx.stc.STC_CMD_DELETEBACK),
+            # By-character deletion behavior
+            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_NORM,
+             wx.stc.STC_CMD_DELETEBACK),
+            (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_SHIFT,
+             wx.stc.STC_CMD_DELETEBACK),
 
-            # NOTE: the following two are a special case, since Scintilla doesn't have
-            # a forward-delete action.  So here we just cancel any tip our auto-c
-            # completion display, and then implement forward-delete in OnKeyDown.
-            (wx.stc.STC_KEY_DELETE, 0, wx.stc.STC_CMD_CANCEL),
-            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_SHIFT, wx.stc.STC_CMD_CANCEL),
+            # NOTE: The following two are a special case, since Scintilla 
+            # doesn't have a forward-delete action.  So here we just cancel any
+            # tip our auto-completion display, and then implement forward 
+            # delete in OnKeyDown.
+            #(wx.stc.STC_KEY_DELETE, 0, wx.stc.STC_CMD_CANCEL),
+            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_SHIFT,
+             wx.stc.STC_CMD_CANCEL),
             ]
