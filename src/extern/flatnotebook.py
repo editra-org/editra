@@ -3807,6 +3807,7 @@ class PageContainer(wx.Panel):
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
         self.Bind(wx.EVT_MIDDLE_DOWN, self.OnMiddleDown)
+        self.Bind(wx.EVT_MOUSEWHEEL, self.OnMouseWheel)
         self.Bind(wx.EVT_MOTION, self.OnMouseMove)
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_LEAVE_WINDOW, self.OnMouseLeave)
@@ -3928,6 +3929,24 @@ class PageContainer(wx.Panel):
         if where == FNB_TAB:
             self.DeletePage(tabIdx)
         
+        event.Skip()
+
+
+    def OnMouseWheel(self, event):
+        """ Scroll tabs when the mouse whee """
+        delta = event.GetWheelRotation()
+        for tab in range(abs(delta)):
+            if delta > 0:
+                before = self._nLeftButtonStatus
+                self._nLeftButtonStatus = FNB_BTN_PRESSED
+                self.RotateLeft()
+                self._nLeftButtonStatus = before
+            else:
+                before = self._nRightButtonStatus
+                self._nRightButtonStatus = FNB_BTN_PRESSED
+                self.RotateRight()
+                self._nRightButtonStatus = before
+
         event.Skip()
 
 
