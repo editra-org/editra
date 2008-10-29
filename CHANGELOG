@@ -22,6 +22,7 @@ NEW: [features/improvements]
 +Add option to auto-trim trailing whitespace when saving file
 +Add Valencian translation
 +New version of Launch (add support for D)
++Improved OSX cursor movement keybinding compliance (patch from Joe Strout)
 
 BUG FIXES:
 +Fix case where encoding can be None in when initializing the preference dialog
