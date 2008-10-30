@@ -470,7 +470,7 @@ class SearchEngine:
         @postcondition: the engines regular expression is created
 
         """
-        tmp = str(self._query)
+        tmp = self._query
         if not self._isregex:
             tmp = EscapeRegEx(tmp)
 
