@@ -92,7 +92,7 @@ class EdTabBase(object):
         for page in range(self._nb.GetPageCount()):
             ctrl = self._nb.GetPage(page)
             if ctrl.GetId() == obj_id:
-                nbook.SetPageText(title)
+                self._nb.SetPageText(title)
                 break
         else:
             # TODO: notify of error?
