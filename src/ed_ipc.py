@@ -137,7 +137,7 @@ class EdIpcServer(threading.Thread):
         """Tell the server to exit"""
         self._exit = True
         # Wake up the server in case its waiting
-        SendCommands(['quit',], self.__key)
+        SendCommands(['quit', ], self.__key)
 
     def run(self):
         """Start the server. The server runs in blocking mode, this
@@ -219,9 +219,11 @@ if __name__ == '__main__':
     KEY = 'mykey'
 
     def OnMessage(evt):
+        """Test message reciever"""
         print "MSG RECIEVED: %s" % str(evt.GetValue())
 
-    class TestFrame(wx.Frame):  
+    class TestFrame(wx.Frame):
+        """Test application frame"""  
         def __init__(self, parent, title="Server Test"):
             wx.Frame.__init__(self, parent, wx.ID_ANY, title)
             sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -235,11 +237,13 @@ if __name__ == '__main__':
             self.Bind(wx.EVT_BUTTON, self.Exit, id=ID_STOP)
             self.Show()
 
-        def Go(self, evt):    
+        def Go(self, evt):
+            """Send some commands to the server"""
             for msg in ('Japan', 'United States', 'Spain', 'Greece'):
                 SendCommands(["I'm in %s" % msg], KEY)
 
         def Exit(self, evt):
+            """Shutdown the server and the app"""
             SERVER.Shutdown()
             self.Close()
 
