@@ -689,7 +689,7 @@ class EdPages(FNB.FlatNotebook):
             self.DeletePage(pg_num)
             self.GoCurrentPage()
         else:
-            False
+            return False
 
         if not self.GetPageCount() and \
            hasattr(frame, 'IsExiting') and not frame.IsExiting():
