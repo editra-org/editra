@@ -25,7 +25,6 @@ __revision__ = "$Revision$"
 # Imports
 
 import os
-import re
 import wx, wx.stc
 
 # Local Imports
@@ -1562,7 +1561,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         cpos = self.GetCurrentPos()
         cline = self.GetCurrentLine()
         cline_len = len(self.GetLine(cline))
-        s_len = self.GetLength()
         epos = cline_len - (self.GetLineEndPosition(cline) - cpos)
 
         # Begin stripping trailing whitespace
