@@ -39,6 +39,7 @@ import ed_print
 import ed_cmdbar
 import ed_statbar
 import ed_mdlg
+import prefdlg
 import syntax.syntax as syntax
 import generator
 import plugin
@@ -1236,14 +1237,11 @@ def OnAbout(evt):
 
 def OnPreferences(evt):
     """Open the Preference Panel
-    @note: The dialogs module is not imported until this is
-           first called so the first open may lag a little.
     @param evt: Event fired that called this handler
     @type evt: wxMenuEvent
 
     """
     if evt.GetId() == ID_PREF:
-        import prefdlg
         win = wx.GetApp().GetWindowInstance(prefdlg.PreferencesDialog)
         if win is not None:
             win.Raise()
