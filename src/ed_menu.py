@@ -282,10 +282,7 @@ class KeyBinder(object):
         @return: tuple
 
         """
-        if cls.cprofile is None:
-            return _DEFAULT_BINDING.get(item_id, None)
-        else:
-            return cls.keyprofile.get(item_id, None)
+        return cls.keyprofile.get(item_id, None)
 
     @classmethod
     def LoadDefaults(cls):
@@ -356,18 +353,15 @@ class KeyBinder(object):
         @param keys: string or list of key strings
 
         """
-        if cls.cprofile is None:
-            util.Log("[keybinder][warn] No keyprofile has been loaded yet")
-        else:
-            if isinstance(keys, basestring):
-                keys = [ key.strip() for key in keys.split('+') ]
+        if isinstance(keys, basestring):
+            keys = [ key.strip() for key in keys.split('+') ]
 
-            if len(keys):
-                cls.keyprofile[item_id] = keys
-            elif cls.keyprofile.has_key(item_id):
-                del cls.keyprofile[item_id]
-            else:
-                pass
+        if len(keys):
+            cls.keyprofile[item_id] = keys
+        elif cls.keyprofile.has_key(item_id):
+            del cls.keyprofile[item_id]
+        else:
+            pass
 
     @classmethod
     def SetProfileName(cls, pname):
