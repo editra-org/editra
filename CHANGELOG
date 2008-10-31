@@ -23,6 +23,7 @@ NEW: [features/improvements]
 +Add Valencian translation
 +New version of Launch (add support for D)
 +Improved OSX cursor movement keybinding compliance (patch from Joe Strout)
++Improve search output window to include search term and options in output
 
 BUG FIXES:
 +Fix case where encoding can be None in when initializing the preference dialog
