@@ -267,9 +267,12 @@ class SearchController:
         if not query:
             return
 
+        # Create a new search engine object
         engine = SearchEngine(query, evt.IsRegEx(), True,
                               evt.IsMatchCase(), evt.IsWholeWord())
 
+        # Send the search function over to any interested parties that wish
+        # to process the results.
         if smode == finddlg.LOCATION_CURRENT_DOC:
             stc = self._stc()
             fname = stc.GetFileName()
@@ -307,6 +310,7 @@ class SearchController:
                 choices = self._li_choices
             choices.reverse()
 
+            # Save the most recent choices of search locations
             Profile_Set('SEARCH_LOC', choices)
 
             # Destroy it
@@ -574,6 +578,20 @@ class SearchEngine:
                 return (lmatch.start(), lmatch.end())
         return None
 
+    def GetOptionsString(self):
+        """Get a string describing the search engines options"""
+        rstring = u"\"%s\" [ " % self._query
+        for desc, attr in ((_("regex: %s"), self._isregex), 
+                          (_("match case: %s"), self._matchcase),
+                          (_("whole word: %s"), self._wholeword)):
+            if attr:
+                rstring += (desc % u"on; ")
+            else:
+                rstring += (desc % u"off; ")
+        rstring += u"]"
+
+        return rstring
+
     def GetQuery(self):
         """Get the raw query string used by the search engine
         @return: string
@@ -613,6 +631,7 @@ class SearchEngine:
     def SearchInBuffer(self, sbuffer):
         """Search in the buffer
         @param sbuffer: buffer like object
+        @todo: implement
 
         """
         
@@ -626,10 +645,14 @@ class SearchEngine:
         if self._regex is None:
             return
 
+        # Get all files in the directories
         paths = [os.path.join(directory, fname)
                 for fname in os.listdir(directory) if not fname.startswith('.')]
+
+        # Begin searching in the paths
         for path in paths:
             if recursive and os.path.isdir(path):
+                # Recursive call to decend into directories
                 for match in self.SearchInDirectory(path, recursive):
                     yield match
             else:
@@ -1139,6 +1162,7 @@ class SearchResultScreen(ctrlbox.ControlBox):
         ctrlbox.ControlBox.__init__(self, parent)
 
         # Attributes
+        self._meth = None
         self._job = None
         self._list = SearchResultList(self)
         self._cancelb = None
@@ -1203,6 +1227,8 @@ class SearchResultScreen(ctrlbox.ControlBox):
 
         """
         start = u">>> %s" % _("Search Started")
+        if self._meth is not None:
+            start += (u": " + self._meth.im_self.GetOptionsString())
         self._list.SetStartEndText(start + os.linesep)
         self._list.Start(250)
 
@@ -1211,8 +1237,12 @@ class SearchResultScreen(ctrlbox.ControlBox):
         @param evt: UpdateBufferEvent
 
         """
+        self._meth = None
+
+        # Stop the timer
         self._list.Stop()
         self._cancelb.Disable()
+
         # Update statusbar to show search is complete
         ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
                            (ed_glob.SB_INFO, _("Search complete")))
@@ -1250,6 +1280,8 @@ class SearchResultScreen(ctrlbox.ControlBox):
         @param searchmeth: callable
 
         """
+        self._meth = searchmeth
+
         if self._job is not None:
             self._job.Cancel()
 
@@ -1288,11 +1320,13 @@ class SearchResultList(outbuff.OutputBuffer):
 
         """
         if isinstance(value, basestring):
+            # Regular search result
             outbuff.OutputBuffer.AppendUpdate(self, value)
         else:
+            # Search in a new file has started
             ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
                                (ed_glob.SB_INFO,
-                                _("Searching in : %s") % value[1]))
+                               _("Searching in : %s") % value[1]))
 
     def ApplyStyles(self, start, txt):
         """Set a hotspot for each search result
