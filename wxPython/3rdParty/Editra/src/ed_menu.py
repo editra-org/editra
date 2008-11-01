@@ -307,14 +307,26 @@ class KeyBinder(object):
                 util.Log("[keybinder][info] Loading KeyProfile: %s" % ppath)
                 for line in reader:
                     parts = line.split('=', 1)
+                    # Check that the line was formatted properly
                     if len(parts) == 2:
+                        # Try to find the ID value
                         item_id = _GetValueFromStr(parts[0])
                         if item_id is not None:
-                            keydict[item_id] = [ part.strip()
-                                                 for part in parts[1].split('+')
-                                                 if len(part.strip()) ]
-                            if parts[1].strip().endswith('++'):
-                                keydict[item_id].append('+')
+                            tmp = [ part.strip()
+                                    for part in parts[1].split('+')
+                                    if len(part.strip()) ]
+
+                            # Do some checking if the binding is valid
+                            nctrl = len([key for key in tmp
+                                         if key not in ('Ctrl', 'Alt', 'Shift')])
+                            if nctrl:
+                                keydict[item_id] = tmp
+                                if parts[1].strip().endswith('++'):
+                                    keydict[item_id].append('+')
+                            else:
+                                # Invalid key binding
+                                continue
+
                 reader.close()
                 KeyBinder.keyprofile = keydict
                 KeyBinder.cprofile = pname
@@ -356,11 +368,7 @@ class KeyBinder(object):
         if isinstance(keys, basestring):
             keys = [ key.strip() for key in keys.split('+') ]
 
-        klen = len(keys)
-        if klen == 1 and keys[0] in ('Ctrl', 'Alt', 'Shift'):
-            # Don't allow for ctrl keys to be used
-            return
-        elif klen:
+        if len(keys):
             # Set the binding
             cls.keyprofile[item_id] = keys
         elif cls.keyprofile.has_key(item_id):
@@ -893,7 +901,24 @@ class EdMenuBar(wx.MenuBar):
         """Reset all key bindings based on current binder profile"""
         for menu in self.GetMenus():
             for item in IterateMenuItems(menu[0]):
-                binding = EdMenuBar.keybinder.GetBinding(item.GetId())
+                item_id = item.GetId()
+                binding = EdMenuBar.keybinder.GetBinding(item_id)
+                if not len(binding):
+                    continue
+
+                # Verify binding and clear invalid ones from binder
+                tmp = [key.title() for key in binding.strip().split(u'+')]
+                nctrl = len([key for key in tmp
+                            if key not in ('Ctrl', 'Alt', 'Shift')])
+                if len(tmp) > 3 or not nctrl:
+                    EdMenuBar.keybinder.SetBinding(item_id, '')
+                    continue
+
+                # Reset the binding in the binder to ensure it is
+                # correctly formatted.
+                binding = u"\t" + u"+".join(tmp)
+                EdMenuBar.keybinder.SetBinding(item_id, binding)
+
                 clbl = item.GetText()
                 # Update the item if the shortcut has changed
                 if ('\t' in clbl and not clbl.endswith(binding)) or \
