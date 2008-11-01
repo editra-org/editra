@@ -1,16 +1,15 @@
 ###############################################################################
-# Name: pytags.py                                                             #
-# Purpose: Generate Python Tags                                               #
-# Author: Cody Precord <cprecord@editra.org>                                  #
+# Name: cpptags.py                                                            #
+# Purpose: Generate CPP Tags                                                  #
+# Author: Luis Cortes                                                         #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 """
-FILE: pytags.py
-AUTHOR: Cody Precord
+FILE: cpp.py
 AUTHOR: Luis Cortes
-LANGUAGE: C
+LANGUAGE: CPP
 SUMMARY:
   Generate a DocStruct object that captures the structure of a python document.
 It supports parsing for global and class variables, class, method, and function
@@ -18,6 +17,8 @@ definitions.
 
 @todo: add back support for class variables
 @todo: document functions
+
+@note: Not used, still too buggy. Currently using regex based parser in ctags.py
 
 """
 
