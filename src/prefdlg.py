@@ -1394,7 +1394,6 @@ KEYS.extend(["F" + str(x) for x in range(1, 13)])
 
 if wx.Platform == '__WXMSW__':
     KEYS.remove('Tab')
-KEYS.sort()
 
 MODIFIERS = ['', 'Alt', 'Shift']
 if wx.Platform == '__WXMAC__':
