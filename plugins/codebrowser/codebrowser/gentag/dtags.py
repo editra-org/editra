@@ -66,7 +66,6 @@ def GenerateTags(buff):
         # Check for a class definition
         match = RE_CLASS.match(line)
         if match is not None:
-            print match.groups()
             cname = match.groups()[0]
             cobj = taglib.Class(cname, lnum)
             rtags.AddClass(cobj)
