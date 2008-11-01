@@ -356,9 +356,15 @@ class KeyBinder(object):
         if isinstance(keys, basestring):
             keys = [ key.strip() for key in keys.split('+') ]
 
-        if len(keys):
+        klen = len(keys)
+        if klen == 1 and keys[0] in ('Ctrl', 'Alt', 'Shift'):
+            # Don't allow for ctrl keys to be used
+            return
+        elif klen:
+            # Set the binding
             cls.keyprofile[item_id] = keys
         elif cls.keyprofile.has_key(item_id):
+            # Clear the binding
             del cls.keyprofile[item_id]
         else:
             pass
