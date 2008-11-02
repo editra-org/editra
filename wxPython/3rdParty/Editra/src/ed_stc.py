@@ -208,6 +208,27 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 #         code = compile(code_txt, self.__module__, 'exec')
 #         exec code in self.__dict__ # Inject new code into this namespace
 
+    def _MacHandleKey(self, k_code, shift_down, alt_down, ctrl_down, cmd_down):
+        """Handler for mac specific actions"""
+        if (k_code == wx.WXK_BACK and shift_down) and \
+           not (alt_down or ctrl_down or cmd_down):
+            self.DeleteForward()
+        elif cmd_down and True not in (alt_down, ctrl_down):
+            line = self.GetCurrentLine()
+            if k_code == wx.WXK_RIGHT:
+                pos = self.GetLineStartPosition(line)
+                txt = self.GetLine(line)
+                diff = len(txt.rstrip())
+                self.GotoPos(pos + diff)
+            elif k_code == wx.WXK_LEFT:
+                self.GotoIndentPos(line)
+            else:
+                return False
+        else:
+            return False
+
+        return True
+
     #---- Public Member Functions ----#
     def PlayMacro(self):
         """Send the list of built up macro messages to the editor
@@ -737,9 +758,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             return                
 
         if wx.Platform == '__WXMAC__' and \
-           (k_code == wx.WXK_BACK and shift_down) and \
-           not (alt_down or ctrl_down or cmd_down):
-            self.DeleteForward()
+           self._MacHandleKey(k_code, shift_down, alt_down, ctrl_down, cmd_down):
+            pass
         elif k_code == wx.WXK_RETURN:
 
             if self._config['autoindent'] and not self.AutoCompActive():
