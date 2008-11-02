@@ -34,7 +34,7 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------#
 # Code Object Base Classes
 
 class Code(object):
@@ -97,6 +97,7 @@ class Code(object):
         """
         return self.scope
 
+#-----------------------------------------------------------------------------#
 
 class Scope(Code):
     """Scope object base class used for creating container code types"""
