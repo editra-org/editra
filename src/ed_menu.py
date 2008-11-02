@@ -1014,8 +1014,8 @@ _DEFAULT_BINDING = { # File Menu
 
 # Set some platform specific keybindigs
 if wx.Platform == '__WXMAC__':
-    _DEFAULT_BINDING[ed_glob.ID_NEXT_MARK] = ("Ctrl", "Right")
-    _DEFAULT_BINDING[ed_glob.ID_PRE_MARK] = ("Ctrl", "Left")
+    _DEFAULT_BINDING[ed_glob.ID_NEXT_MARK] = ("Ctrl", "Down")
+    _DEFAULT_BINDING[ed_glob.ID_PRE_MARK] = ("Ctrl", "Up")
     _DEFAULT_BINDING[ed_glob.ID_FIND_NEXT] = ("Ctrl", "G")
     _DEFAULT_BINDING[ed_glob.ID_GOTO_LINE] = ("Ctrl", "Shift", "E")
 elif wx.Platform == '__WXMSW__':
