@@ -8,14 +8,19 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.x.xx
-DATE 1x/xx/2008
+VERSION 0.3.90
+DATE 11/03/2008
 16th Alpha Release
 
 NEWS:
-
+This is primarly a bug fix release which fixes a number of bugs. A few new
+features and improvements have also been added to improve usability. This is
+also the first release to be compatible with Python 2.6.
 
 NEW: [features/improvements]
++Python 2.6 compatibility
++Updated CodeBrowser with support for C++ and D
++Updated Launch plugin with support for D
 +Add option for enable/disable regex search in quick find bar
 +Automatically expire status bar info messages after 10 seconds
 +Persist 5 most recent search locations between sessions
@@ -23,7 +28,7 @@ NEW: [features/improvements]
 +Add Valencian translation
 +New version of Launch (add support for D)
 +Improved OSX cursor movement keybinding compliance (patch from Joe Strout)
-+Improve search output window to include search term and options in output
++Improved search output window to include search term and options in output
 
 BUG FIXES:
 +Fix case where encoding can be None in when initializing the preference dialog
@@ -33,7 +38,7 @@ BUG FIXES:
 +Fix bug related to ? being in keyword helper lists for some languages
 +Handle invalid regular expressions in find dialog
 +Fix a number of bugs in the new Find All search features
-+Fix not being able to open files mounted to /Volumes on osx
++Fix not being able to open files mounted to /Volumes on OSX
 +Fix issue of window scrolling horizontally when restoring cursor position
 
 #-----------------------------------------------------------------------------#
