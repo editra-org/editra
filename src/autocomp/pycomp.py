@@ -45,7 +45,8 @@ class Completer(object):
         self._log = wx.GetApp().GetLog()
         self._buffer = stc_buffer
         self._autocomp_keys = [ord('.')]
-        self._autocomp_stop = ' .,;:([)]}\'"\\<>%^&+-=*/|`'
+        self._autocomp_stop = '\'"\\`'
+        self._autocomp_fillup = ' .,;:([)]}<>%^&+-=*/|'
         self._calltip_keys = [ord('(')]
         self._case_sensitive = False
 
@@ -103,6 +104,11 @@ class Completer(object):
             return self._autocomp_keys
         else:
             return list()
+        
+    def IsAutoCompEvent(self, evt):
+        if evt.ControlDown() and evt.GetKeyCode() == ord(' '):
+            return True
+        return False
 
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a 
@@ -121,6 +127,9 @@ class Completer(object):
 
         """
         return getattr(self, '_autocomp_stop', u'')
+    
+    def GetAutoCompFillups(self):
+        return getattr(self, '_autocomp_fillup', u'')
 
     def GetCallTip(self, command):
         """Returns the formated calltip string for the command.
@@ -137,6 +146,11 @@ class Completer(object):
 
         """
         return getattr(self, '_calltip_keys', list())
+    
+    def IsCallTipEvent(self, evt):
+        if evt.ControlDown() and evt.GetKeyCode() == ord('9'):
+            return True
+        return False
 
     def GetCaseSensitive(self):
         """Returns whether the autocomp commands are case sensitive
@@ -309,7 +323,7 @@ class PyCompleter(object):
                         if doc is None:
                             doc = max(getattr(result, '__doc__', ' '), ' ')
 
-                        comp = {'word' : meth[len(match):],
+                        comp = {'word' : meth,
                                 'abbr' : meth,
                                 'info' : _cleanstr(str(doc))}
 

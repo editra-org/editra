@@ -55,6 +55,9 @@ class AutoCompService(object):
             return self._completer.GetAutoCompKeys()
         else:
             return list()
+        
+    def IsAutoCompEvent(self, evt):
+        return self._completer.IsAutoCompEvent(evt) if self._completer else False
 
     def GetAutoCompList(self, command):
         """Retrieves the sorted autocomplete list for a command
@@ -76,6 +79,9 @@ class AutoCompService(object):
             return self._completer.GetAutoCompStops()
         else:
             return u''
+        
+    def GetAutoCompFillups(self):
+        return self._completer.GetAutoCompFillups() if self._completer else u''
 
     def GetCallTip(self, command):
         """Returns the calltip string for a command
@@ -96,6 +102,9 @@ class AutoCompService(object):
             return self._completer.GetCallTipKeys()
         else:
             return list()
+        
+    def IsCallTipEvent(self, evt):
+        return self._completer.IsCallTipEvent(evt) if self._completer else False
 
     def GetIgnoreCase(self):
         """Are commands case sensitive or not

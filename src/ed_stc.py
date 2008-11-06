@@ -806,6 +806,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.AddText(unichr(key_code))
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
+        elif self._code['compsvc'].IsAutoCompEvent(evt):
+            if self.AutoCompActive():
+                self.AutoCompCancel()
+            command = self.GetCommandStr()
+            if self._config['autocomp']:
+                self.ShowAutoCompOpt(command)
         elif key_code in self._code['compsvc'].GetCallTipKeys():
             if self.AutoCompActive():
                 self.AutoCompCancel()
@@ -813,6 +819,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.AddText(unichr(key_code))
             if self._config['autocomp']:
                 self.ShowCallTip(command)
+        elif self._code['compsvc'].IsCallTipEvent(evt):
+            if self.AutoCompActive():
+                self.AutoCompCancel()
+            command = self.GetCommandStr()
+            if self._config['autocomp']:
+                self.ShowCallTip(command[:command.rfind('(')])
         else:
             evt.Skip()
         return
@@ -895,7 +907,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         curr_pos = self.GetCurrentPos()
         start = curr_pos - 1
         col = self.GetColumn(curr_pos)
-        cmd_lmt = list(self._code['compsvc'].GetAutoCompStops())
+        cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
+                       self._code['compsvc'].GetAutoCompFillups())
         for key in self._code['compsvc'].GetAutoCompKeys():
             kval = chr(key)
             if kval in cmd_lmt:
@@ -917,7 +930,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         lst = self._code['compsvc'].GetAutoCompList(command)
         if len(lst):
-            self.AutoCompShow(0, u' '.join(lst))
+            pos = self.GetCurrentPos()
+            self.AutoCompShow(pos - self.WordStartPosition(pos, True), u' '.join(lst))
             self.SetFocus()
 
     def ShowCallTip(self, command):
@@ -1954,9 +1968,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.AutoCompSetAutoHide(False)
+        self.AutoCompSetChooseSingle(True)
         self._code['compsvc'].LoadCompProvider(self.GetLexer())
         self.AutoCompSetIgnoreCase(self._code['compsvc'].GetIgnoreCase())
         self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
+        self.AutoCompSetFillUps(self._code['compsvc'].GetAutoCompFillups())
 
     def ConfigureLexer(self, file_ext):
         """Sets Lexer and Lexer Keywords for the specifed file extension
