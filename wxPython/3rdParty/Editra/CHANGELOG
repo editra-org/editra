@@ -16,6 +16,7 @@ NEWS:
 
 NEW: [features/improvements]
 +Improved Python auto-indenter (patch from Ofer Schwarz)
++Show auto-completion choices with Ctrl+Space (patch from Ofer Schwarz)
 
 BUG FIXES:
 
