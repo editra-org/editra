@@ -28,6 +28,7 @@ import inspect
 
 # Indenter keywords
 INDENT_KW = u"def if elif else for while class try except finally"
+UNINDENT_KW = u"return raise break continue pass exit quit"
 
 # Python Keywords
 KEYWORDS = keyword.kwlist
@@ -35,16 +36,12 @@ KEYWORDS.extend(['True', 'False', 'None', 'self'])
 PY_KW = (0, u" ".join(KEYWORDS))
 
 # Highlighted builtins
-# TODO: find out why treating __builtins__ like a module here does
-#       not work. It works if 'print __builtins__' but not with
-#       using the dir() method. When this is done it just inspected
-#       as a dict.
 try:
-    BUILTINS = [b for b in __builtins__
-                if inspect.isbuiltin(__builtins__.get(b, None))]
+    import __builtin__
+    BUILTINS = dir(__builtin__)
 except:
     BUILTINS = list()
-BUILTINS.extend(['int', 'hex', 'long', 'float'])
+#BUILTINS.append('self')
 BUILTINS = list(set(BUILTINS))
 
 PY_BIN = (1, u" ".join(sorted(BUILTINS)))
@@ -115,25 +112,33 @@ def AutoIndenter(stc, pos, ichar):
     line = stc.GetCurrentLine()
     text = stc.GetTextRange(stc.PositionFromLine(line), pos)
 
-    if text.isspace():
-        rtxt = '\n'
+    # Ignore empty lines
+    while text.isspace():
+        line -= 1
+        if line < 0:
+            return u''
+        text = stc.GetTextRange(stc.PositionFromLine(line), pos)
+
+    indent = stc.GetLineIndentation(line)
+    if ichar == u"\t":
+        tabw = stc.GetTabWidth()
     else:
-        indent = stc.GetLineIndentation(line)
-        if ichar == u"\t":
-            tabw = stc.GetTabWidth()
-        else:
-            tabw = stc.GetIndent()
+        tabw = stc.GetIndent()
 
         i_space = indent / tabw
-        ndent = u"\n" + ichar * i_space
-        rtxt = ndent + ((indent - (tabw * i_space)) * u' ')
+        end_spaces = ((indent - (tabw * i_space)) * u' ')
 
-    tokens = [token for token in text.strip().split() if len(token)]
-    if len(tokens) and tokens[-1].endswith(":"):
-        if tokens[0].rstrip(u":") in INDENT_KW:
-            rtxt += ichar
+    tokens = filter(None, text.strip().split())
+    if tokens:
+        if tokens[-1].endswith(u":"):
+            if tokens[0].rstrip(u":") in INDENT_KW:
+                i_space += 1
+        elif tokens[-1].endswith(u"\\"):
+            i_space += 1
+        elif tokens[0] in UNINDENT_KW:
+            i_space = max(i_space - 1, 0)
 
-    return rtxt
+    return u"\n" + ichar * i_space + end_spaces
 
 #---- End Required Module Functions ----#
 
