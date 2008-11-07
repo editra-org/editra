@@ -549,6 +549,9 @@ class EdMenuBar(wx.MenuBar):
         editmenu.Append(ed_glob.ID_PASTE, _("&Paste") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PASTE),
                         _("Paste Text from Clipboard to File"))
+        editmenu.Append(ed_glob.ID_PASTE_AFTER, _("P&aste After") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PASTE_AFTER),
+                        _("Paste Text from Clipboard to File after the cursor"))
         editmenu.AppendSeparator()
         editmenu.Append(ed_glob.ID_SELECTALL, _("Select &All") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_SELECTALL),
@@ -975,6 +978,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_CUT : ("Ctrl", "X"),
                      ed_glob.ID_COPY : ("Ctrl", "C"),
                      ed_glob.ID_PASTE : ("Ctrl", "V"),
+                     ed_glob.ID_PASTE_AFTER : ("Ctrl", "Shift", "V"),
                      ed_glob.ID_SELECTALL : ("Ctrl", "A"),
                      ed_glob.ID_LINE_AFTER : ("Ctrl", "L"),
                      ed_glob.ID_LINE_BEFORE : ("Ctrl", "Shift", "L"),

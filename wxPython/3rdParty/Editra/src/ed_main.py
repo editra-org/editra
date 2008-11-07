@@ -160,6 +160,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_PRINT_SU, self.OnPrint),
 
                                        # Edit Menu
+                                       (ID_PASTE_AFTER, self.DispatchToControl),
                                        (ID_QUICK_FIND, self.OnCommandBar),
                                        (ID_PREF, OnPreferences),
 
@@ -201,6 +202,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      (ID_COPY, self.OnUpdateClipboardUI),
                                      (ID_CUT, self.OnUpdateClipboardUI),
                                      (ID_PASTE, self.OnUpdateClipboardUI),
+                                     (ID_PASTE_AFTER, self.OnUpdateClipboardUI),
                                      (ID_UNDO, self.OnUpdateClipboardUI),
                                      (ID_REDO, self.OnUpdateClipboardUI),
                                      # Format Menu
@@ -912,7 +914,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_JOIN_LINES, ID_CUT_LINE, ID_COPY_LINE, ID_INDENT,
                         ID_UNINDENT, ID_TRANSPOSE, ID_COMMENT, ID_UNCOMMENT,
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY,
-                        ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE ]
+                        ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE,
+                        ID_PASTE_AFTER ]
 
         has_focus = self.FindFocus()
         if has_focus != ctrl and e_id in active_only:
@@ -1015,7 +1018,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Enable(ctrl.CanUndo())
         elif e_id == ID_REDO:
             evt.Enable(ctrl.CanRedo())
-        elif e_id == ID_PASTE:
+        elif e_id in ( ID_PASTE, ID_PASTE_AFTER):
             evt.Enable(ctrl.CanPaste())
         elif e_id in [ID_COPY, ID_CUT]:
             evt.Enable(ctrl.GetSelectionStart() != ctrl.GetSelectionEnd())

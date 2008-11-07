@@ -1227,6 +1227,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetViewEdgeGuide(not self.GetEdgeMode())
         elif e_id == ed_glob.ID_SHOW_EOL:
             self.SetViewEOL(not self.GetViewEOL())
+        elif e_id == ed_glob.ID_PASTE_AFTER:
+            cpos = self.GetCurrentPos()
+            self.Paste()
+            self.SetCurrentPos(cpos)
+            self.SetSelection(cpos, cpos)
         elif e_id == ed_glob.ID_SHOW_WS:
             self.SetViewWhiteSpace(not self.GetViewWhiteSpace())
         elif e_id == ed_glob.ID_WORD_WRAP:
