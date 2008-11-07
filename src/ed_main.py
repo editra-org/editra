@@ -504,6 +504,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type evt: wxMenuEvent
 
         """
+        if not self.IsActive():
+            evt.Skip()
+            return
+
         e_id = evt.GetId()
         if e_id == ID_CLOSE:
             self.nb.ClosePage()
