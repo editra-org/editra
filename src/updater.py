@@ -42,7 +42,7 @@ import util
 RE_VERSION = re.compile('<\s*span id\="VERSION"[^>]*>(.*?)<\s*/span\s*>')
 RE_CURL = re.compile('<\s*a id\="CURRENT"\s*href=\"(.*?)\"[^>]*>.*?<\s*/a\s*>')
 DL_VERSION = ed_glob.HOME_PAGE + "/version.php"
-DL_REQUEST = ed_glob.HOME_PAGE + "/?page=download&dist=%s"
+DL_REQUEST = ed_glob.HOME_PAGE + "/e_update.php?dist=%s"
 DL_LIN = 'SRC'          # This may need to change in future
 DL_MAC = 'Macintosh'
 DL_SRC = 'SRC'
