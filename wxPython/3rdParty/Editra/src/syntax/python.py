@@ -124,8 +124,8 @@ def AutoIndenter(stc, pos, ichar):
     else:
         tabw = stc.GetIndent()
 
-        i_space = indent / tabw
-        end_spaces = ((indent - (tabw * i_space)) * u' ')
+    i_space = indent / tabw
+    end_spaces = ((indent - (tabw * i_space)) * u' ')
 
     tokens = filter(None, text.strip().split())
     if tokens:
