@@ -166,15 +166,16 @@ class SearchController:
         else:
             evt.Skip()
 
-    def OnFind(self, evt):
+    def OnFind(self, evt, findnext=False):
         """Do an incremental search in the currently buffer
         @param evt: EVT_FIND, EVT_FIND_NEXT
+        @keyword findnext: force a find next action
 
         """
         data = self.GetData()
 
-        # Find next from menu event
-        if evt.GetEventType() == wx.wxEVT_COMMAND_MENU_SELECTED:
+        # Find next from menu event or called internally by replace
+        if findnext or evt.GetEventType() == wx.wxEVT_COMMAND_MENU_SELECTED:
             evt = finddlg.FindEvent(finddlg.edEVT_FIND_NEXT,
                                     flags=data.GetFlags())
             evt.SetFindString(data.GetFindString())
@@ -326,6 +327,9 @@ class SearchController:
         """
         replacestring = evt.GetReplaceString()
         self._stc().ReplaceSelection(replacestring)
+
+        # Go to the next match
+        self.OnFind(None, True)
 
     def OnReplaceAll(self, evt):
         """Replace all instance of the search string with the given
