@@ -203,21 +203,20 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetSelBackground(True, highlight)
         self.__SetupStyles()
 
-    def __PutText(self, txt, ind):
-        """
-        @param txt: String to append
-        @param ind: index in update buffer
+    def __FlushBuffer(self):
+        """Flush the update buffer
+        @postcondition: The update buffer is empty
 
         """
         self._updating.acquire()
         self.SetReadOnly(False)
-        start = self.GetLength() # Get position new text will start from
+        txt = u''.join(self._updates[:])
+        start = self.GetLength()
         self.AppendText(txt)
         self.GotoPos(self.GetLength())
-        self._updates = self._updates[ind:]
+        self._updates = list()
         self.ApplyStyles(start, txt)
         self.SetReadOnly(True)
-        self.RefreshBufferedLines()
         self._updating.release()
 
     def __SetupStyles(self, font=None):
@@ -378,7 +377,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         """
         ind = len(self._updates)
         if ind:
-            wx.CallAfter(self.__PutText, u''.join(self._updates), ind)
+            self.__FlushBuffer()
         elif evt is not None:
             self.DoUpdatesEmpty()
         else:
@@ -628,7 +627,7 @@ class ProcessThread(threading.Thread):
                 ctypes.windll.kernel32.PeekNamedPipe(handle, None, 0, 0,
                                                      ctypes.byref(avail), None)
                 if avail.value > 0:
-                    read = self._proc.stdout.readline()
+                    read = self._proc.stdout.read(4096)
                     if read.endswith(os.linesep):
                         read = read[:-1 * len(os.linesep)] + "\n"
                 else:
@@ -659,10 +658,10 @@ class ProcessThread(threading.Thread):
                     if not select.select([self._proc.stdout], [], [], 1)[0]:
                         return True
 
-                    read = self._proc.stdout.readline()
+                    read = self._proc.stdout.read(4096)
                     if read == '':
                         return False
-                except IOError:
+                except IOError, msg:
                     return False
             finally:
                 if not self._proc.stdout.closed:
