@@ -756,7 +756,7 @@ def EscapeRegEx(regex):
     @return: string
 
     """
-    for char in u"\\[](){}+*$^?":
+    for char in u"\\[](){}+*$^?.":
         regex = regex.replace(char, "\\%s" % char)
     return regex
 
