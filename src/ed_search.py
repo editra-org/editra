@@ -222,6 +222,11 @@ class SearchController:
         match = engine.Find(spos)
         if match is not None:
             start, end = match
+
+            if engine.IsWholeWord():
+                start += 1
+                end -= 1
+
             if isdown:
                 stc.SetSelection(start + spos, end + spos)
             else:
@@ -245,6 +250,11 @@ class SearchController:
 
             if match is not None:
                 start, end = match
+
+                if engine.IsWholeWord():
+                    start += 1
+                    end -= 1
+
                 self._posinfo['found'] = start
 
                 match = list(match)
