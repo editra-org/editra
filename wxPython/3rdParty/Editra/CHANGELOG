@@ -19,6 +19,7 @@ NEW: [features/improvements]
 +Improved Python auto-indenter (patch from Ofer Schwarz)
 +Show auto-completion choices with Ctrl+Space (patch from Ofer Schwarz)
 +Add Paste After command (patch from Dario Ghilardi)
++Report number of matches that were replaced in a Replace All action
 
 BUG FIXES:
 +Fix bug in selecting Cancel when prompted to save modifications that would
@@ -27,6 +28,7 @@ BUG FIXES:
  tab of the top MainWindow.
 +Fix not being able to search for strings with '.' in them in non-regex mode
 +Fix bug in Launch output sometimes missing output data
++Fix inaccurate highlighting of words when doing incremental whole word search
 
 #-----------------------------------------------------------------------------#
 
