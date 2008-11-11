@@ -25,6 +25,8 @@ BUG FIXES:
  cause the editor to block paint events and appear frozen.
 +Ctrl+W properly closes the active window instead of always defaulting to the
  tab of the top MainWindow.
++Fix not being able to search for strings with '.' in them in non-regex mode
++Fix bug in Launch output sometimes missing output data
 
 #-----------------------------------------------------------------------------#
 
