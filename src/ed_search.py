@@ -350,6 +350,7 @@ class SearchController:
         rstring = evt.GetReplaceString()
         engine = SearchEngine(evt.GetFindString(), evt.IsRegEx(),
                               True, evt.IsMatchCase(), evt.IsWholeWord())
+        results = 0
 
         if smode == finddlg.LOCATION_CURRENT_DOC:
             stc = self._stc()
@@ -357,14 +358,14 @@ class SearchController:
             matches = engine.FindAll()
             if matches is not None:
                 self.ReplaceInStc(stc, matches, rstring)
-            # TODO report number of items replaced
+                results = len(matches)
         elif smode == finddlg.LOCATION_OPEN_DOCS:
             for ctrl in self._parent.GetTextControls():
                 engine.SetSearchPool(ctrl.GetTextRaw())
                 matches = engine.FindAll()
                 if matches is not None:
                     self.ReplaceInStc(ctrl, matches, rstring)
-            # TODO report number of items replaced
+                    results += len(matches)
         elif smode == finddlg.LOCATION_IN_FILES:
             dlg = wx.MessageDialog(self._parent,
                                    _("Sorry will be ready for next version"),
@@ -374,6 +375,7 @@ class SearchController:
                                    style=wx.ICON_WARNING|wx.OK|wx.CANCEL|wx.CENTER)
             result = dlg.ShowModal()
             dlg.Destroy()
+
             if result == wx.ID_OK:
                 pass
 #                path = evt.GetDirectory()
@@ -382,6 +384,12 @@ class SearchController:
 #                                    [path,], dict(recursive=evt.IsRecursive())))
             else:
                 return
+
+        # Post number of matches that were replaced to the status bar
+        if results > 0:
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                              (ed_glob.SB_INFO,
+                              _("%d matches were replaced.") % results))
 
     def OnShowFindDlg(self, evt):
         """Catches the Find events and shows the appropriate find dialog
