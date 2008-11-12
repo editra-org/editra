@@ -223,10 +223,6 @@ class SearchController:
         if match is not None:
             start, end = match
 
-            if engine.IsWholeWord():
-                start += 1
-                end -= 1
-
             if isdown:
                 stc.SetSelection(start + spos, end + spos)
             else:
@@ -250,10 +246,6 @@ class SearchController:
 
             if match is not None:
                 start, end = match
-
-                if engine.IsWholeWord():
-                    start += 1
-                    end -= 1
 
                 self._posinfo['found'] = start
 
@@ -357,14 +349,14 @@ class SearchController:
             engine.SetSearchPool(stc.GetTextRaw())
             matches = engine.FindAll()
             if matches is not None:
-                self.ReplaceInStc(stc, matches, rstring)
+                self.ReplaceInStc(stc, matches, rstring, evt.IsRegEx())
                 results = len(matches)
         elif smode == finddlg.LOCATION_OPEN_DOCS:
             for ctrl in self._parent.GetTextControls():
                 engine.SetSearchPool(ctrl.GetTextRaw())
                 matches = engine.FindAll()
                 if matches is not None:
-                    self.ReplaceInStc(ctrl, matches, rstring)
+                    self.ReplaceInStc(ctrl, matches, rstring, evt.IsRegEx())
                     results += len(matches)
         elif smode == finddlg.LOCATION_IN_FILES:
             dlg = wx.MessageDialog(self._parent,
@@ -420,7 +412,7 @@ class SearchController:
         self._finddlg.SetFocus()
 
     @staticmethod
-    def ReplaceInStc(stc, matches, rstring):
+    def ReplaceInStc(stc, matches, rstring, isregex=True):
         """Replace the strings at the position in the given StyledTextCtrl
         @param stc: StyledTextCtrl
         @param matches: list of tuples [(s1, e1), (s2, e2)]
@@ -428,10 +420,15 @@ class SearchController:
 
         """
         stc.BeginUndoAction()
-        for start, end in reversed(matches):
+        for match in reversed(matches):
+            start, end = match.span()
+            if isregex:
+                value = match.expand(rstring)
+            else:
+                value = rstring
             stc.SetTargetStart(start)
             stc.SetTargetEnd(end)
-            stc.ReplaceTarget(rstring)
+            stc.ReplaceTarget(value)
         stc.EndUndoAction()
 
     def SetLookinChoices(self, choices):
@@ -498,15 +495,15 @@ class SearchEngine:
         """
         tmp = self._query
         if not self._isregex:
-            tmp = EscapeRegEx(tmp)
+            tmp = re.escape(tmp)
 
         if self._wholeword:
-            tmp = "\\s%s\\s" % tmp
+            tmp = "\\b%s\\b" % tmp
 
-        if self._matchcase:
-            flags = 0
-        else:
-            flags = re.IGNORECASE
+        flags = re.MULTILINE
+
+        if not self._matchcase:
+            flags |= re.IGNORECASE
 
         if self._unicode:
             flags |= re.UNICODE
@@ -541,11 +538,8 @@ class SearchEngine:
         if self._regex is None:
             return list()
 
-        matches = [ match for match in re.finditer(self._regex, self._pool) ]
-        if len(matches):
-            matches = [match.span() for match in matches]
-            return matches
-        return list()
+        matches = [match for match in re.finditer(self._regex, self._pool)]
+        return matches
 
     def FindAllLines(self):
         """Find all the matches in the current context
@@ -767,16 +761,6 @@ class SearchEngine:
         self._CompileRegex()
 
 #-----------------------------------------------------------------------------#
-
-def EscapeRegEx(regex):
-    """Escape all special regex characters in the given string
-    @param regex: string
-    @return: string
-
-    """
-    for char in u"\\[](){}+*$^?.":
-        regex = regex.replace(char, "\\%s" % char)
-    return regex
 
 def FormatResult(fname, lnum, match):
     """Format the search result string
