@@ -239,6 +239,9 @@ def GenFileFilters():
     f_dict = dict()
     for key, val in extreg.iteritems():
         val.sort()
+        if key.lower() == 'makefile':
+            continue
+
         f_dict[key] = u";*." + u";*.".join(val)
 
     # Build the final list of properly formated strings
