@@ -463,6 +463,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Check if copy/cut is possible"""
         return self.GetSelectionStart() != self.GetSelectionEnd()
 
+    CanCut = CanCopy
+
     def ConvertCase(self, upper=False):
         """Converts the case of the selected text to either all lower
         case(default) or all upper case.

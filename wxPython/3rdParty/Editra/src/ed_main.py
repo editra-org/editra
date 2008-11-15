@@ -1013,15 +1013,33 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
+        focus = self.FindFocus()
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_UNDO:
-            evt.Enable(ctrl.CanUndo())
+            can_undo = False
+            if hasattr(focus, 'CanUndo'):
+                can_undo = focus.CanUndo()
+            evt.Enable(can_undo)
         elif e_id == ID_REDO:
-            evt.Enable(ctrl.CanRedo())
-        elif e_id in ( ID_PASTE, ID_PASTE_AFTER):
-            evt.Enable(ctrl.CanPaste())
-        elif e_id in [ID_COPY, ID_CUT]:
-            evt.Enable(ctrl.GetSelectionStart() != ctrl.GetSelectionEnd())
+            can_redo = False
+            if hasattr(focus, 'CanRedo'):
+                can_redo = focus.CanRedo()
+            evt.Enable(can_redo)
+        elif e_id in (ID_PASTE, ID_PASTE_AFTER):
+            can_paste = False
+            if hasattr(focus, 'CanPaste'):
+                can_paste = focus.CanPaste()
+            evt.Enable(can_paste)
+        elif e_id == ID_COPY:
+            can_copy = False
+            if hasattr(focus, 'CanCopy'):
+                can_copy = focus.CanCopy()
+            evt.Enable(can_copy)
+        elif e_id == ID_CUT:
+            can_cut = False
+            if hasattr(focus, 'CanCut'):
+                can_cut = focus.CanCut()
+            evt.Enable(can_cut)
         else:
             evt.Skip()
 

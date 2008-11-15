@@ -281,6 +281,21 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         """
         pass
 
+    def CanCopy(self):
+        """Is it possible to copy text right now
+        @return: bool
+
+        """
+        sel = self.GetSelection()
+        return sel[0] != sel[1]
+
+    def CanCut(self):
+        """Is it possible to Cut
+        @return: bool
+
+        """
+        return not self.GetReadOnly()
+
     def Clear(self):
         """Clear the Buffer"""
         self.SetReadOnly(False)
