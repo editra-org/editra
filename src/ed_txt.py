@@ -351,7 +351,7 @@ def DecodeString(string, encoding=None):
     @keyword encoding: encoding to decode string with
 
     """
-    if not encoding:
+    if encoding is None:
         encoding = DEFAULT_ENCODING
 
     if not isinstance(string, types.UnicodeType):

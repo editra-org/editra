@@ -225,10 +225,10 @@ class Profile(dict):
         """
         try:
             self.Set('MYPROFILE', path)
+            UpdateProfileLoader()
             fhandle = open(path, 'wb')
             cPickle.dump(self.copy(), fhandle, cPickle.HIGHEST_PROTOCOL)
             fhandle.close()
-            UpdateProfileLoader()
         except (IOError, cPickle.PickleError), msg:
             dev_tool.DEBUGP("[profile][err] %s" % str(msg))
             return False
@@ -348,12 +348,13 @@ def AddFileHistoryToProfile(file_history):
 
 def CalcVersionValue(ver_str="0.0.0"):
     """Calculates a version value from the provided dot-formated string
-    @keyword ver_str: Version string to calculate value of
 
     1) SPECIFICATION: Version value calculation AA.BBB.CCC
          - major values: < 1     (i.e 0.0.85 = 0.850)
          - minor values: 1 - 999 (i.e 0.1.85 = 1.850)
          - micro values: >= 1000 (i.e 1.1.85 = 1001.850)
+
+    @keyword ver_str: Version string to calculate value of
 
     """
     ver_str = ''.join([char for char in ver_str
@@ -378,10 +379,9 @@ def GetLoader():
     """
     cbase = CONFIG['CONFIG_BASE']
     if cbase is None:
-        loader = os.path.join(wx.GetHomeDir(), u"." + PROG_NAME,
-                              u"profiles", u".loader2")
-    else:
-        loader = os.path.join(cbase, u"profiles", u".loader2")
+        cbase = wx.StandardPaths_Get().GetUserDataDir()
+
+    loader = os.path.join(cbase, u"profiles", u".loader2")
 
     return loader
 
@@ -420,7 +420,7 @@ def ProfileVersionStr():
 
     """
     loader = GetLoader()
-    reader = util.GetFileReader(loader)
+    reader = util.GetFileReader(loader, sys.getfilesystemencoding())
     if reader == -1:
         return "0.0.0"
 
@@ -455,7 +455,11 @@ def UpdateProfileLoader():
     if not prof_name:
         prof_name = CONFIG['PROFILE_DIR'] + 'default.ppb'
 
-    prof_name = prof_name.encode(sys.getfilesystemencoding())
+    if not os.path.exists(prof_name):
+        prof_name = os.path.join(CONFIG['CONFIG_BASE'],
+                                 os.path.basename(prof_name))
+        Profile_Set('MYPROFILE', prof_name)
+
     writer.write(prof_name)
     writer.write(u"\nVERSION\t" + VERSION)
     writer.close()

@@ -27,6 +27,7 @@ import base64
 import locale
 import time
 import getopt
+import shutil
 import wx
 
 # The event handler mixin is now part of wxPython proper, but there hasn't
@@ -90,42 +91,13 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         wx.App.__init__(self, *args, **kargs)
         events.AppEventHandlerMixin.__init__(self)
 
+        self.SetAppName(ed_glob.PROG_NAME)
+
         # Attributes
+        self.profile_updated = InitConfig()
         self._log = dev_tool.DEBUGP
         self._lock = False
         self._windows = dict()
-
-        # Setup Plugins after locale as they may have resource that need to
-        # be loaded.
-        self._pluginmgr = plugin.PluginManager()
-
-        self._log("[app][info] Registering Editra's ArtProvider")
-        wx.ArtProvider.PushProvider(ed_art.EditraArt())
-
-    def AddMessageCatalog(self, name, path):
-        """Add a catalog lookup path to the app
-        @param name: name of catalog (i.e 'projects')
-        @param path: catalog lookup path
-
-        """
-        if self.locale is not None:
-            path = resource_filename(path, 'locale')
-            self.locale.AddCatalogLookupPathPrefix(path)
-            self.locale.AddCatalog(name)
-
-    def OnInit(self):
-        """Initialize the Editor
-        @note: this gets called before __init__
-        @postcondition: custom artprovider and plugins are loaded
-
-        """
-        self.SetAppName(ed_glob.PROG_NAME)
-
-        self._log = dev_tool.DEBUGP
-        self._log("[app][info] Editra is Initializing")
-
-        self._isfirst = False # Is the first instance
-        self._instance = None
 
         if ed_glob.SINGLE:
             # Setup the instance checker
@@ -167,6 +139,36 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 self._isfirst = True
         else:
             self._isfirst = True
+
+        # Setup Plugins after locale as they may have resource that need to
+        # be loaded.
+        self._pluginmgr = plugin.PluginManager()
+
+        self._log("[app][info] Registering Editra's ArtProvider")
+        wx.ArtProvider.PushProvider(ed_art.EditraArt())
+
+    def AddMessageCatalog(self, name, path):
+        """Add a catalog lookup path to the app
+        @param name: name of catalog (i.e 'projects')
+        @param path: catalog lookup path
+
+        """
+        if self.locale is not None:
+            path = resource_filename(path, 'locale')
+            self.locale.AddCatalogLookupPathPrefix(path)
+            self.locale.AddCatalog(name)
+
+    def OnInit(self):
+        """Initialize the Editor
+        @note: this gets called before __init__
+        @postcondition: custom artprovider and plugins are loaded
+
+        """
+        self._log = dev_tool.DEBUGP
+        self._log("[app][info] Editra is Initializing")
+
+        self._isfirst = False # Is the first instance
+        self._instance = None
 
         # Setup Locale
         locale.setlocale(locale.LC_ALL, '')
@@ -314,6 +316,13 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         """
         return self._pluginmgr
+
+    def GetProfileUpdated(self):
+        """Was the profile updated 
+        @return: bool
+
+        """
+        return self.profile_updated
 
     def GetWindowInstance(self, wintype):
         """Get an instance of an open window if one exists
@@ -648,6 +657,12 @@ def InitConfig():
         # Fresh install
         util.CreateConfigDir()
 
+        # Check and upgrade installs from old location
+        try:
+            UpgradeOldInstall()
+        except:
+            pass
+
         # Set default eol for windows
         if wx.Platform == '__WXMSW__':
             profiler.Profile_Set('EOL', 'Windows (\\r\\n)')
@@ -674,6 +689,42 @@ def InitConfig():
     ed_glob.CONFIG['CACHE_DIR'] = util.ResolvConfigDir("cache")
 
     return profile_updated
+
+#--------------------------------------------------------------------------#
+
+def UpgradeOldInstall():
+    """Upgrade an old installation and transfer all files if they exist
+    @note: FOR INTERNAL USE ONLY
+
+    """
+    old_cdir = user_config = u"%s%s.%s%s" % (wx.GetHomeDir(), os.sep,
+                                             ed_glob.PROG_NAME, os.sep)
+    if os.path.exists(old_cdir):
+        base = ed_glob.CONFIG['CONFIG_BASE']
+        for item in os.listdir(old_cdir):
+            try:
+                dest = os.path.join(base, item)
+                item = os.path.join(old_cdir, item)
+                if os.path.exists(dest):
+                    if os.path.isdir(dest):
+                        shutil.rmtree(dest, True)
+                    else:
+                        os.remove(dest)
+
+                shutil.move(item, base)
+            except:
+                continue
+
+        os.rmdir(old_cdir)
+
+        # Load the copied over profile
+        pstr = profiler.GetProfileStr()
+        prof = os.path.basename(pstr)
+        pstr = os.path.join(base, u"profiles", prof)
+        if os.path.exists(pstr):
+            profiler.Profile().Load(pstr)
+            profiler.Profile().Update()
+            profiler.UpdateProfileLoader()
 
 #--------------------------------------------------------------------------#
 def PrintHelp():
@@ -745,9 +796,6 @@ def Main():
     """
     opts, args = ProcessCommandLine()
 
-    # We are ready to run so fire up the config and launch the app
-    profile_updated = InitConfig()
-
     # Put extern subpackage on path so that bundled external dependancies
     # can be found if needed.
     if not hasattr(sys, 'frozen'):
@@ -773,7 +821,7 @@ def Main():
         editra_app.Destroy()
         os._exit(0)
 
-    if profile_updated:
+    if editra_app.GetProfileUpdated():
         # Make sure window iniliazes to default position
         profiler.Profile_Del('WPOS')
         wx.MessageBox(_("Your profile has been updated to the latest "
