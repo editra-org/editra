@@ -21,18 +21,21 @@ import wx
 
 #-----------------------------------------------------------------------------#
 
-if wx.Platform == '__WXMAC__' and not hasattr(wx, 'MacThemeColour'):
-    def MacThemeColour(theme_id):
-        """Get a specified Mac theme colour
-        @param theme_id: Carbon theme id
-        @return: wx.Colour
+if wx.Platform == '__WXMAC__':
+    if not hasattr(wx, 'MacThemeColour'):
+        def MacThemeColour(theme_id):
+            """Get a specified Mac theme colour
+            @param theme_id: Carbon theme id
+            @return: wx.Colour
 
-        """
-        brush = wx.Brush(wx.Colour(0, 0, 0))
-        brush.MacSetTheme(theme_id)
-        return brush.GetColour()
+            """
+            brush = wx.Brush(wx.Colour(0, 0, 0))
+            brush.MacSetTheme(theme_id)
+            return brush.GetColour()
 
-    wx.MacThemeColour = MacThemeColour
+        wx.MacThemeColour = MacThemeColour
+
+    wx.SystemOptions.SetOptionInt("mac.textcontrol-use-spell-checker", 1)
 
 # GetText is not available in 2.9 but GetItemLabel is not available pre 2.8.6
 if wx.VERSION < (2, 8, 6, 0, ''):
