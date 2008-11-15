@@ -20,6 +20,7 @@ __revision__ = "$Revision$"
 import os
 import sys
 import stat
+import types
 import encodings
 import codecs
 import urllib2
@@ -323,7 +324,7 @@ def GetFileWriter(file_name, enc='utf-8'):
 
     """
     try:
-        file_h = file(file_name, "wb")
+        file_h = open(file_name, "wb")
     except IOError:
         dev_tool.DEBUGP("[file_writer][err] Failed to open file %s" % file_name)
         return -1
@@ -452,31 +453,6 @@ def MakeNewFolder(path, name):
 
     return (True, folder)
 
-def ResolvAbsPath(rel_path):
-    """Takes a relative path and converts it to an
-    absolute path.
-    @param rel_path: path to construct absolute path for
-
-    """
-    cwd = os.getcwd()
-    pieces = rel_path.split(os.sep)
-    cut = 0
-
-    for token in pieces:
-        if token == "..":
-            cut += 1
-
-        if cut > 0:
-            rpath = os.sep.join(pieces[cut:])
-            cut *= -1
-            cwd = cwd.split(os.sep)
-            apath = os.sep.join(cwd[0:cut])
-        else:
-            rpath = rel_path
-            apath = cwd
-
-    return apath + os.sep + rpath
-
 def HasConfigDir(loc=u""):
     """ Checks if the user has a config directory and returns True
     if the config directory exists or False if it does not.
@@ -485,26 +461,19 @@ def HasConfigDir(loc=u""):
     """
     cbase = ed_glob.CONFIG['CONFIG_BASE']
     if cbase is None:
-        to_check = u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
-                                     ed_glob.PROG_NAME, os.sep, loc)
-    else:
-        to_check = cbase + os.sep + loc
+        cbase = wx.StandardPaths_Get().GetUserDataDir()
 
-    if os.path.exists(to_check):
-        return True
-    else:
-        return False
+    to_check = os.path.join(cbase, loc)
+    return os.path.exists(to_check)
 
 def MakeConfigDir(name):
     """Makes a user config directory
     @param name: name of config directory to make in user config dir
 
     """
-    cbase = ed_glob.CONFIG['CONFIG_BASE']
-    if cbase is None:
-        config_dir = wx.GetHomeDir() + os.sep + u"." + ed_glob.PROG_NAME
-    else:
-        config_dir = cbase
+    config_dir = ed_glob.CONFIG['CONFIG_BASE']
+    if config_dir is None:
+        config_dir = wx.StandardPaths_Get().GetUserDataDir()
 
     try:
         os.mkdir(config_dir + os.sep + name)
@@ -518,13 +487,13 @@ def CreateConfigDir():
 
     """
     #---- Resolve Paths ----#
-    cbase = ed_glob.CONFIG['CONFIG_BASE']
-    if cbase is None:
-        config_dir = u"%s%s.%s" % (wx.GetHomeDir(), os.sep, ed_glob.PROG_NAME)
-    else:
-        config_dir = cbase
-    profile_dir = u"%s%sprofiles" % (config_dir, os.sep)
-    dest_file = u"%s%sdefault.ppb" % (profile_dir, os.sep)
+    config_dir = ed_glob.CONFIG['CONFIG_BASE']
+    if config_dir is None:
+        config_dir = wx.StandardPaths_Get().GetUserDataDir()
+        ed_glob.CONFIG['CONFIG_BASE'] = config_dir + os.sep
+
+    profile_dir = os.path.join(config_dir, u"profiles")
+    dest_file = os.path.join(profile_dir, u"default.ppb")
     ext_cfg = ["cache", "styles", "plugins"]
 
     #---- Create Directories ----#
@@ -556,17 +525,16 @@ def ResolvConfigDir(config_dir, sys_only=False):
            the code has proven itself.
 
     """
+    stdpath = wx.StandardPaths_Get()
+
+    # Try to get a User config directory
     if not sys_only:
-        # If the Config Base has already been determined use it instead of doing
-        # a full search.
-        cbase = ed_glob.CONFIG['CONFIG_BASE']
-        if cbase is None:
-            # Try to look for a user dir
-            user_config = u"%s%s.%s%s%s" % (wx.GetHomeDir(), os.sep,
-                                            ed_glob.PROG_NAME, os.sep,
-                                            config_dir)
-        else:
-            user_config = os.path.normpath(cbase + os.sep + config_dir)
+        user_config = ed_glob.CONFIG['CONFIG_BASE']
+        if user_config is None:
+            user_config = stdpath.GetUserDataDir() + os.sep
+            ed_glob.CONFIG['CONFIG_BASE'] = user_config
+
+        user_config = os.path.join(user_config, config_dir)
 
         if os.path.exists(user_config):
             return user_config + os.sep
@@ -578,6 +546,8 @@ def ResolvConfigDir(config_dir, sys_only=False):
     path = os.sep.join(path.split(os.sep)[:-2])
     path =  path + os.sep + config_dir + os.sep
     if os.path.exists(path):
+        if not isinstance(path, types.UnicodeType):
+            path = unicode(path, sys.getfilesystemencoding())
         return path
 
     # If we get here we need to do some platform dependant lookup
@@ -602,7 +572,11 @@ def ResolvConfigDir(config_dir, sys_only=False):
             pieces = pro_path.split(os.sep)
             pro_path = os.sep.join(pieces[:-1])
         else:
-            pro_path = ResolvAbsPath(pro_path)
+            pro_path = os.path.abspath(pro_path)
+    elif os.sys.platform == "darwin":
+        # On OS X the config directories are in the applet under Resources
+        pro_path = stdpath.GetResourcesDir()
+        pro_path = os.path.join(pro_path, config_dir)
     else:
         pro_path = os.sep.join(pieces[:-2])
 
@@ -614,16 +588,17 @@ def ResolvConfigDir(config_dir, sys_only=False):
             if pieces[-1] not in [ed_glob.PROG_NAME.lower(), ed_glob.PROG_NAME]:
                 pro_path = os.sep.join(pieces[:-1])
         else:
-            pro_path = ResolvAbsPath(pro_path)
+            pro_path = os.path.abspath(pro_path)
 
-    if os.sys.platform == "darwin":
-        # On OS X the config directories are in the applet under Resources
-        pro_path = u"%s%sResources%s%s%s" % (pro_path, os.sep, os.sep,
-                                             config_dir, os.sep)
-    else:
+    if os.sys.platform != "darwin":
         pro_path = pro_path + os.sep + config_dir + os.sep
 
-    return os.path.normpath(pro_path) + os.sep
+    path = os.path.normpath(pro_path) + os.sep
+    # Make sure path is unicode
+    if not isinstance(path, types.UnicodeType):
+        path = unicode(path, sys.getdefaultencoding())
+
+    return path
 
 def GetResources(resource):
     """Returns a list of resource directories from a given toplevel config dir

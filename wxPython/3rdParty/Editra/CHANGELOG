@@ -22,8 +22,10 @@ NEW: [features/improvements]
 +Report number of matches that were replaced in a Replace All action
 +Expand groups when doing a regular expression search and replace
 +Add Polish and Slovenian translations
++User configuration files are now kept at standard platform locations
 
 BUG FIXES:
++Fix encoding errors when loading plugins on some systems
 +Fix not being able to cut and copy from Shelf windows
 +Fix bug in selecting Cancel when prompted to save modifications that would
  cause the editor to block paint events and appear frozen.

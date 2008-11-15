@@ -71,7 +71,7 @@ import wx
 
 # Editra Libraries
 import ed_glob
-from ed_txt import DecodeString
+from ed_txt import EncodeString
 import util
 from profiler import CalcVersionValue
 
@@ -341,7 +341,7 @@ class PluginManager(object):
         self.LOG = wx.GetApp().GetLog()
         self._config = self.LoadPluginConfig() # Enabled/Disabled Plugins
         self._pi_path = list(set([ed_glob.CONFIG['PLUGIN_DIR'], 
-                             ed_glob.CONFIG['SYS_PLUGIN_DIR']]))
+                                  ed_glob.CONFIG['SYS_PLUGIN_DIR']]))
         sys.path.extend(self._pi_path)
         self._env = self.CreateEnvironment(self._pi_path)
         self._plugins = dict()      # Set of available plugins
@@ -422,19 +422,19 @@ class PluginManager(object):
         in path list
         @param path: path(s) to scan for extension points
         @type path: list of path strings
-        @todo: Figure out why decoding the path with getfilesystemencoding
-               fails on some systems.
+        @note: pkgutils does not like Unicode! only send encoded strings
 
         """
         if pkg_resources != None:
-            path = [ DecodeString(pname, sys.getfilesystemencoding())
+            path = [ EncodeString(pname, sys.getfilesystemencoding())
                      for pname in path ]
+
             try:
                 env = pkg_resources.Environment(path)
             except UnicodeDecodeError, msg:
                 self.LOG("[pluginmgr][err] %s" % msg)
         else:
-            self.LOG("[pluginmgr][warn] setup tools is not installed")
+            self.LOG("[pluginmgr][warn] setuptools is not installed")
             env = dict()
         return env
 
