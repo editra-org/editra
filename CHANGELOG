@@ -20,8 +20,10 @@ NEW: [features/improvements]
 +Show auto-completion choices with Ctrl+Space (patch from Ofer Schwarz)
 +Add Paste After command (patch from Dario Ghilardi)
 +Report number of matches that were replaced in a Replace All action
++Expand groups when doing a regular expression search and replace
 
 BUG FIXES:
++Fix not being able to cut and copy from Shelf windows
 +Fix bug in selecting Cancel when prompted to save modifications that would
  cause the editor to block paint events and appear frozen.
 +Ctrl+W properly closes the active window instead of always defaulting to the
@@ -29,6 +31,7 @@ BUG FIXES:
 +Fix not being able to search for strings with '.' in them in non-regex mode
 +Fix bug in Launch output sometimes missing output data
 +Fix inaccurate highlighting of words when doing incremental whole word search
++Fix regex not working with '^' (patch from craig.ds)
 
 #-----------------------------------------------------------------------------#
 
