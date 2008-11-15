@@ -194,7 +194,7 @@ def EnvironmentInfo():
     info = list()
     info.append("#---- Notes ----#")
     info.append("Please provide additional information about the crash here")
-    info.extend(["", "", ""])
+    info.extend(["", ""])
     info.append("#---- System Information ----#")
     info.append("%s Version: %s" % (ed_glob.PROG_NAME, ed_glob.VERSION))
     info.append("Operating System: %s" % wx.GetOsDescription())
@@ -211,29 +211,7 @@ def EnvironmentInfo():
     info.append("Byte order: %s" % sys.byteorder)
     info.append("Frozen: %s" % str(getattr(sys, 'frozen', 'False')))
     info.append("#---- End System Information ----#")
-    info.append("#---- Runtime Variables ----#")
-    from profiler import Profile
-    ftypes = list()
-    for key in sorted(Profile().keys()):
-        # Exclude "private" information
-        val = Profile().Get(key)
-        if key.startswith('FILE') or 'proxy' in key.lower():
-            continue
-        elif key == 'LAST_SESSION' or key == 'FHIST':
-            for fname in val:
-                if '.' in fname:
-                    ext = fname.split('.')[-1]
-                    if ext not in ftypes:
-                        ftypes.append(ext)
-        else:
-            try:
-                info.append(u"%s=%s" % (key, str(val)))
-            except UnicodeDecodeError:
-                continue
-
-    info.append(u"FTYPES=%s" % str(ftypes))
-    info.append("#---- End Runtime Variables ----#")
-
+    info.append("")
     return os.linesep.join(info)
 
 def ExceptionHook(exctype, value, trace):
@@ -244,6 +222,8 @@ def ExceptionHook(exctype, value, trace):
 
     """
     ftrace = FormatTrace(exctype, value, trace)
+
+    print type(ftrace)
 
     # Ensure that error gets raised to console as well
     print ftrace
@@ -262,8 +242,8 @@ def FormatTrace(etype, value, trace):
 
     """
     exc = traceback.format_exception(etype, value, trace)
-    exc.insert(0, "*** %s ***%s" % (TimeStamp(), os.linesep))
-    return "".join(exc)
+    exc.insert(0, u"*** %s ***%s" % (TimeStamp(), os.linesep))
+    return u"".join(exc)
 
 def TimeStamp():
     """Create a formatted time stamp of current time
@@ -348,19 +328,22 @@ class ErrorDialog(wx.Dialog):
 
         """
         ErrorDialog.REPORTER_ACTIVE = True
-        wx.Dialog.__init__(self, None, title="Error/Crash Reporter", 
-                           style=wx.DEFAULT_DIALOG_STYLE)
+        wx.Dialog.__init__(self, None, title=_("Error/Crash Reporter"), 
+                           style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
         
         # Give message to ErrorReporter
         ErrorReporter().AddMessage(message)
 
         # Attributes
-        self.err_msg = "%s\n\n%s\n%s\n%s" % (EnvironmentInfo(), \
-                                             "#---- Traceback Info ----#", \
-                                             ErrorReporter().GetErrorStack(), \
-                                             "#---- End Traceback Info ----#")
+        self.err_msg = os.linesep.join((EnvironmentInfo(),
+                                        "#---- Traceback Info ----#",
+                                        ErrorReporter().GetErrorStack(),
+                                        "#---- End Traceback Info ----#"))
+
         # Layout
+        self._panel = ErrorPanel(self, self.err_msg)
         self._DoLayout()
+        self.SetMinSize(wx.Size(450, 300))
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
@@ -375,33 +358,9 @@ class ErrorDialog(wx.Dialog):
         @note: Do not call this method in your code
 
         """
-        # Objects
-        icon = wx.StaticBitmap(self, 
-                               bitmap=wx.ArtProvider.GetBitmap(wx.ART_ERROR))
-        mainmsg = wx.StaticText(self, 
-                                label=_("Error: Oh no something bad happend\n"
-                                        "Help improve Editra by clicking on "
-                                        "Report Error\nto send the Error "
-                                        "Traceback shown below."))
-        t_lbl = wx.StaticText(self, label=_("Error Traceback:"))
-        tctrl = wx.TextCtrl(self, value=self.err_msg, style=wx.TE_MULTILINE | 
-                                                            wx.TE_READONLY)
-        abort_b = wx.Button(self, wx.ID_ABORT, _("Abort"))
-        send_b = wx.Button(self, ID_SEND, _("Report Error"))
-        send_b.SetDefault()
-        close_b = wx.Button(self, wx.ID_CLOSE)
-
-        # Layout
-        sizer = wx.GridBagSizer()
-        sizer.AddMany([(icon, (1, 1)), (mainmsg, (1, 2), (1, 2)), 
-                       ((2, 2), (3, 0)), (t_lbl, (3, 1), (1, 2)),
-                       (tctrl, (4, 1), (8, 5), wx.EXPAND), ((5, 5), (4, 6)),
-                       ((2, 2), (12, 0)),
-                       (abort_b, (13, 1), (1, 1), wx.ALIGN_LEFT),
-                       (send_b, (13, 3), (1, 2), wx.ALIGN_RIGHT),
-                       (close_b, (13, 5), (1, 1), wx.ALIGN_RIGHT),
-                       ((2, 2), (14, 0))])
-        self.SetSizer(sizer)
+        msizer = wx.BoxSizer(wx.VERTICAL)
+        msizer.Add(self._panel, 1, wx.EXPAND)
+        self.SetSizer(msizer)
         self.SetInitialSize()
 
     def OnButton(self, evt):
@@ -439,3 +398,65 @@ class ErrorDialog(wx.Dialog):
         ErrorDialog.REPORTER_ACTIVE = False
         self.Destroy()
         evt.Skip()
+
+#-----------------------------------------------------------------------------#
+
+class ErrorPanel(wx.Panel):
+    """Error Reporter panel"""
+    def __init__(self, parent, msg):
+        """Create the panel
+        @param parent: wx.Window
+        @param msg: Error message to display
+
+        """
+        wx.Panel.__init__(self, parent)
+
+        self.err_msg = msg
+        
+        self.__DoLayout()
+
+    def __DoLayout(self):
+        """Layout the control"""
+        icon = wx.StaticBitmap(self, 
+                               bitmap=wx.ArtProvider.GetBitmap(wx.ART_ERROR))
+        mainmsg = wx.StaticText(self, 
+                                label=_("Error: Something unexpected happend\n"
+                                        "Help improve Editra by clicking on "
+                                        "Report Error\nto send the Error "
+                                        "Traceback shown below."))
+        t_lbl = wx.StaticText(self, label=_("Error Traceback:"))
+        tctrl = wx.TextCtrl(self, value=self.err_msg, style=wx.TE_MULTILINE | 
+                                                            wx.TE_READONLY)
+
+        abort_b = wx.Button(self, wx.ID_ABORT, _("Abort"))
+        abort_b.SetToolTipString(_("Exit the application"))
+        send_b = wx.Button(self, ID_SEND, _("Report Error"))
+        send_b.SetDefault()
+        close_b = wx.Button(self, wx.ID_CLOSE)
+
+        # Layout
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+
+        hsizer1 = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer1.AddMany([((5, 5), 0), (icon, 0, wx.ALIGN_CENTER_VERTICAL),
+                         ((12, 5), 0), (mainmsg, 0), ((5, 5), 0)])
+
+        hsizer2 = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer2.AddMany([((5, 5), 0), (tctrl, 1, wx.EXPAND), ((5, 5), 0)])
+
+        bsizer = wx.BoxSizer(wx.HORIZONTAL)
+        bsizer.AddMany([((5, 5), 0), (abort_b, 0), ((-1, -1), 1, wx.EXPAND),
+                        (send_b, 0), ((5, 5), 0), (close_b, 0), ((5, 5), 0)])
+
+        vsizer.AddMany([((5, 5), 0),
+                        (hsizer1, 0),
+                        ((10, 10), 0),
+                        (t_lbl, 0, wx.ALIGN_LEFT),
+                        ((3, 3), 0),
+                        (hsizer2, 1, wx.EXPAND),
+                        ((8, 8), 0),
+                        (bsizer, 0, wx.EXPAND),
+                        ((8, 8), 0)])
+
+        self.SetSizer(vsizer)
+        self.SetAutoLayout(True)
