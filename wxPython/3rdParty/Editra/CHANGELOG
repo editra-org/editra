@@ -21,6 +21,7 @@ NEW: [features/improvements]
 +Add Paste After command (patch from Dario Ghilardi)
 +Report number of matches that were replaced in a Replace All action
 +Expand groups when doing a regular expression search and replace
++Add Polish and Slovenian translations
 
 BUG FIXES:
 +Fix not being able to cut and copy from Shelf windows

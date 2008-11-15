@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-19 21:19-0500\n"
+"POT-Creation-Date: 2008-11-14 21:52-0600\n"
 "PO-Revision-Date: 2008-10-17 07:59+0100\n"
 "Last-Translator: vjatv <vjatv@yahoo.es>\n"
 "Language-Team: Softwarevalencia\n"
@@ -14,17 +14,22 @@ msgstr ""
 "X-Poedit-Language: Valencian\n"
 "X-Poedit-Country: SPAIN\n"
 
-#: ../../src/ed_search.py:258
+#: ../../src/ed_search.py:261
 #, python-format
 msgid "\"%s\" was not found"
 msgstr "No s'han trobat \"%s\""
+
+#: ../../src/ed_search.py:384
+#, python-format
+msgid "%d matches were replaced."
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:267
 #, python-format
 msgid "%s Source File"
 msgstr "%s Archiu d'orige"
 
-#: ../../src/ed_main.py:488
+#: ../../src/ed_main.py:491
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -33,88 +38,88 @@ msgstr ""
 "%s no s'ha pogut trobar\n"
 "Pot ser que s'haja mogut o borrat"
 
-#: ../../src/ed_stc.py:1818
+#: ../../src/ed_stc.py:1889
 #, python-format
 msgid "%s does not exist"
 msgstr "%s no existix"
 
-#: ../../src/ed_menu.py:817
+#: ../../src/ed_menu.py:828
 msgid "&About"
 msgstr "&Al voltant de"
 
-#: ../../src/ed_menu.py:466
+#: ../../src/ed_menu.py:474
 msgid "&Close Page"
 msgstr "&Tancar Pàgina"
 
-#: ../../src/ed_menu.py:538
+#: ../../src/ed_menu.py:546
 msgid "&Copy"
 msgstr "&Copiar"
 
-#: ../../src/ed_menu.py:605
+#: ../../src/ed_menu.py:616
 msgid "&Edit"
 msgstr "&Editar"
 
-#: ../../src/ed_menu.py:519
+#: ../../src/ed_menu.py:527
 msgid "&File"
 msgstr "&Archiu"
 
-#: ../../src/ed_menu.py:587
+#: ../../src/ed_menu.py:598
 msgid "&Find"
 msgstr "&Buscar"
 
-#: ../../src/ed_menu.py:680
+#: ../../src/ed_menu.py:691
 msgid "&Font"
 msgstr "&Font"
 
-#: ../../src/ed_menu.py:649
+#: ../../src/ed_menu.py:660
 msgid "&Goto Line"
 msgstr "&Anar a Llínea"
 
-#: ../../src/ed_main.py:136 ../../src/ed_menu.py:835
+#: ../../src/ed_main.py:137 ../../src/ed_menu.py:846
 msgid "&Help"
 msgstr "&Ajuda"
 
-#: ../../src/ed_menu.py:452
+#: ../../src/ed_menu.py:460
 msgid "&New Tab"
 msgstr "&Nova pestanya"
 
-#: ../../src/ed_menu.py:459
+#: ../../src/ed_menu.py:467
 msgid "&Open"
 msgstr "&Obrir"
 
-#: ../../src/ed_menu.py:541
+#: ../../src/ed_menu.py:549
 msgid "&Paste"
 msgstr "&Apegar"
 
-#: ../../src/ed_menu.py:510
+#: ../../src/ed_menu.py:518
 msgid "&Print"
 msgstr "&Imprimir"
 
-#: ../../src/ed_menu.py:593
+#: ../../src/ed_menu.py:604
 msgid "&Quick Find"
 msgstr "&Busca ràpida"
 
-#: ../../src/ed_menu.py:477
+#: ../../src/ed_menu.py:485
 msgid "&Save"
 msgstr "&Guardar"
 
-#: ../../src/ed_menu.py:776
+#: ../../src/ed_menu.py:787
 msgid "&Settings"
 msgstr "&Ajusts"
 
-#: ../../src/ed_menu.py:666
+#: ../../src/ed_menu.py:677
 msgid "&Toolbar"
 msgstr "Barra de ferramen&tes"
 
-#: ../../src/ed_menu.py:808
+#: ../../src/ed_menu.py:819
 msgid "&Tools"
 msgstr "&Ferramentes"
 
-#: ../../src/ed_menu.py:528
+#: ../../src/ed_menu.py:536
 msgid "&Undo"
 msgstr "&Desfer"
 
-#: ../../src/ed_menu.py:671
+#: ../../src/ed_menu.py:682
 msgid "&View"
 msgstr "&Vore"
 
@@ -126,11 +131,11 @@ msgstr "**Alies**"
 msgid "**New Value**"
 msgstr "**Nou Valor**"
 
-#: ../../plugins/Launch/launch/launch.py:439 ../../src/dev_tool.py:389
+#: ../../plugins/Launch/launch/launch.py:440 ../../src/dev_tool.py:389
 msgid "Abort"
 msgstr "Abortar"
 
-#: ../../src/ed_menu.py:819
+#: ../../src/ed_menu.py:830
 msgid "About"
 msgstr "Al voltant de"
 
@@ -138,15 +143,15 @@ msgstr "Al voltant de"
 msgid "Add a new executable"
 msgstr "Afegir un nou eixecutable"
 
-#: ../../src/ed_menu.py:552
+#: ../../src/ed_menu.py:563
 msgid "Add a new line after the current line"
 msgstr "Afegir una nova llínea després de la llínea actual"
 
-#: ../../src/ed_menu.py:556
+#: ../../src/ed_menu.py:567
 msgid "Add a new line before the current line"
 msgstr "Afegir una nova llínea abans de la llínea actual"
 
-#: ../../src/ed_menu.py:585
+#: ../../src/ed_menu.py:596
 msgid "Add and remove bookmarks"
 msgstr "Afegir i borrar marcadors"
 
@@ -191,11 +196,11 @@ msgstr "Atributs"
 msgid "Author"
 msgstr "Autor"
 
-#: ../../src/ed_menu.py:758 ../../src/prefdlg.py:722
+#: ../../src/ed_menu.py:769 ../../src/prefdlg.py:722
 msgid "Auto-Completion"
 msgstr "Auto-completat"
 
-#: ../../src/ed_menu.py:761 ../../src/prefdlg.py:724
+#: ../../src/ed_menu.py:772 ../../src/prefdlg.py:724
 msgid "Auto-Indent"
 msgstr "Auto-Sangnar"
 
@@ -231,19 +236,19 @@ msgstr "Encuadernar"
 msgid "Black/White"
 msgstr "Blanc/Negre"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:451
+#: ../../plugins/filebrowser/filebrowser/browser.py:465
 msgid "Bookmark Selected Path(s)"
 msgstr "Guardar rutes seleccionades"
 
-#: ../../src/ed_menu.py:584
+#: ../../src/ed_menu.py:595
 msgid "Bookmarks"
 msgstr "Marcadors"
 
-#: ../../src/ed_menu.py:765 ../../src/prefdlg.py:702
+#: ../../src/ed_menu.py:776 ../../src/prefdlg.py:702
 msgid "Bracket Highlighting"
 msgstr "Resaltat de claus"
 
-#: ../../src/ed_search.py:1178 ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1207 ../../src/style_editor.py:139
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -251,7 +256,7 @@ msgstr "Cancelar"
 msgid "Canceled"
 msgstr "Cancelat"
 
-#: ../../src/ed_menu.py:682
+#: ../../src/ed_menu.py:693
 msgid "Change Font Settings"
 msgstr "Canviar Ajusts de la tipografia"
 
@@ -285,11 +290,11 @@ msgstr "Buscar actualisacions a l'inici."
 msgid "Check if on disk file has been modified by others"
 msgstr "Comprovar si l'archiu ha sigut modificat per atres"
 
-#: ../../src/ed_main.py:377
+#: ../../src/ed_main.py:380
 msgid "Choose a File"
 msgstr "Seleccionar un Archiu"
 
-#: ../../src/ed_main.py:568
+#: ../../src/ed_main.py:575
 msgid "Choose a Save Location"
 msgstr "Selecciona un lloc per a guardar"
 
@@ -303,7 +308,7 @@ msgid "Class Definitions"
 msgstr "Definicions de Classe"
 
 #: ../../plugins/Launch/launch/launch.py:166 ../../src/ed_log.py:140
-#: ../../src/ed_search.py:1187
+#: ../../src/ed_search.py:1216
 msgid "Clear"
 msgstr "Netejar"
 
@@ -324,23 +329,23 @@ msgstr "Tancar \"%s\""
 msgid "Close All"
 msgstr "Tancar-h Tot"
 
-#: ../../src/ed_menu.py:473
+#: ../../src/ed_menu.py:481
 msgid "Close All Pages"
 msgstr "Tancar Totes les Pàgines"
 
-#: ../../src/ed_menu.py:468
+#: ../../src/ed_menu.py:476
 msgid "Close Current Page"
 msgstr "Tancar Pàgina Actual"
 
-#: ../../src/ed_menu.py:470
+#: ../../src/ed_menu.py:478
 msgid "Close Window"
 msgstr "Tancar Finestra"
 
-#: ../../src/ed_menu.py:475
+#: ../../src/ed_menu.py:483
 msgid "Close all open tabs"
 msgstr "Tancar totes les pestanyes obertes"
 
-#: ../../src/ed_menu.py:472
+#: ../../src/ed_menu.py:480
 msgid "Close the current window"
 msgstr "Tancar la finestra actual"
 
@@ -352,7 +357,7 @@ msgstr "Còdic"
 msgid "Code Browser"
 msgstr "Explorador de Còdic"
 
-#: ../../src/ed_menu.py:768 ../../src/prefdlg.py:704
+#: ../../src/ed_menu.py:779 ../../src/prefdlg.py:704
 msgid "Code Folding"
 msgstr "Plegat de Còdic"
 
@@ -364,7 +369,7 @@ msgstr "Explorador de Còdic"
 msgid "Color"
 msgstr "Color"
 
-#: ../../src/ed_menu.py:773
+#: ../../src/ed_menu.py:784
 msgid "Color Highlight Code Syntax"
 msgstr "Color per al resaltat de sintaxis del còdic"
 
@@ -380,19 +385,19 @@ msgstr "Color/predeterminat"
 msgid "Colour/White"
 msgstr "Color/Blanc"
 
-#: ../../src/ed_cmdbar.py:178
+#: ../../src/ed_cmdbar.py:179
 msgid "Command"
 msgstr "Comandament"
 
-#: ../../src/ed_menu.py:576
+#: ../../src/ed_menu.py:587
 msgid "Commands that affect an entire line"
 msgstr "Comandaments que afecten una llínea completa"
 
-#: ../../src/ed_menu.py:684
+#: ../../src/ed_menu.py:695
 msgid "Comment Lines"
 msgstr "Comentar Llínees"
 
-#: ../../src/ed_menu.py:686
+#: ../../src/ed_menu.py:697
 msgid "Comment the selected lines"
 msgstr "Comentar les llínees seleccionades"
 
@@ -404,31 +409,31 @@ msgstr "Configuració"
 msgid "Configure"
 msgstr "Configurar"
 
-#: ../../src/ed_menu.py:506
+#: ../../src/ed_menu.py:514
 msgid "Configure Printer"
 msgstr "Configurar Impressora"
 
-#: ../../src/ed_menu.py:705
+#: ../../src/ed_menu.py:716
 msgid "Convert selected text to all lowercase letters"
 msgstr "Convertir text seleccionat a lletres minúscules"
 
-#: ../../src/ed_menu.py:702
+#: ../../src/ed_menu.py:713
 msgid "Convert selected text to all uppercase letters"
 msgstr "Convertir text seleccionat a lletres MAYÚSCULES"
 
-#: ../../src/ed_menu.py:721
+#: ../../src/ed_menu.py:732
 msgid "Convert spaces to tabs in selected/all text"
 msgstr "Convertir espais a tabuladors en la selecció/tot el text"
 
-#: ../../src/ed_menu.py:724
+#: ../../src/ed_menu.py:735
 msgid "Convert tabs to spaces in selected/all text"
 msgstr "Convertir tabuladors a espais en la selecció/tot el text"
 
-#: ../../src/ed_stc.py:2168 ../../src/ed_toolbar.py:82
+#: ../../src/ed_stc.py:2241 ../../src/ed_toolbar.py:82
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../../src/ed_menu.py:563
+#: ../../src/ed_menu.py:574
 msgid "Copy Current Line"
 msgstr "Copiar Llínea Actual"
 
@@ -436,20 +441,20 @@ msgstr "Copiar Llínea Actual"
 msgid "Copy Full Path"
 msgstr "Copiar tot el camí"
 
-#: ../../src/ed_menu.py:561
+#: ../../src/ed_menu.py:572
 msgid "Copy Line"
 msgstr "Copiar Llínea"
 
-#: ../../src/ed_menu.py:540 ../../src/ed_toolbar.py:83
+#: ../../src/ed_menu.py:548 ../../src/ed_toolbar.py:83
 msgid "Copy Selected Text to Clipboard"
 msgstr "Copiar Text Seleccionat al Portapapers"
 
-#: ../../src/ed_main.py:1229
+#: ../../src/ed_main.py:1255
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:461
-#: ../../plugins/filebrowser/filebrowser/browser.py:565
+#: ../../plugins/filebrowser/filebrowser/browser.py:475
+#: ../../plugins/filebrowser/filebrowser/browser.py:579
 #, python-format
 msgid "Create Archive of \"%s\""
 msgstr "Crear archiu de \"%s\""
@@ -458,27 +463,27 @@ msgstr "Crear archiu de \"%s\""
 msgid "Created"
 msgstr "Creat"
 
-#: ../../src/ed_menu.py:535
+#: ../../src/ed_menu.py:543
 msgid "Cu&t"
 msgstr "Tal&lar"
 
-#: ../../src/ed_stc.py:2167 ../../src/ed_toolbar.py:80
+#: ../../src/ed_stc.py:2240 ../../src/ed_toolbar.py:80
 msgid "Cut"
 msgstr "Tallar"
 
-#: ../../src/ed_menu.py:560
+#: ../../src/ed_menu.py:571
 msgid "Cut Current Line"
 msgstr "Tallar Llínea Actual"
 
-#: ../../src/ed_menu.py:558
+#: ../../src/ed_menu.py:569
 msgid "Cut Line"
 msgstr "Tallar Llínea"
 
-#: ../../src/ed_menu.py:537 ../../src/ed_toolbar.py:81
+#: ../../src/ed_menu.py:545 ../../src/ed_toolbar.py:81
 msgid "Cut Selected Text from File"
 msgstr "Tallar Text Seleccionat de l'Archiu"
 
-#: ../../src/ed_search.py:744 ../../src/ed_search.py:748
+#: ../../src/ed_search.py:773 ../../src/ed_search.py:777
 msgid "DECODING ERROR"
 msgstr "ERRO DE CODIFICACIÓ"
 
@@ -534,7 +539,7 @@ msgstr "Mostrar Font"
 msgid "Do you wish to exit?"
 msgstr "¿Desija eixir?"
 
-#: ../../src/ed_pages.py:522
+#: ../../src/ed_pages.py:524
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -579,32 +584,32 @@ msgstr "Descarregant: %s"
 msgid "Downloads are incomplete"
 msgstr "Les descarregues no s'han completat"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:460
+#: ../../plugins/filebrowser/filebrowser/browser.py:474
 msgid "Duplicate"
 msgstr "Duplicar"
 
-#: ../../src/ed_menu.py:565
+#: ../../src/ed_menu.py:576
 msgid "Duplicate Line"
 msgstr "Llínea Duplicada"
 
-#: ../../src/ed_menu.py:567
+#: ../../src/ed_menu.py:578
 msgid "Duplicate the current line"
 msgstr "Duplicar la llínea actual"
 
-#: ../../src/ed_menu.py:514
+#: ../../src/ed_menu.py:522
 msgid "E&xit"
 msgstr "E&ixir"
 
-#: ../../src/ed_menu.py:745
+#: ../../src/ed_menu.py:756
 msgid "EOL Mode"
 msgstr "Final de llínea"
 
-#: ../../src/ed_main.py:546
+#: ../../src/ed_main.py:553
 #, python-format
 msgid "ERROR: %s"
 msgstr "ERRO: %s"
 
-#: ../../src/ed_main.py:584
+#: ../../src/ed_main.py:591
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "ERRO: Fallo al guardar %s"
@@ -613,23 +618,23 @@ msgstr "ERRO: Fallo al guardar %s"
 msgid "Edge Guide"
 msgstr "Marge de la Guia"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:447
+#: ../../plugins/filebrowser/filebrowser/browser.py:461
 msgid "Edit"
 msgstr "Editar"
 
-#: ../../src/ed_menu.py:602
+#: ../../src/ed_menu.py:613
 msgid "Edit Preferences / Settings"
 msgstr "Editar Preferències / Ajusts"
 
-#: ../../src/ed_menu.py:797
+#: ../../src/ed_menu.py:808
 msgid "Edit the way syntax is highlighted"
 msgstr "Modificar el resaltat"
 
-#: ../../src/ed_menu.py:646
+#: ../../src/ed_menu.py:657
 msgid "Editor"
 msgstr "Editor"
 
-#: ../../src/ed_menu.py:785
+#: ../../src/ed_menu.py:796
 msgid "Editor Command"
 msgstr "Comandament de l'editor"
 
@@ -658,11 +663,11 @@ msgstr ""
 "Erro:\n"
 "%(errormsg)s"
 
-#: ../../src/ed_main.py:1219
+#: ../../src/ed_main.py:1245
 msgid "Editra is a programmers text editor."
 msgstr "Editra es un editor de text per a programadors."
 
-#: ../../src/ed_menu.py:829
+#: ../../src/ed_menu.py:840
 msgid "Editra translations project"
 msgstr "Proyecte de traduccions d'Editra"
 
@@ -674,7 +679,7 @@ msgstr "Activar Vi Emulation"
 msgid "Encoding to try when auto detection fails"
 msgstr "Fallo de l'autodetecció a l'intentar la codificació"
 
-#: ../../src/ed_menu.py:746
+#: ../../src/ed_menu.py:757
 msgid "End of line character formatting"
 msgstr "Formateig de caràcter de final de llínea"
 
@@ -712,7 +717,7 @@ msgstr ""
 "Ajudans a millorar Editra pulsant en Informar Erro\n"
 "per a enviar la Traça de l'Erro mostrada a continuació"
 
-#: ../../src/ed_main.py:1160
+#: ../../src/ed_main.py:1186
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr "Erro: No se pot obrir %s"
@@ -725,11 +730,11 @@ msgstr "Comandaments Eixecutables"
 msgid "Executables"
 msgstr "Eixecutables"
 
-#: ../../plugins/Launch/launch/launch.py:563
+#: ../../plugins/Launch/launch/launch.py:564
 msgid "Exit Code"
 msgstr "Còdic d'eixida"
 
-#: ../../src/ed_menu.py:516
+#: ../../src/ed_menu.py:524
 msgid "Exit the Program"
 msgstr "Eixir del Programa"
 
@@ -745,7 +750,7 @@ msgstr "Exportar Fulla d'Estil"
 msgid "Extensions (space separated, no dots)"
 msgstr "Extensions (separades per espais, sense punts)"
 
-#: ../../src/ed_menu.py:749
+#: ../../src/ed_menu.py:760
 msgid "F&ormat"
 msgstr "F&ormat"
 
@@ -758,7 +763,7 @@ msgstr "Fallo"
 msgid "Failed to install %d plugins"
 msgstr "Fallo a l'instalar %d complements"
 
-#: ../../src/ed_main.py:973
+#: ../../src/ed_main.py:981
 #, python-format
 msgid "Failed to reload the file with: %(encoding)s"
 msgstr "Fallo al recarregar l'archiu en: %(encoding)s"
@@ -776,11 +781,11 @@ msgstr ""
 "Erro:\n"
 "%(errormsg)s"
 
-#: ../../src/ed_menu.py:830
+#: ../../src/ed_menu.py:841
 msgid "Feedback"
 msgstr "Correu electrònic"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:244
+#: ../../plugins/filebrowser/filebrowser/browser.py:246
 msgid "File Browser"
 msgstr "Navegador d'Archius"
 
@@ -788,7 +793,7 @@ msgstr "Navegador d'Archius"
 msgid "File History Length"
 msgstr "Tamany de l'Historial d'Archius"
 
-#: ../../src/ed_main.py:490
+#: ../../src/ed_main.py:493
 msgid "File Not Found"
 msgstr "Archiu No Trobat"
 
@@ -816,28 +821,28 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "Associacions de tipos d'archius"
 
-#: ../../src/ed_cmdbar.py:208 ../../src/ed_search.py:83
+#: ../../src/ed_cmdbar.py:209 ../../src/ed_search.py:83
 #: ../../src/ed_search.py:87 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Buscar"
 
-#: ../../src/ed_menu.py:596
+#: ../../src/ed_menu.py:607
 msgid "Find Next"
 msgstr "Busca Següent"
 
-#: ../../src/ed_search.py:1097
+#: ../../src/ed_search.py:1125
 msgid "Find Results"
 msgstr "Resultats de la busca"
 
-#: ../../src/ed_menu.py:589 ../../src/ed_toolbar.py:87
+#: ../../src/ed_menu.py:600 ../../src/ed_toolbar.py:87
 msgid "Find Text"
 msgstr "Buscar text"
 
-#: ../../src/ed_menu.py:592 ../../src/ed_toolbar.py:89
+#: ../../src/ed_menu.py:603 ../../src/ed_toolbar.py:89
 msgid "Find and Replace Text"
 msgstr "Buscar i reemplaçar text"
 
-#: ../../src/ed_menu.py:590
+#: ../../src/ed_menu.py:601
 msgid "Find/R&eplace"
 msgstr "Buscar/R&eemplaçar"
 
@@ -878,7 +883,7 @@ msgstr "Primer pla"
 msgid "Format"
 msgstr "Format"
 
-#: ../../src/ed_menu.py:735 ../../src/ed_menu.py:739 ../../src/ed_menu.py:743
+#: ../../src/ed_menu.py:746 ../../src/ed_menu.py:750 ../../src/ed_menu.py:754
 #, python-format
 msgid "Format all EOL characters to %s Mode"
 msgstr "Formatejar tots els caràcters de final de llínea al modo %s"
@@ -916,7 +921,7 @@ msgstr "Generar un archiu %s del document actual"
 msgid "Generator"
 msgstr "Generador"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:454
+#: ../../plugins/filebrowser/filebrowser/browser.py:468
 msgid "Get Info"
 msgstr "Obtindre informació"
 
@@ -933,23 +938,23 @@ msgstr "¿Anar a la pàgina de configuració?"
 msgid "Goto \"%s\""
 msgstr "Anar \"%s\""
 
-#: ../../src/ed_cmdbar.py:155
+#: ../../src/ed_cmdbar.py:156
 msgid "Goto Line"
 msgstr "Anar a la llínea"
 
-#: ../../src/ed_menu.py:651
+#: ../../src/ed_menu.py:662
 msgid "Goto Line Number"
 msgstr "Anar a la llínea número"
 
-#: ../../src/ed_menu.py:652
+#: ../../src/ed_menu.py:663
 msgid "Goto Matching Brace"
 msgstr "Anar al Corchet Corresponent"
 
-#: ../../src/ed_menu.py:787
+#: ../../src/ed_menu.py:798
 msgid "Goto command buffer"
 msgstr "Anar al comandament"
 
-#: ../../src/ed_menu.py:598
+#: ../../src/ed_menu.py:609
 msgid "Goto the next match"
 msgstr "Anar al següent"
 
@@ -957,19 +962,19 @@ msgstr "Anar al següent"
 msgid "Guide Column"
 msgstr "Guia de la columna"
 
-#: ../../src/ed_menu.py:767
+#: ../../src/ed_menu.py:778
 msgid "Highlight Brackets/Braces"
 msgstr "Resaltar claus/paréntesis"
 
-#: ../../src/ed_menu.py:625 ../../src/prefdlg.py:715
+#: ../../src/ed_menu.py:636 ../../src/prefdlg.py:715
 msgid "Highlight Caret Line"
 msgstr "Resaltar signe d'intercalació"
 
-#: ../../src/ed_menu.py:627
+#: ../../src/ed_menu.py:638
 msgid "Highlight the background of the current line"
 msgstr "Resaltar el fondo de la llínea actual"
 
-#: ../../src/ed_main.py:1221
+#: ../../src/ed_main.py:1247
 msgid "Homepage"
 msgstr "Pàgina principal"
 
@@ -985,7 +990,7 @@ msgstr "Icons"
 msgid "Identities"
 msgstr "Identitats"
 
-#: ../../src/ed_menu.py:693
+#: ../../src/ed_menu.py:704
 msgid "Indent Lines"
 msgstr "Sangnar llínees"
 
@@ -993,11 +998,11 @@ msgstr "Sangnar llínees"
 msgid "Indent Width"
 msgstr "Amplària del sangnat"
 
-#: ../../src/ed_menu.py:695
+#: ../../src/ed_menu.py:706
 msgid "Indent the selected lines"
 msgstr "Sangnar les llínees seleccionades"
 
-#: ../../src/ed_menu.py:630 ../../src/prefdlg.py:718
+#: ../../src/ed_menu.py:641 ../../src/prefdlg.py:718
 msgid "Indentation Guides"
 msgstr "Guies de sangnat"
 
@@ -1013,7 +1018,7 @@ msgstr "Text d'informació"
 msgid "Input Helpers"
 msgstr "Ajuda d'entrada"
 
-#: ../../src/ed_menu.py:710
+#: ../../src/ed_menu.py:721
 msgid "Insert spaces instead of tab characters with tab key"
 msgstr "Insertar espais en conte de caràcters tab en la tecla tab"
 
@@ -1041,12 +1046,12 @@ msgstr "Erro en l'instalació"
 msgid "Installed Version"
 msgstr "Versió instalada"
 
-#: ../../src/ed_search.py:192
+#: ../../src/ed_search.py:193
 #, fuzzy, python-format
 msgid "Invalid expression \"%s\""
 msgstr "Archiu no vàlit: %s"
 
-#: ../../src/ed_pages.py:506
+#: ../../src/ed_pages.py:508
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Archiu no vàlit: %s"
@@ -1055,11 +1060,11 @@ msgstr "Archiu no vàlit: %s"
 msgid "Inverse"
 msgstr "Invers"
 
-#: ../../src/ed_menu.py:569
+#: ../../src/ed_menu.py:580
 msgid "Join Lines"
 msgstr "Unir llínees"
 
-#: ../../src/ed_menu.py:571
+#: ../../src/ed_menu.py:582
 msgid "Join the Selected Lines"
 msgstr "Unir llínees seleccionades"
 
@@ -1079,7 +1084,7 @@ msgstr "Perfil Clau"
 msgid "Keybindings"
 msgstr "Claus d'encuadernació"
 
-#: ../../src/ed_menu.py:788
+#: ../../src/ed_menu.py:799
 msgid "Keyword Helper"
 msgstr "Ajuda de paraules clau"
 
@@ -1111,19 +1116,19 @@ msgstr "Distribució"
 msgid "Lexer"
 msgstr "Lèxic"
 
-#: ../../src/ed_main.py:128
+#: ../../src/ed_main.py:129
 msgid "Lexers"
 msgstr "Lèxics"
 
-#: ../../src/ed_main.py:1223
+#: ../../src/ed_main.py:1249
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr "Llicència: wxWindows (veja COPYING.txt per a la llicència completa)"
 
-#: ../../src/ed_menu.py:575
+#: ../../src/ed_menu.py:586
 msgid "Line Edit"
 msgstr "Editar llínea"
 
-#: ../../src/ed_stc.py:787
+#: ../../src/ed_stc.py:846
 #, python-format
 msgid "Line: %d  Column: %d"
 msgstr "Llínea: %d  Columna: %d"
@@ -1132,15 +1137,15 @@ msgstr "Llínea: %d  Columna: %d"
 msgid "Load Last Session"
 msgstr "Carregar última sessió"
 
-#: ../../src/ed_menu.py:498
+#: ../../src/ed_menu.py:506
 msgid "Load Profile"
 msgstr "Carregar perfil"
 
-#: ../../src/ed_main.py:623 ../../src/ed_menu.py:500
+#: ../../src/ed_main.py:630 ../../src/ed_menu.py:508
 msgid "Load a Custom Profile"
 msgstr "Carregar un perfil personalisat"
 
-#: ../../src/ed_menu.py:502
+#: ../../src/ed_menu.py:510
 msgid "Load and save custom Profiles"
 msgstr "Carregar/Guardar els perfils personalisats"
 
@@ -1148,7 +1153,7 @@ msgstr "Carregar/Guardar els perfils personalisats"
 msgid "Load files from last session on startup"
 msgstr "Carregar archius de l'última sessió a l'inici"
 
-#: ../../src/ed_main.py:630
+#: ../../src/ed_main.py:637
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr "Perfil carregat: %s"
@@ -1157,11 +1162,11 @@ msgstr "Perfil carregat: %s"
 msgid "Locale Settings"
 msgstr "Ajusts de localisació"
 
-#: ../../src/ed_menu.py:703
+#: ../../src/ed_menu.py:714
 msgid "Lowercase"
 msgstr "Minúscules"
 
-#: ../../src/ed_menu.py:733 ../../src/prefdlg.py:528
+#: ../../src/ed_menu.py:744 ../../src/prefdlg.py:528
 msgid "Macintosh (\\r)"
 msgstr "Macintosh (\\r)"
 
@@ -1177,15 +1182,15 @@ msgstr "Macros"
 msgid "Main display font for various UI components"
 msgstr "Mostrar font principal per a varis components UI"
 
-#: ../../src/ed_menu.py:794
+#: ../../src/ed_menu.py:805
 msgid "Manage, Download, and Install plugins"
 msgstr "Gestionar, descarregar e instalar complements"
 
-#: ../../src/ed_main.py:130
+#: ../../src/ed_main.py:131
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Establir lèxic/sintaxis manualment"
 
-#: ../../src/ed_cmdbar.py:218
+#: ../../src/ed_cmdbar.py:219
 msgid "Match Case"
 msgstr "Comprovar MAYÚSCULES/minúscules"
 
@@ -1214,7 +1219,7 @@ msgstr "Modificador 2"
 msgid "Modules"
 msgstr "Mòduls"
 
-#: ../../src/ed_menu.py:654
+#: ../../src/ed_menu.py:665
 msgid "Move caret matching brace"
 msgstr "Moure al Corchet Corresponent"
 
@@ -1239,23 +1244,23 @@ msgstr "Ret"
 msgid "New"
 msgstr "Nou"
 
-#: ../../src/ed_menu.py:455
+#: ../../src/ed_menu.py:463
 msgid "New &Window"
 msgstr "Nova &Finestra"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:458
+#: ../../plugins/filebrowser/filebrowser/browser.py:472
 msgid "New File"
 msgstr "Nou archiu"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:457
+#: ../../plugins/filebrowser/filebrowser/browser.py:471
 msgid "New Folder"
 msgstr "Nova Carpeta"
 
-#: ../../src/ed_menu.py:550
+#: ../../src/ed_menu.py:561
 msgid "New Line After"
 msgstr "Nova llínea després"
 
-#: ../../src/ed_menu.py:554
+#: ../../src/ed_menu.py:565
 msgid "New Line Before"
 msgstr "Nova llínea abans"
 
@@ -1267,11 +1272,11 @@ msgstr "Nou perfil"
 msgid "New Tab"
 msgstr "Nova pestanya"
 
-#: ../../src/ed_cmdbar.py:211
+#: ../../src/ed_cmdbar.py:212
 msgid "Next"
 msgstr "Següent"
 
-#: ../../src/ed_menu.py:656
+#: ../../src/ed_menu.py:667
 msgid "Next Bookmark"
 msgstr "Següent marcador"
 
@@ -1279,7 +1284,7 @@ msgstr "Següent marcador"
 msgid "No Description Available"
 msgstr "No hi ha descripció disponible"
 
-#: ../../src/ed_pages.py:516
+#: ../../src/ed_pages.py:518
 msgid "No Valid Files to Open"
 msgstr "No hi han archius vàlits per a obrir"
 
@@ -1291,7 +1296,7 @@ msgstr "Ningun"
 msgid "Normal"
 msgstr "Normal"
 
-#: ../../src/ed_search.py:353
+#: ../../src/ed_search.py:364
 msgid "Not implemented"
 msgstr "No implementat"
 
@@ -1299,19 +1304,19 @@ msgstr "No implementat"
 msgid "Ok"
 msgstr "Acceptar"
 
-#: ../../src/ed_menu.py:824
+#: ../../src/ed_menu.py:835
 msgid "Online Documentation"
 msgstr "Documentació en llínea"
 
-#: ../../src/ed_menu.py:826
+#: ../../src/ed_menu.py:837
 msgid "Online project documentation and help guides"
 msgstr "Documentació del proyecte i guies d'ajuda en llínea"
 
-#: ../../src/ed_menu.py:461 ../../src/ed_toolbar.py:72
+#: ../../src/ed_menu.py:469 ../../src/ed_toolbar.py:72
 msgid "Open"
 msgstr "Obrir"
 
-#: ../../src/ed_menu.py:463
+#: ../../src/ed_menu.py:471
 msgid "Open &Recent"
 msgstr "Obrir &recent"
 
@@ -1323,7 +1328,7 @@ msgstr "Obrir una shell Python"
 msgid "Open Code Browser Sidepanel"
 msgstr "Obrir panel navegador de còdic"
 
-#: ../../src/ed_pages.py:527
+#: ../../src/ed_pages.py:529
 msgid "Open Directory?"
 msgstr "¿Obrir directori?"
 
@@ -1331,7 +1336,7 @@ msgstr "¿Obrir directori?"
 msgid "Open File"
 msgstr "Obrir archiu"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:245
+#: ../../plugins/filebrowser/filebrowser/browser.py:247
 msgid "Open File Browser Sidepanel"
 msgstr "Obrir panel navegador d'archius"
 
@@ -1339,29 +1344,33 @@ msgstr "Obrir panel navegador d'archius"
 msgid "Open files in new windows by default"
 msgstr "Obrir archius en finestres noves predeterminades"
 
-#: ../../src/ed_menu.py:595
+#: ../../src/ed_menu.py:606
 msgid "Open the Quick Find Bar"
 msgstr "Obrir barra de busca ràpida"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:448
+#: ../../plugins/filebrowser/filebrowser/browser.py:462
 msgid "Open with "
 msgstr "Obrir en "
 
-#: ../../src/ed_pages.py:547
+#: ../../src/ed_pages.py:549
 #, python-format
 msgid "Opened file: %s"
 msgstr "Archiu obert: %s"
 
-#: ../../src/ed_main.py:1157
+#: ../../src/ed_main.py:1183
 #, python-format
 msgid "Opening %s"
 msgstr "Obrint %s"
+
+#: ../../src/ed_menu.py:552
+msgid "P&aste After"
+msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Packages"
 msgstr "Paquets"
 
-#: ../../src/ed_menu.py:504
+#: ../../src/ed_menu.py:512
 msgid "Page Set&up"
 msgstr "Configuració de Pàgina"
 
@@ -1374,12 +1383,17 @@ msgstr "Pàgina: %d"
 msgid "Password"
 msgstr "Contrasenya"
 
-#: ../../src/ed_stc.py:2169 ../../src/ed_toolbar.py:84
+#: ../../src/ed_stc.py:2242 ../../src/ed_toolbar.py:84
 msgid "Paste"
 msgstr "Apegar"
 
-#: ../../src/ed_menu.py:543 ../../src/ed_toolbar.py:85
+#: ../../src/ed_menu.py:551 ../../src/ed_toolbar.py:85
 msgid "Paste Text from Clipboard to File"
+msgstr "Apegar text del portapapers a l'archiu"
+
+#: ../../src/ed_menu.py:554
+#, fuzzy
+msgid "Paste Text from Clipboard to File after the cursor"
 msgstr "Apegar text del portapapers a l'archiu"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:104
@@ -1398,7 +1412,7 @@ msgstr "Nom de la perspectiva"
 msgid "Perspective to Delete"
 msgstr "Perspectiva a Borrar"
 
-#: ../../src/ed_main.py:124
+#: ../../src/ed_main.py:125
 msgid "Perspectives"
 msgstr "Perspectives"
 
@@ -1406,7 +1420,7 @@ msgstr "Perspectives"
 msgid "Plain Text"
 msgstr "Text pla"
 
-#: ../../src/ed_main.py:1222
+#: ../../src/ed_main.py:1248
 msgid "Platform Info"
 msgstr "Informació de plataforma"
 
@@ -1418,7 +1432,7 @@ msgstr "Per favor comprove el diàlec preferent per a comprovar les seues prefer
 msgid "Plugin"
 msgstr "Complement"
 
-#: ../../src/ed_main.py:866 ../../src/ed_menu.py:792
+#: ../../src/ed_main.py:873 ../../src/ed_menu.py:803
 msgid "Plugin Manager"
 msgstr "Gestor de complements"
 
@@ -1426,7 +1440,7 @@ msgstr "Gestor de complements"
 msgid "Port Number"
 msgstr "Número de port"
 
-#: ../../src/ed_menu.py:600
+#: ../../src/ed_menu.py:611
 msgid "Pr&eferences"
 msgstr "Pr&eferències"
 
@@ -1442,15 +1456,15 @@ msgstr "Preferències - Editra"
 msgid "Preview"
 msgstr "Vista previa"
 
-#: ../../src/ed_menu.py:509
+#: ../../src/ed_menu.py:517
 msgid "Preview Printout"
 msgstr "Vista previa de l'impressió"
 
-#: ../../src/ed_cmdbar.py:215
+#: ../../src/ed_cmdbar.py:216
 msgid "Previous"
 msgstr "Anterior"
 
-#: ../../src/ed_menu.py:659
+#: ../../src/ed_menu.py:670
 msgid "Previous Bookmark"
 msgstr "Marcador anterior"
 
@@ -1462,11 +1476,11 @@ msgstr "Font principal"
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../../src/ed_menu.py:512 ../../src/ed_toolbar.py:75
+#: ../../src/ed_menu.py:520 ../../src/ed_toolbar.py:75
 msgid "Print Current File"
 msgstr "Imprimir archiu actual"
 
-#: ../../src/ed_menu.py:507
+#: ../../src/ed_menu.py:515
 msgid "Print Pre&view"
 msgstr "Vista Pr&evia"
 
@@ -1482,11 +1496,11 @@ msgstr "Modo d'impressora"
 msgid "Procedure Definitions"
 msgstr "Definicions de Procediment"
 
-#: ../../src/ed_main.py:604 ../../src/ed_main.py:625 ../../src/ed_menu.py:501
+#: ../../src/ed_main.py:611 ../../src/ed_main.py:632 ../../src/ed_menu.py:509
 msgid "Profile"
 msgstr "Perfil"
 
-#: ../../src/ed_main.py:609
+#: ../../src/ed_main.py:616
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr "Perfil guardat com: %s"
@@ -1503,7 +1517,7 @@ msgstr "Comandament Eixecutable del Programa"
 msgid "Programs"
 msgstr "Programes"
 
-#: ../../src/ed_menu.py:820
+#: ../../src/ed_menu.py:831
 msgid "Project Homepage"
 msgstr "Web del proyecte"
 
@@ -1511,7 +1525,7 @@ msgstr "Web del proyecte"
 msgid "Protocols"
 msgstr "Protocols"
 
-#: ../../src/ed_menu.py:790
+#: ../../src/ed_menu.py:801
 msgid "Provides a Contextual Help Menu Listing Standard Keywords/Functions"
 msgstr "Proporciona un menú d'ajuda contextual que llista les paraules clau/funcions estàndarts."
 
@@ -1532,44 +1546,44 @@ msgstr "Posar un element en l'estant"
 msgid "Rate: %.2f Kb/s"
 msgstr "Velocitat: %.2f Kb/s"
 
-#: ../../src/ed_search.py:782
+#: ../../src/ed_search.py:811
 msgid "Recent Searches"
 msgstr "Busques recents"
 
-#: ../../src/ed_menu.py:464
+#: ../../src/ed_menu.py:472
 msgid "Recently Opened Files"
 msgstr "Archius oberts recentment"
 
-#: ../../src/ed_stc.py:1520
+#: ../../src/ed_stc.py:1592
 msgid "Recording Finished"
 msgstr "Gravat finalisat"
 
-#: ../../src/ed_stc.py:1507
+#: ../../src/ed_stc.py:1579
 msgid "Recording Macro"
 msgstr "Gravant macro"
 
-#: ../../src/ed_menu.py:531 ../../src/ed_stc.py:2165
+#: ../../src/ed_menu.py:539 ../../src/ed_stc.py:2238
 #: ../../src/ed_toolbar.py:78
 msgid "Redo"
 msgstr "Refer"
 
-#: ../../src/ed_menu.py:533 ../../src/ed_toolbar.py:78
+#: ../../src/ed_menu.py:541 ../../src/ed_toolbar.py:78
 msgid "Redo Last Undo"
 msgstr "Refer l'última acció"
 
-#: ../../src/ed_cmdbar.py:221
+#: ../../src/ed_cmdbar.py:222
 msgid "Regex"
 msgstr ""
 
-#: ../../src/ed_search.py:193
+#: ../../src/ed_search.py:194
 msgid "Regex Compile Error"
 msgstr ""
 
-#: ../../src/ed_menu.py:492
+#: ../../src/ed_menu.py:500
 msgid "Reload the file with a specified encoding"
 msgstr "Recarregar l'archiu en una codificació especificada"
 
-#: ../../src/ed_main.py:961 ../../src/ed_menu.py:490
+#: ../../src/ed_main.py:969 ../../src/ed_menu.py:498
 msgid "Reload with Encoding"
 msgstr "Recarregar en codificació"
 
@@ -1585,7 +1599,7 @@ msgstr "Recordar posició de la finestra a l'eixir"
 msgid "Remember Window Size on Exit"
 msgstr "Recordar tamany de la finestra a l'eixir"
 
-#: ../../src/ed_menu.py:581
+#: ../../src/ed_menu.py:592
 msgid "Remove All Bookmarks"
 msgstr "Borrar tots els marcadors"
 
@@ -1593,7 +1607,7 @@ msgstr "Borrar tots els marcadors"
 msgid "Remove Saved Path"
 msgstr "Borrar ruta guardada"
 
-#: ../../src/ed_menu.py:583
+#: ../../src/ed_menu.py:594
 msgid "Remove all bookmarks from the current document"
 msgstr "Borrar tots els marcadors del document actual"
 
@@ -1601,11 +1615,11 @@ msgstr "Borrar tots els marcadors del document actual"
 msgid "Remove selection from list"
 msgstr "Borrar selecció de llista"
 
-#: ../../src/ed_menu.py:727
+#: ../../src/ed_menu.py:738
 msgid "Remove trailing whitespace"
 msgstr "Borrar espais al final"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:455
+#: ../../plugins/filebrowser/filebrowser/browser.py:469
 msgid "Rename"
 msgstr "Renomenar"
 
@@ -1617,11 +1631,11 @@ msgstr "Informe d'erro"
 msgid "Retrieving Plugin List"
 msgstr "Obtenint llista de complements"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:449
+#: ../../plugins/filebrowser/filebrowser/browser.py:463
 msgid "Reveal in "
 msgstr "Revelar En "
 
-#: ../../src/ed_menu.py:489
+#: ../../src/ed_menu.py:497
 msgid "Revert file to last save point"
 msgstr "Tornar l'archiu a l'últim punt guardat"
 
@@ -1629,13 +1643,13 @@ msgstr "Tornar l'archiu a l'últim punt guardat"
 msgid "Revert to Default"
 msgstr "Restablir predeterminats"
 
-#: ../../src/ed_menu.py:487
+#: ../../src/ed_menu.py:495
 msgid "Revert to Saved"
 msgstr "Tornar a guardar"
 
 #: ../../plugins/Launch/launch/__init__.py:91
 #: ../../plugins/Launch/launch/launch.py:158
-#: ../../plugins/Launch/launch/launch.py:445
+#: ../../plugins/Launch/launch/launch.py:446
 msgid "Run"
 msgstr "Eixecutar"
 
@@ -1656,27 +1670,27 @@ msgstr "Guardar"
 msgid "Save \"%s\""
 msgstr "Guardar \"%s\""
 
-#: ../../src/ed_menu.py:480
+#: ../../src/ed_menu.py:488
 msgid "Save &As"
 msgstr "Guardar &Com"
 
-#: ../../src/ed_menu.py:483
+#: ../../src/ed_menu.py:491
 msgid "Save All"
 msgstr "Guardar-ho tot"
 
-#: ../../src/ed_menu.py:482
+#: ../../src/ed_menu.py:490
 msgid "Save As"
 msgstr "Guardar com"
 
-#: ../../src/ed_main.py:1185
+#: ../../src/ed_main.py:1211
 msgid "Save Changes?"
 msgstr "¿Guardar canvis?"
 
-#: ../../src/ed_menu.py:479 ../../src/ed_toolbar.py:73
+#: ../../src/ed_menu.py:487 ../../src/ed_toolbar.py:73
 msgid "Save Current File"
 msgstr "Guardar archiu actual"
 
-#: ../../src/ed_menu.py:497
+#: ../../src/ed_menu.py:505
 msgid "Save Current Settings to a New Profile"
 msgstr "Guardar ajusts actuals en un nou perfil"
 
@@ -1692,7 +1706,7 @@ msgstr "Guardar erro"
 msgid "Save Perspective"
 msgstr "Guardar perpectiva"
 
-#: ../../src/ed_menu.py:495
+#: ../../src/ed_menu.py:503
 msgid "Save Profile"
 msgstr "Guardar perfil"
 
@@ -1704,7 +1718,7 @@ msgstr "Guardar rutes seleccionades"
 msgid "Save Styles"
 msgstr "Guardar estils"
 
-#: ../../src/ed_menu.py:485
+#: ../../src/ed_menu.py:493
 msgid "Save all open pages"
 msgstr "Guardar totes les pàgines obertes"
 
@@ -1712,12 +1726,12 @@ msgstr "Guardar totes les pàgines obertes"
 msgid "Save the current window layout"
 msgstr "Guardar el diseny actual de la finestra"
 
-#: ../../src/ed_main.py:586
+#: ../../src/ed_main.py:593
 #, python-format
 msgid "Saved File As: %s"
 msgstr "Guardar archiu com: %s"
 
-#: ../../src/ed_main.py:543
+#: ../../src/ed_main.py:550
 #, python-format
 msgid "Saved File: %s"
 msgstr "Archiu guardat: %s"
@@ -1726,28 +1740,28 @@ msgstr "Archiu guardat: %s"
 msgid "Script Arguments"
 msgstr "Arguments del script"
 
-#: ../../src/ed_search.py:1225
+#: ../../src/ed_search.py:1260
 #, python-format
 msgid "Search Complete: %d matching lines where found"
 msgstr "Busca completa: s'han trobat %d llínees coincidents"
 
-#: ../../src/ed_search.py:1205
+#: ../../src/ed_search.py:1234
 msgid "Search Started"
 msgstr "Escomençar busca"
 
-#: ../../src/ed_search.py:1218
+#: ../../src/ed_search.py:1253
 msgid "Search complete"
 msgstr "Busca completa"
 
-#: ../../src/ed_search.py:243
+#: ../../src/ed_search.py:245
 msgid "Search wrapped to bottom"
 msgstr "Busca cíclica cap avant"
 
-#: ../../src/ed_search.py:238
+#: ../../src/ed_search.py:240
 msgid "Search wrapped to top"
 msgstr "Busca cíclica cap arrere"
 
-#: ../../src/ed_search.py:1295
+#: ../../src/ed_search.py:1334
 #, python-format
 msgid "Searching in : %s"
 msgstr "Buscant en : %s"
@@ -1760,19 +1774,19 @@ msgstr "Font secundaria"
 msgid "Sections"
 msgstr "Seccions"
 
-#: ../../src/ed_menu.py:545
+#: ../../src/ed_menu.py:556
 msgid "Select &All"
 msgstr "Seleccionar-ho &Tot"
 
-#: ../../src/ed_stc.py:2174
+#: ../../src/ed_stc.py:2247
 msgid "Select All"
 msgstr "Seleccionar-ho tot"
 
-#: ../../src/ed_menu.py:547
+#: ../../src/ed_menu.py:558
 msgid "Select All Text in Document"
 msgstr "Seleccionar tot el text del document"
 
-#: ../../src/ed_main.py:960
+#: ../../src/ed_main.py:968
 msgid "Select an encoding to reload the file with"
 msgstr "Seleccionar una codificació per a recarregar l'archiu en"
 
@@ -1784,7 +1798,7 @@ msgstr "Seleccionar complement a descarregar"
 msgid "Select the desired plugins and then Click Download"
 msgstr "Selecciona els complements desijats i pulsa Descarregar"
 
-#: ../../src/ed_menu.py:832
+#: ../../src/ed_menu.py:843
 msgid "Send bug reports and suggestions"
 msgstr "Enviar informes de fallos i sugerències"
 
@@ -1812,15 +1826,15 @@ msgstr "Ajusts"
 msgid "Shelf"
 msgstr "Estant"
 
-#: ../../src/ed_menu.py:637 ../../src/ed_menu.py:639 ../../src/prefdlg.py:551
+#: ../../src/ed_menu.py:648 ../../src/ed_menu.py:650 ../../src/prefdlg.py:551
 msgid "Show EOL Markers"
 msgstr "Mostrar caràcters del final de llínea"
 
-#: ../../src/ed_menu.py:634
+#: ../../src/ed_menu.py:645
 msgid "Show Edge Guide"
 msgstr "Mostrar guia de marge"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:237
+#: ../../plugins/filebrowser/filebrowser/browser.py:239
 msgid "Show Hidden Files"
 msgstr "Mostrar archius ocults"
 
@@ -1828,15 +1842,15 @@ msgstr "Mostrar archius ocults"
 msgid "Show Icons on Tabs"
 msgstr "Mostrar Icons en pestanyes"
 
-#: ../../src/ed_menu.py:632
+#: ../../src/ed_menu.py:643
 msgid "Show Indentation Guides"
 msgstr "Mostrar guies de sagnat"
 
-#: ../../src/ed_menu.py:642
+#: ../../src/ed_menu.py:653
 msgid "Show Line Number Margin"
 msgstr "Mostrar marge de número de llínea"
 
-#: ../../src/ed_menu.py:640 ../../src/prefdlg.py:553
+#: ../../src/ed_menu.py:651 ../../src/prefdlg.py:553
 msgid "Show Line Numbers"
 msgstr "Mostrar números de llínea"
 
@@ -1848,23 +1862,23 @@ msgstr "Mostrar estant"
 msgid "Show Splash Screen"
 msgstr "Mostrar pantalla de benvinguda"
 
-#: ../../src/ed_menu.py:665 ../../src/prefdlg.py:959
+#: ../../src/ed_menu.py:676 ../../src/prefdlg.py:959
 msgid "Show Status Bar"
 msgstr "Mostrar Barra d'Estat"
 
-#: ../../src/ed_menu.py:668 ../../src/prefdlg.py:961
+#: ../../src/ed_menu.py:679 ../../src/prefdlg.py:961
 msgid "Show Toolbar"
 msgstr "Mostrar barra de ferramentes"
 
-#: ../../src/ed_menu.py:643 ../../src/prefdlg.py:555
+#: ../../src/ed_menu.py:654 ../../src/prefdlg.py:555
 msgid "Show Whitespace"
 msgstr "Mostrar espais en blanc"
 
-#: ../../src/ed_menu.py:645
+#: ../../src/ed_menu.py:656
 msgid "Show Whitespace Markers"
 msgstr "Mostrar espais en blanc"
 
-#: ../../src/ed_search.py:1097
+#: ../../src/ed_search.py:1125
 msgid "Show a find results screen"
 msgstr "Mostrar pantalla de resultats de busca"
 
@@ -1876,7 +1890,7 @@ msgstr "Mostrar eixida de"
 msgid "Show the Shelf"
 msgstr "Mostrar l'estant"
 
-#: ../../src/ed_menu.py:636
+#: ../../src/ed_menu.py:647
 msgid "Show the edge column guide"
 msgstr "Mostrar el marge de la guia de la columna"
 
@@ -1889,11 +1903,11 @@ msgstr "Tamany"
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr "Alguns estils han canviat ¿Vols guardar-los abans d'eixir?"
 
-#: ../../src/ed_search.py:352
+#: ../../src/ed_search.py:363
 msgid "Sorry will be ready for next version"
 msgstr "Ho sentim, estarà per a la pròxima versió"
 
-#: ../../src/ed_menu.py:719
+#: ../../src/ed_menu.py:730
 msgid "Spaces to Tabs"
 msgstr "Espais a tabuladors"
 
@@ -1905,11 +1919,11 @@ msgstr "Escomençar un nou archiu"
 msgid "Start a blank new style"
 msgstr "Escomençar un nou estil en blanc"
 
-#: ../../src/ed_menu.py:454
+#: ../../src/ed_menu.py:462
 msgid "Start a new file in a new tab"
 msgstr "Escomençar un nou archiu en una nova pestanya"
 
-#: ../../src/ed_menu.py:457
+#: ../../src/ed_menu.py:465
 msgid "Start a new file in a new window"
 msgstr "Escomençar un nou archiu en una finestra nova"
 
@@ -1921,7 +1935,7 @@ msgstr "Ajusts d'inici"
 msgid "Status Unknown"
 msgstr "Estat desconegut"
 
-#: ../../src/ed_menu.py:795 ../../src/style_editor.py:63
+#: ../../src/ed_menu.py:806 ../../src/style_editor.py:63
 msgid "Style Editor"
 msgstr "Editor d'estils"
 
@@ -1955,7 +1969,7 @@ msgstr "Canviar lèxic a %s"
 msgid "Syntax Files"
 msgstr "Archius de sintaxis"
 
-#: ../../src/ed_menu.py:771 ../../src/prefdlg.py:452 ../../src/prefdlg.py:819
+#: ../../src/ed_menu.py:782 ../../src/prefdlg.py:452 ../../src/prefdlg.py:819
 msgid "Syntax Highlighting"
 msgstr "Resaltat de sintaxis"
 
@@ -1967,7 +1981,7 @@ msgstr "Directori de sistema"
 msgid "Tab Width"
 msgstr "Amplària del tabulador"
 
-#: ../../src/ed_menu.py:722
+#: ../../src/ed_menu.py:733
 msgid "Tabs to Spaces"
 msgstr "Tabuladors a espais"
 
@@ -1996,7 +2010,7 @@ msgstr ""
 "Tria una codificació i seleccione Acceptar per a obrir l'archiu en la codificació seleccionada.\n"
 "Pulsa Cancelar per a cancelar l'acció d'obrir l'archiu"
 
-#: ../../src/ed_main.py:1182
+#: ../../src/ed_main.py:1208
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -2006,16 +2020,16 @@ msgstr ""
 "L'archiu: \"%s\" ha sigut modificat des de l'última vegada que s'ha guardat.\n"
 "¿Desija guardar els canvis?"
 
-#: ../../src/ed_pages.py:514
+#: ../../src/ed_pages.py:516
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "No existixen archius que Editra puga obrir en %s"
 
-#: ../../src/ed_stc.py:2172
+#: ../../src/ed_stc.py:2245
 msgid "To Lowercase"
 msgstr "A minúscules"
 
-#: ../../src/ed_stc.py:2171
+#: ../../src/ed_stc.py:2244
 msgid "To Uppercase"
 msgstr "A MAYÚSCULES"
 
@@ -2038,23 +2052,23 @@ msgstr "Per a activar un complement marca la casella al costat de la seua etique
 msgid "To open multiple files at once %s+Click to select the desired files/folders then hit Enter to open them all at once"
 msgstr "Per a obrir múltiples archius d'una vegada pulsa %s+Clic per a seleccionar els archius/carpetes seleccionades i pulsa Intro per a obrir-los"
 
-#: ../../src/ed_menu.py:763
+#: ../../src/ed_menu.py:774
 msgid "Toggle Auto-Indentation functionality"
 msgstr "Activar/desactivar auto sagnat"
 
-#: ../../src/ed_menu.py:578
+#: ../../src/ed_menu.py:589
 msgid "Toggle Bookmark"
 msgstr "Activar/desactivar Marcador"
 
-#: ../../src/ed_menu.py:770
+#: ../../src/ed_menu.py:781
 msgid "Toggle Code Folding"
 msgstr "Activar/desactivar còdic de carpeta"
 
-#: ../../src/ed_menu.py:647
+#: ../../src/ed_menu.py:658
 msgid "Toggle Editor View Options"
 msgstr "Activar/desactivar opcions de vista de l'editor"
 
-#: ../../src/ed_menu.py:580
+#: ../../src/ed_menu.py:591
 msgid "Toggle bookmark of the current line"
 msgstr "Activar/desactivar marcador de la llínea actual"
 
@@ -2062,7 +2076,7 @@ msgstr "Activar/desactivar marcador de la llínea actual"
 msgid "Toolbar Icon Size"
 msgstr "Tamany d'icons de la barra de ferramentes"
 
-#: ../../src/ed_menu.py:827
+#: ../../src/ed_menu.py:838
 msgid "Translate Editra"
 msgstr "Traducció Editra"
 
@@ -2070,15 +2084,15 @@ msgstr "Traducció Editra"
 msgid "Transparency"
 msgstr "Transparència"
 
-#: ../../src/ed_menu.py:572
+#: ../../src/ed_menu.py:583
 msgid "Transpose Line"
 msgstr "Intercanviar llínea"
 
-#: ../../src/ed_menu.py:574
+#: ../../src/ed_menu.py:585
 msgid "Transpose the current line with the previous one"
 msgstr "Intercanviar la llínea actual i l'anterior"
 
-#: ../../src/ed_menu.py:725
+#: ../../src/ed_menu.py:736
 msgid "Trim Trailing Whitespace"
 msgstr "Eliminar espais al final"
 
@@ -2098,31 +2112,31 @@ msgstr "No se pot recuperar la llista de complements"
 msgid "Unable to retrieve version info"
 msgstr "No se pot obtindre l'informació de la versió"
 
-#: ../../src/ed_menu.py:687
+#: ../../src/ed_menu.py:698
 msgid "Uncomment Lines"
 msgstr "Descomentar llínees"
 
-#: ../../src/ed_menu.py:689
+#: ../../src/ed_menu.py:700
 msgid "Uncomment the selected lines"
 msgstr "Descomentar les llínees seleccionades"
 
-#: ../../src/ed_stc.py:2164 ../../src/ed_toolbar.py:77
+#: ../../src/ed_stc.py:2237 ../../src/ed_toolbar.py:77
 msgid "Undo"
 msgstr "Desfer"
 
-#: ../../src/ed_menu.py:530 ../../src/ed_toolbar.py:77
+#: ../../src/ed_menu.py:538 ../../src/ed_toolbar.py:77
 msgid "Undo Last Action"
 msgstr "Desfer l'última acció"
 
-#: ../../src/ed_menu.py:696
+#: ../../src/ed_menu.py:707
 msgid "Unindent Lines"
 msgstr "Llevar indentació de les llínees"
 
-#: ../../src/ed_menu.py:698
+#: ../../src/ed_menu.py:709
 msgid "Unindent the selected lines"
 msgstr "Llevar indentació de la llínees seleccionades"
 
-#: ../../src/ed_menu.py:737 ../../src/prefdlg.py:528
+#: ../../src/ed_menu.py:748 ../../src/prefdlg.py:528
 msgid "Unix (\\n)"
 msgstr "Unix (\\n)"
 
@@ -2131,7 +2145,7 @@ msgstr "Unix (\\n)"
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../../src/ed_search.py:539
+#: ../../src/ed_search.py:559
 #, fuzzy
 msgid "Untitled"
 msgstr "_Archiu sense titul"
@@ -2141,11 +2155,11 @@ msgstr "_Archiu sense titul"
 msgid "Untitled - %d"
 msgstr "_Archiu sense titul"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:605
+#: ../../plugins/filebrowser/filebrowser/browser.py:619
 msgid "Untitled_File"
 msgstr "_Archiu sense titul"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:603
+#: ../../plugins/filebrowser/filebrowser/browser.py:617
 msgid "Untitled_Folder"
 msgstr "_Carpeta sense titul"
 
@@ -2157,11 +2171,11 @@ msgstr "Actualisar"
 msgid "Update Available"
 msgstr "Actualisació disponible"
 
-#: ../../src/ed_menu.py:700
+#: ../../src/ed_menu.py:711
 msgid "Uppercase"
 msgstr "MAYÚSCULES"
 
-#: ../../src/ed_menu.py:760
+#: ../../src/ed_menu.py:771
 msgid "Use Auto Completion when available"
 msgstr "Usar autocompletat quant estiga disponible"
 
@@ -2169,7 +2183,7 @@ msgstr "Usar autocompletat quant estiga disponible"
 msgid "Use Proxy"
 msgstr "Usar Proxy"
 
-#: ../../src/ed_menu.py:708
+#: ../../src/ed_menu.py:719
 msgid "Use Soft Tabs"
 msgstr "Usar Tabuladors"
 
@@ -2193,11 +2207,11 @@ msgstr "Versió"
 msgid "View Editra's console log"
 msgstr "Vore consola del registre d'Editra"
 
-#: ../../src/ed_menu.py:658
+#: ../../src/ed_menu.py:669
 msgid "View Line of Next Bookmark"
 msgstr "Vore llínea del següent marcador"
 
-#: ../../src/ed_menu.py:661
+#: ../../src/ed_menu.py:672
 msgid "View Line of Previous Bookmark"
 msgstr "Vore llínea del marcador anterior"
 
@@ -2205,7 +2219,7 @@ msgstr "Vore llínea del marcador anterior"
 msgid "View Options"
 msgstr "Vore opcions"
 
-#: ../../src/ed_menu.py:822
+#: ../../src/ed_menu.py:833
 #, python-format
 msgid "Visit the project homepage %s"
 msgstr "Visitar la web del proyecte %s"
@@ -2222,31 +2236,31 @@ msgstr "Text d'avís"
 msgid "Where"
 msgstr "On"
 
-#: ../../src/ed_main.py:602
+#: ../../src/ed_main.py:609
 msgid "Where to Save Profile?"
 msgstr "¿On vols guardar el perfil?"
 
-#: ../../src/ed_menu.py:728
+#: ../../src/ed_menu.py:739
 msgid "Whitespace"
 msgstr "Espai en blanc"
 
-#: ../../src/ed_menu.py:729
+#: ../../src/ed_menu.py:740
 msgid "Whitespace formating commands"
 msgstr "Comandaments de formateig d'espais"
 
-#: ../../src/ed_menu.py:741 ../../src/prefdlg.py:529
+#: ../../src/ed_menu.py:752 ../../src/prefdlg.py:529
 msgid "Windows (\\r\\n)"
 msgstr "Windows (\\r\\n)"
 
-#: ../../src/ed_menu.py:712 ../../src/prefdlg.py:557
+#: ../../src/ed_menu.py:723 ../../src/prefdlg.py:557
 msgid "Word Wrap"
 msgstr "Ajust de llínea"
 
-#: ../../src/ed_menu.py:714
+#: ../../src/ed_menu.py:725
 msgid "Wrap Text Horizontally"
 msgstr "Ajustar llínees horisontalment"
 
-#: ../../src/ed_main.py:1220
+#: ../../src/ed_main.py:1246
 #, python-format
 msgid "Written in 100%% Python."
 msgstr "Escrit 100%% en Python"
@@ -2255,15 +2269,15 @@ msgstr "Escrit 100%% en Python"
 msgid "Your profile has been updated to the latest version"
 msgstr "El perfil s'ha actualisat a l'última versió"
 
-#: ../../src/ed_menu.py:620 ../../src/ed_menu.py:622
+#: ../../src/ed_menu.py:631 ../../src/ed_menu.py:633
 msgid "Zoom Default"
 msgstr "Zoom predeterminat"
 
-#: ../../src/ed_menu.py:617 ../../src/ed_menu.py:619
+#: ../../src/ed_menu.py:628 ../../src/ed_menu.py:630
 msgid "Zoom In"
 msgstr "Arrimar"
 
-#: ../../src/ed_menu.py:614 ../../src/ed_menu.py:616
+#: ../../src/ed_menu.py:625 ../../src/ed_menu.py:627
 msgid "Zoom Out"
 msgstr "Alluntar"
 
@@ -2287,9 +2301,24 @@ msgstr "eixecutar"
 msgid "italic"
 msgstr "cursiva"
 
+#: ../../src/ed_search.py:601
+#, fuzzy, python-format
+msgid "match case: %s"
+msgstr "Comprovar MAYÚSCULES/minúscules"
+
+#: ../../src/ed_search.py:600
+#, python-format
+msgid "regex: %s"
+msgstr ""
+
 #: ../../src/style_editor.py:664
 msgid "underline"
 msgstr "subrallat"
+
+#: ../../src/ed_search.py:602
+#, python-format
+msgid "whole word: %s"
+msgstr ""
 
 #~ msgid ""
 #~ "%s has been deleted since its last save point.\n"
