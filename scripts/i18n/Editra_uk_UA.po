@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-19 21:19-0500\n"
+"POT-Creation-Date: 2008-11-14 21:52-0600\n"
 "PO-Revision-Date: 2008-08-05 07:56+0000\n"
 "Last-Translator: Ihor Chomko <igorchomko@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,9 +12,14 @@ msgstr ""
 "X-Launchpad-Export-Date: 2008-08-05 22:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../../src/ed_search.py:258
+#: ../../src/ed_search.py:261
 #, python-format
 msgid "\"%s\" was not found"
+msgstr ""
+
+#: ../../src/ed_search.py:384
+#, python-format
+msgid "%d matches were replaced."
 msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/FileInfo.py:267
@@ -22,7 +27,7 @@ msgstr ""
 msgid "%s Source File"
 msgstr "%s Вихідний файл"
 
-#: ../../src/ed_main.py:488
+#: ../../src/ed_main.py:491
 #, python-format
 msgid ""
 "%s could not be found\n"
@@ -31,89 +36,89 @@ msgstr ""
 "%s неможливо знайти\n"
 "Можливо його було переміщено або видалено"
 
-#: ../../src/ed_stc.py:1818
+#: ../../src/ed_stc.py:1889
 #, python-format
 msgid "%s does not exist"
 msgstr ""
 
-#: ../../src/ed_menu.py:817
+#: ../../src/ed_menu.py:828
 msgid "&About"
 msgstr "&Про"
 
-#: ../../src/ed_menu.py:466
+#: ../../src/ed_menu.py:474
 #, fuzzy
 msgid "&Close Page"
 msgstr "Закрити сторінку"
 
-#: ../../src/ed_menu.py:538
+#: ../../src/ed_menu.py:546
 msgid "&Copy"
 msgstr "&Копіювати"
 
-#: ../../src/ed_menu.py:605
+#: ../../src/ed_menu.py:616
 msgid "&Edit"
 msgstr "&Редагувати"
 
-#: ../../src/ed_menu.py:519
+#: ../../src/ed_menu.py:527
 msgid "&File"
 msgstr "&Файл"
 
-#: ../../src/ed_menu.py:587
+#: ../../src/ed_menu.py:598
 msgid "&Find"
 msgstr "&Знайти"
 
-#: ../../src/ed_menu.py:680
+#: ../../src/ed_menu.py:691
 msgid "&Font"
 msgstr "&Шрифт"
 
-#: ../../src/ed_menu.py:649
+#: ../../src/ed_menu.py:660
 msgid "&Goto Line"
 msgstr "&Перейти на Лінійку"
 
-#: ../../src/ed_main.py:136 ../../src/ed_menu.py:835
+#: ../../src/ed_main.py:137 ../../src/ed_menu.py:846
 msgid "&Help"
 msgstr "&Допомога"
 
-#: ../../src/ed_menu.py:452
+#: ../../src/ed_menu.py:460
 msgid "&New Tab"
 msgstr "&Новий Табулятор"
 
-#: ../../src/ed_menu.py:459
+#: ../../src/ed_menu.py:467
 msgid "&Open"
 msgstr "&Відкрити"
 
-#: ../../src/ed_menu.py:541
+#: ../../src/ed_menu.py:549
 msgid "&Paste"
 msgstr "&Вставити"
 
-#: ../../src/ed_menu.py:510
+#: ../../src/ed_menu.py:518
 msgid "&Print"
 msgstr "&Друкувати"
 
-#: ../../src/ed_menu.py:593
+#: ../../src/ed_menu.py:604
 msgid "&Quick Find"
 msgstr "&Швидкий пошук"
 
-#: ../../src/ed_menu.py:477
+#: ../../src/ed_menu.py:485
 msgid "&Save"
 msgstr "&Зберегти"
 
-#: ../../src/ed_menu.py:776
+#: ../../src/ed_menu.py:787
 msgid "&Settings"
 msgstr "&Налаштування"
 
-#: ../../src/ed_menu.py:666
+#: ../../src/ed_menu.py:677
 msgid "&Toolbar"
 msgstr "&Пенал"
 
-#: ../../src/ed_menu.py:808
+#: ../../src/ed_menu.py:819
 msgid "&Tools"
 msgstr "&Інструменти"
 
-#: ../../src/ed_menu.py:528
+#: ../../src/ed_menu.py:536
 msgid "&Undo"
 msgstr "&Відмінити"
 
-#: ../../src/ed_menu.py:671
+#: ../../src/ed_menu.py:682
 msgid "&View"
 msgstr "&Вигляд"
 
@@ -125,11 +130,11 @@ msgstr "**Аліас**"
 msgid "**New Value**"
 msgstr "**Нова змінна**"
 
-#: ../../plugins/Launch/launch/launch.py:439 ../../src/dev_tool.py:389
+#: ../../plugins/Launch/launch/launch.py:440 ../../src/dev_tool.py:389
 msgid "Abort"
 msgstr "Відмінити"
 
-#: ../../src/ed_menu.py:819
+#: ../../src/ed_menu.py:830
 msgid "About"
 msgstr "Про"
 
@@ -137,15 +142,15 @@ msgstr "Про"
 msgid "Add a new executable"
 msgstr "Додати нового виконуваного"
 
-#: ../../src/ed_menu.py:552
+#: ../../src/ed_menu.py:563
 msgid "Add a new line after the current line"
 msgstr "Додати нову лінійку після існуючої"
 
-#: ../../src/ed_menu.py:556
+#: ../../src/ed_menu.py:567
 msgid "Add a new line before the current line"
 msgstr "Додати нову лінійку перед існуючою"
 
-#: ../../src/ed_menu.py:585
+#: ../../src/ed_menu.py:596
 msgid "Add and remove bookmarks"
 msgstr "Додати і видалити закладки"
 
@@ -190,11 +195,11 @@ msgstr "Атрибути"
 msgid "Author"
 msgstr "Автор"
 
-#: ../../src/ed_menu.py:758 ../../src/prefdlg.py:722
+#: ../../src/ed_menu.py:769 ../../src/prefdlg.py:722
 msgid "Auto-Completion"
 msgstr "Автозавершення"
 
-#: ../../src/ed_menu.py:761 ../../src/prefdlg.py:724
+#: ../../src/ed_menu.py:772 ../../src/prefdlg.py:724
 msgid "Auto-Indent"
 msgstr "Автоідентифікація"
 
@@ -230,19 +235,19 @@ msgstr "Прив'язка"
 msgid "Black/White"
 msgstr ""
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:451
+#: ../../plugins/filebrowser/filebrowser/browser.py:465
 msgid "Bookmark Selected Path(s)"
 msgstr "Додати обраний шлях(-и) в закладки"
 
-#: ../../src/ed_menu.py:584
+#: ../../src/ed_menu.py:595
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: ../../src/ed_menu.py:765 ../../src/prefdlg.py:702
+#: ../../src/ed_menu.py:776 ../../src/prefdlg.py:702
 msgid "Bracket Highlighting"
 msgstr "Кронштейн підсвічування"
 
-#: ../../src/ed_search.py:1178 ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1207 ../../src/style_editor.py:139
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -250,7 +255,7 @@ msgstr "Скасувати"
 msgid "Canceled"
 msgstr "Скасовано"
 
-#: ../../src/ed_menu.py:682
+#: ../../src/ed_menu.py:693
 msgid "Change Font Settings"
 msgstr "Змінити налаштування шрифтів"
 
@@ -284,11 +289,11 @@ msgstr "Перевіряти оновлення при завантаженні"
 msgid "Check if on disk file has been modified by others"
 msgstr "Перевірити чи дисковий файл не було змінено іншими"
 
-#: ../../src/ed_main.py:377
+#: ../../src/ed_main.py:380
 msgid "Choose a File"
 msgstr "Вибрати файл"
 
-#: ../../src/ed_main.py:568
+#: ../../src/ed_main.py:575
 msgid "Choose a Save Location"
 msgstr "Обрати місце збереження"
 
@@ -303,7 +308,7 @@ msgid "Class Definitions"
 msgstr "Визначення Класу"
 
 #: ../../plugins/Launch/launch/launch.py:166 ../../src/ed_log.py:140
-#: ../../src/ed_search.py:1187
+#: ../../src/ed_search.py:1216
 msgid "Clear"
 msgstr "Очистити"
 
@@ -325,23 +330,23 @@ msgstr "Перейти до \"%s\""
 msgid "Close All"
 msgstr "Закрити всі сторінки"
 
-#: ../../src/ed_menu.py:473
+#: ../../src/ed_menu.py:481
 msgid "Close All Pages"
 msgstr "Закрити всі сторінки"
 
-#: ../../src/ed_menu.py:468
+#: ../../src/ed_menu.py:476
 msgid "Close Current Page"
 msgstr "Закрити наявну сторінку"
 
-#: ../../src/ed_menu.py:470
+#: ../../src/ed_menu.py:478
 msgid "Close Window"
 msgstr "Закрити вікно"
 
-#: ../../src/ed_menu.py:475
+#: ../../src/ed_menu.py:483
 msgid "Close all open tabs"
 msgstr "Закрити усі відкриті табулятори"
 
-#: ../../src/ed_menu.py:472
+#: ../../src/ed_menu.py:480
 msgid "Close the current window"
 msgstr "Закрити наявне вікно"
 
@@ -353,7 +358,7 @@ msgstr "Код"
 msgid "Code Browser"
 msgstr "Браузер кодування"
 
-#: ../../src/ed_menu.py:768 ../../src/prefdlg.py:704
+#: ../../src/ed_menu.py:779 ../../src/prefdlg.py:704
 msgid "Code Folding"
 msgstr "Згортання коду"
 
@@ -365,7 +370,7 @@ msgstr "Браузер Кодів"
 msgid "Color"
 msgstr "Колір"
 
-#: ../../src/ed_menu.py:773
+#: ../../src/ed_menu.py:784
 msgid "Color Highlight Code Syntax"
 msgstr "Кольорове підсвічування синтаксису коду"
 
@@ -382,19 +387,19 @@ msgstr "Масштаб зображення по замовчуванню"
 msgid "Colour/White"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:178
+#: ../../src/ed_cmdbar.py:179
 msgid "Command"
 msgstr "Команда"
 
-#: ../../src/ed_menu.py:576
+#: ../../src/ed_menu.py:587
 msgid "Commands that affect an entire line"
 msgstr "Команди,що впливають на всю лінійку"
 
-#: ../../src/ed_menu.py:684
+#: ../../src/ed_menu.py:695
 msgid "Comment Lines"
 msgstr "Лінійки коментаря"
 
-#: ../../src/ed_menu.py:686
+#: ../../src/ed_menu.py:697
 msgid "Comment the selected lines"
 msgstr "Коментувати обрані лінійки"
 
@@ -406,31 +411,31 @@ msgstr "Конфігурація"
 msgid "Configure"
 msgstr "Сконфігурувати"
 
-#: ../../src/ed_menu.py:506
+#: ../../src/ed_menu.py:514
 msgid "Configure Printer"
 msgstr "Сконфігурувати принтер"
 
-#: ../../src/ed_menu.py:705
+#: ../../src/ed_menu.py:716
 msgid "Convert selected text to all lowercase letters"
 msgstr "Сконвертувати обраний текст до літер нижнього регістру"
 
-#: ../../src/ed_menu.py:702
+#: ../../src/ed_menu.py:713
 msgid "Convert selected text to all uppercase letters"
 msgstr "Сконвертувати обраний текст до літер верхнього регістру"
 
-#: ../../src/ed_menu.py:721
+#: ../../src/ed_menu.py:732
 msgid "Convert spaces to tabs in selected/all text"
 msgstr "Сконвертувати пробіли до табуляцій в обраних/усіх  текстах"
 
-#: ../../src/ed_menu.py:724
+#: ../../src/ed_menu.py:735
 msgid "Convert tabs to spaces in selected/all text"
 msgstr "Сконвертувати табуляції до  пробілів  в обраних/усіх  текстах"
 
-#: ../../src/ed_stc.py:2168 ../../src/ed_toolbar.py:82
+#: ../../src/ed_stc.py:2241 ../../src/ed_toolbar.py:82
 msgid "Copy"
 msgstr "Копіювати"
 
-#: ../../src/ed_menu.py:563
+#: ../../src/ed_menu.py:574
 msgid "Copy Current Line"
 msgstr "Копіювати наявну лінійку"
 
@@ -438,20 +443,20 @@ msgstr "Копіювати наявну лінійку"
 msgid "Copy Full Path"
 msgstr ""
 
-#: ../../src/ed_menu.py:561
+#: ../../src/ed_menu.py:572
 msgid "Copy Line"
 msgstr "Копіювати лінійку"
 
-#: ../../src/ed_menu.py:540 ../../src/ed_toolbar.py:83
+#: ../../src/ed_menu.py:548 ../../src/ed_toolbar.py:83
 msgid "Copy Selected Text to Clipboard"
 msgstr "Коліювати обраний текст до буферу обміну"
 
-#: ../../src/ed_main.py:1229
+#: ../../src/ed_main.py:1255
 msgid "Copyright"
 msgstr "Авторське право"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:461
-#: ../../plugins/filebrowser/filebrowser/browser.py:565
+#: ../../plugins/filebrowser/filebrowser/browser.py:475
+#: ../../plugins/filebrowser/filebrowser/browser.py:579
 #, python-format
 msgid "Create Archive of \"%s\""
 msgstr "Створити архів \"%s\""
@@ -460,27 +465,27 @@ msgstr "Створити архів \"%s\""
 msgid "Created"
 msgstr "Створено"
 
-#: ../../src/ed_menu.py:535
+#: ../../src/ed_menu.py:543
 msgid "Cu&t"
 msgstr "Ви&різати"
 
-#: ../../src/ed_stc.py:2167 ../../src/ed_toolbar.py:80
+#: ../../src/ed_stc.py:2240 ../../src/ed_toolbar.py:80
 msgid "Cut"
 msgstr "Вирізати"
 
-#: ../../src/ed_menu.py:560
+#: ../../src/ed_menu.py:571
 msgid "Cut Current Line"
 msgstr "Вирізати наявну лінійку"
 
-#: ../../src/ed_menu.py:558
+#: ../../src/ed_menu.py:569
 msgid "Cut Line"
 msgstr "Вирізати  лінійку"
 
-#: ../../src/ed_menu.py:537 ../../src/ed_toolbar.py:81
+#: ../../src/ed_menu.py:545 ../../src/ed_toolbar.py:81
 msgid "Cut Selected Text from File"
 msgstr "Вирізати з файлу обраний текст"
 
-#: ../../src/ed_search.py:744 ../../src/ed_search.py:748
+#: ../../src/ed_search.py:773 ../../src/ed_search.py:777
 msgid "DECODING ERROR"
 msgstr ""
 
@@ -536,7 +541,7 @@ msgstr "Відобразити шрифт"
 msgid "Do you wish to exit?"
 msgstr "Бажаєте вийти?"
 
-#: ../../src/ed_pages.py:522
+#: ../../src/ed_pages.py:524
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -581,32 +586,32 @@ msgstr "Завантаження: %s"
 msgid "Downloads are incomplete"
 msgstr "Завантаження не завершені"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:460
+#: ../../plugins/filebrowser/filebrowser/browser.py:474
 msgid "Duplicate"
 msgstr "Подвоїти"
 
-#: ../../src/ed_menu.py:565
+#: ../../src/ed_menu.py:576
 msgid "Duplicate Line"
 msgstr "Подвоїти лінійку"
 
-#: ../../src/ed_menu.py:567
+#: ../../src/ed_menu.py:578
 msgid "Duplicate the current line"
 msgstr "Подвоїти наявну лінійку"
 
-#: ../../src/ed_menu.py:514
+#: ../../src/ed_menu.py:522
 msgid "E&xit"
 msgstr "Вий&ти"
 
-#: ../../src/ed_menu.py:745
+#: ../../src/ed_menu.py:756
 msgid "EOL Mode"
 msgstr "Режим EOL"
 
-#: ../../src/ed_main.py:546
+#: ../../src/ed_main.py:553
 #, python-format
 msgid "ERROR: %s"
 msgstr "ПОМИЛКА: %s"
 
-#: ../../src/ed_main.py:584
+#: ../../src/ed_main.py:591
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "ПОМИЛКА: Невдале збереження %s"
@@ -615,23 +620,23 @@ msgstr "ПОМИЛКА: Невдале збереження %s"
 msgid "Edge Guide"
 msgstr "Скеровувач країв"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:447
+#: ../../plugins/filebrowser/filebrowser/browser.py:461
 msgid "Edit"
 msgstr "Редагувати"
 
-#: ../../src/ed_menu.py:602
+#: ../../src/ed_menu.py:613
 msgid "Edit Preferences / Settings"
 msgstr "Редагувати Установки / Налаштування"
 
-#: ../../src/ed_menu.py:797
+#: ../../src/ed_menu.py:808
 msgid "Edit the way syntax is highlighted"
 msgstr "Редагувати спосіб підсвічування синтаксису"
 
-#: ../../src/ed_menu.py:646
+#: ../../src/ed_menu.py:657
 msgid "Editor"
 msgstr "Редактор"
 
-#: ../../src/ed_menu.py:785
+#: ../../src/ed_menu.py:796
 msgid "Editor Command"
 msgstr "Команда редактора"
 
@@ -660,13 +665,13 @@ msgstr ""
 "Error:\n"
 "%(errormsg)s"
 
-#: ../../src/ed_main.py:1219
+#: ../../src/ed_main.py:1245
 msgid "Editra is a programmers text editor."
 msgstr ""
 "Editra - це текстовий редактор для програмістів.\n"
 "Автор українського перекладу: © Ігор ЧОМКО"
 
-#: ../../src/ed_menu.py:829
+#: ../../src/ed_menu.py:840
 msgid "Editra translations project"
 msgstr "Проект перекладів Editra"
 
@@ -678,7 +683,7 @@ msgstr "Уможливити Vi моделювання"
 msgid "Encoding to try when auto detection fails"
 msgstr ""
 
-#: ../../src/ed_menu.py:746
+#: ../../src/ed_menu.py:757
 msgid "End of line character formatting"
 msgstr "Кінець форматування шрифтів лінійки"
 
@@ -720,7 +725,7 @@ msgstr ""
 "Клацніть ПОВІДОМИТИ ПРО ПОМИЛКУ,щоб відслідкувати її \n"
 " і тим допоможете вдосконалити Editra"
 
-#: ../../src/ed_main.py:1160
+#: ../../src/ed_main.py:1186
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr "Помилка:Неможливо відкрити %s"
@@ -733,11 +738,11 @@ msgstr "Виконувані команди"
 msgid "Executables"
 msgstr "Виконувані"
 
-#: ../../plugins/Launch/launch/launch.py:563
+#: ../../plugins/Launch/launch/launch.py:564
 msgid "Exit Code"
 msgstr "Вийти з коду"
 
-#: ../../src/ed_menu.py:516
+#: ../../src/ed_menu.py:524
 msgid "Exit the Program"
 msgstr "Вийти з Програми"
 
@@ -753,7 +758,7 @@ msgstr "Експортувати Карту Стилів"
 msgid "Extensions (space separated, no dots)"
 msgstr "Розширення (розділені пробілом,без крапок)"
 
-#: ../../src/ed_menu.py:749
+#: ../../src/ed_menu.py:760
 msgid "F&ormat"
 msgstr "Фор&мат"
 
@@ -766,7 +771,7 @@ msgstr "Невдало"
 msgid "Failed to install %d plugins"
 msgstr "Невдале інсталювання додатків %d"
 
-#: ../../src/ed_main.py:973
+#: ../../src/ed_main.py:981
 #, fuzzy, python-format
 msgid "Failed to reload the file with: %(encoding)s"
 msgstr ""
@@ -786,11 +791,11 @@ msgstr ""
 "Error:\n"
 "%(errormsg)s"
 
-#: ../../src/ed_menu.py:830
+#: ../../src/ed_menu.py:841
 msgid "Feedback"
 msgstr "Зворотній зв'язок"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:244
+#: ../../plugins/filebrowser/filebrowser/browser.py:246
 msgid "File Browser"
 msgstr "Браузер файлів"
 
@@ -798,7 +803,7 @@ msgstr "Браузер файлів"
 msgid "File History Length"
 msgstr "Довжина історії файлу"
 
-#: ../../src/ed_main.py:490
+#: ../../src/ed_main.py:493
 msgid "File Not Found"
 msgstr "Файл не знайдено"
 
@@ -826,30 +831,30 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "Асоціації типів файлів"
 
-#: ../../src/ed_cmdbar.py:208 ../../src/ed_search.py:83
+#: ../../src/ed_cmdbar.py:209 ../../src/ed_search.py:83
 #: ../../src/ed_search.py:87 ../../src/ed_toolbar.py:87
 msgid "Find"
 msgstr "Шукати"
 
-#: ../../src/ed_menu.py:596
+#: ../../src/ed_menu.py:607
 #, fuzzy
 msgid "Find Next"
 msgstr "Пошук тексту"
 
-#: ../../src/ed_search.py:1097
+#: ../../src/ed_search.py:1125
 #, fuzzy
 msgid "Find Results"
 msgstr "Пошук тексту"
 
-#: ../../src/ed_menu.py:589 ../../src/ed_toolbar.py:87
+#: ../../src/ed_menu.py:600 ../../src/ed_toolbar.py:87
 msgid "Find Text"
 msgstr "Пошук тексту"
 
-#: ../../src/ed_menu.py:592 ../../src/ed_toolbar.py:89
+#: ../../src/ed_menu.py:603 ../../src/ed_toolbar.py:89
 msgid "Find and Replace Text"
 msgstr "Знайти і замінити текст"
 
-#: ../../src/ed_menu.py:590
+#: ../../src/ed_menu.py:601
 msgid "Find/R&eplace"
 msgstr "Знайти/За&мінити"
 
@@ -890,7 +895,7 @@ msgstr "Переднє тло"
 msgid "Format"
 msgstr "Форматувати"
 
-#: ../../src/ed_menu.py:735 ../../src/ed_menu.py:739 ../../src/ed_menu.py:743
+#: ../../src/ed_menu.py:746 ../../src/ed_menu.py:750 ../../src/ed_menu.py:754
 #, python-format
 msgid "Format all EOL characters to %s Mode"
 msgstr "Сформатувати усі шрифти EOL до %s режиму"
@@ -928,7 +933,7 @@ msgstr "Згенерувати %s версію наявного документ
 msgid "Generator"
 msgstr "Генератор"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:454
+#: ../../plugins/filebrowser/filebrowser/browser.py:468
 msgid "Get Info"
 msgstr "Отримати інформацію"
 
@@ -945,23 +950,23 @@ msgstr "Перейти до сторінки конфігурування?"
 msgid "Goto \"%s\""
 msgstr "Перейти до \"%s\""
 
-#: ../../src/ed_cmdbar.py:155
+#: ../../src/ed_cmdbar.py:156
 msgid "Goto Line"
 msgstr "Перейти на лінійку"
 
-#: ../../src/ed_menu.py:651
+#: ../../src/ed_menu.py:662
 msgid "Goto Line Number"
 msgstr "Перейти до номеру лінійки"
 
-#: ../../src/ed_menu.py:652
+#: ../../src/ed_menu.py:663
 msgid "Goto Matching Brace"
 msgstr "Перейти до вирівнювання дужок"
 
-#: ../../src/ed_menu.py:787
+#: ../../src/ed_menu.py:798
 msgid "Goto command buffer"
 msgstr "Перейти до буферу команд"
 
-#: ../../src/ed_menu.py:598
+#: ../../src/ed_menu.py:609
 msgid "Goto the next match"
 msgstr ""
 
@@ -969,19 +974,19 @@ msgstr ""
 msgid "Guide Column"
 msgstr "Скеровуюча колонка"
 
-#: ../../src/ed_menu.py:767
+#: ../../src/ed_menu.py:778
 msgid "Highlight Brackets/Braces"
 msgstr "Підсвітити дужки"
 
-#: ../../src/ed_menu.py:625 ../../src/prefdlg.py:715
+#: ../../src/ed_menu.py:636 ../../src/prefdlg.py:715
 msgid "Highlight Caret Line"
 msgstr "Підсвітити лінійку знаків вставляння"
 
-#: ../../src/ed_menu.py:627
+#: ../../src/ed_menu.py:638
 msgid "Highlight the background of the current line"
 msgstr "Підсвітити тло наявної лінійки"
 
-#: ../../src/ed_main.py:1221
+#: ../../src/ed_main.py:1247
 msgid "Homepage"
 msgstr "Домашня сторінка"
 
@@ -997,7 +1002,7 @@ msgstr "Іконки"
 msgid "Identities"
 msgstr "Тотожності"
 
-#: ../../src/ed_menu.py:693
+#: ../../src/ed_menu.py:704
 msgid "Indent Lines"
 msgstr "Відступ в лінійках"
 
@@ -1005,11 +1010,11 @@ msgstr "Відступ в лінійках"
 msgid "Indent Width"
 msgstr "Ширина відступу"
 
-#: ../../src/ed_menu.py:695
+#: ../../src/ed_menu.py:706
 msgid "Indent the selected lines"
 msgstr "Відступити обрані лінійки"
 
-#: ../../src/ed_menu.py:630 ../../src/prefdlg.py:718
+#: ../../src/ed_menu.py:641 ../../src/prefdlg.py:718
 msgid "Indentation Guides"
 msgstr "Направляючі відступу"
 
@@ -1025,7 +1030,7 @@ msgstr "Текст інформації"
 msgid "Input Helpers"
 msgstr "Помічники ввідних даних"
 
-#: ../../src/ed_menu.py:710
+#: ../../src/ed_menu.py:721
 msgid "Insert spaces instead of tab characters with tab key"
 msgstr "Вставити пробіли замість літер табулювання з ключем табулювання"
 
@@ -1053,12 +1058,12 @@ msgstr "Помилка інсталяції"
 msgid "Installed Version"
 msgstr "Встановлена версія"
 
-#: ../../src/ed_search.py:192
+#: ../../src/ed_search.py:193
 #, fuzzy, python-format
 msgid "Invalid expression \"%s\""
 msgstr "Недійсний файл: %s"
 
-#: ../../src/ed_pages.py:506
+#: ../../src/ed_pages.py:508
 #, python-format
 msgid "Invalid file: %s"
 msgstr "Недійсний файл: %s"
@@ -1067,11 +1072,11 @@ msgstr "Недійсний файл: %s"
 msgid "Inverse"
 msgstr ""
 
-#: ../../src/ed_menu.py:569
+#: ../../src/ed_menu.py:580
 msgid "Join Lines"
 msgstr "Об'єднати рядки"
 
-#: ../../src/ed_menu.py:571
+#: ../../src/ed_menu.py:582
 msgid "Join the Selected Lines"
 msgstr "Об'єднати вибрані лінійки"
 
@@ -1091,7 +1096,7 @@ msgstr "Профіль клавіші"
 msgid "Keybindings"
 msgstr "Комбінації клавіш"
 
-#: ../../src/ed_menu.py:788
+#: ../../src/ed_menu.py:799
 msgid "Keyword Helper"
 msgstr "Помічник ключового слова"
 
@@ -1123,19 +1128,19 @@ msgstr "Розмітка"
 msgid "Lexer"
 msgstr "Лексичний аналізатор"
 
-#: ../../src/ed_main.py:128
+#: ../../src/ed_main.py:129
 msgid "Lexers"
 msgstr "Лексичні аналізатори"
 
-#: ../../src/ed_main.py:1223
+#: ../../src/ed_main.py:1249
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr "Ліцензія: wxWindows (дивіться COPYING.txt для повної ліцензії)"
 
-#: ../../src/ed_menu.py:575
+#: ../../src/ed_menu.py:586
 msgid "Line Edit"
 msgstr "Рядок вводу"
 
-#: ../../src/ed_stc.py:787
+#: ../../src/ed_stc.py:846
 #, python-format
 msgid "Line: %d  Column: %d"
 msgstr "Лінійка: %d  Стовпець: %d"
@@ -1144,15 +1149,15 @@ msgstr "Лінійка: %d  Стовпець: %d"
 msgid "Load Last Session"
 msgstr "Завантажити останню сесію"
 
-#: ../../src/ed_menu.py:498
+#: ../../src/ed_menu.py:506
 msgid "Load Profile"
 msgstr "Завантажити профіль"
 
-#: ../../src/ed_main.py:623 ../../src/ed_menu.py:500
+#: ../../src/ed_main.py:630 ../../src/ed_menu.py:508
 msgid "Load a Custom Profile"
 msgstr "Завантажити користувацький профіль"
 
-#: ../../src/ed_menu.py:502
+#: ../../src/ed_menu.py:510
 msgid "Load and save custom Profiles"
 msgstr "Завантажити і зберегти користувацькі Профілі"
 
@@ -1160,7 +1165,7 @@ msgstr "Завантажити і зберегти користувацькі П
 msgid "Load files from last session on startup"
 msgstr "Завантажити файли з останньої сесії під-час запуску"
 
-#: ../../src/ed_main.py:630
+#: ../../src/ed_main.py:637
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr "Завантажений профіль: %s"
@@ -1169,11 +1174,11 @@ msgstr "Завантажений профіль: %s"
 msgid "Locale Settings"
 msgstr "Установки місця"
 
-#: ../../src/ed_menu.py:703
+#: ../../src/ed_menu.py:714
 msgid "Lowercase"
 msgstr "Нижній регістр"
 
-#: ../../src/ed_menu.py:733 ../../src/prefdlg.py:528
+#: ../../src/ed_menu.py:744 ../../src/prefdlg.py:528
 msgid "Macintosh (\\r)"
 msgstr "Макінтош (\\r)"
 
@@ -1189,15 +1194,15 @@ msgstr "Макрос"
 msgid "Main display font for various UI components"
 msgstr "Головне відображення шрифтів для різноманітних компонентів UI"
 
-#: ../../src/ed_menu.py:794
+#: ../../src/ed_menu.py:805
 msgid "Manage, Download, and Install plugins"
 msgstr "Організувати,Завантажити та Встановити додатки"
 
-#: ../../src/ed_main.py:130
+#: ../../src/ed_main.py:131
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Встановити Лексичний аналізатор/Синтаксис вручну"
 
-#: ../../src/ed_cmdbar.py:218
+#: ../../src/ed_cmdbar.py:219
 msgid "Match Case"
 msgstr "Звірити регістр"
 
@@ -1226,7 +1231,7 @@ msgstr "Модифікатор 2"
 msgid "Modules"
 msgstr "Модулі"
 
-#: ../../src/ed_menu.py:654
+#: ../../src/ed_menu.py:665
 msgid "Move caret matching brace"
 msgstr "Перемістити дужки,що схожі на знаки вставляння"
 
@@ -1251,23 +1256,23 @@ msgstr "Мережа"
 msgid "New"
 msgstr "Новий"
 
-#: ../../src/ed_menu.py:455
+#: ../../src/ed_menu.py:463
 msgid "New &Window"
 msgstr "Нове &Вікно"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:458
+#: ../../plugins/filebrowser/filebrowser/browser.py:472
 msgid "New File"
 msgstr "Новий файл"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:457
+#: ../../plugins/filebrowser/filebrowser/browser.py:471
 msgid "New Folder"
 msgstr "Нова папка"
 
-#: ../../src/ed_menu.py:550
+#: ../../src/ed_menu.py:561
 msgid "New Line After"
 msgstr "Нова лінійка Після"
 
-#: ../../src/ed_menu.py:554
+#: ../../src/ed_menu.py:565
 msgid "New Line Before"
 msgstr "Нова лінійка Перед"
 
@@ -1280,11 +1285,11 @@ msgstr "Новий профіль"
 msgid "New Tab"
 msgstr "&Новий Табулятор"
 
-#: ../../src/ed_cmdbar.py:211
+#: ../../src/ed_cmdbar.py:212
 msgid "Next"
 msgstr "Далі"
 
-#: ../../src/ed_menu.py:656
+#: ../../src/ed_menu.py:667
 msgid "Next Bookmark"
 msgstr "Наступна закладка"
 
@@ -1292,7 +1297,7 @@ msgstr "Наступна закладка"
 msgid "No Description Available"
 msgstr "Відсутній опис"
 
-#: ../../src/ed_pages.py:516
+#: ../../src/ed_pages.py:518
 msgid "No Valid Files to Open"
 msgstr "Відсутні дійсні файли для відкривання"
 
@@ -1305,7 +1310,7 @@ msgstr "Жодного"
 msgid "Normal"
 msgstr "Форматувати"
 
-#: ../../src/ed_search.py:353
+#: ../../src/ed_search.py:364
 msgid "Not implemented"
 msgstr ""
 
@@ -1313,19 +1318,19 @@ msgstr ""
 msgid "Ok"
 msgstr "Добре"
 
-#: ../../src/ed_menu.py:824
+#: ../../src/ed_menu.py:835
 msgid "Online Documentation"
 msgstr "Мережева документація"
 
-#: ../../src/ed_menu.py:826
+#: ../../src/ed_menu.py:837
 msgid "Online project documentation and help guides"
 msgstr "Мережева проектна документація та допоміжні інструкції"
 
-#: ../../src/ed_menu.py:461 ../../src/ed_toolbar.py:72
+#: ../../src/ed_menu.py:469 ../../src/ed_toolbar.py:72
 msgid "Open"
 msgstr "Відкрити"
 
-#: ../../src/ed_menu.py:463
+#: ../../src/ed_menu.py:471
 #, fuzzy
 msgid "Open &Recent"
 msgstr "Відкрити недавні"
@@ -1338,7 +1343,7 @@ msgstr "Відкрити оболонку Python"
 msgid "Open Code Browser Sidepanel"
 msgstr "Відкрити бокову Панель Браузера кодування"
 
-#: ../../src/ed_pages.py:527
+#: ../../src/ed_pages.py:529
 msgid "Open Directory?"
 msgstr "Відкрити директорію?"
 
@@ -1346,7 +1351,7 @@ msgstr "Відкрити директорію?"
 msgid "Open File"
 msgstr "Відкрити файл"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:245
+#: ../../plugins/filebrowser/filebrowser/browser.py:247
 msgid "Open File Browser Sidepanel"
 msgstr "Відкрити бокову Панель Браузера файлів"
 
@@ -1354,29 +1359,33 @@ msgstr "Відкрити бокову Панель Браузера файлів
 msgid "Open files in new windows by default"
 msgstr "Відкрити файли у новому вікні по замовчуванню"
 
-#: ../../src/ed_menu.py:595
+#: ../../src/ed_menu.py:606
 msgid "Open the Quick Find Bar"
 msgstr "Відкрити Вікно Швидкого Пошуку"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:448
+#: ../../plugins/filebrowser/filebrowser/browser.py:462
 msgid "Open with "
 msgstr "Відкрити за допомогою "
 
-#: ../../src/ed_pages.py:547
+#: ../../src/ed_pages.py:549
 #, python-format
 msgid "Opened file: %s"
 msgstr "Відкритий файл: %s"
 
-#: ../../src/ed_main.py:1157
+#: ../../src/ed_main.py:1183
 #, python-format
 msgid "Opening %s"
 msgstr "Відкривання %s"
+
+#: ../../src/ed_menu.py:552
+msgid "P&aste After"
+msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Packages"
 msgstr "Пакети"
 
-#: ../../src/ed_menu.py:504
+#: ../../src/ed_menu.py:512
 msgid "Page Set&up"
 msgstr "Встановлення сто&рінки"
 
@@ -1389,12 +1398,17 @@ msgstr "Сторінка: %d"
 msgid "Password"
 msgstr "Пароль"
 
-#: ../../src/ed_stc.py:2169 ../../src/ed_toolbar.py:84
+#: ../../src/ed_stc.py:2242 ../../src/ed_toolbar.py:84
 msgid "Paste"
 msgstr "Вставити"
 
-#: ../../src/ed_menu.py:543 ../../src/ed_toolbar.py:85
+#: ../../src/ed_menu.py:551 ../../src/ed_toolbar.py:85
 msgid "Paste Text from Clipboard to File"
+msgstr "Вставити текст у файл з буферу обміну"
+
+#: ../../src/ed_menu.py:554
+#, fuzzy
+msgid "Paste Text from Clipboard to File after the cursor"
 msgstr "Вставити текст у файл з буферу обміну"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:104
@@ -1413,7 +1427,7 @@ msgstr "Ім'я перспективи"
 msgid "Perspective to Delete"
 msgstr "Перспектива до видалення"
 
-#: ../../src/ed_main.py:124
+#: ../../src/ed_main.py:125
 msgid "Perspectives"
 msgstr "Перспективи"
 
@@ -1421,7 +1435,7 @@ msgstr "Перспективи"
 msgid "Plain Text"
 msgstr "Простий текст"
 
-#: ../../src/ed_main.py:1222
+#: ../../src/ed_main.py:1248
 msgid "Platform Info"
 msgstr "Інформація щодо платформи"
 
@@ -1434,7 +1448,7 @@ msgstr "Перевірте,будь-ласка, діалог налаштува�
 msgid "Plugin"
 msgstr "Додаток"
 
-#: ../../src/ed_main.py:866 ../../src/ed_menu.py:792
+#: ../../src/ed_main.py:873 ../../src/ed_menu.py:803
 msgid "Plugin Manager"
 msgstr "Менеджер додатків"
 
@@ -1442,7 +1456,7 @@ msgstr "Менеджер додатків"
 msgid "Port Number"
 msgstr "Номер порту"
 
-#: ../../src/ed_menu.py:600
+#: ../../src/ed_menu.py:611
 msgid "Pr&eferences"
 msgstr "На&лаштування"
 
@@ -1459,15 +1473,15 @@ msgstr "Налаштування - Editra"
 msgid "Preview"
 msgstr "Попередній перегляд"
 
-#: ../../src/ed_menu.py:509
+#: ../../src/ed_menu.py:517
 msgid "Preview Printout"
 msgstr "Попередній перегляд роздруковки"
 
-#: ../../src/ed_cmdbar.py:215
+#: ../../src/ed_cmdbar.py:216
 msgid "Previous"
 msgstr "Попередній"
 
-#: ../../src/ed_menu.py:659
+#: ../../src/ed_menu.py:670
 msgid "Previous Bookmark"
 msgstr "Попередня Закладка"
 
@@ -1479,11 +1493,11 @@ msgstr "Первісний Шрифт"
 msgid "Print"
 msgstr "Друкувати"
 
-#: ../../src/ed_menu.py:512 ../../src/ed_toolbar.py:75
+#: ../../src/ed_menu.py:520 ../../src/ed_toolbar.py:75
 msgid "Print Current File"
 msgstr "Видрукувати наявний файл"
 
-#: ../../src/ed_menu.py:507
+#: ../../src/ed_menu.py:515
 msgid "Print Pre&view"
 msgstr "Видрукувати По&передній перегляд"
 
@@ -1499,11 +1513,11 @@ msgstr "Режим принтера"
 msgid "Procedure Definitions"
 msgstr "Визначення процедури"
 
-#: ../../src/ed_main.py:604 ../../src/ed_main.py:625 ../../src/ed_menu.py:501
+#: ../../src/ed_main.py:611 ../../src/ed_main.py:632 ../../src/ed_menu.py:509
 msgid "Profile"
 msgstr "Профіль"
 
-#: ../../src/ed_main.py:609
+#: ../../src/ed_main.py:616
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr "Профіль збережено як: %s"
@@ -1520,7 +1534,7 @@ msgstr "Команда на виконання програми"
 msgid "Programs"
 msgstr "Програми"
 
-#: ../../src/ed_menu.py:820
+#: ../../src/ed_menu.py:831
 msgid "Project Homepage"
 msgstr "Домашня сторінка проекту"
 
@@ -1528,7 +1542,7 @@ msgstr "Домашня сторінка проекту"
 msgid "Protocols"
 msgstr "Протоколи"
 
-#: ../../src/ed_menu.py:790
+#: ../../src/ed_menu.py:801
 msgid "Provides a Contextual Help Menu Listing Standard Keywords/Functions"
 msgstr "Забезпечує Контекстне Меню Допомоги з переліком стандартних Ключових слів/Функцій"
 
@@ -1549,44 +1563,44 @@ msgstr "Покласти елемент на цю Поличку"
 msgid "Rate: %.2f Kb/s"
 msgstr "Швидкість: %.2f Kb/s"
 
-#: ../../src/ed_search.py:782
+#: ../../src/ed_search.py:811
 msgid "Recent Searches"
 msgstr "Недавні пошуки"
 
-#: ../../src/ed_menu.py:464
+#: ../../src/ed_menu.py:472
 msgid "Recently Opened Files"
 msgstr "Недавно відкриті файли"
 
-#: ../../src/ed_stc.py:1520
+#: ../../src/ed_stc.py:1592
 msgid "Recording Finished"
 msgstr "Запис завершено"
 
-#: ../../src/ed_stc.py:1507
+#: ../../src/ed_stc.py:1579
 msgid "Recording Macro"
 msgstr "Запис Макро"
 
-#: ../../src/ed_menu.py:531 ../../src/ed_stc.py:2165
+#: ../../src/ed_menu.py:539 ../../src/ed_stc.py:2238
 #: ../../src/ed_toolbar.py:78
 msgid "Redo"
 msgstr "Відновити"
 
-#: ../../src/ed_menu.py:533 ../../src/ed_toolbar.py:78
+#: ../../src/ed_menu.py:541 ../../src/ed_toolbar.py:78
 msgid "Redo Last Undo"
 msgstr "Відновити останню відміну"
 
-#: ../../src/ed_cmdbar.py:221
+#: ../../src/ed_cmdbar.py:222
 msgid "Regex"
 msgstr ""
 
-#: ../../src/ed_search.py:193
+#: ../../src/ed_search.py:194
 msgid "Regex Compile Error"
 msgstr ""
 
-#: ../../src/ed_menu.py:492
+#: ../../src/ed_menu.py:500
 msgid "Reload the file with a specified encoding"
 msgstr ""
 
-#: ../../src/ed_main.py:961 ../../src/ed_menu.py:490
+#: ../../src/ed_main.py:969 ../../src/ed_menu.py:498
 msgid "Reload with Encoding"
 msgstr ""
 
@@ -1602,7 +1616,7 @@ msgstr "При виході запам'ятати позицію вікна"
 msgid "Remember Window Size on Exit"
 msgstr "При виході запам'ятати розмір вікна"
 
-#: ../../src/ed_menu.py:581
+#: ../../src/ed_menu.py:592
 msgid "Remove All Bookmarks"
 msgstr "Видалити усі закладки"
 
@@ -1610,7 +1624,7 @@ msgstr "Видалити усі закладки"
 msgid "Remove Saved Path"
 msgstr "Видалити збережений шлях"
 
-#: ../../src/ed_menu.py:583
+#: ../../src/ed_menu.py:594
 msgid "Remove all bookmarks from the current document"
 msgstr "Видалити усі закладки з наявного документу"
 
@@ -1618,11 +1632,11 @@ msgstr "Видалити усі закладки з наявного докум�
 msgid "Remove selection from list"
 msgstr "Видалити вибір зі списку"
 
-#: ../../src/ed_menu.py:727
+#: ../../src/ed_menu.py:738
 msgid "Remove trailing whitespace"
 msgstr "Видалити кінцевий символ пробілу"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:455
+#: ../../plugins/filebrowser/filebrowser/browser.py:469
 msgid "Rename"
 msgstr "Перейменувати"
 
@@ -1634,11 +1648,11 @@ msgstr "Повідомити про помилку"
 msgid "Retrieving Plugin List"
 msgstr "Пошук списку додатків"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:449
+#: ../../plugins/filebrowser/filebrowser/browser.py:463
 msgid "Reveal in "
 msgstr "Показати в "
 
-#: ../../src/ed_menu.py:489
+#: ../../src/ed_menu.py:497
 msgid "Revert file to last save point"
 msgstr ""
 
@@ -1646,14 +1660,14 @@ msgstr ""
 msgid "Revert to Default"
 msgstr "Повернутися до По замовчуванню"
 
-#: ../../src/ed_menu.py:487
+#: ../../src/ed_menu.py:495
 #, fuzzy
 msgid "Revert to Saved"
 msgstr "Повернутися до По замовчуванню"
 
 #: ../../plugins/Launch/launch/__init__.py:91
 #: ../../plugins/Launch/launch/launch.py:158
-#: ../../plugins/Launch/launch/launch.py:445
+#: ../../plugins/Launch/launch/launch.py:446
 msgid "Run"
 msgstr "Виконати"
 
@@ -1674,27 +1688,27 @@ msgstr "Зберегти"
 msgid "Save \"%s\""
 msgstr "Зберегти як"
 
-#: ../../src/ed_menu.py:480
+#: ../../src/ed_menu.py:488
 msgid "Save &As"
 msgstr "Зберегти &як"
 
-#: ../../src/ed_menu.py:483
+#: ../../src/ed_menu.py:491
 msgid "Save All"
 msgstr "Зберегти все"
 
-#: ../../src/ed_menu.py:482
+#: ../../src/ed_menu.py:490
 msgid "Save As"
 msgstr "Зберегти як"
 
-#: ../../src/ed_main.py:1185
+#: ../../src/ed_main.py:1211
 msgid "Save Changes?"
 msgstr "Зберегти зміни?"
 
-#: ../../src/ed_menu.py:479 ../../src/ed_toolbar.py:73
+#: ../../src/ed_menu.py:487 ../../src/ed_toolbar.py:73
 msgid "Save Current File"
 msgstr "Зберегти наявний файл"
 
-#: ../../src/ed_menu.py:497
+#: ../../src/ed_menu.py:505
 msgid "Save Current Settings to a New Profile"
 msgstr "Зберегти наявні установки для нового профілю"
 
@@ -1710,7 +1724,7 @@ msgstr "Зберегти помилку"
 msgid "Save Perspective"
 msgstr "Зберегти перспективу"
 
-#: ../../src/ed_menu.py:495
+#: ../../src/ed_menu.py:503
 msgid "Save Profile"
 msgstr "Зберегти профіль"
 
@@ -1722,7 +1736,7 @@ msgstr "Зберегти обрані шляхи"
 msgid "Save Styles"
 msgstr "Зберегти стилі"
 
-#: ../../src/ed_menu.py:485
+#: ../../src/ed_menu.py:493
 msgid "Save all open pages"
 msgstr "Зберегти усі відкриті сторінки"
 
@@ -1730,12 +1744,12 @@ msgstr "Зберегти усі відкриті сторінки"
 msgid "Save the current window layout"
 msgstr "Зберегти макет наявного вікна"
 
-#: ../../src/ed_main.py:586
+#: ../../src/ed_main.py:593
 #, python-format
 msgid "Saved File As: %s"
 msgstr "Зберегти файл як: %s"
 
-#: ../../src/ed_main.py:543
+#: ../../src/ed_main.py:550
 #, python-format
 msgid "Saved File: %s"
 msgstr "Збережений файл: %s"
@@ -1744,28 +1758,28 @@ msgstr "Збережений файл: %s"
 msgid "Script Arguments"
 msgstr "Аргументи скрипта"
 
-#: ../../src/ed_search.py:1225
+#: ../../src/ed_search.py:1260
 #, python-format
 msgid "Search Complete: %d matching lines where found"
 msgstr ""
 
-#: ../../src/ed_search.py:1205
+#: ../../src/ed_search.py:1234
 msgid "Search Started"
 msgstr ""
 
-#: ../../src/ed_search.py:1218
+#: ../../src/ed_search.py:1253
 msgid "Search complete"
 msgstr ""
 
-#: ../../src/ed_search.py:243
+#: ../../src/ed_search.py:245
 msgid "Search wrapped to bottom"
 msgstr ""
 
-#: ../../src/ed_search.py:238
+#: ../../src/ed_search.py:240
 msgid "Search wrapped to top"
 msgstr ""
 
-#: ../../src/ed_search.py:1295
+#: ../../src/ed_search.py:1334
 #, python-format
 msgid "Searching in : %s"
 msgstr ""
@@ -1778,19 +1792,19 @@ msgstr "Вторинні шрифти"
 msgid "Sections"
 msgstr "Секції"
 
-#: ../../src/ed_menu.py:545
+#: ../../src/ed_menu.py:556
 msgid "Select &All"
 msgstr "Вибрати &все"
 
-#: ../../src/ed_stc.py:2174
+#: ../../src/ed_stc.py:2247
 msgid "Select All"
 msgstr "Вибрати все"
 
-#: ../../src/ed_menu.py:547
+#: ../../src/ed_menu.py:558
 msgid "Select All Text in Document"
 msgstr "Вибрати весь текст документу"
 
-#: ../../src/ed_main.py:960
+#: ../../src/ed_main.py:968
 msgid "Select an encoding to reload the file with"
 msgstr ""
 
@@ -1802,7 +1816,7 @@ msgstr "Вибрати додатки для завантаження"
 msgid "Select the desired plugins and then Click Download"
 msgstr "Виберіть бажані додатки і натисніть кнопку Завантажити"
 
-#: ../../src/ed_menu.py:832
+#: ../../src/ed_menu.py:843
 msgid "Send bug reports and suggestions"
 msgstr "Надашліть повідомлення про недоліки,а також пропозиції"
 
@@ -1830,15 +1844,15 @@ msgstr "Установки"
 msgid "Shelf"
 msgstr "Поличка"
 
-#: ../../src/ed_menu.py:637 ../../src/ed_menu.py:639 ../../src/prefdlg.py:551
+#: ../../src/ed_menu.py:648 ../../src/ed_menu.py:650 ../../src/prefdlg.py:551
 msgid "Show EOL Markers"
 msgstr "Показати Маркери EOL"
 
-#: ../../src/ed_menu.py:634
+#: ../../src/ed_menu.py:645
 msgid "Show Edge Guide"
 msgstr "Показати направляючого країв"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:237
+#: ../../plugins/filebrowser/filebrowser/browser.py:239
 msgid "Show Hidden Files"
 msgstr "Показати приховані файли"
 
@@ -1847,15 +1861,15 @@ msgstr "Показати приховані файли"
 msgid "Show Icons on Tabs"
 msgstr "Пробіли до Табуляторів"
 
-#: ../../src/ed_menu.py:632
+#: ../../src/ed_menu.py:643
 msgid "Show Indentation Guides"
 msgstr "Показати направляючих відступу"
 
-#: ../../src/ed_menu.py:642
+#: ../../src/ed_menu.py:653
 msgid "Show Line Number Margin"
 msgstr "Показати номер межі лінійки"
 
-#: ../../src/ed_menu.py:640 ../../src/prefdlg.py:553
+#: ../../src/ed_menu.py:651 ../../src/prefdlg.py:553
 msgid "Show Line Numbers"
 msgstr "Показати номери лінійок"
 
@@ -1867,23 +1881,23 @@ msgstr "Показати Поличку"
 msgid "Show Splash Screen"
 msgstr "Показати Екран заставки"
 
-#: ../../src/ed_menu.py:665 ../../src/prefdlg.py:959
+#: ../../src/ed_menu.py:676 ../../src/prefdlg.py:959
 msgid "Show Status Bar"
 msgstr "Показати Вікно статусу"
 
-#: ../../src/ed_menu.py:668 ../../src/prefdlg.py:961
+#: ../../src/ed_menu.py:679 ../../src/prefdlg.py:961
 msgid "Show Toolbar"
 msgstr "Показати пенал"
 
-#: ../../src/ed_menu.py:643 ../../src/prefdlg.py:555
+#: ../../src/ed_menu.py:654 ../../src/prefdlg.py:555
 msgid "Show Whitespace"
 msgstr "Показати пробільний символ"
 
-#: ../../src/ed_menu.py:645
+#: ../../src/ed_menu.py:656
 msgid "Show Whitespace Markers"
 msgstr "Показати Маркери Символу пробілу"
 
-#: ../../src/ed_search.py:1097
+#: ../../src/ed_search.py:1125
 msgid "Show a find results screen"
 msgstr ""
 
@@ -1895,7 +1909,7 @@ msgstr ""
 msgid "Show the Shelf"
 msgstr "Показати Поличку"
 
-#: ../../src/ed_menu.py:636
+#: ../../src/ed_menu.py:647
 msgid "Show the edge column guide"
 msgstr "Показати направляючого країв стовпця"
 
@@ -1908,11 +1922,11 @@ msgstr "Розмір"
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr "Деякі стилі було змінено.Бажаєте зберегти зміни перед виходом?"
 
-#: ../../src/ed_search.py:352
+#: ../../src/ed_search.py:363
 msgid "Sorry will be ready for next version"
 msgstr ""
 
-#: ../../src/ed_menu.py:719
+#: ../../src/ed_menu.py:730
 msgid "Spaces to Tabs"
 msgstr "Пробіли до Табуляторів"
 
@@ -1924,11 +1938,11 @@ msgstr "Запустити новий файл"
 msgid "Start a blank new style"
 msgstr "Запустити порожній новий стиль"
 
-#: ../../src/ed_menu.py:454
+#: ../../src/ed_menu.py:462
 msgid "Start a new file in a new tab"
 msgstr "Запустити новий файл у новому табуляторі"
 
-#: ../../src/ed_menu.py:457
+#: ../../src/ed_menu.py:465
 msgid "Start a new file in a new window"
 msgstr "Запустити новий файл у новому табуляторі"
 
@@ -1940,7 +1954,7 @@ msgstr "Установки запуску"
 msgid "Status Unknown"
 msgstr "Статус невідомий"
 
-#: ../../src/ed_menu.py:795 ../../src/style_editor.py:63
+#: ../../src/ed_menu.py:806 ../../src/style_editor.py:63
 msgid "Style Editor"
 msgstr "Редактор стилю"
 
@@ -1974,7 +1988,7 @@ msgstr "Переключити лексичний аналізатор на %s"
 msgid "Syntax Files"
 msgstr "Файли синтаксису"
 
-#: ../../src/ed_menu.py:771 ../../src/prefdlg.py:452 ../../src/prefdlg.py:819
+#: ../../src/ed_menu.py:782 ../../src/prefdlg.py:452 ../../src/prefdlg.py:819
 msgid "Syntax Highlighting"
 msgstr "Підсвічування синтаксису"
 
@@ -1986,7 +2000,7 @@ msgstr "Системна директорія"
 msgid "Tab Width"
 msgstr "Ширина табулятора"
 
-#: ../../src/ed_menu.py:722
+#: ../../src/ed_menu.py:733
 msgid "Tabs to Spaces"
 msgstr "Табуляцію в пропуски"
 
@@ -2011,7 +2025,7 @@ msgid ""
 "Click Cancel to abort opening the file"
 msgstr ""
 
-#: ../../src/ed_main.py:1182
+#: ../../src/ed_main.py:1208
 #, python-format
 msgid ""
 "The file: \"%s\" has been modified since the last save point.\n"
@@ -2022,17 +2036,17 @@ msgstr ""
 "\n"
 "Would you like to save the changes?"
 
-#: ../../src/ed_pages.py:514
+#: ../../src/ed_pages.py:516
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr "There are no files that Editra can open in %s"
 
-#: ../../src/ed_stc.py:2172
+#: ../../src/ed_stc.py:2245
 #, fuzzy
 msgid "To Lowercase"
 msgstr "Нижній регістр"
 
-#: ../../src/ed_stc.py:2171
+#: ../../src/ed_stc.py:2244
 #, fuzzy
 msgid "To Uppercase"
 msgstr "Верхній регістр"
@@ -2055,23 +2069,23 @@ msgstr "Для включення додатку поставте галочку
 msgid "To open multiple files at once %s+Click to select the desired files/folders then hit Enter to open them all at once"
 msgstr "Для відкриття кількох файлів одночасно %s+Клацніть, щоб обрати бажані файли/папки,а потім натиснітьt Enter, щоб відкрити їх усіх одночасно"
 
-#: ../../src/ed_menu.py:763
+#: ../../src/ed_menu.py:774
 msgid "Toggle Auto-Indentation functionality"
 msgstr "Перемикнути функціональність автоабзацування"
 
-#: ../../src/ed_menu.py:578
+#: ../../src/ed_menu.py:589
 msgid "Toggle Bookmark"
 msgstr "Перемикнути закладки"
 
-#: ../../src/ed_menu.py:770
+#: ../../src/ed_menu.py:781
 msgid "Toggle Code Folding"
 msgstr "Перемикнути згортання кодування"
 
-#: ../../src/ed_menu.py:647
+#: ../../src/ed_menu.py:658
 msgid "Toggle Editor View Options"
 msgstr "Перемикнути опції Вигляду редактора"
 
-#: ../../src/ed_menu.py:580
+#: ../../src/ed_menu.py:591
 msgid "Toggle bookmark of the current line"
 msgstr "Перемикнути закладки наявної лінійки"
 
@@ -2079,7 +2093,7 @@ msgstr "Перемикнути закладки наявної лінійки"
 msgid "Toolbar Icon Size"
 msgstr "Розмір іконки Пеналу інструментів"
 
-#: ../../src/ed_menu.py:827
+#: ../../src/ed_menu.py:838
 msgid "Translate Editra"
 msgstr "Перекласти  Editra"
 
@@ -2087,15 +2101,15 @@ msgstr "Перекласти  Editra"
 msgid "Transparency"
 msgstr "Прозорість"
 
-#: ../../src/ed_menu.py:572
+#: ../../src/ed_menu.py:583
 msgid "Transpose Line"
 msgstr "Лінійка транспонування"
 
-#: ../../src/ed_menu.py:574
+#: ../../src/ed_menu.py:585
 msgid "Transpose the current line with the previous one"
 msgstr "Транспонувати наявну лінійку попередньою"
 
-#: ../../src/ed_menu.py:725
+#: ../../src/ed_menu.py:736
 msgid "Trim Trailing Whitespace"
 msgstr "Впорядкувати  кінцевий символ пробілу"
 
@@ -2115,31 +2129,31 @@ msgstr "Неможливо видобути список додатків"
 msgid "Unable to retrieve version info"
 msgstr "Неможливо видобути інформацію про версію"
 
-#: ../../src/ed_menu.py:687
+#: ../../src/ed_menu.py:698
 msgid "Uncomment Lines"
 msgstr "Не коментувати  лінійки"
 
-#: ../../src/ed_menu.py:689
+#: ../../src/ed_menu.py:700
 msgid "Uncomment the selected lines"
 msgstr "Не коментувати обрані  лінійки"
 
-#: ../../src/ed_stc.py:2164 ../../src/ed_toolbar.py:77
+#: ../../src/ed_stc.py:2237 ../../src/ed_toolbar.py:77
 msgid "Undo"
 msgstr "Відмінити"
 
-#: ../../src/ed_menu.py:530 ../../src/ed_toolbar.py:77
+#: ../../src/ed_menu.py:538 ../../src/ed_toolbar.py:77
 msgid "Undo Last Action"
 msgstr "Відмінити останню дію"
 
-#: ../../src/ed_menu.py:696
+#: ../../src/ed_menu.py:707
 msgid "Unindent Lines"
 msgstr "Лінійки без відступу"
 
-#: ../../src/ed_menu.py:698
+#: ../../src/ed_menu.py:709
 msgid "Unindent the selected lines"
 msgstr "Не робити відступу обраних лінійок"
 
-#: ../../src/ed_menu.py:737 ../../src/prefdlg.py:528
+#: ../../src/ed_menu.py:748 ../../src/prefdlg.py:528
 msgid "Unix (\\n)"
 msgstr "Unix (\\n)"
 
@@ -2148,7 +2162,7 @@ msgstr "Unix (\\n)"
 msgid "Unknown"
 msgstr "Невідомий"
 
-#: ../../src/ed_search.py:539
+#: ../../src/ed_search.py:559
 #, fuzzy
 msgid "Untitled"
 msgstr "Файл_без назви"
@@ -2158,11 +2172,11 @@ msgstr "Файл_без назви"
 msgid "Untitled - %d"
 msgstr "Файл_без назви"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:605
+#: ../../plugins/filebrowser/filebrowser/browser.py:619
 msgid "Untitled_File"
 msgstr "Файл_без назви"
 
-#: ../../plugins/filebrowser/filebrowser/browser.py:603
+#: ../../plugins/filebrowser/filebrowser/browser.py:617
 msgid "Untitled_Folder"
 msgstr "Папка_без назви"
 
@@ -2174,11 +2188,11 @@ msgstr "Оновити"
 msgid "Update Available"
 msgstr "Доступне оновлення"
 
-#: ../../src/ed_menu.py:700
+#: ../../src/ed_menu.py:711
 msgid "Uppercase"
 msgstr "Верхній регістр"
 
-#: ../../src/ed_menu.py:760
+#: ../../src/ed_menu.py:771
 msgid "Use Auto Completion when available"
 msgstr "Використовувати автозаповнення при наявності"
 
@@ -2186,7 +2200,7 @@ msgstr "Використовувати автозаповнення при на�
 msgid "Use Proxy"
 msgstr "Використовувати Проксі"
 
-#: ../../src/ed_menu.py:708
+#: ../../src/ed_menu.py:719
 msgid "Use Soft Tabs"
 msgstr "Використовувати програмні табулятори"
 
@@ -2210,11 +2224,11 @@ msgstr "Версія"
 msgid "View Editra's console log"
 msgstr "Переглянути протокол  Editra"
 
-#: ../../src/ed_menu.py:658
+#: ../../src/ed_menu.py:669
 msgid "View Line of Next Bookmark"
 msgstr "Переглянути лінійку наступної закладки"
 
-#: ../../src/ed_menu.py:661
+#: ../../src/ed_menu.py:672
 msgid "View Line of Previous Bookmark"
 msgstr "Переглянути лінійку попередньої закладки"
 
@@ -2222,7 +2236,7 @@ msgstr "Переглянути лінійку попередньої закла�
 msgid "View Options"
 msgstr "Перегляд параметрів"
 
-#: ../../src/ed_menu.py:822
+#: ../../src/ed_menu.py:833
 #, python-format
 msgid "Visit the project homepage %s"
 msgstr "Відвідати домашню сторінку проекту %s"
@@ -2239,31 +2253,31 @@ msgstr "Текст попередження"
 msgid "Where"
 msgstr "Де"
 
-#: ../../src/ed_main.py:602
+#: ../../src/ed_main.py:609
 msgid "Where to Save Profile?"
 msgstr "Де зберегти профіль?"
 
-#: ../../src/ed_menu.py:728
+#: ../../src/ed_menu.py:739
 msgid "Whitespace"
 msgstr "Пробільний символ"
 
-#: ../../src/ed_menu.py:729
+#: ../../src/ed_menu.py:740
 msgid "Whitespace formating commands"
 msgstr "Команди форматування пробільного символу"
 
-#: ../../src/ed_menu.py:741 ../../src/prefdlg.py:529
+#: ../../src/ed_menu.py:752 ../../src/prefdlg.py:529
 msgid "Windows (\\r\\n)"
 msgstr "Windows(\\r\\n"
 
-#: ../../src/ed_menu.py:712 ../../src/prefdlg.py:557
+#: ../../src/ed_menu.py:723 ../../src/prefdlg.py:557
 msgid "Word Wrap"
 msgstr "Переносити слова"
 
-#: ../../src/ed_menu.py:714
+#: ../../src/ed_menu.py:725
 msgid "Wrap Text Horizontally"
 msgstr "Огорнути текст горизонтально"
 
-#: ../../src/ed_main.py:1220
+#: ../../src/ed_main.py:1246
 #, python-format
 msgid "Written in 100%% Python."
 msgstr "Написано на 100%% Python."
@@ -2272,15 +2286,15 @@ msgstr "Написано на 100%% Python."
 msgid "Your profile has been updated to the latest version"
 msgstr "Ваш профіль було оновлено до наступної версії"
 
-#: ../../src/ed_menu.py:620 ../../src/ed_menu.py:622
+#: ../../src/ed_menu.py:631 ../../src/ed_menu.py:633
 msgid "Zoom Default"
 msgstr "Масштаб зображення по замовчуванню"
 
-#: ../../src/ed_menu.py:617 ../../src/ed_menu.py:619
+#: ../../src/ed_menu.py:628 ../../src/ed_menu.py:630
 msgid "Zoom In"
 msgstr "Збільшити масштаб зображення"
 
-#: ../../src/ed_menu.py:614 ../../src/ed_menu.py:616
+#: ../../src/ed_menu.py:625 ../../src/ed_menu.py:627
 msgid "Zoom Out"
 msgstr "Зменшити масштаб зображення"
 
@@ -2304,9 +2318,24 @@ msgstr "exec"
 msgid "italic"
 msgstr "курсив"
 
+#: ../../src/ed_search.py:601
+#, fuzzy, python-format
+msgid "match case: %s"
+msgstr "Звірити регістр"
+
+#: ../../src/ed_search.py:600
+#, python-format
+msgid "regex: %s"
+msgstr ""
+
 #: ../../src/style_editor.py:664
 msgid "underline"
 msgstr "підкреслення"
+
+#: ../../src/ed_search.py:602
+#, python-format
+msgid "whole word: %s"
+msgstr ""
 
 #~ msgid ""
 #~ "%s has been deleted since its last save point.\n"
