@@ -699,8 +699,10 @@ def UpgradeOldInstall():
     """
     old_cdir = user_config = u"%s%s.%s%s" % (wx.GetHomeDir(), os.sep,
                                              ed_glob.PROG_NAME, os.sep)
-    if os.path.exists(old_cdir):
-        base = ed_glob.CONFIG['CONFIG_BASE']
+    base = ed_glob.CONFIG['CONFIG_BASE']
+
+    if os.path.exists(old_cdir) and \
+       base.lower().rstrip(os.sep) != old_cdir.lower().rstrip(os.sep):
         for item in os.listdir(old_cdir):
             try:
                 dest = os.path.join(base, item)
