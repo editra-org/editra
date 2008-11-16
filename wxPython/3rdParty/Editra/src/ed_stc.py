@@ -1979,7 +1979,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self._code['compsvc'].LoadCompProvider(self.GetLexer())
         self.AutoCompSetIgnoreCase(self._code['compsvc'].GetIgnoreCase())
         self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
-        self.AutoCompSetFillUps(self._code['compsvc'].GetAutoCompFillups())
+        # TODO: come back to this it can cause some annoying behavior where
+        #       it automatically completes strings that you don't want to be
+        #       inserted in the buffer. (i.e typing self._value will bring up
+        #       the autocomp list but if self._value is not in the list and you
+        #       hit space it will automatically insert something from the list.)
+#        self.AutoCompSetFillUps(self._code['compsvc'].GetAutoCompFillups())
 
     def ConfigureLexer(self, file_ext):
         """Sets Lexer and Lexer Keywords for the specifed file extension
