@@ -356,6 +356,7 @@ class StyleMgr(object):
         # Attributes
         self.fonts = self.GetFontDictionary()
         self.style_set = custom
+        self.syntax_set = list()
         self.LOG = wx.GetApp().GetLog()
 
         # Get the Style Set
@@ -381,6 +382,27 @@ class StyleMgr(object):
                 sty_dict[key] = StyleItem("#000000", "#FFFFFF",
                                           "%(primary)s", "%(size)d")
         return sty_dict
+
+    def FindTagById(self, style_id):
+        """Find the style tag that is associated with the given
+        Id. If not found it returns an empty string.
+        @param style_id: id of tag to look for
+        @return: style tag string
+        @todo: change syntax modules to all use ids
+
+        """
+        for data in self.syntax_set:
+            # If its a standard lexer the style id will be stored as
+            # a string. If its a container lexer it is the id.
+            if isinstance(data[0], basestring):
+                s_id = getattr(wx.stc, data[0])
+            else:
+                s_id = data[0]
+
+            if style_id == s_id:
+                return data[1]
+
+        return 'default_style'
 
     def GetFontDictionary(self, default=True):
         """Does a system lookup to build a default set of fonts using
@@ -537,6 +559,13 @@ class StyleMgr(object):
 
         """
         return StyleMgr.STYLES.get(self.style_set, DefaultStyleDictionary())
+
+    def GetSyntaxParams(self):
+        """Get the set of syntax parameters
+        @return: list
+
+        """
+        return self.syntax_set
 
     def HasNamedStyle(self, name):
         """Checks if a style has been set/loaded or not
@@ -839,6 +868,86 @@ class StyleMgr(object):
             self.LOG("[ed_style][err] SetStyles expects a " \
                      "dictionary of StyleItems")
             return False
+
+    def SetSyntax(self, syn_lst):
+        """Sets the Syntax Style Specs from a list of specifications
+        @param syn_lst: [(STYLE_ID, "STYLE_TYPE"), (STYLE_ID2, "STYLE_TYPE2)]
+
+        """
+        # Parses Syntax Specifications list, ignoring all bad values
+        self.UpdateBaseStyles()
+        valid_settings = list()
+        for syn in syn_lst:
+            if len(syn) != 2:
+                continue
+            else:
+                if self.GetLexer() == wx.stc.STC_LEX_CONTAINER:
+                    self.StyleSetSpec(syn[0], self.GetStyleByName(syn[1]))
+                else:
+                    if not isinstance(syn[0], basestring) or \
+                       not hasattr(wx.stc, syn[0]):
+                        continue
+                    elif not isinstance(syn[1], basestring):
+                        continue
+                    else:
+                        self.StyleSetSpec(getattr(wx.stc, syn[0]), \
+                                          self.GetStyleByName(syn[1]))
+                valid_settings.append(syn)
+
+        self.syntax_set = valid_settings
+        return True
+
+    def StyleDefault(self):
+        """Clears the editor styles to default
+        @postcondition: style is reset to default
+
+        """
+        self.StyleClearAll()
+        self.SetCaretForeground(wx.NamedColor("black"))
+        self.Colourise(0, -1)
+
+    def UpdateBaseStyles(self):
+        """Updates the base styles of editor to the current settings
+        @postcondition: base style info is updated
+
+        """
+        self.StyleDefault()
+        self.SetMargins(4, 0)
+        # Global default styles for all languages
+        self.StyleSetSpec(0, self.GetStyleByName('default_style'))
+        self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, \
+                          self.GetStyleByName('default_style'))
+        self.StyleSetSpec(wx.stc.STC_STYLE_LINENUMBER, \
+                          self.GetStyleByName('line_num'))
+        self.StyleSetSpec(wx.stc.STC_STYLE_CONTROLCHAR, \
+                          self.GetStyleByName('ctrl_char'))
+        self.StyleSetSpec(wx.stc.STC_STYLE_BRACELIGHT, \
+                          self.GetStyleByName('brace_good'))
+        self.StyleSetSpec(wx.stc.STC_STYLE_BRACEBAD, \
+                          self.GetStyleByName('brace_bad'))
+        self.StyleSetSpec(wx.stc.STC_STYLE_INDENTGUIDE, \
+                          self.GetStyleByName('guide_style'))
+
+        # wx.stc.STC_STYLE_CALLTIP doesnt seem to do anything
+        calltip = self.GetItemByName('calltip')
+        self.CallTipSetBackground(calltip.GetBack())
+        self.CallTipSetForeground(calltip.GetFore())
+
+        sback = self.GetItemByName('select_style')
+        if not sback.IsNull():
+            sback = sback.GetBack()
+        else:
+            sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        self.SetSelBackground(True, sback)
+
+        wspace = self.GetItemByName('whitespace_style')
+        if not wspace.IsNull():
+            self.SetWhitespaceBackground(True, wspace.GetBack())
+            self.SetWhitespaceForeground(True, wspace.GetFore())
+
+        self.SetCaretForeground(self.GetDefaultForeColour())
+        self.SetCaretLineBack(self.GetItemByName('caret_line').GetBack())
+        self.Colourise(0, -1)
 
 #-----------------------------------------------------------------------------#
 # Utility Functions

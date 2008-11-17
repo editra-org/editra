@@ -113,7 +113,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self._code = dict(compsvc=autocomp.AutoCompService(self),
                           synmgr=syntax.SyntaxMgr(ed_glob.CONFIG['CACHE_DIR']),
                           keywords=[ ' ' ],
-                          syntax_set=list(),
                           comment=list(),
                           clexer=None,      # Container lexer method
                           indenter=None,    # Auto indenter
@@ -665,27 +664,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if self.GetSelectionStart() == self.GetSelectionEnd():
             self.SetCurrentPos(self.GetCurrentPos() + 1)
         self.DeleteBack()
-
-    def FindTagById(self, style_id):
-        """Find the style tag that is associated with the given
-        Id. If not found it returns an empty string.
-        @param style_id: id of tag to look for
-        @return: style tag string
-        @todo: change syntax modules to all use ids
-
-        """
-        for data in self._code['syntax_set']:
-            # If its a standard lexer the style id will be stored as
-            # a string. If its a container lexer it is the id.
-            if isinstance(data[0], basestring):
-                s_id = getattr(wx.stc, data[0])
-            else:
-                s_id = data[0]
-
-            if style_id == s_id:
-                return data[1]
-
-        return 'default_style'
 
     def GetAutoComplete(self):
         """Is Autocomplete being used by this instance
@@ -2096,42 +2074,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         kwlist = self._code['keywords'].split()    # Split into a list of words
         kwlist = list(set(kwlist))                 # Uniqueify the list
         kwlist.sort()                              # Sort into alphbetical order
+
         # Can't have ? in scintilla autocomp list unless specifying an image
         if '?' in kwlist:
             kwlist.remove('?')
         self._code['keywords'] = " ".join(kwlist)  # Put back into a string
-        return True
-
-    def SetSyntax(self, syn_lst):
-        """Sets the Syntax Style Specs from a list of specifications
-        @param syn_lst: [(STYLE_ID, "STYLE_TYPE"), (STYLE_ID2, "STYLE_TYPE2)]
-
-        """
-        # Parses Syntax Specifications list, ignoring all bad values
-        self.UpdateBaseStyles()
-        valid_settings = list()
-        for syn in syn_lst:
-            if len(syn) != 2:
-                self.LOG("[ed_stc][warn] Error setting syntax spec")
-                continue
-            else:
-                if self.GetLexer() == wx.stc.STC_LEX_CONTAINER:
-                    self.StyleSetSpec(syn[0], self.GetStyleByName(syn[1]))
-                else:
-                    if not isinstance(syn[0], basestring) or \
-                       not hasattr(wx.stc, syn[0]):
-                        self.LOG("[ed_stc][warn] Unknown syntax region: %s" % \
-                                 str(syn[0]))
-                        continue
-                    elif not isinstance(syn[1], basestring):
-                        self.LOG("[ed_stc][warn] Poorly formated styletag: %s" % \
-                                 str(syn[1]))
-                        continue
-                    else:
-                        self.StyleSetSpec(getattr(wx.stc, syn[0]), \
-                                          self.GetStyleByName(syn[1]))
-                valid_settings.append(syn)
-        self._code['syntax_set'] = valid_settings
         return True
 
     def SetProperties(self, prop_lst):
@@ -2162,63 +2109,14 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         self.Freeze()
         self.StyleClearAll()
-        self.SetSyntax(self._code['syntax_set'])
+        self.SetSyntax(self.GetSyntaxParams())
         self.DefineMarkers()
         self.Thaw()
         self.Refresh()
 
-    def StyleDefault(self):
-        """Clears the editor styles to default
-        @postcondition: style is reset to default
-
-        """
-        self.StyleClearAll()
-        self.SetCaretForeground(wx.NamedColor("black"))
-        self.Colourise(0, -1)
-
     def UpdateBaseStyles(self):
-        """Updates the base styles of editor to the current settings
-        @postcondition: base style info is updated
-
-        """
-        self.StyleDefault()
-        self.SetMargins(4, 0)
-        # Global default styles for all languages
-        self.StyleSetSpec(0, self.GetStyleByName('default_style'))
-        self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, \
-                          self.GetStyleByName('default_style'))
-        self.StyleSetSpec(wx.stc.STC_STYLE_LINENUMBER, \
-                          self.GetStyleByName('line_num'))
-        self.StyleSetSpec(wx.stc.STC_STYLE_CONTROLCHAR, \
-                          self.GetStyleByName('ctrl_char'))
-        self.StyleSetSpec(wx.stc.STC_STYLE_BRACELIGHT, \
-                          self.GetStyleByName('brace_good'))
-        self.StyleSetSpec(wx.stc.STC_STYLE_BRACEBAD, \
-                          self.GetStyleByName('brace_bad'))
-        self.StyleSetSpec(wx.stc.STC_STYLE_INDENTGUIDE, \
-                          self.GetStyleByName('guide_style'))
-
-        # wx.stc.STC_STYLE_CALLTIP doesnt seem to do anything
-        calltip = self.GetItemByName('calltip')
-        self.CallTipSetBackground(calltip.GetBack())
-        self.CallTipSetForeground(calltip.GetFore())
-
-        sback = self.GetItemByName('select_style')
-        if not sback.IsNull():
-            sback = sback.GetBack()
-        else:
-            sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-        self.SetSelBackground(True, sback)
-
-        wspace = self.GetItemByName('whitespace_style')
-        if not wspace.IsNull():
-            self.SetWhitespaceBackground(True, wspace.GetBack())
-            self.SetWhitespaceForeground(True, wspace.GetFore())
-
-        self.SetCaretForeground(self.GetDefaultForeColour())
-        self.SetCaretLineBack(self.GetItemByName('caret_line').GetBack())
+        ed_style.StyleMgr.UpdateBaseStyles(self)
         self.DefineMarkers()
-        self.Colourise(0, -1)
 
     def UpdateAllStyles(self, spec_style=None):
         """Refreshes all the styles and attributes of the control
@@ -2229,7 +2127,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if spec_style != self.style_set:
             self.LoadStyleSheet(self.GetStyleSheet(spec_style), force=True)
         self.UpdateBaseStyles()
-        self.SetSyntax(self._code['syntax_set'])
+        self.SetSyntax(self.GetSyntaxParams())
         self.Refresh()
 
     #---- End Style Definitions ----#
