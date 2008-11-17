@@ -28,6 +28,9 @@ __revision__ = "$Revision$"
 import os
 import re
 import wx
+
+# Editra Libraries
+import ed_glob
 import util
 from profiler import Profile_Get, Profile_Set
 
@@ -560,6 +563,40 @@ class StyleMgr(object):
         """
         return StyleMgr.STYLES.get(self.style_set, DefaultStyleDictionary())
 
+    @staticmethod
+    def GetStyleSheet(sheet_name=None):
+        """Finds the current style sheet and returns its path. The
+        Lookup is done by first looking in the users config directory
+        and if it is not found there it looks for one on the system
+        level and if that fails it returns None.
+        @param sheet_name: style sheet to look for
+        @return: full path to style sheet
+
+        """
+        if sheet_name:
+            style = sheet_name
+            if sheet_name.split(u'.')[-1] != u"ess":
+                style += u".ess"
+        elif Profile_Get('SYNTHEME', 'str').split(u'.')[-1] != u"ess":
+            style = (Profile_Get('SYNTHEME', 'str') + u".ess").lower()
+        else:
+            style = Profile_Get('SYNTHEME', 'str').lower()
+
+        # Get Correct Filename if it exists
+        for sheet in util.GetResourceFiles('styles', False, True, title=False):
+            if sheet.lower() == style.lower():
+                style = sheet
+                break
+
+        user = os.path.join(ed_glob.CONFIG['STYLES_DIR'], style)
+        sysp = os.path.join(ed_glob.CONFIG['SYS_STYLES_DIR'], style)
+        if os.path.exists(user):
+            return user
+        elif os.path.exists(sysp):
+            return sysp
+        else:
+            return None
+
     def GetSyntaxParams(self):
         """Get the set of syntax parameters
         @return: list
@@ -905,6 +942,18 @@ class StyleMgr(object):
         self.StyleClearAll()
         self.SetCaretForeground(wx.NamedColor("black"))
         self.Colourise(0, -1)
+
+    def UpdateAllStyles(self, spec_style=None):
+        """Refreshes all the styles and attributes of the control
+        @param spec_style: style scheme name
+        @postcondition: style scheme is set to specified style
+
+        """
+        if spec_style != self.style_set:
+            self.LoadStyleSheet(self.GetStyleSheet(spec_style), force=True)
+        self.UpdateBaseStyles()
+        self.SetSyntax(self.GetSyntaxParams())
+        self.Refresh()
 
     def UpdateBaseStyles(self):
         """Updates the base styles of editor to the current settings
