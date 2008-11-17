@@ -223,8 +223,6 @@ def ExceptionHook(exctype, value, trace):
     """
     ftrace = FormatTrace(exctype, value, trace)
 
-    print type(ftrace)
-
     # Ensure that error gets raised to console as well
     print ftrace
 
