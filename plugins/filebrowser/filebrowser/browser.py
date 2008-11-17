@@ -32,12 +32,12 @@ import wx
 import ed_glob
 import ed_msg
 import ed_menu
+import ed_mdlg
 import syntax.syntax
 import util
 from eclib import platebtn
 
 # Local Imports
-import FileInfo
 import Trash
 
 #-----------------------------------------------------------------------------#
@@ -453,7 +453,8 @@ class FileBrowser(wx.GenericDirCtrl):
             if bmp.IsOk():
                 self._imglst.Replace(idx, bmp)
 
-    def _MakeMenu(self):
+    @staticmethod
+    def _MakeMenu():
         """Setup the context menu"""
         menu = wx.Menu()
 
@@ -603,7 +604,7 @@ class FileBrowser(wx.GenericDirCtrl):
         elif e_id == ID_GETINFO:
             last = None
             for fname in paths:
-                info = FileInfo.FileInfoDlg(self.GetTopLevelParent(), fname)
+                info = ed_mdlg.EdFileInfoDlg(self.GetTopLevelParent(), fname)
                 if last is None:
                     info.CenterOnParent()
                 else:
@@ -671,7 +672,8 @@ class FileBrowser(wx.GenericDirCtrl):
         self._SetupIcons()
         self._tree.Refresh()
 
-    def OpenFiles(self, files):
+    @staticmethod
+    def OpenFiles(files):
         """Open the list of files in Editra for editing
         @param files: list of file names
 
@@ -919,6 +921,9 @@ class FileDragImage(wx.DragImage):
         """
         bmp = self.MakeBitmap(treeCtrl, lbl, img)
         wx.DragImage.__init__(self, bmp, wx.StockCursor(wx.CURSOR_COPY_ARROW))
+
+        # Attributes
+        self._backgroundColour = None
 
     def MakeBitmap(self, treeCtrl, lbl, img):
         """Draw and create the drag image

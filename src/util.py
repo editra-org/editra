@@ -16,11 +16,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import sys
 import stat
 import types
+import mimetypes
 import encodings
 import codecs
 import urllib2
@@ -31,6 +32,8 @@ import ed_glob
 import ed_event
 import ed_crypt
 import dev_tool
+import syntax.syntax as syntax
+import syntax.synglob as synglob
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -286,6 +289,28 @@ def GetFileModTime(file_name):
     except EnvironmentError:
         mod_time = 0
     return mod_time
+
+def GetFileType(fname):
+    """Get what the type of the file is as Editra sees it
+    in a formatted string.
+    @param fname: file path
+    @return: string (formatted/translated filetype)
+
+    """
+    if os.path.isdir(fname):
+        return _("Folder")
+
+    eguess = syntax.GetTypeFromExt(fname.split('.')[-1])
+    if eguess == synglob.LANG_TXT and fname.split('.')[-1] == 'txt':
+        return _("Text Document")
+    elif eguess == synglob.LANG_TXT:
+        mtype = mimetypes.guess_type(fname)[0]
+        if mtype is not None:
+            return mtype
+        else:
+            return _("Unknown")
+    else:
+        return _("%s Source File") % eguess
 
 def GetFileReader(file_name, enc='utf-8'):
     """Returns a file stream reader object for reading the
