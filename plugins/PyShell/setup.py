@@ -18,7 +18,7 @@ except ImportError:
 if setup != None:
     setup(
         name='PyShell',
-        version='0.5',
+        version='0.6',
         description=__doc__,
         author=__author__,
         author_email="cprecord@editra.org",

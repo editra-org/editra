@@ -9,21 +9,30 @@
 # Plugin Metadata
 """Adds a PyShell to the Shelf"""
 __author__ = "Cody Precord"
-__version__ = "0.5"
+__version__ = "0.6"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import os
 import wx
+import wx.stc
 from wx.py import shell
 
 # Local Imports
 import ed_glob
+import util
 import iface
-from profiler import Profile_Get
+import ed_style
 import plugin
+from profiler import Profile_Get, Profile_Set
+import syntax.syntax as syntax
+import eclib.ctrlbox as ctrlbox
 
 #-----------------------------------------------------------------------------#
 # Globals
+
+PYSHELL_STYLE = "PyShell.Style" # Profile Key
+
 _ = wx.GetTranslation
 
 #-----------------------------------------------------------------------------#
@@ -33,56 +42,21 @@ class PyShell(plugin.Plugin):
     plugin.Implements(iface.ShelfI)
     __name__ = u'PyShell'
 
-    def __SetupFonts(self):
-        """Create the font settings for the shell by trying to get the
-        users prefered font settings used in the EdStc
-
-        """
-        fonts = { 
-                  'size'      : 11,
-                  'lnsize'    : 10,
-                  'backcol'   : '#FFFFFF',
-                  'calltipbg' : '#FFFFB8',
-                  'calltipfg' : '#404040',
-        }
-
-        font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN, 
-                                                        wx.FONTSTYLE_NORMAL, 
-                                                        wx.FONTWEIGHT_NORMAL))
-        if font.IsOk() and len(font.GetFaceName()):
-            fonts['mono'] = font.GetFaceName()
-            fonts['size'] = font.GetPointSize()
-            fonts['lnsize'] = max(0, fonts['size'] - 1)
-
-        font = Profile_Get('FONT2', 'font', wx.Font(11, wx.FONTFAMILY_SWISS, 
-                                                        wx.FONTSTYLE_NORMAL, 
-                                                        wx.FONTWEIGHT_NORMAL))
-        if font.IsOk() and len(font.GetFaceName()):
-            fonts['times'] = font.GetFaceName()
-            fonts['helv'] = font.GetFaceName()
-            fonts['other'] = font.GetFaceName()
-
-        return fonts
-
     def AllowMultiple(self):
         """PyShell allows multiple instances"""
         return True
 
     def CreateItem(self, parent):
         """Returns a PyShell Panel"""
-        self._log = wx.GetApp().GetLog()
-        self._log("[PyShell][info] Creating PyShell instance for Shelf")
-        pyshell = shell.Shell(parent, locals=dict())
-        pyshell.setStyles(self.__SetupFonts())
-        return pyshell
+        util.Log("[PyShell][info] Creating PyShell instance for Shelf")
+        return EdPyShellBox(parent)
 
     def GetBitmap(self):
         """Get the bitmap for representing this control in the ui
         @return: wx.Bitmap
 
         """
-        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PYSHELL), wx.ART_MENU)
-        return bmp
+        return wx.ArtProvider.GetBitmap(str(ed_glob.ID_PYSHELL), wx.ART_MENU)
 
     def GetId(self):
         return ed_glob.ID_PYSHELL
@@ -96,3 +70,92 @@ class PyShell(plugin.Plugin):
 
     def IsStockable(self):
         return True
+
+#-----------------------------------------------------------------------------#
+
+class EdPyShellBox(ctrlbox.ControlBox):
+    """Control box for PyShell"""
+    def __init__(self, parent):
+        ctrlbox.ControlBox.__init__(self, parent)
+
+        # Attributes
+        self._shell = EdPyShell(self)
+        self._styles = util.GetResourceFiles('styles', True,
+                                             True, title=False)
+        self._choice = None
+
+        # Setup
+        self.__DoLayout()
+        style = self._shell.GetShellTheme()
+        for sty in self._styles:
+            if sty.lower() == style.lower():
+                self._choice.SetStringSelection(sty)
+                break
+
+        # Event handlers
+        self.Bind(wx.EVT_CHOICE, self.OnChoice, self._choice)
+
+    def __DoLayout(self):
+        """Layout the control box"""
+        ctrlbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        if wx.Platform == '__WXGTK__':
+            ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+
+        self._choice = wx.Choice(ctrlbar, wx.ID_ANY, choices=self._styles)
+
+        ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("Color Scheme") + u":"),
+                           wx.ALIGN_LEFT)
+        ctrlbar.AddControl(self._choice, wx.ALIGN_LEFT)
+
+        self.SetControlBar(ctrlbar)
+
+        self.SetWindow(self._shell)
+
+    def OnChoice(self, evt):
+        """Change the color style
+        @param evt: wx.EVT_CHOICE
+
+        """
+        e_obj = evt.GetEventObject()
+        val = e_obj.GetStringSelection()
+        self._shell.SetShellTheme(val)
+
+#-----------------------------------------------------------------------------#
+
+class EdPyShell(shell.Shell, ed_style.StyleMgr):
+    """Custom PyShell that uses Editras StyleManager"""
+    def __init__(self, parent):
+        """Initialize the Shell"""
+        shell.Shell.__init__(self, parent, locals=dict())
+
+        # Get the color scheme to use
+        style = Profile_Get(PYSHELL_STYLE)
+        if style is None:
+            style = Profile_Get('SYNTHEME')
+
+        ed_style.StyleMgr.__init__(self, self.GetStyleSheet(style))
+
+        # Attributes
+        self.SetStyleBits(5)
+        self._shell_style = style
+        mgr = syntax.SyntaxMgr(ed_glob.CONFIG['CACHE_DIR'])
+        syn_data = mgr.SyntaxData('py')
+        synspec = syn_data[syntax.SYNSPEC]
+        self.SetLexer(wx.stc.STC_LEX_PYTHON)
+        self.SetSyntax(synspec)
+
+    def GetShellTheme(self):
+        """Get the theme currently used by the shell
+        @return: string
+
+        """
+        return self._shell_style
+
+    def SetShellTheme(self, style):
+        """Set the color scheme used by the shell
+        @param style: style sheet name (string)
+
+        """
+        self._shell_style = style
+        Profile_Set(PYSHELL_STYLE, style)
+        self.UpdateAllStyles(style)
