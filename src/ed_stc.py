@@ -687,39 +687,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         return self.file
 
-    def GetStyleSheet(self, sheet_name=None):
-        """Finds the current style sheet and returns its path. The
-        Lookup is done by first looking in the users config directory
-        and if it is not found there it looks for one on the system
-        level and if that fails it returns None.
-        @param sheet_name: style sheet to look for
-        @return: full path to style sheet
-
-        """
-        if sheet_name:
-            style = sheet_name
-            if sheet_name.split(u'.')[-1] != u"ess":
-                style += u".ess"
-        elif _PGET('SYNTHEME', 'str').split(u'.')[-1] != u"ess":
-            style = (_PGET('SYNTHEME', 'str') + u".ess").lower()
-        else:
-            style = _PGET('SYNTHEME', 'str').lower()
-
-        # Get Correct Filename if it exists
-        for sheet in util.GetResourceFiles('styles', False, True, title=False):
-            if sheet.lower() == style.lower():
-                style = sheet
-                break
-
-        user = os.path.join(ed_glob.CONFIG['STYLES_DIR'], style)
-        sysp = os.path.join(ed_glob.CONFIG['SYS_STYLES_DIR'], style)
-        if os.path.exists(user):
-            return user
-        elif os.path.exists(sysp):
-            return sysp
-        else:
-            return None
-
     def OnKeyDown(self, evt):
         """Handles keydown events, currently only deals with
         auto indentation.
@@ -2117,18 +2084,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def UpdateBaseStyles(self):
         ed_style.StyleMgr.UpdateBaseStyles(self)
         self.DefineMarkers()
-
-    def UpdateAllStyles(self, spec_style=None):
-        """Refreshes all the styles and attributes of the control
-        @param spec_style: style scheme name
-        @postcondition: style scheme is set to specified style
-
-        """
-        if spec_style != self.style_set:
-            self.LoadStyleSheet(self.GetStyleSheet(spec_style), force=True)
-        self.UpdateBaseStyles()
-        self.SetSyntax(self.GetSyntaxParams())
-        self.Refresh()
 
     #---- End Style Definitions ----#
 
