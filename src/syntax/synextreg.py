@@ -236,6 +236,10 @@ LANG_LATEX = u'LaTeX'
 ID_LANG_VB = _NewId()
 LANG_VB = u'Visual Basic'
 
+# Use LEX_VBSCRIPT
+ID_LANG_VBSCRIPT = _NewId()
+LANG_VBSCRIPT = u'VBScript'
+
 # Use LEX_VERILOG
 ID_LANG_VERILOG = _NewId()
 LANG_VERILOG = u'Verilog'
@@ -347,6 +351,7 @@ EXT_MAP = {
            'txt'                : LANG_TXT,
            'vala'               : LANG_VALA,
            'bas cls ctl frm vb' : LANG_VB,
+           'vbs dsm'            : LANG_VBSCRIPT,
            'v'                  : LANG_VERILOG,
            'vh vhdl'            : LANG_VHDL,
            'axl dtd plist rdf svg xml xrc xsd xsl xslt xul' : LANG_XML,
