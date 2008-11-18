@@ -94,6 +94,8 @@ class EdPages(FNB.FlatNotebook):
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CLOSED, self.OnPageClosed)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnUpdatePageText)
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self._pages.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
+        self._pages.Bind(wx.EVT_MIDDLE_UP, lambda evt: self.ClosePage())
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU, self.OnTabMenu)
         self.Bind(wx.EVT_MENU, self.OnCopyTabPath, id=ed_glob.ID_COPY_PATH)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
@@ -282,6 +284,17 @@ class EdPages(FNB.FlatNotebook):
             path = self.control.GetFileName()
             if path is not None:
                 util.SetClipboardText(path)
+        else:
+            evt.Skip()
+
+    def OnLeftDClick(self, evt):
+        """Handle left double clicks and open new tab when in empty area.
+        @param evt: wx.EVT_LEFT_DCLICK
+
+        """
+        where, tabIdx = self._pages.HitTest(evt.GetPosition())
+        if where == FNB.FNB_NOWHERE:
+            self.NewPage()
         else:
             evt.Skip()
 

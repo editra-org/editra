@@ -24,6 +24,8 @@ NEW: [features/improvements]
 +Add Polish and Slovenian translations
 +User configuration files are now kept at standard platform locations
 +New version of PyShell. Supports custom styles.
++Middle click closes tabs (patch from craig.ds)
++Double click empty tab area opens new tab (patch from craig.ds)
 
 BUG FIXES:
 +Fix encoding errors when loading plugins on some systems
