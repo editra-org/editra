@@ -27,6 +27,7 @@ import plugin
 from profiler import Profile_Get, Profile_Set
 import syntax.syntax as syntax
 import eclib.ctrlbox as ctrlbox
+import eclib.platebtn as platebtn
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -83,6 +84,7 @@ class EdPyShellBox(ctrlbox.ControlBox):
         self._styles = util.GetResourceFiles('styles', True,
                                              True, title=False)
         self._choice = None
+        self._clear = None
 
         # Setup
         self.__DoLayout()
@@ -93,6 +95,7 @@ class EdPyShellBox(ctrlbox.ControlBox):
                 break
 
         # Event handlers
+        self.Bind(wx.EVT_BUTTON, self.OnButton, self._clear)
         self.Bind(wx.EVT_CHOICE, self.OnChoice, self._choice)
 
     def __DoLayout(self):
@@ -107,9 +110,24 @@ class EdPyShellBox(ctrlbox.ControlBox):
                            wx.ALIGN_LEFT)
         ctrlbar.AddControl(self._choice, wx.ALIGN_LEFT)
 
-        self.SetControlBar(ctrlbar)
+        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
+        self._clear = platebtn.PlateButton(ctrlbar, label=_("Clear"), bmp=cbmp)
+        ctrlbar.AddStretchSpacer()
+        ctrlbar.AddControl(self._clear, wx.ALIGN_RIGHT)
 
+        self.SetControlBar(ctrlbar)
         self.SetWindow(self._shell)
+
+    def OnButton(self, evt):
+        """Button event handler
+        @param evt: wx.EVT_BUTTON
+
+        """
+        if evt.GetEventObject() == self._clear:
+            self._shell.clear()
+            self._shell.prompt()
+        else:
+            evt.Skip()
 
     def OnChoice(self, evt):
         """Change the color style
