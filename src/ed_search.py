@@ -858,7 +858,6 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         if self.GetValue() == self._last:
             s_cmd = finddlg.edEVT_FIND_NEXT
-        self.InsertHistoryItem(self.GetValue())
 
         evt = finddlg.FindEvent(s_cmd, flags=self._flags)
         self._last = self.GetValue()
@@ -1037,6 +1036,10 @@ class EdSearchCtrl(wx.SearchCtrl):
                 self.DoSearch(next=False)
             else:
                 self.DoSearch(next=True)
+
+            # Add to search history
+            if e_key == wx.WXK_RETURN:
+                self.InsertHistoryItem(self.GetValue())
         else:
             # Don't do incremental searches when the RegEx flag is set in order
             # to avoid errors in compiling the expression

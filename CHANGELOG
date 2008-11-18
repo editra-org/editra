@@ -38,6 +38,7 @@ BUG FIXES:
 +Fix bug in Launch output sometimes missing output data
 +Fix inaccurate highlighting of words when doing incremental whole word search
 +Fix regex not working with '^' (patch from craig.ds)
++Fix bug in populating quick finds search history menu
 
 #-----------------------------------------------------------------------------#
 
