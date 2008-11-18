@@ -111,7 +111,8 @@ class EdPyShellBox(ctrlbox.ControlBox):
         ctrlbar.AddControl(self._choice, wx.ALIGN_LEFT)
 
         cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
-        self._clear = platebtn.PlateButton(ctrlbar, label=_("Clear"), bmp=cbmp)
+        self._clear = platebtn.PlateButton(ctrlbar, label=_("Clear"), bmp=cbmp,
+                                           style=platebtn.PB_STYLE_NOBG)
         ctrlbar.AddStretchSpacer()
         ctrlbar.AddControl(self._clear, wx.ALIGN_RIGHT)
 
