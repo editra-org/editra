@@ -658,10 +658,19 @@ def InitConfig():
         util.CreateConfigDir()
 
         # Check and upgrade installs from old location
+        success = True
         try:
-            UpgradeOldInstall()
+            success = UpgradeOldInstall()
         except:
-            pass
+            success = False
+
+        if not success:
+            old_cdir = u"%s%s.%s%s" % (wx.GetHomeDir(), os.sep,
+                                       ed_glob.PROG_NAME, os.sep)
+            msg = ("Failed to upgrade your old installation\n"
+                   "To retain your old settings you may need to copy some files:\n"
+                   "\nFrom: %s\n\nTo: %s") % (old_cdir, ed_glob.CONFIG['CONFIG_BASE'])
+            wx.MessageBox(msg, "Upgrade Failed", style=wx.ICON_WARNING|wx.OK)
 
         # Set default eol for windows
         if wx.Platform == '__WXMSW__':
@@ -675,17 +684,17 @@ def InitConfig():
     ed_glob.CONFIG['CONFIG_DIR'] = util.ResolvConfigDir("")
     ed_glob.CONFIG['SYSPIX_DIR'] = util.ResolvConfigDir("pixmaps", True)
     ed_glob.CONFIG['PLUGIN_DIR'] = util.ResolvConfigDir("plugins")
-    ed_glob.CONFIG['THEME_DIR'] = util.ResolvConfigDir(os.path.join("pixmaps",
-                                                                    "theme"))
+    ed_glob.CONFIG['THEME_DIR'] = util.ResolvConfigDir(os.path.join("pixmaps", "theme"))
     ed_glob.CONFIG['LANG_DIR'] = util.ResolvConfigDir("locale", True)
     ed_glob.CONFIG['STYLES_DIR'] = util.ResolvConfigDir("styles")
     ed_glob.CONFIG['SYS_PLUGIN_DIR'] = util.ResolvConfigDir("plugins", True)
     ed_glob.CONFIG['SYS_STYLES_DIR'] = util.ResolvConfigDir("styles", True)
-    ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir(os.path.join("tests",
-                                                                   "syntax"),
-                                                                   True)
-    if not util.HasConfigDir("cache"):
-        util.MakeConfigDir("cache")
+    ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir(os.path.join("tests", "syntax"), True)
+
+    # Make sure all standard config directories are there
+    for cfg in ["cache", "styles", "plugins", "profiles"]:
+        if not util.HasConfigDir(cfg):
+            util.MakeConfigDir(cfg)
     ed_glob.CONFIG['CACHE_DIR'] = util.ResolvConfigDir("cache")
 
     return profile_updated
@@ -695,12 +704,14 @@ def InitConfig():
 def UpgradeOldInstall():
     """Upgrade an old installation and transfer all files if they exist
     @note: FOR INTERNAL USE ONLY
+    @return: bool (True if success, False if failure)
 
     """
-    old_cdir = user_config = u"%s%s.%s%s" % (wx.GetHomeDir(), os.sep,
-                                             ed_glob.PROG_NAME, os.sep)
+    old_cdir = u"%s%s.%s%s" % (wx.GetHomeDir(), os.sep,
+                               ed_glob.PROG_NAME, os.sep)
     base = ed_glob.CONFIG['CONFIG_BASE']
 
+    err = 0
     if os.path.exists(old_cdir) and \
        base.lower().rstrip(os.sep) != old_cdir.lower().rstrip(os.sep):
         for item in os.listdir(old_cdir):
@@ -715,6 +726,7 @@ def UpgradeOldInstall():
 
                 shutil.move(item, base)
             except:
+                err += 1
                 continue
 
         os.rmdir(old_cdir)
@@ -727,6 +739,8 @@ def UpgradeOldInstall():
             profiler.Profile().Load(pstr)
             profiler.Profile().Update()
             profiler.UpdateProfileLoader()
+
+    return not err
 
 #--------------------------------------------------------------------------#
 def PrintHelp():

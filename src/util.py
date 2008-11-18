@@ -486,7 +486,7 @@ def HasConfigDir(loc=u""):
     """
     cbase = ed_glob.CONFIG['CONFIG_BASE']
     if cbase is None:
-        cbase = wx.StandardPaths_Get().GetUserDataDir()
+        cbase = wx.StandardPaths_Get().GetUserDataDir() + os.sep
 
     to_check = os.path.join(cbase, loc)
     return os.path.exists(to_check)
@@ -496,12 +496,12 @@ def MakeConfigDir(name):
     @param name: name of config directory to make in user config dir
 
     """
-    config_dir = ed_glob.CONFIG['CONFIG_BASE']
-    if config_dir is None:
-        config_dir = wx.StandardPaths_Get().GetUserDataDir()
+    cbase = ed_glob.CONFIG['CONFIG_BASE']
+    if cbase is None:
+        cbase = wx.StandardPaths_Get().GetUserDataDir()
 
     try:
-        os.mkdir(config_dir + os.sep + name)
+        os.mkdir(cbase + os.sep + name)
     except (OSError, IOError):
         pass
 
@@ -514,8 +514,7 @@ def CreateConfigDir():
     #---- Resolve Paths ----#
     config_dir = ed_glob.CONFIG['CONFIG_BASE']
     if config_dir is None:
-        config_dir = wx.StandardPaths_Get().GetUserDataDir()
-        ed_glob.CONFIG['CONFIG_BASE'] = config_dir + os.sep
+        config_dir = wx.StandardPaths_Get().GetUserDataDir() + os.sep
 
     profile_dir = os.path.join(config_dir, u"profiles")
     dest_file = os.path.join(profile_dir, u"default.ppb")
@@ -557,7 +556,6 @@ def ResolvConfigDir(config_dir, sys_only=False):
         user_config = ed_glob.CONFIG['CONFIG_BASE']
         if user_config is None:
             user_config = stdpath.GetUserDataDir() + os.sep
-            ed_glob.CONFIG['CONFIG_BASE'] = user_config
 
         user_config = os.path.join(user_config, config_dir)
 
