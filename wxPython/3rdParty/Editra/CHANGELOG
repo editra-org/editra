@@ -26,6 +26,7 @@ NEW: [features/improvements]
 +New version of PyShell. Supports custom styles.
 +Middle click closes tabs (patch from craig.ds)
 +Double click empty tab area opens new tab (patch from craig.ds)
++Add support for VBScript
 
 BUG FIXES:
 +Fix encoding errors when loading plugins on some systems
