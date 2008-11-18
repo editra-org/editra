@@ -612,6 +612,7 @@ def InitConfig():
         ed_glob.CONFIG['PROFILE_DIR'] = os.path.join(config_base, u"profiles")
         ed_glob.CONFIG['PROFILE_DIR'] += os.sep
     else:
+        config_base = wx.StandardPaths.Get().GetUserDataDir()
         ed_glob.CONFIG['PROFILE_DIR'] = util.ResolvConfigDir("profiles")
 
     # Check for if config directory exists and if profile is from the current
@@ -661,7 +662,8 @@ def InitConfig():
         success = True
         try:
             success = UpgradeOldInstall()
-        except:
+        except Exception, msg:
+            dev_tool.DEBUGP("[InitConfig][err] %s" % msg)
             success = False
 
         if not success:
@@ -669,7 +671,7 @@ def InitConfig():
                                        ed_glob.PROG_NAME, os.sep)
             msg = ("Failed to upgrade your old installation\n"
                    "To retain your old settings you may need to copy some files:\n"
-                   "\nFrom: %s\n\nTo: %s") % (old_cdir, ed_glob.CONFIG['CONFIG_BASE'])
+                   "\nFrom: %s\n\nTo: %s") % (old_cdir, config_base)
             wx.MessageBox(msg, "Upgrade Failed", style=wx.ICON_WARNING|wx.OK)
 
         # Set default eol for windows
@@ -710,11 +712,14 @@ def UpgradeOldInstall():
     old_cdir = u"%s%s.%s%s" % (wx.GetHomeDir(), os.sep,
                                ed_glob.PROG_NAME, os.sep)
     base = ed_glob.CONFIG['CONFIG_BASE']
+    if base is None:
+        base = wx.StandardPaths.Get().GetUserDataDir() + os.sep
 
     err = 0
     if os.path.exists(old_cdir) and \
        base.lower().rstrip(os.sep) != old_cdir.lower().rstrip(os.sep):
         for item in os.listdir(old_cdir):
+            print item
             try:
                 dest = os.path.join(base, item)
                 item = os.path.join(old_cdir, item)
@@ -724,8 +729,10 @@ def UpgradeOldInstall():
                     else:
                         os.remove(dest)
 
-                shutil.move(item, base)
-            except:
+                print "MOVING", item , base
+                shutil.move(item, dest)
+            except Exception, msg:
+                util.Log("[Upgrade][err] %s" % msg)
                 err += 1
                 continue
 

@@ -456,7 +456,7 @@ def UpdateProfileLoader():
         prof_name = CONFIG['PROFILE_DIR'] + 'default.ppb'
 
     if not os.path.exists(prof_name):
-        prof_name = os.path.join(CONFIG['CONFIG_BASE'],
+        prof_name = os.path.join(CONFIG['CONFIG_DIR'],
                                  os.path.basename(prof_name))
         Profile_Set('MYPROFILE', prof_name)
 
