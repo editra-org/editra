@@ -677,6 +677,7 @@ def InitConfig():
         # Set default eol for windows
         if wx.Platform == '__WXMSW__':
             profiler.Profile_Set('EOL', 'Windows (\\r\\n)')
+            profiler.Profile_Set('ICONSZ', (16, 16))
 
     # Set debug mode
     if 'DEBUG' in profiler.Profile_Get('MODE'):
