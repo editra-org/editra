@@ -642,6 +642,10 @@ def InitConfig():
             # Print modes don't use strings anymore
             if isinstance(profiler.Profile_Get('PRINT_MODE'), basestring):
                 profiler.Profile_Set('PRINT_MODE', ed_glob.PRINT_BLACK_WHITE)
+
+            # Simplifications to eol mode persistance (0.4.0)
+            TranslateEOLMode()
+
             #---- End Temporary Profile Adaptions ----#
 
             # Write out updated profile
@@ -676,8 +680,14 @@ def InitConfig():
 
         # Set default eol for windows
         if wx.Platform == '__WXMSW__':
-            profiler.Profile_Set('EOL', 'Windows (\\r\\n)')
+            profiler.Profile_Set('EOL', 'CRLF')
             profiler.Profile_Set('ICONSZ', (16, 16))
+
+    #---- Profile Loaded / Installed ----#
+
+    # Extra Adaption checks
+    TranslateEOLMode()
+    # End Extra Adaptions
 
     # Set debug mode
     if 'DEBUG' in profiler.Profile_Get('MODE'):
@@ -751,6 +761,20 @@ def UpgradeOldInstall():
     return not err
 
 #--------------------------------------------------------------------------#
+
+def TranslateEOLMode():
+    """Translate old eol mode persistance to new one
+    @prerequisite: Profile has been initialized / loaded
+
+    """
+    eol_m = profiler.Profile_Get('EOL')
+    if len(eol_m) > 4:
+        emap = { 'm' : 'CR', 'w' : 'CRLF', 'u' : 'LF' }
+        cmode = eol_m[0].lower()
+        profiler.Profile_Set('EOL', emap.get(cmode, 'LF'))
+
+#--------------------------------------------------------------------------#
+
 def PrintHelp():
     """Print command line help
     @postcondition: Help is printed and program exits

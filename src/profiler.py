@@ -39,7 +39,7 @@ _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 # Globals
 _DEFAULTS = {
-           'ALPHA'      : 255,              # Transparency level
+           'ALPHA'      : 255,              # Transparency level (0-255)
            'AALIASING'  : False,            # Use Anti-Aliasing if availble
            'APPSPLASH'  : True,             # Show splash at startup
            'AUTO_COMP'  : True,             # Use Auto-comp if available
@@ -55,7 +55,7 @@ _DEFAULTS = {
            'DEFAULT_VIEW' : 'Automatic',    # Default Perspective
            'EDGE'       : 80,               # Edge guide column
            'ENCODING'   : None,             # Prefered text encoding
-           'EOL'        : 'Unix (\\n)',     # EOL mode
+           'EOL'        : 'LF',             # EOL mode
            'FHIST'      : list(),           # List of history files
            'FHIST_LVL'  : 9,                # Filehistory length (9 is max)
            'FFILTER'    : 0,                # Last file filter used
