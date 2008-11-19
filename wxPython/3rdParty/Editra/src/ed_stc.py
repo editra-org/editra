@@ -49,10 +49,17 @@ MARK_MARGIN = 0
 NUM_MARGIN  = 1
 FOLD_MARGIN = 2
 
+# EOL Constants
+EDSTC_EOL_CR   = "CR"
+EDSTC_EOL_LF   = "LF"
+EDSTC_EOL_CRLF = "CRLF"
+
+# Character sets
 SPACECHARS = " \t\r\n"
 NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 OPERATORS = "./\?[]{}<>!@#$%^&*():=-+\"';,"
 
+# Key code additions
 ALT_SHIFT = wx.stc.STC_SCMOD_ALT|wx.stc.STC_SCMOD_SHIFT
 CTRL_SHIFT = wx.stc.STC_SCMOD_CTRL|wx.stc.STC_SCMOD_SHIFT
 
@@ -398,7 +405,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetTabWidth(_PGET('TABWIDTH', 'int'))
 #        self.SetTabIndents(True) # Add option for this too?
         self.SetIndentationGuides(_PGET('GUIDES'))
-        self.SetEOLFromString(_PGET('EOL'))
+        self.SetEOLMode(_PGET('EOL'))
         self.SetViewEOL(_PGET('SHOW_EOL'))
         self.SetAutoComplete(_PGET('AUTO_COMP'))
         self.FoldingOnOff(_PGET('CODE_FOLD'))
@@ -1442,18 +1449,18 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         self.file.SetEncoding(enc)
 
-    def SetEOLFromString(self, mode_str):
+    def SetEOLMode(self, mode):
         """Sets the EOL mode from a string descript
         @param mode_str: eol mode to set
-        @todo: get rid of this somehow
+        @note: overrides StyledTextCtrl.SetEOLMode
 
         """
-        mode_map = { 'Macintosh (\\r)' : wx.stc.STC_EOL_CR,
-                     'Unix (\\n)' : wx.stc.STC_EOL_LF,
-                     'Windows (\\r\\n)' : wx.stc.STC_EOL_CRLF
+        mode_map = { EDSTC_EOL_CR   : wx.stc.STC_EOL_CR,
+                     EDSTC_EOL_LF   : wx.stc.STC_EOL_LF,
+                     EDSTC_EOL_CRLF : wx.stc.STC_EOL_CRLF
                    }
-        mode = mode_map.get(mode_str, wx.stc.STC_EOL_LF)
-        self.SetEOLMode(mode)
+        mode = mode_map.get(mode, wx.stc.STC_EOL_LF)
+        wx.stc.StyledTextCtrl.SetEOLMode(self, mode)
 
     def SetFileName(self, path):
         """Set the buffers filename attributes from the given path"""
