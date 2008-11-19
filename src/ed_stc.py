@@ -788,7 +788,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def PostPositionEvent(self):
         """Post an event to update the status of the line/column"""
-        msg = _("Line: %d  Column: %d") % self.GetPos()
+        pos = self.GetPos()
+        msg = _("Line: %(lnum)d  Column: %(cnum)d") % dict(lnum=pos[0], cnum=pos[1])
         nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
                                     msg, ed_glob.SB_ROWCOL)
         wx.PostEvent(self.GetTopLevelParent(), nevt)
