@@ -741,18 +741,18 @@ class EdMenuBar(wx.MenuBar):
 
         # Line EOL formatting submenu
         lineformat = self._menus['lineformat'] = EdMenu()
-        lineformat.Append(ed_glob.ID_EOL_MAC, _("Macintosh (\\r)") + \
+        lineformat.Append(ed_glob.ID_EOL_MAC, _("Old Macintosh (\\r)") + \
                           EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_MAC),
                           _("Format all EOL characters to %s Mode") % \
-                          u"Macintosh (\\r)", wx.ITEM_CHECK)
+                          _(u"Old Macintosh (\\r)"), wx.ITEM_CHECK)
         lineformat.Append(ed_glob.ID_EOL_UNIX, _("Unix (\\n)") + \
                           EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_UNIX),
                           _("Format all EOL characters to %s Mode") % \
-                          u"Unix (\\n)", wx.ITEM_CHECK)
+                          _(u"Unix (\\n)"), wx.ITEM_CHECK)
         lineformat.Append(ed_glob.ID_EOL_WIN, _("Windows (\\r\\n)") + \
                           EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_WIN),
                           _("Format all EOL characters to %s Mode") % \
-                          "Windows (\\r\\n)", wx.ITEM_CHECK)
+                          _("Windows (\\r\\n)"), wx.ITEM_CHECK)
         formatmenu.AppendMenu(ed_glob.ID_EOL_MODE, _("EOL Mode"), lineformat,
                               _("End of line character formatting"))
 
