@@ -26,6 +26,40 @@ print_help () {
 }
 
 ##############################################################################
+# Function: get_appfile
+# Purpose: Generate the app file
+##############################################################################
+gen_appfile () {
+    OUTPUT="$(pwd)/app.fil"
+    BASE="../.."
+    PLUGINS="$BASE/plugins"
+
+    # Remove current file
+    rm app.fil
+
+    # Start searching for files
+    DIRS=("$BASE/" "$BASE/src/" "$BASE/src/eclib/" "$BASE/src/syntax/" 
+          "$PLUGINS/" "$PLUGINS/codebrowser/codebrowser/"
+          "$PLUGINS/filebrowser/filebrowser/" "$PLUGINS/Launch/launch/"
+          "$PLUGINS/PyShell/PyShell/" )
+
+    # TODO: why does this not give the right number?
+    #DIRNUM=${#DIRS}
+
+    for ((i=0; i < 9; i++)); do
+        DIR=${DIRS[${i}]}
+        for FNAME in $(ls $DIR); do
+            if ! [ -z `echo $FNAME | grep "^.*\.py$"` ]; then
+                if [ -a "$DIR$FNAME" ]; then
+                    echo "Found: $DIR$FNAME"
+                    echo "$DIR$FNAME" >> $OUTPUT
+                fi
+            fi
+        done
+    done
+}
+
+##############################################################################
 # Function: gen_po
 # Purpose: Generate new po files from the source
 ##############################################################################
@@ -61,8 +95,12 @@ then
     make_mo
 elif [ "$ARG" = "-all" ]
 then
+    gen_appfile
     gen_po
     make_mo
+elif [ "$ARG" = "-app" ]
+then
+    gen_appfile
 else
     print_help
 fi    
