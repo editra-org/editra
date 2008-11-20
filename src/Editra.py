@@ -740,7 +740,6 @@ def UpgradeOldInstall():
                     else:
                         os.remove(dest)
 
-                print "MOVING", item , base
                 shutil.move(item, dest)
             except Exception, msg:
                 util.Log("[Upgrade][err] %s" % msg)
@@ -757,6 +756,13 @@ def UpgradeOldInstall():
             profiler.Profile().Load(pstr)
             profiler.Profile().Update()
             profiler.UpdateProfileLoader()
+
+        if not err:
+            wx.MessageBox(_("Your profile has been updated to the latest "
+                "version") + u"\n" + \
+              _("Please check the preferences dialog to check "
+                "your preferences"),
+              _("Profile Updated"))
 
     return not err
 
