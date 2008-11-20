@@ -134,6 +134,7 @@ class ControlBar(wx.PyPanel):
         self._style = style
         self._sizer = wx.BoxSizer(wx.HORIZONTAL)
         self._tools = dict(simple=list())
+        self._spacing = (5, 5)
 
         # Setup
         msizer = wx.BoxSizer(wx.VERTICAL)
@@ -172,11 +173,11 @@ class ControlBar(wx.PyPanel):
                 control.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
         if align == wx.ALIGN_LEFT:
-            self._sizer.Add((5, 5), 0)
+            self._sizer.Add(self._spacing, 0)
             self._sizer.Add(control, stretch, align|wx.ALIGN_CENTER_VERTICAL)
         else:
             self._sizer.Add(control, stretch, align|wx.ALIGN_CENTER_VERTICAL)
-            self._sizer.Add((5, 5), 0)
+            self._sizer.Add(self._spacing, 0)
 
         self.Layout()
 
@@ -208,7 +209,7 @@ class ControlBar(wx.PyPanel):
             tool.SetMargins(0, 0)
             spacer = (0, 0)
         else:
-            spacer = (5, 5)
+            spacer = self._spacing
         tool.SetToolTipString(help)
 
         self._tools['simple'].append(tool.GetId())
@@ -243,6 +244,14 @@ class ControlBar(wx.PyPanel):
         gc.DrawRectangle(0, 0, rect.width - 0.5, rect.height - 0.5)
 
         evt.Skip()
+
+    def SetToolSpacing(self, px):
+        """Set the spacing to use between tools/controls.
+        @param px: int (number of pixels)
+        @todo: dynamically update existing layouts
+
+        """
+        self._spacing = (px, px)
 
     def SetVMargin(self, top, bottom):
         """Set the Vertical margin used for spacing controls from the
