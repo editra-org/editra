@@ -69,9 +69,10 @@ AFR_NOREGEX     = 512           # Hide the Regular Expression option
 AFR_NOOPTIONS   = 1024          # Hide all options in the dialog
 
 # Search Location Parameters (NOTE: must be kept in sync with Lookin List)
-LOCATION_CURRENT_DOC = 0
-LOCATION_OPEN_DOCS   = 1
-LOCATION_IN_FILES    = 2
+LOCATION_CURRENT_DOC  = 0
+LOCATION_OPEN_DOCS    = 1
+LOCATION_IN_FILES     = 2
+LOCATION_MAX          = 2
 
 # Control Names
 FindBoxName = "EdFindBox"
@@ -603,7 +604,7 @@ class FindPanel(wx.Panel):
                   lambda evt: self.FireEvent(evt.GetId()) or evt.Skip())
         self.Bind(wx.EVT_CHECKBOX, self.OnOption)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnOption)
-        self.Bind(wx.EVT_CHOICE, lambda evt: self._UpdateContext(), id=ID_LOOKIN)
+        self.Bind(wx.EVT_CHOICE, self.OnChoice, id=ID_LOOKIN)
         for bid in (wx.ID_FIND, wx.ID_REPLACE, ID_FIND_ALL, ID_REPLACE_ALL):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=bid)
         self._ftxt.Bind(wx.EVT_SET_FOCUS, lambda evt: self._ftxt.SelectAll())
@@ -711,7 +712,7 @@ class FindPanel(wx.Panel):
         self.FindWindowById(ID_WHOLE_WORD).Enable(not (flags & AFR_NOWHOLEWORD))
         self.FindWindowById(ID_MATCH_CASE).Enable(not (flags & AFR_NOMATCHCASE))
         self.FindWindowById(ID_REGEX).Enable(not (flags & AFR_NOREGEX))
-        in_files = bool(self._lookin.GetSelection() >= LOCATION_IN_FILES)
+        in_files = bool(self._lookin.GetSelection() >= LOCATION_MAX)
         recurse = self.FindWindowById(ID_RECURSE)
         recurse.SetValue(flags & AFR_RECURSIVE)
         recurse.Enable(in_files)
@@ -745,7 +746,7 @@ class FindPanel(wx.Panel):
 
         """
         self._UpdateDefaultBtn()
-        in_files = bool(self._lookin.GetSelection() >= LOCATION_IN_FILES)
+        in_files = bool(self._lookin.GetSelection() >= LOCATION_MAX)
         self.FindWindowById(ID_RECURSE).Enable(in_files)
 
     def _UpdateDefaultBtn(self):
@@ -875,6 +876,23 @@ class FindPanel(wx.Panel):
 
         """
         return self._mode
+
+    def OnChoice(self, evt):
+        """Handle choice control events
+        @param evt: wx.EVT_CHOICE
+
+        """
+        e_id = evt.GetId()
+        if e_id == ID_LOOKIN:
+            self._UpdateContext()
+            choice = self._lookin.GetSelection()
+            if choice >= LOCATION_IN_FILES:
+                tts = self._paths.get(choice, u'')
+                self._lookin.SetToolTipString(tts)
+            else:
+                self._lookin.SetToolTipString(u'')
+        else:
+            evt.Skip()
 
     def OnChooseDir(self, evt):
         """Open the choose directory dialog for selecting what
