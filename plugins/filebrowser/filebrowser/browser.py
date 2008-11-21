@@ -253,7 +253,7 @@ class BrowserPane(wx.Panel):
                              (self._browser, 1, wx.EXPAND)])
 
         # TODO: an unresolved bug in msw version the show hidden files
-        #       option causes a hard crash.
+        #       option causes a hard crash. So just show them by default
         if wx.Platform != '__WXMSW__':
             cb_sz = wx.BoxSizer(wx.HORIZONTAL)
             cb_sz.Add((4, 4))
@@ -408,6 +408,11 @@ class FileBrowser(wx.GenericDirCtrl):
         self._treeId = 0                # id of TreeItem that was last rclicked
         self._fmenu = self._MakeMenu()
         self._drag_img = None
+
+        # Show hidden files by default on windows since the option is disabled
+        # due to it crashing out the program...
+        if wx.Platform == '__WXMSW__':
+            self.ShowHidden(True)
         
         # Set custom styles
         self._tree.SetWindowStyle(self._tree.GetWindowStyle() | wx.TR_MULTIPLE)
