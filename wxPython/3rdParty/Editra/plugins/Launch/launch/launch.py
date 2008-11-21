@@ -252,8 +252,17 @@ class LaunchWindow(ctrlbox.ControlBox):
         @param evt: wx.CommandEvent
 
         """
-        if evt.GetId() == self._chFiles.GetId():
-            self.SetFile(self._fnames[evt.GetSelection()])
+        e_id = evt.GetId()
+        e_sel = evt.GetSelection()
+        if e_id == self._chFiles.GetId():
+            fname = self._fnames[e_sel]
+            self.SetFile(fname)
+            self._chFiles.SetToolTipString(fname)
+        elif e_id == ID_EXECUTABLE:
+            e_obj = evt.GetEventObject()
+            handler = handlers.GetHandlerById(self._config['lang'])
+            cmd = e_obj.GetStringSelection()
+            e_obj.SetToolTipString(handler.GetCommand(cmd))
         else:
             evt.Skip()
 
@@ -364,6 +373,9 @@ class LaunchWindow(ctrlbox.ControlBox):
         # Set control states
         csel = exe_ch.GetStringSelection()
         exe_ch.SetItems(cmds)
+        if len(cmds):
+            exe_ch.SetToolTipString(handler.GetCommand(cmds[0]))
+
         util.Log("[Launch][info] Found commands %s" % str(cmds))
         if handler.GetName() != handlers.DEFAULT_HANDLER and len(self.GetFile()):
             for ctrl in (exe_ch, args_txt, run_btn, self._chFiles):
@@ -507,6 +519,8 @@ class LaunchWindow(ctrlbox.ControlBox):
         items = [ os.path.basename(fname) for fname in self._fnames ]
         try:
             self._chFiles.SetItems(items)
+            if len(self._fnames):
+                self._chFiles.SetToolTipString(self._fnames[0])
         except TypeError:
             util.Log("[Launch][err] UpdateCurrent Files: " + str(items))
             self._chFiles.SetItems([''])

@@ -759,6 +759,19 @@ class TCLHandler(FileTypeHandler):
             FileTypeHandler.StyleText(self, stc, start, txt)
 
 #-----------------------------------------------------------------------------#
+
+class VBScriptHandler(FileTypeHandler):
+    """FileTypeHandler for VBScript"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(cscript='CSCRIPT.exe', wscript='WSCRIPT.exe')
+        self.default = 'cscript'
+
+    @property
+    def __name__(self):
+        return 'VBScript'
+
+#-----------------------------------------------------------------------------#
 # Handler Object Dictionary
 # Create an instance of each Handler to use as a persistent object
 HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
@@ -782,7 +795,8 @@ HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_PS      : PostScriptHandler(),
             synglob.ID_LANG_PYTHON  : PythonHandler(),
             synglob.ID_LANG_RUBY    : RubyHandler(),
-            synglob.ID_LANG_TCL     : TCLHandler() }
+            synglob.ID_LANG_TCL     : TCLHandler(),
+            synglob.ID_LANG_VBSCRIPT : VBScriptHandler() }
 
 #-----------------------------------------------------------------------------#
 # Local utility functions

@@ -16,7 +16,7 @@ except ImportError:
 if setup != None:
     setup(
         name='Launch',
-        version='0.6',
+        version='0.7',
         description=__doc__,
         author=__author__,
         author_email="cprecord@editra.org",
