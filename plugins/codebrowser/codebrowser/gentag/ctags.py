@@ -14,6 +14,7 @@ SUMMARY:
   Generate a DocStruct object that captures the structure of C source code.
 
 @todo: add support for typdefs/structs/enum
+@todo: detection of cpp ctor/dtor does not work
 
 """
 
@@ -32,7 +33,7 @@ import parselib
 
 #--------------------------------------------------------------------------#
 
-RE_METH = re.compile(r"([A-Za-z0-9_]+\s+)+([*A-Za-z0-9_::]+)\s*\([^)]*\)\s*(const)*\s*\{")
+RE_METH = re.compile(r"([A-Za-z0-9_]+\s+)+([*~A-Za-z0-9_:]+)\s*\([^)]*\)\s*(const)*\s*\{")
 RE_DEF = re.compile(r"#define[ \t]+([A-Za-z0-9_]+)")
 
 #--------------------------------------------------------------------------#
@@ -46,10 +47,12 @@ def GenerateTags(buff):
     rtags = taglib.DocStruct()
     rtags.SetElementDescription('macro', "Macros")
     rtags.SetElementPriority('macro', 3)
+    rtags.SetElementDescription('class', "Class Definitions")
+    rtags.SetElementPriority('class', 2)
     rtags.SetElementDescription('function', "Function Definitions")
     rtags.SetElementPriority('function', 1)
 
-    kwords = ("if else for while switch case")
+    kwords = ("if else for while switch case catch")
     txt = buff.read()
 
     # Get class/method/function defintions

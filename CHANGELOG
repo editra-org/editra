@@ -27,6 +27,7 @@ NEW: [features/improvements]
 +Middle click closes tabs (patch from craig.ds)
 +Double click empty tab area opens new tab (patch from craig.ds)
 +Add support for VBScript
++Improved text drag and drop
 
 BUG FIXES:
 +Fix encoding errors when loading plugins on some systems
