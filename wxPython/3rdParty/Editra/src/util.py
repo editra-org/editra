@@ -146,9 +146,7 @@ class DropTargetFT(wx.PyDropTarget):
             point = wx.Point(x_cord, y_cord)
             self._tmp.BeginDrag(point - self._lastp, stc)
             self._tmp.Hide()
-            stc.GotoPos(stc.PositionFromPoint(point))
-            stc.Refresh()
-            stc.Update()
+            stc.DoDragOver(x_cord, y_cord, drag_result)
             self._tmp.Move(point)
             self._tmp.Show()
             self._tmp.RedrawImage(self._lastp, point, True, True)
@@ -169,8 +167,8 @@ class DropTargetFT(wx.PyDropTarget):
         except wx.PyAssertionError:
             wx.PostEvent(self.window.GetTopLevelParent(), \
                         ed_event.StatusEvent(ed_event.edEVT_STATUS, -1,
-                                             _("Unable to open dropped file or "
-                                               "text")))
+                                             _("Unable to accept dropped file "
+                                               "or text")))
             data = False
             drag_result = wx.DragCancel
 
@@ -179,16 +177,8 @@ class DropTargetFT(wx.PyDropTarget):
             text = self._data['tdata'].GetText()
             if len(files) > 0 and self._data['fcallb'] is not None:
                 self._data['fcallb'](files)
-            elif(len(text) > 0):
-                if hasattr(self.window, 'PositionFromPointClose'):
-                    pos = self.window.PositionFromPointClose(x_cord, y_cord)
-                else:
-                    pos = wx.stc.STC_INVALID_POSITION
-
-                if pos != wx.stc.STC_INVALID_POSITION:
-                    self.window.InsertText(pos, text)
-                else:
-                    drag_result = wx.DragCancel
+            elif len(text) > 0:
+                self.window.DoDropText(x_cord, y_cord, text)
         self.InitObjects()
         return drag_result
 
