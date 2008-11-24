@@ -81,6 +81,14 @@ class EdFile(object):
         self.bom = None
         self.modtime = modtime
         self.last_err = None
+        self._mcallback = list()
+
+    def AddModifiedCallback(self, callback):
+        """Set modified callback method
+        @param callback: callable
+
+        """
+        self._mcallback.append(callback)
 
     def ClearLastError(self):
         """Reset the error marker on this file"""
@@ -123,6 +131,21 @@ class EdFile(object):
     def Encoding(self):
         """File encoding property"""
         return self.encoding
+
+    def FireModified(self):
+        """Fire the modified callback(s)"""
+        remove = list()
+        for idx, mcallback in enumerate(self._mcallback):
+            try:
+                mcallback()
+            except:
+                remove.append(idx)
+
+        # Cleanup any bad callbacks
+        if len(remove):
+            remove.reverse()
+            for idx in remove:
+                list.pop(idx)
 
     def GetEncoding(self):
         """Get the encoding used by the file it may not be the
@@ -236,6 +259,14 @@ class EdFile(object):
             return txt
         else:
             raise ReadError, self.last_err
+
+    def RemoveModifiedCallback(self, callback):
+        """Remove a registered callback
+        @param callback: callable to remove
+
+        """
+        if callback in self._mcallback:
+            self._mcallback.remove(callback)
 
     def ResetAll(self):
         """Reset all attributes of this file"""

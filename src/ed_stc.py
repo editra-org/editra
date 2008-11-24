@@ -167,6 +167,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
        #---- End Init ----#
 
+    def __del__(self):
+        self.file.RemoveModifiedCallback(self.FireModified)
+
     @property
     def __name__(self):
         return u"EditraTextCtrl"
@@ -671,6 +674,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if self.GetSelectionStart() == self.GetSelectionEnd():
             self.SetCurrentPos(self.GetCurrentPos() + 1)
         self.DeleteBack()
+
+    def FireModified(self):
+        """Fire a modifed event"""
+        self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_MODIFIED,
+                                               self.GetId()))
 
     def GetAutoComplete(self):
         """Is Autocomplete being used by this instance
@@ -1893,8 +1901,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if result:
             self.SetSavePoint()
             self.SetModTime(util.GetFileModTime(path))
-            self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_MODIFIED,
-                                                   self.GetId()))
+            self.file.FireModified()
             self.SetFileName(path)
 
         wx.CallAfter(ed_msg.PostMessage,

@@ -103,11 +103,16 @@ class EdPages(FNB.FlatNotebook):
         # Message handlers
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_NOTEBOOK)
+        ed_msg.RegisterCallback(self.OnDocPointerRequest, ed_msg.EDREQ_DOCPOINTER)
 
         # Add a blank page
         self.NewPage()
 
     #---- End Init ----#
+
+    def __del__(self):
+        ed_msg.Unsubscribe(self.OnThemeChanged)
+        ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
 
     #---- Function Definitions ----#
     def _HandleEncodingError(self, control):
@@ -189,6 +194,47 @@ class EdPages(FNB.FlatNotebook):
             pass
 
         return result == wx.ID_YES
+
+    def DocDuplicated(self, path):
+        """Check for if the given path is open elswhere and duplicate the
+        docpointer.
+        @param path: string
+
+        """
+        doc = ed_msg.RequestResult(ed_msg.EDREQ_DOCPOINTER, [self, path])
+        if hasattr(doc, 'GetDocPointer'):
+            self.GetTopLevelParent().Freeze()
+            nbuff = ed_editv.EdEditorView(self, wx.ID_ANY)
+            nbuff.SetDocPointer(doc.GetDocPointer())
+            doc = doc.GetDocument()
+            nbuff.SetDocument(doc)
+            doc.AddModifiedCallback(nbuff.FireModified)
+            nbuff.FindLexer()
+            nbuff.EmptyUndoBuffer()
+
+            if Profile_Get('SAVE_POS'):
+                pos = self.DocMgr.GetPos(nbuff.GetFileName())
+                nbuff.GotoPos(pos)
+                nbuff.ScrollToColumn(0)
+
+            filename = util.GetFileName(path)
+            self.AddPage(nbuff, filename)
+
+            self.frame.SetTitle(nbuff.GetTitleString())
+            self.SetPageText(self.GetSelection(), filename)
+            self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
+
+            # Set tab image
+            self.SetPageImage(self.GetSelection(), str(nbuff.GetLangId()))
+
+            # Refocus on selected page
+            self.control = nbuff
+            self.GoCurrentPage()
+            self.GetTopLevelParent().Thaw()
+            ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, nbuff.GetFileName())
+            return True
+        else:
+            return False
 
     def GetCurrentCtrl(self):
         """Returns the control of the currently selected
@@ -287,6 +333,21 @@ class EdPages(FNB.FlatNotebook):
         else:
             evt.Skip()
 
+    def OnDocPointerRequest(self, args):
+        """Get a buffer that has the same file open as the requested path.
+        @param sender: Notebook that sent the message
+        @param args: [sender, path]
+        @return: EdEditorView reference or ed_msg.NullValue
+
+        """
+        sender, path = args
+        if sender != self:
+            for buf in self.GetTextControls():
+                if buf.GetFileName() == path:
+                    return buf
+
+        return ed_msg.NullValue()
+
     def OnLeftDClick(self, evt):
         """Handle left double clicks and open new tab when in empty area.
         @param evt: wx.EVT_LEFT_DCLICK
@@ -336,6 +397,9 @@ class EdPages(FNB.FlatNotebook):
 
         """
         path2file = os.path.join(path, filename)
+
+        if self.DocDuplicated(path2file):
+            return
 
         # Check if file needs to be opened
         # TODO: these steps could be combined together with some
@@ -417,6 +481,8 @@ class EdPages(FNB.FlatNotebook):
         self.control.FindLexer()
         self.control.CheckEOL()
         self.control.EmptyUndoBuffer()
+        doc = self.control.GetDocument()
+        doc.AddModifiedCallback(self.control.FireModified)
 
         if Profile_Get('SAVE_POS'):
             pos = self.DocMgr.GetPos(self.control.GetFileName())
@@ -682,8 +748,7 @@ class EdPages(FNB.FlatNotebook):
 
         """
         for page in xrange(self.GetPageCount()):
-            result = self.ClosePage()
-            if result == wx.ID_CANCEL:
+            if not self.ClosePage():
                 break
 
     def ClosePage(self):
@@ -696,13 +761,11 @@ class EdPages(FNB.FlatNotebook):
         self.GoCurrentPage()
         page = self.GetCurrentPage()
         pg_num = self.GetSelection()
-        result = True
+        result = page.CanCloseTab()
 
-        if page.CanCloseTab():
+        if result:
             self.DeletePage(pg_num)
             self.GoCurrentPage()
-        else:
-            result = False
 
         if not self.GetPageCount() and \
            hasattr(frame, 'IsExiting') and not frame.IsExiting():
