@@ -9,11 +9,16 @@ Change Log:
 Changes since last release:
 
 VERSION 0.4.0
-DATE xx/xx/2008
+DATE 11/23/2008
 17th Alpha Release
 
 NEWS:
 
+On Macintosh and Windows the user configuration files have moved to more 
+platform specific locations. This transition should should happen automatically
+but if there are any problems follow the onscreen instructions to manually
+transition your preference settings to the new location. See the changelog
+below for the details of other major changes.
 
 NEW: [features/improvements]
 +User configuration files are now kept at standard platform locations
