@@ -226,6 +226,13 @@ def Unsubscribe(callback, messages=None):
 
 #-----------------------------------------------------------------------------#
 
+# Request Messages
+EDREQ_ALL = ('editra', 'req')
+
+EDREQ_DOCPOINTER =  EDREQ_ALL + ('docpointer',)
+
+#-----------------------------------------------------------------------------#
+
 class NullValue:
     """Null value to signify that a callback method should be skipped or that
     no callback could answer the request.

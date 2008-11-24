@@ -709,8 +709,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 self.Close(True) # Force exit since there is a problem
 
             self.LOG("[ed_main][evt] OnClose: Requesting Page Close")
-            result = self.nb.ClosePage()
-            if result == wx.ID_CANCEL:
+            if not self.nb.ClosePage():
                 self._exiting = False
                 ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
                                    (self.nb, self.nb.GetSelection()))
