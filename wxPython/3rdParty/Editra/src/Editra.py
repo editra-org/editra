@@ -94,7 +94,6 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self.SetAppName(ed_glob.PROG_NAME)
 
         # Attributes
-        self.profile_updated = InitConfig()
         self._log = dev_tool.DEBUGP
         self._lock = False
         self._windows = dict()
@@ -167,6 +166,8 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._log = dev_tool.DEBUGP
         self._log("[app][info] Editra is Initializing")
 
+        # Load user preferences
+        self.profile_updated = InitConfig()
         self._isfirst = False # Is the first instance
         self._instance = None
 
