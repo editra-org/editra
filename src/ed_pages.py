@@ -95,7 +95,7 @@ class EdPages(FNB.FlatNotebook):
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnUpdatePageText)
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self._pages.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
-        self._pages.Bind(wx.EVT_MIDDLE_UP, lambda evt: self.ClosePage())
+        self._pages.Bind(wx.EVT_MIDDLE_UP, self.OnMClick)
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU, self.OnTabMenu)
         self.Bind(wx.EVT_MENU, self.OnCopyTabPath, id=ed_glob.ID_COPY_PATH)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
@@ -356,6 +356,20 @@ class EdPages(FNB.FlatNotebook):
         where, tabIdx = self._pages.HitTest(evt.GetPosition())
         if where == FNB.FNB_NOWHERE:
             self.NewPage()
+        else:
+            evt.Skip()
+
+    def OnMClick(self, evt):
+        """Handle tab middle click event
+        @param evt: wx.MouseEvent
+
+        """
+        where, tabIdx = self._pages.HitTest(evt.GetPosition())
+        if where in (FNB.FNB_TAB, FNB.FNB_TAB_X):
+            # If the click is on the tab, make sure the tab is selected
+            # then close it.
+            self.SetSelection(tabIdx)
+            self.ClosePage()
         else:
             evt.Skip()
 
