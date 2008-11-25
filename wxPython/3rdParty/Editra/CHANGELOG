@@ -8,6 +8,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.4.xx
+DATE xx/xx/2008
+19th Alpha Release
+
+NEWS:
+
+
+NEW: [features/improvements]
+
+
+BUG FIXES:
++Middle click closes the tab that was clicked on and not the active tab
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.4.01
 DATE 11/24/2008
 18th Alpha Release
