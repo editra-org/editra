@@ -91,8 +91,6 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         wx.App.__init__(self, *args, **kargs)
         events.AppEventHandlerMixin.__init__(self)
 
-        self.SetAppName(ed_glob.PROG_NAME)
-
         # Attributes
         self._log = dev_tool.DEBUGP
         self._lock = False
@@ -163,6 +161,8 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         @postcondition: custom artprovider and plugins are loaded
 
         """
+        self.SetAppName(ed_glob.PROG_NAME)
+
         self._log = dev_tool.DEBUGP
         self._log("[app][info] Editra is Initializing")
 
