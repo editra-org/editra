@@ -933,6 +933,7 @@ def Main():
 
     # 3. Start Applications Main Loop
     dev_tool.DEBUGP("[main][info] Starting MainLoop...")
+    wx.CallAfter(frame.Raise)
     editra_app.MainLoop()
     dev_tool.DEBUGP("[main][info] MainLoop finished exiting application")
     os._exit(0)
