@@ -117,6 +117,7 @@ ID_DUP_LINE      = wx.NewId()
 ID_JOIN_LINES    = wx.NewId()
 ID_TRANSPOSE     = wx.NewId()
 ID_FIND          = wx.ID_FIND
+ID_FIND_PREVIOUS = wx.NewId()
 ID_FIND_NEXT     = wx.NewId()
 ID_FIND_REPLACE  = wx.ID_REPLACE
 # Using the system ids automatically disables the menus items
