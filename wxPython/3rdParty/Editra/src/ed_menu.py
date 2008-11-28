@@ -604,6 +604,9 @@ class EdMenuBar(wx.MenuBar):
         editmenu.Append(ed_glob.ID_QUICK_FIND, _("&Quick Find") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_QUICK_FIND),
                         _("Open the Quick Find Bar"))
+        editmenu.Append(ed_glob.ID_FIND_PREVIOUS, _("Find Previous") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_PREVIOUS),
+                        _("Goto previous match"))
         editmenu.Append(ed_glob.ID_FIND_NEXT, _("Find Next") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_NEXT),
                         _("Goto the next match"))
@@ -989,6 +992,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_TRANSPOSE : ("Ctrl", "T"),
                      ed_glob.ID_ADD_BM : ("Ctrl", "B"),
                      ed_glob.ID_FIND : ("Ctrl", "Shift", "F"),
+                     ed_glob.ID_FIND_PREVIOUS : ("Shift", "F3"),
                      ed_glob.ID_FIND_NEXT : ("F3",),
                      ed_glob.ID_FIND_REPLACE : ("Ctrl", "R"),
                      ed_glob.ID_QUICK_FIND : ("Ctrl", "F"),
@@ -1020,6 +1024,7 @@ _DEFAULT_BINDING = { # File Menu
 if wx.Platform == '__WXMAC__':
     _DEFAULT_BINDING[ed_glob.ID_NEXT_MARK] = ("Ctrl", "Down")
     _DEFAULT_BINDING[ed_glob.ID_PRE_MARK] = ("Ctrl", "Up")
+    _DEFAULT_BINDING[ed_glob.ID_FIND_PREVIOUS] = ("Ctrl", "Shift", "G")
     _DEFAULT_BINDING[ed_glob.ID_FIND_NEXT] = ("Ctrl", "G")
     _DEFAULT_BINDING[ed_glob.ID_GOTO_LINE] = ("Ctrl", "Shift", "E")
 elif wx.Platform == '__WXMSW__':

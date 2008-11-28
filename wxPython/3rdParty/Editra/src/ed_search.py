@@ -83,8 +83,8 @@ class SearchController:
                                             (_("Find"), _("Find/Replace")),
                                             finddlg.AFR_STYLE_REPLACEDIALOG)
         elif e_id == ed_glob.ID_FIND:
-            dlg =  finddlg.AdvFindReplaceDlg(self._parent, self._data,
-                                             (_("Find"), _("Find/Replace")))
+            dlg = finddlg.AdvFindReplaceDlg(self._parent, self._data,
+                                            (_("Find"), _("Find/Replace")))
         else:
             dlg = None
 
@@ -161,7 +161,7 @@ class SearchController:
         @param evt: updateui event
 
         """
-        if evt.GetId() == ed_glob.ID_FIND_NEXT:
+        if evt.GetId() in (ed_glob.ID_FIND_PREVIOUS, ed_glob.ID_FIND_NEXT):
             evt.Enable(len(self.GetData().GetFindString()))
         else:
             evt.Skip()
@@ -176,8 +176,12 @@ class SearchController:
 
         # Find next from menu event or called internally by replace
         if findnext or evt.GetEventType() == wx.wxEVT_COMMAND_MENU_SELECTED:
+            flags = data.GetFlags()
+            if evt.GetId() == ed_glob.ID_FIND_PREVIOUS:
+                flags |= finddlg.AFR_UP
+
             evt = finddlg.FindEvent(finddlg.edEVT_FIND_NEXT,
-                                    flags=data.GetFlags())
+                                    flags=flags)
             evt.SetFindString(data.GetFindString())
 
         stc = self._stc()
