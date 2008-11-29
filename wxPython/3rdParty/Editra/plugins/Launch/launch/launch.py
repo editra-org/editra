@@ -92,6 +92,13 @@ class LaunchWindow(ctrlbox.ControlBox):
         self.UpdateBufferColors()
         cbuffer = self._mw.GetNotebook().GetCurrentCtrl()
         self.SetupControlBar(cbuffer)
+        self._config['lang'] = GetLangIdFromMW(self._mw)
+        self.UpdateCurrentFiles(self._config['lang'])
+        self.SetFile(GetTextBuffer(self._mw).GetFileName())
+
+        # Setup filetype settings
+        self.RefreshControlBar()
+
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
