@@ -93,7 +93,12 @@ class Launch(plugin.Plugin):
                      _("Run the file associated with the current buffer in Launch"))
         mainw.AddMenuHandler(ed_glob.ID_RUN_LAUNCH, OnRequestHandler)
         mainw.AddUIHandler(ed_glob.ID_RUN_LAUNCH, OnUpdateMenu)
-        tmenu.Insert(1, wx.ID_SEPARATOR)
+        tmenu.Insert(1, ed_glob.ID_LAUNCH_LAST, _("Run last executed") + \
+                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_LAUNCH_LAST),
+                     _("Re-run the last run program"))
+        mainw.AddMenuHandler(ed_glob.ID_LAUNCH_LAST, OnLaunchLast)
+        mainw.AddUIHandler(ed_glob.ID_LAUNCH_LAST, OnUpdateMenu)
+        tmenu.Insert(2, wx.ID_SEPARATOR)
 
     def IsInstalled(self):
         """Check whether launch has been installed yet or not
@@ -114,6 +119,13 @@ def OnRequestHandler(evt):
 
     """
     ed_msg.PostMessage(launch.MSG_RUN_LAUNCH)
+
+def OnLaunchLast(evt):
+    """Handle the Run Last Script menu event and dispatch it to the currently
+    active Launch panel
+
+    """
+    ed_msg.PostMessage(launch.MSG_RUN_LAST)
 
 def OnUpdateMenu(evt):
     """Update the Run Launch menu item

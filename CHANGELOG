@@ -16,7 +16,8 @@ NEWS:
 
 
 NEW: [features/improvements]
-
++Add shortcut for Find Previous
++New version of Launch plugin (Run last executed program)
 
 BUG FIXES:
 +Middle click closes the tab that was clicked on and not the active tab
