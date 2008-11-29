@@ -217,6 +217,7 @@ ID_HTML_GEN      = wx.NewId()
 ID_TEX_GEN       = wx.NewId()
 ID_RTF_GEN       = wx.NewId()
 ID_RUN_LAUNCH    = wx.NewId()
+ID_LAUNCH_LAST   = wx.NewId()
 
 # Help Menu IDs
 ID_ABOUT         = wx.ID_ABOUT

@@ -45,6 +45,7 @@ LAUNCH_KEY = 'Launch.Config'
 
 # Custom Messages
 MSG_RUN_LAUNCH = ('launch', 'run')
+MSG_RUN_LAST = ('launch', 'runlast')
 
 # Value reqest messages
 REQUEST_ACTIVE = 'Launch.IsActive'
@@ -68,7 +69,8 @@ class LaunchWindow(ctrlbox.ControlBox):
         self._config = dict(file='', lang=0,
                             cfile='', clang=0,
                             last='', lastlang=0,
-                            prelang=0)
+                            prelang=0, largs='',
+                            lcmd='')
         self._prefs = Profile_Get('Launch.Prefs', default=None)
 
         # Setup
@@ -99,7 +101,6 @@ class LaunchWindow(ctrlbox.ControlBox):
         # Setup filetype settings
         self.RefreshControlBar()
 
-
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
@@ -109,6 +110,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         ed_msg.Subscribe(self.OnLexerChange, ed_msg.EDMSG_UI_STC_LEXER)
         ed_msg.Subscribe(self.OnConfigExit, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
         ed_msg.Subscribe(self.OnRunMsg, MSG_RUN_LAUNCH)
+        ed_msg.Subscribe(self.OnRunLastMsg, MSG_RUN_LAST)
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
 
     def __del__(self):
@@ -118,6 +120,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         ed_msg.Unsubscribe(self.OnLexerChange)
         ed_msg.Unsubscribe(self.OnConfigExit)
         ed_msg.Unsubscribe(self.OnRunMsg)
+        ed_msg.Unsubscribe(self.OnRunLastMsg)
         ed_msg.UnRegisterCallback(self._CanLaunch)
         super(LaunchWindow, self).__del__()
 
@@ -349,6 +352,30 @@ class LaunchWindow(ctrlbox.ControlBox):
             shelf.RaiseWindow(self)
             self.StartStopProcess()
 
+    def OnRunLastMsg(self, msg):
+        """Re-run the last run program.
+        @param msg: MSG_RUN_LAST
+
+        """
+        if self.CanLaunch():
+            fname, ftype = self.GetLastRun()
+            # If there is no last run file return
+            if not len(fname):
+                return
+
+            shelf = self._mw.GetShelf()
+            self.UpdateCurrentFiles(ftype)
+            self.SetFile(fname)
+            self.RefreshControlBar()
+            shelf.RaiseWindow(self)
+
+            if self._prefs.get('autoclear'):
+                self._buffer.Clear()
+
+            self.SetProcessRunning(True)
+
+            self.Run(fname, self._config['lcmd'], self._config['largs'], ftype)
+
     def OnThemeChanged(self, msg):
         """Update icons when the theme has been changed
         @param msg: Message Object
@@ -398,6 +425,23 @@ class LaunchWindow(ctrlbox.ControlBox):
             for ctrl in (exe_ch, args_txt, run_btn, self._chFiles):
                 ctrl.Disable()
 
+    def Run(self, fname, cmd, args, ftype):
+        """Run the given file
+        @param fname: File path
+        @param cmd: Command to run on file
+        @param args: Executable arguments
+        @param ftype: File type id
+
+        """
+        handler = handlers.GetHandlerById(ftype)
+        cmd = handler.GetCommand(cmd)
+        path, fname = os.path.split(fname)
+        self._worker = outbuff.ProcessThread(self._buffer,
+                                             cmd, fname,
+                                             args, path,
+                                             handler.GetEnvironment())
+        self._worker.start()
+
     def StartStopProcess(self):
         """Run or abort the context of the current process if possible"""
         if self._prefs.get('autoclear'):
@@ -408,9 +452,11 @@ class LaunchWindow(ctrlbox.ControlBox):
             util.Log("[Launch][info] Starting process")
             handler = handlers.GetHandlerById(self._config['lang'])
             cmd = self.FindWindowById(ID_EXECUTABLE).GetStringSelection()
+            self._config['lcmd'] = cmd
             cmd = handler.GetCommand(cmd)
             path, fname = os.path.split(self._config['file'])
             args = self.FindWindowById(ID_ARGS).GetValue().split()
+            self._config['largs'] = args
             self._worker = outbuff.ProcessThread(self._buffer, cmd, fname,
                                                  args, path,
                                                  handler.GetEnvironment())
