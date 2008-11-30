@@ -47,8 +47,9 @@ LAUNCH_KEY = 'Launch.Config'
 MSG_RUN_LAUNCH = ('launch', 'run')
 MSG_RUN_LAST = ('launch', 'runlast')
 
-# Value reqest messages
+# Value request messages
 REQUEST_ACTIVE = 'Launch.IsActive'
+REQUEST_RELAUNCH = 'Launch.CanRelaunch'
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
@@ -112,6 +113,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         ed_msg.Subscribe(self.OnRunMsg, MSG_RUN_LAUNCH)
         ed_msg.Subscribe(self.OnRunLastMsg, MSG_RUN_LAST)
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
+        ed_msg.RegisterCallback(self._CanReLaunch, REQUEST_RELAUNCH)
 
     def __del__(self):
         ed_msg.Unsubscribe(self.OnPageChanged)
@@ -122,6 +124,7 @@ class LaunchWindow(ctrlbox.ControlBox):
         ed_msg.Unsubscribe(self.OnRunMsg)
         ed_msg.Unsubscribe(self.OnRunLastMsg)
         ed_msg.UnRegisterCallback(self._CanLaunch)
+        ed_msg.UnRegisterCallback(self._CanReLaunch)
         super(LaunchWindow, self).__del__()
 
     def __DoLayout(self):
@@ -204,6 +207,13 @@ class LaunchWindow(ctrlbox.ControlBox):
         """Method to use with RegisterCallback for getting status"""
         val = self.CanLaunch()
         if not val:
+            val = ed_msg.NullValue()
+        return val
+
+    def _CanReLaunch(self):
+        """Method to use with RegisterCallback for getting status"""
+        val = self.CanLaunch()
+        if not val or not len(self._config['last']):
             val = ed_msg.NullValue()
         return val
 
