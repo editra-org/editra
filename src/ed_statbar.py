@@ -26,13 +26,9 @@ import wx
 import ed_glob
 import util
 import ed_msg
-import ed_cmdbar
 from syntax.syntax import GetFtypeDisplayName
 from eclib.pstatbar import ProgressStatusBar
 from extern.decorlib import anythread
-
-#--------------------------------------------------------------------------#
-# Globals
 
 #--------------------------------------------------------------------------#
 
@@ -141,7 +137,9 @@ class EdStatBar(ProgressStatusBar):
         """
         pt = evt.GetPosition()
         if self.GetFieldRect(ed_glob.SB_ROWCOL).Contains(pt):
-            self.GetParent().ShowCommandCtrl(ed_cmdbar.ID_LINE_CTRL)
+            mw = self.GetParent()
+            mpane = mw.GetEditPane()
+            mpane.ShowCommandControl(ed_glob.ID_GOTO_LINE)
         else:
             evt.Skip()
 

@@ -28,7 +28,6 @@ import wx, wx.stc
 import ed_event
 import ed_glob
 import ed_stc
-import ed_cmdbar
 
 # Vi command regex patterns
 VI_DCMD_RIGHT = '[bBcdeEGhHlLMwWy|{}$<>]'
@@ -195,11 +194,12 @@ class ViKeyHandler(KeyHandler):
         cpos = self.stc.GetCurrentPos()
         cline = self.stc.LineFromPosition(cpos)
         mw = self.stc.GetTopLevelParent()
+        mpane = mw.GetEditPane()
 
         # Check for change from NORMAL mode to Command mode
         if u':' in cmd:
             self.cmdcache = u''
-            mw.ShowCommandCtrl(ed_cmdbar.ID_CMD_CTRL)
+            mpane.ShowCommandControl(ed_glob.ID_COMMAND)
 
         # Single key commands
         if len(cmd) == 1 and (cmd in 'AHILmM0^$nia/?:'):
@@ -224,7 +224,7 @@ class ViKeyHandler(KeyHandler):
                 self.stc.GotoPos(cpos + 1)
             elif cmd in u'/?':
                 if mw is not None:
-                    mw.ShowCommandCtrl(ed_cmdbar.ID_SEARCH_CTRL)
+                    mpane.ShowCommandControl(ed_glob.ID_QUICK_FIND)
 
             # Return to insert mode
             if cmd in u'aAiI':

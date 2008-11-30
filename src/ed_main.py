@@ -398,6 +398,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         return self._mpane.GetControlBar(wx.BOTTOM)
 
+    def GetEditPane(self):
+        """Get the editor notebook/command bar control
+        @return: ed_mpane.MainPane
+
+        """
+        return self._mpane
+
     def GetFrameManager(self):
         """Returns the manager for this frame
         @return: Reference to the AuiMgr of this window
