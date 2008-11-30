@@ -87,8 +87,7 @@ class CommandBar(wx.Panel):
         # Attributes
         self._parent = parent
         self._installed = False
-        self._sizers = dict(psizer=parent.GetSizer(),
-                            h_sizer=wx.BoxSizer(wx.HORIZONTAL),
+        self._sizers = dict(h_sizer=wx.BoxSizer(wx.HORIZONTAL),
                             goto=wx.BoxSizer(),
                             search=wx.BoxSizer(),
                             cmd=wx.BoxSizer())
@@ -119,8 +118,6 @@ class CommandBar(wx.Panel):
 
         """
         wx.Panel.Hide(self)
-        if self._sizers['psizer'] != None:
-            self._sizers['psizer'].Layout()
         self._parent.SendSizeEvent()
         self._parent.nb.GetCurrentCtrl().SetFocus()
         return True
@@ -313,19 +310,10 @@ class CommandBar(wx.Panel):
         self.UpdateIcons()
 
     def Show(self, id_=0):
-        """Shows the control and installs it in the parents
-        sizer if not installed already.
+        """Shows the control
         @param id_: Id of control to show in bar
 
         """
-        # Install self in parent
-        if not self._installed and self._sizers['psizer'] != None:
-            self._installed = True
-            self._sizers['psizer'].Add(self, 0, wx.EXPAND)
-            self._sizers['psizer'].Layout()
-            self._parent.SendSizeEvent()
-        wx.Panel.Show(self)
-
         # HACK YUCK, come back and try again when my brain is working
         # Show specified control
         if id_:
@@ -355,6 +343,7 @@ class CommandBar(wx.Panel):
             if ctrl != None:
                 ctrl.SetFocus()
                 ctrl.SelectAll()
+        wx.Panel.Show(self)
 
     def UpdateIcons(self):
         """Refresh icons to current theme settings

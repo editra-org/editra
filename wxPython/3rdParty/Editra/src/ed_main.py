@@ -31,12 +31,11 @@ from ed_glob import *
 import util
 import profiler
 import ed_toolbar
+import ed_mpane
 import ed_event
 import ed_msg
-import ed_pages
 import ed_menu
 import ed_print
-import ed_cmdbar
 import ed_statbar
 import ed_mdlg
 import prefdlg
@@ -85,9 +84,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._exiting = False
         self._handlers = dict(menu=list(), ui=list())
 
-        #---- Sizers to hold subapplets ----#
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
-
         #---- Setup File History ----#
         self.filehistory = wx.FileHistory(_PGET('FHIST_LVL', 'int', 5))
 
@@ -98,19 +94,15 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         #---- End Statusbar Setup ----#
 
         #---- Notebook that contains the editting buffers ----#
-        edit_pane = wx.Panel(self)
-        self.nb = ed_pages.EdPages(edit_pane, wx.ID_ANY)
-        edit_pane.nb = self.nb
-        self.sizer.Add(self.nb, 1, wx.EXPAND)
-        edit_pane.SetSizer(self.sizer)
-        self._mgr.AddPane(edit_pane, wx.aui.AuiPaneInfo(). \
+        self._mpane = ed_mpane.MainPanel(self)
+        self.nb = self._mpane.GetWindow()
+        self._mgr.AddPane(self._mpane, wx.aui.AuiPaneInfo(). \
                           Name("EditPane").Center().Layer(1).Dockable(False). \
                           CloseButton(False).MaximizeButton(False). \
                           CaptionVisible(False))
 
         #---- Command Bar ----#
-        self._cmdbar = ed_cmdbar.CommandBar(edit_pane, ID_COMMAND_BAR)
-        self._cmdbar.Hide()
+        self._mpane.HideCommandBar()
 
         #---- Setup Toolbar ----#
         self.SetToolBar(ed_toolbar.EdToolBar(self))
@@ -404,7 +396,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @return: ed_cmdbar.CommandBar
 
         """
-        return self._cmdbar
+        return self._mpane.GetControlBar(wx.BOTTOM)
 
     def GetFrameManager(self):
         """Returns the manager for this frame
@@ -1146,11 +1138,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         e_id = evt.GetId()
-        ctrld = { ID_QUICK_FIND : ed_cmdbar.ID_SEARCH_CTRL,
-                  ID_GOTO_LINE : ed_cmdbar.ID_LINE_CTRL,
-                  ID_COMMAND : ed_cmdbar.ID_CMD_CTRL }
-        if e_id in ctrld:
-            self.ShowCommandCtrl(ctrld[e_id])
+        if e_id in (ID_QUICK_FIND, ID_GOTO_LINE, ID_COMMAND):
+            self._mpane.ShowCommandControl(e_id)
         else:
             evt.Skip()
 
@@ -1183,14 +1172,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             webbrowser.open(page, 1)
         except:
             self.PushStatusText(_("Error: Unable to open %s") % page, SB_INFO)
-
-    def ShowCommandCtrl(self, ctrl_id):
-        """Open the Commandbar in command mode.
-        @param ctrl_id: control id to show
-
-        """
-        self._cmdbar.Show(ctrl_id)
-        self.sizer.Layout()
 
     def ModifySave(self):
         """Called when document has been modified prompting
