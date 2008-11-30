@@ -1892,7 +1892,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if _PGET('AUTO_TRIM_WS', 'bool', False):
                 self.TrimWhitespace()
 
-            self.file.Write(self.GetText())
+            if self.file.IsReadOnly():
+                wx.MessageBox(_("File is Read Only and cannot be saved"),
+                              _("Read Only"),
+                              style=wx.OK|wx.CENTER|wx.ICON_WARNING)
+                return True
+            else:
+                self.file.Write(self.GetText())
         except Exception, msg:
             result = False
             self.LOG("[ed_stc][err] There was an error saving %s" % path)
