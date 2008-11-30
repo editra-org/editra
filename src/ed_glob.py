@@ -256,6 +256,7 @@ ID_USB               = wx.NewId()
 ID_UP                = wx.ID_UP
 ID_VI_MODE           = wx.NewId()
 ID_WEB               = wx.NewId()
+ID_READONLY          = wx.NewId()
 
 # Statusbar IDs
 SB_INFO          = 0

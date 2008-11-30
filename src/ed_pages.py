@@ -85,6 +85,8 @@ class EdPages(FNB.FlatNotebook):
         imgl = wx.ImageList(16, 16)
         txtbmp = wx.ArtProvider.GetBitmap(str(synglob.ID_LANG_TXT), wx.ART_MENU)
         self._index[synglob.ID_LANG_TXT] = imgl.Add(txtbmp)
+        robmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_READONLY), wx.ART_MENU)
+        self._index[ed_glob.ID_READONLY] = imgl.Add(robmp)
         self.SetImageList(imgl)
 
         # Notebook Events
@@ -514,7 +516,12 @@ class EdPages(FNB.FlatNotebook):
         self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
 
         # Set tab image
-        self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
+        cpage = self.GetSelection()
+        if doc.ReadOnly:
+            FNB.FlatNotebook.SetPageImage(self, cpage,
+                                          self._index[ed_glob.ID_READONLY])
+        else:
+            self.SetPageImage(cpage, str(self.control.GetLangId()))
 
         # Refocus on selected page
         self.GoCurrentPage()
@@ -654,6 +661,15 @@ class EdPages(FNB.FlatNotebook):
             page = self.GetCurrentPage()
             if page is not None:
                 page.DoOnIdle()
+
+#            # Update document indicator state
+#            if hasattr(page, 'GetDocument'):
+#                doc = page.GetDocument()
+#                sel = self.GetSelection()
+#                img = self.GetPageImage(sel)
+#                roidx = self._index[ed_glob.ID_READONLY]
+#                if doc.ReadOnly and img != roidx:
+#                    FNB.FlatNotebook.SetPageImage(sel, roidx)
 
     def OnLeftUp(self, evt):
         """Traps clicks sent to page close buttons and

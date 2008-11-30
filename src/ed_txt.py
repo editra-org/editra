@@ -203,6 +203,16 @@ class EdFile(object):
         """
         return self.open
 
+    def IsReadOnly(self):
+        """Is the file Read Only
+        @return: bool
+
+        """
+        if os.path.exists(self.path):
+            return not os.access(self.path, os.R_OK|os.W_OK)
+        else:
+            return False
+
     @property
     def Modtime(self):
         """File modification time propery"""
@@ -259,6 +269,10 @@ class EdFile(object):
             return txt
         else:
             raise ReadError, self.last_err
+
+    @property
+    def ReadOnly(self):
+        return self.IsReadOnly()
 
     def RemoveModifiedCallback(self, callback):
         """Remove a registered callback
