@@ -55,9 +55,11 @@ class ControlBox(wx.PyPanel):
 
         # Attributes
         self._sizer = wx.BoxSizer(wx.VERTICAL)
-        self._ctrlbar = None
+        self._topb = None
         self._main = None
+        self._botb = None
 
+        # Layout
         self.SetSizer(self._sizer)
         self.SetAutoLayout(True)
 
@@ -68,17 +70,24 @@ class ControlBox(wx.PyPanel):
         @postcondition: A top aligned L{ControlBar} is created.
 
         """
-        if self._ctrlbar is None:
-            self._ctrlbar = ControlBar(self, size=(-1, 24),
-                                       style=CTRLBAR_STYLE_GRADIENT)
-            self._sizer.Insert(0, self._ctrlbar, 0, wx.EXPAND)
+        cbar = self.GetControlBar(pos)
+        if cbar is None:
+            cbar = ControlBar(self, size=(-1, 24),
+                              style=CTRLBAR_STYLE_GRADIENT)
 
-    def GetControlBar(self):
+            self.SetControlBar(cbar, pos)
+
+    def GetControlBar(self, pos=wx.TOP):
         """Get the L{ControlBar} used by this window
         @return: ControlBar or None
 
         """
-        return self._ctrlbar
+        if pos == wx.TOP:
+            cbar = self._topb
+        else:
+            cbar = self._botb
+
+        return cbar
 
     def GetWindow(self):
         """Get the main display window
@@ -87,20 +96,37 @@ class ControlBox(wx.PyPanel):
         """
         return self._main
 
-    def SetControlBar(self, ctrlbar):
+    def SetControlBar(self, ctrlbar, pos=wx.TOP):
         """Set the ControlBar used by this ControlBox
         @param ctrlbar: L{ControlBar}
+        @keyword pos: wx.TOP/wx.BOTTOM
 
         """
-        if self._ctrlbar is not None:
-            self._sizer.Replace(self._ctrlbar, ctrlbar)
-            try:
-                self._ctrlbar.Destroy()
-            except wx.PyDeadObjectError:
-                pass
+        tbar = self.GetControlBar(pos)
+        if pos == wx.TOP:
+            if tbar is None:
+                self._sizer.Insert(0, ctrlbar, 0, wx.EXPAND)
+            else:
+                self._sizer.Replace(self._topb, ctrlbar)
+
+                try:
+                    self._topb.Destroy()
+                except wx.PyDeadObjectError:
+                    pass
+
+            self._topb = ctrlbar
         else:
-            self._sizer.Insert(0, ctrlbar, 0, wx.EXPAND)
-        self._ctrlbar = ctrlbar
+            if tbar is None:
+                self._sizer.Add(ctrlbar, 0, wx.EXPAND)
+            else:
+                self._sizer.Replace(self._botb, ctrlbar)
+
+                try:
+                    self._botb.Destroy()
+                except wx.PyDeadObjectError:
+                    pass
+
+            self._botb = ctrlbar
 
     def SetWindow(self, window):
         """Set the main window control portion of the box. This will be the
@@ -108,12 +134,20 @@ class ControlBox(wx.PyPanel):
         @param window: Any window/panel like object
 
         """
-        if self._main is None:
-            self._main = window
-            self._sizer.Add(self._main, 1, wx.EXPAND)
+        if self.GetWindow() is None:
+            if self._topb is None:
+                self._sizer.Add(window, 1, wx.EXPAND)
+            else:
+                self._sizer.Insert(1, window, 1, wx.EXPAND)
         else:
             self._sizer.Replace(self._main, window)
-            self._main = window
+
+            try:
+                self._main.Destroy()
+            except wx.PyDeadObjectError:
+                pass
+
+        self._main = window
 
 #--------------------------------------------------------------------------#
 
@@ -307,6 +341,7 @@ if __name__ == '__main__':
         fsizer = wx.BoxSizer(wx.VERTICAL)
 
         cbox = ControlBox(frame)
+        
         cbox.CreateControlBar()
 
         cbar = cbox.GetControlBar()
@@ -315,6 +350,10 @@ if __name__ == '__main__':
         cbar.AddStretchSpacer()
         cbar.AddControl(wx.Choice(cbar, wx.ID_ANY, choices=[str(x) for x in range(10)]), wx.ALIGN_RIGHT)
         cbar.AddControl(wx.Button(cbar, label="New Frame"), wx.ALIGN_RIGHT)
+
+        cbox.CreateControlBar(wx.BOTTOM)
+        bbar = cbox.GetControlBar(wx.BOTTOM)
+        bbar.AddTool(wx.ID_ANY, wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16, 16)), "HELLO")
 
         cbox.SetWindow(wx.TextCtrl(cbox, style=wx.TE_MULTILINE))
         cbox.Bind(EVT_CTRLBAR, OnControlBar)
