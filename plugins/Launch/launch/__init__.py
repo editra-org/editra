@@ -132,4 +132,10 @@ def OnUpdateMenu(evt):
     @param evt: UpdateUI
 
     """
-    evt.Enable(ed_msg.RequestResult(launch.REQUEST_ACTIVE))
+    e_id = evt.GetId()
+    if e_id == ed_glob.ID_RUN_LAUNCH:
+        evt.Enable(ed_msg.RequestResult(launch.REQUEST_ACTIVE))
+    elif e_id == ed_glob.ID_LAUNCH_LAST:
+        evt.Enable(ed_msg.RequestResult(launch.REQUEST_RELAUNCH))
+    else:
+        evt.Skip()
