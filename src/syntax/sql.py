@@ -355,7 +355,7 @@ SQL_BACKTICKS_IDENTIFIER = ("lexer.sql.backticks.identifier", "0")
 #---- Required Module Functions ----#
 def Keywords(lang_id=0):
     """ Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+    @keyword lang_id: used to select specific subset of keywords
                     (ID_LANG_SQL and ID_LANG_PLSQL supported)
 
     """
@@ -371,7 +371,7 @@ def Keywords(lang_id=0):
 
 def SyntaxSpec(lang_id=0):
     """ Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
+    @keyword lang_id: used for selecting a specific subset of syntax specs
                                    (ID_LANG_SQL and ID_LANG_PLSQL supported)
 
     """
@@ -382,7 +382,7 @@ def SyntaxSpec(lang_id=0):
 
 def Properties(lang_id=0):
     """ Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
+    @keyword lang_id: used to select a specific set of properties
                    (ID_LANG_SQL and ID_LANG_PLSQL supported)
 
     """
@@ -396,7 +396,7 @@ def Properties(lang_id=0):
 
 def CommentPattern(lang_id=0):
     """ Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
+    @keyword lang_id: used to select a specific subset of comment pattern(s)
                                    (ID_LANG_SQL and ID_LANG_PLSQL supported)
 
     """
