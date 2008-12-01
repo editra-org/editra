@@ -221,6 +221,8 @@ ID_LANG_SQL = _NewId()
 LANG_SQL = u'SQL'
 ID_LANG_PLSQL = _NewId()
 LANG_PLSQL = u'PL/SQL'
+ID_LANG_4GL = _NewId()
+LANG_4GL = u"Progress 4GL"
 
 # Use LEX_TCL
 ID_LANG_TCL  = _NewId()
@@ -282,6 +284,7 @@ LANG_S = u'S'
 
 # Default extensions to file type mapping
 EXT_MAP = {
+           '4gl'                : LANG_4GL,
            '68k'                : LANG_68K,
            'ada adb ads a'      : LANG_ADA,
            'conf htaccess'      : LANG_APACHE,
