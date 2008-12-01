@@ -1,33 +1,39 @@
 ' Syntax Highlighting test file for VBScript
 ' Comments look like this
 
-Set objFSO = CreateObject("Scripting.FileSystemObject")
-Set objTextFile = objFSO.CreateTextFile("c:\scripts\software.tsv", True)
+function hello(name) 'comment for function
 
-strComputer = "."
-Set objWMIService = GetObject("winmgmts:" _
-    & "{impersonationLevel=impersonate}!\\" & strComputer & "\root\cimv2")
-Set colSoftware = objWMIService.ExecQuery _
-    ("Select * from Win32_Product")
+    on error resume next
 
-objTextFile.WriteLine "Caption" & vbtab & _
-    "Description" & vbtab & "Identifying Number" & vbtab & _
-    "Install Date" & vbtab & "Install Location" & vbtab & _
-    "Install State" & vbtab & "Name" & vbtab & _ 
-    "Package Cache" & vbtab & "SKU Number" & vbtab & "Vendor" & vbtab _
-        & "Version" 
+    dim x,y
 
-For Each objSoftware in colSoftware
-    objTextFile.WriteLine objSoftware.Caption & vbtab & _
-    objSoftware.Description & vbtab & _
-    objSoftware.IdentifyingNumber & vbtab & _
-    objSoftware.InstallDate2 & vbtab & _
-    objSoftware.InstallLocation & vbtab & _
-    objSoftware.InstallState & vbtab & _
-    objSoftware.Name & vbtab & _
-    objSoftware.PackageCache & vbtab & _
-    objSoftware.SKUNumber & vbtab & _
-    objSoftware.Vendor & vbtab & _
-    objSoftware.Version
-Next
-objTextFile.Close
+    if name<>"World" then
+        for x = 1 to 10
+            wscript.echo "Hello " & name
+        next
+    else
+        x=0
+        do while x<10
+            wscript.echo "Hello World"
+            x=x+1
+        loop
+    end if
+
+    hello=x+y
+
+end function
+
+'---------------------------
+
+on error resume next
+
+dim didIt
+dim userid
+
+set WshShell = WScript.CreateObject("WScript.Shell")
+'Finds the user name from an environment variable
+userid=wshshell.expandenvironmentstrings("%username%")
+
+didIt=hello(userid)
+
+wscript.exit(0)
