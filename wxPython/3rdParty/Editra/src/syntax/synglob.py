@@ -33,7 +33,8 @@ from synextreg import *
 #-----------------------------------------------------------------------------#
 
 # Maps file types to syntax definitions
-LANG_MAP = {LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
+LANG_MAP = {LANG_4GL    : (ID_LANG_4GL,    stc.STC_LEX_SQL,      'progress'),
+            LANG_68K    : (ID_LANG_68K,    stc.STC_LEX_ASM,      'asm68k'),
             LANG_ADA    : (ID_LANG_ADA,    stc.STC_LEX_ADA,      'ada'),
             LANG_APACHE : (ID_LANG_APACHE, stc.STC_LEX_CONF,     'apache'),
             LANG_AS     : (ID_LANG_AS,     stc.STC_LEX_CPP,      'actionscript'),
