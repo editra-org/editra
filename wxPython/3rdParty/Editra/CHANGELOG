@@ -23,6 +23,7 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Middle click closes the tab that was clicked on and not the active tab
++Fix Find dialog not preserving order of lookin choices
 
 #-----------------------------------------------------------------------------#
 
