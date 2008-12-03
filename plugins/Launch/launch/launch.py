@@ -425,10 +425,14 @@ class LaunchWindow(ctrlbox.ControlBox):
             for ctrl in (exe_ch, args_txt, run_btn, self._chFiles):
                 ctrl.Enable()
             self._isready = True
+
             if self._config['lang'] == self._config['prelang'] and len(csel):
                 exe_ch.SetStringSelection(csel)
             else:
-                exe_ch.SetStringSelection(handler.GetDefault())
+                csel = handler.GetDefault()
+                exe_ch.SetStringSelection(csel)
+
+            exe_ch.SetToolTipString(handler.GetCommand(csel))
             self.GetControlBar().Layout()
         else:
             self._isready = False
