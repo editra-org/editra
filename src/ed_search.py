@@ -228,10 +228,17 @@ class SearchController:
             start, end = match
 
             if isdown:
-                stc.SetSelection(start + spos, end + spos)
+                start = start + spos
+                end = end + spos
+                stc.SetSelection(start, end)
             else:
                 stc.SetSelection(end, start)
+
+            # Ensure caret and the line its in is exposed
             stc.EnsureCaretVisible()
+            line = stc.LineFromPosition(start)
+            stc.EnsureVisible(line)
+
             self._posinfo['found'] = start
 
             ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
@@ -257,7 +264,11 @@ class SearchController:
                 if not isdown:
                     match.reverse()
                 stc.SetSelection(match[0], match[1])
+                
+                # Ensure caret and the line its in is exposed
                 stc.EnsureCaretVisible()
+                line = stc.LineFromPosition(match[0])
+                stc.EnsureVisible(line)
             else:
                 self._posinfo['found'] = -1
                 ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
