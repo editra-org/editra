@@ -9,6 +9,7 @@ Date: xx/xx/200x
 
 +Add run last executed program function and shortcut
 +Fix file list not being populated on first opening
++Fix incorrect tooltip on exe choice control
 
 #-----------------------------------------------------------------------------#
 
