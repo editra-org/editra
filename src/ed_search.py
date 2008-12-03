@@ -315,7 +315,6 @@ class SearchController:
                 choices = self._li_choices[-5:]
             else:
                 choices = self._li_choices
-            choices.reverse()
 
             # Save the most recent choices of search locations
             Profile_Set('SEARCH_LOC', choices)
