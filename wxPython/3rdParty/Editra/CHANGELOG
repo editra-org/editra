@@ -26,6 +26,7 @@ BUG FIXES:
 +Fix Find dialog not preserving order of lookin choices
 +Fix searching in folded text not being exposed during search
 +Fix random jumping to top/bottom of file during incremental search
++Fix text Drag n Drop not working on Windows.
 
 #-----------------------------------------------------------------------------#
 
