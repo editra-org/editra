@@ -9,7 +9,7 @@
 # Plugin Meta
 """Adds a CodeBrowser Sidepanel"""
 __author__ = "Cody Precord"
-__version__ = "0.5"
+__version__ = "0.6"
 
 #-----------------------------------------------------------------------------#
 # Imports

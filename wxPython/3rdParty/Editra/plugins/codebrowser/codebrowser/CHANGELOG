@@ -4,6 +4,16 @@
 
 #-----------------------------------------------------------------------------#
 
+Version 0.6
+Released: xx/xx/200x
+
+New:
+
+Bug Fixes:
++Fix cpp method signatures with * or in & in them not being added to tree view
+
+#-----------------------------------------------------------------------------#
+
 Version 0.5
 Released: 11/02/2008
 
