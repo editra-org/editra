@@ -139,10 +139,11 @@ class DropTargetFT(wx.PyDropTarget):
                is not moved.
 
         """
+        stc = self.window
         if self._tmp is None:
+            stc.DoDragOver(x_cord, y_cord, drag_result)
             return drag_result
         else:
-            stc = self.window
             point = wx.Point(x_cord, y_cord)
             self._tmp.BeginDrag(point - self._lastp, stc)
             self._tmp.Hide()
@@ -151,7 +152,7 @@ class DropTargetFT(wx.PyDropTarget):
             self._tmp.Show()
             self._tmp.RedrawImage(self._lastp, point, True, True)
             self._lastp = point
-            return drag_result
+        return drag_result
 
     def OnData(self, x_cord, y_cord, drag_result):
         """Gets and processes the dropped data
