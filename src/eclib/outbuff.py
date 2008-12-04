@@ -195,6 +195,11 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetReadOnly(True)
         self.SetCaretWidth(0)
 
+        if wx.Platform == '__WXMSW__':
+            self.SetEOLMode(wx.stc.STC_EOL_CRLF)
+        else:
+            self.SetEOLMode(wx.stc.STC_EOL_LF)
+
         #self.SetEndAtLastLine(False)
         self.SetVisiblePolicy(1, wx.stc.STC_VISIBLE_STRICT)
 
@@ -642,9 +647,9 @@ class ProcessThread(threading.Thread):
                 ctypes.windll.kernel32.PeekNamedPipe(handle, None, 0, 0,
                                                      ctypes.byref(avail), None)
                 if avail.value > 0:
-                    read = self._proc.stdout.read(4096)
+                    read = self._proc.stdout.read(avail.value)
                     if read.endswith(os.linesep):
-                        read = read[:-1 * len(os.linesep)] + "\n"
+                        read = read[:-1 * len(os.linesep)]
                 else:
                     if self._proc.poll() is None:
                         time.sleep(1)
