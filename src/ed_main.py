@@ -1254,6 +1254,7 @@ def OnPreferences(evt):
 
     """
     if evt.GetId() == ID_PREF:
+        cursor = wx.BusyCursor()
         win = wx.GetApp().GetWindowInstance(prefdlg.PreferencesDialog)
         if win is not None:
             win.Raise()
@@ -1261,6 +1262,7 @@ def OnPreferences(evt):
             dlg = prefdlg.PreferencesDialog(None)
             dlg.CenterOnParent()
             dlg.Show()
+        del cursor
     else:
         evt.Skip()
 
