@@ -33,7 +33,7 @@ import parselib
 
 #--------------------------------------------------------------------------#
 
-RE_METH = re.compile(r"([A-Za-z0-9_]+\s+)+([*~A-Za-z0-9_:]+)\s*\([^)]*\)\s*(const)*\s*\{")
+RE_METH = re.compile(r"([A-Za-z0-9_*&]+\s+)+([&*~A-Za-z0-9_:]+)\s*\([^)]*\)\s*(const)*\s*\{")
 RE_DEF = re.compile(r"#define[ \t]+([A-Za-z0-9_]+)")
 
 #--------------------------------------------------------------------------#
@@ -63,6 +63,7 @@ def GenerateTags(buff):
             if u"::" in fname:
                 scopes = fname.split("::")
                 cname = scopes[0].lstrip('*')
+                cname = scopes[0].lstrip('&')
                 cobj = rtags.GetElement('class', cname)
                 if cobj == None:
                     cobj = taglib.Class(cname, line)
