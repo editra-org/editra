@@ -45,6 +45,10 @@ class DocPositionMgr(object):
         self._book = None
         self._records = dict()
 
+        # Non persisted navigation cache
+        self._poscache = list()
+        self._cpos = -1
+
     def InitPositionCache(self, book_path):
         """Initialize and load the on disk document position cache.
         @param book_path: path to on disk cache
@@ -54,6 +58,19 @@ class DocPositionMgr(object):
         self._book = book_path
         if Profile_Get('SAVE_POS'):
             self.LoadBook(book_path)
+
+    def AddNaviPosition(self, fname, pos):
+        """Add a new postion to the navigation cache
+        @param fname: file name
+        @param pos: position
+
+        """
+        clen = len(self._poscache)
+        if self._cpos+1 != clen:
+            self._poscache = self._poscache[:self._cpos]
+
+        self._poscache.append((fname, pos))
+        self._cpos = len(self._poscache) - 1
 
     def AddRecord(self, vals):
         """Adds a record to the dictionary from a list of the
@@ -74,6 +91,53 @@ class DocPositionMgr(object):
 
         """
         return self._book
+
+    def GetNextNaviPos(self, fname=None):
+        """Get the next stored navigation position
+        The optional fname parameter will get the next found position for
+        the given file.
+        @param fname: filename (note currently not supported)
+        @return: int or None
+
+        """
+        if not len(self._poscache):
+            return None
+
+        # If at end wrap to begining
+        if self._cpos >= len(self._cpos):
+            self._cpos = 0
+
+        rval = None
+        # Get the position at the current history position marker
+        rval = self._poscache[self._cpos]
+        self._cpos += 1
+
+    def GetPreviousNaviPos(self, fname=None):
+        """Get the last stored navigation position
+        The optional fname parameter will get the last found position for
+        the given file.
+        @param fname: filename (note currently not supported)
+        @return: int or None
+
+        """
+        if not len(self._poscache):
+            return None
+
+        # If past begining wrap to the end
+        if self._cpos < 0:
+            self._cpos = len(self._cpos) - 1
+
+        rval = None
+#        if fname is None:
+        # Get the position at the current history position marker
+        rval = self._poscache[self._cpos]
+        self._cpos -= 1
+#        else:
+#            # Get the last known position for the given file
+#            idx = 0
+#            for name, pos in reversed(self._poscache[:self._cpos]):
+#                if name == fname:
+#                    rval = pos
 
     def GetPos(self, name):
         """Get the position record for a given filename
