@@ -67,7 +67,7 @@ def main():
         for key in torem:
             del sys.modules[key]
     else:
-        if sys.modules.has_key('src'):
+        if 'src' in sys.modules:
             del sys.modules['src']
 
     sys.path.insert(0, SRC_DIR)

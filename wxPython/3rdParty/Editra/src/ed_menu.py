@@ -371,7 +371,7 @@ class KeyBinder(object):
         if len(keys):
             # Set the binding
             cls.keyprofile[item_id] = keys
-        elif cls.keyprofile.has_key(item_id):
+        elif item_id in cls.keyprofile:
             # Clear the binding
             del cls.keyprofile[item_id]
         else:
@@ -1098,7 +1098,7 @@ def WalkMenu(menu, label, collection):
     @return: dict {menulabel : [menu id, (item1 id, label1),]}
 
     """
-    if not collection.has_key(label):
+    if label not in collection:
         collection[label] = list()
 
     for item in menu.GetMenuItems():

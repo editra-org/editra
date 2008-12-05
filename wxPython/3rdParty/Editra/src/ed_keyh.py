@@ -340,7 +340,7 @@ class ViKeyHandler(KeyHandler):
                 # Goto column number at current line
                 self.stc.GotoColumn(repeat - 1)
             else:
-                if not cmd_map.has_key(rcmd):
+                if rcmd not in cmd_map:
                     return True
                 run = cmd_map[rcmd]
                 for count in xrange(repeat):

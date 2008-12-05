@@ -721,7 +721,7 @@ class PyParser:
         if tokentype == tokenize.NUMBER or tokentype == tokenize.STRING:
             return token #token = tokentype
 
-        if tokens.has_key(token):
+        if token in tokens:
             return tokens[token]
         else:
             # NOTE: This part of the parse is where the problem is happening

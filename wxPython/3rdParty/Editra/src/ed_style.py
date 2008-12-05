@@ -610,7 +610,7 @@ class StyleMgr(object):
         @return: whether item is in style set or not
 
         """
-        return self.GetStyleSet().has_key(name)
+        return name in self.GetStyleSet()
 
     def LoadStyleSheet(self, style_sheet, force=False):
         """Loads a custom style sheet and returns True on success
@@ -623,7 +623,7 @@ class StyleMgr(object):
         """
         if isinstance(style_sheet, basestring) and \
            os.path.exists(style_sheet) and \
-           ((force or not StyleMgr.STYLES.has_key(style_sheet)) or \
+           ((force or style_sheet not in StyleMgr.STYLES) or \
              style_sheet != self.style_set):
             reader = util.GetFileReader(style_sheet)
             if reader == -1:
@@ -632,7 +632,7 @@ class StyleMgr(object):
             ret_val = self.SetStyles(style_sheet, self.ParseStyleData(reader.read()))
             reader.close()
             return ret_val
-        elif not StyleMgr.STYLES.has_key(style_sheet):
+        elif style_sheet not in StyleMgr.STYLES:
             self.LOG("[ed_style][warn] Style sheet %s does not exists" % style_sheet)
             # Reset to default style
             Profile_Set('SYNTHEME', 'default')
@@ -650,7 +650,7 @@ class StyleMgr(object):
         @return: style_set with all unset attributes set to match default style
 
         """
-        if isinstance(style_set, dict) and style_set.has_key('default_style'):
+        if isinstance(style_set, dict) and 'default_style' in style_set:
             default = style_set['default_style']
             for tag in style_set:
                 if style_set[tag].IsNull():

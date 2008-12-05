@@ -524,7 +524,7 @@ class DownloadPanel(wx.Panel):
             else:
                 self._downlb.Disable()
 
-            if self._dl_list.has_key(pin):
+            if pin in self._dl_list:
                 del self._dl_list[pin]
 
     def PopulateList(self):
@@ -557,14 +557,14 @@ class DownloadPanel(wx.Panel):
 
         """
         # Removed downloaded data
-        if self._eggbasket.has_key(item):
+        if item in self._eggbasket:
             del self._eggbasket[item]
 
         # Remove download entry data
         match = self.EGG_PATTERN(item)
         if match:
             plugin_name = match.group('name').lower()
-            if self._dl_list.has_key(plugin_name):
+            if plugin_name in self._dl_list:
                 del self._dl_list[plugin_name]
 
     def UpdateList(self, url=PLUGIN_REPO):

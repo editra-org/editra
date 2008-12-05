@@ -104,8 +104,7 @@ class EditraArt(wx.ArtProvider):
         # If using default theme let the system provide the art when possible
         # this is mostly for GTK where there is a native art provider that can
         # provide theme icons.
-        if Profile_Get('ICONS', 'str').lower() == u'default' and \
-           DEFAULT.has_key(art_id):
+        if Profile_Get('ICONS', 'str').lower() == u'default' and art_id in DEFAULT:
             if client == wx.ART_MENU:
                 size = (16, 16)
             elif client == wx.ART_TOOLBAR:

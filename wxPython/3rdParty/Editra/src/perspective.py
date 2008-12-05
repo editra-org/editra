@@ -175,7 +175,7 @@ class PerspectiveManager(object):
         @return: whether perspective is managed by this manager or not
 
         """
-        return self._viewset.has_key(name)
+        return name in self._viewset
 
     def LoadPerspectives(self):
         """Loads the perspectives data into the manager. Returns
@@ -198,7 +198,7 @@ class PerspectiveManager(object):
                 self._viewset[label] = val.strip()
             reader.close()
         finally:
-            if self._viewset.has_key(LAST_KEY):
+            if LAST_KEY in self._viewset:
                 self._currview = self._viewset[LAST_KEY]
                 del self._viewset[LAST_KEY]
             return len(self._viewset)
@@ -267,7 +267,7 @@ class PerspectiveManager(object):
         @param name: name of perspective to remove/delete
 
         """
-        if self._viewset.has_key(name):
+        if name in self._viewset:
             del self._viewset[name]
             rem_id = self._menu.RemoveItemByName(name)
             if rem_id:
@@ -313,7 +313,7 @@ class PerspectiveManager(object):
         @rtype: bool
 
         """
-        if self._viewset.has_key(name):
+        if name in self._viewset:
 
             if name == AUTO_PERSPECTIVE:
                 self._viewset[AUTO_PERSPECTIVE] = self._viewset[self._currview]

@@ -530,9 +530,9 @@ class FileBrowser(wx.GenericDirCtrl):
             r_txt = u''
         else:
             if wx.Platform == '__WXGTK__':
-                if path[0].lower() == 'home directory':
+                if path[0].lower() == _("Home directory"):
                     path[0] = wx.GetHomeDir()
-                elif path[0].lower() == 'desktop':
+                elif path[0].lower() == _("Desktop"):
                     path.insert(0, wx.GetHomeDir())
                 else:
                     pass
