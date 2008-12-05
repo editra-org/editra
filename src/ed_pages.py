@@ -716,7 +716,8 @@ class EdPages(FNB.FlatNotebook):
         @param pg_num: Page number to change 
 
         """
-        if self.GetSelection() != pg_num:
+        cpage = self.GetSelection()
+        if cpage != pg_num:
             self.SetSelection(pg_num)
 
         # Get the window that is the current page
@@ -728,7 +729,7 @@ class EdPages(FNB.FlatNotebook):
         self.frame.SetTitle(self.control.GetTitleString())
 
         # Only post page changes when the change is not from the app exiting
-        if not self.frame.IsExiting():
+        if not self.frame.IsExiting() and cpage != pg_num:
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pg_num))
 
     def OnPageChanged(self, evt):
