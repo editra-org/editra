@@ -66,6 +66,9 @@ class Completer(object):
         @return: list or string
 
         """
+        if command is None or (len(command) and command[0].isdigit()):
+            return ''
+
         try:
             cmpl = PyCompleter()
 
