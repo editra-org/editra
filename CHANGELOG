@@ -20,6 +20,7 @@ NEW: [features/improvements]
 +New version of Launch plugin (Run last executed program)
 +Read Only indicators on tabs
 +Add support for Progress 4GL
++Middle click can close tabs in Shelf
 
 BUG FIXES:
 +Middle click closes the tab that was clicked on and not the active tab
