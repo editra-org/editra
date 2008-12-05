@@ -1634,7 +1634,7 @@ class FNBRenderer:
         dc = wx.MemoryDC()
         dc.SelectObject(wx.EmptyBitmap(1,1))
 
-        boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        boldFont = pageContainer.GetFont()
         boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
 
         if pc.IsDefaultTabs():
