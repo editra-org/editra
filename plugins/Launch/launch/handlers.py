@@ -218,7 +218,7 @@ class FileTypeHandler(object):
                 self.commands.update(sdict)
 
             # Reset default if it has been removed
-            if not self.commands.has_key(self.default):
+            if self.default not in self.commands:
                 keys = self.commands.keys()
                 if len(keys):
                     self.default = keys[0]

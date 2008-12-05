@@ -113,10 +113,10 @@ class Scope(Code):
         @param element: L{Code} object to add to this scope
 
         """
-        if not self.elements.has_key(obj):
+        if obj not in self.elements:
             self.elements[obj] = list()
         self.elements[obj].append(element)
-        if not self.prio.has_key(obj):
+        if obj not in self.prio:
             self.prio[obj] = 0
 
     def GetElement(self, etype, ename):
@@ -157,7 +157,7 @@ class Scope(Code):
         sorder = [ key for key, val in sorted(self.prio.items(), cmptup, reverse=True) ]
         rlist = list()
         for key in sorder:
-            if self.elements.has_key(key):
+            if key in self.elements:
                 rlist.append({key:sorted(self.elements[key])})
         return rlist
 

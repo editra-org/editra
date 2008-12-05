@@ -34,7 +34,7 @@ class FakeRTags( object ):
         self.ids = {}
         
     def AddElement( self, elementid, ctags ):
-        if ( self.ids.has_key( elementid )):
+        if elementid in self.ids:
             self.ids [ elementid ].append( ctags )
         else:
             self.ids [ elementid ] = [ ctags ]
