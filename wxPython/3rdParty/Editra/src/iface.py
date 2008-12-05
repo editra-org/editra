@@ -270,7 +270,8 @@ class Shelf(plugin.Plugin):
                                              FNB.FNB_BACKGROUND_GRADIENT |
                                              FNB.FNB_NODRAG |
                                              FNB.FNB_BOTTOM |
-                                             FNB.FNB_NO_X_BUTTON)
+                                             FNB.FNB_NO_X_BUTTON |
+                                             FNB.FNB_MOUSE_MIDDLE_CLOSES_TABS)
         self._shelf.SetImageList(self._imglst)
         mgr.AddPane(self._shelf, wx.aui.AuiPaneInfo().Name(Shelf.SHELF_NAME).\
                             Caption("Shelf").Bottom().Layer(0).\
