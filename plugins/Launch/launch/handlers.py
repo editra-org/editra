@@ -89,7 +89,7 @@ RE_PROC_SE = re.compile('>{3,3}.*' + os.linesep)
 # Public Handler Api for use outside this module
 def GetHandlerById(lang_id):
     """Get a handler for the specified language id"""
-    if HANDLERS.has_key(lang_id):
+    if lang_id in HANDLERS:
         return HANDLERS[lang_id]
     else:
         return HANDLERS[0]
