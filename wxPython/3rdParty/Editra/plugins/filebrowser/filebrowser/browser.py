@@ -811,7 +811,7 @@ class PathMarkConfig(object):
 
     def RemovePathMark(self, pmark):
         """Removes a path mark from the config"""
-        if self._pmarks.has_key(pmark):
+        if pmark in self._pmarks:
             del self._pmarks[pmark]
 
     def Save(self):
