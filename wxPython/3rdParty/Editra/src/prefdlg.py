@@ -337,6 +337,24 @@ class GeneralPanel(wx.Panel):
                                    default=Profile_Get('FHIST_LVL', 'str')),
                          0, wx.ALIGN_CENTER_VERTICAL)])
 
+        # Encoding options
+        d_encoding = Profile_Get('ENCODING',
+                                 'str',
+                                 default=locale.getpreferredencoding())
+        if d_encoding is None:
+            d_encoding = 'utf-8'
+            Profile_Set('ENCODING', d_encoding)
+
+        d_encoding = encodings.normalize_encoding(d_encoding)
+
+        enc_ch = ExChoice(self, ed_glob.ID_PREF_ENCODING,
+                          choices=util.GetAllEncodings(),
+                          default=d_encoding)
+        enc_ch.SetToolTipString(_("Encoding to try when auto detection fails"))
+        enc_sz = wx.BoxSizer(wx.HORIZONTAL)
+        enc_sz.AddMany([(wx.StaticText(self, label=_("Prefered Encoding") + u":"),
+                        0, wx.ALIGN_CENTER_VERTICAL), ((5, 5),), (enc_ch, 1)])
+
         win_cb = wx.CheckBox(self, ed_glob.ID_NEW_WINDOW,
                              _("Open files in new windows by default"))
         win_cb.SetValue(Profile_Get('OPEN_NW'))
@@ -357,7 +375,7 @@ class GeneralPanel(wx.Panel):
                          0, wx.ALIGN_CENTER_VERTICAL)])
 
         # Layout items
-        sizer = wx.FlexGridSizer(15, 2, 5, 5)
+        sizer = wx.FlexGridSizer(17, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self,
                         label=_("Startup Settings") + u": "),
@@ -369,7 +387,8 @@ class GeneralPanel(wx.Panel):
                        ((5, 5),), (chk_update, 0),
                        ((5, 5),), ((5, 5),),
                        (wx.StaticText(self, label=_("File Settings") + u": "),
-                        0, wx.ALIGN_CENTER_VERTICAL), (fhsizer, 0),
+                        0, wx.ALIGN_CENTER_VERTICAL), (enc_sz, 0),
+                       ((5, 5),), (fhsizer, 0),
                        ((5, 5),), (win_cb, 0),
                        ((5, 5),), (pos_cb, 0),
                        ((5, 5),), (chkmod_cb, 0),
@@ -411,7 +430,9 @@ class GeneralPanel(wx.Panel):
         e_obj = evt.GetEventObject()
         if e_id in [ed_glob.ID_PREF_MODE,
                     ed_glob.ID_PREF_FHIST,
-                    ed_glob.ID_PREF_LANG]:
+                    ed_glob.ID_PREF_LANG,
+                    ed_glob.ID_PREF_ENCODING]:
+
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
             if e_id == ed_glob.ID_PREF_MODE:
                 ed_glob.DEBUG = ('DEBUG' in e_obj.GetValue())
@@ -530,21 +551,6 @@ class DocGenPanel(wx.Panel):
                                  default=Profile_Get('EOL')),
                         0, wx.ALIGN_CENTER_VERTICAL)])
 
-        # Encoding options
-        d_encoding = Profile_Get('ENCODING',
-                                 'str',
-                                 default=locale.getpreferredencoding())
-        if d_encoding is None:
-            d_encoding = 'utf-8'
-            Profile_Set('ENCODING', d_encoding)
-
-        d_encoding = encodings.normalize_encoding(d_encoding)
-
-        enc_ch = ExChoice(self, ed_glob.ID_PREF_ENCODING,
-                          choices=util.GetAllEncodings(),
-                          default=d_encoding)
-        enc_ch.SetToolTipString(_("Encoding to try when auto detection fails"))
-
         # View Options
         aa_cb = wx.CheckBox(self, ed_glob.ID_PREF_AALIAS, _("AntiAliasing"))
         aa_cb.SetValue(Profile_Get('AALIASING'))
@@ -572,7 +578,7 @@ class DocGenPanel(wx.Panel):
                                   "regions when syntax highlighting is in use"))
 
         # Layout
-        sizer = wx.FlexGridSizer(21, 2, 5, 5)
+        sizer = wx.FlexGridSizer(19, 2, 5, 5)
         sizer.AddGrowableCol(1, 1)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Format") + u": "),
@@ -582,9 +588,6 @@ class DocGenPanel(wx.Panel):
                        ((5, 5), 0), (tabsz, 0),
                        ((5, 5), 0), (indentsz, 0),
                        ((5, 5), 0), (eolsz, 0),
-                       ((10, 10), 0), ((10, 10), 0),
-                       (wx.StaticText(self, label=_("Prefered Encoding") + u":"),
-                        0), (enc_ch, 1),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("View Options") + u": "),
                         0), (aa_cb, 0),
@@ -647,13 +650,12 @@ class DocGenPanel(wx.Panel):
                     ed_glob.ID_PREF_AALIAS, ed_glob.ID_SHOW_EOL,
                     ed_glob.ID_SHOW_LN, ed_glob.ID_SHOW_WS,
                     ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS,
-                    ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_ENCODING,
-                    ed_glob.ID_PREF_AUTOTRIM ]:
+                    ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_AUTOTRIM ]:
             Profile_Set(ed_glob.ID_2_PROF[e_id],
                         evt.GetEventObject().GetValue())
 
             # Do updates for everything but text encoding
-            if e_id not in (ed_glob.ID_PREF_ENCODING, ed_glob.ID_PREF_AUTOTRIM):
+            if e_id not in (ed_glob.ID_PREF_AUTOTRIM, ):
                 wx.CallLater(25, DoUpdates)
         else:
             evt.Skip()
