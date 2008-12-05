@@ -451,7 +451,7 @@ class StyleEditor(wx.Dialog):
         style_id = self.preview.GetStyleAt(self.preview.GetCurrentPos())
         tag_lst = self.FindWindowById(ID_STYLES)
         data = self.preview.FindTagById(style_id)
-        if data != wx.EmptyString and self.styles_new.has_key(data):
+        if data != wx.EmptyString and data in self.styles_new:
             tag_lst.SetStringSelection(data)
             if wx.Platform == '__WXGTK__':
                 tag_lst.SetFirstItemStr(data)
@@ -465,7 +465,7 @@ class StyleEditor(wx.Dialog):
 
         """
         tag = evt.GetEventObject().GetStringSelection()
-        if tag != wx.EmptyString and self.styles_new.has_key(tag):
+        if tag != wx.EmptyString and tag in self.styles_new:
             self.UpdateSettingsPane(self.styles_new[tag])
             self.EnableSettings()
         else:

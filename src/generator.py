@@ -255,7 +255,7 @@ class Html(plugin.Plugin):
                 last_id = curr_id
                 style_start = style_end
                 tag = stc.FindTagById(last_id)
-                if not self.css.has_key(tag):
+                if tag not in self.css:
                     s_item = StyleItem()
                     s_item.SetAttrFromStr(stc.GetStyleByName(tag))
                     self.css[tag] = CssItem(tag.split('_')[0], s_item)
@@ -294,11 +294,11 @@ class Html(plugin.Plugin):
 
         """
         # Must have the default style defined
-        if not self.css.has_key('default_style'):
+        if 'default_style' not in self.css:
             return
 
         # Don't style operators. This is to optimize the html size
-        if self.css.has_key('operator_style'):
+        if 'operator_style' in self.css:
             self.css.pop('operator_style')
 
         # All other css elements will inheirit from the default

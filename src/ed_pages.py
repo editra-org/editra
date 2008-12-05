@@ -818,7 +818,7 @@ class EdPages(FNB.FlatNotebook):
             return
 
         imglst = self.GetImageList()
-        if not self._index.has_key(lang_id):
+        if lang_id not in self._index:
             bmp = wx.ArtProvider.GetBitmap(lang_id, wx.ART_MENU)
             if bmp.IsNull():
                 self._index.setdefault(lang_id, \

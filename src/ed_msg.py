@@ -255,7 +255,7 @@ def RegisterCallback(callback, msgtype):
     else:
         mtype = msgtype
 
-    if not _CALLBACK_REGISTRY.has_key(mtype):
+    if mtype not in _CALLBACK_REGISTRY:
         _CALLBACK_REGISTRY[mtype] = list()
 
     if callback not in _CALLBACK_REGISTRY[mtype]:

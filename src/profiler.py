@@ -141,7 +141,7 @@ class Profile(dict):
         @type item: string
 
         """
-        if self.has_key(item):
+        if item in self:
             del self[item]
         else:
             pass
@@ -155,7 +155,7 @@ class Profile(dict):
                           not in profile.
 
         """
-        if self.has_key(index):
+        if index in self:
             val = self.__getitem__(index)
         else:
             return default
@@ -247,7 +247,7 @@ class Profile(dict):
         """
         if update is None:
             for key, val in _DEFAULTS.iteritems():
-                if not self.has_key(key):
+                if key not in self:
                     self.Set(key, val)
         else:
             self.update(update)

@@ -115,7 +115,7 @@ class EdPrinter:
         @rtype: boolean
 
         """
-        if COLOURMODES.has_key(mode):
+        if mode in COLOURMODES:
             self.print_mode = mode
             ret = True
         else:

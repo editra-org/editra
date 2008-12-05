@@ -1179,8 +1179,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if self.AutoCompActive():
             self.AutoCompCancel()
 
-        if e_obj.GetClassName() == "wxToolBar" or e_map.has_key(e_id):
-            if e_map.has_key(e_id):
+        if e_obj.GetClassName() == "wxToolBar" or e_id in e_map:
+            if e_id in e_map:
                 e_map[e_id]()
             return
 

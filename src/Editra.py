@@ -552,7 +552,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         @param name: name of window to unregister
 
         """
-        if self._windows.has_key(name):
+        if name in self._windows:
             self._windows.pop(name)
             cur_top = self.GetTopWindow()
             if not len(self._windows):
@@ -589,7 +589,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         @param winname: name of window to query
 
         """
-        if self._windows.has_key(winname):
+        if winname in self._windows:
             return self._windows[winname][1]
         else:
             self._log("[app][warn] the window %s has "

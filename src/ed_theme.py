@@ -335,7 +335,7 @@ class TangoTheme(plugin.Plugin):
         @param bmp_id: Id of bitmap to look for
 
         """
-        if ART.has_key(bmp_id):
+        if bmp_id in ART:
             path = self.__GetArtPath(wx.ART_MENU, mime=False)
             if path is not None:
                 path = path + ART[bmp_id]
@@ -354,7 +354,7 @@ class TangoTheme(plugin.Plugin):
         """
         path = self.__GetArtPath(wx.ART_MENU, mime=True)
         if path is not None and bmp_id in SyntaxIds():
-            if MIME_ART.has_key(bmp_id):
+            if bmp_id in MIME_ART:
                 req = path + MIME_ART[bmp_id]
                 if os.path.exists(req):
                     return wx.Bitmap(req, wx.BITMAP_TYPE_PNG)
