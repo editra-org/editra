@@ -27,6 +27,7 @@ BUG FIXES:
 +Fix searching in folded text not being exposed during search
 +Fix random jumping to top/bottom of file during incremental search
 +Fix text Drag n Drop not working on Windows.
++Don't show Python auto-comp choices after numbers.
 
 #-----------------------------------------------------------------------------#
 
