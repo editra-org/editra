@@ -197,6 +197,11 @@ class EdPages(FNB.FlatNotebook):
 
         return result == wx.ID_YES
 
+    def AddPage(self, page, text, select=True, imgId=-1):
+        """Add a page to the notebook"""
+        FNB.FlatNotebook.AddPage(self, page, text, select, imgId)
+        self.EnsureVisible(self.GetSelection())
+
     def DocDuplicated(self, path):
         """Check for if the given path is open elswhere and duplicate the
         docpointer.
