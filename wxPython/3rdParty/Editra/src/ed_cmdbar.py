@@ -93,12 +93,12 @@ class CommandBar(wx.Panel):
                             cmd=wx.BoxSizer())
 
         # Install Controls
-        self._sizers['h_sizer'].Add((8, 8))
+        self._sizers['h_sizer'].Add((8, 0))
         self.close_b = platebtn.PlateButton(self, ID_CLOSE_BUTTON,
                                             bmp=XButton.GetBitmap(),
                                             style=platebtn.PB_STYLE_NOBG)
         self._sizers['h_sizer'].Add(self.close_b, 0, wx.ALIGN_CENTER_VERTICAL)
-        self._sizers['h_sizer'].Add((5, 5))
+        self._sizers['h_sizer'].Add((5, 0))
         self.SetSizer(self._sizers['h_sizer'])
         self.SetAutoLayout(True)
 
@@ -136,6 +136,7 @@ class CommandBar(wx.Panel):
             ctrl = self.InstallCommandCtrl()
         else:
             ctrl = None
+        self.Layout()
         return ctrl
 
     def InstallLineCtrl(self):
@@ -147,9 +148,11 @@ class CommandBar(wx.Panel):
         v_sizer = wx.BoxSizer(wx.VERTICAL)
         v_sizer.Add((5, 5))
         linectrl = LineCtrl(self, ID_LINE_CTRL, self._parent.nb.GetCurrentCtrl,
-                            size=(100, 20))
+                            size=(100, -1))
+        linectrl.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
         v_sizer.Add(linectrl, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
+
         go_lbl = wx.StaticText(self, label=_("Goto Line") + ": ")
         if wx.Platform == '__WXMAC__':
             go_lbl.SetFont(wx.SMALL_FONT)
@@ -170,7 +173,9 @@ class CommandBar(wx.Panel):
         h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         v_sizer = wx.BoxSizer(wx.VERTICAL)
         v_sizer.Add((5, 5))
-        cmdctrl = CommandExecuter(self, ID_CMD_CTRL, size=(150, 20))
+        cmdctrl = CommandExecuter(self, ID_CMD_CTRL, size=(150, -1))
+        cmdctrl.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
         v_sizer.Add(cmdctrl, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
         cmd_lbl = wx.StaticText(self, label=_("Command") + ": ")
@@ -200,7 +205,9 @@ class CommandBar(wx.Panel):
             spacer = (4, 4)
         v_sizer.Add(spacer)
         search = ed_search.EdSearchCtrl(self, ID_SEARCH_CTRL,
-                                        menulen=5, size=(180, 20))
+                                        menulen=5, size=(180, -1))
+        search.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
         v_sizer.Add(search, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
         f_lbl = wx.StaticText(self, label=_("Find") + u": ")
@@ -227,7 +234,7 @@ class CommandBar(wx.Panel):
 
         ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL),
                             ((5, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL),
-                            ((8, 0)),
+                            ((5, 0)),
                             (match_case, 0, wx.ALIGN_CENTER_VERTICAL),
                             ((5, 5), 0),
                             (regex_cb, 0, wx.ALIGN_CENTER_VERTICAL)])
