@@ -223,7 +223,7 @@ class CommandBar(wx.Panel):
         match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
         match_case.SetValue(search.IsMatchCase())
 
-        regex_cb = wx.CheckBox(self, ID_REGEX, _("Regex"))
+        regex_cb = wx.CheckBox(self, ID_REGEX, _("Regular Expression"))
         regex_cb.SetValue(search.IsRegEx())
 
         # Use the small size controls on osx
