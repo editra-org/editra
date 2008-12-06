@@ -1695,16 +1695,13 @@ class FNBRenderer:
         normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont = normalFont
 
-        if "__WXGTK__" in wx.PlatformInfo:
-            boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
-            dc.SetFont(boldFont)
+#        if "__WXGTK__" in wx.PlatformInfo:
+#            boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
+#            dc.SetFont(boldFont)
 
         height = dc.GetCharHeight()
         
         tabHeight = height + FNB_HEIGHT_SPACER # We use 8 pixels as padding
-        if "__WXGTK__" in wx.PlatformInfo:
-            # On GTK the tabs are should be larger
-            tabHeight += 4
 
         self._tabHeight = tabHeight
         
@@ -3024,21 +3021,18 @@ class FlatNotebook(wx.PyPanel):
         # Set default page height
         dc = wx.ClientDC(self)
         
-        if "__WXGTK__" in wx.PlatformInfo:
-            # For GTK it seems that we must do this steps in order
-            # for the tabs will get the proper height on initialization
-            # on MSW, preforming these steps yields wierd results
-            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-            boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
-            dc.SetFont(boldFont)
+#        if "__WXGTK__" in wx.PlatformInfo:
+#            # For GTK it seems that we must do this steps in order
+#            # for the tabs will get the proper height on initialization
+#            # on MSW, preforming these steps yields wierd results
+#            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+#            boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
+#            dc.SetFont(boldFont)
         
         height = dc.GetCharHeight()
 
         tabHeight = height + FNB_HEIGHT_SPACER         # We use 8 pixels as padding
         
-        if "__WXGTK__" in wx.PlatformInfo:
-            tabHeight += 4
-            
         self._pages.SetSizeHints(-1, tabHeight)
         # Add the tab container to the sizer
         self._mainSizer.Insert(0, self._pages, 0, wx.EXPAND)
@@ -3786,10 +3780,10 @@ class PageContainer(wx.Panel):
         memDc = wx.MemoryDC()
         memDc.SelectObject(wx.EmptyBitmap(1,1))
     
-        if "__WXGTK__" in wx.PlatformInfo:
-            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-            boldFont.SetWeight(wx.BOLD)
-            memDc.SetFont(boldFont)
+#        if "__WXGTK__" in wx.PlatformInfo:
+#            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+#            boldFont.SetWeight(wx.BOLD)
+#            memDc.SetFont(boldFont)
 
         height = memDc.GetCharHeight()
         tabHeight = height + FNB_HEIGHT_SPACER # We use 10 pixels as padding
