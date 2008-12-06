@@ -327,6 +327,11 @@ class EdPages(FNB.FlatNotebook):
         ext_reg = syntax.ExtensionRegister()
         ext_lst = ext_reg.get(dlexer, ['txt', ])
         self.control.FindLexer(ext_lst[0])
+
+        # Set the modified callback notifier
+        doc = self.control.GetDocument()
+        doc.AddModifiedCallback(self.control.FireModified)
+
         self.Thaw()
 
     def OnCopyTabPath(self, evt):

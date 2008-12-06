@@ -29,6 +29,7 @@ BUG FIXES:
 +Fix random jumping to top/bottom of file during incremental search
 +Fix text Drag n Drop not working on Windows.
 +Don't show Python auto-comp choices after numbers.
++Fix file modified indicator not being hidden after saving file.
 
 #-----------------------------------------------------------------------------#
 
