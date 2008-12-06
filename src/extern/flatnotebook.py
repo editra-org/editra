@@ -1634,7 +1634,7 @@ class FNBRenderer:
         dc = wx.MemoryDC()
         dc.SelectObject(wx.EmptyBitmap(1,1))
 
-        boldFont = pageContainer.GetFont()
+        boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
 
         if pc.IsDefaultTabs():
@@ -1704,7 +1704,7 @@ class FNBRenderer:
         tabHeight = height + FNB_HEIGHT_SPACER # We use 8 pixels as padding
         if "__WXGTK__" in wx.PlatformInfo:
             # On GTK the tabs are should be larger
-            tabHeight += 6
+            tabHeight += 4
 
         self._tabHeight = tabHeight
         
@@ -3037,7 +3037,7 @@ class FlatNotebook(wx.PyPanel):
         tabHeight = height + FNB_HEIGHT_SPACER         # We use 8 pixels as padding
         
         if "__WXGTK__" in wx.PlatformInfo:
-            tabHeight += 6
+            tabHeight += 4
             
         self._pages.SetSizeHints(-1, tabHeight)
         # Add the tab container to the sizer
