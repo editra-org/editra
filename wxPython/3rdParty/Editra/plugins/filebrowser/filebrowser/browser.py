@@ -529,22 +529,29 @@ class FileBrowser(wx.GenericDirCtrl):
         if wx.Platform == '__WXMSW__':
             r_txt = u''
         else:
+            # Handle localized paths for special nodes on gtk version
             if wx.Platform == '__WXGTK__':
-                if path[0].lower() == _("Home directory"):
+                if path[0] == _("Home directory"):
                     path[0] = wx.GetHomeDir()
-                elif path[0].lower() == _("Desktop"):
+                elif path[0] == _("Desktop"):
                     path.insert(0, wx.GetHomeDir())
                 else:
                     pass
 
-            if wx.Platform == '__WXMAC__':
+            elif wx.Platform == '__WXMAC__':
                 if path[0] != "/":
                     if path == 'Macintosh HD':
                         path.pop(0)
                     else:
                         path.insert(0, 'Volumes')
 
+                if u'Macintosh HD' in path:
+                    idx = path.index(u'Macintosh HD')
+                    if len(path) > idx:
+                        path = path[idx+1:]
+
             r_txt = os.path.sep
+
         return r_txt + os.sep.join(path)
 
     def GetPaths(self):
@@ -654,7 +661,12 @@ class FileBrowser(wx.GenericDirCtrl):
             return
         else:
             files = [ fname for fname in files if not os.path.isdir(fname) ]
+
+        # Disconnect from page change notifications while opening files
+        # from the browser.
+        ed_msg.Unsubscribe(self.OnPageChange)
         self.OpenFiles(files)
+        ed_msg.Subscribe(self.OnPageChange, ed_msg.EDMSG_UI_NB_CHANGED)
 
     def OnPageChange(self, msg):
         """Syncronize selection with the notebook page changes
@@ -666,7 +678,18 @@ class FileBrowser(wx.GenericDirCtrl):
         nbdata = msg.GetData()
         page = nbdata[0].GetPage(nbdata[1])
         path = page.GetFileName()
-        if path:
+        if len(path) and os.path.exists(path):
+            if wx.Platform == '__WXMAC__' and \
+               path.startswith('/Volumes/Macintosh HD'):
+                path = path.replace('/Volumes/Macintosh HD', '', 1)
+            elif wx.Platform == '__WXGTK__':
+                home = wx.GetHomeDir()
+                desk = home + _("Desktop")
+                if path.startswith(desk):
+                    path = path.replace(desk, '', 1)
+                elif path.startswith(home):
+                    path = path.replace(home, '', 1)
+
             self.GotoPath(path)
 
     def OnThemeChanged(self, msg):
