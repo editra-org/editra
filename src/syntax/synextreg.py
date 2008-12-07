@@ -273,6 +273,8 @@ LANG_YAML = u'YAML'
 # Use LEX_CONTAINER
 ID_LANG_DJANGO = _NewId()
 LANG_DJANGO = u'Django'
+ID_LANG_ISSL = _NewId()
+LANG_ISSL = u'IssueList'
 ID_LANG_MAKO = _NewId()
 LANG_MAKO = u'Mako'
 ID_LANG_R = _NewId()
@@ -315,6 +317,7 @@ EXT_MAP = {
            'hs'                 : LANG_HASKELL,
            'hx hxml'            : LANG_HAXE,
            'htm html shtm shtml xhtml' : LANG_HTML,
+           'isl'                : LANG_ISSL,
            'iss'                : LANG_INNO,
            'java'               : LANG_JAVA,
            'js'                 : LANG_JS,
