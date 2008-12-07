@@ -595,7 +595,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def GotoLine(self, line):
         """Move caret to begining given line number
-        @param line: line to go to
+        @param line: line to go to (int)
 
         """
         if line > self.GetLineCount():
@@ -606,8 +606,17 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             pass
 
         self.SetYCaretPolicy(wx.stc.STC_CARET_STRICT, 0)
-        wx.stc.StyledTextCtrl.GotoLine(self, line)
+        super(EditraStc, self).GotoLine(line)
         self.SetYCaretPolicy(wx.stc.STC_CARET_EVEN, 0)
+        self.PostPositionEvent()
+
+    def GotoPos(self, pos):
+        """Override StyledTextCtrl.GotoPos
+        @param pos: position in buffer to move carat to (int)
+
+        """
+        super(EditraStc, self).GotoPos(pos)
+        self.PostPositionEvent()
 
     def SetCurrentCol(self, column):
         """Set the current column position on the currently line
