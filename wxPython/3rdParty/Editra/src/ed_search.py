@@ -1274,8 +1274,9 @@ class SearchResultScreen(ctrlbox.ControlBox):
  
         # Add our end message
         lines = max(0, self._list.GetLineCount() - 2)
-        msg = _("Search Complete: %d matching lines where found") % lines
-        end = u">>> %s" % msg
+        msg = _("Search Complete: %d matching lines where found.") % lines
+        msg2 = _("Files Searched: %d" % self._list.GetFileCount())
+        end = u">>> %s \t%s" % (msg, msg2)
         self._list.SetStartEndText(end + os.linesep)
 
     def OnThemeChange(self, msg):
@@ -1326,6 +1327,9 @@ class SearchResultList(outbuff.OutputBuffer):
     def __init__(self, parent):
         outbuff.OutputBuffer.__init__(self, parent)
 
+        # Attributes
+        self._files = 0
+
         # Setup
         font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN, 
                                                     wx.FONTSTYLE_NORMAL, 
@@ -1346,9 +1350,10 @@ class SearchResultList(outbuff.OutputBuffer):
             outbuff.OutputBuffer.AppendUpdate(self, value)
         else:
             # Search in a new file has started
+            self._files += 1
             ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
                                (ed_glob.SB_INFO,
-                               _("Searching in : %s") % value[1]))
+                               _("Searching in: %s") % value[1]))
 
     def ApplyStyles(self, start, txt):
         """Set a hotspot for each search result
@@ -1363,6 +1368,11 @@ class SearchResultList(outbuff.OutputBuffer):
             self.SetStyling(len(txt), SearchResultList.STY_SEARCH_MATCH)
         else:
             self.SetStyling(len(txt), outbuff.OPB_STYLE_DEFAULT)
+
+    def Clear(self):
+        """Override OutputBuffer.Clear"""
+        self._files = 0
+        super(SearchResultList, self).Clear()
 
     def DoHotSpotClicked(self, pos, line):
         """Handle a click on a hotspot and open the file to the matched line
@@ -1381,6 +1391,13 @@ class SearchResultList(outbuff.OutputBuffer):
                 else:
                     lnum = 0
                 self._OpenToLine(fname, lnum)
+
+    def GetFileCount(self):
+        """Get the number of files searched in the previous/current search job.
+        @return: int
+
+        """
+        return self._files
 
     def SetStartEndText(self, txt):
         """Add a start task or end task message to the output. Styled in
