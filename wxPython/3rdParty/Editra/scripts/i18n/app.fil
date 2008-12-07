@@ -18,6 +18,7 @@
 ../../src/ed_main.py
 ../../src/ed_mdlg.py
 ../../src/ed_menu.py
+../../src/ed_mpane.py
 ../../src/ed_msg.py
 ../../src/ed_pages.py
 ../../src/ed_print.py
@@ -99,6 +100,7 @@
 ../../src/syntax/php.py
 ../../src/syntax/pike.py
 ../../src/syntax/postscript.py
+../../src/syntax/progress.py
 ../../src/syntax/props.py
 ../../src/syntax/python.py
 ../../src/syntax/ruby.py
@@ -111,6 +113,7 @@
 ../../src/syntax/synglob.py
 ../../src/syntax/syntax.py
 ../../src/syntax/tcl.py
+../../src/syntax/vbscript.py
 ../../src/syntax/verilog.py
 ../../src/syntax/vhdl.py
 ../../src/syntax/visualbasic.py
