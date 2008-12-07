@@ -21,6 +21,8 @@ NEW: [features/improvements]
 +Read Only indicators on tabs
 +Add support for Progress 4GL
 +Middle click can close tabs in Shelf
++Add custom highlighting for Issue Lists (from Torsten Mohr)
++Report number of files searched when doing a Find in Files
 
 BUG FIXES:
 +Middle click closes the tab that was clicked on and not the active tab
