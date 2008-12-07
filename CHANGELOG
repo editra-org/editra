@@ -34,6 +34,8 @@ BUG FIXES:
 +Don't show Python auto-comp choices after numbers.
 +Fix file modified indicator not being hidden after saving file.
 +Fix number of bugs with opening files from filebrowser on gtk versions
++Fix statusbar line column number not being updated when clicking on
+Find Results links.
 
 #-----------------------------------------------------------------------------#
 
