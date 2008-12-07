@@ -90,17 +90,21 @@ make_mo () {
 if [ "$ARG" = "-po" ]
 then
     gen_po
+    exit 0
 elif [ "$ARG" = "-mo" ]
 then
     make_mo
+    exit 0
 elif [ "$ARG" = "-all" ]
 then
     gen_appfile
     gen_po
     make_mo
+    exit 0
 elif [ "$ARG" = "-app" ]
 then
     gen_appfile
+    exit 0
 else
     print_help
 fi    
