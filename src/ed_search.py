@@ -1351,9 +1351,14 @@ class SearchResultList(outbuff.OutputBuffer):
         else:
             # Search in a new file has started
             self._files += 1
-            ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
-                               (ed_glob.SB_INFO,
-                               _("Searching in: %s") % value[1]))
+
+            # Only updated status bar for every 10 files to reduce the overhead
+            # of updating the status bar and to improve performance of search.
+            if self._files == 1 or \
+               ((self._files / 10) > ((self._files-1) / 10)): 
+                ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                                   (ed_glob.SB_INFO,
+                                   _("Searching in: %s") % value[1]))
 
     def ApplyStyles(self, start, txt):
         """Set a hotspot for each search result
