@@ -36,6 +36,8 @@ BUG FIXES:
 +Fix number of bugs with opening files from filebrowser on gtk versions
 +Fix statusbar line column number not being updated when clicking on
 Find Results links.
++Fix drag and drop of text not scrolling window as the mouse is moved toards top
+or bottom of buffer.
 
 #-----------------------------------------------------------------------------#
 
