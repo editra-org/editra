@@ -141,7 +141,18 @@ class DropTargetFT(wx.PyDropTarget):
         """
         stc = self.window
         if self._tmp is None:
-            stc.DoDragOver(x_cord, y_cord, drag_result)
+            val = stc.DoDragOver(x_cord, y_cord, drag_result)
+            cline = stc.PositionFromPoint(wx.Point(x_cord, y_cord))
+            if cline != wx.stc.STC_INVALID_POSITION:
+                cline = stc.LineFromPosition(cline)
+                fline = stc.GetFirstVisibleLine()
+                lline = stc.GetLastVisibleLine()
+                if (cline - fline) < 3:
+                    stc.ScrollLines(-2)
+                elif lline - cline < 3:
+                    stc.ScrollLines(2)
+                else:
+                    pass
             return drag_result
         else:
             point = wx.Point(x_cord, y_cord)
