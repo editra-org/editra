@@ -366,7 +366,7 @@ class StyleMgr(object):
         if custom != wx.EmptyString and self.LoadStyleSheet(custom):
             self.LOG("[ed_style][info] Loaded custom style sheet %s" % custom)
         elif custom == wx.EmptyString:
-            self.SetStyles('default', DefaultStyleDictionary())
+            self.SetStyles('default', DEF_STYLE_DICT)
         else:
             self.LOG("[ed_style][err] Failed to import styles from %s" % custom)
 
@@ -378,7 +378,7 @@ class StyleMgr(object):
 
         """
         sty_dict = dict()
-        for key in DefaultStyleDictionary().keys():
+        for key in DEF_STYLE_DICT.keys():
             if key in ('select_style', 'whitespace_style'):
                 sty_dict[key] = NullStyleItem()
             else:
@@ -564,7 +564,7 @@ class StyleMgr(object):
         @rtype: dict
 
         """
-        return StyleMgr.STYLES.get(self.style_set, DefaultStyleDictionary())
+        return StyleMgr.STYLES.get(self.style_set, DEF_STYLE_DICT)
 
     @staticmethod
     def GetStyleSheet(sheet_name=None):
@@ -639,7 +639,7 @@ class StyleMgr(object):
             self.LOG("[ed_style][warn] Style sheet %s does not exists" % style_sheet)
             # Reset to default style
             Profile_Set('SYNTHEME', 'default')
-            self.SetStyles('default', DefaultStyleDictionary())
+            self.SetStyles('default', DEF_STYLE_DICT)
             return False
         else:
             self.LOG("[ed_style][info] Using cached style data")
@@ -889,7 +889,7 @@ class StyleMgr(object):
                     return False
 
             self.style_set = name
-            defaultd = DefaultStyleDictionary()
+            defaultd = DEF_STYLE_DICT
             dstyle = style_dict.get('default_style', None)
             if dstyle is None:
                 style_dict['default_style'] = defaultd['default_style']
@@ -1003,15 +1003,17 @@ class StyleMgr(object):
 
 #-----------------------------------------------------------------------------#
 # Utility Functions
-def DefaultStyleDictionary():
-    """This is the default style values that are used for styling
-    documents. Its used as a fallback for undefined values in a
-    style sheet.
-    @note: incomplete style sheets are merged against this set to ensure
-           a full set of definitions is avaiable
+
+def NullStyleItem():
+    """Create a null style item
+    @return: empty style item that cannot be merged
 
     """
-    def_dict = \
+    item = StyleItem()
+    item.null = True
+    return item
+
+DEF_STYLE_DICT = \
         {'brace_good' : StyleItem("#FFFFFF", "#0000FF", ex=["bold",]),
          'brace_bad'  : StyleItem(back="#FF0000", ex=["bold",]),
          'calltip'    : StyleItem("#404040", "#FFFFB8"),
@@ -1067,7 +1069,6 @@ def DefaultStyleDictionary():
          'userkw_style' : StyleItem(),
          'whitespace_style' : StyleItem('#838383')
          }
-    return def_dict
 
 def MergeFonts(style_dict, font_dict):
     """Does any string substitution that the style dictionary
@@ -1095,12 +1096,3 @@ def MergeStyles(styles1, styles2):
     for style in styles2:
         styles1[style] = styles2[style]
     return styles1
-
-def NullStyleItem():
-    """Create a null style item
-    @return: empty style item that cannot be merged
-
-    """
-    item = StyleItem()
-    item.null = True
-    return item

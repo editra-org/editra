@@ -33,7 +33,7 @@ class StyleMgrTest(unittest.TestCase):
     def setUp(self):
         self.app = EdApp(False)
         self.mgr = ed_style.StyleMgr()
-        self.dd = ed_style.DefaultStyleDictionary()
+        self.dd = ed_style.DEF_STYLE_DICT
         self.bstr = ["fore:#000000", "back:#FFFFFF",
                      "face:%(primary)s", "size:%(size)d"]
 
