@@ -216,7 +216,7 @@ class ProgressStatusBar(wx.StatusBar):
         if number == self.GetFieldsCount() - 1 and self.IsBusy():
             self.tmp = txt
         else:
-            wx.StatusBar.SetStatusText(self, txt, number)
+            super(ProgressStatusBar, self).SetStatusText(txt, number)
 
     # Alias for SetStatusText
     PushStatusText = SetStatusText

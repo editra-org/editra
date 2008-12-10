@@ -80,6 +80,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         util.SetWindowIcon(self)
 
         # Attributes
+        self._loaded = False
         self.LOG = wx.GetApp().GetLog()
         self._exiting = False
         self._handlers = dict(menu=list(), ui=list())
@@ -278,7 +279,16 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         app = wx.GetApp()
+
+        # Don't needlessly push and pop events if we only have one window open
+        if self._loaded and len(app.GetMainWindows()) == 1:
+            print "SKIP"
+            evt.Skip()
+            return
+
+        # Add or remove handlers from the event stack
         if evt.GetActive():
+            self._loaded = True
 
             # Slow the update interval to reduce overhead
             wx.UpdateUIEvent.SetUpdateInterval(160)
