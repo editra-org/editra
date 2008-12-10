@@ -133,7 +133,7 @@ class EditraArt(wx.ArtProvider):
             # Dont fail on a toolbar icon return a warning icon when nothing is
             # found in the bitmap provider.
             bmp = wx.ArtProvider.GetBitmap(wx.ART_WARNING, client, size)
-        elif art_id in syntax.SyntaxIds():
+        elif art_id in syntax.SYNTAX_IDS:
             # Dont fail when requesting mime type icons, fallback to the system
             # icon for a normal file in this case.
             bmp = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE,

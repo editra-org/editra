@@ -178,7 +178,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_CONTACT, self.OnHelp)])
 
         self._handlers['menu'].extend([(l_id, self.DispatchToControl)
-                                       for l_id in syntax.SyntaxIds()])
+                                       for l_id in syntax.SYNTAX_IDS])
 
         # Extra menu handlers (need to work these into above system yet)
         self.Bind(wx.EVT_MENU, self.DispatchToControl)
@@ -225,7 +225,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Lexer Menu
         self._handlers['ui'].extend([(l_id, self.OnUpdateLexerUI)
-                                     for l_id in syntax.SyntaxIds()])
+                                     for l_id in syntax.SYNTAX_IDS])
 
         # Perspectives
         self._handlers['ui'].extend(self.GetPersectiveHandlers())
@@ -934,7 +934,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 evt.Skip()
             return
 
-        menu_ids = syntax.SyntaxIds()
+        menu_ids = list(syntax.SYNTAX_IDS)
         menu_ids.extend([ID_SHOW_EOL, ID_SHOW_WS, ID_INDENT_GUIDES, ID_SYNTAX,
                          ID_WORD_WRAP, ID_BRACKETHL, ID_EOL_MAC, ID_EOL_UNIX,
                          ID_EOL_WIN, ID_NEXT_MARK, ID_PRE_MARK, ID_ADD_BM,
@@ -1071,7 +1071,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         e_id = evt.GetId()
-        if e_id in syntax.SyntaxIds():
+        if e_id in syntax.SYNTAX_IDS:
             lang = self.nb.GetCurrentCtrl().GetLangId()
             evt.Check(lang == evt.GetId())
         else:
