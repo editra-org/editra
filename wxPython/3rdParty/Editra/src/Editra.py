@@ -794,6 +794,7 @@ def PrintHelp():
        "  -d         Turn on console debugging\n"
        "  -D         Turn off console debugging (overrides preferences)\n"
        "  -h         Show this help message\n"
+       "  -p         Run Editra in the profiler\n"
        "  -v         Print version number and exit\n"
        "  -S         Disable single instance checker\n"
        "\nLong Arguments:\n"
@@ -812,7 +813,7 @@ def ProcessCommandLine():
 
     """
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "dhvDS",
+        opts, args = getopt.getopt(sys.argv[1:], "dhpvDS",
                                    ['debug', 'help', 'version', 'auth'])
     except getopt.GetoptError, msg:
         return list(), list()
@@ -851,6 +852,22 @@ def Main():
     """
     opts, args = ProcessCommandLine()
 
+    if '-p' in opts:
+        opts.remove('-p')
+        import hotshot
+        # TODO: make output file configurable via commandline
+        prof = hotshot.Profile("editra.prof")
+        prof.runcall(_Main, opts, args)
+        prof.close()
+    else:
+        _Main(opts, args)
+
+def _Main(opts, args):
+    """Main method
+    @param opts: Commandline options
+    @param args: Commandline arguments
+
+    """
     # Put extern subpackage on path so that bundled external dependancies
     # can be found if needed.
     if not hasattr(sys, 'frozen'):
