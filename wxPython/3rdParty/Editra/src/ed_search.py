@@ -24,6 +24,7 @@ __revision__ = "$Revision$"
 import os
 import sys
 import re
+import fnmatch
 import types
 from StringIO import StringIO
 import wx
@@ -64,6 +65,7 @@ class SearchController:
         self._data     = wx.FindReplaceData(finddlg.AFR_RECURSIVE)
         self._li_choices = list()
         self._li_sel   = 0
+        self._filters  = None
 
         # Event handlers
         self._parent.Bind(finddlg.EVT_FIND, self.OnFind)
@@ -101,6 +103,7 @@ class SearchController:
 
             dlg.SetLookinChoices(self._li_choices)
             dlg.SetLookinSelection(self._li_sel)
+            dlg.SetFileFilters(self._filters)
 
         return dlg
 
@@ -307,6 +310,7 @@ class SearchController:
                                (engine.SearchInFiles, [files,], dict()))
         elif smode == finddlg.LOCATION_IN_FILES:
             path = evt.GetDirectory()
+            engine.SetFileFilters(evt.GetFileFilters())
             ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                (engine.SearchInDirectory,
                                 [path,], dict(recursive=evt.IsRecursive())))
@@ -320,6 +324,7 @@ class SearchController:
             # Save the lookin values for next time dialog is shown
             self._li_choices = self._finddlg.GetLookinChoices()
             self._li_sel = self._finddlg.GetLookinSelection()
+            self._filters = self._finddlg.GetFileFilters()
 
             # Store in profile. Only save most recent 5 in history
             if len(self._li_choices) > 5:
@@ -329,6 +334,7 @@ class SearchController:
 
             # Save the most recent choices of search locations
             Profile_Set('SEARCH_LOC', choices)
+            Profile_Set('SEARCH_FILTER', self._filters)
 
             # Destroy it
             self._finddlg.Destroy()
@@ -444,6 +450,13 @@ class SearchController:
             stc.SetTargetEnd(end)
             stc.ReplaceTarget(value)
         stc.EndUndoAction()
+
+    def SetFileFilters(self, filters):
+        """Set the file filter to use
+        @param filters: string '*.py *.pyw'
+
+        """
+        self._filters = filters
 
     def SetLookinChoices(self, choices):
         """Set the list of locations to use for the recent search
@@ -664,7 +677,7 @@ class SearchEngine:
         @todo: implement
 
         """
-        
+        raise NotImplementedError
 
     def SearchInDirectory(self, directory, recursive=True):
         """Search in all the files found in the given directory
@@ -678,6 +691,19 @@ class SearchEngine:
         # Get all files in the directories
         paths = [os.path.join(directory, fname)
                 for fname in os.listdir(directory) if not fname.startswith('.')]
+
+        # Filter out files that don't match the current filter(s)
+        if self._filters is not None:
+            filtered = list()
+            for fname in paths:
+                if os.path.isdir(fname):
+                    filtered.append(fname)
+                    continue
+
+                for pat in self._filters:
+                    if fnmatch.fnmatch(fname, pat):
+                        filtered.append(fname)
+            paths = filtered
 
         # Begin searching in the paths
         for path in paths:
@@ -739,6 +765,15 @@ class SearchEngine:
         @keyword startpos: search start position
 
         """
+        raise NotImplementedError
+
+    def SetFileFilters(self, filters):
+        """Set the file filters to specify what type of files to search in
+        the filter should be a list of wild card patterns to match.
+        @param filters: list of strings ['*.py', '*.pyw']
+
+        """
+        self._filters = filters
 
     def SetFlags(self, isregex=None, matchcase=None, wholeword=None, down=None):
         """Set the search engine flags. Leaving the parameter set to None

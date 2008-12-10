@@ -69,6 +69,8 @@ class EdPages(FNB.FlatNotebook):
         self._searchctrl = ed_search.SearchController(self, self.GetCurrentCtrl)
         self._searchctrl.SetLookinChoices(Profile_Get('SEARCH_LOC',
                                                       default=list()))
+        self._searchctrl.SetFileFilters(Profile_Get('SEARCH_FILTER', default=''))
+
         self.pg_num = -1              # Track new pages (aka untitled docs)
         self.control = None
         self.frame = self.GetTopLevelParent() # MainWindow
