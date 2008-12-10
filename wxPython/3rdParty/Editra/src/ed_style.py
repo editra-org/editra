@@ -516,12 +516,15 @@ class StyleMgr(object):
 
         """
         if self.HasNamedStyle(name):
-            if u"%" in unicode(StyleMgr.STYLES[self.style_set][name]):
-                val = unicode(StyleMgr.STYLES[self.style_set][name]) % self.fonts
+            item = StyleMgr.STYLES[self.style_set][name]
+            ival = unicode(item)
+
+            # Set font value if need be
+            if u"%" in ival:
+                val = ival % self.fonts
                 item = StyleItem()
                 item.SetAttrFromStr(val)
-            else:
-                item = StyleMgr.STYLES[self.style_set][name]
+
             return item
         else:
             return StyleItem()
