@@ -1216,7 +1216,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetIndentationGuides(not bool(self.GetIndentationGuides()))
         elif e_id == ed_glob.ID_HLCARET_LINE:
             self.SetCaretLineVisible(not self.GetCaretLineVisible())
-        elif e_id in syntax.SyntaxIds():
+        elif e_id in syntax.SYNTAX_IDS:
             f_ext = syntax.GetExtFromId(e_id)
             self.LOG("[ed_stc][evt] Manually Setting Lexer to %s" % str(f_ext))
             self.FindLexer(f_ext)

@@ -266,6 +266,7 @@ def GetLexerList():
     f_order.sort()
     return f_order
 
+#---- Syntax id set ----#
 def SyntaxIds():
     """Gets a list of all Syntax Ids and returns it
     @return: list of all syntax language ids
@@ -283,6 +284,10 @@ def SyntaxIds():
         ret_ids.append(getattr(synglob, syn_id))
 
     return ret_ids
+
+SYNTAX_IDS = SyntaxIds()
+
+#---- End Syntax ids ----#
 
 def GetExtFromId(ext_id):
     """Takes a language ID and fetches an appropriate file extension string

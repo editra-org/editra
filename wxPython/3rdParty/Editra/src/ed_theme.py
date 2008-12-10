@@ -30,7 +30,7 @@ import util
 import plugin
 from profiler import Profile_Get, Profile_Set
 import syntax.synglob as synglob
-from syntax.syntax import SyntaxIds
+from syntax.syntax import SYNTAX_IDS
 
 #--------------------------------------------------------------------------#
 
@@ -353,7 +353,7 @@ class TangoTheme(plugin.Plugin):
 
         """
         path = self.__GetArtPath(wx.ART_MENU, mime=True)
-        if path is not None and bmp_id in SyntaxIds():
+        if path is not None and bmp_id in SYNTAX_IDS:
             if bmp_id in MIME_ART:
                 req = path + MIME_ART[bmp_id]
                 if os.path.exists(req):
