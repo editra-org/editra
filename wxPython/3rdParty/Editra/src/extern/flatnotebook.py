@@ -722,8 +722,6 @@ def PaintStraightGradientBox(dc, rect, startColor, endColor, vertical=True):
     dc.SetPen(savedPen)
     dc.SetBrush(savedBrush)
 
-
-
 # -----------------------------------------------------------------------------
 # Util functions
 # -----------------------------------------------------------------------------
