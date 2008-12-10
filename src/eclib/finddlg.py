@@ -20,7 +20,7 @@ over the basic FindReplaceDialog.
   * Multi-Find/Replace event action for Find All / Replace All actions
   * Switch dialog from Find mode to Replace mode or visa-versa once its already
     been created.
-  * Options for specifiying the location to look in
+  * Options for specifiying the location to look in.
   * Regular Expression option
   * Use standard dialog or a floating MiniFrame (default)
 
@@ -66,7 +66,8 @@ AFR_NOUPDOWN    = 64            # Hide the Direction options in the dialog
 AFR_NOWHOLEWORD = 128           # Hide the Whole Word option in the dialog
 AFR_NOMATCHCASE = 256           # Hide the Match Case option in the dialog
 AFR_NOREGEX     = 512           # Hide the Regular Expression option
-AFR_NOOPTIONS   = 1024          # Hide all options in the dialog
+AFR_NOFILTER    = 1024          # Hide the File Filter option
+AFR_NOOPTIONS   = 2048          # Hide all options in the dialog
 
 # Search Location Parameters (NOTE: must be kept in sync with Lookin List)
 LOCATION_CURRENT_DOC  = 0
@@ -137,6 +138,7 @@ class FindEvent(wx.PyCommandEvent):
         self._find = u''
         self._replace = u''
         self._dir = u''
+        self._filters = None
 
     def GetDirectory(self):
         """Get the directory of files to search in
@@ -144,6 +146,13 @@ class FindEvent(wx.PyCommandEvent):
 
         """
         return self._dir
+
+    def GetFileFilters(self):
+        """Get the filter to search with
+        @return: list or None
+
+        """
+        return self._filters
 
     def GetFindString(self):
         """Get the find string
@@ -179,6 +188,19 @@ class FindEvent(wx.PyCommandEvent):
 
         """
         self._dir = directory
+
+    def SetFileFilters(self, filters):
+        """Set the file filters to use for a Search In Files event
+        @param filters: string or list of strings
+
+        """
+        if isinstance(filters, basestring):
+            self._filters = filters.split()
+        else:
+            self._filters = filters
+
+        if self._filters is not None:
+            self._filters = [ f.strip() for f in self._filters ]
 
     def SetFindString(self, find):
         """Set the find String
@@ -335,6 +357,13 @@ class FindReplaceDlgBase:
         """
         return self._panel.GetPanelMode()
 
+    def GetFileFilters(self):
+        """Get the file filters field value
+        @return: string
+
+        """
+        return self._panel.GetFileFilters()
+
     def GetLookinChoices(self):
         """Get the set choices from the looking choice list
         @return: list of strings
@@ -372,6 +401,13 @@ class FindReplaceDlgBase:
 
         """
         self._box.SetBoxMode(mode == AFR_STYLE_FINDDIALOG)
+
+    def SetFileFilters(self, filters):
+        """Set the file filters field value
+        @param filters: string
+
+        """
+        self._panel.SetFileFilters(filters)
 
     def SetFindBitmap(self, bmp):
         """Set the find Bitmap
@@ -566,9 +602,9 @@ class FindBox(ctrlbox.ControlBox):
 
 class FindPanel(wx.Panel):
     """Find controls panel"""
-    def __init__(self, parent, fdata, id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=AFR_STYLE_FINDDIALOG,
-                 name=FindPanelName):
+    def __init__(self, parent, fdata, id=wx.ID_ANY, 
+                 pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 style=AFR_STYLE_FINDDIALOG, name=FindPanelName):
         """Create the panel
         @param fdata: wx.FindReplaceData
 
@@ -585,6 +621,8 @@ class FindPanel(wx.Panel):
         locations = [_("Current Document"), _("Open Documents")]
         self._lookin = wx.Choice(self, ID_LOOKIN, choices=locations)
         self._lookin.SetSelection(0)
+        self._filterlbl = wx.StaticText(self, label=_("File Filters:"))
+        self._filters = None # Created in __DoLayout
         self._sizers = dict()
         self._paths = dict()
         self._fdata = fdata
@@ -672,6 +710,24 @@ class FindPanel(wx.Panel):
                           (ID_REGEX, _("Regular expression")),
                           (ID_RECURSE, _("Search Recursively"))]:
             sboxsz.AddMany([((3, 3), 0), (wx.CheckBox(self, cid, clbl), 0)])
+
+        # File Filters
+        self._sizers['filter'] = wx.BoxSizer(wx.VERTICAL)
+        self._filters = wx.TextCtrl(self)
+        tt_txt = _("Enter wildcard shell patterns for matching files (*.txt).")
+        self._filters.SetToolTipString(tt_txt)
+
+        # Disable spell checking on mac for this control
+        if wx.Platform == '__WXMAC__':
+            self._filters.MacCheckSpelling(False)
+
+        f_sz = wx.BoxSizer(wx.HORIZONTAL)
+        f_sz.Add(self._filters, 1, wx.EXPAND)
+        self._sizers['filter'].AddMany([(self._filterlbl, 0, wx.ALIGN_LEFT),
+                                        ((3, 3), 0), (f_sz, 0, wx.EXPAND),
+                                        ((5, 5), 0)])
+        sboxsz.AddMany([((3, 3), 0), (self._sizers['filter'], 0, wx.EXPAND)])
+
         self._sizers['opt'].AddMany([((5, 5), 0), (sboxsz, 0, wx.EXPAND)])
 
         # Buttons
@@ -716,6 +772,7 @@ class FindPanel(wx.Panel):
         recurse = self.FindWindowById(ID_RECURSE)
         recurse.SetValue(flags & AFR_RECURSIVE)
         recurse.Enable(in_files)
+        self.ShowFileFilters(in_files and not (flags & AFR_NOFILTER))
 
     def _ShowButtons(self, find=True):
         """Toggle the visiblity of a button set
@@ -748,6 +805,11 @@ class FindPanel(wx.Panel):
         self._UpdateDefaultBtn()
         in_files = bool(self._lookin.GetSelection() >= LOCATION_MAX)
         self.FindWindowById(ID_RECURSE).Enable(in_files)
+        flags = self._fdata.GetFlags()
+
+        # Only update visibility of file filter field if it is enabled
+        if not (flags & AFR_NOFILTER):
+            self.ShowFileFilters(in_files)
 
     def _UpdateDefaultBtn(self):
         """Change the default button depending on what the search context
@@ -840,6 +902,7 @@ class FindPanel(wx.Panel):
 
             if stype >= LOCATION_IN_FILES:
                 evt.SetDirectory(self._paths.get(lookin_idx, u''))
+                evt.SetFileFilters(self._filters.GetValue())
 
             wx.PostEvent(self.GetParent(), evt)
             return True
@@ -852,6 +915,13 @@ class FindPanel(wx.Panel):
 
         """
         return self._fdata
+
+    def GetFileFilters(self):
+        """Get the currently set file filters
+        @return: string
+
+        """
+        return self._filters.GetValue()
 
     def GetLookinChoices(self):
         """Get the looking choices
@@ -980,6 +1050,13 @@ class FindPanel(wx.Panel):
         self._fdata = data
         self._ConfigureControls()
 
+    def SetFileFilters(self, filters):
+        """Set the file filters field values
+        @param filters: string
+
+        """
+        self._filters.SetValue(filters)
+
     def SetFlag(self, flag):
         """Set a search flag
         @param flag: AFR_* flag value
@@ -1013,6 +1090,12 @@ class FindPanel(wx.Panel):
         if idx <= self._lookin.GetCount():
             self._lookin.SetSelection(idx)
 
+            # If the selection is a Look in Files make sure the filter
+            # field is shown
+            flags = self._fdata.GetFlags()
+            in_files = bool(idx >= LOCATION_MAX)
+            self.ShowFileFilters(in_files and not (flags & AFR_NOFILTER))
+
     def SetReplaceString(self, rstring):
         """Set the replace fields string
         @param rstring: string
@@ -1029,6 +1112,19 @@ class FindPanel(wx.Panel):
         if 'dir' in self._sizers:
             self._sizers['dir'].ShowItems(show)
             self.Layout()
+
+    def ShowFileFilters(self, show=True):
+        """Show or hide the File Filters filed
+        @keyword show: bool
+
+        """
+        if 'filter' in self._sizers:
+            self._sizers['filter'].ShowItems(show)
+            self.Layout()
+
+            # Require additional resizing
+            evt = _DlgModeChange(self.GetId(), _edEVT_MODE_CHANGE)
+            wx.PostEvent(self.GetTopLevelParent(), evt)
 
     def ShowLookinCombo(self, show=True):
         """Show the lookin choice and directory chooser control

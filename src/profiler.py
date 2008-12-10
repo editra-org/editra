@@ -78,6 +78,7 @@ _DEFAULTS = {
            'SAVE_POS'   : True,             # Remember Carat positions
            'SAVE_SESSION' : False,          # Load previous session on startup
            'SEARCH_LOC' : list(),           # Recent Search Locations
+           'SEARCH_FILTER' : '',            # Last used search filter
            'SESSION_KEY' : '',              # Ipc Session Server Key
            'SET_WPOS'   : True,             # Remember window position
            'SET_WSIZE'  : True,             # Remember mainwindow size on exit

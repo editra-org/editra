@@ -24,6 +24,7 @@ NEW: [features/improvements]
 +Add custom highlighting for Issue Lists (from Torsten Mohr)
 +Report number of files searched when doing a Find in Files
 +Improve performance of Find All.
++Add ability to filter file type to Find in Files
 
 BUG FIXES:
 +Middle click closes the tab that was clicked on and not the active tab
