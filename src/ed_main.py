@@ -282,7 +282,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Don't needlessly push and pop events if we only have one window open
         if self._loaded and len(app.GetMainWindows()) == 1:
-            print "SKIP"
             evt.Skip()
             return
 
@@ -291,7 +290,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self._loaded = True
 
             # Slow the update interval to reduce overhead
-            wx.UpdateUIEvent.SetUpdateInterval(160)
+            wx.UpdateUIEvent.SetUpdateInterval(200)
             wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
             self.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
 
