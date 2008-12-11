@@ -281,15 +281,20 @@ class StyleEditor(wx.Dialog):
                 else:
                     ed_glob.CONFIG['STYLES_DIR'] = user_config
 
-        dlg = wx.FileDialog(self, _("Export Style Sheet"),
-                            ed_glob.CONFIG['STYLES_DIR'],
-                            wildcard=_("Editra Style Sheet") + " (*.ess)|*.ess",
-                            style=wx.FD_SAVE | wx.OVERWRITE_PROMPT)
-        dlg.CenterOnParent()
-        result = dlg.ShowModal()
+        result = wx.ID_CANCEL
+        ss_c = self.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
+        new_cb = self.FindWindowById(wx.ID_NEW)
+        if new_cb.GetValue():
+            name = ''
+        else:
+            name = ss_c.GetStringSelection()
 
-        if result == wx.ID_OK:
-            sheet_path = dlg.GetPath()
+        fname = wx.GetTextFromUser(_("Enter style sheet name"),
+                                   _("Export Style Sheet"),
+                                   name, self)
+
+        if len(fname):
+            sheet_path = os.path.join(ed_glob.CONFIG['STYLES_DIR'], fname)
             if sheet_path.split(u'.')[-1] != u'ess':
                 sheet_path += u".ess"
 
@@ -303,19 +308,19 @@ class StyleEditor(wx.Dialog):
             else:
                 # Update Style Sheet Control
                 sheet = ".".join(os.path.basename(sheet_path).split(u'.')[:-1])
-                ss_c = self.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
                 ss_c.SetItems(util.GetResourceFiles(u'styles', get_all=True))
                 ss_c.SetStringSelection(sheet)
                 ss_c.Enable()
                 self.FindWindowById(wx.ID_NEW).SetValue(False)
                 self.styles_orig = self.styles_new
                 self.styles_new = DuplicateStyleDict(self.styles_orig)
+                result = wx.ID_OK
 
                 if sheet_path.startswith(ed_glob.CONFIG['STYLES_DIR']) or \
                    sheet_path.startswith(ed_glob.CONFIG['SYS_STYLES_DIR']):
                     # Update editor windows/buffer to use new style sheet
                     UpdateBufferStyles(sheet)
-        dlg.Destroy()
+
         return result
 
     def GenerateStyleSheet(self):
