@@ -16,30 +16,31 @@ NEWS:
 
 
 NEW: [features/improvements]
-+Add shortcut for Find Previous
-+New version of Launch plugin (Run last executed program)
-+Read Only indicators on tabs
-+Add support for Progress 4GL
-+Middle click can close tabs in Shelf
-+Add custom highlighting for Issue Lists (from Torsten Mohr)
-+Report number of files searched when doing a Find in Files
++Add shortcut for Find Previous.
++New version of Launch plugin (Run last executed program).
++Read Only indicators on tabs.
++Add support for Progress 4GL.
++Middle click can close tabs in Shelf.
++Add custom highlighting for Issue Lists (from Torsten Mohr).
++Report number of files searched when doing a Find in Files.
 +Improve performance of Find All.
-+Add ability to filter file type to Find in Files
-+Add commandline option to run Editra in the hotshot profiler
++Add ability to filter file type to Find in Files.
++Add commandline option to run Editra in the hotshot profiler.
++Numerous minor performance improvements.
 
 BUG FIXES:
-+Middle click closes the tab that was clicked on and not the active tab
-+Fix Find dialog not preserving order of lookin choices
-+Fix searching in folded text not being exposed during search
-+Fix random jumping to top/bottom of file during incremental search
++Middle click closes the tab that was clicked on and not the active tab.
++Fix Find dialog not preserving order of lookin choices.
++Fix searching in folded text not being exposed during search.
++Fix random jumping to top/bottom of file during incremental search.
 +Fix text Drag n Drop not working on Windows.
 +Don't show Python auto-comp choices after numbers.
 +Fix file modified indicator not being hidden after saving file.
-+Fix number of bugs with opening files from filebrowser on gtk versions
-+Fix statusbar line column number not being updated when clicking on
++Fix number of bugs with opening files from filebrowser on gtk versions.
++Fix statusbar line column number not being updated when clicking on.
 Find Results links.
-+Fix drag and drop of text not scrolling window as the mouse is moved toards top
-or bottom of buffer.
++Fix drag and drop of text not scrolling window as the mouse is moved towards 
+top or bottom of buffer.
 
 #-----------------------------------------------------------------------------#
 
