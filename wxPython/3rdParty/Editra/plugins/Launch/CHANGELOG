@@ -7,9 +7,10 @@
 Version 0.8
 Date: xx/xx/200x
 
-+Add run last executed program function and shortcut
-+Fix file list not being populated on first opening
-+Fix incorrect tooltip on exe choice control
++Add run last executed program function and shortcut.
++Automatically save the buffer to be excuted if it is modified.
++Fix file list not being populated on first opening.
++Fix incorrect tooltip on exe choice control.
 
 #-----------------------------------------------------------------------------#
 

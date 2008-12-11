@@ -447,8 +447,16 @@ class LaunchWindow(ctrlbox.ControlBox):
         @param ftype: File type id
 
         """
+        # Find and save the file if it is modified
+        nb = self._mw.GetNotebook()
+        for ctrl in nb.GetTextControls():
+            tname = ctrl.GetFileName()
+            if fname == tname:
+                if ctrl.GetModify():
+                    ctrl.SaveFile(tname)
+                    break
+
         handler = handlers.GetHandlerById(ftype)
-        cmd = handler.GetCommand(cmd)
         path, fname = os.path.split(fname)
         self._worker = outbuff.ProcessThread(self._buffer,
                                              cmd, fname,
@@ -468,13 +476,9 @@ class LaunchWindow(ctrlbox.ControlBox):
             cmd = self.FindWindowById(ID_EXECUTABLE).GetStringSelection()
             self._config['lcmd'] = cmd
             cmd = handler.GetCommand(cmd)
-            path, fname = os.path.split(self._config['file'])
             args = self.FindWindowById(ID_ARGS).GetValue().split()
             self._config['largs'] = args
-            self._worker = outbuff.ProcessThread(self._buffer, cmd, fname,
-                                                 args, path,
-                                                 handler.GetEnvironment())
-            self._worker.start()
+            self.Run(self._config['file'], cmd, args, self._config['lang'])
         else:
             util.Log("[Launch][info] Aborting process")
             self._worker.Abort()
