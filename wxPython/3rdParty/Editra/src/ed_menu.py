@@ -471,14 +471,14 @@ class EdMenuBar(wx.MenuBar):
         filemenu.AppendMenu(ed_glob.ID_FHIST, _("Open &Recent"),
                             filehist, _("Recently Opened Files"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_CLOSE, _("&Close Page") + \
+        filemenu.Append(ed_glob.ID_CLOSE, _("&Close Tab") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSE),
-                        _("Close Current Page"))
+                        _("Close Current Tab"))
         filemenu.Append(ed_glob.ID_CLOSE_WINDOW,
                         _("Close Window") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSE_WINDOW),
                         _("Close the current window"))
-        filemenu.Append(ed_glob.ID_CLOSEALL, _("Close All Pages") + \
+        filemenu.Append(ed_glob.ID_CLOSEALL, _("Close All Tabs") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSEALL),
                         _("Close all open tabs"))
         filemenu.AppendSeparator()
