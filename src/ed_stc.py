@@ -39,6 +39,7 @@ import ed_msg
 import ed_txt
 import ed_menu
 from ed_keyh import KeyHandler, ViKeyHandler
+from extern import vertedit
 
 #-------------------------------------------------------------------------#
 # Globals
@@ -101,6 +102,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Attributes
         self.LOG = wx.GetApp().GetLog()
         self.key_handler = KeyHandler(self)
+        self.vert_edit = vertedit.VertEdit(self)
 
         # File Attributes
         self.file = ed_txt.EdFile()
@@ -157,6 +159,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
+        self.Bind(wx.stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
@@ -967,9 +970,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             adj = 8
 
-        self.SetMarginWidth(NUM_MARGIN, max(15, mwidth + adj))
+        nwidth = max(15, mwidth + adj)
+        if self.GetMarginWidth(NUM_MARGIN) != nwidth:
+            self.SetMarginWidth(NUM_MARGIN, nwidth)
 
         wx.PostEvent(self.GetParent(), evt)
+        evt.Skip()
 
     def OnUpdateUI(self, evt):
         """Check for matching braces
@@ -977,12 +983,19 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @type evt: wx.stc.StyledTextEvent
 
         """
+        # If disabled just skip the event
+        if not self._config['brackethl']:
+            evt.Skip()
+            return
+
         brace_at_caret, brace_opposite = self.GetBracePair()
         # CallAfter necessary to reduce CG warnings on Mac
         if brace_at_caret != -1  and brace_opposite == -1:
             wx.CallAfter(self.BraceBadLight, brace_at_caret)
         else:
             wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
+
+        evt.Skip()
 
     def OnMarginClick(self, evt):
         """Open and Close Folders as Needed
@@ -1663,11 +1676,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if (switch is None and not self._config['brackethl']) or switch:
             self.LOG("[ed_stc][evt] Bracket Highlighting Turned On")
             self._config['brackethl'] = True
-            self.Bind(wx.stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
         else:
             self.LOG("[ed_stc][evt] Bracket Highlighting Turned Off")
             self._config['brackethl'] = False
-            self.Unbind(wx.stc.EVT_STC_UPDATEUI)
 
     def ToggleLineNumbers(self, switch=None):
         """Toggles the visibility of the line number margin
@@ -2113,6 +2124,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def UpdateBaseStyles(self):
         ed_style.StyleMgr.UpdateBaseStyles(self)
+        sback = self.GetItemByName('select_style')
+        if not sback.IsNull():
+            sback = sback.GetBack()
+        else:
+            sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        self.vert_edit.SetBlockColor(sback)
         self.DefineMarkers()
 
     #---- End Style Definitions ----#
