@@ -5,11 +5,12 @@
 #-----------------------------------------------------------------------------#
 
 Version 0.6
-Released: xx/xx/200x
+Released: 12/11/2008
 
 New:
 
 Bug Fixes:
++Fix not getting cleared when the current buffer is a blank buffer
 +Fix cpp method signatures with * or in & in them not being added to tree view
 
 #-----------------------------------------------------------------------------#
