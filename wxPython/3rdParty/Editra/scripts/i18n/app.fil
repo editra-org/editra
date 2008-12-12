@@ -81,6 +81,7 @@
 ../../src/syntax/haxe.py
 ../../src/syntax/html.py
 ../../src/syntax/inno.py
+../../src/syntax/issuelist.py
 ../../src/syntax/java.py
 ../../src/syntax/javascript.py
 ../../src/syntax/kix.py

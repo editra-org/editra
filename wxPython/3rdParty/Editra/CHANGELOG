@@ -28,6 +28,7 @@ NEW: [features/improvements]
 +Add ability to filter file type to Find in Files.
 +Add commandline option to run Editra in the hotshot profiler.
 +Numerous minor performance improvements.
++Add Swedish translation (by Peter Magnusson)
 
 BUG FIXES:
 +Middle click closes the tab that was clicked on and not the active tab.
