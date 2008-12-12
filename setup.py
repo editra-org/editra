@@ -80,11 +80,10 @@ CLASSIFIERS = [
             'Topic :: Text Editors'
             ]
 
-DATA_FILES = [("include/python2.5",
+def GenerateBinPackageFiles():
+    """Generate the list of files needed for py2exe/py2app package files"""
+    data = [("include/python2.5",
                glob.glob("include/python2.5/%s/*" % __platform__)),
-              ("pixmaps", ["pixmaps/editra.png", "pixmaps/editra.ico",
-                           "pixmaps/editra.icns", "pixmaps/editra_doc.icns",
-                           "pixmaps/editra_doc.png"]),
               ("pixmaps/theme/Default", ["pixmaps/theme/Default/README"]),
               ("pixmaps/theme/Tango",["pixmaps/theme/Tango/AUTHORS",
                                       "pixmaps/theme/Tango/COPYING"]),
@@ -96,90 +95,74 @@ DATA_FILES = [("include/python2.5",
                glob.glob("pixmaps/theme/Tango/mime/*.png")),
               ("pixmaps/theme/Tango/other",
                glob.glob("pixmaps/theme/Tango/other/*.png")),
-              ("plugins", glob.glob("plugins/*.egg")),
-              ("templates", glob.glob("templates/*")),
-              ("locale/cs_CZ/LC_MESSAGES",
-               ["locale/cs_CZ/LC_MESSAGES/Editra.mo"]),
-              ("locale/de_DE/LC_MESSAGES",
-               ["locale/de_DE/LC_MESSAGES/Editra.mo"]),
-              ("locale/en_US/LC_MESSAGES",
-               ["locale/en_US/LC_MESSAGES/Editra.mo"]),
-              ("locale/es_ES/LC_MESSAGES",
-               ["locale/es_ES/LC_MESSAGES/Editra.mo"]),
-              ("locale/fr_FR/LC_MESSAGES",
-               ["locale/fr_FR/LC_MESSAGES/Editra.mo"]),
-              ("locale/it_IT/LC_MESSAGES",
-               ["locale/it_IT/LC_MESSAGES/Editra.mo"]),
-              ("locale/ja_JP/LC_MESSAGES",
-               ["locale/ja_JP/LC_MESSAGES/Editra.mo"]),
-              ("locale/lv_LV/LC_MESSAGES",
-               ["locale/lv_LV/LC_MESSAGES/Editra.mo"]),
-              ("locale/nl_NL/LC_MESSAGES",
-               ["locale/nl_NL/LC_MESSAGES/Editra.mo"]),
-              ("locale/nn_NO/LC_MESSAGES",
-               ["locale/nn_NO/LC_MESSAGES/Editra.mo"]),
-              ("locale/pl_PL/LC_MESSAGES",
-               ["locale/pl_PL/LC_MESSAGES/Editra.mo"]),
-              ("locale/pt_BR/LC_MESSAGES",
-               ["locale/pt_BR/LC_MESSAGES/Editra.mo"]),
-              ("locale/ru_RU/LC_MESSAGES",
-               ["locale/ru_RU/LC_MESSAGES/Editra.mo"]),
-              ("locale/sl_SI/LC_MESSAGES",
-               ["locale/sl_SI/LC_MESSAGES/Editra.mo"]),
-              ("locale/sr_SR/LC_MESSAGES",
-               ["locale/sr_SR/LC_MESSAGES/Editra.mo"]),
-              ("locale/tr_TR/LC_MESSAGES",
-               ["locale/tr_TR/LC_MESSAGES/Editra.mo"]),
-              ("locale/uk_UA/LC_MESSAGES",
-               ["locale/uk_UA/LC_MESSAGES/Editra.mo"]),
-              ("locale/zh_CN/LC_MESSAGES",
-               ["locale/zh_CN/LC_MESSAGES/Editra.mo"]),
-              ("locale/zh_TW/LC_MESSAGES",
-               ["locale/zh_TW/LC_MESSAGES/Editra.mo"]),
               ("styles", glob.glob("styles/*.ess")),
               ("tests/syntax", glob.glob("tests/syntax/*")),
-#               ("tests/controls", glob.glob("tests/controls/*")),
               ("docs", glob.glob("docs/*.txt")), "AUTHORS", "FAQ", "INSTALL",
               "README","CHANGELOG","COPYING", "NEWS", "THANKS", "TODO",
-              "setup.cfg", "pixmaps/editra_doc.icns"
-             ]
+              "setup.cfg"
+            ]
 
-DATA = [ "src/*.py", "src/syntax/*.py", "src/autocomp/*.py", "src/eclib/*.py",
-         "docs/*.txt", "pixmaps/*.png", "pixmaps/*.ico", "pixmaps/*.icns",
-         'Editra',
-         "src/extern/*.py", "src/extern/pygments/*.py",
-         "src/extern/pygments/formatters/*.py",
-         "src/extern/pygments/filters/*.py",
-         "src/extern/pygments/lexers/*.py", "src/extern/pygments/styles/*.py",
-         "pixmaps/*.icns", "pixmaps/theme/Default/README",
-         "pixmaps/theme/Tango/AUTHOR", "pixmaps/theme/Tango/COPYING",
-         "pixmaps/theme/Tango/toolbar/*.png", "pixmaps/theme/Tango/menu/*.png",
-         "pixmaps/theme/Tango/mime/*.png", "pixmaps/theme/Default/README",
-         "pixmaps/theme/Tango/other/*.png",
-         "locale/cs_CZ/LC_MESSAGES/Editra.mo",
-         "locale/de_DE/LC_MESSAGES/Editra.mo",
-         "locale/en_US/LC_MESSAGES/Editra.mo",
-         "locale/es_ES/LC_MESSAGES/Editra.mo",
-         "locale/fr_FR/LC_MESSAGES/Editra.mo",
-         "locale/it_IT/LC_MESSAGES/Editra.mo",
-         "locale/ja_JP/LC_MESSAGES/Editra.mo",
-         "locale/lv_LV/LC_MESSAGES/Editra.mo",
-         "locale/nl_NL/LC_MESSAGES/Editra.mo",
-         "locale/nn_NO/LC_MESSAGES/Editra.mo",
-         "locale/pl_PL/LC_MESSAGES/Editra.mo",
-         "locale/pt_BR/LC_MESSAGES/Editra.mo",
-         "locale/ru_RU/LC_MESSAGES/Editra.mo",
-         "locale/sl_SI/LC_MESSAGES/Editra.mo",
-         "locale/sr_SR/LC_MESSAGES/Editra.mo",
-         "locale/tr_TR/LC_MESSAGES/Editra.mo",
-         "locale/uk_UA/LC_MESSAGES/Editra.mo",
-         "locale/zh_CN/LC_MESSAGES/Editra.mo",
-         "locale/zh_TW/LC_MESSAGES/Editra.mo",
-#          "tests/controls/*",
-         "styles/*.ess", "tests/syntax/*",
-         "AUTHORS", "CHANGELOG","COPYING", "FAQ", "INSTALL", "NEWS", "README",
-         "THANKS", "TODO", "setup.cfg", "plugins/*.egg"
-]
+    # Get the locale files
+    for loc_dir in os.listdir("locale"):
+        tmp = "locale/" + loc_dir + "/LC_MESSAGES"
+        if os.path.isdir(tmp):
+            tmp2 = tmp + "/Editra.mo"
+            if os.path.exists(tmp2):
+                data.append((tmp, [tmp2]))
+
+    # Only bundle the plugins for the running version of python being used for
+    # the build.
+    data.append(("plugins",
+                 glob.glob("plugins/*py%d.%d.egg" % sys.version_info[:2])))
+
+    # Get platform specific icons
+    pixlist = ["pixmaps/editra.png", "pixmaps/editra_doc.png"]
+
+    if "darwin" in sys.platform:
+        data.append("pixmaps/editra_doc.icns")
+        pixlist.extend(["pixmaps/editra.icns", "pixmaps/editra_doc.icns"])
+    elif sys.platform.startswith("win"):
+        pixlist.append("pixmaps/editra.ico")
+
+    data.append(("pixmaps", pixlist))
+
+    return data
+
+def GenerateSrcPackageFiles():
+    """Generate the list of files to include in a source package dist/install"""
+    data = [ "src/*.py", "src/syntax/*.py", "src/autocomp/*.py", 
+             "src/eclib/*.py", "docs/*.txt", "pixmaps/*.png", "pixmaps/*.ico",
+             'Editra',
+             "src/extern/*.py", "src/extern/pygments/*.py",
+             "src/extern/pygments/formatters/*.py",
+             "src/extern/pygments/filters/*.py",
+             "src/extern/pygments/lexers/*.py",
+             "src/extern/pygments/styles/*.py",
+             "pixmaps/*.icns",
+             "pixmaps/theme/Default/README",
+             "pixmaps/theme/Tango/AUTHOR",
+             "pixmaps/theme/Tango/COPYING",
+             "pixmaps/theme/Tango/toolbar/*.png",
+             "pixmaps/theme/Tango/menu/*.png",
+             "pixmaps/theme/Tango/mime/*.png",
+             "pixmaps/theme/Default/README",
+             "pixmaps/theme/Tango/other/*.png",
+             "styles/*.ess", "tests/syntax/*",
+             "AUTHORS", "CHANGELOG","COPYING", "FAQ", "INSTALL", "NEWS", 
+             "README", "THANKS", "TODO", "setup.cfg" ]
+
+    # Get the local files
+    for loc_dir in os.listdir("locale"):
+        tmp = "locale/" + loc_dir
+        if os.path.isdir(tmp):
+            tmp = tmp + "/LC_MESSAGES/Editra.mo"
+            if os.path.exists(tmp):
+                data.append(tmp)
+
+    # NOTE: plugins selected to package in build step
+    
+    return data
+
 
 DESCRIPTION = "Developer's Text Editor"
 
@@ -287,7 +270,7 @@ if __platform__ == "win32" and 'py2exe' in sys.argv:
         maintainer_email = AUTHOR_EMAIL,
         license = LICENSE,
         url = URL,
-        data_files = DATA_FILES,
+        data_files = GenerateBinPackageFiles(),
         )
 
 #---- Setup MacOSX APP ----#
@@ -327,6 +310,7 @@ elif __platform__ == "darwin" and 'py2app' in sys.argv:
                        plist = PLIST)
 
     # Add extra mac specific files
+    DATA_FILES = GenerateBinPackageFiles()
     DATA_FILES.append("scripts/editramac.sh")
 
     # Put extern package on path for py2app
@@ -349,13 +333,22 @@ elif __platform__ == "darwin" and 'py2app' in sys.argv:
 
 #---- Other Platform(s)/Source module install ----#
 else:
+
+    # Get the package data
+    DATA = GenerateSrcPackageFiles()
+
     # Force optimization
     if 'install' in sys.argv and ('O1' not in sys.argv or '02' not in sys.argv):
         sys.argv.append('-O2')
 
-    if 'bdist_egg' in sys.argv:
+        # Install the plugins for this version of Python
+        DATA.append("plugins/*py%d.%d.egg" % sys.version_info[:2])
+    elif 'bdist_egg' in sys.argv:
         try:
             from setuptools import setup
+
+            # Only bundle eggs for the given python version
+            DATA.append("plugins/*py%d.%d.egg" % sys.version_info[:2])
         except ImportError:
             print "To build an egg setuptools must be installed"
     else:
