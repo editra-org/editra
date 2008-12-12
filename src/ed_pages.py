@@ -718,7 +718,7 @@ class EdPages(FNB.FlatNotebook):
                   "%d to Page: %d\n" % pages)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGING, (self,) + pages)
 
-    def ChangePage(self, pg_num, old=-1):
+    def ChangePage(self, pg_num, old=-2):
         """Change the page and focus to the the given page id
         @param pg_num: Page number to change
         @keyword old: previous selection
@@ -737,7 +737,9 @@ class EdPages(FNB.FlatNotebook):
         self.frame.SetTitle(self.control.GetTitleString())
 
         # Only post page changes when the change is not from the app exiting
-        if old > -1:
+        # NOTE: -2 is used as default value, cant use -1 as it comes from
+        #       page close events.
+        if old > -2:
             cpage = old
 
         if not self.frame.IsExiting() and cpage != pg_num:
