@@ -1,6 +1,3 @@
-#! /usr/bin/python
-# coding: latin-1
-
 ###############################################################################
 # Name: issuelist.py                                                          #
 # Purpose: Define IssueList syntax for highlighting and other features        #
