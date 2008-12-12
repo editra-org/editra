@@ -343,7 +343,9 @@ else:
 
         # Install the plugins for this version of Python
         DATA.append("plugins/*py%d.%d.egg" % sys.version_info[:2])
-    elif 'bdist_egg' in sys.argv:
+
+    # Import proper setup function
+    if 'bdist_egg' in sys.argv:
         try:
             from setuptools import setup
 
