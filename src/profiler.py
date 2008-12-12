@@ -256,13 +256,18 @@ class Profile(dict):
     #---- End Public Members ----#
 
 #-----------------------------------------------------------------------------#
+# Singleton reference instance
+
+TheProfile = Profile()
+
+#-----------------------------------------------------------------------------#
 # Profile convenience functions
 def Profile_Del(item):
     """Removes an item from the profile
     @param item: items key name
 
     """
-    Profile().DeleteItem(item)
+    TheProfile.DeleteItem(item)
 
 def Profile_Get(index, fmt=None, default=None):
     """Convenience for Profile().Get()
@@ -271,7 +276,7 @@ def Profile_Get(index, fmt=None, default=None):
     @keyword default: default value to return if not found
 
     """
-    return Profile().Get(index, fmt, default)
+    return TheProfile.Get(index, fmt, default)
 
 def Profile_Set(index, val, fmt=None):
     """Convenience for Profile().Set()
@@ -280,7 +285,7 @@ def Profile_Set(index, val, fmt=None):
     @keyword fmt: format to convert object from
 
     """
-    return Profile().Set(index, val, fmt)
+    return TheProfile.Set(index, val, fmt)
 
 def _FromObject(val, fmt):
     """Convert the given value to a to a profile compatible value
