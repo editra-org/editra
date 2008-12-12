@@ -64,7 +64,7 @@ gen_appfile () {
 # Purpose: Generate new po files from the source
 ##############################################################################
 gen_po () {
-    ./mki18n.py -pv --domain=Editra
+    python mki18n.py -pv --domain=Editra
     # Copy all .new files to override the originals
     for fname in $(ls); do
         if ! [ -z $(echo $fname | grep '.*\.new') ]; then
@@ -79,7 +79,7 @@ gen_po () {
 # Purpose: Make mo files and place them in the appropriate locale directory
 ##############################################################################
 make_mo () {
-    ./mki18n.py -mv --domain=Editra --moTarget=../../locale
+    python mki18n.py -mv --domain=Editra --moTarget=../../locale
 }
 
 
