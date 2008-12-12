@@ -246,9 +246,6 @@ class VertEdit(object):
         if self.state == STATE_ACTIVE:
             curI = self.e.LineFromPosition(curP)
             if curP == self.e.GetLineEndPosition(curI):
-                self.state = STATE_OFF
-                self.e.AddText(" ")
-                self.state = 2
                 self.e.GotoPos(curP)
 
             if curI not in self.lines:
