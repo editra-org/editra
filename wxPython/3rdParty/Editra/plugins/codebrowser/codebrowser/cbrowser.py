@@ -347,16 +347,23 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         """
         # Don't update when this window is not Active
-        if self._mw != wx.GetApp().GetActiveWindow():
+        if not self._mw.IsActive():
             return
 
         page = self._GetCurrentCtrl()
+        cfname = page.GetFileName()
+
+        # If its a blank document just clear out
+        if not len(cfname):
+            self._cdoc = None
+            self.DeleteChildren(self.root)
+            return
 
         # If document job is same as current don't start a new one
-        if self._lastjob == page.GetFileName():
+        if self._lastjob == cfname:
             return
         else:
-            self._lastjob = page.GetFileName()
+            self._lastjob = cfname
 
         # Get the generator method
         genfun = TagLoader.GetGenerator(page.GetLangId())
