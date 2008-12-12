@@ -206,7 +206,10 @@ class CommandBar(wx.Panel):
         v_sizer.Add(spacer)
         search = ed_search.EdSearchCtrl(self, ID_SEARCH_CTRL,
                                         menulen=5, size=(180, -1))
-        search.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
+        # The small variant is Too small on windows but good on others
+        if wx.Platform != '__WXMSW__':
+            search.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
         v_sizer.Add(search, 0, wx.ALIGN_CENTER_VERTICAL)
         v_sizer.Add((4, 4))
