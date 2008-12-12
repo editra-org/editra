@@ -974,8 +974,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if self.GetMarginWidth(NUM_MARGIN) != nwidth:
             self.SetMarginWidth(NUM_MARGIN, nwidth)
 
+        self.vert_edit.OnModified(evt)
         wx.PostEvent(self.GetParent(), evt)
-        evt.Skip()
 
     def OnUpdateUI(self, evt):
         """Check for matching braces

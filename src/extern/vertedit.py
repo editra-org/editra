@@ -54,13 +54,11 @@ class VertEdit(object):
         self.stack = deque()
         self.jitter = None
         self.SetBlockColor(blockBackColour)
-        self.modMask = self.e.ModEventMask
-        self.e.ModEventMask |= VertEdit.INS|VertEdit.DEL|VertEdit.BDEL
+        self.modmask = long(self.e.ModEventMask)
 
         # Event Handlers
         self.e.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-        self.e.Bind(stc.EVT_STC_MODIFIED,self.OnModified)
-        self.e.Bind(stc.EVT_STC_UPDATEUI,self.OnUpdateUI)
+        self.e.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
 
     def enable(self):
         self.enabled = True
@@ -105,6 +103,7 @@ class VertEdit(object):
 
     def endMode(self):
         if self.state != STATE_OFF:
+            self.e.SetModEventMask(self.modmask)
             self.e.HideSelection(False)
             self.state = STATE_OFF
             self.e.EndUndoAction()
@@ -153,7 +152,7 @@ class VertEdit(object):
             if fn:
                 self.endMode() if evt.LinesAdded else self.stack.append(fn)
 
-        evt.Skip()
+        # Don't skip event causes issues in notebook!!!
 
     def SetBlockColor(self, color):
         """Set the block background color used during the highlight
@@ -166,6 +165,7 @@ class VertEdit(object):
 
     def startMode(self, singleLine=False):
         if self.state == STATE_OFF:
+            self.e.ModEventMask |= VertEdit.INS|VertEdit.DEL|VertEdit.BDEL
             self.e.HideSelection(True)
             orig = self.e.Anchor
             self.origCol = self.e.GetColumn(orig)
@@ -192,9 +192,6 @@ class VertEdit(object):
             if newA == self.e.CurrentPos:
                 newA = self.e.GetLineEndPosition(self.curLine)
                 if newA == self.e.CurrentPos:
-                    self.state = STATE_OFF
-                    self.e.AddText(" ")
-                    self.state = STATE_SELECTION
                     self.e.CurrentPos -= 1
                     newA += 1
             self.e.Anchor = newA
