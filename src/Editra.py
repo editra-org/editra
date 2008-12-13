@@ -614,7 +614,7 @@ def InitConfig():
         ed_glob.CONFIG['PROFILE_DIR'] += os.sep
     else:
         config_base = wx.StandardPaths.Get().GetUserDataDir()
-        ed_glob.CONFIG['PROFILE_DIR'] = util.ResolvConfigDir("profiles")
+        ed_glob.CONFIG['PROFILE_DIR'] = util.ResolvConfigDir(u"profiles")
 
     # Check for if config directory exists and if profile is from the current
     # running version of Editra.
@@ -696,20 +696,20 @@ def InitConfig():
 
     # Resolve resource locations
     ed_glob.CONFIG['CONFIG_DIR'] = util.ResolvConfigDir("")
-    ed_glob.CONFIG['SYSPIX_DIR'] = util.ResolvConfigDir("pixmaps", True)
-    ed_glob.CONFIG['PLUGIN_DIR'] = util.ResolvConfigDir("plugins")
-    ed_glob.CONFIG['THEME_DIR'] = util.ResolvConfigDir(os.path.join("pixmaps", "theme"))
-    ed_glob.CONFIG['LANG_DIR'] = util.ResolvConfigDir("locale", True)
-    ed_glob.CONFIG['STYLES_DIR'] = util.ResolvConfigDir("styles")
-    ed_glob.CONFIG['SYS_PLUGIN_DIR'] = util.ResolvConfigDir("plugins", True)
-    ed_glob.CONFIG['SYS_STYLES_DIR'] = util.ResolvConfigDir("styles", True)
-    ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir(os.path.join("tests", "syntax"), True)
+    ed_glob.CONFIG['SYSPIX_DIR'] = util.ResolvConfigDir(u"pixmaps", True)
+    ed_glob.CONFIG['PLUGIN_DIR'] = util.ResolvConfigDir(u"plugins")
+    ed_glob.CONFIG['THEME_DIR'] = util.ResolvConfigDir(os.path.join(u"pixmaps", u"theme"))
+    ed_glob.CONFIG['LANG_DIR'] = util.ResolvConfigDir(u"locale", True)
+    ed_glob.CONFIG['STYLES_DIR'] = util.ResolvConfigDir(u"styles")
+    ed_glob.CONFIG['SYS_PLUGIN_DIR'] = util.ResolvConfigDir(u"plugins", True)
+    ed_glob.CONFIG['SYS_STYLES_DIR'] = util.ResolvConfigDir(u"styles", True)
+    ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir(os.path.join(u"tests", u"syntax"), True)
 
     # Make sure all standard config directories are there
     for cfg in ["cache", "styles", "plugins", "profiles"]:
         if not util.HasConfigDir(cfg):
             util.MakeConfigDir(cfg)
-    ed_glob.CONFIG['CACHE_DIR'] = util.ResolvConfigDir("cache")
+    ed_glob.CONFIG['CACHE_DIR'] = util.ResolvConfigDir(u"cache")
 
     return profile_updated
 
