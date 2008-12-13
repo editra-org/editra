@@ -11,7 +11,20 @@
 import wx
 from wx import stc
 from collections import deque
-from functools import partial
+
+try:
+    # python2.5+
+    from functools import partial
+except ImportError:
+    def partial(func, *args, **keywords):
+        def newfunc(*fargs, **fkeywords):
+            newkeywords = keywords.copy()
+            newkeywords.update(fkeywords)
+            return func(*(args + fargs), **newkeywords)
+        newfunc.func = func
+        newfunc.args = args
+        newfunc.keywords = keywords
+        return newfunc
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -159,7 +172,10 @@ class VertEdit(object):
                     self.insCol = self.e.GetColumn(self.e.CurrentPos)
 
             if fn:
-                self.endMode() if evt.LinesAdded else self.stack.append(fn)
+                if evt.LinesAdded:
+                    self.endMode()
+                else:
+                    self.stack.append(fn)
 
         # Don't skip event causes issues in notebook!!! *Editra Bug*
         # Will fix later
