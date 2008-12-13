@@ -586,7 +586,7 @@ class StyleMgr(object):
             style = Profile_Get('SYNTHEME', 'str').lower()
 
         # Get Correct Filename if it exists
-        for sheet in util.GetResourceFiles('styles', False, True, title=False):
+        for sheet in util.GetResourceFiles(u'styles', False, True, title=False):
             if sheet.lower() == style.lower():
                 style = sheet
                 break

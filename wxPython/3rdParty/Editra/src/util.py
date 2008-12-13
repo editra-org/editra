@@ -520,7 +520,7 @@ def CreateConfigDir():
 
     profile_dir = os.path.join(config_dir, u"profiles")
     dest_file = os.path.join(profile_dir, u"default.ppb")
-    ext_cfg = ["cache", "styles", "plugins"]
+    ext_cfg = [u"cache", u"styles", u"plugins"]
 
     #---- Create Directories ----#
     if not os.path.exists(config_dir):
@@ -567,17 +567,20 @@ def ResolvConfigDir(config_dir, sys_only=False):
     # The following lines are used only when Editra is being run as a
     # source package. If the found path does not exist then Editra is
     # running as as a built package.
-    path = __file__
-    path = os.sep.join(path.split(os.sep)[:-2])
-    path =  path + os.sep + config_dir + os.sep
-    if os.path.exists(path):
-        if not isinstance(path, types.UnicodeType):
-            path = unicode(path, sys.getfilesystemencoding())
-        return path
+    if not hasattr(sys, 'frozen'):
+        path = __file__
+        path = os.sep.join(path.split(os.sep)[:-2])
+        path =  path + os.sep + config_dir + os.sep
+        if os.path.exists(path):
+            if not isinstance(path, types.UnicodeType):
+                path = unicode(path, sys.getfilesystemencoding())
+            return path
 
     # If we get here we need to do some platform dependant lookup
     # to find everything.
     path = sys.argv[0]
+    if not isinstance(path, types.UnicodeType):
+        path = unicode(path, sys.getfilesystemencoding())
 
     # If it is a link get the real path
     if os.path.islink(path):
@@ -607,7 +610,7 @@ def ResolvConfigDir(config_dir, sys_only=False):
 
         if pro_path.startswith(os.sep):
             pass
-        elif pro_path == "":
+        elif pro_path == u"":
             pro_path = os.getcwd()
             pieces = pro_path.split(os.sep)
             if pieces[-1] not in [ed_glob.PROG_NAME.lower(), ed_glob.PROG_NAME]:
@@ -619,6 +622,7 @@ def ResolvConfigDir(config_dir, sys_only=False):
         pro_path = pro_path + os.sep + config_dir + os.sep
 
     path = os.path.normpath(pro_path) + os.sep
+
     # Make sure path is unicode
     if not isinstance(path, types.UnicodeType):
         path = unicode(path, sys.getdefaultencoding())

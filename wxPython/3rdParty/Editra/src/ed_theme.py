@@ -306,7 +306,7 @@ class TangoTheme(plugin.Plugin):
 
         # Get the path
         if ed_glob.CONFIG['THEME_DIR'] == u'':
-            theme = util.ResolvConfigDir(os.path.join("pixmaps", "theme"))
+            theme = util.ResolvConfigDir(os.path.join(u"pixmaps", u"theme"))
             ed_glob.CONFIG['THEME_DIR'] = theme
 
         if mime:

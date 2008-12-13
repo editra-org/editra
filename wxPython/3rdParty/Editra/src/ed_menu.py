@@ -246,7 +246,7 @@ class KeyBinder(object):
         @return: list of strings
 
         """
-        recs = util.GetResourceFiles('cache', trim=True, get_all=False,
+        recs = util.GetResourceFiles(u'cache', trim=True, get_all=False,
                                      suffix='.ekeys', title=False)
         if recs == -1:
             recs = list()

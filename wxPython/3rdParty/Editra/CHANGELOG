@@ -22,6 +22,7 @@ BUG FIXES:
 +Fix find in files where if the filter was empty no files were searched.
 +Buffer context menu now works correctly on gtk version.
 +Fix column mode keybinding on windows.
++Unicode fixes
 
 #-----------------------------------------------------------------------------#
 

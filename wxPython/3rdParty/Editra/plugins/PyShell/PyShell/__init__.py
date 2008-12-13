@@ -81,7 +81,7 @@ class EdPyShellBox(ctrlbox.ControlBox):
 
         # Attributes
         self._shell = EdPyShell(self)
-        self._styles = util.GetResourceFiles('styles', True,
+        self._styles = util.GetResourceFiles(u'styles', True,
                                              True, title=False)
         self._choice = None
         self._clear = None
