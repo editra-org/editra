@@ -693,7 +693,7 @@ class SearchEngine:
                 for fname in os.listdir(directory) if not fname.startswith('.')]
 
         # Filter out files that don't match the current filter(s)
-        if self._filters is not None:
+        if self._filters is not None and len(self._filters):
             filtered = list()
             for fname in paths:
                 if os.path.isdir(fname):
