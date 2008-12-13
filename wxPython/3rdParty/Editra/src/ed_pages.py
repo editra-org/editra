@@ -285,7 +285,8 @@ class EdPages(FNB.FlatNotebook):
         @return: list of tuples
 
         """
-        return [(ed_glob.ID_FIND_NEXT, self._searchctrl.OnUpdateFindUI), ]
+        return [(ed_glob.ID_FIND_NEXT, self._searchctrl.OnUpdateFindUI,
+                 ed_glob.ID_FIND_PREVIOUS, self._searchctrl.OnUpdateFindUI)]
 
     def LoadSessionFiles(self):
         """Load files from saved session data in profile
