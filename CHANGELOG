@@ -8,16 +8,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.4.xx
-DATE xx/xx/2008
+VERSION 0.4.20
+DATE 12/12/2008
 19th Alpha Release
 
 NEWS:
 
+This release fixes a number of of bugs and general stability issues introduced
+from the last few rounds of feature enhancements. In addition to these bug
+fixes a few new features such as a column edit mode and more improvements to
+the text searching features have been added.
+
 
 NEW: [features/improvements]
 +Add shortcut for Find Previous
-+Vertical edit mode (start by making an empty vertical selection)
++Column edit mode
 +New version of Launch plugin (Run last executed program)
 +Read Only indicators on tabs
 +Add support for Progress 4GL
