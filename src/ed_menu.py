@@ -556,6 +556,9 @@ class EdMenuBar(wx.MenuBar):
         editmenu.Append(ed_glob.ID_SELECTALL, _("Select &All") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_SELECTALL),
                         _("Select All Text in Document"))
+        editmenu.Append(ed_glob.ID_COLUMN_MODE, _("Column Mode") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_COLUMN_MODE),
+                        _("Enable column edit mode."), wx.ITEM_CHECK)
         editmenu.AppendSeparator()
         linemenu = EdMenu()
         linemenu.Append(ed_glob.ID_LINE_AFTER, _("New Line After") + \
@@ -983,6 +986,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_PASTE : ("Ctrl", "V"),
                      ed_glob.ID_PASTE_AFTER : ("Ctrl", "Shift", "V"),
                      ed_glob.ID_SELECTALL : ("Ctrl", "A"),
+                     ed_glob.ID_COLUMN_MODE : ("Ctrl", "|"),
                      ed_glob.ID_LINE_AFTER : ("Ctrl", "L"),
                      ed_glob.ID_LINE_BEFORE : ("Ctrl", "Shift", "L"),
                      ed_glob.ID_CUT_LINE : ("Ctrl", "D"),
