@@ -170,6 +170,13 @@ class ControlBar(wx.PyPanel):
         self._tools = dict(simple=list())
         self._spacing = (5, 5)
 
+        # Drawing related
+        color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
+        self._color2 = AdjustColour(color, 30)
+        self._color = AdjustColour(color, -20)
+        pcolor = tuple([min(190, x) for x in AdjustColour(self._color, -25)])
+        self._pen = wx.Pen(pcolor, 1)
+
         # Setup
         msizer = wx.BoxSizer(wx.VERTICAL)
         spacer = (0, 0)
@@ -266,14 +273,11 @@ class ControlBar(wx.PyPanel):
 
         # Paint the gradient
         gc = wx.GraphicsContext.Create(dc)
-        col1 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        col2 = AdjustColour(col1, 30)
-        col1 = AdjustColour(col1, -20)
         rect = self.GetClientRect()
-        grad = gc.CreateLinearGradientBrush(0, .5, 0, rect.height, col2, col1)
+        grad = gc.CreateLinearGradientBrush(0, .5, 0, rect.height,
+                                            self._color2, self._color)
 
-        pen_col = tuple([min(190, x) for x in AdjustColour(col1, -25)])
-        gc.SetPen(gc.CreatePen(wx.Pen(pen_col, 1)))
+        gc.SetPen(gc.CreatePen(self._pen))
         gc.SetBrush(grad)
         gc.DrawRectangle(0, 0, rect.width - 0.5, rect.height - 0.5)
 
