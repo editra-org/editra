@@ -312,6 +312,7 @@ class ControlBar(wx.PyPanel):
         self.Refresh()
 
 #--------------------------------------------------------------------------#
+
 def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     """ Brighten/Darken input colour by percent and adjust alpha
     channel if needed. Returns the modified color.
@@ -334,47 +335,3 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     green = min(color.Green() + gadj, 255)
     blue = min(color.Blue() + badj, 255)
     return wx.Colour(red, green, blue, alpha)
-
-#--------------------------------------------------------------------------#
-# Test
-if __name__ == '__main__':
-
-    # Setup Display
-    def MakeTestFrame():
-        frame = wx.Frame(None, title="Test ControlBox")
-        fsizer = wx.BoxSizer(wx.VERTICAL)
-
-        cbox = ControlBox(frame)
-        
-        cbox.CreateControlBar()
-
-        cbar = cbox.GetControlBar()
-        cbar.AddTool(wx.ID_ANY, wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16, 16)), "hello world")
-        cbar.AddTool(wx.ID_ANY, wx.ArtProvider.GetBitmap(wx.ART_WARNING, wx.ART_MENU, (16, 16)), "warning")
-        cbar.AddStretchSpacer()
-        cbar.AddControl(wx.Choice(cbar, wx.ID_ANY, choices=[str(x) for x in range(10)]), wx.ALIGN_RIGHT)
-        cbar.AddControl(wx.Button(cbar, label="New Frame"), wx.ALIGN_RIGHT)
-
-        cbox.CreateControlBar(wx.BOTTOM)
-        bbar = cbox.GetControlBar(wx.BOTTOM)
-        bbar.AddTool(wx.ID_ANY, wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16, 16)), "HELLO")
-
-        cbox.SetWindow(wx.TextCtrl(cbox, style=wx.TE_MULTILINE))
-        cbox.Bind(EVT_CTRLBAR, OnControlBar)
-        cbox.Bind(wx.EVT_BUTTON, OnButton)
-
-        fsizer.Add(cbox, 1, wx.EXPAND)
-        return frame
-
-    def OnControlBar(evt):
-        print "ControlBarEvent", evt.GetId()
-
-    def OnButton(evt):
-        print "Button tool clicked"
-        frame = MakeTestFrame()
-        frame.Show()
-
-    APP = wx.App(False)
-    FRAME = MakeTestFrame()
-    FRAME.Show()
-    APP.MainLoop()
