@@ -48,6 +48,7 @@ BUG FIXES:
 Find Results links.
 +Fix drag and drop of text not scrolling window as the mouse is moved towards 
 top or bottom of buffer.
++Fix some python2.4 compatibility issues.
 
 #-----------------------------------------------------------------------------#
 

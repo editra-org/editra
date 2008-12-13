@@ -51,20 +51,23 @@ class AutoCompService(object):
         @return: list of characters used for activating autocomp
 
         """
-        if self._completer != None:
+        if self._completer is not None:
             return self._completer.GetAutoCompKeys()
         else:
             return list()
         
     def IsAutoCompEvent(self, evt):
-        return self._completer.IsAutoCompEvent(evt) if self._completer else False
+        if self._completer is not None:
+            return self._completer.IsAutoCompEvent(evt)
+        else:
+            return False
 
     def GetAutoCompList(self, command):
         """Retrieves the sorted autocomplete list for a command
         @param command: command string to do lookup on
 
         """
-        if self._completer != None:
+        if self._completer is not None:
             return self._completer.GetAutoCompList(command)
         else:
             return list()
@@ -75,20 +78,23 @@ class AutoCompService(object):
         @return: string of characters that will hide the autocomp/calltip
 
         """
-        if self._completer != None:
+        if self._completer is not None:
             return self._completer.GetAutoCompStops()
         else:
             return u''
         
     def GetAutoCompFillups(self):
-        return self._completer.GetAutoCompFillups() if self._completer else u''
+        if self._completer is not None:
+            return self._completer.GetAutoCompFillups()
+        else:
+            return u''
 
     def GetCallTip(self, command):
         """Returns the calltip string for a command
         @param command: command to get callip for
 
         """
-        if self._completer != None:
+        if self._completer is not None:
             return self._completer.GetCallTip(command)
         else:
             return u''
@@ -98,20 +104,23 @@ class AutoCompService(object):
         @return: list of calltip activation keys
 
         """
-        if self._completer != None:
+        if self._completer is not None:
             return self._completer.GetCallTipKeys()
         else:
             return list()
         
     def IsCallTipEvent(self, evt):
-        return self._completer.IsCallTipEvent(evt) if self._completer else False
+        if self._completer:
+            return self._completer.IsCallTipEvent(evt)
+        else:
+            return False
 
     def GetIgnoreCase(self):
         """Are commands case sensitive or not
         @return: whether case is ignored or not by lookup
 
         """
-        if self._completer != None:
+        if self._completer is not None:
             return not self._completer.GetCaseSensitive()
         else:
             return True
