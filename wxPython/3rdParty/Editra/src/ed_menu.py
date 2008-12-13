@@ -986,7 +986,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_PASTE : ("Ctrl", "V"),
                      ed_glob.ID_PASTE_AFTER : ("Ctrl", "Shift", "V"),
                      ed_glob.ID_SELECTALL : ("Ctrl", "A"),
-                     ed_glob.ID_COLUMN_MODE : ("Ctrl", "|"),
+                     ed_glob.ID_COLUMN_MODE : ("Ctrl", "Shift", "|"),
                      ed_glob.ID_LINE_AFTER : ("Ctrl", "L"),
                      ed_glob.ID_LINE_BEFORE : ("Ctrl", "Shift", "L"),
                      ed_glob.ID_CUT_LINE : ("Ctrl", "D"),

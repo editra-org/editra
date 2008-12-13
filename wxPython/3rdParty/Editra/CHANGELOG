@@ -8,6 +8,22 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.4.xx
+DATE xx/xx/200x
+20th Alpha Release
+
+NEWS:
+
+
+NEW: [features/improvements]
+
+
+BUG FIXES:
++Buffer context menu now works correctly on gtk version.
++Fix column mode keybinding on windows.
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.4.20
 DATE 12/12/2008
 19th Alpha Release
