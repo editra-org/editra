@@ -154,6 +154,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
                                        # Edit Menu
                                        (ID_PASTE_AFTER, self.DispatchToControl),
+                                       (ID_COLUMN_MODE, self.DispatchToControl),
                                        (ID_QUICK_FIND, self.OnCommandBar),
                                        (ID_PREF, OnPreferences),
 
@@ -198,6 +199,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      (ID_PASTE_AFTER, self.OnUpdateClipboardUI),
                                      (ID_UNDO, self.OnUpdateClipboardUI),
                                      (ID_REDO, self.OnUpdateClipboardUI),
+                                     (ID_COLUMN_MODE, self.OnUpdateClipboardUI),
                                      # Format Menu
                                      (ID_INDENT, self.OnUpdateFormatUI),
                                      (ID_USE_SOFTTABS, self.OnUpdateFormatUI),
@@ -290,7 +292,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self._loaded = True
 
             # Slow the update interval to reduce overhead
-            wx.UpdateUIEvent.SetUpdateInterval(200)
+            wx.UpdateUIEvent.SetUpdateInterval(205)
             wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
             self.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
 
@@ -922,7 +924,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_UNINDENT, ID_TRANSPOSE, ID_COMMENT, ID_UNCOMMENT,
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY,
                         ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE,
-                        ID_PASTE_AFTER ]
+                        ID_PASTE_AFTER, ID_COLUMN_MODE ]
 
         has_focus = self.FindFocus()
         if has_focus != ctrl and e_id in active_only:
@@ -1022,31 +1024,38 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         e_id = evt.GetId()
         focus = self.FindFocus()
         ctrl = self.nb.GetCurrentCtrl()
+        enable = False
         if e_id == ID_UNDO:
-            can_undo = False
             if hasattr(focus, 'CanUndo'):
-                can_undo = focus.CanUndo()
-            evt.Enable(can_undo)
+                enable = focus.CanUndo()
+            evt.Enable(enable)
         elif e_id == ID_REDO:
             can_redo = False
             if hasattr(focus, 'CanRedo'):
-                can_redo = focus.CanRedo()
-            evt.Enable(can_redo)
+                enable = focus.CanRedo()
+            evt.Enable(enable)
         elif e_id in (ID_PASTE, ID_PASTE_AFTER):
             can_paste = False
             if hasattr(focus, 'CanPaste'):
-                can_paste = focus.CanPaste()
-            evt.Enable(can_paste)
+                enable = focus.CanPaste()
+            evt.Enable(enable)
         elif e_id == ID_COPY:
             can_copy = False
             if hasattr(focus, 'CanCopy'):
-                can_copy = focus.CanCopy()
-            evt.Enable(can_copy)
+                enable = focus.CanCopy()
+            evt.Enable(enable)
         elif e_id == ID_CUT:
             can_cut = False
             if hasattr(focus, 'CanCut'):
-                can_cut = focus.CanCut()
-            evt.Enable(can_cut)
+                enable = focus.CanCut()
+            evt.Enable(enable)
+        elif e_id == ID_COLUMN_MODE:
+            if hasattr(focus, 'IsColumnMode'):
+                enable = focus.IsColumnMode()
+                evt.Enable(True)
+            else:
+                evt.Enable(False)
+            evt.Check(enable)
         else:
             evt.Skip()
 

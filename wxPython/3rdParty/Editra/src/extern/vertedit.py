@@ -49,7 +49,7 @@ class VertEdit(object):
         # Attributes
         self.e = editor
         self.marker = markerNumber
-        self.enabled = True
+        self.enabled = False            # Disable by default
         self.state = STATE_OFF
         self.stack = deque()
         self.jitter = None
@@ -61,11 +61,24 @@ class VertEdit(object):
         self.e.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
 
     def enable(self):
+        """Enable the column edit mode"""
         self.enabled = True
 
     def disable(self):
+        """Disable the column edit mode"""
         self.endMode()
         self.enabled = False
+
+    @property
+    def Enabled(self):
+        """Is the column edit mode enabled"""
+        return self.enabled
+
+    @Enabled.setter
+    def Enabled(self, enable):
+        if not enable:
+            self.endMode()
+        self.enabled = enable
 
     def vertCaret(self, col=None, pos=None):
         if col is None:
@@ -84,12 +97,12 @@ class VertEdit(object):
             self.e.MarkerAdd(line, self.marker)
 
         for line in self.markedLines.difference(linesToMark):
-            self.e.MarkerDelete(line,self.marker)
+            self.e.MarkerDelete(line, self.marker)
 
         self.markedLines = linesToMark
 
     def OnKeyDown(self, evt):
-        if self.state != STATE_OFF:
+        if self.Enabled and self.state != STATE_OFF:
             k = evt.GetKeyCode()
             if k in (wx.WXK_ESCAPE, wx.WXK_LEFT, wx.WXK_NUMPAD_LEFT,
                      wx.WXK_RIGHT, wx.WXK_NUMPAD_RIGHT) and evt.Modifiers == 0:
@@ -134,7 +147,7 @@ class VertEdit(object):
         return True
 
     def OnModified(self, evt):
-        if self.state > STATE_OFF:
+        if self.Enabled and self.state > STATE_OFF:
             fn = None
             if evt.ModificationType & VertEdit.INS == VertEdit.INS:
                 col = self.insCol or self.e.GetColumn(evt.Position)
@@ -152,7 +165,8 @@ class VertEdit(object):
             if fn:
                 self.endMode() if evt.LinesAdded else self.stack.append(fn)
 
-        # Don't skip event causes issues in notebook!!!
+        # Don't skip event causes issues in notebook!!! *Editra Bug*
+        # Will fix later
 
     def SetBlockColor(self, color):
         """Set the block background color used during the highlight
@@ -204,6 +218,12 @@ class VertEdit(object):
         self.newMarkers(self.lines)
 
     def OnUpdateUI(self, evt):
+        """Handle EVT_UPDATEUI"""
+        # Check if enabled
+        if not self.Enabled:
+            evt.Skip()
+            return
+
         curP = self.e.CurrentPos
         if self.state == STATE_OFF:
             anchor = self.e.Anchor

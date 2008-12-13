@@ -1163,6 +1163,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_REVERT_FILE : self.RevertToSaved,
                   ed_glob.ID_KWHELPER: self.ShowKeywordHelp,
                   ed_glob.ID_CUT_LINE : self.LineCut,
+                  ed_glob.ID_COLUMN_MODE : self.ToggleColumnMode,
                   ed_glob.ID_COPY_LINE : self.LineCopy,
                   ed_glob.ID_DUP_LINE : self.LineDuplicate,
                   ed_glob.ID_BRACKETHL : self.ToggleBracketHL,
@@ -1376,6 +1377,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         return self._config['brackethl']
+
+    def IsColumnMode(self):
+        """Is the buffer in column edit mode
+        @return: bool
+
+        """
+        return self.vert_edit.Enabled
 
     def IsComment(self, pos):
         """Is the given position in a comment region of the current buffer
@@ -1679,6 +1687,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             self.LOG("[ed_stc][evt] Bracket Highlighting Turned Off")
             self._config['brackethl'] = False
+
+    def ToggleColumnMode(self):
+        """Toggle the column edit mode"""
+        self.vert_edit.Enabled = not self.vert_edit.Enabled
 
     def ToggleLineNumbers(self, switch=None):
         """Toggles the visibility of the line number margin
