@@ -1690,7 +1690,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def ToggleColumnMode(self):
         """Toggle the column edit mode"""
-        self.vert_edit.Enabled = not self.vert_edit.Enabled
+        self.vert_edit.enable(not self.vert_edit.Enabled)
 
     def ToggleLineNumbers(self, switch=None):
         """Toggles the visibility of the line number margin

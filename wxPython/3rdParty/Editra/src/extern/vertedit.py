@@ -60,9 +60,11 @@ class VertEdit(object):
         self.e.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.e.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
 
-    def enable(self):
+    def enable(self, enable=True):
         """Enable the column edit mode"""
-        self.enabled = True
+        if not enable:
+            self.endMode()
+        self.enabled = enable
 
     def disable(self):
         """Disable the column edit mode"""
@@ -73,12 +75,6 @@ class VertEdit(object):
     def Enabled(self):
         """Is the column edit mode enabled"""
         return self.enabled
-
-    @Enabled.setter
-    def Enabled(self, enable):
-        if not enable:
-            self.endMode()
-        self.enabled = enable
 
     def vertCaret(self, col=None, pos=None):
         if col is None:
