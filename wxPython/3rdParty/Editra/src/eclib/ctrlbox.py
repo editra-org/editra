@@ -9,11 +9,45 @@
 """
 Editra Control Library: ControlBox
 
+Sizer managed panel class with support for a toolbar like control that can be
+placed on the top/bottom of the main window area, multiple control bars are also
+possible.
+
+Class ControlBar:
+
+Toolbar like control with automatic item spacing and layout.
+
+Styles:
+  - CTRLBAR_STYLE_DEFAULT: Plain background
+  - CTRLBAR_STYLE_GRADIENT: Draw the bar with a vertical gradient.
+
+Class ControlBox:
+
+The ControlBox is a sizer managed panel that supports easy creation of windows
+that require a sandwich like layout.
+
++---------------------------------------+
+| ControlBar                            |
++---------------------------------------+
+|                                       |
+|                                       |
+|          MainWindow Area              |
+|                                       |
+|                                       |
+|                                       |
++---------------------------------------+
+| ControlBar                            |
++---------------------------------------+
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
+
+__all__ = ["ControlBar", "ControlBarEvent", "ControlBox",
+           "CTRLBAR_STYLE_DEFAULT", "CTRLBAR_STYLE_GRADIENT",
+           "EVT_CTRLBAR", "edEVT_CTRLBAR"]
 
 #--------------------------------------------------------------------------#
 # Dependancies

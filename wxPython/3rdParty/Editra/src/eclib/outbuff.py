@@ -64,6 +64,14 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
+__all__ = ["OutputBuffer", "OutputBufferEvent", "ProcessBufferMixin",
+           "ProcessThread", "TaskThread", "OPB_STYLE_DEFAULT", "OPB_STYLE_INFO",
+           "OPB_STYLE_WARN", "OPB_STYLE_ERROR", "OPB_STYLE_MAX",
+           "edEVT_PROCESS_START", "EVT_PROCESS_START", "edEVT_TASK_START",
+           "EVT_TASK_START", "edEVT_UPDATE_TEXT", "EVT_UPDATE_TEXT",
+           "edEVT_PROCESS_EXIT", "EVT_PROCESS_EXIT", "edEVT_TASK_COMPLETE",
+           "EVT_TASK_COMPLETE"]
+
 #--------------------------------------------------------------------------#
 # Imports
 import os

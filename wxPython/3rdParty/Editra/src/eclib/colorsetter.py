@@ -9,12 +9,18 @@
 """
 Editra Control Library: ColorSetter
 
+Color picker control that has a text entry section for entering hex color codes,
+there is also a button that previews the color and can be used to open a color
+choice dialog.
        
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
+
+__all__ = ["ColorSetter", "ColorSetterEvent",
+           "EVT_COLORSETTER", "csEVT_COLORSETTER"]
 
 #-----------------------------------------------------------------------------#
 # Imports

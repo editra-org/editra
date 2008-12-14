@@ -9,13 +9,15 @@
 """
 FileInfo.py
 
-Dialog for displaying information about a path
+Dialog for displaying file information.
 
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
+
+__all__ = ["FileInfoDlg", "CalcSize", "GetFileType"]
 
 #--------------------------------------------------------------------------#
 # Imports
