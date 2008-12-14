@@ -38,6 +38,7 @@ import ed_event
 import ed_msg
 import eclib.platebtn as platebtn
 import eclib.finddlg as finddlg
+import eclib.txtentry as txtentry
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -378,7 +379,7 @@ class CommandBar(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class CommandExecuter(wx.SearchCtrl):
+class CommandExecuter(txtentry.CommandEntryBase):
     """Part of the Vi emulation, opens a minibuffer to execute EX commands.
     @note: based on search ctrl so we get the nice roudned edges on wxmac.
 
@@ -390,8 +391,8 @@ class CommandExecuter(wx.SearchCtrl):
 
     def __init__(self, parent, id_, size=wx.DefaultSize):
         """Initializes the CommandExecuter"""
-        wx.SearchCtrl.__init__(self, parent, id_, size=size,
-                               style=wx.TE_PROCESS_ENTER|wx.WANTS_CHARS)
+        txtentry.CommandEntryBase.__init__(self, parent, id_, size=size,
+                                           style=wx.TE_PROCESS_ENTER|wx.WANTS_CHARS)
 
         # Attributes
         self._history = dict(cmds=[''], index=-1, lastval='')
@@ -407,25 +408,6 @@ class CommandExecuter(wx.SearchCtrl):
         else:
             self._popup = PopupWinList(self)
 
-        # Hide the search button and text
-        self.ShowSearchButton(False)
-        self.ShowCancelButton(False)
-        self.SetDescriptiveText(wx.EmptyString)
-
-        # Event Handlers
-        # HACK, needed on Windows to get any key events and for
-        # GTK to get key down events
-        if wx.Platform in ['__WXGTK__', '__WXMSW__']:
-            for child in self.GetChildren():
-                if isinstance(child, wx.TextCtrl):
-                    child.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-                    child.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-                    break
-        else:
-            self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-            self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-
-        self.Bind(wx.EVT_TEXT_ENTER, self.OnEnter)
         self.Bind(ed_event.EVT_NOTIFY, self.OnPopupNotify)
         ed_msg.Subscribe(self._UpdateCwd, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self._UpdateCwd, ed_msg.EDMSG_FILE_SAVED)
@@ -850,11 +832,9 @@ class CommandExecuter(wx.SearchCtrl):
 
 #-----------------------------------------------------------------------------#
 
-class LineCtrl(wx.SearchCtrl):
+class LineCtrl(txtentry.CommandEntryBase):
     """A custom int control for providing a go To line control
     for the Command Bar.
-    @note: The control is subclassed from SearchCtrl so that it gets
-           the nice rounded edges on wxMac.
 
     """
     def __init__(self, parent, id_, get_doc, size=wx.DefaultSize):
@@ -863,33 +843,15 @@ class LineCtrl(wx.SearchCtrl):
                         current document.
 
         """
-        wx.SearchCtrl.__init__(self, parent, id_, "", size=size,
-                             style=wx.TE_PROCESS_ENTER,
-                             validator=util.IntValidator(0, 65535))
+        txtentry.CommandEntryBase.__init__(self, parent, id_, "", size=size,
+                                           style=wx.TE_PROCESS_ENTER,
+                                           validator=util.IntValidator(0, 65535))
 
         # Attributes
         self._last = 0
         self.GetDoc = get_doc
 
-        # Hide the search button and text
-        self.ShowSearchButton(False)
-        self.ShowCancelButton(False)
-        self.SetDescriptiveText(wx.EmptyString)
-
-        # MSW/GTK HACK
-        if wx.Platform in ['__WXGTK__', '__WXMSW__']:
-            for child in self.GetChildren():
-                if isinstance(child, wx.TextCtrl):
-                    child.SetValidator(util.IntValidator(0, 65535))
-                    child.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-                    break
-        else:
-            self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-
-        # Event management
-        self.Bind(wx.EVT_TEXT_ENTER, self.OnInput)
-
-    def OnInput(self, evt):
+    def OnEnter(self, evt):
         """Processes the entered line number
         @param evt: Event that called this handler
         @type evt: wx.EVT_TEXT_ENTER
