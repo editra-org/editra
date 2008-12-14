@@ -17,6 +17,8 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
+__all__ = ["CommandEntryBase",]
+
 #-----------------------------------------------------------------------------#
 # Imports
 import wx

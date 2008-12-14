@@ -38,6 +38,19 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
+__all__ = ["FindBox", "FindEvent", "FindPanel", "FindReplaceDlg",
+           "MiniFindReplaceDialog", "AdvFindReplaceDlg",
+           "AFR_STYLE_FINDDIALOG", "AFR_STYLE_REPLACEDIALOG",
+           "AFR_STYLE_NON_FLOATING", "AFR_UP", "AFR_WHOLEWORD", 
+           "AFR_MATCHCASE", "AFR_REGEX", "AFR_RECURSIVE", "AFR_NOLOOKIN",
+           "AFR_NOUPDOWN", "AFR_NOWHOLEWORD", "AFR_NOMATCHCASE", "AFR_NOREGEX",
+           "AFR_NOFILTER", "AFR_NOOPTIONS", "LOCATION_CURRENT_DOC", 
+           "LOCATION_OPEN_DOCS", "LOCATION_IN_FILES", "LOCATION_MAX", 
+           "edEVT_FIND_CLOSE", "EVT_FIND_CLOSE", "edEVT_FIND", "EVT_FIND",
+           "edEVT_FIND_NEXT", "EVT_FIND_NEXT", "edEVT_FIND_ALL", "EVT_FIND_ALL",
+           "edEVT_REPLACE", "EVT_REPLACE", "edEVT_REPLACE_ALL",
+           "EVT_REPLACE_ALL"]
+
 #--------------------------------------------------------------------------#
 # Imports
 import os

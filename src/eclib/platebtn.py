@@ -72,6 +72,11 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
+__all__ = ["PlateButton", "AdjustAlpha", "AdjustColor", "GetHighlightColor",
+           "PLATE_NORMAL", "PLATE_PRESSED", "PLATE_HIGHLIGHT", 
+           "PB_STYLE_DEFAULT", "PB_STYLE_GRADIENT", "PB_STYLE_SQUARE",
+           "PB_STYLE_NOBG" ]
+
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
