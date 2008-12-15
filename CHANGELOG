@@ -20,6 +20,7 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Fix find in files where if the filter was empty no files were searched.
++Fix error in Find All where incorrect search flag parameters were set.
 +Buffer context menu now works correctly on gtk version.
 +Fix column mode keybinding on windows.
 +Unicode fixes

@@ -367,6 +367,7 @@ class SearchController:
         if smode == finddlg.LOCATION_CURRENT_DOC:
             stc = self._stc()
             engine.SetSearchPool(stc.GetTextRaw())
+            print "IN CURRENT DOC"
             matches = engine.FindAll()
             if matches is not None:
                 self.ReplaceInStc(stc, matches, rstring, evt.IsRegEx())
@@ -565,7 +566,7 @@ class SearchEngine:
         if self._regex is None:
             return list()
 
-        matches = [match for match in re.finditer(self._regex, self._pool)]
+        matches = [match for match in self._regex.finditer(self._pool)]
         return matches
 
     def FindAllLines(self):
@@ -577,12 +578,8 @@ class SearchEngine:
         if self._regex is None:
             return rlist
 
-        flag = 0
-        if not self._matchcase:
-            flag = re.IGNORECASE
-
         for lnum, line in enumerate(StringIO(self._pool)):
-            if self._regex.search(line, flag) is not None:
+            if self._regex.search(line) is not None:
                 rlist.append(FormatResult(_("Untitled"), lnum, line))
 
         return rlist
@@ -615,7 +612,7 @@ class SearchEngine:
             return None
 
         if spos+1 < len(self._pool):
-            matches = [match for match in re.finditer(self._regex, self._pool[:spos])]
+            matches = [match for match in self._regex.finditer(self._pool[:spos])]
             if len(matches):
                 lmatch = matches[-1]
                 return (lmatch.start(), lmatch.end())
@@ -736,12 +733,8 @@ class SearchEngine:
                 # Special token to signify start of a search
                 yield (None, fname)
 
-            flag = 0
-            if not self._matchcase:
-                flag = re.IGNORECASE
-
             for lnum, line in enumerate(fobj):
-                if self._regex.search(line, flag) is not None:
+                if self._regex.search(line) is not None:
                     yield FormatResult(fname, lnum, line)
             fobj.close()
         return
