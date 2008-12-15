@@ -179,8 +179,10 @@ class SearchController:
 
         # Find next from menu event or called internally by replace
         if findnext or evt.GetEventType() == wx.wxEVT_COMMAND_MENU_SELECTED:
+
+            # Adjust flags
             flags = data.GetFlags()
-            if evt.GetId() == ed_glob.ID_FIND_PREVIOUS:
+            if not findnext and evt.GetId() == ed_glob.ID_FIND_PREVIOUS:
                 flags |= finddlg.AFR_UP
 
             evt = finddlg.FindEvent(finddlg.edEVT_FIND_NEXT,
@@ -351,7 +353,10 @@ class SearchController:
         self._stc().ReplaceSelection(replacestring)
 
         # Go to the next match
-        self.OnFind(None, True)
+        # Fake event object for on Find Handler
+        tevt = finddlg.FindEvent(finddlg.edEVT_FIND_NEXT,
+                                 ed_glob.ID_FIND_PREVIOUS)
+        self.OnFind(tevt, True)
 
     def OnReplaceAll(self, evt):
         """Replace all instance of the search string with the given
@@ -367,7 +372,6 @@ class SearchController:
         if smode == finddlg.LOCATION_CURRENT_DOC:
             stc = self._stc()
             engine.SetSearchPool(stc.GetTextRaw())
-            print "IN CURRENT DOC"
             matches = engine.FindAll()
             if matches is not None:
                 self.ReplaceInStc(stc, matches, rstring, evt.IsRegEx())
