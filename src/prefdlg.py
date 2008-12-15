@@ -509,7 +509,7 @@ class DocGenPanel(wx.Panel):
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnUpdateEditor)
         self.Bind(wx.EVT_CHOICE, self.OnUpdateEditor)
-        self.Bind(ed_event.EVT_NOTIFY, self.OnFontChange)
+        self.Bind(ecpickers.EVT_FONT_CHANGED, self.OnFontChange)
 
     def __DoLayout(self):
         """Layout the controls
@@ -610,7 +610,7 @@ class DocGenPanel(wx.Panel):
 
     @staticmethod
     def OnFontChange(evt):
-        """Handles L{ed_event.EVT_NOTIFY} from the font controls"""
+        """Handles L{ecpickers.EVT_FONT_CHANGED} from the font controls"""
         e_id = evt.GetId()
         if e_id in [DocGenPanel.ID_FONT_PICKER, DocGenPanel.ID_FONT_PICKER2]:
             font = evt.GetValue()
