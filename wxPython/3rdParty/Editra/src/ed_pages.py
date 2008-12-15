@@ -142,6 +142,12 @@ class EdPages(FNB.FlatNotebook):
             msg = _("The correct encoding of '%s' could not be determined.\n\n"
                     "Choose an encoding and select Ok to open the file with the chosen encoding.\n"
                     "Click Cancel to abort opening the file") % fname
+
+            # On some systems it seems that default encoding ends up being
+            # None so default to utf-8 for choices.
+            if enc is None:
+                enc = 'utf_8'
+
             dlg = encdlg.EncodingDialog(self, msg=msg,
                                         title=_("Choose an Encoding"),
                                         default=enc)
