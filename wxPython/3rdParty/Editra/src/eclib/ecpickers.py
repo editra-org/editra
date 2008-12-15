@@ -22,13 +22,36 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ['PyFontPicker',]
+__all__ = ['PyFontPicker', 'FontChangeEvent',
+           'EVT_FONT_CHANGED', 'edEVT_FONT_CHANGED']
 
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
 
 _ = wx.GetTranslation
+#-----------------------------------------------------------------------------#
+
+edEVT_FONT_CHANGED = wx.NewEventType()
+EVT_FONT_CHANGED = wx.PyEventBinder(edEVT_FONT_CHANGED, 1)
+class FontChangeEvent(wx.PyCommandEvent):
+    """General notification event"""
+    def __init__(self, etype, eid, value=None, obj=None):
+        wx.PyCommandEvent.__init__(self, etype, eid)
+
+        # Attributes
+        self._value = value
+
+        # Setup
+        self.SetEventObject(obj)
+
+    def GetValue(self):
+        """Returns the value from the event.
+        @return: the value of this event
+
+        """
+        return self._value
+
 #-----------------------------------------------------------------------------#
 
 class PyFontPicker(wx.Panel):
@@ -95,12 +118,11 @@ class PyFontPicker(wx.Panel):
         if font.IsNull():
             return
         self._font = font
-        self._text.Clear()
         self._text.SetFont(self._font)
         self._text.SetLabel(u"%s - %dpt" % (font.GetFaceName(), \
                                             font.GetPointSize()))
-        evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
-                                         self.GetId(), self._font, self)
+        self.Layout()
+        evt = FontChangeEvent(edEVT_FONT_CHANGED, self.GetId(), self._font, self)
         wx.PostEvent(self.GetParent(), evt)
 
     def SetButtonLabel(self, label):
