@@ -11,6 +11,9 @@ Editra Control Library: Editra Control Pickers
 
 Collection of various custom picker controls
 
+Class: PyFontPicker
+Custom font picker control
+
 @summary: Various custom picker controls
 
 """
@@ -30,7 +33,7 @@ _ = wx.GetTranslation
 
 class PyFontPicker(wx.Panel):
     """A slightly enhanced wx.FontPickerCtrl that displays the choosen font in
-    the text control using the choosen font as well as the font's size using
+    the label text using the choosen font as well as the font's size using
     nicer formatting.
 
     """
@@ -46,18 +49,22 @@ class PyFontPicker(wx.Panel):
             self._font = wx.SystemSettings_GetFont(wx.SYS_SYSTEM_FONT)
         else:
             self._font = default
-        self._text = wx.TextCtrl(self, style=wx.TE_CENTER | wx.TE_READONLY)
+
+        self._text = wx.StaticText(self)
         self._text.SetFont(default)
-        self._text.SetValue(u"%s - %dpt" % (self._font.GetFaceName(), \
+        self._text.SetLabel(u"%s - %dpt" % (self._font.GetFaceName(), \
                                             self._font.GetPointSize()))
-        self._text.Enable(False)
         self._button = wx.Button(self, label=_("Set Font") + u'...')
 
         # Layout
+        vsizer = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.AddMany([(self._text, 1, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
-                       (self._button, 0, wx.ALIGN_CENTER_VERTICAL)])
-        self.SetSizer(sizer)
+        sizer.AddStretchSpacer()
+        sizer.Add(self._text, 0, wx.ALIGN_CENTER_VERTICAL)
+        sizer.AddStretchSpacer()
+        sizer.Add(self._button, 0, wx.ALIGN_CENTER_VERTICAL)
+        vsizer.AddMany([((1, 1), 0), (sizer, 0, wx.EXPAND), ((1, 1), 0)])
+        self.SetSizer(vsizer)
         self.SetAutoLayout(True)
 
         # Event Handlers
@@ -73,7 +80,7 @@ class PyFontPicker(wx.Panel):
 
     def GetTextCtrl(self):
         """Gets the widgets text control
-        @return: wx.TextCtrl
+        @return: wx.StaticText
 
         """
         return self._text
@@ -90,7 +97,7 @@ class PyFontPicker(wx.Panel):
         self._font = font
         self._text.Clear()
         self._text.SetFont(self._font)
-        self._text.SetValue(u"%s - %dpt" % (font.GetFaceName(), \
+        self._text.SetLabel(u"%s - %dpt" % (font.GetFaceName(), \
                                             font.GetPointSize()))
         evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
                                          self.GetId(), self._font, self)
@@ -100,6 +107,7 @@ class PyFontPicker(wx.Panel):
         """Sets the buttons label"""
         self._button.SetLabel(label)
         self._button.Refresh()
+        self.Layout()
 
     def SetToolTipString(self, tip):
         """Sets the tooltip of the window
