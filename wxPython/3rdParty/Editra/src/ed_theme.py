@@ -387,9 +387,15 @@ class TangoTheme(plugin.Plugin):
 
         """
         if bmp_id in ART:
+#            size = Profile_Get('ICON_SZ', default=(24, 24))
             path = self.__GetArtPath(wx.ART_TOOLBAR, mime=False)
             if path is not None:
+#                tpath = os.path.join(path, '24', ART[bmp_id])
+#                if size[0] == 24 and os.path.exists(tpath):
+#                    path = tpath
+#                else:
                 path = path + ART[bmp_id]
+
                 if os.path.exists(path):
                     return wx.Bitmap(path, wx.BITMAP_TYPE_PNG)
 
