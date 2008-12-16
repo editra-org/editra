@@ -684,6 +684,22 @@ class PythonHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class RHandler(FileTypeHandler):
+    """FileTypeHandler for R"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = {'r' : 'R',
+                         'Rterm' : 'Rterm',
+                         'Rgui' : 'Rgui',
+                         'Rscript' 'Rscript'}
+        self.default = 'Rscript'
+
+    @property
+    def __name__(self):
+        return 'R'
+
+#-----------------------------------------------------------------------------#
+
 class RubyHandler(FileTypeHandler):
     """FileTypeHandler for Ruby scripts"""
     RE_RUBY_ERROR = re.compile('(.+):([0-9]+)[:]{0,1}.*')
@@ -794,6 +810,7 @@ HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_PIKE    : PikeHandler(),
             synglob.ID_LANG_PS      : PostScriptHandler(),
             synglob.ID_LANG_PYTHON  : PythonHandler(),
+            synglob.ID_LANG_R       : RHandler(),
             synglob.ID_LANG_RUBY    : RubyHandler(),
             synglob.ID_LANG_TCL     : TCLHandler(),
             synglob.ID_LANG_VBSCRIPT : VBScriptHandler() }
