@@ -115,16 +115,17 @@ class EditraArt(wx.ArtProvider):
         bmp = self._library.GetBitmap(art_id, client)
         if not bmp.IsNull() and bmp.IsOk():
             # Dont scale toolbar icons on wxMac as the toolbar handles it
-            # internally and produces much nicer results. Only allow images
-            # to be scaled down as scaling up degrades quality.
+            # internally and produces much nicer results.
             if client == wx.ART_TOOLBAR and not wx.Platform == '__WXMAC__':
                 if size == wx.DefaultSize:
                     size = Profile_Get('ICON_SZ', default=(24, 24))
-                img = wx.ImageFromBitmap(bmp)
-                img_sz = img.GetSize()
+
+                img_sz = bmp.GetSize()
                 if size[0] < img_sz[0]:
+                    img = wx.ImageFromBitmap(bmp)
                     img.Rescale(size[0], size[1], wx.IMAGE_QUALITY_HIGH)
-                bmp = wx.BitmapFromImage(img)
+                    bmp = wx.BitmapFromImage(img)
+
             elif client == wx.ART_MENU and bmp.GetSize() != (16, 16):
                 img = wx.ImageFromBitmap(bmp)
                 img.Rescale(16, 16, wx.IMAGE_QUALITY_HIGH)
