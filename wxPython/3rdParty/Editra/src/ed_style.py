@@ -965,6 +965,7 @@ class StyleMgr(object):
         """
         self.StyleDefault()
         self.SetMargins(4, 0)
+
         # Global default styles for all languages
         self.StyleSetSpec(0, self.GetStyleByName('default_style'))
         self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, \
