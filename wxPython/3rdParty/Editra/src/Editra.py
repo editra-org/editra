@@ -824,8 +824,7 @@ def ProcessCommandLine():
         if opt in ['-h', '--help']:
             PrintHelp()
         elif opt in ['-v', '--version']:
-            print "%s - v%s - Developers Editor" % (ed_glob.PROG_NAME, \
-                                                    ed_glob.VERSION)
+            print ed_glob.VERSION
             os._exit(0)
         elif opt in ['-d', '--debug'] and '-D' not in opts:
             ed_glob.DEBUG = True
