@@ -113,6 +113,7 @@ class ControlBox(wx.PyPanel):
 
     def GetControlBar(self, pos=wx.TOP):
         """Get the L{ControlBar} used by this window
+        @param pos: wx.TOP or wx.BOTTOM
         @return: ControlBar or None
 
         """
@@ -129,6 +130,36 @@ class ControlBox(wx.PyPanel):
 
         """
         return self._main
+
+    def ReplaceControlBar(self, ctrlbar, pos=wx.TOP):
+        """Replace the L{ControlBar} at the given position
+        with the given ctrlbar and return the bar that was
+        replaced or None.
+        @param ctrlbar: L{ControlBar}
+        @keyword pos: Postion
+        @return: L{ControlBar} or None
+
+        """
+        tbar = self.GetControlBar(pos)
+        rbar = None
+        if pos == wx.TOP:
+            if tbar is None:
+                self._sizer.Insert(0, ctrlbar, 0, wx.EXPAND)
+            else:
+                self._sizer.Replace(self._topb, ctrlbar)
+                rbar = self._topb
+
+            self._topb = ctrlbar
+        else:
+            if tbar is None:
+                self._sizer.Add(ctrlbar, 0, wx.EXPAND)
+            else:
+                self._sizer.Replace(self._botb, ctrlbar)
+                rbar = self._botb
+
+            self._botb = ctrlbar
+
+        return rbar
 
     def SetControlBar(self, ctrlbar, pos=wx.TOP):
         """Set the ControlBar used by this ControlBox
