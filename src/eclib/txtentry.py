@@ -30,6 +30,11 @@ class CommandEntryBase(wx.SearchCtrl):
     def __init__(self, parent, id=wx.ID_ANY, value='', pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0, validator=wx.DefaultValidator,
                  name="CommandEntryBase"):
+
+        clone = None
+        if validator != wx.DefaultValidator:
+            clone = validator.Clone()
+
         wx.SearchCtrl.__init__(self, parent, id, value, pos,
                                size, style, validator, name)
 
@@ -45,7 +50,8 @@ class CommandEntryBase(wx.SearchCtrl):
         if wx.Platform in ['__WXGTK__', '__WXMSW__']:
             for child in self.GetChildren():
                 if isinstance(child, wx.TextCtrl):
-                    child.SetValidator(validator)
+                    if clone is not None:
+                        child.SetValidator(clone)
                     child.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
                     child.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
                     break
@@ -68,3 +74,7 @@ class CommandEntryBase(wx.SearchCtrl):
         """Handle the Enter key event"""
         evt.Skip()
 
+    def SetFocus(self):
+        """Set the focus and select the text in the field"""
+        super(CommandEntryBase, self).SetFocus()
+        self.SelectAll()

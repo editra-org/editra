@@ -1020,6 +1020,11 @@ class EdSearchCtrl(wx.SearchCtrl):
             return bool(finddlg.AFR_WHOLEWORD & data.GetFlags())
         return False
 
+    def SetFocus(self):
+        """Set the focus and select the text"""
+        super(EdSearchCtrl, self).SetFocus()
+        self.SelectAll()
+
     def SetHistory(self, hist_list):
         """Populates the history list from a list of
         string values.
