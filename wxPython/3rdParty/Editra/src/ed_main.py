@@ -101,6 +101,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                           Name("EditPane").Center().Layer(1).Dockable(False). \
                           CloseButton(False).MaximizeButton(False). \
                           CaptionVisible(False))
+        self._mpane.InitCommandBar() # <- required due to nb dependancies...
 
         #---- Command Bar ----#
         self._mpane.HideCommandBar()
@@ -404,7 +405,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     def GetCommandbar(self):
         """Get this windows command bar
-        @return: ed_cmdbar.CommandBar
+        @return: ed_cmdbar.CommandBarBase
 
         """
         return self._mpane.GetControlBar(wx.BOTTOM)
