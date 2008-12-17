@@ -108,7 +108,14 @@ class AutoCompService(object):
             return self._completer.GetCallTipKeys()
         else:
             return list()
-        
+
+    def GetCallTipCancel(self):
+        """Get the list of key codes that should stop a calltip"""
+        if self._completer is not None:
+            return self._completer.GetCallTipCancel()
+        else:
+            return list()
+
     def IsCallTipEvent(self, evt):
         if self._completer:
             return self._completer.IsCallTipEvent(evt)

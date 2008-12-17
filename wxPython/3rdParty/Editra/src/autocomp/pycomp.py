@@ -44,10 +44,11 @@ class Completer(object):
         object.__init__(self)
         self._log = wx.GetApp().GetLog()
         self._buffer = stc_buffer
-        self._autocomp_keys = [ord('.')]
-        self._autocomp_stop = '\'"\\`'
-        self._autocomp_fillup = ' .,;:([)]}<>%^&+-=*/|'
-        self._calltip_keys = [ord('(')]
+        self._autocomp_keys = [ord('.'),]
+        self._autocomp_stop = '\'"\\`)'
+        self._autocomp_fillup = '.,;:([]}<>%^&+-=*/|'
+        self._calltip_keys = [ord('('),]
+        self._calltip_cancel = [ord(')'), wx.WXK_RETURN]
         self._case_sensitive = False
 
         # Needed for introspect to run
@@ -109,7 +110,7 @@ class Completer(object):
             return list()
         
     def IsAutoCompEvent(self, evt):
-        if evt.ControlDown() and evt.GetKeyCode() == ord(' '):
+        if evt.ControlDown() and evt.GetKeyCode() == wx.WXK_SPACE:
             return True
         return False
 
@@ -129,10 +130,10 @@ class Completer(object):
         @return: string of keys that will cancel autocomp/calltip actions
 
         """
-        return getattr(self, '_autocomp_stop', u'')
+        return self._autocomp_stop
     
     def GetAutoCompFillups(self):
-        return getattr(self, '_autocomp_fillup', u'')
+        return self._autocomp_fillup
 
     def GetCallTip(self, command):
         """Returns the formated calltip string for the command.
@@ -148,9 +149,14 @@ class Completer(object):
         @return: list of keys that can activate a calltip
 
         """
-        return getattr(self, '_calltip_keys', list())
-    
+        return self._calltip_keys
+
+    def GetCallTipCancel(self):
+        """Get the list of key codes that should stop a calltip"""
+        return self._calltip_cancel
+
     def IsCallTipEvent(self, evt):
+        """@todo: How is this used?"""
         if evt.ControlDown() and evt.GetKeyCode() == ord('9'):
             return True
         return False
@@ -161,7 +167,7 @@ class Completer(object):
         @return: whether lookup is case sensitive or not
 
         """
-        return getattr(self, '_case_sensitive', False)
+        return self._case_sensitive
 
     def SetCaseSensitive(self, value):
         """Sets whether the completer should be case sensitive

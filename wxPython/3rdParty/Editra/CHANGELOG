@@ -16,7 +16,8 @@ NEWS:
 
 
 NEW: [features/improvements]
-
++Some autocompletion behavior improvements
++Some minor ui changes to the command bar
 
 BUG FIXES:
 +Fix find in files where if the filter was empty no files were searched.

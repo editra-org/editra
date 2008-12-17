@@ -774,24 +774,29 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             # The key handler handled this keypress, we don't need to insert
             # the character into the buffer.
             pass
+
         elif not self._config['autocomp'] or \
-             self.IsString(cpos) or \
-             self.IsComment(cpos):
+             self.IsString(cpos) or self.IsComment(cpos):
             evt.Skip()
             return
+
         elif key_code in self._code['compsvc'].GetAutoCompKeys():
             if self.AutoCompActive():
                 self.AutoCompCancel()
+            if self.CallTipActive():
+                self.CallTipCancel()
             command = self.GetCommandStr() + unichr(key_code)
             self.AddText(unichr(key_code))
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
+
         elif self._code['compsvc'].IsAutoCompEvent(evt):
             if self.AutoCompActive():
                 self.AutoCompCancel()
             command = self.GetCommandStr()
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
+
         elif key_code in self._code['compsvc'].GetCallTipKeys():
             if self.AutoCompActive():
                 self.AutoCompCancel()
@@ -799,12 +804,18 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.AddText(unichr(key_code))
             if self._config['autocomp']:
                 self.ShowCallTip(command)
+
         elif self._code['compsvc'].IsCallTipEvent(evt):
             if self.AutoCompActive():
                 self.AutoCompCancel()
             command = self.GetCommandStr()
             if self._config['autocomp']:
                 self.ShowCallTip(command[:command.rfind('(')])
+
+        elif key_code in self._code['compsvc'].GetCallTipCancel():
+            evt.Skip()
+            if self.CallTipActive():
+                self.CallTipCancel()
         else:
             evt.Skip()
         return
@@ -883,15 +894,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Gets the command string to the left of the autocomp
         activation character.
         @return: the command string to the left of the autocomp char
+        @todo: fillups are currently disabled. See note in Configure.
 
         """
         curr_pos = self.GetCurrentPos()
         start = curr_pos - 1
         col = self.GetColumn(curr_pos)
-        cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
-                       self._code['compsvc'].GetAutoCompFillups())
+        cmd_lmt = list(self._code['compsvc'].GetAutoCompStops())# + \
+                       #self._code['compsvc'].GetAutoCompFillups())
         for key in self._code['compsvc'].GetAutoCompKeys():
-            kval = chr(key)
+            kval = unichr(key)
             if kval in cmd_lmt:
                 cmd_lmt.remove(kval)
 
