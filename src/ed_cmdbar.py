@@ -39,6 +39,7 @@ import ed_msg
 import eclib.platebtn as platebtn
 import eclib.finddlg as finddlg
 import eclib.txtentry as txtentry
+import eclib.ctrlbox as ctrlbox
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -61,223 +62,38 @@ XButton = PyEmbeddedImage(
 #-----------------------------------------------------------------------------#
 # Globals
 ID_CLOSE_BUTTON = wx.NewId()
-ID_SEARCH_CTRL = wx.NewId()
 ID_SEARCH_NEXT = wx.NewId()
 ID_SEARCH_PRE = wx.NewId()
 ID_MATCH_CASE = wx.NewId()
 ID_REGEX = wx.NewId()
-ID_LINE_CTRL = wx.NewId()
-ID_CMD_CTRL = wx.NewId()
 
 #-----------------------------------------------------------------------------#
 
-class CommandBar(wx.Panel):
-    """The command bar is a slim panel that is used to hold various small
-    controls for searching jumping to line, ect...
-    @todo: make a plugin interface and a management system for showing and
-           hiding the various conrols
+class CommandBarBase(ctrlbox.ControlBar):
+    """Base class for control bars"""
+    def __init__(self, parent):
+        ctrlbox.ControlBar.__init__(self, parent,
+                                    style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
 
-    """
-    def __init__(self, parent, id_, size=(-1, 24), style=wx.TAB_TRAVERSAL):
-        """Initializes the bar and its default widgets
-        @postcondition: commandbar is created
+        if wx.Platform == '__WXGTK__':
+            self.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
 
-        """
-        wx.Panel.__init__(self, parent, id_, size=size, style=style)
+        self.SetVMargin(2, 2)
 
         # Attributes
         self._parent = parent
-        self._installed = False
-        self._sizers = dict(h_sizer=wx.BoxSizer(wx.HORIZONTAL),
-                            goto=wx.BoxSizer(),
-                            search=wx.BoxSizer(),
-                            cmd=wx.BoxSizer())
-
-        # Install Controls
-        self._sizers['h_sizer'].Add((8, 0))
+        self.ctrl = None
         self.close_b = platebtn.PlateButton(self, ID_CLOSE_BUTTON,
                                             bmp=XButton.GetBitmap(),
                                             style=platebtn.PB_STYLE_NOBG)
-        self._sizers['h_sizer'].Add(self.close_b, 0, wx.ALIGN_CENTER_VERTICAL)
-        self._sizers['h_sizer'].Add((5, 0))
-        self.SetSizer(self._sizers['h_sizer'])
-        self.SetAutoLayout(True)
 
-        # Bind Events
-        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
+        # Setup
+        self.AddControl(self.close_b, wx.ALIGN_LEFT)
 
-        # Don't paint the gradient on gtk due to transparency
-        # issues with some controls
-        if wx.Platform != '__WXGTK__':
-            self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_BUTTON, self.OnButton)
-        self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
+        # Event Handlers
+        self.Bind(wx.EVT_BUTTON, self.OnClose, self.close_b)
 
-    def Hide(self):
-        """Hides the control and notifies the parent
-        @postcondition: commandbar is hidden
-
-        """
-        wx.Panel.Hide(self)
-        self._parent.SendSizeEvent()
-        self._parent.nb.GetCurrentCtrl().SetFocus()
-        return True
-
-    def InstallCtrl(self, id_):
-        """Installs a control into the bar by ID
-        @postcondition: control is installed
-        @return: requested control or None
-
-        """
-        if id_ == ID_SEARCH_CTRL:
-            ctrl = self.InstallSearchCtrl()
-        elif id_ == ID_LINE_CTRL:
-            ctrl = self.InstallLineCtrl()
-        elif id_ == ID_CMD_CTRL:
-            ctrl = self.InstallCommandCtrl()
-        else:
-            ctrl = None
-        self.Layout()
-        return ctrl
-
-    def InstallLineCtrl(self):
-        """Installs the go to line control into the panel.
-        @postcondition: GotoLine control is installed in bar.
-
-        """
-        h_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        v_sizer = wx.BoxSizer(wx.VERTICAL)
-        v_sizer.Add((5, 5))
-        linectrl = LineCtrl(self, ID_LINE_CTRL, self._parent.nb.GetCurrentCtrl,
-                            size=(100, -1))
-        linectrl.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
-        v_sizer.Add(linectrl, 0, wx.ALIGN_CENTER_VERTICAL)
-        v_sizer.Add((4, 4))
-
-        go_lbl = wx.StaticText(self, label=_("Goto Line") + ": ")
-        if wx.Platform == '__WXMAC__':
-            go_lbl.SetFont(wx.SMALL_FONT)
-        h_sizer.AddMany([(go_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                         ((5, 5)), (v_sizer)])
-        h_sizer.Layout()
-        self._sizers['goto'] = h_sizer
-        self._sizers['h_sizer'].Add(h_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        self._sizers['h_sizer'].Layout()
-        return linectrl
-
-    def InstallCommandCtrl(self):
-        """Install the sizer containing the command executer control
-        into the bar.
-        @return: the command control instance
-
-        """
-        h_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        v_sizer = wx.BoxSizer(wx.VERTICAL)
-        v_sizer.Add((5, 5))
-        cmdctrl = CommandExecuter(self, ID_CMD_CTRL, size=(150, -1))
-        cmdctrl.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
-
-        v_sizer.Add(cmdctrl, 0, wx.ALIGN_CENTER_VERTICAL)
-        v_sizer.Add((4, 4))
-        cmd_lbl = wx.StaticText(self, label=_("Command") + ": ")
-        if wx.Platform == '__WXMAC__':
-            cmd_lbl.SetFont(wx.SMALL_FONT)
-        h_sizer.AddMany([(cmd_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                         ((5, 5)), (v_sizer)])
-        h_sizer.Layout()
-        self._sizers['cmd'] = h_sizer
-        self._sizers['h_sizer'].Add(h_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        self._sizers['h_sizer'].Layout()
-        return cmdctrl
-
-    def InstallSearchCtrl(self):
-        """Installs the search context controls into the panel.
-        Other controls should be removed from the panel before calling
-        this method.
-        @postcondition: search control is installed in bar
-
-        """
-        h_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        v_sizer = wx.BoxSizer(wx.VERTICAL)
-        t_sizer = wx.BoxSizer(wx.VERTICAL)
-
-        spacer = (6, 6)
-        if wx.Platform == '__WXGTK__':
-            spacer = (4, 4)
-        v_sizer.Add(spacer)
-        search = ed_search.EdSearchCtrl(self, ID_SEARCH_CTRL,
-                                        menulen=5, size=(180, -1))
-
-        # The small variant is Too small on windows but good on others
-        if wx.Platform != '__WXMSW__':
-            search.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
-
-        v_sizer.Add(search, 0, wx.ALIGN_CENTER_VERTICAL)
-        v_sizer.Add((4, 4))
-        f_lbl = wx.StaticText(self, label=_("Find") + u": ")
-        ctrl_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOWN), wx.ART_MENU)
-        next_btn = platebtn.PlateButton(self, ID_SEARCH_NEXT, _("Next"),
-                                        t_bmp, style=platebtn.PB_STYLE_NOBG)
-
-        t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_UP), wx.ART_MENU)
-        pre_btn = platebtn.PlateButton(self, ID_SEARCH_PRE, _("Previous"),
-                                       t_bmp, style=platebtn.PB_STYLE_NOBG)
-
-        match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
-        match_case.SetValue(search.IsMatchCase())
-
-        regex_cb = wx.CheckBox(self, ID_REGEX, _("Regular Expression"))
-        regex_cb.SetValue(search.IsRegEx())
-
-        # Use the small size controls on osx
-        if wx.Platform == '__WXMAC__':
-            t_sizer.Add((5, 5))
-            for win in (f_lbl, match_case, next_btn, pre_btn, regex_cb):
-                win.SetFont(wx.SMALL_FONT)
-
-        ctrl_sizer.AddMany([(10, 0), (next_btn, 0, wx.ALIGN_CENTER_VERTICAL),
-                            ((5, 0)), (pre_btn, 0, wx.ALIGN_CENTER_VERTICAL),
-                            ((5, 0)),
-                            (match_case, 0, wx.ALIGN_CENTER_VERTICAL),
-                            ((5, 5), 0),
-                            (regex_cb, 0, wx.ALIGN_CENTER_VERTICAL)])
-
-        t_sizer.Add(ctrl_sizer, 0, wx.ALIGN_CENTER_VERTICAL)
-
-        h_sizer.AddMany([(f_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                         ((5, 5)), (v_sizer, 0, wx.ALIGN_CENTER_VERTICAL),
-                         (t_sizer, 0, wx.ALIGN_CENTER_VERTICAL)])
-        self._sizers['search'] = h_sizer
-        self._sizers['h_sizer'].Add(h_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        self._sizers['h_sizer'].Layout()
-        return search
-
-    def OnCheck(self, evt):
-        """Check box event handler
-        @param evt: Event that called this handler
-        @type evt: wx.EVT_CHECKBOX
-
-        """
-        e_id = evt.GetId()
-        if e_id in (ID_MATCH_CASE, ID_REGEX):
-            ctrl = self.FindWindowById(e_id)
-            if ctrl != None:
-                search = self.FindWindowById(ID_SEARCH_CTRL)
-                if e_id == ID_MATCH_CASE:
-                    flag = finddlg.AFR_MATCHCASE
-                else:
-                    flag = finddlg.AFR_REGEX
-
-                if search != None:
-                    if ctrl.GetValue():
-                        search.SetSearchFlag(flag)
-                    else:
-                        search.ClearSearchFlag(flag)
-        else:
-            evt.Skip()
-
-    def OnButton(self, evt):
+    def OnClose(self, evt):
         """Handles events from the buttons on the bar
         @param evt: Event that called this handler
 
@@ -285,80 +101,117 @@ class CommandBar(wx.Panel):
         e_id = evt.GetId()
         if e_id == ID_CLOSE_BUTTON:
             self.Hide()
-        elif e_id in [ID_SEARCH_NEXT, ID_SEARCH_PRE]:
-            search = self.FindWindowById(ID_SEARCH_CTRL)
-            if search != None:
-                search.DoSearch(e_id == ID_SEARCH_NEXT)
         else:
             evt.Skip()
 
-    def OnPaint(self, evt):
-        """Paints the background of the bar with a nice gradient.
-        @param evt: Event that called this handler
-        @type evt: wx.PaintEvent
+    def Hide(self):
+        """Hides the control and notifies the parent
+        @postcondition: commandbar is hidden
+        @todo: dont reference nb directly here
 
         """
-        dc = wx.PaintDC(self)
-        gc = wx.GraphicsContext.Create(dc)
-        col1 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        col2 = util.AdjustColour(col1, 40)
-        col1 = util.AdjustColour(col1, -15)
-        grad = gc.CreateLinearGradientBrush(0, 1, 0, 29, col2, col1)
-        rect = self.GetClientRect()
+        super(CommandBarBase, self).Hide()
+        self._parent.SendSizeEvent()
+        self._parent.nb.GetCurrentCtrl().SetFocus()
+        return True
 
-        pen_col = tuple([min(190, x) for x in util.AdjustColour(col1, 20)])
-        gc.SetPen(gc.CreatePen(wx.Pen(pen_col, 1)))
-        gc.SetBrush(grad)
-        gc.DrawRectangle(0, 1, rect.width - 0.5, rect.height - 0.5)
+    def SetControl(self, ctrl):
+        """Set the main control of this command bar
+        @param ctrl: window
 
-        evt.Skip()
+        """
+        self.ctrl = ctrl
+
+    def SetFocus(self):
+        """Set the focus to the bar and its main control"""
+        super(CommandBarBase, self).SetFocus()
+        if self.ctrl is not None:
+            self.ctrl.SetFocus()
+
+#-----------------------------------------------------------------------------#
+
+class SearchBar(CommandBarBase):
+    """Commandbar for searching text in the current buffer."""
+    def __init__(self, parent):
+        CommandBarBase.__init__(self, parent)
+
+        # Attributes
+        self.SetControl(ed_search.EdSearchCtrl(self, wx.ID_ANY,
+                                               menulen=5, size=(180, -1)))
+
+        # Setup
+        f_lbl = wx.StaticText(self, label=_("Find") + u": ")
+        t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOWN), wx.ART_MENU)
+        next_btn = platebtn.PlateButton(self, ID_SEARCH_NEXT, _("Next"),
+                                        t_bmp, style=platebtn.PB_STYLE_NOBG)
+        self.AddControl(f_lbl, wx.ALIGN_LEFT)
+        self.AddControl(self.ctrl, wx.ALIGN_LEFT)
+        self.AddControl(next_btn, wx.ALIGN_LEFT)
+
+        t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_UP), wx.ART_MENU)
+        pre_btn = platebtn.PlateButton(self, ID_SEARCH_PRE, _("Previous"),
+                                       t_bmp, style=platebtn.PB_STYLE_NOBG)
+        self.AddControl(pre_btn, wx.ALIGN_LEFT)
+
+        match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
+        match_case.SetValue(self.ctrl.IsMatchCase())
+        self.AddControl(match_case, wx.ALIGN_LEFT)
+
+        regex_cb = wx.CheckBox(self, ID_REGEX, _("Regular Expression"))
+        regex_cb.SetValue(self.ctrl.IsRegEx())
+        self.AddControl(regex_cb, wx.ALIGN_LEFT)
+
+        # HACK: workaround bug in mac control that resets size to
+        #       that of the default variant after any text has been
+        #       typed in it. Note it reports the best size as the default
+        #       variant and causes layout issues. wxBUG 
+        if wx.Platform == '__WXMAC__':
+            self.ctrl.SetSizeHints(180, 16, 180, 16)
+
+        # Event Handlers
+        self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
+        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
+
+    def __del__(self):
+        ed_msg.Unsubscribe(self.OnThemeChange)
+
+    def OnButton(self, evt):
+        """Handle button clicks for the next/previous buttons
+        @param evt: wx.CommandEvent
+
+        """
+        e_id = evt.GetId()
+        if e_id in [ID_SEARCH_NEXT, ID_SEARCH_PRE]:
+            self.ctrl.DoSearch(e_id == ID_SEARCH_NEXT)
+        else:
+            evt.Skip()
+
+    def OnCheck(self, evt):
+        """Set search options for match case, regex, ect...
+        @param evt: wx.CommandEvent
+
+        """
+        e_id = evt.GetId()
+        if e_id in (ID_MATCH_CASE, ID_REGEX):
+            ctrl = self.FindWindowById(e_id)
+            if ctrl != None:
+                if e_id == ID_MATCH_CASE:
+                    flag = finddlg.AFR_MATCHCASE
+                else:
+                    flag = finddlg.AFR_REGEX
+
+                if self.search != None:
+                    if ctrl.GetValue():
+                        self.ctrl.SetSearchFlag(flag)
+                    else:
+                        self.ctrl.ClearSearchFlag(flag)
+        else:
+            evt.Skip()
 
     def OnThemeChange(self, msg):
         """Update icons when the theme has changed
         @param msg: Message Object
-
-        """
-        self.UpdateIcons()
-
-    def Show(self, id_=0):
-        """Shows the control
-        @param id_: Id of control to show in bar
-
-        """
-        # HACK YUCK, come back and try again when my brain is working
-        # Show specified control
-        if id_:
-            ctrl = self.FindWindowById(id_)
-            if ctrl is None:
-                ctrl = self.InstallCtrl(id_)
-
-            # First Hide everything
-            for kid in (list(self._sizers['search'].GetChildren()) +
-                        list(self._sizers['goto'].GetChildren()) +
-                        list(self._sizers['cmd'].GetChildren())):
-                kid.Show(False)
-
-            if id_ == ID_SEARCH_CTRL:
-                for kid in self._sizers['search'].GetChildren():
-                    kid.Show(True)
-                self.FindWindowById(ID_SEARCH_CTRL).AutoSetQuery()
-                self._sizers['search'].Layout()
-            elif id_ == ID_LINE_CTRL:
-                for kid in self._sizers['goto'].GetChildren():
-                    kid.Show(True)
-            elif id_ == ID_CMD_CTRL:
-                for kid in self._sizers['cmd'].GetChildren():
-                    kid.Show(True)
-
-            self.GetSizer().Layout()
-            if ctrl != None:
-                ctrl.SetFocus()
-                ctrl.SelectAll()
-        wx.Panel.Show(self)
-
-    def UpdateIcons(self):
-        """Refresh icons to current theme settings
-        @postcondition: all icons are updated
 
         """
         next = self.FindWindowById(ID_SEARCH_NEXT)
@@ -376,6 +229,52 @@ class CommandBar(wx.Panel):
             pre.SetBitmapHover(t_bmp)
             pre.Update()
             pre.Refresh()
+
+#-----------------------------------------------------------------------------#
+
+class CommandEntryBar(CommandBarBase):
+    """Commandbar for editor command entry and execution."""
+    def __init__(self, parent):
+        CommandBarBase.__init__(self, parent)
+
+        # Attributes
+        self.SetControl(CommandExecuter(self, wx.ID_ANY, size=(150, -1)))
+
+        # Setup
+        cmd_lbl = wx.StaticText(self, label=_("Command") + ": ")
+        self.AddControl(cmd_lbl, wx.ALIGN_LEFT)
+        self.AddControl(self.ctrl, wx.ALIGN_LEFT)
+
+        # HACK: workaround bug in mac control that resets size to
+        #       that of the default variant after any text has been
+        #       typed in it. Note it reports the best size as the default
+        #       variant and causes layout issues. wxBUG 
+        if wx.Platform == '__WXMAC__':
+            self.ctrl.SetSizeHints(150, 16, 150, 16)
+
+#-----------------------------------------------------------------------------#
+
+class GotoLineBar(CommandBarBase):
+    """Commandbar for Goto Line function"""
+    def __init__(self, parent):
+        CommandBarBase.__init__(self, parent)
+
+        # Attributes
+        self.SetControl(LineCtrl(self, wx.ID_ANY,
+                                 self._parent.nb.GetCurrentCtrl,
+                                 size=(100, -1)))
+
+        # Setup
+        go_lbl = wx.StaticText(self, label=_("Goto Line") + ": ")
+        self.AddControl(go_lbl, wx.ALIGN_LEFT)
+        self.AddControl(self.ctrl, wx.ALIGN_LEFT)
+
+        # HACK: workaround bug in mac control that resets size to
+        #       that of the default variant after any text has been
+        #       typed in it. Note it reports the best size as the default
+        #       variant and causes layout issues. wxBUG 
+        if wx.Platform == '__WXMAC__':
+            self.ctrl.SetSizeHints(100, 16, 100, 16)
 
 #-----------------------------------------------------------------------------#
 

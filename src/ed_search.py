@@ -846,7 +846,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         # Attributes
         self._parent     = parent
         # TEMP HACK
-        self.FindService = self.GetTopLevelParent().nb._searchctrl
+        self.FindService = self.GetTopLevelParent().GetNotebook()._searchctrl
         self._flags      = 0
         self._recent     = list()        # The History List
         self._last       = None
@@ -1059,6 +1059,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             # TODO change to more safely determine the context
             # Currently control is only used in command bar
             self.GetParent().Hide()
+            evt.Skip()
             return
         elif e_key == wx.WXK_SHIFT:
             self.ClearSearchFlag(finddlg.AFR_UP)

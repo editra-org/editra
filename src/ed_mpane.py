@@ -31,34 +31,62 @@ import eclib.ctrlbox as ctrlbox
 #-----------------------------------------------------------------------------#
 
 class MainPanel(ctrlbox.ControlBox):
-    """Main panel view"""
+    """Main panel view
+    @todo: Add interface for registering additional commandbars.
+
+    """
     def __init__(self, parent):
         """Initialize the panel"""
         ctrlbox.ControlBox.__init__(self, parent)
 
         # Attributes
         self.nb = ed_pages.EdPages(self, wx.ID_ANY)
-        self._cmdbar = ed_cmdbar.CommandBar(self, ed_glob.ID_COMMAND_BAR)
+        self._search = None
+        self._line = None
+        self._cmd = None
 
         # Layout
         self.SetWindow(self.nb)
-        self.SetControlBar(self._cmdbar, wx.BOTTOM)
 
     def HideCommandBar(self):
         """Hide the command bar"""
-        self._cmdbar.Hide()
+        self.GetControlBar(wx.BOTTOM).Hide()
         self.Layout()
+
+    def InitCommandBar(self):
+        """Initialize the commandbar"""
+        if self._search is None:
+            self._search = ed_cmdbar.SearchBar(self)
+            self.SetControlBar(self._search, wx.BOTTOM)
 
     def ShowCommandControl(self, ctrlid):
         """Change the mode of the commandbar
         @param ctrlid: CommandBar control id
 
         """
-        ctrld = { ed_glob.ID_QUICK_FIND : ed_cmdbar.ID_SEARCH_CTRL,
-                  ed_glob.ID_GOTO_LINE : ed_cmdbar.ID_LINE_CTRL,
-                  ed_glob.ID_COMMAND : ed_cmdbar.ID_CMD_CTRL }
+        bar = None
+        if ctrlid == ed_glob.ID_QUICK_FIND:
+            bar = self.ReplaceControlBar(self._search, wx.BOTTOM)
+        elif ctrlid == ed_glob.ID_GOTO_LINE:
+            # Lazy init
+            if self._line is None:
+                self._line = ed_cmdbar.GotoLineBar(self)
+            bar = self.ReplaceControlBar(self._line, wx.BOTTOM)
+        elif ctrlid == ed_glob.ID_COMMAND :
+            # Lazy init
+            if self._cmd is None:
+                self._cmd = ed_cmdbar.CommandEntryBar(self)
+            bar = self.ReplaceControlBar(self._cmd, wx.BOTTOM)
+        else:
+            return
 
-        if ctrlid in ctrld:
-            self._cmdbar.Show(ctrld[ctrlid])
+        if bar is not None:
+            bar.Hide()
+
+        cbar = self.GetControlBar(wx.BOTTOM)
+        if cbar is not None:
+            cbar.Show()
+            cbar.Layout()
+            cbar.SetFocus()
 
         self.Layout()
