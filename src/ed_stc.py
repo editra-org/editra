@@ -2141,7 +2141,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Refresh()
 
     def UpdateBaseStyles(self):
+        """Update the controls basic styles"""
         ed_style.StyleMgr.UpdateBaseStyles(self)
+
+        # Set control specific styles
         sback = self.GetItemByName('select_style')
         if not sback.IsNull():
             sback = sback.GetBack()
