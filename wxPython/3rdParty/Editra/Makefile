@@ -1,5 +1,10 @@
 # Editra Makefile
 #
+# Instructions:
+# To make source bundle: make sdist
+# To make eggs: make egg
+# To make plugins: make plugin
+#
 
 # Variables
 PYVERSION = 2.5
@@ -22,6 +27,9 @@ PYTHON = python$(PYVERSION)
 MAKE_PLUGIN24 = python2.4 ./setup.py bdist_egg --dist-dir=../
 MAKE_PLUGIN25 = python2.5 ./setup.py bdist_egg --dist-dir=../
 MAKE_PLUGIN26 = python2.6 ./setup.py bdist_egg --dist-dir=../
+MAKE_EGG24 = python2.4 ./setup.py bdist_egg 
+MAKE_EGG25 = python2.5 ./setup.py bdist_egg 
+MAKE_EGG26 = python2.6 ./setup.py bdist_egg 
 
 #---- Plugins ----#
 
@@ -64,6 +72,11 @@ osx_app_nodeps:
 	$(PYTHON) ./setup.py py2app
 	cd $(OSXRESOURCES)/plugins && rm -f $(EGGFILTER)
 	cd $(OSXRESOURCES)/pixmaps && rm -f *.ico
+
+egg: depfiles
+	$(MAKE_EGG24)
+	$(MAKE_EGG25)
+	$(MAKE_EGG26)
 
 install: depfiles
 	python ./setup.py install
