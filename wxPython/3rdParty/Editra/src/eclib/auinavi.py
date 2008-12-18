@@ -84,7 +84,8 @@ class AuiPaneNavigator(wx.Dialog):
 
     def OnKeyUp(self, event):
         """Handles wx.EVT_KEY_UP"""
-        if event.GetKeyCode() == wx.WXK_TAB:
+        # TODO: add setter method for setting the navigation key
+        if event.GetKeyCode() in (wx.WXK_TAB, ord('1')): # <- TEMP for windows/linux
             self._tabed += 1
             if self._tabed == 1:
                 event.Skip()

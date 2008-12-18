@@ -1013,7 +1013,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_NEXT_MARK : ("Alt", "Right"), # Win/Linux
                      ed_glob.ID_PRE_MARK : ("Alt", "Left"), # Win/Linux
                      ed_glob.ID_SHOW_SHELF : ("Ctrl", "Alt", "S"),
-                     ed_glob.ID_PANELIST : ("Alt", "Tab"),
+                     ed_glob.ID_PANELIST : ("Alt", "1"), # Win/Linux
 
                      # Format Menu
                      ed_glob.ID_COMMENT : ("Ctrl", "1"),
@@ -1036,6 +1036,7 @@ if wx.Platform == '__WXMAC__':
     _DEFAULT_BINDING[ed_glob.ID_FIND_PREVIOUS] = ("Ctrl", "Shift", "G")
     _DEFAULT_BINDING[ed_glob.ID_FIND_NEXT] = ("Ctrl", "G")
     _DEFAULT_BINDING[ed_glob.ID_GOTO_LINE] = ("Ctrl", "Shift", "E")
+    _DEFAULT_BINDING[ed_glob.ID_PANELIST] = ("Alt", "Tab")
 elif wx.Platform == '__WXMSW__':
      # FIXME: On Windows if Tab is bound to a menu item it is no longer
      #        usable elsewhere such as in the stc control. On Mac/Gtk there
