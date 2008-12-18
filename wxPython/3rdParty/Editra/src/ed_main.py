@@ -45,6 +45,7 @@ import plugin
 import perspective as viewmgr
 import iface
 import eclib.encdlg as encdlg
+import eclib.auinavi as auinavi
 
 # Function Aliases
 _ = wx.GetTranslation
@@ -106,6 +107,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         #---- Command Bar ----#
         self._mpane.HideCommandBar()
 
+        #---- Pane Navigator ----#
+        self._paneNavi = None
+
         #---- Setup Toolbar ----#
         self.SetToolBar(ed_toolbar.EdToolBar(self))
         self.GetToolBar().Show(_PGET('TOOLBAR'))
@@ -164,6 +168,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_GOTO_MBRACE, self.DispatchToControl),
                                        (ID_SHOW_SB, self.OnShowStatusBar),
                                        (ID_VIEW_TOOL, self.OnViewTb),
+                                       (ID_PANELIST, self.OnPaneList),
 
                                        # Format Menu
                                        (ID_FONT, self.OnFont),
@@ -993,6 +998,35 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                     doc.SetEncoding(cenc)
                     ctrl.ReloadFile()
             dlg.Destroy()
+        else:
+            evt.Skip()
+
+    def OnPaneList(self, evt):
+        """Navigates through panes
+        @param event: CommandEvent instance
+
+        """
+        if evt.GetId() == ID_PANELIST:
+            if self._paneNavi is not None:
+                return
+
+            bmp = wx.ArtProvider.GetBitmap(str(ID_NEW_WINDOW), wx.ART_MENU)
+            self._paneNavi = auinavi.AuiPaneNavigator(self, self._mgr, bmp,
+                                                      _("Aui Pane Navigator"))
+            self._paneNavi.SetReturnCode(wx.ID_OK)
+            self._paneNavi.ShowModal()
+
+            sel = self._paneNavi.GetSelection()
+            self._paneNavi.Destroy()
+            self._paneNavi = None
+
+            if isinstance(sel, basestring):
+                paneInfo = self._mgr.GetPane(sel)
+                if paneInfo.IsOk():
+                    if not paneInfo.IsShown():
+                        paneInfo.Show()
+                        self._mgr.Update()
+                    paneInfo.window.SetFocus()
         else:
             evt.Skip()
 
