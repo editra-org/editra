@@ -142,17 +142,7 @@ class DropTargetFT(wx.PyDropTarget):
         stc = self.window
         if self._tmp is None:
             val = stc.DoDragOver(x_cord, y_cord, drag_result)
-            cline = stc.PositionFromPoint(wx.Point(x_cord, y_cord))
-            if cline != wx.stc.STC_INVALID_POSITION:
-                cline = stc.LineFromPosition(cline)
-                fline = stc.GetFirstVisibleLine()
-                lline = stc.GetLastVisibleLine()
-                if (cline - fline) < 3:
-                    stc.ScrollLines(-2)
-                elif lline - cline < 3:
-                    stc.ScrollLines(2)
-                else:
-                    pass
+            self.ScrollBuffer(stc, x_cord, y_cord)
             return drag_result
         else:
             point = wx.Point(x_cord, y_cord)
@@ -163,6 +153,7 @@ class DropTargetFT(wx.PyDropTarget):
             self._tmp.Show()
             self._tmp.RedrawImage(self._lastp, point, True, True)
             self._lastp = point
+            self.ScrollBuffer(stc, x_cord, y_cord)
         return drag_result
 
     def OnData(self, x_cord, y_cord, drag_result):
@@ -209,6 +200,28 @@ class DropTargetFT(wx.PyDropTarget):
             except wx.PyAssertionError, msg:
                 Log("[droptargetft][err] %s" % str(msg))
 
+    @staticmethod
+    def ScrollBuffer(stc, x_cord, y_cord):
+        """Scroll the buffer as the dragged text is moved towards the
+        ends.
+        @param stc: StyledTextCtrl
+        @param x_cord: int (x position)
+        @param y_cord: int (y position)
+        @note: currenly does not work on wxMac
+
+        """
+        cline = stc.PositionFromPoint(wx.Point(x_cord, y_cord))
+        if cline != wx.stc.STC_INVALID_POSITION:
+            cline = stc.LineFromPosition(cline)
+            fline = stc.GetFirstVisibleLine()
+            lline = stc.GetLastVisibleLine()
+            print cline, fline, lline
+            if (cline - fline) < 3:
+                stc.ScrollLines(-2)
+            elif lline - cline < 3:
+                stc.ScrollLines(2)
+            else:
+                pass
 #---- End FileDropTarget ----#
 
 #---- Misc Common Function Library ----#
