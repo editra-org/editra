@@ -662,6 +662,9 @@ class EdMenuBar(wx.MenuBar):
                         _("Show Whitespace Markers"), wx.ITEM_CHECK)
         viewmenu.AppendSubMenu(self._menus['viewedit'], _("Editor"), \
                                _("Toggle Editor View Options"))
+        viewmenu.Append(ed_glob.ID_PANELIST, _("Pane Navigator") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PANELIST),
+                        _("View pane selection list"))
         viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_GOTO_LINE, _("&Goto Line") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_LINE),
@@ -1010,6 +1013,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_NEXT_MARK : ("Alt", "Right"), # Win/Linux
                      ed_glob.ID_PRE_MARK : ("Alt", "Left"), # Win/Linux
                      ed_glob.ID_SHOW_SHELF : ("Ctrl", "Alt", "S"),
+                     ed_glob.ID_PANELIST : ("Alt", "Tab"),
 
                      # Format Menu
                      ed_glob.ID_COMMENT : ("Ctrl", "1"),
