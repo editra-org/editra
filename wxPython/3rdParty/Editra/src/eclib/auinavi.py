@@ -35,7 +35,7 @@ class AuiPaneNavigator(wx.Dialog):
 
     def __init__(self, parent, auiMgr, icon=None, title=''):
         """@param auiMgr: Main window Aui Manager"""
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, "", style=0)
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, "", style=wx.STAY_ON_TOP)
 
         # Attributes
         self._auimgr = auiMgr
@@ -84,9 +84,12 @@ class AuiPaneNavigator(wx.Dialog):
 
     def OnKeyUp(self, event):
         """Handles wx.EVT_KEY_UP"""
+        self._auimgr.HideHint()
         # TODO: add setter method for setting the navigation key
         if event.GetKeyCode() in (wx.WXK_TAB, ord('1')): # <- TEMP for windows/linux
             self._tabed += 1
+
+            # Don't move selection on initial show
             if self._tabed == 1:
                 event.Skip()
                 return
@@ -96,6 +99,11 @@ class AuiPaneNavigator(wx.Dialog):
                 selected = 0
 
             self._listBox.SetSelection(selected)
+            sel = self._listBox.GetStringSelection()
+            pane = self._auimgr.GetPane(sel)
+            if pane.IsOk():
+                self._auimgr.ShowHint(pane.window.GetScreenRect())
+                self._listBox.SetFocus()
             event.Skip()
         elif event.GetKeyCode() in AuiPaneNavigator.CLOSEKEYS:
             self.CloseDialog()
@@ -135,6 +143,7 @@ class AuiPaneNavigator(wx.Dialog):
     def CloseDialog(self):
         """Closes the L{AuiPaneNavigator} dialog"""
         self._selectedItem = self._listBox.GetStringSelection()
+        self._auimgr.HideHint()
         self.EndModal(wx.ID_OK)
 
     def GetSelection(self):
