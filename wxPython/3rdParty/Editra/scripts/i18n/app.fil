@@ -47,6 +47,7 @@
 ../../src/eclib/__init__.py
 ../../src/eclib/colorsetter.py
 ../../src/eclib/ctrlbox.py
+../../src/eclib/ecpickers.py
 ../../src/eclib/elistmix.py
 ../../src/eclib/encdlg.py
 ../../src/eclib/finddlg.py
@@ -54,6 +55,7 @@
 ../../src/eclib/outbuff.py
 ../../src/eclib/platebtn.py
 ../../src/eclib/pstatbar.py
+../../src/eclib/txtentry.py
 ../../src/syntax/__init__.py
 ../../src/syntax/actionscript.py
 ../../src/syntax/ada.py
