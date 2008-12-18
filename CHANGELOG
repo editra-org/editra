@@ -16,7 +16,7 @@ NEWS:
 
 
 NEW: [features/improvements]
-+Keyboard navigation of MainWindow panes (Alt+Tab). (modified patch from cowo)
++Keyboard navigation of MainWindow panes (Alt+Tab). (modified patch from Giuseppe "Cowo" Corbelli)
 
 BUG FIXES:
 +Fix search string not getting set from buffer selection in search bar.
