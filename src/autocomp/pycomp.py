@@ -45,7 +45,7 @@ class Completer(object):
         self._log = wx.GetApp().GetLog()
         self._buffer = stc_buffer
         self._autocomp_keys = [ord('.'),]
-        self._autocomp_stop = '\'"\\`)'
+        self._autocomp_stop = ' \'"\\`)'
         self._autocomp_fillup = '.,;:([]}<>%^&+-=*/|'
         self._calltip_keys = [ord('('),]
         self._calltip_cancel = [ord(')'), wx.WXK_RETURN]
