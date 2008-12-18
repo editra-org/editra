@@ -1,7 +1,7 @@
 ###############################################################################
 # Name: auinavi.py                                                            #
 # Purpose: AuiMgr Pane navigator                                              #
-# Author: Cowo                                                                #
+# Author: Giuseppe "Cowo" Corbelli                                            #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # Licence: wxWindows Licence                                                  #
