@@ -201,7 +201,7 @@ class SearchBar(CommandBarBase):
                 else:
                     flag = finddlg.AFR_REGEX
 
-                if self.search != None:
+                if self.ctrl != None:
                     if ctrl.GetValue():
                         self.ctrl.SetSearchFlag(flag)
                     else:
