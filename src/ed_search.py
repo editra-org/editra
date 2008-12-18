@@ -1023,6 +1023,7 @@ class EdSearchCtrl(wx.SearchCtrl):
     def SetFocus(self):
         """Set the focus and select the text"""
         super(EdSearchCtrl, self).SetFocus()
+        self.AutoSetQuery()
         self.SelectAll()
 
     def SetHistory(self, hist_list):
