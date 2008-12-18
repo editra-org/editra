@@ -18,6 +18,8 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
+__all__ = ['AuiPaneNavigator',]
+
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
@@ -29,7 +31,7 @@ import ctrlbox
 
 class AuiPaneNavigator(wx.Dialog):
     """Navigate through Aui Panes"""
-    closeKeys = [wx.WXK_ALT, wx.WXK_CONTROL, wx.WXK_RETURN]
+    CLOSEKEYS = [wx.WXK_ALT, wx.WXK_CONTROL, wx.WXK_RETURN]
 
     def __init__(self, parent, auiMgr, icon=None, title=''):
         """@param auiMgr: Main window Aui Manager"""
@@ -40,6 +42,7 @@ class AuiPaneNavigator(wx.Dialog):
         self._selectedItem = -1
         self._indexMap = []
         self._sel = 0
+        self._tabed = 0
 
         # Setup
         sz = wx.BoxSizer(wx.VERTICAL)
@@ -59,22 +62,20 @@ class AuiPaneNavigator(wx.Dialog):
 
         sz.Add(self._panel, 0, wx.EXPAND)
         sz.Add(self._listBox, 1, wx.EXPAND)
+        sz.Fit(self)
+        sz.SetSizeHints(self)
+        sz.Layout()
+        self.Centre()
         self.SetSizer(sz)
+        self.SetAutoLayout(True)
+
+        # Get the panes
+        self.PopulateListControl()
 
         # Event Handlers
         self._listBox.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self._listBox.Bind(wx.EVT_NAVIGATION_KEY, self.OnNavigationKey)
         self._listBox.Bind(wx.EVT_LISTBOX_DCLICK, self.OnItemSelected)
-        
-        # Connect paint event to the panel
-        self.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE))
-        self._listBox.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE))
-        self.PopulateListControl()
-        
-        self.GetSizer().Fit(self)
-        self.GetSizer().SetSizeHints(self)
-        self.GetSizer().Layout()
-        self.Centre()
 
         # Set focus on the list box to avoid having to click on it to change
         # the tab selection under GTK.
@@ -84,14 +85,18 @@ class AuiPaneNavigator(wx.Dialog):
     def OnKeyUp(self, event):
         """Handles wx.EVT_KEY_UP"""
         if event.GetKeyCode() == wx.WXK_TAB:
-           selected = self._listBox.GetSelection() + 1
-           if selected >= self._listBox.GetCount():
-               selected = 0
+            self._tabed += 1
+            if self._tabed == 1:
+                event.Skip()
+                return
 
-           self._listBox.SetSelection(selected)
-           event.Skip()
-           return
-        elif event.GetKeyCode() in AuiPaneNavigator.closeKeys:
+            selected = self._listBox.GetSelection() + 1
+            if selected >= self._listBox.GetCount():
+                selected = 0
+
+            self._listBox.SetSelection(selected)
+            event.Skip()
+        elif event.GetKeyCode() in AuiPaneNavigator.CLOSEKEYS:
             self.CloseDialog()
         else:
             event.Skip()
