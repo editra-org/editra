@@ -691,7 +691,7 @@ class RHandler(FileTypeHandler):
         self.commands = {'r' : 'R',
                          'Rterm' : 'Rterm',
                          'Rgui' : 'Rgui',
-                         'Rscript' 'Rscript'}
+                         'Rscript' : 'Rscript'}
         self.default = 'Rscript'
 
     @property
