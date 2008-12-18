@@ -215,13 +215,13 @@ class DropTargetFT(wx.PyDropTarget):
             cline = stc.LineFromPosition(cline)
             fline = stc.GetFirstVisibleLine()
             lline = stc.GetLastVisibleLine()
-            print cline, fline, lline
-            if (cline - fline) < 3:
-                stc.ScrollLines(-2)
-            elif lline - cline < 3:
-                stc.ScrollLines(2)
+            if (cline - fline) < 2:
+                stc.ScrollLines(-1)
+            elif lline - cline < 2:
+                stc.ScrollLines(1)
             else:
                 pass
+
 #---- End FileDropTarget ----#
 
 #---- Misc Common Function Library ----#
