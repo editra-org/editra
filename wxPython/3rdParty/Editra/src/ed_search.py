@@ -625,9 +625,9 @@ class SearchEngine:
     def GetOptionsString(self):
         """Get a string describing the search engines options"""
         rstring = u"\"%s\" [ " % self._query
-        for desc, attr in ((_("regex: %s"), self._isregex), 
-                          (_("match case: %s"), self._matchcase),
-                          (_("whole word: %s"), self._wholeword)):
+        for desc, attr in ((_("regex: %s"), self._isregex),
+                           (_("match case: %s"), self._matchcase),
+                           (_("whole word: %s"), self._wholeword)):
             if attr:
                 rstring += (desc % u"on; ")
             else:
@@ -650,6 +650,13 @@ class SearchEngine:
 
         """
         return self._regex
+
+    def GetSearchPool(self):
+        """Get the search pool string for this L{SearchEngine}.
+        @return: string
+
+        """
+        return self._pool
 
     def IsMatchCase(self):
         """Is the engine set to a case sensitive search
@@ -785,7 +792,7 @@ class SearchEngine:
                           ('_wholeword', wholeword), ('_next', down)):
             if val is not None:
                 setattr(self, attr, val)
-        self._regex = self._CompileRegex()
+        self._CompileRegex()
 
     def SetSearchPool(self, pool):
         """Set the search pool used by the Find methods
