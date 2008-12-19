@@ -31,8 +31,6 @@ import ctrlbox
 
 class AuiPaneNavigator(wx.Dialog):
     """Navigate through Aui Panes"""
-    CLOSEKEYS = [wx.WXK_ALT, wx.WXK_CONTROL, wx.WXK_RETURN]
-
     def __init__(self, parent, auiMgr, icon=None, title=''):
         """@param auiMgr: Main window Aui Manager"""
         wx.Dialog.__init__(self, parent, wx.ID_ANY, "", style=wx.STAY_ON_TOP)
@@ -40,9 +38,11 @@ class AuiPaneNavigator(wx.Dialog):
         # Attributes
         self._auimgr = auiMgr
         self._selectedItem = -1
-        self._indexMap = []
+        self._indexMap = list()
         self._sel = 0
         self._tabed = 0
+        self._close_keys = [wx.WXK_ALT, wx.WXK_CONTROL, wx.WXK_RETURN]
+        self._navi_keys = [wx.WXK_TAB, ord('1')] # <- TEMP
 
         # Setup
         sz = wx.BoxSizer(wx.VERTICAL)
@@ -85,22 +85,12 @@ class AuiPaneNavigator(wx.Dialog):
     def __del__(self):
         self._auimgr.HideHint()
 
-    def HighlightPane(self):
-        """Highlight the currently selected pane"""
-        sel = self._listBox.GetStringSelection()
-        pane = self._auimgr.GetPane(sel)
-        if pane.IsOk():
-            self._auimgr.ShowHint(pane.window.GetScreenRect())
-            # NOTE: this is odd but it is the only way for the focus to
-            #       work correctly on wxMac...
-            wx.CallAfter(self._listBox.SetFocus)
-            self._listBox.SetFocus()
-
     def OnKeyUp(self, event):
         """Handles wx.EVT_KEY_UP"""
         self._auimgr.HideHint()
+        key_code = event.GetKeyCode()
         # TODO: add setter method for setting the navigation key
-        if event.GetKeyCode() in (wx.WXK_TAB, ord('1')): # <- TEMP for windows/linux
+        if key_code in self._navi_keys:
             self._tabed += 1
 
             # Don't move selection on initial show
@@ -116,7 +106,9 @@ class AuiPaneNavigator(wx.Dialog):
             self._listBox.SetSelection(selected)
             self.HighlightPane()
             event.Skip()
-        elif event.GetKeyCode() in AuiPaneNavigator.CLOSEKEYS:
+        elif key_code in self._close_keys:
+            self.CloseDialog()
+        elif key_code == wx.WXK_ESCAPE:
             self.CloseDialog()
         else:
             event.Skip()
@@ -161,3 +153,29 @@ class AuiPaneNavigator(wx.Dialog):
     def GetSelection(self):
         """Get the index of the selected page"""
         return self._selectedItem
+
+    def HighlightPane(self):
+        """Highlight the currently selected pane"""
+        sel = self._listBox.GetStringSelection()
+        pane = self._auimgr.GetPane(sel)
+        if pane.IsOk():
+            self._auimgr.ShowHint(pane.window.GetScreenRect())
+            # NOTE: this is odd but it is the only way for the focus to
+            #       work correctly on wxMac...
+            wx.CallAfter(self._listBox.SetFocus)
+            self._listBox.SetFocus()
+
+    def SetCloseKeys(self, keylist):
+        """Set the keys that can be used to dismiss the L{AuiPaneNavigator}
+        window.
+        @param keylist: list of key codes
+
+        """
+        self._close_keys = keylist
+
+    def SetNavigationKeys(self, keylist):
+        """Set the key(s) to advance the selection in the pane list
+        @param keylist: list of key codes
+
+        """
+        self._navi_keys = keylist
