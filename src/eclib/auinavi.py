@@ -11,6 +11,21 @@
 Editra Control Library: AuiPaneNavigator
 
 Popup navigation window for quickly navigating through AuiPanes in an AuiMgr.
+Activating the dialog will cause a modal popup dialog with a list of all panes
+managed by the aui manager. Changing the selection in the dialog will highlight
+the pane in the managed frame. Selecting the choice in the list will move the
+focus to that pane.
+
++---------------------+
+| bmp title           |
++---------------------+
+| pane list           |
+|                     |                   
+|                     |                   
+|                     |                   
+|                     |                   
+|                     |
++---------------------+                   
 
 """
 
@@ -32,7 +47,13 @@ import ctrlbox
 class AuiPaneNavigator(wx.Dialog):
     """Navigate through Aui Panes"""
     def __init__(self, parent, auiMgr, icon=None, title=''):
-        """@param auiMgr: Main window Aui Manager"""
+        """Initialize the navigator window
+        @param parent: parent window
+        @param auiMgr: wx.aui.AuiManager
+        @keyword icon: wx.Bitmap or None
+        @keyword title: string (dialog title)
+
+        """
         wx.Dialog.__init__(self, parent, wx.ID_ANY, "", style=wx.STAY_ON_TOP)
 
         # Attributes
@@ -43,8 +64,35 @@ class AuiPaneNavigator(wx.Dialog):
         self._tabed = 0
         self._close_keys = [wx.WXK_ALT, wx.WXK_CONTROL, wx.WXK_RETURN]
         self._navi_keys = [wx.WXK_TAB, ord('1')] # <- TEMP
+        self._listBox = None
+        self._panel = None
 
         # Setup
+        self.__DoLayout(icon, title)
+
+        # Get the panes
+        self.PopulateListControl()
+
+        # Event Handlers
+        self._listBox.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+        self._listBox.Bind(wx.EVT_NAVIGATION_KEY, self.OnNavigationKey)
+        self._listBox.Bind(wx.EVT_LISTBOX_DCLICK, self.OnItemSelected)
+        self._listBox.Bind(wx.EVT_LISTBOX, lambda evt: self.HighlightPane())
+
+        # Set focus on the list box to avoid having to click on it to change
+        # the tab selection under GTK.
+        self._listBox.SetFocus()
+        self._listBox.SetSelection(0)
+
+    def __del__(self):
+        self._auimgr.HideHint()
+
+    def __DoLayout(self, icon, title):
+        """Layout the dialog controls
+        @param icon: wx.Bitmap or None
+        @param title: string
+
+        """
         sz = wx.BoxSizer(wx.VERTICAL)
         self._listBox = wx.ListBox(self, wx.ID_ANY, wx.DefaultPosition,
                                    wx.Size(200, 150), list(),
@@ -57,6 +105,7 @@ class AuiPaneNavigator(wx.Dialog):
         if icon is not None:
             bmp = wx.StaticBitmap(self._panel, bitmap=icon)
             self._panel.AddControl(bmp, wx.ALIGN_LEFT)
+
         txt = wx.StaticText(self._panel, label=title)
         self._panel.AddControl(txt, wx.ALIGN_LEFT)
 
@@ -68,22 +117,6 @@ class AuiPaneNavigator(wx.Dialog):
         self.Centre()
         self.SetSizer(sz)
         self.SetAutoLayout(True)
-
-        # Get the panes
-        self.PopulateListControl()
-
-        # Event Handlers
-        self._listBox.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-        self._listBox.Bind(wx.EVT_NAVIGATION_KEY, self.OnNavigationKey)
-        self._listBox.Bind(wx.EVT_LISTBOX_DCLICK, self.OnItemSelected)
-
-        # Set focus on the list box to avoid having to click on it to change
-        # the tab selection under GTK.
-        self._listBox.SetFocus()
-        self._listBox.SetSelection(0)
-
-    def __del__(self):
-        self._auimgr.HideHint()
 
     def OnKeyUp(self, event):
         """Handles wx.EVT_KEY_UP"""
@@ -149,6 +182,20 @@ class AuiPaneNavigator(wx.Dialog):
         self._selectedItem = self._listBox.GetStringSelection()
         self._auimgr.HideHint()
         self.EndModal(wx.ID_OK)
+
+    def GetCloseKeys(self):
+        """Get the list of keys that can dismiss the dialog
+        @return: list of long (wx.WXK_*)
+
+        """
+        return self._close_keys
+
+    def GetNavigationKeys(self):
+        """Get the list of navigation key(s)
+        @return: list of long (wx.WXK_*)
+
+        """
+        return self._navi_keys
 
     def GetSelection(self):
         """Get the index of the selected page"""
