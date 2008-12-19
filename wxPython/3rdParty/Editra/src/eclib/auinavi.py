@@ -82,6 +82,20 @@ class AuiPaneNavigator(wx.Dialog):
         self._listBox.SetFocus()
         self._listBox.SetSelection(0)
 
+    def __del__(self):
+        self._auimgr.HideHint()
+
+    def HighlightPane(self):
+        """Highlight the currently selected pane"""
+        sel = self._listBox.GetStringSelection()
+        pane = self._auimgr.GetPane(sel)
+        if pane.IsOk():
+            self._auimgr.ShowHint(pane.window.GetScreenRect())
+            # NOTE: this is odd but it is the only way for the focus to
+            #       work correctly on wxMac...
+            wx.CallAfter(self._listBox.SetFocus)
+            self._listBox.SetFocus()
+
     def OnKeyUp(self, event):
         """Handles wx.EVT_KEY_UP"""
         self._auimgr.HideHint()
@@ -91,6 +105,7 @@ class AuiPaneNavigator(wx.Dialog):
 
             # Don't move selection on initial show
             if self._tabed == 1:
+                self.HighlightPane()
                 event.Skip()
                 return
 
@@ -99,11 +114,7 @@ class AuiPaneNavigator(wx.Dialog):
                 selected = 0
 
             self._listBox.SetSelection(selected)
-            sel = self._listBox.GetStringSelection()
-            pane = self._auimgr.GetPane(sel)
-            if pane.IsOk():
-                self._auimgr.ShowHint(pane.window.GetScreenRect())
-                self._listBox.SetFocus()
+            self.HighlightPane()
             event.Skip()
         elif event.GetKeyCode() in AuiPaneNavigator.CLOSEKEYS:
             self.CloseDialog()
@@ -127,8 +138,9 @@ class AuiPaneNavigator(wx.Dialog):
                 itemToSelect = maxItems - 1
             else:
                 itemToSelect = selected - 1
-        
+
         self._listBox.SetSelection(itemToSelect)
+        self.HighlightPane()
 
     def PopulateListControl(self):
         """Populates the L{AuiPaneNavigator} with the panes in the AuiMgr"""
