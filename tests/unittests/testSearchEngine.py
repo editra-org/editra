@@ -27,7 +27,12 @@ import ed_search
 POOL = ("Test string to use for the find tests. The find tests work on strings"
         " while the search methods work on files. Here is some more random"
         " strings to search in. def foo(param1, param2): print param1, param2"
-        " 123 + 754 / 5 = $x. $var1 = TEST_STRING; $var2=test_string;")
+        " 123 + 754 / 5 = $x. $var1 = TEST_STRING; $var2=test_string; test ")
+
+POOL2 = """Multiline test pool of text to search in.
+This text can be used to check for doing multiline searches. As well
+as doing multiline replaces.
+"""
 
 #-----------------------------------------------------------------------------#
 # Test Class
@@ -94,6 +99,25 @@ class SearchEngineTest(unittest.TestCase):
         t3 = self._def_eng.Find(0)
         self.assertTrue(t3 is None)
 
+    def testFindAll(self):
+        """Test doing a find all in the search pool"""
+        self._def_eng.SetSearchPool(POOL)
+        
+        # Find All Case insensitive
+        self._def_eng.SetQuery(u"test")
+        t1 = self._def_eng.FindAll()
+        self.assertTrue(len(t1) == 6, "Found: %d Expected: 5" % len(t1))
+
+        # Find All Match Case
+        self._def_eng.SetFlags(matchcase=True)
+        t2 = self._def_eng.FindAll()
+        self.assertTrue(len(t2) == 4, "Found: %d Expected: 3" % len(t2))
+
+        # Find All Match Case / Whole Word
+        self._def_eng.SetFlags(wholeword=True)
+        t3 = self._def_eng.FindAll()
+        self.assertTrue(len(t3) == 1, "Found: %d Expected: 1" % len(t3))
+
     def testWholeWordFind(self):
         """Test find procedure to see if it acuratly returns the correct
         positions in the search pool
@@ -109,7 +133,7 @@ class SearchEngineTest(unittest.TestCase):
 
         # Find Next (Should be None)
         t2 = self._ww_eng.Find(t1[1])
-        self.assertTrue(t2 is None, "Find next failed")
+        self.assertTrue(t2 is not None, "Find next failed")
 
     def testMatchCaseFind(self):
         """Test find procedure to see if it acuratly returns the correct
@@ -134,6 +158,13 @@ class SearchEngineTest(unittest.TestCase):
         t3 = self._mc_eng.Find(0)
         self.assertTrue(t3 is None)
 
+    def testQuery(self):
+        """Test setting and retrieving the search query"""
+        q1 = self._def_eng.GetQuery()
+        self.assertTrue(q1 == u"")
+        self._def_eng.SetQuery(u"test")
+        self.assertTrue(self._def_eng.GetQuery() == u"test")
+
     def testRegexFind(self):
         """Test find procedure to see if it acuratly returns the correct
         positions in the search pool
@@ -155,6 +186,7 @@ class SearchEngineTest(unittest.TestCase):
         t3 = self._regex_eng.Find(0)
         self.assertTrue(t3 is None)
 
+        # Multiline 
 #-----------------------------------------------------------------------------#
 
 if __name__ == '__main__':
