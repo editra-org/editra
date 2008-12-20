@@ -701,12 +701,9 @@ class EdMenuBar(wx.MenuBar):
                           EdMenuBar.keybinder.GetBinding(ed_glob.ID_FONT),
                           _("Change Font Settings"))
         formatmenu.AppendSeparator()
-        formatmenu.Append(ed_glob.ID_COMMENT, _("Comment Lines") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_COMMENT),
-                          _("Comment the selected lines"))
-        formatmenu.Append(ed_glob.ID_UNCOMMENT, _("Uncomment Lines") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_UNCOMMENT),
-                          _("Uncomment the selected lines"))
+        formatmenu.Append(ed_glob.ID_TOGGLECOMMENT, _("Toggle Comment") + \
+                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLECOMMENT),
+                          _("Toggle comment on the selected line(s)"))
         formatmenu.AppendSeparator()
 
 
@@ -1016,8 +1013,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_PANELIST : ("Alt", "1"), # Win/Linux
 
                      # Format Menu
-                     ed_glob.ID_COMMENT : ("Ctrl", "1"),
-                     ed_glob.ID_UNCOMMENT : ("Ctrl", "2"),
+                     ed_glob.ID_TOGGLECOMMENT : ("Ctrl", "1"),
                      ed_glob.ID_INDENT : ("Tab",),
                      ed_glob.ID_UNINDENT : ("Shift", "Tab"),
                      ed_glob.ID_USE_SOFTTABS : ("Ctrl", "Shift", "I"),
