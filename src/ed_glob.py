@@ -31,8 +31,8 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_GOTO_LINE', 'ID_NEXT_MARK', 'ID_PRE_MARK', 'ID_FONT',
             'ID_EOL_MAC', 'ID_EOL_UNIX', 'ID_EOL_WIN', 'ID_WORD_WRAP',
             'ID_INDENT', 'ID_UNINDENT', 'ID_TO_UPPER', 'ID_TO_LOWER',
-            'ID_SPACE_TO_TAB', 'ID_TAB_TO_SPACE', 'ID_TRIM_WS', 'ID_COMMENT',
-            'ID_UNCOMMENT', 'ID_AUTOCOMP', 'ID_AUTOINDENT', 'ID_SYNTAX',
+            'ID_SPACE_TO_TAB', 'ID_TAB_TO_SPACE', 'ID_TRIM_WS',
+            'ID_TOGGLECOMMENT', 'ID_AUTOCOMP', 'ID_AUTOINDENT', 'ID_SYNTAX',
             'ID_FOLDING', 'ID_BRACKETHL', 'ID_LEXER', 'ID_KWHELPER',
             'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 'ID_MACRO_STOP',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
@@ -194,8 +194,7 @@ ID_WS_FORMAT     = wx.NewId()
 ID_SPACE_TO_TAB  = wx.NewId()
 ID_TAB_TO_SPACE  = wx.NewId()
 ID_TRIM_WS       = wx.NewId()
-ID_COMMENT       = wx.NewId()
-ID_UNCOMMENT     = wx.NewId()
+ID_TOGGLECOMMENT = wx.NewId()
 
 # Settings Menu IDs
 ID_AUTOCOMP      = wx.NewId()

@@ -427,23 +427,22 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetViEmulationMode(_PGET('VI_EMU'))
         self.SetViewEdgeGuide(_PGET('SHOW_EDGE'))
 
-    def Comment(self, uncomment=False):
+    def Comment(self, start, end, uncomment=False):
         """(Un)Comments a line or a selected block of text
         in a document.
-        @param uncomment: uncomment selection
+        @param start: begining line (int)
+        @param end: end line (int)
+        @keyword uncomment: uncomment selection
 
         """
         if len(self._code['comment']):
             sel = self.GetSelection()
-            start = self.LineFromPosition(sel[0])
-            end = self.LineFromPosition(sel[1])
             c_start = self._code['comment'][0]
             c_end = u''
             if len(self._code['comment']) > 1:
                 c_end = self._code['comment'][1]
-            if end > start and self.GetColumn(sel[1]) == 0:
-                end = end - 1
 
+            # Modify the selected line(s)
             self.BeginUndoAction()
             try:
                 nchars = 0
@@ -476,6 +475,33 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     if len(self._code['comment']) > 1:
                         nchars = nchars - len(self._code['comment'][1])
                     self.GotoPos(sel[0] + nchars)
+
+    def ToggleComment(self):
+        """Toggle the comment of the selected region"""
+        if len(self._code['comment']):
+            sel = self.GetSelection()
+            start = self.LineFromPosition(sel[0])
+            end = self.LineFromPosition(sel[1])
+            c_start = self._code['comment'][0]
+            c_end = u''
+            if len(self._code['comment']) > 1:
+                c_end = self._code['comment'][1]
+
+            if end > start and self.GetColumn(sel[1]) == 0:
+                end = end - 1
+
+            # Analyze the seleted line(s)
+            comment = 0
+            for line in range(start, end+1):
+                txt = self.GetLine(line)
+                if txt.lstrip().startswith(c_start):
+                    comment += 1
+
+            if comment > (end - start)/2:
+                # Uncomment
+                self.Comment(start, end, True)
+            else:
+                self.Comment(start, end, False)
 
     def CanCopy(self):
         """Check if copy/cut is possible"""
@@ -1191,7 +1217,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_SELECTALL: self.SelectAll,
                   ed_glob.ID_FOLDING : self.FoldingOnOff,
                   ed_glob.ID_SHOW_LN : self.ToggleLineNumbers,
-                  ed_glob.ID_COMMENT : self.Comment,
+                  ed_glob.ID_TOGGLECOMMENT : self.ToggleComment,
                   ed_glob.ID_AUTOINDENT : self.ToggleAutoIndent,
                   ed_glob.ID_LINE_AFTER : self.AddLine,
                   ed_glob.ID_TRIM_WS : self.TrimWhitespace,
@@ -1254,8 +1280,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.FindLexer(f_ext)
         elif e_id == ed_glob.ID_AUTOCOMP:
             self.SetAutoComplete(not self.GetAutoComplete())
-        elif e_id == ed_glob.ID_UNCOMMENT:
-            self.Comment(True)
         elif e_id == ed_glob.ID_LINE_BEFORE:
             self.AddLine(before=True)
         elif e_id in [ed_glob.ID_TO_UPPER, ed_glob.ID_TO_LOWER]:
