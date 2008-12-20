@@ -497,7 +497,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 if txt.lstrip().startswith(c_start):
                     comment += 1
 
-            if comment > (end - start)/2:
+            lcount = end - start
+            mod = 1
+            if lcount == 0:
+                mod = 0
+
+            if comment > (lcount / 2) + mod:
                 # Uncomment
                 self.Comment(start, end, True)
             else:
