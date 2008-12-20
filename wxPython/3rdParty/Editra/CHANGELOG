@@ -9,14 +9,17 @@ Change Log:
 Changes since last release:
 
 VERSION 0.4.28
-DATE xx/xx/200x
+DATE 12/20/2009
 21th Alpha Release
 
 NEWS:
-
+This is yet another quick turnaround bug fix release. The previous build had
+an issue with some missing files. This release also adds the new pane navigator
+feature to make it easy to move from panel to panel with the keyboard.
 
 NEW: [features/improvements]
-+Keyboard navigation of MainWindow panes (Alt+Tab). (modified patch from Giuseppe "Cowo" Corbelli)
++Keyboard navigation of MainWindow panes (OSX: Alt+Tab, Others:Alt+1).
+ (modified patch from Giuseppe "Cowo" Corbelli).
 
 BUG FIXES:
 +Fix search string not getting set from buffer selection in search bar.
