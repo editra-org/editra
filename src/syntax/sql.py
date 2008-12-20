@@ -107,7 +107,9 @@ SQL_KW = (0, "access add all alter and any as asc audit between by check "
              "option or order pctfree prior privileges public rename resource "
              "revoke row rows select session set share size start successful "
              "synonym table to trigger union unique update validate values "
-             "view whenever where with")
+             "view whenever where with primary key constraint foreign "
+             "references restrict no action without schema deferrable not "
+             "deferrable rule do")
 # dropped reserved words from the specification above:
 # char date decimal float integer long mlslabel number raw smallint varchar
 #   varchar2 => SQL_DBO
@@ -129,7 +131,7 @@ SQL_DBO = (1, "anydata anydataset anytype bfile binary_float binary_integer "
               "simple_integer smallint time timestamp timestamp_unconstrained "
               "timestamp_ltz_unconstrained timestamp_tz_unconstrained urowid "
               "varchar varchar2 varying xdburitype xmltype year "
-              "yminterval_unconstrained zone")
+              "yminterval_unconstrained zone serial")
 # Note: some data types consist of more than one word like "interval year to
 #       month" or "timestamp with local time zone"
 #       some of these words are preferred in other sections:

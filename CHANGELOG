@@ -21,6 +21,7 @@ NEW: [features/improvements]
 BUG FIXES:
 +Fix search string not getting set from buffer selection in search bar.
 +Fix error when clicking Regular Expression in Search Bar
++Add some missing sql keywords.
 
 #-----------------------------------------------------------------------------#
 
