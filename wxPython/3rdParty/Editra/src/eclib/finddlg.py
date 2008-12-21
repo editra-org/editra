@@ -102,35 +102,49 @@ ID_REGEX = wx.NewId()
 ID_RECURSE = wx.NewId()
 ID_FIND_ALL = wx.NewId()
 ID_REPLACE_ALL = wx.NewId()
+ID_OPTION_CHANGE = wx.NewId()
 ID_CHOOSE_DIR = wx.NewId()
 
 _ = wx.GetTranslation
 
 #--------------------------------------------------------------------------#
 
-# Events
+# Events Definitions
+
+# Find dialog has been closed
 edEVT_FIND_CLOSE = wx.NewEventType()
 EVT_FIND_CLOSE = wx.PyEventBinder(edEVT_FIND_CLOSE, 1)
 
+# Find cutton clicked
 edEVT_FIND = wx.NewEventType()
 EVT_FIND = wx.PyEventBinder(edEVT_FIND, 1)
 
+# Find cutton clicked again with the same search string
 edEVT_FIND_NEXT = wx.NewEventType()
 EVT_FIND_NEXT = wx.PyEventBinder(edEVT_FIND_NEXT, 1)
 
+# Find All button clicked
 edEVT_FIND_ALL = wx.NewEventType()
 EVT_FIND_ALL = wx.PyEventBinder(edEVT_FIND_ALL, 1)
 
+# Replace button clicked
 edEVT_REPLACE = wx.NewEventType()
 EVT_REPLACE = wx.PyEventBinder(edEVT_REPLACE, 1)
 
+# Replace All button clicked
 edEVT_REPLACE_ALL = wx.NewEventType()
 EVT_REPLACE_ALL = wx.PyEventBinder(edEVT_REPLACE_ALL, 1)
 
-EVENT_MAP = { wx.ID_FIND : edEVT_FIND,
-              wx.ID_REPLACE : edEVT_REPLACE,
-              ID_FIND_ALL : edEVT_FIND_ALL,
-              ID_REPLACE_ALL : edEVT_REPLACE_ALL }
+# Find option has changed
+edEVT_OPTION_CHANGED = wx.NewEventType()
+EVT_OPTION_CHANGED = wx.PyEventBinder(edEVT_OPTION_CHANGED, 1)
+
+# Convenience for generating events
+_EVENT_MAP = { wx.ID_FIND : edEVT_FIND,
+               wx.ID_REPLACE : edEVT_REPLACE,
+               ID_FIND_ALL : edEVT_FIND_ALL,
+               ID_REPLACE_ALL : edEVT_REPLACE_ALL,
+               ID_OPTION_CHANGE : edEVT_OPTION_CHANGED }
 
 class FindEvent(wx.PyCommandEvent):
     """Event sent by the FindReplaceDialog that contains all
@@ -399,6 +413,13 @@ class FindReplaceDlgBase:
         data = self.GetData()
         self._panel.SetFindString(data.GetFindString())
         self._panel.SetReplaceString(data.GetReplaceString())
+
+    def RefreshFindOptions(self):
+        """Refresh the find options controls based on the current
+        values of the FindData owned by this window.
+
+        """
+        self._panel.RefreshControls()
 
     def SetData(self, data):
         """Set the dialogs FindReplaceData
@@ -882,7 +903,7 @@ class FindPanel(wx.Panel):
 
         """
         flags = self._fdata.GetFlags()
-        flags &= ~flag 
+        flags &= ~flag
         self.SetFlags(flags)
 
     def FireEvent(self, eid):
@@ -890,7 +911,7 @@ class FindPanel(wx.Panel):
         @param eid: Event id
 
         """
-        etype = EVENT_MAP.get(eid, None)
+        etype = _EVENT_MAP.get(eid, None)
         query = self._ftxt.GetValue()
         if eid == wx.ID_FIND:
             if self._lastSearch == query:
@@ -1012,8 +1033,10 @@ class FindPanel(wx.Panel):
                 self.SetFlag(fmap[eid])
             else:
                 self.ClearFlag(fmap[eid])
+            self.FireEvent(ID_OPTION_CHANGE)
         elif eid == wx.ID_DOWN:
             self.ClearFlag(fmap[wx.ID_UP])
+            self.FireEvent(ID_OPTION_CHANGE)
         else:
             evt.Skip()
 
@@ -1052,6 +1075,10 @@ class FindPanel(wx.Panel):
         """
         self._ftxt.SetValue(query)
         self._fdata.SetFindString(query)
+
+    def RefreshControls(self):
+        """Refresh the state of the controls from the current FindData."""
+        self._ConfigureControls()
 
     def SetData(self, data):
         """Set the FindReplaceData and update the dialog with that data
