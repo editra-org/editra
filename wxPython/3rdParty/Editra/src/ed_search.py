@@ -66,6 +66,7 @@ class SearchController:
         self._li_choices = list()
         self._li_sel   = 0
         self._filters  = None
+        self._clients = list()
 
         # Event handlers
         self._parent.Bind(finddlg.EVT_FIND, self.OnFind)
@@ -74,6 +75,7 @@ class SearchController:
         self._parent.Bind(finddlg.EVT_REPLACE, self.OnReplace)
         self._parent.Bind(finddlg.EVT_REPLACE_ALL, self.OnReplaceAll)
         self._parent.Bind(finddlg.EVT_FIND_CLOSE, self.OnFindClose)
+        self._parent.Bind(finddlg.EVT_OPTION_CHANGED, self.OnOptionChanged)
 
     def _CreateNewDialog(self, e_id):
         """Create and set the controlers find dialog
@@ -344,6 +346,15 @@ class SearchController:
         self._finddlg = None
         evt.Skip()
 
+    def OnOptionChanged(self, evt):
+        """Handle when the find options are changed in the dialog"""
+        dead = list()
+        for idx, client in enumerate(self._clients):
+            try:
+                client.NotifyOptionChanged(evt)
+            except wx.PyDeadObjectError:
+                dead.append(idx)
+
     def OnReplace(self, evt):
         """Replace the selected text in the current buffer
         @param evt: finddlg.EVT_REPLACE
@@ -436,6 +447,27 @@ class SearchController:
             self._finddlg.Raise()
         self._finddlg.SetFocus()
 
+    def RegisterClient(self, client):
+        """Register a client object of this search controller. The client object
+        must implement a method called NotifyOptionChanged to be called when
+        search options are changed.
+
+        >>> def NotifyOptionChanged(self, evt)
+
+        @param client: object
+
+        """
+        if client not in self._clients:
+            self._clients.append(client)
+
+    def RemoveClient(self, client):
+        """Remove a client from this controller
+        @param client: object
+
+        """
+        if client in self._clients:
+            self._clients.remove(client)
+
     @staticmethod
     def ReplaceInStc(stc, matches, rstring, isregex=True):
         """Replace the strings at the position in the given StyledTextCtrl
@@ -486,6 +518,11 @@ class SearchController:
         self._data.SetFlags(flags)
         if self._finddlg is not None:
             self._finddlg.SetData(self._data)
+
+    def RefreshControls(self):
+        """Refresh controls that are associated with this controllers data."""
+        if self._finddlg is not None:
+            self._finddlg.RefreshFindOptions()
 
 #-----------------------------------------------------------------------------#
 
@@ -896,6 +933,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             c_flags ^= flag
             self._flags = c_flags
             data.SetFlags(self._flags)
+            self.FindService.RefreshControls()
 
     def DoSearch(self, next=True):
         """Do the search and move the selection
@@ -928,6 +966,13 @@ class EdSearchCtrl(wx.SearchCtrl):
             # sure
             self.SetForegroundColour(wx.ColorRGB(0 | 1 | 0))
         self.Refresh()
+
+    def GetSearchController(self):
+        """Get the L{SearchController} used by this control.
+        @return: L{SearchController}
+
+        """
+        return self.FindService
 
     def GetSearchData(self):
         """Gets the find data from the controls FindService
@@ -1054,6 +1099,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             c_flags |= flags
             self._flags = c_flags
             data.SetFlags(self._flags)
+            self.FindService.RefreshControls()
 
     #---- End Functions ----#
 

@@ -138,6 +138,7 @@ class SearchBar(CommandBarBase):
         # Attributes
         self.SetControl(ed_search.EdSearchCtrl(self, wx.ID_ANY,
                                                menulen=5, size=(180, -1)))
+        self._sctrl = self.ctrl.GetSearchController()
 
         # Setup
         f_lbl = wx.StaticText(self, label=_("Find") + u": ")
@@ -172,9 +173,11 @@ class SearchBar(CommandBarBase):
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
+        self._sctrl.RegisterClient(self)
 
     def __del__(self):
         ed_msg.Unsubscribe(self.OnThemeChange)
+        self._sctrl.RemoveClient(self)
 
     def OnButton(self, evt):
         """Handle button clicks for the next/previous buttons
@@ -208,6 +211,15 @@ class SearchBar(CommandBarBase):
                         self.ctrl.ClearSearchFlag(flag)
         else:
             evt.Skip()
+
+    def NotifyOptionChanged(self, evt):
+        """Callback for L{ed_search.SearchController} to notify of update
+        to the find options.
+        @param evt: eclib.finddlg.FindEvent
+
+        """
+        self.FindWindowById(ID_MATCH_CASE).SetValue(evt.IsMatchCase())
+        self.FindWindowById(ID_REGEX).SetValue(evt.IsRegEx())
 
     def OnThemeChange(self, msg):
         """Update icons when the theme has changed
