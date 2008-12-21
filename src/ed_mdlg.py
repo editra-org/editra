@@ -22,11 +22,14 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Imports
 import wx
+import wx.stc
 from extern.embeddedimage import PyEmbeddedImage
 
 # Editra Library
+import ed_glob
 import util
 import eclib.infodlg as infodlg
+import eclib.choicedlg as choicedlg
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -123,3 +126,35 @@ class EdFileInfoDlg(infodlg.FileInfoDlg):
         # Setup
         self.SetFileTypeLabel(util.GetFileType(fname))
 
+#--------------------------------------------------------------------------#
+
+class EdFormatEOLDlg(choicedlg.ChoiceDialog):
+    """Dialog for selecting EOL format"""
+    def __init__(self, parent, msg=u'', title=u'', selection=0):
+        """Create the dialog
+        @keyword selection: default selection (wx.stc.STC_EOL_*)
+
+        """
+        choices = [_("Unix") + u" (\\n)", _("Old Machintosh") + u" (\\r)",
+                   _("Windows") + u" (\\r\\n)"]
+        self._eol = [wx.stc.STC_EOL_LF, wx.stc.STC_EOL_CR, wx.stc.STC_EOL_CRLF]
+        idx = self._eol.index(selection)
+        selection = choices[idx]
+
+        choicedlg.ChoiceDialog.__init__(self, parent, msg=msg, title=title,
+                                        choices=choices, default=selection,
+                                        style=wx.YES_NO|wx.YES_DEFAULT)
+
+        # Setup
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOCPROP), wx.ART_OTHER)
+        if bmp.IsOk():
+            self.SetBitmap(bmp)
+        self.CenterOnParent()
+
+    def GetSelection(self):
+        """Get the selected eol mode
+        @return: wx.stc.STC_EOL_*
+
+        """
+        sel = super(EdFormatEOLDlg, self).GetSelection()
+        return self._eol[sel]
