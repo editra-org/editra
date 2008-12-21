@@ -644,8 +644,8 @@ def InitConfig():
             if isinstance(profiler.Profile_Get('PRINT_MODE'), basestring):
                 profiler.Profile_Set('PRINT_MODE', ed_glob.PRINT_BLACK_WHITE)
 
-            # Simplifications to eol mode persistance (0.4.0)
-            TranslateEOLMode()
+            # Simplifications to eol mode persistance (0.4.28)
+            profiler.Profile_Del('EOL') # changed to EOL_MODE
 
             #---- End Temporary Profile Adaptions ----#
 
@@ -681,14 +681,11 @@ def InitConfig():
 
         # Set default eol for windows
         if wx.Platform == '__WXMSW__':
-            profiler.Profile_Set('EOL', 'CRLF')
+            profiler.Profile_Set('EOL_MODE', ed_glob.EOL_MODE_CRLF)
             profiler.Profile_Set('ICONSZ', (16, 16))
 
     #---- Profile Loaded / Installed ----#
 
-    # Extra Adaption checks
-    TranslateEOLMode()
-    # End Extra Adaptions
 
     # Set debug mode
     if 'DEBUG' in profiler.Profile_Get('MODE'):
@@ -766,19 +763,6 @@ def UpgradeOldInstall():
               _("Profile Updated"))
 
     return not err
-
-#--------------------------------------------------------------------------#
-
-def TranslateEOLMode():
-    """Translate old eol mode persistance to new one
-    @prerequisite: Profile has been initialized / loaded
-
-    """
-    eol_m = profiler.Profile_Get('EOL')
-    if len(eol_m) > 4:
-        emap = { 'm' : 'CR', 'w' : 'CRLF', 'u' : 'LF' }
-        cmode = eol_m[0].lower()
-        profiler.Profile_Set('EOL', emap.get(cmode, 'LF'))
 
 #--------------------------------------------------------------------------#
 

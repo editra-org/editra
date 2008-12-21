@@ -54,6 +54,8 @@ from info import *
 #---- Imported Libs/Objects ----#
 import wx
 
+_ = wx.GetTranslation
+
 #---- WX Compatibility Hacks ----#
 import wxcompat
 
@@ -295,7 +297,7 @@ ID_2_PROF = {
              ID_PERSPECTIVES      : 'DEFAULT_VIEW',
              ID_PREF_EDGE         : 'EDGE',
              ID_PREF_ENCODING     : 'ENCODING',
-             ID_EOL_MODE          : 'EOL',
+             ID_EOL_MODE          : 'EOL_MODE',
              ID_PREF_FHIST        : 'FHIST_LVL',
              ID_INDENT_GUIDES     : 'GUIDES',
              ID_HLCARET_LINE      : 'HLCARETLINE',
@@ -328,6 +330,16 @@ ID_2_PROF = {
              ID_PREF_WARN_EOL     : 'WARN_EOL',
              ID_WORD_WRAP         : 'WRAP',
 }
+
+EOL_MODE_CR   = 0
+EOL_MODE_LF   = 1
+EOL_MODE_CRLF = 2
+def EOLModeMap():
+    """Get the eol mode map"""
+    # Maintenance Note: ints must be kept in sync with EDSTC_EOL_* in edstc 
+    return { EOL_MODE_CR : _("Old Machintosh") + u" (\\r)",
+             EOL_MODE_LF : _("Unix") + u" (\\n)",
+             EOL_MODE_CRLF : _("Windows") + u" (\\r\\n)"}
 
 # Default Plugins
 DEFAULT_PLUGINS = ("generator.Html", "generator.LaTeX", "generator.Rtf",

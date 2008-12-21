@@ -31,7 +31,7 @@ import cPickle
 import wx
 
 # Editra Imports
-from ed_glob import CONFIG, PROG_NAME, VERSION, PRINT_BLACK_WHITE
+from ed_glob import CONFIG, PROG_NAME, VERSION, PRINT_BLACK_WHITE, EOL_MODE_LF
 import util
 import dev_tool
 
@@ -55,7 +55,7 @@ _DEFAULTS = {
            'DEFAULT_VIEW' : 'Automatic',    # Default Perspective
            'EDGE'       : 80,               # Edge guide column
            'ENCODING'   : None,             # Prefered text encoding
-           'EOL'        : 'LF',             # EOL mode
+           'EOL_MODE'   : EOL_MODE_LF,      # EOL mode 1 == LF, 2 == CRLF
            'FHIST'      : list(),           # List of history files
            'FHIST_LVL'  : 9,                # Filehistory length (9 is max)
            'FFILTER'    : 0,                # Last file filter used

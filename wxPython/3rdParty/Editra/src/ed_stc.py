@@ -52,9 +52,9 @@ NUM_MARGIN  = 1
 FOLD_MARGIN = 2
 
 # EOL Constants
-EDSTC_EOL_CR   = "CR"
-EDSTC_EOL_LF   = "LF"
-EDSTC_EOL_CRLF = "CRLF"
+EDSTC_EOL_CR   = ed_glob.EOL_MODE_CR
+EDSTC_EOL_LF   = ed_glob.EOL_MODE_LF
+EDSTC_EOL_CRLF = ed_glob.EOL_MODE_CRLF
 
 # Character sets
 SPACECHARS = " \t\r\n"
@@ -418,7 +418,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetTabWidth(_PGET('TABWIDTH', 'int'))
 #        self.SetTabIndents(True) # Add option for this too?
         self.SetIndentationGuides(_PGET('GUIDES'))
-        self.SetEOLMode(_PGET('EOL'))
+        self.SetEOLMode(_PGET('EOL_MODE'))
         self.SetViewEOL(_PGET('SHOW_EOL'))
         self.SetAutoComplete(_PGET('AUTO_COMP'))
         self.FoldingOnOff(_PGET('CODE_FOLD'))
@@ -1344,7 +1344,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 if dlg.ShowModal() == wx.ID_YES:
                     sel = dlg.GetSelection()
                     self.ConvertEOLs(sel)
-                    self.SetEOLMode(sel)
+                    super(EditraStc, self).SetEOLMode(sel)
                 dlg.Destroy()
             else:
                 # The end of line character is different from the prefered
@@ -1357,7 +1357,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def ConvertLineMode(self, mode_id):
         """Converts all line endings in a document to a specified
         format.
-        @param mode_id: id of eol mode to set
+        @param mode_id: (menu) id of eol mode to set
 
         """
         eol_map = { ed_glob.ID_EOL_MAC  : wx.stc.STC_EOL_CR,
@@ -1365,7 +1365,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     ed_glob.ID_EOL_WIN  : wx.stc.STC_EOL_CRLF
                   }
         self.ConvertEOLs(eol_map[mode_id])
-        self.SetEOLMode(eol_map[mode_id])
+        super(EditraStc, self).SetEOLMode(eol_map[mode_id])
 
     def ConvertWhitespace(self, mode_id):
         """Convert whitespace from using tabs to spaces or visa versa
@@ -1408,10 +1408,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @return: the character used for eol in this document
 
         """
-        m_id = self.GetEOLModeId()
-        if m_id == ed_glob.ID_EOL_MAC:
+        m_id = self.GetEOLMode()
+        if m_id == wx.stc.STC_EOL_CR:
             return u'\r'
-        elif m_id == ed_glob.ID_EOL_WIN:
+        elif m_id == wx.stc.STC_EOL_CRLF:
             return u'\r\n'
         else:
             return u'\n'
@@ -1427,7 +1427,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             return u' ' * self.GetIndent()
 
     def GetEOLModeId(self):
-        """Gets the id of the eol format
+        """Gets the id of the eol format. Convinience for updating
+        menu ui.
         @return: id of the eol mode of this document
 
         """
@@ -1564,8 +1565,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                      EDSTC_EOL_LF   : wx.stc.STC_EOL_LF,
                      EDSTC_EOL_CRLF : wx.stc.STC_EOL_CRLF
                    }
+
         mode = mode_map.get(mode, wx.stc.STC_EOL_LF)
-        wx.stc.StyledTextCtrl.SetEOLMode(self, mode)
+        super(EditraStc, self).SetEOLMode(mode)
 
     def SetFileName(self, path):
         """Set the buffers filename attributes from the given path"""
