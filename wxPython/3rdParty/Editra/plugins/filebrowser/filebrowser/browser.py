@@ -36,6 +36,7 @@ import ed_mdlg
 import syntax.syntax
 import util
 from eclib import platebtn
+from eclib import ctrlbox
 
 # Local Imports
 import Trash
@@ -69,11 +70,15 @@ ID_MARK_PATH = wx.NewId()
 ID_OPEN_MARK = wx.NewId()
 ID_REMOVE_MARK = wx.NewId()
 
-class BrowserMenuBar(wx.Panel):
+class BrowserMenuBar(ctrlbox.ControlBar):
     """Creates a menubar with """
 
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, style=wx.NO_BORDER)
+        ctrlbox.ControlBar.__init__(self, parent,
+                                    style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+
+        if wx.Platform == '__WXGTK__':
+            self.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
 
         # Attributes
         self._saved = ed_menu.EdMenu()
@@ -105,21 +110,11 @@ class BrowserMenuBar(wx.Panel):
         self.menub.SetMenu(menu)
 
         # Layout bar
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add((1, 1))
-        men_sz = wx.BoxSizer(wx.HORIZONTAL)
-        men_sz.Add((6, 6))
-        men_sz.Add(self.menub, 0, wx.ALIGN_LEFT)
-        sizer.Add(men_sz)
-        sizer.Add((1, 1))
-        self.SetSizer(sizer)
+        self.AddControl(self.menub, wx.ALIGN_LEFT)
 
         # Event Handlers
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         self.Bind(wx.EVT_BUTTON, lambda evt: self.menub.ShowMenu(), self.menub)
-        # Due to transparency issues dont do painting on gtk
-        if wx.Platform != '__WXGTK__':
-            self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def __del__(self):
         """Unsubscribe from messages"""
@@ -165,25 +160,6 @@ class BrowserMenuBar(wx.Panel):
         """Returns the menu containg the saved items"""
         return self._saved
 
-    def OnPaint(self, evt):
-        """Paints the background of the menubar"""
-        dc = wx.PaintDC(self)
-        gc = wx.GraphicsContext.Create(dc)
-        col1 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), -15)
-        col2 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 40)
-        rect = self.GetRect()
-        grad = gc.CreateLinearGradientBrush(0, 1, 0, rect.height, col2, col1)
-
-        # Create the background path
-        path = gc.CreatePath()
-        path.AddRectangle(0, 0, rect.width - 0.5, rect.height - 0.5)
-
-        gc.SetPen(wx.Pen(util.AdjustColour(col1, -20), 1))
-        gc.SetBrush(grad)
-        gc.DrawPath(path)
-
-        evt.Skip()
-
     def OnThemeChanged(self, msg):
         """Update the buttons icon when the icon theme changes
         @param msg: Message Object
@@ -210,22 +186,20 @@ class BrowserMenuBar(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class BrowserPane(wx.Panel):
+class BrowserPane(ctrlbox.ControlBox):
     """Creates a filebrowser Pane"""
     ID_SHOW_HIDDEN = wx.NewId()
 
     def __init__(self, parent, id, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.NO_BORDER):
-        wx.Panel.__init__(self, parent, id, pos, size, style)
+        ctrlbox.ControlBox.__init__(self, parent, id, pos, size, style)
         
         # Attributes
         self._mw = parent
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
-        filters = "".join(syntax.syntax.GenFileFilters())
+        filters = u"".join(syntax.syntax.GenFileFilters())
         self._menbar = BrowserMenuBar(self)
         self._browser = FileBrowser(self, ID_FILEBROWSE, 
-                                    dir=wx.GetHomeDir(), 
-                                    size=(200, -1),
+                                    dir=wx.GetHomeDir(),
                                     style=wx.DIRCTRL_SHOW_FILTERS | 
                                           wx.DIRCTRL_EDIT_LABELS | 
                                           wx.BORDER_SUNKEN,
@@ -235,11 +209,22 @@ class BrowserPane(wx.Panel):
             self._menbar.AddItem(item)
 
         # Setup hidden files checkbox
-        self._showh_cb = wx.CheckBox(self, self.ID_SHOW_HIDDEN, 
+        bbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        if wx.Platform == '__WXGTK__':
+            bbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+
+        self._showh_cb = wx.CheckBox(bbar, self.ID_SHOW_HIDDEN, 
                                      _("Show Hidden Files"))
         self._showh_cb.SetValue(False)
-        if wx.Platform == '__WXMAC__':
-            self._showh_cb.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+        bbar.AddControl(self._showh_cb, wx.ALIGN_LEFT)
+
+        # Layout
+        self.SetWindow(self._browser)
+        self.SetControlBar(self._menbar, wx.TOP)
+        self.SetControlBar(bbar, wx.BOTTOM)
+        if wx.Platform == '__WXMSW__':
+            bbar.Hide()
+        self.Layout()
 
         #---- Add Menu Items ----#
         viewm = self._mw.GetMenuBar().GetMenuByName("view")
@@ -248,26 +233,9 @@ class BrowserPane(wx.Panel):
                                      wx.ITEM_CHECK,
                                      after=ed_glob.ID_PRE_MARK)
 
-        # Layout Pane
-        self._sizer.AddMany([(self._menbar, 0, wx.EXPAND),
-                             (self._browser, 1, wx.EXPAND)])
-
-        # TODO: an unresolved bug in msw version the show hidden files
-        #       option causes a hard crash. So just show them by default
-        if wx.Platform != '__WXMSW__':
-            cb_sz = wx.BoxSizer(wx.HORIZONTAL)
-            cb_sz.Add((4, 4))
-            cb_sz.Add(self._showh_cb, 0, wx.ALIGN_LEFT)
-            self._sizer.AddMany([((2, 2),), (cb_sz, 0, wx.ALIGN_LEFT), ((2, 2),)])
-        else:
-            self._showh_cb.Hide()
-
-        self.SetSizer(self._sizer)
-
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(wx.EVT_MENU, self.OnMenu)
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
         # Messages
         ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
@@ -322,30 +290,6 @@ class BrowserPane(wx.Panel):
             self._config.Save()
         else:
             evt.Skip()
-
-    def OnPaint(self, evt):
-        """Paints the background of the panel"""
-        dc = wx.PaintDC(self)
-        gc = wx.GraphicsContext.Create(dc)
-        col1 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), -15)
-        col2 = util.AdjustColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 40)
-        rect = self.GetRect()
-        x = 0
-        y = rect.height - (self._showh_cb.GetSize()[1] + 6)
-        grad = gc.CreateLinearGradientBrush(x, y, x, 
-                                            y + self._showh_cb.GetSize()[1] + 6,
-                                            col2, col1)
-
-        # Create the background path
-        path = gc.CreatePath()
-        path.AddRectangle(x, y, rect.width - 0.5, 
-                          self._showh_cb.GetSize()[1] + 6)
-
-        gc.SetPen(wx.Pen(util.AdjustColour(col1, -20), 1))
-        gc.SetBrush(grad)
-        gc.DrawPath(path)
-
-        evt.Skip()
 
     def OnShowBrowser(self, evt):
         """Shows the filebrowser"""
@@ -419,13 +363,6 @@ class FileBrowser(wx.GenericDirCtrl):
         self._tree.Refresh()
         self._imglst = self._tree.GetImageList()
         self._SetupIcons()
-
-        # Use the small variant of the choice control on osx
-        if wx.Platform == '__WXMAC__':
-            for child in self.GetChildren():
-                if isinstance(child, wx.Choice):
-                    child.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
-                    break
 
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnOpen)

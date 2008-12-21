@@ -2,6 +2,10 @@ FileBrowser Plugin for Editra
 Author: Cody Precord
 License: wxWindows
 
+Version 1.2:
+
+    - Minor UI changes
+
 Version 1.1:
 
     - Fix not being able to open files from Home and Desktop nodes on gtk when
