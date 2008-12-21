@@ -540,17 +540,11 @@ class DocGenPanel(wx.Panel):
 
         eolsz = wx.BoxSizer(wx.HORIZONTAL)
 
-        emode_val = Profile_Get('EOL')
-        if emode_val == ed_stc.EDSTC_EOL_CRLF:
-            emode_val = 2
-        elif emode_val == ed_stc.EDSTC_EOL_LF:
-            emode_val = 1
-        else:
-            emode_val = 0
+        # NOTE: order must be kept insync with vals in ed_glob, ed_stc
         eolmode = ExChoice(self, ed_glob.ID_EOL_MODE,
                            choices=[_("Old Macintosh (\\r)"), _("Unix (\\n)"),
                                     _("Windows (\\r\\n)")])
-        eolmode.SetSelection(emode_val)
+        eolmode.SetSelection(Profile_Get('EOL_MODE'))
                         
         eolsz.AddMany([(wx.StaticText(self,
                         label=_("Default EOL Mode") + u": "),
@@ -660,13 +654,7 @@ class DocGenPanel(wx.Panel):
 
             e_value = evt.GetEventObject().GetValue()
             if e_id == ed_glob.ID_EOL_MODE:
-                # Translate to settings mode
-                if u"\\r\\n" in e_value:
-                    e_value = ed_stc.EDSTC_EOL_CRLF
-                elif u"\\n" in e_value:
-                    e_value = ed_stc.EDSTC_EOL_LF
-                else:
-                    e_value = ed_stc.EDSTC_EOL_CR
+                e_value = evt.GetEventObject().GetSelection()
 
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_value)
 
@@ -1891,9 +1879,10 @@ class ExChoice(wx.Choice):
 
         """
         if len(choices) and isinstance(choices[0], int):
-            for ind in range(len(choices)):
-                choices[ind] = str(choices[ind])
+            choices = [ unicode(choice) for choice in choices ]
+
         wx.Choice.__init__(self, parent, cid, choices=choices)
+
         if default != None and isinstance(default, basestring):
             self.SetStringSelection(default)
         elif default is not None:
