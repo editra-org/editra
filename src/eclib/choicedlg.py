@@ -80,6 +80,13 @@ class ChoiceDialog(wx.Dialog):
         """
         return self._panel.GetSelection()
 
+    def GetStringSelection(self):
+        """Get the chosen string
+        @return: string
+
+        """
+        return self._panel.GetStringSelection()
+
     def SetBitmap(self, bmp):
         """Set the bitmap used in the dialog
         @param bmp: wx.Bitmap
@@ -98,7 +105,8 @@ class ChoiceDialog(wx.Dialog):
 
 class ChoicePanel(wx.Panel):
     """Generic Choice dialog panel"""
-    def __init__(self, parent, msg=u'', choices=list(), default=u'', style=wx.YES_NO):
+    def __init__(self, parent, msg=u'', choices=list(),
+                 default=u'', style=wx.OK|wx.CANCEL):
         """Create the panel
         @keyword msg: Display message
         @keyword choices: list of strings
@@ -112,6 +120,7 @@ class ChoicePanel(wx.Panel):
         self._msg = msg
         self._choices = wx.Choice(self, wx.ID_ANY)
         self._selection = default
+        self._selidx = 0
         self._bmp = None
         self._buttons = list()
 
@@ -119,8 +128,10 @@ class ChoicePanel(wx.Panel):
         self._choices.SetItems(choices)
         if default in choices:
             self._choices.SetStringSelection(default)
+            self._selidx = self._choices.GetSelection()
         else:
             self._choices.SetSelection(0)
+            self._selidx = 0
             self._selection = self._choices.GetStringSelection()
 
         # Setup Buttons
@@ -129,10 +140,6 @@ class ChoicePanel(wx.Panel):
             if btn & style:
                 button = wx.Button(self, id_)
                 self._buttons.append(button)
-                if id_ == wx.ID_YES and wx.YES_DEFAULT & style:
-                    button.SetDefault()
-                elif id_ == wx.ID_OK:
-                    button.SetDefault()
 
         if not len(self._buttons):
             self._buttons.append(wx.Button(self, wx.ID_OK))
@@ -155,6 +162,17 @@ class ChoicePanel(wx.Panel):
         bsizer = wx.StdDialogButtonSizer()
         for button in self._buttons:
             bsizer.AddButton(button)
+            bid = button.GetId()
+            if bid in (wx.ID_NO, wx.ID_YES):
+                if wx.NO_DEFAULT & style:
+                    if bid == wx.ID_NO:
+                        button.SetDefault()
+                else:
+                    if bid == wx.ID_YES:
+                        button.SetDefault()
+            elif bid == wx.ID_OK:
+                button.SetDefault()
+
         bsizer.Realize()
 
         vsizer.AddMany([((10, 10), 0), (caption, 0), ((20, 20), 0),
@@ -181,8 +199,22 @@ class ChoicePanel(wx.Panel):
         self.SetInitialSize()
         self.SetAutoLayout(True)
 
+    def GetChoiceControl(self):
+        """Get the dialogs choice control
+        @return: wx.Choice
+
+        """
+        return self._choices
+
     def GetSelection(self):
-        """Get the chosen encoding
+        """Get the chosen index
+        @return: int
+
+        """
+        return self._selidx
+
+    def GetStringSelection(self):
+        """Get the chosen string
         @return: string
 
         """
@@ -204,6 +236,7 @@ class ChoicePanel(wx.Panel):
         """
         if evt.GetEventObject() == self._choices:
             self._selection = self._choices.GetStringSelection()
+            self._selidx = self._choices.GetSelection()
         else:
             evt.Skip()
 

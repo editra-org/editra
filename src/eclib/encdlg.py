@@ -71,7 +71,7 @@ class EncodingDialog(choicedlg.ChoiceDialog):
         @return: string
 
         """
-        return self.GetSelection()
+        return self.GetStringSelection()
 
 #--------------------------------------------------------------------------#
 # Utilities
@@ -96,4 +96,3 @@ if __name__ == '__main__':
                          title="Encodings", default="utf-8")
     dlg.ShowModal()
     print dlg, dlg.GetEncoding()
-    app.MainLoop()
