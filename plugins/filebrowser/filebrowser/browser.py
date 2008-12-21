@@ -191,7 +191,7 @@ class BrowserPane(ctrlbox.ControlBox):
     ID_SHOW_HIDDEN = wx.NewId()
 
     def __init__(self, parent, id, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.NO_BORDER):
+                 size=wx.DefaultSize, style=wx.NO_BORDER|wx.TAB_TRAVERSAL):
         ctrlbox.ControlBox.__init__(self, parent, id, pos, size, style)
         
         # Attributes
@@ -282,7 +282,7 @@ class BrowserPane(ctrlbox.ControlBox):
             pmark = self._menbar.GetItemText(e_id)
             path = self._config.GetPath(pmark)
             self._browser.ExpandPath(path)
-            self._browser.SetFocus()
+            self._browser.GetTreeCtrl().SetFocus()
         elif e_id in d_ids:
             plabel = self._menbar.GetItemText(e_id)
             self._menbar.RemoveItemById(e_id)
@@ -324,6 +324,10 @@ class BrowserPane(ctrlbox.ControlBox):
         """
         pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
         evt.Check(pane.IsShown())
+
+    def SetFocus(self):
+        """Set the focus to this window"""
+        self._browser.GetTreeCtrl().SetFocus()
 
 #-----------------------------------------------------------------------------#
 # Menu Id's
@@ -444,6 +448,10 @@ class FileBrowser(wx.GenericDirCtrl):
         self.SetTreeStyle(style)
         self.Refresh()
         return rval
+
+    def AcceptsFocus(self):
+        print "HELLO1"
+        return True
 
     def GetItemPath(self, itemId):
         """Get and return the path of the given item id
