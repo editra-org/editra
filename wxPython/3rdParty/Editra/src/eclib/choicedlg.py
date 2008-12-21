@@ -94,6 +94,13 @@ class ChoiceDialog(wx.Dialog):
         """
         self._panel.SetBitmap(bmp)
 
+    def SetStringSelection(self, sel):
+        """Set the selected choice
+        @param sel: string
+
+        """
+        self._panel.SetStringSelection(sel)
+
     def SetSelection(self, sel):
         """Set the selected choice
         @param sel: string
@@ -259,11 +266,21 @@ class ChoicePanel(wx.Panel):
 
     def SetSelection(self, sel):
         """Set the selected choice
+        @param sel: int
+
+        """
+        self._choices.SetSelection(sel)
+        self._selection = self._choices.GetStringSelection()
+        self._selidx = self._choices.GetSelection()
+
+    def SetStringSelection(self, sel):
+        """Set the selected choice
         @param sel: string
 
         """
         self._choices.SetStringSelection(sel)
         self._selection = self._choices.GetStringSelection()
+        self._selidx = self._choices.GetSelection()
 
 #--------------------------------------------------------------------------#
 

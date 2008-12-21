@@ -135,15 +135,14 @@ class EdFormatEOLDlg(choicedlg.ChoiceDialog):
         @keyword selection: default selection (wx.stc.STC_EOL_*)
 
         """
-        choices = [_("Unix") + u" (\\n)", _("Old Machintosh") + u" (\\r)",
+        choices = [_("Old Machintosh") + u" (\\r)", _("Unix") + u" (\\n)",
                    _("Windows") + u" (\\r\\n)"]
-        self._eol = [wx.stc.STC_EOL_LF, wx.stc.STC_EOL_CR, wx.stc.STC_EOL_CRLF]
+        self._eol = [wx.stc.STC_EOL_CR, wx.stc.STC_EOL_LF, wx.stc.STC_EOL_CRLF]
         idx = self._eol.index(selection)
-        selection = choices[idx]
-
         choicedlg.ChoiceDialog.__init__(self, parent, msg=msg, title=title,
-                                        choices=choices, default=selection,
+                                        choices=choices,
                                         style=wx.YES_NO|wx.YES_DEFAULT)
+        self.SetSelection(idx)
 
         # Setup
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOCPROP), wx.ART_OTHER)
