@@ -96,6 +96,7 @@ _DEFAULTS = {
            'USETABS'    : False,            # Use tabs instead of spaces
            'USE_PROXY'  : False,            # Use Proxy server settings?
            'VI_EMU'     : False,            # Use Vi emulation mode
+           'WARN_EOL'   : True,             # Warn about mixed eol characters
            'WRAP'       : False,            # Use Wordwrap
            'WSIZE'      : (700, 450)        # Mainwindow size
           #FONT1 created at runtime by ed_styles as primary font

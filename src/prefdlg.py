@@ -355,6 +355,9 @@ class GeneralPanel(wx.Panel):
                                 _("Check if on disk file has been "
                                   "modified by others"))
         chkmod_cb.SetValue(Profile_Get('CHECKMOD'))
+        eolwarn_cb = wx.CheckBox(self, ed_glob.ID_PREF_WARN_EOL,
+                                 _("Warn when mixed eol characters are detected"))
+        eolwarn_cb.SetValue(Profile_Get('WARN_EOL'))
 
         # Locale
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -365,7 +368,7 @@ class GeneralPanel(wx.Panel):
                          0, wx.ALIGN_CENTER_VERTICAL)])
 
         # Layout items
-        sizer = wx.FlexGridSizer(17, 2, 5, 5)
+        sizer = wx.FlexGridSizer(18, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self,
                         label=_("Startup Settings") + u": "),
@@ -382,6 +385,7 @@ class GeneralPanel(wx.Panel):
                        ((5, 5),), (win_cb, 0),
                        ((5, 5),), (pos_cb, 0),
                        ((5, 5),), (chkmod_cb, 0),
+                       ((5, 5),), (eolwarn_cb, 0),
                        ((5, 5),), ((5, 5),),
                        (wx.StaticText(self, label=_("Locale Settings") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (lsizer, 0),
@@ -399,9 +403,10 @@ class GeneralPanel(wx.Panel):
         util.Log("[prefdlg][evt] General Page: Check box clicked")
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
-        if e_id in [ed_glob.ID_APP_SPLASH, ed_glob.ID_PREF_SPOS,
+        if e_id in (ed_glob.ID_APP_SPLASH, ed_glob.ID_PREF_SPOS,
                     ed_glob.ID_PREF_CHKMOD, ed_glob.ID_SESSION,
-                    ed_glob.ID_NEW_WINDOW, ed_glob.ID_PREF_CHKUPDATE]:
+                    ed_glob.ID_NEW_WINDOW, ed_glob.ID_PREF_CHKUPDATE,
+                    ed_glob.ID_PREF_WARN_EOL):
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
         elif e_id == ed_glob.ID_REPORTER:
             Profile_Set(ed_glob.ID_2_PROF[e_id], not e_obj.GetValue())

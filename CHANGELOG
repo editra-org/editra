@@ -17,6 +17,9 @@ NEWS:
 
 NEW: [features/improvements]
 +Comment/Uncomment are now combined into a single toggle action.
++When mixed eol characters are detected a dialog warning of it is now shown,
+ that offers to convert them.
++Add option to enable/disable checking of eol characters.
 
 BUG FIXES:
 +Fix find options not properly being syncronized between dialog and find bar.
