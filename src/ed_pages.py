@@ -514,7 +514,6 @@ class EdPages(FNB.FlatNotebook):
 
         # Setup Document
         self.control.FindLexer()
-        self.control.CheckEOL()
         self.control.EmptyUndoBuffer()
         doc = self.control.GetDocument()
         doc.AddModifiedCallback(self.control.FireModified)
@@ -545,6 +544,7 @@ class EdPages(FNB.FlatNotebook):
         self.GoCurrentPage()
         self.GetTopLevelParent().Thaw()
         ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.control.GetFileName())
+        self.control.CheckEOL()
 
     def GoCurrentPage(self):
         """Move Focus to Currently Selected Page.
