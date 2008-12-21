@@ -29,20 +29,24 @@ import locale
 import encodings
 import wx
 
+# Editra Control Library Imports
+import choicedlg
+
 #--------------------------------------------------------------------------#
 # Globals
 EncodingDialogNameStr = u"EncodingDialog"
 
 #--------------------------------------------------------------------------#
 
-class EncodingDialog(wx.Dialog):
+class EncodingDialog(choicedlg.ChoiceDialog):
     """Dialog for choosing an file encoding from the list of available
     encodings on the system.
 
     """
     def __init__(self, parent, id=wx.ID_ANY, msg=u'', title=u'',
-                  elist=None, default=u'',
-                  style=wx.CAPTION, pos=wx.DefaultPosition):
+                  elist=list(), default=u'',
+                  style=wx.CAPTION, pos=wx.DefaultPosition,
+                  name=EncodingDialogNameStr):
         """Create the encoding dialog
         @keyword msg: Dialog Message
         @keyword title: Dialog Title
@@ -50,133 +54,24 @@ class EncodingDialog(wx.Dialog):
         @keyword default: Default selected encoding
 
         """
-        wx.Dialog.__init__(self, parent, id, title, style=style,
-                           pos=pos, name=EncodingDialogNameStr)
+        if not len(elist):
+            elist = GetAllEncodings()
 
-        # Attributes
-        self._encpanel = EncodingPanel(self, msg=msg,
-                                       elist=elist, default=default)
+        default = encodings.normalize_encoding(default)
+        if default and default.lower() in elist:
+            sel = default
+        else:
+            sel = locale.getpreferredencoding(False)
 
-        # Layout
-        self.__DoLayout()
-
-        # Event Handlers
-        
-
-    def __DoLayout(self):
-        """Layout the dialogs controls"""
-        sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(self._encpanel, 1, wx.EXPAND)
-        self.SetSizer(sizer)
-        self.SetAutoLayout(True)
-        self.SetInitialSize()
+        choicedlg.ChoiceDialog.__init__(self, parent, id, msg, title,
+                                        elist, sel, pos, style)
 
     def GetEncoding(self):
         """Get the selected encoding
         @return: string
 
         """
-        return self._encpanel.GetEncoding()
-
-    def SetBitmap(self, bmp):
-        """Set the bitmap used in the dialog
-        @param bmp: wx.Bitmap
-
-        """
-        self._encpanel.SetBitmap(bmp)
-
-#--------------------------------------------------------------------------#
-
-class EncodingPanel(wx.Panel):
-    """Panel that holds encoding selection choices"""
-    def __init__(self, parent, msg=u'', elist=None, default=u''):
-        """Create the panel
-        @keyword msg: Display message
-        @keyword elist: list of encodings to show or None to show all
-        @keyword default: default encoding selection
-
-        """
-        wx.Panel.__init__(self, parent)
-
-        # Attributes
-        self._msg = msg
-        self._encs = wx.Choice(self, wx.ID_ANY)
-        self._selection = default
-        self._bmp = None
-
-        # Setup
-        if elist is None:
-            elist = GetAllEncodings()
-
-        self._encs.SetItems(elist)
-        default = encodings.normalize_encoding(default)
-        if default and default.lower() in elist:
-            self._encs.SetStringSelection(default)
-        else:
-            self._encs.SetStringSelection(locale.getpreferredencoding(False))
-            self._selection = self._encs.GetStringSelection()
-
-        # Layout
-        self.__DoLayout()
-
-        # Event Handlers
-        self.Bind(wx.EVT_CHOICE, self.OnChoice, self._encs)
-
-    def __DoLayout(self):
-        """Layout the panel"""
-        hsizer = wx.BoxSizer(wx.HORIZONTAL)
-        vsizer = wx.BoxSizer(wx.VERTICAL)
-        caption = wx.StaticText(self, label=self._msg)
-        bsizer = wx.BoxSizer(wx.HORIZONTAL)
-        ok_b = wx.Button(self, wx.ID_OK)
-        ok_b.SetDefault()
-        bsizer.AddMany([((10, 10), 0),
-                        (ok_b, 0, wx.ALIGN_LEFT),
-                        ((100, 5), 1, wx.EXPAND),
-                        (wx.Button(self, wx.ID_CANCEL), 0, wx.ALIGN_RIGHT),
-                        ((10, 10), 0)])
-        vsizer.AddMany([((10, 10), 0), (caption, 0), ((20, 20), 0),
-                        (self._encs, 1, wx.EXPAND), ((10, 10), 0),
-                        (bsizer, 1, wx.EXPAND),
-                        ((10, 10), 0)])
-
-        icon = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_MESSAGE_BOX, (64, 64))
-        self._bmp = wx.StaticBitmap(self, bitmap=icon)
-        bmpsz = wx.BoxSizer(wx.VERTICAL)
-        bmpsz.AddMany([((10, 10), 0), (self._bmp, 0, wx.ALIGN_CENTER_VERTICAL),
-                       ((10, 30), 0, wx.EXPAND)])
-        hsizer.AddMany([((10, 10), 0), (bmpsz, 0, wx.ALIGN_TOP),
-                        ((10, 10), 0), (vsizer, 1), ((10, 10), 0)])
-
-        self.SetSizer(hsizer)
-        self.SetInitialSize()
-        self.SetAutoLayout(True)
-
-    def GetEncoding(self):
-        """Get the chosen encoding
-        @return: string
-
-        """
-        return self._selection
-
-    def OnChoice(self, evt):
-        """Update the selection
-        @param evt: wx.EVT_CHOICE
-        @type evt: wx.CommandEvent
-
-        """
-        if evt.GetEventObject() == self._encs:
-            self._selection = self._encs.GetStringSelection()
-        else:
-            evt.Skip()
-
-    def SetBitmap(self, bmp):
-        """Set the dialogs bitmap
-        @param bmp: wx.Bitmap
-
-        """
-        self._bmp.SetBitmap(bmp)
-        self.Layout()
+        return self.GetSelection()
 
 #--------------------------------------------------------------------------#
 # Utilities
