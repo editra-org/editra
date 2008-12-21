@@ -59,7 +59,7 @@ class EncodingDialog(choicedlg.ChoiceDialog):
 
         default = encodings.normalize_encoding(default)
         if default and default.lower() in elist:
-            sel = default
+            sel = default.lower()
         else:
             sel = locale.getpreferredencoding(False)
 
