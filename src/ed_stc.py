@@ -932,8 +932,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         curr_pos = self.GetCurrentPos()
         start = curr_pos - 1
         col = self.GetColumn(curr_pos)
-        cmd_lmt = list(self._code['compsvc'].GetAutoCompStops())# + \
-                       #self._code['compsvc'].GetAutoCompFillups())
+        cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
+                       self._code['compsvc'].GetAutoCompFillups())
         for key in self._code['compsvc'].GetAutoCompKeys():
             kval = unichr(key)
             if kval in cmd_lmt:
