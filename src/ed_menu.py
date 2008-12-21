@@ -662,6 +662,7 @@ class EdMenuBar(wx.MenuBar):
                         _("Show Whitespace Markers"), wx.ITEM_CHECK)
         viewmenu.AppendSubMenu(self._menus['viewedit'], _("Editor"), \
                                _("Toggle Editor View Options"))
+        viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_PANELIST, _("Pane Navigator") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PANELIST),
                         _("View pane selection list"))
