@@ -12,12 +12,9 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
-import sys
-import os
 import unittest
 
 # Module to test
-sys.path.insert(0, os.path.abspath("../../src"))
 import ed_style
 
 #-----------------------------------------------------------------------------#
@@ -163,8 +160,3 @@ class StyleItemTest(unittest.TestCase):
         self.assertEquals(self.item.GetFace(), "FakeFont")
         self.item.SetNamedAttr('fore', None)
         self.assertEquals(self.item.GetFore(), "")
-
-#-----------------------------------------------------------------------------#
-
-if __name__ == '__main__':
-    unittest.main()

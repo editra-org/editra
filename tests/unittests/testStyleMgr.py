@@ -12,13 +12,10 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
-import os
-import sys
 import wx
 import unittest
 
 # Module to Test
-sys.path.insert(0, os.path.abspath("../../src"))
 import ed_style
 
 #-----------------------------------------------------------------------------#
@@ -187,8 +184,3 @@ class StyleMgrTest(unittest.TestCase):
                           "%s != %s" % (citem, item))
         self.assertFalse(self.mgr.SetStyleTag('default_style', self.bstr),
                          "SetStyleTag allowed setting of a list!")
-
-#-----------------------------------------------------------------------------#
-
-if __name__ == '__main__':
-    unittest.main()

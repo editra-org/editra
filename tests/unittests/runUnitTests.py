@@ -28,6 +28,9 @@ import time
 import wx
 from optparse import OptionParser
 
+# Put Editra/src on the 
+sys.path.append(os.path.abspath("../../src"))
+
 # ----------------- Helper Functions / Classes ---------------------
 
 # TODO: maybe change some variable names?
@@ -394,6 +397,9 @@ class MyApp(wx.App):
     def OnInit(self):
         runUnitTestsAndOutputResults()
         return True
+
+    def GetLog(self):
+        return lambda msg: None
 
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':

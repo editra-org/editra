@@ -17,8 +17,6 @@ import os
 import unittest
 
 # Module to test
-import sys
-sys.path.insert(0, os.path.abspath("../../src"))
 import util
 
 #-----------------------------------------------------------------------------#
@@ -71,7 +69,6 @@ class UtilTest(unittest.TestCase):
             self.assertEqual(fname, util.GetFileName(path),
                              "util.GetFileName(%s) != %s" % (path, fname))
 
-
     def testGetPathName(self):
         """Test that getting the path name from a string returns the correct
         string.
@@ -85,8 +82,3 @@ class UtilTest(unittest.TestCase):
             tmp = os.path.join(path, fname)
             self.assertEqual(path, util.GetPathName(tmp),
                              "util.GetPathName(%s) != %s" % (tmp, path))
-
-#-----------------------------------------------------------------------------#
-
-if __name__ == '__main__':
-    unittest.main()
