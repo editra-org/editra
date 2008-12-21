@@ -36,6 +36,7 @@ from autocomp import autocomp
 import util
 import ed_style
 import ed_msg
+import ed_mdlg
 import ed_txt
 import ed_menu
 from ed_keyh import KeyHandler, ViKeyHandler
@@ -1308,13 +1309,18 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         eol_map = {"\n" : wx.stc.STC_EOL_LF,
                    "\r\n" : wx.stc.STC_EOL_CRLF,
                    "\r" : wx.stc.STC_EOL_CR}
+
         eol = chr(self.GetCharAt(self.GetLineEndPosition(0)))
         if eol == "\r":
             tmp = chr(self.GetCharAt(self.GetLineEndPosition(0) + 1))
             if tmp == "\n":
                 eol += tmp
+
+        # Is the eol used in the document the same as what is currently set.
         if eol != self.GetEOLChar():
             diff = True
+
+        # Check the lines to see if they are all matching or not.
         for line in range(self.GetLineCount() - 1):
             end = self.GetLineEndPosition(line)
             tmp = chr(self.GetCharAt(end))
@@ -1328,8 +1334,22 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         if mixed or diff:
             if mixed:
-                self.SetViewEOL(True)
+                # Warn about mixed end of line characters and offer to convert
+                msg = _("Mixed EOL characters detected.\n\n"
+                        "Would you like to format them to all be the same?")
+                dlg = ed_mdlg.EdFormatEOLDlg(self.GetTopLevelParent(), msg,
+                                             _("Format EOL?"),
+                                             eol_map.get(eol, self.GetEOLMode()))
+
+                if dlg.ShowModal() == wx.ID_YES:
+                    sel = dlg.GetSelection()
+                    self.ConvertEOLs(sel)
+                    self.SetEOLMode(sel)
+                dlg.Destroy()
             else:
+                # The end of line character is different from the prefered
+                # user setting for end of line. So change our eol mode to
+                # preserve that of what the document is using.
                 self.SetEOLMode(eol_map.get(eol, wx.stc.STC_EOL_LF))
         else:
             pass
