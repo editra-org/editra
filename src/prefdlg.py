@@ -35,6 +35,7 @@ from profiler import Profile_Get, Profile_Set
 import ed_i18n
 import ed_event
 import ed_crypt
+import ed_stc
 import updater
 import util
 import syntax.syntax as syntax
@@ -536,15 +537,25 @@ class DocGenPanel(wx.Panel):
         bsu_cb = wx.CheckBox(self, ed_glob.ID_PREF_UNINDENT,
                              _("Backspace Unindents"))
         bsu_cb.SetValue(Profile_Get('BSUNINDENT', 'bool', True))
+
         eolsz = wx.BoxSizer(wx.HORIZONTAL)
+
+        emode_val = Profile_Get('EOL')
+        if emode_val == ed_stc.EDSTC_EOL_CRLF:
+            emode_val = 2
+        elif emode_val == ed_stc.EDSTC_EOL_LF:
+            emode_val = 1
+        else:
+            emode_val = 0
+        eolmode = ExChoice(self, ed_glob.ID_EOL_MODE,
+                           choices=[_("Old Macintosh (\\r)"), _("Unix (\\n)"),
+                                    _("Windows (\\r\\n)")])
+        eolmode.SetSelection(emode_val)
+                        
         eolsz.AddMany([(wx.StaticText(self,
                         label=_("Default EOL Mode") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
-                       (ExChoice(self, ed_glob.ID_EOL_MODE,
-                                 choices=[_("Macintosh (\\r)"), _("Unix (\\n)"),
-                                          _("Windows (\\r\\n)")],
-                                 default=Profile_Get('EOL')),
-                        0, wx.ALIGN_CENTER_VERTICAL)])
+                       (eolmode, 0, wx.ALIGN_CENTER_VERTICAL)])
 
         # View Options
         aa_cb = wx.CheckBox(self, ed_glob.ID_PREF_AALIAS, _("AntiAliasing"))
@@ -646,8 +657,18 @@ class DocGenPanel(wx.Panel):
                     ed_glob.ID_SHOW_LN, ed_glob.ID_SHOW_WS,
                     ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS,
                     ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_AUTOTRIM ]:
-            Profile_Set(ed_glob.ID_2_PROF[e_id],
-                        evt.GetEventObject().GetValue())
+
+            e_value = evt.GetEventObject().GetValue()
+            if e_id == ed_glob.ID_EOL_MODE:
+                # Translate to settings mode
+                if u"\\r\\n" in e_value:
+                    e_value = ed_stc.EDSTC_EOL_CRLF
+                elif u"\\n" in e_value:
+                    e_value = ed_stc.EDSTC_EOL_LF
+                else:
+                    e_value = ed_stc.EDSTC_EOL_CR
+
+            Profile_Set(ed_glob.ID_2_PROF[e_id], e_value)
 
             # Do updates for everything but text encoding
             if e_id not in (ed_glob.ID_PREF_AUTOTRIM, ):
