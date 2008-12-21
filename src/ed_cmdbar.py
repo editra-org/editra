@@ -25,7 +25,6 @@ __revision__ = "$Revision$"
 # Imports
 import os
 import sys
-import cStringIO, zlib
 import glob
 import re
 import wx
@@ -468,7 +467,6 @@ class CommandExecuter(txtentry.CommandEntryBase):
             return
 
         self.CommandPush(cmd_str)
-        self._histidx = -1
         self.GetParent().Hide()
 
     def GetHistCommand(self, pre=True):
@@ -603,7 +601,8 @@ class CommandExecuter(txtentry.CommandEntryBase):
         if len(paths):
             pos = self.GetScreenPosition().Get()
             extent = self.GetTextExtent(cstr)
-            self._popup.SetPosition((pos[0] + extent[0], pos[1] + extent[1] + 7))
+            self._popup.SetPosition((pos[0] + extent[0],
+                                    pos[1] + extent[1] + 7))
             self._popup.SetBestSelection(cmd)
             if not self._popup.IsShown():
                 self._popup.Show()
@@ -728,6 +727,7 @@ class CommandExecuter(txtentry.CommandEntryBase):
         self._AdjustSize()
 
     def UpdateAutoComp(self):
+        """Update the autocomp list for paths that best match current value"""
         self.ListDir()
         val = self.GetValue().split(' ', 1)[-1]
         self._popup.SetBestSelection(val)
@@ -799,6 +799,7 @@ class LineCtrl(txtentry.CommandEntryBase):
 # TODO: merge the common parts of these two classes into a single base class
 
 class PopupList(wx.MiniFrame):
+    """Popup window with a listbox in it"""
     def __init__(self, parent, choices=list(), pos=wx.DefaultPosition):
 
         style = wx.FRAME_NO_TASKBAR | wx.FRAME_FLOAT_ON_PARENT
@@ -878,6 +879,7 @@ class PopupList(wx.MiniFrame):
         return self._list.GetStrings()
 
     def GetListCtrl(self):
+        """Get the ListBox control of the popupwindow"""
         return self._list
 
     def GetSelection(self):
@@ -916,6 +918,7 @@ class PopupList(wx.MiniFrame):
         self.__PostEvent()
 
     def OnSize(self, evt):
+        """Resize the listbox"""
         csz = self.GetClientSize()
         csz.SetWidth(csz.x + wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X))
         self._list.SetSize(csz)
@@ -1026,6 +1029,7 @@ class PopupWinList(wx.PopupWindow):
         return self._list.GetStringSelection()
 
     def OnSize(self, evt):
+        """Resize the list box to the correct size to fit."""
         csz = self.GetClientSize()
         csz.SetWidth(csz.x + wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X))
         self._list.SetSize(csz)
