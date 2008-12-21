@@ -4,6 +4,7 @@ License: wxWindows
 
 Version 1.2:
 
+    - Navigate through filebrowser with keyboard.
     - Minor UI changes
 
 Version 1.1:
