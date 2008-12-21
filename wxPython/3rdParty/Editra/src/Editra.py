@@ -908,6 +908,7 @@ def _Main(opts, args):
         splash = wx.SplashScreen(splash_img, wx.SPLASH_CENTRE_ON_PARENT | \
                                  wx.SPLASH_NO_TIMEOUT, 0, None, wx.ID_ANY)
         splash.Show()
+        wx.CallLater(2500, splash.Destroy)
 
     if profiler.Profile_Get('SET_WSIZE'):
         wsize = profiler.Profile_Get('WSIZE')
@@ -929,9 +930,6 @@ def _Main(opts, args):
     # pushed.
     if wx.Platform == '__WXMSW__':
         wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
-
-    if 'splash' in locals():
-        splash.Destroy()
 
     # Do update check, only check if its been more than a day since the last
     # check
