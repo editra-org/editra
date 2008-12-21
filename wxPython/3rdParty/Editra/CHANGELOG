@@ -25,6 +25,7 @@ BUG FIXES:
 +Fix find options not properly being syncronized between dialog and find bar.
 +Fix event handlers not properly getting connected when going from 2 -> 1 window.
 +Fix eol mode settings in preferences.
++Fix search bar text not being colored properly on msw/gtk.
 
 #-----------------------------------------------------------------------------#
 

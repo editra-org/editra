@@ -39,7 +39,7 @@ class CommandEntryBase(wx.SearchCtrl):
                                size, style, validator, name)
 
         # Attributes
-        
+        self._txtctrl = None  # For msw/gtk
 
         # Hide the search button and text by default
         self.ShowSearchButton(False)
@@ -52,6 +52,7 @@ class CommandEntryBase(wx.SearchCtrl):
                 if isinstance(child, wx.TextCtrl):
                     if clone is not None:
                         child.SetValidator(clone)
+                    self._txtctrl = child
                     child.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
                     child.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
                     break
@@ -61,6 +62,13 @@ class CommandEntryBase(wx.SearchCtrl):
 
         # Event management
         self.Bind(wx.EVT_TEXT_ENTER, self.OnEnter)
+
+    def GetTextControl(self):
+        """Get the wx.TextCtrl window.
+        @note: only for msw/gtk
+
+        """
+        return self._txtctrl
 
     def OnKeyDown(self, evt):
         """Handle KeyDown events"""

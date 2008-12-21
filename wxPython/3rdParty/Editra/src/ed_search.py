@@ -896,6 +896,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         self._last       = None
         self.rmenu       = wx.Menu()
         self.max_menu    = menulen + 2   # Max menu length + descript/separator
+        self._txtctrl    = None          # msw/gtk only
 
         # Setup Recent Search Menu
         lbl = self.rmenu.Append(wx.ID_ANY, _("Recent Searches"))
@@ -908,6 +909,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             for child in self.GetChildren():
                 if isinstance(child, wx.TextCtrl):
                     child.Bind(wx.EVT_KEY_UP, self.ProcessEvent)
+                    self._txtctrl = child
                     break
         else:
             self.Bind(wx.EVT_KEY_UP, self.ProcessEvent)
@@ -957,14 +959,20 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         # Give feedback on whether text was found or not
         if self.FindService.GetLastFound() < 0 and len(self.GetValue()) > 0:
-            self.SetForegroundColour(wx.RED)
+            if self._txtctrl is None:
+                self.SetForegroundColour(wx.RED)
+            else:
+                self._txtctrl.SetForegroundColour(wx.RED)
             wx.Bell()
         else:
             # ?wxBUG? cant set text back to black after changing color
             # But setting it to this almost black color works. Most likely its
             # due to bit masking but I havent looked at the source so I am not
             # sure
-            self.SetForegroundColour(wx.ColorRGB(0 | 1 | 0))
+            if self._txtctrl is None:
+                self.SetForegroundColour(wx.ColorRGB(0 | 1 | 0))
+            else:
+                self._txtctrl.SetForegroundColour(wx.ColorRGB(0 | 1 | 0))
         self.Refresh()
 
     def GetSearchController(self):
