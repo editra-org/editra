@@ -326,6 +326,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
             for handler in self._handlers['ui']:
                 app.RemoveUIHandlerForID(handler[0])
+
+            self._loaded = False
+
         evt.Skip()
 
     def AddFileToHistory(self, fname):
