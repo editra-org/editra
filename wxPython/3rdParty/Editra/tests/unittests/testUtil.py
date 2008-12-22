@@ -25,6 +25,7 @@ import util
 class UtilTest(unittest.TestCase):
     def setUp(self):
         self.app = wx.App(False)
+        self.path = os.path.abspath('./data/test_read_utf8.txt')
 
     def tearDown(self):
         self.app.Destroy()
@@ -68,6 +69,11 @@ class UtilTest(unittest.TestCase):
         for path in paths:
             self.assertEqual(fname, util.GetFileName(path),
                              "util.GetFileName(%s) != %s" % (path, fname))
+
+    def testGetFileModTime(self):
+        """Test getting a files modtime"""
+        mtime = util.GetFileModTime(self.path)
+        self.assertNotEqual(mtime, 0, "Mtime was: " + str(mtime))
 
     def testGetPathName(self):
         """Test that getting the path name from a string returns the correct
