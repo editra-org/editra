@@ -16,9 +16,11 @@ NEWS:
 
 
 NEW: [features/improvements]
-+Comment/Uncomment are now combined into a single toggle action.
++Comment/Uncomment are now combined into a single toggle action
+ (modified patch from Giuseppe "Cowo" Corbelli).
 +When mixed eol characters are detected a dialog warning of it is now shown,
- that offers to convert them.
+ that offers to convert them instead of toggling on eol visibility as it
+ previously did.
 +Add option to enable/disable checking of eol characters.
 
 BUG FIXES:
