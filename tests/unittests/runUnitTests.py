@@ -129,13 +129,16 @@ class UnitTestSuite:
         elif exclude != "":
             _module_specs = self._clean_listify(exclude)
             _spec_type    = "exclude"
+
         if tests != "":
             _test_specs = self._clean_listify(tests, False)
+
         # make sure they all exist
         if _module_specs != None: # TODO: got to be a better place to put this
             for _mod in _module_specs:
                 if not _module_names.has_key(_mod.lower()):
                     parser.error("Module %s not found under test" % (_mod))
+
         # now import the modules
         if _module_specs == None:
             self.modules = [ __import__(name) for name in _module_names.values() ]
@@ -161,6 +164,7 @@ class UnitTestSuite:
                                _docstr != None and _docstr.lower().find(_test.lower()) != -1:
                             _suite.addTest(_class(_test_name))
                         break
+
             # filter out tests that shouldn't be run in subclasses
             _tests = _suite._tests
             for _t in _tests:
@@ -177,6 +181,7 @@ class UnitTestSuite:
                     if not _class.__name__.startswith(restriction):
                         #print "filtered: %s (class=%s)" % (mname,_class.__name__)
                         _tests.remove(_t)
+
             # if suite is non-empty...
             if _suite.countTestCases() > 0:
                 # add it to the list of suites :-)
@@ -395,7 +400,6 @@ class MyApp(wx.App):
         wx.App.__init__(self, redirect=False)
 
     def OnInit(self):
-        runUnitTestsAndOutputResults()
         return True
 
     def GetLog(self):
@@ -404,4 +408,5 @@ class MyApp(wx.App):
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
     app = MyApp()
+    runUnitTestsAndOutputResults()
     app.MainLoop()

@@ -15,20 +15,18 @@ __revision__ = "$Revision$"
 import wx
 import unittest
 
+# Local Imports
+import common
+
 # Module to Test
 import ed_style
-
-#-----------------------------------------------------------------------------#
-class EdApp(wx.App):
-    def GetLog(self):
-        return lambda msg: None
 
 #-----------------------------------------------------------------------------#
 # Test Class
 
 class StyleMgrTest(unittest.TestCase):
     def setUp(self):
-        self.app = EdApp(False)
+        self.app = common.EdApp(False)
         self.mgr = ed_style.StyleMgr()
         self.dd = ed_style.DEF_STYLE_DICT
         self.bstr = ["fore:#000000", "back:#FFFFFF",
