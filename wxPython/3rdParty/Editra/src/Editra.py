@@ -373,6 +373,12 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 encoding = sys.getfilesystemencoding()
                 window.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN,
                               ed_txt.DecodeString(filename, encoding))
+
+                # Make sure the window is brought to the front
+                if window.IsIconized():
+                    window.Iconize(False)
+                window.Raise()
+
             except Exception, msg:
                 self._log("[app][err] Failed to open drop file: %s" % str(msg))
                 pass
