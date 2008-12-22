@@ -651,7 +651,8 @@ def InitConfig():
                 profiler.Profile_Set('PRINT_MODE', ed_glob.PRINT_BLACK_WHITE)
 
             # Simplifications to eol mode persistance (0.4.28)
-            profiler.Profile_Del('EOL') # changed to EOL_MODE
+            # Keep for now till plugins are updated
+            #profiler.Profile_Del('EOL') # changed to EOL_MODE
 
             #---- End Temporary Profile Adaptions ----#
 
