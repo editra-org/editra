@@ -677,7 +677,7 @@ class EdPages(FNB.FlatNotebook):
         @type evt: wx.IdleEvent
 
         """
-        if wx.GetApp().IsActive() and self.GetPageCount():
+        if wx.GetApp().IsActive():
             page = self.GetCurrentPage()
             if page is not None:
                 page.DoOnIdle()
