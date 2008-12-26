@@ -1350,7 +1350,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 # The end of line character is different from the prefered
                 # user setting for end of line. So change our eol mode to
                 # preserve that of what the document is using.
-                self.SetEOLMode(eol_map.get(eol, wx.stc.STC_EOL_LF))
+                mode = eol_map.get(eol, wx.stc.STC_EOL_LF)
+                super(EditraStc, self).SetEOLMode(mode)
         else:
             pass
 
