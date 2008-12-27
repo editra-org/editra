@@ -57,9 +57,10 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         if Profile_Get('CHECKMOD'):
             cfile = self.GetFileName()
             lmod = GetFileModTime(cfile)
-            if self.GetModTime() and not lmod and not os.path.exists(cfile):
+            mtime = self.GetModTime()
+            if mtime and not lmod and not os.path.exists(cfile):
                 wx.CallAfter(self.PromptToReSave, cfile)
-            elif self.GetModTime() < lmod:
+            elif mtime < lmod:
                 wx.CallAfter(self.AskToReload, cfile)
             else:
                 pass
