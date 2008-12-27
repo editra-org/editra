@@ -135,6 +135,9 @@ class SearchController:
 
         """
         cbuff = self._stc()
+        if cbuff is None:
+            return u''
+
         start, end = cbuff.GetSelection()
         rtext = cbuff.GetSelectedText()
         if start != end:
