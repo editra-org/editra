@@ -301,7 +301,7 @@ def GetFileModTime(file_name):
     """
     try:
         mod_time = os.path.getmtime(file_name)
-    except EnvironmentError:
+    except (OSError, EnvironmentError):
         mod_time = 0
     return mod_time
 
