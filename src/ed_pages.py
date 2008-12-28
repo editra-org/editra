@@ -423,6 +423,52 @@ class EdPages(FNB.FlatNotebook):
         """
         self.UpdateAllImages()
 
+    def OpenFileObject(self, fileobj):
+        """Open a new text editor page with the given file object. The file
+        object must be an instance of ed_txt.EdFile.
+        @param fileobj: File Object
+
+        """
+        # Create the control
+        control = ed_editv.EdEditorView(self, wx.ID_ANY)
+        control.Hide()
+
+        # Load the files data
+        path = fileobj.GetPath()
+        filename = util.GetFileName(path)
+        control.SetDocument(fileobj)
+        result = control.ReloadFile()
+
+        # Setup the buffer
+        fileobj.AddModifiedCallback(control.FireModified)
+
+        # Setup the notebook
+        self.control = control
+        self.control.FindLexer()
+        self.control.EmptyUndoBuffer()
+        self.control.Show()
+        self.AddPage(self.control, filename)
+
+        self.frame.SetTitle(self.control.GetTitleString())
+        self.frame.AddFileToHistory(path)
+        self.SetPageText(self.GetSelection(), filename)
+        self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
+
+        # Set tab image
+        cpage = self.GetSelection()
+        if fileobj.ReadOnly:
+            super(FNB.FlatNotebook, self).SetPageImage(cpage,
+                                               self._index[ed_glob.ID_READONLY])
+        else:
+            self.SetPageImage(cpage, str(self.control.GetLangId()))
+
+        # Refocus on selected page
+        self.GoCurrentPage()
+        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.control.GetFileName())
+
+        if Profile_Get('WARN_EOL', default=True):
+            self.control.CheckEOL()
+
     def OpenPage(self, path, filename, quiet=False):
         """Open a File Inside of a New Page
         @param path: files base path
