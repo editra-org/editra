@@ -22,6 +22,7 @@ NEW: [features/improvements]
  that offers to convert them instead of toggling on eol visibility as it
  previously did.
 +Add option to enable/disable checking of eol characters.
++Add menu shortcut for toggle fold
 
 BUG FIXES:
 +Fix find options not properly being syncronized between dialog and find bar.

@@ -160,6 +160,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        # Edit Menu
                                        (ID_PASTE_AFTER, self.DispatchToControl),
                                        (ID_COLUMN_MODE, self.DispatchToControl),
+                                       (ID_TOGGLE_FOLD, self.DispatchToControl),
                                        (ID_QUICK_FIND, self.OnCommandBar),
                                        (ID_PREF, OnPreferences),
 
@@ -933,7 +934,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_UNINDENT, ID_TRANSPOSE, ID_TOGGLECOMMENT,
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY,
                         ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE,
-                        ID_PASTE_AFTER, ID_COLUMN_MODE ]
+                        ID_PASTE_AFTER, ID_COLUMN_MODE, ID_TOGGLE_FOLD ]
 
         has_focus = self.FindFocus()
         if has_focus != ctrl and e_id in active_only:
