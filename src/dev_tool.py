@@ -94,7 +94,7 @@ def DEBUGP(statement):
 
 #-----------------------------------------------------------------------------#
 
-class LogMsg:
+class LogMsg(object):
     """LogMsg is a container class for representing log messages. Converting
     it to a string will yield a formatted log message with timestamp. Once a
     message has been displayed once (converted to a string) it is marked as
@@ -108,6 +108,8 @@ class LogMsg:
         @keyword level: Priority of the message
 
         """
+        object.__init__(self)
+
         # Attributes
         self._msg = dict(mstr=msg, msrc=msrc, lvl=level, tstamp=time.time())
         self._ok = True
