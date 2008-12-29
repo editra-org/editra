@@ -72,6 +72,7 @@ BUG FIXES:
 +Buffer context menu now works correctly on gtk version.
 +Fix column mode keybinding on windows.
 +Unicode fixes
++Fix drag and drop error for instlling plugins through plugin manager.
 
 #-----------------------------------------------------------------------------#
 

@@ -141,19 +141,23 @@ class DropTargetFT(wx.PyDropTarget):
         """
         stc = self.window
         if self._tmp is None:
-            val = stc.DoDragOver(x_cord, y_cord, drag_result)
-            self.ScrollBuffer(stc, x_cord, y_cord)
-            return drag_result
+            if hasattr(stc, 'DoDragOver'):
+                val = stc.DoDragOver(x_cord, y_cord, drag_result)
+                self.ScrollBuffer(stc, x_cord, y_cord)
+            drag_result = wx.DragCopy
         else:
-            point = wx.Point(x_cord, y_cord)
-            self._tmp.BeginDrag(point - self._lastp, stc)
-            self._tmp.Hide()
-            stc.DoDragOver(x_cord, y_cord, drag_result)
-            self._tmp.Move(point)
-            self._tmp.Show()
-            self._tmp.RedrawImage(self._lastp, point, True, True)
-            self._lastp = point
-            self.ScrollBuffer(stc, x_cord, y_cord)
+            if hasattr(stc, 'DoDragOver'):
+                point = wx.Point(x_cord, y_cord)
+                self._tmp.BeginDrag(point - self._lastp, stc)
+                self._tmp.Hide()
+                stc.DoDragOver(x_cord, y_cord, drag_result)
+                self._tmp.Move(point)
+                self._tmp.Show()
+                self._tmp.RedrawImage(self._lastp, point, True, True)
+                self._lastp = point
+                self.ScrollBuffer(stc, x_cord, y_cord)
+            drag_result = wx.DragCopy
+
         return drag_result
 
     def OnData(self, x_cord, y_cord, drag_result):
@@ -181,7 +185,10 @@ class DropTargetFT(wx.PyDropTarget):
             if len(files) > 0 and self._data['fcallb'] is not None:
                 self._data['fcallb'](files)
             elif len(text) > 0:
-                self.window.DoDropText(x_cord, y_cord, text)
+                if self._data['tcallb'] is not None:
+                    self._data['tcallb'](text)
+                else:
+                    self.window.DoDropText(x_cord, y_cord, text)
         self.InitObjects()
         return drag_result
 
