@@ -10,7 +10,7 @@ Changes since last release:
 
 VERSION 0.4.28
 DATE xx/xx/200x
-22th Alpha Release
+22nd Alpha Release
 
 NEWS:
 
@@ -30,12 +30,13 @@ BUG FIXES:
 +Fix eol mode settings in preferences.
 +Fix search bar text not being colored properly on msw/gtk.
 +Fix window not being raised from taskbar when opening file with 'Open with...'
++Fix drag and drop error for instlling plugins through plugin manager.
 
 #-----------------------------------------------------------------------------#
 
 VERSION 0.4.28
 DATE 12/20/2008
-21th Alpha Release
+21st Alpha Release
 
 NEWS:
 This is yet another quick turnaround bug fix release. The previous build had
@@ -72,7 +73,6 @@ BUG FIXES:
 +Buffer context menu now works correctly on gtk version.
 +Fix column mode keybinding on windows.
 +Unicode fixes
-+Fix drag and drop error for instlling plugins through plugin manager.
 
 #-----------------------------------------------------------------------------#
 
