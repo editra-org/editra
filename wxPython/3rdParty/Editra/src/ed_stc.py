@@ -1226,6 +1226,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_TOGGLECOMMENT : self.ToggleComment,
                   ed_glob.ID_AUTOINDENT : self.ToggleAutoIndent,
                   ed_glob.ID_LINE_AFTER : self.AddLine,
+                  ed_glob.ID_TOGGLE_FOLD : self.ToggleFold,
                   ed_glob.ID_TRIM_WS : self.TrimWhitespace,
                   ed_glob.ID_MACRO_START : self.StartRecord,
                   ed_glob.ID_MACRO_STOP : self.StopRecord,
@@ -1761,6 +1762,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def ToggleColumnMode(self):
         """Toggle the column edit mode"""
         self.vert_edit.enable(not self.vert_edit.Enabled)
+
+    def ToggleFold(self, lineNum=None):
+        """Toggle the fold at the given line number. If lineNum is
+        None then the fold closest cursors current postions.
+        @keyword lineNum: int
+
+        """
+        if lineNum is None:
+            lineNum = self.GetCurrentLine()
+        super(EditraStc, self).ToggleFold(lineNum)
 
     def ToggleLineNumbers(self, switch=None):
         """Toggles the visibility of the line number margin

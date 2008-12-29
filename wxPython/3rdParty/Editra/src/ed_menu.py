@@ -674,6 +674,10 @@ class EdMenuBar(wx.MenuBar):
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_MBRACE),
                         _("Move caret matching brace"))
         viewmenu.AppendSeparator()
+        viewmenu.Append(ed_glob.ID_TOGGLE_FOLD, _("Toggle Fold") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLE_FOLD),
+                        _("Toggle the current fold in the buffer"))
+        viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_NEXT_MARK, _("Next Bookmark") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEXT_MARK),
                         _("View Line of Next Bookmark"))
@@ -1008,6 +1012,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_ZOOM_NORMAL : ("Ctrl", "0"),
                      ed_glob.ID_GOTO_LINE : ("Ctrl", "G"),
                      ed_glob.ID_GOTO_MBRACE : ("Ctrl", "Shift", "B"),
+                     ed_glob.ID_TOGGLE_FOLD : ("Ctrl", "Shift", "T"),
                      ed_glob.ID_NEXT_MARK : ("Alt", "Right"), # Win/Linux
                      ed_glob.ID_PRE_MARK : ("Alt", "Left"), # Win/Linux
                      ed_glob.ID_SHOW_SHELF : ("Ctrl", "Alt", "S"),
