@@ -196,7 +196,7 @@ ICON = { 'Win' : "pixmaps/editra.ico",
 # or otherwise not able to be found by py2app/exe
 INCLUDES = ['syntax.*', 'ed_log', 'shutil', 'subprocess', 'zipfile',
             'pygments.*', 'pygments.lexers.*', 'pygments.formatters.*',
-            'pygments.filters.*', 'pygments.styles.*']
+            'pygments.filters.*', 'pygments.styles.*', 'ftplib']
 if sys.platform.startswith('win'):
     INCLUDES.extend(['ctypes'])
 else:
