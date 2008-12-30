@@ -75,7 +75,9 @@ CONFIG = {
           'TEST_DIR'    : "",   # Test data files dir
 }
 
+# Global logging/application variables
 DEBUG = False
+VDEBUG = False
 SINGLE = True
 
 #---- Object ID's ----#

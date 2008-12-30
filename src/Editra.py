@@ -695,8 +695,11 @@ def InitConfig():
 
 
     # Set debug mode
-    if 'DEBUG' in profiler.Profile_Get('MODE'):
+    emode = profiler.Profile_Get('MODE')
+    if 'DEBUG' in emode:
         ed_glob.DEBUG = True
+        if emode.startswith('VERBOSE'):
+            ed_glob.VDEBUG = True
 
     # Resolve resource locations
     ed_glob.CONFIG['CONFIG_DIR'] = util.ResolvConfigDir("")
@@ -782,7 +785,7 @@ def PrintHelp():
        "Cody Precord (2005-2008)\n\n"
        "usage: Editra [arguments] [files... ]\n\n"
        "Short Arguments:\n"
-       "  -d         Turn on console debugging\n"
+       "  -d         Turn on console debugging (-dd for verbose debug)\n"
        "  -D         Turn off console debugging (overrides preferences)\n"
        "  -h         Show this help message\n"
        "  -p         Run Editra in the profiler\n"
@@ -818,6 +821,9 @@ def ProcessCommandLine():
             print ed_glob.VERSION
             os._exit(0)
         elif opt in ['-d', '--debug'] and '-D' not in opts:
+            # If the debug flag is set more than once go into verbose mode
+            if ed_glob.DEBUG:
+                ed_glob.VDEBUG = True
             ed_glob.DEBUG = True
             opts.remove(opt)
         elif opt == '-D':
