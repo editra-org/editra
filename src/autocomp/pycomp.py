@@ -450,12 +450,13 @@ class Scope(object):
         @return: string
 
         """
-        # we need to start with this, to fix up broken completions
-        # hopefully this name is unique enough...
         cstr = '"""' + self.docstr + '"""\n'
         for loc in self.locals:
-            if loc.startswith('import'):
+            if loc.startswith('import') or loc.startswith('from'):
                 cstr += loc + '\n'
+
+        # we need to start with this, to fix up broken completions
+        # hopefully this name is unique enough...
         cstr += 'class _PyCmplNoType:\n    def __getattr__(self,name):\n        return None\n'
 
         for sub in self.subscopes:
@@ -750,24 +751,36 @@ class PyParser:
             # NOTE: This part of the parse is where the problem is happening
             assign += token
             level = 0
+            tstack = list()
             while True:
                 tokentype, token = self.next()[:-1]
+#                tstack.append((assign, token, level))
                 if token in ('(', '{', '['):
-                    level += 1
+                    level = level + 1
                 elif token in (']', '}', ')'):
-                    level -= 1
-                    if level == 0:
+                    level = level - 1
+                    if level == 0 or level == -1:
                         break
                 elif level == 0:
+                    # end of line
                     if token in (';', '\n'):
                         break
-                    assign += token
+                    elif token == ',':
+                        assign = ''
+                    else:
+                        assign += token
 
         # Check syntax to filter out bad tokens
         # NOTE: temporary till parser is improved more
         try:
             compile(assign, '_pycomp', 'eval')
         except:
+#            print ""
+#            for t in tstack:
+#                print t
+#            print assign
+#            print ""
+#            print ""
             dbg("[pycomp][err] parseassignment bad token: %s" % assign)
             return None
         else:
@@ -878,6 +891,7 @@ class PyParser:
                             loc += " as %s" % alias
                         self.scope.local(loc)
                     freshscope = False
+
                 elif tokentype == STRING:
                     if freshscope:
                         self.scope.doc(token)
@@ -892,6 +906,7 @@ class PyParser:
         except StopIteration: #thrown on EOF
             pass
         except:
+#            traceback.print_exc()
             dbg("[pycomp][err] Pyparser.parse: %s, %s" %
                 (sys.exc_info()[0], sys.exc_info()[1]))
         return self._adjustvisibility()
