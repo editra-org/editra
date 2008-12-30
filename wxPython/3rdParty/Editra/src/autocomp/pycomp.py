@@ -21,8 +21,15 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Dependancies
-import os, sys, tokenize, types
+import os
+import sys
+import tokenize
+import types
 from token import NAME, DEDENT, STRING, NEWLINE
+
+# For debugging
+import traceback
+
 import wx
 from wx.py import introspect
 
@@ -95,7 +102,8 @@ class Completer(object):
                 return sigs
 
         except Exception, msg:
-            self._log("[pycomp][err] %s" % str(msg))
+            self._log("[pycomp][err] _GetCompletionInfo: %s, %s" % \
+                      (sys.exc_info()[0], sys.exc_info()[1]))
             return ''
 
     def GetAutoCompKeys(self):
@@ -205,13 +213,13 @@ class PyCompleter(object):
         try: 
             exec src in self.compldict
         except Exception, msg:
-            dbg("[pycomp][exec err]: src exec: %s" % msg)
+            dbg("[pycomp][err] src exec: %s" % msg)
 
         for loc in scope.locals:
             try: 
                 exec loc in self.compldict
             except Exception, msg:
-                dbg("[pycomp][local err]: local exec %s [%s]" % (msg, loc))
+                dbg("[pycomp][err] local exec %s [%s]" % (msg, loc))
 
     def get_arguments(self, func_obj):
         """Get the arguments of a given function obj
@@ -328,9 +336,15 @@ class PyCompleter(object):
                         else:
                             inst = getattr(result, meth)
 
-                        doc = getattr(inst, '__doc__', None)
-                        if doc is None:
-                            doc = max(getattr(result, '__doc__', ' '), ' ')
+                        # TODO: necessary check to handle some odd swig related
+                        #       errors. Find out why type 'swigvarlink' causes
+                        #       the exception Unknown C global variable.
+                        if len(dir(inst)):
+                            doc = getattr(inst, '__doc__', None)
+                            if doc is None:
+                                doc = max(getattr(result, '__doc__', ' '), ' ')
+                        else:
+                            doc = ' '
 
                         comp = {'word' : meth,
                                 'abbr' : meth,
@@ -350,8 +364,8 @@ class PyCompleter(object):
                             comp['abbr'] += '('
                         completions.append(comp)
                 except Exception, msg:
-                    dbg("[pycomp][err] inner completion: %s [stmt='%s']:" % \
-                        (msg, stmt))
+#                    traceback.print_exc()
+                    dbg("[pycomp][err] inner completion: %s [stmt='%s']:" % (msg, stmt))
 
             return completions
         except Exception, msg:
@@ -390,14 +404,17 @@ class Scope(object):
         @param docstr: Docstring to format and set
 
         """
-        dstr = docstr.replace('\n',' ')
-        dstr = dstr.replace('\t',' ')
-        while dstr.find('  ') > -1: 
-            dstr = dstr.replace('  ',' ')
-        while dstr[0] in '"\'\t ':
-            dstr = dstr[1:]
-        while dstr[-1] in '"\'\t ':
-            dstr = dstr[:-1]
+        dstr = docstr.replace('\n', ' ')
+        dstr = dstr.replace('\t', ' ')
+        dstr = dstr.replace('  ', ' ')
+
+        if len(dstr):
+            while len(dstr) and dstr[0] in '"\' ':
+                dstr = dstr[1:]
+
+            while len(dstr) and dstr[-1] in '"\' ':
+                dstr = dstr[:-1]
+
         self.docstr = dstr
 
     def local(self, loc):
@@ -706,7 +723,7 @@ class PyParser:
                    'open' : 'file', 'file' : 'file',
                    # List
                    '[' : '[]', 'list' : '[]',
-                   'dir' : '[]', 'zip' : '[]', 'map' : '[]',
+                   'dir' : '["",""]', 'zip' : '[]', 'map' : '[]',
                    'sorted' : '[]', 'range' : '[]',
                    # NoneType
                    'None' : '_PyCmplNoType()',

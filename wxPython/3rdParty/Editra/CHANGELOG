@@ -22,7 +22,8 @@ NEW: [features/improvements]
  that offers to convert them instead of toggling on eol visibility as it
  previously did, since this was found to be confusing to many.
 +Add option to enable/disable checking of eol characters.
-+Add menu shortcut for toggle fold
++Add menu shortcut for toggle fold.
++Some improvements to the Python autocompletion feature.
 
 BUG FIXES:
 +Fix find options not properly being syncronized between dialog and find bar.
