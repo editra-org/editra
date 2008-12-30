@@ -78,9 +78,15 @@ def DEBUGP(statement):
         mstr = unicode(msg)
         print mstr.encode('utf-8', 'replace')
 
+        # Check for trapped exceptions to print
+        if ed_glob.VDEBUG and msg.Type in ('err', 'error'):
+            traceback.print_exc()
+
     # Dispatch message to all interested parties
     if msg.Type in ('err', 'error'):
         mtype = ed_msg.EDMSG_LOG_ERROR
+        if ed_glob.VDEBUG:
+            msg = LogMsg(msg.Value + os.linesep + traceback.format_exc())
     elif msg.Type in ('warn', 'warning'):
         mtype = ed_msg.EDMSG_LOG_WARN
     elif msg.Type in ('evt', 'event'):

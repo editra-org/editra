@@ -293,7 +293,7 @@ class GeneralPanel(wx.Panel):
         msizer.AddMany([(wx.StaticText(self, label=_("Editor Mode") + u": "),
                          0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                         (ExChoice(self, ed_glob.ID_PREF_MODE,
-                                  choices=['CODE', 'DEBUG'],
+                                  choices=['CODE', 'DEBUG', 'VERBOSE DEBUG'],
                                   default=Profile_Get('MODE')),
                           0, wx.ALIGN_CENTER_VERTICAL)])
 
@@ -431,7 +431,9 @@ class GeneralPanel(wx.Panel):
 
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
             if e_id == ed_glob.ID_PREF_MODE:
-                ed_glob.DEBUG = ('DEBUG' in e_obj.GetValue())
+                val = e_obj.GetValue()
+                ed_glob.DEBUG = ('DEBUG' in val)
+                ed_glob.VDEBUG = ('VERBOSE' in val)
         elif e_id == ed_glob.ID_PRINT_MODE:
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetSelection())
         else:
