@@ -23,7 +23,7 @@ NEW: [features/improvements]
  previously did, since this was found to be confusing to many.
 +Add option to enable/disable checking of eol characters.
 +Add menu shortcut for toggle fold.
-+Some improvements to the Python autocompletion feature.
++Some improvements to the Python autocompletion.
 
 BUG FIXES:
 +Fix find options not properly being syncronized between dialog and find bar.
