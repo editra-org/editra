@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-30 19:21-0600\n"
+"POT-Creation-Date: 2008-12-30 20:14-0600\n"
 "PO-Revision-Date: 2008-10-06 02:05+0000\n"
 "Last-Translator: Cody Precord <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -1697,7 +1697,7 @@ msgstr ""
 #: ../../src/updater.py:669
 #, python-format
 msgid "Rate: %.2f Kb/s"
-msgstr "レート: %2f Kb/s"
+msgstr "レート: %.2f Kb/s"
 
 #: ../../plugins/Launch/launch/__init__.py:98
 msgid "Re-run the last run program"
