@@ -266,10 +266,7 @@ def TimeStamp():
 
 class ErrorReporter(object):
     """Crash/Error Reporter Service
-    @summary: Stores all errors caught during the current session and
-              is implemented as a singleton so that all errors pushed
-              onto it are kept in one central location no matter where
-              the object is called from.
+    @summary: Stores all errors caught during the current session.
 
     """
     instance = None
@@ -309,7 +306,7 @@ class ErrorReporter(object):
         @return: formatted log message of errors
 
         """
-        return "\n\n".join(self._sessionerr)
+        return (os.linesep * 2).join(self._sessionerr)
 
     def GetLastError(self):
         """Gets the last error from the current session
