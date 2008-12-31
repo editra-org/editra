@@ -27,9 +27,6 @@ import tokenize
 import types
 from token import NAME, DEDENT, STRING, NEWLINE
 
-# For debugging
-import traceback
-
 import wx
 from wx.py import introspect
 
@@ -334,7 +331,7 @@ class PyCompleter(object):
                             # NOTE: when result is none compdict is a list
                             inst = meth #compdict[meth]
                         else:
-                            inst = getattr(result, meth)
+                            inst = getattr(result, meth, None)
 
                         # TODO: necessary check to handle some odd swig related
                         #       errors. Find out why type 'swigvarlink' causes
@@ -364,7 +361,6 @@ class PyCompleter(object):
                             comp['abbr'] += '('
                         completions.append(comp)
                 except Exception, msg:
-#                    traceback.print_exc()
                     dbg("[pycomp][err] inner completion: %s [stmt='%s']:" % (msg, stmt))
 
             return completions
@@ -906,7 +902,6 @@ class PyParser:
         except StopIteration: #thrown on EOF
             pass
         except:
-#            traceback.print_exc()
             dbg("[pycomp][err] Pyparser.parse: %s, %s" %
                 (sys.exc_info()[0], sys.exc_info()[1]))
         return self._adjustvisibility()
