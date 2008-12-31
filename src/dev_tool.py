@@ -86,7 +86,8 @@ def DEBUGP(statement):
     if msg.Type in ('err', 'error'):
         mtype = ed_msg.EDMSG_LOG_ERROR
         if ed_glob.VDEBUG:
-            msg = LogMsg(msg.Value + os.linesep + traceback.format_exc())
+            msg = LogMsg(msg.Value + os.linesep + traceback.format_exc(),
+                         msg.Origin, msg.Type)
     elif msg.Type in ('warn', 'warning'):
         mtype = ed_msg.EDMSG_LOG_WARN
     elif msg.Type in ('evt', 'event'):
