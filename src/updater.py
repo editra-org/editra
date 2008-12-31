@@ -561,7 +561,7 @@ class DownloadDialog(wx.Frame):
         dl_file = wx.StaticText(panel, label=_("Downloading: %s") % fname)
         dl_loc = wx.StaticText(panel, wx.ID_ANY,
                                _("Downloading To: %s") % floc)
-        self._cancel_bt = wx.Button(panel, wx.ID_CANCEL)
+        self._cancel_bt = wx.Button(panel, wx.ID_CANCEL, _("Cancel"))
         self._timer = wx.Timer(self, id=self.ID_TIMER)
         self._proghist = list()
 
