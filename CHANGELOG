@@ -25,6 +25,7 @@ NEW: [features/improvements]
 +Add option to enable/disable checking of eol characters.
 +Add menu shortcut for toggle fold.
 +Add a verbose debug mode for view stack tracebacks in editra log messages.
++Updated (Italian, Japanese, Latvian, Polish, Russian, Spanish, Turkish) Translations.
 
 BUG FIXES:
 +Fix find options not properly being syncronized between dialog and find bar.

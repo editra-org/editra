@@ -45,6 +45,8 @@
 ../../src/util.py
 ../../src/wxcompat.py
 ../../src/eclib/__init__.py
+../../src/eclib/auinavi.py
+../../src/eclib/choicedlg.py
 ../../src/eclib/colorsetter.py
 ../../src/eclib/ctrlbox.py
 ../../src/eclib/ecpickers.py
