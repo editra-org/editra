@@ -400,19 +400,25 @@ class EdPages(FNB.FlatNotebook):
         if self._menu is not None:
             self._menu.Destroy()
             self._menu = None
+
+        ctab = self.GetCurrentPage()
         cidx = self.GetSelection()
         ptxt = self.GetPageText(cidx)
 
         # Construct the menu
-        self._menu = ed_menu.EdMenu()
-        self._menu.Append(ed_glob.ID_NEW, _("New Tab"))
-        self._menu.AppendSeparator()
-        self._menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
-        self._menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
-        self._menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
-        self._menu.AppendSeparator()
-        self._menu.Append(ed_glob.ID_COPY_PATH, _("Copy Full Path"))
-        #self._menu.AppendSeparator()
+        if ctab is not None:
+            self._menu = ctab.GetTabMenu()
+
+        if self._menu is None:
+            self._menu = ed_menu.EdMenu()
+            self._menu.Append(ed_glob.ID_NEW, _("New Tab"))
+            self._menu.AppendSeparator()
+            self._menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
+            self._menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
+            self._menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
+            self._menu.AppendSeparator()
+            self._menu.Append(ed_glob.ID_COPY_PATH, _("Copy Full Path"))
+            #self._menu.AppendSeparator()
         
         self.PopupMenu(self._menu)
 
