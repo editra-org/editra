@@ -352,7 +352,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Check if we are still alive or not, as this may be called
         # after we have been deleted.
         if isinstance(self, wx.stc.StyledTextCtrl):
-            wx.stc.StyledTextCtrl.BraceBadLight(self, pos)
+            super(EditraStc, self).BraceBadLight(pos)
 
     def BraceHighlight(self, pos1, pos2):
         """Highlight characters at pos1 and pos2
@@ -363,7 +363,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Check if we are still alive or not, as this may be called
         # after we have been deleted.
         if isinstance(self, wx.stc.StyledTextCtrl):
-            wx.stc.StyledTextCtrl.BraceHighlight(self, pos1, pos2)
+            super(EditraStc, self).BraceHighlight(pos1, pos2)
 
     def GetBookmarks(self):
         """Gets a list of all lines containing bookmarks
@@ -904,7 +904,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.WordPartRight()
-        wx.stc.StyledTextCtrl.ParaDown(self)
+        super(EditraStc, self).ParaDown()
         if self.GetCurrentPos() != self.GetLength():
             self.WordPartLeft()
             self.GotoPos(self.GetCurrentPos() + len(self.GetEOLChar()))
@@ -917,7 +917,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.WordRightExtend()
-        wx.stc.StyledTextCtrl.ParaDownExtend(self)
+        super(EditraStc, self).ParaDownExtend()
         if self.GetCurrentPos() != self.GetLength():
             self.WordLeftExtend()
             self.SetCurrentPos(self.GetCurrentPos() + len(self.GetEOLChar()))
@@ -1528,7 +1528,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.BeginUndoAction()
-        wx.stc.StyledTextCtrl.LineTranspose(self)
+        super(EditraStc, self).LineTranspose()
         self.EndUndoAction()
 
     def SetAutoComplete(self, value):
@@ -1580,7 +1580,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @note: overriden as a hack for msw
 
         """
-        wx.stc.StyledTextCtrl.SetFocus(self)
+        super(EditraStc, self).SetFocus()
         if wx.Platform == '__WXMSW__':
             wx.PostEvent(self, wx.FocusEvent(wx.wxEVT_SET_FOCUS, self.GetId()))
 
@@ -1602,7 +1602,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 self.Unbind(wx.stc.EVT_STC_STYLENEEDED)
                 self._code['clexer'] = None
 
-        wx.stc.StyledTextCtrl.SetLexer(self, lexer)
+        super(EditraStc, self).SetLexer(lexer)
 
     def SetModTime(self, modtime):
         """Set the value of the files last modtime"""
@@ -1641,7 +1641,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                                    _("Recording Macro") + u"...",
                                    ed_glob.SB_INFO)
         wx.PostEvent(self.GetTopLevelParent(), evt)
-        wx.stc.StyledTextCtrl.StartRecord(self)
+        super(EditraStc, self).StartRecord()
 
     def StopRecord(self):
         """Stops the recording and builds the macro script
@@ -1649,7 +1649,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.recording = False
-        wx.stc.StyledTextCtrl.StopRecord(self)
+        super(EditraStc, self).StopRecord()
         evt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
                                    _("Recording Finished"),
                                    ed_glob.SB_INFO)
@@ -1791,10 +1791,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.SetWordChars(NONSPACE)
-        wx.stc.StyledTextCtrl.WordLeft(self)
+        super(EditraStc, self).WordLeft()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordLeft(self)
+            super(EditraStc, self).WordLeft()
         self.SetWordChars('')
 
     def WordLeftExtend(self):
@@ -1803,10 +1803,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.SetWordChars(NONSPACE)
-        wx.stc.StyledTextCtrl.WordLeftExtend(self)
+        super(EditraStc, self).WordLeftExtend()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordLeftExtend(self)
+            super(EditraStc, self).WordLeftExtend()
         self.SetWordChars('')
 
     def WordPartLeft(self):
@@ -1814,38 +1814,38 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @note: overrides default function to not count whitespace as words
 
         """
-        wx.stc.StyledTextCtrl.WordPartLeft(self)
+        super(EditraStc, self).WordPartLeft()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordPartLeft(self)
+            super(EditraStc, self).WordPartLeft()
 
     def WordPartLeftExtend(self):
         """Extend selection left to the next change in capitalization/puncuation
         @note: overrides default function to not count whitespace as words
 
         """
-        wx.stc.StyledTextCtrl.WordPartLeftExtend(self)
+        super(EditraStc, self).WordPartLeftExtend()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordPartLeftExtend(self)
+            super(EditraStc, self).WordPartLeftExtend()
 
     def WordPartRight(self):
         """Move the caret to the start of the next word part to the right
         @note: overrides default function to exclude white space
 
         """
-        wx.stc.StyledTextCtrl.WordPartRight(self)
+        super(EditraStc, self).WordPartRight()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordPartRight(self)
+            super(EditraStc, self).WordPartRight()
 
     def WordPartRightEnd(self):
         """Move caret to end of next change in capitalization/puncuation
         @postcondition: caret is moved
 
         """
-        wx.stc.StyledTextCtrl.WordPartRight(self)
-        wx.stc.StyledTextCtrl.WordPartRight(self)
+        super(EditraStc, self).WordPartRight()
+        super(EditraStc, self).WordPartRight()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos - 1) in SPACECHARS:
             self.CharLeft()
@@ -1855,8 +1855,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: selection is extended
 
         """
-        wx.stc.StyledTextCtrl.WordPartRightExtend(self)
-        wx.stc.StyledTextCtrl.WordPartRightExtend(self)
+        super(EditraStc, self).WordPartRightExtend()
+        super(EditraStc, self).WordPartRightExtend()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos - 1) in SPACECHARS:
             self.CharLeftExtend()
@@ -1866,10 +1866,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: selection is extended
 
         """
-        wx.stc.StyledTextCtrl.WordPartRightExtend(self)
+        super(EditraStc, self).WordPartRightExtend()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordPartRightExtend(self)
+            super(EditraStc, self).WordPartRightExtend()
 
     def WordRight(self):
         """Move caret to begining of next word
@@ -1877,10 +1877,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.SetWordChars(NONSPACE)
-        wx.stc.StyledTextCtrl.WordRight(self)
+        super(EditraStc, self).WordRight()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordRight(self)
+            super(EditraStc, self).WordRight()
         self.SetWordChars('')
 
     def WordRightEnd(self):
@@ -1889,10 +1889,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.SetWordChars(NONSPACE)
-        wx.stc.StyledTextCtrl.WordRightEnd(self)
+        super(EditraStc, self).WordRightEnd()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos - 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordRightEnd(self)
+            super(EditraStc, self).WordRightEnd()
         self.SetWordChars('')
 
     def WordRightExtend(self):
@@ -1901,10 +1901,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.SetWordChars(NONSPACE)
-        wx.stc.StyledTextCtrl.WordRightExtend(self)
+        super(EditraStc, self).WordRightExtend()
         cpos = self.GetCurrentPos()
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
-            wx.stc.StyledTextCtrl.WordRightExtend(self)
+            super(EditraStc, self).WordRightExtend()
         self.SetWordChars('')
 
     def LoadFile(self, path):
@@ -2170,7 +2170,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     continue
                 else:
                     self._code['keywords'] += keyw[1]
-                    wx.stc.StyledTextCtrl.SetKeyWords(self, keyw[0], keyw[1])
+                    super(EditraStc, self).SetKeyWords(keyw[0], keyw[1])
 
         kwlist = self._code['keywords'].split()    # Split into a list of words
         kwlist = list(set(kwlist))                 # Uniqueify the list
