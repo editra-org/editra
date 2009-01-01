@@ -154,7 +154,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 self.CmdKeyAssign(*keys)
 
         # Other Settings
-        self._menu = MakeMenu()
         self.UsePopUp(False)
 
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
@@ -165,9 +164,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
-
-        # Context Menu Events
-        self.Bind(wx.EVT_CONTEXT_MENU, lambda evt: self.PopupMenu(self._menu))
         
         # Need to relay the menu events from the context menu to the top level
         # window to be handled on gtk. Other platforms don't require this.
@@ -2231,22 +2227,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     #---- End Style Definitions ----#
 
 #-----------------------------------------------------------------------------#
-
-def MakeMenu():
-    """Make the buffers context menu"""
-    menu = ed_menu.EdMenu()
-    menu.Append(ed_glob.ID_UNDO, _("Undo"))
-    menu.Append(ed_glob.ID_REDO, _("Redo"))
-    menu.AppendSeparator()
-    menu.Append(ed_glob.ID_CUT, _("Cut"))
-    menu.Append(ed_glob.ID_COPY, _("Copy"))
-    menu.Append(ed_glob.ID_PASTE, _("Paste"))
-    menu.AppendSeparator()
-    menu.Append(ed_glob.ID_TO_UPPER, _("To Uppercase"))
-    menu.Append(ed_glob.ID_TO_LOWER, _("To Lowercase"))
-    menu.AppendSeparator()
-    menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
-    return menu
 
 def _GetMacKeyBindings():
     """Returns a list of 3-element tuples defining the standard key
