@@ -47,11 +47,19 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         ed_stc.EditraStc.__init__(self, parent, id_, pos, size, style, use_dt)
         ed_tab.EdTabBase.__init__(self, parent)
 
+        # Attributes
+        self._menu = MakeMenu()
+
         # Initialize the classes position manager for the first control
         # that is created only.
         if not EdEditorView.DOCMGR.IsInitialized():
             EdEditorView.DOCMGR.InitPositionCache(ed_glob.CONFIG['CACHE_DIR'] + \
                                                   os.sep + u'positions')
+
+        # Context Menu Events
+        self.Bind(wx.EVT_CONTEXT_MENU, lambda evt: self.PopupMenu(self._menu))
+
+    #---- EdTab Methods ----#
 
     def DoOnIdle(self):
         """Check if the file has been modified and prompt a warning"""
@@ -136,6 +144,8 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         return result
 
+    #---- End EdTab Methods ----#
+
     def PromptToReSave(self, cfile):
         """Show a dialog prompting to resave the current file
         @param cfile: the file in question
@@ -183,3 +193,21 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                 mdlg.Destroy()
         else:
             self.SetModTime(GetFileModTime(cfile))
+
+#-----------------------------------------------------------------------------#
+
+def MakeMenu():
+    """Make the buffers context menu"""
+    menu = ed_menu.EdMenu()
+    menu.Append(ed_glob.ID_UNDO, _("Undo"))
+    menu.Append(ed_glob.ID_REDO, _("Redo"))
+    menu.AppendSeparator()
+    menu.Append(ed_glob.ID_CUT, _("Cut"))
+    menu.Append(ed_glob.ID_COPY, _("Copy"))
+    menu.Append(ed_glob.ID_PASTE, _("Paste"))
+    menu.AppendSeparator()
+    menu.Append(ed_glob.ID_TO_UPPER, _("To Uppercase"))
+    menu.Append(ed_glob.ID_TO_LOWER, _("To Lowercase"))
+    menu.AppendSeparator()
+    menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
+    return menu
