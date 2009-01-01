@@ -33,7 +33,6 @@ import util
 import ed_msg
 import ed_txt
 import ed_mdlg
-import ed_menu
 import eclib.encdlg as encdlg
 from extern import flatnotebook as FNB
 
@@ -207,7 +206,9 @@ class EdPages(FNB.FlatNotebook):
     def AddPage(self, page, text, select=True, imgId=-1):
         """Add a page to the notebook"""
         FNB.FlatNotebook.AddPage(self, page, text, select, imgId)
-        self.EnsureVisible(self.GetSelection())
+        page.SetTabLabel(text)
+        sel = self.GetSelection()
+        self.EnsureVisible(sel)
 
     def DocDuplicated(self, path):
         """Check for if the given path is open elswhere and duplicate the
@@ -401,26 +402,13 @@ class EdPages(FNB.FlatNotebook):
             self._menu.Destroy()
             self._menu = None
 
-        ctab = self.GetCurrentPage()
-        cidx = self.GetSelection()
-        ptxt = self.GetPageText(cidx)
-
         # Construct the menu
+        ctab = self.GetCurrentPage()
         if ctab is not None:
             self._menu = ctab.GetTabMenu()
 
-        if self._menu is None:
-            self._menu = ed_menu.EdMenu()
-            self._menu.Append(ed_glob.ID_NEW, _("New Tab"))
-            self._menu.AppendSeparator()
-            self._menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
-            self._menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
-            self._menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
-            self._menu.AppendSeparator()
-            self._menu.Append(ed_glob.ID_COPY_PATH, _("Copy Full Path"))
-            #self._menu.AppendSeparator()
-        
-        self.PopupMenu(self._menu)
+        if self._menu is not None:
+            self.PopupMenu(self._menu)
 
     def OnThemeChanged(self, msg):
         """Update icons when the theme has changed
@@ -643,6 +631,16 @@ class EdPages(FNB.FlatNotebook):
         if not txt or txt[0] != u"*":
             return txt
         return txt[1:]
+
+    def SetPageText(self, pg_num, txt):
+        """Set the pages tab text
+        @param pg_num: page index
+        @param txt: string
+
+        """
+        super(EdPages, self).SetPageText(pg_num, txt)
+        page = self.GetPage(pg_num)
+        page.SetTabLabel(txt)
 
     def GetTextControls(self):
         """Gets all the currently opened text controls
