@@ -325,7 +325,7 @@ class PlateButton(wx.PyControl):
             self.__DrawHighlight(gc, width, height)
 
         elif self._state['cur'] == PLATE_PRESSED:
-            gc.SetTextForeground(self._color['ptxt'])
+            gc.SetTextForeground(self._color['htxt'])
             if wx.Platform == '__WXMAC__':
                 brush = wx.Brush(wx.BLACK)
                 brush.MacSetTheme(Carbon.Appearance.kThemeBrushFocusHighlight)
@@ -334,10 +334,10 @@ class PlateButton(wx.PyControl):
                 pen = wx.Pen(AdjustColour(self._color['press'], -80, 220), 1)
             gc.SetPen(pen)
 
+            self.__DrawHighlight(gc, width, height)
             txt_x = self.__DrawBitmap(gc)
             gc.DrawText(self.GetLabel(), txt_x + 2, txt_y)
             self.__DrawDropArrow(gc, txt_x + tw + 6, (height / 2) - 2)
-            self.__DrawHighlight(gc, width, height)
 
         else:
             if self.IsEnabled():
@@ -355,12 +355,11 @@ class PlateButton(wx.PyControl):
     def __InitColors(self):
         """Initialize the default colors"""
         color = GetHighlightColour()
-        pcolor = AdjustColour(color, -10, 160)
+        pcolor = AdjustColour(color, -12)
         colors = dict(default=True,
                       hlight=color, 
                       press=pcolor,
-                      htxt=BestLabelColour(self.GetForegroundColour()),
-                      ptxt=self.GetForegroundColour())
+                      htxt=BestLabelColour(self.GetForegroundColour()))
         return colors
 
     #---- End Private Member Function ----#
@@ -600,7 +599,7 @@ class PlateButton(wx.PyControl):
         wx.PyControl.SetLabel(self, label)
         self.InvalidateBestSize()
 
-    def SetLabelColor(self, normal, hlight=wx.NullColor, press=wx.NullColor):
+    def SetLabelColor(self, normal, hlight=wx.NullColor):
         """Set the color of the label. The optimal label color is usually
         automatically selected depending on the button color. In some
         cases the colors that are choosen may not be optimal.
@@ -612,7 +611,6 @@ class PlateButton(wx.PyControl):
 
         @param normal: Label color for normal state
         @keyword hlight: Color for when mouse is hovering over
-        @keyword press: Color for when button is pressed
 
         """
         self._color['default'] = False
@@ -624,13 +622,10 @@ class PlateButton(wx.PyControl):
             else:
                 self._color['htxt'] = BestLabelColour(normal)
 
-        if press is not None:
-            if press.IsOk():
-                self._color['ptxt'] = press
-            else:
-                self._color['ptxt'] = BestLabelColour(self._color['press'])
-
-        self.GetParent().RefreshRect(self.GetRect(), False)
+        if wx.Platform == '__WXMSW__':
+            self.GetParent().RefreshRect(self.GetRect(), False)
+        else:
+            self.Refresh()
 
     def SetMenu(self, menu):
         """Set the menu that can be shown when clicking on the
@@ -659,7 +654,6 @@ class PlateButton(wx.PyControl):
             self._color['hlight'] = color
         self._color['press'] = AdjustColour(color, -10, 160)
         self._color['htxt'] = BestLabelColour(self._color['hlight'])
-        self._color['ptxt'] = BestLabelColour(self._color['htxt'])
         self.Refresh()
 
     def SetState(self, state):
@@ -670,7 +664,10 @@ class PlateButton(wx.PyControl):
         """
         self._state['pre'] = self._state['cur']
         self._state['cur'] = state
-        self.GetParent().RefreshRect(self.GetRect(), False)
+        if wx.Platform == '__WXMSW__':
+            self.GetParent().RefreshRect(self.GetRect(), False)
+        else:
+            self.Refresh()
 
     def SetWindowStyle(self, style):
         """Sets the window style bytes, the updates take place
