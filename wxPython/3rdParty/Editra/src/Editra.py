@@ -693,7 +693,6 @@ def InitConfig():
 
     #---- Profile Loaded / Installed ----#
 
-
     # Set debug mode
     emode = profiler.Profile_Get('MODE')
     if 'DEBUG' in emode:
@@ -828,6 +827,7 @@ def ProcessCommandLine():
             opts.remove(opt)
         elif opt == '-D':
             ed_glob.DEBUG = False
+            ed_glob.VDEBUG = False
             opts.remove('-D')
         elif opt == '-S':
             ed_glob.SINGLE = False # Disable single instance checker
