@@ -38,6 +38,7 @@ class EdTabBase(object):
         object.__init__(self)
 
         # Attributes
+        self._lbl = u''
         self._nb = nbook
 
     #---- Methods to override in subclasses ----#
@@ -90,6 +91,20 @@ class EdTabBase(object):
         return True
 
     #---- Common Base Methods ----#
+
+    def GetTabLabel(self):
+        """Get the tabs label
+        @return: string
+
+        """
+        return self._lbl
+
+    def SetTabLabel(self, lbl):
+        """Set the tabs label
+        @param lbl: string
+
+        """
+        self._lbl = lbl
 
     def SetTabTitle(self, title):
         """Set the notebooks title text for this tab"""

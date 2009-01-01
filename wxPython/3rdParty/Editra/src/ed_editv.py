@@ -24,6 +24,7 @@ import os
 
 # Editra Libraries
 import ed_glob
+import ed_menu
 import ed_stc
 import ed_tab
 from doctools import DocPositionMgr
@@ -93,7 +94,17 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         @todo: move logic from notebook to here
 
         """
-        pass
+        ptxt = self.GetTabLabel()
+
+        menu = ed_menu.EdMenu()
+        menu.Append(ed_glob.ID_NEW, _("New Tab"))
+        menu.AppendSeparator()
+        menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
+        menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
+        menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
+        menu.AppendSeparator()
+        menu.Append(ed_glob.ID_COPY_PATH, _("Copy Full Path"))
+        return menu
 
     def GetTitleString(self):
         """Get the title string to display in the MainWindows title bar
