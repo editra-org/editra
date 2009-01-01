@@ -68,6 +68,13 @@ class EdTabBase(object):
         """
         raise NotImplementedError, "GetName Must be implemented!!"
 
+    def GetTabMenu(self):
+        """Get the context menu to show on the tab
+        @return: wx.Menu or None
+
+        """
+        return None
+
     def GetTitleString(self):
         """Get the title string to display in the MainWindows title bar
         @return: (unicode) string

@@ -87,6 +87,14 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         """
         return u"EditraTextCtrl"
 
+    def GetTabMenu(self):
+        """Get the tab menu
+        @return: wx.Menu
+        @todo: move logic from notebook to here
+
+        """
+        pass
+
     def GetTitleString(self):
         """Get the title string to display in the MainWindows title bar
         @return: (unicode) string
