@@ -205,7 +205,7 @@ class EdPages(FNB.FlatNotebook):
 
     def AddPage(self, page, text, select=True, imgId=-1):
         """Add a page to the notebook"""
-        FNB.FlatNotebook.AddPage(self, page, text, select, imgId)
+        super(EdPages, self).AddPage(page, text, select, imgId)
         page.SetTabLabel(text)
         sel = self.GetSelection()
         self.EnsureVisible(sel)
@@ -452,8 +452,8 @@ class EdPages(FNB.FlatNotebook):
         # Set tab image
         cpage = self.GetSelection()
         if fileobj.ReadOnly:
-            super(FNB.FlatNotebook, self).SetPageImage(cpage,
-                                               self._index[ed_glob.ID_READONLY])
+            super(EdPages, self).SetPageImage(cpage,
+                                              self._index[ed_glob.ID_READONLY])
         else:
             self.SetPageImage(cpage, str(self.control.GetLangId()))
 
@@ -578,8 +578,8 @@ class EdPages(FNB.FlatNotebook):
         # Set tab image
         cpage = self.GetSelection()
         if doc.ReadOnly:
-            FNB.FlatNotebook.SetPageImage(self, cpage,
-                                          self._index[ed_glob.ID_READONLY])
+            super(EdPages, self).SetPageImage(cpage,
+                                              self._index[ed_glob.ID_READONLY])
         else:
             self.SetPageImage(cpage, str(self.control.GetLangId()))
 
@@ -627,7 +627,7 @@ class EdPages(FNB.FlatNotebook):
         # even though the pg_num here is one that is obtained by calling
         # GetSelection which should return a valid index.
         try:
-            txt = FNB.FlatNotebook.GetPageText(self, pg_num)
+            txt = super(EdPages, self).GetPageText(pg_num)
         except IndexError:
             txt = ''
 
@@ -906,7 +906,7 @@ class EdPages(FNB.FlatNotebook):
             else:
                 self._index[lang_id] = imglst.Add(wx.ArtProvider.\
                                               GetBitmap(lang_id, wx.ART_MENU))
-        FNB.FlatNotebook.SetPageImage(self, pg_num, self._index[lang_id])
+        super(EdPages, self).SetPageImage(pg_num, self._index[lang_id])
 
     def UpdateAllImages(self):
         """Reload and Reset all images in the notebook pages and
@@ -917,7 +917,7 @@ class EdPages(FNB.FlatNotebook):
         # If icons preference has been disabled then clear all icons
         if not Profile_Get('TABICONS'):
             for page in xrange(self.GetPageCount()):
-                FNB.FlatNotebook.SetPageImage(self, page, -1)
+                super(EdPages, self).SetPageImage(page, -1)
         else:
             # Reload the image list with new icons from the ArtProvider
             imglst = self.GetImageList()
@@ -959,7 +959,7 @@ class EdPages(FNB.FlatNotebook):
                     title = u"*" + title
 
                 # Only Update if the text has changed
-                if title != FNB.FlatNotebook.GetPageText(self, pg_num):
+                if title != super(EdPages, self).GetPageText(pg_num):
                     self.SetPageText(pg_num, title)
                     ftitle = self.control.GetTitleString()
                     self.frame.SetTitle(ftitle)
@@ -971,7 +971,7 @@ class EdPages(FNB.FlatNotebook):
                         title = self.GetPageText(page)
                         if control.GetModify():
                             title = u"*" + title
-                        if title != FNB.FlatNotebook.GetPageText(self, page):
+                        if title != super(EdPages, self).GetPageText(page):
                             self.SetPageText(page, title)
         except wx.PyDeadObjectError:
             pass
