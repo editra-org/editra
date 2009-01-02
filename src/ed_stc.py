@@ -174,7 +174,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
        #---- End Init ----#
 
     def __del__(self):
+        # Cleanup the file object callbacks
         self.file.RemoveModifiedCallback(self.FireModified)
+        self.file.CleanUp()
 
     @property
     def __name__(self):
@@ -1040,8 +1042,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             wx.CallAfter(self.BraceBadLight, brace_at_caret)
         else:
             wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
-
-        evt.Skip()
 
     def OnMarginClick(self, evt):
         """Open and Close Folders as Needed

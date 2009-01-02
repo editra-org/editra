@@ -107,6 +107,10 @@ class EdFile(object):
 
         self.open = False
 
+    def CleanUp(self):
+        """Cleanup callback"""
+        pass
+
     def DoOpen(self, mode):
         """Opens and creates the internal file object
         @param mode: mode to open file in
