@@ -127,7 +127,7 @@ class ShelfI(plugin.Interface):
     def GetMenuEntry(self, menu):
         """Returns the menu entry associated with this item
         @param menu: The menu this entry will be added to
-        @return: wx.MenuItem
+        @return: wx.MenuItem or None if no menu entry is needed
 
         """
         raise NotImplementedError
@@ -199,7 +199,7 @@ class Shelf(plugin.Plugin):
             self._open[observer.GetName()] = 0
             try:
                 menu_i = observer.GetMenuEntry(menu)
-                if menu_i:
+                if menu_i is not None:
                     menu_items.append((menu_i.GetItemLabel(), menu_i))
             except Exception, msg:
                 self._log("[shelf][err] %s" % str(msg))
