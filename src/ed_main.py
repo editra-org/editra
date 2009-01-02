@@ -308,13 +308,15 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
             for handler in self._handlers['ui']:
                 app.AddUIHandlerForID(*handler)
+
+            app.SetTopWindow(self)
         else:
             self.SetExtraStyle(0)
 
             # HACK set update ui events back to proccess all here in case
             # opened dialog needs them. Not sure why this is necessary but it
             # is the only solution I could find to fix the external find
-            # dialogs so that there buttons become enabled when typing in the
+            # dialogs so that their buttons become enabled when typing in the
             # text control.
             #
             # If the windows that took the active position is another mainwindow

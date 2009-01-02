@@ -271,8 +271,10 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 break
 
         if awin is None:
-            if len(self.GetMainWindows()):
-                awin = self.GetMainWindows()[0]
+            awin = self.GetTopWindow()
+            if awin is None or getattr(awin, '__name__', '?') != "MainWindow":
+                if len(self.GetMainWindows()):
+                    awin = self.GetMainWindows()[0]
 
         return awin
 
