@@ -424,6 +424,7 @@ class EdPages(FNB.FlatNotebook):
 
         """
         # Create the control
+        self.GetTopLevelParent().Freeze()
         control = ed_editv.EdEditorView(self, wx.ID_ANY)
         control.Hide()
 
@@ -455,6 +456,8 @@ class EdPages(FNB.FlatNotebook):
                                                self._index[ed_glob.ID_READONLY])
         else:
             self.SetPageImage(cpage, str(self.control.GetLangId()))
+
+        self.GetTopLevelParent().Thaw()
 
         # Refocus on selected page
         self.GoCurrentPage()
