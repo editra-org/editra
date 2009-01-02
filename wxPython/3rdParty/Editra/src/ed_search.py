@@ -1259,13 +1259,25 @@ class EdFindResults(plugin.Plugin):
 
         """
         win = wx.GetApp().GetActiveWindow()
+
+        # Cleanup window list for dead objects
+        for idx, item in enumerate(list(EdFindResults.RESULT_SCREENS)):
+            if not isinstance(item, SearchResultScreen):
+                EdFindResults.RESULT_SCREENS.pop(idx)
+
+        # Try to find an empty existing window to use for the new search
         if win is not None:
             shelf = win.GetShelf()
-            screen = shelf.RaiseItem(u"Find Results")
-            if screen is None or screen.GetDisplayedLines() > 3:
+            for item in EdFindResults.RESULT_SCREENS:
+                if item.GetDisplayedLines() < 3:
+                    screen = shelf.RaiseWindow(item)
+                    break;
+            else:
                 shelf.PutItemOnShelf(ed_glob.ID_FIND_RESULTS)
                 shelf_nb = shelf.GetWindow()
                 screen = shelf_nb.GetCurrentPage()
+
+            # Fire off the search job
             data = msg.GetData()
             if len(data) > 1:
                 # Doing a file search operation
