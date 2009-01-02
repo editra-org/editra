@@ -1241,8 +1241,7 @@ class EdFindResults(plugin.Plugin):
         @param menu: the menu items parent menu
 
         """
-        return wx.MenuItem(menu, ed_glob.ID_FIND_RESULTS,
-                           _("Find Results"), _("Show a find results screen"))
+        return None
 
     def GetName(self):
         """Return the name of this control"""
