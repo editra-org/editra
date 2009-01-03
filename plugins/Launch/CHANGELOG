@@ -8,6 +8,7 @@ Version 0.9
 Date: xx/xx/200x
 
 +Add support for R
++Fix file type not being checked when window is first shown
 
 #-----------------------------------------------------------------------------#
 Version 0.8

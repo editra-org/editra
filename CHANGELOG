@@ -27,6 +27,7 @@ NEW: [features/improvements]
 +Add a verbose debug mode for view stack tracebacks in editra log messages.
 +Updated (Italian, Japanese, Latvian, Polish, Russian, Spanish, Turkish) Translations.
 +Reuse existing find results screens more effectively.
++New version of Launch with support for R.
 
 BUG FIXES:
 +Fix find options not properly being syncronized between dialog and find bar.
