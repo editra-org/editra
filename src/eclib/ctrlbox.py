@@ -20,6 +20,8 @@ Toolbar like control with automatic item spacing and layout.
 Styles:
   - CTRLBAR_STYLE_DEFAULT: Plain background
   - CTRLBAR_STYLE_GRADIENT: Draw the bar with a vertical gradient.
+  - CTRLBAR_STYLE_BORDER_BOTTOM: add a border to the bottom
+  - CTRLBAR_STYLE_BORDER: add a border to the top
 
 Class ControlBox:
 
