@@ -8,7 +8,7 @@
 ###############################################################################
 # Plugin Metadata
 """Run the script in the current buffer"""
-__version__ = "0.8"
+__version__ = "0.9"
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
@@ -54,7 +54,8 @@ class Launch(plugin.Plugin):
     def CreateItem(self, parent):
         """Create a Launch panel"""
         util.Log("[Launch][info] Creating Launch instance for Shelf")
-        return launch.LaunchWindow(parent)
+        win = launch.LaunchWindow(parent)
+        return win
 
     def GetBitmap(self):
         """Get the tab bitmap
