@@ -679,7 +679,13 @@ class FindPanel(wx.Panel):
         self.Bind(wx.EVT_CHOICE, self.OnChoice, id=ID_LOOKIN)
         for bid in (wx.ID_FIND, wx.ID_REPLACE, ID_FIND_ALL, ID_REPLACE_ALL):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=bid)
+        self.Bind(wx.EVT_SET_FOCUS, lambda evt: self.__SetFocus())
         self._ftxt.Bind(wx.EVT_SET_FOCUS, lambda evt: self._ftxt.SelectAll())
+
+    def __SetFocus(self):
+        """Set the focus to the find box"""
+        self._ftxt.SetFocus()
+        self._ftxt.SelectAll()
 
     def __DoLayout(self):
         """Layout the panel"""
