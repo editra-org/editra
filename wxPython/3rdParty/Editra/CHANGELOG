@@ -8,12 +8,16 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.4.xx
-DATE xx/xx/200x
+VERSION 0.4.40
+DATE 01/02/2009
 22nd Alpha Release
 
 NEWS:
 
+This is the first release of 2009. It was mostly focused on internal cleanup and
+api refactoring. Through this a number of bugs have been fixed and a number of
+existing features have recieved some refinements. The most noteable changes
+are listed below.
 
 NEW: [features/improvements]
 +Some improvements to the Python autocompletion.
