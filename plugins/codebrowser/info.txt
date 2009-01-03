@@ -1,4 +1,4 @@
 Author=Cody Precord
-Version=0.5
+Version=0.6
 Name=CodeBrowser
 Description=Browse code structure and elements
