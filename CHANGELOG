@@ -8,6 +8,20 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.4.xx
+DATE xx/xx/2009
+23rd Alpha Release
+
+NEWS:
+
+NEW: [features/improvments]
+
+
+BUG FIXES:
++Update window being shown at same time as splash window causing lockups.
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.4.40
 DATE 01/02/2009
 22nd Alpha Release
