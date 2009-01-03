@@ -586,7 +586,8 @@ class FindBox(ctrlbox.ControlBox):
 
         # Setup
         if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+            ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_BORDER_BOTTOM)
+
         ctrlbar.SetVMargin(2, 2)
         ctrlbar.AddControl(self.find, wx.ALIGN_LEFT)
         ctrlbar.AddControl(self.replace, wx.ALIGN_LEFT)
