@@ -196,6 +196,14 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self.Bind(ed_event.EVT_NOTIFY, self.OnNotify)
         self.Bind(ed_ipc.EVT_COMMAND_RECV, self.OnCommandRecieved)
 
+        # Splash a warning if version is not a final version
+        if profiler.Profile_Get('APPSPLASH'):
+            import edimage
+            splash_img = edimage.splashwarn.GetBitmap()
+            self.splash = wx.SplashScreen(splash_img, wx.SPLASH_CENTRE_ON_PARENT | \
+                                          wx.SPLASH_NO_TIMEOUT, 0, None, wx.ID_ANY)
+            self.splash.Show()
+
         return True
 
     def Destroy(self):
@@ -206,6 +214,12 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         except AttributeError:
             pass
         wx.App.Destroy(self)
+
+    def DestroySplash(self):
+        """Destroy the splash screen"""
+        if self.splash is not None and isinstance(self.splash, wx.SplashScreen):
+            self.splash.Destroy()
+            self.splash = None
 
     def Exit(self, force=False):
         """Exit the program
@@ -507,6 +521,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         e_val = evt.GetValue()
         if evt.GetId() == ID_UPDATE_CHECK and \
            isinstance(e_val, tuple) and e_val[0]:
+            self.DestroySplash()
             mdlg = wx.MessageDialog(self.GetActiveWindow(),
                                     _("An updated version of Editra is available\n"
                                       "Would you like to download Editra %s now?") %\
@@ -891,23 +906,8 @@ def _Main(opts, args):
         editra_app.Destroy()
         os._exit(0)
 
-    if editra_app.GetProfileUpdated():
-        # Make sure window iniliazes to default position
-        profiler.Profile_Del('WPOS')
-        wx.MessageBox(_("Your profile has been updated to the latest "
-                        "version") + u"\n" + \
-                      _("Please check the preferences dialog to check "
-                        "your preferences"),
-                      _("Profile Updated"))
-
-    # Splash a warning if version is not a final version
-    if profiler.Profile_Get('APPSPLASH'):
-        import edimage
-        splash_img = edimage.splashwarn.GetBitmap()
-        splash = wx.SplashScreen(splash_img, wx.SPLASH_CENTRE_ON_PARENT | \
-                                 wx.SPLASH_NO_TIMEOUT, 0, None, wx.ID_ANY)
-        splash.Show()
-        wx.CallLater(2500, splash.Destroy)
+    # Set the timeout on destroying the splash screen
+    wx.CallLater(2300, editra_app.DestroySplash)
 
     if profiler.Profile_Get('SET_WSIZE'):
         wsize = profiler.Profile_Get('WSIZE')
@@ -943,6 +943,17 @@ def _Main(opts, args):
             frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname)
         except IndexError:
             dev_tool.DEBUGP("[main][err] IndexError on commandline args")
+
+    # Notify that profile was updated
+    if editra_app.GetProfileUpdated():
+        editra_app.DestroySplash()
+        # Make sure window iniliazes to default position
+        profiler.Profile_Del('WPOS')
+        wx.MessageBox(_("Your profile has been updated to the latest "
+                        "version") + u"\n" + \
+                      _("Please check the preferences dialog to check "
+                        "your preferences"),
+                      _("Profile Updated"))
 
     # 3. Start Applications Main Loop
     dev_tool.DEBUGP("[main][info] Starting MainLoop...")
