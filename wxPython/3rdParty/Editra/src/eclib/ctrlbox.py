@@ -63,9 +63,12 @@ CTRLBOX_NAME_STR = u'EditraControlBox'
 #-- Control Style Flags --#
 
 # ControlBar
-CTRLBAR_STYLE_DEFAULT  = 0
-CTRLBAR_STYLE_GRADIENT = 1  # Paint the bar with a gradient
-CTRLBAR_STYLE_FOLDABLE = 2  # Add a fold button to the bar.
+CTRLBAR_STYLE_DEFAULT       = 0
+CTRLBAR_STYLE_GRADIENT      = 1     # Paint the bar with a gradient
+CTRLBAR_STYLE_BORDER_BOTTOM = 2     # Add a border to the bottom
+CTRLBAR_STYLE_BORDER_TOP    = 4     # Add a border to the top
+
+#CTRLBAR_STYLE_FOLDABLE = 2  # Add a fold button to the bar.
 
 # ControlBar event for items added by AddTool
 edEVT_CTRLBAR = wx.NewEventType()
@@ -332,19 +335,26 @@ class ControlBar(wx.PyPanel):
 
         """
         dc = wx.PaintDC(self)
-        if not self._style & CTRLBAR_STYLE_GRADIENT:
-            evt.Skip()
-            return
+        rect = self.GetClientRect()
+        dc.SetPen(wx.Pen(self._color, 1))
+
+        # Add a border to the bottom
+        if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
+            dc.DrawLine(0, rect.height-1, rect.width, rect.height-1)
+
+        # Add a border to the top
+        if self._style & CTRLBAR_STYLE_BORDER_TOP:
+            dc.DrawLine(0, 1, rect.width, 1)
 
         # Paint the gradient
-        gc = wx.GraphicsContext.Create(dc)
-        rect = self.GetClientRect()
-        grad = gc.CreateLinearGradientBrush(0, .5, 0, rect.height,
-                                            self._color2, self._color)
+        if self._style & CTRLBAR_STYLE_GRADIENT:
+            gc = wx.GraphicsContext.Create(dc)
+            grad = gc.CreateLinearGradientBrush(0, .5, 0, rect.height,
+                                                self._color2, self._color)
 
-        gc.SetPen(gc.CreatePen(self._pen))
-        gc.SetBrush(grad)
-        gc.DrawRectangle(0, 0, rect.width - 0.5, rect.height - 0.5)
+            gc.SetPen(gc.CreatePen(self._pen))
+            gc.SetBrush(grad)
+            gc.DrawRectangle(0, 0, rect.width - 0.5, rect.height - 0.5)
 
         evt.Skip()
 
