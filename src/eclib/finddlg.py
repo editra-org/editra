@@ -347,6 +347,7 @@ class FindReplaceDlgBase:
         self.Bind(wx.EVT_MENU, lambda evt: self._SendCloseEvent(), id=wx.ID_CLOSE)
         self.Bind(wx.EVT_SET_FOCUS,
                   lambda evt: self._panel.SetFocus() and evt.Skip())
+        self.Bind(wx.EVT_SHOW, lambda evt: self._panel.SetFocus())
 
     def __DoLayout(self):
         """Layout the dialog"""
