@@ -974,11 +974,6 @@ class AppearancePanel(wx.Panel):
         fpick = ecpickers.PyFontPicker(self, wx.ID_ANY, fnt)
         fpick.SetToolTipString(_("Main display font for various UI components"))
 
-        # Misc
-        trans_size = (-1, -1)
-        if wx.Platform == '__WXGTK__':
-            trans_size = (200, 15)
-
         # Layout
         sizer = wx.FlexGridSizer(16, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
@@ -998,8 +993,8 @@ class AppearancePanel(wx.Panel):
                        (wx.StaticText(self, label=_("Transparency") + u": "), 0),
                        (wx.Slider(self, ed_glob.ID_TRANSPARENCY,
                                    Profile_Get('ALPHA'), 100, 255,
-                                   size=trans_size, style=wx.SL_HORIZONTAL | \
-                                   wx.SL_AUTOTICKS | wx.SL_LABELS), 0, wx.EXPAND),
+                                   style=wx.SL_HORIZONTAL|wx.SL_AUTOTICKS|\
+                                         wx.SL_LABELS), 0, wx.EXPAND),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Display Font") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL),
