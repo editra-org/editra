@@ -222,7 +222,7 @@ class KeyBinder(object):
             shortcut = u"+".join(rbind)
             if len(shortcut):
                 shortcut = u"\t" + shortcut
-        return shortcut
+        return unicode(shortcut)
 
     @classmethod
     def GetCurrentProfile(cls):
@@ -306,23 +306,23 @@ class KeyBinder(object):
             if reader != -1:
                 util.Log("[keybinder][info] Loading KeyProfile: %s" % ppath)
                 for line in reader:
-                    parts = line.split('=', 1)
+                    parts = line.split(u'=', 1)
                     # Check that the line was formatted properly
                     if len(parts) == 2:
                         # Try to find the ID value
                         item_id = _GetValueFromStr(parts[0])
                         if item_id is not None:
                             tmp = [ part.strip()
-                                    for part in parts[1].split('+')
+                                    for part in parts[1].split(u'+')
                                     if len(part.strip()) ]
 
                             # Do some checking if the binding is valid
                             nctrl = len([key for key in tmp
-                                         if key not in ('Ctrl', 'Alt', 'Shift')])
+                                         if key not in (u'Ctrl', u'Alt', u'Shift')])
                             if nctrl:
                                 keydict[item_id] = tmp
-                                if parts[1].strip().endswith('++'):
-                                    keydict[item_id].append('+')
+                                if parts[1].strip().endswith(u'++'):
+                                    keydict[item_id].append(u'+')
                             else:
                                 # Invalid key binding
                                 continue
@@ -350,7 +350,7 @@ class KeyBinder(object):
             if writer != -1:
                 itemlst = list()
                 for item in KeyBinder.keyprofile.keys():
-                    itemlst.append("%s=%s%s" % (_FindStringRep(item),
+                    itemlst.append(u"%s=%s%s" % (_FindStringRep(item),
                                                 self.GetBinding(item).lstrip(),
                                                 os.linesep))
                 writer.writelines(sorted(itemlst))
@@ -972,78 +972,78 @@ class EdMenuBar(wx.MenuBar):
 #---- Private Objects/Functions ----#
 
 _DEFAULT_BINDING = { # File Menu
-                     ed_glob.ID_NEW : ("Ctrl", "N"),
-                     ed_glob.ID_NEW_WINDOW : ("Ctrl", "Shift", "N"),
-                     ed_glob.ID_OPEN : ("Ctrl", "O"),
-                     ed_glob.ID_CLOSE : ("Ctrl", "W"),
-                     ed_glob.ID_CLOSE_WINDOW : ("Ctrl", "Shift", "W"),
-                     ed_glob.ID_SAVE : ("Ctrl", "S"),
-                     ed_glob.ID_SAVEAS : ("Ctrl", "Shift", "S"),
-                     ed_glob.ID_PRINT_SU : ("Ctrl", "Shift", "P"),
-                     ed_glob.ID_PRINT : ("Ctrl", "P"),
-                     ed_glob.ID_EXIT : ("Ctrl", "Q"),
+                     ed_glob.ID_NEW : (u"Ctrl", u"N"),
+                     ed_glob.ID_NEW_WINDOW : (u"Ctrl", u"Shift", u"N"),
+                     ed_glob.ID_OPEN : (u"Ctrl", u"O"),
+                     ed_glob.ID_CLOSE : (u"Ctrl", u"W"),
+                     ed_glob.ID_CLOSE_WINDOW : (u"Ctrl", u"Shift", u"W"),
+                     ed_glob.ID_SAVE : (u"Ctrl", u"S"),
+                     ed_glob.ID_SAVEAS : (u"Ctrl", u"Shift", u"S"),
+                     ed_glob.ID_PRINT_SU : (u"Ctrl", u"Shift", u"P"),
+                     ed_glob.ID_PRINT : (u"Ctrl", u"P"),
+                     ed_glob.ID_EXIT : (u"Ctrl", u"Q"),
 
                      # Edit Menu
-                     ed_glob.ID_UNDO : ("Ctrl", "Z"),
-                     ed_glob.ID_REDO : ("Ctrl", "Shift", "Z"),
-                     ed_glob.ID_CUT : ("Ctrl", "X"),
-                     ed_glob.ID_COPY : ("Ctrl", "C"),
-                     ed_glob.ID_PASTE : ("Ctrl", "V"),
-                     ed_glob.ID_PASTE_AFTER : ("Ctrl", "Shift", "V"),
-                     ed_glob.ID_SELECTALL : ("Ctrl", "A"),
-                     ed_glob.ID_COLUMN_MODE : ("Ctrl", "Shift", "|"),
-                     ed_glob.ID_LINE_AFTER : ("Ctrl", "L"),
-                     ed_glob.ID_LINE_BEFORE : ("Ctrl", "Shift", "L"),
-                     ed_glob.ID_CUT_LINE : ("Ctrl", "D"),
-                     ed_glob.ID_COPY_LINE : ("Ctrl", "Y"),
-                     ed_glob.ID_DUP_LINE : ("Ctrl", "Shift", "C"),
-                     ed_glob.ID_JOIN_LINES : ("Ctrl", "J"),
-                     ed_glob.ID_TRANSPOSE : ("Ctrl", "T"),
-                     ed_glob.ID_ADD_BM : ("Ctrl", "B"),
-                     ed_glob.ID_FIND : ("Ctrl", "Shift", "F"),
-                     ed_glob.ID_FIND_PREVIOUS : ("Shift", "F3"),
-                     ed_glob.ID_FIND_NEXT : ("F3",),
-                     ed_glob.ID_FIND_REPLACE : ("Ctrl", "R"),
-                     ed_glob.ID_QUICK_FIND : ("Ctrl", "F"),
+                     ed_glob.ID_UNDO : (u"Ctrl", u"Z"),
+                     ed_glob.ID_REDO : (u"Ctrl", u"Shift", u"Z"),
+                     ed_glob.ID_CUT : (u"Ctrl", u"X"),
+                     ed_glob.ID_COPY : (u"Ctrl", u"C"),
+                     ed_glob.ID_PASTE : (u"Ctrl", u"V"),
+                     ed_glob.ID_PASTE_AFTER : (u"Ctrl", u"Shift", u"V"),
+                     ed_glob.ID_SELECTALL : (u"Ctrl", u"A"),
+                     ed_glob.ID_COLUMN_MODE : (u"Ctrl", u"Shift", u"|"),
+                     ed_glob.ID_LINE_AFTER : (u"Ctrl", u"L"),
+                     ed_glob.ID_LINE_BEFORE : (u"Ctrl", u"Shift", u"L"),
+                     ed_glob.ID_CUT_LINE : (u"Ctrl", u"D"),
+                     ed_glob.ID_COPY_LINE : (u"Ctrl", u"Y"),
+                     ed_glob.ID_DUP_LINE : (u"Ctrl", u"Shift", u"C"),
+                     ed_glob.ID_JOIN_LINES : (u"Ctrl", u"J"),
+                     ed_glob.ID_TRANSPOSE : (u"Ctrl", u"T"),
+                     ed_glob.ID_ADD_BM : (u"Ctrl", u"B"),
+                     ed_glob.ID_FIND : (u"Ctrl", u"Shift", u"F"),
+                     ed_glob.ID_FIND_PREVIOUS : (u"Shift", u"F3"),
+                     ed_glob.ID_FIND_NEXT : (u"F3",),
+                     ed_glob.ID_FIND_REPLACE : (u"Ctrl", u"R"),
+                     ed_glob.ID_QUICK_FIND : (u"Ctrl", u"F"),
 
                      # View Menu
-                     ed_glob.ID_ZOOM_IN : ("Ctrl", "+"),
-                     ed_glob.ID_ZOOM_OUT : ("Ctrl", "-"),
-                     ed_glob.ID_ZOOM_NORMAL : ("Ctrl", "0"),
-                     ed_glob.ID_GOTO_LINE : ("Ctrl", "G"),
-                     ed_glob.ID_GOTO_MBRACE : ("Ctrl", "Shift", "B"),
-                     ed_glob.ID_TOGGLE_FOLD : ("Ctrl", "Shift", "T"),
-                     ed_glob.ID_NEXT_MARK : ("Alt", "Right"), # Win/Linux
-                     ed_glob.ID_PRE_MARK : ("Alt", "Left"), # Win/Linux
-                     ed_glob.ID_SHOW_SHELF : ("Ctrl", "Alt", "S"),
-                     ed_glob.ID_PANELIST : ("Alt", "1"), # Win/Linux
+                     ed_glob.ID_ZOOM_IN : (u"Ctrl", u"+"),
+                     ed_glob.ID_ZOOM_OUT : (u"Ctrl", u"-"),
+                     ed_glob.ID_ZOOM_NORMAL : (u"Ctrl", u"0"),
+                     ed_glob.ID_GOTO_LINE : (u"Ctrl", u"G"),
+                     ed_glob.ID_GOTO_MBRACE : (u"Ctrl", u"Shift", u"B"),
+                     ed_glob.ID_TOGGLE_FOLD : (u"Ctrl", u"Shift", u"T"),
+                     ed_glob.ID_NEXT_MARK : (u"Alt", u"Right"), # Win/Linux
+                     ed_glob.ID_PRE_MARK : (u"Alt", u"Left"), # Win/Linux
+                     ed_glob.ID_SHOW_SHELF : (u"Ctrl", u"Alt", u"S"),
+                     ed_glob.ID_PANELIST : (u"Alt", u"1"), # Win/Linux
 
                      # Format Menu
-                     ed_glob.ID_TOGGLECOMMENT : ("Ctrl", "1"),
-                     ed_glob.ID_INDENT : ("Tab",),
-                     ed_glob.ID_UNINDENT : ("Shift", "Tab"),
-                     ed_glob.ID_USE_SOFTTABS : ("Ctrl", "Shift", "I"),
+                     ed_glob.ID_TOGGLECOMMENT : (u"Ctrl", u"1"),
+                     ed_glob.ID_INDENT : (u"Tab",),
+                     ed_glob.ID_UNINDENT : (u"Shift", u"Tab"),
+                     ed_glob.ID_USE_SOFTTABS : (u"Ctrl", u"Shift", u"I"),
 
                      # Tools Menu
-                     ed_glob.ID_COMMAND : ("Ctrl", "E"),
-                     ed_glob.ID_KWHELPER : ("Ctrl", "K"),
-                     ed_glob.ID_RUN_LAUNCH : ("F5",),
-                     ed_glob.ID_LAUNCH_LAST : ("Shift", "F5")
+                     ed_glob.ID_COMMAND : (u"Ctrl", u"E"),
+                     ed_glob.ID_KWHELPER : (u"Ctrl", u"K"),
+                     ed_glob.ID_RUN_LAUNCH : (u"F5",),
+                     ed_glob.ID_LAUNCH_LAST : (u"Shift", u"F5")
                      }
 
 # Set some platform specific keybindigs
 if wx.Platform == '__WXMAC__':
-    _DEFAULT_BINDING[ed_glob.ID_NEXT_MARK] = ("Ctrl", "Down")
-    _DEFAULT_BINDING[ed_glob.ID_PRE_MARK] = ("Ctrl", "Up")
-    _DEFAULT_BINDING[ed_glob.ID_FIND_PREVIOUS] = ("Ctrl", "Shift", "G")
-    _DEFAULT_BINDING[ed_glob.ID_FIND_NEXT] = ("Ctrl", "G")
-    _DEFAULT_BINDING[ed_glob.ID_GOTO_LINE] = ("Ctrl", "Shift", "E")
-    _DEFAULT_BINDING[ed_glob.ID_PANELIST] = ("Alt", "Tab")
+    _DEFAULT_BINDING[ed_glob.ID_NEXT_MARK] = (u"Ctrl", u"Down")
+    _DEFAULT_BINDING[ed_glob.ID_PRE_MARK] = (u"Ctrl", u"Up")
+    _DEFAULT_BINDING[ed_glob.ID_FIND_PREVIOUS] = (u"Ctrl", u"Shift", u"G")
+    _DEFAULT_BINDING[ed_glob.ID_FIND_NEXT] = (u"Ctrl", u"G")
+    _DEFAULT_BINDING[ed_glob.ID_GOTO_LINE] = (u"Ctrl", u"Shift", u"E")
+    _DEFAULT_BINDING[ed_glob.ID_PANELIST] = (u"Alt", u"Tab")
 elif wx.Platform == '__WXMSW__':
      # FIXME: On Windows if Tab is bound to a menu item it is no longer
      #        usable elsewhere such as in the stc control. On Mac/Gtk there
      #        are not problems with it.
-    _DEFAULT_BINDING[ed_glob.ID_INDENT] = ("",)
+    _DEFAULT_BINDING[ed_glob.ID_INDENT] = (u"",)
 else:
     pass
 
