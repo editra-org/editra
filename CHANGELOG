@@ -19,6 +19,8 @@ NEW: [features/improvments]
 
 BUG FIXES:
 +Update window being shown at same time as splash window causing lockups.
++Fix trim trailing whitespace from getting the wrong text position when certain
+unicode characters are present.
 
 #-----------------------------------------------------------------------------#
 
