@@ -14,9 +14,10 @@ DATE xx/xx/2009
 
 NEWS:
 
-NEW: [features/improvments]
-+Launch adds support for OCaml (patch from ...)
 
+NEW: [features/improvments]
++Launch adds support for OCaml (patch from quode)
++Shortcut for maximizing/minimizing the editor pane (patch from rudi)
 
 BUG FIXES:
 +Update window being shown at same time as splash window causing lockups.

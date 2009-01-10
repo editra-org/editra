@@ -666,6 +666,9 @@ class EdMenuBar(wx.MenuBar):
         viewmenu.Append(ed_glob.ID_PANELIST, _("Pane Navigator") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PANELIST),
                         _("View pane selection list"))
+        viewmenu.Append(ed_glob.ID_MAXIMIZE_EDITOR, _("Maximize Editor") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_MAXIMIZE_EDITOR),
+                        _("Toggle Editor Maximization"))
         viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_GOTO_LINE, _("&Goto Line") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_LINE),
@@ -1017,6 +1020,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_PRE_MARK : (u"Alt", u"Left"), # Win/Linux
                      ed_glob.ID_SHOW_SHELF : (u"Ctrl", u"Alt", u"S"),
                      ed_glob.ID_PANELIST : (u"Alt", u"1"), # Win/Linux
+                     ed_glob.ID_MAXIMIZE_EDITOR : (u"Ctrl", u"M"), 
 
                      # Format Menu
                      ed_glob.ID_TOGGLECOMMENT : (u"Ctrl", u"1"),
@@ -1039,6 +1043,7 @@ if wx.Platform == '__WXMAC__':
     _DEFAULT_BINDING[ed_glob.ID_FIND_NEXT] = (u"Ctrl", u"G")
     _DEFAULT_BINDING[ed_glob.ID_GOTO_LINE] = (u"Ctrl", u"Shift", u"E")
     _DEFAULT_BINDING[ed_glob.ID_PANELIST] = (u"Alt", u"Tab")
+    _DEFAULT_BINDING[ed_glob.ID_MAXIMIZE_EDITOR] = (u"Alt", u"M")
 elif wx.Platform == '__WXMSW__':
      # FIXME: On Windows if Tab is bound to a menu item it is no longer
      #        usable elsewhere such as in the stc control. On Mac/Gtk there

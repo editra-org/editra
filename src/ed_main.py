@@ -170,6 +170,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_SHOW_SB, self.OnShowStatusBar),
                                        (ID_VIEW_TOOL, self.OnViewTb),
                                        (ID_PANELIST, self.OnPaneList),
+                                       (ID_MAXIMIZE_EDITOR, self.OnMaximizeEditor),
 
                                        # Format Menu
                                        (ID_FONT, self.OnFont),
@@ -231,7 +232,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                                    ID_VIEW_TOOL, ID_SHOW_WS,
                                                    ID_SHOW_EDGE, ID_SHOW_EOL,
                                                    ID_SHOW_LN, ID_INDENT_GUIDES,
-                                                   ]])
+                                                   ID_MAXIMIZE_EDITOR]])
 
         # Lexer Menu
         self._handlers['ui'].extend([(l_id, self.OnUpdateLexerUI)
@@ -832,6 +833,20 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         else:
             evt.Skip()
 
+    def OnMaximizeEditor(self, evt):
+        """Maximize the editor and hide the other panes. If the editor
+        is already maximized, it is un-maximized and the other panes are restored  
+        @param event: CommandEvent instance
+
+        """
+        paneInfo = self._mgr.GetPane("EditPane")
+        if paneInfo.IsMaximized():
+            self._mgr.RestorePane(paneInfo)
+        else:
+            self._mgr.RestoreMaximizedPane()
+            self._mgr.MaximizePane(paneInfo)
+        self._mgr.Update()
+        
     #---- End View Menu Functions ----#
 
     #---- Format Menu Functions ----#
@@ -1194,6 +1209,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Check(bool(ctrl.GetMarginWidth(1)))
         elif e_id == ID_INDENT_GUIDES:
             evt.Check(bool(ctrl.GetIndentationGuides()))
+        elif e_id == ID_MAXIMIZE_EDITOR:
+            paneInfo = self._mgr.GetPane("EditPane")
+            txt = _("Maximize Editor")
+            if paneInfo.IsMaximized():
+                txt = _("Restore Editor")
+            evt.SetText(txt)
         else:
             evt.Skip()
 
