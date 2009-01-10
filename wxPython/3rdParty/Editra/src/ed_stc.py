@@ -1664,10 +1664,17 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         # Begin stripping trailing whitespace
         self.BeginUndoAction()
-        for line in xrange(self.GetLineCount() + 1):
+        for line in xrange(self.GetLineCount()):
             eol = u''
             tmp = self.GetLine(line)
-            tlen = len(tmp)
+
+            # Scintilla stores text in utf8 internally so we need to
+            # encode to utf8 to get the correct length of the text.
+            try:
+                tlen = len(tmp.encode('utf-8'))
+            except:
+                tlen = len(tmp)
+
             if tlen:
                 if "\r\n" in tmp:
                     eol = "\r\n"
@@ -1688,6 +1695,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             start = max(end - tlen, 0)
             self.SetTargetStart(start)
             self.SetTargetEnd(end)
+            print start, end
             self.ReplaceTarget(tmp.rstrip() + eol)
         self.EndUndoAction()
 
