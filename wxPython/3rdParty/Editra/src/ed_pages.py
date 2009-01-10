@@ -379,7 +379,8 @@ class EdPages(FNB.FlatNotebook):
         if where == FNB.FNB_NOWHERE:
             self.NewPage()
         else:
-            evt.Skip()
+            # Maximize Editor
+            self.GetTopLevelParent().OnMaximizeEditor(None)
 
     def OnMClick(self, evt):
         """Handle tab middle click event
