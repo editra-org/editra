@@ -327,6 +327,37 @@ class BooHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class CamlHandler(FileTypeHandler):
+    """FileTypeHandler for Caml"""
+    RE_CAML_ERROR = re.compile(r'File "(.+)", line (.+), characters .+:')
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(ocaml='ocaml')
+        self.default = 'ocaml'
+
+    @property
+    def __name__(self):
+        return 'Caml'
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_CAML_ERROR)
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style OCaml Information and Error messages from script output."""
+        if _StyleError(stc, start, txt, self.RE_CAML_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
+
+#-----------------------------------------------------------------------------#
+
 class CSHHandler(FileTypeHandler):
     """FileTypeHandler for C-Shell"""
     def __init__(self):
@@ -794,6 +825,7 @@ HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_ADA     : AdaHandler(),
             synglob.ID_LANG_BASH    : BashHandler(),
             synglob.ID_LANG_BOO     : BooHandler(),
+            synglob.ID_LANG_CAML    : CamlHandler(),
             synglob.ID_LANG_CSH     : CSHHandler(),
             synglob.ID_LANG_D       : DHandler(),
             synglob.ID_LANG_FERITE  : FeriteHandler(),

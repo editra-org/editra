@@ -15,6 +15,7 @@ DATE xx/xx/2009
 NEWS:
 
 NEW: [features/improvments]
++Launch adds support for OCaml (patch from ...)
 
 
 BUG FIXES:
