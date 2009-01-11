@@ -4,8 +4,15 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.0
+Date: xx/xx/2009
+
++Add support for OCaml (patch from quode)
++Improved Haskell support (patch from quode)
+
+#-----------------------------------------------------------------------------#
 Version 0.9
-Date: xx/xx/200x
+Date: 01/02/2009
 
 +Add support for R
 +Fix file type not being checked when window is first shown
