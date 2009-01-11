@@ -399,6 +399,7 @@ class FeriteHandler(FileTypeHandler):
 
 class HaskellHandler(FileTypeHandler):
     """FileTypeHandler for Haskell"""
+    RE_HASKELL_ERROR = re.compile('(.+):(.+):[0-9]+:.+ error .+')
     def __init__(self):
         FileTypeHandler.__init__(self)
         self.commands = {'ghc --make' : 'ghc --make'}
@@ -407,6 +408,23 @@ class HaskellHandler(FileTypeHandler):
     @property
     def __name__(self):
         return 'haskell'
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the buffer.
+
+        """
+        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_HASKELL_ERROR)
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style GHC Information and Error messages from script output."""
+        if _StyleError(stc, start, txt, self.RE_HASKELL_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
 
 #-----------------------------------------------------------------------------#
 
