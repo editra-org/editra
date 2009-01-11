@@ -54,7 +54,7 @@ DOC_KEYWORDS = (2, "TODO FIXME XXX author brief bug callgraph category class "
 
 # CPP Keyword Extensions
 CPP_KEYWORDS = ("and and_eq bitand bitor catch class compl const_cast delete "
-                "dynamic_cast false friend new not not_eq opperator or or_eq "
+                "dynamic_cast false friend new not not_eq operator or or_eq "
                 "private protected public reinterpret_cast static_cast this "
                 "throw try true typeid using xor xor_eq")
 
