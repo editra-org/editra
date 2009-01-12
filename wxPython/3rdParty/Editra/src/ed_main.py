@@ -1211,10 +1211,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Check(bool(ctrl.GetIndentationGuides()))
         elif e_id == ID_MAXIMIZE_EDITOR:
             paneInfo = self._mgr.GetPane("EditPane")
+            binder = self.MenuBar.GetKeyBinder()
+            binding = binder.GetBinding(ID_MAXIMIZE_EDITOR)
             txt = _("Maximize Editor")
             if paneInfo.IsMaximized():
                 txt = _("Restore Editor")
-            evt.SetText(txt)
+            evt.SetText(txt + binding)
         else:
             evt.Skip()
 
