@@ -217,7 +217,9 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
     def DestroySplash(self):
         """Destroy the splash screen"""
-        if self.splash is not None and isinstance(self.splash, wx.SplashScreen):
+        # If is created and not dead already
+        if getattr(self, 'splash', None) is not None and \
+           isinstance(self.splash, wx.SplashScreen):
             self.splash.Destroy()
             self.splash = None
 
