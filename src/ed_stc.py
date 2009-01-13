@@ -164,7 +164,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
-        
+
         # Need to relay the menu events from the context menu to the top level
         # window to be handled on gtk. Other platforms don't require this.
         if wx.Platform == '__WXGTK__':
@@ -372,7 +372,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def GetBracePair(self):
         """Get a tuple of the positions in the buffer where the brace at the
-        current caret position and its match are. if a brace doesn't have a 
+        current caret position and its match are. if a brace doesn't have a
         match it will return -1 for the missing brace.
         @return: tuple (brace_at_caret, brace_opposite)
 
@@ -765,7 +765,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         if self.key_handler.PreProcessKey(k_code, ctrl_down,
                                           cmd_down, shift_down, alt_down):
-            return                
+            return
 
         if wx.Platform == '__WXMAC__' and \
            self._MacHandleKey(k_code, shift_down, alt_down, ctrl_down, cmd_down):
@@ -987,7 +987,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         return
 
     def OnLeftUp(self, evt):
-        """Set primary selection and inform mainwindow that cursor position 
+        """Set primary selection and inform mainwindow that cursor position
         has changed.
         @param evt: wx.MouseEvent()
 
@@ -1695,7 +1695,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             start = max(end - tlen, 0)
             self.SetTargetStart(start)
             self.SetTargetEnd(end)
-            print start, end
             self.ReplaceTarget(tmp.rstrip() + eol)
         self.EndUndoAction()
 
@@ -2245,9 +2244,9 @@ def _GetMacKeyBindings():
     # A good reference for these: http://www.yellowbrain.com/stc/keymap.html
     return [
             # Move/select/delete by word
-            (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_ALT, 
+            (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_ALT,
              wx.stc.STC_CMD_WORDLEFT),
-            (wx.stc.STC_KEY_RIGHT, wx.stc.STC_SCMOD_ALT, 
+            (wx.stc.STC_KEY_RIGHT, wx.stc.STC_SCMOD_ALT,
              wx.stc.STC_CMD_WORDRIGHT),
             (wx.stc.STC_KEY_LEFT, ALT_SHIFT, wx.stc.STC_CMD_WORDLEFTEXTEND),
             (wx.stc.STC_KEY_RIGHT, ALT_SHIFT, wx.stc.STC_CMD_WORDRIGHTEXTEND),
@@ -2257,7 +2256,7 @@ def _GetMacKeyBindings():
              wx.stc.STC_CMD_DELWORDRIGHT),
             (wx.stc.STC_KEY_BACK, ALT_SHIFT, wx.stc.STC_CMD_DELWORDRIGHT),
             (wx.stc.STC_KEY_DELETE, ALT_SHIFT, wx.stc.STC_CMD_DELWORDLEFT),
-            
+
             # Move/select/delete by line
             (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_CTRL,
              wx.stc.STC_CMD_VCHOME),
@@ -2271,16 +2270,16 @@ def _GetMacKeyBindings():
              wx.stc.STC_CMD_DELLINERIGHT),
             (wx.stc.STC_KEY_BACK, CTRL_SHIFT, wx.stc.STC_CMD_DELLINERIGHT),
             (wx.stc.STC_KEY_DELETE, CTRL_SHIFT, wx.stc.STC_CMD_DELLINELEFT),
-            
+
             # By-character deletion behavior
             (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_NORM,
              wx.stc.STC_CMD_DELETEBACK),
             (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_SHIFT,
              wx.stc.STC_CMD_DELETEBACK),
 
-            # NOTE: The following two are a special case, since Scintilla 
+            # NOTE: The following two are a special case, since Scintilla
             # doesn't have a forward-delete action.  So here we just cancel any
-            # tip our auto-completion display, and then implement forward 
+            # tip our auto-completion display, and then implement forward
             # delete in OnKeyDown.
             #(wx.stc.STC_KEY_DELETE, 0, wx.stc.STC_CMD_CANCEL),
             (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_SHIFT,
