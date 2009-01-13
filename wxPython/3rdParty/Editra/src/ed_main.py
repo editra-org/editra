@@ -311,6 +311,15 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 app.AddUIHandlerForID(*handler)
 
             app.SetTopWindow(self)
+
+            # HACK find better way to do this later. It seems that on gtk the
+            #      window doesnt get activated until later than it does on the
+            #      other platforms. So for panels that depend on updating their
+            #      initial state we need to send out a fake update message here.
+            if wx.Platform == '__WXGTK__':
+                nb = self.GetNotebook()
+                ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
+                                   (nb, nb.GetSelection()))
         else:
             self.SetExtraStyle(0)
 
