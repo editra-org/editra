@@ -1,6 +1,6 @@
 Editra
 Author: Cody Precord
-Copyright: (c) Cody Precord 2005-2008
+Copyright: (c) Cody Precord 2005-2009
 License: wxWindows
 
 Change Log:
@@ -17,12 +17,13 @@ NEWS:
 
 NEW: [features/improvments]
 +Launch adds support for OCaml (patch from quode)
-+Shortcut for maximizing/minimizing the editor pane (patch from rudi)
++Shortcut for maximizing/minimizing the editor pane (patch from Rudi Pettazzi)
 
 BUG FIXES:
 +Update window being shown at same time as splash window causing lockups.
 +Fix trim trailing whitespace from getting the wrong text position when certain
 unicode characters are present.
++Add some missing JavaScript keywords (patch from Rudi Pettazzi)
 
 #-----------------------------------------------------------------------------#
 
