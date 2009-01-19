@@ -1109,12 +1109,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 if expanding:
                     self.SetFoldExpanded(line_num, True)
                     line_num = self.Expand(line_num, True) - 1
-            else:
-                last_child = self.GetLastChild(line_num, -1)
-                self.SetFoldExpanded(line_num, False)
+                else:
+                    last_child = self.GetLastChild(line_num, -1)
+                    self.SetFoldExpanded(line_num, False)
 
-                if last_child > line_num:
-                    self.HideLines(line_num + 1, last_child)
+                    if last_child > line_num:
+                        self.HideLines(line_num + 1, last_child)
             line_num = line_num + 1
 
     def Expand(self, line, do_expand, force=False, vis_levels=0, level=-1):
@@ -1223,6 +1223,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_AUTOINDENT : self.ToggleAutoIndent,
                   ed_glob.ID_LINE_AFTER : self.AddLine,
                   ed_glob.ID_TOGGLE_FOLD : self.ToggleFold,
+                  ed_glob.ID_TOGGLE_ALL_FOLDS : self.FoldAll,
                   ed_glob.ID_TRIM_WS : self.TrimWhitespace,
                   ed_glob.ID_MACRO_START : self.StartRecord,
                   ed_glob.ID_MACRO_STOP : self.StopRecord,

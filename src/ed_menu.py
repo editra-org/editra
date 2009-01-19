@@ -662,6 +662,16 @@ class EdMenuBar(wx.MenuBar):
                         _("Show Whitespace Markers"), wx.ITEM_CHECK)
         viewmenu.AppendSubMenu(self._menus['viewedit'], _("Editor"), \
                                _("Toggle Editor View Options"))
+        viewfold = self._menus['viewfold'] = EdMenu()
+        viewfold.Append(ed_glob.ID_TOGGLE_FOLD, _("Toggle fold") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLE_FOLD),
+                        _("Toggle current fold"))
+        viewfold.Append(ed_glob.ID_TOGGLE_ALL_FOLDS, _("Toggle all folds") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLE_ALL_FOLDS),
+                        _("Toggle all folds"))
+        viewmenu.AppendSubMenu(self._menus['viewfold'], _("Code Folding"), \
+                               _("Code folding toggle actions"))
+
         viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_PANELIST, _("Pane Navigator") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PANELIST),
@@ -676,10 +686,6 @@ class EdMenuBar(wx.MenuBar):
         viewmenu.Append(ed_glob.ID_GOTO_MBRACE, _("Goto Matching Brace") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_MBRACE),
                         _("Move caret matching brace"))
-        viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_TOGGLE_FOLD, _("Toggle Fold") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLE_FOLD),
-                        _("Toggle the current fold in the buffer"))
         viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_NEXT_MARK, _("Next Bookmark") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEXT_MARK),
