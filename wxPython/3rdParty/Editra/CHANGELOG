@@ -18,6 +18,7 @@ NEWS:
 NEW: [features/improvments]
 +Launch adds support for OCaml (patch from quode)
 +Shortcut for maximizing/minimizing the editor pane (patch from Rudi Pettazzi)
++Add menu entry for Fold All action (patch from Giuseppe "Cowo" Corbelli)
 
 BUG FIXES:
 +Update window being shown at same time as splash window causing lockups.
