@@ -20,6 +20,7 @@ __revision__ = "$Revision$"
 import os
 import sys
 import re
+import threading
 import codecs
 import locale
 import types
@@ -28,6 +29,7 @@ from StringIO import StringIO
 # Local Imports
 from util import Log, GetFileModTime
 from profiler import Profile_Get
+from ed_event import edEVT_UPDATE_TEXT, UpdateTextEvent
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -222,7 +224,7 @@ class EdFile(object):
         """File modification time propery"""
         return self.GetModtime()
 
-    def Read(self):
+    def Read(self, store=None, chunk=512):
         """Get the contents of the file as a string, automatically handling
         any decoding that may be needed.
 
@@ -249,7 +251,15 @@ class EdFile(object):
 
             try:
                 reader = codecs.getreader(self.encoding)(self._handle)
-                txt = reader.read()
+                txt = u''
+                if store is None:
+                    while 1:
+                        tmp = reader.read(chunk)
+                        if not len(tmp):
+                            break
+                        txt += tmp
+                else:
+                    store(reader, chunk)
                 reader.close()
             except Exception, msg:
                 Log("[ed_txt][err] Error while reading with %s" % self.encoding)
@@ -273,6 +283,19 @@ class EdFile(object):
             return txt
         else:
             raise ReadError, self.last_err
+
+    def ReadAsync(self, control):
+        """Read the file asynchronously on a separate thread
+        @param control: text control to send text to
+
+        """
+        def generator(reader, chunk):
+            while 1:
+                txt = reader.read(chunk*1024)
+                if not len(txt):
+                    break
+                yield chunk
+        thread = FileReadThread(control, Self.Read, generator)
 
     @property
     def ReadOnly(self):
@@ -356,6 +379,35 @@ class EdFile(object):
             Log("[ed_txt][info] %s was written successfully" % self.path)
         else:
             raise WriteError, self.last_err
+
+#-----------------------------------------------------------------------------#
+
+class FileReadThread(threading.Thread):
+    """Worker thread for reading text from a file"""
+    def __init__(self, reciever, task, *args, **kwargs):
+        """Create the thread
+        @param reciever: Window to recieve events
+        @param task: generator method to call
+
+        """
+        threading.Thread.__init__(self)
+        self.cancel = False
+        self._task = task
+        self.reciever = reciever
+        self._args = args
+        self._kwargs = kwargs
+
+    def run(self):
+        """Read the text"""
+        for txt in self._task(*self._args, **self._kwargs):
+            if self.cancel:
+                break
+            evt = UpdateTextEvent(edEVT_UPDATE_TEXT, wx.ID_ANY, txt)
+            wx.PostEvent(self.reciever, ed_event.UpdateTextEvent)
+
+    def Cancel(self):
+        """Cancel the running task"""
+        self.cancel = True
 
 #-----------------------------------------------------------------------------#
 # Utility Function
