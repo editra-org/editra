@@ -237,8 +237,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 txt = self.GetLine(line)
                 diff = len(txt.rstrip())
                 self.GotoPos(pos + diff)
+                if shift_down:
+                    self.SetSelection(pos, pos + diff)
             elif k_code == wx.WXK_LEFT:
+                cpos = self.GetCurrentPos()
                 self.GotoIndentPos(line)
+                if shift_down:
+                    self.SetSelection(cpos, self.GetCurrentPos())
             else:
                 return False
         else:
