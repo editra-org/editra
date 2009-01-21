@@ -430,6 +430,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.ToggleLineNumbers(_PGET('SHOW_LN'))
         self.SetViEmulationMode(_PGET('VI_EMU'))
         self.SetViewEdgeGuide(_PGET('SHOW_EDGE'))
+        self.SetEndAtLastLine(False)
 
     def Comment(self, start, end, uncomment=False):
         """(Un)Comments a line or a selected block of text
