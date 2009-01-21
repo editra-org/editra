@@ -25,6 +25,8 @@ BUG FIXES:
 +Fix trim trailing whitespace from getting the wrong text position when certain
 unicode characters are present.
 +Add some missing JavaScript keywords (patch from Rudi Pettazzi)
++Fix groups not being expanded on a regex replace action.
++Fix Cmd+Shift+Left/Right not selecting line on osx.
 
 #-----------------------------------------------------------------------------#
 
