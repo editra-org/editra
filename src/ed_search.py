@@ -67,6 +67,7 @@ class SearchController:
         self._li_sel   = 0
         self._filters  = None
         self._clients = list()
+        self._engine = None
 
         # Event handlers
         self._parent.Bind(finddlg.EVT_FIND, self.OnFind)
@@ -201,6 +202,7 @@ class SearchController:
         isdown = not evt.IsUp()
         engine = SearchEngine(data.GetFindString(), evt.IsRegEx(),
                               isdown, evt.IsMatchCase(), evt.IsWholeWord())
+        self._engine = engine
 
         # Check if expression was valid or not
         if engine.GetQueryObject() is None:
@@ -364,7 +366,15 @@ class SearchController:
 
         """
         replacestring = evt.GetReplaceString()
-        self._stc().ReplaceSelection(replacestring)
+        if evt.IsRegEx() and self._engine is not None:
+            match = self._engine.GetLastMatch()
+            if match is not None:
+                value = match.expand(replacestring)
+            else:
+                value = replacestring
+        else:
+            value = replacestring
+        self._stc().ReplaceSelection(value)
 
         # Go to the next match
         # Fake event object for on Find Handler
@@ -556,6 +566,7 @@ class SearchEngine:
         self._query = query
         self._regex = u''
         self._pool = u''
+        self._lmatch = None             # Last match object
         self._filters = None            # File Filters
         self._CompileRegex()
 
@@ -642,6 +653,7 @@ class SearchEngine:
         if spos < len(self._pool):
             match = self._regex.search(self._pool[spos:])
             if match is not None:
+                self._lmatch = match
                 return match.span()
         return None
 
@@ -659,8 +671,17 @@ class SearchEngine:
             matches = [match for match in self._regex.finditer(self._pool[:spos])]
             if len(matches):
                 lmatch = matches[-1]
+                self._lmatch = lmatch
                 return (lmatch.start(), lmatch.end())
         return None
+
+    def GetLastMatch(self):
+        """Get the last found match object from the previous L{FindNext} or
+        L{FindPrev} action.
+        @return: match object or None
+
+        """
+        return self._lmatch
 
     def GetOptionsString(self):
         """Get a string describing the search engines options"""
