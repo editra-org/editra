@@ -344,6 +344,7 @@ class FindReplaceDlgBase:
 
         # Event handlers
         self.Bind(_EVT_MODE_CHANGE, self._OnModeChange)
+        self.Bind(_EVT_DO_CLOSE_DLG, lambda evt: self._SendCloseEvent())
         self.Bind(wx.EVT_MENU, lambda evt: self._SendCloseEvent(), id=wx.ID_CLOSE)
         self.Bind(wx.EVT_SET_FOCUS,
                   lambda evt: self._panel.SetFocus() and evt.Skip())
@@ -623,7 +624,7 @@ class FindBox(ctrlbox.ControlBox):
         """
         self._fpanel.SetFindMode(find)
         self.Layout()
-        evt = _DlgModeChange(self.GetId(), _edEVT_MODE_CHANGE)
+        evt = _AdvFindDlgInternalEvent(self.GetId(), _edEVT_MODE_CHANGE)
         wx.PostEvent(self.GetParent(), evt)
 
     def SetReplaceBitmap(self, bmp):
@@ -683,6 +684,11 @@ class FindPanel(wx.Panel):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=bid)
         self.Bind(wx.EVT_SET_FOCUS, lambda evt: self.__SetFocus())
         self._ftxt.Bind(wx.EVT_SET_FOCUS, lambda evt: self._ftxt.SelectAll())
+
+        # Key handling HACK for windows
+        if wx.Platform == '__WXMSW__':
+            for child in self.GetChildren():
+                child.Bind(wx.EVT_KEY_UP, self._OnKeyUp)
 
     def __SetFocus(self):
         """Set the focus to the find box"""
@@ -815,6 +821,16 @@ class FindPanel(wx.Panel):
         recurse.SetValue(flags & AFR_RECURSIVE)
         recurse.Enable(in_files)
         self.ShowFileFilters(in_files and not (flags & AFR_NOFILTER))
+
+    def _OnKeyUp(self, evt):
+        """Check if the dialog should be closed
+        @note: msw only
+
+        """
+        if evt.GetKeyCode() == wx.WXK_ESCAPE:
+            evt = _AdvFindDlgInternalEvent(self.GetId(), _edEVT_DO_CLOSE_DLG)
+            wx.PostEvent(self.GetTopLevelParent(), evt)
+        evt.Skip()
 
     def _ShowButtons(self, find=True):
         """Toggle the visiblity of a button set
@@ -1171,7 +1187,7 @@ class FindPanel(wx.Panel):
             self.Layout()
 
             # Require additional resizing
-            evt = _DlgModeChange(self.GetId(), _edEVT_MODE_CHANGE)
+            evt = _AdvFindDlgInternalEvent(self.GetId(), _edEVT_MODE_CHANGE)
             wx.PostEvent(self.GetTopLevelParent(), evt)
 
     def ShowLookinCombo(self, show=True):
@@ -1198,7 +1214,10 @@ class FindPanel(wx.Panel):
 _edEVT_MODE_CHANGE = wx.NewEventType()
 _EVT_MODE_CHANGE = wx.PyEventBinder(_edEVT_MODE_CHANGE, 1)
 
-class _DlgModeChange(wx.PyEvent):
+_edEVT_DO_CLOSE_DLG = wx.NewEventType()
+_EVT_DO_CLOSE_DLG = wx.PyEventBinder(_edEVT_DO_CLOSE_DLG, 1)
+
+class _AdvFindDlgInternalEvent(wx.PyEvent):
     def __init__(self, winid=wx.ID_ANY, etype=wx.wxEVT_NULL):
         """Create the Event"""
         wx.PyEvent.__init__(self, winid, etype)
