@@ -119,17 +119,20 @@ class CodeBrowserTree(wx.TreeCtrl):
             globe = wx.ArtProvider.GetBitmap(str(ed_glob.ID_WEB), wx.ART_MENU)
             self.icons['globals'] = imglst.Add(globe)
         else:
-            self.icons['globals'] = imglst.Add(IconFile.GetGlobalBitmap())
-        self.icons['class'] = imglst.Add(IconFile.GetBricksBitmap())
-        self.icons['section'] = imglst.Add(IconFile.GetBrickAddBitmap())
-        self.icons['function'] = imglst.Add(IconFile.GetBrickGoBitmap())
+            self.icons['globals'] = imglst.Add(IconFile.World.GetBitmap())
+        self.icons['class'] = imglst.Add(IconFile.Bricks.GetBitmap())
+        self.icons['section'] = imglst.Add(IconFile.Brick_Add.GetBitmap())
+        self.icons['function'] = imglst.Add(IconFile.Brick_Go.GetBitmap())
         self.icons['method'] = self.icons['function']
         self.icons['subroutine'] = self.icons['function']
         self.icons['procedure'] = self.icons['function']
-        self.icons['task'] = imglst.Add(IconFile.GetBrickGo2Bitmap())
+        self.icons['task'] = imglst.Add(IconFile.Brick_Go2.GetBitmap())
         self.icons['function2'] = self.icons['task']
-        self.icons['variable'] = imglst.Add(IconFile.GetBrickBitmap())
-        self.icons['namespace'] = imglst.Add(IconFile.GetBrickBricksBitmap())
+        self.icons['variable'] = imglst.Add(IconFile.Brick.GetBitmap())
+        self.icons['namespace'] = imglst.Add(IconFile.Brick_Bricks.GetBitmap())
+        self.icons['tag_red'] = imglst.Add(IconFile.Tag_Red.GetBitmap())
+        self.icons['tag_blue'] = imglst.Add(IconFile.Tag_Blue.GetBitmap())
+        self.icons['tag_green'] = imglst.Add(IconFile.Tag_Green.GetBitmap())
         self.SetImageList(imglst)
         # NOTE: Must save reference to the image list or tree will crash!!!
         self.il = imglst
