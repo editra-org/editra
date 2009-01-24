@@ -20,12 +20,16 @@ __scid__ = "$Id$"
 
 __all__ = ['moveToTrash']
 
-import os, time, platform, shutil, stat
+import os
+import time
+import platform
+import shutil
+import stat
 
 OSX = WIN = False
 
 # Determine platform, if it's not one of these assume UNIX/Linux
-if platform.system().lower() == 'windows':
+if platform.system().lower() in ['windows', 'microsoft']:
     WIN = True
     # Install recycle.exe binary
     import Recycle

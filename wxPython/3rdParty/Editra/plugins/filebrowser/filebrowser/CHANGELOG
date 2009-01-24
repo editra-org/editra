@@ -2,6 +2,10 @@ FileBrowser Plugin for Editra
 Author: Cody Precord
 License: wxWindows
 
+Version 1.3:
+
+    - Fix platform detection for trash function when running on Vista
+
 Version 1.2:
 
     - Navigate through filebrowser with keyboard.
