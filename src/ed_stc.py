@@ -2097,7 +2097,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetStyleBits(7)
         elif lexer == wx.stc.STC_LEX_NULL:
             self.SetStyleBits(5)
-            self.SetIndentationGuides(False)
             self.SetLexer(lexer)
             self.ClearDocumentStyle()
             self.UpdateBaseStyles()
