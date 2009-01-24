@@ -9,6 +9,7 @@ Date: xx/xx/2009
 
 +Add support for OCaml (patch from quode)
 +Improved Haskell support (patch from quode)
++Add support for LaTex files.
 
 #-----------------------------------------------------------------------------#
 Version 0.9
