@@ -24,6 +24,9 @@ import platform
 import traceback
 import time
 import webbrowser
+import codecs
+import locale
+import types
 import wx
 
 # Editra Libraries
@@ -34,6 +37,13 @@ import ed_msg
 # Globals
 _ = wx.GetTranslation
 RE_LOG_LBL = re.compile(r"\[(.+?)\]")
+
+# The default fallback encoding
+DEFAULT_ENCODING = locale.getpreferredencoding()
+try:
+    codecs.lookup(DEFAULT_ENCODING)
+except (LookupError, TypeError):
+    DEFAULT_ENCODING = 'utf-8'
 
 #-----------------------------------------------------------------------------#
 # General Debuging Helper Functions
@@ -147,7 +157,7 @@ class LogMsg(object):
 
     def __str__(self):
         """Returns a nice formatted string version of the message"""
-        statement = unicode(self._msg['mstr'])
+        statement = DecodeString(self._msg['mstr'])
         s_lst = [u"[%s][%s][%s]%s" % (self.ClockTime, self._msg['msrc'],
                                       self._msg['lvl'], msg) 
                  for msg in statement.split(u"\n")
@@ -192,6 +202,28 @@ class LogMsg(object):
     def Value(self):
         """Returns the message part of the log string"""
         return self._msg['mstr']
+
+#-----------------------------------------------------------------------------#
+
+def DecodeString(string, encoding=None):
+    """Decode the given string to Unicode using the provided
+    encoding or the DEFAULT_ENCODING if None is provided.
+    @param string: string to decode
+    @keyword encoding: encoding to decode string with
+
+    """
+    if encoding is None:
+        encoding = DEFAULT_ENCODING
+
+    if not isinstance(string, types.UnicodeType):
+        try:
+            rtxt = codecs.getdecoder(encoding)(string)[0]
+        except Exception, msg:
+            rtxt = string
+        return rtxt
+    else:
+        # The string is already unicode so just return it
+        return string
 
 #-----------------------------------------------------------------------------#
 
