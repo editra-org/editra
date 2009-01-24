@@ -31,6 +31,7 @@ unicode characters are present.
 +Fix Comment command not working on Latex documents
 +Fix some unicode errors in the log system.
 +Fix platform detection for some components when running on Vista.
++Fix indentation guides preference not properly being applied on restart.
 
 #-----------------------------------------------------------------------------#
 
