@@ -511,6 +511,21 @@ class KornHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class LatexHandler(FileTypeHandler):
+    """FileTypeHandler for LaTex"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(latex='latex', dvips='dvips',
+                             pdflatex='pdflatex', ps2pdf='ps2pdf',
+                             dvipng='dvipng', latex2html='latex2html')
+        self.default = 'latex'
+
+    @property
+    def __name__(self):
+        return 'LaTex'
+
+#-----------------------------------------------------------------------------#
+
 class LuaHandler(FileTypeHandler):
     """FileTypeHandler for Lua"""
     RE_LUA_ERROR = re.compile('.*: (.+):([0-9]+):.*')
@@ -852,6 +867,7 @@ HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_HAXE    : HaxeHandler(),
             synglob.ID_LANG_HTML    : HTMLHandler(),
             synglob.ID_LANG_INNO    : InnoSetupHandler(),
+            synglob.ID_LANG_LATEX   : LatexHandler(),
             synglob.ID_LANG_LUA     : LuaHandler(),
             synglob.ID_LANG_NEWLISP : NewLispHandler(),
             synglob.ID_LANG_NSIS    : NSISHandler(),
@@ -862,6 +878,7 @@ HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_PYTHON  : PythonHandler(),
             synglob.ID_LANG_R       : RHandler(),
             synglob.ID_LANG_RUBY    : RubyHandler(),
+            synglob.ID_LANG_TEX     : LatexHandler(),
             synglob.ID_LANG_TCL     : TCLHandler(),
             synglob.ID_LANG_VBSCRIPT : VBScriptHandler() }
 
