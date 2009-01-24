@@ -684,6 +684,7 @@ class FindPanel(wx.Panel):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=bid)
         self.Bind(wx.EVT_SET_FOCUS, lambda evt: self.__SetFocus())
         self._ftxt.Bind(wx.EVT_SET_FOCUS, lambda evt: self._ftxt.SelectAll())
+        self._rtxt.Bind(wx.EVT_SET_FOCUS, lambda evt: self._rtxt.SelectAll())
 
         # Key handling HACK for windows
         if wx.Platform == '__WXMSW__':
