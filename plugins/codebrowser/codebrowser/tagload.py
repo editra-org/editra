@@ -44,6 +44,7 @@ LOAD_MAP = { synglob.ID_LANG_ADA : TAGLIB + 'adatags',
              synglob.ID_LANG_F95 : TAGLIB + 'fortrantags',
              synglob.ID_LANG_FERITE : TAGLIB + 'feritetags',
              synglob.ID_LANG_HAXE : TAGLIB + 'haxetags',
+             synglob.ID_LANG_HTML : TAGLIB + 'xmltags',
              synglob.ID_LANG_INNO : TAGLIB + 'innotags',
              synglob.ID_LANG_KSH : TAGLIB + 'shtags',
              synglob.ID_LANG_LISP : TAGLIB + 'lisptags',
@@ -60,7 +61,8 @@ LOAD_MAP = { synglob.ID_LANG_ADA : TAGLIB + 'adatags',
              synglob.ID_LANG_SCHEME : TAGLIB + 'schemetags',
              synglob.ID_LANG_SQL : TAGLIB + 'sqltags',
              synglob.ID_LANG_TCL : TAGLIB + 'tcltags',
-             synglob.ID_LANG_VERILOG : TAGLIB + 'verilogtags' }
+             synglob.ID_LANG_VERILOG : TAGLIB + 'verilogtags',
+             synglob.ID_LANG_XML : TAGLIB + 'xmltags' }
 
 # Compatibility for older versions of Editra
 if hasattr(synglob, 'ID_LANG_SYSVERILOG'):
