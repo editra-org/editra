@@ -781,7 +781,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Update profile
         profiler.AddFileHistoryToProfile(self.filehistory)
-        profiler.Profile().Write(_PGET('MYPROFILE'))
+        ppath = _PGET('MYPROFILE')
+        profiler.Profile().Write(ppath)
+        self.LOG("[ed_main][info] Saving profile to %s" % ppath)
 
         # Cleanup file history
         try:

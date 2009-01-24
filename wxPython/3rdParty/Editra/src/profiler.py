@@ -232,7 +232,7 @@ class Profile(dict):
             cPickle.dump(self.copy(), fhandle, cPickle.HIGHEST_PROTOCOL)
             fhandle.close()
         except (IOError, cPickle.PickleError), msg:
-            dev_tool.DEBUGP("[profile][err] %s" % str(msg))
+            dev_tool.DEBUGP(u"[profile][err] %s" % msg)
             return False
         else:
             return True
