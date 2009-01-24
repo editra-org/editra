@@ -29,6 +29,8 @@ unicode characters are present.
 +Fix groups not being expanded on a regex replace action.
 +Fix Cmd+Shift+Left/Right not selecting line on osx.
 +Fix Comment command not working on Latex documents
++Fix some unicode errors in the log system.
++Fix platform detection for some components when running on Vista.
 
 #-----------------------------------------------------------------------------#
 
