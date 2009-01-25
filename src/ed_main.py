@@ -290,14 +290,21 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         app = wx.GetApp()
+        active = evt.GetActive()
 
         # Don't needlessly push and pop events if we only have one window open
         if self._loaded and len(app.GetMainWindows()) == 1:
             evt.Skip()
+            if active:
+                wx.UpdateUIEvent.SetUpdateInterval(205)
+                wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
+            else:
+                self.SetExtraStyle(0)
+                wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_ALL)
             return
 
         # Add or remove handlers from the event stack
-        if evt.GetActive():
+        if active:
             self._loaded = True
 
             # Slow the update interval to reduce overhead
