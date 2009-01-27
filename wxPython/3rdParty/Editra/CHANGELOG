@@ -32,6 +32,7 @@ unicode characters are present.
 +Fix some unicode errors in the log system.
 +Fix platform detection for some components when running on Vista.
 +Fix indentation guides preference not properly being applied on restart.
++Fix transparency settings not being set on Linux.
 
 #-----------------------------------------------------------------------------#
 

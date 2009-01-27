@@ -177,7 +177,9 @@ class PerspectiveManager(object):
     def InitWindowAlpha(self):
         """Initialize the windows alpha setting"""
         level = max(100, Profile_Get('ALPHA', default=255))
-        self._window.SetTransparent(level)
+        # Only set the transparency if it is not opaque
+        if level != 255:
+            self._window.SetTransparent(level)
 
     def LoadPerspectives(self):
         """Loads the perspectives data into the manager. Returns
