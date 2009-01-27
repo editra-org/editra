@@ -77,10 +77,7 @@ class PerspectiveManager(object):
         for name in self._viewset:
             self.AddPerspectiveMenuEntry(name)
 
-        # Restore the managed windows previous position and alpha
-        # preferences if they are available.
-        level = max(100, Profile_Get('ALPHA', default=255))
-        self._window.SetTransparent(level)
+        # Restore the managed windows previous position preference if available.
         pos = Profile_Get('WPOS', "size_tuple", False)
         if Profile_Get('SET_WPOS') and pos:
             # Ensure window is on screen
@@ -176,6 +173,11 @@ class PerspectiveManager(object):
 
         """
         return name in self._viewset
+
+    def InitWindowAlpha(self):
+        """Initialize the windows alpha setting"""
+        level = max(100, Profile_Get('ALPHA', default=255))
+        self._window.SetTransparent(level)
 
     def LoadPerspectives(self):
         """Loads the perspectives data into the manager. Returns

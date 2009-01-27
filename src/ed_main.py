@@ -278,6 +278,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         ed_msg.PostMessage(ed_msg.EDMSG_DSP_FONT,
                            _PGET('FONT3', 'font', wx.NORMAL_FONT))
 
+        # HACK: for gtk as most linux window managers manage the windows alpha
+        #       and set it when its created.
+        wx.CallAfter(self.InitWindowAlpha)
+
     __name__ = u"MainWindow"
 
     #---- End Private Member Functions/Variables ----#
