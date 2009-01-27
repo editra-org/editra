@@ -33,7 +33,8 @@ PHP_KEYWORDS = ("__LINE__ __FILE__ declare else enddeclare endswitch elseif "
                 "while case default switch return break continue exit var bool "
                 "bool boolean int integer real double float string array "
                 "NULL extends global static include require include_once "
-                "require_once new true false function class object ")
+                "require_once new true false function class object "
+                "self final public private protected ")
 
 # PHP Standard Functions/Methods
 # (roughly based off of PHP Pocket Reference by O'Reilly)
