@@ -210,7 +210,8 @@ class ConfigPanel(wx.Panel):
         # Executables List
         exelist = CommandListCtrl(self, ID_EXECUTABLES,
                                   style=wx.LC_EDIT_LABELS|\
-                                        wx.BORDER|wx.LC_REPORT)
+                                        wx.BORDER|wx.LC_REPORT|\
+                                        wx.LC_SINGLE_SEL)
 #        exelist.SetToolTipString(_("Click on an item to edit"))
 #        exelist.InsertColumn(0, _("Alias"))
 #        exelist.InsertColumn(1, _("Executable Commands"))
@@ -467,6 +468,7 @@ class MiscPanel(wx.Panel):
             evt.Skip()
 
 #-----------------------------------------------------------------------------#
+ID_BROWSE = wx.NewId()
 
 class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
                       listmix.TextEditMixin,
@@ -480,6 +482,11 @@ class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
 #        listmix.CheckListCtrlMixin.__init__(self)
         elistmix.ListRowHighlighter.__init__(self)
 
+        # Attributes
+        self._menu = None
+        self._cindex = -1
+
+        # Setup
         self.SetToolTipString(_("Click on an item to edit"))
 #        pcol = _("Dir")
 #        self.InsertColumn(0, pcol)
@@ -488,6 +495,48 @@ class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
 #        self.SetColumnWidth(0, self.GetTextExtent(pcol)[0] + 5)
 
         listmix.TextEditMixin.__init__(self)
+
+        # Event Handlers
+        self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnContextClick)
+        self.Bind(wx.EVT_MENU, self.OnMenu, id=ID_BROWSE)
+
+    def OnContextClick(self, evt):
+        """Handle right clicks"""
+        if not self.GetSelectedItemCount():
+            evt.Skip()
+            return
+
+        if self._menu is None:
+            # Lazy init of menu
+            self._menu = wx.Menu()
+            self._menu.Append(ID_BROWSE, _("Browse"))
+
+        self._cindex = evt.GetIndex()
+        self.PopupMenu(self._menu)
+
+    def OnMenu(self, evt):
+        """Handle Menu events"""
+        e_id = evt.GetId()
+        if e_id == ID_BROWSE:
+            dlg = wx.FileDialog(self, _("Choose and executable"))
+            if dlg.ShowModal() == wx.ID_OK:
+                path = dlg.GetPath()
+                if self._cindex >= 0:
+                    self.SetStringItem(self._cindex, 1, path)
+                    levt = wx.ListEvent(wx.wxEVT_COMMAND_LIST_END_LABEL_EDIT,
+                                        self.GetId())
+# TODO: ERR ><! there are no setters for index, column, and label...
+#                    levt.Index = self._cindex
+#                    levt.SetInt(self._cindex)
+#                    levt.Column = 1
+#                    levt.Label = path
+                    # HACK set the member variables directly...
+                    levt.m_itemIndex = self._cindex
+                    levt.m_col = 1
+                    levt.SetString(path)
+                    wx.PostEvent(self.GetParent(), levt)
+        else:
+            evt.Skip()
 
 #    def Append(self, entry):
 #        """Append a row to the list. Overrides ListCtrl.Append to allow
