@@ -115,7 +115,8 @@ class MatlabLexer(RegexLexer):
     #
     # for f in elfun specfun elmat; do
     #   echo -n "$f = "
-    #   matlab -nojvm -r "help $f;exit;"|perl -ne 'push(@c,$1) if /^    (\w+)\s+-/; END {print q{["}.join(q{","},@c).qq{"]\n};}'
+    #   matlab -nojvm -r "help $f;exit;" | perl -ne \
+    #   'push(@c,$1) if /^    (\w+)\s+-/; END {print q{["}.join(q{","},@c).qq{"]\n};}'
     # done
     #
     # elfun: Elementary math functions
@@ -251,6 +252,10 @@ class NumPyLexer(PythonLexer):
 
     name = 'NumPy'
     aliases = ['numpy']
+
+    # override the mimetypes to not inherit them from python
+    mimetypes = []
+    filenames = []
 
     EXTRA_KEYWORDS = set([
         'abs', 'absolute', 'accumulate', 'add', 'alen', 'all', 'allclose',

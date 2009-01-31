@@ -5,7 +5,7 @@
 
     Formatter for LaTeX fancyvrb output.
 
-    :copyright: 2006-2007 by Georg Brandl.
+    :copyright: 2006-2008 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 import StringIO
@@ -18,13 +18,13 @@ from pygments.util import get_bool_opt, get_int_opt
 __all__ = ['LatexFormatter']
 
 
-def escape_tex(text):
+def escape_tex(text, commandprefix):
     return text.replace('@', '\x00').    \
                 replace('[', '\x01').    \
                 replace(']', '\x02').    \
-                replace('\x00', '@at[]').\
-                replace('\x01', '@lb[]').\
-                replace('\x02', '@rb[]')
+                replace('\x00', '@%sZat[]' % commandprefix).\
+                replace('\x01', '@%sZlb[]' % commandprefix).\
+                replace('\x02', '@%sZrb[]' % commandprefix)
 
 
 DOC_TEMPLATE = r'''
@@ -109,6 +109,7 @@ class LatexFormatter(Formatter):
         The LaTeX commands used to produce colored output are constructed
         using this prefix and some letters (default: ``'PY'``).
         *New in Pygments 0.7.*
+
         *New in Pygments 0.10:* the default is now ``'PY'`` instead of ``'C'``.
     """
     name = 'LaTeX'
@@ -154,6 +155,12 @@ class LatexFormatter(Formatter):
                 cmndef = r'\textit{' + cmndef + '}'
             if ndef['underline']:
                 cmndef = r'\underline{' + cmndef + '}'
+            if ndef['roman']:
+                cmndef = r'\textrm{' + cmndef + '}'
+            if ndef['sans']:
+                cmndef = r'\textsf{' + cmndef + '}'
+            if ndef['mono']:
+                cmndef = r'\texttt{' + cmndef + '}'
             if ndef['color']:
                 cmndef = r'\textcolor[rgb]{%s}{%s}' % (
                     rgbcolor(ndef['color']),
@@ -187,10 +194,12 @@ class LatexFormatter(Formatter):
         used to format text in the verbatim environment. ``arg`` is ignored.
         """
         nc = '\\newcommand'
-        return '%s\\at{@}\n%s\\lb{[}\n%s\\rb{]}\n' % (nc, nc, nc) + \
-               '\n'.join(['\\newcommand\\%s[1]{%s}' % (alias, cmndef)
-                          for alias, cmndef in self.cmd2def.iteritems()
-                          if cmndef != '#1'])
+        cp = self.commandprefix
+        return (
+            '%s\\%sZat{@}\n%s\\%sZlb{[}\n%s\\%sZrb{]}\n' % (nc, cp, nc, cp, nc, cp) +
+            '\n'.join(['\\newcommand\\%s[1]{%s}' % (alias, cmndef)
+                       for alias, cmndef in self.cmd2def.iteritems()
+                       if cmndef != '#1']))
 
     def format(self, tokensource, outfile):
         # TODO: add support for background colors
@@ -213,7 +222,7 @@ class LatexFormatter(Formatter):
         for ttype, value in tokensource:
             if enc:
                 value = value.encode(enc)
-            value = escape_tex(value)
+            value = escape_tex(value, self.commandprefix)
             cmd = self.ttype2cmd.get(ttype)
             while cmd is None:
                 ttype = ttype.parent

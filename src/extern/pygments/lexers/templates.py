@@ -5,7 +5,7 @@
 
     Lexers for various template engines' markup.
 
-    :copyright: 2006-2007 by Armin Ronacher, Georg Brandl, Matt Good,
+    :copyright: 2006-2008 by Armin Ronacher, Georg Brandl, Matt Good,
                 Ben Bangert.
     :license: BSD, see LICENSE for more details.
 """
@@ -23,7 +23,7 @@ from pygments.lexers.compiled import JavaLexer
 from pygments.lexer import Lexer, DelegatingLexer, RegexLexer, bygroups, \
      include, using, this
 from pygments.token import Error, Punctuation, \
-     Text, Comment, Operator, Keyword, Name, String, Number, Other
+     Text, Comment, Operator, Keyword, Name, String, Number, Other, Token
 from pygments.util import html_doctype_matches, looks_like_xml
 
 __all__ = ['HtmlPhpLexer', 'XmlPhpLexer', 'CssPhpLexer',
@@ -37,7 +37,8 @@ __all__ = ['HtmlPhpLexer', 'XmlPhpLexer', 'CssPhpLexer',
            'MyghtyLexer', 'MyghtyHtmlLexer', 'MyghtyXmlLexer',
            'MyghtyCssLexer', 'MyghtyJavascriptLexer', 'MakoLexer',
            'MakoHtmlLexer', 'MakoXmlLexer', 'MakoJavascriptLexer',
-           'MakoCssLexer', 'JspLexer']
+           'MakoCssLexer', 'JspLexer', 'CheetahLexer', 'CheetahHtmlLexer',
+           'CheetahXmlLexer', 'CheetahJavascriptLexer']
 
 
 class ErbLexer(Lexer):
@@ -207,27 +208,27 @@ class DjangoLexer(RegexLexer):
 
     tokens = {
         'root': [
-            (r'[^\{]+', Other),
+            (r'[^{]+', Other),
             (r'\{\{', Comment.Preproc, 'var'),
             # jinja/django comments
             (r'\{[*#].*?[*#]\}', Comment),
             # django comments
-            (r'(\{\%)(\-?\s*)(comment)(\s*\-?)(\%\})(.*?)'
-             r'(\{\%)(\-?\s*)(endcomment)(\s*\-?)(\%\})',
+            (r'(\{%)(-?\s*)(comment)(\s*-?)(%\})(.*?)'
+             r'(\{%)(-?\s*)(endcomment)(\s*-?)(%\})',
              bygroups(Comment.Preproc, Text, Keyword, Text, Comment.Preproc,
                       Comment, Comment.Preproc, Text, Keyword, Text,
                       Comment.Preproc)),
             # raw jinja blocks
-            (r'(\{\%)(\-?\s*)(raw)(\s*\-?)(\%\})(.*?)'
-             r'(\{\%)(\-?\s*)(endraw)(\s*\-?)(\%\})',
+            (r'(\{%)(-?\s*)(raw)(\s*-?)(%\})(.*?)'
+             r'(\{%)(-?\s*)(endraw)(\s*-?)(%\})',
              bygroups(Comment.Preproc, Text, Keyword, Text, Comment.Preproc,
                       Text, Comment.Preproc, Text, Keyword, Text,
                       Comment.Preproc)),
             # filter blocks
-            (r'(\{\%)(\-?\s*)(filter)(\s+)([a-zA-Z_][a-zA-Z0-9_]*)',
+            (r'(\{%)(-?\s*)(filter)(\s+)([a-zA-Z_][a-zA-Z0-9_]*)',
              bygroups(Comment.Preproc, Text, Keyword, Text, Name.Function),
              'block'),
-            (r'(\{\%)(\-?\s*)([a-zA-Z_][a-zA-Z0-9_]*)',
+            (r'(\{%)(-?\s*)([a-zA-Z_][a-zA-Z0-9_]*)',
              bygroups(Comment.Preproc, Text, Keyword), 'block'),
             (r'\{', Other)
         ],
@@ -236,10 +237,10 @@ class DjangoLexer(RegexLexer):
              bygroups(Operator, Text, Name.Function)),
             (r'(is)(\s+)(not)?(\s+)?([a-zA-Z_][a-zA-Z0-9_]*)',
              bygroups(Keyword, Text, Keyword, Text, Name.Function)),
-            (r'(_|(?:true|false|undefined|null))\b', Keyword.Pseudo),
+            (r'(_|true|false|none|True|False|None)\b', Keyword.Pseudo),
             (r'(in|as|reversed|recursive|not|and|or|is|if|else|import|'
              r'with(?:(?:out)?\s*context)?)\b', Keyword),
-            (r'(loop|block|forloop)\b', Name.Builtin),
+            (r'(loop|block|super|forloop)\b', Name.Builtin),
             (r'[a-zA-Z][a-zA-Z0-9_]*', Name.Variable),
             (r'\.[a-zA-Z0-9_]+', Name.Variable),
             (r':?"(\\\\|\\"|[^"])*"', String.Double),
@@ -250,12 +251,12 @@ class DjangoLexer(RegexLexer):
         ],
         'var': [
             (r'\s+', Text),
-            (r'(\-?)(\}\})', bygroups(Text, Comment.Preproc), '#pop'),
+            (r'(-?)(\}\})', bygroups(Text, Comment.Preproc), '#pop'),
             include('varnames')
         ],
         'block': [
             (r'\s+', Text),
-            (r'(\-?)(\%\})', bygroups(Text, Comment.Preproc), '#pop'),
+            (r'(-?)(%\})', bygroups(Text, Comment.Preproc), '#pop'),
             include('varnames'),
             (r'.', Punctuation)
         ]
@@ -263,9 +264,9 @@ class DjangoLexer(RegexLexer):
 
     def analyse_text(text):
         rv = 0.0
-        if re.search(r'\{\%\s*(block|extends)', text) is not None:
+        if re.search(r'\{%\s*(block|extends)', text) is not None:
             rv += 0.4
-        if re.search(r'\{\%\s*if\s*.*?\%\}', text) is not None:
+        if re.search(r'\{%\s*if\s*.*?%\}', text) is not None:
             rv += 0.1
         if re.search(r'\{\{.*?\}\}', text) is not None:
             rv += 0.1
@@ -303,8 +304,8 @@ class MyghtyLexer(RegexLexer):
             (r'</&>', Name.Tag),
             (r'(<%!?)(.*?)(%>)(?s)',
              bygroups(Name.Tag, using(PythonLexer), Name.Tag)),
-            (r'(?<=^)\#[^\n]*(\n|\Z)', Comment),
-            (r'(?<=^)(\%)([^\n]*)(\n|\Z)',
+            (r'(?<=^)#[^\n]*(\n|\Z)', Comment),
+            (r'(?<=^)(%)([^\n]*)(\n|\Z)',
              bygroups(Name.Tag, using(PythonLexer), Other)),
             (r"""(?sx)
                  (.+?)               # anything, followed by:
@@ -407,9 +408,9 @@ class MakoLexer(RegexLexer):
 
     tokens = {
         'root': [
-            (r'(\s*)(\%)(\s*end(?:\w+))(\n|\Z)',
+            (r'(\s*)(%)(\s*end(?:\w+))(\n|\Z)',
              bygroups(Text, Comment.Preproc, Keyword, Other)),
-            (r'(\s*)(\%)([^\n]*)(\n|\Z)',
+            (r'(\s*)(%)([^\n]*)(\n|\Z)',
              bygroups(Text, Comment.Preproc, using(PythonLexer), Other)),
              (r'(\s*)(#[^\n]*)(\n|\Z)',
               bygroups(Text, Comment.Preproc, Other)),
@@ -523,7 +524,115 @@ class MakoCssLexer(DelegatingLexer):
                                              **options)
 
 
-# Genshi lexers courtesy of Matt Good.
+# Genshi and Cheetah lexers courtesy of Matt Good.
+
+class CheetahPythonLexer(Lexer):
+    """
+    Lexer for handling Cheetah's special $ tokens in Python syntax.
+    """
+
+    def get_tokens_unprocessed(self, text):
+        pylexer = PythonLexer(**self.options)
+        for pos, type_, value in pylexer.get_tokens_unprocessed(text):
+            if type_ == Token.Error and value == '$':
+                type_ = Comment.Preproc
+            yield pos, type_, value
+
+
+class CheetahLexer(RegexLexer):
+    """
+    Generic `cheetah templates`_ lexer. Code that isn't Cheetah
+    markup is yielded as `Token.Other`.  This also works for
+    `spitfire templates`_ which use the same syntax.
+
+    .. _cheetah templates: http://www.cheetahtemplate.org/
+    .. _spitfire templates: http://code.google.com/p/spitfire/
+    """
+
+    name = 'Cheetah'
+    aliases = ['cheetah', 'spitfire']
+    filenames = ['*.tmpl', '*.spt']
+    mimetypes = ['application/x-cheetah', 'application/x-spitfire']
+
+    tokens = {
+        'root': [
+            (r'(##[^\n]*)$',
+             (bygroups(Comment))),
+            (r'#[*](.|\n)*?[*]#', Comment),
+            (r'#end[^#\n]*(?:#|$)', Comment.Preproc),
+            (r'#slurp$', Comment.Preproc),
+            (r'(#[a-zA-Z]+)([^#\n]*)(#|$)',
+             (bygroups(Comment.Preproc, using(CheetahPythonLexer),
+                       Comment.Preproc))),
+            # TODO support other Python syntax like $foo['bar']
+            (r'(\$)([a-zA-Z_][a-zA-Z0-9_\.]*[a-zA-Z0-9_])',
+             bygroups(Comment.Preproc, using(CheetahPythonLexer))),
+            (r'(\$\{!?)(.*?)(\})(?s)',
+             bygroups(Comment.Preproc, using(CheetahPythonLexer),
+                      Comment.Preproc)),
+            (r'''(?sx)
+                (.+?)               # anything, followed by:
+                (?:
+                 (?=[#][#a-zA-Z]*) |   # an eval comment
+                 (?=\$[a-zA-Z_{]) | # a substitution
+                 \Z                 # end of string
+                )
+            ''', Other),
+            (r'\s+', Text),
+        ],
+    }
+
+
+class CheetahHtmlLexer(DelegatingLexer):
+    """
+    Subclass of the `CheetahLexer` that highlights unlexer data
+    with the `HtmlLexer`.
+    """
+
+    name = 'HTML+Cheetah'
+    aliases = ['html+cheetah', 'html+spitfire']
+    mimetypes = ['text/html+cheetah', 'text/html+spitfire']
+
+    def __init__(self, **options):
+        super(CheetahHtmlLexer, self).__init__(HtmlLexer, CheetahLexer,
+                                               **options)
+
+
+class CheetahXmlLexer(DelegatingLexer):
+    """
+    Subclass of the `CheetahLexer` that highlights unlexer data
+    with the `XmlLexer`.
+    """
+
+    name = 'XML+Cheetah'
+    aliases = ['xml+cheetah', 'xml+spitfire']
+    mimetypes = ['application/xml+cheetah', 'application/xml+spitfire']
+
+    def __init__(self, **options):
+        super(CheetahXmlLexer, self).__init__(XmlLexer, CheetahLexer,
+                                              **options)
+
+
+class CheetahJavascriptLexer(DelegatingLexer):
+    """
+    Subclass of the `CheetahLexer` that highlights unlexer data
+    with the `JavascriptLexer`.
+    """
+
+    name = 'JavaScript+Cheetah'
+    aliases = ['js+cheetah', 'javascript+cheetah',
+               'js+spitfire', 'javascript+spitfire']
+    mimetypes = ['application/x-javascript+cheetah',
+                 'text/x-javascript+cheetah',
+                 'text/javascript+cheetah',
+                 'application/x-javascript+spitfire',
+                 'text/x-javascript+spitfire',
+                 'text/javascript+spitfire']
+
+    def __init__(self, **options):
+        super(CheetahJavascriptLexer, self).__init__(JavascriptLexer,
+                                                     CheetahLexer, **options)
+
 
 class GenshiTextLexer(RegexLexer):
     """

@@ -24,7 +24,7 @@ from pygments.util import get_bool_opt, get_list_opt, looks_like_xml, \
 
 
 __all__ = ['HtmlLexer', 'XmlLexer', 'JavascriptLexer', 'CssLexer',
-           'PhpLexer', 'ActionScriptLexer', 'XsltLexer']
+           'PhpLexer', 'ActionScriptLexer', 'XsltLexer', 'ActionScript3Lexer']
 
 
 class JavascriptLexer(RegexLexer):
@@ -44,12 +44,14 @@ class JavascriptLexer(RegexLexer):
             (r'<!--', Comment),
             (r'//.*?\n', Comment),
             (r'/\*.*?\*/', Comment),
-            (r'/(\\\\|\\/|[^/\n])*/[gim]*', String.Regex),
+            (r'/(\\\\|\\/|[^/\n])*/[gim]+\b', String.Regex),
+            (r'/(\\\\|\\/|[^/\n])*/(?=\s*[,);])', String.Regex),
+            (r'/(\\\\|\\/|[^/\n])*/(?=\s*\.[a-z])', String.Regex),
             (r'[~\^\*!%&<>\|+=:;,/?\\-]+', Operator),
             (r'[{}\[\]();.]+', Punctuation),
             (r'(for|in|while|do|break|return|continue|if|else|throw|try|'
-             r'catch|var|with|const|label|function|new|typeof|'
-             r'instanceof|this)\b', Keyword),
+             r'catch|new|typeof|instanceof|this)\b', Keyword),
+            (r'(var|with|const|label|function)\b', Keyword.Declaration),
             (r'(true|false|null|NaN|Infinity|undefined)\b', Keyword.Constant),
             (r'(Array|Boolean|Date|Error|Function|Math|netscape|'
              r'Number|Object|Packages|RegExp|String|sun|decodeURI|'
@@ -93,7 +95,8 @@ class ActionScriptLexer(RegexLexer):
              r'switch)\b', Keyword),
             (r'(class|public|final|internal|native|override|private|protected|'
              r'static|import|extends|implements|interface|intrinsic|return|super|'
-             r'dynamic|function|const|get|namespace|package|set)\b', Keyword.Declaration),
+             r'dynamic|function|const|get|namespace|package|set)\b',
+             Keyword.Declaration),
             (r'(true|false|null|NaN|Infinity|-Infinity|undefined|Void)\b',
              Keyword.Constant),
             (r'(Accessibility|AccessibilityProperties|ActionScriptVersion|'
@@ -145,6 +148,73 @@ class ActionScriptLexer(RegexLexer):
             (r'[0-9]+', Number.Integer),
             (r'"(\\\\|\\"|[^"])*"', String.Double),
             (r"'(\\\\|\\'|[^'])*'", String.Single),
+        ]
+    }
+
+
+class ActionScript3Lexer(RegexLexer):
+    """
+    For ActionScript 3 source code.
+
+    *New in Pygments 0.11.*
+    """
+
+    name = 'ActionScript 3'
+    aliases = ['as3', 'actionscript3']
+    filenames = ['*.as']
+    mimetypes = ['application/x-actionscript', 'text/x-actionscript',
+                 'text/actionscript']
+
+    identifier = r'[$a-zA-Z_][a-zA-Z0-9_]*'
+
+    flags = re.DOTALL | re.MULTILINE
+    tokens = {
+        'root': [
+            (r'\s+', Text),
+            (r'(function\s+)(' + identifier + r')(\s*)(\()',
+             bygroups(Keyword.Declaration, Name.Function, Text, Operator),
+             'funcparams'),
+            (r'(var|const)(\s+)(' + identifier + r')(\s*)(:)(\s*)(' + identifier + r')',
+             bygroups(Keyword.Declaration, Text, Name, Text, Punctuation, Text,
+                      Keyword.Type)),
+            (r'(import|package)(\s+)((?:' + identifier + r'|\.)+)(\s*)',
+             bygroups(Keyword, Text, Name.Namespace, Text)),
+            (r'(new)(\s+)(' + identifier + r')(\s*)(\()',
+             bygroups(Keyword, Text, Keyword.Type, Text, Operator)),
+            (r'//.*?\n', Comment.Single),
+            (r'/\*.*?\*/', Comment.Multiline),
+            (r'/(\\\\|\\/|[^\n])*/[gisx]*', String.Regex),
+            (r'(\.)(' + identifier + r')', bygroups(Operator, Name.Attribute)),
+            (r'(case|default|for|each|in|while|do|break|return|continue|if|else|'
+             r'throw|try|catch|with|new|typeof|arguments|instanceof|this|'
+             r'switch|import|include|as|is)\b',
+             Keyword),
+            (r'(class|public|final|internal|native|override|private|protected|'
+             r'static|import|extends|implements|interface|intrinsic|return|super|'
+             r'dynamic|function|const|get|namespace|package|set)\b',
+             Keyword.Declaration),
+            (r'(true|false|null|NaN|Infinity|-Infinity|undefined|Void)\b',
+             Keyword.Constant),
+            (r'(decodeURI|decodeURIComponent|encodeURI|escape|eval|isFinite|isNaN|'
+             r'isXMLName|clearInterval|fscommand|getTimer|getURL|getVersion|'
+             r'isFinite|parseFloat|parseInt|setInterval|trace|updateAfterEvent|'
+             r'unescape)\b', Name.Function),
+            (identifier, Name),
+            (r'[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?', Number.Float),
+            (r'0x[0-9a-f]+', Number.Hex),
+            (r'[0-9]+', Number.Integer),
+            (r'"(\\\\|\\"|[^"])*"', String.Double),
+            (r"'(\\\\|\\'|[^'])*'", String.Single),
+            (r'[~\^\*!%&<>\|+=:;,/?\\{}\[\]();.-]+', Operator),
+        ],
+        'funcparams': [
+            (r'(' + identifier + r')(\s*)(:)(\s*)(' + identifier + r'|\*)(\s*)(,?)',
+             bygroups(Name, Text, Operator, Text, Keyword.Type, Text, Operator)),
+            (r'\)', Operator, 'type')
+        ],
+        'type': [
+            (r'(\s*)(:)(' + identifier + r'|\*)',
+             bygroups(Text, Operator, Keyword.Type), '#pop:2')
         ]
     }
 
@@ -415,7 +485,8 @@ class PhpLexer(RegexLexer):
              r'implements|public|private|protected|abstract|clone|try|'
              r'catch|throw|this)\b', Keyword),
             ('(true|false|null)\b', Keyword.Constant),
-            (r'\$[a-zA-Z_][a-zA-Z0-9_]*', Name.Variable),
+            (r'\$\{\$+[a-zA-Z_][a-zA-Z0-9_]*\}', Name.Variable),
+            (r'\$+[a-zA-Z_][a-zA-Z0-9_]*', Name.Variable),
             ('[a-zA-Z_][a-zA-Z0-9_]*', Name.Other),
             (r"[0-9](\.[0-9]*)?(eE[+-][0-9])?[flFLdD]?|"
              r"0[xX][0-9a-fA-F]+[Ll]?", Number),
@@ -481,9 +552,10 @@ class PhpLexer(RegexLexer):
 
     def analyse_text(text):
         rv = 0.0
-        for tag in '<?php', '?>':
-            if tag in text:
-                rv += 0.2
+        if re.search(r'<\?(?!xml)', text):
+            rv += 0.3
+        if '?>' in text:
+            rv += 0.1
         return rv
 
 
@@ -565,3 +637,7 @@ class XsltLexer(XmlLexer):
                 yield index, Keyword, value
             else:
                 yield index, token, value
+
+    def analyse_text(text):
+        if looks_like_xml(text) and '<xsl' in text:
+            return 0.8

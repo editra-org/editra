@@ -20,11 +20,11 @@
 
     .. _Pygments tip: http://dev.pocoo.org/hg/pygments-main/archive/tip.tar.gz#egg=Pygments-dev
 
-    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher and others.
+    :copyright: 2006-2008 by Georg Brandl, Armin Ronacher and others.
     :license: BSD, see LICENSE for more details.
 """
 
-__version__ = '0.10'
+__version__ = '1.0'
 __author__ = 'Georg Brandl <g.brandl@gmx.net>'
 __url__ = 'http://pygments.org/'
 __license__ = 'BSD License'
@@ -78,9 +78,7 @@ def format(tokens, formatter, outfile=None):
 
 def highlight(code, lexer, formatter, outfile=None):
     """
-    Lex ``code`` with ``lexer`` and format it with the formatter
-    ``formatter``. If ``filters`` are given they will be applied
-    on the token stream.
+    Lex ``code`` with ``lexer`` and format it with the formatter ``formatter``.
 
     If ``outfile`` is given and a valid file object (an object
     with a ``write`` method), the result will be written to it, otherwise
