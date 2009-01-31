@@ -136,12 +136,21 @@ EDMSG_PROGRESS_STATE = EDMSG_UI_ALL + ('statbar', 'progbar', 'state')
 EDMSG_UI_SB_TXT = EDMSG_UI_ALL + ('statbar', 'text')
 
 ## Text Buffer
+
+# Root message for the text buffer
+EDMSG_UI_STC_ALL = EDMSG_UI_ALL + ('stc',)
+
 # msgdata == ((x, y), keycode)
-EDMSG_UI_STC_KEYUP = EDMSG_UI_ALL + ('stc', 'keyup')
+EDMSG_UI_STC_KEYUP = EDMSG_UI_STC_ALL + ('keyup',)
 
 # Lexer Changed
 # msgdata == (filename, filetype id)
-EDMSG_UI_STC_LEXER = EDMSG_UI_ALL + ('stc', 'lexer')
+EDMSG_UI_STC_LEXER = EDMSG_UI_STC_ALL + ('lexer',)
+
+# Buffer Changed
+# NOTE: this gets called ALOT so be very efficient in any handlers of it!
+# msgdata == None
+EDMSG_UI_STC_CHANGED = EDMSG_UI_STC_ALL + ('changed',)
 
 #---- End UI Action Messages ----#
 
