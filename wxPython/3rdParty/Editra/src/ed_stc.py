@@ -158,7 +158,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
-        self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
+        self.Bind(wx.stc.EVT_STC_CHANGE, self.OnModified)
         self.Bind(wx.stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_CHAR, self.OnChar)
@@ -732,7 +732,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def FireModified(self):
         """Fire a modifed event"""
-        self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_MODIFIED,
+        self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_CHANGE,
                                                self.GetId()))
 
     def GetAutoComplete(self):
@@ -1031,6 +1031,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         self.vert_edit.OnModified(evt)
         wx.PostEvent(self.GetParent(), evt)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CHANGED)
 
     def OnUpdateUI(self, evt):
         """Check for matching braces

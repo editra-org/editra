@@ -94,7 +94,7 @@ class EdPages(FNB.FlatNotebook):
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnPageClosing)
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CLOSED, self.OnPageClosed)
-        self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnUpdatePageText)
+        self.Bind(wx.stc.EVT_STC_CHANGE, self.OnUpdatePageText)
         self._pages.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self._pages.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
         self._pages.Bind(wx.EVT_MIDDLE_UP, self.OnMClick)
