@@ -27,7 +27,8 @@ try:
 except ImportError:
     _winreg = None
 
-__all__ = ['ImageFormatter']
+__all__ = ['ImageFormatter', 'GifImageFormatter', 'JpgImageFormatter',
+           'BmpImageFormatter']
 
 
 # For some unknown reason every font calls it something different
@@ -163,7 +164,7 @@ class FontManager(object):
 
 class ImageFormatter(Formatter):
     """
-    Create an image from source code. This uses the Python Imaging Library to
+    Create a PNG image from source code. This uses the Python Imaging Library to
     generate a pixmap from the source code.
 
     *New in Pygments 0.10.*
@@ -252,10 +253,12 @@ class ImageFormatter(Formatter):
 
     # Required by the pygments mapper
     name = 'img'
-    aliases = ['img', 'IMG', 'png', 'jpg', 'gif', 'bmp']
-    filenames = ['*.png', '*.jpg', '*.gif', '*.bmp']
+    aliases = ['img', 'IMG', 'png']
+    filenames = ['*.png']
 
     unicodeoutput = False
+
+    default_image_format = 'png'
 
     def __init__(self, **options):
         """
@@ -272,12 +275,14 @@ class ImageFormatter(Formatter):
         else:
             self.background_color = self.style.background_color
         # Image options
-        self.image_format = get_choice_opt(options, 'image_format',
-            ['PNG', 'JPEG', 'GIF', 'BMP'], 'PNG')
+        self.image_format = get_choice_opt(
+            options, 'image_format', ['png', 'jpeg', 'gif', 'bmp'],
+            self.default_image_format, normcase=True)
         self.image_pad = get_int_opt(options, 'image_pad', 10)
         self.line_pad = get_int_opt(options, 'line_pad', 2)
         # The fonts
-        self.fonts = FontManager(options.get('font_name', ''))
+        fontsize = get_int_opt(options, 'font_size', 14)
+        self.fonts = FontManager(options.get('font_name', ''), fontsize)
         self.fontw, self.fonth = self.fonts.get_char_size()
         # Line number options
         self.line_number_fg = options.get('line_number_fg', '#886')
@@ -299,6 +304,10 @@ class ImageFormatter(Formatter):
         else:
             self.line_number_width = 0
         self.drawables = []
+
+    def get_style_defs(self, arg=''):
+        raise NotImplementedError('The -S option is meaningless for the image '
+                                  'formatter. Use -O style=<stylename> instead.')
 
     def _get_line_height(self):
         """
@@ -455,6 +464,52 @@ class ImageFormatter(Formatter):
         draw = ImageDraw.Draw(im)
         for pos, value, font, kw in self.drawables:
             draw.text(pos, value, font=font, **kw)
-        im.save(outfile, self.image_format)
+        im.save(outfile, self.image_format.upper())
 
 
+# Add one formatter per format, so that the "-f gif" option gives the correct result
+# when used in pygmentize.
+
+class GifImageFormatter(ImageFormatter):
+    """
+    Create a GIF image from source code. This uses the Python Imaging Library to
+    generate a pixmap from the source code.
+
+    *New in Pygments 1.0.* (You could create GIF images before by passing a
+    suitable `image_format` option to the `ImageFormatter`.)
+    """
+
+    name = 'img_gif'
+    aliases = ['gif']
+    filenames = ['*.gif']
+    default_image_format = 'gif'
+
+
+class JpgImageFormatter(ImageFormatter):
+    """
+    Create a JPEG image from source code. This uses the Python Imaging Library to
+    generate a pixmap from the source code.
+
+    *New in Pygments 1.0.* (You could create JPEG images before by passing a
+    suitable `image_format` option to the `ImageFormatter`.)
+    """
+
+    name = 'img_jpg'
+    aliases = ['jpg', 'jpeg']
+    filenames = ['*.jpg']
+    default_image_format = 'jpeg'
+
+
+class BmpImageFormatter(ImageFormatter):
+    """
+    Create a bitmap image from source code. This uses the Python Imaging Library to
+    generate a pixmap from the source code.
+
+    *New in Pygments 1.0.* (You could create bitmap images before by passing a
+    suitable `image_format` option to the `ImageFormatter`.)
+    """
+
+    name = 'img_bmp'
+    aliases = ['bmp', 'bitmap']
+    filenames = ['*.bmp']
+    default_image_format = 'bmp'
