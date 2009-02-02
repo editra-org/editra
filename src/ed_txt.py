@@ -20,6 +20,7 @@ __revision__ = "$Revision$"
 import os
 import sys
 import re
+import wx
 import threading
 import codecs
 import locale
@@ -27,9 +28,9 @@ import types
 from StringIO import StringIO
 
 # Local Imports
-from util import Log, GetFileModTime
+from util import Log, GetFileModTime, GetFileSize
 from profiler import Profile_Get
-from ed_event import edEVT_UPDATE_TEXT, UpdateTextEvent
+import ed_msg
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -289,13 +290,25 @@ class EdFile(object):
         @param control: text control to send text to
 
         """
+        pid = control.GetTopLevelParent().GetId()
+        filesize = GetFileSize(self.path)
+        ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW, (pid, True))
+        ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 0, filesize))
+
         def generator(reader, chunk):
+            """Read generator"""
+            counter = 0
             while 1:
-                txt = reader.read(chunk*1024)
+                txt = reader.read(chunk * 1024)
                 if not len(txt):
                     break
-                yield chunk
-        thread = FileReadThread(control, Self.Read, generator)
+
+                ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
+                                   (pid, (chunk * 1024) * counter, filesize))
+                counter += 1
+                yield txt
+        thread = FileReadThread(control, self.Read, generator)
+        thread.start()
 
     @property
     def ReadOnly(self):
@@ -402,12 +415,40 @@ class FileReadThread(threading.Thread):
         for txt in self._task(*self._args, **self._kwargs):
             if self.cancel:
                 break
-            evt = UpdateTextEvent(edEVT_UPDATE_TEXT, wx.ID_ANY, txt)
-            wx.PostEvent(self.reciever, ed_event.UpdateTextEvent)
+
+            evt = FileLoadEvent(edEVT_FILE_LOAD, wx.ID_ANY, txt)
+            wx.PostEvent(self.reciever, evt)
 
     def Cancel(self):
         """Cancel the running task"""
         self.cancel = True
+
+#-----------------------------------------------------------------------------#
+
+edEVT_FILE_LOAD = wx.NewEventType()
+EVT_FILE_LOAD = wx.PyEventBinder(edEVT_FILE_LOAD, 1)
+class FileLoadEvent(wx.PyEvent):
+    """Event to signal that a chunk of text haes been read"""
+    def __init__(self, etype, eid, value=None):
+        """Creates the event object"""
+        wx.PyEvent.__init__(self, eid, etype)
+
+        # Attributes
+        self._value = value
+    
+    def HasText(self):
+        """Returns true if the event has text
+        @return: bool whether the event contains text
+
+        """
+        return self._value is not None
+
+    def GetValue(self):
+        """Returns the value from the event.
+        @return: the value of this event
+
+        """
+        return self._value
 
 #-----------------------------------------------------------------------------#
 # Utility Function
