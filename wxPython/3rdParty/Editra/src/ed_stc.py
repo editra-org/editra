@@ -165,6 +165,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
 
+        # Async file load events
+        self.Bind(ed_txt.EVT_FILE_LOAD, self.OnLoadProgress)
+
         # Need to relay the menu events from the context menu to the top level
         # window to be handled on gtk. Other platforms don't require this.
         if wx.Platform == '__WXGTK__':
@@ -1007,6 +1010,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 #        if len(stxt):
 #            util.SetClipboardText(stxt, primary=True)
         self.PostPositionEvent()
+
+    def OnLoadProgress(self, evt):
+        """Recieves file loading events from asynchronous file loading"""
+        if evt.HasText():
+            self.SetReadOnly(False)
+            #self.AppendText(evt.GetValue())
+            self.SetReadOnly(True)
 
     def OnModified(self, evt):
         """Handles updates that need to take place after
