@@ -920,7 +920,7 @@ class AppearancePanel(wx.Panel):
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_SLIDER, self.OnSetTransparent, \
                   id=ed_glob.ID_TRANSPARENCY)
-        self.Bind(ed_event.EVT_NOTIFY, self.OnFontChange)
+        self.Bind(ecpickers.EVT_FONT_CHANGED, self.OnFontChange)
 
     def _DoLayout(self):
         """Add and layout the widgets

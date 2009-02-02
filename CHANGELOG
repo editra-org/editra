@@ -36,6 +36,7 @@ unicode characters are present.
 +Fix indentation guides preference not properly being applied on restart.
 +Fix transparency settings not being set on Linux.
 +Add some missing PHP keywords (patch from Giuseppe "Cowo" Corbelli)
++Fix Display Font preference not being applied.
 
 #-----------------------------------------------------------------------------#
 
