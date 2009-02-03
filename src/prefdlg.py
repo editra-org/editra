@@ -194,7 +194,15 @@ class PrefTools(wx.Toolbook):
 
         # Event Handlers
         self.Bind(wx.EVT_TOOLBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(wx.EVT_TOOLBOOK_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+    def OnPageChanging(self, evt):
+        sel = evt.GetSelection()
+        page = self.GetPage(sel)
+        if hasattr(page, 'DoSelected'):
+            page.DoSelected()
+        evt.Skip()
 
     def OnPageChanged(self, evt=None):
         """Resizes the dialog based on the pages size
@@ -456,10 +464,9 @@ class DocumentPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Attributes
-        self._DoLayout()
-        self.SetAutoLayout(True)
+        self._layout_done = False
 
-    def _DoLayout(self):
+    def __DoLayout(self):
         """Do the layout of the panel
         @note: Do not call this after __init__
 
@@ -481,6 +488,13 @@ class DocumentPanel(wx.Panel):
         """
         sz = wx.Panel.GetSize(self)
         return wx.Size(sz[0] + 35, sz[1])
+
+    def DoSelected(self):
+        """Handle initial selection to create controls"""
+        if not self._layout_done:
+            self._layout_done = True
+            self.__DoLayout()
+            self.SetAutoLayout(True)
 
 class DocGenPanel(wx.Panel):
     """Panel used for general document settings in the DocumentPanel's
@@ -913,7 +927,7 @@ class AppearancePanel(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Layout
-        self._DoLayout()
+        self._layout_done = False
 
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
@@ -922,7 +936,7 @@ class AppearancePanel(wx.Panel):
                   id=ed_glob.ID_TRANSPARENCY)
         self.Bind(ecpickers.EVT_FONT_CHANGED, self.OnFontChange)
 
-    def _DoLayout(self):
+    def __DoLayout(self):
         """Add and layout the widgets
         @note: Do not call this after __init__
 
@@ -1005,6 +1019,13 @@ class AppearancePanel(wx.Panel):
         msizer = wx.BoxSizer(wx.HORIZONTAL)
         msizer.AddMany([((10, 10), 0), (sizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
+
+    def DoSelected(self):
+        """Handle initial selection to create controls"""
+        if not self._layout_done:
+            self._layout_done = True
+            self.__DoLayout()
+            self.SetAutoLayout(True)
 
     @staticmethod
     def OnCheck(evt):
@@ -1089,8 +1110,7 @@ class NetworkPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Layout
-        self.__DoLayout()
-        self.SetAutoLayout(True)
+        self._layout_done = False
 
     def __DoLayout(self):
         """Do the layout of the panel
@@ -1105,6 +1125,13 @@ class NetworkPanel(wx.Panel):
         msizer = wx.BoxSizer(wx.VERTICAL)
         msizer.AddMany([(sizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
+
+    def DoSelected(self):
+        """Handle initial selection event to create controls"""
+        if not self._layout_done:
+            self._layout_done = True
+            self.__DoLayout()
+            self.SetAutoLayout(True)
 
 #-----------------------------------------------------------------------------#
 
@@ -1121,6 +1148,7 @@ class NetConfigPage(wx.Panel):
 
         # Layout
         self.__DoLayout()
+        self.SetAutoLayout(True)
 
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck, id=ID_USE_PROXY)
@@ -1363,8 +1391,7 @@ class AdvancedPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Layout
-        self.__DoLayout()
-        self.SetAutoLayout(True)
+        self._layout_done = False
 
     def __DoLayout(self):
         """Do the layout of the panel
@@ -1378,6 +1405,13 @@ class AdvancedPanel(wx.Panel):
         msizer = wx.BoxSizer(wx.VERTICAL)
         msizer.AddMany([(sizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
+
+    def DoSelected(self):
+        """Handle initial selection to create controls"""
+        if not self._layout_done:
+            self._layout_done = True
+            self.__DoLayout()
+            self.SetAutoLayout(True)
 
 #-----------------------------------------------------------------------------#
 # Keybinding Panel
