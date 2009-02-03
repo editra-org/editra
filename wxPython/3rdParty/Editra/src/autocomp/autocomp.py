@@ -26,6 +26,8 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import wx.stc as stc
+import pycomp
+import simplecomp
 
 #--------------------------------------------------------------------------#
 
@@ -42,8 +44,11 @@ class AutoCompService(object):
 
         """
         object.__init__(self)
+
+        # Attributes
         self._buffer = parent
         self._completer = None
+        self._simpleCompleter = simplecomp.Completer(self._buffer)
 
     def GetAutoCompKeys(self):
         """Returns the list of key codes for activating the
@@ -51,26 +56,24 @@ class AutoCompService(object):
         @return: list of characters used for activating autocomp
 
         """
-        if self._completer is not None:
-            return self._completer.GetAutoCompKeys()
-        else:
-            return list()
-        
+        comp = self._completer or self._simpleCompleter
+        return comp.GetAutoCompKeys()
+
     def IsAutoCompEvent(self, evt):
-        if self._completer is not None:
-            return self._completer.IsAutoCompEvent(evt)
-        else:
-            return False
+        comp = self._completer or self._simpleCompleter
+        return comp.IsAutoCompEvent(evt)
 
     def GetAutoCompList(self, command):
         """Retrieves the sorted autocomplete list for a command
         @param command: command string to do lookup on
 
         """
-        if self._completer is not None:
-            return self._completer.GetAutoCompList(command)
+        if self._completer:
+            rlist = self._completer.GetAutoCompList(command)
         else:
-            return list()
+            rlist = self._simpleCompleter.GetAutoCompList(command)
+
+        return rlist
 
     def GetAutoCompStops(self):
         """Returns a string of characters that should cancel
@@ -78,59 +81,45 @@ class AutoCompService(object):
         @return: string of characters that will hide the autocomp/calltip
 
         """
-        if self._completer is not None:
-            return self._completer.GetAutoCompStops()
-        else:
-            return u''
-        
+        comp = self._completer or self._simpleCompleter
+        return comp.GetAutoCompStops()
+
     def GetAutoCompFillups(self):
-        if self._completer is not None:
-            return self._completer.GetAutoCompFillups()
-        else:
-            return u''
+        comp = self._completer or self._simpleCompleter
+        return comp.GetAutoCompFillups()
 
     def GetCallTip(self, command):
         """Returns the calltip string for a command
         @param command: command to get callip for
 
         """
-        if self._completer is not None:
-            return self._completer.GetCallTip(command)
-        else:
-            return u''
+        comp = self._completer or self._simpleCompleter
+        return comp.GetCallTip(command)
 
     def GetCallTipKeys(self):
         """Returns the list of keys to activate a calltip on
         @return: list of calltip activation keys
 
         """
-        if self._completer is not None:
-            return self._completer.GetCallTipKeys()
-        else:
-            return list()
+        comp = self._completer or self._simpleCompleter
+        return comp.GetCallTipKeys()
 
     def GetCallTipCancel(self):
         """Get the list of key codes that should stop a calltip"""
-        if self._completer is not None:
-            return self._completer.GetCallTipCancel()
-        else:
-            return list()
+        comp = self._completer or self._simpleCompleter
+        return comp.GetCallTipCancel()
 
     def IsCallTipEvent(self, evt):
-        if self._completer:
-            return self._completer.IsCallTipEvent(evt)
-        else:
-            return False
+        comp = self._completer or self._simpleCompleter
+        return comp.IsCallTipEvent(evt)
 
     def GetIgnoreCase(self):
         """Are commands case sensitive or not
         @return: whether case is ignored or not by lookup
 
         """
-        if self._completer is not None:
-            return not self._completer.GetCaseSensitive()
-        else:
-            return True
+        comp = self._completer or self._simpleCompleter
+        return not comp.GetCaseSensitive()
 
     def LoadCompProvider(self, lex_value):
         """Loads a specified completion provider by stc_lex value
@@ -138,7 +127,6 @@ class AutoCompService(object):
 
         """
         if lex_value == stc.STC_LEX_PYTHON:
-            import pycomp
             self._completer = pycomp.Completer(self._buffer)
         else:
             self._completer = None
