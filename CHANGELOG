@@ -22,6 +22,9 @@ NEW: [features/improvments]
 +Codebrowser adds support for XML/HTML (patch from Rudi Pettazzi)
 +Some minor changes to the default hightlighting style. The old default is now
 called Cream.
++Add simple generic autocompleter that provides completions based off of words
+in the current buffer (Ctrl+Space). (patch from Giuseppe "Cowo" Corbelli)
+
 
 BUG FIXES:
 +Update window being shown at same time as splash window causing lockups.

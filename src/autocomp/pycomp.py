@@ -190,7 +190,8 @@ class Completer(object):
 # This code below is a modified and adapted version of the pythoncomplete 
 # Omni completion script for vim. The original vimscript can be found at the 
 # following address: http://www.vim.org/scripts/script.php?script_id=1542
-dbg = wx.GetApp().GetLog()
+def dbg(msg):
+    wx.GetApp().GetLog()(msg)
 
 class PyCompleter(object):
     """Python code completion provider"""
