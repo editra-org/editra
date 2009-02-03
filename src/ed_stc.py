@@ -158,7 +158,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
-        self.Bind(wx.stc.EVT_STC_CHANGE, self.OnModified)
+        self.Bind(wx.stc.EVT_STC_CHANGE, self.OnChanged)
+        self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
         self.Bind(wx.stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_CHAR, self.OnChar)
@@ -793,6 +794,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if self.CallTipActive():
                 self.CallTipCancel()
 
+        elif self.vert_edit.Enabled:
+            # XXX: handle column mode
+            self.vert_edit.OnKeyDown(evt)
         else:
             evt.Skip()
 
@@ -1018,7 +1022,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             #self.AppendText(evt.GetValue())
             self.SetReadOnly(True)
 
-    def OnModified(self, evt):
+    def OnChanged(self, evt):
         """Handles updates that need to take place after
         the control has been modified.
         @param evt: event that called this handler
@@ -1039,9 +1043,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if self.GetMarginWidth(NUM_MARGIN) != nwidth:
             self.SetMarginWidth(NUM_MARGIN, nwidth)
 
-        self.vert_edit.OnModified(evt)
         wx.PostEvent(self.GetParent(), evt)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CHANGED)
+
+    def OnModified(self, evt):
+        """Handle modify events, includes style changes!"""
+        if self.vert_edit.Enabled:
+            self.vert_edit.OnModified(evt)
+        else:
+            evt.Skip()
 
     def OnUpdateUI(self, evt):
         """Check for matching braces
@@ -1050,16 +1060,18 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         # If disabled just skip the event
-        if not self._config['brackethl']:
-            evt.Skip()
-            return
+        if self._config['brackethl']:
+            brace_at_caret, brace_opposite = self.GetBracePair()
+            # CallAfter necessary to reduce CG warnings on Mac
+            if brace_at_caret != -1  and brace_opposite == -1:
+                wx.CallAfter(self.BraceBadLight, brace_at_caret)
+            else:
+                wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
 
-        brace_at_caret, brace_opposite = self.GetBracePair()
-        # CallAfter necessary to reduce CG warnings on Mac
-        if brace_at_caret != -1  and brace_opposite == -1:
-            wx.CallAfter(self.BraceBadLight, brace_at_caret)
-        else:
-            wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
+        # XXX: handle when column mode is enabled
+        if self.vert_edit.Enabled:
+            self.vert_edit.OnUpdateUI(evt)
+        evt.Skip()
 
     def OnMarginClick(self, evt):
         """Open and Close Folders as Needed
