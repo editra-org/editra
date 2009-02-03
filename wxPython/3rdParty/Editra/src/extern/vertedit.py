@@ -70,8 +70,8 @@ class VertEdit(object):
         self.modmask = long(self.e.ModEventMask)
 
         # Event Handlers
-        self.e.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-        self.e.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
+#        self.e.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+#        self.e.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
 
     def enable(self, enable=True):
         """Enable the column edit mode"""
@@ -305,4 +305,4 @@ class VertEdit(object):
                     self.state *= -1
 
                 self.vertCaret(col = curC)
-        evt.Skip()
+#        evt.Skip()
