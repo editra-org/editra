@@ -72,6 +72,7 @@ class AutoCompService(object):
             rlist = self._completer.GetAutoCompList(command)
         else:
             rlist = self._simpleCompleter.GetAutoCompList(command)
+            rlist = list(set(rlist))
 
         return rlist
 
