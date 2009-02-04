@@ -81,6 +81,22 @@ def MakeThemeTool(tool_id):
 
 #----------------------------------------------------------------------------#
 
+class PreferencesPanelBase(object):
+    def __init__(self):
+        object.__init__(self)
+
+        # Attributes
+        self._layout_done = False
+
+    def DoSelected(self):
+        """Handle initial selection to create controls"""
+        if not self._layout_done:
+            self._layout_done = True
+            self._DoLayout()
+            self.SetAutoLayout(True)
+
+#----------------------------------------------------------------------------#
+
 class PreferencesDialog(wx.Frame):
     """Preference dialog for configuring the editor
     @summary: Provides an interface into configuring profile settings
@@ -264,7 +280,7 @@ class PrefTools(wx.Toolbook):
 
 #-----------------------------------------------------------------------------#
 
-class GeneralPanel(wx.Panel):
+class GeneralPanel(wx.Panel, PreferencesPanelBase):
     """Creates a panel with controls for Editra's general settings
     @summary: Panel with a number of controls that affect the users
               global profile setting for how Editra should operate.
@@ -276,6 +292,7 @@ class GeneralPanel(wx.Panel):
 
         """
         wx.Panel.__init__(self, parent)
+        PreferencesPanelBase.__init__(self)
 
         # Attributes
         self.SetToolTipString(_("Changes made in this dialog are saved in your "
@@ -283,15 +300,16 @@ class GeneralPanel(wx.Panel):
                                 "require the program to be restarted before "
                                 "taking effect."))
 
-        # Layout
-        self.__DoLayout()
+        # Layout this page right away
+        self._DoLayout()
+        self._layout_done = True
 
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_COMBOBOX, self.OnChoice)
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Add the controls and do the layout
         @note: do not call this after __init__
 
@@ -449,7 +467,7 @@ class GeneralPanel(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class DocumentPanel(wx.Panel):
+class DocumentPanel(wx.Panel, PreferencesPanelBase):
     """Creates a panel with controls for Editra's editing settings
     @summary: Contains a wx.Notebook that contains a number of pages with
               setting controls for how documents are handled by the
@@ -462,11 +480,9 @@ class DocumentPanel(wx.Panel):
 
         """
         wx.Panel.__init__(self, parent)
+        PreferencesPanelBase.__init__(self)
 
-        # Attributes
-        self._layout_done = False
-
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Do the layout of the panel
         @note: Do not call this after __init__
 
@@ -489,13 +505,6 @@ class DocumentPanel(wx.Panel):
         sz = wx.Panel.GetSize(self)
         return wx.Size(sz[0] + 35, sz[1])
 
-    def DoSelected(self):
-        """Handle initial selection to create controls"""
-        if not self._layout_done:
-            self._layout_done = True
-            self.__DoLayout()
-            self.SetAutoLayout(True)
-
 class DocGenPanel(wx.Panel):
     """Panel used for general document settings in the DocumentPanel's
     notebook.
@@ -514,7 +523,7 @@ class DocGenPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Layout
-        self.__DoLayout()
+        self._DoLayout()
         self.SetAutoLayout(True)
 
         # Event Handlers
@@ -522,7 +531,7 @@ class DocGenPanel(wx.Panel):
         self.Bind(wx.EVT_CHOICE, self.OnUpdateEditor)
         self.Bind(ecpickers.EVT_FONT_CHANGED, self.OnFontChange)
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Layout the controls
         @note: Do not call this after __init__
 
@@ -680,6 +689,8 @@ class DocGenPanel(wx.Panel):
         else:
             evt.Skip()
 
+#----------------------------------------------------------------------------#
+
 class DocCodePanel(wx.Panel):
     """Panel used for programming settings
     @summary: Houses many of the controls for configuring the editors features
@@ -694,7 +705,7 @@ class DocCodePanel(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Layout
-        self.__DoLayout()
+        self._DoLayout()
         self.SetAutoLayout(True)
 
         # Event Handlers
@@ -702,7 +713,7 @@ class DocCodePanel(wx.Panel):
         self.Bind(wx.EVT_CHOICE, self.OnCheck)
         self.Bind(wx.EVT_SPINCTRL, self.OnSpin)
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Layout the page
         @note: Do not call this after __init__
 
@@ -804,6 +815,8 @@ class DocCodePanel(wx.Panel):
         else:
             evt.Skip()
 
+#----------------------------------------------------------------------------#
+
 class DocSyntaxPanel(wx.Panel):
     """Document syntax config panel
     @summary: Manages the configuration of the syntax highlighting
@@ -822,7 +835,7 @@ class DocSyntaxPanel(wx.Panel):
         self._elist.SetMinSize((425, 200))
 
         # Layout page
-        self.__DoLayout()
+        self._DoLayout()
         self.SetAutoLayout(True)
 
         # Event Handlers
@@ -830,7 +843,7 @@ class DocSyntaxPanel(wx.Panel):
         self.Bind(wx.EVT_CHECKBOX, self.OnSynChange)
         self.Bind(wx.EVT_CHOICE, self.OnSynChange)
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Layout all the controls
         @note: Do not call this after __init__
 
@@ -913,7 +926,7 @@ class DocSyntaxPanel(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class AppearancePanel(wx.Panel):
+class AppearancePanel(wx.Panel, PreferencesPanelBase):
     """Creates a panel with controls for Editra's appearance settings
     @summary: contains all the controls for configuring the appearance
               related settings in Editra.
@@ -925,9 +938,7 @@ class AppearancePanel(wx.Panel):
 
         """
         wx.Panel.__init__(self, parent)
-
-        # Layout
-        self._layout_done = False
+        PreferencesPanelBase.__init__(self)
 
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
@@ -936,7 +947,7 @@ class AppearancePanel(wx.Panel):
                   id=ed_glob.ID_TRANSPARENCY)
         self.Bind(ecpickers.EVT_FONT_CHANGED, self.OnFontChange)
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Add and layout the widgets
         @note: Do not call this after __init__
 
@@ -1020,13 +1031,6 @@ class AppearancePanel(wx.Panel):
         msizer.AddMany([((10, 10), 0), (sizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
 
-    def DoSelected(self):
-        """Handle initial selection to create controls"""
-        if not self._layout_done:
-            self._layout_done = True
-            self.__DoLayout()
-            self.SetAutoLayout(True)
-
     @staticmethod
     def OnCheck(evt):
         """Updates profile based on checkbox actions
@@ -1103,16 +1107,14 @@ class AppearancePanel(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class NetworkPanel(wx.Panel):
+class NetworkPanel(wx.Panel, PreferencesPanelBase):
     """Network related configration options"""
     def __init__(self, parent):
         """Create the panel"""
         wx.Panel.__init__(self, parent)
+        PreferencesPanelBase.__init__(self)
 
-        # Layout
-        self._layout_done = False
-
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Do the layout of the panel
         @note: Do not call this after __init__
 
@@ -1125,13 +1127,6 @@ class NetworkPanel(wx.Panel):
         msizer = wx.BoxSizer(wx.VERTICAL)
         msizer.AddMany([(sizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
-
-    def DoSelected(self):
-        """Handle initial selection event to create controls"""
-        if not self._layout_done:
-            self._layout_done = True
-            self.__DoLayout()
-            self.SetAutoLayout(True)
 
 #-----------------------------------------------------------------------------#
 
@@ -1147,14 +1142,14 @@ class NetConfigPage(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Layout
-        self.__DoLayout()
+        self._DoLayout()
         self.SetAutoLayout(True)
 
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck, id=ID_USE_PROXY)
         self.Bind(wx.EVT_BUTTON, self.OnApply, id=wx.ID_APPLY)
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Layout the controls in the panel"""
         msizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1276,13 +1271,13 @@ class UpdatePage(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Layout
-        self.__DoLayout()
+        self._DoLayout()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(ed_event.EVT_UPDATE_TEXT, self.OnUpdateText)
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Do the layout of the panel
         @note: Do not call this after __init__
 
@@ -1393,7 +1388,7 @@ class AdvancedPanel(wx.Panel):
         # Layout
         self._layout_done = False
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Do the layout of the panel
         @note: Do not call this after __init__
 
@@ -1410,7 +1405,7 @@ class AdvancedPanel(wx.Panel):
         """Handle initial selection to create controls"""
         if not self._layout_done:
             self._layout_done = True
-            self.__DoLayout()
+            self._DoLayout()
             self.SetAutoLayout(True)
 
 #-----------------------------------------------------------------------------#
@@ -1466,14 +1461,14 @@ class KeyBindingPanel(wx.Panel):
                 self.menumap[key] = sorted(val, _tupSort)
 
         # Layout
-        self.__DoLayout()
+        self._DoLayout()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_LISTBOX, self.OnListBox)
 
-    def __DoLayout(self):
+    def _DoLayout(self):
         """Layout the controls"""
         msizer = wx.BoxSizer(wx.VERTICAL) # Main Sizer
         spacer = ((5, 5), 0)
@@ -1801,6 +1796,7 @@ class KeyBindingPanel(wx.Panel):
             evt.Skip()
 
 #----------------------------------------------------------------------------#
+
 class ExtListCtrl(wx.ListCtrl,
                   listmix.ListCtrlAutoWidthMixin,
                   listmix.TextEditMixin,
@@ -1897,6 +1893,7 @@ class ExtListCtrl(wx.ListCtrl,
                                u'  ' + u' '.join(self._extreg[ftype]))
 
 #----------------------------------------------------------------------------#
+
 class ExChoice(wx.Choice):
     """Class to extend wx.Choice to have the GetValue
     function. This allows the application function to remain
