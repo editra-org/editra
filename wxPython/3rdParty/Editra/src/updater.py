@@ -24,6 +24,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import os
+import sys
 import stat
 import re
 import urllib2
@@ -47,6 +48,7 @@ DL_LIN = 'SRC'          # This may need to change in future
 DL_MAC = 'Macintosh'
 DL_SRC = 'SRC'
 DL_WIN = 'Windows'
+ISBIN = hasattr(sys, 'frozen')
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -99,9 +101,9 @@ class UpdateService(object):
         """
         if wx.Platform == '__WXGTK__':
             dist = DL_LIN
-        elif wx.Platform == '__WXMAC__':
+        elif wx.Platform == '__WXMAC__' and ISBIN:
             dist = DL_MAC
-        elif wx.Platform == '__WXMSW__':
+        elif wx.Platform == '__WXMSW__' and ISBIN:
             dist = DL_WIN
         else:
             dist = DL_SRC
@@ -651,7 +653,7 @@ class DownloadDialog(wx.Frame):
         self._progress.Abort()
         # Wait till thread has halted before exiting
         while self._progress.IsDownloading():
-            wx.Yield()
+            wx.YieldIfNeeded()
         wx.GetApp().UnRegisterWindow(repr(self))
         evt.Skip()
 
