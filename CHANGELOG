@@ -40,6 +40,7 @@ unicode characters are present.
 +Fix transparency settings not being set on Linux.
 +Add some missing PHP keywords (patch from Giuseppe "Cowo" Corbelli)
 +Fix Display Font preference not being applied.
++Fix error in handling modification event callbacks for mutiple file views.
 
 #-----------------------------------------------------------------------------#
 

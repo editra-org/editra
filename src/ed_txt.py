@@ -152,7 +152,7 @@ class EdFile(object):
         if len(remove):
             remove.reverse()
             for idx in remove:
-                list.pop(idx)
+                self._mcallback.pop(idx)
 
     def GetEncoding(self):
         """Get the encoding used by the file it may not be the
