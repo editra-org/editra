@@ -495,7 +495,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
             for fname in hist_list:
                 if isinstance(fname, basestring) and fname:
-                    self.filehistory.AddFileToHistory(fname)
+                    # TODO: find out why these errors are happening
+                    #       when loading the pickled strings on some systems
+                    #       The pickled strings are in unicode format.
+                    try:
+                        self.filehistory.AddFileToHistory(fname)
+                    except wx.PyAssertionError:
+                        pass
         except UnicodeEncodeError, msg:
             self.LOG("[ed_main][err] Filehistory load failed: %s" % str(msg))
 
