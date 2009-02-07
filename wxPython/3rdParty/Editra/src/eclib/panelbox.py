@@ -89,7 +89,7 @@ class PanelBox(scrolled.ScrolledPanel):
             evt.Skip()
 
     #---- Public Api ----#
-    def Append(self, item):
+    def AppendItem(self, item):
         """Append an item to the list
         @param item: PanelBoxItem
 
@@ -118,7 +118,7 @@ class PanelBox(scrolled.ScrolledPanel):
         """
         return [item for item in self._items if item.IsSelected()]
 
-    def Insert(self, index, item):
+    def InsertItem(self, index, item):
         """Insert an item into the list
         @param index: index to insert at
         @param item: PanelBoxItem
@@ -186,17 +186,17 @@ class PanelBoxItemBase(wx.PyPanel):
         dc = wx.PaintDC(self)
         rect = self.GetClientRect()
 
-        if self.IsSelected():
-            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-            dc.SetBrush(wx.Brush(color))
-            dc.SetPen(wx.TRANSPARENT_PEN)
-            dc.DrawRectangle(*rect)
-        else:
-            col2 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_LISTBOX)
-            dc.SetBackground(wx.Brush(col2))
-            dc.SetBrush(wx.Brush(col2))
-            dc.SetPen(wx.TRANSPARENT_PEN)
-            dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height - 1)
+#        if self.IsSelected():
+#            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+#            dc.SetBrush(wx.Brush(color))
+#            dc.SetPen(wx.TRANSPARENT_PEN)
+#            dc.DrawRectangle(*rect)
+#        else:
+#            col2 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_LISTBOX)
+#            dc.SetBackground(wx.Brush(col2))
+#            dc.SetBrush(wx.Brush(col2))
+#            dc.SetPen(wx.TRANSPARENT_PEN)
+#            dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height - 1)
 
         pcolor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE)
         dc.SetPen(wx.Pen(pcolor))
@@ -220,6 +220,11 @@ class PanelBoxItemBase(wx.PyPanel):
 
         """
         self._selected = select
+        if self._selected:
+            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        else:
+            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_LISTBOX)
+        self.SetBackgroundColour(color)
         self.Refresh()
 
 #--------------------------------------------------------------------------#
@@ -323,6 +328,6 @@ if __name__ == '__main__':
 
         pi = PanelBoxItem(panel, bmp, "Hello", secondary)
         pi.SetMinSize((300, 50))
-        panel.Append(pi)
+        panel.AppendItem(pi)
     frame.Show()
     app.MainLoop()
