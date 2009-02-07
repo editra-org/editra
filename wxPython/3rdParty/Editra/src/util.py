@@ -416,8 +416,8 @@ def GetPathName(path):
 
 def GetFileManagerCmd():
     """Get the file manager open command for the current os. Under linux
-    it will check for nautilus and konqueror and return which one it finds
-    first or 'nautilus' (Gnome) if it finds neither.
+    it will check for xdg-open, nautilus, konqueror, and Thunar, it will then
+    return which one it finds first or 'nautilus' it finds nothing.
     @return: string
 
     """
