@@ -376,6 +376,10 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """
         self._lock = True
 
+    def MacNewFile(self):
+        """Stub for future use"""
+        pass
+
     def MacOpenFile(self, filename):
         """Macintosh Specific code for opening files that are associated
         with the editor and double clicked on after the editor is already
@@ -402,6 +406,13 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 pass
         else:
             pass
+
+    def MacPrintFile(self, filename):
+        """Stub for future use
+        @param filename: file to print
+
+        """
+        pass
 
     def MacReopenApp(self):
         """Handle kAEReopenApplication when dock icons is clicked on"""
