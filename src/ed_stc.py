@@ -736,8 +736,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def FireModified(self):
         """Fire a modifed event"""
-        self.OnModified(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_CHANGE,
-                                               self.GetId()))
+        self.OnChanged(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_CHANGE,
+                                              self.GetId()))
 
     def GetAutoComplete(self):
         """Is Autocomplete being used by this instance
