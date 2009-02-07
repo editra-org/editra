@@ -55,6 +55,7 @@
 ../../src/eclib/finddlg.py
 ../../src/eclib/infodlg.py
 ../../src/eclib/outbuff.py
+../../src/eclib/panelbox.py
 ../../src/eclib/platebtn.py
 ../../src/eclib/pstatbar.py
 ../../src/eclib/txtentry.py
