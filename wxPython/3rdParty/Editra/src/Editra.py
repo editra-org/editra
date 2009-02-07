@@ -403,6 +403,14 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         else:
             pass
 
+    def MacReopenApp(self):
+        """Handle kAEReopenApplication when dock icons is clicked on"""
+        frame = self.GetTopWindow()
+        if frame is not None:
+            if frame.IsIconized():
+                frame.Iconize(False)
+            frame.Raise()
+
     def OnActivate(self, evt):
         """Activation Event Handler
         @param evt: event that called this handler
