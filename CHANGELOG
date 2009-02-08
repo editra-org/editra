@@ -41,6 +41,7 @@ unicode characters are present.
 +Add some missing PHP keywords (patch from Giuseppe "Cowo" Corbelli)
 +Fix Display Font preference not being applied.
 +Fix error in handling modification event callbacks for mutiple file views.
++Fix text being shown behind busy indicator in status bar while it is busy.
 
 #-----------------------------------------------------------------------------#
 
