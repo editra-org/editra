@@ -216,7 +216,8 @@ class ProgressStatusBar(wx.StatusBar):
 
         """
         if number == self.GetFieldsCount() - 1 and self.IsBusy():
-            self.tmp = txt
+            if self.tmp is None:
+                self.tmp = txt
         else:
             super(ProgressStatusBar, self).SetStatusText(txt, number)
 
@@ -231,7 +232,9 @@ class ProgressStatusBar(wx.StatusBar):
         self.__Reposition()
         bfield = self.GetFieldsCount() - 1
         self.tmp = self.GetStatusText(bfield)
-        self.SetStatusText('', bfield) # Clear the progress field
+        # Clear the progress field so the text doesn't show behind
+        # the progress indicator.
+        super(ProgressStatusBar, self).SetStatusText('', bfield)
         self.stop = False
         self.ShowProgress(True)
         self.Run(rate)
