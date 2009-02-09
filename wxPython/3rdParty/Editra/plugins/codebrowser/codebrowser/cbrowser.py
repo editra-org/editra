@@ -344,13 +344,14 @@ class CodeBrowserTree(wx.TreeCtrl):
         pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
         evt.Check(pane.IsShown())
 
-    def OnUpdateTree(self, msg=None):
+    def OnUpdateTree(self, msg=None, force=False):
         """Update the tree when an action message is sent
-        @param keyword: Message Object
+        @keyword msg: Message Object
+        @keyword force: Force update
 
         """
         # Don't update when this window is not Active
-        if not self._mw.IsActive():
+        if not force and not self._mw.IsActive():
             return
 
         page = self._GetCurrentCtrl()
@@ -363,7 +364,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             return
 
         # If document job is same as current don't start a new one
-        if self._lastjob == cfname:
+        if not force and self._lastjob == cfname:
             return
         else:
             self._lastjob = cfname
@@ -373,7 +374,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         self._cjob += 1 # increment job Id
 
         # Check if we need to do updates
-        if genfun is not None and self._ShouldUpdate():
+        if genfun is not None and (force or self._ShouldUpdate()):
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
                                (self._mw.GetId(), True))
             # Start progress indicator in pulse mode
@@ -399,7 +400,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             pane = mgr.GetPane(PANE_NAME)
             pane.Show(not pane.IsShown())
             mgr.Update()
-            self.OnUpdateTree()
+            self.OnUpdateTree(force=True)
         else:
             evt.Skip()
 

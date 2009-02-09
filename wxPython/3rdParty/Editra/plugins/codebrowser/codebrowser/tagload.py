@@ -61,6 +61,7 @@ LOAD_MAP = { synglob.ID_LANG_ADA : TAGLIB + 'adatags',
              synglob.ID_LANG_SCHEME : TAGLIB + 'schemetags',
              synglob.ID_LANG_SQL : TAGLIB + 'sqltags',
              synglob.ID_LANG_TCL : TAGLIB + 'tcltags',
+             synglob.ID_LANG_VALA : TAGLIB + 'valatags',
              synglob.ID_LANG_VERILOG : TAGLIB + 'verilogtags',
              synglob.ID_LANG_XML : TAGLIB + 'xmltags' }
 
