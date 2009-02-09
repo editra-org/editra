@@ -780,8 +780,7 @@ class DocCodePanel(wx.Panel):
         msizer.AddMany([((10, 10), 0), (sizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
 
-    @staticmethod
-    def OnCheck(evt):
+    def OnCheck(self, evt):
         """Handles the events from this panels check boxes
         @param evt: wx.CommandEvent
 
@@ -792,8 +791,19 @@ class DocCodePanel(wx.Panel):
                     ed_glob.ID_AUTOCOMP, ed_glob.ID_AUTOINDENT,
                     ed_glob.ID_PREF_EDGE, ed_glob.ID_VI_MODE,
                     ed_glob.ID_PREF_DLEXER, ed_glob.ID_HLCARET_LINE):
-            Profile_Set(ed_glob.ID_2_PROF[e_id],
-                        evt.GetEventObject().GetValue())
+
+            e_val = evt.GetEventObject().GetValue()
+
+            # Update Profile
+            Profile_Set(ed_glob.ID_2_PROF[e_id], e_val)
+
+            # Make ui adjustments
+            if e_id == ed_glob.ID_SHOW_EDGE:
+                spin = self.FindWindowById(ed_glob.ID_PREF_EDGE)
+                if spin is not None:
+                    spin.Enable(e_val)
+
+            # Inform views of preference changes
             wx.CallLater(25, DoUpdates)
         else:
             evt.Skip()
