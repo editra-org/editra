@@ -9,6 +9,11 @@ using GLib;
 
 //! \summary Documentation keyword
 public class Sample : Object {
+
+    // Some Variable definitions
+    public static const double ASPECT = 8.0/6.0;
+    static unichar a_char = 'a';
+
     public Sample () {
     }
 

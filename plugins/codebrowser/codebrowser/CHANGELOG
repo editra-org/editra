@@ -5,12 +5,14 @@
 #-----------------------------------------------------------------------------#
 
 Version 0.7
-Released: xx/x/2009
+Released: 02/08/2009
 
 New:
 +Add support for XML/Html patch from Rudi Pettazzi
++Add support for Vala (Classes, Class Methods, Functions)
 
 Bug Fixes:
++Tree not being refreshed when browser window is first shown.
 
 #-----------------------------------------------------------------------------#
 
