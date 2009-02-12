@@ -22,6 +22,8 @@ import wx
 #-----------------------------------------------------------------------------#
 
 if wx.Platform == '__WXMAC__':
+    # MacThemeColour is defined in wxPython2.9 but does not exist in 2.8
+    # This is a 2.8 version of this method.
     if not hasattr(wx, 'MacThemeColour'):
         def MacThemeColour(theme_id):
             """Get a specified Mac theme colour
@@ -29,7 +31,9 @@ if wx.Platform == '__WXMAC__':
             @return: wx.Colour
 
             """
-            return wx.Colour(theme_id)
+            brush = wx.Brush(wx.BLACK)
+            brush.MacSetTheme(theme_id)
+            return brush.GetColour()
 
         wx.MacThemeColour = MacThemeColour
 
@@ -40,4 +44,7 @@ if wx.VERSION < (2, 8, 6, 0, ''):
     wx.MenuItem.GetItemLabel = wx.MenuItem.GetText
     wx.MenuItem.GetItemLabelText = wx.MenuItem.GetLabel
 
-
+# HACK temporary bandaid to allow the the program to run until a replacement
+#      for this method can be found.
+if wx.VERSION >= (2, 9, 0, 0, ''):
+    wx.Brush.MacSetTheme = lambda x, y: x
