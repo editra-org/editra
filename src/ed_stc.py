@@ -169,12 +169,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Async file load events
         self.Bind(ed_txt.EVT_FILE_LOAD, self.OnLoadProgress)
 
-        # Need to relay the menu events from the context menu to the top level
-        # window to be handled on gtk. Other platforms don't require this.
-        if wx.Platform == '__WXGTK__':
-            self.Bind(wx.EVT_MENU,
-                      lambda evt: wx.PostEvent(self.GetTopLevelParent(), evt))
-
        #---- End Init ----#
 
     def __del__(self):
