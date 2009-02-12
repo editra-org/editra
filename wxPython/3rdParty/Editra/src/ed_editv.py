@@ -59,6 +59,12 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         # Context Menu Events
         self.Bind(wx.EVT_CONTEXT_MENU, lambda evt: self.PopupMenu(self._menu))
 
+        # Need to relay the menu events from the context menu to the top level
+        # window to be handled on gtk. Other platforms don't require this.
+        if wx.Platform == '__WXGTK__':
+            self.Bind(wx.EVT_MENU,
+                      lambda evt: wx.PostEvent(self.GetTopLevelParent(), evt))
+
     #---- EdTab Methods ----#
 
     def DoOnIdle(self):
