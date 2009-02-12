@@ -862,7 +862,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 self.CallTipCancel()
         else:
             evt.Skip()
-        return
 
     def OnKeyUp(self, evt):
         """Update status bar of window
