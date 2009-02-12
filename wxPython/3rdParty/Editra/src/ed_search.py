@@ -324,6 +324,21 @@ class SearchController:
                                (engine.SearchInDirectory,
                                 [path,], dict(recursive=evt.IsRecursive())))
 
+    def OnFindSelected(self, evt):
+        """Set the search query to the selected text and progress the search
+        to the next match.
+
+        """
+        stc = self._stc()
+
+        fstring = stc.GetSelectedText()
+        if fstring:
+            data = self.GetData()
+            data.SetFindString(fstring)
+            self.OnFind(evt)
+        else:
+            evt.Skip()
+
     def OnFindClose(self, evt):
         """Destroy Find Dialog After Cancel is clicked in it
         @param evt: event that called this handler

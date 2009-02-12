@@ -41,7 +41,8 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE', 'ID_SHOW_SB',
             'ID_REVERT_FILE', 'ID_RELOAD_ENC', 'ID_DOCPROP', 'ID_PASTE_AFTER',
             'ID_COLUMN_MODE', 'ID_PANELIST', 'ID_MAXIMIZE_EDITOR', 
-            'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS']
+            'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS',
+            'ID_FIND_SELECTED']
 
 #---- Project Info ----#
 # The project info was moved to another module so it could be accessed
@@ -127,6 +128,7 @@ ID_FIND          = wx.ID_FIND
 ID_FIND_PREVIOUS = wx.NewId()
 ID_FIND_NEXT     = wx.NewId()
 ID_FIND_REPLACE  = wx.ID_REPLACE
+ID_FIND_SELECTED = wx.NewId()
 
 # Using the system ids automatically disables the menus items
 # when the dialog is open which is not wanted
