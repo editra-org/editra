@@ -16,6 +16,7 @@ NEWS:
 
 
 NEW: [features/improvments]
++Instantly start searching for selected text (Win/Lin Ctrl+F3, OSX Cmd+3)
 +Launch adds support for OCaml (patch from quode) and LaTex
 +Shortcut for maximizing/minimizing the editor pane (patch from Rudi Pettazzi)
 +Add menu entry for Fold All action (patch from Giuseppe "Cowo" Corbelli)

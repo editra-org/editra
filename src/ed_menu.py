@@ -613,6 +613,8 @@ class EdMenuBar(wx.MenuBar):
         editmenu.Append(ed_glob.ID_FIND_NEXT, _("Find Next") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_NEXT),
                         _("Goto the next match"))
+        editmenu.Append(ed_glob.ID_FIND_SELECTED, _("Find Selected") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_SELECTED))
         editmenu.AppendSeparator()
         editmenu.Append(ed_glob.ID_PREF, _("Pr&eferences") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PREF),
@@ -1014,6 +1016,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_FIND_NEXT : (u"F3",),
                      ed_glob.ID_FIND_REPLACE : (u"Ctrl", u"R"),
                      ed_glob.ID_QUICK_FIND : (u"Ctrl", u"F"),
+                     ed_glob.ID_FIND_SELECTED : (u"Ctrl", u"F3"),
 
                      # View Menu
                      ed_glob.ID_ZOOM_IN : (u"Ctrl", u"+"),
@@ -1050,6 +1053,7 @@ if wx.Platform == '__WXMAC__':
     _DEFAULT_BINDING[ed_glob.ID_GOTO_LINE] = (u"Ctrl", u"Shift", u"E")
     _DEFAULT_BINDING[ed_glob.ID_PANELIST] = (u"Alt", u"Tab")
     _DEFAULT_BINDING[ed_glob.ID_MAXIMIZE_EDITOR] = (u"Alt", u"M")
+    _DEFAULT_BINDING[ed_glob.ID_FIND_SELECTED] = (u"Ctrl", u"3")
 elif wx.Platform == '__WXMSW__':
      # FIXME: On Windows if Tab is bound to a menu item it is no longer
      #        usable elsewhere such as in the stc control. On Mac/Gtk there

@@ -283,7 +283,8 @@ class EdPages(FNB.FlatNotebook):
         rlist = [(ed_glob.ID_FIND, self._searchctrl.OnShowFindDlg),
                  (ed_glob.ID_FIND_REPLACE, self._searchctrl.OnShowFindDlg),
                  (ed_glob.ID_FIND_NEXT, self._searchctrl.OnFind),
-                 (ed_glob.ID_FIND_PREVIOUS, self._searchctrl.OnFind)]
+                 (ed_glob.ID_FIND_PREVIOUS, self._searchctrl.OnFind),
+                 (ed_glob.ID_FIND_SELECTED, self._searchctrl.OnFindSelected)]
         return rlist
 
     def GetUiHandlers(self):
