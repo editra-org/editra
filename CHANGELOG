@@ -21,6 +21,7 @@ NEW: [features/improvments]
 +Shortcut for maximizing/minimizing the editor pane (patch from Rudi Pettazzi)
 +Add menu entry for Fold All action (patch from Giuseppe "Cowo" Corbelli)
 +Codebrowser adds support for XML/HTML (patch from Rudi Pettazzi)
++Codebrowser adds support for Vala, VBScript
 +Some minor changes to the default hightlighting style. The old default is now
 called Cream.
 +Add simple generic autocompleter that provides completions based off of words

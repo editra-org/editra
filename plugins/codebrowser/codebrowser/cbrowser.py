@@ -52,7 +52,8 @@ STRINGS = ( _("Class Definitions"), _("Defines"), _("Function Definitions"),
             _("Procedure Definitions"), _("Programs"), _("Protocols"),
             _("Sections"), _("Style Tags"), _("Subroutines"),
             _("Subroutine Declarations"), _("Task Definitions"), 
-            _("Modules") )
+            _("Modules"), _("Functions"), _("Public Functions"),
+            _("Public Subroutines") )
 del STRINGS
 
 #--------------------------------------------------------------------------#
