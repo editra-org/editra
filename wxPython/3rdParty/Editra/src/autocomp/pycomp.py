@@ -36,24 +36,26 @@ from wx.py import introspect
 # of each character instead of each actual token which causes the parse to fail.
 from StringIO import StringIO
 
+# Local imports
+import completer
+
 #--------------------------------------------------------------------------#
 
-class Completer(object):
+class Completer(completer.BaseCompleter):
     """Code completer provider"""
+    _autocomp_keys = [ord('.'),]
+    _autocomp_stop = ' \'"\\`):'
+    _autocomp_fillup = '.,;([]}<>%^&+-=*/|'
+    _calltip_keys = [ord('('),]
+    _calltip_cancel = [ord(')'), wx.WXK_RETURN]
+    _case_sensitive = False
+
     def __init__(self, stc_buffer):
         """Initiliazes the completer
         @param stc_buffer: buffer that contains code
 
         """
-        object.__init__(self)
-        self._log = wx.GetApp().GetLog()
-        self._buffer = stc_buffer
-        self._autocomp_keys = [ord('.'),]
-        self._autocomp_stop = ' \'"\\`):'
-        self._autocomp_fillup = '.,;([]}<>%^&+-=*/|'
-        self._calltip_keys = [ord('('),]
-        self._calltip_cancel = [ord(')'), wx.WXK_RETURN]
-        self._case_sensitive = False
+        completer.BaseCompleter.__init__(self, stc_buffer)
 
         # Needed for introspect to run
         try:
@@ -109,16 +111,8 @@ class Completer(object):
         @return: list of autocomp activation keys
 
         """
-        if hasattr(self, "_autocomp_keys"):
-            return self._autocomp_keys
-        else:
-            return list()
+        return Completer._autocomp_keys
         
-    def IsAutoCompEvent(self, evt):
-        if evt.ControlDown() and evt.GetKeyCode() == wx.WXK_SPACE:
-            return True
-        return False
-
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a 
         command string. If namespace is not specified the lookup
@@ -135,10 +129,10 @@ class Completer(object):
         @return: string of keys that will cancel autocomp/calltip actions
 
         """
-        return self._autocomp_stop
+        return Completer._autocomp_stop
     
     def GetAutoCompFillups(self):
-        return self._autocomp_fillup
+        return Completer._autocomp_fillup
 
     def GetCallTip(self, command):
         """Returns the formated calltip string for the command.
@@ -154,11 +148,11 @@ class Completer(object):
         @return: list of keys that can activate a calltip
 
         """
-        return self._calltip_keys
+        return Completer._calltip_keys
 
     def GetCallTipCancel(self):
         """Get the list of key codes that should stop a calltip"""
-        return self._calltip_cancel
+        return Completer._calltip_cancel
 
     def IsCallTipEvent(self, evt):
         """@todo: How is this used?"""
@@ -172,7 +166,7 @@ class Completer(object):
         @return: whether lookup is case sensitive or not
 
         """
-        return self._case_sensitive
+        return Completer._case_sensitive
 
     def SetCaseSensitive(self, value):
         """Sets whether the completer should be case sensitive
@@ -181,7 +175,7 @@ class Completer(object):
 
         """
         if isinstance(value, bool):
-            self._case_sensitive = value
+            Completer._case_sensitive = value
             return True
         else:
             return False
