@@ -16,14 +16,19 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
+import re
 import string
 import wx
 import wx.stc as stc
+from StringIO import StringIO
+
+# Local Imports
+import completer
 
 #--------------------------------------------------------------------------#
 
-class Completer(object):
+class Completer(completer.BaseCompleter):
     """Code completer provider"""
     autocompFillup = '.,;([]){}<>%^&+-=*/|'
     autocompStop = ' \'"\\`):'
@@ -33,55 +38,45 @@ class Completer(object):
     calltipCancel = []
     caseSensitive = False
 
-    def __init__(self, stc_buffer):
-        """Initiliazes the completer
-        @param stc_buffer: buffer that contains code
-
-        """
-        object.__init__(self)
-
-        # Attributes
-        self._log = wx.GetApp().GetLog()
-        self._buffer = stc_buffer
-
     def _GetCompletionInfo(self, command, calltip=False):
         """Get Completion list or Calltip
         @return: list or string
 
         """
-        if command is None or (len(command) and command[0].isdigit()):
+        if command in [None, u''] or (len(command) and command[0].isdigit()):
             return u''
 
         bf = self._buffer
         currentPos = bf.GetCurrentPos()
 
-        #Get the real word: segment using autocompFillup
-        ls = list(command.strip(self.autocompFillup))
+        # Get the real word: segment using autocompFillup
+        ls = list(command.strip(Completer.autocompFillup))
         ls.reverse()
         idx = 0
         for c in ls:
-            if c in self.autocompFillup:
+            if c in Completer.autocompFillup:
                 break
             idx += 1
         ls2 = ls[:idx]
         ls2.reverse()
         command = u"".join(ls2)
 
-        #Available completions so far
+        # Available completions so far
         wordsNear = []
         maxWordLength = 0
         nWords = 0
         minPos = 0
         maxPos = bf.GetLength()
         flags = stc.STC_FIND_WORDSTART
-        if self.caseSensitive:
+        if Completer.caseSensitive:
             flags |= stc.STC_FIND_MATCHCASE
 
+        # TODO: calling this with an empty command string causes a program lockup...
         posFind = bf.FindText(minPos, maxPos, command, flags)
         while posFind >= 0 and posFind < maxPos:
             wordEnd = posFind + len(command)
             if posFind != currentPos:
-                while -1 != self.wordCharacters.find(chr(bf.GetCharAt(wordEnd))):
+                while -1 != Completer.wordCharacters.find(chr(bf.GetCharAt(wordEnd))):
                     wordEnd += 1
 
                 wordLength = wordEnd - posFind
@@ -98,6 +93,7 @@ class Completer(object):
         completionInfo = ""
         if len(wordsNear) > 0 and (maxWordLength > len(command)):
             return wordsNear
+
         return []
 
     def GetAutoCompKeys(self):
@@ -106,13 +102,7 @@ class Completer(object):
         @return: list of autocomp activation keys
 
         """
-        return self.autocompKeys
-
-    def IsAutoCompEvent(self, evt):
-        """Is this a key event that we need to provide completions on"""
-        if evt.ControlDown() and evt.GetKeyCode() == wx.WXK_SPACE:
-            return True
-        return False
+        return Completer.autocompKeys
 
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a
@@ -130,30 +120,22 @@ class Completer(object):
         @return: string of keys that will cancel autocomp/calltip actions
 
         """
-        return self.autocompStop
+        return Completer.autocompStop
 
     def GetAutoCompFillups(self):
         """List of keys to fill up autocompletions on"""
-        return self.autocompFillup
-
-    def GetCallTip(self, command):
-        """Returns the formated calltip string for the command.
-        If the namespace command is unset the locals namespace is used.
-        @param command: command to get calltip for
-
-        """
-        return ""
+        return Completer.autocompFillup
 
     def GetCallTipKeys(self):
         """Returns the list of keys to activate a calltip on
         @return: list of keys that can activate a calltip
 
         """
-        return self.calltipKeys
+        return Completer.calltipKeys
 
     def GetCallTipCancel(self):
         """Get the list of key codes that should stop a calltip"""
-        return self.calltipCancel
+        return Completer.calltipCancel
 
     def IsCallTipEvent(self, evt):
         """@todo: How is this used?"""
@@ -167,7 +149,7 @@ class Completer(object):
         @return: whether lookup is case sensitive or not
 
         """
-        return self.caseSensitive
+        return Completer.caseSensitive
 
     def SetCaseSensitive(self, value):
         """Sets whether the completer should be case sensitive
@@ -176,7 +158,7 @@ class Completer(object):
 
         """
         if isinstance(value, bool):
-            self.caseSensitive = value
+            Completer.caseSensitive = value
             return True
         else:
             return False
