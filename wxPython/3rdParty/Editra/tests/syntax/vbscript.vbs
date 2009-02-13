@@ -23,6 +23,18 @@ function hello(name) 'comment for function
 
 end function
 
+Public Function testPublicFunct()
+    dim c,d
+end Sub
+
+sub testStub()
+    dim a,b
+end sub
+
+Public Sub testPublicSub()
+    dim c,d
+end Sub
+
 '---------------------------
 
 on error resume next

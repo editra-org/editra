@@ -10,6 +10,7 @@ Released: 02/08/2009
 New:
 +Add support for XML/Html patch from Rudi Pettazzi
 +Add support for Vala (Classes, Class Methods, Functions)
++Add support for VBScript (Functions, Subs)
 
 Bug Fixes:
 +Tree not being refreshed when browser window is first shown.
