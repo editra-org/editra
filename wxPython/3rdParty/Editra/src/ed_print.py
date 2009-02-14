@@ -43,7 +43,7 @@ COLOURMODES = { ed_glob.PRINT_BLACK_WHITE : wx.stc.STC_PRINT_BLACKONWHITE,
                 ed_glob.PRINT_NORMAL      : wx.stc.STC_PRINT_NORMAL }
 
 #--------------------------------------------------------------------------#
-class EdPrinter:
+class EdPrinter(object):
     """Printer Class for the editor
     @note: current font size is fixed at 12 point for printing
 
@@ -55,6 +55,9 @@ class EdPrinter:
         @keyword mode: printer mode
 
         """
+        object.__init__(self)
+
+        # Attributes
         self.stc = stc_callable
         self.title = wx.EmptyString
         self.parent = parent
