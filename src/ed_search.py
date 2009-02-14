@@ -44,7 +44,6 @@ import eclib.finddlg as finddlg
 
 #--------------------------------------------------------------------------#
 # Globals
-RESULT_TEMPLATE = u"%(fname)s (%(lnum)d): %(match)s"
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -204,6 +203,7 @@ class SearchController(object):
         isdown = not evt.IsUp()
         engine = SearchEngine(data.GetFindString(), evt.IsRegEx(),
                               isdown, evt.IsMatchCase(), evt.IsWholeWord())
+        engine.SetResultFormatter(FormatResult)
         self._engine = engine
 
         # Check if expression was valid or not
@@ -302,6 +302,7 @@ class SearchController(object):
         # Create a new search engine object
         engine = SearchEngine(query, evt.IsRegEx(), True,
                               evt.IsMatchCase(), evt.IsWholeWord())
+        engine.SetResultFormatter(FormatResult)
 
         # Send the search function over to any interested parties that wish
         # to process the results.
@@ -408,6 +409,8 @@ class SearchController(object):
         rstring = evt.GetReplaceString()
         engine = SearchEngine(evt.GetFindString(), evt.IsRegEx(),
                               True, evt.IsMatchCase(), evt.IsWholeWord())
+        engine.SetResultFormatter(FormatResult)
+
         results = 0
 
         if smode == finddlg.LOCATION_CURRENT_DOC:
@@ -556,7 +559,7 @@ class SearchController(object):
 
 #-----------------------------------------------------------------------------#
 
-class SearchEngine:
+class SearchEngine(object):
     """Text Search Engine
     All Search* methods are iterable generators
     All Find* methods do a complete search and return the match collection
@@ -574,6 +577,8 @@ class SearchEngine:
         @keyword wholeword: Match whole word
 
         """
+        object.__init__(self)
+
         # Attributes
         self._isregex = regex
         self._next = down
@@ -585,6 +590,7 @@ class SearchEngine:
         self._pool = u''
         self._lmatch = None             # Last match object
         self._filters = None            # File Filters
+        self._formatter = lambda f, l, m: u"%s %d: %s" % (f, l+1, m)
         self._CompileRegex()
 
     def _CompileRegex(self):
@@ -652,7 +658,7 @@ class SearchEngine:
 
         for lnum, line in enumerate(StringIO(self._pool)):
             if self._regex.search(line) is not None:
-                rlist.append(FormatResult(_("Untitled"), lnum, line))
+                rlist.append(self._formatter(_("Untitled"), lnum, line))
 
         return rlist
 
@@ -824,7 +830,7 @@ class SearchEngine:
 
             for lnum, line in enumerate(fobj):
                 if self._regex.search(line) is not None:
-                    yield FormatResult(fname, lnum, line)
+                    yield self._formatter(fname, lnum, line)
             fobj.close()
         return
 
@@ -872,6 +878,14 @@ class SearchEngine:
                 setattr(self, attr, val)
         self._CompileRegex()
 
+    def SetResultFormatter(self, funct):
+        """Set the result formatter function
+        @param funct: callable(filename, linenum, matchstr)
+
+        """
+        assert callable(funct)
+        self._formatter = funct
+
     def SetSearchPool(self, pool):
         """Set the search pool used by the Find methods
         @param pool: string to search in
@@ -908,7 +922,9 @@ def FormatResult(fname, lnum, match):
         match = _("DECODING ERROR")
     else:
         match = u" " + match.lstrip()
-    return RESULT_TEMPLATE % dict(fname=fname, lnum=lnum+1, match=match)
+
+    rstring = u"%(fname)s (%(lnum)d): %(match)s"
+    return rstring % dict(fname=fname, lnum=lnum+1, match=match)
 
 #-----------------------------------------------------------------------------#
 
