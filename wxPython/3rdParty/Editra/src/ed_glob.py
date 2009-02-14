@@ -243,6 +243,7 @@ ID_CONTACT       = wx.NewId()
 # Misc IDs
 ID_ADVANCED          = wx.NewId()
 ID_APP_SPLASH        = wx.NewId()
+ID_BACKWARD          = wx.ID_BACKWARD
 ID_BIN_FILE          = ID_COMMAND
 ID_CDROM             = wx.NewId()
 ID_COMMAND_LINE_OPEN = wx.NewId()
@@ -257,6 +258,7 @@ ID_FILE              = wx.ID_FILE
 ID_FIND_RESULTS      = wx.NewId()
 ID_FLOPPY            = wx.NewId()
 ID_FOLDER            = wx.NewId()
+ID_FORWARD           = wx.ID_FORWARD
 ID_HARDDISK          = wx.NewId()
 ID_KEY_PROFILES      = wx.NewId()
 ID_LOGGER            = wx.NewId()
