@@ -519,6 +519,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
     def OpenNewWindow(self, fname=u'', caller=None):
         """Open a new window
         @keyword fname: Open a file in the new window
+        @return: the new window
 
         """
         frame = ed_main.MainWindow(None, wx.ID_ANY,
@@ -538,6 +539,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         # this doesn't happen automatically on windows
         if wx.Platform == '__WXMSW__':
             wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
+        return frame
 
     def OnNotify(self, evt):
         """Handle notification events
