@@ -49,7 +49,7 @@ RESULT_TEMPLATE = u"%(fname)s (%(lnum)d): %(match)s"
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 
-class SearchController:
+class SearchController(object):
     """Controls the interface to the text search engine"""
     def __init__(self, owner, getstc):
         """Create the controller
@@ -57,6 +57,8 @@ class SearchController:
         @param getstc: Callable to get the current buffer with
 
         """
+        object.__init__(self)
+
         # Attributes
         self._parent   = owner
         self._stc      = getstc
