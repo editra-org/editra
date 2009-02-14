@@ -90,6 +90,13 @@ class EdTabBase(object):
         """
         return True
 
+    def OnTabMenu(self, evt):
+        """Handle events from this tabs menu
+        @param evt: menu event
+
+        """
+        evt.Skip()
+
     #---- Common Base Methods ----#
 
     def GetTabLabel(self):

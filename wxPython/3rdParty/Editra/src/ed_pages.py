@@ -99,7 +99,7 @@ class EdPages(FNB.FlatNotebook):
         self._pages.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
         self._pages.Bind(wx.EVT_MIDDLE_UP, self.OnMClick)
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU, self.OnTabMenu)
-        self.Bind(wx.EVT_MENU, self.OnCopyTabPath, id=ed_glob.ID_COPY_PATH)
+        self.Bind(wx.EVT_MENU, self.OnMenu)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
 
         # Message handlers
@@ -203,8 +203,11 @@ class EdPages(FNB.FlatNotebook):
 
         return result == wx.ID_YES
 
-    def AddPage(self, page, text, select=True, imgId=-1):
+    def AddPage(self, page, text=u'', select=True, imgId=-1):
         """Add a page to the notebook"""
+        if not len(text):
+            self.pg_num += 1
+            text = _("Untitled - %d") % self.pg_num
         super(EdPages, self).AddPage(page, text, select, imgId)
         page.SetTabLabel(text)
         sel = self.GetSelection()
@@ -218,35 +221,7 @@ class EdPages(FNB.FlatNotebook):
         """
         doc = ed_msg.RequestResult(ed_msg.EDREQ_DOCPOINTER, [self, path])
         if hasattr(doc, 'GetDocPointer'):
-            self.GetTopLevelParent().Freeze()
-            nbuff = ed_editv.EdEditorView(self, wx.ID_ANY)
-            nbuff.SetDocPointer(doc.GetDocPointer())
-            doc = doc.GetDocument()
-            nbuff.SetDocument(doc)
-            doc.AddModifiedCallback(nbuff.FireModified)
-            nbuff.FindLexer()
-            nbuff.EmptyUndoBuffer()
-
-            if Profile_Get('SAVE_POS'):
-                pos = self.DocMgr.GetPos(nbuff.GetFileName())
-                nbuff.GotoPos(pos)
-                nbuff.ScrollToColumn(0)
-
-            filename = util.GetFileName(path)
-            self.AddPage(nbuff, filename)
-
-            self.frame.SetTitle(nbuff.GetTitleString())
-            self.SetPageText(self.GetSelection(), filename)
-            self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
-
-            # Set tab image
-            self.SetPageImage(self.GetSelection(), str(nbuff.GetLangId()))
-
-            # Refocus on selected page
-            self.control = nbuff
-            self.GoCurrentPage()
-            self.GetTopLevelParent().Thaw()
-            ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, nbuff.GetFileName())
+            self.OpenDocPointer(doc.GetDocPointer(), doc.GetDocument())
             return True
         else:
             return False
@@ -325,11 +300,10 @@ class EdPages(FNB.FlatNotebook):
 
         """
         self.Freeze()
-        self.pg_num += 1
         self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
         self.control.SetEncoding(Profile_Get('ENCODING'))
         self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
-        self.AddPage(self.control, _("Untitled - %d") % self.pg_num)
+        self.AddPage(self.control)
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
 
         # Set the control up the the preferred default lexer
@@ -344,15 +318,14 @@ class EdPages(FNB.FlatNotebook):
 
         self.Thaw()
 
-    def OnCopyTabPath(self, evt):
-        """Copy the path of the selected tab to the clipboard.
-        @param evt: wxMenuEvent
+    def OnMenu(self, evt):
+        """Handle context menu events
+        @param evt: wx.MenuEvent
 
         """
-        if evt.GetId() == ed_glob.ID_COPY_PATH:
-            path = self.control.GetFileName()
-            if path is not None:
-                util.SetClipboardText(path)
+        ctab = self.GetCurrentPage()
+        if ctab is not None:
+            ctab.OnTabMenu(evt)
         else:
             evt.Skip()
 
@@ -420,6 +393,53 @@ class EdPages(FNB.FlatNotebook):
 
         """
         self.UpdateAllImages()
+
+    def OpenDocPointer(self, ptr, doc, title=u''):
+        """Open a page using an stc document poiner
+        @param ptr: EdEditorView document Pointer
+        @param doc: EdFile instance
+        @keyword title: tab title
+
+        """
+        self.GetTopLevelParent().Freeze()
+        nbuff = self.GetCurrentPage()
+        need_add = False
+        if nbuff.GetFileName() or nbuff.GetLength():
+            need_add = True
+            nbuff = ed_editv.EdEditorView(self)
+
+        nbuff.SetDocPointer(ptr)
+        nbuff.SetDocument(doc)
+        doc.AddModifiedCallback(nbuff.FireModified)
+        nbuff.FindLexer()
+
+        path = nbuff.GetFileName()
+        if Profile_Get('SAVE_POS'):
+            pos = self.DocMgr.GetPos(path)
+            nbuff.GotoPos(pos)
+            nbuff.ScrollToColumn(0)
+
+        if title:
+            filename = title
+        else:
+            filename = util.GetFileName(path)
+
+        if need_add:
+            self.AddPage(nbuff, filename)
+        else:
+            self.SetPageText(self.GetSelection(), filename)
+
+        self.frame.SetTitle(nbuff.GetTitleString())
+        self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
+
+        # Set tab image
+        self.SetPageImage(self.GetSelection(), str(nbuff.GetLangId()))
+
+        # Refocus on selected page
+        self.control = nbuff
+        self.GoCurrentPage()
+        self.GetTopLevelParent().Thaw()
+        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, nbuff.GetFileName())
 
     def OpenFileObject(self, fileobj):
         """Open a new text editor page with the given file object. The file
@@ -638,6 +658,18 @@ class EdPages(FNB.FlatNotebook):
         if not txt or txt[0] != u"*":
             return txt
         return txt[1:]
+
+    def GetRawPageText(self, pg_num):
+        """Get the unformatted raw page text
+        @param pg_num: int
+        @return: string
+
+        """
+        try:
+            txt = super(EdPages, self).GetPageText(pg_num)
+        except IndexError:
+            txt = ''
+        return txt
 
     def SetPageText(self, pg_num, txt):
         """Set the pages tab text
@@ -882,10 +914,10 @@ class EdPages(FNB.FlatNotebook):
             self.DeletePage(pg_num)
             self.GoCurrentPage()
 
+        frame.Thaw()
         if not self.GetPageCount() and \
            hasattr(frame, 'IsExiting') and not frame.IsExiting():
             self.NewPage()
-        frame.Thaw()
         return result
 
     def SetPageImage(self, pg_num, lang_id):

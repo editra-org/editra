@@ -41,7 +41,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     """Tab editor view for main notebook control."""
     DOCMGR = DocPositionMgr()
 
-    def __init__(self, parent, id_, pos=wx.DefaultPosition,
+    def __init__(self, parent, id_=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0, use_dt=True):
         """Initialize the editor view"""
         ed_stc.EditraStc.__init__(self, parent, id_, pos, size, style, use_dt)
@@ -49,6 +49,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         # Attributes
         self._menu = MakeMenu()
+        self._ignore_del = False
 
         # Initialize the classes position manager for the first control
         # that is created only.
@@ -112,6 +113,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         menu = ed_menu.EdMenu()
         menu.Append(ed_glob.ID_NEW, _("New Tab"))
+        menu.Append(ed_glob.ID_MOVE_TAB, _("Move Tab to New Window"))
         menu.AppendSeparator()
         menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
         menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
@@ -142,6 +144,9 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         @return: bool
 
         """
+        if self._ignore_del:
+            return True
+
         result = True
         if self.GetModify():
             # TODO: Move this method down from the frame to here
@@ -149,6 +154,25 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             result = result in (wx.ID_OK, wx.ID_NO)
 
         return result
+
+    def OnTabMenu(self, evt):
+        """Tab menu event handler"""
+        e_id = evt.GetId()
+        if e_id == ed_glob.ID_COPY_PATH:
+            path = self.GetFileName()
+            if path is not None:
+                util.SetClipboardText(path)
+        elif e_id == ed_glob.ID_MOVE_TAB:
+            t = self.GetTopLevelParent()
+            frame = wx.GetApp().OpenNewWindow()
+            nb = frame.GetNotebook()
+            parent = self.GetParent()
+            pg_txt = parent.GetRawPageText(parent.GetSelection())
+            nb.OpenDocPointer(self.GetDocPointer(), self.GetDocument(), pg_txt)
+            self._ignore_del = True
+            wx.CallAfter(parent.ClosePage)
+        else:
+            evt.Skip()
 
     #---- End EdTab Methods ----#
 
