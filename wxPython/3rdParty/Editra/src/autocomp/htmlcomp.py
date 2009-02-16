@@ -17,21 +17,25 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Imports
+import re
+import wx
+import wx.stc
 
 # Local Imports
 import completer
 
 #--------------------------------------------------------------------------#
-TAGS = ['a', 'abbr', 'accept', 'accesskey', 'acronym', 'action', 'address',
-        'align', 'alink', 'alt', 'applet', 'archive', 'area', 'axis', 'b',
-        'background', 'base', 'basefont', 'bdo', 'bgcolor', 'big', 'blockquote',
-        'body', 'border', 'bordercolor', 'br', 'button', 'caption',
-        'cellpadding', 'cellspacing', 'center', 'char', 'charoff', 'charset',
-        'checked', 'cite', 'cite', 'class', 'classid', 'clear', 'code',
-        'codebase', 'codetype', 'col', 'colgroup', 'color', 'cols', 'colspan',
-        'compact', 'content', 'coords', 'data', 'datetime', 'dd', 'declare',
-        'defer', 'del', 'dfn', 'dir', 'dir', 'disabled', 'div', 'dl', 'dt',
-        'dtml-call', 'dtml-comment', 'dtml-if', 'dtml-in', 'dtml-let',
+# Standard Html Tags
+TAGS = ['!--', 'a', 'abbr', 'accept', 'accesskey', 'acronym', 'action',
+        'address', 'align', 'alink', 'alt', 'applet', 'archive', 'area', 'axis',
+        'b', 'background', 'base', 'basefont', 'bdo', 'bgcolor', 'big',
+        'blockquote', 'body', 'border', 'bordercolor', 'br', 'button',
+        'caption', 'cellpadding', 'cellspacing', 'center', 'char', 'charoff',
+        'charset', 'checked', 'cite', 'cite', 'class', 'classid', 'clear',
+        'code', 'codebase', 'codetype', 'col', 'colgroup', 'color', 'cols',
+        'colspan', 'compact', 'content', 'coords', 'data', 'datetime', 'dd',
+        'declare', 'defer', 'del', 'dfn', 'dir', 'dir', 'disabled', 'div', 'dl',
+        'dt', 'dtml-call', 'dtml-comment', 'dtml-if', 'dtml-in', 'dtml-let',
         'dtml-raise', 'dtml-tree', 'dtml-try', 'dtml-unless', 'dtml-var',
         'dtml-with', 'em', 'enctype', 'face', 'fieldset', 'font', 'for', 'form',
         'frame', 'gutter', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head',
@@ -49,6 +53,8 @@ TAGS = ['a', 'abbr', 'accept', 'accesskey', 'acronym', 'action', 'address',
         'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'type', 'u',
         'ul', 'url', 'usemap', 'valign', 'value', 'valuetype', 'var', 'version',
         'vlink', 'vspace', 'width', 'wrap', 'xmp']
+
+TAG_RE = re.compile("\<\s*([a-zA-Z][a-zA-Z0-9]*)")
 
 #--------------------------------------------------------------------------#
 
@@ -91,7 +97,10 @@ class Completer(completer.BaseCompleter):
 
         # Check if we are completing an open tag
         if tmp.endswith('<'):
-            return TAGS
+            if buff.GetLexer() == wx.stc.STC_LEX_XML:
+                return _FindXmlTags(buff.GetText())
+            else:
+                return TAGS
 
         tmp = tmp.rstrip('>').rstrip()
         if not tmp.endswith('/'):
@@ -125,3 +134,21 @@ class Completer(completer.BaseCompleter):
     def GetAutoCompFillups(self):
         """List of keys to fill up autocompletions on"""
         return Completer._autocomp_fillup
+
+#--------------------------------------------------------------------------#
+
+def _FindXmlTags(text):
+    """Dynamically generate a list of possible xml tags based on tags found in
+    the given text.
+    @param text: string
+    @return: sorted list
+
+    """
+    matches = TAG_RE.findall(text)
+    if len(matches):
+        matches.append(u'!--')
+        matches = list(set(matches))
+        matches.sort()
+    else:
+        matches = [u'!--', ]
+    return matches

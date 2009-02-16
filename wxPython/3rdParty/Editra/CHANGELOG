@@ -16,7 +16,7 @@ NEWS:
 
 
 NEW: [features/improvments]
-+Add autocompletion support for HTML documents.
++Add autocompletion support for HTML/XML documents.
 +Instantly start searching for selected text (Win/Lin Ctrl+F3, OSX Cmd+3)
 +Launch adds support for OCaml (patch from quode) and LaTex
 +Shortcut for maximizing/minimizing the editor pane (patch from Rudi Pettazzi)
