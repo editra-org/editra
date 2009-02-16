@@ -25,7 +25,7 @@ import os
 import sys
 import tokenize
 import types
-from token import NAME, DEDENT, STRING, NEWLINE
+from token import NAME, DEDENT, STRING
 
 import wx
 from wx.py import introspect
@@ -43,12 +43,11 @@ import completer
 
 class Completer(completer.BaseCompleter):
     """Code completer provider"""
-    _autocomp_keys = [ord('.'),]
+    _autocomp_keys = [ord('.'), ]
     _autocomp_stop = ' \'"\\`):'
     _autocomp_fillup = '.,;([]}<>%^&+-=*/|'
-    _calltip_keys = [ord('('),]
+    _calltip_keys = [ord('('), ]
     _calltip_cancel = [ord(')'), wx.WXK_RETURN]
-    _case_sensitive = False
 
     def __init__(self, stc_buffer):
         """Initiliazes the completer
@@ -153,32 +152,6 @@ class Completer(completer.BaseCompleter):
     def GetCallTipCancel(self):
         """Get the list of key codes that should stop a calltip"""
         return Completer._calltip_cancel
-
-    def IsCallTipEvent(self, evt):
-        """@todo: How is this used?"""
-        if evt.ControlDown() and evt.GetKeyCode() == ord('9'):
-            return True
-        return False
-
-    def GetCaseSensitive(self):
-        """Returns whether the autocomp commands are case sensitive
-        or not.
-        @return: whether lookup is case sensitive or not
-
-        """
-        return Completer._case_sensitive
-
-    def SetCaseSensitive(self, value):
-        """Sets whether the completer should be case sensitive
-        or not, and returns True if the value was set.
-        @param value: toggle case sensitivity
-
-        """
-        if isinstance(value, bool):
-            Completer._case_sensitive = value
-            return True
-        else:
-            return False
 
 #-----------------------------------------------------------------------------#
 # This code below is a modified and adapted version of the pythoncomplete 
@@ -742,7 +715,7 @@ class PyParser:
             # NOTE: This part of the parse is where the problem is happening
             assign += token
             level = 0
-            tstack = list()
+#            tstack = list()
             while True:
                 tokentype, token = self.next()[:-1]
 #                tstack.append((assign, token, level))

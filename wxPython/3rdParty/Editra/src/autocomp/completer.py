@@ -35,6 +35,7 @@ class BaseCompleter(object):
         # Attributes
         self._buffer = parent
         self._log = wx.GetApp().GetLog()
+        self._case_sensitive = False
 
     def GetAutoCompKeys(self):
         """Returns the list of key codes for activating the autocompletion.
@@ -43,11 +44,17 @@ class BaseCompleter(object):
         """
         return list()
 
+    def IsCallTipEvent(self, evt):
+        """Should a calltip be shown for the given key combo"""
+        if evt.ControlDown() and evt.GetKeyCode() == ord('9'):
+            return True
+        return False
+
     def IsAutoCompEvent(self, evt):
         """Is it a key combination that should allow completions to be shown
         @param: wx.KeyEvent
         @return: bool
-        @todo: this shoudl probably be handled in edstc
+        @todo: this shoud probably be handled in edstc
 
         """
         if evt.ControlDown() and evt.GetKeyCode() == wx.WXK_SPACE:
@@ -105,5 +112,16 @@ class BaseCompleter(object):
         @return: bool
 
         """
-        return False
+        return self._case_sensitive
 
+    def SetCaseSensitive(self, sensitive):
+        """Set whether this completer is case sensitive or not
+        @param sensitive: bool
+        @return: bool
+
+        """
+        if isinstance(sensitive, bool):
+            self._case_sensitive = sensitive
+            return True
+        else:
+            return False

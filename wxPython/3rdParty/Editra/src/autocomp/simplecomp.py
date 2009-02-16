@@ -17,11 +17,8 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Imports
-import re
 import string
-import wx
 import wx.stc as stc
-from StringIO import StringIO
 
 # Local Imports
 import completer
@@ -34,8 +31,6 @@ class Completer(completer.BaseCompleter):
     autocompStop = ' \'"\\`):'
     wordCharacters = "".join(['_', string.letters])
     autocompKeys = []
-    calltipKeys = []
-    calltipCancel = []
     caseSensitive = False
 
     def _GetCompletionInfo(self, command, calltip=False):
@@ -90,7 +85,6 @@ class Completer(completer.BaseCompleter):
             minPos = wordEnd
             posFind = bf.FindText(minPos, maxPos, command, flags)
 
-        completionInfo = ""
         if len(wordsNear) > 0 and (maxWordLength > len(command)):
             return wordsNear
 
@@ -126,39 +120,3 @@ class Completer(completer.BaseCompleter):
         """List of keys to fill up autocompletions on"""
         return Completer.autocompFillup
 
-    def GetCallTipKeys(self):
-        """Returns the list of keys to activate a calltip on
-        @return: list of keys that can activate a calltip
-
-        """
-        return Completer.calltipKeys
-
-    def GetCallTipCancel(self):
-        """Get the list of key codes that should stop a calltip"""
-        return Completer.calltipCancel
-
-    def IsCallTipEvent(self, evt):
-        """@todo: How is this used?"""
-        if evt.ControlDown() and evt.GetKeyCode() == ord('9'):
-            return True
-        return False
-
-    def GetCaseSensitive(self):
-        """Returns whether the autocomp commands are case sensitive
-        or not.
-        @return: whether lookup is case sensitive or not
-
-        """
-        return Completer.caseSensitive
-
-    def SetCaseSensitive(self, value):
-        """Sets whether the completer should be case sensitive
-        or not, and returns True if the value was set.
-        @param value: toggle case sensitivity
-
-        """
-        if isinstance(value, bool):
-            Completer.caseSensitive = value
-            return True
-        else:
-            return False
