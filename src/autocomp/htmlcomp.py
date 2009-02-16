@@ -1,13 +1,13 @@
 ###############################################################################
 # Name: htmlcomp.py                                                           #
-# Purpose: Simple input assistant for html                                    #
+# Purpose: Simple input assistant for html and xml.                           #
 # Author: Cody Precord                                                        #
 # Copyright: (c) 2009 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 """
-Simple autocompletion support for HTML.
+Simple autocompletion support for HTML and XML documents.
 
 """
 
@@ -57,19 +57,26 @@ class Completer(completer.BaseCompleter):
         buff = self.GetBuffer()
         cpos = buff.GetCurrentPos()
         cline = buff.GetCurrentLine()
-        for line in range(cline, -1, -1):
-            txt = buff.GetLine(line)
-            if line == cline:
-                txt = txt[:buff.GetColumn(cpos)]
 
-            idx = txt.rfind('<')
-            if idx != -1:
-                parts = txt[idx:].lstrip('<').strip().split()
-                if len(parts):
-                    tag = parts[0]
-                    if tag not in ('img', 'br') and not tag.startswith('!'):
-                        return [u"</" + tag, ]
-                break
+        tmp = buff.GetLine(cline).rstrip()
+        tmp = tmp.rstrip('>').rstrip()
+        if not tmp.endswith('/'):
+            for line in range(cline, -1, -1):
+                txt = buff.GetLine(line)
+                if line == cline:
+                    txt = txt[:buff.GetColumn(cpos)]
+
+                idx = txt.rfind('<')
+                if idx != -1:
+                    parts = txt[idx:].lstrip('<').strip().split()
+                    if len(parts):
+                        tag = parts[0]
+                        if tag not in ('img', 'br') and not tag[0] in ('!', '/'):
+                            rtag = u"</" + tag.rstrip('>') + u">"
+                            if not parts[-1].endswith('>'):
+                                rtag = u">" + rtag
+                            return [rtag, ]
+                    break
 
         return list()
 
