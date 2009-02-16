@@ -835,7 +835,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 self.AutoCompCancel()
 
             command = self.GetCommandStr()
-            print "COMMAND STRING", command
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
 
