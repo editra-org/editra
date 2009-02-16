@@ -27,7 +27,7 @@ TAGS = ['a', 'abbr', 'accept', 'accesskey', 'acronym', 'action', 'address',
         'background', 'base', 'basefont', 'bdo', 'bgcolor', 'big', 'blockquote',
         'body', 'border', 'bordercolor', 'br', 'button', 'caption',
         'cellpadding', 'cellspacing', 'center', 'char', 'charoff', 'charset',
-        'checked', 'cite', 'cite', 'class', 'classid', 'clear', 'code', 'code',
+        'checked', 'cite', 'cite', 'class', 'classid', 'clear', 'code',
         'codebase', 'codetype', 'col', 'colgroup', 'color', 'cols', 'colspan',
         'compact', 'content', 'coords', 'data', 'datetime', 'dd', 'declare',
         'defer', 'del', 'dfn', 'dir', 'dir', 'disabled', 'div', 'dl', 'dt',
@@ -46,9 +46,9 @@ TAGS = ['a', 'abbr', 'accept', 'accesskey', 'acronym', 'action', 'address',
         'scrolling', 'select', 'selected', 'shape', 'size', 'small', 'span',
         'src', 'standby', 'start', 'strike', 'strong', 'style', 'sub',
         'summary', 'sup', 'tabindex', 'table', 'target', 'tbody', 'td', 'text',
-        'textarea', 'tfoot', 'th', 'thead', 'title', 'title', 'tr', 'tt',
-        'type', 'u', 'ul', 'url', 'usemap', 'valign', 'value', 'valuetype',
-        'var', 'version', 'vlink', 'vspace', 'width', 'wrap', 'xmp']
+        'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'type', 'u',
+        'ul', 'url', 'usemap', 'valign', 'value', 'valuetype', 'var', 'version',
+        'vlink', 'vspace', 'width', 'wrap', 'xmp']
 
 #--------------------------------------------------------------------------#
 
