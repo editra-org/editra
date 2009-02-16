@@ -61,7 +61,7 @@ TAG_RE = re.compile("\<\s*([a-zA-Z][a-zA-Z0-9]*)")
 class Completer(completer.BaseCompleter):
     """Code completer provider"""
     _autocomp_keys = [ord('>'), ord('<')]
-    _autocomp_stop = ''
+    _autocomp_stop = ' '
     _autocomp_fillup = ''
 
     def __init__(self, stc_buffer):
