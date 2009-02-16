@@ -821,8 +821,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         elif key_code in self._code['compsvc'].GetAutoCompKeys():
             if self.AutoCompActive():
                 self.AutoCompCancel()
+
             if self.CallTipActive():
                 self.CallTipCancel()
+
             command = self.GetCommandStr() + unichr(key_code)
             self.AddText(unichr(key_code))
             if self._config['autocomp']:
@@ -963,6 +965,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             pos = self.GetCurrentPos()
             self.AutoCompShow(pos - self.WordStartPosition(pos, True), u' '.join(lst))
             self.SetFocus()
+
+            if len(lst) == 1 and self._code['compsvc'].GetAutoCompAfter():
+                super(EditraStc, self).GotoPos(pos)
 
     def ShowCallTip(self, command):
         """Shows call tip for given command
@@ -1481,6 +1486,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @return: bool
 
         """
+        pos = max(0, pos-1)
         return 'comment' in self.FindTagById(self.GetStyleAt(pos))
 
     def IsFoldingOn(self):

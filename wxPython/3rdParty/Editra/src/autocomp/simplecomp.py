@@ -41,7 +41,7 @@ class Completer(completer.BaseCompleter):
         if command in [None, u''] or (len(command) and command[0].isdigit()):
             return u''
 
-        bf = self._buffer
+        bf = self.GetBuffer()
         currentPos = bf.GetCurrentPos()
 
         # Get the real word: segment using autocompFillup
