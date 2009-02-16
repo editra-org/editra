@@ -26,6 +26,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependancies
 import wx.stc as stc
+import htmlcomp
 import pycomp
 import simplecomp
 
@@ -49,6 +50,15 @@ class AutoCompService(object):
         self._buffer = parent
         self._completer = None
         self._simpleCompleter = simplecomp.Completer(self._buffer)
+
+    def GetAutoCompAfter(self):
+        """Should the text insterted by the completer be inserted after the
+        cursor.
+        @return: bool
+
+        """
+        comp = self._completer or self._simpleCompleter
+        return comp.GetAutoCompAfter()
 
     def GetAutoCompKeys(self):
         """Returns the list of key codes for activating the
@@ -129,5 +139,7 @@ class AutoCompService(object):
         """
         if lex_value == stc.STC_LEX_PYTHON:
             self._completer = pycomp.Completer(self._buffer)
+        elif lex_value in (stc.STC_LEX_HTML, stc.STC_LEX_XML):
+            self._completer = htmlcomp.Completer(self._buffer)
         else:
             self._completer = None

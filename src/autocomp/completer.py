@@ -36,6 +36,15 @@ class BaseCompleter(object):
         self._buffer = parent
         self._log = wx.GetApp().GetLog()
         self._case_sensitive = False
+        self._autocomp_after = False
+
+    def GetAutoCompAfter(self):
+        """Should text insterted by autocomp be placed after the cursor
+        or before it.
+        @return: bool
+
+        """
+        return self._autocomp_after
 
     def GetAutoCompKeys(self):
         """Returns the list of key codes for activating the autocompletion.
@@ -103,9 +112,12 @@ class BaseCompleter(object):
         """Get the list of key codes that should stop a calltip"""
         return list()
 
-    def IsCallTipEvent(self, evt):
-        """@todo: need docs"""
-        return False
+    def GetBuffer(self):
+        """Get the reference to the buffer this autocomp object is owned by
+        @return: EditraStc
+
+        """
+        return self._buffer
 
     def GetCaseSensitive(self):
         """Are commands case sensitive or not
@@ -113,6 +125,14 @@ class BaseCompleter(object):
 
         """
         return self._case_sensitive
+
+    def SetAutoCompAfter(self, after=False):
+        """Set if text insterted by autocomp should be placed after the cursor
+        or before it.
+        @keyword after: bool
+
+        """
+        self._autocomp_after = after
 
     def SetCaseSensitive(self, sensitive):
         """Set whether this completer is case sensitive or not
