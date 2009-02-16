@@ -52,20 +52,16 @@ class Completer(completer.BaseCompleter):
 
         """
         if command in [None, u'']:
-            print "EMPTY!!"
             return u''
 
         buff = self.GetBuffer()
         cpos = buff.GetCurrentPos()
         cline = buff.GetCurrentLine()
-        print "CLINE", cline
         for line in range(cline, -1, -1):
-            print "WTF", line
             txt = buff.GetLine(line)
             if line == cline:
                 txt = txt[:buff.GetColumn(cpos)]
 
-            print "HELLO", txt
             idx = txt.rfind('<')
             if idx != -1:
                 parts = txt[idx:].lstrip('<').strip().split()
