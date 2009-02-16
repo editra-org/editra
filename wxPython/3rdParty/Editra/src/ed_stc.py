@@ -833,7 +833,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         elif self._code['compsvc'].IsAutoCompEvent(evt):
             if self.AutoCompActive():
                 self.AutoCompCancel()
+
             command = self.GetCommandStr()
+            print "COMMAND STRING", command
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
 
@@ -960,14 +962,16 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @param command: command to look for autocomp options for
 
         """
+        pos = self.GetCurrentPos()
         lst = self._code['compsvc'].GetAutoCompList(command)
         if len(lst):
-            pos = self.GetCurrentPos()
+            self.BeginUndoAction()
             self.AutoCompShow(pos - self.WordStartPosition(pos, True), u' '.join(lst))
-            self.SetFocus()
 
             if len(lst) == 1 and self._code['compsvc'].GetAutoCompAfter():
                 super(EditraStc, self).GotoPos(pos)
+            self.EndUndoAction()
+            self.SetFocus()
 
     def ShowCallTip(self, command):
         """Shows call tip for given command
