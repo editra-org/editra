@@ -323,7 +323,7 @@ if __name__ == '__main__':
         if num % 2:
             secondary = wx.StaticText(panel, label="PanelBoxItem test")
         else:
-            secondary = wx.Gauge(panel)
+            secondary = wx.Gauge(panel, size=(-1, 16))
             secondary.Pulse()
 
         pi = PanelBoxItem(panel, bmp, "Hello", secondary)
