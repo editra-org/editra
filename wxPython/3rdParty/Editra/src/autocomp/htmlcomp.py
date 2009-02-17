@@ -54,6 +54,9 @@ TAGS = ['!--', 'a', 'abbr', 'accept', 'accesskey', 'acronym', 'action',
         'ul', 'url', 'usemap', 'valign', 'value', 'valuetype', 'var', 'version',
         'vlink', 'vspace', 'width', 'wrap', 'xmp']
 
+# Tags that usually have a new line inbetween them
+NLINE_TAGS = ('body', 'head', 'html', 'ol', 'style', 'table', 'tbody', 'ul')
+
 TAG_RE = re.compile("\<\s*([a-zA-Z][a-zA-Z0-9]*)")
 
 #--------------------------------------------------------------------------#
@@ -113,9 +116,12 @@ class Completer(completer.BaseCompleter):
                 if idx != -1:
                     parts = txt[idx:].lstrip('<').strip().split()
                     if len(parts):
-                        tag = parts[0]
+                        tag = parts[0].rstrip('>')
                         if tag not in ('img', 'br') and not tag[0] in ('!', '/'):
-                            rtag = u"</" + tag.rstrip('>') + u">"
+                            rtag = u"</" + tag + u">"
+                            if tag in NLINE_TAGS:
+                                rtag = buff.GetEOLChar() + rtag
+
                             if not parts[-1].endswith('>'):
                                 rtag = u">" + rtag
                             return [rtag, ]
