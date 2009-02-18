@@ -39,6 +39,7 @@ class PanelBox(scrolled.ScrolledPanel):
 
         # Attributes
         self._items = list()
+        self._last_sel = -1
         self._sizer = wx.BoxSizer(wx.VERTICAL)
 
         # Setup
@@ -52,6 +53,7 @@ class PanelBox(scrolled.ScrolledPanel):
 
         # Event Handlers
 #        self.Bind(wx.EVT_KEY_UP, self.OnNavigate)
+        self.GetParent().Bind(wx.EVT_KEY_UP, self.OnNavigate)
 
     #---- Event Handlers ----#
 
@@ -62,31 +64,62 @@ class PanelBox(scrolled.ScrolledPanel):
         """
         item = evt.GetEventObject()
         selected = item.IsSelected()
+        idx = self.FindIndex(item)
+        print "INDEX", idx
+        if idx == -1:
+            return
 
         if evt.CmdDown():
             # Add/Remove from selection
             item.SetSelection(not selected)
         elif evt.ShiftDown():
             # Select all items between this item and the next selected one
-            for pbitem in self._items:
-                if pbitem is item:
-                    index = None
+            if idx < self._last_sel:
+                inc = -1
+            else:
+                inc = 1
+
+            for index in range(self._last_sel, idx + inc, inc):
+                self.SetSelection(index, True)
         else:
             # Move selection to this item
-            for pbitem in self._items:
-                pbitem.SetSelection(False)
+            self.ClearSelections()
 
             if not selected:
                 item.SetSelection(True)
 
+        if not selected:
+            self._last_sel = idx
+        else:
+            self._last_sel = -1
+
     def OnNavigate(self, evt):
+        """Handle navigation key events"""
         key_code = evt.GetKeyCode()
+        nsel = None
+        isup = False
         if key_code == wx.WXK_UP:
-            print "KEY UP"
+            if self._last_sel in (0, -1):
+                nsel = len(self._items) - 1
+            else:
+                nsel = self._last_sel - 1
+            isup = True
         elif key_code == wx.WXK_DOWN:
-            print "KEY DOWN"
+            if self._last_sel in (-1, len(self._items) - 1):
+                nsel = 0
+            else:
+                nsel = self._last_sel + 1
         else:
             evt.Skip()
+            return
+
+        if evt.ShiftDown():
+            self.SetSelection(nsel, True)
+        else:
+            self.ClearSelections()
+            self.SetSelection(nsel, True)
+
+        evt.Skip()
 
     #---- Public Api ----#
     def AppendItem(self, item):
@@ -102,6 +135,18 @@ class PanelBox(scrolled.ScrolledPanel):
         """Unselect all items"""
         for item in self._items:
             item.SetSelection(False)
+
+    def FindIndex(self, item):
+        """Find the index of a given L{PanelBoxItem}
+        @param item: instance of PanelBoxItemBase
+        @return: int (-1 on failure)
+
+        """
+        for idx, pbitem in enumerate(self._items):
+            if pbitem is item:
+                return idx
+        else:
+            return -1
 
     def GetSelection(self):
         """Get the (first) selected item"""
@@ -152,6 +197,19 @@ class PanelBox(scrolled.ScrolledPanel):
 
         self.Layout()
 
+    def SetSelection(self, idx, select=True):
+        """Set the selection on a given index
+        @param idx: int
+        @keyword select: bool
+
+        """
+        if idx < len(self._items):
+            item = self._items[idx]
+            item.SetSelection(select)
+            self._last_sel = idx
+        else:
+            raise IndexError, "Index out of range: %d > %d" (idx, len(self._items))
+
 #--------------------------------------------------------------------------#
 
 class PanelBoxItemBase(wx.PyPanel):
@@ -167,6 +225,22 @@ class PanelBoxItemBase(wx.PyPanel):
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 #        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+
+    def _UpdateForeground(self, color):
+        """Update foreground colors when selection changes
+        @param color: selection color
+        @todo: should cache text's original color to restore
+               on deselection.
+
+        """
+        if sum(color.Get()[:3]) < (127 * 3):
+            ncolor = wx.WHITE
+        else:
+            ncolor = wx.BLACK
+
+        for child in self.GetChildren():
+            if isinstance(child, wx.StaticText):
+                child.SetForegroundColour(ncolor)
 
     def OnKeyUp(self, evt):
         """Handle key navigation events"""
@@ -225,6 +299,7 @@ class PanelBoxItemBase(wx.PyPanel):
         else:
             color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_LISTBOX)
         self.SetBackgroundColour(color)
+        self._UpdateForeground(color)
         self.Refresh()
 
 #--------------------------------------------------------------------------#
