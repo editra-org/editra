@@ -820,6 +820,11 @@ class EdPages(FNB.FlatNotebook):
         pages = (evt.GetOldSelection(), evt.GetSelection())
         self.LOG("[ed_pages][evt] Control Changing from Page: "
                   "%d to Page: %d\n" % pages)
+
+        # Check if it has been destroyed already
+        if isinstance(self.control, wx.Window):
+            self.control.DoDeactivateTab()
+
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGING, (self,) + pages)
 
     def ChangePage(self, pg_num, old=-2):

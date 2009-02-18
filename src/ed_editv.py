@@ -68,6 +68,17 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     #---- EdTab Methods ----#
 
+    def DoDeactivateTab(self):
+        """Deactivate any active popups when the tab is no longer
+        the active tab.
+
+        """
+        if self.AutoCompActive():
+            self.AutoCompCancel()
+
+        if self.CallTipActive():
+            self.CallTipCancel()
+
     def DoOnIdle(self):
         """Check if the file has been modified and prompt a warning"""
         if Profile_Get('CHECKMOD'):

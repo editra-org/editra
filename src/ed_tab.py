@@ -43,6 +43,10 @@ class EdTabBase(object):
 
     #---- Methods to override in subclasses ----#
 
+    def DoDeactivateTab(self):
+        """Called when the tab is moved from the foreground to background"""
+        pass
+
     def DoOnIdle(self):
         """Called when the notebook is idle and this instance is the active
         tab.
