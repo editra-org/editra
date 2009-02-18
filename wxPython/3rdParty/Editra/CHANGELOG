@@ -47,6 +47,7 @@ unicode characters are present.
 +Fix error in handling modification event callbacks for mutiple file views.
 +Fix text being shown behind busy indicator in status bar while it is busy.
 +Fix application crashes that could happen on Linux when compiz is being used.
++Fix autocomp window not being hidden when switching tabs.
 
 #-----------------------------------------------------------------------------#
 
