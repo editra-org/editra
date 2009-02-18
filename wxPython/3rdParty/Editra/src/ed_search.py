@@ -105,6 +105,7 @@ class SearchController(object):
             if replace is not None and replace.IsOk():
                 dlg.SetReplaceBitmap(replace)
 
+            # Set the persisted data from the last time the dialog was shown
             dlg.SetLookinChoices(self._li_choices)
             dlg.SetLookinSelection(self._li_sel)
             dlg.SetFileFilters(self._filters)
@@ -155,6 +156,13 @@ class SearchController(object):
 
         """
         return self._data
+
+    def GetDialog(self):
+        """Return the active find dialog if one exists else return None
+        @return: FindDialog or None
+
+        """
+        return self._finddlg
 
     def GetLastFound(self):
         """Returns the position value of the last found search item
@@ -472,8 +480,8 @@ class SearchController(object):
                 evt.Skip()
                 return
             self._finddlg.SetTransparent(240)
-            self._finddlg.Show()
 #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
+            self._finddlg.Show()
         else:
             # Dialog is open already so just update it
             self._UpdateDialogState(eid)
