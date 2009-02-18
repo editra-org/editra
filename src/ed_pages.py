@@ -249,6 +249,13 @@ class EdPages(FNB.FlatNotebook):
                 rlist.append(fname)
         return rlist
 
+    def GetFindDialog(self):
+        """Get the active find dialog or None if one is not active
+        @return: FindDialog or None
+
+        """
+        return self._searchctrl.GetDialog()
+
     def GetMenuHandlers(self):
         """Get the (id, evt_handler) tuples that this window should
         handle.

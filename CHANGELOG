@@ -28,6 +28,7 @@ called Cream.
 +Add simple generic autocompleter that provides completions based off of words
 in the current buffer (Ctrl+Space). (patch from Giuseppe "Cowo" Corbelli)
 +Add Move Tab to New Window option on tab context menu.
++Keyword helper functionality moved into the simple completer.
 
 BUG FIXES:
 +Update window being shown at same time as splash window causing lockups.
