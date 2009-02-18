@@ -28,9 +28,10 @@ from cpp import AutoIndenter
 #---- Keyword Specifications ----#
 
 # PHP Keywords
-PHP_KEYWORDS = ("__LINE__ __FILE__ declare else enddeclare endswitch elseif "
+PHP_KEYWORDS = ("__LINE__ __FILE__ __FUNCTION__ __CLASS__ __METHOD__ declare "
+                "else enddeclare endswitch elseif "
                 "endif if switch as do endfor endforeach endwhile for foreach "
-                "while case default switch return break continue exit var bool "
+                "while case default switch return break continue exit var "
                 "bool boolean int integer real double float string array "
                 "NULL extends global static include require include_once "
                 "require_once new true false function class object "
@@ -378,7 +379,7 @@ PHP_FUNC = ("apache_child_terminate apache_lookup_uri apache_note "
             "mcrypt_module_self_test define_syslog_variables "
             "mcrypt_module_get_supported_key_sizes imap_clearflag_full "
             "mcrypt_module_is_block_algorithm imagepsencodefont "
-            "mcrypt_module_get_algo_block_size imagepsslantfont")
+            "mcrypt_module_get_algo_block_size imagepsslantfont count")
 
 # HTML Keywords
 HTML_KEYWORDS = html.Keywords()
