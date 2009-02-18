@@ -118,7 +118,7 @@ class Completer(completer.BaseCompleter):
                     if len(parts):
                         tag = parts[0].rstrip('>')
                         if len(tag) and \
-                           tag not in ('img', 'br', '?php', '?xml') and \
+                           tag not in ('img', 'br', '?php', '?xml', '?') and \
                            not tag[0] in ('!', '/'):
                             rtag = u"</" + tag + u">"
                             if tag in NLINE_TAGS:
