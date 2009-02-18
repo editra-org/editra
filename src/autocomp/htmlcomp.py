@@ -117,7 +117,9 @@ class Completer(completer.BaseCompleter):
                     parts = txt[idx:].lstrip('<').strip().split()
                     if len(parts):
                         tag = parts[0].rstrip('>')
-                        if tag not in ('img', 'br') and not tag[0] in ('!', '/'):
+                        if len(tag) and \
+                           tag not in ('img', 'br', '?php', '?xml') and \
+                           not tag[0] in ('!', '/'):
                             rtag = u"</" + tag + u">"
                             if tag in NLINE_TAGS:
                                 rtag = buff.GetEOLChar() + rtag
