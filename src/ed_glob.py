@@ -33,7 +33,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_INDENT', 'ID_UNINDENT', 'ID_TO_UPPER', 'ID_TO_LOWER',
             'ID_SPACE_TO_TAB', 'ID_TAB_TO_SPACE', 'ID_TRIM_WS',
             'ID_TOGGLECOMMENT', 'ID_AUTOCOMP', 'ID_AUTOINDENT', 'ID_SYNTAX',
-            'ID_FOLDING', 'ID_BRACKETHL', 'ID_LEXER', 'ID_KWHELPER',
+            'ID_FOLDING', 'ID_BRACKETHL', 'ID_LEXER',
             'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 'ID_MACRO_STOP',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
             'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
@@ -220,7 +220,6 @@ ID_LEXER         = wx.NewId()
 
 # Tool Menu IDs
 ID_COMMAND       = wx.NewId()
-ID_KWHELPER      = wx.NewId()
 ID_PLUGMGR       = wx.NewId()
 ID_STYLE_EDIT    = wx.ID_EDIT
 ID_MACRO_START   = wx.NewId()
@@ -317,7 +316,6 @@ ID_2_PROF = {
              ID_PREF_ICONSZ       : 'ICON_SZ',
              ID_PREF_INDENTW      : 'INDENTWIDTH',
              ID_KEY_PROFILES      : 'KEY_PROFILE',
-             ID_KWHELPER          : 'KWHELPER',
              ID_PREF_LANG         : 'LANG',
              ID_PREF_MODE         : 'MODE',
              ID_NEW_WINDOW        : 'OPEN_NW',

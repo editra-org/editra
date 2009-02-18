@@ -976,11 +976,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type evt: wxMenuEvent
 
         """
-        e_id = evt.GetId()
-        if not self.IsActive() and e_id != ID_KWHELPER:
+        if not self.IsActive():
             evt.Skip()
             return
 
+        e_id = evt.GetId()
         ctrl = self.nb.GetCurrentCtrl()
         active_only = [ ID_ZOOM_IN, ID_ZOOM_OUT, ID_ZOOM_NORMAL,
                         ID_JOIN_LINES, ID_CUT_LINE, ID_COPY_LINE, ID_INDENT,
@@ -990,6 +990,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_PASTE_AFTER, ID_COLUMN_MODE, ID_TOGGLE_FOLD,
                         ID_TOGGLE_ALL_FOLDS ]
 
+        # Special handling for common clipboard related actions
         has_focus = self.FindFocus()
         if has_focus != ctrl and e_id in active_only:
             if has_focus is not None:
@@ -1017,7 +1018,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                          ID_AUTOINDENT, ID_TAB_TO_SPACE, ID_SPACE_TO_TAB,
                          ID_TRIM_WS, ID_SHOW_EDGE, ID_MACRO_START,
                          ID_MACRO_STOP, ID_MACRO_PLAY, ID_TO_LOWER,
-                         ID_TO_UPPER, ID_KWHELPER, ID_USE_SOFTTABS,
+                         ID_TO_UPPER, ID_USE_SOFTTABS,
                          ID_GOTO_MBRACE, ID_HLCARET_LINE, ID_REVERT_FILE
                          ])
         menu_ids.extend(active_only)

@@ -38,10 +38,11 @@ class Completer(completer.BaseCompleter):
         @return: list or string
 
         """
-        if command in [None, u''] or (len(command) and command[0].isdigit()):
-            return u''
-
         bf = self.GetBuffer()
+
+        if command in [None, u''] or (len(command) and command[0].isdigit()):
+            return bf.GetKeywords()
+
         currentPos = bf.GetCurrentPos()
 
         # Get the real word: segment using autocompFillup
@@ -88,7 +89,7 @@ class Completer(completer.BaseCompleter):
         if len(wordsNear) > 0 and (maxWordLength > len(command)):
             return wordsNear
 
-        return []
+        return bf.GetKeywords()
 
     def GetAutoCompKeys(self):
         """Returns the list of key codes for activating the
