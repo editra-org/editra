@@ -27,7 +27,7 @@ import completer
 
 class Completer(completer.BaseCompleter):
     """Code completer provider"""
-    autocompFillup = '.,;([]){}<>%^&+-=*/|'
+    autocompFillup = '.,:;([]){}<>%^&+-=*/|$'
     autocompStop = ' \'"\\`):'
     wordCharacters = "".join(['_', string.letters])
     autocompKeys = []
@@ -39,9 +39,13 @@ class Completer(completer.BaseCompleter):
 
         """
         bf = self.GetBuffer()
+        kwlst = bf.GetKeywords()
 
-        if command in [None, u''] or (len(command) and command[0].isdigit()):
-            return bf.GetKeywords()
+        if command in (None, u''):
+            return kwlst
+
+        if command[0].isdigit() or (command[-1] in self.autocompFillup):
+            return kwlst
 
         currentPos = bf.GetCurrentPos()
 
@@ -67,7 +71,8 @@ class Completer(completer.BaseCompleter):
         if Completer.caseSensitive:
             flags |= stc.STC_FIND_MATCHCASE
 
-        # TODO: calling this with an empty command string causes a program lockup...
+        # TODO: find out why calling this with an empty command string causes
+        #       a program lockup...
         posFind = bf.FindText(minPos, maxPos, command, flags)
         while posFind >= 0 and posFind < maxPos:
             wordEnd = posFind + len(command)
@@ -89,7 +94,7 @@ class Completer(completer.BaseCompleter):
         if len(wordsNear) > 0 and (maxWordLength > len(command)):
             return wordsNear
 
-        return bf.GetKeywords()
+        return kwlst
 
     def GetAutoCompKeys(self):
         """Returns the list of key codes for activating the
