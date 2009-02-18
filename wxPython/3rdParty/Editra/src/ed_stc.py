@@ -987,20 +987,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             fail_safe = curr_pos - self.GetColumn(curr_pos)
             self.CallTipShow(max(tip_pos, fail_safe), tip)
 
-    def ShowKeywordHelp(self):
-        """Displays the keyword helper
-        @postcondition: keyword helper list is shown if it currently is not
-                        otherwise it is hidden.
-
-        """
-        if self.AutoCompActive():
-            self.AutoCompCancel()
-        elif len(self._code['keywords']) > 1:
-            pos = self.GetCurrentPos()
-            pos2 = self.WordStartPosition(pos, True)
-            self.AutoCompShow(pos - pos2, self._code['keywords'])
-        return
-
     def OnLeftUp(self, evt):
         """Set primary selection and inform mainwindow that cursor position
         has changed.
@@ -1238,7 +1224,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_PASTE : self.Paste, ed_glob.ID_UNDO : self.Undo,
                   ed_glob.ID_REDO  : self.Redo, ed_glob.ID_INDENT : self.Tab,
                   ed_glob.ID_REVERT_FILE : self.RevertToSaved,
-                  ed_glob.ID_KWHELPER: self.ShowKeywordHelp,
                   ed_glob.ID_CUT_LINE : self.LineCut,
                   ed_glob.ID_COLUMN_MODE : self.ToggleColumnMode,
                   ed_glob.ID_COPY_LINE : self.LineCopy,
@@ -1455,6 +1440,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             return u'\t'
         else:
             return u' ' * self.GetIndent()
+
+    def GetKeywords(self):
+        """Get the keyword set for the current document.
+        @return: list of strings
+
+        """
+        return self._code['keywords']
 
     def GetEOLModeId(self):
         """Gets the id of the eol format. Convinience for updating
@@ -2195,7 +2187,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         # Parse Keyword Settings List simply ignoring bad values and badly
         # formed lists
-        self._code['keywords'] = ""
+        self._code['keywords'] = list()
+        kwlist = ""
         for keyw in kw_lst:
             if len(keyw) != 2:
                 continue
@@ -2204,18 +2197,17 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                    not isinstance(keyw[1], basestring):
                     continue
                 else:
-                    self._code['keywords'] += keyw[1]
+                    kwlist += keyw[1]
                     super(EditraStc, self).SetKeyWords(keyw[0], keyw[1])
 
-        kwlist = self._code['keywords'].split()    # Split into a list of words
-        kwlist = list(set(kwlist))                 # Uniqueify the list
-        kwlist.sort()                              # Sort into alphbetical order
+        kwlist = kwlist.split()         # Split into a list of words
+        kwlist = list(set(kwlist))      # Uniqueify the list
+        kwlist.sort()                   # Sort into alphbetical order
 
         # Can't have ? in scintilla autocomp list unless specifying an image
         if '?' in kwlist:
             kwlist.remove('?')
-        self._code['keywords'] = " ".join(kwlist)  # Put back into a string
-        return True
+        self._code['keywords'] = kwlist
 
     def SetProperties(self, prop_lst):
         """Sets the Lexer Properties from a list of specifications

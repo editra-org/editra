@@ -818,10 +818,6 @@ class EdMenuBar(wx.MenuBar):
         toolsmenu.Append(ed_glob.ID_COMMAND, _("Editor Command") + \
                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_COMMAND),
                          _("Goto command buffer"))
-        toolsmenu.Append(ed_glob.ID_KWHELPER, _("Keyword Helper") + \
-                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_KWHELPER),
-                         _("Provides a Contextual Help Menu Listing Standard "
-                           "Keywords/Functions"))
         toolsmenu.Append(ed_glob.ID_PLUGMGR, _("Plugin Manager") + \
                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_PLUGMGR),
                          _("Manage, Download, and Install plugins"))
@@ -1039,7 +1035,6 @@ _DEFAULT_BINDING = { # File Menu
 
                      # Tools Menu
                      ed_glob.ID_COMMAND : (u"Ctrl", u"E"),
-                     ed_glob.ID_KWHELPER : (u"Ctrl", u"K"),
                      ed_glob.ID_RUN_LAUNCH : (u"F5",),
                      ed_glob.ID_LAUNCH_LAST : (u"Shift", u"F5")
                      }
