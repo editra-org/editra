@@ -6,14 +6,14 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
-__author__ = "Cody Precord <cprecord@editra.org>"
-__svnid__ = "$Id$"
-__revision__ = "$Revision$"
-
 """
 Unittest for User Profile and settings persistance.
 
 """
+
+__author__ = "Cody Precord <cprecord@editra.org>"
+__svnid__ = "$Id$"
+__revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -24,7 +24,7 @@ import profiler
 
 #-----------------------------------------------------------------------------#
 
-class LogMsgTest(unittest.TestCase):
+class ProfileTest(unittest.TestCase):
     def setUp(self):
         # Create the singleton profile object
         self._profile = profiler.TheProfile
@@ -43,23 +43,44 @@ class LogMsgTest(unittest.TestCase):
         loaded.
 
         """
-        pass
+        # Load the default settings
+        self._profile.LoadDefaults()
+
+        # Try retrieving soem values from it
+        self.assertEquals(self._profile.Get('EDGE'), profiler._DEFAULTS['EDGE'])
+
+        # Test a value that doesn't exist
+        self.assertTrue(self._profile.Get('FAKEKEYTOFETCH') is None)
+
+        # Test fallback value
+        self.assertEquals(self._profile.Get('FAKEKEYTOFETCH', default="hello"), "hello")
 
     def testChangeValue(self):
         """Test changing an existing profile value."""
-        pass
+        self.assertTrue(self._profile.Get('TEST1') is None)
 
-    def testNewValue(self):
-        """Test creating a new profile value."""
-        pass
+        # Now change the value
+        self._profile.Set('TEST1', 123)
+        self.assertTrue(self._profile.Get('TEST1') == 123)
 
     def testDeleteValue(self):
         """Test removing a value from the object."""
-        pass
+        # Add a value
+        self._profile.Set('TEST2', "myString")
+        self.assertTrue(self._profile.Get('TEST2') == "myString")
+
+        # Now try to delete it
+        self._profile.DeleteItem('TEST2')
+        self.assertTrue(self._profile.Get('TEST2') is None)
 
     def testLoadProfile(self):
         """Test loading a stored profile."""
-        pass
+        # Add some values to the profile
+        #TODO: should re-org profile support functions to make testing this
+        #      not require modifing the installed profile loader.
+#        self._profile.Set('VALUE1', 25)
+#        self._profile.Set('VALUE2', "string")
+#        self._profile.Write(
 
     def testWrite(self):
         """Test writing the settings out to disk."""

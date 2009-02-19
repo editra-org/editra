@@ -6,6 +6,8 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
+"""Unittests for EdFile"""
+
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"

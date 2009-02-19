@@ -6,6 +6,11 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
+"""Unittest cases for testing the various Utility functions in
+the util module.
+
+"""
+
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
