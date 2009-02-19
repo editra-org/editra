@@ -842,6 +842,8 @@ class TCLHandler(FileTypeHandler):
 
 class VBScriptHandler(FileTypeHandler):
     """FileTypeHandler for VBScript"""
+    RE_VBS_ERROR = re.compile('(.+)\(([0-9]+).*' + os.linesep)
+
     def __init__(self):
         FileTypeHandler.__init__(self)
         self.commands = dict(cscript='CSCRIPT.exe', wscript='WSCRIPT.exe')
@@ -850,6 +852,25 @@ class VBScriptHandler(FileTypeHandler):
     @property
     def __name__(self):
         return 'VBScript'
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Hotspots are error messages, find the file/line of the
+        error in question and open the file to that point in the
+        buffer.
+
+        """
+        ifile, line = _FindFileLine(outbuffer, line, fname,
+                                    VBScriptHandler.RE_VBS_ERROR)
+        _OpenToLine(ifile, line, mainw)
+
+    def StyleText(self, stc, start, txt):
+        """Style VBScript Information and Error messages from script output."""
+        if _StyleError(stc, start, txt, self.RE_VBS_ERROR):
+            return
+        else:
+            # Highlight Start end lines this is what the
+            # base classes method does.
+            FileTypeHandler.StyleText(self, stc, start, txt)
 
 #-----------------------------------------------------------------------------#
 # Handler Object Dictionary
