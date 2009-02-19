@@ -15,6 +15,7 @@ Date: 01/29/2009
 +Right click on configure executables list will show an option to browse for
 the executable.
 +Add error link support to VBScript (patch from Gaël)
++Add support for Dos Batch scripts (patch from Gaël)
 
 #-----------------------------------------------------------------------------#
 Version 0.9

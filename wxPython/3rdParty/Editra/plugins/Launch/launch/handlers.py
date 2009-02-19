@@ -314,6 +314,19 @@ class BashHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class BatchHandler(FileTypeHandler):
+    """FileTypeHandler for Dos batch files"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(cmd='cmd /c')
+        self.default = 'cmd'
+
+    @property
+    def __name__(self):
+        return 'Batch'
+
+#-----------------------------------------------------------------------------#
+
 class BooHandler(FileTypeHandler):
     """FileTypeHandler for Boo"""
     def __init__(self):
@@ -878,6 +891,7 @@ class VBScriptHandler(FileTypeHandler):
 HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_ADA     : AdaHandler(),
             synglob.ID_LANG_BASH    : BashHandler(),
+            synglob.ID_LANG_BATCH   : BatchHandler(),
             synglob.ID_LANG_BOO     : BooHandler(),
             synglob.ID_LANG_CAML    : CamlHandler(),
             synglob.ID_LANG_CSH     : CSHHandler(),
