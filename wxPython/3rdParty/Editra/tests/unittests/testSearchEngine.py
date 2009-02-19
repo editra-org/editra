@@ -6,6 +6,8 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
+"""Unittests for Editra's text SearchEngine"""
+
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
