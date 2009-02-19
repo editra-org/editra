@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # Editra Launch Plugin
 # Author: Cody Precord
 # License: wxWindows License
@@ -12,6 +14,7 @@ Date: 01/29/2009
 +Add support for LaTex files.
 +Right click on configure executables list will show an option to browse for
 the executable.
++Add error link support to VBScript (patch from Gaël)
 
 #-----------------------------------------------------------------------------#
 Version 0.9
