@@ -18,7 +18,8 @@ NEWS:
 NEW: [features/improvments]
 +Add autocompletion support for HTML/XML documents.
 +Instantly start searching for selected text (Win/Lin Ctrl+F3, OSX Cmd+3)
-+Launch adds support for OCaml (patch from quode) and LaTex
++Launch adds support for OCaml (patch from quode),
+ Batch scripts (patch from Gaël), and LaTex.
 +Shortcut for maximizing/minimizing the editor pane (patch from Rudi Pettazzi)
 +Add menu entry for Fold All action (patch from Giuseppe "Cowo" Corbelli)
 +Codebrowser adds support for XML/HTML (patch from Rudi Pettazzi)
