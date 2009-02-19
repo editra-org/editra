@@ -65,7 +65,6 @@ class PanelBox(scrolled.ScrolledPanel):
         item = evt.GetEventObject()
         selected = item.IsSelected()
         idx = self.FindIndex(item)
-        print "INDEX", idx
         if idx == -1:
             return
 
