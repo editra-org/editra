@@ -135,6 +135,15 @@ class PanelBox(scrolled.ScrolledPanel):
         for item in self._items:
             item.SetSelection(False)
 
+    def DeleteAllItems(self):
+        """Delete all the items in the list"""
+        for item in self._items:
+            self._sizer.Remove(item)
+
+        del self._items
+        self._items = list()
+        self.Layout()
+
     def FindIndex(self, item):
         """Find the index of a given L{PanelBoxItem}
         @param item: instance of PanelBoxItemBase
@@ -146,6 +155,22 @@ class PanelBox(scrolled.ScrolledPanel):
                 return idx
         else:
             return -1
+
+    def GetItemCount(self):
+        """Get the number of items in teh control
+        @return: int
+
+        """
+        return len(self._items)
+
+    def GetItems(self):
+        """Get the list of items held by this control
+        @return: list of PanelBoxItems
+        @todo: should probably return a list of shadow items so that orignals
+               are not modified.
+
+        """
+        return self._items
 
     def GetSelection(self):
         """Get the (first) selected item"""
@@ -384,7 +409,7 @@ class PanelBoxItem(PanelBoxItemBase):
         @param ctrl: wxWindow
 
         """
-        
+        pass
 
 #--------------------------------------------------------------------------#
 
@@ -393,15 +418,14 @@ if __name__ == '__main__':
     frame = wx.Frame(None, title="Test PanelBox")
     panel = PanelBox(frame)
     bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_TOOLBAR, (32, 32))
-    for num in range(5):
+    for num in range(15):
         if num % 2:
             secondary = wx.StaticText(panel, label="PanelBoxItem test")
         else:
             secondary = wx.Gauge(panel, size=(-1, 16))
             secondary.Pulse()
 
-        pi = PanelBoxItem(panel, bmp, "Hello", secondary)
-        pi.SetMinSize((300, 50))
+        pi = PanelBoxItem(panel, bmp, "Test Label", secondary)
         panel.AppendItem(pi)
     frame.Show()
     app.MainLoop()
