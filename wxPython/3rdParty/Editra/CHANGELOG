@@ -1,3 +1,4 @@
+# encoding: utf-8
 Editra
 Author: Cody Precord
 Copyright: (c) Cody Precord 2005-2009
@@ -8,18 +9,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.4.xx
-DATE xx/xx/2009
+VERSION 0.4.65
+DATE 02/20/2009
 23rd Alpha Release
 
 NEWS:
-
+This release contains a large number of bug fixes and improvements. Most notably
+there has been a fair amount of work done on the autocompletions support. All
+file types now have support for some basic word completion help. HTML and XML
+now have support for smart input assistance and completion tips.
 
 NEW: [features/improvments]
 +Add autocompletion support for HTML/XML documents.
 +Instantly start searching for selected text (Win/Lin Ctrl+F3, OSX Cmd+3)
 +Launch adds support for OCaml (patch from quode),
- Batch scripts (patch from Gaël), and LaTex.
+ Batch scripts (patch from GaÃŽl), and LaTex.
 +Shortcut for maximizing/minimizing the editor pane (patch from Rudi Pettazzi)
 +Add menu entry for Fold All action (patch from Giuseppe "Cowo" Corbelli)
 +Codebrowser adds support for XML/HTML (patch from Rudi Pettazzi)
