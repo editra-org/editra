@@ -390,6 +390,31 @@ class ControlBar(wx.PyPanel):
 
 #--------------------------------------------------------------------------#
 
+#class SegmentBar(wx.PyPanel):
+#    """Simple toolbar like control that displays bitmaps and optionaly
+#    labels below each bitmap. The bitmaps are turned into a toggle button
+#    where only one segment in the bar can be selected at one time.
+
+#    """
+#    def __init__(self, parent, id=wx.ID_ANY,
+#                 pos=wx.DefaultPosition, size=wx.DefaultSize,
+#                 style=CTRLBAR_STYLE_DEFAULT,
+#                 name=CTRLBAR_NAME_STR):
+#        wx.PyPanel.__init__(self, parent, id, pos, size,
+#                            wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
+
+#        # Attributes
+        
+
+#        # Event Handlers
+#        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+#    def OnPaint(self, evt):
+#        """Paint the control"""
+#        dc = wx.PaintDC(self)
+
+#--------------------------------------------------------------------------#
+
 def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     """ Brighten/Darken input colour by percent and adjust alpha
     channel if needed. Returns the modified color.
