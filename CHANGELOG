@@ -9,6 +9,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.4.xx
+DATE 0x/xx/2009
+24th Alpha Release
+
+NEWS:
+
+
+NEW: [features/enhancments]
+
+
+BUG FIXES:
++Fix incorrect page count shown in print previews.
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.4.65
 DATE 02/20/2009
 23rd Alpha Release

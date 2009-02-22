@@ -151,6 +151,13 @@ class EdPrintout(wx.Printout):
         if remainder:
             self.page_count += 1
 
+    def GetPageInfo(self):
+        """Get the page range information
+        @return: tuple
+
+        """
+        return (1, self.page_count, 1, self.page_count)
+
     def HasPage(self, page):
         """Is a page within range
         @param page: page number
