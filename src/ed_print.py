@@ -48,9 +48,8 @@ class EdPrinter(object):
     @note: current font size is fixed at 12 point for printing
 
     """
-    def __init__(self, parent, stc_callable, mode=ed_glob.PRINT_NORMAL):
-        """Initializes the Printer, the stc_callable parameter
-        must be a callable function that returns an STC instance object
+    def __init__(self, parent, mode=ed_glob.PRINT_NORMAL):
+        """Initializes the Printer
         @param stc_callable: function to get current stc document
         @keyword mode: printer mode
 
@@ -58,7 +57,7 @@ class EdPrinter(object):
         object.__init__(self)
 
         # Attributes
-        self.stc = stc_callable
+        self.stc = None
         self.title = wx.EmptyString
         self.parent = parent
         self.print_mode = mode
@@ -70,7 +69,7 @@ class EdPrinter(object):
 
         """
         colour = COLOURMODES[self.print_mode]
-        return EdPrintout(self.stc(), colour, self.stc().GetFileName())
+        return EdPrintout(self.stc, colour, self.stc.GetFileName())
 
     def PageSetup(self):
         """Opens a print setup dialog
@@ -91,7 +90,11 @@ class EdPrinter(object):
         printout = self.CreatePrintout()
         printout2 = self.CreatePrintout()
         preview = wx.PrintPreview(printout, printout2, self.print_data)
+        preview.SetZoom(150)
         pre_frame = wx.PreviewFrame(preview, self.parent, _("Print Preview"))
+        dsize = wx.GetDisplaySize()
+        pre_frame.SetInitialSize((self.stc.GetSize()[0],
+                                  dsize.GetHeight() - 100))
         pre_frame.Initialize()
         pre_frame.Show()
 
@@ -124,6 +127,14 @@ class EdPrinter(object):
         else:
             ret = False
         return ret
+
+    def SetStc(self, stc):
+        """Set the stc we are printing for
+        @param stc: instance of wx.stc.StyledTextCtrl
+        @note: MUST be called prior to any other print operations
+
+        """
+        self.stc = stc
 
 #-----------------------------------------------------------------------------#
 class EdPrintout(wx.Printout):

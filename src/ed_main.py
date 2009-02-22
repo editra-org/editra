@@ -59,6 +59,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     @todo: modularize the event handling more (pubsub?)
 
     """
+    PRINTER = None
+
     def __init__(self, parent, id_, wsize, title):
         """Initialiaze the Frame and Event Handlers.
         @param wsize: Windows initial size
@@ -115,6 +117,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         #---- Pane Navigator ----#
         self._paneNavi = None
+
+        # Printer Setup
+        if MainWindow.PRINTER is None:
+            MainWindow.PRINTER = ed_print.EdPrinter(self)
 
         #---- Setup Toolbar ----#
         self.SetToolBar(ed_toolbar.EdToolBar(self))
@@ -724,7 +730,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         e_id = evt.GetId()
-        printer = ed_print.EdPrinter(self, self.nb.GetCurrentCtrl)
+        printer = MainWindow.PRINTER
+        printer.SetStc(self.nb.GetCurrentCtrl())
         printer.SetColourMode(_PGET('PRINT_MODE'))
         if e_id == ID_PRINT:
             printer.Print()
