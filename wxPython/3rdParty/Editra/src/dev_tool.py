@@ -45,6 +45,8 @@ try:
 except (LookupError, TypeError):
     DEFAULT_ENCODING = 'utf-8'
 
+PYTHONW = 'pythonw' in sys.executable.lower()
+
 #-----------------------------------------------------------------------------#
 # General Debuging Helper Functions
 
@@ -84,7 +86,8 @@ def DEBUGP(statement):
         msg = LogMsg(info)
 
     # Only print to stdout when DEBUG is active
-    if ed_glob.DEBUG:
+    # Cant print to stdio if using pythonw
+    if ed_glob.DEBUG and not PYTHONW:
         mstr = unicode(msg)
         print mstr.encode('utf-8', 'replace')
 
