@@ -73,13 +73,19 @@ class SegmentPanel(ctrlbox.ControlBox):
         self.log = log
 
         # Setup
-        segbar = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        segbar = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT|ctrlbox.CTRLBAR_STYLE_LABELS)
         err_bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16, 16))
 
         for num in range(5):
-            segbar.AddButton(wx.NewId(), err_bmp, label=u'Test')
+            segbar.AddSegment(wx.NewId(), err_bmp, label=u'TestLabel')
 
-        self.SetControlBar(segbar)
+        segbar2 = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+
+        for num in range(5):
+            segbar2.AddSegment(wx.NewId(), err_bmp, label=u'Test')
+
+        self.SetControlBar(segbar, wx.TOP)
+        self.SetControlBar(segbar2, wx.BOTTOM)
 
         self.SetWindow(wx.TextCtrl(self, style=wx.TE_MULTILINE))
 

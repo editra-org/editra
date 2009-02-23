@@ -445,6 +445,8 @@ class SegmentBar(ControlBar):
     where only one segment in the bar can be selected at one time.
 
     """
+    HPAD = 5
+    VPAD = 3
     def __init__(self, parent, id=wx.ID_ANY,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=CTRLBAR_STYLE_DEFAULT,
@@ -453,15 +455,19 @@ class SegmentBar(ControlBar):
 
         # Attributes
         self._buttons = list()
+        self._segsize = (0, 0)
         self._selected = -1
         self._scolor1 = AdjustColour(self._color, -20)
         self._scolor2 = AdjustColour(self._color2, -20)
 
+        if wx.Platform == '__WXMAC__':
+            self.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
         # Event Handlers
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
 
-    def AddButton(self, id, bmp, label=u''):
-        """Add a button to the bar
+    def AddSegment(self, id, bmp, label=u''):
+        """Add a segment to the bar
         @param id: button id
         @param bmp: wx.Bitmap
         @param label: string
@@ -469,32 +475,41 @@ class SegmentBar(ControlBar):
         """
         assert bmp.IsOk()
         lsize = self.GetTextExtent(label)
+        print lsize
         self._buttons.append(dict(id=id, bmp=bmp, label=label,
                                   lsize=lsize, bsize=bmp.GetSize(),
                                   bx1=0, bx2=0))
         self.InvalidateBestSize()
         self.Refresh()
 
-    def DoDrawButton(self, dc, xpos, button, selected=False):
+    def DoDrawButton(self, dc, xpos, button, selected=False, draw_label=False):
         """Draw a button
         @param dc: DC to draw on
         @param xpos: X coordinate
         @param button: button dict
         @keyword selected: is this the selected button (bool)
+        @keyword draw_label: draw the label (bool)
         return: int (next xpos)
 
         """
         rect = self.GetRect()            
         height = rect.height
         bsize = button['bsize']
-        bpos = (xpos + 5, 3)
-        rside = bpos[0] + bsize.width + 5
 
+        bxpos = ((self._segsize[0] / 2) - (bsize.width / 2)) + xpos
+        bpos = (bxpos, SegmentBar.VPAD)
+        rside = xpos + self._segsize[0]
         if selected:
             brect = wx.Rect(xpos, 0, rside - xpos, height)
             self.DoPaintBackground(dc, brect, self._scolor1, self._scolor2)
 
         dc.DrawBitmap(button['bmp'], bpos[0], bpos[1])
+
+        if draw_label:
+            twidth, theight = button['lsize']
+            txpos = ((self._segsize[0] / 2) - (twidth / 2)) + xpos
+            typos = height - theight
+            dc.DrawText(button['label'], txpos, typos)
 
         dc.SetPen(self._pen)
         dc.DrawLine(xpos, 0, xpos, height)
@@ -506,17 +521,29 @@ class SegmentBar(ControlBar):
     def DoGetBestSize(self):
         """Get the best size for the control"""
         mwidth, mheight = 0, 0
+        draw_label = self._style & CTRLBAR_STYLE_LABELS
         for btn in self._buttons:
             bwidth, bheight = btn['bsize']
+            twidth = btn['lsize'][0]
             if bheight > mheight:
                 mheight = bheight
 
             if bwidth > mwidth:
                 mwidth = bwidth
 
-        width = (mwidth + 10) * len(self._buttons)
-        size = wx.Size(width, mheight + 6)
+            if draw_label:
+                if twidth > mwidth:
+                    mwidth = twidth
+
+        # Adjust for label text
+        if draw_label and len(self._buttons):
+            mheight += self._buttons[0]['lsize'][1]
+
+        width = (mwidth + (SegmentBar.HPAD * 2)) * len(self._buttons)
+        size = wx.Size(width, mheight + (SegmentBar.VPAD * 2))
         self.CacheBestSize(size)
+        self._segsize = (mwidth + (SegmentBar.HPAD * 2),
+                         mheight + (SegmentBar.VPAD * 2))
         return size
 
     def OnLeftUp(self, evt):
@@ -551,7 +578,9 @@ class SegmentBar(ControlBar):
         npos = 0
         use_labels = self._style & CTRLBAR_STYLE_LABELS
         for idx, button in enumerate(self._buttons):
-            npos = self.DoDrawButton(dc, npos, button, self._selected == idx)
+            npos = self.DoDrawButton(dc, npos, button,
+                                     self._selected == idx,
+                                     use_labels)
 
 # Cleanup namespace
 #del SegmentBar.__dict__['AddControl']
