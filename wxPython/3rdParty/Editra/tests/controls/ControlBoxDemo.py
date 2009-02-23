@@ -34,6 +34,7 @@ class TestPanel(ctrlbox.ControlBox):
         self.log = log
 
         # Setup
+        tmpbar = ctrlbox.SegmentBar(self)
         self.CreateControlBar()
 
         cbar = self.GetControlBar()
@@ -64,11 +65,43 @@ class TestPanel(ctrlbox.ControlBox):
 
 #-----------------------------------------------------------------------------#
 
-def MakeTestFrame(log):
+class SegmentPanel(ctrlbox.ControlBox):
+    def __init__(self, parent, log):
+        ctrlbox.ControlBox.__init__(self, parent)
+
+        # Attributes
+        self.log = log
+
+        # Setup
+        segbar = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        err_bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16, 16))
+
+        for num in range(5):
+            segbar.AddButton(wx.NewId(), err_bmp, label=u'Test')
+
+        self.SetControlBar(segbar)
+
+        self.SetWindow(wx.TextCtrl(self, style=wx.TE_MULTILINE))
+
+        # Event Handlers
+        self.Bind(ctrlbox.EVT_SEGMENT_SELECTED, self.OnSegmentClicked)
+
+    def OnSegmentClicked(self, evt):
+        cur = evt.GetCurrentSelection()
+        pre = evt.GetPreviousSelection()
+        self.log.write("Segment Clicked: Cur=%d, Pre=%d, Id=%d" % (cur, pre, evt.GetId()))
+
+#-----------------------------------------------------------------------------#
+
+def MakeTestFrame(segment=False):
     frame = wx.Frame(None, title="Test ControlBox")
     fsizer = wx.BoxSizer(wx.VERTICAL)
-    cbox = TestPanel(frame, log)
-    fsizer.Add(cbox, 1, wx.EXPAND)
+    if not segment:
+        panel = TestPanel(frame, TestLog())
+    else:
+        panel = SegmentPanel(frame, TestLog())
+        frame.CenterOnParent()
+    fsizer.Add(panel, 1, wx.EXPAND)
     return frame
 
 #-----------------------------------------------------------------------------#
@@ -88,9 +121,10 @@ if __name__ == '__main__':
         import run
     except ImportError:
         app = wx.PySimpleApp(False)
-        frame = MakeTestFrame(TestLog())
-        frame.CenterOnParent()
+        frame = MakeTestFrame(segment=False)
         frame.Show()
+        frame2 = MakeTestFrame(segment=True)
+        frame2.Show()
         app.MainLoop()
     else:
         run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])

@@ -55,12 +55,16 @@ __all__ = ["ControlBar", "ControlBarEvent", "ControlBox",
 # Dependancies
 import wx
 
+# Local Imports
+from eclutil import AdjustColour
+
 #--------------------------------------------------------------------------#
 # Globals
 
 #-- Control Name Strings --#
 CTRLBAR_NAME_STR = u'EditraControlBar'
 CTRLBOX_NAME_STR = u'EditraControlBox'
+SEGBAR_NAME_STR = u'EditraSegmentBar'
 
 #-- Control Style Flags --#
 
@@ -69,14 +73,47 @@ CTRLBAR_STYLE_DEFAULT       = 0
 CTRLBAR_STYLE_GRADIENT      = 1     # Paint the bar with a gradient
 CTRLBAR_STYLE_BORDER_BOTTOM = 2     # Add a border to the bottom
 CTRLBAR_STYLE_BORDER_TOP    = 4     # Add a border to the top
-
-#CTRLBAR_STYLE_FOLDABLE = 2  # Add a fold button to the bar.
+CTRLBAR_STYLE_LABELS        = 8     # Draw labels under the icons (SegmentBar)
 
 # ControlBar event for items added by AddTool
 edEVT_CTRLBAR = wx.NewEventType()
 EVT_CTRLBAR = wx.PyEventBinder(edEVT_CTRLBAR, 1)
 class ControlBarEvent(wx.PyCommandEvent):
     """ControlBar Button Event"""
+
+edEVT_SEGMENT_SELECTED = wx.NewEventType()
+EVT_SEGMENT_SELECTED = wx.PyEventBinder(edEVT_SEGMENT_SELECTED, 1)
+class SegmentBarEvent(wx.PyCommandEvent):
+    """SegmentBar Button Event"""
+    def __init__(self, etype, id=0):
+        wx.PyCommandEvent.__init__(self, etype, id)
+
+        # Attributes
+        self._pre = -1
+        self._cur = -1
+
+    def GetPreviousSelection(self):
+        """Get the previously selected segment
+        @return: int
+
+        """
+        return self._pre
+
+    def GetCurrentSelection(self):
+        """Get the currently selected segment
+        @return: int
+
+        """
+        return self._cur
+
+    def SetSelections(self, previous=-1, current=-1):
+        """Set the events selection
+        @keyword previous: previously selected button index (int)
+        @keyword previous: currently selected button index (int)
+
+        """
+        self._pre = previous
+        self._cur = current
 
 #--------------------------------------------------------------------------#
 
@@ -331,6 +368,35 @@ class ControlBar(wx.PyPanel):
             self._sizer.Add(spacer, 0)
             self._sizer.Add(tool, 0, align|wx.ALIGN_CENTER_VERTICAL)
 
+    def DoPaintBackground(self, dc, rect, color, color2):
+        """Paint the background of the given rect based on the style of
+        the control bar.
+        @param dc: DC to draw on
+        @param rect: wx.Rect
+        @param color: Pen/Base gradient color
+        @param color2: Gradient end color
+
+        """
+        dc.SetPen(wx.Pen(color, 1))
+
+        # Add a border to the bottom
+        if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
+            dc.DrawLine(rect.x, rect.height-1, rect.width, rect.height-1)
+
+        # Add a border to the top
+        if self._style & CTRLBAR_STYLE_BORDER_TOP:
+            dc.DrawLine(rect.x, 1, rect.width, 1)
+
+        # Paint the gradient
+        if self._style & CTRLBAR_STYLE_GRADIENT:
+            gc = wx.GraphicsContext.Create(dc)
+            grad = gc.CreateLinearGradientBrush(rect.x, .5, rect.x, rect.height,
+                                                color2, color)
+
+            gc.SetPen(gc.CreatePen(self._pen))
+            gc.SetBrush(grad)
+            gc.DrawRectangle(rect.x, 0, rect.width - 0.5, rect.height - 0.5)
+
     def OnPaint(self, evt):
         """Paint the background to match the current style
         @param evt: wx.PaintEvent
@@ -338,25 +404,8 @@ class ControlBar(wx.PyPanel):
         """
         dc = wx.PaintDC(self)
         rect = self.GetClientRect()
-        dc.SetPen(wx.Pen(self._color, 1))
 
-        # Add a border to the bottom
-        if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
-            dc.DrawLine(0, rect.height-1, rect.width, rect.height-1)
-
-        # Add a border to the top
-        if self._style & CTRLBAR_STYLE_BORDER_TOP:
-            dc.DrawLine(0, 1, rect.width, 1)
-
-        # Paint the gradient
-        if self._style & CTRLBAR_STYLE_GRADIENT:
-            gc = wx.GraphicsContext.Create(dc)
-            grad = gc.CreateLinearGradientBrush(0, .5, 0, rect.height,
-                                                self._color2, self._color)
-
-            gc.SetPen(gc.CreatePen(self._pen))
-            gc.SetBrush(grad)
-            gc.DrawRectangle(0, 0, rect.width - 0.5, rect.height - 0.5)
+        self.DoPaintBackground(dc, rect, self._color, self._color2)
 
         evt.Skip()
 
@@ -390,50 +439,125 @@ class ControlBar(wx.PyPanel):
 
 #--------------------------------------------------------------------------#
 
-#class SegmentBar(wx.PyPanel):
-#    """Simple toolbar like control that displays bitmaps and optionaly
-#    labels below each bitmap. The bitmaps are turned into a toggle button
-#    where only one segment in the bar can be selected at one time.
-
-#    """
-#    def __init__(self, parent, id=wx.ID_ANY,
-#                 pos=wx.DefaultPosition, size=wx.DefaultSize,
-#                 style=CTRLBAR_STYLE_DEFAULT,
-#                 name=CTRLBAR_NAME_STR):
-#        wx.PyPanel.__init__(self, parent, id, pos, size,
-#                            wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
-
-#        # Attributes
-        
-
-#        # Event Handlers
-#        self.Bind(wx.EVT_PAINT, self.OnPaint)
-
-#    def OnPaint(self, evt):
-#        """Paint the control"""
-#        dc = wx.PaintDC(self)
-
-#--------------------------------------------------------------------------#
-
-def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
-    """ Brighten/Darken input colour by percent and adjust alpha
-    channel if needed. Returns the modified color.
-    @param color: color object to adjust
-    @type color: wx.Color
-    @param percent: percent to adjust +(brighten) or -(darken)
-    @type percent: int
-    @keyword alpha: Value to adjust alpha channel to
+class SegmentBar(ControlBar):
+    """Simple toolbar like control that displays bitmaps and optionaly
+    labels below each bitmap. The bitmaps are turned into a toggle button
+    where only one segment in the bar can be selected at one time.
 
     """
-    radj, gadj, badj = [ int(val * (abs(percent) / 100.))
-                         for val in color.Get() ]
+    def __init__(self, parent, id=wx.ID_ANY,
+                 pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 style=CTRLBAR_STYLE_DEFAULT,
+                 name=SEGBAR_NAME_STR):
+        ControlBar.__init__(self, parent, id, pos, size, style, name)
 
-    if percent < 0:
-        radj, gadj, badj = [ val * -1 for val in [radj, gadj, badj] ]
-    else:
-        radj, gadj, badj = [ val or percent for val in [radj, gadj, badj] ]
+        # Attributes
+        self._buttons = list()
+        self._selected = -1
+        self._scolor1 = AdjustColour(self._color, -20)
+        self._scolor2 = AdjustColour(self._color2, -20)
 
-    red = min(color.Red() + radj, 255)
-    green = min(color.Green() + gadj, 255)
-    blue = min(color.Blue() + badj, 255)
-    return wx.Colour(red, green, blue, alpha)
+        # Event Handlers
+        self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+
+    def AddButton(self, id, bmp, label=u''):
+        """Add a button to the bar
+        @param id: button id
+        @param bmp: wx.Bitmap
+        @param label: string
+
+        """
+        assert bmp.IsOk()
+        lsize = self.GetTextExtent(label)
+        self._buttons.append(dict(id=id, bmp=bmp, label=label,
+                                  lsize=lsize, bsize=bmp.GetSize(),
+                                  bx1=0, bx2=0))
+        self.InvalidateBestSize()
+        self.Refresh()
+
+    def DoDrawButton(self, dc, xpos, button, selected=False):
+        """Draw a button
+        @param dc: DC to draw on
+        @param xpos: X coordinate
+        @param button: button dict
+        @keyword selected: is this the selected button (bool)
+        return: int (next xpos)
+
+        """
+        rect = self.GetRect()            
+        height = rect.height
+        bsize = button['bsize']
+        bpos = (xpos + 5, 3)
+        rside = bpos[0] + bsize.width + 5
+
+        if selected:
+            brect = wx.Rect(xpos, 0, rside - xpos, height)
+            self.DoPaintBackground(dc, brect, self._scolor1, self._scolor2)
+
+        dc.DrawBitmap(button['bmp'], bpos[0], bpos[1])
+
+        dc.SetPen(self._pen)
+        dc.DrawLine(xpos, 0, xpos, height)
+        dc.DrawLine(rside, 0, rside, height)
+        button['bx1'] = xpos + 1
+        button['bx2'] = rside - 1
+        return rside
+
+    def DoGetBestSize(self):
+        """Get the best size for the control"""
+        mwidth, mheight = 0, 0
+        for btn in self._buttons:
+            bwidth, bheight = btn['bsize']
+            if bheight > mheight:
+                mheight = bheight
+
+            if bwidth > mwidth:
+                mwidth = bwidth
+
+        width = (mwidth + 10) * len(self._buttons)
+        size = wx.Size(width, mheight + 6)
+        self.CacheBestSize(size)
+        return size
+
+    def OnLeftUp(self, evt):
+        """Handle clicks on the bar
+        @param evt: wx.MouseEvent
+
+        """
+        cur_x = evt.GetPosition()[0]
+        for idx, button in enumerate(self._buttons):
+            xpos = button['bx1']
+            xpos2 = button['bx2']
+            if cur_x >= xpos and cur_x <= xpos2:
+                pre = self._selected
+                self._selected = idx
+                if self._selected != pre:
+                    self.Refresh()
+                    sevt = SegmentBarEvent(edEVT_SEGMENT_SELECTED, button['id'])
+                    sevt.SetSelections(pre, idx)
+                    wx.PostEvent(self.GetParent(), sevt)
+                break
+        evt.Skip()
+
+    def OnPaint(self, evt):
+        """Paint the control"""
+        dc = wx.PaintDC(self)
+
+        # Paint the background
+        rect = self.GetClientRect()
+        self.DoPaintBackground(dc, rect, self._color, self._color2)
+
+        # Paint the background of pressed button
+        npos = 0
+        use_labels = self._style & CTRLBAR_STYLE_LABELS
+        for idx, button in enumerate(self._buttons):
+            npos = self.DoDrawButton(dc, npos, button, self._selected == idx)
+
+# Cleanup namespace
+#del SegmentBar.__dict__['AddControl']
+#del SegmentBar.__dict__['AddSpacer']
+#del SegmentBar.__dict__['AddTool']
+#del SegmentBar.__dict__['SetToolSpacing']
+#del SegmentBar.__dict__['SetVMargin']
+
+#--------------------------------------------------------------------------#
