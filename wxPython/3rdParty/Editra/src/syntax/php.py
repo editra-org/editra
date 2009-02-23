@@ -29,17 +29,19 @@ from cpp import AutoIndenter
 
 # PHP Keywords
 PHP_KEYWORDS = ("__LINE__ __FILE__ __FUNCTION__ __CLASS__ __METHOD__ declare "
-                "else enddeclare endswitch elseif "
-                "endif if switch as do endfor endforeach endwhile for foreach "
-                "while case default switch return break continue exit var "
-                "bool boolean int integer real double float string array "
-                "NULL extends global static include require include_once "
-                "require_once new true false function class object "
-                "self final public private protected ")
+                "else enddeclare endswitch elseif endif if switch as do endfor "
+                "endforeach endwhile for foreach while case default switch "
+                "return break continue exit var bool boolean int integer real "
+                "double float string array NULL extends global static include "
+                "require include_once require_once new true false function "
+                "class object self final public private protected try catch "
+                "throw print abstract parent interface implements ")
 
 # PHP Standard Functions/Methods
 # (roughly based off of PHP Pocket Reference by O'Reilly)
-PHP_FUNC = ("apache_child_terminate apache_lookup_uri apache_note "
+PHP_FUNC = ("__construct __autoload __destruct __get __set __isset __unset "
+            "__call __sleep __wakeup __toString __set_state __clone "
+            "apache_child_terminate apache_lookup_uri apache_note "
             "apache_request_headers apache_response_headers apache_setenv "
             "ascii2ebcdic ebcdic2ascii getallheaders virtual jewishtojd "
             "array_change_key_case array_chunk array_count_values "
@@ -379,7 +381,7 @@ PHP_FUNC = ("apache_child_terminate apache_lookup_uri apache_note "
             "mcrypt_module_self_test define_syslog_variables "
             "mcrypt_module_get_supported_key_sizes imap_clearflag_full "
             "mcrypt_module_is_block_algorithm imagepsencodefont "
-            "mcrypt_module_get_algo_block_size imagepsslantfont count")
+            "mcrypt_module_get_algo_block_size imagepsslantfont count ")
 
 # HTML Keywords
 HTML_KEYWORDS = html.Keywords()
