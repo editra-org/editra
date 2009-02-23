@@ -139,6 +139,25 @@ class ControlBox(wx.PyPanel):
         self.SetSizer(self._sizer)
         self.SetAutoLayout(True)
 
+    def ChangeWindow(self, window):
+        """Change the main window area, and return the current window
+        @param window: Any window/panel like object
+        @return: the old window or None
+
+        """
+        rwindow = None
+        if self.GetWindow() is None:
+            if self._topb is None:
+                self._sizer.Add(window, 1, wx.EXPAND)
+            else:
+                self._sizer.Insert(1, window, 1, wx.EXPAND)
+        else:
+            self._sizer.Replace(self._main, window)
+            rwindow = self._main
+
+        self._main = window
+        return rwindow
+
     def CreateControlBar(self, pos=wx.TOP):
         """Create a ControlBar at the given position if one does not
         already exist.
@@ -475,7 +494,6 @@ class SegmentBar(ControlBar):
         """
         assert bmp.IsOk()
         lsize = self.GetTextExtent(label)
-        print lsize
         self._buttons.append(dict(id=id, bmp=bmp, label=label,
                                   lsize=lsize, bsize=bmp.GetSize(),
                                   bx1=0, bx2=0))
