@@ -484,6 +484,7 @@ class SegmentBar(ControlBar):
 
         # Event Handlers
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
 
     def AddSegment(self, id, bmp, label=u''):
         """Add a segment to the bar
@@ -521,9 +522,10 @@ class SegmentBar(ControlBar):
             brect = wx.Rect(xpos, 0, rside - xpos, height)
             self.DoPaintBackground(dc, brect, self._scolor1, self._scolor2)
 
-        dc.DrawBitmap(button['bmp'], bpos[0], bpos[1])
+        dc.DrawBitmap(button['bmp'], bpos[0], bpos[1])#, True)
 
         if draw_label:
+            dc.SetFont(self.GetFont())
             twidth, theight = button['lsize']
             txpos = ((self._segsize[0] / 2) - (twidth / 2)) + xpos
             typos = height - theight
@@ -575,6 +577,10 @@ class SegmentBar(ControlBar):
     def GetSelection(self):
         """Get the currently selected index"""
         return self._selected
+
+    def OnEraseBackground(self, evt):
+        """Handle the erase background event"""
+        pass
 
     def OnLeftUp(self, evt):
         """Handle clicks on the bar
