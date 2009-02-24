@@ -24,6 +24,9 @@ import wx
 sys.path.insert(0, os.path.abspath('../../'))
 import src.eclib.segmentbk as segmentbk
 
+# Local imports
+import IconFile
+
 #-----------------------------------------------------------------------------#
 
 class TestPanel(segmentbk.SegmentBook):
@@ -32,18 +35,27 @@ class TestPanel(segmentbk.SegmentBook):
 
         # Attributes
         self.log = log
-        self._imglst = wx.ImageList(16, 16)
+        self._imglst = wx.ImageList(32, 32)
 
         # Setup
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_WARNING, wx.ART_MENU)
+        bmp = IconFile.Monkey.GetBitmap()
         self._imglst.Add(bmp)
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_MENU)
+        bmp = IconFile.Devil.GetBitmap()
         self._imglst.Add(bmp)
         self.SetImageList(self._imglst)
 
-        self.AddPage(wx.TextCtrl(self, style=wx.TE_MULTILINE), "Text Editor", img_id=0)
+        self.AddPage(wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Hello"),
+                     "Text Editor", img_id=0)
         self.AddPage(wx.GenericDirCtrl(self), "File Browser", img_id=1)
-        self.AddPage(wx.TextCtrl(self, style=wx.TE_MULTILINE), "Text Editor2", img_id=0)
+        self.AddPage(wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Test Control"),
+                     "Text Editor2", img_id=0)
+        todo = wx.ListBox(self, choices=['Wake up',
+                                         'Finish Event handling',
+                                         'Take a nap',
+                                         'Procrastinate for a while',
+                                         'Drink some coffee',
+                                         'Check in code'])
+        self.AddPage(todo, "TODO List", img_id=1)
 
 #-----------------------------------------------------------------------------#
 

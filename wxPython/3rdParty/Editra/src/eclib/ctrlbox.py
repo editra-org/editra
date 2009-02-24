@@ -408,7 +408,10 @@ class ControlBar(wx.PyPanel):
 
         # Paint the gradient
         if self._style & CTRLBAR_STYLE_GRADIENT:
-            gc = wx.GraphicsContext.Create(dc)
+            if isinstance(dc, wx.GCDC):
+                gc = dc.GetGraphicsContext()
+            else:
+                gc = wx.GraphicsContext.Create(dc)
             grad = gc.CreateLinearGradientBrush(rect.x, .5, rect.x, rect.height,
                                                 color2, color)
 
@@ -421,10 +424,11 @@ class ControlBar(wx.PyPanel):
         @param evt: wx.PaintEvent
 
         """
-        dc = wx.PaintDC(self)
+        dc = wx.AutoBufferedPaintDCFactory(self)
+        gc = wx.GCDC(dc)
         rect = self.GetClientRect()
 
-        self.DoPaintBackground(dc, rect, self._color, self._color2)
+        self.DoPaintBackground(gc, rect, self._color, self._color2)
 
         evt.Skip()
 
@@ -522,10 +526,10 @@ class SegmentBar(ControlBar):
             brect = wx.Rect(xpos, 0, rside - xpos, height)
             self.DoPaintBackground(dc, brect, self._scolor1, self._scolor2)
 
-        dc.DrawBitmap(button['bmp'], bpos[0], bpos[1])#, True)
+        bmp = button['bmp']
+        dc.DrawBitmap(bmp, bpos[0], bpos[1], bmp.GetMask() != None)
 
         if draw_label:
-            dc.SetFont(self.GetFont())
             twidth, theight = button['lsize']
             txpos = ((self._segsize[0] / 2) - (twidth / 2)) + xpos
             typos = height - theight
@@ -604,17 +608,25 @@ class SegmentBar(ControlBar):
 
     def OnPaint(self, evt):
         """Paint the control"""
-        dc = wx.PaintDC(self)
+        dc = wx.AutoBufferedPaintDCFactory(self)
+        gc = wx.GCDC(dc)
+
+        # Setup
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        gc.SetBrush(wx.TRANSPARENT_BRUSH)
+        gc.SetFont(self.GetFont())
+        gc.SetBackgroundMode(wx.TRANSPARENT)
+        gc.Clear()
 
         # Paint the background
         rect = self.GetClientRect()
-        self.DoPaintBackground(dc, rect, self._color, self._color2)
+        self.DoPaintBackground(gc, rect, self._color, self._color2)
 
         # Paint the background of pressed button
         npos = 0
         use_labels = self._style & CTRLBAR_STYLE_LABELS
         for idx, button in enumerate(self._buttons):
-            npos = self.DoDrawButton(dc, npos, button,
+            npos = self.DoDrawButton(gc, npos, button,
                                      self._selected == idx,
                                      use_labels)
 
