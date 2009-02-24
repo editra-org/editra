@@ -64,7 +64,9 @@ class SegmentBook(ctrlbox.ControlBox):
         """Change the page in the book"""
         pcel = evt.GetPreviousSelection()
         csel = evt.GetCurrentSelection()
+        self.Freeze()
         self.ChangePage(csel)
+        self.Thaw()
 
     def AddPage(self, page, text, select=False, img_id=-1):
         """Add a page to the notebook

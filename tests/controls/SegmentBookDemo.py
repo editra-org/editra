@@ -32,12 +32,12 @@ class TestPanel(segmentbk.SegmentBook):
 
         # Attributes
         self.log = log
-        self._imglst = wx.ImageList(32, 32)
+        self._imglst = wx.ImageList(16, 16)
 
         # Setup
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_WARNING, wx.ART_TOOLBAR, (32, 32))
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_WARNING, wx.ART_MENU)
         self._imglst.Add(bmp)
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_TOOLBAR, (32, 32))
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_MENU)
         self._imglst.Add(bmp)
         self.SetImageList(self._imglst)
 
