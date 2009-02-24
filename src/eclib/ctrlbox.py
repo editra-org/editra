@@ -564,6 +564,18 @@ class SegmentBar(ControlBar):
                          mheight + (SegmentBar.VPAD * 2))
         return size
 
+    def GetSegmentLabel(self, index):
+        """Get the label of the given segment
+        @param index: segment index
+        @return: string
+
+        """
+        return self._buttons[index]['label']
+
+    def GetSelection(self):
+        """Get the currently selected index"""
+        return self._selected
+
     def OnLeftUp(self, evt):
         """Handle clicks on the bar
         @param evt: wx.MouseEvent
@@ -599,6 +611,14 @@ class SegmentBar(ControlBar):
             npos = self.DoDrawButton(dc, npos, button,
                                      self._selected == idx,
                                      use_labels)
+
+    def SetSelection(self, index):
+        """Set the selection
+        @param index: int
+
+        """
+        self._selected = index
+        self.Refresh()
 
 # Cleanup namespace
 #del SegmentBar.__dict__['AddControl']
