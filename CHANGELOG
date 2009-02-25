@@ -22,6 +22,7 @@ NEW: [features/enhancments]
 BUG FIXES:
 +Fix incorrect page count shown in print previews.
 +Remember print settings throughout session and for every frame.
++Fix error when doing Copy Path from tab right click menu.
 
 #-----------------------------------------------------------------------------#
 

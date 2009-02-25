@@ -29,7 +29,7 @@ import ed_stc
 import ed_tab
 from doctools import DocPositionMgr
 from profiler import Profile_Get
-from util import GetFileModTime, Log
+from util import GetFileModTime, Log, SetClipboardText
 
 #--------------------------------------------------------------------------#
 
@@ -172,7 +172,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         if e_id == ed_glob.ID_COPY_PATH:
             path = self.GetFileName()
             if path is not None:
-                util.SetClipboardText(path)
+                SetClipboardText(path)
         elif e_id == ed_glob.ID_MOVE_TAB:
             t = self.GetTopLevelParent()
             frame = wx.GetApp().OpenNewWindow()
