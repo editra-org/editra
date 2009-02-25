@@ -571,6 +571,17 @@ class SegmentBar(ControlBar):
                          mheight + (SegmentBar.VPAD * 2))
         return size
 
+    def GetIndexFromPosition(self, pos):
+        """Get the segment index closest to the given position"""
+        cur_x = pos[0]
+        for idx, button in enumerate(self._buttons):
+            xpos = button['bx1']
+            xpos2 = button['bx2']
+            if cur_x >= xpos and cur_x <= xpos2:
+                return idx
+        else:
+            return wx.NOT_FOUND
+
     def GetSegmentCount(self):
         """Get the number segments in the control
         @return: int
@@ -599,20 +610,17 @@ class SegmentBar(ControlBar):
         @param evt: wx.MouseEvent
 
         """
-        cur_x = evt.GetPosition()[0]
-        for idx, button in enumerate(self._buttons):
-            xpos = button['bx1']
-            xpos2 = button['bx2']
-            if cur_x >= xpos and cur_x <= xpos2:
-                pre = self._selected
-                self._selected = idx
-                if self._selected != pre:
-                    self.Refresh()
-                    sevt = SegmentBarEvent(edEVT_SEGMENT_SELECTED, button['id'])
-                    sevt.SetSelections(pre, idx)
-                    sevt.SetEventObject(self)
-                    wx.PostEvent(self.GetParent(), sevt)
-                break
+        index = self.GetIndexFromPosition(evt.GetPosition())
+        if index != wx.NOT_FOUND:
+            button = self._buttons[index]
+            pre = self._selected
+            self._selected = index
+            if self._selected != pre:
+                self.Refresh()
+                sevt = SegmentBarEvent(edEVT_SEGMENT_SELECTED, button['id'])
+                sevt.SetSelections(pre, index)
+                sevt.SetEventObject(self)
+                wx.PostEvent(self.GetParent(), sevt)
         evt.Skip()
 
     def OnPaint(self, evt):
@@ -631,7 +639,9 @@ class SegmentBar(ControlBar):
         rect = self.GetClientRect()
         self.DoPaintBackground(gc, rect, self._color, self._color2)
 
-        # Paint the background of pressed button
+        # Draw the buttons
+        # TODO: would be more efficient to just redraw the buttons that
+        #       need redrawing.
         npos = 0
         use_labels = self._style & CTRLBAR_STYLE_LABELS
         for idx, button in enumerate(self._buttons):
@@ -654,6 +664,22 @@ class SegmentBar(ControlBar):
             if index >= count:
                 self.SetSelection(count-1)
 
+        self.Refresh()
+
+    def SetSegmentImage(self, index, bmp):
+        """Set the image to use on the given segment
+        @param index: int
+        @param bmp: Bitmap
+
+        """
+        assert bmp.IsOk()
+        segment = self._buttons[index]
+        if segment['bmp'].IsOk():
+            segment['bmp'].Destroy()
+            del segment['bmp']
+        segment['bmp'] = bmp
+        segment['bsize'] = bmp.GetSize()
+        self.InvalidateBestSize()
         self.Refresh()
 
     def SetSelection(self, index):
