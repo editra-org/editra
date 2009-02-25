@@ -21,6 +21,11 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
+import pygments
+from pygments.token import Token
+from pygments.lexers import get_lexer_by_name
+
+#--------------------------------------------------------------------------#
 
 class TokenNotFound(Exception):
     """Parsing exception"""
@@ -158,3 +163,74 @@ def SkipWhitespace(line, idx):
 
     """
     return idx + (len(line[idx:]) - len(line[idx:].lstrip()))
+
+#-----------------------------------------------------------------------------#
+
+class ELexer(object):
+    """
+    A wrapper to add peeking and line counting to pygments lexer.
+    Example usage:
+
+        import pygments
+        from pygments.token import Token
+        from pygments.lexers import get_lexer_by_name
+        
+        iterable = pygments.lex(buff.read(), 
+                                lexers.get_lexer_by_name('lexer_name'))
+        peekable = PeekableLexer(iterable)
+    
+    The peekable iterator pattern has been copied from Anthony Baxter's 
+    Oscon 2005 slides.
+
+    """
+    def __init__(self, iterable, ignore = [ Token.Comment, Token.Text ]):
+        self.it = iterable
+        self.cache = []
+        self.line_count = 1
+        self.ignore = ignore
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if self.cache:
+            return self.cache.pop()
+        while self.it:
+            ttype, tval = self.it.next()
+            if '\n' in tval:
+                tline = self.line_count + 1
+                self.line_count += tval.count('\n')
+            else:
+                tline = self.line_count
+            if ttype in self.ignore:
+                continue
+
+            return (tline, ttype, tval)
+            # alternatively, we could return a clearly defined object instead of a tuple.
+            # I personally prefer the object-way because it allows you to write: 
+            # peek().ttype = ...
+            # return EToken(tline, ttype, tval)
+
+    def peek(self):
+        try:
+            value = self.next()
+        except StopIteration:
+            raise
+        self.cache.append(value)
+        return value
+
+    def __nonzero__(self):
+        try:
+            self.peek()
+        except StopIteration:
+            return False
+        return True
+
+class EToken(object):
+    def __init__(self, line, type, value):
+        self.line = line
+        self.type = type
+        self.value = value
+
+    def __repr__(self):
+        return '%s, %s, %s' % (self.line, self.type, self.value)
