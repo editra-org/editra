@@ -75,8 +75,10 @@ class TestPanel(segmentbk.SegmentBook):
         e_id = evt.GetId()
         if e_id == wx.ID_NEW:
             self.log.write("SegmentBook New Page")
+            self.GetParent().Freeze()
             txt = wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Enter Text Here")
             self.AddPage(txt, "Text Editor", select=True, img_id=0)
+            self.GetParent().Thaw()
         elif e_id == wx.ID_DELETE:
             self.log.write("SegmentBook Delete Page")
             sel = self.GetSelection()
