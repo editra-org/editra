@@ -146,7 +146,8 @@ class ControlBox(wx.PyPanel):
 
         """
         rwindow = None
-        if self.GetWindow() is None:
+        if self.GetWindow() is None or not isinstance(self._main, wx.Window):
+            del self._main
             if self._topb is None:
                 self._sizer.Add(window, 1, wx.EXPAND)
             else:
@@ -570,6 +571,13 @@ class SegmentBar(ControlBar):
                          mheight + (SegmentBar.VPAD * 2))
         return size
 
+    def GetSegmentCount(self):
+        """Get the number segments in the control
+        @return: int
+
+        """
+        return len(self._buttons)
+
     def GetSegmentLabel(self, index):
         """Get the label of the given segment
         @param index: segment index
@@ -602,6 +610,7 @@ class SegmentBar(ControlBar):
                     self.Refresh()
                     sevt = SegmentBarEvent(edEVT_SEGMENT_SELECTED, button['id'])
                     sevt.SetSelections(pre, idx)
+                    sevt.SetEventObject(self)
                     wx.PostEvent(self.GetParent(), sevt)
                 break
         evt.Skip()
@@ -629,6 +638,23 @@ class SegmentBar(ControlBar):
             npos = self.DoDrawButton(gc, npos, button,
                                      self._selected == idx,
                                      use_labels)
+
+    def RemoveSegment(self, index):
+        """Remove a segment from the bar
+        @param index: int
+
+        """
+        button = self._buttons[index]
+        if button['bmp']:
+            button['bmp'].Destroy()
+        del self._buttons[index]
+
+        if self.GetSelection() == index:
+            count = self.GetSegmentCount()
+            if index >= count:
+                self.SetSelection(count-1)
+
+        self.Refresh()
 
     def SetSelection(self, index):
         """Set the selection

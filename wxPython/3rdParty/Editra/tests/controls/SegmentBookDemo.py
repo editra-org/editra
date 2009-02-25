@@ -23,6 +23,7 @@ import wx
 
 sys.path.insert(0, os.path.abspath('../../'))
 import src.eclib.segmentbk as segmentbk
+import src.eclib.ctrlbox as ctrlbox
 
 # Local imports
 import IconFile
@@ -56,6 +57,42 @@ class TestPanel(segmentbk.SegmentBook):
                                          'Drink some coffee',
                                          'Check in code'])
         self.AddPage(todo, "TODO List", img_id=1)
+
+        # Add a sub controlbar
+        cbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        cbar.SetVMargin(3, 3)
+        self.SetControlBar(cbar, wx.BOTTOM)
+        cbar.AddControl(wx.Button(cbar, wx.ID_NEW))
+        cbar.AddControl(wx.Button(cbar, wx.ID_DELETE))
+
+        # Event Handlers
+        self.Bind(segmentbk.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
+        self.Bind(segmentbk.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(wx.EVT_BUTTON, self.OnButton)
+
+    def OnButton(self, evt):
+        """Handle button clicks from control bar"""
+        e_id = evt.GetId()
+        if e_id == wx.ID_NEW:
+            self.log.write("SegmentBook New Page")
+            txt = wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Enter Text Here")
+            self.AddPage(txt, "Text Editor", select=True, img_id=0)
+        elif e_id == wx.ID_DELETE:
+            self.log.write("SegmentBook Delete Page")
+            sel = self.GetSelection()
+            if sel != -1:
+                self.DeletePage(sel)
+
+    def OnPageChanging(self, evt):
+        """Handle the page changing events"""
+        old = evt.GetOldSelection()
+        new = evt.GetSelection()
+        self.log.write("SegmentBook Page Changing: from %d, to %d" % (old, new))
+
+    def OnPageChanged(self, evt):
+        """Handle the page changed events"""
+        new = evt.GetSelection()
+        self.log.write("SegmentBook Page Changed to: to %d" % new)
 
 #-----------------------------------------------------------------------------#
 

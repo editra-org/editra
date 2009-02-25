@@ -45,7 +45,7 @@ class SegmentBook(ctrlbox.ControlBox):
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.TAB_TRAVERSAL|wx.NO_BORDER,
                  name=u"SegmentBook"):
-        """Initialie the book"""
+        """Initialie the SegmentBook"""
         ctrlbox.ControlBox.__init__(self, parent, id, pos, size, style, name)
 
         # Attributes
@@ -60,13 +60,36 @@ class SegmentBook(ctrlbox.ControlBox):
         # Event Handlers
         self.Bind(ctrlbox.EVT_SEGMENT_SELECTED, self._OnSegmentSel)
 
+    def _DoPageChange(self, psel, csel):
+        """Change the page and post events
+        @param psel: previous selection (int)
+        @param csel: current selection (int)
+
+        """
+        # Post page changing event
+        event = SegmentBookEvent(edEVT_SB_PAGE_CHANGING,
+                                 self.GetId(), csel, psel)
+        event.SetEventObject(self)
+        handler = self.GetEventHandler()
+        if not handler.ProcessEvent(event) or event.IsAllowed():
+            # Do the actual page change
+            self.Freeze()
+            self.ChangePage(csel)
+            self.Thaw()
+
+            # Post page changed event
+            event.SetEventType(edEVT_SB_PAGE_CHANGED)
+            handler.ProcessEvent(event)
+        else:
+            # Reset the segment selection
+            psel = max(psel, 0)
+            evt.GetObject().SetSelection(psel)
+
     def _OnSegmentSel(self, evt):
         """Change the page in the book"""
-        pcel = evt.GetPreviousSelection()
+        psel = evt.GetPreviousSelection()
         csel = evt.GetCurrentSelection()
-        self.Freeze()
-        self.ChangePage(csel)
-        self.Thaw()
+        self._DoPageChange(psel, csel)
 
     def AddPage(self, page, text, select=False, img_id=-1):
         """Add a page to the notebook
@@ -81,9 +104,10 @@ class SegmentBook(ctrlbox.ControlBox):
         segbar = self.GetControlBar(wx.TOP)
         segbar.AddSegment(wx.ID_ANY, self._imglist.GetBitmap(img_id), text)
         idx = len(self._pages) - 1
+
         if select or idx == 0:
             segbar.SetSelection(idx)
-            self.ChangePage(idx)
+            self._DoPageChange(segbar.GetSelection(), idx)
 
     def ChangePage(self, index):
         """Change the page to the given index"""
@@ -103,7 +127,14 @@ class SegmentBook(ctrlbox.ControlBox):
         @param index: int
 
         """
-        raise NotImplmentedError
+        segbar = self.GetControlBar(wx.TOP)
+        cpage = segbar.GetSelection() 
+        segbar.RemoveSegment(index)
+        npage = segbar.GetSelection()
+        self._DoPageChange(cpage, npage)
+
+        self._pages[index]['page'].Destroy()
+        del self._pages[index]
         
     def CurrentPage(self):
         """Get the currently selected page
@@ -153,6 +184,14 @@ class SegmentBook(ctrlbox.ControlBox):
         """
         bar = self.GetControlBar(wx.TOP)
         return bar.GetSegmentLabel(index)
+
+    def GetSelection(self):
+        """Get the current selection
+        @return: int
+
+        """
+        bar = self.GetControlBar(wx.TOP)
+        return bar.GetSelection()
 
     def HasMultiplePages(self):
         """Does the book have multiple pages
