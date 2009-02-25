@@ -17,7 +17,7 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = []
+__all__ = ['SegmentBook']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -30,13 +30,26 @@ import ctrlbox
 # Events
 edEVT_SB_PAGE_CHANGING = wx.NewEventType()
 EVT_SB_PAGE_CHANGING = wx.PyEventBinder(edEVT_SB_PAGE_CHANGING, 1)
+
 edEVT_SB_PAGE_CHANGED = wx.NewEventType()
 EVT_SB_PAGE_CHANGED = wx.PyEventBinder(edEVT_SB_PAGE_CHANGED, 1)
+
 edEVT_SB_PAGE_CLOSED = wx.NewEventType()
 EVT_SB_PAGE_CLOSED = wx.PyEventBinder(edEVT_SB_PAGE_CLOSED, 1)
+
+edEVT_SB_PAGE_CONTEXT_MENU = wx.NewEventType()
+EVT_SB_PAGE_CLOSED = wx.PyEventBinder(edEVT_SB_PAGE_CONTEXT_MENU, 1)
 class SegmentBookEvent(wx.NotebookEvent):
     """SegmentBook event"""
     pass
+
+#-----------------------------------------------------------------------------#
+# Global constants
+
+# Locations used in HitTest Results
+SEGBOOK_NO_WHERE = -1
+SEGBOOK_ON_SEGMENT = 0
+SEGBOOK_ON_SEGBAR = 1
 
 #-----------------------------------------------------------------------------#
 
@@ -59,6 +72,7 @@ class SegmentBook(ctrlbox.ControlBox):
 
         # Event Handlers
         self.Bind(ctrlbox.EVT_SEGMENT_SELECTED, self._OnSegmentSel)
+        self.Bind(wx.EVT_RIGHT_DOWN, self._OnRightDown)
 
     def _DoPageChange(self, psel, csel):
         """Change the page and post events
@@ -80,10 +94,29 @@ class SegmentBook(ctrlbox.ControlBox):
             # Post page changed event
             event.SetEventType(edEVT_SB_PAGE_CHANGED)
             handler.ProcessEvent(event)
+            changed = True
         else:
             # Reset the segment selection
             psel = max(psel, 0)
             evt.GetObject().SetSelection(psel)
+            changed = False
+        return changed
+
+    def _OnRightDown(self, evt):
+        """Handle right click events"""
+        pos = evt.GetPosition()
+        where, index = self.HitTest(pos)
+        if where in (SEGBOOK_ON_SEGBAR, SEGBOOK_ON_SEGMENT):
+            if where == SEGBOOK_ON_SEGMENT:
+                changed = self._DoPageChange(self.GetSelection(), index)
+                if changed:
+                    # Send Context Menu Event
+                    pass
+            else:
+                # TODO: Handle other right clicks
+                pass
+
+        evt.Skip()
 
     def _OnSegmentSel(self, evt):
         """Change the page in the book"""
@@ -120,7 +153,8 @@ class SegmentBook(ctrlbox.ControlBox):
 
     def DeleteAllPages(self):
         """Remove all pages from the control"""
-        raise NotImplmentedError
+        for page in reversed(range(len(self._pages))):
+            self.DeletePage()
 
     def DeletePage(self, index):
         """Delete the page at the given index
@@ -200,6 +234,21 @@ class SegmentBook(ctrlbox.ControlBox):
         """
         return bool(self.GetPageCount())
 
+    def HitTest(self, pt):
+        """Find if/where the given point is in the window
+        @param pt: wxPoint
+        @return: where, index
+
+        """
+        where, index = (SEGBOOK_NO_WHERE, -1)
+        segbar = self.GetControlBar(wx.TOP)
+        index = segbar.GetIndexFromPostion(pt)
+        if index != wx.NOT_FOUND:
+            where = SEGBOOK_ON_SEGMENT
+
+        # TOOD check for clicks elsewhere on bar
+        return where, index
+
     def InsertPage(self, index, page, text, select=False, image_id=-1):
         """Insert a page a the given index
         @param index: index to insert page at
@@ -224,6 +273,9 @@ class SegmentBook(ctrlbox.ControlBox):
         @param img_id: image list index
 
         """
+        page = self._pages[index]
+        segbar = self.GetControlBar(wx.TOP)
+        
         raise NotImplementedError
 
     def SetPageText(self, index, text):
