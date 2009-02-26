@@ -483,11 +483,14 @@ class SegmentBar(ControlBar):
         self._selected = -1
         self._scolor1 = AdjustColour(self._color, -20)
         self._scolor2 = AdjustColour(self._color2, -20)
+        self._spen = wx.Pen(AdjustColour(self._pen.GetColour(), -25))
+        self._clicked_before = -1
 
         if wx.Platform == '__WXMAC__':
             self.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
         # Event Handlers
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
 
@@ -536,9 +539,26 @@ class SegmentBar(ControlBar):
             typos = height - theight
             dc.DrawText(button['label'], txpos, typos)
 
-        dc.SetPen(self._pen)
-        dc.DrawLine(xpos, 0, xpos, height)
-        dc.DrawLine(rside, 0, rside, height)
+        if not selected:
+            dc.SetPen(self._pen)
+            dc.DrawLine(xpos, 0, xpos, height)
+            dc.DrawLine(rside, 0, rside, height)
+        else:
+            dc.SetPen(self._spen)
+            tmpx = xpos + 1
+            trside = rside - 1
+            dc.DrawLine(tmpx, 0, tmpx, height)
+            dc.DrawLine(trside, 0, trside, height)
+
+            tpen = wx.Pen(self._spen.GetColour())
+            tpen.SetJoin(wx.JOIN_BEVEL)
+            mpoint = height / 2
+            mlen = mpoint / 2
+            dc.DrawLine(tmpx + 1, mpoint, tmpx, 0)
+            dc.DrawLine(tmpx + 1, mpoint, tmpx, height)
+            dc.DrawLine(trside - 1, mpoint, trside, 0)
+            dc.DrawLine(trside - 1, mpoint, trside, height)
+
         button['bx1'] = xpos + 1
         button['bx2'] = rside - 1
         return rside
@@ -605,13 +625,22 @@ class SegmentBar(ControlBar):
         """Handle the erase background event"""
         pass
 
+    def OnLeftDown(self, evt):
+        """Handle clicks on the bar
+        @param evt: wx.MouseEvent
+
+        """
+        index = self.GetIndexFromPosition(evt.GetPosition())
+        self._clicked_before = index
+        evt.Skip()
+
     def OnLeftUp(self, evt):
         """Handle clicks on the bar
         @param evt: wx.MouseEvent
 
         """
         index = self.GetIndexFromPosition(evt.GetPosition())
-        if index != wx.NOT_FOUND:
+        if index != wx.NOT_FOUND and index == self._clicked_before:
             button = self._buttons[index]
             pre = self._selected
             self._selected = index
@@ -621,6 +650,8 @@ class SegmentBar(ControlBar):
                 sevt.SetSelections(pre, index)
                 sevt.SetEventObject(self)
                 wx.PostEvent(self.GetParent(), sevt)
+
+        self._clicked_before = -1
         evt.Skip()
 
     def OnPaint(self, evt):

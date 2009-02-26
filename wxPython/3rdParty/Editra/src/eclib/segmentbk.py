@@ -66,13 +66,14 @@ class SegmentBook(ctrlbox.ControlBox):
         self._imglist = None
 
         # Setup
-        bar = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT|\
-                                             ctrlbox.CTRLBAR_STYLE_LABELS)
-        self.SetControlBar(bar, wx.TOP)
+        self._segbar = ctrlbox.SegmentBar(self,
+                                          style=ctrlbox.CTRLBAR_STYLE_GRADIENT|\
+                                                ctrlbox.CTRLBAR_STYLE_LABELS)
+        self.SetControlBar(self._segbar, wx.TOP)
 
         # Event Handlers
         self.Bind(ctrlbox.EVT_SEGMENT_SELECTED, self._OnSegmentSel)
-        self.Bind(wx.EVT_RIGHT_DOWN, self._OnRightDown)
+        self._segbar.Bind(wx.EVT_RIGHT_DOWN, self._OnRightDown)
 
     def _DoPageChange(self, psel, csel):
         """Change the page and post events
@@ -106,8 +107,10 @@ class SegmentBook(ctrlbox.ControlBox):
         """Handle right click events"""
         pos = evt.GetPosition()
         where, index = self.HitTest(pos)
+        print where, index
         if where in (SEGBOOK_ON_SEGBAR, SEGBOOK_ON_SEGMENT):
             if where == SEGBOOK_ON_SEGMENT:
+                self._segbar.SetSelection(index)
                 changed = self._DoPageChange(self.GetSelection(), index)
                 if changed:
                     # Send Context Menu Event
@@ -161,9 +164,8 @@ class SegmentBook(ctrlbox.ControlBox):
         @param index: int
 
         """
-        segbar = self.GetControlBar(wx.TOP)
-        cpage = segbar.GetSelection() 
-        segbar.RemoveSegment(index)
+        cpage = self._segbar.GetSelection() 
+        self._segbar.RemoveSegment(index)
         npage = segbar.GetSelection()
         self._DoPageChange(cpage, npage)
 
@@ -175,7 +177,7 @@ class SegmentBook(ctrlbox.ControlBox):
         @return: wxWindow or None
 
         """
-        idx = self.GetControlBar(wx.TOP).GetSelection()
+        idx = self._segbar.GetSelection()
         if idx != -1:
             return self._pages[idx]['page']
         else:
@@ -216,16 +218,14 @@ class SegmentBook(ctrlbox.ControlBox):
         @return: string
 
         """
-        bar = self.GetControlBar(wx.TOP)
-        return bar.GetSegmentLabel(index)
+        return self._segbar.GetSegmentLabel(index)
 
     def GetSelection(self):
         """Get the current selection
         @return: int
 
         """
-        bar = self.GetControlBar(wx.TOP)
-        return bar.GetSelection()
+        return self._segbar.GetSelection()
 
     def HasMultiplePages(self):
         """Does the book have multiple pages
@@ -241,8 +241,7 @@ class SegmentBook(ctrlbox.ControlBox):
 
         """
         where, index = (SEGBOOK_NO_WHERE, -1)
-        segbar = self.GetControlBar(wx.TOP)
-        index = segbar.GetIndexFromPostion(pt)
+        index = self._segbar.GetIndexFromPosition(pt)
         if index != wx.NOT_FOUND:
             where = SEGBOOK_ON_SEGMENT
 
@@ -274,9 +273,9 @@ class SegmentBook(ctrlbox.ControlBox):
 
         """
         page = self._pages[index]
-        segbar = self.GetControlBar(wx.TOP)
-        
-        raise NotImplementedError
+        page['img'] = img_id
+        self._segbar.SetSegmentImage(self._imglst.GetBitmap(img_id))
+        self.Layout()
 
     def SetPageText(self, index, text):
         """Set the text to use on the given page

@@ -24,6 +24,9 @@ import wx
 sys.path.insert(0, os.path.abspath('../../'))
 import src.eclib.ctrlbox as ctrlbox
 
+# Local imports
+import IconFile
+
 #-----------------------------------------------------------------------------#
 
 class TestPanel(ctrlbox.ControlBox):
@@ -72,22 +75,26 @@ class SegmentPanel(ctrlbox.ControlBox):
         # Attributes
         self.log = log
 
-        # Setup
+        # Make up the top segment bar
         segbar = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT|ctrlbox.CTRLBAR_STYLE_LABELS)
-        err_bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16, 16))
-
         for num in range(5):
-            segbar.AddSegment(wx.NewId(), err_bmp, label=u'TestLabel')
+            if num % 2:
+                segbar.AddSegment(wx.NewId(), IconFile.Home.GetBitmap(), label=u'Home')
+            else:
+                segbar.AddSegment(wx.NewId(), IconFile.Monkey.GetBitmap(), label=u'Monkey')
 
+        # Make a bottom segment bar
         segbar2 = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
-
         for num in range(5):
-            segbar2.AddSegment(wx.NewId(), err_bmp, label=u'Test')
+            if num % 2:
+                segbar2.AddSegment(wx.NewId(), IconFile.Book.GetBitmap())
+            else:
+                segbar2.AddSegment(wx.NewId(), IconFile.Address.GetBitmap())
 
+        # Put the components together
         self.SetControlBar(segbar, wx.TOP)
         self.SetControlBar(segbar2, wx.BOTTOM)
-
-        self.SetWindow(wx.TextCtrl(self, style=wx.TE_MULTILINE))
+        self.SetWindow(wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Hello World"))
 
         # Event Handlers
         self.Bind(ctrlbox.EVT_SEGMENT_SELECTED, self.OnSegmentClicked)
