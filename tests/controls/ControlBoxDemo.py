@@ -76,7 +76,9 @@ class SegmentPanel(ctrlbox.ControlBox):
         self.log = log
 
         # Make up the top segment bar
-        segbar = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT|ctrlbox.CTRLBAR_STYLE_LABELS)
+        segbar = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT|\
+                                                ctrlbox.CTRLBAR_STYLE_LABELS|\
+                                                ctrlbox.CTRLBAR_STYLE_NO_DIVIDERS)
         for num in range(5):
             if num % 2:
                 segbar.AddSegment(wx.NewId(), IconFile.Home.GetBitmap(), label=u'Home')

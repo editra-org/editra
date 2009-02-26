@@ -32,11 +32,13 @@ import IconFile
 
 class TestPanel(segmentbk.SegmentBook):
     def __init__(self, parent, log):
-        segmentbk.SegmentBook.__init__(self, parent)
+        segmentbk.SegmentBook.__init__(self, parent,
+                                       style=segmentbk.SEGBOOK_STYLE_NO_DIVIDERS|\
+                                             segmentbk.SEGBOOK_STYLE_LABELS)
 
         # Attributes
         self.log = log
-        self._imglst = wx.ImageList(32, 32)
+        self._imglst = wx.ImageList(32, 32, mask=False)
 
         # Setup
         bmp = IconFile.Monkey.GetBitmap()
