@@ -46,29 +46,43 @@ class SegmentBookEvent(wx.NotebookEvent):
 #-----------------------------------------------------------------------------#
 # Global constants
 
+# Styles
+SEGBOOK_STYLE_DEFAULT     = 0   # Default Style
+SEGBOOK_STYLE_NO_DIVIDERS = 1   # Don't put dividers between segments
+SEGBOOK_STYLE_LABELS      = 2   # Use labels below the icons
+
 # Locations used in HitTest Results
 SEGBOOK_NO_WHERE = -1
 SEGBOOK_ON_SEGMENT = 0
 SEGBOOK_ON_SEGBAR = 1
+
+# Misc
+SEGBOOK_NAME_STR = u"EditraSegmentBook"
 
 #-----------------------------------------------------------------------------#
 
 class SegmentBook(ctrlbox.ControlBox):
     """Notebook Class"""
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.TAB_TRAVERSAL|wx.NO_BORDER,
-                 name=u"SegmentBook"):
+                 size=wx.DefaultSize, style=SEGBOOK_STYLE_DEFAULT,
+                 name=SEGBOOK_NAME_STR):
         """Initialie the SegmentBook"""
-        ctrlbox.ControlBox.__init__(self, parent, id, pos, size, style, name)
+        ctrlbox.ControlBox.__init__(self, parent, id, pos, size,
+                                    wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
 
         # Attributes
         self._pages = list()
         self._imglist = None
 
         # Setup
-        self._segbar = ctrlbox.SegmentBar(self,
-                                          style=ctrlbox.CTRLBAR_STYLE_GRADIENT|\
-                                                ctrlbox.CTRLBAR_STYLE_LABELS)
+        bstyle = ctrlbox.CTRLBAR_STYLE_GRADIENT | \
+                 ctrlbox.CTRLBAR_STYLE_BORDER_BOTTOM
+        if style & SEGBOOK_STYLE_NO_DIVIDERS:
+            bstyle |= ctrlbox.CTRLBAR_STYLE_NO_DIVIDERS
+        if style & SEGBOOK_STYLE_LABELS:
+            bstyle |= ctrlbox.CTRLBAR_STYLE_LABELS
+
+        self._segbar = ctrlbox.SegmentBar(self, style=bstyle)
         self.SetControlBar(self._segbar, wx.TOP)
 
         # Event Handlers
@@ -283,4 +297,4 @@ class SegmentBook(ctrlbox.ControlBox):
         @param text: string
 
         """
-        raise NotImplementedError
+        self._segbar.SetSegmentLabel(index, text)

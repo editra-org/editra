@@ -68,12 +68,13 @@ SEGBAR_NAME_STR = u'EditraSegmentBar'
 
 #-- Control Style Flags --#
 
-# ControlBar
+# ControlBar / SegmentBar Style Flags
 CTRLBAR_STYLE_DEFAULT       = 0
 CTRLBAR_STYLE_GRADIENT      = 1     # Paint the bar with a gradient
 CTRLBAR_STYLE_BORDER_BOTTOM = 2     # Add a border to the bottom
 CTRLBAR_STYLE_BORDER_TOP    = 4     # Add a border to the top
 CTRLBAR_STYLE_LABELS        = 8     # Draw labels under the icons (SegmentBar)
+CTRLBAR_STYLE_NO_DIVIDERS   = 16    # Don't draw dividers between segments
 
 # ControlBar event for items added by AddTool
 edEVT_CTRLBAR = wx.NewEventType()
@@ -397,16 +398,6 @@ class ControlBar(wx.PyPanel):
         @param color2: Gradient end color
 
         """
-        dc.SetPen(wx.Pen(color, 1))
-
-        # Add a border to the bottom
-        if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
-            dc.DrawLine(rect.x, rect.height-1, rect.width, rect.height-1)
-
-        # Add a border to the top
-        if self._style & CTRLBAR_STYLE_BORDER_TOP:
-            dc.DrawLine(rect.x, 1, rect.width, 1)
-
         # Paint the gradient
         if self._style & CTRLBAR_STYLE_GRADIENT:
             if isinstance(dc, wx.GCDC):
@@ -419,6 +410,15 @@ class ControlBar(wx.PyPanel):
             gc.SetPen(gc.CreatePen(self._pen))
             gc.SetBrush(grad)
             gc.DrawRectangle(rect.x, 0, rect.width - 0.5, rect.height - 0.5)
+
+        dc.SetPen(wx.Pen(color, 1))
+        # Add a border to the bottom
+        if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
+            dc.DrawLine(rect.x, rect.height - 1, rect.width, rect.height - 1)
+
+        # Add a border to the top
+        if self._style & CTRLBAR_STYLE_BORDER_TOP:
+            dc.DrawLine(rect.x, 1, rect.width, 1)
 
     def OnPaint(self, evt):
         """Paint the background to match the current style
@@ -540,9 +540,10 @@ class SegmentBar(ControlBar):
             dc.DrawText(button['label'], txpos, typos)
 
         if not selected:
-            dc.SetPen(self._pen)
-            dc.DrawLine(xpos, 0, xpos, height)
-            dc.DrawLine(rside, 0, rside, height)
+            if not (self._style & CTRLBAR_STYLE_NO_DIVIDERS):
+                dc.SetPen(self._pen)
+                dc.DrawLine(xpos, 0, xpos, height)
+                dc.DrawLine(rside, 0, rside, height)
         else:
             dc.SetPen(self._spen)
             tmpx = xpos + 1
@@ -673,7 +674,7 @@ class SegmentBar(ControlBar):
         # Draw the buttons
         # TODO: would be more efficient to just redraw the buttons that
         #       need redrawing.
-        npos = 0
+        npos = 5
         use_labels = self._style & CTRLBAR_STYLE_LABELS
         for idx, button in enumerate(self._buttons):
             npos = self.DoDrawButton(gc, npos, button,
@@ -710,6 +711,19 @@ class SegmentBar(ControlBar):
             del segment['bmp']
         segment['bmp'] = bmp
         segment['bsize'] = bmp.GetSize()
+        self.InvalidateBestSize()
+        self.Refresh()
+
+    def SetSegmentLabel(self, index, label):
+        """Set the label for a given segment
+        @param index: segment index
+        @param label: string
+
+        """
+        segment = self._buttons[index]
+        lsize = self.GetTextExtent(label)
+        segment['label'] = label
+        segment['lsize'] = lsize
         self.InvalidateBestSize()
         self.Refresh()
 
