@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Test file for testing the ControlBox and ControlBar
+Test file for testing the ControlBox, ControlBar, and SegmentBar classes
 
 """
 
@@ -17,6 +17,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import time
 import sys
 import os
 import wx
@@ -28,6 +29,11 @@ import src.eclib.ctrlbox as ctrlbox
 import IconFile
 
 #-----------------------------------------------------------------------------#
+# Globals
+ID_SHOW_CONTROL = wx.NewId()
+ID_SHOW_SEGMENT = wx.NewId()
+
+#-----------------------------------------------------------------------------#
 
 class TestPanel(ctrlbox.ControlBox):
     def __init__(self, parent, log):
@@ -37,7 +43,44 @@ class TestPanel(ctrlbox.ControlBox):
         self.log = log
 
         # Setup
-        tmpbar = ctrlbox.SegmentBar(self)
+        self.CreateControlBar()
+        cbar = self.GetControlBar()
+        cbar.SetVMargin(2, 2)
+        cbar.AddControl(wx.Button(cbar, ID_SHOW_CONTROL, label="Show ControlBar Sample"))
+        cbar.AddControl(wx.Button(cbar, ID_SHOW_SEGMENT, label="Show SegmentBar Sample"))
+        text = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.TE_RICH2)
+        text.SetValue("Welcome to the ControlBox Sample.\n\nThis window is a"
+                      "ControlBox with a ControlBar in it.\n\n"
+                      "Click a button to see the extended samples.")
+        self.SetWindow(text)
+
+        # Event Handlers
+        self.Bind(wx.EVT_BUTTON, self.OnButton)
+
+    def OnButton(self, evt):
+        """Handle Button Events"""
+        e_id = evt.GetId()
+        if e_id == ID_SHOW_CONTROL:
+            # Show a Frame with a ControlBox using ControlBars in it
+            frame = MakeTestFrame(self, "ControlBar Sample", self.log, False)
+            frame.Show()
+        elif e_id == ID_SHOW_SEGMENT:
+            # Show a frame with a ControlBox using SegmentBars in it
+            frame = MakeTestFrame(self, "SegmentBar Sample", self.log, True)
+            frame.Show()
+        else:
+            evt.Skip()
+
+#-----------------------------------------------------------------------------#
+
+class ControlBarPanel(ctrlbox.ControlBox):
+    def __init__(self, parent, log):
+        ctrlbox.ControlBox.__init__(self, parent)
+
+        # Attributes
+        self.log = log
+
+        # Setup
         self.CreateControlBar()
 
         cbar = self.GetControlBar()
@@ -52,6 +95,7 @@ class TestPanel(ctrlbox.ControlBox):
 
         self.CreateControlBar(wx.BOTTOM)
         bbar = self.GetControlBar(wx.BOTTOM)
+        bbar.SetVMargin(1, 1)
         bbar.AddTool(wx.ID_ANY, err_bmp, "HELLO")
 
         self.SetWindow(wx.TextCtrl(self, style=wx.TE_MULTILINE))
@@ -62,8 +106,9 @@ class TestPanel(ctrlbox.ControlBox):
         self.log.write("ControlBarEvent: %d" % evt.GetId())
 
     def OnButton(self, evt):
-        self.log.write("Button tool clicked")
-        frame = MakeTestFrame(self.log)
+        self.log.write("Button tool clicked: Id=%d" % evt.GetId())
+        frame = MakeTestFrame(self, "Random Test Frame", self.log,
+                              bool(long(time.time()) % 2))
         frame.Show()
 
 #-----------------------------------------------------------------------------#
@@ -108,15 +153,21 @@ class SegmentPanel(ctrlbox.ControlBox):
 
 #-----------------------------------------------------------------------------#
 
-def MakeTestFrame(segment=False):
-    frame = wx.Frame(None, title="Test ControlBox")
+def MakeTestFrame(caller, title, log, segment=False):
+    frame = wx.Frame(None, title=title)
     fsizer = wx.BoxSizer(wx.VERTICAL)
     if not segment:
-        panel = TestPanel(frame, TestLog())
+        panel = ControlBarPanel(frame, log)
     else:
-        panel = SegmentPanel(frame, TestLog())
-        frame.CenterOnParent()
+        panel = SegmentPanel(frame, log)
     fsizer.Add(panel, 1, wx.EXPAND)
+    frame.SetSizer(fsizer)
+
+    # Adjust Window Postion
+    if caller is not None:
+        pos = caller.GetScreenPosition()
+        frame.SetPosition((pos[0]+22, pos[1]+22))
+
     return frame
 
 #-----------------------------------------------------------------------------#
@@ -136,10 +187,11 @@ if __name__ == '__main__':
         import run
     except ImportError:
         app = wx.PySimpleApp(False)
-        frame = MakeTestFrame(segment=False)
+        frame = wx.Frame(None, title="ControlBox Test")
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(TestPanel(frame, TestLog()), 1, wx.EXPAND)
+        frame.SetSizer(sizer)
         frame.Show()
-        frame2 = MakeTestFrame(segment=True)
-        frame2.Show()
         app.MainLoop()
     else:
         run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])

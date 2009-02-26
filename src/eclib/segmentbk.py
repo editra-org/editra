@@ -9,7 +9,26 @@
 """
 Editra Control Library: SegmentBook
 
-Custom notebook like class
+A L{SegmentBook} is a Toolbook like class derived from a ControlBox and
+SegmentBar. Allows for a multipage control with Icons w/ optional text as
+page buttons.
+
++-----------------------------------------+
+| @^@    *>                               |
+| <->   /|D                               |
+| frog  bird                              |
++-----------------------------------------+
+|                                         |
+| Main Page Area                          |
+|                                         |
+|                                         |
+|                                         |
+|                                         |
+|                                         |
+|                                         |
+|                                         |
+|                                         |
++-----------------------------------------+
 
 """
 
@@ -17,7 +36,14 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ['SegmentBook']
+__all__ = ['SegmentBook', 'SegmentBookEvent', 'SEGBOOK_STYLE_DEFAULT',
+           'SEGBOOK_STYLE_NO_DIVIDERS', 'SEGBOOK_STYLE_LABELS',
+           'SEGBOOK_NO_WHERE', 'SEGBOOK_ON_SEGMENT', 'SEGBOOK_ON_SEGBAR',
+           'SEGBOOK_NAME_STR',
+           'edEVT_SB_PAGE_CHANGING', 'EVT_SB_PAGE_CHANGING',
+           'edEVT_SB_PAGE_CHANGED', 'EVT_SB_PAGE_CHANGED',
+           'edEVT_SB_PAGE_CLOSED', 'EVT_SB_PAGE_CLOSED',
+           'edEVT_SB_PAGE_CONTEXT_MENU', 'EVT_SB_PAGE_CLOSED', ]
 
 #-----------------------------------------------------------------------------#
 # Imports
