@@ -22,7 +22,6 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Dependancies
-import os
 import wx
 import ed_glob
 from profiler import Profile_Get
