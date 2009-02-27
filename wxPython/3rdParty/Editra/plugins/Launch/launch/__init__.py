@@ -8,9 +8,9 @@
 ###############################################################################
 # Plugin Metadata
 """Run the script in the current buffer"""
-__version__ = "1.0"
+__version__ = "1.1"
 
-__author__ = "Cody Precord <cprecord@editra.org>"
+__author__ = "Cody Precord"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
