@@ -718,11 +718,13 @@ class PostScriptHandler(FileTypeHandler):
 
 class PythonHandler(FileTypeHandler):
     """FileTypeHandler for Python"""
-    RE_PY_ERROR = re.compile('File "(.+)", line ([0-9]+)')
+    RE_PY_ERROR = re.compile('File "(.+)", line ([0-9]+)') # Python Exceptions
+    RE_PL_ERR = re.compile(r'\s*([REWCF]):\s*([0-9]+):.*') # Pylint Output
 
     def __init__(self):
         FileTypeHandler.__init__(self)
-        self.commands = dict(python='python -u', pylint='pylint')
+        self.commands = dict(python='python -u', pylint='pylint',
+                             pylinterr='pylint -e')
         self.default = 'python'
 
     @property
@@ -744,15 +746,22 @@ class PythonHandler(FileTypeHandler):
         error in question and open the file to that point in the buffer.
 
         """
-        ifile, line = _FindFileLine(outbuffer, line, fname, self.RE_PY_ERROR)
-        _OpenToLine(ifile, line, mainw)
+        match = PythonHandler.RE_PL_ERR.match(outbuffer.GetLine(line))
+        if match:
+            eline = max(0, int(match.group(2)) - 1)
+            _OpenToLine(fname, eline, mainw)
+        else:
+            ifile, line = _FindFileLine(outbuffer, line, fname,
+                                        PythonHandler.RE_PY_ERROR)
+            _OpenToLine(ifile, line, mainw)
 
     def StyleText(self, stc, start, txt):
         """Style python Information and Error messages from script
         output.
 
         """
-        if _StyleError(stc, start, txt, self.RE_PY_ERROR):
+        if _StyleError(stc, start, txt, PythonHandler.RE_PY_ERROR) or \
+           _StyleError(stc, start, txt, PythonHandler.RE_PL_ERR):
             return
         else:
             # Highlight Start end lines this is what the
