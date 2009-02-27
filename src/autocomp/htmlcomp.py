@@ -59,6 +59,30 @@ NLINE_TAGS = ('body', 'head', 'html', 'ol', 'style', 'table', 'tbody', 'ul')
 
 TAG_RE = re.compile("\<\s*([a-zA-Z][a-zA-Z0-9]*)")
 
+PHP_AREA = [wx.stc.STC_HPHP_COMMENT, wx.stc.STC_HPHP_COMMENTLINE,
+            wx.stc.STC_HPHP_COMPLEX_VARIABLE, wx.stc.STC_HPHP_DEFAULT,
+            wx.stc.STC_HPHP_HSTRING, wx.stc.STC_HPHP_HSTRING_VARIABLE,
+            wx.stc.STC_HPHP_NUMBER, wx.stc.STC_HPHP_OPERATOR,
+            wx.stc.STC_HPHP_SIMPLESTRING,
+            wx.stc.STC_HPHP_VARIABLE, wx.stc.STC_HPHP_WORD]
+
+HTML_AREA = [wx.stc.STC_H_ASP, wx.stc.STC_H_ASPAT, wx.stc.STC_H_ATTRIBUTE,
+             wx.stc.STC_H_ATTRIBUTEUNKNOWN, wx.stc.STC_H_CDATA,
+             wx.stc.STC_H_COMMENT, wx.stc.STC_H_DEFAULT,
+             wx.stc.STC_H_DOUBLESTRING, wx.stc.STC_H_ENTITY,
+             wx.stc.STC_H_NUMBER, wx.stc.STC_H_OTHER, wx.stc.STC_H_QUESTION,
+             wx.stc.STC_H_SCRIPT, wx.stc.STC_H_SGML_1ST_PARAM,
+             wx.stc.STC_H_SGML_1ST_PARAM_COMMENT,
+             wx.stc.STC_H_SGML_BLOCK_DEFAULT, wx.stc.STC_H_SGML_COMMAND,
+             wx.stc.STC_H_SGML_COMMENT, wx.stc.STC_H_SGML_DEFAULT,
+             wx.stc.STC_H_SGML_DOUBLESTRING, wx.stc.STC_H_SGML_ENTITY,
+             wx.stc.STC_H_SGML_ERROR, wx.stc.STC_H_SGML_SIMPLESTRING,
+             wx.stc.STC_H_SGML_SPECIAL, wx.stc.STC_H_SINGLESTRING,
+             wx.stc.STC_H_TAG, wx.stc.STC_H_TAGEND,
+             wx.stc.STC_H_TAGUNKNOWN, wx.stc.STC_H_VALUE,
+             wx.stc.STC_H_XCCOMMENT, wx.stc.STC_H_XMLEND,
+             wx.stc.STC_H_XMLSTART]
+
 #--------------------------------------------------------------------------#
 
 class Completer(completer.BaseCompleter):
@@ -94,6 +118,11 @@ class Completer(completer.BaseCompleter):
 
         buff = self.GetBuffer()
         cpos = buff.GetCurrentPos()
+
+        # Check if we are in a php region or not
+        if buff.GetStyleAt(cpos) not in HTML_AREA:
+            return u''
+
         cline = buff.GetCurrentLine()
 
         tmp = buff.GetLine(cline).rstrip()
@@ -106,7 +135,7 @@ class Completer(completer.BaseCompleter):
                 return TAGS
 
         tmp = tmp.rstrip('>').rstrip()
-        if not tmp.endswith('/'):
+        if len(tmp) and (tmp[-1] in '"\' \t' or tmp[-1].isalpha()):
             for line in range(cline, -1, -1):
                 txt = buff.GetLine(line)
                 if line == cline:

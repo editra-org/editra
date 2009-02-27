@@ -23,6 +23,7 @@ BUG FIXES:
 +Fix incorrect page count shown in print previews.
 +Remember print settings throughout session and for every frame.
 +Fix error when doing Copy Path from tab right click menu.
++Fix incorrectly showing autocompletion options under some cases in php files.
 
 #-----------------------------------------------------------------------------#
 
