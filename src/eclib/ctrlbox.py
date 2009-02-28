@@ -270,9 +270,13 @@ class ControlBox(wx.PyPanel):
 
         """
         if self.GetWindow() is None:
-            if self._topb is None:
+            if (self._topb and self._botb is None) or \
+               (self._topb is None and self._botb is None):
                 self._sizer.Add(window, 1, wx.EXPAND)
+            elif self._botb and self._topb is None:
+                self._sizer.Insert(0, window, 1, wx.EXPAND)
             else:
+                print self._botb, self._topb
                 self._sizer.Insert(1, window, 1, wx.EXPAND)
         else:
             self._sizer.Replace(self._main, window)
@@ -543,7 +547,7 @@ class SegmentBar(ControlBar):
         if draw_label:
             twidth, theight = button['lsize']
             txpos = ((self._segsize[0] / 2) - (twidth / 2)) + xpos
-            typos = height - theight
+            typos = height - theight - 2
             dc.DrawText(button['label'], txpos, typos)
 
         if not selected:
