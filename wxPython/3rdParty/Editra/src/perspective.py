@@ -81,8 +81,10 @@ class PerspectiveManager(object):
         pos = Profile_Get('WPOS', "size_tuple", False)
         if Profile_Get('SET_WPOS') and pos:
             # Ensure window is on screen
+            # NOTE: don't default to 0,0 otherwise on osx the frame will be
+            #       stuck behind the menubar.
             if pos[0] < 0 or pos[1] < 0:
-                pos = (0, 0)
+                pos = (100, 100)
             self._window.SetPosition(pos)
 
         # Event Handlers
