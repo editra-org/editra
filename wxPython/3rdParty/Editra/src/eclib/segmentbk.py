@@ -138,8 +138,7 @@ class SegmentBook(ctrlbox.ControlBox):
             changed = True
         else:
             # Reset the segment selection
-            psel = max(psel, 0)
-            evt.GetObject().SetSelection(psel)
+            self._segbar.SetSelection(max(psel, 0))
             changed = False
         return changed
 
@@ -324,3 +323,14 @@ class SegmentBook(ctrlbox.ControlBox):
 
         """
         self._segbar.SetSegmentLabel(index, text)
+
+    def SetSelection(self, index):
+        """Set the selected page
+        @param index: index of page to select
+
+        """
+        csel = self._segbar.GetSelection()
+        if csel != index:
+            self._segbar.SetSelection(index)
+            self._DoPageChange(csel, index)
+
