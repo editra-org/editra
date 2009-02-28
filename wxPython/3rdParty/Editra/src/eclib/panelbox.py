@@ -55,6 +55,39 @@ class PanelBox(scrolled.ScrolledPanel):
 #        self.Bind(wx.EVT_KEY_UP, self.OnNavigate)
         self.GetParent().Bind(wx.EVT_KEY_UP, self.OnNavigate)
 
+#    def SetupScrolling(self, scroll_x=True, scroll_y=True, rate_x=20, rate_y=20, 
+#                       scrollToTop=True):
+#        """
+#        This function sets up the event handling necessary to handle
+#        scrolling properly. It should be called within the __init__
+#        function of any class that is derived from ScrolledPanel,
+#        once the controls on the panel have been constructed and
+#        thus the size of the scrolling area can be determined.
+
+#        """
+#        # The following is all that is needed to integrate the sizer and the
+#        # scrolled window.
+#        if not scroll_x: rate_x = 0
+#        if not scroll_y: rate_y = 0
+
+#        # Round up the virtual size to be a multiple of the scroll rate
+#        sizer = self.GetSizer()
+#        if sizer:
+#            w, h = sizer.GetMinSize()
+#            if rate_x:
+#                w += rate_x - (w % rate_x)
+#            if rate_y:
+#                h += rate_y - (h % rate_y)
+#            self.SetVirtualSize( (w, h) )
+#        self.SetScrollRate(rate_x, rate_y)        
+#        wx.CallAfter(self._SetupAfter, scrollToTop) # scroll back to top after initial events
+
+
+#    def _SetupAfter(self, scrollToTop):
+#        self.SetVirtualSize(self.GetBestVirtualSize())
+#        if scrollToTop:
+#            self.Scroll(0,0)
+
     #---- Event Handlers ----#
 
     def OnItemClicked(self, evt):
@@ -249,6 +282,7 @@ class PanelBoxItemBase(wx.PyPanel):
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 #        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_MOUSEWHEEL, self.OnMouseWheel)
 
     def _UpdateForeground(self, color):
         """Update foreground colors when selection changes
@@ -277,6 +311,11 @@ class PanelBoxItemBase(wx.PyPanel):
         evt.SetEventObject(self)
         self.GetParent().OnItemClicked(evt)
         evt.SetEventObject(e_obj)
+        evt.Skip()
+
+    def OnMouseWheel(self, evt):
+        """Relay the mouse wheel events to the panel box"""
+        self.GetParent().GetEventHandler().ProcessEvent(evt)
         evt.Skip()
 
     def OnPaint(self, evt):
