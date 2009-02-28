@@ -42,6 +42,7 @@ import syntax.syntax as syntax
 import ed_msg
 import eclib.elistmix as elistmix
 import eclib.ecpickers as ecpickers
+import eclib.segmentbk as segmentbk
 
 #----------------------------------------------------------------------------#
 # Globals
@@ -161,7 +162,7 @@ class PreferencesDialog(wx.Frame):
 
 #-----------------------------------------------------------------------------#
 
-class PrefTools(wx.Toolbook):
+class PrefTools(segmentbk.SegmentBook):
     """Main sections of the configuration pages
     @note: implements the top level book control for the prefdlg
     @todo: when using BK_BUTTONBAR style so that the icons have text
@@ -175,7 +176,7 @@ class PrefTools(wx.Toolbook):
     UPDATE_PG  = 3
     ADV_PG     = 4
 
-    def __init__(self, parent, tbid=wx.ID_ANY, style=wx.BK_BUTTONBAR):
+    def __init__(self, parent):
         """Initializes the main book control of the preferences dialog
         @summary: Creates the top level notebook control for the prefdlg
                   a toolbar is used for changing pages.
@@ -186,7 +187,9 @@ class PrefTools(wx.Toolbook):
                changed the toolbook icons cannont be updated instantly.
 
         """
-        wx.Toolbook.__init__(self, parent, tbid, style=style)
+        segmentbk.SegmentBook.__init__(self, parent, wx.ID_ANY,
+                                       style=segmentbk.SEGBOOK_STYLE_LABELS|\
+                                             segmentbk.SEGBOOK_STYLE_NO_DIVIDERS)
 
         # Attributes
         self._imglst = wx.ImageList(32, 32)
@@ -198,20 +201,19 @@ class PrefTools(wx.Toolbook):
         self.SetImageList(self._imglst)
 
         self.AddPage(GeneralPanel(self), _("General"),
-                     imageId=self.GENERAL_PG)
+                     img_id=self.GENERAL_PG)
         self.AddPage(AppearancePanel(self), _("Appearance"),
-                     imageId=self.APPEAR_PG)
+                     img_id=self.APPEAR_PG)
         self.AddPage(DocumentPanel(self), _("Document"),
-                     imageId=self.DOC_PG)
+                     img_id=self.DOC_PG)
         self.AddPage(NetworkPanel(self), _("Network"),
-                     imageId=self.UPDATE_PG)
+                     img_id=self.UPDATE_PG)
         self.AddPage(AdvancedPanel(self), _("Advanced"),
-                     imageId=self.ADV_PG)
+                     img_id=self.ADV_PG)
 
         # Event Handlers
-        self.Bind(wx.EVT_TOOLBOOK_PAGE_CHANGED, self.OnPageChanged)
-        self.Bind(wx.EVT_TOOLBOOK_PAGE_CHANGING, self.OnPageChanging)
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(segmentbk.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(segmentbk.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
 
     def OnPageChanging(self, evt):
         sel = evt.GetSelection()
@@ -230,53 +232,20 @@ class PrefTools(wx.Toolbook):
         page.SetInitialSize()
         parent = self.GetParent()
         psz = page.GetSize()
-        tbh = self.GetToolBar().GetSize().GetHeight()
+        width = psz.GetWidth()
 
-        # Make sure not to resize the width less than the size needed to show
-        # all the books icons.
-        tbw = self.GetToolBar().GetBestSize().GetWidth()
-        if psz.GetWidth() >= tbw:
-            width = psz.GetWidth()
-        else:
-            width = tbw
+        cbar = self.GetControlBar(wx.TOP)
+        tbsz = cbar.GetBestSize()
+        if tbsz[0] > width:
+            width = tbsz[0]
 
         page.Freeze()
-        parent.SetClientSize((width, psz.GetHeight() + tbh))
+        parent.SetClientSize((width, psz.GetHeight() + tbsz[1]))
         parent.SendSizeEvent()
         parent.Layout()
         page.Thaw()
         if evt is not None:
             evt.Skip()
-
-    def OnPaint(self, evt):
-        """Paint the toolbar's background
-        @todo: it would be nice to use a unified toolbar style on osx
-        @note: unified toolbar is available in 2.8.5+ maybe create custom
-               window using native toolbar to accomidate this.
-
-        """
-        # This is odd but I have recieved a number of error reports where
-        # wx is being reported as None in this function
-        if 'wx' not in globals() or wx is None:
-            evt.Skip()
-            return
-
-        dc = wx.PaintDC(self)
-        gc = wx.GraphicsContext.Create(dc)
-        col1 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        col2 = util.AdjustColour(col1, -10)
-        rect = self.GetToolBar().GetRect()
-
-        # Create the background path
-        path = gc.CreatePath()
-        path.AddRectangle(0, 0, rect.width, (rect.height + 3))
-
-        gc.SetPen(wx.Pen(col1, 1))
-        grad = gc.CreateLinearGradientBrush(0, 0, 0, rect.height, col1, col2)
-        gc.SetBrush(grad)
-        gc.DrawPath(path)
-
-        evt.Skip()
 
 #-----------------------------------------------------------------------------#
 
@@ -286,12 +255,12 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
               global profile setting for how Editra should operate.
 
     """
-    def __init__(self, parent):
+    def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
         PreferencesPanelBase.__init__(self)
 
         # Attributes
@@ -474,12 +443,12 @@ class DocumentPanel(wx.Panel, PreferencesPanelBase):
               ed_stc.EditraStc text control.
 
     """
-    def __init__(self, parent):
+    def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
         PreferencesPanelBase.__init__(self)
 
     def _DoLayout(self):
@@ -942,12 +911,12 @@ class AppearancePanel(wx.Panel, PreferencesPanelBase):
               related settings in Editra.
 
     """
-    def __init__(self, parent):
+    def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
         PreferencesPanelBase.__init__(self)
 
         # Event Handlers
@@ -1119,9 +1088,9 @@ class AppearancePanel(wx.Panel, PreferencesPanelBase):
 
 class NetworkPanel(wx.Panel, PreferencesPanelBase):
     """Network related configration options"""
-    def __init__(self, parent):
+    def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel"""
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
         PreferencesPanelBase.__init__(self)
 
     def _DoLayout(self):
@@ -1388,12 +1357,12 @@ class AdvancedPanel(wx.Panel):
               options.
 
     """
-    def __init__(self, parent):
+    def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
 
         # Layout
         self._layout_done = False

@@ -17,7 +17,7 @@ NEWS:
 
 
 NEW: [features/enhancments]
-
++New Plugin Manager Dialog.
 
 BUG FIXES:
 +Fix incorrect page count shown in print previews.
