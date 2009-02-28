@@ -949,8 +949,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 win.Raise()
                 return
             dlg = plugdlg.PluginDialog(self, wx.ID_ANY, PROG_NAME + " " \
-                                        + _("Plugin Manager"), \
-                                        size=wx.Size(550, 350))
+                                       + _("Plugin Manager"), \
+                                       size=wx.Size(550, 350))
             dlg.CenterOnParent()
             dlg.Show()
         else:
