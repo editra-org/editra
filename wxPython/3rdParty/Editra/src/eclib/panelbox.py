@@ -172,6 +172,10 @@ class PanelBox(scrolled.ScrolledPanel):
         """Delete all the items in the list"""
         for item in self._items:
             self._sizer.Remove(item)
+            try:
+                item.Destroy()
+            except wx.PyDeadObjectError:
+                pass
 
         del self._items
         self._items = list()
