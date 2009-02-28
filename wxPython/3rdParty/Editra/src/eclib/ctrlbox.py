@@ -597,7 +597,8 @@ class SegmentBar(ControlBar):
             mheight += self._buttons[0]['lsize'][1]
 
         width = (mwidth + (SegmentBar.HPAD * 2)) * len(self._buttons)
-        size = wx.Size(width, mheight + (SegmentBar.VPAD * 2))
+        size = wx.Size(width + (SegmentBar.HPAD * 2),
+                       mheight + (SegmentBar.VPAD * 2))
         self.CacheBestSize(size)
         self._segsize = (mwidth + (SegmentBar.HPAD * 2),
                          mheight + (SegmentBar.VPAD * 2))
