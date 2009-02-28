@@ -192,13 +192,14 @@ class PrefTools(segmentbk.SegmentBook):
                                              segmentbk.SEGBOOK_STYLE_NO_DIVIDERS)
 
         # Attributes
-        self._imglst = wx.ImageList(32, 32)
-        self._imglst.Add(MakeThemeTool(ed_glob.ID_PREF))
-        self._imglst.Add(MakeThemeTool(ed_glob.ID_THEME))
-        self._imglst.Add(MakeThemeTool(ed_glob.ID_DOCPROP))
-        self._imglst.Add(MakeThemeTool(ed_glob.ID_WEB))
-        self._imglst.Add(MakeThemeTool(ed_glob.ID_ADVANCED))
+        self._imglst = list()
+        self._imglst.append(MakeThemeTool(ed_glob.ID_PREF))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_THEME))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_DOCPROP))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_WEB))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_ADVANCED))
         self.SetImageList(self._imglst)
+        self.SetUsePyImageList(True)
 
         self.AddPage(GeneralPanel(self), _("General"),
                      img_id=self.GENERAL_PG)

@@ -100,16 +100,14 @@ class PluginDialog(wx.MiniFrame):
         self._cfg_pg = ConfigPanel(self._nb, style=wx.BORDER_SUNKEN)
         self._dl_pg = DownloadPanel(self._nb)
         self._inst_pg = InstallPanel(self._nb)
-        self._imglst = wx.ImageList(32, 32)
+        self._imglst = list()
 
         # Setup
-        bmp = MakeThemeTool(ed_glob.ID_PREF)
-        self._imglst.Add(bmp)
-        bmp = MakeThemeTool(ed_glob.ID_WEB)
-        self._imglst.Add(bmp)
-        bmp = MakeThemeTool(ed_glob.ID_PACKAGE)
-        self._imglst.Add(bmp)
+        self._imglst.append(MakeThemeTool(ed_glob.ID_PREF))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_WEB))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_PACKAGE))
         self._nb.SetImageList(self._imglst)
+        self._nb.SetUsePyImageList(True)
 
         self._nb.AddPage(self._cfg_pg, _("Configure"), img_id=0)
         self._nb.AddPage(self._dl_pg, _("Download"), img_id=1)

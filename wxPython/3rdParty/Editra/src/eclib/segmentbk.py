@@ -99,6 +99,7 @@ class SegmentBook(ctrlbox.ControlBox):
         # Attributes
         self._pages = list()
         self._imglist = None
+        self._use_pylist = False
 
         # Setup
         bstyle = ctrlbox.CTRLBAR_STYLE_GRADIENT | \
@@ -177,7 +178,11 @@ class SegmentBook(ctrlbox.ControlBox):
         page.Hide()
         self._pages.append(dict(page=page, img=img_id))
         segbar = self.GetControlBar(wx.TOP)
-        segbar.AddSegment(wx.ID_ANY, self._imglist.GetBitmap(img_id), text)
+        if self._use_pylist:
+            bmp = self._imglist[img_id]
+        else:
+            bmp = self._imglist.GetBitmap(img_id)
+        segbar.AddSegment(wx.ID_ANY, bmp, text)
         idx = len(self._pages) - 1
 
         if select or idx == 0:
@@ -334,3 +339,10 @@ class SegmentBook(ctrlbox.ControlBox):
             self._segbar.SetSelection(index)
             self._DoPageChange(csel, index)
 
+    def SetUsePyImageList(self, use_pylist):
+        """Set whether the control us using a regular python list for
+        storing images or a wxImageList.
+        @param use_pylist: bool
+
+        """
+        self._use_pylist = use_pylist
