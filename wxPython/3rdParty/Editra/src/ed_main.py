@@ -995,7 +995,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY,
                         ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE,
                         ID_PASTE_AFTER, ID_COLUMN_MODE, ID_TOGGLE_FOLD,
-                        ID_TOGGLE_ALL_FOLDS ]
+                        ID_TOGGLE_ALL_FOLDS, ID_DELETE_LINE ]
 
         # Special handling for common clipboard related actions
         has_focus = self.FindFocus()

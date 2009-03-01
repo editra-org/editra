@@ -572,6 +572,9 @@ class EdMenuBar(wx.MenuBar):
         linemenu.Append(ed_glob.ID_CUT_LINE, _("Cut Line") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_CUT_LINE),
                         _("Cut Current Line"))
+        linemenu.Append(ed_glob.ID_DELETE_LINE, _("Delete Line") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DELETE_LINE),
+                        _("Delete the selected line(s)"))
         linemenu.Append(ed_glob.ID_COPY_LINE, _("Copy Line") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_COPY_LINE),
                         _("Copy Current Line"))
@@ -1002,6 +1005,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_LINE_AFTER : (u"Ctrl", u"L"),
                      ed_glob.ID_LINE_BEFORE : (u"Ctrl", u"Shift", u"L"),
                      ed_glob.ID_CUT_LINE : (u"Ctrl", u"D"),
+                     ed_glob.ID_DELETE_LINE : (u"Ctrl", u"Shift", "D"),
                      ed_glob.ID_COPY_LINE : (u"Ctrl", u"Y"),
                      ed_glob.ID_DUP_LINE : (u"Ctrl", u"Shift", u"C"),
                      ed_glob.ID_JOIN_LINES : (u"Ctrl", u"J"),

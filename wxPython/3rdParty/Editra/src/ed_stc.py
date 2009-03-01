@@ -1225,6 +1225,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                   ed_glob.ID_REDO  : self.Redo, ed_glob.ID_INDENT : self.Tab,
                   ed_glob.ID_REVERT_FILE : self.RevertToSaved,
                   ed_glob.ID_CUT_LINE : self.LineCut,
+                  ed_glob.ID_DELETE_LINE : self.LineDelete,
                   ed_glob.ID_COLUMN_MODE : self.ToggleColumnMode,
                   ed_glob.ID_COPY_LINE : self.LineCopy,
                   ed_glob.ID_DUP_LINE : self.LineDuplicate,
@@ -1516,6 +1517,23 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         style = self.GetStyleAt(pos)
         return self.FindTagById(style) in ('string_style', 'char_style')
+
+    def LineDelete(self):
+        """Delete the selected lines without modifying the clipboard"""
+        sline = self.LineFromPosition(self.GetSelectionStart())
+        eline = self.LineFromPosition(self.GetSelectionEnd())
+        if sline < eline:
+            tstart = self.GetLineStartPosition(sline)
+            tend = self.GetLineEndPosition(eline)
+        else:
+            tstart = self.GetLineStartPosition(eline)
+            tend = self.GetLineEndPosition(sline)
+
+        self.SetTargetStart(tstart - len(self.GetEOLChar()))
+        self.SetTargetEnd(tend)
+        self.BeginUndoAction()
+        self.ReplaceTarget(u'')
+        self.EndUndoAction()
 
     def LinesJoin(self):
         """Join lines in target and compress whitespace

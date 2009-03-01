@@ -18,6 +18,7 @@ NEWS:
 
 NEW: [features/enhancments]
 +New Plugin Manager Dialog.
++Add shortcut for LineDelete to delete line without modifying clipboard.
 
 BUG FIXES:
 +Fix incorrect page count shown in print previews.
