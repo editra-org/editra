@@ -23,7 +23,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_PRINT_SU', 'ID_EXIT', 'ID_UNDO', 'ID_REDO', 'ID_CUT',
             'ID_COPY', 'ID_PASTE', 'ID_SELECTALL', 'ID_ADD_BM',
             'ID_DEL_ALL_BM', 'ID_LINE_AFTER', 'ID_LINE_BEFORE', 'ID_CUT_LINE',
-            'ID_COPY_LINE', 'ID_JOIN_LINES', 'ID_TRANSPOSE',
+            'ID_COPY_LINE', 'ID_JOIN_LINES', 'ID_TRANSPOSE', 'ID_DELETE_LINE',
             'ID_QUICK_FIND', 'ID_PREF', 'ID_ZOOM_OUT',
             'HOME_PAGE', 'CONTACT_MAIL', 'ID_ZOOM_IN', 'ID_ZOOM_NORMAL',
             'ID_SHOW_EDGE', 'ID_SHOW_EOL', 'ID_SHOW_LN', 'ID_SHOW_WS',
@@ -120,6 +120,7 @@ ID_DEL_ALL_BM    = wx.NewId()
 ID_LINE_AFTER    = wx.NewId()
 ID_LINE_BEFORE   = wx.NewId()
 ID_CUT_LINE      = wx.NewId()
+ID_DELETE_LINE   = wx.NewId()
 ID_COPY_LINE     = wx.NewId()
 ID_DUP_LINE      = wx.NewId()
 ID_JOIN_LINES    = wx.NewId()
