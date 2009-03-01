@@ -511,8 +511,13 @@ class PluginManager(object):
             return
 
         pkg_env = env
+        tmploaded = [ name.lower() for name in self._loaded ]
         for name in pkg_env:
             self.LOG("[pluginmgr][info] Found plugin: %s" % name)
+            if name.lower() in tmploaded:
+                self.LOG("[pluginmgr][info] %s is already loaded" % name)
+                continue
+
             egg = pkg_env[name][0]  # egg is of type Distrobution
             egg.activate()
             for name in egg.get_entry_map(ENTRYPOINT):
@@ -523,10 +528,10 @@ class PluginManager(object):
                         cls = entry_point.load()
                         self._loaded.append(name)
                     else:
+                        self.LOG("[pluginmgr][info] Skip reloading: %s" % name)
                         continue
                 except Exception, msg:
-                    self.LOG("[pluginmgr][err] Couldn't Load %s: %s" % \
-                                                          (str(name), str(msg)))
+                    self.LOG("[pluginmgr][err] Couldn't Load %s: %s" % (name, msg))
                 else:
                     try:
                         # Only initialize plugins that haven't already been
@@ -539,6 +544,8 @@ class PluginManager(object):
                                 self._plugins[cls] = cls(self)
                             else:
                                 self._obsolete.append(name)
+                        else:
+                            self.LOG("[pluginmgr][info] Skip re-init of %s" % cls)
                     finally:
                         pass
 
