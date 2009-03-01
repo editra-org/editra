@@ -546,9 +546,9 @@ class SegmentBar(ControlBar):
 
         if draw_label:
             twidth, theight = button['lsize']
-            txpos = ((self._segsize[0] / 2) - (twidth / 2)) + xpos
             typos = height - theight - 2
-            dc.DrawText(button['label'], txpos, typos)
+            trect = wx.Rect(xpos, typos, self._segsize[0], theight + 3)
+            dc.DrawLabel(button['label'], trect, wx.ALIGN_CENTER)
 
         if not selected:
             if not (self._style & CTRLBAR_STYLE_NO_DIVIDERS):
