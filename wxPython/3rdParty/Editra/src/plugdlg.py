@@ -80,7 +80,7 @@ def MakeThemeTool(tool_id):
 
 #-----------------------------------------------------------------------------#
 
-class PluginDialog(wx.MiniFrame):
+class PluginDialog(wx.Frame):
     """Defines a Plugin manager Dialog that can be used to download plugins
     from a defined repository, offers services to install plugins that
     where downloaded with or without the dialog, as well as configure
@@ -90,11 +90,11 @@ class PluginDialog(wx.MiniFrame):
 
     """
     def __init__(self, parent, id=wx.ID_ANY, title=u'', size=wx.DefaultSize):
-        wx.MiniFrame.__init__(self, parent, title=title, size=size,
+        wx.Frame.__init__(self, parent, title=title, size=size,
                               style=wx.DEFAULT_FRAME_STYLE)
+        util.SetWindowIcon(self)
 
         # Attributes
-        self.SetStatusBar(pstatbar.ProgressStatusBar(self, style=wx.SB_FLAT))
         bstyle = segmentbk.SEGBOOK_STYLE_NO_DIVIDERS|segmentbk.SEGBOOK_STYLE_LABELS
         self._nb = segmentbk.SegmentBook(self, style=bstyle)
         self._cfg_pg = ConfigPanel(self._nb, style=wx.BORDER_SUNKEN)
@@ -117,6 +117,7 @@ class PluginDialog(wx.MiniFrame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self._nb, 1, wx.EXPAND)
         self.SetSizer(sizer)
+        self.SetStatusBar(pstatbar.ProgressStatusBar(self, style=wx.SB_FLAT))
         self.SetInitialSize(size)
 
         # Event Handlers
