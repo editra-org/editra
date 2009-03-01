@@ -1529,8 +1529,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             tstart = self.GetLineStartPosition(eline)
             tend = self.GetLineEndPosition(sline)
 
-        self.SetTargetStart(tstart - len(self.GetEOLChar()))
-        self.SetTargetEnd(tend)
+        self.SetTargetStart(tstart)
+        self.SetTargetEnd(tend + len(self.GetEOLChar()))
         self.BeginUndoAction()
         self.ReplaceTarget(u'')
         self.EndUndoAction()
