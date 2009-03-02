@@ -32,7 +32,6 @@ import iface
 import plugin
 from profiler import Profile_Get
 import ed_glob
-import ed_txt
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -46,15 +45,15 @@ class EdLogViewer(plugin.Plugin):
     """Shelf interface implementation for the log viewer"""
     plugin.Implements(iface.ShelfI)
 
-    @property
-    def __name__(self):
-        return u'Editra Log'
+    __name__ = u'Editra Log'
 
-    def AllowMultiple(self):
+    @staticmethod
+    def AllowMultiple():
         """EdLogger allows multiple instances"""
         return True
 
-    def CreateItem(self, parent):
+    @staticmethod
+    def CreateItem(parent):
         """Returns a log viewr panel"""
         return LogViewer(parent)
 
@@ -66,11 +65,13 @@ class EdLogViewer(plugin.Plugin):
         bmp = wx.ArtProvider.GetBitmap(str(self.GetId()), wx.ART_MENU)
         return bmp
 
-    def GetId(self):
+    @staticmethod
+    def GetId():
         """Plugin menu identifier ID"""
         return ed_glob.ID_LOGGER
 
-    def GetMenuEntry(self, menu):
+    @staticmethod
+    def GetMenuEntry(menu):
         """Get the menu entry for the log viewer
         @param menu: the menu items parent menu
 
@@ -78,11 +79,13 @@ class EdLogViewer(plugin.Plugin):
         return wx.MenuItem(menu, ed_glob.ID_LOGGER, _("Editra Log"),
                            _("View Editra's console log"))
 
-    def GetName(self):
+    @staticmethod
+    def GetName():
         """Return the name of this control"""
-        return self.__name__
+        return EdLogViewer.__name__
 
-    def IsStockable(self):
+    @staticmethod
+    def IsStockable():
         """EdLogViewer can be saved in the shelf preference stack"""
         return True
 

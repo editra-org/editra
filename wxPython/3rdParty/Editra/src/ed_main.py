@@ -1123,35 +1123,29 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         e_id = evt.GetId()
         focus = self.FindFocus()
-        ctrl = self.nb.GetCurrentCtrl()
         enable = False
         if e_id == ID_UNDO:
             if hasattr(focus, 'CanUndo'):
                 enable = focus.CanUndo()
             evt.Enable(enable)
         elif e_id == ID_REDO:
-            can_redo = False
             if hasattr(focus, 'CanRedo'):
                 enable = focus.CanRedo()
             evt.Enable(enable)
         elif e_id in (ID_PASTE, ID_PASTE_AFTER):
-            can_paste = False
             if hasattr(focus, 'CanPaste'):
                 enable = focus.CanPaste()
             evt.Enable(enable)
         elif e_id == ID_COPY:
-            can_copy = False
             if hasattr(focus, 'CanCopy'):
                 enable = focus.CanCopy()
             evt.Enable(enable)
         elif e_id == ID_CUT:
-            can_cut = False
             if hasattr(focus, 'CanCut'):
                 enable = focus.CanCut()
             evt.Enable(enable)
         elif e_id == ID_COLUMN_MODE:
             if hasattr(focus, 'IsColumnMode'):
-                enable = focus.IsColumnMode()
                 evt.Enable(True)
             else:
                 evt.Enable(False)
