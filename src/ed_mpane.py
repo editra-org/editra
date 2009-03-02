@@ -64,24 +64,24 @@ class MainPanel(eclib.ControlBox):
         @param ctrlid: CommandBar control id
 
         """
-        bar = None
+        cur_bar = None
         if ctrlid == ed_glob.ID_QUICK_FIND:
-            bar = self.ReplaceControlBar(self._search, wx.BOTTOM)
+            cur_bar = self.ReplaceControlBar(self._search, wx.BOTTOM)
         elif ctrlid == ed_glob.ID_GOTO_LINE:
             # Lazy init
             if self._line is None:
                 self._line = ed_cmdbar.GotoLineBar(self)
-            bar = self.ReplaceControlBar(self._line, wx.BOTTOM)
+            cur_bar = self.ReplaceControlBar(self._line, wx.BOTTOM)
         elif ctrlid == ed_glob.ID_COMMAND :
             # Lazy init
             if self._cmd is None:
                 self._cmd = ed_cmdbar.CommandEntryBar(self)
-            bar = self.ReplaceControlBar(self._cmd, wx.BOTTOM)
+            cur_bar = self.ReplaceControlBar(self._cmd, wx.BOTTOM)
         else:
             return
 
-        if bar is not None:
-            bar.Hide()
+        if cur_bar is not None:
+            cur_bar.Hide()
 
         cbar = self.GetControlBar(wx.BOTTOM)
         if cbar is not None:

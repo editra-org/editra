@@ -36,13 +36,12 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_FOLDING', 'ID_BRACKETHL', 'ID_LEXER',
             'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 'ID_MACRO_STOP',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
-            'ID_COMMAND_BAR', 'ID_DOCUMENTATION', 'ID_COMMAND',
+            'ID_DOCUMENTATION', 'ID_COMMAND',
             'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
             'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE', 'ID_SHOW_SB',
             'ID_REVERT_FILE', 'ID_RELOAD_ENC', 'ID_DOCPROP', 'ID_PASTE_AFTER',
             'ID_COLUMN_MODE', 'ID_PANELIST', 'ID_MAXIMIZE_EDITOR', 
-            'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS',
-            'ID_FIND_SELECTED']
+            'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS']
 
 #---- Project Info ----#
 # The project info was moved to another module so it could be accessed
@@ -247,7 +246,6 @@ ID_BACKWARD          = wx.ID_BACKWARD
 ID_BIN_FILE          = ID_COMMAND
 ID_CDROM             = wx.NewId()
 ID_COMMAND_LINE_OPEN = wx.NewId()
-ID_COMMAND_BAR       = wx.NewId()
 ID_COMPUTER          = wx.NewId()
 ID_COPY_PATH         = wx.NewId()
 ID_DELETE            = wx.NewId()
