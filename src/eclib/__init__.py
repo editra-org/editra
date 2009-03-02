@@ -24,5 +24,28 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
 
-__all__ = ['colorsetter', 'ctrlbox', 'elistmix', 'encdlg', 'finddlg',
-           'outbuff', 'platebtn', 'pstatbar']
+__all__ = ['auinavi', 'choicedlg', 'colorsetter', 'ctrlbox', 'eclutil',
+           'ecpickers', 'elistmix', 'encdlg', 'finddlg', 'infodlg', 'panelbox',
+           'outbuff', 'platebtn', 'pstatbar', 'segmentbk', 'txtentry']
+
+#-----------------------------------------------------------------------------#
+
+from auinavi import *
+from choicedlg import *
+from colorsetter import *
+from ctrlbox import *
+from eclutil import *
+from ecpickers import *
+from elistmix import *
+from encdlg import *
+from finddlg import *
+from infodlg import *
+from outbuff import *
+from panelbox import *
+from platebtn import *
+from pstatbar import *
+from segmentbk import *
+from txtentry import *
+
+# TODO: Delete module entries once all plugins have been updated to not 
+#       import them sepearatly.

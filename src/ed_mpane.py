@@ -26,18 +26,18 @@ import wx
 import ed_glob
 import ed_pages
 import ed_cmdbar
-import eclib.ctrlbox as ctrlbox
+import eclib
 
 #-----------------------------------------------------------------------------#
 
-class MainPanel(ctrlbox.ControlBox):
+class MainPanel(eclib.ControlBox):
     """Main panel view
     @todo: Add interface for registering additional commandbars.
 
     """
     def __init__(self, parent):
         """Initialize the panel"""
-        ctrlbox.ControlBox.__init__(self, parent)
+        eclib.ControlBox.__init__(self, parent)
 
         # Attributes
         self.nb = ed_pages.EdPages(self, wx.ID_ANY)

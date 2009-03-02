@@ -27,9 +27,7 @@ import wx
 
 # Editra Libraries
 import ed_msg
-import eclib.outbuff as outbuff
-import eclib.ctrlbox as ctrlbox
-import eclib.platebtn as platebtn
+import eclib
 import iface
 import plugin
 from profiler import Profile_Get
@@ -91,13 +89,13 @@ class EdLogViewer(plugin.Plugin):
 #-----------------------------------------------------------------------------#
 
 # LogViewer Ui Implementation
-class LogViewer(ctrlbox.ControlBox):
+class LogViewer(eclib.ControlBox):
     """LogViewer is a control for displaying and working with output
     from Editra's log.
 
     """
     def __init__(self, parent):
-        ctrlbox.ControlBox.__init__(self, parent)
+        eclib.ControlBox.__init__(self, parent)
 
         # Attributes
         self._buffer = LogBuffer(self)
@@ -122,9 +120,9 @@ class LogViewer(ctrlbox.ControlBox):
     def __DoLayout(self):
         """Layout the log viewer window"""
         # Setup ControlBar
-        ctrlbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
         if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
 
         # View Choice
         self._srcfilter = wx.Choice(ctrlbar, wx.ID_ANY, choices=[])
@@ -137,8 +135,8 @@ class LogViewer(ctrlbox.ControlBox):
         cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
         if cbmp.IsNull() or not cbmp.IsOk():
             cbmp = None
-        clear = platebtn.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
-                                     cbmp, style=platebtn.PB_STYLE_NOBG)
+        clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
+                                     cbmp, style=eclib.PB_STYLE_NOBG)
         ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
         ctrlbar.SetVMargin(1, 1)
         self.SetControlBar(ctrlbar)
@@ -173,17 +171,17 @@ class LogViewer(ctrlbox.ControlBox):
             self._srcfilter.SetSelection(0)
 
 #-----------------------------------------------------------------------------#
-class LogBuffer(outbuff.OutputBuffer):
+class LogBuffer(eclib.OutputBuffer):
     """Buffer for displaying log messages that are sent on Editra's
     log channel.
     @todo: make line buffering configurable through interface
 
     """
     RE_WARN_MSG = re.compile(r'\[err\]|\[error\]|\[warn\]')
-    ERROR_STYLE = outbuff.OPB_STYLE_MAX + 1
+    ERROR_STYLE = eclib.OPB_STYLE_MAX + 1
 
     def __init__(self, parent):
-        outbuff.OutputBuffer.__init__(self, parent)
+        eclib.OutputBuffer.__init__(self, parent)
 
         # Attributes
         self._filter = SHOW_ALL_MSG

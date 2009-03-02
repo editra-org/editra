@@ -35,10 +35,7 @@ import ed_glob
 import ed_search
 import ed_event
 import ed_msg
-import eclib.platebtn as platebtn
-import eclib.finddlg as finddlg
-import eclib.txtentry as txtentry
-import eclib.ctrlbox as ctrlbox
+import eclib
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -68,23 +65,23 @@ ID_REGEX = wx.NewId()
 
 #-----------------------------------------------------------------------------#
 
-class CommandBarBase(ctrlbox.ControlBar):
+class CommandBarBase(eclib.ControlBar):
     """Base class for control bars"""
     def __init__(self, parent):
-        ctrlbox.ControlBar.__init__(self, parent,
-                                    style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        eclib.ControlBar.__init__(self, parent,
+                                    style=eclib.CTRLBAR_STYLE_GRADIENT)
 
         if wx.Platform == '__WXGTK__':
-            self.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+            self.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
 
         self.SetVMargin(2, 2)
 
         # Attributes
         self._parent = parent
         self.ctrl = None
-        self.close_b = platebtn.PlateButton(self, ID_CLOSE_BUTTON,
-                                            bmp=XButton.GetBitmap(),
-                                            style=platebtn.PB_STYLE_NOBG)
+        self.close_b = eclib.PlateButton(self, ID_CLOSE_BUTTON,
+                                         bmp=XButton.GetBitmap(),
+                                         style=eclib.PB_STYLE_NOBG)
 
         # Setup
         self.AddControl(self.close_b, wx.ALIGN_LEFT)
@@ -142,15 +139,15 @@ class SearchBar(CommandBarBase):
         # Setup
         f_lbl = wx.StaticText(self, label=_("Find") + u": ")
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOWN), wx.ART_MENU)
-        next_btn = platebtn.PlateButton(self, ID_SEARCH_NEXT, _("Next"),
-                                        t_bmp, style=platebtn.PB_STYLE_NOBG)
+        next_btn = eclib.PlateButton(self, ID_SEARCH_NEXT, _("Next"),
+                                     t_bmp, style=eclib.PB_STYLE_NOBG)
         self.AddControl(f_lbl, wx.ALIGN_LEFT)
         self.AddControl(self.ctrl, wx.ALIGN_LEFT)
         self.AddControl(next_btn, wx.ALIGN_LEFT)
 
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_UP), wx.ART_MENU)
-        pre_btn = platebtn.PlateButton(self, ID_SEARCH_PRE, _("Previous"),
-                                       t_bmp, style=platebtn.PB_STYLE_NOBG)
+        pre_btn = eclib.PlateButton(self, ID_SEARCH_PRE, _("Previous"),
+                                    t_bmp, style=eclib.PB_STYLE_NOBG)
         self.AddControl(pre_btn, wx.ALIGN_LEFT)
 
         match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
@@ -199,9 +196,9 @@ class SearchBar(CommandBarBase):
             ctrl = self.FindWindowById(e_id)
             if ctrl != None:
                 if e_id == ID_MATCH_CASE:
-                    flag = finddlg.AFR_MATCHCASE
+                    flag = eclib.AFR_MATCHCASE
                 else:
-                    flag = finddlg.AFR_REGEX
+                    flag = eclib.AFR_REGEX
 
                 if self.ctrl != None:
                     if ctrl.GetValue():
@@ -289,7 +286,7 @@ class GotoLineBar(CommandBarBase):
 
 #-----------------------------------------------------------------------------#
 
-class CommandExecuter(txtentry.CommandEntryBase):
+class CommandExecuter(eclib.CommandEntryBase):
     """Part of the Vi emulation, opens a minibuffer to execute EX commands.
     @note: based on search ctrl so we get the nice roudned edges on wxmac.
 
@@ -301,7 +298,7 @@ class CommandExecuter(txtentry.CommandEntryBase):
 
     def __init__(self, parent, id_, size=wx.DefaultSize):
         """Initializes the CommandExecuter"""
-        txtentry.CommandEntryBase.__init__(self, parent, id_, size=size,
+        eclib.CommandEntryBase.__init__(self, parent, id_, size=size,
                                            style=wx.TE_PROCESS_ENTER|wx.WANTS_CHARS)
 
         # Attributes
@@ -743,7 +740,7 @@ class CommandExecuter(txtentry.CommandEntryBase):
 
 #-----------------------------------------------------------------------------#
 
-class LineCtrl(txtentry.CommandEntryBase):
+class LineCtrl(eclib.CommandEntryBase):
     """A custom int control for providing a go To line control
     for the Command Bar.
 
@@ -754,7 +751,7 @@ class LineCtrl(txtentry.CommandEntryBase):
                         current document.
 
         """
-        txtentry.CommandEntryBase.__init__(self, parent, id_, "", size=size,
+        eclib.CommandEntryBase.__init__(self, parent, id_, "", size=size,
                                            style=wx.TE_PROCESS_ENTER,
                                            validator=util.IntValidator(0, 65535))
 

@@ -32,10 +32,7 @@ import ed_event
 import util
 import ed_txt
 from profiler import Profile_Get, Profile_Set
-import eclib.panelbox as panelbox
-import eclib.segmentbk as segmentbk
-import eclib.pstatbar as pstatbar
-import eclib.ctrlbox as ctrlbox
+import eclib
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -95,8 +92,8 @@ class PluginDialog(wx.Frame):
         util.SetWindowIcon(self)
 
         # Attributes
-        bstyle = segmentbk.SEGBOOK_STYLE_NO_DIVIDERS|segmentbk.SEGBOOK_STYLE_LABELS
-        self._nb = segmentbk.SegmentBook(self, style=bstyle)
+        bstyle = eclib.SEGBOOK_STYLE_NO_DIVIDERS|eclib.SEGBOOK_STYLE_LABELS
+        self._nb = eclib.SegmentBook(self, style=bstyle)
         self._cfg_pg = ConfigPanel(self._nb, style=wx.BORDER_SUNKEN)
         self._dl_pg = DownloadPanel(self._nb)
         self._inst_pg = InstallPanel(self._nb)
@@ -117,11 +114,11 @@ class PluginDialog(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self._nb, 1, wx.EXPAND)
         self.SetSizer(sizer)
-        self.SetStatusBar(pstatbar.ProgressStatusBar(self, style=wx.SB_FLAT))
+        self.SetStatusBar(eclib.ProgressStatusBar(self, style=wx.SB_FLAT))
         self.SetInitialSize(size)
 
         # Event Handlers
-        self.Bind(segmentbk.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
+        self.Bind(eclib.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, evt):
@@ -195,7 +192,7 @@ class ConfigPanel(wx.Panel):
         wx.Panel.__init__(self, parent, style=style)
 
         # Attrtibutes
-        self._list = panelbox.PanelBox(self)
+        self._list = eclib.PanelBox(self)
 
         # Layout Panel
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -279,7 +276,7 @@ class ConfigPanel(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class DownloadPanel(ctrlbox.ControlBox):
+class DownloadPanel(eclib.ControlBox):
     """Creates a panel with controls for downloading plugins."""
     ID_DOWNLOAD = wx.NewId()
     EGG_PATTERN = re.compile(r"(?P<name>[^-]+)"
@@ -289,14 +286,14 @@ class DownloadPanel(ctrlbox.ControlBox):
 
     def __init__(self, parent, style=wx.NO_BORDER):
         """Initializes the panel"""
-        ctrlbox.ControlBox.__init__(self, parent, style=style)
+        eclib.ControlBox.__init__(self, parent, style=style)
 
         # Attributes
         self._p_list = dict()           # list of available plugins/meta
         self._dl_list = dict()          # List of download urls
         self._eggcount = 0              # Number of plugins to download
         self._eggbasket = dict()        # Basket of downloaded eggs
-        self._list = panelbox.PanelBox(self)
+        self._list = eclib.PanelBox(self)
 
         # Layout Panel
         self.CreateControlBar(wx.BOTTOM)
@@ -582,7 +579,7 @@ def _DownloadPlugin(*args):
 
 #-----------------------------------------------------------------------------#
 
-class InstallPanel(ctrlbox.ControlBox):
+class InstallPanel(eclib.ControlBox):
     """Creates a panel for installing plugins."""
     ID_INSTALL = wx.NewId()
     ID_USER = wx.NewId()
@@ -591,7 +588,7 @@ class InstallPanel(ctrlbox.ControlBox):
 
     def __init__(self, parent, style=wx.NO_BORDER):
         """Initializes the panel"""
-        ctrlbox.ControlBox.__init__(self, parent, style=style)
+        eclib.ControlBox.__init__(self, parent, style=style)
 
         # Attributes
         self.CreateControlBar(wx.BOTTOM)
@@ -780,7 +777,7 @@ class InstallPanel(ctrlbox.ControlBox):
 
 #-----------------------------------------------------------------------------#
 
-class PBPluginItem(panelbox.PanelBoxItemBase):
+class PBPluginItem(eclib.PanelBoxItemBase):
     """PanelBox Item to display configuration information about a plugin."""
     def __init__(self, parent, bmp=None, title=u'Plugin Name', version=u'0.0',
                  desc=u'Description', auth='John Doe', enabled=False):
@@ -788,7 +785,7 @@ class PBPluginItem(panelbox.PanelBoxItemBase):
         @param parent: L{PanelBox}
 
         """
-        panelbox.PanelBoxItemBase.__init__(self, parent)
+        eclib.PanelBoxItemBase.__init__(self, parent)
 
         # Attributes
         self._bmp = bmp

@@ -28,8 +28,7 @@ from extern.embeddedimage import PyEmbeddedImage
 # Editra Library
 import ed_glob
 import util
-import eclib.infodlg as infodlg
-import eclib.choicedlg as choicedlg
+import eclib
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -112,7 +111,7 @@ def SaveErrorDlg(parent, fname, err):
 
 #--------------------------------------------------------------------------#
 
-class EdFileInfoDlg(infodlg.FileInfoDlg):
+class EdFileInfoDlg(eclib.FileInfoDlg):
     """File information dialog"""
     def __init__(self, parent, fname):
         """General file information dialog
@@ -120,7 +119,7 @@ class EdFileInfoDlg(infodlg.FileInfoDlg):
         @param fname: file path
 
         """
-        infodlg.FileInfoDlg.__init__(self, parent, fname=fname,
+        eclib.FileInfoDlg.__init__(self, parent, fname=fname,
                                      ftype=None, bmp=FileIcon.GetBitmap())
 
         # Setup
@@ -128,7 +127,7 @@ class EdFileInfoDlg(infodlg.FileInfoDlg):
 
 #--------------------------------------------------------------------------#
 
-class EdFormatEOLDlg(choicedlg.ChoiceDialog):
+class EdFormatEOLDlg(eclib.ChoiceDialog):
     """Dialog for selecting EOL format"""
     def __init__(self, parent, msg=u'', title=u'', selection=0):
         """Create the dialog
@@ -139,7 +138,7 @@ class EdFormatEOLDlg(choicedlg.ChoiceDialog):
                    _("Windows") + u" (\\r\\n)"]
         self._eol = [wx.stc.STC_EOL_CR, wx.stc.STC_EOL_LF, wx.stc.STC_EOL_CRLF]
         idx = self._eol.index(selection)
-        choicedlg.ChoiceDialog.__init__(self, parent, msg=msg, title=title,
+        eclib.ChoiceDialog.__init__(self, parent, msg=msg, title=title,
                                         choices=choices,
                                         style=wx.YES_NO|wx.YES_DEFAULT)
         self.SetSelection(idx)

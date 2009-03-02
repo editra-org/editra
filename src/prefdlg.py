@@ -35,14 +35,11 @@ from profiler import Profile_Get, Profile_Set
 import ed_i18n
 import ed_event
 import ed_crypt
-import ed_stc
 import updater
 import util
 import syntax.syntax as syntax
 import ed_msg
-import eclib.elistmix as elistmix
-import eclib.ecpickers as ecpickers
-import eclib.segmentbk as segmentbk
+import eclib
 
 #----------------------------------------------------------------------------#
 # Globals
@@ -162,7 +159,7 @@ class PreferencesDialog(wx.Frame):
 
 #-----------------------------------------------------------------------------#
 
-class PrefTools(segmentbk.SegmentBook):
+class PrefTools(eclib.SegmentBook):
     """Main sections of the configuration pages
     @note: implements the top level book control for the prefdlg
     @todo: when using BK_BUTTONBAR style so that the icons have text
@@ -187,9 +184,9 @@ class PrefTools(segmentbk.SegmentBook):
                changed the toolbook icons cannont be updated instantly.
 
         """
-        segmentbk.SegmentBook.__init__(self, parent, wx.ID_ANY,
-                                       style=segmentbk.SEGBOOK_STYLE_LABELS|\
-                                             segmentbk.SEGBOOK_STYLE_NO_DIVIDERS)
+        eclib.SegmentBook.__init__(self, parent, wx.ID_ANY,
+                                       style=eclib.SEGBOOK_STYLE_LABELS|\
+                                             eclib.SEGBOOK_STYLE_NO_DIVIDERS)
 
         # Attributes
         self._imglst = list()
@@ -213,8 +210,8 @@ class PrefTools(segmentbk.SegmentBook):
                      img_id=self.ADV_PG)
 
         # Event Handlers
-        self.Bind(segmentbk.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
-        self.Bind(segmentbk.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
+        self.Bind(eclib.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(eclib.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
 
     def OnPageChanging(self, evt):
         sel = evt.GetSelection()
@@ -499,7 +496,7 @@ class DocGenPanel(wx.Panel):
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnUpdateEditor)
         self.Bind(wx.EVT_CHOICE, self.OnUpdateEditor)
-        self.Bind(ecpickers.EVT_FONT_CHANGED, self.OnFontChange)
+        self.Bind(eclib.EVT_FONT_CHANGED, self.OnFontChange)
 
     def _DoLayout(self):
         """Layout the controls
@@ -563,12 +560,12 @@ class DocGenPanel(wx.Panel):
         fnt = Profile_Get('FONT1', 'font', wx.Font(10, wx.FONTFAMILY_MODERN,
                                                    wx.FONTSTYLE_NORMAL,
                                                    wx.FONTWEIGHT_NORMAL))
-        fpick = ecpickers.PyFontPicker(self, DocGenPanel.ID_FONT_PICKER, fnt)
+        fpick = eclib.PyFontPicker(self, DocGenPanel.ID_FONT_PICKER, fnt)
         fpick.SetToolTipString(_("Sets the main/default font of the document"))
         fnt = Profile_Get('FONT2', 'font', wx.Font(10, wx.FONTFAMILY_SWISS,
                                                    wx.FONTSTYLE_NORMAL,
                                                    wx.FONTWEIGHT_NORMAL))
-        fpick2 = ecpickers.PyFontPicker(self, DocGenPanel.ID_FONT_PICKER2, fnt)
+        fpick2 = eclib.PyFontPicker(self, DocGenPanel.ID_FONT_PICKER2, fnt)
         fpick2.SetToolTipString(_("Sets a secondary font used for special "
                                   "regions when syntax highlighting is in use"))
 
@@ -925,7 +922,7 @@ class AppearancePanel(wx.Panel, PreferencesPanelBase):
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_SLIDER, self.OnSetTransparent, \
                   id=ed_glob.ID_TRANSPARENCY)
-        self.Bind(ecpickers.EVT_FONT_CHANGED, self.OnFontChange)
+        self.Bind(eclib.EVT_FONT_CHANGED, self.OnFontChange)
 
     def _DoLayout(self):
         """Add and layout the widgets
@@ -976,7 +973,7 @@ class AppearancePanel(wx.Panel, PreferencesPanelBase):
 
         # Font
         fnt = Profile_Get('FONT3', 'font', wx.NORMAL_FONT)
-        fpick = ecpickers.PyFontPicker(self, wx.ID_ANY, fnt)
+        fpick = eclib.PyFontPicker(self, wx.ID_ANY, fnt)
         fpick.SetToolTipString(_("Main display font for various UI components"))
 
         # Layout
@@ -1780,7 +1777,7 @@ class KeyBindingPanel(wx.Panel):
 class ExtListCtrl(wx.ListCtrl,
                   listmix.ListCtrlAutoWidthMixin,
                   listmix.TextEditMixin,
-                  elistmix.ListRowHighlighter):
+                  eclib.ListRowHighlighter):
     """Class to manage the file extension associations
     @summary: Creates a list control for showing file type to file extension
               associations as well as providing an interface to editing these
@@ -1800,7 +1797,7 @@ class ExtListCtrl(wx.ListCtrl,
                                    wx.LC_VRULES | wx.BORDER)
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
-        elistmix.ListRowHighlighter.__init__(self)
+        eclib.ListRowHighlighter.__init__(self)
 
         # Setup
         self.InsertColumn(ExtListCtrl.FILE_COL, _("Lexer"))
