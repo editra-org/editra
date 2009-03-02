@@ -210,7 +210,7 @@ class SegmentBook(ctrlbox.ControlBox):
         """
         cpage = self._segbar.GetSelection() 
         self._segbar.RemoveSegment(index)
-        npage = segbar.GetSelection()
+        npage = self._segbar.GetSelection()
         self._DoPageChange(cpage, npage)
 
         self._pages[index]['page'].Destroy()
