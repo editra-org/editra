@@ -27,6 +27,7 @@ BUG FIXES:
 +Fix incorrectly showing autocompletion options under some cases in php files.
 +Fix condition where window could be placed at (0, 0) on OSX which causes the
  frame to be placed behind the menubar.
++Fix improper detection of when to auto-unindent in Python files.
 
 #-----------------------------------------------------------------------------#
 

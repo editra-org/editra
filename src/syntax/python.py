@@ -26,8 +26,10 @@ import keyword
 #---- Keyword Specifications ----#
 
 # Indenter keywords
-INDENT_KW = u"def if elif else for while class try except finally"
-UNINDENT_KW = u"return raise break continue pass exit quit"
+INDENT_KW = (u"def", u"if", u"elif" u"else", u"for", u"while",
+             u"class", u"try", u"except", u"finally")
+UNINDENT_KW = (u"return", u"raise", u"break", u"continue",
+               u"pass", u"exit", u"quit")
 
 # Python Keywords
 KEYWORDS = keyword.kwlist
@@ -130,6 +132,7 @@ def AutoIndenter(stc, pos, ichar):
     tokens = filter(None, text.strip().split())
     if tokens:
         if tokens[-1].endswith(u":"):
+            print "TOKENS", tokens
             if tokens[0].rstrip(u":") in INDENT_KW:
                 i_space += 1
         elif tokens[-1].endswith(u"\\"):
