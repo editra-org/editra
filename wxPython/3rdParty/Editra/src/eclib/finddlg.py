@@ -39,7 +39,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = ["FindBox", "FindEvent", "FindPanel", "FindReplaceDlg",
-           "MiniFindReplaceDialog", "AdvFindReplaceDlg",
+           "MiniFindReplaceDlg", "AdvFindReplaceDlg",
            "AFR_STYLE_FINDDIALOG", "AFR_STYLE_REPLACEDIALOG",
            "AFR_STYLE_NON_FLOATING", "AFR_UP", "AFR_WHOLEWORD", 
            "AFR_MATCHCASE", "AFR_REGEX", "AFR_RECURSIVE", "AFR_NOLOOKIN",
@@ -49,7 +49,7 @@ __all__ = ["FindBox", "FindEvent", "FindPanel", "FindReplaceDlg",
            "edEVT_FIND_CLOSE", "EVT_FIND_CLOSE", "edEVT_FIND", "EVT_FIND",
            "edEVT_FIND_NEXT", "EVT_FIND_NEXT", "edEVT_FIND_ALL", "EVT_FIND_ALL",
            "edEVT_REPLACE", "EVT_REPLACE", "edEVT_REPLACE_ALL",
-           "EVT_REPLACE_ALL"]
+           "EVT_REPLACE_ALL", "EVT_OPTION_CHANGED", "edEVT_OPTION_CHANGED"]
 
 #--------------------------------------------------------------------------#
 # Imports

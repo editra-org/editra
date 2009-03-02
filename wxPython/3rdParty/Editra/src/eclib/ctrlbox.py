@@ -51,11 +51,11 @@ __all__ = ["ControlBox", "CTRLBOX_NAME_STR",
 
            "ControlBar", "ControlBarEvent",
            "CTRLBAR_STYLE_DEFAULT", "CTRLBAR_STYLE_GRADIENT",
-           "CTRLBAR_STYLE_BORDER_TOP", "CTRLBAR_BORDER_BOTTOM",
-           "EVT_CTRLBAR", "edEVT_CTRLBAR", "CTRLBAR_NAME_STR"
+           "CTRLBAR_STYLE_BORDER_TOP", "CTRLBAR_STYLE_BORDER_BOTTOM",
+           "EVT_CTRLBAR", "edEVT_CTRLBAR", "CTRLBAR_NAME_STR",
 
            "SegmentBar", "SegmentBarEvent", "edEVT_SEGMENT_SELECTED",
-           "CTRLBAR_STYLE_LABELS", "CTRLBAR_STYLE_NO_DIVIDERS"
+           "CTRLBAR_STYLE_LABELS", "CTRLBAR_STYLE_NO_DIVIDERS",
            "EVT_SEGMENT_SELECTED", "SEGBAR_NAME_STR"]
 
 #--------------------------------------------------------------------------#

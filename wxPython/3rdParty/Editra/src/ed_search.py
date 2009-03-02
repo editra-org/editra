@@ -37,10 +37,7 @@ import plugin
 import iface
 from util import FileTypeChecker
 from profiler import Profile_Get, Profile_Set
-import eclib.ctrlbox as ctrlbox
-import eclib.outbuff as outbuff
-import eclib.platebtn as platebtn
-import eclib.finddlg as finddlg
+import eclib
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -63,7 +60,7 @@ class SearchController(object):
         self._stc      = getstc
         self._finddlg  = None
         self._posinfo  = dict(scroll=0, start=0, found=0, ldir=None)
-        self._data     = wx.FindReplaceData(finddlg.AFR_RECURSIVE)
+        self._data     = wx.FindReplaceData(eclib.AFR_RECURSIVE)
         self._li_choices = list()
         self._li_sel   = 0
         self._filters  = None
@@ -71,13 +68,13 @@ class SearchController(object):
         self._engine = None
 
         # Event handlers
-        self._parent.Bind(finddlg.EVT_FIND, self.OnFind)
-        self._parent.Bind(finddlg.EVT_FIND_NEXT, self.OnFind)
-        self._parent.Bind(finddlg.EVT_FIND_ALL, self.OnFindAll)
-        self._parent.Bind(finddlg.EVT_REPLACE, self.OnReplace)
-        self._parent.Bind(finddlg.EVT_REPLACE_ALL, self.OnReplaceAll)
-        self._parent.Bind(finddlg.EVT_FIND_CLOSE, self.OnFindClose)
-        self._parent.Bind(finddlg.EVT_OPTION_CHANGED, self.OnOptionChanged)
+        self._parent.Bind(eclib.EVT_FIND, self.OnFind)
+        self._parent.Bind(eclib.EVT_FIND_NEXT, self.OnFind)
+        self._parent.Bind(eclib.EVT_FIND_ALL, self.OnFindAll)
+        self._parent.Bind(eclib.EVT_REPLACE, self.OnReplace)
+        self._parent.Bind(eclib.EVT_REPLACE_ALL, self.OnReplaceAll)
+        self._parent.Bind(eclib.EVT_FIND_CLOSE, self.OnFindClose)
+        self._parent.Bind(eclib.EVT_OPTION_CHANGED, self.OnOptionChanged)
 
     def _CreateNewDialog(self, e_id):
         """Create and set the controlers find dialog
@@ -85,11 +82,11 @@ class SearchController(object):
 
         """
         if e_id == ed_glob.ID_FIND_REPLACE:
-            dlg = finddlg.AdvFindReplaceDlg(self._parent, self._data,
+            dlg = eclib.AdvFindReplaceDlg(self._parent, self._data,
                                             (_("Find"), _("Find/Replace")),
-                                            finddlg.AFR_STYLE_REPLACEDIALOG)
+                                            eclib.AFR_STYLE_REPLACEDIALOG)
         elif e_id == ed_glob.ID_FIND:
-            dlg = finddlg.AdvFindReplaceDlg(self._parent, self._data,
+            dlg = eclib.AdvFindReplaceDlg(self._parent, self._data,
                                             (_("Find"), _("Find/Replace")))
         else:
             dlg = None
@@ -118,11 +115,11 @@ class SearchController(object):
             self._finddlg = self._CreateNewDialog(e_id)
         else:
             mode = self._finddlg.GetDialogMode()
-            if e_id == ed_glob.ID_FIND and mode != finddlg.AFR_STYLE_FINDDIALOG:
-                self._finddlg.SetDialogMode(finddlg.AFR_STYLE_FINDDIALOG)
+            if e_id == ed_glob.ID_FIND and mode != eclib.AFR_STYLE_FINDDIALOG:
+                self._finddlg.SetDialogMode(eclib.AFR_STYLE_FINDDIALOG)
             elif e_id == ed_glob.ID_FIND_REPLACE and \
-                 mode != finddlg.AFR_STYLE_REPLACEDIALOG:
-                self._finddlg.SetDialogMode(finddlg.AFR_STYLE_REPLACEDIALOG)
+                 mode != eclib.AFR_STYLE_REPLACEDIALOG:
+                self._finddlg.SetDialogMode(eclib.AFR_STYLE_REPLACEDIALOG)
             else:
                 pass
 
@@ -198,9 +195,9 @@ class SearchController(object):
             # Adjust flags
             flags = data.GetFlags()
             if not findnext and evt.GetId() == ed_glob.ID_FIND_PREVIOUS:
-                flags |= finddlg.AFR_UP
+                flags |= eclib.AFR_UP
 
-            evt = finddlg.FindEvent(finddlg.edEVT_FIND_NEXT,
+            evt = eclib.FindEvent(eclib.edEVT_FIND_NEXT,
                                     flags=flags)
             evt.SetFindString(data.GetFindString())
 
@@ -233,7 +230,7 @@ class SearchController(object):
             self._posinfo['ldir'] = 'up'
 
         # Get the search start position
-        if evt.GetEventType() == finddlg.edEVT_FIND:
+        if evt.GetEventType() == eclib.edEVT_FIND:
             spos = self._posinfo['found']
         else:
             spos = stc.GetCurrentPos()
@@ -314,7 +311,7 @@ class SearchController(object):
 
         # Send the search function over to any interested parties that wish
         # to process the results.
-        if smode == finddlg.LOCATION_CURRENT_DOC:
+        if smode == eclib.LOCATION_CURRENT_DOC:
             stc = self._stc()
             fname = stc.GetFileName()
             if len(fname):
@@ -323,12 +320,12 @@ class SearchController(object):
             else:
                 engine.SetSearchPool(stc.GetTextRaw())
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH, (engine.FindAllLines,))
-        elif smode == finddlg.LOCATION_OPEN_DOCS:
+        elif smode == eclib.LOCATION_OPEN_DOCS:
             files = [fname.GetFileName()
                      for fname in self._parent.GetTextControls()]
             ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                (engine.SearchInFiles, [files,], dict()))
-        elif smode == finddlg.LOCATION_IN_FILES:
+        elif smode == eclib.LOCATION_IN_FILES:
             path = evt.GetDirectory()
             engine.SetFileFilters(evt.GetFileFilters())
             ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
@@ -404,7 +401,7 @@ class SearchController(object):
 
         # Go to the next match
         # Fake event object for on Find Handler
-        tevt = finddlg.FindEvent(finddlg.edEVT_FIND_NEXT,
+        tevt = eclib.FindEvent(eclib.edEVT_FIND_NEXT,
                                  ed_glob.ID_FIND_PREVIOUS)
         self.OnFind(tevt, True)
 
@@ -421,21 +418,21 @@ class SearchController(object):
 
         results = 0
 
-        if smode == finddlg.LOCATION_CURRENT_DOC:
+        if smode == eclib.LOCATION_CURRENT_DOC:
             stc = self._stc()
             engine.SetSearchPool(stc.GetTextRaw())
             matches = engine.FindAll()
             if matches is not None:
                 self.ReplaceInStc(stc, matches, rstring, evt.IsRegEx())
                 results = len(matches)
-        elif smode == finddlg.LOCATION_OPEN_DOCS:
+        elif smode == eclib.LOCATION_OPEN_DOCS:
             for ctrl in self._parent.GetTextControls():
                 engine.SetSearchPool(ctrl.GetTextRaw())
                 matches = engine.FindAll()
                 if matches is not None:
                     self.ReplaceInStc(ctrl, matches, rstring, evt.IsRegEx())
                     results += len(matches)
-        elif smode == finddlg.LOCATION_IN_FILES:
+        elif smode == eclib.LOCATION_IN_FILES:
             dlg = wx.MessageDialog(self._parent,
                                    _("Sorry will be ready for next version"),
                                    _("Not implemented"),
@@ -1007,17 +1004,17 @@ class EdSearchCtrl(wx.SearchCtrl):
         @keyword next: search next or previous
 
         """
-        s_cmd = finddlg.edEVT_FIND
+        s_cmd = eclib.edEVT_FIND
         if not next:
-            self.SetSearchFlag(finddlg.AFR_UP)
+            self.SetSearchFlag(eclib.AFR_UP)
         else:
-            if finddlg.AFR_UP & self._flags:
-                self.ClearSearchFlag(finddlg.AFR_UP)
+            if eclib.AFR_UP & self._flags:
+                self.ClearSearchFlag(eclib.AFR_UP)
 
         if self.GetValue() == self._last:
-            s_cmd = finddlg.edEVT_FIND_NEXT
+            s_cmd = eclib.edEVT_FIND_NEXT
 
-        evt = finddlg.FindEvent(s_cmd, flags=self._flags)
+        evt = eclib.FindEvent(s_cmd, flags=self._flags)
         self._last = self.GetValue()
         evt.SetFindString(self.GetValue())
         self.FindService.OnFind(evt)
@@ -1106,7 +1103,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         """
         data = self.GetSearchData()
         if data is not None:
-            return bool(finddlg.AFR_MATCHCASE & data.GetFlags())
+            return bool(eclib.AFR_MATCHCASE & data.GetFlags())
         return False
 
     def IsRegEx(self):
@@ -1118,7 +1115,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         """
         data = self.GetSearchData()
         if data is not None:
-            return bool(finddlg.AFR_REGEX & data.GetFlags())
+            return bool(eclib.AFR_REGEX & data.GetFlags())
         return False
 
     def IsSearchPrevious(self):
@@ -1130,7 +1127,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         """
         data = self.GetSearchData()
         if data is not None:
-            return bool(finddlg.AFR_UP & data.GetFlags())
+            return bool(eclib.AFR_UP & data.GetFlags())
         return False
 
     def IsWholeWord(self):
@@ -1142,7 +1139,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         """
         data = self.GetSearchData()
         if data is not None:
-            return bool(finddlg.AFR_WHOLEWORD & data.GetFlags())
+            return bool(eclib.AFR_WHOLEWORD & data.GetFlags())
         return False
 
     def SetFocus(self):
@@ -1194,7 +1191,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             evt.Skip()
             return
         elif e_key == wx.WXK_SHIFT:
-            self.ClearSearchFlag(finddlg.AFR_UP)
+            self.ClearSearchFlag(eclib.AFR_UP)
             return
         else:
             pass
@@ -1358,14 +1355,14 @@ class EdFindResults(plugin.Plugin):
 
 #-----------------------------------------------------------------------------#
 
-class SearchResultScreen(ctrlbox.ControlBox):
+class SearchResultScreen(eclib.ControlBox):
     """Screen for displaying search results and navigating to them"""
     def __init__(self, parent):
         """Create the result screen
         @param parent: parent window
 
         """
-        ctrlbox.ControlBox.__init__(self, parent)
+        eclib.ControlBox.__init__(self, parent)
 
         # Attributes
         self._meth = None
@@ -1383,8 +1380,8 @@ class SearchResultScreen(ctrlbox.ControlBox):
                   lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
         self.Bind(wx.EVT_BUTTON,
                   lambda evt: self.CancelSearch(), id=wx.ID_CANCEL)
-        self._list.Bind(outbuff.EVT_TASK_START, self.OnTaskStart)
-        self._list.Bind(outbuff.EVT_TASK_COMPLETE, self.OnTaskComplete)
+        self._list.Bind(eclib.EVT_TASK_START, self.OnTaskStart)
+        self._list.Bind(eclib.EVT_TASK_COMPLETE, self.OnTaskComplete)
 
         # Message Handlers
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
@@ -1394,9 +1391,9 @@ class SearchResultScreen(ctrlbox.ControlBox):
 
     def __DoLayout(self):
         """Layout and setup the results screen ui"""
-        ctrlbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
         if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
 
         ctrlbar.AddStretchSpacer()
 
@@ -1405,8 +1402,8 @@ class SearchResultScreen(ctrlbox.ControlBox):
         if cbmp.IsNull() or not cbmp.IsOk():
             cbmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR,
                                             wx.ART_MENU, (16, 16))
-        cancel = platebtn.PlateButton(ctrlbar, wx.ID_CANCEL, _("Cancel"),
-                                      cbmp, style=platebtn.PB_STYLE_NOBG)
+        cancel = eclib.PlateButton(ctrlbar, wx.ID_CANCEL, _("Cancel"),
+                                      cbmp, style=eclib.PB_STYLE_NOBG)
         self._cancelb = cancel
         ctrlbar.AddControl(cancel, wx.ALIGN_RIGHT)
 
@@ -1414,8 +1411,8 @@ class SearchResultScreen(ctrlbox.ControlBox):
         cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
         if cbmp.IsNull() or not cbmp.IsOk():
             cbmp = None
-        clear = platebtn.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
-                                     cbmp, style=platebtn.PB_STYLE_NOBG)
+        clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
+                                     cbmp, style=eclib.PB_STYLE_NOBG)
         self._clearb = clear
         ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
 
@@ -1493,23 +1490,23 @@ class SearchResultScreen(ctrlbox.ControlBox):
             self._job.Cancel()
 
         self._list.Clear()
-        self._job = outbuff.TaskThread(self._list, searchmeth, *args, **kwargs)
+        self._job = eclib.TaskThread(self._list, searchmeth, *args, **kwargs)
         self._job.start()
         self._cancelb.Enable()
 
 #-----------------------------------------------------------------------------#
 
-class SearchResultList(outbuff.OutputBuffer):
+class SearchResultList(eclib.OutputBuffer):
     """Outputbuffer for listing matching lines from the search results that
     a L{SearchEngine} dispatches. The matching lines are turned into hotspots
     that allow them to be clicked on for instant navigation to the matching
     line.
 
     """
-    STY_SEARCH_MATCH = outbuff.OPB_STYLE_MAX + 1
+    STY_SEARCH_MATCH = eclib.OPB_STYLE_MAX + 1
     RE_FIND_MATCH = re.compile('(.+) \(([0-9]+)\)\: .+')
     def __init__(self, parent):
-        outbuff.OutputBuffer.__init__(self, parent)
+        eclib.OutputBuffer.__init__(self, parent)
 
         # Attributes
         self._files = 0
@@ -1531,7 +1528,7 @@ class SearchResultList(outbuff.OutputBuffer):
         """
         if isinstance(value, basestring):
             # Regular search result
-            outbuff.OutputBuffer.AppendUpdate(self, value)
+            eclib.OutputBuffer.AppendUpdate(self, value)
         else:
             # Search in a new file has started
             self._files += 1
@@ -1556,7 +1553,7 @@ class SearchResultList(outbuff.OutputBuffer):
         if re.match(SearchResultList.RE_FIND_MATCH, txt):
             self.SetStyling(len(txt), SearchResultList.STY_SEARCH_MATCH)
         else:
-            self.SetStyling(len(txt), outbuff.OPB_STYLE_DEFAULT)
+            self.SetStyling(len(txt), eclib.OPB_STYLE_DEFAULT)
 
     def Clear(self):
         """Override OutputBuffer.Clear"""
@@ -1598,7 +1595,7 @@ class SearchResultList(outbuff.OutputBuffer):
         cpos = self.GetLength()
         self.AppendText(txt)
         self.StartStyling(cpos, 0x1f)
-        self.SetStyling(self.GetLength() - cpos, outbuff.OPB_STYLE_INFO)
+        self.SetStyling(self.GetLength() - cpos, eclib.OPB_STYLE_INFO)
         self.SetReadOnly(True)
 
     @staticmethod

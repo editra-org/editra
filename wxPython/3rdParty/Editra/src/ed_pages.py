@@ -33,7 +33,7 @@ import util
 import ed_msg
 import ed_txt
 import ed_mdlg
-import eclib.encdlg as encdlg
+import eclib
 from extern import flatnotebook as FNB
 
 #--------------------------------------------------------------------------#
@@ -147,7 +147,7 @@ class EdPages(FNB.FlatNotebook):
             if enc is None:
                 enc = 'utf_8'
 
-            dlg = encdlg.EncodingDialog(self, msg=msg,
+            dlg = eclib.EncodingDialog(self, msg=msg,
                                         title=_("Choose an Encoding"),
                                         default=enc)
             bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOCPROP),

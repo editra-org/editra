@@ -33,7 +33,7 @@ import ed_stc
 from ed_style import StyleItem
 import util
 import syntax.syntax as syntax
-import eclib.colorsetter as colorsetter
+import eclib
 
 # Function Aliases
 _ = wx.GetTranslation
@@ -157,7 +157,7 @@ class StyleEditor(wx.Dialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_LISTBOX, self.OnListBox)
-        self.Bind(colorsetter.EVT_COLORSETTER, self.OnColor)
+        self.Bind(eclib.EVT_COLORSETTER, self.OnColor)
         self.preview.Bind(wx.EVT_LEFT_UP, self.OnTextRegion)
         self.preview.Bind(wx.EVT_KEY_UP, self.OnTextRegion)
     #--- End Init ---#
@@ -558,7 +558,7 @@ class StyleEditor(wx.Dialog):
                 ctrl.SetValue(val_map[sid])
             elif c_type == "wxChoice":
                 ctrl.SetStringSelection(val_map[sid])
-            elif isinstance(ctrl, colorsetter.ColorSetter):
+            elif isinstance(ctrl, eclib.ColorSetter):
                 ctrl.SetLabel(val_map[sid][:7])
         return True
 
@@ -581,7 +581,7 @@ class StyleEditor(wx.Dialog):
             val = ctrl.GetValue()
         elif ctrl_t == 'wxChoice':
             val = ctrl.GetStringSelection()
-        elif isinstance(ctrl, colorsetter.ColorSetter):
+        elif isinstance(ctrl, eclib.ColorSetter):
             val = ctrl.GetLabel()
         else:
             return False
@@ -637,7 +637,7 @@ class SettingsPanel(wx.Panel):
         # Foreground
         fground_sizer = wx.BoxSizer(wx.HORIZONTAL)
         fground_lbl = wx.StaticText(self, label=_("Foreground") + u": ")
-        fground_sel = colorsetter.ColorSetter(self, ID_FORE_COLOR, wx.BLACK)
+        fground_sel = eclib.ColorSetter(self, ID_FORE_COLOR, wx.BLACK)
         fground_sizer.AddMany([((5, 5)),
                                (fground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
                                ((2, 2), 1, wx.EXPAND),
@@ -649,7 +649,7 @@ class SettingsPanel(wx.Panel):
         # Background
         bground_sizer = wx.BoxSizer(wx.HORIZONTAL)
         bground_lbl = wx.StaticText(self, label=_("Background") + u": ")
-        bground_sel = colorsetter.ColorSetter(self, ID_BACK_COLOR, wx.WHITE)
+        bground_sel = eclib.ColorSetter(self, ID_BACK_COLOR, wx.WHITE)
         bground_sizer.AddMany([((5, 5)),
                                (bground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
                                ((2, 2), 1, wx.EXPAND),

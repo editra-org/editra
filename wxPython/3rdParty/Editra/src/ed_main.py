@@ -44,8 +44,7 @@ import generator
 import plugin
 import perspective as viewmgr
 import iface
-import eclib.encdlg as encdlg
-import eclib.auinavi as auinavi
+import eclib
 
 # Function Aliases
 _ = wx.GetTranslation
@@ -1045,7 +1044,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             ctrl = self.nb.GetCurrentCtrl()
             doc = ctrl.GetDocument()
             cenc = doc.GetEncoding()
-            dlg = encdlg.EncodingDialog(self.GetNotebook(),
+            dlg = eclib.EncodingDialog(self.GetNotebook(),
                                         msg=_("Select an encoding to reload the file with"),
                                         title=_("Reload with Encoding"),
                                         default=cenc)
@@ -1077,7 +1076,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 return
 
             bmp = wx.ArtProvider.GetBitmap(str(ID_NEW_WINDOW), wx.ART_MENU)
-            self._paneNavi = auinavi.AuiPaneNavigator(self, self._mgr, bmp,
+            self._paneNavi = eclib.AuiPaneNavigator(self, self._mgr, bmp,
                                                       _("Aui Pane Navigator"))
             self._paneNavi.SetReturnCode(wx.ID_OK)
             self._paneNavi.ShowModal()
