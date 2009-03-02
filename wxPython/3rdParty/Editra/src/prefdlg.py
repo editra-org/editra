@@ -49,21 +49,7 @@ ID_UPDATE_MSG   = wx.NewId()
 
 _ = wx.GetTranslation
 #----------------------------------------------------------------------------#
-# Class Globals
-#from extern.embeddedimage import PyEmbeddedImage
-
-#ButtonBackground = PyEmbeddedImage(
-#    "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAfhJ"
-#    "REFUWIXtlz9uGkEUh7/ZWbDdEAWH0ltRYCKRigNQxhFS3EUuUjlGspQLODfIAVxEkVPFzgmc"
-#    "LhegCoolupWQ6GIcWIvE7DwmBX9iwGBiMG74SVvM6M37ffPeaEarGFQceJbJZA611inmKBEp"
-#    "l0qlfeA7UOvNq2sxu6lUKpfNZne2nm+x/mR9nv6c/zzn9OspxWLxuFwuvwakB+BEIpE3hb3C"
-#    "+2QyGfM8b67Gw6pUKhy8O/jQbDb3AVFAbvvl9rd8Pn+vxtdVrVY5+nR07Pv+W3djw9vzPI8g"
-#    "uATsQgBisUdsbqZ3fN//6EZc91UikSAIGrcutNZirUUphVLq1vhJeppOc3b249A1xlD/VZ9s"
-#    "3K2MYjbTkbxtm3KNGBpT7H58FrgrlxGDKyI0GsHdAWaQiNBpQX2wBRM3ZKcJmry0J2MMrhjh"
-#    "MnigChjBDY2hVrtAaz3zyZ5W1lpEhNAYFN3KxB/HiUai/SCtNdHoylwMW60rROTfOGxRu+g8"
-#    "B32AYWmtWYmuDswppVhbXcNxnJH4tm0ThiHGhNihjFetPwMAAznHAYyTqyNA50IaosNaS7t9"
-#    "s9E4/TfAvDVayyXAEmAJsARYAixWLxzgywMC/AbI0XmQFv19pvMvigMUgPoCzevA7nA5CgsE"
-#    "KNzUD6fbjpN7ND7pevQP/18X4iAGbqux9wAAAABJRU5ErkJggg==")
+# Utility
 
 def MakeThemeTool(tool_id):
     """Makes a themed bitmap for the tool book of the pref dialog.
