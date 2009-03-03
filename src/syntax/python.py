@@ -26,7 +26,7 @@ import keyword
 #---- Keyword Specifications ----#
 
 # Indenter keywords
-INDENT_KW = (u"def", u"if", u"elif" u"else", u"for", u"while",
+INDENT_KW = (u"def", u"if", u"elif", u"else", u"for", u"while",
              u"class", u"try", u"except", u"finally")
 UNINDENT_KW = (u"return", u"raise", u"break", u"continue",
                u"pass", u"exit", u"quit")
@@ -111,14 +111,23 @@ def AutoIndenter(stc, pos, ichar):
     """
     rtxt = u''
     line = stc.GetCurrentLine()
-    text = stc.GetTextRange(stc.PositionFromLine(line), pos)
+    spos = stc.PositionFromLine(line)
+    text = stc.GetTextRange(spos, pos)
+    epos = stc.GetLineEndPosition(line)
+    at_eol = pos == epos
+    inspace = text.isspace()
 
-    # Ignore empty lines
-    while text.isspace():
-        line -= 1
-        if line < 0:
-            return u''
-        text = stc.GetTextRange(stc.PositionFromLine(line), pos)
+    # Check if the cursor is in column 0 and just return newline.
+    if not len(text):
+        return u'\n'
+
+    # Ignore empty lines and backtrace to find the previous line that we can
+    # get the indent position from
+#    while text.isspace():
+#        line -= 1
+#        if line < 0:
+#            return u''
+#        text = stc.GetTextRange(stc.PositionFromLine(line), pos)
 
     indent = stc.GetLineIndentation(line)
     if ichar == u"\t":
@@ -130,9 +139,8 @@ def AutoIndenter(stc, pos, ichar):
     end_spaces = ((indent - (tabw * i_space)) * u' ')
 
     tokens = filter(None, text.strip().split())
-    if tokens:
+    if tokens and not inspace:
         if tokens[-1].endswith(u":"):
-            print "TOKENS", tokens
             if tokens[0].rstrip(u":") in INDENT_KW:
                 i_space += 1
         elif tokens[-1].endswith(u"\\"):
@@ -140,7 +148,15 @@ def AutoIndenter(stc, pos, ichar):
         elif tokens[0] in UNINDENT_KW:
             i_space = max(i_space - 1, 0)
 
-    return u"\n" + ichar * i_space + end_spaces
+    rval = u"\n" + (ichar * i_space) + end_spaces
+    if inspace and ichar != u"\t":
+        rpos = indent - (pos - spos)
+        if rpos < len(rval) and rpos > 0:
+            rval = rval[:-rpos]
+        elif rpos >= len(rval):
+            rval = u"\n"
+
+    return rval
 
 #---- End Required Module Functions ----#
 
