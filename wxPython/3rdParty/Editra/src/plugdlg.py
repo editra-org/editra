@@ -477,6 +477,7 @@ class DownloadPanel(eclib.ControlBox):
             self._list.DeleteAllItems()
 
         pins = sorted([ name for name in self._p_list.keys() ], key=unicode.lower)
+        self.Freeze()
         for item in pins:
             data = self._p_list[item]
             pbi = PBDownloadItem(self._list, None, data.GetName(),
@@ -484,6 +485,7 @@ class DownloadPanel(eclib.ControlBox):
                                  data.GetAuthor())
             self._list.AppendItem(pbi)
 
+        self.Thaw()
         self._list.SendSizeEvent()
         return self._list.GetItemCount()
 
