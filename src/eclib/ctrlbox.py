@@ -311,8 +311,8 @@ class ControlBar(wx.PyPanel):
 
         # Drawing related
         color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        self._color2 = AdjustColour(color, 30)
-        self._color = AdjustColour(color, -20)
+        self._color2 = AdjustColour(color, 15)
+        self._color = AdjustColour(color, -10)
         pcolor = tuple([min(190, x) for x in AdjustColour(self._color, -25)])
         self._pen = wx.Pen(pcolor, 1)
 
