@@ -3385,7 +3385,7 @@ class FlatNotebook(wx.PyPanel):
         """ Returns the currently selected notebook page or None. """
         
         sel = self._pages.GetSelection()
-        if sel < 0:
+        if sel < 0 or sel >= len(self._windows):
             return None
 
         return self._windows[sel]
