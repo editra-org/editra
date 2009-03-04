@@ -114,12 +114,15 @@ def AutoIndenter(stc, pos, ichar):
     spos = stc.PositionFromLine(line)
     text = stc.GetTextRange(spos, pos)
     epos = stc.GetLineEndPosition(line)
-    at_eol = pos == epos
     inspace = text.isspace()
+
+    # Cursor is in the indent area somewhere
+    if inspace:
+        return u"\n" + text
 
     # Check if the cursor is in column 0 and just return newline.
     if not len(text):
-        return u'\n'
+        return u"\n"
 
     # Ignore empty lines and backtrace to find the previous line that we can
     # get the indent position from
@@ -136,7 +139,7 @@ def AutoIndenter(stc, pos, ichar):
         tabw = stc.GetIndent()
 
     i_space = indent / tabw
-    end_spaces = ((indent - (tabw * i_space)) * u' ')
+    end_spaces = ((indent - (tabw * i_space)) * u" ")
 
     tokens = filter(None, text.strip().split())
     if tokens and not inspace:
