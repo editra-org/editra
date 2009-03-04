@@ -30,6 +30,7 @@ BUG FIXES:
 +Fix improper detection of when to auto-unindent in Python files.
 +Fix Python auto-indent from incorrectly inserting space when the cursor is
 in the indentation space of a line.
++Fix Close All option in tab context menu not working on GTK.
 
 #-----------------------------------------------------------------------------#
 
