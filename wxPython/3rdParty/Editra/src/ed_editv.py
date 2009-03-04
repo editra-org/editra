@@ -182,6 +182,11 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             nb.OpenDocPointer(self.GetDocPointer(), self.GetDocument(), pg_txt)
             self._ignore_del = True
             wx.CallAfter(parent.ClosePage)
+        elif wx.Platform == '__WXGTK__' and \
+             e_id in (ed_glob.ID_CLOSE, ed_glob.ID_CLOSEALL):
+            # Need to relay events up to toplevel window on GTK for them to
+            # be processed. On other platforms the propagate by them selves.
+            wx.PostEvent(self.GetTopLevelParent(), evt)
         else:
             evt.Skip()
 
