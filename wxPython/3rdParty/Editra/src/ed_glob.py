@@ -141,6 +141,7 @@ ID_PREF          = wx.ID_PREFERENCES
 # Prefrence Dlg Ids
 ID_PREF_LANG     = wx.NewId()
 ID_PREF_AALIAS   = wx.NewId()
+ID_PREF_AUTO_RELOAD = wx.NewId()
 ID_PREF_AUTOTRIM = wx.NewId()
 ID_PREF_CHKMOD   = wx.NewId()
 ID_PREF_CHKUPDATE = wx.NewId()
@@ -298,6 +299,7 @@ ID_2_PROF = {
              ID_APP_SPLASH        : 'APPSPLASH',
              ID_AUTOCOMP          : 'AUTO_COMP',
              ID_AUTOINDENT        : 'AUTO_INDENT',
+             ID_PREF_AUTO_RELOAD  : 'AUTO_RELOAD',
              ID_PREF_AUTOTRIM     : 'AUTO_TRIM_WS',
              ID_BRACKETHL         : 'BRACKETHL',
              ID_PREF_CHKMOD       : 'CHECKMOD',

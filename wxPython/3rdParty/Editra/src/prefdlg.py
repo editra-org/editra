@@ -334,10 +334,16 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
         chkmod_cb = wx.CheckBox(self, ed_glob.ID_PREF_CHKMOD,
                                 _("Check if on disk file has been "
                                   "modified by others"))
-        chkmod_cb.SetValue(Profile_Get('CHECKMOD'))
+        chkmod_val = Profile_Get('CHECKMOD', default=True)
+        chkmod_cb.SetValue(chkmod_val)
+        autorl_cb = wx.CheckBox(self, ed_glob.ID_PREF_AUTO_RELOAD,
+                                _("Automatically reload files when "
+                                  "changes are detected on disk"))
+        autorl_cb.SetValue(Profile_Get('AUTO_RELOAD', default=False) and chkmod_val)
+        autorl_cb.Enable(chkmod_val)
         eolwarn_cb = wx.CheckBox(self, ed_glob.ID_PREF_WARN_EOL,
                                  _("Warn when mixed eol characters are detected"))
-        eolwarn_cb.SetValue(Profile_Get('WARN_EOL'))
+        eolwarn_cb.SetValue(Profile_Get('WARN_EOL', default=True))
 
         # Locale
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -348,7 +354,7 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
                          0, wx.ALIGN_CENTER_VERTICAL)])
 
         # Layout items
-        sizer = wx.FlexGridSizer(18, 2, 5, 5)
+        sizer = wx.FlexGridSizer(19, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self,
                         label=_("Startup Settings") + u": "),
@@ -365,6 +371,7 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
                        ((5, 5),), (win_cb, 0),
                        ((5, 5),), (pos_cb, 0),
                        ((5, 5),), (chkmod_cb, 0),
+                       ((5, 5),), (autorl_cb, 0),
                        ((5, 5),), (eolwarn_cb, 0),
                        ((5, 5),), ((5, 5),),
                        (wx.StaticText(self, label=_("Locale Settings") + u": "),
@@ -374,8 +381,7 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
         msizer.AddMany([((10, 10), 0), (sizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
 
-    @staticmethod
-    def OnCheck(evt):
+    def OnCheck(self, evt):
         """Handles events from the check boxes
         @param evt: event that called this handler
 
@@ -384,12 +390,16 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
         if e_id in (ed_glob.ID_APP_SPLASH, ed_glob.ID_PREF_SPOS,
-                    ed_glob.ID_PREF_CHKMOD, ed_glob.ID_SESSION,
+                    ed_glob.ID_SESSION,
                     ed_glob.ID_NEW_WINDOW, ed_glob.ID_PREF_CHKUPDATE,
-                    ed_glob.ID_PREF_WARN_EOL):
+                    ed_glob.ID_PREF_WARN_EOL, ed_glob.ID_PREF_AUTO_RELOAD):
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
         elif e_id == ed_glob.ID_REPORTER:
             Profile_Set(ed_glob.ID_2_PROF[e_id], not e_obj.GetValue())
+        elif e_id == ed_glob.ID_PREF_CHKMOD:
+            val = e_obj.GetValue()
+            Profile_Set(ed_glob.ID_2_PROF[e_id], val)
+            self.FindWindowById(ed_glob.ID_PREF_AUTO_RELOAD).Enable(val)
         else:
             pass
         evt.Skip()

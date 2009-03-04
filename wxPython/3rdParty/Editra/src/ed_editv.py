@@ -88,9 +88,27 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             if mtime and not lmod and not os.path.exists(cfile):
                 wx.CallAfter(self.PromptToReSave, cfile)
             elif mtime < lmod:
-                wx.CallAfter(self.AskToReload, cfile)
+                # Check if we should automatically reload the file or not
+                if Profile_Get('AUTO_RELOAD', default=False) and \
+                   not self.GetModify():
+                    wx.CallAfter(self.DoReloadFile)
+                else:
+                    wx.CallAfter(self.AskToReload, cfile)
             else:
                 pass
+
+    def DoReloadFile(self):
+        """Reload the current file"""
+        ret, rmsg = self.ReloadFile()
+        if not ret:
+            errmap = dict(filename=cfile, errmsg=rmsg)
+            mdlg = wx.MessageDialog(self,
+                                    _("Failed to reload %(filename)s:\n"
+                                      "Error: %(errmsg)s") % errmap,
+                                    _("Error"),
+                                    wx.OK | wx.ICON_ERROR)
+            mdlg.ShowModal()
+            mdlg.Destroy()
 
     def DoTabClosing(self):
         """Save the current position in the buffer to reset on next load"""
@@ -227,16 +245,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         result = mdlg.ShowModal()
         mdlg.Destroy()
         if result == wx.ID_YES:
-            ret, rmsg = self.ReloadFile()
-            if not ret:
-                errmap = dict(filename=cfile, errmsg=rmsg)
-                mdlg = wx.MessageDialog(self,
-                                        _("Failed to reload %(filename)s:\n"
-                                          "Error: %(errmsg)s") % errmap,
-                                        _("Error"),
-                                        wx.OK | wx.ICON_ERROR)
-                mdlg.ShowModal()
-                mdlg.Destroy()
+            self.DoReloadFile()
         else:
             self.SetModTime(GetFileModTime(cfile))
 
