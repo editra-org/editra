@@ -301,7 +301,8 @@ class PanelBoxItemBase(wx.PyPanel):
             ncolor = wx.BLACK
 
         for child in self.GetChildren():
-            if hasattr(child, 'SetForegroundColour'):
+            if hasattr(child, 'SetForegroundColour') and \
+               not isinstance(child, wx.Button):
                 child.SetForegroundColour(ncolor)
 
     def OnKeyUp(self, evt):
