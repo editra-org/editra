@@ -38,7 +38,7 @@ import wx
 class ProgressStatusBar(wx.StatusBar):
     """Custom StatusBar with a built-in progress bar"""
     def __init__(self, parent, id_=wx.ID_ANY,
-                 style=wx.DEFAULT_STATUSBAR_STYLE,
+                 style=wx.SB_FLAT,
                  name="ProgressStatusBar"):
         """Creates a status bar that can hide and show a progressbar
         in the far right section. The size of the progressbar is also
