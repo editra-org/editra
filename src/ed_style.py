@@ -33,6 +33,7 @@ import wx
 import ed_glob
 import util
 from profiler import Profile_Get, Profile_Set
+import eclib
 
 # Globals
 STY_ATTRIBUTES     = u"face fore back size modifiers"
@@ -478,7 +479,7 @@ class StyleMgr(object):
             fore = u"#000000"
 
         if not as_hex:
-            rgb = util.HexToRGB(fore[1:])
+            rgb = eclib.HexToRGB(fore[1:])
             fore = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
         return fore
 
@@ -504,7 +505,7 @@ class StyleMgr(object):
             back = u"#FFFFFF"
 
         if not as_hex:
-            rgb = util.HexToRGB(back[1:])
+            rgb = eclib.HexToRGB(back[1:])
             back = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
         return back
 

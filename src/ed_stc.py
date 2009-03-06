@@ -41,6 +41,7 @@ import ed_txt
 import ed_menu
 from ed_keyh import KeyHandler, ViKeyHandler
 from extern import vertedit
+import eclib
 
 #-------------------------------------------------------------------------#
 # Globals
@@ -694,11 +695,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # backwards from what the parameters take so use our Fore color for
         # the stcs back and visa versa for our Back color.
         back = style.GetFore()
-        rgb = util.HexToRGB(back[1:])
+        rgb = eclib.HexToRGB(back[1:])
         back = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
 
         fore = style.GetBack()
-        rgb = util.HexToRGB(fore[1:])
+        rgb = eclib.HexToRGB(fore[1:])
         fore = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
 
         self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPEN,

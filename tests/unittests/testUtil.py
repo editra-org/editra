@@ -50,18 +50,6 @@ class UtilTest(unittest.TestCase):
         self.assertTrue(sum(c.Get()) > sum(c2.Get()),
                         "Failed to darken colour")
 
-    def testHexToRGB(self):
-        """Test that the conversion of a hex string to rgb is acurate"""
-        hexstr = ("#FF0000", "#00FF00", "#0000FF", "#000000", "#FFFFFF")
-        rgb = ((255, 0, 0), (0, 255, 0), (0, 0, 255),
-               (0, 0, 0), (255, 255, 255))
-
-        for hval, rgbval in zip(hexstr, rgb):
-            convert = tuple(util.HexToRGB(hval))
-            self.assertEquals(convert, rgbval,
-                              "(HexToRGB(%s) == %s) != %s" %
-                              (hval, convert, str(rgbval)))
-
     def testGetFileName(self):
         """Test that getting the file name from a string returns the correct
         string.

@@ -34,6 +34,8 @@ import ed_crypt
 import dev_tool
 import syntax.syntax as syntax
 import syntax.synglob as synglob
+import eclib # TODO: Temporary till refs to HexToRGB and AdjustColor are
+             #       no longer used anywhere
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -766,37 +768,21 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     @param percent: percent to adjust +(brighten) or -(darken)
     @type percent: int
     @keyword alpha: Value to adjust alpha channel to
+    @note: DON'T USE THIS FUNCTION use the one in eclib instead
+           this will be removed at some point.
 
     """
-    radj, gadj, badj = [ int(val * (abs(percent) / 100.))
-                         for val in color.Get() ]
-
-    if percent < 0:
-        radj, gadj, badj = [ val * -1 for val in [radj, gadj, badj] ]
-    else:
-        radj, gadj, badj = [ val or percent for val in [radj, gadj, badj] ]
-
-    red = min(color.Red() + radj, 255)
-    green = min(color.Green() + gadj, 255)
-    blue = min(color.Blue() + badj, 255)
-    return wx.Colour(red, green, blue, alpha)
+    return eclib.AdjustColour(color, percent, alpha)
 
 def HexToRGB(hex_str):
     """Returns a list of red/green/blue values from a
     hex string.
     @param hex_str: hex string to convert to rgb
+    @note: DON'T USE THIS FUNCTION use the one in eclib instead
+           this will be removed at some point.
 
     """
-    hexval = hex_str
-    if hexval[0] == u"#":
-        hexval = hexval[1:]
-    ldiff = 6 - len(hexval)
-    hexval += ldiff * u"0"
-    # Convert hex values to integer
-    red = int(hexval[0:2], 16)
-    green = int(hexval[2:4], 16)
-    blue = int(hexval[4:], 16)
-    return [red, green, blue]
+    return eclib.HexToRGB(hex_str)
 
 def SetWindowIcon(window):
     """Sets the given windows icon to be the programs
