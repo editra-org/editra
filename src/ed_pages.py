@@ -739,9 +739,9 @@ class EdPages(FNB.FlatNotebook):
                     # Warn when the folder contains many files
                     dlg = wx.MessageDialog(self,
                                            _("Do you wish to open all %d files"
-                                             " in this directory?\n\nWarning"
+                                             " in this directory?\n\nWarning:"
                                              " opening many files at once may"
-                                             " cause the editor to temporarly "
+                                             " cause the editor to temporarily "
                                              " freeze.") % len(dcnt),
                                            _("Open Directory?"),
                                            style=wx.YES | wx.NO | \

@@ -559,8 +559,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Check if file still exists
         if not os.path.exists(fname):
-            mdlg = wx.MessageDialog(self, _("%s could not be found\nPerhaps "
-                                            "its been moved or deleted") % \
+            mdlg = wx.MessageDialog(self, _("%s could not be found.\nPerhaps "
+                                            "it's been moved or deleted.") % \
                                     fname, _("File Not Found"),
                                     wx.OK | wx.ICON_WARNING)
             mdlg.CenterOnParent()

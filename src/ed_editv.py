@@ -238,7 +238,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         mdlg = wx.MessageDialog(self,
                                 _("%s has been modified by another "
                                   "application.\n\nWould you like "
-                                  "to Reload it?") % cfile,
+                                  "to reload it?") % cfile,
                                   _("Reload File?"),
                                   wx.YES_NO | wx.ICON_INFORMATION)
         mdlg.CenterOnParent()
