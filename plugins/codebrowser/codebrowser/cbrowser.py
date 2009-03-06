@@ -352,7 +352,8 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         """
         # Don't update when this window is not Active
-        if not force and not self._mw.IsActive():
+        istop = wx.GetApp().GetTopWindow() == self._mw
+        if not force and not self._mw.IsActive() and not istop:
             return
 
         page = self._GetCurrentCtrl()
