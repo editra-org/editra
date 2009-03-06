@@ -4,6 +4,16 @@
 
 #-----------------------------------------------------------------------------#
 
+Version 0.8
+Released: 0x/xx/2009
+
+New:
+
+Bug Fixes:
++Fix activation issue causing some updates to be missed on Linux.
+
+#-----------------------------------------------------------------------------#
+
 Version 0.7
 Released: 02/08/2009
 
