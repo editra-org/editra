@@ -27,32 +27,14 @@ __all__ = ["ColorSetter", "ColorSetterEvent",
 import wx
 import wx.lib.colourselect as csel
 
+from eclutil import HexToRGB
+
 #-----------------------------------------------------------------------------#
 # Globals
 # NOTE: # is expected at end
 HEX_CHARS = "0123456789ABCDEFabcdef#"
 
 _ = wx.GetTranslation
-#-----------------------------------------------------------------------------#
-
-# Utility
-def HexToRGB(hex_str):
-    """Returns a list of red/green/blue values from a
-    hex string.
-    @param hex_str: hex string to convert to rgb
-
-    """
-    hexval = hex_str
-    if hexval[0] == u"#":
-        hexval = hexval[1:]
-    ldiff = 6 - len(hexval)
-    hexval += ldiff * u"0"
-    # Convert hex values to integer
-    red = int(hexval[0:2], 16)
-    green = int(hexval[2:4], 16)
-    blue = int(hexval[4:], 16)
-    return [red, green, blue]
-
 #-----------------------------------------------------------------------------#
 
 csEVT_COLORSETTER = wx.NewEventType()

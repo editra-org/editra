@@ -17,7 +17,7 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ['AdjustAlpha', 'AdjustColour']
+__all__ = ['AdjustAlpha', 'AdjustColour', 'HexToRGB']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -51,3 +51,20 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     green = min(color.Green() + gadj, 255)
     blue = min(color.Blue() + badj, 255)
     return wx.Colour(red, green, blue, alpha)
+
+def HexToRGB(hex_str):
+    """Returns a list of red/green/blue values from a
+    hex string.
+    @param hex_str: hex string to convert to rgb
+
+    """
+    hexval = hex_str
+    if hexval[0] == u"#":
+        hexval = hexval[1:]
+    ldiff = 6 - len(hexval)
+    hexval += ldiff * u"0"
+    # Convert hex values to integer
+    red = int(hexval[0:2], 16)
+    green = int(hexval[2:4], 16)
+    blue = int(hexval[4:], 16)
+    return [red, green, blue]
