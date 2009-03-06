@@ -496,6 +496,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         return self._exiting
 
+    def IsTopWindow(self):
+        """Is this main window 'the' current top window
+        @return: bool
+
+        """
+        return wx.GetApp().GetTopWindow() == self
+
     def LoadFileHistory(self, size):
         """Loads file history from profile
         @return: None
