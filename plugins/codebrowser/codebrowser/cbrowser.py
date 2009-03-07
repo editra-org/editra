@@ -74,6 +74,10 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.icons = dict()
         self.il = None
 
+        self._timer = wx.Timer(self)
+        self._cpage = None
+        self._force = False
+
         # Setup
         self._SetupImageList()
         viewm = self._mw.GetMenuBar().GetMenuByName("view")
@@ -91,6 +95,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnMenu)
+        self.Bind(wx.EVT_TIMER, self.OnStartJob)
         self.Bind(EVT_JOB_FINISHED, self.OnTagsReady)
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
@@ -330,6 +335,9 @@ class CodeBrowserTree(wx.TreeCtrl):
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
                                (self._mw.GetId(), 0, 0))
 
+            if not self._timer.IsRunning():
+                self._cpage = None
+
     def OnUpdateFont(self, msg):
         """Update the ui font when a message comes saying to do so."""
         font = msg.GetData()
@@ -344,6 +352,45 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
         evt.Check(pane.IsShown())
+
+    def OnStartJob(self, evt):
+        """Start the tree update job
+        @param evt: wxTimerEvent
+
+        """
+        if self._cpage is None or not isinstance(self._cpage, wx.Window):
+            self._cpage = None
+            return
+        else:
+            # Check if its still the current page
+            parent = self._cpage.GetParent()
+            if self._cpage != parent.GetCurrentPage():
+                return
+
+        # Get the generator method
+        genfun = TagLoader.GetGenerator(self._cpage.GetLangId())
+        self._cjob += 1 # increment job Id
+
+        # Check if we need to do updates
+        if genfun is not None and (self._force or self._ShouldUpdate()):
+            self._force = False
+
+            # Start progress indicator in pulse mode
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
+                               (self._mw.GetId(), True))
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
+                               (self._mw.GetId(), -1, -1))
+
+            # Create and start the worker thread
+            thread = TagGenThread(self, self._cjob, genfun,
+                                  StringIO.StringIO(self._cpage.GetText()))
+            wx.CallLater(75, thread.start)
+        else:
+            self._cdoc = None
+            self.DeleteChildren(self.root)
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
+                               (self._mw.GetId(), False))
+            return
 
     def OnUpdateTree(self, msg=None, force=False):
         """Update the tree when an action message is sent
@@ -366,31 +413,17 @@ class CodeBrowserTree(wx.TreeCtrl):
             return
 
         # If document job is same as current don't start a new one
-        if not force and self._lastjob == cfname:
-            return
-        else:
+        if force or self._lastjob != cfname:
             self._lastjob = cfname
+            if self._timer.IsRunning():
+                self._timer.Stop()
 
-        # Get the generator method
-        genfun = TagLoader.GetGenerator(page.GetLangId())
-        self._cjob += 1 # increment job Id
+            # Cache the current job information
+            self._cpage = page
+            self._force = force
 
-        # Check if we need to do updates
-        if genfun is not None and (force or self._ShouldUpdate()):
-            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
-                               (self._mw.GetId(), True))
-            # Start progress indicator in pulse mode
-            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
-                               (self._mw.GetId(), -1, -1))
-            thread = TagGenThread(self, self._cjob, genfun,
-                                  StringIO.StringIO(page.GetText()))
-            wx.CallLater(75, thread.start)
-        else:
-            self._cdoc = None
-            self.DeleteChildren(self.root)
-            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
-                               (self._mw.GetId(), False))
-            return
+            # Start the oneshot timer for beginning the tag generator job
+            self._timer.Start(300, True)
 
     def OnShowBrowser(self, evt):
         """Show the browser pane
