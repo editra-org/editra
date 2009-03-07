@@ -8,6 +8,7 @@ Version 0.8
 Released: 0x/xx/2009
 
 New:
++Delay thread creation timing to reduce number of uneeded jobs that are started.
 
 Bug Fixes:
 +Fix activation issue causing some updates to be missed on Linux.
