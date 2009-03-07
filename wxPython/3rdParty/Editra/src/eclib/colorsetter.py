@@ -81,6 +81,7 @@ class ColorSetter(wx.Panel):
         self._txt.SetMaxSize((-1, txtheight + 4))
         self._txt.SetToolTip(wx.ToolTip(_("Enter a hex color value")))
         self._cbtn = csel.ColourSelect(self, colour=color, size=(20, 20))
+        self._preval = color
         self._DoLayout()
 
         # Event Handlers
@@ -95,6 +96,11 @@ class ColorSetter(wx.Panel):
         if not isinstance(value, wx.Color):
             value = wx.Color(*value)
 
+        # Don't post update if value hasn't changed
+        if value == self._preval:
+            return
+
+        self._preval = value
         evt = ColorSetterEvent(csEVT_COLORSETTER, self.GetId(), value)
         wx.PostEvent(self.GetParent(), evt)
 
@@ -153,7 +159,7 @@ class ColorSetter(wx.Panel):
         """
         e_val = evt.GetValue()[0:3]
         red, green, blue = (hex(val)[2:].upper() for val in e_val)
-        hex_str = "#%s%s%s" % (red.zfill(2), green.zfill(2), blue.zfill(2))
+        hex_str = u"#%s%s%s" % (red.zfill(2), green.zfill(2), blue.zfill(2))
         self._txt.SetValue(hex_str)
         self._cbtn.SetValue(wx.Color(*e_val))
         self.__PostEvent()
@@ -173,8 +179,8 @@ class ColorSetter(wx.Panel):
 
         """
         code = evt.GetKeyCode()
-        if code in [wx.WXK_DELETE, wx.WXK_BACK, wx.WXK_LEFT, wx.WXK_RIGHT] or \
-           evt.CmdDown():
+        if code in (wx.WXK_DELETE, wx.WXK_BACK, wx.WXK_LEFT,
+                    wx.WXK_RIGHT, wx.WXK_TAB) or evt.CmdDown():
             evt.Skip()
             return
 
@@ -184,7 +190,7 @@ class ColorSetter(wx.Panel):
             return
 
         if key in HEX_CHARS and \
-           (len(self._txt.GetValue().lstrip("#")) < 6 or \
+           (len(self._txt.GetValue().lstrip(u"#")) < 6 or \
             self._txt.GetStringSelection()):
             evt.Skip()
 
@@ -202,8 +208,9 @@ class ColorSetter(wx.Panel):
 
         """
         self._cbtn.SetValue(color)
+        self._preval = color
         red, green, blue = (hex(val)[2:].zfill(2).upper() for val in color[0:3])
-        hex_str = "#%s%s%s" % (red, green, blue)
+        hex_str = u"#%s%s%s" % (red, green, blue)
         self._txt.SetValue(hex_str)
 
 #-----------------------------------------------------------------------------#
