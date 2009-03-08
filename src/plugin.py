@@ -227,6 +227,39 @@ class Plugin(object):
 
 #-----------------------------------------------------------------------------#
 
+class PluginConfigObject(object):
+    """Plugin configuration object. Plugins that wish to provide a
+    configuration panel should implement a subclass of this object
+    in their __init__ module. The __init__ module must also have a
+    function 'GetConfigObject' that returns an instance of this
+    class.
+
+    """
+    def GetConfigPanel(self, parent):
+        """Get the configuration panel for this plugin
+        @param parent: parent window for the panel
+        @return: wxPanel
+
+        """
+        raise NotImplementedError
+
+    def GetBitmap(self):
+        """Get the 32x32 bitmap to show in the config dialog
+        @return: wx.Bitmap
+        @note: Optional if not implemented default icon will be used
+
+        """
+        return wx.NullBitmap
+
+    def GetLabel(self):
+        """Get the display label for the configuration
+        @return: string
+
+        """
+        raise NotImplementedError
+
+#-----------------------------------------------------------------------------#
+
 class PluginData(object):
     """A storage class for representing data about a Plugin
     @see: L{Plugin}

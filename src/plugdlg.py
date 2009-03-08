@@ -86,6 +86,7 @@ class PluginDialog(wx.Frame):
     it does not interfere with usage of the editor.
 
     """
+    CFG_ICON = 3
     def __init__(self, parent, id=wx.ID_ANY, title=u'', size=wx.DefaultSize):
         wx.Frame.__init__(self, parent, title=title, size=size,
                               style=wx.DEFAULT_FRAME_STYLE)
@@ -103,6 +104,9 @@ class PluginDialog(wx.Frame):
         self._imglst.append(MakeThemeTool(ed_glob.ID_PREF))
         self._imglst.append(MakeThemeTool(ed_glob.ID_WEB))
         self._imglst.append(MakeThemeTool(ed_glob.ID_PACKAGE))
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF),
+                                       wx.ART_TOOLBAR, (32, 32))
+        self._imglst.append(bmp)
         self._nb.SetImageList(self._imglst)
         self._nb.SetUsePyImageList(True)
 
@@ -219,18 +223,35 @@ class ConfigPanel(wx.Panel):
                 identifer = (name, item.GetVersionString())
         return identifer
 
-    @staticmethod
-    def OnNotify(evt):
+    def OnNotify(self, evt):
         """Handles the notification events that are
         posted from the list control.
         @param evt: Event fired that called this handler
         @type evt: ed_event.NotificationEvent
 
         """
-        index = evt.GetId()
-        enable, pname = evt.GetValue()
-        pmgr = wx.GetApp().GetPluginManager()
-        pmgr.EnablePlugin(pname, enable)
+        e_id = evt.GetId()
+        if e_id == ed_glob.ID_PREF:
+            # TODO: check for an open existing instance of this config objects
+            #       page.
+            cfg_obj = evt.GetValue()
+            parent = self.GetParent() # SegmentBook
+
+            bmp = cfg_obj.GetBitmap()
+            if bmp.IsNull():
+                idx = PluginDialog.CFG_ICON
+            else:
+                imglst = parent.GetImageList()
+                imglst.append(bmp)
+                idx = len(imgst) - 1
+
+            label = cfg_obj.GetLabel()
+            panel = cfg_obj.GetConfigPanel(parent)
+            parent.AddPage(panel, label, True, idx)
+        else:
+            enable, pname = evt.GetValue()
+            pmgr = wx.GetApp().GetPluginManager()
+            pmgr.EnablePlugin(pname, enable)
 
     def PopulateCtrl(self):
         """Populates the list of plugins and sets the
@@ -264,7 +285,7 @@ class ConfigPanel(wx.Panel):
             pin.SetAuthor(getattr(mod, '__author__', _("Unknown")))
             pin.SetVersion(str(getattr(mod, '__version__', _("Unknown"))))
 
-            pbi = PBPluginItem(self._list, None, item, pin.GetVersion(),
+            pbi = PBPluginItem(self._list, mod, None, item, pin.GetVersion(),
                                pin.GetDescription(), pin.GetAuthor())
 
             pbi.SetChecked(val)
@@ -781,15 +802,18 @@ class InstallPanel(eclib.ControlBox):
 
 class PBPluginItem(eclib.PanelBoxItemBase):
     """PanelBox Item to display configuration information about a plugin."""
-    def __init__(self, parent, bmp=None, title=u'Plugin Name', version=u'0.0',
-                 desc=u'Description', auth='John Doe', enabled=False):
-        """Create teh PanelBoxItem
+    def __init__(self, parent, mod, bmp=None,
+                 title=u'Plugin Name', version=u'0.0',
+                 desc=u'Description', auth='John Doe',
+                 enabled=False):
+        """Create the PanelBoxItem
         @param parent: L{PanelBox}
 
         """
         eclib.PanelBoxItemBase.__init__(self, parent)
 
         # Attributes
+        self._module = mod
         self._bmp = bmp
         self._title = wx.StaticText(self, label=title)
         self._version = wx.StaticText(self, label=version)
@@ -797,10 +821,13 @@ class PBPluginItem(eclib.PanelBoxItemBase):
         self._auth = wx.StaticText(self, label=_("Author: %s") % auth)
         self._enabled = wx.CheckBox(self, label=_("Enable"))
         self._enabled.SetValue(enabled)
-        self._config = wx.Button(self, label=_("Configure"))
-        self._config.Hide()
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF), wx.ART_MENU)
+        self._config = eclib.PlateButton(self, label=_("Configure"), bmp=bmp)
+        self._config.Enable(enabled)
 
         # Setup
+        if not hasattr(mod, 'GetConfigObject'):
+            self._config.Hide()
         font = self._title.GetFont()
         font.SetWeight(wx.FONTWEIGHT_BOLD)
         self._title.SetFont(font)
@@ -817,6 +844,7 @@ class PBPluginItem(eclib.PanelBoxItemBase):
 
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
+        self.Bind(wx.EVT_BUTTON, self.OnButton)
 
     def __DoLayout(self):
         """Layout the panel"""
@@ -864,9 +892,17 @@ class PBPluginItem(eclib.PanelBoxItemBase):
         """
         return self._version.GetLabel()
 
+    def OnButton(self, evt):
+        """Handle when the configuration button is hit."""
+        cfg_obj = self._module.GetConfigObject()
+        event = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
+                                           ed_glob.ID_PREF, cfg_obj)
+        wx.PostEvent(self.GetParent(), event)
+
     def OnCheck(self, evt):
         """Notify container of changes to state of plugin"""
         enabled = self._enabled.GetValue()
+        self._config.Enable(enabled)
         pname = self._title.GetLabel()
         event = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY, self.GetId(),
                                            (enabled, pname), self)
@@ -878,6 +914,7 @@ class PBPluginItem(eclib.PanelBoxItemBase):
 
         """
         self._enabled.SetValue(check)
+        self._config.Enable(check)
 
 #-----------------------------------------------------------------------------#
 
