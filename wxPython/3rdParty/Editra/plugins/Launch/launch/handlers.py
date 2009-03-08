@@ -175,10 +175,9 @@ class FileTypeHandler(object):
         """
         return os.environ
 
-    @classmethod
-    def GetName(cls):
+    def GetName(self):
         """Get the name of this handler"""
-        return cls.__name__
+        return self.__name__
 
     def HandleHotSpot(self, mainw, outbuffer, line, fname):
         """Handle hotspot clicks. Called when a hotspot is clicked
