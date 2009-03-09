@@ -430,11 +430,11 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """
         if evt.GetActive():
             self._log("[app][info] I'm Awake!!")
-            frame = self.GetTopWindow()
-            if frame is not None:
-                if frame.IsIconized():
-                    frame.Iconize(False)
-                frame.Raise()
+#            frame = self.GetTopWindow()
+#            if frame is not None:
+#                if frame.IsIconized():
+#                    frame.Iconize(False)
+#                frame.Raise()
         else:
             self._log("[app][info] Going to sleep")
         evt.Skip()
