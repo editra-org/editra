@@ -110,9 +110,6 @@ class ConfigDialog(wx.Frame):
         """
         wx.Frame.__init__(self, parent, title=_("Launch Configuration"))
 
-        # Attributes
-        self.ftype = ftype
-
         # Layout
         util.SetWindowIcon(self)
         self.__DoLayout()
@@ -130,27 +127,34 @@ class ConfigDialog(wx.Frame):
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         vsizer = wx.BoxSizer(wx.VERTICAL)
         panel = wx.Panel(self)
-        noteb = wx.Notebook(panel)
-        noteb.AddPage(ConfigPanel(noteb), _("General"))
-        noteb.AddPage(MiscPanel(noteb), _("Misc"))
+        noteb = ConfigNotebook(self)
         hsizer.AddMany([((5, 5), 0), (noteb, 1, wx.EXPAND), ((5, 5), 0)])
         vsizer.AddMany([((5, 5), 0), (hsizer, 1, wx.EXPAND), ((10, 10), 0)])
         panel.SetSizer(vsizer)
-
         sizer.Add(panel, 1, wx.EXPAND)
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
         self.SetInitialSize()
         self.SetMinSize((420, 345))
 
-    def GetLangId(self):
-        return self.ftype
-
     def OnClose(self, evt):
         """Unregister the window when its closed"""
         wx.GetApp().UnRegisterWindow(repr(self))
-        ed_msg.PostMessage(EDMSG_LAUNCH_CFG_EXIT)
         evt.Skip()
+
+#-----------------------------------------------------------------------------#
+
+class ConfigNotebook(wx.Notebook):
+    """Notebook for holding config pages"""
+    def __init__(self, parent):
+        wx.Notebook.__init__(self, parent)
+
+        # Setup
+        self.AddPage(ConfigPanel(self), _("General"))
+        self.AddPage(MiscPanel(self), _("Misc"))
+
+    def __del__(self):
+        ed_msg.PostMessage(EDMSG_LAUNCH_CFG_EXIT)
 
 #-----------------------------------------------------------------------------#
 
@@ -158,8 +162,6 @@ class ConfigPanel(wx.Panel):
     """Configuration panel that holds the controls for configuration"""
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-
-        # Attributes
 
         # Layout
         self.__DoLayout()
@@ -174,7 +176,7 @@ class ConfigPanel(wx.Panel):
         msizer = wx.BoxSizer(wx.VERTICAL)
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
-        ftype = self.GetTopLevelParent().GetLangId()
+        ftype = wx.GetApp().GetCurrentBuffer().GetLangId()
         ftype = handlers.GetHandlerById(ftype).GetName()
         htypes = GetHandlerTypes()
         lang_ch = wx.Choice(self, ID_LANGUAGE, choices=htypes)

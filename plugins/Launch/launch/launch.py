@@ -54,6 +54,12 @@ REQUEST_RELAUNCH = 'Launch.CanRelaunch'
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
+def OnStoreConfig(msg):
+    Profile_Set(LAUNCH_KEY, handlers.GetState())
+ed_msg.Subscribe(OnStoreConfig, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
+
+#-----------------------------------------------------------------------------#
+
 class LaunchWindow(ctrlbox.ControlBox):
     """Control window for showing and running scripts"""
     def __init__(self, parent):
@@ -253,8 +259,7 @@ class LaunchWindow(ctrlbox.ControlBox):
             app = wx.GetApp()
             win = app.GetWindowInstance(cfgdlg.ConfigDialog)
             if win is None:
-                config = cfgdlg.ConfigDialog(self._mw,
-                                             ftype=self._config['lang'])
+                config = cfgdlg.ConfigDialog(self._mw)
                 config.CentreOnParent()
                 config.Show()
             else:
