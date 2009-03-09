@@ -60,6 +60,7 @@ __all__ = ["ControlBox", "CTRLBOX_NAME_STR",
 
 #--------------------------------------------------------------------------#
 # Dependancies
+import math
 import wx
 
 # Local Imports
@@ -82,6 +83,10 @@ CTRLBAR_STYLE_BORDER_BOTTOM = 2     # Add a border to the bottom
 CTRLBAR_STYLE_BORDER_TOP    = 4     # Add a border to the top
 CTRLBAR_STYLE_LABELS        = 8     # Draw labels under the icons (SegmentBar)
 CTRLBAR_STYLE_NO_DIVIDERS   = 16    # Don't draw dividers between segments
+
+# Segment Button Options
+SEGBTN_OPT_CLOSEBTNL     = 1     # Close button on the segments left side.
+SEGBTN_OPT_CLOSEBTNR     = 2     # Close button on the segment right side.
 
 # ControlBar event for items added by AddTool
 edEVT_CTRLBAR = wx.NewEventType()
@@ -276,7 +281,6 @@ class ControlBox(wx.PyPanel):
             elif self._botb and self._topb is None:
                 self._sizer.Insert(0, window, 1, wx.EXPAND)
             else:
-                print self._botb, self._topb
                 self._sizer.Insert(1, window, 1, wx.EXPAND)
         else:
             self._sizer.Replace(self._main, window)
@@ -311,8 +315,13 @@ class ControlBar(wx.PyPanel):
 
         # Drawing related
         color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-        self._color2 = AdjustColour(color, 15)
-        self._color = AdjustColour(color, -10)
+        if wx.Platform != '__WXMAC__':
+            self._color2 = AdjustColour(color, 15)
+            self._color = AdjustColour(color, -10)
+        else:
+            self._color2 = AdjustColour(color, 15)
+            self._color = AdjustColour(color, -20)
+
         pcolor = tuple([min(190, x) for x in AdjustColour(self._color, -25)])
         self._pen = wx.Pen(pcolor, 1)
 
@@ -516,7 +525,7 @@ class SegmentBar(ControlBar):
         lsize = self.GetTextExtent(label)
         self._buttons.append(dict(id=id, bmp=bmp, label=label,
                                   lsize=lsize, bsize=bmp.GetSize(),
-                                  bx1=0, bx2=0))
+                                  bx1=0, bx2=0, opts=0))
         self.InvalidateBestSize()
         self.Refresh()
 
@@ -530,7 +539,7 @@ class SegmentBar(ControlBar):
         return: int (next xpos)
 
         """
-        rect = self.GetRect()            
+        rect = self.GetRect()
         height = rect.height
         bsize = button['bsize']
 
@@ -571,9 +580,50 @@ class SegmentBar(ControlBar):
             dc.DrawLine(trside - 1, mpoint, trside, 0)
             dc.DrawLine(trside - 1, mpoint, trside, height)
 
+        if button['opts'] & SEGBTN_OPT_CLOSEBTNL or \
+           button['opts'] & SEGBTN_OPT_CLOSEBTNR:
+            brect = wx.Rect(xpos + 1, 0, (rside - 1) - (xpos - 1), height)
+            self.DoDrawCloseBtn(dc, button, brect, (0, 0), selected)
+
         button['bx1'] = xpos + 1
         button['bx2'] = rside - 1
         return rside
+
+    def DoDrawCloseBtn(self, gcdc, button, rect, cord, selected):
+        """Draw the close button on the segment
+        @param dc: Device Context
+        @param rect: Segment Rect
+        @param cord: mouse position or None
+
+        """
+        brush = gcdc.GetBrush()
+        if selected:
+            gcdc.SetBrush(wx.Brush(self._scolor2))
+        else:
+            gcdc.SetBrush(wx.Brush(self._color2))
+
+        if button['opts'] & SEGBTN_OPT_CLOSEBTNL:
+            x = rect.x + 6
+            y = rect.y + 6
+        else:
+            x = (rect.x + rect.width) - 6
+            y = rect.y + 6
+
+#        gcdc.DrawCircle(x, y, 5)
+
+        # Draw the X
+#        x1, y1 = (x + (4 * math.cos(180)), y + (4 * math.sin(180)))
+#        x2, y2 = (x + (4 * math.cos(-180)), y + (4 * math.sin(-180)))
+#        x3, y3 = (x + (4 * math.cos(225)), y + (4 * math.sin(225)))
+#        x4, y4 = (x + (4 * math.cos(-225)), y + (4 * math.sin(-225)))
+        pen = gcdc.GetPen()
+        brect = wx.Rect(x-3, y-3, 5, 5)
+        gcdc.DrawLabel('x', brect, wx.ALIGN_CENTER)
+#        gcdc.DrawLineList([(x,y,x1,y1),(x,y,x2,y2),(x3,y3,x,y),(x4,y4,x,y)], wx.RED_PEN)
+#        gcdc.DrawLineList([(x1,y1,x2,y2), (x3,y3,x4,y4)], wx.RED_PEN)
+#        gcdc.DrawLineList([(x-4.5, y, x+4.5, y), (x-.5, y+4.5,x-.5, y-4.5)])
+        gcdc.SetBrush(brush)
+        gcdc.SetPen(pen)
 
     def DoGetBestSize(self):
         """Get the best size for the control"""
@@ -737,6 +787,15 @@ class SegmentBar(ControlBar):
         segment['label'] = label
         segment['lsize'] = lsize
         self.InvalidateBestSize()
+        self.Refresh()
+
+    def SetSegmentOption(self, index, option):
+        """Set an option on a given segment
+        @param index: segment index
+        @param option: option to set
+
+        """
+        self._buttons[index]['opts'] |= option
         self.Refresh()
 
     def SetSelection(self, index):

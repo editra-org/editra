@@ -256,6 +256,16 @@ class SegmentBook(ctrlbox.ControlBox):
         """
         return self._pages[index]['img']
 
+    def SetPageCloseButton(self, index, button):
+        """Set the property of a page
+        @param prop: Property to set
+
+        """
+        if wx.Platform != '__WXMAC__':
+            self._segbar.SetSegmentOption(index, ctrlbox.SEGBTN_OPT_CLOSEBTNR)
+        else:
+            self._segbar.SetSegmentOption(index, ctrlbox.SEGBTN_OPT_CLOSEBTNL)
+
     def GetPageText(self, index):
         """Get the text of the current page
         @param index: page index
