@@ -894,10 +894,11 @@ class PBPluginItem(eclib.PanelBoxItemBase):
 
     def OnButton(self, evt):
         """Handle when the configuration button is hit."""
-        cfg_obj = self._module.GetConfigObject()
-        event = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
-                                           ed_glob.ID_PREF, cfg_obj)
-        wx.PostEvent(self.GetParent(), event)
+        if self._module is not None:
+            cfg_obj = self._module.GetConfigObject()
+            event = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
+                                               ed_glob.ID_PREF, cfg_obj)
+            wx.PostEvent(self.GetParent(), event)
 
     def OnCheck(self, evt):
         """Notify container of changes to state of plugin"""
@@ -926,7 +927,8 @@ class PBDownloadItem(PBPluginItem):
         @param parent: L{PanelBox}
 
         """
-        PBPluginItem.__init__(self, parent, bmp, title, version, desc, auth)
+        PBPluginItem.__init__(self, parent, None, bmp=bmp, title=title,
+                              version=version, desc=desc, auth=auth)
 
         # Setup
         self._enabled.SetLabel(_("Download"))
