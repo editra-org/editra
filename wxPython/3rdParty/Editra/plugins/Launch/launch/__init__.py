@@ -20,6 +20,7 @@ import wx
 
 # Local modules
 import launch
+import cfgdlg
 
 # Editra imports
 import ed_glob
@@ -111,6 +112,32 @@ class Launch(plugin.Plugin):
 
     def IsStockable(self):
         return True
+
+#-----------------------------------------------------------------------------#
+
+def GetConfigObject():
+    return LaunchConfigObject()
+
+class LaunchConfigObject(plugin.PluginConfigObject):
+    """Plugin configuration object. Plugins that wish to provide a
+    configuration panel should implement a subclass of this object
+    in their __init__ module.
+
+    """
+    def GetConfigPanel(self, parent):
+        """Get the configuration panel for this plugin
+        @param parent: parent window for the panel
+        @return: wxPanel
+
+        """
+        return cfgdlg.ConfigNotebook(parent)
+
+    def GetLabel(self):
+        """Get the label for this config panel
+        @return string
+
+        """
+        return _("Launch")
 
 #-----------------------------------------------------------------------------#
 

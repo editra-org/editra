@@ -6,8 +6,8 @@
 #
 
 #-----------------------------------------------------------------------------#
-Version 1.0
-Date: 01/29/2009
+Version 1.1
+Date: 0x/xx/2009
 
 +Add support for links in pylint output (patch from Erik Tollerud)
 
