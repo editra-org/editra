@@ -818,17 +818,19 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self.LOG("[ed_main][evt] OnClose: Closing editor at pos=%s size=%s" % \
                  (_PGET('WPOS', 'str'), _PGET('WSIZE', 'str')))
 
-        # Update profile
-        profiler.AddFileHistoryToProfile(self.filehistory)
-        ppath = _PGET('MYPROFILE')
-        profiler.Profile().Write(ppath)
-        self.LOG("[ed_main][info] Saving profile to %s" % ppath)
-
         # Cleanup file history
+        # TODO: Find out why filehistory can be undefined by this point
+        #       sometimes.
         try:
+            profiler.AddFileHistoryToProfile(self.filehistory)
             del self.filehistory
         except AttributeError:
             self.LOG("[ed_main][err] OnClose: Trapped AttributeError OnExit")
+
+        # Update profile
+        ppath = _PGET('MYPROFILE')
+        profiler.Profile().Write(ppath)
+        self.LOG("[ed_main][info] Saving profile to %s" % ppath)
 
         # Post exit notice to all aui panes
         panes = self._mgr.GetAllPanes()
