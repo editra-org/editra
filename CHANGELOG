@@ -18,6 +18,7 @@ NEWS:
 
 NEW: [features/enhancments]
 +New Plugin Manager Dialog.
++Improved configuration options for plugins.
 +Add shortcut for LineDelete to delete line without modifying clipboard.
 +Add option for automatically reloading files when they have changed on disk.
 
@@ -34,6 +35,7 @@ in the indentation space of a line.
 +Fix Close All option in tab context menu not working on GTK.
 +Fix Codebrowser not refreshing when files are opened from the file dialog
 on Linux.
++Fix error that could occur while trying to save filehistory on exit.
 
 #-----------------------------------------------------------------------------#
 
