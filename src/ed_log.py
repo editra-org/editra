@@ -79,10 +79,9 @@ class EdLogViewer(plugin.Plugin):
         return wx.MenuItem(menu, ed_glob.ID_LOGGER, _("Editra Log"),
                            _("View Editra's console log"))
 
-    @staticmethod
-    def GetName():
+    def GetName(self):
         """Return the name of this control"""
-        return EdLogViewer.__name__
+        return self.__name__
 
     @staticmethod
     def IsStockable():
