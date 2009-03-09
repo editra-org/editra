@@ -130,6 +130,9 @@ class SegmentPanel(ctrlbox.ControlBox):
             else:
                 segbar.AddSegment(wx.NewId(), IconFile.Monkey.GetBitmap(), label=u'Monkey')
 
+        segbar.SetSegmentOption(4, ctrlbox.SEGBTN_OPT_CLOSEBTNR)
+        segbar.SetSegmentOption(3, ctrlbox.SEGBTN_OPT_CLOSEBTNL)
+
         # Make a bottom segment bar
         segbar2 = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
         for num in range(5):
