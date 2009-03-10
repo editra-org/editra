@@ -21,6 +21,7 @@ NEW: [features/enhancments]
 +Improved configuration options for plugins.
 +Add shortcut for LineDelete to delete line without modifying clipboard.
 +Add option for automatically reloading files when they have changed on disk.
++Remember last save location when opening save as dialog.
 
 BUG FIXES:
 +Fix incorrect page count shown in print previews.
