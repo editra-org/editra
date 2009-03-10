@@ -89,6 +89,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Attributes
         self._loaded = False
+        self._last_save = u''
         self.LOG = wx.GetApp().GetLog()
         self._exiting = False
         self._handlers = dict(menu=list(), ui=list())
@@ -617,6 +618,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             if fname != '':
                 fpath = ctrl[1].GetFileName()
                 result = ctrl[1].SaveFile(fpath)
+                self._last_save = fpath
                 if result:
                     self.PushStatusText(_("Saved File: %s") % fname, SB_INFO)
                 else:
@@ -627,7 +629,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             else:
                 ret_val = self.OnSaveAs(ID_SAVEAS, ctrl[0], ctrl[1])
                 if ret_val:
-                    self.AddFileToHistory(ctrl[1].GetFileName())
+                    self._last_save = ctrl[1].GetFileName()
+                    self.AddFileToHistory(self._last_save)
 
     def OnSaveAs(self, evt, title=u'', page=None):
         """Save File Using a new/different name
@@ -643,10 +646,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if title == u'':
             title = os.path.split(ctrl.GetFileName())[1]
 
+        sdir = ctrl.GetFileName()
+        if sdir is None or not len(sdir):
+            sdir = self._last_save
+
         dlg = wx.FileDialog(self, _("Choose a Save Location"),
-                            os.path.dirname(ctrl.GetFileName()),
-                            title.lstrip("*"),
-                            ''.join(syntax.GenFileFilters()),
+                            os.path.dirname(sdir),
+                            title.lstrip(u"*"),
+                            u''.join(syntax.GenFileFilters()),
                             wx.SAVE | wx.OVERWRITE_PROMPT)
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -661,6 +668,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 ctrl.GetDocument().ResetAll()
                 self.PushStatusText(_("ERROR: Failed to save %s") % fname, SB_INFO)
             else:
+                self._last_save = path
                 self.PushStatusText(_("Saved File As: %s") % fname, SB_INFO)
                 self.SetTitle("%s - file://%s" % (fname, ctrl.GetFileName()))
                 self.nb.SetPageText(self.nb.GetSelection(), fname)
