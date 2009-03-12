@@ -38,6 +38,7 @@ class TestPanel(segmentbk.SegmentBook):
 
         # Attributes
         self.log = log
+        self._menu = None
         self._imglst = wx.ImageList(32, 32, mask=False)
 
         # Setup
@@ -70,7 +71,10 @@ class TestPanel(segmentbk.SegmentBook):
         # Event Handlers
         self.Bind(segmentbk.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(segmentbk.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(segmentbk.EVT_SB_PAGE_CONTEXT_MENU, self.OnPageMenu)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_MENU, self.OnButton, id=wx.ID_NEW)
+        self.Bind(wx.EVT_MENU, self.OnButton, id=wx.ID_DELETE)
 
     def OnButton(self, evt):
         """Handle button clicks from control bar"""
@@ -97,6 +101,17 @@ class TestPanel(segmentbk.SegmentBook):
         """Handle the page changed events"""
         new = evt.GetSelection()
         self.log.write("SegmentBook Page Changed to: to %d" % new)
+
+    def OnPageMenu(self, evt):
+        """Handle when a segment is right clicked on"""
+        sel = evt.GetSelection()
+        self.log.write("SegmentBook Segment Right Click: %d" % sel)
+        if self._menu is None:
+            self._menu = wx.Menu()
+            self._menu.Append(wx.ID_NEW, "New")
+            self._menu.AppendSeparator()
+            self._menu.Append(wx.ID_DELETE, "Close")
+        self.PopupMenu(self._menu)
 
 #-----------------------------------------------------------------------------#
 

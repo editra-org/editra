@@ -42,7 +42,7 @@ __all__ = ['SegmentBook', 'SegmentBookEvent', 'SEGBOOK_STYLE_DEFAULT',
            'edEVT_SB_PAGE_CHANGING', 'EVT_SB_PAGE_CHANGING',
            'edEVT_SB_PAGE_CHANGED', 'EVT_SB_PAGE_CHANGED',
            'edEVT_SB_PAGE_CLOSED', 'EVT_SB_PAGE_CLOSED',
-           'edEVT_SB_PAGE_CONTEXT_MENU', 'EVT_SB_PAGE_CLOSED',
+           'edEVT_SB_PAGE_CONTEXT_MENU', 'EVT_SB_PAGE_CONTEXT_MENU',
            'edEVT_SB_PAGE_CLOSING', 'EVT_SB_PAGE_CLOSING' ]
 
 #-----------------------------------------------------------------------------#
@@ -67,7 +67,7 @@ edEVT_SB_PAGE_CLOSED = wx.NewEventType()
 EVT_SB_PAGE_CLOSED = wx.PyEventBinder(edEVT_SB_PAGE_CLOSED, 1)
 
 edEVT_SB_PAGE_CONTEXT_MENU = wx.NewEventType()
-EVT_SB_PAGE_CLOSED = wx.PyEventBinder(edEVT_SB_PAGE_CONTEXT_MENU, 1)
+EVT_SB_PAGE_CONTEXT_MENU = wx.PyEventBinder(edEVT_SB_PAGE_CONTEXT_MENU, 1)
 class SegmentBookEvent(wx.NotebookEvent):
     """SegmentBook event"""
     pass
@@ -146,13 +146,19 @@ class SegmentBook(ctrlbox.ControlBox):
         """Handle right click events"""
         pos = evt.GetPosition()
         where, index = self._segbar.HitTest(pos)
+        print where, index
         if where in (ctrlbox.SEGMENT_HT_SEG, ctrlbox.SEGMENT_HT_X_BTN):
             if where == ctrlbox.SEGMENT_HT_SEG:
                 self._segbar.SetSelection(index)
                 changed = self._DoPageChange(self.GetSelection(), index)
                 if changed:
                     # Send Context Menu Event
-                    pass
+                    event = SegmentBookEvent(edEVT_SB_PAGE_CONTEXT_MENU,
+                                             self.GetId())
+                    event.SetSelection(index)
+                    event.SetOldSelection(index)
+                    event.SetEventObject(self)
+                    self.GetEventHandler().ProcessEvent(event)
             else:
                 # TODO: Handle other right clicks
                 pass

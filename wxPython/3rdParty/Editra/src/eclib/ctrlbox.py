@@ -738,17 +738,20 @@ class SegmentBar(ControlBar):
 
         """
         index = self.GetIndexFromPosition(pos)
-        loc = SEGMENT_HT_NOWHERE
+        where = SEGMENT_HT_NOWHERE
         if index != wx.NOT_FOUND:
             button = self._buttons[index]
-            if 'xbtn' in button:
+            if self.SegmentHasCloseButton(index):
                 brect = button['xbtn']
                 trect = wx.Rect(brect.x, brect.y, brect.width+4, brect.height+4)
                 if trect.Contains(pos):
-                    loc = SEGMENT_HT_X_BTN
+                    where = SEGMENT_HT_X_BTN
+                else:
+                    where = SEGMENT_HT_SEG
             else:
-                loc = SEGMENT_HT_SEG
-        return loc
+                where = SEGMENT_HT_SEG
+
+        return where, index
 
     def OnEraseBackground(self, evt):
         """Handle the erase background event"""
@@ -777,7 +780,7 @@ class SegmentBar(ControlBar):
 
         # Check for click on close btn
         if self.SegmentHasCloseButton(index):
-            if self.HitTest(epos) == SEGMENT_HT_X_BTN:
+            if self.HitTest(epos)[0] == SEGMENT_HT_X_BTN:
                 self._x_clicked_before = True
 
         evt.Skip()
@@ -788,11 +791,11 @@ class SegmentBar(ControlBar):
 
         """
         epos = evt.GetPosition()
-        index = self.GetIndexFromPosition(epos)
+        where, index = self.HitTest(epos)
 
         # Check for click on close btn
         if self.SegmentHasCloseButton(index) and self._x_clicked_before:
-            if self.HitTest(epos) == SEGMENT_HT_X_BTN:
+            if where == SEGMENT_HT_X_BTN:
                 removed = self.RemoveSegment(index)
 
         evt.Skip()
@@ -800,9 +803,8 @@ class SegmentBar(ControlBar):
     def OnMouseMove(self, evt):
         """Handle when the mouse moves over the bar"""
         epos = evt.GetPosition()
-        ht_res = self.HitTest(epos)
+        ht_res, index = self.HitTest(epos)
         x_state = self._x_state
-        index = self.GetIndexFromPosition(epos)
         self._x_state = SEGMENT_STATE_NONE
 
         if ht_res != SEGMENT_HT_NOWHERE:
