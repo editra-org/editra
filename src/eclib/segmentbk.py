@@ -38,12 +38,12 @@ __revision__ = "$Revision$"
 
 __all__ = ['SegmentBook', 'SegmentBookEvent', 'SEGBOOK_STYLE_DEFAULT',
            'SEGBOOK_STYLE_NO_DIVIDERS', 'SEGBOOK_STYLE_LABELS',
-           'SEGBOOK_NO_WHERE', 'SEGBOOK_ON_SEGMENT', 'SEGBOOK_ON_SEGBAR',
            'SEGBOOK_NAME_STR',
            'edEVT_SB_PAGE_CHANGING', 'EVT_SB_PAGE_CHANGING',
            'edEVT_SB_PAGE_CHANGED', 'EVT_SB_PAGE_CHANGED',
            'edEVT_SB_PAGE_CLOSED', 'EVT_SB_PAGE_CLOSED',
-           'edEVT_SB_PAGE_CONTEXT_MENU', 'EVT_SB_PAGE_CLOSED', ]
+           'edEVT_SB_PAGE_CONTEXT_MENU', 'EVT_SB_PAGE_CLOSED',
+           'edEVT_SB_PAGE_CLOSING', 'EVT_SB_PAGE_CLOSING' ]
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -59,6 +59,9 @@ EVT_SB_PAGE_CHANGING = wx.PyEventBinder(edEVT_SB_PAGE_CHANGING, 1)
 
 edEVT_SB_PAGE_CHANGED = wx.NewEventType()
 EVT_SB_PAGE_CHANGED = wx.PyEventBinder(edEVT_SB_PAGE_CHANGED, 1)
+
+edEVT_SB_PAGE_CLOSING = wx.NewEventType()
+EVT_SB_PAGE_CLOSING = wx.PyEventBinder(edEVT_SB_PAGE_CLOSING, 1)
 
 edEVT_SB_PAGE_CLOSED = wx.NewEventType()
 EVT_SB_PAGE_CLOSED = wx.PyEventBinder(edEVT_SB_PAGE_CLOSED, 1)
@@ -76,11 +79,6 @@ class SegmentBookEvent(wx.NotebookEvent):
 SEGBOOK_STYLE_DEFAULT     = 0   # Default Style
 SEGBOOK_STYLE_NO_DIVIDERS = 1   # Don't put dividers between segments
 SEGBOOK_STYLE_LABELS      = 2   # Use labels below the icons
-
-# Locations used in HitTest Results
-SEGBOOK_NO_WHERE = -1
-SEGBOOK_ON_SEGMENT = 0
-SEGBOOK_ON_SEGBAR = 1
 
 # Misc
 SEGBOOK_NAME_STR = u"EditraSegmentBook"
@@ -115,6 +113,7 @@ class SegmentBook(ctrlbox.ControlBox):
         # Event Handlers
         self.Bind(ctrlbox.EVT_SEGMENT_SELECTED, self._OnSegmentSel)
         self._segbar.Bind(wx.EVT_RIGHT_DOWN, self._OnRightDown)
+        self._segbar.Bind(ctrlbox.EVT_SEGMENT_CLOSE, self._OnSegClose)
 
     def _DoPageChange(self, psel, csel):
         """Change the page and post events
@@ -146,10 +145,9 @@ class SegmentBook(ctrlbox.ControlBox):
     def _OnRightDown(self, evt):
         """Handle right click events"""
         pos = evt.GetPosition()
-        where, index = self.HitTest(pos)
-        print where, index
-        if where in (SEGBOOK_ON_SEGBAR, SEGBOOK_ON_SEGMENT):
-            if where == SEGBOOK_ON_SEGMENT:
+        where, index = self._segbar.HitTest(pos)
+        if where in (ctrlbox.SEGMENT_HT_SEG, ctrlbox.SEGMENT_HT_X_BTN):
+            if where == ctrlbox.SEGMENT_HT_SEG:
                 self._segbar.SetSelection(index)
                 changed = self._DoPageChange(self.GetSelection(), index)
                 if changed:
@@ -160,6 +158,10 @@ class SegmentBook(ctrlbox.ControlBox):
                 pass
 
         evt.Skip()
+
+    def _OnSegClose(self, evt):
+        """Handle clicks on segment close buttons"""
+        pass
 
     def _OnSegmentSel(self, evt):
         """Change the page in the book"""
@@ -280,6 +282,13 @@ class SegmentBook(ctrlbox.ControlBox):
 
         """
         return self._segbar.GetSelection()
+
+    def GetSegmentBar(self):
+        """Get the segment bar used by this control
+        @return: SegmentBar
+
+        """
+        return self._segbar
 
     def HasMultiplePages(self):
         """Does the book have multiple pages
