@@ -54,9 +54,14 @@ __all__ = ["ControlBox", "CTRLBOX_NAME_STR",
            "CTRLBAR_STYLE_BORDER_TOP", "CTRLBAR_STYLE_BORDER_BOTTOM",
            "EVT_CTRLBAR", "edEVT_CTRLBAR", "CTRLBAR_NAME_STR",
 
-           "SegmentBar", "SegmentBarEvent", "edEVT_SEGMENT_SELECTED",
+           "SegmentBar", "SegmentBarEvent",
+           "EVT_SEGMENT_SELECTED", "edEVT_SEGMENT_SELECTED",
+           "EVT_SEGMENT_CLOSE", "edEVT_SEGMENT_CLOSE",
            "CTRLBAR_STYLE_LABELS", "CTRLBAR_STYLE_NO_DIVIDERS",
-           "EVT_SEGMENT_SELECTED", "SEGBAR_NAME_STR"]
+           "SEGBTN_OPT_CLOSEBTNL", "SEGBTN_OPT_CLOSEBTNR",
+           "SEGBAR_NAME_STR", "SEGMENT_HT_NOWHERE",
+           "SEGMENT_HT_SEG", "SEGMENT_HT_X_BTN"
+]
 
 #--------------------------------------------------------------------------#
 # Dependancies
@@ -88,6 +93,16 @@ CTRLBAR_STYLE_NO_DIVIDERS   = 16    # Don't draw dividers between segments
 SEGBTN_OPT_CLOSEBTNL     = 1     # Close button on the segments left side.
 SEGBTN_OPT_CLOSEBTNR     = 2     # Close button on the segment right side.
 
+# Hit test locations
+SEGMENT_HT_NOWHERE = 0
+SEGMENT_HT_SEG     = 1
+SEGMENT_HT_X_BTN   = 2
+
+# Segment States
+SEGMENT_STATE_NONE = 0  # Hover no where
+SEGMENT_STATE_SEG  = 1  # Hover on segment
+SEGMENT_STATE_X    = 2  # Hover on segment x button
+
 # ControlBar event for items added by AddTool
 edEVT_CTRLBAR = wx.NewEventType()
 EVT_CTRLBAR = wx.PyEventBinder(edEVT_CTRLBAR, 1)
@@ -96,12 +111,15 @@ class ControlBarEvent(wx.PyCommandEvent):
 
 edEVT_SEGMENT_SELECTED = wx.NewEventType()
 EVT_SEGMENT_SELECTED = wx.PyEventBinder(edEVT_SEGMENT_SELECTED, 1)
+edEVT_SEGMENT_CLOSE = wx.NewEventType()
+EVT_SEGMENT_CLOSE = wx.PyEventBinder(edEVT_SEGMENT_CLOSE, 1)
 class SegmentBarEvent(wx.PyCommandEvent):
     """SegmentBar Button Event"""
     def __init__(self, etype, id=0):
         wx.PyCommandEvent.__init__(self, etype, id)
 
         # Attributes
+        self.notify = wx.NotifyEvent(etype, id)
         self._pre = -1
         self._cur = -1
 
@@ -119,6 +137,13 @@ class SegmentBarEvent(wx.PyCommandEvent):
         """
         return self._cur
 
+    def IsAllowed(self):
+        """Is the event allowed to propagate
+        @return: bool
+
+        """
+        return self.notify.IsAllowed()
+
     def SetSelections(self, previous=-1, current=-1):
         """Set the events selection
         @keyword previous: previously selected button index (int)
@@ -127,6 +152,10 @@ class SegmentBarEvent(wx.PyCommandEvent):
         """
         self._pre = previous
         self._cur = current
+
+    def Veto(self):
+        """Veto the event"""
+        self.notify.Veto()
 
 #--------------------------------------------------------------------------#
 
@@ -504,7 +533,8 @@ class SegmentBar(ControlBar):
         self._scolor1 = AdjustColour(self._color, -20)
         self._scolor2 = AdjustColour(self._color2, -20)
         self._spen = wx.Pen(AdjustColour(self._pen.GetColour(), -25))
-        self._clicked_before = -1
+        self._x_clicked_before = False
+        self._x_state = SEGMENT_STATE_NONE
 
         if wx.Platform == '__WXMAC__':
             self.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
@@ -512,6 +542,7 @@ class SegmentBar(ControlBar):
         # Event Handlers
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_MOTION, self.OnMouseMove)
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
 
     def AddSegment(self, id, bmp, label=u''):
@@ -523,22 +554,25 @@ class SegmentBar(ControlBar):
         """
         assert bmp.IsOk()
         lsize = self.GetTextExtent(label)
+        # TODO: Refactor to a Segment Class
         self._buttons.append(dict(id=id, bmp=bmp, label=label,
                                   lsize=lsize, bsize=bmp.GetSize(),
-                                  bx1=0, bx2=0, opts=0))
+                                  bx1=0, bx2=0, opts=0,
+                                  selected=False))
         self.InvalidateBestSize()
         self.Refresh()
 
-    def DoDrawButton(self, dc, xpos, button, selected=False, draw_label=False):
+    def DoDrawButton(self, dc, xpos, bidx, selected=False, draw_label=False):
         """Draw a button
         @param dc: DC to draw on
         @param xpos: X coordinate
-        @param button: button dict
+        @param bidx: button dict
         @keyword selected: is this the selected button (bool)
         @keyword draw_label: draw the label (bool)
         return: int (next xpos)
 
         """
+        button = self._buttons[bidx]
         rect = self.GetRect()
         height = rect.height
         bsize = button['bsize']
@@ -546,8 +580,8 @@ class SegmentBar(ControlBar):
         bxpos = ((self._segsize[0] / 2) - (bsize.width / 2)) + xpos
         bpos = (bxpos, SegmentBar.VPAD)
         rside = xpos + self._segsize[0]
+        brect = wx.Rect(xpos, 0, rside - xpos, height)
         if selected:
-            brect = wx.Rect(xpos, 0, rside - xpos, height)
             self.DoPaintBackground(dc, brect, self._scolor1, self._scolor2)
 
         bmp = button['bmp']
@@ -580,24 +614,26 @@ class SegmentBar(ControlBar):
             dc.DrawLine(trside - 1, mpoint, trside, 0)
             dc.DrawLine(trside - 1, mpoint, trside, height)
 
-        if button['opts'] & SEGBTN_OPT_CLOSEBTNL or \
-           button['opts'] & SEGBTN_OPT_CLOSEBTNR:
-            brect = wx.Rect(xpos + 1, 0, (rside - 1) - (xpos - 1), height)
-            self.DoDrawCloseBtn(dc, button, brect, (0, 0), selected)
-
         button['bx1'] = xpos + 1
         button['bx2'] = rside - 1
+        button['selected'] = selected
+
+        if self.SegmentHasCloseButton(bidx):
+            brect = wx.Rect(button['bx1'], 0, button['bx2'] - (xpos - 1), height)
+            self.DoDrawCloseBtn(dc, button, brect)
+
         return rside
 
-    def DoDrawCloseBtn(self, gcdc, button, rect, cord, selected):
+    def DoDrawCloseBtn(self, gcdc, button, rect):
         """Draw the close button on the segment
         @param dc: Device Context
+        @param button: Segment Dict
         @param rect: Segment Rect
-        @param cord: mouse position or None
 
         """
         brush = gcdc.GetBrush()
-        if selected:
+
+        if button['selected']:
             gcdc.SetBrush(wx.Brush(self._scolor2))
         else:
             gcdc.SetBrush(wx.Brush(self._color2))
@@ -606,7 +642,7 @@ class SegmentBar(ControlBar):
             x = rect.x + 6
             y = rect.y + 6
         else:
-            x = (rect.x + rect.width) - 6
+            x = (rect.x + rect.width) - 8
             y = rect.y + 6
 
 #        gcdc.DrawCircle(x, y, 5)
@@ -617,8 +653,19 @@ class SegmentBar(ControlBar):
 #        x3, y3 = (x + (4 * math.cos(225)), y + (4 * math.sin(225)))
 #        x4, y4 = (x + (4 * math.cos(-225)), y + (4 * math.sin(-225)))
         pen = gcdc.GetPen()
-        brect = wx.Rect(x-3, y-3, 5, 5)
+        brect = wx.Rect(x-3, y-3, 8, 8)
+#        gcdc.SetPen(wx.TRANSPARENT_PEN)
+#        gcdc.DrawRectangleRect(brect)
+        if self._x_state == SEGMENT_STATE_X:
+            color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+            gcdc.SetBrush(wx.Brush(color))
+            gcdc.SetPen(wx.Pen(AdjustColour(color, -20)))
+        else:
+            gcdc.SetPen(wx.TRANSPARENT_PEN)
+
+        gcdc.DrawRectangleRect(brect)
         gcdc.DrawLabel('x', brect, wx.ALIGN_CENTER)
+        button['xbtn'] = brect
 #        gcdc.DrawLineList([(x,y,x1,y1),(x,y,x2,y2),(x3,y3,x,y),(x4,y4,x,y)], wx.RED_PEN)
 #        gcdc.DrawLineList([(x1,y1,x2,y2), (x3,y3,x4,y4)], wx.RED_PEN)
 #        gcdc.DrawLineList([(x-4.5, y, x+4.5, y), (x-.5, y+4.5,x-.5, y-4.5)])
@@ -684,6 +731,25 @@ class SegmentBar(ControlBar):
         """Get the currently selected index"""
         return self._selected
 
+    def HitTest(self, pos):
+        """Find where the position is in the window
+        @param pos: (x, y) in client cords
+        @return: int
+
+        """
+        index = self.GetIndexFromPosition(pos)
+        loc = SEGMENT_HT_NOWHERE
+        if index != wx.NOT_FOUND:
+            button = self._buttons[index]
+            if 'xbtn' in button:
+                brect = button['xbtn']
+                trect = wx.Rect(brect.x, brect.y, brect.width+4, brect.height+4)
+                if trect.Contains(pos):
+                    loc = SEGMENT_HT_X_BTN
+            else:
+                loc = SEGMENT_HT_SEG
+        return loc
+
     def OnEraseBackground(self, evt):
         """Handle the erase background event"""
         pass
@@ -693,20 +759,13 @@ class SegmentBar(ControlBar):
         @param evt: wx.MouseEvent
 
         """
-        index = self.GetIndexFromPosition(evt.GetPosition())
-        self._clicked_before = index
-        evt.Skip()
-
-    def OnLeftUp(self, evt):
-        """Handle clicks on the bar
-        @param evt: wx.MouseEvent
-
-        """
-        index = self.GetIndexFromPosition(evt.GetPosition())
-        if index != wx.NOT_FOUND and index == self._clicked_before:
+        epos = evt.GetPosition()
+        index = self.GetIndexFromPosition(epos)
+        if index != wx.NOT_FOUND:
             button = self._buttons[index]
             pre = self._selected
             self._selected = index
+
             if self._selected != pre:
                 self.Refresh()
                 sevt = SegmentBarEvent(edEVT_SEGMENT_SELECTED, button['id'])
@@ -714,7 +773,55 @@ class SegmentBar(ControlBar):
                 sevt.SetEventObject(self)
                 wx.PostEvent(self.GetParent(), sevt)
 
-        self._clicked_before = -1
+        self._x_clicked_before = False
+
+        # Check for click on close btn
+        if self.SegmentHasCloseButton(index):
+            if self.HitTest(epos) == SEGMENT_HT_X_BTN:
+                self._x_clicked_before = True
+
+        evt.Skip()
+
+    def OnLeftUp(self, evt):
+        """Handle clicks on the bar
+        @param evt: wx.MouseEvent
+
+        """
+        epos = evt.GetPosition()
+        index = self.GetIndexFromPosition(epos)
+
+        # Check for click on close btn
+        if self.SegmentHasCloseButton(index) and self._x_clicked_before:
+            if self.HitTest(epos) == SEGMENT_HT_X_BTN:
+                removed = self.RemoveSegment(index)
+
+        evt.Skip()
+
+    def OnMouseMove(self, evt):
+        """Handle when the mouse moves over the bar"""
+        epos = evt.GetPosition()
+        ht_res = self.HitTest(epos)
+        x_state = self._x_state
+        index = self.GetIndexFromPosition(epos)
+        self._x_state = SEGMENT_STATE_NONE
+
+        if ht_res != SEGMENT_HT_NOWHERE:
+            if ht_res == SEGMENT_HT_X_BTN and self.SegmentHasCloseButton(index):
+                self._x_state = SEGMENT_STATE_X
+            elif ht_res == SEGMENT_HT_SEG:
+                # TODO: add highligh option for hover on segment
+                pass
+
+        bRedrawX = x_state != self._x_state
+        if bRedrawX:
+            dc = wx.ClientDC(self)
+            crect = self.GetClientRect()
+            button = self._buttons[index]
+            brect = wx.Rect(button['bx1'], 0,
+                            button['bx2'] - (button['bx1'] - 2),
+                            crect.height)
+            self.DoDrawCloseBtn(dc, button, brect)
+
         evt.Skip()
 
     def OnPaint(self, evt):
@@ -739,16 +846,25 @@ class SegmentBar(ControlBar):
         npos = 5
         use_labels = self._style & CTRLBAR_STYLE_LABELS
         for idx, button in enumerate(self._buttons):
-            npos = self.DoDrawButton(gc, npos, button,
+            npos = self.DoDrawButton(gc, npos, idx,
                                      self._selected == idx,
                                      use_labels)
 
     def RemoveSegment(self, index):
         """Remove a segment from the bar
         @param index: int
+        @return: bool
 
         """
         button = self._buttons[index]
+
+        event = SegmentBarEvent(edEVT_SEGMENT_CLOSE, self.GetId())
+        event.SetSelections(index, index)
+        event.SetEventObject(self)
+        self.GetEventHandler().ProcessEvent(event)
+        if not event.IsAllowed():
+            return False
+
         if button['bmp']:
             button['bmp'].Destroy()
         del self._buttons[index]
@@ -759,6 +875,18 @@ class SegmentBar(ControlBar):
                 self.SetSelection(count-1)
 
         self.Refresh()
+        return True
+
+    def SegmentHasCloseButton(self, index):
+        """Does the segment at index have a close button
+        @param index: int
+
+        """
+        button = self._buttons[index]
+        if button['opts'] & SEGBTN_OPT_CLOSEBTNL or \
+           button['opts'] & SEGBTN_OPT_CLOSEBTNR:
+            return True
+        return False
 
     def SetSegmentImage(self, index, bmp):
         """Set the image to use on the given segment

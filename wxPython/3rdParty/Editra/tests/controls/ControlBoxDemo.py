@@ -23,7 +23,7 @@ import os
 import wx
 
 sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib.ctrlbox as ctrlbox
+import src.eclib as eclib
 
 # Local imports
 import IconFile
@@ -35,9 +35,9 @@ ID_SHOW_SEGMENT = wx.NewId()
 
 #-----------------------------------------------------------------------------#
 
-class TestPanel(ctrlbox.ControlBox):
+class TestPanel(eclib.ControlBox):
     def __init__(self, parent, log):
-        ctrlbox.ControlBox.__init__(self, parent)
+        eclib.ControlBox.__init__(self, parent)
 
         # Attributes
         self.log = log
@@ -73,9 +73,9 @@ class TestPanel(ctrlbox.ControlBox):
 
 #-----------------------------------------------------------------------------#
 
-class ControlBarPanel(ctrlbox.ControlBox):
+class ControlBarPanel(eclib.ControlBox):
     def __init__(self, parent, log):
-        ctrlbox.ControlBox.__init__(self, parent)
+        eclib.ControlBox.__init__(self, parent)
 
         # Attributes
         self.log = log
@@ -99,7 +99,7 @@ class ControlBarPanel(ctrlbox.ControlBox):
         bbar.AddTool(wx.ID_ANY, err_bmp, "HELLO")
 
         self.SetWindow(wx.TextCtrl(self, style=wx.TE_MULTILINE))
-        self.Bind(ctrlbox.EVT_CTRLBAR, self.OnControlBar)
+        self.Bind(eclib.EVT_CTRLBAR, self.OnControlBar)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
 
     def OnControlBar(self, evt):
@@ -113,28 +113,28 @@ class ControlBarPanel(ctrlbox.ControlBox):
 
 #-----------------------------------------------------------------------------#
 
-class SegmentPanel(ctrlbox.ControlBox):
+class SegmentPanel(eclib.ControlBox):
     def __init__(self, parent, log):
-        ctrlbox.ControlBox.__init__(self, parent)
+        eclib.ControlBox.__init__(self, parent)
 
         # Attributes
         self.log = log
 
         # Make up the top segment bar
-        segbar = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT|\
-                                                ctrlbox.CTRLBAR_STYLE_LABELS|\
-                                                ctrlbox.CTRLBAR_STYLE_NO_DIVIDERS)
+        segbar = eclib.SegmentBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT|\
+                                              eclib.CTRLBAR_STYLE_LABELS|\
+                                              eclib.CTRLBAR_STYLE_NO_DIVIDERS)
         for num in range(5):
             if num % 2:
                 segbar.AddSegment(wx.NewId(), IconFile.Home.GetBitmap(), label=u'Home')
             else:
                 segbar.AddSegment(wx.NewId(), IconFile.Monkey.GetBitmap(), label=u'Monkey')
 
-        segbar.SetSegmentOption(4, ctrlbox.SEGBTN_OPT_CLOSEBTNR)
-        segbar.SetSegmentOption(3, ctrlbox.SEGBTN_OPT_CLOSEBTNL)
+        segbar.SetSegmentOption(4, eclib.SEGBTN_OPT_CLOSEBTNR)
+        segbar.SetSegmentOption(3, eclib.SEGBTN_OPT_CLOSEBTNL)
 
         # Make a bottom segment bar
-        segbar2 = ctrlbox.SegmentBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        segbar2 = eclib.SegmentBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
         for num in range(5):
             if num % 2:
                 segbar2.AddSegment(wx.NewId(), IconFile.Book.GetBitmap())
@@ -147,7 +147,7 @@ class SegmentPanel(ctrlbox.ControlBox):
         self.SetWindow(wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Hello World"))
 
         # Event Handlers
-        self.Bind(ctrlbox.EVT_SEGMENT_SELECTED, self.OnSegmentClicked)
+        self.Bind(eclib.EVT_SEGMENT_SELECTED, self.OnSegmentClicked)
 
     def OnSegmentClicked(self, evt):
         cur = evt.GetCurrentSelection()
