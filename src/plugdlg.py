@@ -248,6 +248,7 @@ class ConfigPanel(wx.Panel):
             label = cfg_obj.GetLabel()
             panel = cfg_obj.GetConfigPanel(parent)
             parent.AddPage(panel, label, True, idx)
+            parent.SetSegmentCanClose(parent.GetPageCount() - 1, True)
         else:
             enable, pname = evt.GetValue()
             pmgr = wx.GetApp().GetPluginManager()
