@@ -40,6 +40,7 @@ _ = wx.GetTranslation
 class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     """Tab editor view for main notebook control."""
     DOCMGR = DocPositionMgr()
+    RCLICK_MENU = None
 
     def __init__(self, parent, id_=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0, use_dt=True):
@@ -48,7 +49,6 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         ed_tab.EdTabBase.__init__(self, parent)
 
         # Attributes
-        self._menu = MakeMenu()
         self._ignore_del = False
 
         # Initialize the classes position manager for the first control
@@ -58,7 +58,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                                                   os.sep + u'positions')
 
         # Context Menu Events
-        self.Bind(wx.EVT_CONTEXT_MENU, lambda evt: self.PopupMenu(self._menu))
+        self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
 
         # Need to relay the menu events from the context menu to the top level
         # window to be handled on gtk. Other platforms don't require this.
@@ -209,6 +209,13 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             evt.Skip()
 
     #---- End EdTab Methods ----#
+
+    def OnContextMenu(self, evt):
+        """Handle right click menu events in the buffer"""
+        if EdEditorView.RCLICK_MENU is None:
+            EdEditorView.RCLICK_MENU = MakeMenu()
+        self.PopupMenu(EdEditorView.RCLICK_MENU)
+        evt.Skip()
 
     def PromptToReSave(self, cfile):
         """Show a dialog prompting to resave the current file
