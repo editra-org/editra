@@ -70,7 +70,8 @@ edEVT_SB_PAGE_CONTEXT_MENU = wx.NewEventType()
 EVT_SB_PAGE_CONTEXT_MENU = wx.PyEventBinder(edEVT_SB_PAGE_CONTEXT_MENU, 1)
 class SegmentBookEvent(wx.NotebookEvent):
     """SegmentBook event"""
-    pass
+    def __init__(self, etype=wx.wxEVT_NULL, id=-1, sel=-1, old_sel=-1):
+        wx.NotebookEvent.__init__(self, etype, id, sel, old_sel)
 
 #-----------------------------------------------------------------------------#
 # Global constants
@@ -167,7 +168,19 @@ class SegmentBook(ctrlbox.ControlBox):
 
     def _OnSegClose(self, evt):
         """Handle clicks on segment close buttons"""
-        pass
+        index = evt.GetPreviousSelection()
+        change = -1
+        segcnt = self._segbar.GetSegmentCount() - 1
+        if  index == 0 and segcnt:
+            change = 1
+        elif index > 0 and segcnt > 1:
+            change = index - 1
+
+        if change != -1:
+            self._DoPageChange(index, change)
+
+        self._pages[index]['page'].Destroy()
+        del self._pages[index]
 
     def _OnSegmentSel(self, evt):
         """Change the page in the book"""
@@ -281,6 +294,20 @@ class SegmentBook(ctrlbox.ControlBox):
 
         """
         return self._segbar.GetSegmentLabel(index)
+
+    def SetSegmentCanClose(self, index, can_close=True):
+        """Add a close button to the given segment
+        @param index: segment index
+        @keyword can_close: Enable/Disable
+
+        """
+        if not can_close:
+            opt = ctrlbox.SEGBTN_OPT_NONE
+        elif wx.Platform == '__WXMAC__':
+            opt = ctrlbox.SEGBTN_OPT_CLOSEBTNL
+        else:
+            opt = ctrlbox.SEGBTN_OPT_CLOSEBTNLR
+        self._segbar.SetSegmentOption(index, opt)
 
     def GetSelection(self):
         """Get the current selection

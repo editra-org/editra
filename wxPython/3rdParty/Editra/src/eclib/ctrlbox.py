@@ -90,8 +90,9 @@ CTRLBAR_STYLE_LABELS        = 8     # Draw labels under the icons (SegmentBar)
 CTRLBAR_STYLE_NO_DIVIDERS   = 16    # Don't draw dividers between segments
 
 # Segment Button Options
-SEGBTN_OPT_CLOSEBTNL     = 1     # Close button on the segments left side.
-SEGBTN_OPT_CLOSEBTNR     = 2     # Close button on the segment right side.
+SEGBTN_OPT_NONE          = 1     # No options set.
+SEGBTN_OPT_CLOSEBTNL     = 2     # Close button on the segments left side.
+SEGBTN_OPT_CLOSEBTNR     = 4     # Close button on the segment right side.
 
 # Hit test locations
 SEGMENT_HT_NOWHERE = 0
@@ -648,14 +649,8 @@ class SegmentBar(ControlBar):
 #        gcdc.DrawCircle(x, y, 5)
 
         # Draw the X
-#        x1, y1 = (x + (4 * math.cos(180)), y + (4 * math.sin(180)))
-#        x2, y2 = (x + (4 * math.cos(-180)), y + (4 * math.sin(-180)))
-#        x3, y3 = (x + (4 * math.cos(225)), y + (4 * math.sin(225)))
-#        x4, y4 = (x + (4 * math.cos(-225)), y + (4 * math.sin(-225)))
         pen = gcdc.GetPen()
         brect = wx.Rect(x-3, y-3, 8, 8)
-#        gcdc.SetPen(wx.TRANSPARENT_PEN)
-#        gcdc.DrawRectangleRect(brect)
         if self._x_state == SEGMENT_STATE_X:
             color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
             gcdc.SetBrush(wx.Brush(color))
@@ -664,13 +659,14 @@ class SegmentBar(ControlBar):
             gcdc.SetPen(wx.TRANSPARENT_PEN)
 
         gcdc.DrawRectangleRect(brect)
-        gcdc.DrawLabel('x', brect, wx.ALIGN_CENTER)
-        button['xbtn'] = brect
-#        gcdc.DrawLineList([(x,y,x1,y1),(x,y,x2,y2),(x3,y3,x,y),(x4,y4,x,y)], wx.RED_PEN)
-#        gcdc.DrawLineList([(x1,y1,x2,y2), (x3,y3,x4,y4)], wx.RED_PEN)
-#        gcdc.DrawLineList([(x-4.5, y, x+4.5, y), (x-.5, y+4.5,x-.5, y-4.5)])
+        gcdc.SetPen(wx.BLACK_PEN)
+        gcdc.DrawLine(brect.x+1, brect.y+1,
+                      brect.x + brect.width - 1, brect.y + brect.height - 1)
+        gcdc.DrawLine(brect.x + brect.width - 1, brect.y + 1,
+                      brect.x + 1, brect.y + brect.height - 1)
         gcdc.SetBrush(brush)
         gcdc.SetPen(pen)
+        button['xbtn'] = brect
 
     def DoGetBestSize(self):
         """Get the best size for the control"""
@@ -796,6 +792,12 @@ class SegmentBar(ControlBar):
         # Check for click on close btn
         if self.SegmentHasCloseButton(index) and self._x_clicked_before:
             if where == SEGMENT_HT_X_BTN:
+                event = SegmentBarEvent(edEVT_SEGMENT_CLOSE, self.GetId())
+                event.SetSelections(index, index)
+                event.SetEventObject(self)
+                self.GetEventHandler().ProcessEvent(event)
+                if not event.IsAllowed():
+                    return False
                 removed = self.RemoveSegment(index)
 
         evt.Skip()
@@ -859,13 +861,6 @@ class SegmentBar(ControlBar):
 
         """
         button = self._buttons[index]
-
-        event = SegmentBarEvent(edEVT_SEGMENT_CLOSE, self.GetId())
-        event.SetSelections(index, index)
-        event.SetEventObject(self)
-        self.GetEventHandler().ProcessEvent(event)
-        if not event.IsAllowed():
-            return False
 
         if button['bmp']:
             button['bmp'].Destroy()
