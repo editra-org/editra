@@ -40,12 +40,18 @@ __revision__ = "$Revision$"
 
 __all__ = ["FindBox", "FindEvent", "FindPanel", "FindReplaceDlg",
            "MiniFindReplaceDlg", "AdvFindReplaceDlg",
+
            "AFR_STYLE_FINDDIALOG", "AFR_STYLE_REPLACEDIALOG",
-           "AFR_STYLE_NON_FLOATING", "AFR_UP", "AFR_WHOLEWORD", 
+           "AFR_STYLE_NON_FLOATING",
+           
+           "AFR_UP", "AFR_WHOLEWORD", 
            "AFR_MATCHCASE", "AFR_REGEX", "AFR_RECURSIVE", "AFR_NOLOOKIN",
            "AFR_NOUPDOWN", "AFR_NOWHOLEWORD", "AFR_NOMATCHCASE", "AFR_NOREGEX",
-           "AFR_NOFILTER", "AFR_NOOPTIONS", "LOCATION_CURRENT_DOC", 
-           "LOCATION_OPEN_DOCS", "LOCATION_IN_FILES", "LOCATION_MAX", 
+           "AFR_NOFILTER", "AFR_NOOPTIONS",
+
+           "LOCATION_CURRENT_DOC",
+           "LOCATION_OPEN_DOCS", "LOCATION_IN_FILES", "LOCATION_MAX",
+
            "edEVT_FIND_CLOSE", "EVT_FIND_CLOSE", "edEVT_FIND", "EVT_FIND",
            "edEVT_FIND_NEXT", "EVT_FIND_NEXT", "edEVT_FIND_ALL", "EVT_FIND_ALL",
            "edEVT_REPLACE", "EVT_REPLACE", "edEVT_REPLACE_ALL",
@@ -731,6 +737,7 @@ class FindPanel(wx.Panel):
         self._sizers['look'] = wx.BoxSizer(wx.VERTICAL)
         li_sz = wx.BoxSizer(wx.HORIZONTAL)
         dirbtn = wx.Button(self, ID_CHOOSE_DIR, u"...", style=wx.BU_EXACTFIT)
+        dirbtn.SetToolTipString(_("Choose Folder"))
         li_sz.AddMany([(self._lookin, 1, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                        (dirbtn, 0, wx.ALIGN_CENTER_VERTICAL)])
         li_lbl = wx.StaticText(self, label=_("Look in") + u":")
