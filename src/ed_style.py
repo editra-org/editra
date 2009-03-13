@@ -944,7 +944,7 @@ class StyleMgr(object):
 
         """
         self.StyleClearAll()
-        self.SetCaretForeground(wx.NamedColor("black"))
+        self.SetCaretForeground(wx.BLACK)
         self.Colourise(0, -1)
 
     def UpdateAllStyles(self, spec_style=None):
