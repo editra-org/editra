@@ -109,7 +109,7 @@ class TestPanel(scrolled.ScrolledPanel):
                  # Row 3
                  (devil, "Custom Color",       default, None,    None, wx.RED, True),
                  (monkey, "Gradient Highlight", gradient, None,  None, None,   True),
-                 (monkey, "Custom Gradient",   gradient, None,   None, wx.Color(245, 55, 245), True),
+                 (monkey, "Custom Gradient",   gradient, None,   None, wx.Colour(245, 55, 245), True),
                  (devil,  "",                  default, None,    None, None,   True),
                  (bookmark,  "",               default, None,    True, None,   True),
                  (monkey,  "",                 square,  None,    None, None,   True),
