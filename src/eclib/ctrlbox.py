@@ -640,7 +640,7 @@ class SegmentBar(ControlBar):
             gcdc.SetBrush(wx.Brush(self._color2))
 
         if button['opts'] & SEGBTN_OPT_CLOSEBTNL:
-            x = rect.x + 6
+            x = rect.x + 8
             y = rect.y + 6
         else:
             x = (rect.x + rect.width) - 8
@@ -703,7 +703,7 @@ class SegmentBar(ControlBar):
         for idx, button in enumerate(self._buttons):
             xpos = button['bx1']
             xpos2 = button['bx2']
-            if cur_x >= xpos and cur_x <= xpos2:
+            if cur_x >= xpos and cur_x <= xpos2 + 1:
                 return idx
         else:
             return wx.NOT_FOUND
@@ -805,14 +805,17 @@ class SegmentBar(ControlBar):
     def OnMouseMove(self, evt):
         """Handle when the mouse moves over the bar"""
         epos = evt.GetPosition()
-        ht_res, index = self.HitTest(epos)
+        where, index = self.HitTest(epos)
+        if index == -1 or not self.SegmentHasCloseButton(index):
+            return
+
         x_state = self._x_state
         self._x_state = SEGMENT_STATE_NONE
 
-        if ht_res != SEGMENT_HT_NOWHERE:
-            if ht_res == SEGMENT_HT_X_BTN and self.SegmentHasCloseButton(index):
+        if where != SEGMENT_HT_NOWHERE:
+            if where == SEGMENT_HT_X_BTN:
                 self._x_state = SEGMENT_STATE_X
-            elif ht_res == SEGMENT_HT_SEG:
+            elif where == SEGMENT_HT_SEG:
                 # TODO: add highligh option for hover on segment
                 pass
 
