@@ -69,7 +69,7 @@ class ColorSetter(wx.Panel):
         wx.Panel.__init__(self, parent, id_)
 
         if isinstance(color, tuple):
-            color = wx.Color(*color)
+            color = wx.Colour(*color)
 
         # Attributes
         self._label = color.GetAsString(wx.C2S_HTML_SYNTAX)
@@ -93,8 +93,8 @@ class ColorSetter(wx.Panel):
     def __PostEvent(self):
         """Notify the parent window of any value changes to the control"""
         value = self._cbtn.GetValue()
-        if not isinstance(value, wx.Color):
-            value = wx.Color(*value)
+        if not isinstance(value, wx.Colour):
+            value = wx.Colour(*value)
 
         # Don't post update if value hasn't changed
         if value == self._preval:
@@ -161,7 +161,7 @@ class ColorSetter(wx.Panel):
         red, green, blue = (hex(val)[2:].upper() for val in e_val)
         hex_str = u"#%s%s%s" % (red.zfill(2), green.zfill(2), blue.zfill(2))
         self._txt.SetValue(hex_str)
-        self._cbtn.SetValue(wx.Color(*e_val))
+        self._cbtn.SetValue(wx.Colour(*e_val))
         self.__PostEvent()
 
     def OnTextChange(self, evt=None):
