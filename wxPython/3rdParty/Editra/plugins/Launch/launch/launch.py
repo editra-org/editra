@@ -570,7 +570,7 @@ class LaunchWindow(ctrlbox.ControlBox):
                       'infof', 'infob', 'warnf', 'warnb'):
             val = self._prefs.get(color, None)
             if val is not None:
-                colors[color] = wx.Color(*val)
+                colors[color] = wx.Colour(*val)
             else:
                 colors[color] = val
 

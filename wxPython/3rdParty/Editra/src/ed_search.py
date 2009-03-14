@@ -1032,9 +1032,9 @@ class EdSearchCtrl(wx.SearchCtrl):
             # due to bit masking but I havent looked at the source so I am not
             # sure
             if self._txtctrl is None:
-                self.SetForegroundColour(wx.ColorRGB(0 | 1 | 0))
+                self.SetForegroundColour(wx.ColourRGB(0 | 1 | 0))
             else:
-                self._txtctrl.SetForegroundColour(wx.ColorRGB(0 | 1 | 0))
+                self._txtctrl.SetForegroundColour(wx.ColourRGB(0 | 1 | 0))
         self.Refresh()
 
     def GetSearchController(self):
