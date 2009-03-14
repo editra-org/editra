@@ -35,8 +35,7 @@ import ed_menu
 import ed_mdlg
 import syntax.syntax
 import util
-from eclib import platebtn
-from eclib import ctrlbox
+import eclib
 
 # Local Imports
 import Trash
@@ -70,15 +69,15 @@ ID_MARK_PATH = wx.NewId()
 ID_OPEN_MARK = wx.NewId()
 ID_REMOVE_MARK = wx.NewId()
 
-class BrowserMenuBar(ctrlbox.ControlBar):
+class BrowserMenuBar(eclib.ControlBar):
     """Creates a menubar with """
 
     def __init__(self, parent):
-        ctrlbox.ControlBar.__init__(self, parent,
-                                    style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        eclib.ControlBar.__init__(self, parent,
+                                  style=eclib.CTRLBAR_STYLE_GRADIENT)
 
         if wx.Platform == '__WXGTK__':
-            self.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+            self.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
 
         # Attributes
         self._saved = ed_menu.EdMenu()
@@ -104,8 +103,8 @@ class BrowserMenuBar(ctrlbox.ControlBar):
 
         # Button
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
-        self.menub = platebtn.PlateButton(self, bmp=bmp,
-                                          style=platebtn.PB_STYLE_NOBG)
+        self.menub = eclib.PlateButton(self, bmp=bmp,
+                                       style=eclib.PB_STYLE_NOBG)
         self.menub.SetToolTipString(_("Pathmarks"))
         self.menub.SetMenu(menu)
 
@@ -186,13 +185,13 @@ class BrowserMenuBar(ctrlbox.ControlBar):
 
 #-----------------------------------------------------------------------------#
 
-class BrowserPane(ctrlbox.ControlBox):
+class BrowserPane(eclib.ControlBox):
     """Creates a filebrowser Pane"""
     ID_SHOW_HIDDEN = wx.NewId()
 
     def __init__(self, parent, id, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.NO_BORDER|wx.TAB_TRAVERSAL):
-        ctrlbox.ControlBox.__init__(self, parent, id, pos, size, style)
+        eclib.ControlBox.__init__(self, parent, id, pos, size, style)
         
         # Attributes
         self._mw = parent
@@ -209,9 +208,9 @@ class BrowserPane(ctrlbox.ControlBox):
             self._menbar.AddItem(item)
 
         # Setup hidden files checkbox
-        bbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        bbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
         if wx.Platform == '__WXGTK__':
-            bbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+            bbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
 
         self._showh_cb = wx.CheckBox(bbar, self.ID_SHOW_HIDDEN, 
                                      _("Show Hidden Files"))

@@ -28,9 +28,7 @@ import ed_glob
 import util
 from profiler import Profile_Get, Profile_Set
 import ed_msg
-import eclib.ctrlbox as ctrlbox
-import eclib.outbuff as outbuff
-import eclib.platebtn as platebtn
+import eclib
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -60,10 +58,10 @@ ed_msg.Subscribe(OnStoreConfig, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
 
 #-----------------------------------------------------------------------------#
 
-class LaunchWindow(ctrlbox.ControlBox):
+class LaunchWindow(eclib.ControlBox):
     """Control window for showing and running scripts"""
     def __init__(self, parent):
-        ctrlbox.ControlBox.__init__(self, parent)
+        eclib.ControlBox.__init__(self, parent)
 
         # Attributes
         self._mw = self.__FindMainWindow()
@@ -136,14 +134,14 @@ class LaunchWindow(ctrlbox.ControlBox):
     def __DoLayout(self):
         """Layout the window"""
         #-- Setup ControlBar --#
-        ctrlbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
         if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
 
         # Preferences
         prefbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF), wx.ART_MENU)
-        pref = platebtn.PlateButton(ctrlbar, ID_SETTINGS, '', prefbmp,
-                                    style=platebtn.PB_STYLE_NOBG)
+        pref = eclib.PlateButton(ctrlbar, ID_SETTINGS, '', prefbmp,
+                                 style=eclib.PB_STYLE_NOBG)
         pref.SetToolTipString(_("Settings"))
         ctrlbar.AddControl(pref, wx.ALIGN_LEFT)
 
@@ -174,16 +172,16 @@ class LaunchWindow(ctrlbox.ControlBox):
         rbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_BIN_FILE), wx.ART_MENU)
         if rbmp.IsNull() or not rbmp.IsOk():
             rbmp = None
-        run = platebtn.PlateButton(ctrlbar, ID_RUN, _("Run"), rbmp,
-                                   style=platebtn.PB_STYLE_NOBG)
+        run = eclib.PlateButton(ctrlbar, ID_RUN, _("Run"), rbmp,
+                                style=eclib.PB_STYLE_NOBG)
         ctrlbar.AddControl(run, wx.ALIGN_RIGHT)
 
         # Clear Button
         cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
         if cbmp.IsNull() or not cbmp.IsOk():
             cbmp = None
-        clear = platebtn.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
-                                     cbmp, style=platebtn.PB_STYLE_NOBG)
+        clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
+                                  cbmp, style=eclib.PB_STYLE_NOBG)
         ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
         ctrlbar.SetVMargin(1, 1)
         self.SetControlBar(ctrlbar)
@@ -463,10 +461,10 @@ class LaunchWindow(ctrlbox.ControlBox):
 
         handler = handlers.GetHandlerById(ftype)
         path, fname = os.path.split(fname)
-        self._worker = outbuff.ProcessThread(self._buffer,
-                                             cmd, fname,
-                                             args, path,
-                                             handler.GetEnvironment())
+        self._worker = eclib.ProcessThread(self._buffer,
+                                           cmd, fname,
+                                           args, path,
+                                           handler.GetEnvironment())
         self._worker.start()
 
     def StartStopProcess(self):
@@ -603,11 +601,11 @@ class LaunchWindow(ctrlbox.ControlBox):
 
 #-----------------------------------------------------------------------------#
 
-class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
+class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
     """Main output buffer display"""
     def __init__(self, parent):
-        outbuff.OutputBuffer.__init__(self, parent)
-        outbuff.ProcessBufferMixin.__init__(self)
+        eclib.OutputBuffer.__init__(self, parent)
+        eclib.ProcessBufferMixin.__init__(self)
 
         # Attributes
         self._mw = parent.GetMainWindow()
@@ -641,7 +639,7 @@ class OutputDisplay(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         """Pass hotspot click to the filetype handler for processing
         @param pos: click position
         @param line: line the click happened on
-        @note: overridden from L{outbuff.OutputBuffer}
+        @note: overridden from L{eclib.OutputBuffer}
 
         """
         fname, lang_id = self.GetParent().GetLastRun()

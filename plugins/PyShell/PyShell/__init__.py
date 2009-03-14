@@ -9,7 +9,7 @@
 # Plugin Metadata
 """Adds a PyShell to the Shelf"""
 __author__ = "Cody Precord"
-__version__ = "0.6"
+__version__ = "0.7"
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -26,8 +26,7 @@ import ed_style
 import plugin
 from profiler import Profile_Get, Profile_Set
 import syntax.syntax as syntax
-import eclib.ctrlbox as ctrlbox
-import eclib.platebtn as platebtn
+import eclib
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -74,10 +73,10 @@ class PyShell(plugin.Plugin):
 
 #-----------------------------------------------------------------------------#
 
-class EdPyShellBox(ctrlbox.ControlBox):
+class EdPyShellBox(eclib.ControlBox):
     """Control box for PyShell"""
     def __init__(self, parent):
-        ctrlbox.ControlBox.__init__(self, parent)
+        eclib.ControlBox.__init__(self, parent)
 
         # Attributes
         self._shell = EdPyShell(self)
@@ -100,9 +99,9 @@ class EdPyShellBox(ctrlbox.ControlBox):
 
     def __DoLayout(self):
         """Layout the control box"""
-        ctrlbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
         if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(ctrlbox.CTRLBAR_STYLE_DEFAULT)
+            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
 
         self._choice = wx.Choice(ctrlbar, wx.ID_ANY, choices=self._styles)
 
@@ -111,8 +110,8 @@ class EdPyShellBox(ctrlbox.ControlBox):
         ctrlbar.AddControl(self._choice, wx.ALIGN_LEFT)
 
         cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
-        self._clear = platebtn.PlateButton(ctrlbar, label=_("Clear"), bmp=cbmp,
-                                           style=platebtn.PB_STYLE_NOBG)
+        self._clear = eclib.PlateButton(ctrlbar, label=_("Clear"), bmp=cbmp,
+                                        style=eclib.PB_STYLE_NOBG)
         ctrlbar.AddStretchSpacer()
         ctrlbar.AddControl(self._clear, wx.ALIGN_RIGHT)
 

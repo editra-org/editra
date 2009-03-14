@@ -10,6 +10,7 @@ Version 1.1
 Date: 0x/xx/2009
 
 +Add support for links in pylint output (patch from Erik Tollerud)
++Api compatibility changes.
 
 #-----------------------------------------------------------------------------#
 Version 1.0
