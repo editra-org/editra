@@ -25,11 +25,10 @@ import zlib
 import handlers
 
 # Editra Libraries
-import eclib.colorsetter as colorsetter
-import eclib.elistmix as elistmix
-from profiler import Profile_Get, Profile_Set
-import ed_msg
+import eclib
 import util
+import ed_msg
+from profiler import Profile_Get, Profile_Set
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -377,7 +376,7 @@ class MiscPanel(wx.Panel):
 
         # Event Handlers
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
-        self.Bind(colorsetter.EVT_COLORSETTER, self.OnColor)
+        self.Bind(eclib.EVT_COLORSETTER, self.OnColor)
 
     def __DoLayout(self):
         """Layout the controls"""
@@ -396,7 +395,7 @@ class MiscPanel(wx.Panel):
         # Colors
         colors = dict()
         for btn in COLOR_MAP.iteritems():
-            cbtn = colorsetter.ColorSetter(self, btn[0], color=cfg.get(btn[1]))
+            cbtn = eclib.ColorSetter(self, btn[0], color=cfg.get(btn[1]))
             colors[btn[0]] = cbtn
 
         flexg = wx.FlexGridSizer(5, 5, 5, 5)
@@ -474,7 +473,7 @@ ID_BROWSE = wx.NewId()
 
 class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
                       listmix.TextEditMixin,
-                      elistmix.ListRowHighlighter,
+                      eclib.ListRowHighlighter,
 #                      listmix.CheckListCtrlMixin,
                       wx.ListCtrl):
     """Auto-width adjusting list for showing editing the commands"""
@@ -482,7 +481,7 @@ class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
         wx.ListCtrl.__init__(self, *args, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
 #        listmix.CheckListCtrlMixin.__init__(self)
-        elistmix.ListRowHighlighter.__init__(self)
+        eclib.ListRowHighlighter.__init__(self)
 
         # Attributes
         self._menu = None
