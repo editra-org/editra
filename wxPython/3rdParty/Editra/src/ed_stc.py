@@ -948,9 +948,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if kval in cmd_lmt:
                 cmd_lmt.remove(kval)
 
-        while self.GetTextRange(start, curr_pos)[0] not in cmd_lmt \
-              and col - (curr_pos - start) > 0:
-            start -= 1
+        while col - (curr_pos - start) > 0:
+            txt = self.GetTextRange(start, curr_pos)
+            if len(txt) and txt[0] not in cmd_lmt:
+                start -= 1
+            else:
+                break
 
         if self.GetColumn(start) != 0:
             start += 1
