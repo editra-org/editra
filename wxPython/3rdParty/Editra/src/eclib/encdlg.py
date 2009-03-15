@@ -46,6 +46,7 @@ class EncodingDialog(choicedlg.ChoiceDialog):
     def __init__(self, parent, id=wx.ID_ANY, msg=u'', title=u'',
                   elist=list(), default=u'',
                   style=wx.CAPTION, pos=wx.DefaultPosition,
+                  size=wx.DefaultSize,
                   name=EncodingDialogNameStr):
         """Create the encoding dialog
         @keyword msg: Dialog Message
@@ -64,7 +65,7 @@ class EncodingDialog(choicedlg.ChoiceDialog):
             sel = locale.getpreferredencoding(False)
 
         choicedlg.ChoiceDialog.__init__(self, parent, id, msg, title,
-                                        elist, sel, pos, style)
+                                        elist, sel, pos, size, style)
 
     def GetEncoding(self):
         """Get the selected encoding
