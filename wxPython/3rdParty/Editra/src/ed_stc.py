@@ -1739,7 +1739,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             start = max(end - tlen, 0)
             self.SetTargetStart(start)
             self.SetTargetEnd(end)
-            self.ReplaceTarget(tmp.rstrip() + eol)
+            rtxt = tmp.rstrip() + eol
+            if rtxt != self.GetTextRange(start, end):
+                self.ReplaceTarget(tmp.rstrip() + eol)
         self.EndUndoAction()
 
         # Restore carat position
@@ -1751,7 +1753,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             start = max(end - cline_len, 0)
             epos += start
 
-        self.GotoPos(epos)
+        if epos != cpos:
+            self.GotoPos(epos)
 
     def FoldingOnOff(self, switch=None):
         """Turn code folding on and off
