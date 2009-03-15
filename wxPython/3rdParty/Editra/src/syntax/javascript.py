@@ -74,7 +74,7 @@ def Keywords(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_JS:
-        return [JS_KEYWORDS]
+        return [JS_KEYWORDS,]
     else:
         return list()
 
