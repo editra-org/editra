@@ -37,6 +37,7 @@ class ChoiceDialog(wx.Dialog):
                  msg=u'', title=u'',
                  choices=None, default=u'',
                  pos=wx.DefaultPosition,
+                 size=wx.DefaultSize,
                  style=0,
                  name=ChoiceDialogNameStr):
         """Create the choice dialog
@@ -47,7 +48,7 @@ class ChoiceDialog(wx.Dialog):
 
         """
         wx.Dialog.__init__(self, parent, id, title,
-                           style=wx.CAPTION, pos=pos, name=name)
+                           style=wx.CAPTION, pos=pos, size=size, name=name)
 
         # Attributes
         self._panel = ChoicePanel(self, msg=msg,
