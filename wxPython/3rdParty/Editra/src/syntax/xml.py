@@ -47,7 +47,7 @@ def Keywords(lang_id=0):
     @param lang_id: used to select specific subset of keywords
 
     """
-    return [(5, XML_KEYWORDS), (6, SGML_KEYWORDS)]
+    return [(5, XML_KEYWORDS + u" " + SGML_KEYWORDS)]
 
 def SyntaxSpec(lang_id=0):
     """Syntax Specifications
