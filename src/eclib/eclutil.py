@@ -17,13 +17,23 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ['AdjustAlpha', 'AdjustColour', 'HexToRGB']
+__all__ = ['AdjustAlpha', 'AdjustColour', 'BestLabelColour', 'HexToRGB',
+           'GetHighlightColour']
 
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
 
+if wx.Platform == '__WXMAC__':
+    try:
+        import Carbon.Appearance
+    except ImportError:
+        CARBON = False
+    else:
+        CARBON = True
+
 #-----------------------------------------------------------------------------#
+# Colour Utilities
 
 def AdjustAlpha(colour, alpha):
     """Adjust the alpha of a given colour"""
@@ -51,6 +61,42 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     green = min(color.Green() + gadj, 255)
     blue = min(color.Blue() + badj, 255)
     return wx.Colour(red, green, blue, alpha)
+
+def BestLabelColour(color):
+    """Get the best color to use for the label that will be drawn on
+    top of the given color.
+    @param color: background color that text will be drawn on
+
+    """
+    avg = sum(color.Get()) / 3
+    if avg > 192:
+        txt_color = wx.BLACK
+    elif avg > 128:
+        txt_color = AdjustColour(color, -95)
+    elif avg < 64:
+        txt_color = wx.WHITE
+    else:
+        txt_color = AdjustColour(color, 95)
+    return txt_color
+
+def GetHighlightColour():
+    """Get the default highlight color
+    @return: wx.Colour
+
+    """
+    if wx.Platform == '__WXMAC__':
+        if CARBON:
+            if wx.VERSION < (2, 9, 0, 0, ''):
+                # kThemeBrushButtonPressedLightHighlight
+                brush = wx.Brush(wx.BLACK)
+                brush.MacSetTheme(Carbon.Appearance.kThemeBrushFocusHighlight)
+                return brush.GetColour()
+            else:
+                color = wx.Colour(Carbon.Appearance.kThemeBrushFocusHighlight)
+                return color
+
+    # Fallback to text highlight color
+    return wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
 
 def HexToRGB(hex_str):
     """Returns a list of red/green/blue values from a

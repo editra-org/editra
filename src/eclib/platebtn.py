@@ -40,6 +40,10 @@ window that has a non solid color for a background. i.e a gradient or image is
 painted on the background of the parent window. If used on a background with
 a solid color it may cause the control to loose its transparent appearance.
 
+PB_STYLE_DROPARROW:
+Add a drop button arrow to the button that will send a separate event when
+clicked on.
+
 Other attributes can be configured after the control has been created. The
 settings that are currently available are as follows:
 
@@ -72,21 +76,19 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ["PlateButton", "GetHighlightColour", "BestLabelColour",
+__all__ = ["PlateButton",
            "PLATE_NORMAL", "PLATE_PRESSED", "PLATE_HIGHLIGHT", 
            "PB_STYLE_DEFAULT", "PB_STYLE_GRADIENT", "PB_STYLE_SQUARE",
-           "PB_STYLE_NOBG" ]
+           "PB_STYLE_NOBG", "PB_STYLE_DROPARROW",
+           "EVT_PLATEBTN_DROPARROW_PRESSED"]
 
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
-
-# Used on OSX to get access to carbon api constants
-if wx.Platform == '__WXMAC__':
-    import Carbon.Appearance
+import wx.lib.newevent
 
 # Local Imports
-from eclutil import AdjustAlpha, AdjustColour
+from eclutil import *
 
 #-----------------------------------------------------------------------------#
 # Button States
@@ -100,39 +102,11 @@ PB_STYLE_GRADIENT = 2   # Gradient Filled Background
 PB_STYLE_SQUARE   = 4   # Use square corners instead of rounded
 PB_STYLE_NOBG     = 8   # Usefull on Windows to get a transparent appearance
                         # when the control is shown on a non solid background
+PB_STYLE_DROPARROW = 16 # Draw drop arrow and fire EVT_PLATEBTN_DROPRROW_PRESSED event
 
 #-----------------------------------------------------------------------------#
-# Utility Functions
 
-def BestLabelColour(color):
-    """Get the best color to use for the label that will be drawn on
-    top of the given color.
-    @param color: background color that text will be drawn on
-
-    """
-    avg = sum(color.Get()) / 3
-    if avg > 192:
-        txt_color = wx.BLACK
-    elif avg > 128:
-        txt_color = AdjustColour(color, -95)
-    elif avg < 64:
-        txt_color = wx.WHITE
-    else:
-        txt_color = AdjustColour(color, 95)
-    return txt_color
-
-def GetHighlightColour():
-    """Get the default highlight color
-    @return: wx.Color
-
-    """
-    if wx.Platform == '__WXMAC__':
-        brush = wx.Brush(wx.BLACK)
-        # kThemeBrushButtonPressedLightHighlight
-        brush.MacSetTheme(Carbon.Appearance.kThemeBrushFocusHighlight)
-        return brush.GetColour()
-    else:
-        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+PlateBtnDropArrowPressed, EVT_PLATEBTN_DROPARROW_PRESSED = wx.lib.newevent.NewEvent()
 
 #-----------------------------------------------------------------------------#
 
@@ -217,7 +191,7 @@ class PlateButton(wx.PyControl):
         @param ypos: y cord to start at
 
         """
-        if self._menu is not None:
+        if self._menu is not None or self._style & PB_STYLE_DROPARROW:
             # Positioning needs a little help on Windows
             if wx.Platform == '__WXMSW__':
                 xpos -= 2
@@ -304,9 +278,7 @@ class PlateButton(wx.PyControl):
         elif self._state['cur'] == PLATE_PRESSED:
             gc.SetTextForeground(self._color['htxt'])
             if wx.Platform == '__WXMAC__':
-                brush = wx.Brush(wx.BLACK)
-                brush.MacSetTheme(Carbon.Appearance.kThemeBrushFocusHighlight)
-                pen = wx.Pen(brush.GetColour(), 1, wx.SOLID)
+                pen = wx.Pen(GetHighlightColour(), 1, wx.SOLID)
             else:
                 pen = wx.Pen(AdjustColour(self._color['press'], -80, 220), 1)
             gc.SetPen(pen)
@@ -388,7 +360,7 @@ class PlateButton(wx.PyControl):
         else:
             width += 10
 
-        if self._menu is not None:
+        if self._menu is not None or self._style & PB_STYLE_DROPARROW:
             width += 12
 
         best = wx.Size(width, height)
@@ -504,10 +476,16 @@ class PlateButton(wx.PyControl):
         pos = evt.GetPositionTuple()
         self.SetState(PLATE_PRESSED)
         size = self.GetSizeTuple()
-        if self._menu is not None and pos[0] >= size[0] - 16:
-            self.ShowMenu()
+        if pos[0] >= size[0] - 16:
+            if self._menu is not None:
+                self.ShowMenu()
+            elif self._style & PB_STYLE_DROPARROW:
+                event = PlateBtnDropArrowPressed()
+                event.SetEventObject(self)
+                wx.PostEvent(self, event)
+        
         self.SetFocus()
-            
+
     def OnLeftUp(self, evt):
         """Post a button event if the control was previously in a
         pressed state.
@@ -515,7 +493,10 @@ class PlateButton(wx.PyControl):
 
         """
         if self._state['cur'] == PLATE_PRESSED:
-            self.__PostEvent()
+            pos = evt.GetPositionTuple()
+            size = self.GetSizeTuple()
+            if not (self._style & PB_STYLE_DROPARROW and pos[0] >= size[0] - 16):
+                self.__PostEvent()
         self.SetState(PLATE_HIGHLIGHT)
 
     def OnMenuClose(self, evt):
