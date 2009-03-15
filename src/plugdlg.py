@@ -183,7 +183,14 @@ class PluginDialog(wx.Frame):
         elif cur_pg == INSTALL_PG:
             pass
         else:
-            pass
+            page = self._nb.GetPage(cur_pg)
+            size = page.GetBestSize()
+            s2 = self.GetSize()
+            segbar = self._nb.GetSegmentBar()
+            segsize = segbar.GetBestSize()
+            self.SetClientSize((s2.GetWidth(),
+                                size.GetHeight() + segsize.GetHeight()))
+            self.SetStatusText("", 0)
 
         evt.Skip()
 
