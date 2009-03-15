@@ -96,9 +96,10 @@ PY_KEYWORDS = (3, "")
 # embedded xml highlighting it is currently not being used.
 
 # SGML Keywords
-SGML_KEYWORDS = (6, "#CURRENT #IMPLIED #REQUIRED ATTLIST CDATA DOCTYPE "
-                    "ELEMENT ENTITY HTML IDREF INCLUDE IGNORE NMTOKEN NUMBER "
-                    "RCDATA TEMP")
+SGML_KEYWORDS = (5, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION")
+#SGML_KEYWORDS = (5, "#CURRENT #IMPLIED #REQUIRED ATTLIST CDATA DOCTYPE "
+#                    "ELEMENT ENTITY HTML IDREF INCLUDE IGNORE NMTOKEN NUMBER "
+#                    "RCDATA TEMP")
 
 # SGML Block Keywords
 SGML_BLOCK = (7, "")
@@ -117,10 +118,10 @@ SYNTAX_ITEMS = [ ('STC_H_DEFAULT', 'default_style'),
                  ('STC_H_OTHER', 'default_style'),  # Style ME
                  ('STC_H_QUESTION', 'scalar_style'),
                  ('STC_H_SCRIPT', 'funct_style'), # STYLE ME
-                 ('STC_H_SGML_1ST_PARAM', 'default_style'), # STYLE ME
+                 ('STC_H_SGML_1ST_PARAM', 'keyword2_style'), # STYLE ME
                  ('STC_H_SGML_1ST_PARAM_COMMENT', 'comment_style'),
                  ('STC_H_SGML_BLOCK_DEFAULT', 'default_style'), # STYLE ME
-                 ('STC_H_SGML_COMMAND', 'default_style'), # STYLE ME
+                 ('STC_H_SGML_COMMAND', 'keyword_style'), # STYLE ME
                  ('STC_H_SGML_COMMENT', 'comment_style'),
                  ('STC_H_SGML_DEFAULT', 'array_style'), # STYLE ME
                  ('STC_H_SGML_DOUBLESTRING', 'string_style'),

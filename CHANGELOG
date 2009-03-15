@@ -38,6 +38,7 @@ in the indentation space of a line.
 on Linux.
 +Fix error that could occur while trying to save filehistory on exit.
 +Fix toolbar not resizing properly when changing icon size on osx.
++Fix error in highlighing of DTD.
 
 #-----------------------------------------------------------------------------#
 
