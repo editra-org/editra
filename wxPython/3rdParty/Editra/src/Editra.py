@@ -699,6 +699,12 @@ def InitConfig():
             # Keep for now till plugins are updated
             #profiler.Profile_Del('EOL') # changed to EOL_MODE
 
+            # After 0.4.65 LAST_SESSION now points a session file and not
+            # to a list of files to open.
+            sess = profiler.Profile_Get('LAST_SESSION')
+            if isinstance(sess, list):
+                profiler.Profile_Set('LAST_SESSION', u'')
+
             #---- End Temporary Profile Adaptions ----#
 
             # Write out updated profile
@@ -706,7 +712,7 @@ def InitConfig():
 
             # When upgrading from an older version make sure all
             # config directories are available.
-            for cfg in ["cache", "styles", "plugins", "profiles"]:
+            for cfg in ("cache", "styles", "plugins", "profiles", "sessions"):
                 if not util.HasConfigDir(cfg):
                     util.MakeConfigDir(cfg)
 
@@ -746,7 +752,7 @@ def InitConfig():
             ed_glob.VDEBUG = True
 
     # Resolve resource locations
-    ed_glob.CONFIG['CONFIG_DIR'] = util.ResolvConfigDir("")
+    ed_glob.CONFIG['CONFIG_DIR'] = util.ResolvConfigDir(u"")
     ed_glob.CONFIG['SYSPIX_DIR'] = util.ResolvConfigDir(u"pixmaps", True)
     ed_glob.CONFIG['PLUGIN_DIR'] = util.ResolvConfigDir(u"plugins")
     ed_glob.CONFIG['THEME_DIR'] = util.ResolvConfigDir(os.path.join(u"pixmaps", u"theme"))
@@ -757,10 +763,11 @@ def InitConfig():
     ed_glob.CONFIG['TEST_DIR'] = util.ResolvConfigDir(os.path.join(u"tests", u"syntax"), True)
 
     # Make sure all standard config directories are there
-    for cfg in ["cache", "styles", "plugins", "profiles"]:
+    for cfg in ("cache", "styles", "plugins", "profiles", "sessions"):
         if not util.HasConfigDir(cfg):
             util.MakeConfigDir(cfg)
     ed_glob.CONFIG['CACHE_DIR'] = util.ResolvConfigDir(u"cache")
+    ed_glob.CONFIG['SESSION_DIR'] = util.ResolvConfigDir(u"sessions")
 
     return profile_updated
 
@@ -950,7 +957,8 @@ def _Main(opts, args):
     # Load Session Data
     # But not if there are command line args for files to open
     if profiler.Profile_Get('SAVE_SESSION', 'bool', False) and not len(args):
-        frame.GetNotebook().LoadSessionFiles()
+        session = profiler.Profile_Get('LAST_SESSION', default=u'')
+        frame.GetNotebook().LoadSessionFile(session)
 
     # Unlike wxMac/wxGTK Windows doesn't post an activate event when a window
     # is first shown, so do it manually to make sure all event handlers get
