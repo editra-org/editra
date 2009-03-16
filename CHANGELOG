@@ -19,6 +19,8 @@ NEWS:
 NEW: [features/enhancments]
 +New Plugin Manager Dialog.
 +Improved configuration options for plugins.
++Improved support for sessions. Multiple custom sessions can not be saved and
+reloaded (modified code from Erik Tollerud).
 +Add shortcut for LineDelete to delete line without modifying clipboard.
 +Add option for automatically reloading files when they have changed on disk.
 +Remember last save location when opening save as dialog.

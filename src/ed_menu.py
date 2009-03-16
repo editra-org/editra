@@ -499,6 +499,8 @@ class EdMenuBar(wx.MenuBar):
                         u"..." + EdMenuBar.keybinder.GetBinding(ed_glob.ID_RELOAD_ENC),
                         _("Reload the file with a specified encoding"))
         filemenu.AppendSeparator()
+
+        # Profile
         pmenu = EdMenu()
         pmenu.Append(ed_glob.ID_SAVE_PROFILE, _("Save Profile") + \
                      EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVE_PROFILE),
@@ -508,6 +510,18 @@ class EdMenuBar(wx.MenuBar):
                      _("Load a Custom Profile"))
         filemenu.AppendSubMenu(pmenu, _("Profile"),
                                _("Load and save custom Profiles"))
+
+        # Sessions
+        smenu = EdMenu()
+        smenu.Append(ed_glob.ID_SAVE_SESSION, _("Save Session") + \
+                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVE_SESSION),
+                     _("Save the current session."))
+        smenu.Append(ed_glob.ID_LOAD_SESSION, _("Load Session") + \
+                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_LOAD_SESSION),
+                     _("Load a saved session."))
+        filemenu.AppendSubMenu(smenu, _("Sessions"),
+                               _("Load and save custom sessions."))
+
         filemenu.AppendSeparator()
         filemenu.Append(ed_glob.ID_PRINT_SU, _("Page Set&up") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRINT_SU),

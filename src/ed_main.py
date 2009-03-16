@@ -164,6 +164,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_RELOAD_ENC, self.OnReloadWithEnc),
                                        (ID_SAVE_PROFILE, self.OnSaveProfile),
                                        (ID_LOAD_PROFILE, self.OnLoadProfile),
+                                       (ID_SAVE_SESSION, self.OnSaveSession),
+                                       (ID_LOAD_SESSION, self.OnLoadSession),
                                        (ID_EXIT, wx.GetApp().OnExit),
                                        (ID_PRINT, self.OnPrint),
                                        (ID_PRINT_PRE, self.OnPrint),
@@ -723,6 +725,61 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         else:
             evt.Skip()
 
+    def OnSaveSession(self, evt):
+        """Save the current session of open files.
+        @todo: Save all windows and what the active tabs are as well
+
+        """
+        if evt.GetId() == ID_SAVE_SESSION:
+            # TODO: set current profile as default
+            dlg = wx.FileDialog(self, _("Where to Save Session?"), \
+                               CONFIG['SESSION_DIR'], u"", \
+                               _("Session") + " (*.session)|*.session",
+                                wx.SAVE | wx.OVERWRITE_PROMPT)
+
+            if dlg.ShowModal() == wx.ID_OK:
+                fname = dlg.GetPath()
+                if fname is None or not len(fname):
+                    return
+
+                if not fname.endswith('.session'):
+                    fname = fname.rstrip(u'.') + u'.session'
+                rval = self.nb.SaveSessionFile(fname)
+                if rval is not None:
+                    wx.MessageBox(rval[1], rval[0], wx.OK|wx.ICON_ERROR)
+                    return
+
+                self.PushStatusText(_("Session Saved as: %s") % fname, SB_INFO)
+                _PSET('LAST_SESSION', fname)
+            dlg.Destroy()
+        else:
+            evt.Skip()
+
+    def OnLoadSession(self, evt):
+        """Load a saved session."""
+        if evt.GetId() == ID_LOAD_SESSION:
+            # TODO: set current file as default
+            dlg = wx.FileDialog(self, _("Load a Session file"),
+                                CONFIG['SESSION_DIR'], u"",
+                                _("Session") + " (*.session)|*.session", wx.OPEN)
+
+            if dlg.ShowModal() == wx.ID_OK:
+                fname = dlg.GetPath()
+                nbook = self.GetNotebook()
+                rval = nbook.LoadSessionFile(fname)
+
+                # Check for an error during load
+                if rval is not None:
+                    wx.MessageBox(rval[1], rval[0], wx.OK|wx.ICON_WARNING)
+                    return
+                
+                self.PushStatusText(_("Loaded Session: %s") % fname, SB_INFO)
+                _PSET('LAST_SESSION', fname)
+
+            dlg.Destroy()
+        else:
+            evt.Skip()
+
     def OnStatus(self, evt):
         """Update status text with messages from other controls
         @param evt: event that called this handler
@@ -779,8 +836,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @return: None on destroy, or True on cancel
 
         """
+        # Save session files
+        session = _PGET('LAST_SESSION')
+        if not session or session is None:
+            session = os.path.join(CONFIG['SESSION_DIR'], u"__default.session")
+        _PSET('LAST_SESSION', session)
+        self.nb.SaveSessionFile(session)
+
         # Cleanup Controls
-        _PSET('LAST_SESSION', self.nb.GetFileNames())
         self._exiting = True
         controls = self.nb.GetPageCount()
         self.LOG("[ed_main][evt] OnClose: Number of controls: %d" % controls)

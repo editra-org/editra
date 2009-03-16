@@ -20,6 +20,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import glob
+import cPickle
 import wx
 
 # Editra Libraries
@@ -277,29 +278,90 @@ class EdPages(FNB.FlatNotebook):
         return [(ed_glob.ID_FIND_NEXT, self._searchctrl.OnUpdateFindUI),
                 (ed_glob.ID_FIND_PREVIOUS, self._searchctrl.OnUpdateFindUI)]
 
-    def LoadSessionFiles(self):
+    def SaveSessionFile(self, session):
+        """Save the current open files to the given session file
+        @param session: path to session file
+        @return: tuple (error desc, error msg) or None
+
+        """
+        try:
+            f_handle = open(session, 'wb')
+        except (IOError, OSError), msg:
+            return (_("Error Loading Session File"),  unicode(msg))
+
+        try:
+            sdata = dict(win1=self.GetFileNames())
+            cPickle.dump(sdata, f_handle)
+        finally:
+            f_handle.close()
+
+        return None
+
+    def LoadSessionFile(self, session):
         """Load files from saved session data in profile
-        @postcondition: Files saved from previous session are
-                        opened. If no files were found then only a
-                        single blank page is opened.
+        @param session: session filename
+        @return: tuple (error desc, error msg), or None if no error
 
         """
         self._ses_load = True
-        files = Profile_Get('LAST_SESSION')
+#        files = Profile_Get('LAST_SESSION')
 
-        # Open the files from the profile
-        if files is not None:
-            for fname in files:
-                if os.path.exists(fname) and os.access(fname, os.R_OK):
-                    self.OpenPage(os.path.dirname(fname),
-                                  os.path.basename(fname))
-                    # Give feedback as files are loaded
-                    self.Update()
+        if os.path.exists(session):
+            try:
+                f_handle = open(session)
+            except IOError:
+                f_handle = None
+        else:
+            f_handle = None
+
+        # Invalid file
+        if f_handle is None:
+            return (_("Invalid File"), _("Session file doesn't exist."))
+
+        # Load and validate file
+        try:
+            flist = cPickle.load(f_handle)
+            # TODO: Extend in future to support loading sessions
+            #       for mutiple windows.
+            flist = flist.get('win1', list()) 
+            for item in flist:
+                if type(item) not in (unicode, str):
+                    raise TypeError('Invalid item in unpickled sequence')
+        except (cPickle.UnpicklingError, TypeError), e:
+            dlg.Destroy()
+            return (_('Invalid file'),
+                    _('Selected file is not a valid session file'))
+        finally:
+            f_handle.close()
+
+        if not len(flist):
+            return (_("Empty File"), _("Session file is empty."))
+
+        # Close current files
+        self.CloseAllPages()
+
+        missingfns = []
+        for loadfn in flist:
+            if os.path.exists(loadfn) and os.access(loadfn, os.R_OK):
+                self.OpenPage(os.path.dirname(loadfn),
+                              os.path.basename(loadfn))
+                # Give feedback as files are loaded
+                self.Update()
+            else:
+                missingfns.append(loadfn)
+                
+        if missingfns:
+            rmsg = (_("Missing session files"),
+                    _("Some files in saved session could not be found on disk:\n")+
+                    u'\n'.join(missingfns))
+            return rmsg
 
         self._ses_load = False
 
         if self.GetPageCount() == 0:
             self.NewPage()
+
+        return None
 
     def NewPage(self):
         """Create a new notebook page with a blank text control
