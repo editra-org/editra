@@ -87,23 +87,14 @@ HTML_AREA = [wx.stc.STC_H_ASP, wx.stc.STC_H_ASPAT, wx.stc.STC_H_ATTRIBUTE,
 
 class Completer(completer.BaseCompleter):
     """Code completer provider"""
-    _autocomp_keys = [ord('>'), ord('<')]
-    _autocomp_stop = ' '
-    _autocomp_fillup = ''
-
     def __init__(self, stc_buffer):
         completer.BaseCompleter.__init__(self, stc_buffer)
 
         # Setup
+        self.SetAutoCompKeys([ord('>'), ord('<')])
+        self.SetAutoCompStops(' ')
+        self.SetAutoCompFillups('')
         self.SetAutoCompAfter(True) # Insert Text after cursor on completions
-
-    def GetAutoCompKeys(self):
-        """Returns the list of key codes for activating the
-        autocompletion.
-        @return: list of autocomp activation keys
-
-        """
-        return Completer._autocomp_keys
 
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a
@@ -159,18 +150,6 @@ class Completer(completer.BaseCompleter):
                     break
 
         return list()
-
-    def GetAutoCompStops(self):
-        """Returns a string of characters that should cancel
-        the autocompletion lookup.
-        @return: string of keys that will cancel autocomp/calltip actions
-
-        """
-        return Completer._autocomp_stop
-
-    def GetAutoCompFillups(self):
-        """List of keys to fill up autocompletions on"""
-        return Completer._autocomp_fillup
 
 #--------------------------------------------------------------------------#
 

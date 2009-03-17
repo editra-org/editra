@@ -43,18 +43,19 @@ import completer
 
 class Completer(completer.BaseCompleter):
     """Code completer provider"""
-    _autocomp_keys = [ord('.'), ]
-    _autocomp_stop = ' \'"\\`):'
-    _autocomp_fillup = '.,;([]}<>%^&+-=*/|'
-    _calltip_keys = [ord('('), ]
-    _calltip_cancel = [ord(')'), wx.WXK_RETURN]
-
     def __init__(self, stc_buffer):
         """Initiliazes the completer
         @param stc_buffer: buffer that contains code
 
         """
         completer.BaseCompleter.__init__(self, stc_buffer)
+
+        # Setup
+        self.SetAutoCompKeys([ord('.'), ])
+        self.SetAutoCompStops(' \'"\\`):')
+        self.SetAutoCompFillups('.,;([]}<>%^&+-=*/|')
+        self.SetCallTipKeys([ord('('), ])
+        self.SetCallTipCancel([ord(')'), wx.WXK_RETURN])
 
         # Needed for introspect to run
         try:
@@ -103,14 +104,6 @@ class Completer(completer.BaseCompleter):
             self._log("[pycomp][err] _GetCompletionInfo: %s, %s" % \
                       (sys.exc_info()[0], sys.exc_info()[1]))
             return ''
-
-    def GetAutoCompKeys(self):
-        """Returns the list of key codes for activating the
-        autocompletion.
-        @return: list of autocomp activation keys
-
-        """
-        return Completer._autocomp_keys
         
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a 
@@ -122,36 +115,13 @@ class Completer(completer.BaseCompleter):
         """
         return self._GetCompletionInfo(command)
 
-    def GetAutoCompStops(self):
-        """Returns a string of characters that should cancel
-        the autocompletion lookup.
-        @return: string of keys that will cancel autocomp/calltip actions
-
-        """
-        return Completer._autocomp_stop
-    
-    def GetAutoCompFillups(self):
-        return Completer._autocomp_fillup
-
     def GetCallTip(self, command):
         """Returns the formated calltip string for the command.
         If the namespace command is unset the locals namespace is used.
         @param command: command to get calltip for
-        @keyword namespace: namespace to do lookup in
 
         """
         return self._GetCompletionInfo(command, calltip=True)
-
-    def GetCallTipKeys(self):
-        """Returns the list of keys to activate a calltip on
-        @return: list of keys that can activate a calltip
-
-        """
-        return Completer._calltip_keys
-
-    def GetCallTipCancel(self):
-        """Get the list of key codes that should stop a calltip"""
-        return Completer._calltip_cancel
 
 #-----------------------------------------------------------------------------#
 # This code below is a modified and adapted version of the pythoncomplete 
