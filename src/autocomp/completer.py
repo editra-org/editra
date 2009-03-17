@@ -38,6 +38,32 @@ class BaseCompleter(object):
         self._case_sensitive = False
         self._autocomp_after = False
 
+        self._autocomp_keys = list()
+        self._autocomp_stop = u''
+        self._autocomp_fillup = u''
+        self._calltip_keys = list()
+        self._calltip_cancel = list()
+
+    #--- Override in subclass ----#
+
+    def GetAutoCompList(self, command):
+        """Retrieves the sorted autocomplete list for a command
+        @param command: command string to do lookup on
+        @return: list of strings
+
+        """
+        return list()
+
+    def GetCallTip(self, command):
+        """Returns the calltip string for a command
+        @param command: command to get callip for (string)
+        @return: string
+
+        """
+        return u''
+
+    #--- End override in subclass ----#
+
     def GetAutoCompAfter(self):
         """Should text insterted by autocomp be placed after the cursor
         or before it.
@@ -51,7 +77,7 @@ class BaseCompleter(object):
         @return: list of characters used for activating autocompletion
 
         """
-        return list()
+        return self._autocomp_keys
 
     def IsCallTipEvent(self, evt):
         """Should a calltip be shown for the given key combo"""
@@ -70,13 +96,12 @@ class BaseCompleter(object):
             return True
         return False
 
-    def GetAutoCompList(self, command):
-        """Retrieves the sorted autocomplete list for a command
-        @param command: command string to do lookup on
-        @return: list of strings
+    def SetAutoCompKeys(self, key_list):
+        """Set the keys to provide completions on
+        @param key_list: List of key codes
 
         """
-        return list()
+        self._autocomp_keys = key_list
 
     def GetAutoCompStops(self):
         """Returns a string of characters that should cancel
@@ -84,33 +109,50 @@ class BaseCompleter(object):
         @return: string of characters that will hide the autocomp/calltip
 
         """
-        return u''
+        return self._autocomp_stop
+
+    def SetAutoCompStops(self, stops):
+        """Set the keys to cancel autocompletions on.
+        @param stops: string
+
+        """
+        self._autocomp_stop = stops
 
     def GetAutoCompFillups(self):
         """Get the list of characters to do a fillup on
         @return: string
 
         """
-        return u''
+        return self._autocomp_fillup
 
-    def GetCallTip(self, command):
-        """Returns the calltip string for a command
-        @param command: command to get callip for (string)
-        @return: string
+    def SetAutoCompFillups(self, fillups):
+        """Set the list of characters to do a fillup on
+        @param fillups: string
 
         """
-        return u''
+        self._autocomp_fillup = fillups
 
     def GetCallTipKeys(self):
         """Returns the list of keys to activate a calltip on
         @return: list of calltip activation keys
 
         """
-        return list()
+        return self._calltip_keys
+
+    def SetCallTipKeys(self, keys):
+        """Set the list of keys to activate calltips on
+        @return: list of calltip activation keys
+
+        """
+        self._calltip_keys = keys
 
     def GetCallTipCancel(self):
         """Get the list of key codes that should stop a calltip"""
-        return list()
+        return self._calltip_cancel
+
+    def SetCallTipCancel(self, key_list):
+        """Set the list of key codes that should stop a calltip"""
+        self._calltip_cancel = key_list
 
     def GetBuffer(self):
         """Get the reference to the buffer this autocomp object is owned by
@@ -137,11 +179,20 @@ class BaseCompleter(object):
     def SetCaseSensitive(self, sensitive):
         """Set whether this completer is case sensitive or not
         @param sensitive: bool
+
+        """
+        self._case_sensitive = sensitive
+
+    def ShouldCheck(self, cpos):
+        """Should completions be attempted
+        @param cpos: current buffer position
         @return: bool
 
         """
-        if isinstance(sensitive, bool):
-            self._case_sensitive = sensitive
-            return True
-        else:
-            return False
+        buff = self.GetBuffer()
+        rval = True
+        if buff is not None:
+            if buff.IsString(cpos) or buff.IsComment(cpos):
+                rval = False
+
+        return rval

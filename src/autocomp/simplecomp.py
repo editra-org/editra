@@ -27,11 +27,19 @@ import completer
 
 class Completer(completer.BaseCompleter):
     """Code completer provider"""
-    autocompFillup = '.,:;([]){}<>%^&+-=*/|$'
-    autocompStop = ' \'"\\`):'
     wordCharacters = "".join(['_', string.letters])
-    autocompKeys = []
-    caseSensitive = False
+
+    def __init__(self, stc_buffer):
+        completer.BaseCompleter.__init__(self, stc_buffer)
+
+        # Setup
+        self.SetAutoCompKeys([])
+        self.SetAutoCompStops(' \'"\\`):')
+        self.SetAutoCompFillups('.,:;([]){}<>%^&+-=*/|$')
+        self.SetCallTipKeys([])
+        self.SetCallTipCancel([])
+        self.SetCaseSensitive(False)
+        self.SetAutoCompAfter(False) # Insert Text after cursor on completions
 
     def _GetCompletionInfo(self, command, calltip=False):
         """Get Completion list or Calltip
@@ -44,17 +52,22 @@ class Completer(completer.BaseCompleter):
         if command in (None, u''):
             return kwlst
 
-        if command[0].isdigit() or (command[-1] in self.autocompFillup):
+        fillups = self.GetAutoCompFillups()
+        if command[0].isdigit() or (command[-1] in fillups):
             return kwlst
 
         currentPos = bf.GetCurrentPos()
 
         # Get the real word: segment using autocompFillup
-        ls = list(command.strip(Completer.autocompFillup))
+        tmp = command
+        for ch in fillups:
+            tmp = command.strip(ch)
+        ls = list(tmp)
         ls.reverse()
+
         idx = 0
         for c in ls:
-            if c in Completer.autocompFillup:
+            if c in fillups:
                 break
             idx += 1
         ls2 = ls[:idx]
@@ -68,7 +81,7 @@ class Completer(completer.BaseCompleter):
         minPos = 0
         maxPos = bf.GetLength()
         flags = stc.STC_FIND_WORDSTART
-        if Completer.caseSensitive:
+        if self.GetCaseSensitive():
             flags |= stc.STC_FIND_MATCHCASE
 
         # TODO: find out why calling this with an empty command string causes
@@ -96,14 +109,6 @@ class Completer(completer.BaseCompleter):
 
         return kwlst
 
-    def GetAutoCompKeys(self):
-        """Returns the list of key codes for activating the
-        autocompletion.
-        @return: list of autocomp activation keys
-
-        """
-        return Completer.autocompKeys
-
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a
         command string. If namespace is not specified the lookup
@@ -112,17 +117,5 @@ class Completer(completer.BaseCompleter):
         @keyword namespace: namespace to do lookup in
 
         """
-        return self._GetCompletionInfo(command)
-
-    def GetAutoCompStops(self):
-        """Returns a string of characters that should cancel
-        the autocompletion lookup.
-        @return: string of keys that will cancel autocomp/calltip actions
-
-        """
-        return Completer.autocompStop
-
-    def GetAutoCompFillups(self):
-        """List of keys to fill up autocompletions on"""
-        return Completer.autocompFillup
-
+        rlist = self._GetCompletionInfo(command)
+        return sorted(list(set(rlist)))

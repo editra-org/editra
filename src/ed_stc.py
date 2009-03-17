@@ -121,7 +121,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                             highlight=_PGET('SYNTAX'))
 
         # Code Related Objects
-        self._code = dict(compsvc=autocomp.AutoCompService(self),
+        self._code = dict(compsvc=autocomp.AutoCompService.GetCompleter(self),
                           synmgr=syntax.SyntaxMgr(ed_glob.CONFIG['CACHE_DIR']),
                           keywords=[ ' ' ],
                           comment=list(),
@@ -815,7 +815,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             pass
 
         elif not self._config['autocomp'] or \
-             self.IsString(cpos) or self.IsComment(cpos):
+             not self._code['compsvc'].ShouldCheck(cpos):
+            print "SKIP", self._config['autocomp'], self._code['compsvc'].ShouldCheck(cpos)
             evt.Skip()
             return
 
@@ -967,7 +968,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         pos = self.GetCurrentPos()
         lst = self._code['compsvc'].GetAutoCompList(command)
-        if len(lst):
+        if lst is not None and len(lst):
             self.BeginUndoAction()
             self.AutoCompShow(pos - self.WordStartPosition(pos, True), u' '.join(lst))
 
@@ -1583,7 +1584,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if isinstance(value, bool):
             self._config['autocomp'] = value
             if value:
-                self._code['compsvc'].LoadCompProvider(self.GetLexer())
+#                self._code['compsvc'].LoadCompProvider(self.GetLexer())
+                self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self)
 
     def SetDocument(self, doc):
         """Change the document object used.
@@ -2108,8 +2110,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         self.AutoCompSetAutoHide(False)
         self.AutoCompSetChooseSingle(True)
-        self._code['compsvc'].LoadCompProvider(self.GetLexer())
-        self.AutoCompSetIgnoreCase(self._code['compsvc'].GetIgnoreCase())
+#        self._code['compsvc'].LoadCompProvider(self.GetLexer())
+        self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self)
+        self.AutoCompSetIgnoreCase(not self._code['compsvc'].GetCaseSensitive())
         self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
         # TODO: come back to this it can cause some annoying behavior where
         #       it automatically completes strings that you don't want to be
