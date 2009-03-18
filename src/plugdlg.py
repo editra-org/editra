@@ -830,7 +830,9 @@ class PBPluginItem(eclib.PanelBoxItemBase):
         self._enabled = wx.CheckBox(self, label=_("Enable"))
         self._enabled.SetValue(enabled)
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF), wx.ART_MENU)
-        self._config = eclib.PlateButton(self, label=_("Configure"), bmp=bmp)
+        self._config = eclib.PlateButton(self,
+                                         label=_("Configure"), bmp=bmp,
+                                         style=eclib.PB_STYLE_NOBG)
         self._config.Enable(enabled)
 
         # Setup
