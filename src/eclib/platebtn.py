@@ -33,7 +33,7 @@ PB_STYLE_SQUARE:
 Instead of the default rounded shape use a rectangular shaped button with
 square edges.
 
-PB_STYLE_NB:
+PB_STYLE_NOBG:
 This style only has an effect on Windows but does not cause harm to use on the
 platforms. It should only be used when the control is shown on a panel or other
 window that has a non solid color for a background. i.e a gradient or image is
