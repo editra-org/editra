@@ -303,10 +303,11 @@ class SegmentBook(ctrlbox.ControlBox):
         """
         if not can_close:
             opt = ctrlbox.SEGBTN_OPT_NONE
+
         elif wx.Platform == '__WXMAC__':
             opt = ctrlbox.SEGBTN_OPT_CLOSEBTNL
         else:
-            opt = ctrlbox.SEGBTN_OPT_CLOSEBTNLR
+            opt = ctrlbox.SEGBTN_OPT_CLOSEBTNR
         self._segbar.SetSegmentOption(index, opt)
 
     def GetSelection(self):
