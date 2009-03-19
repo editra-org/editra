@@ -816,7 +816,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         elif not self._config['autocomp'] or \
              not self._code['compsvc'].ShouldCheck(cpos):
-            print "SKIP", self._config['autocomp'], self._code['compsvc'].ShouldCheck(cpos)
             evt.Skip()
             return
 
