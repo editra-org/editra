@@ -70,7 +70,7 @@ class Completer(completer.BaseCompleter):
 
         # Give some help on some common properties
         if tmp.endswith(u':'):
-            word = GetWordLeft(tmp.rstrip(u':').strip())
+            word = GetWordLeft(tmp.rstrip().rstrip(u':'))
             comps = PROP_OPTS.get(word, list())
             comps = list(set(comps))
             comps.sort()
@@ -79,19 +79,19 @@ class Completer(completer.BaseCompleter):
         # Look for if we are completing a tag class
         if tmp.endswith(u'.'):
             classes = list()
-            txt = buff.GetText()
-            txt = RE_CSS_COMMENT.sub(u'', txt)
-            txt = RE_CSS_BLOCK.sub(u' ', txt)
-            for token in txt.split():
-                if u'.' in token:
-                    classes.append(token.split(u'.', 1)[-1])
+            if not buff.IsString(cpos):
+                txt = buff.GetText()
+                txt = RE_CSS_COMMENT.sub(u'', txt)
+                txt = RE_CSS_BLOCK.sub(u' ', txt)
+                for token in txt.split():
+                    if u'.' in token:
+                        classes.append(token.split(u'.', 1)[-1])
 
-            if len(classes):
                 classes = list(set(classes))
                 classes.sort()
-                return classes
+            return classes
 
-        return list()
+        return keywords
 
     def GetCallTip(self, command):
         """Returns the formated calltip string for the command.
