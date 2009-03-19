@@ -25,40 +25,11 @@ import wx.stc
 import completer
 
 #--------------------------------------------------------------------------#
-# Standard Html Tags
-TAGS = ['!--', 'a', 'abbr', 'accept', 'accesskey', 'acronym', 'action',
-        'address', 'align', 'alink', 'alt', 'applet', 'archive', 'area', 'axis',
-        'b', 'background', 'base', 'basefont', 'bdo', 'bgcolor', 'big',
-        'blockquote', 'body', 'border', 'bordercolor', 'br', 'button',
-        'caption', 'cellpadding', 'cellspacing', 'center', 'char', 'charoff',
-        'charset', 'checked', 'cite', 'cite', 'class', 'classid', 'clear',
-        'code', 'codebase', 'codetype', 'col', 'colgroup', 'color', 'cols',
-        'colspan', 'compact', 'content', 'coords', 'data', 'datetime', 'dd',
-        'declare', 'defer', 'del', 'dfn', 'dir', 'dir', 'disabled', 'div', 'dl',
-        'dt', 'dtml-call', 'dtml-comment', 'dtml-if', 'dtml-in', 'dtml-let',
-        'dtml-raise', 'dtml-tree', 'dtml-try', 'dtml-unless', 'dtml-var',
-        'dtml-with', 'em', 'enctype', 'face', 'fieldset', 'font', 'for', 'form',
-        'frame', 'gutter', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head',
-        'headers', 'height', 'hr', 'href', 'hreflang', 'hspace', 'html',
-        'http-equiv', 'i', 'id', 'iframe', 'img', 'input', 'ins', 'isindex',
-        'ismap', 'kbd', 'label', 'lang', 'language', 'legend', 'li', 'link',
-        'link', 'longdesc', 'lowsrc', 'map', 'marginheight', 'marginwidth',
-        'maxlength', 'menu', 'meta', 'method', 'multiple', 'name', 'nohref',
-        'noscript', 'nowrap', 'object', 'ol', 'optgroup', 'option', 'p',
-        'param', 'pre', 'profile', 'prompt', 'q', 'readonly', 'rel', 'rev',
-        'rows', 'rowspan', 'rules', 's', 'samp', 'scheme', 'scope', 'script',
-        'scrolling', 'select', 'selected', 'shape', 'size', 'small', 'span',
-        'src', 'standby', 'start', 'strike', 'strong', 'style', 'sub',
-        'summary', 'sup', 'tabindex', 'table', 'target', 'tbody', 'td', 'text',
-        'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'type', 'u',
-        'ul', 'url', 'usemap', 'valign', 'value', 'valuetype', 'var', 'version',
-        'vlink', 'vspace', 'width', 'wrap', 'xmp']
-
-# Tags that usually have a new line inbetween them
-NLINE_TAGS = ('body', 'head', 'html', 'ol', 'style', 'table', 'tbody', 'ul')
 
 # Regular Expressions
-RE_LINK_PSEUDO = re.compile('a:(link|visited|active|hover|focus)*')
+RE_LINK_PSEUDO = re.compile("a:(link|visited|active|hover|focus)*")
+RE_CSS_COMMENT = re.compile("\/\*[^*]*\*+([^/][^*]*\*+)*\/")
+RE_CSS_BLOCK = re.compile("\{[^}]*\}")
 
 #--------------------------------------------------------------------------#
 
@@ -68,8 +39,8 @@ class Completer(completer.BaseCompleter):
         completer.BaseCompleter.__init__(self, stc_buffer)
 
         # Setup
-        self.SetAutoCompKeys([ord(':'), ])
-        self.SetAutoCompStops(' {}')
+        self.SetAutoCompKeys([ord(':'), ord('.') ])
+        self.SetAutoCompStops(' {}#')
         self.SetAutoCompFillups('')
         self.SetCallTipKeys([ord('('), ])
         self.SetCallTipCancel([ord(')'), wx.WXK_RETURN])
@@ -90,13 +61,37 @@ class Completer(completer.BaseCompleter):
 
         cpos = buff.GetCurrentPos()
         cline = buff.GetCurrentLine()
-        tmp = buff.GetLine(cline).rstrip()
+        lstart = buff.PositionFromLine(cline)
+        tmp = buff.GetTextRange(lstart, cpos).rstrip()
 
         # Check for the case of a pseudo class
         if IsPsuedoClass(command, tmp):
-            return [u'link', u'visited', u'active', u'hover', u'focus']
+            return [ u'active', u'focus', u'hover', u'link', u'visited' ]
 
-        return keywords
+        # Give some help on some common properties
+        if tmp.endswith(u':'):
+            word = GetWordLeft(tmp.rstrip(u':').strip())
+            comps = PROP_OPTS.get(word, list())
+            comps = list(set(comps))
+            comps.sort()
+            return comps
+
+        # Look for if we are completing a tag class
+        if tmp.endswith(u'.'):
+            classes = list()
+            txt = buff.GetText()
+            txt = RE_CSS_COMMENT.sub(u'', txt)
+            txt = RE_CSS_BLOCK.sub(u' ', txt)
+            for token in txt.split():
+                if u'.' in token:
+                    classes.append(token.split(u'.', 1)[-1])
+
+            if len(classes):
+                classes = list(set(classes))
+                classes.sort()
+                return classes
+
+        return list()
 
     def GetCallTip(self, command):
         """Returns the formated calltip string for the command.
@@ -133,6 +128,44 @@ def IsPsuedoClass(cmd, line):
     if cmd.endswith(u':'):
         token = line.split()[-1]
         pieces = token.split(u":")
-        if pieces[0] == 'a':
+        if pieces[0] == 'a' or pieces[0].startswith('a.'):
             return True
     return False
+
+def GetWordLeft(line):
+    """Get the first valid word to the left of the end of line
+    @return: string
+
+    """
+    for idx in range(1, len(line)+1):
+        ch = line[idx*-1]
+        if ch.isspace() or ch in u'{;':
+            return line[-1*idx:].strip()
+    else:
+        return u''
+
+#--------------------------------------------------------------------------#
+
+# Proprites to provide some input help on
+PROP_OPTS = { u'border-style' : [u'none', u'hidden', u'dotted', u'dashed',
+                                 u'solid', u'double', u'groove', u'ridge',
+                                 u'inset', u'outset'],
+              u'float' : [u'left', u'right', u'none'],
+              u'font-style' : [u'normal', u'italic', u'oblique'],
+              u'font-weight' : [u'normal', u'bold', u'lighter', u'bolder'],
+              u'list-style-type' : [u'none', u'disc', u'circle', u'square',
+                                    u'decimal', u'decimal-leading-zero',
+                                    u'lower-roman', u'upper-roman',
+                                    u'lower-alpha', u'upper-alpha',
+                                    u'lower-greek', u'lower-latin', u'hebrew',
+                                    u'armenian', u'georgian', u'cjk-ideographic',
+                                    u'hiragana', u'katakana',
+                                    u'hiragana-iroha', u'katakana-iroha'],
+              u'text-decoration' : [u'none', u'underline', u'line-through',
+                                    u'overline', u'blink'],
+              u'text-align' : [u'left', u'right', u'center', u'justify'],
+              u'vertical-align' : [u'baseline', u'sub', u'super', u'top',
+                                   u'text-top', u'middle', u'bottom',
+                                   u'text-bottom', ]
+              }
+
