@@ -29,7 +29,7 @@ import wx
 # Editra Imports
 import ed_glob
 from profiler import Profile_Get, Profile_Set
-import ed_stc
+import ed_basestc
 from ed_style import StyleItem
 import util
 import syntax.syntax as syntax
@@ -70,8 +70,8 @@ class StyleEditor(wx.Dialog):
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()
-        self.preview = ed_stc.EditraStc(self, wx.ID_ANY, size=(-1, 200),
-                                        style=wx.SUNKEN_BORDER, use_dt=False)
+        self.preview = ed_basestc.EditraBaseStc(self, wx.ID_ANY, size=(-1, 200),
+                                                style=wx.SUNKEN_BORDER)
         self.styles_orig = self.preview.GetStyleSet()
         self.preview.SetCaretLineVisible(True)
         self.styles_new = DuplicateStyleDict(self.styles_orig)

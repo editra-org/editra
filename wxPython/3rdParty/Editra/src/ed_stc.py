@@ -32,25 +32,16 @@ import ed_event
 import ed_glob
 from profiler import Profile_Get as _PGET
 from syntax import syntax
-from autocomp import autocomp
 import util
-import ed_style
+import ed_basestc
 import ed_msg
 import ed_mdlg
 import ed_txt
-import ed_menu
 from ed_keyh import KeyHandler, ViKeyHandler
-from extern import vertedit
-import eclib
 
 #-------------------------------------------------------------------------#
 # Globals
 _ = wx.GetTranslation
-
-# Margin Positions
-MARK_MARGIN = 0
-NUM_MARGIN  = 1
-FOLD_MARGIN = 2
 
 # EOL Constants
 EDSTC_EOL_CR   = ed_glob.EOL_MODE_CR
@@ -62,20 +53,14 @@ SPACECHARS = " \t\r\n"
 NONSPACE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 OPERATORS = "./\?[]{}<>!@#$%^&*():=-+\"';,"
 
-# Key code additions
-ALT_SHIFT = wx.stc.STC_SCMOD_ALT|wx.stc.STC_SCMOD_SHIFT
-CTRL_SHIFT = wx.stc.STC_SCMOD_CTRL|wx.stc.STC_SCMOD_SHIFT
-
 #-------------------------------------------------------------------------#
 
-class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
+class EditraStc(ed_basestc.EditraBaseStc):
     """Defines a styled text control for editing text
     @summary: Subclass of wx.stc.StyledTextCtrl and L{ed_style.StyleMgr}.
               Manages the documents display and input.
 
     """
-    ED_STC_MASK_MARKERS = ~wx.stc.STC_MASK_FOLDERS
-
     def __init__(self, parent, id_,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=0, use_dt=True):
@@ -84,8 +69,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @keyword use_dt: wheter to use a drop target or not
 
         """
-        wx.stc.StyledTextCtrl.__init__(self, parent, id_, pos, size, style)
-        ed_style.StyleMgr.__init__(self, self.GetStyleSheet())
+        ed_basestc.EditraBaseStc.__init__(self, parent, id_, pos, size, style)
 
         self.SetModEventMask(wx.stc.STC_PERFORMED_UNDO | \
                              wx.stc.STC_PERFORMED_REDO | \
@@ -104,10 +88,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Attributes
         self.LOG = wx.GetApp().GetLog()
         self.key_handler = KeyHandler(self)
-        self.vert_edit = vertedit.VertEdit(self)
-
-        # File Attributes
-        self.file = ed_txt.EdFile()
 
         # Macro Attributes
         self._macro = list()
@@ -120,47 +100,15 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                             folding=_PGET('CODE_FOLD'),
                             highlight=_PGET('SYNTAX'))
 
-        # Code Related Objects
-        self._code = dict(compsvc=autocomp.AutoCompService.GetCompleter(self),
-                          synmgr=syntax.SyntaxMgr(ed_glob.CONFIG['CACHE_DIR']),
-                          keywords=[ ' ' ],
-                          comment=list(),
-                          clexer=None,      # Container lexer method
-                          indenter=None,    # Auto indenter
-                          lang_id=0)        # Language ID from syntax module
-
-        # Set Up Margins
-        ## Outer Left Margin Bookmarks
-        self.SetMarginType(MARK_MARGIN, wx.stc.STC_MARGIN_SYMBOL)
-        self.SetMarginMask(MARK_MARGIN, self.ED_STC_MASK_MARKERS)
-        self.SetMarginSensitive(MARK_MARGIN, True)
-        self.SetMarginWidth(MARK_MARGIN, 12)
-
-        ## Middle Left Margin Line Number Indication
-        self.SetMarginType(NUM_MARGIN, wx.stc.STC_MARGIN_NUMBER)
-        self.SetMarginMask(NUM_MARGIN, 0)
-
-        ## Inner Left Margin Setup Folders
-        self.SetMarginType(FOLD_MARGIN, wx.stc.STC_MARGIN_SYMBOL)
-        self.SetMarginMask(FOLD_MARGIN, wx.stc.STC_MASK_FOLDERS)
-        self.SetMarginSensitive(FOLD_MARGIN, True)
-
         # Set Default Styles used by all documents
         self.Configure()
         self.UpdateBaseStyles()
-
-        # Set Mac specific keybindings
-        if wx.Platform == '__WXMAC__':
-            for keys in _GetMacKeyBindings():
-                self.CmdKeyAssign(*keys)
 
         # Other Settings
         self.UsePopUp(False)
 
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
-        self.Bind(wx.stc.EVT_STC_CHANGE, self.OnChanged)
-        self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
         self.Bind(wx.stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_CHAR, self.OnChar)
@@ -172,14 +120,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
        #---- End Init ----#
 
-    def __del__(self):
-        # Cleanup the file object callbacks
-        self.file.RemoveModifiedCallback(self.FireModified)
-        self.file.CleanUp()
-
-    @property
-    def __name__(self):
-        return u"EditraTextCtrl"
+    __name__ = u"EditraTextCtrl"
 
     #---- Protected Member Functions ----#
     def _BuildMacro(self):
@@ -287,34 +228,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.InsertText(pos, self.GetEOLChar())
         self.GotoPos(pos + curr)
 
-    def AutoIndent(self):
-        """Indent from the current postion to match the indentation
-        of the previous line.
-        @postcondition: proper type of white space is added from current pos
-                        to match that of indentation in above line
-        """
-        cpos = self.GetCurrentPos()
-
-        # Check if a special purpose indenter has been registered
-        if self._code['indenter'] is not None:
-            txt = self._code['indenter'](self, cpos, self.GetIndentChar())
-            txt = txt.replace('\n', self.GetEOLChar())
-        else:
-            # Default Indenter
-            line = self.GetCurrentLine()
-            text = self.GetTextRange(self.PositionFromLine(line), cpos)
-            if text.strip() == u'':
-                self.AddText(self.GetEOLChar() + text)
-                self.EnsureCaretVisible()
-                return
-            indent = self.GetLineIndentation(line)
-            i_space = indent / self.GetTabWidth()
-            ndent = self.GetEOLChar() + self.GetIndentChar() * i_space
-            txt = ndent + ((indent - (self.GetTabWidth() * i_space)) * u' ')
-
-        self.AddText(txt)
-        self.EnsureCaretVisible()
-
     def Bookmark(self, action):
         """Handles bookmark actions
         @param action: An event ID that describes what is to be done
@@ -325,11 +238,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         mark = -1
         if action == ed_glob.ID_ADD_BM:
             if self.MarkerGet(lnum):
-                self.MarkerDelete(lnum, MARK_MARGIN)
+                self.MarkerDelete(lnum, ed_basestc.MARK_MARGIN)
             else:
-                self.MarkerAdd(lnum, MARK_MARGIN)
+                self.MarkerAdd(lnum, ed_basestc.MARK_MARGIN)
         elif action == ed_glob.ID_DEL_ALL_BM:
-            self.MarkerDeleteAll(MARK_MARGIN)
+            self.MarkerDeleteAll(ed_basestc.MARK_MARGIN)
         elif action == ed_glob.ID_NEXT_MARK:
             if self.MarkerGet(lnum):
                 lnum += 1
@@ -345,27 +258,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         if mark != -1:
             self.GotoLine(mark)
-
-    def BraceBadLight(self, pos):
-        """Highlight the character at the given position
-        @param pos: position of character to highlight with STC_STYLE_BRACEBAD
-
-        """
-        # Check if we are still alive or not, as this may be called
-        # after we have been deleted.
-        if isinstance(self, wx.stc.StyledTextCtrl):
-            super(EditraStc, self).BraceBadLight(pos)
-
-    def BraceHighlight(self, pos1, pos2):
-        """Highlight characters at pos1 and pos2
-        @param pos1: position of char 1
-        @param pos2: position of char 2
-
-        """
-        # Check if we are still alive or not, as this may be called
-        # after we have been deleted.
-        if isinstance(self, wx.stc.StyledTextCtrl):
-            super(EditraStc, self).BraceHighlight(pos1, pos2)
 
     def GetBookmarks(self):
         """Gets a list of all lines containing bookmarks
@@ -432,93 +324,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # NOTE: disabled because it is more annoying than it is benificial.
 #        self.SetEndAtLastLine(False)
 
-    def Comment(self, start, end, uncomment=False):
-        """(Un)Comments a line or a selected block of text
-        in a document.
-        @param start: begining line (int)
-        @param end: end line (int)
-        @keyword uncomment: uncomment selection
-
-        """
-        if len(self._code['comment']):
-            sel = self.GetSelection()
-            c_start = self._code['comment'][0]
-            c_end = u''
-            if len(self._code['comment']) > 1:
-                c_end = self._code['comment'][1]
-
-            # Modify the selected line(s)
-            self.BeginUndoAction()
-            try:
-                nchars = 0
-                lines = range(start, end+1)
-                lines.reverse()
-                for line_num in lines:
-                    lstart = self.PositionFromLine(line_num)
-                    lend = self.GetLineEndPosition(line_num)
-                    text = self.GetTextRange(lstart, lend)
-                    tmp = text.strip()
-                    if len(tmp):
-                        if uncomment:
-                            if tmp.startswith(c_start):
-                                text = text.replace(c_start, u'', 1)
-                            if c_end and tmp.endswith(c_end):
-                                text = text.replace(c_end, u'', 1)
-                            nchars = nchars - len(c_start + c_end)
-                        else:
-                            text = c_start + text + c_end
-                            nchars = nchars + len(c_start + c_end)
-
-                        self.SetTargetStart(lstart)
-                        self.SetTargetEnd(lend)
-                        self.ReplaceTarget(text)
-            finally:
-                self.EndUndoAction()
-                if sel[0] != sel[1]:
-                    self.SetSelection(sel[0], sel[1] + nchars)
-                else:
-                    if len(self._code['comment']) > 1:
-                        nchars = nchars - len(self._code['comment'][1])
-                    self.GotoPos(sel[0] + nchars)
-
-    def ToggleComment(self):
-        """Toggle the comment of the selected region"""
-        if len(self._code['comment']):
-            sel = self.GetSelection()
-            start = self.LineFromPosition(sel[0])
-            end = self.LineFromPosition(sel[1])
-            c_start = self._code['comment'][0]
-            c_end = u''
-            if len(self._code['comment']) > 1:
-                c_end = self._code['comment'][1]
-
-            if end > start and self.GetColumn(sel[1]) == 0:
-                end = end - 1
-
-            # Analyze the seleted line(s)
-            comment = 0
-            for line in range(start, end+1):
-                txt = self.GetLine(line)
-                if txt.lstrip().startswith(c_start):
-                    comment += 1
-
-            lcount = end - start
-            mod = 1
-            if lcount == 0:
-                mod = 0
-
-            if comment > (lcount / 2) + mod:
-                # Uncomment
-                self.Comment(start, end, True)
-            else:
-                self.Comment(start, end, False)
-
-    def CanCopy(self):
-        """Check if copy/cut is possible"""
-        return self.GetSelectionStart() != self.GetSelectionEnd()
-
-    CanCut = CanCopy
-
     def ConvertCase(self, upper=False):
         """Converts the case of the selected text to either all lower
         case(default) or all upper case.
@@ -548,22 +353,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         return self._config['autoindent']
-
-    def GetCommentChars(self):
-        """Return the list of characters used to comment a string in the
-        current language.
-        @return: list of strings
-
-        """
-        return self._code['comment']
-
-    def GetLangId(self):
-        """Returns the language identifer of this control
-        @return: language identifier of document
-        @rtype: int
-
-        """
-        return self._code['lang_id']
 
     def GetLineStartPosition(self, line):
         """Get the starting position of the given line
@@ -599,17 +388,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             mid = (fline + (self.GetLineCount() / 2))
         return mid
-
-    def GetModTime(self):
-        """Get the value of the buffers file last modtime"""
-        return self.file.GetModtime()
-
-    def GetPos(self):
-        """Update Line/Column information
-        @return: tuple (line, column)
-
-        """
-        return (self.GetCurrentLine() + 1, self.GetColumn(self.GetCurrentPos()))
 
     def GotoBraceMatch(self):
         """Jump the caret to the brace opposite of the one the caret is
@@ -685,41 +463,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         self.GotoPos(self.GetLineIndentPosition(line))
 
-    def DefineMarkers(self):
-        """Defines the folder and bookmark icons for this control
-        @postcondition: all margin markers are defined
-
-        """
-        style = self.GetItemByName('foldmargin_style')
-        # The foreground/background settings for the marker column seem to
-        # backwards from what the parameters take so use our Fore color for
-        # the stcs back and visa versa for our Back color.
-        back = style.GetFore()
-        rgb = eclib.HexToRGB(back[1:])
-        back = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
-
-        fore = style.GetBack()
-        rgb = eclib.HexToRGB(fore[1:])
-        fore = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
-
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPEN,
-                          wx.stc.STC_MARK_BOXMINUS, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDER,
-                          wx.stc.STC_MARK_BOXPLUS,  fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERSUB,
-                          wx.stc.STC_MARK_VLINE, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERTAIL,
-                          wx.stc.STC_MARK_LCORNER, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEREND,
-                          wx.stc.STC_MARK_BOXPLUSCONNECTED, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPENMID,
-                          wx.stc.STC_MARK_BOXMINUSCONNECTED, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERMIDTAIL,
-                          wx.stc.STC_MARK_TCORNER, fore, back)
-        self.MarkerDefine(0, wx.stc.STC_MARK_SHORTARROW, fore, back)
-        self.SetFoldMarginHiColour(True, fore)
-        self.SetFoldMarginColour(True, fore)
-
     def DeleteForward(self):
         """Delete the selection, or if there is no selection, then
         delete the character to the right of the cursor.
@@ -729,10 +472,12 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetCurrentPos(self.GetCurrentPos() + 1)
         self.DeleteBack()
 
-    def FireModified(self):
-        """Fire a modifed event"""
-        self.OnChanged(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_CHANGE,
-                                              self.GetId()))
+    def EnableKeyProcessor(self, enable=True):
+        """Enable specialized key handling
+        @keyword enable: bool
+
+        """
+        self.key_handler.EnableProcessing(enable)
 
     def GetAutoComplete(self):
         """Is Autocomplete being used by this instance
@@ -740,21 +485,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         return self._config['autocomp']
-
-    def GetFileName(self):
-        """Returns the full path name of the current file
-        @return: full path name of document
-
-        """
-        return self.file.GetPath()
-
-    def GetDocument(self):
-        """Return a reference to the document object represented in this buffer.
-        @return: EdFile
-        @see: L{ed_txt.EdFile}
-
-        """
-        return self.file
 
     def OnKeyDown(self, evt):
         """Handles keydown events, currently only deals with
@@ -789,9 +519,9 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if self.CallTipActive():
                 self.CallTipCancel()
 
-        elif self.vert_edit.Enabled:
+        elif self.VertEdit.Enabled:
             # XXX: handle column mode
-            self.vert_edit.OnKeyDown(evt)
+            self.VertEdit.OnKeyDown(evt)
         else:
             evt.Skip()
 
@@ -807,6 +537,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         key_code = evt.GetKeyCode()
         cpos = self.GetCurrentPos()
+        cmpl = self.GetCompleter()
         if self.key_handler.ProcessKey(key_code, evt.ControlDown(),
                                        evt.CmdDown(), evt.ShiftDown(),
                                        evt.AltDown()):
@@ -814,12 +545,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             # the character into the buffer.
             pass
 
-        elif not self._config['autocomp'] or \
-             not self._code['compsvc'].ShouldCheck(cpos):
+        elif not self._config['autocomp'] or not cmpl.ShouldCheck(cpos):
             evt.Skip()
             return
 
-        elif key_code in self._code['compsvc'].GetAutoCompKeys():
+        elif key_code in cmpl.GetAutoCompKeys():
             if self.AutoCompActive():
                 self.AutoCompCancel()
 
@@ -831,7 +561,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
 
-        elif self._code['compsvc'].IsAutoCompEvent(evt):
+        elif cmpl.IsAutoCompEvent(evt):
             if self.AutoCompActive():
                 self.AutoCompCancel()
 
@@ -839,7 +569,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
 
-        elif key_code in self._code['compsvc'].GetCallTipKeys():
+        elif key_code in cmpl.GetCallTipKeys():
             if self.AutoCompActive():
                 self.AutoCompCancel()
             command = self.GetCommandStr()
@@ -847,14 +577,14 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if self._config['autocomp']:
                 self.ShowCallTip(command)
 
-        elif self._code['compsvc'].IsCallTipEvent(evt):
+        elif cmpl.IsCallTipEvent(evt):
             if self.AutoCompActive():
                 self.AutoCompCancel()
             command = self.GetCommandStr()
             if self._config['autocomp']:
                 self.ShowCallTip(command[:command.rfind('(')])
 
-        elif key_code in self._code['compsvc'].GetCallTipCancel():
+        elif key_code in cmpl.GetCallTipCancel():
             evt.Skip()
             if self.CallTipActive():
                 self.CallTipCancel()
@@ -899,13 +629,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             evt.Skip()
 
-    def OnStyleNeeded(self, evt):
-        """Perform custom styling when registered for a container lexer"""
-        if self._code['clexer'] is not None:
-            self._code['clexer'](self, self.GetEndStyled(), evt.GetPosition())
-        else:
-            evt.Skip()
-
     def ParaDown(self):
         """Move the caret one paragraph down
         @note: overrides the default function to set caret at end
@@ -931,66 +654,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.WordLeftExtend()
             self.SetCurrentPos(self.GetCurrentPos() + len(self.GetEOLChar()))
 
-    def GetCommandStr(self):
-        """Gets the command string to the left of the autocomp
-        activation character.
-        @return: the command string to the left of the autocomp char
-        @todo: fillups are currently disabled. See note in Configure.
-
-        """
-        curr_pos = self.GetCurrentPos()
-        start = curr_pos - 1
-        col = self.GetColumn(curr_pos)
-        cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
-                       self._code['compsvc'].GetAutoCompFillups())
-        for key in self._code['compsvc'].GetAutoCompKeys():
-            kval = unichr(key)
-            if kval in cmd_lmt:
-                cmd_lmt.remove(kval)
-
-        while col - (curr_pos - start) > 0:
-            txt = self.GetTextRange(start, curr_pos)
-            if len(txt) and txt[0] not in cmd_lmt:
-                start -= 1
-            else:
-                break
-
-        if self.GetColumn(start) != 0:
-            start += 1
-        cmd = self.GetTextRange(start, curr_pos)
-        return cmd.strip()
-
-    def ShowAutoCompOpt(self, command):
-        """Shows the autocompletion options list for the command
-        @param command: command to look for autocomp options for
-
-        """
-        pos = self.GetCurrentPos()
-        lst = self._code['compsvc'].GetAutoCompList(command)
-        if lst is not None and len(lst):
-            self.BeginUndoAction()
-            self.AutoCompShow(pos - self.WordStartPosition(pos, True), u' '.join(lst))
-
-            if len(lst) == 1 and self._code['compsvc'].GetAutoCompAfter():
-                super(EditraStc, self).GotoPos(pos)
-            self.EndUndoAction()
-            self.SetFocus()
-
-    def ShowCallTip(self, command):
-        """Shows call tip for given command
-        @param command: command to  look for calltips for
-
-        """
-        if self.CallTipActive():
-            self.CallTipCancel()
-
-        tip = self._code['compsvc'].GetCallTip(command)
-        if len(tip):
-            curr_pos = self.GetCurrentPos()
-            tip_pos = curr_pos - (len(command.split('.')[-1]) + 1)
-            fail_safe = curr_pos - self.GetColumn(curr_pos)
-            self.CallTipShow(max(tip_pos, fail_safe), tip)
-
     def OnLeftUp(self, evt):
         """Set primary selection and inform mainwindow that cursor position
         has changed.
@@ -1013,37 +676,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             #self.AppendText(evt.GetValue())
             self.SetReadOnly(True)
 
-    def OnChanged(self, evt):
-        """Handles updates that need to take place after
-        the control has been modified.
-        @param evt: event that called this handler
-        @type evt: wx.stc.StyledTextEvent
-
-        """
-        # Adjust line number margin width to expand as needed when line
-        # number width over fills the area.
-        lines = self.GetLineCount()
-        mwidth = self.GetTextExtent(str(lines))[0]
-
-        if wx.Platform == '__WXMAC__':
-            adj = 2
-        else:
-            adj = 8
-
-        nwidth = max(15, mwidth + adj)
-        if self.GetMarginWidth(NUM_MARGIN) != nwidth:
-            self.SetMarginWidth(NUM_MARGIN, nwidth)
-
-        wx.PostEvent(self.GetParent(), evt)
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CHANGED)
-
-    def OnModified(self, evt):
-        """Handle modify events, includes style changes!"""
-        if self.vert_edit.Enabled:
-            self.vert_edit.OnModified(evt)
-        else:
-            evt.Skip()
-
     def OnUpdateUI(self, evt):
         """Check for matching braces
         @param evt: event that called this handler
@@ -1060,8 +692,8 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
 
         # XXX: handle when column mode is enabled
-        if self.vert_edit.Enabled:
-            self.vert_edit.OnUpdateUI(evt)
+        if self.VertEdit.Enabled:
+            self.VertEdit.OnUpdateUI(evt)
         evt.Skip()
 
     def OnMarginClick(self, evt):
@@ -1070,7 +702,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @type evt: wx.stc.StyledTextEvent
 
         """
-        if evt.GetMargin() == FOLD_MARGIN:
+        if evt.GetMargin() == ed_basestc.FOLD_MARGIN:
             if evt.GetShift() and \
                (evt.GetControl() or (wx.Platform == '__WXMAC__' and evt.GetAlt())):
                 self.FoldAll()
@@ -1097,13 +729,13 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                             self.Expand(line_clicked, True, True, 100, level)
                     else:
                         self.ToggleFold(line_clicked)
-        elif evt.GetMargin() == MARK_MARGIN:
+        elif evt.GetMargin() == ed_basestc.MARK_MARGIN:
             # Bookmarks ect...
             line_clicked = self.LineFromPosition(evt.GetPosition())
             if self.MarkerGet(line_clicked):
-                self.MarkerDelete(line_clicked, MARK_MARGIN)
+                self.MarkerDelete(line_clicked, ed_basestc.MARK_MARGIN)
             else:
-                self.MarkerAdd(line_clicked, MARK_MARGIN)
+                self.MarkerAdd(line_clicked, ed_basestc.MARK_MARGIN)
 
     def FoldAll(self):
         """Fold Tree In or Out
@@ -1181,34 +813,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if not self._config['highlight']:
             return 2
 
-        if set_ext != u'':
-            ext = set_ext.lower()
-        else:
-            ext = self.file.GetExtension()
-        self.ClearDocumentStyle()
-
-        # Configure Lexer from File Extension
-        self.ConfigureLexer(ext)
-
-        # If syntax auto detection fails from file extension try to
-        # see if there is an interpreter line that can be parsed.
-        if self.GetLexer() == wx.stc.STC_LEX_NULL:
-            interp = self.GetLine(0)
-            if interp != wx.EmptyString:
-                interp = interp.split(u"/")[-1]
-                interp = interp.strip().split()
-                if len(interp) and interp[-1][0] != "-":
-                    interp = interp[-1]
-                elif len(interp):
-                    interp = interp[0]
-                else:
-                    interp = u''
-                ex_map = { "python" : "py", "wish" : "tcl", "ruby" : "rb",
-                           "bash" : "sh", "csh" : "csh", "perl" : "pl",
-                           "ksh" : "ksh", "php" : "php", "booi" : "boo",
-                           "pike" : "pike"}
-                self.ConfigureLexer(ex_map.get(interp, interp))
-        self.Colourise(0, -1)
+        super(EditraStc, self).FindLexer(set_ext)
 
         # Configure Autocompletion
         # NOTE: must be done after syntax configuration
@@ -1423,36 +1028,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         return self.LineFromPosition(self.GetCurrentPos())
 
-    def GetEOLChar(self):
-        """Gets the eol character used in document
-        @return: the character used for eol in this document
-
-        """
-        m_id = self.GetEOLMode()
-        if m_id == wx.stc.STC_EOL_CR:
-            return u'\r'
-        elif m_id == wx.stc.STC_EOL_CRLF:
-            return u'\r\n'
-        else:
-            return u'\n'
-
-    def GetIndentChar(self):
-        """Gets the indentation char used in document
-        @return: indentation char used either space or tab
-
-        """
-        if self.GetUseTabs():
-            return u'\t'
-        else:
-            return u' ' * self.GetIndent()
-
-    def GetKeywords(self):
-        """Get the keyword set for the current document.
-        @return: list of strings
-
-        """
-        return self._code['keywords']
-
     def GetEOLModeId(self):
         """Gets the id of the eol format. Convinience for updating
         menu ui.
@@ -1472,22 +1047,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         return self._config['brackethl']
-
-    def IsColumnMode(self):
-        """Is the buffer in column edit mode
-        @return: bool
-
-        """
-        return self.vert_edit.Enabled
-
-    def IsComment(self, pos):
-        """Is the given position in a comment region of the current buffer
-        @param pos: int position in buffer
-        @return: bool
-
-        """
-        pos = max(0, pos-1)
-        return 'comment' in self.FindTagById(self.GetStyleAt(pos))
 
     def IsFoldingOn(self):
         """Returns whether code folding is being used by this
@@ -1512,15 +1071,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         return self.recording
-
-    def IsString(self, pos):
-        """Is the given position in a string region of the current buffer
-        @param pos: int position in buffer
-        @return: bool
-
-        """
-        style = self.GetStyleAt(pos)
-        return self.FindTagById(style) in ('string_style', 'char_style')
 
     def LineDelete(self):
         """Delete the selected lines without modifying the clipboard"""
@@ -1583,23 +1133,7 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if isinstance(value, bool):
             self._config['autocomp'] = value
             if value:
-#                self._code['compsvc'].LoadCompProvider(self.GetLexer())
-                self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self)
-
-    def SetDocument(self, doc):
-        """Change the document object used.
-        @param doc: an L{ed_txt.EdFile} instance
-
-        """
-        del self.file
-        self.file = doc
-
-    def SetEncoding(self, enc):
-        """Sets the encoding of the current document
-        @param enc: encoding to set for document
-
-        """
-        self.file.SetEncoding(enc)
+                self.InitCompleter()
 
     def SetEOLMode(self, mode):
         """Sets the EOL mode from a string descript
@@ -1614,43 +1148,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         mode = mode_map.get(mode, wx.stc.STC_EOL_LF)
         super(EditraStc, self).SetEOLMode(mode)
-
-    def SetFileName(self, path):
-        """Set the buffers filename attributes from the given path"""
-        self.file.SetPath(path)
-
-    def SetFocus(self):
-        """Set the focus to this control
-        @note: overriden as a hack for msw
-
-        """
-        super(EditraStc, self).SetFocus()
-        if wx.Platform == '__WXMSW__':
-            wx.PostEvent(self, wx.FocusEvent(wx.wxEVT_SET_FOCUS, self.GetId()))
-
-    def SetLexer(self, lexer):
-        """Set the buffers lexer
-        @param lexer: lexer to use
-        @note: Overrides StyledTextCtrl.SetLexer
-
-        """
-        if lexer == wx.stc.STC_LEX_CONTAINER:
-            # If setting a container lexer only bind the event if it hasn't
-            # been done yet.
-            if self._code['clexer'] is None:
-                self.Bind(wx.stc.EVT_STC_STYLENEEDED, self.OnStyleNeeded)
-        else:
-            # If changing from a container lexer to a non container
-            # lexer we need to unbind the event.
-            if self._code['clexer'] is not None:
-                self.Unbind(wx.stc.EVT_STC_STYLENEEDED)
-                self._code['clexer'] = None
-
-        super(EditraStc, self).SetLexer(lexer)
-
-    def SetModTime(self, modtime):
-        """Set the value of the files last modtime"""
-        self.file.SetModTime(modtime)
 
     def SetViEmulationMode(self, use_vi):
         """Activate/Deactivate Vi eumulation mode
@@ -1768,11 +1265,11 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if (switch is None and not self._config['folding']) or switch:
             self.LOG("[ed_stc][evt] Code Folding Turned On")
             self._config['folding'] = True
-            self.SetMarginWidth(FOLD_MARGIN, 12)
+            self.SetMarginWidth(ed_basestc.FOLD_MARGIN, 12)
         else:
             self.LOG("[ed_stc][evt] Code Folding Turned Off")
             self._config['folding'] = False
-            self.SetMarginWidth(FOLD_MARGIN, 0)
+            self.SetMarginWidth(ed_basestc.FOLD_MARGIN, 0)
 
     def SyntaxOnOff(self, switch=None):
         """Turn Syntax Highlighting on and off
@@ -1813,10 +1310,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.LOG("[ed_stc][evt] Bracket Highlighting Turned Off")
             self._config['brackethl'] = False
 
-    def ToggleColumnMode(self):
-        """Toggle the column edit mode"""
-        self.vert_edit.enable(not self.vert_edit.Enabled)
-
     def ToggleFold(self, lineNum=None):
         """Toggle the fold at the given line number. If lineNum is
         None then the fold closest cursors current postions.
@@ -1826,18 +1319,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if lineNum is None:
             lineNum = self.GetCurrentLine()
         super(EditraStc, self).ToggleFold(lineNum)
-
-    def ToggleLineNumbers(self, switch=None):
-        """Toggles the visibility of the line number margin
-        @keyword switch: force a particular setting
-
-        """
-        if (switch is None and not self.GetMarginWidth(NUM_MARGIN)) or switch:
-            self.LOG("[ed_stc][evt] Showing Line Numbers")
-            self.SetMarginWidth(NUM_MARGIN, 30)
-        else:
-            self.LOG("[ed_stc][evt] Hiding Line Numbers")
-            self.SetMarginWidth(NUM_MARGIN, 0)
 
     def WordLeft(self):
         """Move caret to begining of previous word
@@ -1961,31 +1442,6 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             super(EditraStc, self).WordRightExtend()
         self.SetWordChars('')
 
-    def LoadFile(self, path):
-        """Load the file at the given path into the buffer. Returns
-        True if no errors and False otherwise. To retrieve the errors
-        check the last error that was set in the file object returned by
-        L{GetDocument}.
-        @param path: path to file
-
-        """
-        # Post notification that a file load is starting
-        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENING, path)
-        self.file.SetPath(path)
-        txt = self.file.Read()
-        if txt is not None:
-            self.SetText(txt)
-        else:
-            self.file.SetPath('')
-            return False
-
-        if self.file.GetLastError() != 'None':
-            # Return false if there was an encoding error and a fallback
-            # was used. So the caller knows to check the error status
-            return False
-        else:
-            return True
-
     def ReloadFile(self):
         """Reloads the current file, returns True on success and
         False if there is a failure.
@@ -1999,10 +1455,10 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 self.BeginUndoAction()
                 marks = self.GetBookmarks()
                 cpos = self.GetCurrentPos()
-                self.SetText(self.file.Read())
+                self.SetText(self.File.Read())
                 self.SetModTime(util.GetFileModTime(cfile))
                 for mark in marks:
-                    self.MarkerAdd(mark, MARK_MARGIN)
+                    self.MarkerAdd(mark, ed_basestc.MARK_MARGIN)
                 self.EndUndoAction()
                 self.SetSavePoint()
             except (AttributeError, OSError, IOError), msg:
@@ -2051,21 +1507,21 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         result = True
         try:
             ed_msg.PostMessage(ed_msg.EDMSG_FILE_SAVE,
-                               (path, self._code['lang_id']))
-            self.file.SetPath(path)
+                               (path, self.GetLangId()))
+            self.File.SetPath(path)
             self.LOG("[ed_stc][info] Writing file %s, with encoding %s" % \
-                     (path, self.file.GetEncoding()))
+                     (path, self.File.GetEncoding()))
 
             if _PGET('AUTO_TRIM_WS', 'bool', False):
                 self.TrimWhitespace()
 
-            if self.file.IsReadOnly():
+            if self.File.IsReadOnly():
                 wx.MessageBox(_("File is Read Only and cannot be saved"),
                               _("Read Only"),
                               style=wx.OK|wx.CENTER|wx.ICON_WARNING)
                 return True
             else:
-                self.file.Write(self.GetText())
+                self.File.Write(self.GetText())
         except Exception, msg:
             result = False
             self.LOG("[ed_stc][err] There was an error saving %s" % path)
@@ -2074,265 +1530,23 @@ class EditraStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if result:
             self.SetSavePoint()
             self.SetModTime(util.GetFileModTime(path))
-            self.file.FireModified()
+            self.File.FireModified()
             self.SetFileName(path)
 
         wx.CallAfter(ed_msg.PostMessage,
                     ed_msg.EDMSG_FILE_SAVED,
-                    (path, self._code['lang_id']))
+                    (path, self.GetLangId()))
 
         return result
-
-    def DoZoom(self, mode):
-        """Zoom control in or out
-        @param mode: either zoom in or out
-        @type mode: int id value
-
-        """
-        id_type = mode
-        zoomlevel = self.GetZoom()
-        if id_type == ed_glob.ID_ZOOM_OUT:
-            if zoomlevel > -9:
-                self.ZoomOut()
-        elif id_type == ed_glob.ID_ZOOM_IN:
-            if zoomlevel < 19:
-                self.ZoomIn()
-        else:
-            self.SetZoom(0)
-        return self.GetZoom()
-
-    def ConfigureAutoComp(self):
-        """Sets up the Autocompleter, the autocompleter
-        configuration depends on the currently set lexer
-        @postcondition: autocomp is configured
-
-        """
-        self.AutoCompSetAutoHide(False)
-        self.AutoCompSetChooseSingle(True)
-#        self._code['compsvc'].LoadCompProvider(self.GetLexer())
-        self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self)
-        self.AutoCompSetIgnoreCase(not self._code['compsvc'].GetCaseSensitive())
-        self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
-        # TODO: come back to this it can cause some annoying behavior where
-        #       it automatically completes strings that you don't want to be
-        #       inserted in the buffer. (i.e typing self._value will bring up
-        #       the autocomp list but if self._value is not in the list and you
-        #       hit space it will automatically insert something from the list.)
-#        self.AutoCompSetFillUps(self._code['compsvc'].GetAutoCompFillups())
 
     def ConfigureLexer(self, file_ext):
         """Sets Lexer and Lexer Keywords for the specifed file extension
         @param file_ext: a file extension to configure the lexer from
 
         """
-        syn_data = self._code['synmgr'].SyntaxData(file_ext)
-
-        # Set the ID of the selected lexer
-        try:
-            self._code['lang_id'] = syn_data[syntax.LANGUAGE]
-        except KeyError:
-            self.LOG("[ed_stc][err] Failed to get Lang Id from Syntax package")
-            self._code['lang_id'] = 0
-
-        lexer = syn_data[syntax.LEXER]
-        # Check for special cases
-        # TODO: add fetch method to check if container lexer requires extra
-        #       style bytes beyond the default 5.
-        if lexer in [ wx.stc.STC_LEX_HTML, wx.stc.STC_LEX_XML]:
-            self.SetStyleBits(7)
-        elif lexer == wx.stc.STC_LEX_NULL:
-            self.SetStyleBits(5)
-            self.SetLexer(lexer)
-            self.ClearDocumentStyle()
-            self.UpdateBaseStyles()
-            return True
-        else:
-            self.SetStyleBits(5)
-
-        try:
-            keywords = syn_data[syntax.KEYWORDS]
-        except KeyError:
-            self.LOG("[ed_stc][err] No Keywords Data Found")
-            keywords = []
-
-        try:
-            synspec = syn_data[syntax.SYNSPEC]
-        except KeyError:
-            self.LOG("[ed_stc][err] Failed to get Syntax Specifications")
-            synspec = []
-
-        try:
-            props = syn_data[syntax.PROPERTIES]
-        except KeyError:
-            self.LOG("[ed_stc][err] No Extra Properties to Set")
-            props = []
-
-        try:
-            comment = syn_data[syntax.COMMENT]
-        except KeyError:
-            self.LOG("[ed_stc][err] No Comment Pattern to set")
-            comment = []
-
-        try:
-            clexer = syn_data[syntax.CLEXER]
-        except KeyError:
-            self.LOG("[ed_stc][err] No Container Lexer to set")
-            clexer = None
-
-        try:
-            indenter = syn_data[syntax.INDENTER]
-        except KeyError:
-            self.LOG("[ed_stc][err] No Auto-Indenter")
-            indenter = None
-
-        # Set Lexer
-        self.SetLexer(lexer)
-        # Set Keywords
-        self.SetKeyWords(keywords)
-        # Set Lexer/Syntax Specifications
-        self.SetSyntax(synspec)
-        # Set Extra Properties
-        self.SetProperties(props)
-        # Set Comment Pattern
-        self._code['comment'] = comment
-        # Set the Container Lexer Method
-        self._code['clexer'] = clexer
-        # Auto-indenter function
-        self._code['indenter'] = indenter
+        super(EditraStc, self).ConfigureLexer(file_ext)
 
         # Notify that lexer has changed
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER,
                            (self.GetFileName(), self.GetLangId()))
         return True
-
-    def SetKeyWords(self, kw_lst):
-        """Sets the keywords from a list of keyword sets
-        @param kw_lst: [ (KWLVL, "KEWORDS"), (KWLVL2, "KEYWORDS2"), ect...]
-        @todo: look into if the uniquifying of the list has a more optimal
-               solution.
-
-        """
-        # Parse Keyword Settings List simply ignoring bad values and badly
-        # formed lists
-        self._code['keywords'] = list()
-        kwlist = ""
-        for keyw in kw_lst:
-            if len(keyw) != 2:
-                continue
-            else:
-                if not isinstance(keyw[0], int) or \
-                   not isinstance(keyw[1], basestring):
-                    continue
-                else:
-                    kwlist += keyw[1]
-                    super(EditraStc, self).SetKeyWords(keyw[0], keyw[1])
-
-        kwlist = kwlist.split()         # Split into a list of words
-        kwlist = list(set(kwlist))      # Uniqueify the list
-        kwlist.sort()                   # Sort into alphbetical order
-
-        # Can't have ? in scintilla autocomp list unless specifying an image
-        if '?' in kwlist:
-            kwlist.remove('?')
-        self._code['keywords'] = kwlist
-
-    def SetProperties(self, prop_lst):
-        """Sets the Lexer Properties from a list of specifications
-        @param prop_lst: [ ("PROPERTY", "VAL"), ("PROPERTY2", "VAL2) ]
-
-        """
-        # Parses Property list, ignoring all bad values
-        for prop in prop_lst:
-            if len(prop) != 2:
-                continue
-            else:
-                if not isinstance(prop[0], basestring) or not \
-                   isinstance(prop[1], basestring):
-                    continue
-                else:
-                    self.SetProperty(prop[0], prop[1])
-        return True
-
-    #---- End Function Definitions ----#
-
-    #---- Style Function Definitions ----#
-    def RefreshStyles(self):
-        """Refreshes the colorization of the window by reloading any
-        style tags that may have been modified.
-        @postcondition: all style settings are refreshed in the control
-
-        """
-        self.Freeze()
-        self.StyleClearAll()
-        self.SetSyntax(self.GetSyntaxParams())
-        self.DefineMarkers()
-        self.Thaw()
-        self.Refresh()
-
-    def UpdateBaseStyles(self):
-        """Update the controls basic styles"""
-        ed_style.StyleMgr.UpdateBaseStyles(self)
-
-        # Set control specific styles
-        sback = self.GetItemByName('select_style')
-        if not sback.IsNull():
-            sback = sback.GetBack()
-        else:
-            sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-        self.vert_edit.SetBlockColor(sback)
-        self.DefineMarkers()
-
-    #---- End Style Definitions ----#
-
-#-----------------------------------------------------------------------------#
-
-def _GetMacKeyBindings():
-    """Returns a list of 3-element tuples defining the standard key
-    bindings for Mac text editors -- i.e., the behavior of option-arrow,
-    shift-delete, and so on.  Each tuple consists of:
-        (key code, modifier keys, STC action)
-    """
-    # A good reference for these: http://www.yellowbrain.com/stc/keymap.html
-    return [
-            # Move/select/delete by word
-            (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_ALT,
-             wx.stc.STC_CMD_WORDLEFT),
-            (wx.stc.STC_KEY_RIGHT, wx.stc.STC_SCMOD_ALT,
-             wx.stc.STC_CMD_WORDRIGHT),
-            (wx.stc.STC_KEY_LEFT, ALT_SHIFT, wx.stc.STC_CMD_WORDLEFTEXTEND),
-            (wx.stc.STC_KEY_RIGHT, ALT_SHIFT, wx.stc.STC_CMD_WORDRIGHTEXTEND),
-            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_ALT,
-             wx.stc.STC_CMD_DELWORDLEFT),
-            (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_ALT,
-             wx.stc.STC_CMD_DELWORDRIGHT),
-            (wx.stc.STC_KEY_BACK, ALT_SHIFT, wx.stc.STC_CMD_DELWORDRIGHT),
-            (wx.stc.STC_KEY_DELETE, ALT_SHIFT, wx.stc.STC_CMD_DELWORDLEFT),
-
-            # Move/select/delete by line
-            (wx.stc.STC_KEY_LEFT, wx.stc.STC_SCMOD_CTRL,
-             wx.stc.STC_CMD_VCHOME),
-            (wx.stc.STC_KEY_LEFT, CTRL_SHIFT, wx.stc.STC_CMD_VCHOMEEXTEND),
-            (wx.stc.STC_KEY_RIGHT, wx.stc.STC_SCMOD_CTRL,
-             wx.stc.STC_CMD_LINEEND),
-            (wx.stc.STC_KEY_RIGHT, CTRL_SHIFT, wx.stc.STC_CMD_LINEENDEXTEND),
-            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_CTRL,
-             wx.stc.STC_CMD_DELLINELEFT),
-            (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_CTRL,
-             wx.stc.STC_CMD_DELLINERIGHT),
-            (wx.stc.STC_KEY_BACK, CTRL_SHIFT, wx.stc.STC_CMD_DELLINERIGHT),
-            (wx.stc.STC_KEY_DELETE, CTRL_SHIFT, wx.stc.STC_CMD_DELLINELEFT),
-
-            # By-character deletion behavior
-            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_NORM,
-             wx.stc.STC_CMD_DELETEBACK),
-            (wx.stc.STC_KEY_DELETE, wx.stc.STC_SCMOD_SHIFT,
-             wx.stc.STC_CMD_DELETEBACK),
-
-            # NOTE: The following two are a special case, since Scintilla
-            # doesn't have a forward-delete action.  So here we just cancel any
-            # tip our auto-completion display, and then implement forward
-            # delete in OnKeyDown.
-            #(wx.stc.STC_KEY_DELETE, 0, wx.stc.STC_CMD_CANCEL),
-            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_SHIFT,
-             wx.stc.STC_CMD_CANCEL),
-            ]
