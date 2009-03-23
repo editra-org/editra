@@ -250,7 +250,7 @@ class Shelf(plugin.Plugin):
 
         """
         handlers = [ (item.GetId(), self.UpdateShelfMenuUI)
-                     for item in self.observers]
+                     for item in self.observers ]
         return handlers
 
     def Init(self, parent):
