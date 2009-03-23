@@ -96,6 +96,9 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._lock = False
         self._windows = dict()
 
+        # Disable debug popups
+        wx.Log.EnableLogging(False)
+
         if ed_glob.SINGLE:
             # Setup the instance checker
             instance_name = u"%s-%s" % (self.GetAppName(), wx.GetUserId())
