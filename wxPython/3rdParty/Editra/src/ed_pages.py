@@ -209,8 +209,8 @@ class EdPages(FNB.FlatNotebook):
         if not len(text):
             self.pg_num += 1
             text = _("Untitled - %d") % self.pg_num
-        super(EdPages, self).AddPage(page, text, select, imgId)
         page.SetTabLabel(text)
+        super(EdPages, self).AddPage(page, text, select, imgId)
         sel = self.GetSelection()
         self.EnsureVisible(sel)
 
