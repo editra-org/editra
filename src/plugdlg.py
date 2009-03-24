@@ -288,8 +288,8 @@ class ConfigPanel(wx.Panel):
             mod = sys.modules.get(item)
             pin = PluginData()
             pin.SetName(item)
-            pin.SetDescription(getattr(mod, '__doc__',
-                                       _("No Description Available")))
+            desc = getattr(mod, '__doc__', _("No Description Available"))
+            pin.SetDescription(desc.strip())
             pin.SetAuthor(getattr(mod, '__author__', _("Unknown")))
             pin.SetVersion(str(getattr(mod, '__version__', _("Unknown"))))
 
