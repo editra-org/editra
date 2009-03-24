@@ -161,8 +161,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         # Its an unsaved buffer
         if not len(title):
-            title = _("Untitled - %d") % self.GetParent().pg_num
-            fname = title
+            title = fname = self.GetTabLabel()
 
         if self.GetModify():
             title = u"*" + title
