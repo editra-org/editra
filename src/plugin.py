@@ -380,7 +380,7 @@ class PluginManager(object):
         self._plugins = dict()      # Set of available plugins
         self._enabled = dict()      # Set of enabled plugins
         self._loaded = list()       # List of 
-        self._obsolete = list()     # Obsolete plugins list
+        self._obsolete = dict()     # Obsolete plugins list
         self.InitPlugins(self._env)
         self.RefreshConfig()
 
@@ -518,7 +518,7 @@ class PluginManager(object):
     def GetIncompatible(self):
         """Get the list of loaded plugins that are incompatible with the
         current running version of Editra.
-        return: list of strings
+        return: dict(name=module)
 
         """
         return self._obsolete
@@ -576,7 +576,9 @@ class PluginManager(object):
                             if minv <= CalcVersionValue(ed_glob.VERSION):
                                 self._plugins[cls] = cls(self)
                             else:
-                                self._obsolete.append(name)
+                                # Save plugins that are not compatible with
+                                # this version to use for notifications.
+                                self._obsolete[name] = cls.__module__
                         else:
                             self.LOG("[pluginmgr][info] Skip re-init of %s" % cls)
                     finally:

@@ -43,6 +43,17 @@ INSTALL_PG = 2
 PY_VER = str(sys.version_info[0]) + str(sys.version_info[1])
 PLUGIN_REPO = "http://editra.org/plugins.php?list=True&py=" + PY_VER
 
+# Panel Display Modes
+MODE_CONFIG = 0
+MODE_ERROR  = 1
+
+# Image list indexes
+IMG_CONFIG   = 0
+IMG_DOWNLOAD = 1
+IMG_INSTALL  = 2
+IMG_ERROR    = 3
+IMG_PLUGIN   = 4
+
 _ = wx.GetTranslation
 
 #-----------------------------------------------------------------------------#
@@ -86,7 +97,6 @@ class PluginDialog(wx.Frame):
     it does not interfere with usage of the editor.
 
     """
-    CFG_ICON = 3
     def __init__(self, parent, id=wx.ID_ANY, title=u'', size=wx.DefaultSize):
         wx.Frame.__init__(self, parent, title=title, size=size,
                               style=wx.DEFAULT_FRAME_STYLE)
@@ -104,15 +114,25 @@ class PluginDialog(wx.Frame):
         self._imglst.append(MakeThemeTool(ed_glob.ID_PREF))
         self._imglst.append(MakeThemeTool(ed_glob.ID_WEB))
         self._imglst.append(MakeThemeTool(ed_glob.ID_PACKAGE))
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_TOOLBAR, (32, 32))
+        self._imglst.append(bmp)
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF),
                                        wx.ART_TOOLBAR, (32, 32))
         self._imglst.append(bmp)
         self._nb.SetImageList(self._imglst)
         self._nb.SetUsePyImageList(True)
 
-        self._nb.AddPage(self._cfg_pg, _("Configure"), img_id=0)
-        self._nb.AddPage(self._dl_pg, _("Download"), img_id=1)
-        self._nb.AddPage(self._inst_pg, _("Install"), img_id=2)
+        self._nb.AddPage(self._cfg_pg, _("Configure"), img_id=IMG_CONFIG)
+        self._nb.AddPage(self._dl_pg, _("Download"), img_id=IMG_DOWNLOAD)
+        self._nb.AddPage(self._inst_pg, _("Install"), img_id=IMG_INSTALL)
+
+        # Check for plugins with error conditions and if any are found
+        # Add the error page.
+        pmgr = wx.GetApp().GetPluginManager()
+        if len(pmgr.GetIncompatible()):
+            self._nb.AddPage(ConfigPanel(self._nb, style=wx.BORDER_SUNKEN,
+                                         mode=MODE_ERROR),
+                             _("Errors"), img_id=IMG_ERROR)
 
         # Layout
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -198,11 +218,12 @@ class PluginDialog(wx.Frame):
 
 class ConfigPanel(wx.Panel):
     """Creates a panel for configuring plugins."""
-    def __init__(self, parent, style=wx.SUNKEN_BORDER):
+    def __init__(self, parent, style=wx.SUNKEN_BORDER, mode=MODE_CONFIG):
         """Build config panel"""
         wx.Panel.__init__(self, parent, style=style)
 
         # Attrtibutes
+        self._mode = mode
         self._list = eclib.PanelBox(self)
 
         # Layout Panel
@@ -210,7 +231,10 @@ class ConfigPanel(wx.Panel):
         sizer.Add(self._list, 1, wx.EXPAND)
         self.SetSizer(sizer)
 
-        self.PopulateCtrl()
+        if self._mode == MODE_CONFIG:
+            self.PopulateCtrl()
+        else:
+            self.PopulateErrors()
 
         # Event handlers
         self.Bind(ed_event.EVT_NOTIFY, self.OnNotify)
@@ -246,7 +270,7 @@ class ConfigPanel(wx.Panel):
 
             bmp = cfg_obj.GetBitmap()
             if bmp.IsNull():
-                idx = PluginDialog.CFG_ICON
+                idx = IMG_PLUGIN
             else:
                 imglst = parent.GetImageList()
                 imglst.append(bmp)
@@ -276,7 +300,6 @@ class ConfigPanel(wx.Panel):
         if self._list.GetItemCount():
             self._list.DeleteAllItems()
 
-        p_mgr = wx.GetApp().GetPluginManager()
         p_mgr.ReInit()
         config = p_mgr.GetConfig()
         keys = sorted([ ed_txt.DecodeString(name)
@@ -297,6 +320,45 @@ class ConfigPanel(wx.Panel):
                                pin.GetDescription(), pin.GetAuthor())
 
             pbi.SetChecked(val)
+            self._list.AppendItem(pbi)
+            self._list.Thaw()
+
+        self._list.SendSizeEvent()
+        return self._list.GetItemCount()
+
+    def PopulateErrors(self):
+        """Populates the list of plugins and sets the
+        values of their states. Any successive calls to
+        this function will clear the list and Repopulate it
+        with current config values. Returns the number of
+        items populated to the list
+        @postcondition: list is popluated with all plugins that are
+                        currently loaded and sets the checkmarks accordingly
+        @return: number of items added to list
+
+        """
+        p_mgr = wx.GetApp().GetPluginManager()
+        if self._list.GetItemCount():
+            self._list.DeleteAllItems()
+
+        p_mgr.ReInit()
+        errors = p_mgr.GetIncompatible()
+        keys = sorted([ ed_txt.DecodeString(name)
+                        for name in errors.keys() ],
+                      key=unicode.lower)
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_TOOLBAR, (32, 32))
+        msg = _("This plugin requires a newer version of Editra.")
+        for item in keys:
+            val = errors[item]
+            self._list.Freeze()
+            mod = sys.modules.get(val)
+            pin = PluginData()
+            pin.SetName(item)
+            pin.SetAuthor(getattr(mod, '__author__', _("Unknown")))
+            pin.SetVersion(str(getattr(mod, '__version__', _("Unknown"))))
+            pbi = PluginErrorItem(self._list, bmp, item, pin.GetVersion(),
+                                  msg, pin.GetAuthor())
+
             self._list.AppendItem(pbi)
             self._list.Thaw()
 
@@ -943,6 +1005,68 @@ class PBDownloadItem(PBPluginItem):
         # Setup
         self._enabled.SetLabel(_("Download"))
         self.Layout()
+
+#-----------------------------------------------------------------------------#
+
+class PluginErrorItem(eclib.PanelBoxItemBase):
+    """PanelBox Item to display configuration information about a plugin."""
+    def __init__(self, parent, bmp,
+                 title=u'Plugin Name', version=u'0.0',
+                 msg=u'Description', auth='John Doe'):
+        """Create the PanelBoxItem
+        @param parent: L{PanelBox}
+
+        """
+        eclib.PanelBoxItemBase.__init__(self, parent)
+
+        # Attributes
+        self._bmp = bmp
+        self._title = wx.StaticText(self, label=title)
+        self._version = wx.StaticText(self, label=version)
+        self._msg = wx.StaticText(self, label=msg)
+        self._auth = wx.StaticText(self, label=_("Author: %s") % auth)
+
+        # Setup
+        font = self._title.GetFont()
+        font.SetWeight(wx.FONTWEIGHT_BOLD)
+        self._title.SetFont(font)
+        self._version.SetFont(font)
+
+        if wx.Platform == '__WXMAC__':
+            self._msg.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+            self._auth.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
+        # Layout
+        self.__DoLayout()
+
+    def __DoLayout(self):
+        """Layout the panel"""
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        # Left side Bitmap and Checkbox
+        hsizer.Add((5, 5), 0)
+        if self._bmp is not None:
+            self._bmp = wx.StaticBitmap(self, bitmap=self._bmp)
+            hsizer.Add(self._bmp, 0, wx.ALIGN_CENTER_VERTICAL)
+
+        # Central area main content
+        csizer = wx.BoxSizer(wx.VERTICAL)
+        tsizer = wx.BoxSizer(wx.HORIZONTAL)
+        tsizer.AddMany([(self._title, 0), ((20, -1), 1, wx.EXPAND),
+                        (self._version, 0, wx.ALIGN_RIGHT)])
+
+        bsizer = wx.BoxSizer(wx.HORIZONTAL)
+        bsizer.AddMany([(self._auth, 0)])
+        csizer.AddMany([(tsizer, 1, wx.EXPAND), ((3, 3), 0),
+                        (self._msg, 0), ((3, 3), 0),
+                        (bsizer, 0, wx.EXPAND)])
+
+        # Finish Layout
+        hsizer.AddMany([((5, 5), 0), (csizer, 1, wx.EXPAND), ((5, 5), 0)])
+        vsizer.AddMany([((4, 4), 0), (hsizer, 0, wx.EXPAND), ((4, 4), 0)])
+        self.SetSizer(vsizer)
+        self.SetAutoLayout(True)
 
 #-----------------------------------------------------------------------------#
 
