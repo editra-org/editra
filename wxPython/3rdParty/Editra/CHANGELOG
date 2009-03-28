@@ -9,17 +9,25 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.4.xx
-DATE 0x/xx/2009
+VERSION 0.4.75
+DATE 03/28/2009
 24th Alpha Release
 
 NEWS:
 
+This release fixes a handful of important bugs and new features. The Plugin
+Manager dialog has been completely reworked. Configuration options for plugins
+that provide them are now available in the dialog as well as better error
+reporting for plugins that could not properly be loaded.
+
+File session support has also been improved to allow for saving and loading of 
+multiple custom sessions. Due to format changes the upgrade will require any
+session from previous installations to be overwritten.
 
 NEW: [features/enhancments]
 +New Plugin Manager Dialog.
 +Improved configuration options for plugins.
-+Incompatible plugins are now displayed in dialog with message explaining why.
++Incompatible plugins are now displayed in PluginManager with message explaining why.
 +Some basic autocompletion support for CSS.
 +Improved support for sessions. Multiple custom sessions can not be saved and
 reloaded (modified code from Erik Tollerud).
