@@ -6,6 +6,7 @@
 ../../src/dev_tool.py
 ../../src/doctools.py
 ../../src/ed_art.py
+../../src/ed_basestc.py
 ../../src/ed_cmdbar.py
 ../../src/ed_crypt.py
 ../../src/ed_editv.py
@@ -49,6 +50,7 @@
 ../../src/eclib/choicedlg.py
 ../../src/eclib/colorsetter.py
 ../../src/eclib/ctrlbox.py
+../../src/eclib/eclutil.py
 ../../src/eclib/ecpickers.py
 ../../src/eclib/elistmix.py
 ../../src/eclib/encdlg.py
@@ -58,6 +60,7 @@
 ../../src/eclib/panelbox.py
 ../../src/eclib/platebtn.py
 ../../src/eclib/pstatbar.py
+../../src/eclib/segmentbk.py
 ../../src/eclib/txtentry.py
 ../../src/syntax/__init__.py
 ../../src/syntax/actionscript.py
