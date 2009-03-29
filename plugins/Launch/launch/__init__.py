@@ -8,7 +8,7 @@
 ###############################################################################
 # Plugin Metadata
 """Run the script in the current buffer"""
-__version__ = "1.1"
+__version__ = "1.2"
 
 __author__ = "Cody Precord"
 __svnid__ = "$Id$"
