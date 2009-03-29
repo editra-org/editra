@@ -148,6 +148,23 @@ class ConfigNotebook(wx.Notebook):
     def __init__(self, parent):
         wx.Notebook.__init__(self, parent)
 
+        # Make sure config has been intialized
+        prefs = Profile_Get(LAUNCH_PREFS, default=None)
+        if prefs is None:
+            buff = eclib.OutputBuffer(self)
+            buff.Hide()
+            Profile_Set(LAUNCH_PREFS,
+                        dict(autoclear=False,
+                             defaultf=buff.GetDefaultForeground().Get(),
+                             defaultb=buff.GetDefaultBackground().Get(),
+                             errorf=buff.GetErrorForeground().Get(),
+                             errorb=buff.GetErrorBackground().Get(),
+                             infof=buff.GetInfoForeground().Get(),
+                             infob=buff.GetInfoBackground().Get(),
+                             warnf=buff.GetWarningForeground().Get(),
+                             warnb=buff.GetWarningBackground().Get()))
+            buff.Destroy()
+
         # Setup
         self.AddPage(ConfigPanel(self), _("General"))
         self.AddPage(MiscPanel(self), _("Misc"))

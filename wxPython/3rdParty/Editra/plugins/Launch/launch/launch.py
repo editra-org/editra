@@ -76,7 +76,7 @@ class LaunchWindow(eclib.ControlBox):
                             last='', lastlang=0,
                             prelang=0, largs='',
                             lcmd='')
-        self._prefs = Profile_Get('Launch.Prefs', default=None)
+        self._prefs = Profile_Get(cfgdlg.LAUNCH_PREFS, default=None)
 
         # Setup
         self.__DoLayout()
@@ -84,7 +84,7 @@ class LaunchWindow(eclib.ControlBox):
         if hstate is not None:
             handlers.SetState(hstate)
         if self._prefs is None:
-            Profile_Set('Launch.Prefs',
+            Profile_Set(cfgdlg.LAUNCH_PREFS,
                         dict(autoclear=False,
                              defaultf=self._buffer.GetDefaultForeground().Get(),
                              defaultb=self._buffer.GetDefaultBackground().Get(),
@@ -94,7 +94,7 @@ class LaunchWindow(eclib.ControlBox):
                              infob=self._buffer.GetInfoBackground().Get(),
                              warnf=self._buffer.GetWarningForeground().Get(),
                              warnb=self._buffer.GetWarningBackground().Get()))
-            self._prefs = Profile_Get('Launch.Prefs')
+            self._prefs = Profile_Get(cfgdlg.LAUNCH_PREFS)
 
         self.UpdateBufferColors()
         cbuffer = self._mw.GetNotebook().GetCurrentCtrl()

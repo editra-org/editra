@@ -6,8 +6,14 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.2
+
++Make sure config is initialized for new installs when accessing config dialog
+from Plugin Manager.
+
+#-----------------------------------------------------------------------------#
 Version 1.1
-Date: 0x/xx/2009
+Date: 03/28/2009
 
 +Add support for links in pylint output (patch from Erik Tollerud)
 +Api compatibility changes.
