@@ -55,7 +55,8 @@ __all__ = ["FindBox", "FindEvent", "FindPanel", "FindReplaceDlg",
            "edEVT_FIND_CLOSE", "EVT_FIND_CLOSE", "edEVT_FIND", "EVT_FIND",
            "edEVT_FIND_NEXT", "EVT_FIND_NEXT", "edEVT_FIND_ALL", "EVT_FIND_ALL",
            "edEVT_REPLACE", "EVT_REPLACE", "edEVT_REPLACE_ALL",
-           "EVT_REPLACE_ALL", "EVT_OPTION_CHANGED", "edEVT_OPTION_CHANGED"]
+           "EVT_REPLACE_ALL", "EVT_OPTION_CHANGED", "edEVT_OPTION_CHANGED",
+           "EVT_COUNT", "edEVT_COUNT"]
 
 #--------------------------------------------------------------------------#
 # Imports
@@ -106,6 +107,7 @@ ID_MATCH_CASE = wx.NewId()
 ID_WHOLE_WORD = wx.NewId()
 ID_REGEX = wx.NewId()
 ID_RECURSE = wx.NewId()
+ID_COUNT = wx.NewId()
 ID_FIND_ALL = wx.NewId()
 ID_REPLACE_ALL = wx.NewId()
 ID_OPTION_CHANGE = wx.NewId()
@@ -137,6 +139,10 @@ EVT_FIND_ALL = wx.PyEventBinder(edEVT_FIND_ALL, 1)
 edEVT_REPLACE = wx.NewEventType()
 EVT_REPLACE = wx.PyEventBinder(edEVT_REPLACE, 1)
 
+# Replace button clicked
+edEVT_COUNT = wx.NewEventType()
+EVT_COUNT = wx.PyEventBinder(edEVT_COUNT, 1)
+
 # Replace All button clicked
 edEVT_REPLACE_ALL = wx.NewEventType()
 EVT_REPLACE_ALL = wx.PyEventBinder(edEVT_REPLACE_ALL, 1)
@@ -148,6 +154,7 @@ EVT_OPTION_CHANGED = wx.PyEventBinder(edEVT_OPTION_CHANGED, 1)
 # Convenience for generating events
 _EVENT_MAP = { wx.ID_FIND : edEVT_FIND,
                wx.ID_REPLACE : edEVT_REPLACE,
+               ID_COUNT : edEVT_COUNT,
                ID_FIND_ALL : edEVT_FIND_ALL,
                ID_REPLACE_ALL : edEVT_REPLACE_ALL,
                ID_OPTION_CHANGE : edEVT_OPTION_CHANGED }
@@ -172,6 +179,14 @@ class FindEvent(wx.PyCommandEvent):
         self._replace = u''
         self._dir = u''
         self._filters = None
+        self._count = 0
+
+    def GetCount(self):
+        """Get the number of matches
+        @return: int
+
+        """
+        return self._count
 
     def GetDirectory(self):
         """Get the directory of files to search in
@@ -214,6 +229,13 @@ class FindEvent(wx.PyCommandEvent):
 
         """
         return self._loc
+
+    def SetCount(self, count):
+        """Set the count
+        @param count: int
+
+        """
+        self._count = count
 
     def SetDirectory(self, directory):
         """Set the directory of files to search in
@@ -686,7 +708,8 @@ class FindPanel(wx.Panel):
         self.Bind(wx.EVT_CHECKBOX, self.OnOption)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnOption)
         self.Bind(wx.EVT_CHOICE, self.OnChoice, id=ID_LOOKIN)
-        for bid in (wx.ID_FIND, wx.ID_REPLACE, ID_FIND_ALL, ID_REPLACE_ALL):
+        for bid in (wx.ID_FIND, wx.ID_REPLACE, ID_COUNT,
+                    ID_FIND_ALL, ID_REPLACE_ALL):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=bid)
         self.Bind(wx.EVT_SET_FOCUS, lambda evt: self.__SetFocus())
         self._ftxt.Bind(wx.EVT_SET_FOCUS, lambda evt: self._ftxt.SelectAll())
@@ -792,6 +815,7 @@ class FindPanel(wx.Panel):
         self._sizers['frspacer'] = bsizer.Add((50, 1), 1)
         for bid, blbl in [(wx.ID_FIND, _("Find")),
                           (wx.ID_REPLACE, _("Replace")),
+                          (ID_COUNT, _("Count")),
                           (ID_FIND_ALL, _("Find All")),
                           (ID_REPLACE_ALL, _("Replace All"))]:
             self._sizers[bid] = wx.BoxSizer(wx.HORIZONTAL)
@@ -846,11 +870,11 @@ class FindPanel(wx.Panel):
 
         """
         if find:
-            show = (wx.ID_FIND, ID_FIND_ALL, 'fspacer')
+            show = (wx.ID_FIND, ID_COUNT, ID_FIND_ALL, 'fspacer')
             hide = (wx.ID_REPLACE, ID_REPLACE_ALL, 'frspacer')
         else:
             show = (wx.ID_REPLACE, ID_REPLACE_ALL, 'frspacer')
-            hide = (ID_FIND_ALL, 'fspacer')
+            hide = (ID_FIND_ALL, ID_COUNT, 'fspacer')
 
         for ctrl in show:
             if isinstance(ctrl, basestring):
@@ -1077,7 +1101,8 @@ class FindPanel(wx.Panel):
         @param evt: wx.UpdateUIEvent
 
         """
-        if evt.GetId() in (wx.ID_FIND, wx.ID_REPLACE) and \
+        # TODO: support count in files?
+        if evt.GetId() in (wx.ID_FIND, ID_COUNT, wx.ID_REPLACE) and \
            self._lookin.GetSelection() > LOCATION_CURRENT_DOC:
             evt.Enable(False)
         else:

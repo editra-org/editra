@@ -71,6 +71,7 @@ class SearchController(object):
         self._parent.Bind(eclib.EVT_FIND, self.OnFind)
         self._parent.Bind(eclib.EVT_FIND_NEXT, self.OnFind)
         self._parent.Bind(eclib.EVT_FIND_ALL, self.OnFindAll)
+        self._parent.Bind(eclib.EVT_COUNT, self.OnCount)
         self._parent.Bind(eclib.EVT_REPLACE, self.OnReplace)
         self._parent.Bind(eclib.EVT_REPLACE_ALL, self.OnReplaceAll)
         self._parent.Bind(eclib.EVT_FIND_CLOSE, self.OnFindClose)
@@ -180,6 +181,28 @@ class SearchController(object):
             evt.Enable(len(self.GetData().GetFindString()))
         else:
             evt.Skip()
+
+    def OnCount(self, evt):
+        """Count the number of matches"""
+        data = self.GetData()
+
+        stc = self._stc()
+
+        # Create the search engine
+        query = evt.GetFindString()
+        engine = SearchEngine(query, evt.IsRegEx(),
+                              True, evt.IsMatchCase(), evt.IsWholeWord())
+        engine.SetSearchPool(stc.GetTextRaw())
+
+        matches = engine.FindAll()
+        if matches:
+            count = len(matches)
+        else:
+            count = 0
+
+        wx.MessageBox(_("The search term \'%s\' was found %d times.") % (query, count),
+                      _("Find Count"),
+                      wx.ICON_INFORMATION|wx.OK)
 
     def OnFind(self, evt, findnext=False):
         """Do an incremental search in the currently buffer
