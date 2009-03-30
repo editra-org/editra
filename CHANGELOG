@@ -9,6 +9,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.4.xx
+DATE 0x/xx/2009
+25th Alpha Release
+
+NEWS:
+
+NEW: [features/improvments]
++Add Count feature to find dialog for counting number of matches in a buffer.
+
+BUG FIXES:
++Fix Launch config not properly being initialized when config panel accessed
+from plugin dialog for first time.
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.4.75
 DATE 03/28/2009
 24th Alpha Release
