@@ -320,17 +320,18 @@ class EdPages(FNB.FlatNotebook):
 
         # Load and validate file
         try:
-            flist = cPickle.load(f_handle)
-            # TODO: Extend in future to support loading sessions
-            #       for mutiple windows.
-            flist = flist.get('win1', list()) 
-            for item in flist:
-                if type(item) not in (unicode, str):
-                    raise TypeError('Invalid item in unpickled sequence')
-        except (cPickle.UnpicklingError, TypeError), e:
-            dlg.Destroy()
-            return (_('Invalid file'),
-                    _('Selected file is not a valid session file'))
+            try:
+                flist = cPickle.load(f_handle)
+                # TODO: Extend in future to support loading sessions
+                #       for mutiple windows.
+                flist = flist.get('win1', list()) 
+                for item in flist:
+                    if type(item) not in (unicode, str):
+                        raise TypeError('Invalid item in unpickled sequence')
+            except (cPickle.UnpicklingError, TypeError), e:
+                dlg.Destroy()
+                return (_('Invalid file'),
+                        _('Selected file is not a valid session file'))
         finally:
             f_handle.close()
 
