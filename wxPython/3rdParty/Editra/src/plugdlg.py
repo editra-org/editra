@@ -164,6 +164,13 @@ class PluginDialog(wx.Frame):
             else:
                 pass
 
+        if self._cfg_pg.ConfigChanged():
+            wx.MessageBox(_("You must restart Editra before your "
+                            "changes will take full affect."),
+                          _("Configuration Changes Made"),
+                          wx.ICON_INFORMATION|wx.OK)
+            
+
         wx.GetApp().UnRegisterWindow(repr(self))
         evt.Skip()
 
@@ -224,6 +231,7 @@ class ConfigPanel(wx.Panel):
 
         # Attrtibutes
         self._mode = mode
+        self._changed = False
         self._list = eclib.PanelBox(self)
 
         # Layout Panel
@@ -238,6 +246,13 @@ class ConfigPanel(wx.Panel):
 
         # Event handlers
         self.Bind(ed_event.EVT_NOTIFY, self.OnNotify)
+
+    def ConfigChanged(self):
+        """Did the configuration change?
+        @return: bool
+
+        """
+        return self._changed
 
     def GetItemIdentifier(self, name):
         """Gets the named item and returns its identifier. The
@@ -284,6 +299,7 @@ class ConfigPanel(wx.Panel):
             enable, pname = evt.GetValue()
             pmgr = wx.GetApp().GetPluginManager()
             pmgr.EnablePlugin(pname, enable)
+            self._changed = True
 
     def PopulateCtrl(self):
         """Populates the list of plugins and sets the
@@ -765,17 +781,10 @@ class InstallPanel(eclib.ControlBox):
             # All plugins installed correctly
             grand_p = self.GetTopLevelParent()
             grand_p.SetStatusText(_("Successfully Installed Plugins"), 0)
-            dlg = wx.MessageDialog(self, _("Go to configuration page?"),
-                                   _("Finished Installing Plugins"),
-                                   style=wx.YES_NO | wx.CENTER | \
-                                         wx.ICON_INFORMATION)
-            result = dlg.ShowModal()
-            dlg.Destroy()
-            if result == wx.ID_YES:
-                # Note: need to do this because Setselection doesn't fire a
-                #       page change.
-                wx.GetApp().GetPluginManager().ReInit()
-                self.GetParent().SetSelection(CONFIG_PG)
+            # Note: need to do this because Setselection doesn't fire a
+            #       page change.
+            wx.GetApp().GetPluginManager().ReInit()
+            self.GetParent().SetSelection(CONFIG_PG)
             self._instb.Disable()
         else:
             self.GetGrandParent().SetStatusText(_("Error"), 1)
