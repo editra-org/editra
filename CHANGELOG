@@ -21,6 +21,7 @@ NEW: [features/improvments]
 BUG FIXES:
 +Fix Launch config not properly being initialized when config panel accessed
 from plugin dialog for first time.
++Fix command entry listing of paths (patch from hasan.aljudy).
 
 #-----------------------------------------------------------------------------#
 

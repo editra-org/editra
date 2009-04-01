@@ -161,7 +161,7 @@ class SearchBar(CommandBarBase):
         # HACK: workaround bug in mac control that resets size to
         #       that of the default variant after any text has been
         #       typed in it. Note it reports the best size as the default
-        #       variant and causes layout issues. wxBUG 
+        #       variant and causes layout issues. wxBUG
         if wx.Platform == '__WXMAC__':
             self.ctrl.SetSizeHints(180, 16, 180, 16)
 
@@ -256,7 +256,7 @@ class CommandEntryBar(CommandBarBase):
         # HACK: workaround bug in mac control that resets size to
         #       that of the default variant after any text has been
         #       typed in it. Note it reports the best size as the default
-        #       variant and causes layout issues. wxBUG 
+        #       variant and causes layout issues. wxBUG
         if wx.Platform == '__WXMAC__':
             self.ctrl.SetSizeHints(150, 16, 150, 16)
 
@@ -280,7 +280,7 @@ class GotoLineBar(CommandBarBase):
         # HACK: workaround bug in mac control that resets size to
         #       that of the default variant after any text has been
         #       typed in it. Note it reports the best size as the default
-        #       variant and causes layout issues. wxBUG 
+        #       variant and causes layout issues. wxBUG
         if wx.Platform == '__WXMAC__':
             self.ctrl.SetSizeHints(100, 16, 100, 16)
 
@@ -557,33 +557,37 @@ class CommandExecuter(eclib.CommandEntryBase):
         @keyword files: Get list of files too
 
         """
-        replace = 0
-        if path.startswith("~/") or path.startswith("~\\"):
-            prefix = wx.GetHomeDir()
-            replace = len(prefix) + 1
-            path = os.path.join(prefix, path[2:])
-        elif not path.startswith(os.sep):
-            prefix = self._curdir
-            replace = len(prefix)
-            path = os.path.join(prefix, path)
-        else:
-            pass
+        def append_slash(path):
+            """Helper function that appends a slash to the path
+            if it's a directory.
 
-        paths = []
-        for atom in glob.glob(path + "*"):
-            if os.path.isdir(atom) or files:
-                if replace > 0:
-                    atom = atom[replace:]
-                if os.path.isdir(atom) and atom[-1] != os.sep:
-                    atom += os.sep
-                paths.append(atom)
+            """
+            if os.path.isdir( path ) and not path.endswith(os.sep):
+                return path + os.sep
+            return path
 
-        return sorted(list(set(paths)))
+        curdir = self._curdir
+        head, tail = os.path.split(path)
+        head = os.path.expanduser(head)
+        head = os.path.expandvars(head)
+        head = os.path.join(curdir, head)
+        if not os.path.isdir(head):
+            return []
+
+        # We expanded head, so trim the suggestion list of its head
+        # so we can add the tail of the suggestion back to the original head
+        candidates = [os.path.basename(p) for p in os.listdir(head)
+                      if p.startswith(tail)]
+        candidates = [append_slash(os.path.join(os.path.dirname(path), cand))
+                      for cand in candidates]
+        if not files:
+            #only show directories
+            candidates = [cand for cand in candidates if os.path.isdir(cand)]
+
+        return sorted(list(set(candidates)))
 
     def ListDir(self):
-        """List the next directory from the current cmd path
-
-        """
+        """List the next directory from the current cmd path"""
         cmd = self.GetValue()
         if cmd.startswith('cd '):
             cstr = 'cd '
