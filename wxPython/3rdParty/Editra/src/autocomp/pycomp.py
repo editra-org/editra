@@ -835,7 +835,10 @@ class PyParser:
                         stmt = self._parseassignment()
                         dbg("[pycomp] parseassignment: %s = %s" % (name, stmt))
                         if stmt != None:
-                            self.scope.local("%s = %s" % (name, stmt))
+                            # XXX Safety Check don't allow assigments to 
+                            # item attributes unless the attribute is self
+                            if u'.' not in name or name.startswith(u'self'):
+                                self.scope.local("%s = %s" % (name, stmt))
                     freshscope = False
         except StopIteration: #thrown on EOF
             pass
