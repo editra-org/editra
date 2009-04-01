@@ -459,16 +459,16 @@ class ControlBar(wx.PyPanel):
 
             gc.SetPen(gc.CreatePen(self._pen))
             gc.SetBrush(grad)
-            gc.DrawRectangle(rect.x, 0, rect.width - 0.5, rect.height - 0.5)
+            gc.DrawRectangle(rect.x, 0, rect.GetWidth() - 0.5, rect.height - 0.5)
 
         dc.SetPen(wx.Pen(color, 1))
         # Add a border to the bottom
         if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
-            dc.DrawLine(rect.x, rect.height - 1, rect.width, rect.height - 1)
+            dc.DrawLine(rect.x, rect.height - 1, rect.GetWidth(), rect.height - 1)
 
         # Add a border to the top
         if self._style & CTRLBAR_STYLE_BORDER_TOP:
-            dc.DrawLine(rect.x, 1, rect.width, 1)
+            dc.DrawLine(rect.x, 1, rect.GetWidth(), 1)
 
     def OnPaint(self, evt):
         """Paint the background to match the current style
@@ -578,7 +578,7 @@ class SegmentBar(ControlBar):
         height = rect.height
         bsize = button['bsize']
 
-        bxpos = ((self._segsize[0] / 2) - (bsize.width / 2)) + xpos
+        bxpos = ((self._segsize[0] / 2) - (bsize.GetWidth() / 2)) + xpos
         bpos = (bxpos, SegmentBar.VPAD)
         rside = xpos + self._segsize[0]
         brect = wx.Rect(xpos, 0, rside - xpos, height)
@@ -643,7 +643,7 @@ class SegmentBar(ControlBar):
             x = rect.x + 8
             y = rect.y + 6
         else:
-            x = (rect.x + rect.width) - 8
+            x = (rect.x + rect.GetWidth()) - 8
             y = rect.y + 6
 
 #        gcdc.DrawCircle(x, y, 5)
@@ -661,8 +661,8 @@ class SegmentBar(ControlBar):
         gcdc.DrawRectangleRect(brect)
         gcdc.SetPen(wx.BLACK_PEN)
         gcdc.DrawLine(brect.x+1, brect.y+1,
-                      brect.x + brect.width - 1, brect.y + brect.height - 1)
-        gcdc.DrawLine(brect.x + brect.width - 1, brect.y + 1,
+                      brect.x + brect.GetWidth() - 1, brect.y + brect.height - 1)
+        gcdc.DrawLine(brect.x + brect.GetWidth() - 1, brect.y + 1,
                       brect.x + 1, brect.y + brect.height - 1)
         gcdc.SetBrush(brush)
         gcdc.SetPen(pen)
@@ -739,7 +739,7 @@ class SegmentBar(ControlBar):
             button = self._buttons[index]
             if self.SegmentHasCloseButton(index):
                 brect = button['xbtn']
-                trect = wx.Rect(brect.x, brect.y, brect.width+4, brect.height+4)
+                trect = wx.Rect(brect.x, brect.y, brect.GetWidth()+4, brect.height+4)
                 if trect.Contains(pos):
                     where = SEGMENT_HT_X_BTN
                 else:
