@@ -1320,6 +1320,95 @@ class EditraStc(ed_basestc.EditraBaseStc):
             lineNum = self.GetCurrentLine()
         super(EditraStc, self).ToggleFold(lineNum)
 
+    def MoveCurrentPos(self, offset):
+        """Move caret by the given offset
+        @note: only use it for movement within a line
+
+        """
+        if offset > 0:
+            step = self.CharRight #XXX breaks RTL, but is RTL supported?
+        else:
+            step = self.CharLeft
+        #XXX is there a better reliable way than repeating basic movements?
+        repeat = abs(offset)
+        for i in range(repeat):
+            step()
+
+    def _FindChar(self, char, repeat=1, reverse=False, extra_offset=0):
+        """Find the position of the next (ith) `char` character
+        on the current line
+
+        @note used by vim motions for finding a character on a line (f,F,t,T)
+
+        @param char: the char to be found
+        @keyword repeat: how many times to repeat the serach
+        @keyword reverse: whether to search backwards
+        @keyword extra_offset: extra offset to be applied to the return value
+
+        @return: offset from caret position
+
+        """
+        text, pos = self.GetCurLine()
+        oldpos = pos
+        if not reverse:
+            for i in range(repeat):
+                pos = text.find(char, pos+1) # pos is on the char itself
+                if pos == -1:
+                    break # -1 + 1 = 0
+        else:
+            for i in range(repeat):
+                pos = text.rfind(char, 0, pos)
+                if pos == -1:
+                    break # TEST not sure but we need this as well
+
+        # if pos == -1 then the char was not found
+        # but offset could be arbitrary
+        # (although should never be other than 0 or -1) so do a bound check
+        newpos = pos + extra_offset
+        if newpos not in range(len(text)):
+            return 0
+
+        return newpos - oldpos;
+
+    def FindNextChar(self, char, repeat=1):
+        """Move caret to the next (ith) occurance of char on the current line
+        @note: This is a vim motion
+        @keyword repeat: int determining ith occurance to move to
+
+        """
+        offset = self._FindChar(char, repeat)
+        self.MoveCurrentPos(offset)
+
+    def FindPrevChar(self, char, repeat=1):
+        """Move caret to the previous (ith) occurance of char on the current line
+        @note: This is a vim motion
+        @keyword repeat: int determining ith occurance to move to
+
+        """
+
+        offset = self._FindChar(char, repeat, reverse=True)
+        self.MoveCurrentPos(offset)
+
+    def FindTillNextChar(self, char, repeat=1):
+        """Move caret until right before the next ith occurance of char
+
+        @note: This is a vim motion
+        @keyword repeat: int determining ith occurance to move to
+
+        """
+        offset = self._FindChar(char, repeat, extra_offset=-1)
+        self.MoveCurrentPos(offset)
+
+    def FindTillPrevChar(self, char, repeat=1):
+        """Move caret until right before the previous ith occurance of char
+
+        @note: This is a vim motion
+        @keyword repeat: int determining ith occurance to move to
+
+        """
+        offset = self._FindChar(char, repeat, reverse=True, extra_offset=-1)
+        self.MoveCurrentPos(offset)
+
     def WordLeft(self):
         """Move caret to begining of previous word
         @note: override builtin to include extra characters in word
