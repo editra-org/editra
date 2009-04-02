@@ -35,6 +35,7 @@ VI_DOUBLE_P1 = re.compile('[cdy<>][0-9]*' + VI_DCMD_RIGHT)
 VI_DOUBLE_P2 = re.compile('[0-9]*[cdy<>]' + VI_DCMD_RIGHT)
 VI_SINGLE_REPEAT = re.compile('[0-9]*[bBCDeEGhjJkloOpPsuwWxX{}~|+-]')
 VI_GCMDS = re.compile('g[fg]')
+VI_FCMDS = re.compile('[0-9]*[ftFT].')
 NUM_PAT = re.compile('[0-9]*')
 
 #-------------------------------------------------------------------------#
@@ -106,6 +107,7 @@ class ViKeyHandler(KeyHandler):
         # Attributes
         self.mode = 0
         self.last = u''
+        self.last_find = u''
         self.cmdcache = u''
 
         # Use Insert mode by default
@@ -184,11 +186,13 @@ class ViKeyHandler(KeyHandler):
         if not len(self.cmdcache):
             return False
 
-        # Check for repeat last action command
-        if self.cmdcache != u'.':
-            cmd = self.cmdcache
-        else:
+        # Check for repeat last action command or last char find command
+        if self.cmdcache == u'.':
             cmd = self.last
+        elif self.cmdcache == u';':
+            cmd = self.last_find
+        else:
+            cmd = self.cmdcache
 
         # Gather common needed data
         cpos = self.stc.GetCurrentPos()
@@ -518,6 +522,23 @@ class ViKeyHandler(KeyHandler):
                 pass # TODO: gf (Goto file at cursor)
             self.last = cmd
             self.cmdcache = u''
+        # Motions towards a character
+        elif re.match(VI_FCMDS, cmd):
+            ch = cmd[-1] # character to find
+            cmd_type = cmd[-2]
+            mcmd = { u'f' : self.stc.FindNextChar,
+                     u'F' : self.stc.FindPrevChar,
+                     r't' : self.stc.FindTillNextChar,
+                     r'T' : self.stc.FindTillPrevChar,
+            }
+            repeat = cmd[:-2]
+            if repeat == u'':
+                repeat = 1
+            else:
+                repeat = int(repeat)
+            mcmd[cmd_type](ch, repeat)
+            self.cmdcache = u''
+            self.last_find = cmd
         else:
             pass
 

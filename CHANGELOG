@@ -17,6 +17,7 @@ NEWS:
 
 NEW: [features/improvments]
 +Add Count feature to find dialog for counting number of matches in a buffer.
++Add Vim find char motions (patch from hasan.aljudy).
 
 BUG FIXES:
 +Fix Launch config not properly being initialized when config panel accessed
