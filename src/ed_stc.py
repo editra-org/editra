@@ -842,6 +842,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
                   ed_glob.ID_SYNTAX : self.SyntaxOnOff,
                   ed_glob.ID_UNINDENT : self.BackTab,
                   ed_glob.ID_TRANSPOSE : self.LineTranspose,
+                  ed_glob.ID_LINE_MOVE_UP : self.LineMoveUp,
+                  ed_glob.ID_LINE_MOVE_DOWN : self.LineMoveDown,
                   ed_glob.ID_SELECTALL: self.SelectAll,
                   ed_glob.ID_FOLDING : self.FoldingOnOff,
                   ed_glob.ID_SHOW_LN : self.ToggleLineNumbers,
@@ -1114,6 +1116,24 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetTargetStart(self.PositionFromLine(sline))
         self.SetTargetEnd(self.GetLineEndPosition(eline))
         self.ReplaceTarget(u' '.join(lines))
+
+    def LineMoveUp(self):
+        """Move the current line up"""
+        linenum = self.GetCurrentLine()
+        if linenum > 0 :
+            self.BeginUndoAction()
+            self.LineTranspose()
+            self.LineUp()
+            self.EndUndoAction()
+
+    def LineMoveDown(self):
+        """Move the current line down"""
+        linenum = self.GetCurrentLine()
+        if linenum < self.GetLineCount() - 1:
+            self.BeginUndoAction()
+            self.LineDown()
+            self.LineTranspose()
+            self.EndUndoAction()
 
     def LineTranspose(self):
         """Switch the current line with the previous one

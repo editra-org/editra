@@ -1073,6 +1073,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         active_only = [ ID_ZOOM_IN, ID_ZOOM_OUT, ID_ZOOM_NORMAL,
                         ID_JOIN_LINES, ID_CUT_LINE, ID_COPY_LINE, ID_INDENT,
                         ID_UNINDENT, ID_TRANSPOSE, ID_TOGGLECOMMENT,
+                        ID_LINE_MOVE_UP, ID_LINE_MOVE_DOWN,
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY,
                         ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE,
                         ID_PASTE_AFTER, ID_COLUMN_MODE, ID_TOGGLE_FOLD,

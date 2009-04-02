@@ -24,6 +24,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_COPY', 'ID_PASTE', 'ID_SELECTALL', 'ID_ADD_BM',
             'ID_DEL_ALL_BM', 'ID_LINE_AFTER', 'ID_LINE_BEFORE', 'ID_CUT_LINE',
             'ID_COPY_LINE', 'ID_JOIN_LINES', 'ID_TRANSPOSE', 'ID_DELETE_LINE',
+            'ID_LINE_MOVE_UP', 'ID_LINE_MOVE_DOWN',
             'ID_QUICK_FIND', 'ID_PREF', 'ID_ZOOM_OUT',
             'HOME_PAGE', 'CONTACT_MAIL', 'ID_ZOOM_IN', 'ID_ZOOM_NORMAL',
             'ID_SHOW_EDGE', 'ID_SHOW_EOL', 'ID_SHOW_LN', 'ID_SHOW_WS',
@@ -67,6 +68,7 @@ CONFIG = {
           'CONFIG_BASE' : None, # Set if config base is in nonstandard location
           'CONFIG_DIR'  : "",   # Root configration directory
           'CACHE_DIR'   : "",   # Holds temp data about documents
+          'KEYPROF_DIR' : "",   # System Keybinding
           'PROFILE_DIR' : "",   # User Profile Directory
           'PLUGIN_DIR'  : "",   # User Plugin Dir
           'SYSPIX_DIR'  : "",   # Editras non user graphics
@@ -127,6 +129,8 @@ ID_COPY_LINE     = wx.NewId()
 ID_DUP_LINE      = wx.NewId()
 ID_JOIN_LINES    = wx.NewId()
 ID_TRANSPOSE     = wx.NewId()
+ID_LINE_MOVE_UP  = wx.NewId()
+ID_LINE_MOVE_DOWN= wx.NewId()
 ID_FIND          = wx.ID_FIND
 ID_FIND_PREVIOUS = wx.NewId()
 ID_FIND_NEXT     = wx.NewId()
