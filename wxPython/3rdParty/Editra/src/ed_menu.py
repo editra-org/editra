@@ -250,6 +250,11 @@ class KeyBinder(object):
                                      suffix='.ekeys', title=False)
         if recs == -1:
             recs = list()
+
+#        tmp = util.GetResourceFiles(u'ekeys', True, True, '.ekeys', False)
+#        if tmp != -1:
+#            recs.extend(tmp)
+
         return recs
 
     def GetProfilePath(self, pname):
@@ -603,6 +608,13 @@ class EdMenuBar(wx.MenuBar):
         linemenu.Append(ed_glob.ID_TRANSPOSE, _("Transpose Line") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_TRANSPOSE),
                         _("Transpose the current line with the previous one"))
+        linemenu.Append(ed_glob.ID_LINE_MOVE_UP, _("Move Current Line Up") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_LINE_MOVE_UP),
+                        _("Move the current line up"))
+        linemenu.Append(ed_glob.ID_LINE_MOVE_DOWN,
+                        _("Move Current Line Down") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_LINE_MOVE_DOWN),
+                        _("Move the current line down"))
         editmenu.AppendMenu(ed_glob.ID_LINE_EDIT, _("Line Edit"), linemenu,
                             _("Commands that affect an entire line"))
         bookmenu = EdMenu()
@@ -738,7 +750,6 @@ class EdMenuBar(wx.MenuBar):
                           EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLECOMMENT),
                           _("Toggle comment on the selected line(s)"))
         formatmenu.AppendSeparator()
-
 
         formatmenu.Append(ed_glob.ID_INDENT, _("Indent Lines") + \
                           EdMenuBar.keybinder.GetBinding(ed_glob.ID_INDENT),
@@ -1024,6 +1035,8 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_DUP_LINE : (u"Ctrl", u"Shift", u"C"),
                      ed_glob.ID_JOIN_LINES : (u"Ctrl", u"J"),
                      ed_glob.ID_TRANSPOSE : (u"Ctrl", u"T"),
+                     ed_glob.ID_LINE_MOVE_UP : (u"Ctrl", u"Shift", u"Up"),
+                     ed_glob.ID_LINE_MOVE_DOWN : (u"Ctrl", u"Shift", u"Down"),
                      ed_glob.ID_ADD_BM : (u"Ctrl", u"B"),
                      ed_glob.ID_FIND : (u"Ctrl", u"Shift", u"F"),
                      ed_glob.ID_FIND_PREVIOUS : (u"Shift", u"F3"),
@@ -1043,7 +1056,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_PRE_MARK : (u"Alt", u"Left"), # Win/Linux
                      ed_glob.ID_SHOW_SHELF : (u"Ctrl", u"Alt", u"S"),
                      ed_glob.ID_PANELIST : (u"Alt", u"1"), # Win/Linux
-                     ed_glob.ID_MAXIMIZE_EDITOR : (u"Ctrl", u"M"), 
+                     ed_glob.ID_MAXIMIZE_EDITOR : (u"Ctrl", u"M"),
 
                      # Format Menu
                      ed_glob.ID_TOGGLECOMMENT : (u"Ctrl", u"1"),
