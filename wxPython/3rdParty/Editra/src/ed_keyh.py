@@ -186,11 +186,9 @@ class ViKeyHandler(KeyHandler):
         if not len(self.cmdcache):
             return False
 
-        # Check for repeat last action command or last char find command
+        # Check for repeat last action command
         if self.cmdcache == u'.':
             cmd = self.last
-        elif self.cmdcache == u';':
-            cmd = self.last_find
         else:
             cmd = self.cmdcache
 
@@ -524,30 +522,46 @@ class ViKeyHandler(KeyHandler):
             self.cmdcache = u''
         # Motions towards a character
         elif re.match(VI_FCMDS, cmd):
-            ch = cmd[-1] # character to find
-            cmd_type = cmd[-2]
-            mcmd = { u'f' : self.stc.FindNextChar,
-                     u'F' : self.stc.FindPrevChar,
-                     r't' : self.stc.FindTillNextChar,
-                     r'T' : self.stc.FindTillPrevChar,
-            }
-            repeat = cmd[:-2]
-            if repeat == u'':
-                repeat = 1
-            else:
-                repeat = int(repeat)
-            mcmd[cmd_type](ch, repeat)
-            self.cmdcache = u''
+            self._VimFindChar(cmd)
             self.last_find = cmd
+            self.cmdcache = u''
+        elif cmd == u';':
+            self._VimFindChar(self.last_find)
+            self.cmdcache = u''
+        elif cmd == u',':
+            self._VimFindChar(self._VimFindCharReverseCmd(self.last_find))
+            self.cmdcache = u''
         else:
             pass
 
         # Update status bar
         if mw and self.mode == ViKeyHandler.NORMAL:
             evt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.stc.GetId(),
-                                       'NORMAL  %s' % self.cmdcache,
-                                        ed_glob.SB_BUFF)
+                                       u'NORMAL  %s' % self.cmdcache,
+                                       ed_glob.SB_BUFF)
             wx.PostEvent(self.stc.GetTopLevelParent(), evt)
 
         return True
 
+    def _VimFindCharReverseCmd(self, cmd):
+        """Reverse the direction of the find char command given by `cmd`
+        @return: a string representing the command in reverse direction
+
+        """
+        return cmd[:-2] + cmd[-2].swapcase() + cmd[-1]
+
+    def _VimFindChar(self, cmd):
+        """Vim fFtT motion"""
+        ch = cmd[-1] # character to find
+        cmd_type = cmd[-2]
+        mcmd = { u'f' : self.stc.FindNextChar,
+                 u'F' : self.stc.FindPrevChar,
+                 r't' : self.stc.FindTillNextChar,
+                 r'T' : self.stc.FindTillPrevChar,
+        }
+        repeat = cmd[:-2]
+        if repeat == '':
+            repeat = 1
+        else:
+            repeat = int(repeat)
+        mcmd[cmd_type](ch, repeat)
