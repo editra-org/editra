@@ -1129,10 +1129,12 @@ class EditraStc(ed_basestc.EditraBaseStc):
     def LineMoveDown(self):
         """Move the current line down"""
         linenum = self.GetCurrentLine()
+        col = self.GetColumn(self.GetCurrentPos())
         if linenum < self.GetLineCount() - 1:
             self.BeginUndoAction()
             self.LineDown()
             self.LineTranspose()
+            self.GotoColumn(col)
             self.EndUndoAction()
 
     def LineTranspose(self):
