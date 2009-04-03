@@ -221,7 +221,7 @@ MANIFEST_TEMPLATE = '''
     name="%(prog)s"
     type="win32"
 />
-<description>%(prog)s Program</description>
+<description>%(prog)s</description>
 <dependency>
     <dependentAssembly>
         <assemblyIdentity
