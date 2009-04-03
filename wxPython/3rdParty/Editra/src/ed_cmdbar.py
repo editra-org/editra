@@ -562,7 +562,7 @@ class CommandExecuter(eclib.CommandEntryBase):
             if it's a directory.
 
             """
-            if os.path.isdir( path ) and not path.endswith(os.sep):
+            if os.path.isdir(path) and not path.endswith(os.sep):
                 return path + os.sep
             return path
 
@@ -581,7 +581,6 @@ class CommandExecuter(eclib.CommandEntryBase):
         candidates = [append_slash(os.path.join(os.path.dirname(path), cand))
                       for cand in candidates]
         if not files:
-            #only show directories
             candidates = [cand for cand in candidates if os.path.isdir(cand)]
 
         return sorted(list(set(candidates)))
@@ -600,15 +599,10 @@ class CommandExecuter(eclib.CommandEntryBase):
         paths = self.GetPaths(cmd, cstr == 'e ')
         self._popup.SetChoices(paths)
         if len(paths):
-            pos = self.GetScreenPosition().Get()
-            extent = self.GetTextExtent(cstr)
-            self._popup.SetPosition((pos[0] + extent[0],
-                                    pos[1] + extent[1] + 7))
-            self._popup.SetBestSelection(cmd)
+            self._popup.SetupPosition(self)
             if not self._popup.IsShown():
                 self._popup.Show()
-        else:
-            self._popup.Hide()
+
         self.SetInsertionPoint(self.GetLastPosition())
 
     def OnEnter(self, evt):
@@ -616,10 +610,11 @@ class CommandExecuter(eclib.CommandEntryBase):
         @postcondition: ctrl is cleared and command is executed
 
         """
-        if self._popup.IsShown():
+        if self._popup.HasSuggestions() and self._popup.HasSelection():
             psel = self._popup.GetSelection()
             if self.GetValue().split(' ', 1)[-1].strip() != psel:
                 self._AdjustValue(psel)
+                self._popup.Hide()
                 return
 
         cmd = self.GetValue()
@@ -636,13 +631,14 @@ class CommandExecuter(eclib.CommandEntryBase):
         """
         e_key = evt.GetKeyCode()
         cmd = self.GetValue()
+
         if e_key == wx.WXK_UP:
-            if self._popup.IsShown():
+            if self._popup.HasSuggestions():
                 self._popup.AdvanceSelection(False)
             else:
                 self.GetHistCommand(pre=True)
         elif e_key == wx.WXK_DOWN:
-            if self._popup.IsShown():
+            if self._popup.HasSuggestions():
                 self._popup.AdvanceSelection(True)
             else:
                 self.GetHistCommand(pre=False)
@@ -652,14 +648,17 @@ class CommandExecuter(eclib.CommandEntryBase):
         elif e_key == wx.WXK_TAB:
             # Provide Tab Completion or swallow key
             if cmd.startswith('cd ') or cmd.startswith('e '):
-                if self._popup.IsShown():
+                if self._popup.HasSuggestions():
                     self._AdjustValue(self._popup.GetSelection())
                 self.ListDir()
             else:
                 pass
         elif e_key == wx.WXK_ESCAPE:
-            self.Clear()
-            self.GetParent().Hide()
+            if self._popup.IsShown():
+                self._popup.Hide()
+            else:
+                self.Clear()
+                self.GetParent().Hide()
         else:
             evt.Skip()
 
@@ -669,8 +668,7 @@ class CommandExecuter(eclib.CommandEntryBase):
 
         """
         val = self.GetValue()
-        if self._popup.IsShown() and \
-           evt.GetKeyCode() not in [wx.WXK_DOWN, wx.WXK_UP]:
+        if self._popup.IsShown():
             if not len(val):
                 self._popup.Hide()
             else:
@@ -730,8 +728,6 @@ class CommandExecuter(eclib.CommandEntryBase):
     def UpdateAutoComp(self):
         """Update the autocomp list for paths that best match current value"""
         self.ListDir()
-        val = self.GetValue().split(' ', 1)[-1]
-        self._popup.SetBestSelection(val)
 
     def WriteCommand(self, cstr):
         """Perform a file write related command
@@ -890,6 +886,18 @@ class PopupList(wx.MiniFrame):
         """
         return self._list.GetStringSelection()
 
+    def HasSelection(self):
+        """Tells whether anything in the list is selected"""
+        return self._list.GetSelection() != wx.NOT_FOUND
+
+    def HasSuggestions(self):
+        """Tell whether the list is showing suggestions"""
+        return self.IsShown() and self.ListCount() > 0
+
+    def ListCount(self):
+        """return the number of elements in the popup list"""
+        return self._list.GetCount()
+
     def OnFocus(self, evt):
         """Raise and reset the focus to the parent window whenever
         we get focus.
@@ -945,7 +953,13 @@ class PopupList(wx.MiniFrame):
         @param choices: list of strings
 
         """
+        selection = self._list.GetSelection()
         self._list.SetItems(choices)
+        count = self._list.GetCount()
+        if selection == wx.NOT_FOUND or selection >= count:
+            selection = 0
+        if count > 0:
+            self._list.SetSelection(selection)
 
     def SetSelection(self, index):
         """Set the selection in the list by index
@@ -961,27 +975,20 @@ class PopupList(wx.MiniFrame):
         """
         self._list.SetStringSelection(text)
 
-    def SetBestSelection(self, prefix):
-        """Set the selection to the one that bests matches the
-        given string.
-        @param prefix: prefix to set selection of
-        @note: searches for a match recursively, if no partial match is found
-               then the first item in the list is selected.
+    def SetupPosition(self, cmd_ex):
+        """Sets size and position of widget
+        @param cmd_ex: CommandExecuter window
 
         """
-        if not len(prefix):
-            if len(self._list.GetStrings()):
-                self._list.SetSelection(0)
-                self.ActivateParent()
-        else:
-            matches = [item for item in self._list.GetItems()
-                       if item.startswith(prefix) ]
-            if len(matches):
-                self._list.SetStringSelection(sorted(matches)[0])
-                self.ActivateParent()
-            else:
-                self.SetBestSelection(prefix[:-1])
+        cmd = cmd_ex.GetValue().strip()
+        path = cmd.split(u' ', 1)[-1]
+        path_prefix = cmd[:cmd.find(path)] # stuff before the start of the path
+        pos = cmd_ex.GetScreenPosition().Get()
+        csize = cmd_ex.GetSize()
+        self.SetPosition((pos[0], pos[1] + csize[1]))
+        self.ActivateParent()
 
+#----------------------------------------------------------------------------#
 
 class PopupWinList(wx.PopupWindow):
     """Popuplist for Windows/GTK"""
@@ -1010,17 +1017,33 @@ class PopupWinList(wx.PopupWindow):
         @keyword down: move selection down or up
 
         """
+        item_count = self._list.GetCount()
+        if item_count == 0:
+            return
         csel = self._list.GetSelection()
-        if csel != wx.NOT_FOUND:
+        if csel == wx.NOT_FOUND:
+            if down:
+                csel = 0
+            else:
+                csel = -1
+        else:
             if down:
                 csel += 1
             else:
                 csel -= 1
-                csel = max(csel, 0)
 
-            if csel < len(self._list.GetItems()):
-                self._list.SetSelection(csel)
-                self._list.EnsureVisible(csel)
+        # If it's -1 actually, but just in case something
+        # crazy happens and it drops even below -1
+        if csel < 0:
+            csel = item_count - 1
+        if csel >= item_count:
+            csel = 0
+        self._list.SetSelection(csel)
+        self._list.EnsureVisible(csel)
+
+    def GetListCtrl(self):
+        """Get the ListBox control of the popupwindow"""
+        return self._list
 
     def GetSelection(self):
         """Get the string that is currently selected in the list
@@ -1029,6 +1052,18 @@ class PopupWinList(wx.PopupWindow):
         """
         return self._list.GetStringSelection()
 
+    def HasSelection(self):
+        """Tells whether anything in the list is selected"""
+        return self._list.GetSelection() != wx.NOT_FOUND
+
+    def HasSuggestions(self):
+        """Tell whether the list is showing suggestions"""
+        return self.IsShown() and self.ListCount() > 0
+
+    def ListCount(self):
+        """return the number of elements in the popup list"""
+        return self._list.GetCount()
+
     def OnSize(self, evt):
         """Resize the list box to the correct size to fit."""
         csz = self.GetClientSize()
@@ -1036,34 +1071,33 @@ class PopupWinList(wx.PopupWindow):
         self._list.SetSize(csz)
         evt.Skip()
 
-    def SetBestSelection(self, prefix):
-        """Set the selection to the one that bests matches the
-        given string.
-        @param prefix: prefix to set selection of
-        @note: searches for a match recursively, if no partial match is found
-               then the first item in the list is selected.
+    def SetupPosition(self, cmd_ex):
+        """Sets size and position of widget
+        @param cmd_ex: CommandExecuter window
 
         """
-        if not len(prefix):
-            if len(self._list.GetStrings()):
-                self._list.SetSelection(0)
-        else:
-            matches = [item for item in self._list.GetItems()
-                       if item.startswith(prefix) ]
-            if len(matches):
-                self._list.SetStringSelection(sorted(matches)[0])
-            else:
-                self.SetBestSelection(prefix[:-1])
-
+        cmd = cmd_ex.GetValue()
+        path = cmd.split(' ', 1)[-1]
+        path_prefix = cmd[:cmd.find(path)] # stuff before the start of the path
+        pos = cmd_ex.GetScreenPosition().Get()
+        csize = cmd_ex.GetSize()
+        ext = cmd_ex.GetTextExtent(path_prefix)
         self._list.SetInitialSize()
         self.SetInitialSize()
+        self.SetPosition((pos[0], pos[1] + csize[1]))
 
     def SetChoices(self, choices):
         """Set the available choices that are shown in the list
         @param choices: list of strings
 
         """
+        selection = self._list.GetSelection()
         self._list.SetItems(choices)
+        count = self._list.GetCount()
+        if selection == wx.NOT_FOUND or selection >= count:
+            selection = 0
+        if count > 0:
+            self._list.SetSelection(selection)
 
     def Show(self, show=True):
         """Adjust size of popup and then show it
