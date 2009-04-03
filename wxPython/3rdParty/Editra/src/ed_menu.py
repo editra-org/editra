@@ -251,9 +251,9 @@ class KeyBinder(object):
         if recs == -1:
             recs = list()
 
-#        tmp = util.GetResourceFiles(u'ekeys', True, True, '.ekeys', False)
-#        if tmp != -1:
-#            recs.extend(tmp)
+        tmp = util.GetResourceFiles(u'ekeys', True, True, '.ekeys', False)
+        if tmp != -1:
+            recs.extend(tmp)
 
         return recs
 
@@ -261,6 +261,9 @@ class KeyBinder(object):
         """Get the full path to the given keyprofile
         @param pname: profile name
         @return: string or None
+        @note: expects unique name for each profile in the case that
+               a name exists in both the user and system paths the one
+               found on the user path will be returned.
 
         """
         if pname is None:
@@ -276,7 +279,12 @@ class KeyBinder(object):
         if rname is None:
             rname = pname
 
-        rname = u"%s%s.ekeys" % (ed_glob.CONFIG['CACHE_DIR'], rname)
+        kprof = u"%s%s.ekeys" % (ed_glob.CONFIG['CACHE_DIR'], rname)
+        if not os.path.exists(kprof):
+            # Must be a system supplied keyprofile
+            rname = u"%s%s.ekeys" % (ed_glob.CONFIG['KEYPROF_DIR'], rname)
+        else:
+            rname = kprof
 
         return rname
 

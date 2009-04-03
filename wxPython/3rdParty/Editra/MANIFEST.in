@@ -13,6 +13,7 @@ include TODO
 include docs/*.txt
 include plugins/*.egg
 recursive-include include *.h
+recursive-include ekeys *.ekeys
 recursive-include locale *.mo
 recursive-include pixmaps *.png *.ico *.icns [A-Z]
 recursive-include scripts *.sh *.po *.py

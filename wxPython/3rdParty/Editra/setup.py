@@ -96,6 +96,7 @@ def GenerateBinPackageFiles():
               ("pixmaps/theme/Tango/other",
                glob.glob("pixmaps/theme/Tango/other/*.png")),
               ("styles", glob.glob("styles/*.ess")),
+              ("ekeys", glob.glob("ekeys/*.ekeys")),
               ("tests/syntax", glob.glob("tests/syntax/*")),
               ("docs", glob.glob("docs/*.txt")), "AUTHORS", "FAQ", "INSTALL",
               "README","CHANGELOG","COPYING", "NEWS", "THANKS", "TODO",
@@ -132,6 +133,7 @@ def GenerateSrcPackageFiles():
     """Generate the list of files to include in a source package dist/install"""
     data = [ "src/*.py", "src/syntax/*.py", "src/autocomp/*.py", 
              "src/eclib/*.py", "docs/*.txt", "pixmaps/*.png", "pixmaps/*.ico",
+             "ekeys/*.ekeys",
              'Editra',
              "src/extern/*.py", "src/extern/pygments/*.py",
              "src/extern/pygments/formatters/*.py",
