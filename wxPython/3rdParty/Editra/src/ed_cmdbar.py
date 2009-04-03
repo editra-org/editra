@@ -999,7 +999,7 @@ class PopupWinList(wx.PopupWindow):
         # Attributes
         self._list = wx.ListBox(self, choices=choices, pos=(0, 0),
                                 style=wx.LC_REPORT | wx.LC_SINGLE_SEL |
-                                      wx.LC_NO_HEADER | wx.NO_BORDER)
+                                      wx.LC_NO_HEADER)
 
         # Layout
         sizer = wx.BoxSizer(wx.HORIZONTAL)
