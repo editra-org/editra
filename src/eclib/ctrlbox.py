@@ -454,17 +454,17 @@ class ControlBar(wx.PyPanel):
                 gc = dc.GetGraphicsContext()
             else:
                 gc = wx.GraphicsContext.Create(dc)
-            grad = gc.CreateLinearGradientBrush(rect.x, .5, rect.x, rect.height,
+            grad = gc.CreateLinearGradientBrush(rect.x, .5, rect.x, rect.GetHeight(),
                                                 color2, color)
 
             gc.SetPen(gc.CreatePen(self._pen))
             gc.SetBrush(grad)
-            gc.DrawRectangle(rect.x, 0, rect.GetWidth() - 0.5, rect.height - 0.5)
+            gc.DrawRectangle(rect.x, 0, rect.GetWidth() - 0.5, rect.GetHeight() - 0.5)
 
         dc.SetPen(wx.Pen(color, 1))
         # Add a border to the bottom
         if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
-            dc.DrawLine(rect.x, rect.height - 1, rect.GetWidth(), rect.height - 1)
+            dc.DrawLine(rect.x, rect.GetHeight() - 1, rect.GetWidth(), rect.GetHeight() - 1)
 
         # Add a border to the top
         if self._style & CTRLBAR_STYLE_BORDER_TOP:
@@ -575,7 +575,7 @@ class SegmentBar(ControlBar):
         """
         button = self._buttons[bidx]
         rect = self.GetRect()
-        height = rect.height
+        height = rect.GetHeight()
         bsize = button['bsize']
 
         bxpos = ((self._segsize[0] / 2) - (bsize.GetWidth() / 2)) + xpos
@@ -661,9 +661,9 @@ class SegmentBar(ControlBar):
         gcdc.DrawRectangleRect(brect)
         gcdc.SetPen(wx.BLACK_PEN)
         gcdc.DrawLine(brect.x+1, brect.y+1,
-                      brect.x + brect.GetWidth() - 1, brect.y + brect.height - 1)
+                      brect.x + brect.GetWidth() - 1, brect.y + brect.GetHeight() - 1)
         gcdc.DrawLine(brect.x + brect.GetWidth() - 1, brect.y + 1,
-                      brect.x + 1, brect.y + brect.height - 1)
+                      brect.x + 1, brect.y + brect.GetHeight() - 1)
         gcdc.SetBrush(brush)
         gcdc.SetPen(pen)
         button['xbtn'] = brect
@@ -739,7 +739,7 @@ class SegmentBar(ControlBar):
             button = self._buttons[index]
             if self.SegmentHasCloseButton(index):
                 brect = button['xbtn']
-                trect = wx.Rect(brect.x, brect.y, brect.GetWidth()+4, brect.height+4)
+                trect = wx.Rect(brect.x, brect.y, brect.GetWidth()+4, brect.GetHeight()+4)
                 if trect.Contains(pos):
                     where = SEGMENT_HT_X_BTN
                 else:
@@ -826,7 +826,7 @@ class SegmentBar(ControlBar):
             button = self._buttons[index]
             brect = wx.Rect(button['bx1'], 0,
                             button['bx2'] - (button['bx1'] - 2),
-                            crect.height)
+                            crect.GetHeight())
             self.DoDrawCloseBtn(dc, button, brect)
 
         evt.Skip()
