@@ -280,6 +280,9 @@ LANG_R = u'R'
 ID_LANG_S = _NewId()
 LANG_S = u'S'
 
+ID_LANG_GROOVY = _NewId()
+LANG_GROOVY = u'Groovy'
+
 #---- End Language Identifier Keys ----#
 
 # Default extensions to file type mapping
@@ -360,6 +363,7 @@ EXT_MAP = {
            'vh vhdl'            : LANG_VHDL,
            'axl dtd plist rdf svg xml xrc xsd xsl xslt xul' : LANG_XML,
            'yaml yml'           : LANG_YAML,
+           'groovy'             : LANG_GROOVY,
           }
 
 
