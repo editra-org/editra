@@ -108,7 +108,8 @@ LANG_MAP = {LANG_4GL    : (ID_LANG_4GL,    stc.STC_LEX_SQL,      'progress'),
             LANG_VERILOG: (ID_LANG_VERILOG, stc.STC_LEX_VERILOG, 'verilog'),
             LANG_VHDL   : (ID_LANG_VHDL,   stc.STC_LEX_VHDL,     'vhdl'),
             LANG_XML    : (ID_LANG_XML,    stc.STC_LEX_XML,      'xml'),
-            LANG_YAML   : (ID_LANG_YAML,   stc.STC_LEX_YAML,     'yaml')
+            LANG_YAML   : (ID_LANG_YAML,   stc.STC_LEX_YAML,     'yaml'),
+            LANG_GROOVY : (ID_LANG_GROOVY,   stc.STC_LEX_CPP,    'groovy')
             }
 
 # Dynamically finds the language description string that matches the given
