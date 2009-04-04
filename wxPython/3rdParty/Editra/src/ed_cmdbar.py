@@ -980,12 +980,12 @@ class PopupList(wx.MiniFrame):
         @param cmd_ex: CommandExecuter window
 
         """
-        cmd = cmd_ex.GetValue().strip()
-        path = cmd.split(u' ', 1)[-1]
-        path_prefix = cmd[:cmd.find(path)] # stuff before the start of the path
+        cmd = cmd_ex.GetValue()
+        cmd = cmd.split(u' ', 1)[0]
+        xpos = cmd_ex.GetTextExtent(cmd + u' ')[0]
         pos = cmd_ex.GetScreenPosition().Get()
         csize = cmd_ex.GetSize()
-        self.SetPosition((pos[0], pos[1] + csize[1]))
+        self.SetPosition((pos[0] + xpos, pos[1] + csize[1]))
         self.ActivateParent()
 
 #----------------------------------------------------------------------------#
@@ -1077,14 +1077,13 @@ class PopupWinList(wx.PopupWindow):
 
         """
         cmd = cmd_ex.GetValue()
-        path = cmd.split(' ', 1)[-1]
-        path_prefix = cmd[:cmd.find(path)] # stuff before the start of the path
+        cmd = cmd.split(u' ', 1)[0]
         pos = cmd_ex.GetScreenPosition().Get()
         csize = cmd_ex.GetSize()
-        ext = cmd_ex.GetTextExtent(path_prefix)
+        xpos = cmd_ex.GetTextExtent(cmd)
         self._list.SetInitialSize()
         self.SetInitialSize()
-        self.SetPosition((pos[0], pos[1] + csize[1]))
+        self.SetPosition((pos[0] + xpos, pos[1] + csize[1]))
 
     def SetChoices(self, choices):
         """Set the available choices that are shown in the list
