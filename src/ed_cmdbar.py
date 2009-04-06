@@ -1080,7 +1080,7 @@ class PopupWinList(wx.PopupWindow):
         cmd = cmd.split(u' ', 1)[0]
         pos = cmd_ex.GetScreenPosition().Get()
         csize = cmd_ex.GetSize()
-        xpos = cmd_ex.GetTextExtent(cmd)
+        xpos = cmd_ex.GetTextExtent(cmd)[0]
         self._list.SetInitialSize()
         self.SetInitialSize()
         self.SetPosition((pos[0] + xpos, pos[1] + csize[1]))
