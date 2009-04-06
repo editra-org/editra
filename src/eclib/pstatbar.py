@@ -156,6 +156,9 @@ class ProgressStatusBar(wx.StatusBar):
             self.DoStop()
             return
 
+        if not self.prog.IsShown():
+            self.Stop()
+
         if self.busy or self.progress < 0:
             self.prog.Pulse()
         else:
