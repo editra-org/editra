@@ -722,7 +722,7 @@ class CommandExecuter(eclib.CommandEntryBase):
         @param value: string to set value of control to
 
         """
-        wx.SearchCtrl.SetValue(self, value)
+        super(CommandExecuter, self).SetValue(value)
         self._AdjustSize()
 
     def UpdateAutoComp(self):
@@ -752,8 +752,8 @@ class LineCtrl(eclib.CommandEntryBase):
 
         """
         eclib.CommandEntryBase.__init__(self, parent, id_, "", size=size,
-                                           style=wx.TE_PROCESS_ENTER,
-                                           validator=util.IntValidator(0, 65535))
+                                        style=wx.TE_PROCESS_ENTER,
+                                        validator=util.IntValidator(0, 65535))
 
         # Attributes
         self._last = 0
@@ -938,7 +938,7 @@ class PopupList(wx.MiniFrame):
         @keyword show: Should the window be shown or not
 
         """
-        res = wx.Frame.Show(self, show)
+        res = super(PopupList, self).Show(show)
 
         if res and show:
             self.ActivateParent()
@@ -1103,7 +1103,7 @@ class PopupWinList(wx.PopupWindow):
         @keyword show: Should the window be shown or not
 
         """
-        res = wx.PopupWindow.Show(self, show)
+        res = super(PopupWinList, self).Show(show)
 
         self._list.Show()
         self._list.SetInitialSize()
