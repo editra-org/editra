@@ -7,11 +7,10 @@
 ###############################################################################
 
 """
-Provides various search controls and searching services for finding text in a
-document. The L{TextFinder} is a search service that can be used to search and
-highlight text in a StyledTextCtrl.
+Provides text searching services, utilities, and ui components for searching
+text documents and files.
 
-@summary: Text searching and result ui
+@summary: Text searching and results presentation ui
 
 """
 
@@ -79,7 +78,7 @@ class SearchController(object):
 
     def _CreateNewDialog(self, e_id):
         """Create and set the controlers find dialog
-        @param eid: Dialog Type Id
+        @param e_id: Dialog Type Id
 
         """
         if e_id == ed_glob.ID_FIND_REPLACE:
@@ -319,7 +318,7 @@ class SearchController(object):
 
     def OnFindAll(self, evt):
         """Find all results for the given query and display results in a
-        L{FindResultsScreen} in the Shelf.
+        L{SearchResultScreen} in the Shelf.
 
         """
         smode = evt.GetSearchType()
@@ -651,7 +650,7 @@ class SearchEngine(object):
         """Find the next match based on the state of the search engine
         @keyword spos: search start position
         @return: tuple (match start pos, match end pos) or None if no match
-        @prerequisite: L{SetSearchPool} has been called to set search string
+        @note: L{SetSearchPool} has been called to set search string
 
         """
         if self._regex is None:
@@ -694,8 +693,7 @@ class SearchEngine(object):
         """Find the next match of the query starting at spos
         @keyword spos: search start position in string
         @return: tuple (match start pos, match end pos) or None if no match
-        @prerequisite: L{SetSearchPool} has been called to set the string to
-                       search in.
+        @note: L{SetSearchPool} has been called to set the string to search in.
 
         """
         if self._regex is None:
@@ -710,7 +708,6 @@ class SearchEngine(object):
 
     def FindPrev(self, spos=-1):
         """Find the previous match of the query starting at spos
-        @param pool: string to search in
         @keyword spos: search start position in string
         @return: tuple (match start pos, match end pos)
 
@@ -959,7 +956,7 @@ def FormatResult(fname, lnum, match):
 class EdSearchCtrl(wx.SearchCtrl):
     """Creates a simple search control for use in the toolbar
     or a statusbar and the such. Supports incremental search,
-    and uses L{TextFinder} to do the actual searching of the
+    and uses L{SearchController} to do the actual searching of the
     document.
 
     """
@@ -1627,7 +1624,6 @@ class SearchResultList(eclib.OutputBuffer):
         @param fname: File name to open, relative paths will be converted to abs
                       paths.
         @param line: Line number to set the cursor to after opening the file
-        @param mainw: MainWindow instance to open the file in
 
         """
         mainw = wx.GetApp().GetActiveWindow()

@@ -122,8 +122,9 @@ def CommentPattern(lang_id=0):
 #---- End Required Module Functions ----#
 
 def AutoIndenter(stc, pos, ichar):
-    """Auto indent cpp code. uses \n the text buffer will
-    handle any eol character formatting.
+    """Auto indent cpp code. uses \n the text buffer will handle any
+    eol character formatting.
+
     @param stc: EditraStyledTextCtrl
     @param pos: current carat position
     @param ichar: Indentation character

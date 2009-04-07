@@ -50,7 +50,7 @@ class EdPrinter(object):
     """
     def __init__(self, parent, mode=ed_glob.PRINT_NORMAL):
         """Initializes the Printer
-        @param stc_callable: function to get current stc document
+        @param parent: parent window
         @keyword mode: printer mode
 
         """

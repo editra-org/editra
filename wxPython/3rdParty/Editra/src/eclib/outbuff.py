@@ -414,8 +414,8 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
     def RefreshBufferedLines(self):
         """Refresh and readjust the lines in the buffer to fit the current
         line buffering limits.
-        @poscondition: Oldest lines are removed until we are back within the
-                       buffer limit bounds.
+        @postcondition: Oldest lines are removed until we are back within the
+                        buffer limit bounds.
 
         """
         if self._line_buffer < 0:
@@ -642,7 +642,6 @@ class ProcessThread(threading.Thread):
 
     def __DoOneRead(self):
         """Read one line of output and post results.
-        @param proc: process to read from
         @return: bool (True if more), (False if not)
 
         """

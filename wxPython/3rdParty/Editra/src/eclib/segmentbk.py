@@ -277,9 +277,9 @@ class SegmentBook(ctrlbox.ControlBox):
         """
         return self._pages[index]['img']
 
-    def SetPageCloseButton(self, index, button):
+    def SetPageCloseButton(self, index):
         """Set the property of a page
-        @param prop: Property to set
+        @param index: Segment index
 
         """
         if wx.Platform != '__WXMAC__':

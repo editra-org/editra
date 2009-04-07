@@ -5,7 +5,9 @@
 #
 
 epydoc --output=../../docs/editra_api \
+       -v \
        --no-frames \
+       --exclude=pygments.* \
        --css=./editra.css \
        --name=Editra \
        --html \

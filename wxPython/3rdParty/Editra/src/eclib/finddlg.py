@@ -480,7 +480,7 @@ class FindReplaceDlgBase:
         """
         self._box.SetFindBitmap(bmp)
 
-    def SetFlag(self, flag):
+    def SetFlag(self, flags):
         """Set a search dialog flag.
         @param flags: AFR_*
 
@@ -531,7 +531,7 @@ class FindReplaceDlgBase:
 
     def SetReplaceString(self, rstring):
         """Set the replace controls search string
-        @param query: string
+        @param rstring: string
 
         """
         self._panel.SetReplaceString(rstring)

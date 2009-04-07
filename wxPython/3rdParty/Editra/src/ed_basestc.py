@@ -807,8 +807,10 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 def _GetMacKeyBindings():
     """Returns a list of 3-element tuples defining the standard key
     bindings for Mac text editors -- i.e., the behavior of option-arrow,
-    shift-delete, and so on.  Each tuple consists of:
-        (key code, modifier keys, STC action)
+    shift-delete, and so on.
+
+    @return: list of (key code, modifier keys, STC action)
+
     """
     # A good reference for these: http://www.yellowbrain.com/stc/keymap.html
     return [

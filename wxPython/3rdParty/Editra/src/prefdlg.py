@@ -597,7 +597,7 @@ class DocGenPanel(wx.Panel):
 
     @staticmethod
     def OnFontChange(evt):
-        """Handles L{ecpickers.EVT_FONT_CHANGED} from the font controls"""
+        """Handles L{eclib.EVT_FONT_CHANGED} from the font controls"""
         e_id = evt.GetId()
         if e_id in [DocGenPanel.ID_FONT_PICKER, DocGenPanel.ID_FONT_PICKER2]:
             font = evt.GetValue()

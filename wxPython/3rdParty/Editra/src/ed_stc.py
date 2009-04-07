@@ -1096,7 +1096,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def IsLoading(self):
         """Is a background thread loading the text into the file
-        @reutrn: bool
+        @return: bool
 
         """
         return self._loading
@@ -1194,7 +1194,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def SetEOLMode(self, mode):
         """Sets the EOL mode from a string descript
-        @param mode_str: eol mode to set
+        @param mode: eol mode to set
         @note: overrides StyledTextCtrl.SetEOLMode
 
         """
@@ -1392,11 +1392,10 @@ class EditraStc(ed_basestc.EditraBaseStc):
             step()
 
     def _FindChar(self, char, repeat=1, reverse=False, extra_offset=0):
-        """Find the position of the next (ith) `char` character
+        """Find the position of the next (ith) 'char' character
         on the current line
 
         @note used by vim motions for finding a character on a line (f,F,t,T)
-
         @param char: the char to be found
         @keyword repeat: how many times to repeat the serach
         @keyword reverse: whether to search backwards

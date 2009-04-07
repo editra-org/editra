@@ -627,7 +627,7 @@ class SegmentBar(ControlBar):
 
     def DoDrawCloseBtn(self, gcdc, button, rect):
         """Draw the close button on the segment
-        @param dc: Device Context
+        @param gcdc: Device Context
         @param button: Segment Dict
         @param rect: Segment Rect
 

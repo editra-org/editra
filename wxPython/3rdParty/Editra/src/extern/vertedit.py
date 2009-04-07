@@ -37,18 +37,18 @@ STATE_ACTIVE = 2
 class VertEdit(object):
     """
     Used instance variables:
-    - e             STC Editor passed via class constructor
-    - enabled       To deactivate this plugin after been loaded
-    - state         0: mode off, 1: mode just activated but still in dynamic line selection, 2: mode active, static block of lines
-    - stack         Holds insertions and deletions, to replicate on all lines of the block
-    - oldCol        Used by vertCaret() to remember last column of vertical caret
-    - markedLines   Used by newMarkers() to remember highlighted lines
-    - orig          Holds position of anchor when first switching from state 0 to state 1.
-    - origCol       Holds column of anchor when first switching from state 0 to state 1.
-    - origLine      Holds line of anchor when first switching from state 0 to state 1.
-    - gotDeletes    An action caused STC to try to delete some text while in state 1.
-    - insCol        Remembers column of cursor before STC deleted some text (see gotDeletes)
-    - delCol2       Remembers last column enclosing text to be deleted
+      - e             STC Editor passed via class constructor
+      - enabled       To deactivate this plugin after been loaded
+      - state         0: mode off, 1: mode just activated but still in dynamic line selection, 2: mode active, static block of lines
+      - stack         Holds insertions and deletions, to replicate on all lines of the block
+      - oldCol        Used by vertCaret() to remember last column of vertical caret
+      - markedLines   Used by newMarkers() to remember highlighted lines
+      - orig          Holds position of anchor when first switching from state 0 to state 1.
+      - origCol       Holds column of anchor when first switching from state 0 to state 1.
+      - origLine      Holds line of anchor when first switching from state 0 to state 1.
+      - gotDeletes    An action caused STC to try to delete some text while in state 1.
+      - insCol        Remembers column of cursor before STC deleted some text (see gotDeletes)
+      - delCol2       Remembers last column enclosing text to be deleted
    
     """
     INS = stc.STC_MOD_INSERTTEXT|stc.STC_PERFORMED_USER

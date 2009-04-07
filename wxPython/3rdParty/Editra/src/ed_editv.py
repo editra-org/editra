@@ -241,7 +241,6 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     def AskToReload(self, cfile):
         """Show a dialog asking if the file should be reloaded
-        @param win: Window to prompt dialog on top of
         @param cfile: the file to prompt for a reload of
 
         """

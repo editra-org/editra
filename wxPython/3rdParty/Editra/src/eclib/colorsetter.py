@@ -202,14 +202,14 @@ class ColorSetter(wx.Panel):
         self._txt.SetValue(label)
         self.__UpdateValues()
 
-    def SetValue(self, color):
+    def SetValue(self, colour):
         """Set the color value of the button
-        @param colour: wxColor or 3 tuple to set color value to
+        @param colour: wxColour or 3 tuple to set color value to
 
         """
-        self._cbtn.SetValue(color)
-        self._preval = color
-        red, green, blue = (hex(val)[2:].zfill(2).upper() for val in color[0:3])
+        self._cbtn.SetValue(colour)
+        self._preval = colour
+        red, green, blue = (hex(val)[2:].zfill(2).upper() for val in colour[0:3])
         hex_str = u"#%s%s%s" % (red, green, blue)
         self._txt.SetValue(hex_str)
 

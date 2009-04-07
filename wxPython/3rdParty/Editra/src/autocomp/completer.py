@@ -87,7 +87,7 @@ class BaseCompleter(object):
 
     def IsAutoCompEvent(self, evt):
         """Is it a key combination that should allow completions to be shown
-        @param: wx.KeyEvent
+        @param evt: wx.KeyEvent
         @return: bool
         @todo: this shoud probably be handled in edstc
 

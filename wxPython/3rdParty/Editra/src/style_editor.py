@@ -733,7 +733,7 @@ def DuplicateStyleDict(style_dict):
 
 def UpdateBufferStyles(sheet):
     """Update the style used in all buffers
-    @sheet: Style sheet to use
+    @param sheet: Style sheet to use
 
     """
     # Only update if the sheet has changed
