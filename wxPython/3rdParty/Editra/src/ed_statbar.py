@@ -60,8 +60,6 @@ class EdStatBar(ProgressStatusBar):
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_FILE_SAVED)
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_UI_STC_LEXER)
-#        ed_msg.Subscribe(self.OnProgress, ed_msg.EDMSG_FILE_OPENING)
-        ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_FILE_OPENED)
 
     def __del__(self):
         """Unsubscribe from messages"""
@@ -165,15 +163,8 @@ class EdStatBar(ProgressStatusBar):
             if mdata[1]:
                 self.Start(75)
             else:
+                # TODO: findout where stray stop event is coming from...
                 self.Stop()
-        elif mtype == ed_msg.EDMSG_FILE_OPENED:
-            self.StopBusy()
-        elif mtype == ed_msg.EDMSG_FILE_OPENING:
-            # Clear any text from the progress field
-            wx.CallAfter(self.__SetStatusText, u'', ed_glob.SB_ROWCOL)
-            # Data is the file path
-            self.SetRange(util.GetFileSize(mdata))
-            self.Start(75)
 
     def OnUpdateDoc(self, msg):
         """Update document related fields
