@@ -209,7 +209,7 @@ class ProgressStatusBar(wx.StatusBar):
         if show:
             self.__Reposition()
         self.prog.Show(show)
-        self.ProcessPendingEvents()
+        wx.GetApp().ProcessPendingEvents()
 
     def SetStatusText(self, txt, number=0):
         """Override wx.StatusBar method to prevent text from being
