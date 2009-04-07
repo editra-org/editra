@@ -87,6 +87,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()
+        self._loading = False
         self.key_handler = KeyHandler(self)
 
         # Macro Attributes
@@ -671,10 +672,37 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def OnLoadProgress(self, evt):
         """Recieves file loading events from asynchronous file loading"""
-        if evt.HasText():
+        pid = self.GetTopLevelParent().GetId()
+        if evt.GetState() == ed_txt.FL_STATE_READING:
+            if evt.HasText():
+                # TODO: gauge gauge updates working properly
+#                sb = self.GetTopLevelParent().GetStatusBar()
+#                gauge = sb.GetGauge() 
+#                gauge.SetValue(evt.GetProgress())
+#                gauge.Show()
+#                gauge.ProcessPendingEvents()
+#                sb.ProcessPendingEvents()
+                self.SetReadOnly(False)
+                self.AppendText(evt.GetValue())
+                self.SetReadOnly(True)
+                wx.GetApp().Yield(True)
+        elif evt.GetState() == ed_txt.FL_STATE_END:
             self.SetReadOnly(False)
-            #self.AppendText(evt.GetValue())
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 0, 0))
+            self.SetSavePoint()
+            self.SetUndoCollection(True)
+            self._loading = False
+            parent = self.GetParent()
+            if hasattr(parent, 'DoPostLoad'):
+                parent.DoPostLoad()
+        elif evt.GetState() == ed_txt.FL_STATE_START:
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW, (pid, True))
+            ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 0, self.File.GetSize()))
             self.SetReadOnly(True)
+            self.SetUndoCollection(False)
+        elif evt.GetState() == ed_txt.FL_STATE_ABORTED:
+            self.SetReadOnly(False)
+            self.ClearAll()
 
     def OnUpdateUI(self, evt):
         """Check for matching braces
@@ -1065,6 +1093,13 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         """
         return self._config['highlight']
+
+    def IsLoading(self):
+        """Is a background thread loading the text into the file
+        @reutrn: bool
+
+        """
+        return self._loading
 
     def IsRecording(self):
         """Returns whether the control is in the middle of recording
@@ -1553,6 +1588,27 @@ class EditraStc(ed_basestc.EditraBaseStc):
             super(EditraStc, self).WordRightExtend()
         self.SetWordChars('')
 
+    def LoadFile(self, path):
+        """Load the file at the given path into the buffer. Returns
+        True if no errors and False otherwise. To retrieve the errors
+        check the last error that was set in the file object returned by
+        L{GetDocument}.
+        @param path: path to file
+
+        """
+        fsize = util.GetFileSize(path)
+        tlw = self.GetTopLevelParent()
+        pid = tlw.GetId()
+
+        if fsize < 1048576: # 1MB
+            return super(EditraStc, self).LoadFile(path)
+        else:
+            ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENING, path)
+            self.file.SetPath(path)
+            self.file.ReadAsync(self)
+            self._loading = True
+            return True
+
     def ReloadFile(self):
         """Reloads the current file, returns True on success and
         False if there is a failure.
@@ -1566,6 +1622,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
                 self.BeginUndoAction()
                 marks = self.GetBookmarks()
                 cpos = self.GetCurrentPos()
+                # TODO: Handle async re-loads of large files
                 self.SetText(self.File.Read())
                 self.SetModTime(util.GetFileModTime(cfile))
                 for mark in marks:

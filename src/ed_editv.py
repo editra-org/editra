@@ -81,6 +81,10 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     def DoOnIdle(self):
         """Check if the file has been modified and prompt a warning"""
+        # Don't check while the file is loading
+        if self.IsLoading():
+            return
+
         if Profile_Get('CHECKMOD'):
             cfile = self.GetFileName()
             lmod = GetFileModTime(cfile)

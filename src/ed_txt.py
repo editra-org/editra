@@ -20,6 +20,7 @@ __revision__ = "$Revision$"
 import os
 import sys
 import re
+import time
 import wx
 import threading
 import codecs
@@ -50,6 +51,13 @@ BOM = { 'utf-8' : codecs.BOM_UTF8,
 # i.e *-* coding: utf-8 *-*, encoding=utf-8, ect...
 # The first group from this expression will be the encoding.
 RE_MAGIC_COMMENT = re.compile("coding[:=]\s*\"*([-\w.]+)\"*")
+
+# File Load States
+FL_STATE_START   = 0
+FL_STATE_READING = 1
+FL_STATE_PAUSED  = 2
+FL_STATE_END     = 3
+FL_STATE_ABORTED = 4
 
 #--------------------------------------------------------------------------#
 
@@ -196,6 +204,16 @@ class EdFile(object):
         """
         return self.path
 
+    def GetSize(self):
+        """Get the size of the file
+        @return: int
+
+        """
+        if self.path:
+            return GetFileSize(self.path)
+        else:
+            return 0
+
     def HasBom(self):
         """Return whether the file has a bom byte or not
         @return: bool
@@ -229,6 +247,9 @@ class EdFile(object):
         """Get the contents of the file as a string, automatically handling
         any decoding that may be needed.
 
+        @keyword store: generator method to pass read results through
+        @keyword chunk: read size
+        @note: the store param overrides incremental
         @return: unicode str
 
         """
@@ -269,6 +290,7 @@ class EdFile(object):
                 self.Close()
                 if self._magic['comment']:
                     self._magic['bad'] = True
+
                 enc, txt = FallbackReader(self.path)
                 if enc is not None:
                     self.encoding = enc
@@ -292,26 +314,67 @@ class EdFile(object):
         """
         pid = control.GetTopLevelParent().GetId()
         filesize = GetFileSize(self.path)
-        ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW, (pid, True))
-        ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 0, filesize))
-
-        def generator(reader, chunk):
-            """Read generator"""
-            counter = 0
-            while 1:
-                txt = reader.read(chunk * 1024)
-                if not len(txt):
-                    break
-
-                ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE,
-                                   (pid, (chunk * 1024) * counter, filesize))
-                counter += 1
-                yield txt
-        thread = FileReadThread(control, self.Read, generator)
+        ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 1, filesize))
+        thread = FileReadThread(control, self.ReadGenerator, 4096)
         thread.start()
+
+    def ReadGenerator(self, chunk=512):
+        """Get the contents of the file as a string, automatically handling
+        any decoding that may be needed.
+
+        @keyword chunk: read size
+        @return: unicode str
+
+        """
+        if self.DoOpen('rb'):
+            lines = [ self._handle.readline() for x in range(2) ]
+            self._handle.seek(0)
+            enc = None
+            if len(lines):
+                enc = CheckBom(lines[0])
+                if enc is None:
+                    self.bom = None
+                    enc = CheckMagicComment(lines)
+                    if enc:
+                        self._magic['comment'] = enc
+                else:
+                    Log("[ed_txt][info] File Has %s BOM" % enc)
+                    self.bom = unicode(BOM.get(enc, None), enc)
+
+            if enc is not None:
+                self.encoding = enc
+
+            try:
+                reader = codecs.getreader(self.encoding)(self._handle)
+                while 1:
+                    tmp = reader.read(chunk)
+                    if not len(tmp):
+                        break
+                    yield tmp
+                reader.close()
+            except Exception, msg:
+                Log("[ed_txt][err] Error while reading with %s" % self.encoding)
+                Log("[ed_txt][err] %s" % msg)
+                self.last_err = unicode(msg)
+                self.Close()
+                if self._magic['comment']:
+                    self._magic['bad'] = True
+
+                # TODO: handle incremental mode for 
+#                enc, txt = FallbackReader(self.path)
+#                if enc is not None:
+#                    self.encoding = enc
+#                else:
+#                    raise UnicodeDecodeError, msg
+
+            Log("[ed_txt][info] Decoded %s with %s" % (self.path, self.encoding))
+            self.SetModTime(GetFileModTime(self.path))
+        else:
+            raise ReadError, self.last_err
 
     @property
     def ReadOnly(self):
+        """Is the file read only?"""
         return self.IsReadOnly()
 
     def RemoveModifiedCallback(self, callback):
@@ -404,20 +467,33 @@ class FileReadThread(threading.Thread):
 
         """
         threading.Thread.__init__(self)
+
+        # Attributes
         self.cancel = False
         self._task = task
         self.reciever = reciever
         self._args = args
         self._kwargs = kwargs
+        self.pid = reciever.GetTopLevelParent().GetId()
 
     def run(self):
         """Read the text"""
+        evt = FileLoadEvent(edEVT_FILE_LOAD, wx.ID_ANY, None, FL_STATE_START)
+        wx.PostEvent(self.reciever, evt)
+        time.sleep(.75) # give ui a chance to get ready
+
+        count = 1
         for txt in self._task(*self._args, **self._kwargs):
             if self.cancel:
                 break
 
             evt = FileLoadEvent(edEVT_FILE_LOAD, wx.ID_ANY, txt)
+            evt.SetProgress(count * self._args[0])
             wx.PostEvent(self.reciever, evt)
+            count += 1
+
+        evt = FileLoadEvent(edEVT_FILE_LOAD, wx.ID_ANY, None, FL_STATE_END)
+        wx.PostEvent(self.reciever, evt)
 
     def Cancel(self):
         """Cancel the running task"""
@@ -429,12 +505,14 @@ edEVT_FILE_LOAD = wx.NewEventType()
 EVT_FILE_LOAD = wx.PyEventBinder(edEVT_FILE_LOAD, 1)
 class FileLoadEvent(wx.PyEvent):
     """Event to signal that a chunk of text haes been read"""
-    def __init__(self, etype, eid, value=None):
+    def __init__(self, etype, eid, value=None, state=FL_STATE_READING):
         """Creates the event object"""
         wx.PyEvent.__init__(self, eid, etype)
 
         # Attributes
+        self._state = state
         self._value = value
+        self._prog = 0
     
     def HasText(self):
         """Returns true if the event has text
@@ -443,12 +521,30 @@ class FileLoadEvent(wx.PyEvent):
         """
         return self._value is not None
 
+    def GetProgress(self):
+        """Get the current progress of the load"""
+        return self._prog
+
+    def GetState(self):
+        """Get the state of the file load action
+        @return: int (FL_STATE_FOO)
+
+        """
+        return self._state
+
     def GetValue(self):
         """Returns the value from the event.
         @return: the value of this event
 
         """
         return self._value
+
+    def SetProgress(self, progress):
+        """Set the number of bytes that have been read
+        @param progress: int
+
+        """
+        self._prog = progress
 
 #-----------------------------------------------------------------------------#
 # Utility Function

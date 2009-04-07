@@ -503,6 +503,7 @@ class EdPages(FNB.FlatNotebook):
         self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
 
         # Set tab image
+        # TODO: Handle read only images
         self.SetPageImage(self.GetSelection(), str(nbuff.GetLangId()))
 
         # Refocus on selected page
@@ -655,11 +656,6 @@ class EdPages(FNB.FlatNotebook):
         doc = self.control.GetDocument()
         doc.AddModifiedCallback(self.control.FireModified)
 
-        if Profile_Get('SAVE_POS'):
-            pos = self.DocMgr.GetPos(self.control.GetFileName())
-            self.control.GotoPos(pos)
-            self.control.ScrollToColumn(0)
-
         # Add the buffer to the notebook
         if new_pg:
             self.AddPage(self.control, filename)
@@ -667,7 +663,6 @@ class EdPages(FNB.FlatNotebook):
         self.frame.SetTitle(self.control.GetTitleString())
         self.frame.AddFileToHistory(path2file)
         self.SetPageText(self.GetSelection(), filename)
-        self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
 
         # Set tab image
         cpage = self.GetSelection()
@@ -677,13 +672,25 @@ class EdPages(FNB.FlatNotebook):
         else:
             self.SetPageImage(cpage, str(self.control.GetLangId()))
 
+        if Profile_Get('WARN_EOL', default=True):
+            self.control.CheckEOL()
+
+        if not control.IsLoading():
+            self.DoPostLoad()
+
         # Refocus on selected page
         self.GoCurrentPage()
         self.GetTopLevelParent().Thaw()
-        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.control.GetFileName())
+        self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
 
-        if Profile_Get('WARN_EOL', default=True):
-            self.control.CheckEOL()
+    def DoPostLoad(self):
+        """Perform post file open actions"""
+        if Profile_Get('SAVE_POS'):
+            pos = self.DocMgr.GetPos(self.control.GetFileName())
+            self.control.GotoPos(pos)
+            self.control.ScrollToColumn(0)
+
+        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.control.GetFileName())
 
     def GoCurrentPage(self):
         """Move Focus to Currently Selected Page.
