@@ -960,7 +960,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     def OnMaximizeEditor(self, evt):
         """Maximize the editor and hide the other panes. If the editor
         is already maximized, it is un-maximized and the other panes are restored  
-        @param event: CommandEvent instance
+        @param evt: CommandEvent instance
 
         """
         paneInfo = self._mgr.GetPane("EditPane")
@@ -1151,7 +1151,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     def OnPaneList(self, evt):
         """Navigates through panes
-        @param event: CommandEvent instance
+        @param evt: CommandEvent instance
 
         """
         if evt.GetId() == ID_PANELIST:

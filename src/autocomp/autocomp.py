@@ -38,10 +38,7 @@ class AutoCompService(object):
 
     """
     def __init__(self):
-        """Initializes the autocompletion service
-        @param parent: parent of this service object
-
-        """
+        """Initializes the autocompletion service"""
         object.__init__(self)
 
     @staticmethod

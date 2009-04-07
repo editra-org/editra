@@ -401,7 +401,6 @@ class EdPages(FNB.FlatNotebook):
 
     def OnDocPointerRequest(self, args):
         """Get a buffer that has the same file open as the requested path.
-        @param sender: Notebook that sent the message
         @param args: [sender, path]
         @return: EdEditorView reference or ed_msg.NullValue
 
