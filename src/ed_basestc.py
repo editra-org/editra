@@ -401,9 +401,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @todo: fillups are currently disabled. See note in Configure.
 
         """
-        curr_pos = self.GetCurrentPos()
-        start = curr_pos - 1
-        col = self.GetColumn(curr_pos)
+        line, col = self.GetCurLine()
         cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
                        self._code['compsvc'].GetAutoCompFillups())
         for key in self._code['compsvc'].GetAutoCompKeys():
@@ -411,16 +409,14 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if kval in cmd_lmt:
                 cmd_lmt.remove(kval)
 
-        while col - (curr_pos - start) > 0:
-            txt = self.GetTextRange(start, curr_pos)
-            if len(txt) and txt[0] not in cmd_lmt:
-                start -= 1
+        curr_pos = col - 1
+        cmd = u''
+        while curr_pos > -1:
+            cmd = line[curr_pos:col]
+            if len(cmd) and cmd[0] not in cmd_lmt:
+                curr_pos -= 1
             else:
                 break
-
-        if self.GetColumn(start) != 0:
-            start += 1
-        cmd = self.GetTextRange(start, curr_pos)
         return cmd.strip()
 
     def GetCommentChars(self):
@@ -703,8 +699,11 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         lst = self._code['compsvc'].GetAutoCompList(command)
         if lst is not None and len(lst):
             self.BeginUndoAction()
-            self.AutoCompShow(pos - self.WordStartPosition(pos, True),
-                              u' '.join(lst))
+            lst = u' '.join(lst)
+            if lst.isspace():
+                return
+
+            self.AutoCompShow(pos - self.WordStartPosition(pos, True), lst)
 
             if len(lst) == 1 and self._code['compsvc'].GetAutoCompAfter():
                 super(EditraBaseStc, self).GotoPos(pos)
