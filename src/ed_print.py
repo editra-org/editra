@@ -62,6 +62,7 @@ class EdPrinter(object):
         self.parent = parent
         self.print_mode = mode
         self.print_data = wx.PrintData()
+        self.margins = (wx.Point(15,15), wx.Point(15,15))
 
     def CreatePrintout(self):
         """Creates a printout of the current stc window
@@ -69,17 +70,27 @@ class EdPrinter(object):
 
         """
         colour = COLOURMODES[self.print_mode]
-        return EdPrintout(self.stc, colour, self.stc.GetFileName())
+        return EdPrintout(self.stc, colour,
+                          self.margins, title=self.stc.GetFileName())
 
     def PageSetup(self):
-        """Opens a print setup dialog
+        """Opens a print setup dialog and save print settings.
         @return: None
 
         """
         dlg_data = wx.PageSetupDialogData(self.print_data)
+        dlg_data.SetPrintData(self.print_data)
+    
+        dlg_data.SetDefaultMinMargins(True)
+        dlg_data.SetMarginTopLeft(self.margins[0])
+        dlg_data.SetMarginBottomRight(self.margins[1])
+
         print_dlg = wx.PageSetupDialog(self.parent, dlg_data)
-        print_dlg.ShowModal()
-        self.print_data = wx.PrintData(dlg_data.GetPrintData())
+        if print_dlg.ShowModal() == wx.ID_OK:
+            self.print_data = wx.PrintData(dlg_data.GetPrintData())
+            self.print_data.SetPaperId(dlg_data.GetPaperId())
+            self.margins = (dlg_data.GetMarginTopLeft(),
+                            dlg_data.GetMarginBottomRight())
         print_dlg.Destroy()
 
     def Preview(self):
@@ -91,27 +102,37 @@ class EdPrinter(object):
         printout2 = self.CreatePrintout()
         preview = wx.PrintPreview(printout, printout2, self.print_data)
         preview.SetZoom(150)
-        pre_frame = wx.PreviewFrame(preview, self.parent, _("Print Preview"))
-        dsize = wx.GetDisplaySize()
-        pre_frame.SetInitialSize((self.stc.GetSize()[0],
-                                  dsize.GetHeight() - 100))
-        pre_frame.Initialize()
-        pre_frame.Show()
+        if preview.IsOk():
+            pre_frame = wx.PreviewFrame(preview, self.parent,
+                                        _("Print Preview"))
+            dsize = wx.GetDisplaySize()
+            pre_frame.SetInitialSize((self.stc.GetSize()[0],
+                                      dsize.GetHeight() - 100))
+            pre_frame.Initialize()
+            pre_frame.Show()
+        else:
+            wx.MessageBox(_("Failed to create print preview"),
+                          _("Print Error"),
+                          style=wx.ICON_ERROR|wx.OK)
 
     def Print(self):
         """Prints the document
         @postcondition: the current document is printed
 
         """
-        pdd = wx.PrintDialogData()
-        pdd.SetPrintData(self.print_data)
+        pdd = wx.PrintDialogData(self.print_data)
         printer = wx.Printer(pdd)
         printout = self.CreatePrintout()
         result = printer.Print(self.parent, printout)
-
         if result:
             dlg_data = printer.GetPrintDialogData()
             self.print_data = wx.PrintData(dlg_data.GetPrintData())
+        elif printer.GetLastError() == wx.PRINTER_ERROR:
+            wx.MessageBox(_("There was an error when printing.\n"
+                            "Check that your printer is properly connected."),
+                          _("Printer Error"),
+                          style=wx.ICON_ERROR|wx.OK)
+            
         printout.Destroy()
 
     def SetColourMode(self, mode):
@@ -145,7 +166,7 @@ class EdPrintout(wx.Printout):
            font that is set now for printing.
 
     """
-    def __init__(self, stc_src, colour, title=wx.EmptyString):
+    def __init__(self, stc_src, colour, margins, title=wx.EmptyString):
         """Initializes the printout object
         @param title: title of document
 
@@ -155,7 +176,7 @@ class EdPrintout(wx.Printout):
         self.colour = colour
         self.title = title
 
-        self.margin = 0.1
+        self.margin = 0.05 #margins # TODO repect margins from setup dlg
         self.lines_pp = 69
         self.page_count, remainder = divmod(self.stc.GetLineCount(), \
                                             self.lines_pp)
