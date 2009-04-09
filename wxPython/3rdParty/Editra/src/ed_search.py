@@ -540,7 +540,7 @@ class SearchController(object):
         for match in reversed(matches):
             start, end = match.span()
             if isregex:
-                value = match.expand(rstring)
+                value = match.expand(rstring.encode('utf-8')).decode('utf-8')
             else:
                 value = rstring
             stc.SetTargetStart(start)

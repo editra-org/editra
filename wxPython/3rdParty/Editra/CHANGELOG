@@ -30,6 +30,7 @@ from plugin dialog for first time.
 +Fix command entry listing of paths (patch from hasan.aljudy).
 +Fix autocompletion for when accented characters are in the command string
  (modified patch from roman.chyla).
++Fix some unicode handling issues in search/replace. (patch from roman.chyla)
 
 #-----------------------------------------------------------------------------#
 
