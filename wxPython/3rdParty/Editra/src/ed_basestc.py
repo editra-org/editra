@@ -401,7 +401,10 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @todo: fillups are currently disabled. See note in Configure.
 
         """
+        # NOTE: the column position retuned by GetCurLine is not correct
+        #       for multibyte characters.
         line, col = self.GetCurLine()
+        col = self.GetColumn(self.GetCurrentPos())
         cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
                        self._code['compsvc'].GetAutoCompFillups())
         for key in self._code['compsvc'].GetAutoCompKeys():
