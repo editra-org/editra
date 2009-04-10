@@ -39,13 +39,17 @@ class TestPanel(segmentbk.SegmentBook):
         # Attributes
         self.log = log
         self._menu = None
-        self._imglst = wx.ImageList(32, 32, mask=False)
+        self._imglst = list()
+#        self._imglst = wx.ImageList(32, 32, mask=False)
 
         # Setup
         bmp = IconFile.Monkey.GetBitmap()
-        self._imglst.Add(bmp)
+        self._imglst.append(bmp)
+#        self._imglst.Add(bmp)
         bmp = IconFile.Devil.GetBitmap()
-        self._imglst.Add(bmp)
+        self._imglst.append(bmp)
+#        self._imglst.Add(bmp)
+        self.SetUsePyImageList(True)    # HACK workaround for mask issues on msw
         self.SetImageList(self._imglst)
 
         self.AddPage(wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Hello"),

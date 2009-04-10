@@ -69,7 +69,7 @@ import math
 import wx
 
 # Local Imports
-from eclutil import AdjustColour
+from eclutil import AdjustColour, DrawCircleCloseBmp
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -535,7 +535,6 @@ class SegmentBar(ControlBar):
         self._scolor2 = AdjustColour(self._color2, -20)
         self._spen = wx.Pen(AdjustColour(self._pen.GetColour(), -25))
         self._x_clicked_before = False
-        self._x_state = SEGMENT_STATE_NONE
 
         if wx.Platform == '__WXMAC__':
             self.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
@@ -555,11 +554,12 @@ class SegmentBar(ControlBar):
         """
         assert bmp.IsOk()
         lsize = self.GetTextExtent(label)
-        # TODO: Refactor to a Segment Class
+        # TODO: Refactor to a Segment Class to manage these data members
         self._buttons.append(dict(id=id, bmp=bmp, label=label,
                                   lsize=lsize, bsize=bmp.GetSize(),
                                   bx1=0, bx2=0, opts=0,
-                                  selected=False))
+                                  selected=False,
+                                  x_state=SEGMENT_STATE_NONE))
         self.InvalidateBestSize()
         self.Refresh()
 
@@ -632,13 +632,6 @@ class SegmentBar(ControlBar):
         @param rect: Segment Rect
 
         """
-        brush = gcdc.GetBrush()
-
-        if button['selected']:
-            gcdc.SetBrush(wx.Brush(self._scolor2))
-        else:
-            gcdc.SetBrush(wx.Brush(self._color2))
-
         if button['opts'] & SEGBTN_OPT_CLOSEBTNL:
             x = rect.x + 8
             y = rect.y + 6
@@ -646,27 +639,33 @@ class SegmentBar(ControlBar):
             x = (rect.x + rect.GetWidth()) - 8
             y = rect.y + 6
 
-#        gcdc.DrawCircle(x, y, 5)
+        color = self._scolor2
+        if button['selected']:
+            color = AdjustColour(color, -25)
 
-        # Draw the X
-        pen = gcdc.GetPen()
-        brect = wx.Rect(x-3, y-3, 8, 8)
-        if self._x_state == SEGMENT_STATE_X:
+        if button['x_state'] == SEGMENT_STATE_X:
             color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-            gcdc.SetBrush(wx.Brush(color))
             gcdc.SetPen(wx.Pen(AdjustColour(color, -20)))
         else:
             gcdc.SetPen(wx.TRANSPARENT_PEN)
 
-        gcdc.DrawRectangleRect(brect)
-        gcdc.SetPen(wx.BLACK_PEN)
-        gcdc.DrawLine(brect.x+1, brect.y+1,
-                      brect.x + brect.GetWidth() - 1, brect.y + brect.GetHeight() - 1)
-        gcdc.DrawLine(brect.x + brect.GetWidth() - 1, brect.y + 1,
-                      brect.x + 1, brect.y + brect.GetHeight() - 1)
-        gcdc.SetBrush(brush)
-        gcdc.SetPen(pen)
+        pen = gcdc.GetPen()
+        brect = wx.Rect(x-3, y-3, 8, 8)
+        bmp = DrawCircleCloseBmp(color, wx.WHITE)
+        gcdc.DrawBitmap(bmp, brect.x, brect.y)
         button['xbtn'] = brect
+        return
+    
+        # Square style button
+#        gcdc.DrawRectangleRect(brect)
+#        gcdc.SetPen(wx.BLACK_PEN)
+#        gcdc.DrawLine(brect.x+1, brect.y+1,
+#                      brect.x + brect.GetWidth() - 1, brect.y + brect.GetHeight() - 1)
+#        gcdc.DrawLine(brect.x + brect.GetWidth() - 1, brect.y + 1,
+#                      brect.x + 1, brect.y + brect.GetHeight() - 1)
+#        gcdc.SetBrush(brush)
+#        gcdc.SetPen(pen)
+#        button['xbtn'] = brect
 
     def DoGetBestSize(self):
         """Get the best size for the control"""
@@ -809,21 +808,28 @@ class SegmentBar(ControlBar):
         if index == -1 or not self.SegmentHasCloseButton(index):
             return
 
-        x_state = self._x_state
-        self._x_state = SEGMENT_STATE_NONE
+        button = self._buttons[index]
+        x_state = button['x_state']
+        button['x_state'] = SEGMENT_STATE_NONE
 
         if where != SEGMENT_HT_NOWHERE:
             if where == SEGMENT_HT_X_BTN:
-                self._x_state = SEGMENT_STATE_X
+                button['x_state'] = SEGMENT_STATE_X
             elif where == SEGMENT_HT_SEG:
                 # TODO: add highligh option for hover on segment
                 pass
+        else:
+            evt.Skip()
+            return
 
-        bRedrawX = x_state != self._x_state
+        # If the hover state over a segments close button
+        # has changed redraw the close button to reflect the
+        # proper state.
+        
+        bRedrawX = button['x_state'] != x_state
         if bRedrawX:
-            dc = wx.ClientDC(self)
+            dc = wx.ClientDC(self) # TODO: this has poor results on msw
             crect = self.GetClientRect()
-            button = self._buttons[index]
             brect = wx.Rect(button['bx1'], 0,
                             button['bx2'] - (button['bx1'] - 2),
                             crect.GetHeight())
@@ -854,8 +860,8 @@ class SegmentBar(ControlBar):
         use_labels = self._style & CTRLBAR_STYLE_LABELS
         for idx, button in enumerate(self._buttons):
             npos = self.DoDrawButton(gc, npos, idx,
-                                     self._selected == idx,
-                                     use_labels)
+                                      self._selected == idx,
+                                      use_labels)
 
     def RemoveSegment(self, index):
         """Remove a segment from the bar
