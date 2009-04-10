@@ -113,3 +113,44 @@ def HexToRGB(hex_str):
     green = int(hexval[2:4], 16)
     blue = int(hexval[4:], 16)
     return [red, green, blue]
+
+#-----------------------------------------------------------------------------#
+# Drawing helpers
+
+def DrawCircleCloseBmp(colour, backColour=None): 
+    """ 
+    Draws a small circular close button.
+    @param colour: Circle's background colour
+    @keyword backColour: pen colour for border and X
+
+    """ 
+
+    bmp = wx.EmptyBitmapRGBA(8, 8) 
+    dc = wx.MemoryDC() 
+    dc.SelectObject(bmp) 
+
+    gc = wx.GraphicsContext.Create(dc) 
+    gc.SetBrush(wx.Brush(colour)) 
+    path = gc.CreatePath()
+    path.AddCircle(4, 4, 4) 
+    path.CloseSubpath() 
+    gc.FillPath(path) 
+
+    path = gc.CreatePath() 
+    if backColour is not None: 
+        pen = wx.Pen(backColour, 1) 
+    else: 
+        pen = wx.Pen("white", 1)
+
+    pen.SetCap(wx.CAP_BUTT) 
+    pen.SetJoin(wx.JOIN_BEVEL) 
+    gc.SetPen(pen) 
+    path.MoveToPoint(1.75, 2) 
+    path.AddLineToPoint(4.75, 5) 
+    path.MoveToPoint(1.75, 5) 
+    path.AddLineToPoint(4.75, 2) 
+    path.CloseSubpath() 
+    gc.DrawPath(path) 
+
+    dc.SelectObject(wx.NullBitmap) 
+    return bmp 

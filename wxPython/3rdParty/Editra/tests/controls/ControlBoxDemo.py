@@ -49,8 +49,8 @@ class TestPanel(eclib.ControlBox):
         cbar.AddControl(wx.Button(cbar, ID_SHOW_CONTROL, label="Show ControlBar Sample"))
         cbar.AddControl(wx.Button(cbar, ID_SHOW_SEGMENT, label="Show SegmentBar Sample"))
         text = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.TE_RICH2)
-        text.SetValue("Welcome to the ControlBox Sample.\n\nThis window is a"
-                      "ControlBox with a ControlBar in it.\n\n"
+        text.SetValue("Welcome to the ControlBox Sample.\n\nThis window is a "
+                      "ControlBox containing a TextCtrl and a ControlBar in it.\n\n"
                       "Click a button to see the extended samples.")
         self.SetWindow(text)
 
@@ -79,6 +79,8 @@ class ControlBarPanel(eclib.ControlBox):
 
         # Attributes
         self.log = log
+        self.gauge = None
+        self._timer = wx.Timer(self)
 
         # Setup
         self.CreateControlBar()
@@ -97,10 +99,16 @@ class ControlBarPanel(eclib.ControlBox):
         bbar = self.GetControlBar(wx.BOTTOM)
         bbar.SetVMargin(1, 1)
         bbar.AddTool(wx.ID_ANY, err_bmp, "HELLO")
+        bbar.AddStretchSpacer()
+        self.gauge = wx.Gauge(bbar, size=(100, 16))
+        bbar.AddControl(self.gauge, wx.ALIGN_RIGHT)
 
         self.SetWindow(wx.TextCtrl(self, style=wx.TE_MULTILINE))
         self.Bind(eclib.EVT_CTRLBAR, self.OnControlBar)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_TIMER, self.OnTimer)
+
+        self._timer.Start(150)
 
     def OnControlBar(self, evt):
         self.log.write("ControlBarEvent: %d" % evt.GetId())
@@ -110,6 +118,9 @@ class ControlBarPanel(eclib.ControlBox):
         frame = MakeTestFrame(self, "Random Test Frame", self.log,
                               bool(long(time.time()) % 2))
         frame.Show()
+
+    def OnTimer(self, evt):
+        self.gauge.Pulse()
 
 #-----------------------------------------------------------------------------#
 
@@ -132,6 +143,7 @@ class SegmentPanel(eclib.ControlBox):
 
         segbar.SetSegmentOption(4, eclib.SEGBTN_OPT_CLOSEBTNR)
         segbar.SetSegmentOption(3, eclib.SEGBTN_OPT_CLOSEBTNL)
+        segbar.SetSegmentOption(2, eclib.SEGBTN_OPT_CLOSEBTNL)
 
         # Make a bottom segment bar
         segbar2 = eclib.SegmentBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
