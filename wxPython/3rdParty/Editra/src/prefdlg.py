@@ -293,9 +293,13 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
         splash_cb = wx.CheckBox(self, ed_glob.ID_APP_SPLASH,
                                 _("Show Splash Screen"))
         splash_cb.SetValue(Profile_Get('APPSPLASH'))
-        chk_update = wx.CheckBox(self, ed_glob.ID_PREF_CHKUPDATE,
-                                 _("Check for updates on startup"))
-        chk_update.SetValue(Profile_Get('CHECKUPDATE'))
+
+        # Only enable update option if user has access to install directory
+        isadmin = os.access(ed_glob.CONFIG['CONFIG_DIR'], os.R_OK|os.W_OK)
+        if isadmin:
+            chk_update = wx.CheckBox(self, ed_glob.ID_PREF_CHKUPDATE,
+                                     _("Check for updates on startup"))
+            chk_update.SetValue(Profile_Get('CHECKUPDATE'))
 
         # File settings
         fhsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -362,9 +366,12 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
                        ((5, 5),), (psizer, 0),
                        ((5, 5),), (reporter_cb, 0),
                        ((5, 5),), (sess_cb, 0),
-                       ((5, 5),), (splash_cb, 0),
-                       ((5, 5),), (chk_update, 0),
-                       ((5, 5),), ((5, 5),),
+                       ((5, 5),), (splash_cb, 0)])
+
+        if isadmin:
+            sizer.AddMany([((5, 5),), (chk_update, 0)])
+
+        sizer.AddMany([((5, 5),), ((5, 5),),
                        (wx.StaticText(self, label=_("File Settings") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (enc_sz, 0),
                        ((5, 5),), (fhsizer, 0),
@@ -1095,7 +1102,11 @@ class NetworkPanel(wx.Panel, PreferencesPanelBase):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         nbook = wx.Notebook(self)
         nbook.AddPage(NetConfigPage(nbook), _("Configuration"))
-        nbook.AddPage(UpdatePage(nbook), _("Update"))
+
+        # Only show update page if user has access to do installs
+        if os.access(ed_glob.CONFIG['CONFIG_DIR'], os.R_OK|os.W_OK):
+            nbook.AddPage(UpdatePage(nbook), _("Update"))
+
         sizer.AddMany([((10, 10), 0), (nbook, 1, wx.EXPAND), ((10, 10), 0)])
         msizer = wx.BoxSizer(wx.VERTICAL)
         msizer.AddMany([(sizer, 1, wx.EXPAND), ((10, 10), 0)])

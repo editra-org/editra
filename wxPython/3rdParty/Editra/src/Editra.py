@@ -972,7 +972,8 @@ def _Main(opts, args):
 
     # Do update check, only check if its been more than a day since the last
     # check
-    if profiler.Profile_Get('CHECKUPDATE', default=True):
+    isadmin = os.access(ed_glob.CONFIG['CONFIG_DIR'], os.R_OK|os.W_OK)
+    if isadmin and profiler.Profile_Get('CHECKUPDATE', default=True):
         uthread = updater.UpdateThread(editra_app, ID_UPDATE_CHECK)
         uthread.start()
 

@@ -20,9 +20,11 @@ NEW: [features/improvments]
 +Add Count feature to find dialog for counting number of matches in a buffer.
 +Add Vim find char motions (patch from hasan.aljudy).
 +Add support for the Groovy programming language (patch from omar.gomez).
-+Add new style sheet Guepardo (patch from omar.gomez).
++Add new syntax style sheet Guepardo (patch from omar.gomez).
 +Add support for loading installation provided key profiles.
 +Add VisualStudio keybindings option (from Vivian).
++Updater is only available if user account running program has access
+ permissions to the install directory.
 
 BUG FIXES:
 +Fix Launch config not properly being initialized when config panel accessed
