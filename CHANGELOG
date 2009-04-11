@@ -31,6 +31,7 @@ from plugin dialog for first time.
 +Fix autocompletion for when accented characters are in the command string
  (modified patch from roman.chyla).
 +Fix some unicode handling issues in search/replace. (patch from roman.chyla)
++Fix number of printout rendering issues.
 
 #-----------------------------------------------------------------------------#
 

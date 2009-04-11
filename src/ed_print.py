@@ -7,9 +7,7 @@
 ###############################################################################
 
 """
-Provides a printer class can render the text from an stc into MemoryDC that is
-used for printing. Much of the code for scaling in this file is derived from a
-python module called STCPrinting written by Riaan Booysen.
+Printer class for creating and managing printouts from a StyledTextCtrl.
 
 Classes:
   - L{EdPrinter}: Class for managing printing and providing print dialogs
@@ -104,10 +102,10 @@ class EdPrinter(object):
         preview.SetZoom(150)
         if preview.IsOk():
             pre_frame = wx.PreviewFrame(preview, self.parent,
-                                        _("Print Preview"))
+                                             _("Print Preview"))
             dsize = wx.GetDisplaySize()
             pre_frame.SetInitialSize((self.stc.GetSize()[0],
-                                      dsize.GetHeight() - 100))
+                                          dsize.GetHeight() - 100))
             pre_frame.Initialize()
             pre_frame.Show()
         else:
@@ -175,6 +173,7 @@ class EdPrintout(wx.Printout):
         self.stc = stc_src
         self.colour = colour
         self.title = title
+        self._start = 0
 
         self.margin = 0.05 #margins # TODO repect margins from setup dlg
         self.lines_pp = 69
@@ -219,8 +218,6 @@ class EdPrintout(wx.Printout):
 
         # Render the title and page numbers
         font = self.stc.GetDefaultFont()
-        if font.GetPointSize() < 12:
-            font.SetPointSize(12)
         dc.SetFont(font)
 
         if self.title:
@@ -235,10 +232,17 @@ class EdPrintout(wx.Printout):
                     int((text_area_h + margin_h) / scale + pg_lbl_h * 2))
 
         # Render the STC window into a DC for printing
-        start_pos = self.stc.PositionFromLine((page - 1) * self.lines_pp)
-        end_pos = self.stc.GetLineEndPosition(page * self.lines_pp - 1)
+        if self._start == 0:
+            start_pos = self.stc.PositionFromLine((page - 1) * self.lines_pp)
+        else:
+            start_pos = self._start
+        line = self.stc.LineFromPosition(start_pos)
+        end_pos = self.stc.GetLineEndPosition(line + self.lines_pp - 1)
         max_w = (dw / scale) - margin_w
+
         self.stc.SetPrintColourMode(self.colour)
+        edge_mode = self.stc.GetEdgeMode()
+        self.stc.SetEdgeMode(wx.stc.STC_EDGE_NONE)
         end_point = self.stc.FormatRange(True, start_pos, end_pos, dc, dc,
                                         wx.Rect(int(margin_w/scale),
                                                 int(margin_h/scale),
@@ -248,7 +252,7 @@ class EdPrintout(wx.Printout):
                                                 self.lines_pp * \
                                                 line_height, max_w,
                                                 line_height * self.lines_pp))
+        self.stc.SetEdgeMode(edge_mode)
+        self._start = end_point
 
-        if end_point < end_pos:
-            util.Log("[ed_print][err] Rendering Error, page %s" % page)
         return True
