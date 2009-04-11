@@ -756,6 +756,7 @@ def InitConfig():
 
     # Resolve resource locations
     ed_glob.CONFIG['CONFIG_DIR'] = util.ResolvConfigDir(u"")
+    ed_glob.CONFIG['INSTALL_DIR'] = util.ResolvConfigDir(u"", True)
     ed_glob.CONFIG['KEYPROF_DIR'] = util.ResolvConfigDir(u"ekeys", True)
     ed_glob.CONFIG['SYSPIX_DIR'] = util.ResolvConfigDir(u"pixmaps", True)
     ed_glob.CONFIG['PLUGIN_DIR'] = util.ResolvConfigDir(u"plugins")
@@ -972,7 +973,7 @@ def _Main(opts, args):
 
     # Do update check, only check if its been more than a day since the last
     # check
-    isadmin = os.access(ed_glob.CONFIG['CONFIG_DIR'], os.R_OK|os.W_OK)
+    isadmin = os.access(ed_glob.CONFIG['INSTALL_DIR'], os.R_OK|os.W_OK)
     if isadmin and profiler.Profile_Get('CHECKUPDATE', default=True):
         uthread = updater.UpdateThread(editra_app, ID_UPDATE_CHECK)
         uthread.start()
