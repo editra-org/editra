@@ -644,12 +644,10 @@ class SegmentBar(ControlBar):
             color = AdjustColour(color, -25)
 
         if button['x_state'] == SEGMENT_STATE_X:
-            color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-            gcdc.SetPen(wx.Pen(AdjustColour(color, -20)))
-        else:
-            gcdc.SetPen(wx.TRANSPARENT_PEN)
+            color = AdjustColour(color, -20)
 
-        pen = gcdc.GetPen()
+        gcdc.SetPen(wx.Pen(AdjustColour(color, -30)))
+
         brect = wx.Rect(x-3, y-3, 8, 8)
         bmp = DrawCircleCloseBmp(color, wx.WHITE)
         gcdc.DrawBitmap(bmp, brect.x, brect.y)
