@@ -66,7 +66,8 @@ import wxcompat
 # Values set when main loads
 CONFIG = {
           'CONFIG_BASE' : None, # Set if config base is in nonstandard location
-          'CONFIG_DIR'  : "",   # Root configration directory (install dir)
+          'INSTALL_DIR' : "",   # Instal directory
+          'CONFIG_DIR'  : "",   # Root configration directory
           'CACHE_DIR'   : "",   # Holds temp data about documents
           'KEYPROF_DIR' : "",   # System Keybinding
           'PROFILE_DIR' : "",   # User Profile Directory
