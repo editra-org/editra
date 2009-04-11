@@ -125,7 +125,7 @@ def DrawCircleCloseBmp(colour, backColour=None):
 
     """ 
 
-    bmp = wx.EmptyBitmapRGBA(8, 8) 
+    bmp = wx.EmptyBitmap(8, 8)
     dc = wx.MemoryDC() 
     dc.SelectObject(bmp) 
 
