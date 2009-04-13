@@ -18,7 +18,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = ['AdjustAlpha', 'AdjustColour', 'BestLabelColour', 'HexToRGB',
-           'GetHighlightColour']
+           'GetHighlightColour', 'EmptyBitmapRGBA']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -115,6 +115,14 @@ def HexToRGB(hex_str):
     return [red, green, blue]
 
 #-----------------------------------------------------------------------------#
+
+def EmptyBitmapRGBA(width, height):
+    """Create an empty bitmap with an alpha channel"""
+    bmp = wx.EmptyBitmap(width, height, 32)
+    bmp.UseAlpha()
+    return bmp
+
+#-----------------------------------------------------------------------------#
 # Drawing helpers
 
 def DrawCircleCloseBmp(colour, backColour=None): 
@@ -125,7 +133,7 @@ def DrawCircleCloseBmp(colour, backColour=None):
 
     """ 
 
-    bmp = wx.EmptyBitmap(8, 8)
+    bmp = EmptyBitmapRGBA(8, 8)
     dc = wx.MemoryDC() 
     dc.SelectObject(bmp) 
 
