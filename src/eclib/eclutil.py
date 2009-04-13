@@ -18,7 +18,10 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = ['AdjustAlpha', 'AdjustColour', 'BestLabelColour', 'HexToRGB',
-           'GetHighlightColour', 'EmptyBitmapRGBA']
+           'GetHighlightColour', 'EmptyBitmapRGBA',
+
+           'DRAW_CIRCLE_SMALL', 'DRAW_CIRCLE_NORMAL', 'DRAW_CIRCLE_LARGE',
+           'DrawCircleCloseBmp' ]
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -31,6 +34,23 @@ if wx.Platform == '__WXMAC__':
         CARBON = False
     else:
         CARBON = True
+
+#-----------------------------------------------------------------------------#
+
+# DrawCircleCloseBmp options
+DRAW_CIRCLE_SMALL  = 0
+DRAW_CIRCLE_NORMAL = 1
+DRAW_CIRCLE_LARGE  = 2
+
+__CircleDefs = { DRAW_CIRCLE_SMALL : dict(size=(8, 8),
+                                          xpath=((1.75, 2), (4.75, 5),
+                                                 (1.75, 5), (4.75, 2))),
+                 DRAW_CIRCLE_NORMAL : dict(size=(16, 16),
+                                           xpath=((3.5, 4), (9.5, 10),
+                                                  (3.5, 10), (9.5, 4))),
+                 DRAW_CIRCLE_LARGE : dict(size=(32, 32),
+                                          xpath=((7, 8), (19, 20),
+                                                 (7, 20), (19, 8))) }
 
 #-----------------------------------------------------------------------------#
 # Colour Utilities
@@ -125,40 +145,59 @@ def EmptyBitmapRGBA(width, height):
 #-----------------------------------------------------------------------------#
 # Drawing helpers
 
-def DrawCircleCloseBmp(colour, backColour=None): 
-    """ 
+def DrawCircleCloseBmp(colour, backColour=None, option=DRAW_CIRCLE_SMALL):
+    """
     Draws a small circular close button.
     @param colour: Circle's background colour
     @keyword backColour: pen colour for border and X
+    @keyword option: DRAW_CIRCLE_* value
+    @return: wxBitmap
 
-    """ 
+    """
+    assert option in __CircleDefs, "Invalid DRAW option!"
 
-    bmp = EmptyBitmapRGBA(8, 8)
-    dc = wx.MemoryDC() 
-    dc.SelectObject(bmp) 
+    defs = __CircleDefs.get(option)
+    size = defs['size']
+    if option != DRAW_CIRCLE_SMALL:
+        # Adjust for border
+        diameter = size[0] - 1
+    else:
+        diameter = size[0]
+    radius = float(diameter) / 2.0
+    xpath = defs['xpath']
 
-    gc = wx.GraphicsContext.Create(dc) 
-    gc.SetBrush(wx.Brush(colour)) 
+    bmp = EmptyBitmapRGBA(*size)
+    dc = wx.MemoryDC()
+    dc.SelectObject(bmp)
+
+    gc = wx.GraphicsContext.Create(dc)
+    gc.SetBrush(wx.Brush(colour))
+    if option > DRAW_CIRCLE_SMALL:
+        gc.SetPen(wx.Pen(AdjustColour(colour, -30)))
+    else:
+        gc.SetPen(wx.TRANSPARENT_PEN)
+
     path = gc.CreatePath()
-    path.AddCircle(4, 4, 4) 
-    path.CloseSubpath() 
-    gc.FillPath(path) 
+    path.AddCircle(radius, radius, radius)
+    path.CloseSubpath()
+    gc.FillPath(path)
+    gc.StrokePath(path)
 
-    path = gc.CreatePath() 
-    if backColour is not None: 
-        pen = wx.Pen(backColour, 1) 
-    else: 
+    path = gc.CreatePath()
+    if backColour is not None:
+        pen = wx.Pen(backColour, 1)
+    else:
         pen = wx.Pen("white", 1)
 
-    pen.SetCap(wx.CAP_BUTT) 
-    pen.SetJoin(wx.JOIN_BEVEL) 
-    gc.SetPen(pen) 
-    path.MoveToPoint(1.75, 2) 
-    path.AddLineToPoint(4.75, 5) 
-    path.MoveToPoint(1.75, 5) 
-    path.AddLineToPoint(4.75, 2) 
-    path.CloseSubpath() 
-    gc.DrawPath(path) 
+    pen.SetCap(wx.CAP_BUTT)
+    pen.SetJoin(wx.JOIN_BEVEL)
+    gc.SetPen(pen)
+    path.MoveToPoint(*xpath[0])
+    path.AddLineToPoint(*xpath[1])
+    path.MoveToPoint(*xpath[2])
+    path.AddLineToPoint(*xpath[3])
+    path.CloseSubpath()
+    gc.DrawPath(path)
 
-    dc.SelectObject(wx.NullBitmap) 
-    return bmp 
+    dc.SelectObject(wx.NullBitmap)
+    return bmp
