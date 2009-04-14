@@ -166,13 +166,20 @@ EDMSG_MENU_LOADPROFILE = EDMSG_MENU + ('load',)
 
 #---- End Menu Messages ----#
 
-#---- Search Results Messages ----#
+#---- Find Actions ----#
+
+EDMSG_FIND_ALL = EDMSG_ALL + ('find',)
+
+# Show or modify an existing find dialog
+# msgdata = dict(mw, lookin, searchtxt, replacetxt)
+EDMSG_FIND_SHOW_DLG = EDMSG_FIND_ALL + ('show',)
+
 # Message to request a search job
 # msgdata == (callable, args, kwargs)
 # msgdata == (callable)
-EDMSG_START_SEARCH = EDMSG_ALL + ('find',)
+EDMSG_START_SEARCH = EDMSG_FIND_ALL + ('results',)
 
-#---- End Search Results Messages ----#
+#---- End Find Actions ----#
 
 #---- Misc Messages ----#
 # Signal that the icon theme has changed. Respond to this to update icon
