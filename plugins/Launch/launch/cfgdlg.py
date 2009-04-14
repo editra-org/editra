@@ -126,7 +126,7 @@ class ConfigDialog(wx.Frame):
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         vsizer = wx.BoxSizer(wx.VERTICAL)
         panel = wx.Panel(self)
-        noteb = ConfigNotebook(self)
+        noteb = ConfigNotebook(panel)
         hsizer.AddMany([((5, 5), 0), (noteb, 1, wx.EXPAND), ((5, 5), 0)])
         vsizer.AddMany([((5, 5), 0), (hsizer, 1, wx.EXPAND), ((10, 10), 0)])
         panel.SetSizer(vsizer)
