@@ -304,7 +304,6 @@ class EdPages(FNB.FlatNotebook):
 
         """
         self._ses_load = True
-#        files = Profile_Get('LAST_SESSION')
 
         if os.path.exists(session):
             try:

@@ -963,7 +963,11 @@ def _Main(opts, args):
     # But not if there are command line args for files to open
     if profiler.Profile_Get('SAVE_SESSION', 'bool', False) and not len(args):
         session = profiler.Profile_Get('LAST_SESSION', default=u'')
-        frame.GetNotebook().LoadSessionFile(session)
+        if isinstance(session, list):
+            # Check for format conversion from previous versions
+            profiler.Profile_Set('LAST_SESSION', u'')
+        else:
+            frame.GetNotebook().LoadSessionFile(session)
 
     # Unlike wxMac/wxGTK Windows doesn't post an activate event when a window
     # is first shown, so do it manually to make sure all event handlers get
