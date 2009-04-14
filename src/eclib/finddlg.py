@@ -342,7 +342,8 @@ def AdvFindReplaceDlg(parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
 #--------------------------------------------------------------------------#
 
 class FindReplaceDlgBase:
-    """Mixin Base class for deriving FindReplaceDialogs.
+    """Delegate mixin base class for deriving FindReplaceDialogs, delegates
+    calls to the widgets and containers that make up the dialog.
     @note: The mixin must be initialized after the class its being mixed into
 
     """
@@ -500,6 +501,15 @@ class FindReplaceDlgBase:
 
         """
         self._panel.SetLookinChoices(paths)
+
+    def SetLookinPath(self, path):
+        """Set the lookin path, adding it to the collection if it is
+        not in there.
+        @param path: string (path of directory)
+
+        """
+        idx = self._panel.AddLookinPath(path)
+        self.SetLookinSelection(idx)
 
     def SetLookinSelection(self, sel):
         """Set the looking choices selection
