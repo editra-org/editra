@@ -76,6 +76,13 @@ class SearchController(object):
         self._parent.Bind(eclib.EVT_FIND_CLOSE, self.OnFindClose)
         self._parent.Bind(eclib.EVT_OPTION_CHANGED, self.OnOptionChanged)
 
+        # Editra message handlers
+        ed_msg.Subscribe(self._OnShowFindMsg, ed_msg.EDMSG_FIND_SHOW_DLG)
+
+    def __del__(self):
+        """Cleanup message handlers"""
+        ed_msg.Unsubscribe(self._OnShowFindMsg)
+
     def _CreateNewDialog(self, e_id):
         """Create and set the controlers find dialog
         @param e_id: Dialog Type Id
@@ -108,6 +115,41 @@ class SearchController(object):
             dlg.SetFileFilters(self._filters)
 
         return dlg
+
+    def _OnShowFindMsg(self, msg):
+        """Message handler for clients to request and setup the find dialog
+        with.
+        @param msg: dict(mainw, lookin, findtxt)
+
+        """
+        data = msg.GetData()
+        if data.get('mainw', None) == self._parent.GetTopLevelParent():
+
+            if 'findtxt' in data:
+                self.SetQueryString(data.get('findtxt'))
+            else:
+                query = self.GetClientString()
+                if len(query):
+                    self.SetQueryString(query)
+
+            # Dialog is not currently open
+            if self._finddlg is None:
+                self._finddlg = self._CreateNewDialog(ed_glob.ID_FIND)
+                if self._finddlg is None:
+                    return
+                self._finddlg.SetTransparent(240)
+    #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
+                self._finddlg.Show()
+            else:
+                # Dialog is open already so just update it
+                self._UpdateDialogState(ed_glob.ID_FIND)
+                self._finddlg.Raise()
+
+            if 'lookin' in data:
+                self._finddlg.SetLookinPath(data.get('lookin'))
+            self._finddlg.SetFocus()
+        else:
+            return
 
     def _UpdateDialogState(self, e_id):
         """Update the state of the existing dialog"""
