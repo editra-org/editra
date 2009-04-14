@@ -87,7 +87,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()
-        self._loading = False
+        self._loading = None
         self.key_handler = KeyHandler(self)
 
         # Macro Attributes
@@ -685,13 +685,14 @@ class EditraStc(ed_basestc.EditraBaseStc):
                 self.SetReadOnly(False)
                 self.AppendText(evt.GetValue())
                 self.SetReadOnly(True)
-                wx.GetApp().Yield(True)
+                # wx.GetApp().Yield(True) # Too slow on windows...
         elif evt.GetState() == ed_txt.FL_STATE_END:
             self.SetReadOnly(False)
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 0, 0))
             self.SetSavePoint()
             self.SetUndoCollection(True)
-            self._loading = False
+            del self._loading
+            self._loading = None
             parent = self.GetParent()
             if hasattr(parent, 'DoPostLoad'):
                 parent.DoPostLoad()
@@ -1099,7 +1100,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @return: bool
 
         """
-        return self._loading
+        return self._loading is not None
 
     def IsRecording(self):
         """Returns whether the control is in the middle of recording
@@ -1605,7 +1606,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENING, path)
             self.file.SetPath(path)
             self.file.ReadAsync(self)
-            self._loading = True
+            self._loading = wx.BusyCursor()
             return True
 
     def ReloadFile(self):
