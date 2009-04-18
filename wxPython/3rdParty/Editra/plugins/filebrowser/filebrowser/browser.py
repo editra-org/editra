@@ -203,6 +203,7 @@ class BrowserPane(eclib.ControlBox):
                                           wx.DIRCTRL_EDIT_LABELS | 
                                           wx.BORDER_SUNKEN,
                                     filter=filters)
+        self._browser.SetMainWindow(self._mw)
         self._config = PathMarkConfig(ed_glob.CONFIG['CACHE_DIR'])
         for item in self._config.GetItemLabels():
             self._menbar.AddItem(item)
@@ -332,6 +333,7 @@ class BrowserPane(eclib.ControlBox):
 # Menu Id's
 ID_EDIT = wx.NewId()
 ID_OPEN = wx.NewId()
+ID_SEARCH_DIR = wx.NewId()
 ID_REVEAL = wx.NewId()
 ID_GETINFO = wx.NewId()
 ID_RENAME = wx.NewId()
@@ -351,6 +353,7 @@ class FileBrowser(wx.GenericDirCtrl):
                                    size, style, filter, defaultFilter)
 
         # Attributes
+        self._mw = None
         self._tree = self.GetTreeCtrl()
         self._treeId = 0                # id of TreeItem that was last rclicked
         self._fmenu = self._MakeMenu()
@@ -410,6 +413,8 @@ class FileBrowser(wx.GenericDirCtrl):
                  (wx.ID_SEPARATOR, '', None),
                  (ID_MARK_PATH, _("Bookmark Selected Path(s)"),
                   ed_glob.ID_ADD_BM),
+                 (wx.ID_SEPARATOR, '', None),
+                 (ID_SEARCH_DIR, _("Search in directory"), ed_glob.ID_FIND),
                  (wx.ID_SEPARATOR, '', None),
                  (ID_GETINFO, _("Get Info"), None),
                  (ID_RENAME, _("Rename"), None),
@@ -557,6 +562,13 @@ class FileBrowser(wx.GenericDirCtrl):
         elif e_id == ID_REVEAL:
             worker = OpenerThread([os.path.dirname(fname) for fname in paths])
             worker.start()
+        elif e_id == ID_SEARCH_DIR:
+            path = self.GetPath()
+            if path:
+                if not os.path.isdir(path):
+                    path = os.path.dirname(path)
+                mdata = dict(mainw=self._mw, lookin=path)
+                ed_msg.PostMessage(ed_msg.EDMSG_FIND_SHOW_DLG, mdata) 
         elif e_id == ID_GETINFO:
             last = None
             for fname in paths:
@@ -718,6 +730,13 @@ class FileBrowser(wx.GenericDirCtrl):
 #                 i_txt = self._tree.GetItemText(item)
 #                 print i_txt
 #             item, cookie = self._tree.GetNextChild(item, cookie)
+
+    def SetMainWindow(self, mainw):
+        """Set the main window this browser belongs to.
+        @param mainw: MainWindow or None
+
+        """
+        self._mw = mainw
 
     def SetTreeStyle(self, style):
         """Sets the style of directory controls tree"""
