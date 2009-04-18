@@ -25,6 +25,7 @@ NEW: [features/improvments]
 +Add VisualStudio keybindings option (from Vivian).
 +Updater is only available if user account running program has access
  permissions to the install directory.
++New version of FileBrowser plugin. (adds search in directory option).
 
 BUG FIXES:
 +Fix Launch config not properly being initialized when config panel accessed
