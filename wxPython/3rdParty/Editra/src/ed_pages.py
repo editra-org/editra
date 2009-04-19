@@ -213,6 +213,7 @@ class EdPages(FNB.FlatNotebook):
         super(EdPages, self).AddPage(page, text, select, imgId)
         sel = self.GetSelection()
         self.EnsureVisible(sel)
+        self.UpdateIndexes()
 
     def DocDuplicated(self, path):
         """Check for if the given path is open elswhere and duplicate the
@@ -277,6 +278,11 @@ class EdPages(FNB.FlatNotebook):
         """
         return [(ed_glob.ID_FIND_NEXT, self._searchctrl.OnUpdateFindUI),
                 (ed_glob.ID_FIND_PREVIOUS, self._searchctrl.OnUpdateFindUI)]
+
+    def InsertPage(self, index, page, text, select=True, imageId=-1):
+        """Insert a page into the notebook"""
+        super(EdPages, self).InsertPage(index, page, text, select, imageId)
+        self.UpdateIndexes()
 
     def SaveSessionFile(self, session):
         """Save the current open files to the given session file
@@ -746,6 +752,14 @@ class EdPages(FNB.FlatNotebook):
             txt = ''
         return txt
 
+    def ImageIsReadOnly(self, index):
+        """Does the given page currently have a ReadOnly Image
+        shown on it?
+        @return: bool
+
+        """
+        return self.GetPageImage(index) == self._index[ed_glob.ID_READONLY]
+
     def SetPageText(self, pg_num, txt):
         """Set the pages tab text
         @param pg_num: page index
@@ -965,6 +979,7 @@ class EdPages(FNB.FlatNotebook):
         cpage = self.GetSelection()
         evt.Skip()
         self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
+        self.UpdateIndexes()
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED, (self, cpage))
 
     #---- End Event Handlers ----#
@@ -1049,6 +1064,12 @@ class EdPages(FNB.FlatNotebook):
                 self.SetPageImage(page, str(self.GetPage(page).GetLangId()))
 
         self.Refresh()
+
+    def UpdateIndexes(self):
+        """Update all page indexes"""
+        pages = [self.GetPage(page) for page in xrange(self.GetPageCount())]
+        for idx, page in enumerate(pages):
+            page.SetTabIndex(idx)
 
     def UpdatePageImage(self):
         """Updates the page tab image

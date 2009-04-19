@@ -40,6 +40,7 @@ class EdTabBase(object):
         # Attributes
         self._lbl = u''
         self._nb = nbook
+        self._idx = -1
 
     #---- Methods to override in subclasses ----#
 
@@ -103,12 +104,26 @@ class EdTabBase(object):
 
     #---- Common Base Methods ----#
 
+    def GetTabIndex(self):
+        """Return the index of the tab in the notebook
+        @return: int
+
+        """
+        return self._idx
+
     def GetTabLabel(self):
         """Get the tabs label
         @return: string
 
         """
         return self._lbl
+
+    def SetTabIndex(self, idx):
+        """Set the tab index
+        @param idx: int
+
+        """
+        self._idx = idx
 
     def SetTabLabel(self, lbl):
         """Set the tabs label
