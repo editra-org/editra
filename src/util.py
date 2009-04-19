@@ -36,6 +36,7 @@ import syntax.syntax as syntax
 import syntax.synglob as synglob
 import eclib # TODO: Temporary till refs to HexToRGB and AdjustColor are
              #       no longer used anywhere
+import ebmlib
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -297,7 +298,7 @@ def FilterFiles(file_list):
 
     """
     good = list()
-    checker = FileTypeChecker()
+    checker = ebmlib.FileTypeChecker()
     for path in file_list:
         if not checker.IsBinary(path):
             good.append(path)
@@ -799,59 +800,6 @@ def SetWindowIcon(window):
             window.SetIcon(wx.Icon(ed_icon, wx.BITMAP_TYPE_PNG))
     finally:
         pass
-
-#-----------------------------------------------------------------------------#
-
-class FileTypeChecker:
-    """File type checker and recognizer"""
-    TXTCHARS = ''.join(map(chr, [7,8,9,10,12,13,27] + range(0x20, 0x100)))
-    ALLBYTES = ''.join(map(chr, range(256)))
-
-    def __init__(self, preread=4096):
-        """Create the FileTypeChecker
-        @keyword preread: number of bytes to read for checking file type
-
-        """
-        # Attributes
-        self._preread = preread
-
-    def _GetHandle(self, fname):
-        """Get a file handle for reading
-        @param fname: filename
-        @return: file object or None
-
-        """
-        try:
-            handle = open(fname, 'rb')
-        except:
-            handle = None
-        return handle
-
-    def IsBinary(self, fname):
-        """Is the file made up of binary data
-        @param fname: filename to check
-        @return: bool
-
-        """
-        handle = self._GetHandle(fname)
-        if handle is not None:
-            bytes = handle.read(self._preread)
-            handle.close()
-            nontext = bytes.translate(FileTypeChecker.ALLBYTES,
-                                      FileTypeChecker.TXTCHARS)
-            return bool(nontext)
-        else:
-            return False
-
-    def IsReadableText(self, fname):
-        """Is the given path readable as text
-        @param fname: filename
-
-        """
-        f_ok = False
-        if os.access(fname, os.R_OK):
-            f_ok = not self.IsBinary(fname)
-        return f_ok
 
 #-----------------------------------------------------------------------------#
 

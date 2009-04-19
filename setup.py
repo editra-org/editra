@@ -133,6 +133,7 @@ def GenerateSrcPackageFiles():
     """Generate the list of files to include in a source package dist/install"""
     data = [ "src/*.py", "src/syntax/*.py", "src/autocomp/*.py", 
              "src/eclib/*.py", "docs/*.txt", "pixmaps/*.png", "pixmaps/*.ico",
+             "src/ebmlib/*.py",
              "ekeys/*.ekeys",
              'Editra',
              "src/extern/*.py", "src/extern/pygments/*.py",
