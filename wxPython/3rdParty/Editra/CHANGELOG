@@ -35,6 +35,7 @@ from plugin dialog for first time.
  (modified patch from roman.chyla).
 +Fix some unicode handling issues in search/replace. (patch from roman.chyla)
 +Fix number of printout rendering issues.
++Update readonly status when permissions change on disk.
 
 #-----------------------------------------------------------------------------#
 
