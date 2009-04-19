@@ -90,6 +90,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             lmod = GetFileModTime(cfile)
             mtime = self.GetModTime()
             if mtime and not lmod and not os.path.exists(cfile):
+                # File was deleted since last check
                 wx.CallAfter(self.PromptToReSave, cfile)
             elif mtime < lmod:
                 # Check if we should automatically reload the file or not
@@ -98,6 +99,18 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                     wx.CallAfter(self.DoReloadFile)
                 else:
                     wx.CallAfter(self.AskToReload, cfile)
+
+            # Check for changes to permissions
+            readonly = self._nb.ImageIsReadOnly(self.GetTabIndex())
+            if self.File.IsReadOnly() != readonly:
+                if readonly:
+                    # File is no longer read only
+                    self._nb.SetPageImage(self.GetTabIndex(),
+                                          str(self.GetLangId()))
+                else:
+                    # File has changed to be readonly
+                    self._nb.SetPageImage(self.GetTabIndex(),
+                                          ed_glob.ID_READONLY)
             else:
                 pass
 
