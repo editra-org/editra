@@ -23,6 +23,7 @@ import unittest
 
 # Module to test
 import util
+import eclib
 import ebmlib
 
 #-----------------------------------------------------------------------------#
@@ -42,12 +43,12 @@ class UtilTest(unittest.TestCase):
         c = wx.Colour(125, 125, 125)
 
         # Check that the color was brightened
-        c2 = util.AdjustColour(c, 50)
+        c2 = eclib.AdjustColour(c, 50)
         self.assertTrue(sum(c.Get()) < sum(c2.Get()),
                         "Failed to lighten colour")
 
         # Check that the color was darkened
-        c2 = util.AdjustColour(c, -50)
+        c2 = eclib.AdjustColour(c, -50)
         self.assertTrue(sum(c.Get()) > sum(c2.Get()),
                         "Failed to darken colour")
 

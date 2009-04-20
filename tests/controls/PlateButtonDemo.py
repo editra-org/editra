@@ -24,7 +24,7 @@ import wx
 import wx.lib.scrolledpanel as scrolled
 
 sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib.platebtn as platebtn
+import src.eclib as eclib
 
 from IconFile import *
 
@@ -86,10 +86,10 @@ class TestPanel(scrolled.ScrolledPanel):
         hsizer3.Add((15, 15))
 
         # Button Styles
-        default = platebtn.PB_STYLE_DEFAULT
-        square  = platebtn.PB_STYLE_SQUARE
-        sqgrad  = platebtn.PB_STYLE_SQUARE | platebtn.PB_STYLE_GRADIENT
-        gradient = platebtn.PB_STYLE_GRADIENT
+        default = eclib.PB_STYLE_DEFAULT
+        square  = eclib.PB_STYLE_SQUARE
+        sqgrad  = eclib.PB_STYLE_SQUARE | eclib.PB_STYLE_GRADIENT
+        gradient = eclib.PB_STYLE_GRADIENT
 
         # Create a number of different PlateButtons
         # Each button is created in the below loop by using the data set in this
@@ -127,7 +127,7 @@ class TestPanel(scrolled.ScrolledPanel):
                 #       it is a no-op as this type of transparency is achieved
                 #       without any help needed. On wxGtk it doesn't hurt to
                 #       set but also unfortunatly doesn't help at all.
-                bstyle = btn[2] | platebtn.PB_STYLE_NOBG
+                bstyle = btn[2] | eclib.PB_STYLE_NOBG
             else:
                 bstyle = btn[2]
 
@@ -138,7 +138,7 @@ class TestPanel(scrolled.ScrolledPanel):
             else:
                 tsizer = hsizer3
 
-            tbtn = platebtn.PlateButton(panel, wx.ID_ANY, btn[1], btn[0], style=bstyle)
+            tbtn = eclib.PlateButton(panel, wx.ID_ANY, btn[1], btn[0], style=bstyle)
 
             # Set a custom window size variant?
             if btn[3] is not None:
@@ -215,12 +215,12 @@ class GradientPanel(wx.Panel):
         dc = wx.PaintDC(self)
         gc = wx.GraphicsContext.Create(dc)
         col1 = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DSHADOW)
-        col2 = platebtn.AdjustColour(col1, -90)
-        col1 = platebtn.AdjustColour(col1, 90)
+        col2 = eclib.AdjustColour(col1, -90)
+        col1 = eclib.AdjustColour(col1, 90)
         rect = self.GetClientRect()
         grad = gc.CreateLinearGradientBrush(0, 1, 0, rect.height - 1, col2, col1)
 
-        pen_col = tuple([min(190, x) for x in platebtn.AdjustColour(col1, -60)])
+        pen_col = tuple([min(190, x) for x in eclib.AdjustColour(col1, -60)])
         gc.SetPen(gc.CreatePen(wx.Pen(pen_col, 1)))
         gc.SetBrush(grad)
         gc.DrawRectangle(0, 1, rect.width - 0.5, rect.height - 0.5)

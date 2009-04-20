@@ -35,6 +35,7 @@ import ed_menu
 from ed_style import StyleItem
 import util
 import plugin
+import eclib
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -926,7 +927,7 @@ class RtfColorTbl:
 
         """
         if si_color not in self._index:
-            rgb = util.HexToRGB(si_color.split(u',')[0])
+            rgb = eclib.HexToRGB(si_color.split(u',')[0])
             color = "\\red%d\\green%d\\blue%d;" % tuple(rgb)
             self._index.append(si_color)
             self._tbl[si_color] = color
