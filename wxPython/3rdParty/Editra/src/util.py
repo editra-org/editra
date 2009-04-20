@@ -19,7 +19,6 @@ __revision__ = "$Revision$"
 # Imports
 import os
 import sys
-import stat
 import types
 import mimetypes
 import encodings
@@ -675,29 +674,6 @@ def GetProxyOpener(proxy_set):
     return opener
 
 #---- GUI helper functions ----#
-def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
-    """ Brighten/Darken input colour by percent and adjust alpha
-    channel if needed. Returns the modified color.
-    @param color: color object to adjust
-    @type color: wx.Color
-    @param percent: percent to adjust +(brighten) or -(darken)
-    @type percent: int
-    @keyword alpha: Value to adjust alpha channel to
-    @note: DON'T USE THIS FUNCTION use the one in eclib instead
-           this will be removed at some point.
-
-    """
-    return eclib.AdjustColour(color, percent, alpha)
-
-def HexToRGB(hex_str):
-    """Returns a list of red/green/blue values from a
-    hex string.
-    @param hex_str: hex string to convert to rgb
-    @note: DON'T USE THIS FUNCTION use the one in eclib instead
-           this will be removed at some point.
-
-    """
-    return eclib.HexToRGB(hex_str)
 
 def SetWindowIcon(window):
     """Sets the given windows icon to be the programs

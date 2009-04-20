@@ -108,8 +108,9 @@ def GetHighlightColour():
         if CARBON:
             if wx.VERSION < (2, 9, 0, 0, ''):
                 # kThemeBrushButtonPressedLightHighlight
-                color = wx.MacThemeColour(Carbon.Appearance.kThemeBrushFocusHighlight)
-                return color
+                brush = wx.Brush(wx.BLACK)
+                brush.MacSetTheme(Carbon.Appearance.kThemeBrushFocusHighlight)
+                return brush.GetColour()
             else:
                 color = wx.Colour(Carbon.Appearance.kThemeBrushFocusHighlight)
                 return color
