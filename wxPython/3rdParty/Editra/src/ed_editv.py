@@ -29,7 +29,8 @@ import ed_stc
 import ed_tab
 from doctools import DocPositionMgr
 from profiler import Profile_Get
-from util import GetFileModTime, Log, SetClipboardText
+from util import Log, SetClipboardText
+from ebmlib import GetFileModTime
 
 #--------------------------------------------------------------------------#
 

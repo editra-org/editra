@@ -29,9 +29,10 @@ import types
 from StringIO import StringIO
 
 # Local Imports
-from util import Log, GetFileModTime, GetFileSize
+from util import Log
 from profiler import Profile_Get
 import ed_msg
+from ebmlib import GetFileModTime, GetFileSize
 
 #--------------------------------------------------------------------------#
 # Globals

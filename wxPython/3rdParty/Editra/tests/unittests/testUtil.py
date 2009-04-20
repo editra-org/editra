@@ -23,6 +23,7 @@ import unittest
 
 # Module to test
 import util
+import ebmlib
 
 #-----------------------------------------------------------------------------#
 # Test Class
@@ -65,7 +66,7 @@ class UtilTest(unittest.TestCase):
 
     def testGetFileModTime(self):
         """Test getting a files modtime"""
-        mtime = util.GetFileModTime(self.path)
+        mtime = ebmlib.GetFileModTime(self.path)
         self.assertNotEqual(mtime, 0, "Mtime was: " + str(mtime))
 
     def testGetPathName(self):

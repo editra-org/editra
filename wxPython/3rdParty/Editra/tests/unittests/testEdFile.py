@@ -25,6 +25,7 @@ import common
 # Module(s) to test
 import ed_txt
 import util
+import ebmlib
 
 #-----------------------------------------------------------------------------#
 
@@ -33,7 +34,7 @@ class EdFileTest(unittest.TestCase):
         self.app = common.EdApp(False)
         self.path = os.path.abspath('./data/test_read_utf8.txt')
         self.file = ed_txt.EdFile(self.path)
-        self.mtime = util.GetFileModTime(self.path)
+        self.mtime = ebmlib.GetFileModTime(self.path)
 
     def tearDown(self):
         self.file.Close()
