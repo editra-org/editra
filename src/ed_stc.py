@@ -38,6 +38,7 @@ import ed_msg
 import ed_mdlg
 import ed_txt
 from ed_keyh import KeyHandler, ViKeyHandler
+import ebmlib
 
 #-------------------------------------------------------------------------#
 # Globals
@@ -1596,7 +1597,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @param path: path to file
 
         """
-        fsize = util.GetFileSize(path)
+        fsize = ebmlib.GetFileSize(path)
         tlw = self.GetTopLevelParent()
         pid = tlw.GetId()
 
@@ -1624,7 +1625,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
                 cpos = self.GetCurrentPos()
                 # TODO: Handle async re-loads of large files
                 self.SetText(self.File.Read())
-                self.SetModTime(util.GetFileModTime(cfile))
+                self.SetModTime(ebmlib.GetFileModTime(cfile))
                 for mark in marks:
                     self.MarkerAdd(mark, ed_basestc.MARK_MARGIN)
                 self.EndUndoAction()
@@ -1697,7 +1698,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         if result:
             self.SetSavePoint()
-            self.SetModTime(util.GetFileModTime(path))
+            self.SetModTime(ebmlib.GetFileModTime(path))
             self.File.FireModified()
             self.SetFileName(path)
 

@@ -36,6 +36,7 @@ import ed_mdlg
 import syntax.syntax
 import util
 import eclib
+import ebmlib
 
 # Local Imports
 import Trash
@@ -583,9 +584,9 @@ class FileBrowser(wx.GenericDirCtrl):
         elif e_id == ID_RENAME:
             self._tree.EditLabel(self._treeId)
         elif e_id == ID_NEW_FOLDER:
-            ok = util.MakeNewFolder(path, _("Untitled_Folder"))
+            ok = ebmlib.MakeNewFolder(path, _("Untitled_Folder"))
         elif e_id == ID_NEW_FILE:
-            ok = util.MakeNewFile(path, _("Untitled_File") + ".txt")
+            ok = ebmlib.MakeNewFile(path, _("Untitled_File") + ".txt")
         elif e_id == ID_DUPLICATE:
             for fname in paths:
                 ok = DuplicatePath(fname)
@@ -823,7 +824,7 @@ def DuplicatePath(path):
     """
     head, tail = os.path.split(path)
     if os.path.isdir(path):
-        name = util.GetUniqueName(head, tail + "_Copy")
+        name = ebmlib.GetUniqueName(head, tail + "_Copy")
         copy = shutil.copytree
     else:
         tmp = [ part for part in tail.split('.') if len(part) ]
@@ -839,7 +840,7 @@ def DuplicatePath(path):
             tmp = '.'.join(tmp[:-1]) + "_Copy." + tmp[-1]
 
         if len(tmp) > 1:
-            name = util.GetUniqueName(head, tmp)
+            name = ebmlib.GetUniqueName(head, tmp)
         copy = shutil.copy2
 
     try:
@@ -861,7 +862,7 @@ def MakeArchive(path):
     ok = True
     name = ''
     if dname and fname:
-        name = util.GetUniqueName(dname, fname + ".zip")
+        name = ebmlib.GetUniqueName(dname, fname + ".zip")
         files = list()
         cwd = os.getcwd()
         head = dname

@@ -14,7 +14,7 @@ Utility functions for managing and working with files.
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__cvsid__ = "$Id$"
+__svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = [ 'GetFileModTime', 'GetFileSize', 'GetUniqueName', 'MakeNewFile',

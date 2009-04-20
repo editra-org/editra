@@ -37,6 +37,7 @@ import ed_glob
 import ed_event
 from profiler import CalcVersionValue, Profile_Get
 import util
+import ebmlib
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -197,7 +198,7 @@ class UpdateService(object):
         if CalcVersionValue(ed_glob.VERSION) < CalcVersionValue(current):
             dl_path = self.GetCurrFileURL()
             dl_file = dl_path.split('/')[-1]
-            dl_to = util.GetUniqueName(dl_to, dl_file)
+            dl_to = ebmlib.GetUniqueName(dl_to, dl_file)
             blk_sz = 4096
             read = 0
             try:

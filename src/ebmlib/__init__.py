@@ -19,3 +19,4 @@ __revision__ = "$Revision$"
 
 from searcheng import *
 from fchecker import *
+from fileutil import *
