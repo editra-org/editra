@@ -38,7 +38,7 @@ class FileBackupMgr(object):
         
 
     @staticmethod
-    def GetBackupFilename(self, fname):
+    def GetBackupFilename(fname):
         """Get the unique name for the files backup copy
         @param fname: string (file path)
         @return: string
