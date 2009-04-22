@@ -102,6 +102,7 @@ class EdPyShellBox(eclib.ControlBox):
         ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
         if wx.Platform == '__WXGTK__':
             ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
+            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_BORDER_BOTTOM)
 
         self._choice = wx.Choice(ctrlbar, wx.ID_ANY, choices=self._styles)
 
