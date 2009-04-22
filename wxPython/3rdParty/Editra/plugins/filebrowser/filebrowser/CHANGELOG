@@ -7,6 +7,8 @@ Version 1.4:
 
     - Api compatibility changes.
     - Search in Directory context menu option.
+    - Fix bug that could happen in notebook notification of page change when
+      all pages have been closed in the notebook.
 
 Version 1.3:
 

@@ -633,6 +633,9 @@ class FileBrowser(wx.GenericDirCtrl):
         """
         
         nbdata = msg.GetData()
+        if nbdata[0].GetPageCount() < nbdata[1]:
+            return # must have closed all pages in the notebook
+
         page = nbdata[0].GetPage(nbdata[1])
         path = page.GetFileName()
         if len(path) and os.path.exists(path):
