@@ -30,17 +30,18 @@ class EdTabBase(object):
     base class after initializing the wx control instance of the subclass.
 
     """
-    def __init__(self, nbook):
-        """Initialize the tab base class
-        @param nbook: Notebook instance
-
-        """
+    def __init__(self):
+        """Initialize the tab base class"""
         object.__init__(self)
 
         # Attributes
         self._lbl = u''
-        self._nb = nbook
         self._idx = -1
+
+    @property
+    def _nb(self):
+        """Get the notebook that owns this tab"""
+        return self.GetParent()
 
     #---- Methods to override in subclasses ----#
 

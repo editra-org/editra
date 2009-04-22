@@ -47,7 +47,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                  size=wx.DefaultSize, style=0, use_dt=True):
         """Initialize the editor view"""
         ed_stc.EditraStc.__init__(self, parent, id_, pos, size, style, use_dt)
-        ed_tab.EdTabBase.__init__(self, parent)
+        ed_tab.EdTabBase.__init__(self)
 
         # Attributes
         self._ignore_del = False
