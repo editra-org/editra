@@ -100,7 +100,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
                             autoindent=_PGET('AUTO_INDENT'),
                             brackethl=_PGET('BRACKETHL'),
                             folding=_PGET('CODE_FOLD'),
-                            highlight=_PGET('SYNTAX'))
+                            highlight=_PGET('SYNTAX'),
+                            autobkup=_PGET('AUTOBACKUP'))
 
         # Set Default Styles used by all documents
         self.Configure()
