@@ -88,6 +88,7 @@ class TestPanel(segmentbk.SegmentBook):
             self.GetParent().Freeze()
             txt = wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Enter Text Here")
             self.AddPage(txt, "Text Editor", select=True, img_id=0)
+            self.SetPageCloseButton(self.GetPageCount()-1)
             self.GetParent().Thaw()
         elif e_id == wx.ID_DELETE:
             self.log.write("SegmentBook Delete Page")
