@@ -229,7 +229,7 @@ class SegmentBook(ctrlbox.ControlBox):
         @param index: int
 
         """
-        cpage = self._segbar.GetSelection() 
+        cpage = self._segbar.GetSelection()
         self._segbar.RemoveSegment(index)
         npage = self._segbar.GetSelection()
         self._DoPageChange(cpage, npage)

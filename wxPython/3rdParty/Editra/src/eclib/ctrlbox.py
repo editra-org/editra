@@ -869,8 +869,9 @@ class SegmentBar(ControlBar):
         """
         button = self._buttons[index]
 
-        if button['bmp']:
-            button['bmp'].Destroy()
+        # TODO: wxPython 2.8.9.2 this causes a crash...
+#        if button['bmp']:
+#            button['bmp'].Destroy()
         del self._buttons[index]
 
         if self.GetSelection() == index:
