@@ -24,7 +24,7 @@ __all__ = [ 'FileBackupMgr', ]
 import os
 import shutil
 
-# Locak Imports
+# Local Imports
 import fileutil
 
 #-----------------------------------------------------------------------------#
@@ -69,7 +69,7 @@ class FileBackupMgr(object):
         else:
             return False
 
-    def MakeBackup(self, fname):
+    def MakeBackupCopy(self, fname):
         """Create a backup copy of the given filename
         @param fname: string (file path)
         @return: bool (True == Success)
@@ -85,3 +85,11 @@ class FileBackupMgr(object):
             return False
         else:
             return True
+
+    def MakeBackupCopyAsync(self, fname):
+        """Do the backup asyncronously
+        @param fname: string (file path)
+        @todo: Not implemented yet
+
+        """
+        raise NotImplementedError, "TODO: once threadpool is finished"
