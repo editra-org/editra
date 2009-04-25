@@ -27,7 +27,10 @@ __revision__ = "$Revision$"
 # Dependancies
 import wx.stc as stc
 
-# TODO: Make dynamic load mechanism and manager for completer classes.
+# Local imports
+import completer
+import simplecomp
+
 #--------------------------------------------------------------------------#
 
 class AutoCompService(object):
@@ -42,19 +45,64 @@ class AutoCompService(object):
         object.__init__(self)
 
     @staticmethod
-    def GetCompleter(buff):
+    def GetCompleter(buff, extended=False):
+        """Get the appropriate completer object for the given buffer.
+        @todo: implement dynamic loading mechanism for each comp class
+
+        """
         lex_value = buff.GetLexer()
         if lex_value == stc.STC_LEX_PYTHON:
             import pycomp
-            completer = pycomp.Completer(buff)
+            completer = pycomp.Completer
         elif lex_value in (stc.STC_LEX_HTML, stc.STC_LEX_XML):
             import htmlcomp
-            completer = htmlcomp.Completer(buff)
+            completer = htmlcomp.Completer
         elif lex_value == stc.STC_LEX_CSS:
             import csscomp
-            completer = csscomp.Completer(buff)
+            completer = csscomp.Completer
         else:
-            import simplecomp
-            completer = simplecomp.Completer(buff)
+            return simplecomp.Completer(buff)
+
+        if extended:
+            completer = CompleterFactory(completer, buff)
+        else:
+            completer = completer(buff)
 
         return completer
+
+#--------------------------------------------------------------------------#
+
+class MetaCompleter(type):
+    """Meta class for creating custom completer classes at runtime"""
+    def __call__(self, base, buff, **kwargs):
+        """Modify the base class with our new methods at time of
+        instantiation.
+
+        """
+        obj = type.__call__(self, base, buff, **kwargs)
+ 
+        # Set/override attributes on the new completer object.
+        setattr(obj, 'BaseGetAutoCompList', obj.GetAutoCompList)
+        setattr(obj, 'GetAutoCompList', lambda cmd: GetAutoCompList(obj, cmd))
+        setattr(obj, '_scomp', simplecomp.Completer(buff))
+
+        # Return the new augmented completer
+        return obj
+
+def GetAutoCompList(self, command):
+    """Apply SimpleCompleter results to base results from the
+    'smart' completer.
+
+    """
+    data = self.BaseGetAutoCompList(command)
+    exdata = self._scomp.GetAutoCompList(command)
+    data.extend(exdata)
+    return data
+
+class CompleterFactory(object):
+    """Factory for creating composite completer objects"""
+    __metaclass__ = MetaCompleter
+    def __new__(cls, base, buff):
+        """Return an instance of the passed in class type"""
+        self = base(buff)
+        return self

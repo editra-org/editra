@@ -724,13 +724,21 @@ class DocCodePanel(wx.Panel):
         # Input Helpers
         comp_cb = wx.CheckBox(self, ed_glob.ID_AUTOCOMP, _("Auto-Completion"))
         comp_cb.SetValue(Profile_Get('AUTO_COMP'))
+        compex_cb = wx.CheckBox(self, ed_glob.ID_PREF_AUTOCOMPEX,
+                                _("Extended Auto-Comp"))
+        compex_cb.SetValue(Profile_Get('AUTO_COMP_EX'))
+        compex_cb.Enable(comp_cb.GetValue())
+        compex_cb.SetToolTipString(_("Warning suggestions will include"
+                                     " context insensitive results"))
+        compex_sz = wx.BoxSizer(wx.HORIZONTAL)
+        compex_sz.AddMany([((16, -1), 0), (compex_cb, 0)])
         ai_cb = wx.CheckBox(self, ed_glob.ID_AUTOINDENT, _("Auto-Indent"))
         ai_cb.SetValue(Profile_Get('AUTO_INDENT'))
         vi_cb = wx.CheckBox(self, ed_glob.ID_VI_MODE, _("Enable Vi Emulation"))
         vi_cb.SetValue(Profile_Get('VI_EMU'))
 
         # Layout the controls
-        sizer = wx.FlexGridSizer(13, 2, 5, 5)
+        sizer = wx.FlexGridSizer(14, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("General") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (dlex_sz, 0),
@@ -743,6 +751,7 @@ class DocCodePanel(wx.Panel):
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Input Helpers") + u": "),
                         0), (comp_cb, 0),
+                       ((5, 5), 0), (compex_sz, 0),
                        ((5, 5), 0), (ai_cb, 0),
                        ((5, 5), 0), (vi_cb, 0),
                        ((10, 10), 0), ((10, 10), 0)])
@@ -760,7 +769,8 @@ class DocCodePanel(wx.Panel):
                     ed_glob.ID_INDENT_GUIDES, ed_glob.ID_FOLDING,
                     ed_glob.ID_AUTOCOMP, ed_glob.ID_AUTOINDENT,
                     ed_glob.ID_PREF_EDGE, ed_glob.ID_VI_MODE,
-                    ed_glob.ID_PREF_DLEXER, ed_glob.ID_HLCARET_LINE):
+                    ed_glob.ID_PREF_DLEXER, ed_glob.ID_HLCARET_LINE,
+                    ed_glob.ID_PREF_AUTOCOMPEX):
 
             e_val = evt.GetEventObject().GetValue()
 
@@ -768,13 +778,22 @@ class DocCodePanel(wx.Panel):
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_val)
 
             # Make ui adjustments
+            meth = None
+            args = list()
             if e_id == ed_glob.ID_SHOW_EDGE:
                 spin = self.FindWindowById(ed_glob.ID_PREF_EDGE)
                 if spin is not None:
                     spin.Enable(e_val)
+            elif e_id == ed_glob.ID_AUTOCOMP:
+                cbox = self.FindWindowById(ed_glob.ID_PREF_AUTOCOMPEX)
+                if cbox is not None:
+                    cbox.Enable(e_val)
+
+            if e_id == ed_glob.ID_PREF_AUTOCOMPEX:
+                meth = 'ConfigureAutoComp'
 
             # Inform views of preference changes
-            wx.CallLater(25, DoUpdates)
+            wx.CallLater(25, DoUpdates, meth, args)
         else:
             evt.Skip()
 
@@ -1926,7 +1945,7 @@ def GetPrintModeStrings():
             _('Inverse'),           # PRINT_INVERSE
             _('Normal')]            # PRINT_NORMAL
 
-def DoUpdates():
+def DoUpdates(meth=None, args=list()):
     """Update all open text controls"""
     for mainw in wx.GetApp().GetMainWindows():
-        mainw.nb.UpdateTextControls()
+        mainw.nb.UpdateTextControls(meth, args)

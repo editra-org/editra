@@ -29,6 +29,8 @@ NEW: [features/improvments]
 +Updater is only available if user account running program has access
  permissions to the install directory.
 +New version of FileBrowser plugin. (adds search in directory option).
++Add option for extended autocompletion to include results from the simple
+completer in with results.
 
 BUG FIXES:
 +Fix Launch config not properly being initialized when config panel accessed

@@ -44,6 +44,7 @@ _DEFAULTS = {
            'APPSPLASH'  : True,             # Show splash at startup
            'AUTOBACKUP' : False,            # Automatically backup files
            'AUTO_COMP'  : True,             # Use Auto-comp if available
+           'AUTO_COMP_EX' : False,          # Use extended autocompletion
            'AUTO_INDENT': True,             # Use Auto Indent
            'AUTO_TRIM_WS' : False,          # Trim whitespace on save
            'AUTO_RELOAD' : False,           # Automatically reload files?

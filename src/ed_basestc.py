@@ -32,6 +32,7 @@ import ed_txt
 from syntax import syntax
 from autocomp import autocomp
 from extern import vertedit
+from profiler import Profile_Get
 
 #-----------------------------------------------------------------------------#
 
@@ -213,8 +214,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         self.AutoCompSetAutoHide(False)
         self.AutoCompSetChooseSingle(True)
-#        self._code['compsvc'].LoadCompProvider(self.GetLexer())
-        self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self)
+        extend = Profile_Get('AUTO_COMP_EX') # Using extended autocomp?
+        self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self, extend)
         self.AutoCompSetIgnoreCase(not self._code['compsvc'].GetCaseSensitive())
         self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
         # TODO: come back to this it can cause some annoying behavior where
