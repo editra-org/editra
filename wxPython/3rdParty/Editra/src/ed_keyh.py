@@ -27,7 +27,9 @@ import wx, wx.stc
 # Editra Libraries
 import ed_event
 import ed_glob
+import ed_basestc
 import ed_stc
+import string
 
 # Vi command regex patterns
 VI_DCMD_RIGHT = '[bBcdeEGhHlLMwWy|{}$<>]'
@@ -35,8 +37,17 @@ VI_DOUBLE_P1 = re.compile('[cdy<>][0-9]*' + VI_DCMD_RIGHT)
 VI_DOUBLE_P2 = re.compile('[0-9]*[cdy<>]' + VI_DCMD_RIGHT)
 VI_SINGLE_REPEAT = re.compile('[0-9]*[bBCDeEGhjJkloOpPsuwWxX{}~|+-]')
 VI_GCMDS = re.compile('g[fg]')
-VI_FCMDS = re.compile('[0-9]*[ftFT].')
+VI_FCMDS = re.compile(u'[0-9]*[ftFT].')
+VI_BM = re.compile(u'[m`].')
+VI_IDENT = re.compile(u'\*|\#')
 NUM_PAT = re.compile('[0-9]*')
+REPEAT_RE = re.compile("([0-9]*)(.*)")
+
+#commands that operator on motions
+VI_CMD_MOTIONS = re.compile(u'[0-9]*[cyd].*')
+
+VI_FIND_FORWARD = 1
+VI_FIND_REVERSE = -1
 
 #-------------------------------------------------------------------------#
 # Use this base class to derive any new keyhandlers from. The keyhandler is
@@ -109,6 +120,7 @@ class ViKeyHandler(KeyHandler):
         self.last = u''
         self.last_find = u''
         self.cmdcache = u''
+        self.bookmarks = {}
 
         # Use Insert mode by default
         self.SetMode(ViKeyHandler.INSERT)
@@ -195,6 +207,7 @@ class ViKeyHandler(KeyHandler):
         # Gather common needed data
         cpos = self.stc.GetCurrentPos()
         cline = self.stc.LineFromPosition(cpos)
+        ccol = self.stc.GetColumn(cpos)
         mw = self.stc.GetTopLevelParent()
         mpane = mw.GetEditPane()
 
@@ -204,7 +217,7 @@ class ViKeyHandler(KeyHandler):
             mpane.ShowCommandControl(ed_glob.ID_COMMAND)
 
         # Single key commands
-        if len(cmd) == 1 and (cmd in 'AHILmM0^$nia/?:'):
+        if len(cmd) == 1 and (cmd in 'AHILM0^$nia/?:'):
             if  cmd in u'A$': # Insert at EOL
                 self.stc.GotoPos(self.stc.GetLineEndPosition(cline))
             elif cmd == u'H': # Go first visible line # todo allow num
@@ -217,11 +230,6 @@ class ViKeyHandler(KeyHandler):
                 self.stc.GotoIndentPos(self.stc.GetLastVisibleLine())
             elif cmd == u'M': # Goto middle line of display
                 self.stc.GotoIndentPos(self.stc.GetMiddleVisibleLine())
-            elif cmd == u'm': # Mark line
-                if self.stc.MarkerGet(cline):
-                    self.stc.Bookmark(ed_glob.ID_DEL_BM)
-                else:
-                    self.stc.Bookmark(ed_glob.ID_ADD_BM)
             elif cmd == u'a': # insert mode after current pos
                 self.stc.GotoPos(cpos + 1)
             elif cmd in u'/?':
@@ -520,15 +528,23 @@ class ViKeyHandler(KeyHandler):
                 pass # TODO: gf (Goto file at cursor)
             self.last = cmd
             self.cmdcache = u''
+        elif re.match(VI_IDENT, cmd):
+            direction = {u'#' : VI_FIND_REVERSE, u'*' : VI_FIND_FORWARD}[cmd]
+            self._VimFindIdent(direction)
+            self.cmdcache = u''
+        # Bookmarks
+        elif re.match(VI_BM, cmd):
+            self._VimBookmark(cmd)
+            self.cmdcache = u''
         # Motions towards a character
         elif re.match(VI_FCMDS, cmd):
             self._VimFindChar(cmd)
             self.last_find = cmd
             self.cmdcache = u''
-        elif cmd == u';':
+        elif cmd == u';' and self.last_find:
             self._VimFindChar(self.last_find)
             self.cmdcache = u''
-        elif cmd == u',':
+        elif cmd == u',' and self.last_find:
             self._VimFindChar(self._VimFindCharReverseCmd(self.last_find))
             self.cmdcache = u''
         else:
@@ -543,25 +559,105 @@ class ViKeyHandler(KeyHandler):
 
         return True
 
+    def _VimBookmark(self, cmd):
+        """Handle vim-style bookmarks"""
+        label = cmd[1]
+        
+        # Add bookmark
+        if cmd[0] == u'm':
+            cline = self.stc.GetCurrentLine()
+            text, ccol = self.stc.GetCurLine()
+
+            if label in string.ascii_lowercase: # Local bookmarks
+                bm_handle = self.stc.MarkerAdd(cline, ed_basestc.MARK_MARGIN)
+                self.bookmarks[label] = (bm_handle, ccol)
+            elif label in string.ascii_uppercase: # Global bookmarks
+                # TODO
+                pass
+        else: # ` goto bookmark
+            if label in self.bookmarks:
+                bm_handle, col = self.bookmarks[label]
+                line = self.stc.MarkerLineFromHandle(bm_handle)
+                if line != -1:
+                    pos = self.stc.FindColumn(line, col)
+                    self.stc.GotoPos(pos)
+                else: #line == -1 means the bookmark was deleted by the user
+                    del self.bookmarks[label] #XXX: is this safe?
+
     def _VimFindCharReverseCmd(self, cmd):
         """Reverse the direction of the find char command given by `cmd`
         @return: a string representing the command in reverse direction
 
         """
+        if not cmd: return cmd
         return cmd[:-2] + cmd[-2].swapcase() + cmd[-1]
 
-    def _VimFindChar(self, cmd):
-        """Vim fFtT motion"""
-        ch = cmd[-1] # character to find
-        cmd_type = cmd[-2]
+    def _VimFindChar(self, cmd, extend=False):
+        """Vim f/F/t/T motion
+        @param cmd: command string
+        @keyword extend: extend the selection
+
+        """
+        repeat, cmd = SplitRepeatCmd(cmd)
+        ch = cmd[1] #character to find
+        cmd_type = cmd[0]
         mcmd = { u'f' : self.stc.FindNextChar,
                  u'F' : self.stc.FindPrevChar,
                  r't' : self.stc.FindTillNextChar,
                  r'T' : self.stc.FindTillPrevChar,
         }
-        repeat = cmd[:-2]
-        if repeat == '':
-            repeat = 1
+        mcmd[cmd_type](ch, repeat, extend)
+
+    def _VimFindIdent(self, direction=VI_FIND_FORWARD):
+        """Vim motion to find next (or previous) occurance of identifier
+        @param direction: VI_FIND_
+
+        """
+        ident = self.stc.GetIdentifierUnderCursor()
+        flags = wx.stc.STC_FIND_WHOLEWORD | wx.stc.STC_FIND_MATCHCASE
+        if not ident:
+            return # Nothing to find
+        if direction == VI_FIND_FORWARD: # Search forward
+            self.stc.GotoPos(self.stc.GetSelectionEnd())
+            self.stc.SearchAnchor()
+            res = self.stc.SearchNext(flags, ident)
+            if res == -1: # Nothing found, search from top
+                self.stc.DocumentStart()
+                self.stc.SearchAnchor()
+                self.stc.SearchNext(flags, ident)
+        elif direction == VI_FIND_REVERSE: # Search backward
+            self.stc.SearchAnchor()
+            res = self.stc.SearchPrev(flags, ident)
+            if res == -1: # Nothing found, search from bottom
+                self.stc.DocumentEnd()
+                self.stc.SearchAnchor()
+                self.stc.SearchPrev(flags, ident)
         else:
-            repeat = int(repeat)
-        mcmd[cmd_type](ch, repeat)
+            raise Exception("Invalid search direction")
+
+        #XXX: -10 is a hack for reasonable scrolling
+        #     otherwise line would be first, which is odd
+        self.stc.ScrollToLine(self.stc.GetCurrentLine()-10)
+
+
+# ---------------------------------------------------------------------------- #
+# Utility Functions
+
+def SplitRepeatCmd( cmd ):
+    """Split the command strings into a pair (repeat, rest)
+
+    >>>SplitRepeatCmd( '3ab' )
+    (3, 'ab')
+    >>>SplitRepeatCmd( 'abc' )
+    (1, 'abc')
+    >>>SplitRepeatCmd( 'ab2' )
+    (1, 'ab2')
+
+    """
+    cmd = cmd.strip() #just in case
+    repeat, rest = re.match( REPEAT_RE, cmd ).groups()
+    if repeat == '':
+        repeat = 1
+    else:
+        repeat = int(repeat)
+    return (repeat, rest)
