@@ -237,7 +237,8 @@ class SearchController(object):
         else:
             count = 0
 
-        wx.MessageBox(_("The search term \'%s\' was found %d times.") % (query, count),
+        rmap = dict(term=query, count=count)
+        wx.MessageBox(_("The search term \'%(term)s\' was found %(count)d times.") % rmap,
                       _("Find Count"),
                       wx.ICON_INFORMATION|wx.OK)
 
