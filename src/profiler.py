@@ -42,6 +42,7 @@ _DEFAULTS = {
            'ALPHA'      : 255,              # Transparency level (0-255)
            'AALIASING'  : False,            # Use Anti-Aliasing if availble
            'APPSPLASH'  : True,             # Show splash at startup
+           'AUTOBACKUP' : False,            # Automatically backup files
            'AUTO_COMP'  : True,             # Use Auto-comp if available
            'AUTO_INDENT': True,             # Use Auto Indent
            'AUTO_TRIM_WS' : False,          # Trim whitespace on save
