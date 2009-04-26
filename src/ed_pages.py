@@ -642,6 +642,7 @@ class EdPages(FNB.FlatNotebook):
                 control.Destroy()
             else:
                 # We where using an existing buffer so reset it
+                "CLEARED IT"
                 control.SetText('')
                 control.SetDocument(ed_txt.EdFile())
                 control.SetSavePoint()
