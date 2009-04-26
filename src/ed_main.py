@@ -838,7 +838,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         # Save session files
         session = _PGET('LAST_SESSION')
-        if not session or session is None:
+        if not isinstance(session, basestring):
             session = os.path.join(CONFIG['SESSION_DIR'], u"__default.session")
         _PSET('LAST_SESSION', session)
         self.nb.SaveSessionFile(session)
