@@ -288,6 +288,9 @@ ID_CLASS_TYPE = wx.NewId()
 ID_FUNCT_TYPE = wx.NewId()
 ID_ELEM_TYPE = wx.NewId()
 ID_VARIABLE_TYPE = wx.NewId()
+ID_ATTR_TYPE = wx.NewId()
+ID_PROPERTY_TYPE = wx.NewId()
+ID_METHOD_TYPE = wx.NewId()
 
 # Statusbar IDs
 SB_INFO          = 0

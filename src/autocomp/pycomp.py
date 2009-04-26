@@ -102,13 +102,13 @@ class Completer(completer.BaseCompleter):
                     if sig['type'] == "function":
                         word += u'?%d' % completer.IMG_FUNCTION
                     elif sig['type'] == "method":
-                        word += u'?%d' % completer.IMG_FUNCTION #METHOD
+                        word += u'?%d' % completer.IMG_METHOD
                     elif sig['type'] == "class":
                         word += u'?%d' % completer.IMG_CLASS
                     elif sig['type'] == "attribute":
-                        word += u'?%d' % completer.IMG_VARIABLE #ATTRIBUTE
+                        word += u'?%d' % completer.IMG_ATTRIBUTE
                     elif sig['type'] == "property":
-                        word += u'?%d' % completer.IMG_VARIABLE #ATTRIBUTE
+                        word += u'?%d' % completer.IMG_PROPERTY
 
                     sigs.append(word)
 

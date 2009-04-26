@@ -260,7 +260,10 @@ ART = { ed_glob.ID_ABOUT  : u'about.png',
         ed_glob.ID_CLASS_TYPE : u'class.png',
         ed_glob.ID_FUNCT_TYPE : u'function.png',
         ed_glob.ID_ELEM_TYPE : u'element.png',
-        ed_glob.ID_VARIABLE_TYPE : u'variable.png'
+        ed_glob.ID_VARIABLE_TYPE : u'variable.png',
+        ed_glob.ID_ATTR_TYPE : u'attribute.png',
+        ed_glob.ID_PROPERTY_TYPE : u'property.png',
+        ed_glob.ID_METHOD_TYPE : u'method.png'
 }
 
 # File Type Art

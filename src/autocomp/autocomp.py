@@ -53,22 +53,22 @@ class AutoCompService(object):
         lex_value = buff.GetLexer()
         if lex_value == stc.STC_LEX_PYTHON:
             import pycomp
-            completer = pycomp.Completer
+            compl = pycomp.Completer
         elif lex_value in (stc.STC_LEX_HTML, stc.STC_LEX_XML):
             import htmlcomp
-            completer = htmlcomp.Completer
+            compl = htmlcomp.Completer
         elif lex_value == stc.STC_LEX_CSS:
             import csscomp
-            completer = csscomp.Completer
+            compl = csscomp.Completer
         else:
             return simplecomp.Completer(buff)
 
         if extended:
-            completer = CompleterFactory(completer, buff)
+            compl = CompleterFactory(compl, buff)
         else:
-            completer = completer(buff)
+            compl = compl(buff)
 
-        return completer
+        return compl
 
 #--------------------------------------------------------------------------#
 
