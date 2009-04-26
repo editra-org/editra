@@ -121,20 +121,23 @@ class CodeBrowserTree(wx.TreeCtrl):
     def _SetupImageList(self):
         """Setup the image list for the tree"""
         imglst = wx.ImageList(16, 16)
-        if Profile_Get('ICONS', 'Default') != 'Default':
-            globe = wx.ArtProvider.GetBitmap(str(ed_glob.ID_WEB), wx.ART_MENU)
-            self.icons['globals'] = imglst.Add(globe)
-        else:
-            self.icons['globals'] = imglst.Add(IconFile.World.GetBitmap())
-        self.icons['class'] = imglst.Add(IconFile.Bricks.GetBitmap())
+
+        globe = wx.ArtProvider.GetBitmap(str(ed_glob.ID_WEB), wx.ART_MENU)
+        self.icons['globals'] = imglst.Add(globe)
+
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_CLASS_TYPE), wx.ART_MENU)
+        self.icons['class'] = imglst.Add(bmp)
         self.icons['section'] = imglst.Add(IconFile.Brick_Add.GetBitmap())
-        self.icons['function'] = imglst.Add(IconFile.Brick_Go.GetBitmap())
-        self.icons['method'] = self.icons['function']
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FUNCT_TYPE), wx.ART_MENU)
+        self.icons['function'] = imglst.Add(bmp)
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_METHOD_TYPE), wx.ART_MENU)
+        self.icons['method'] = imglst.Add(bmp)
         self.icons['subroutine'] = self.icons['function']
         self.icons['procedure'] = self.icons['function']
-        self.icons['task'] = imglst.Add(IconFile.Brick_Go2.GetBitmap())
+        self.icons['task'] = imglst.Add(bmp)
         self.icons['function2'] = self.icons['task']
-        self.icons['variable'] = imglst.Add(IconFile.Brick.GetBitmap())
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_VARIABLE_TYPE), wx.ART_MENU)
+        self.icons['variable'] = imglst.Add(bmp)
         self.icons['namespace'] = imglst.Add(IconFile.Brick_Bricks.GetBitmap())
         self.icons['tag_red'] = imglst.Add(IconFile.Tag_Red.GetBitmap())
         self.icons['tag_blue'] = imglst.Add(IconFile.Tag_Blue.GetBitmap())
