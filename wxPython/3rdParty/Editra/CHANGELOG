@@ -43,6 +43,8 @@ from plugin dialog for first time.
 +Update readonly status when permissions change on disk.
 +Fix error in moving a tab from one window to another when the tab was the only
 tab left in the window it was moved from. (filebrowser bug).
++Fix condition where saving the session file could potentially potentially be
+passed the incorrect type.
 
 #-----------------------------------------------------------------------------#
 
