@@ -24,6 +24,7 @@ import time
 import wx
 import threading
 import codecs
+import encodings
 import locale
 import types
 from StringIO import StringIO
@@ -262,16 +263,16 @@ class EdFile(object):
                 enc = CheckBom(lines[0])
                 if enc is None:
                     self.bom = None
-                    enc = CheckMagicComment(lines)
-                    if enc:
-                        self._magic['comment'] = enc
+                    if not self._magic['bad']:
+                        enc = CheckMagicComment(lines)
+                        if enc:
+                            self._magic['comment'] = enc
                 else:
                     Log("[ed_txt][info] File Has %s BOM" % enc)
                     self.bom = unicode(BOM.get(enc, None), enc)
 
             if enc is not None:
                 self.encoding = enc
-
             try:
                 reader = codecs.getreader(self.encoding)(self._handle)
                 txt = u''
@@ -294,6 +295,10 @@ class EdFile(object):
 
                 enc, txt = FallbackReader(self.path)
                 if enc is not None:
+                    Log("[ed_txt][info] Fallback reader succeeded with: %s" % enc)
+                    # TODO: don't clear the error and allow the client to
+                    #       analyze it for error reporting.
+                    self.ClearLastError()
                     self.encoding = enc
                 else:
                     raise UnicodeDecodeError, msg
@@ -335,9 +340,10 @@ class EdFile(object):
                 enc = CheckBom(lines[0])
                 if enc is None:
                     self.bom = None
-                    enc = CheckMagicComment(lines)
-                    if enc:
-                        self._magic['comment'] = enc
+                    if not self._magic['bad']:
+                        enc = CheckMagicComment(lines)
+                        if enc:
+                            self._magic['comment'] = enc
                 else:
                     Log("[ed_txt][info] File Has %s BOM" % enc)
                     self.bom = unicode(BOM.get(enc, None), enc)
