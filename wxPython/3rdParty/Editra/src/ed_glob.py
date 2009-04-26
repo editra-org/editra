@@ -283,6 +283,12 @@ ID_VI_MODE           = wx.NewId()
 ID_WEB               = wx.NewId()
 ID_READONLY          = wx.NewId()
 
+# Code Elements (ids for art provider)
+ID_CLASS_TYPE = wx.NewId()
+ID_FUNCT_TYPE = wx.NewId()
+ID_ELEM_TYPE = wx.NewId()
+ID_VARIABLE_TYPE = wx.NewId()
+
 # Statusbar IDs
 SB_INFO          = 0
 SB_BUFF          = 1
