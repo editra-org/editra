@@ -601,6 +601,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def RegisterImages(self):
         """Register the images for the autocomp popup list"""
         images = [(autocomp.IMG_FUNCTION, ed_glob.ID_FUNCT_TYPE),
+                  (autocomp.IMG_METHOD, ed_glob.ID_METHOD_TYPE),
+                  (autocomp.IMG_PROPERTY, ed_glob.ID_PROPERTY_TYPE),
                   (autocomp.IMG_CLASS, ed_glob.ID_CLASS_TYPE),
                   (autocomp.IMG_VARIABLE, ed_glob.ID_VARIABLE_TYPE),
                   (autocomp.IMG_ELEMENT, ed_glob.ID_ELEM_TYPE)]

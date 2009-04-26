@@ -18,7 +18,7 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = [ 'IMG_FUNCTION', 'IMG_METHOD', 'IMG_CLASS', 'IMG_ATTRIBUTE',
-            'IMG_VARIABLE', 'IMG_ELEMENT' ]
+            'IMG_VARIABLE', 'IMG_ELEMENT', 'IMG_PROPERTY' ]
 
 #--------------------------------------------------------------------------#
 # Imports
@@ -31,8 +31,9 @@ IMG_FUNCTION, \
 IMG_METHOD, \
 IMG_CLASS, \
 IMG_ATTRIBUTE, \
+IMG_PROPERTY, \
 IMG_VARIABLE, \
-IMG_ELEMENT  = range(1, 7)
+IMG_ELEMENT  = range(1, 8)
 
 #--------------------------------------------------------------------------#
 
