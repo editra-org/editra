@@ -74,17 +74,17 @@ class AutoCompService(object):
 
 class MetaCompleter(type):
     """Meta class for creating custom completer classes at runtime"""
-    def __call__(self, base, buff, **kwargs):
+    def __call__(mcs, base, buff):
         """Modify the base class with our new methods at time of
         instantiation.
 
         """
-        obj = type.__call__(self, base, buff, **kwargs)
+        obj = type.__call__(mcs, base, buff)
  
         # Set/override attributes on the new completer object.
         setattr(obj, 'BaseGetAutoCompList', obj.GetAutoCompList)
         setattr(obj, 'GetAutoCompList', lambda cmd: GetAutoCompList(obj, cmd))
-        setattr(obj, '_scomp', simplecomp.Completer(buff))
+        setattr(obj, 'scomp', simplecomp.Completer(buff))
 
         # Return the new augmented completer
         return obj
@@ -95,7 +95,7 @@ def GetAutoCompList(self, command):
 
     """
     data = self.BaseGetAutoCompList(command)
-    exdata = self._scomp.GetAutoCompList(command)
+    exdata = self.scomp.GetAutoCompList(command)
     data.extend(exdata)
     return data
 
