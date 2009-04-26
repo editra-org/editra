@@ -121,9 +121,10 @@ class Completer(completer.BaseCompleter):
         # Check if we are completing an open tag
         if tmp.endswith('<'):
             if buff.GetLexer() == wx.stc.STC_LEX_XML:
-                return _FindXmlTags(buff.GetText())
+                taglst = _FindXmlTags(buff.GetText())
             else:
-                return TAGS
+                taglst = TAGS
+            return WrapTagImages(taglst)
 
         tmp = tmp.rstrip('>').rstrip()
         if len(tmp) and (tmp[-1] in '"\' \t' or tmp[-1].isalpha()):
@@ -168,3 +169,11 @@ def _FindXmlTags(text):
     else:
         matches = [u'!--', ]
     return matches
+
+def WrapTagImages(taglst):
+    """Apply image identifiers to completion strings
+    @return: list
+
+    """
+    tagstr = u"?%d" % completer.IMG_ELEMENT
+    return [ tag + tagstr for tag in taglst ]
