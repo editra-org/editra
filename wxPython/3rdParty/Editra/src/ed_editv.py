@@ -181,7 +181,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         if not len(title):
             title = fname = self.GetTabLabel()
 
-        if self.GetModify():
+        if self.GetModify() and not title.startswith(u'*'):
             title = u"*" + title
         return u"%s - file://%s" % (title, fname)
 
