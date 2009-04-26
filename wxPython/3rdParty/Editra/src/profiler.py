@@ -229,6 +229,10 @@ class Profile(dict):
 
         """
         try:
+            # Only write if given an absolute path
+            if not os.path.isabs(path):
+                return False
+
             self.Set('MYPROFILE', path)
             UpdateProfileLoader()
             fhandle = open(path, 'wb')
