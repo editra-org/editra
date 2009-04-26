@@ -96,7 +96,23 @@ class Completer(completer.BaseCompleter):
             else:
                 # Get Autocompletion List
                 complst = cmpl.get_completions(command)
-                sigs = [ sig['word'].rstrip('(.') for sig in complst ]
+                sigs = list()
+                for sig in complst:
+                    word = sig['word'].rstrip(u'(.')
+                    if sig['type'] == "function":
+                        word += u'?%d' % completer.IMG_FUNCTION
+                    elif sig['type'] == "method":
+                        word += u'?%d' % completer.IMG_FUNCTION #METHOD
+                    elif sig['type'] == "class":
+                        word += u'?%d' % completer.IMG_CLASS
+                    elif sig['type'] == "attribute":
+                        word += u'?%d' % completer.IMG_VARIABLE #ATTRIBUTE
+                    elif sig['type'] == "property":
+                        word += u'?%d' % completer.IMG_VARIABLE #ATTRIBUTE
+
+                    sigs.append(word)
+
+#                sigs = [ sig['word'].rstrip('(.') for sig in complst ]
                 sigs.sort(lambda x, y: cmp(x.upper(), y.upper()))
                 return sigs
 
@@ -258,6 +274,7 @@ class PyCompleter(object):
 
             dbg("[pycomp] completing: stmt:%s" % stmt)
             completions = []
+            isdict = isinstance(compdict, dict)
             for meth in compdict:
                 if meth == "_PyCmplNoType":
                     continue #this is internal
@@ -281,22 +298,38 @@ class PyCompleter(object):
                         else:
                             doc = ' '
 
+                        if isdict:
+                            typestr = str(compdict[inst])
+                        else:
+                            typestr = str(inst)
+
                         comp = {'word' : meth,
                                 'abbr' : meth,
-                                'info' : _cleanstr(str(doc))}
+                                'info' : _cleanstr(str(doc)),
+                                'type' : typestr}
 
-                        typestr = str(inst)
                         if "function" in typestr:
                             comp['word'] += '('
                             comp['abbr'] += '(' + _cleanstr(self.get_arguments(inst))
+                            comp['type'] = "function"
                         elif "method" in typestr:
                             comp['word'] += '('
                             comp['abbr'] += '(' + _cleanstr(self.get_arguments(inst))
+                            comp['type'] = "method"
                         elif "module" in typestr:
                             comp['word'] += '.'
+                            comp['type'] = "module"
                         elif "class" in typestr:
                             comp['word'] += '('
                             comp['abbr'] += '('
+                            comp['type'] = "class"
+                        elif "attribute" in typestr:
+                            comp['type'] = "attribute"
+                        elif "property" in typestr:
+                            comp['type'] = "property"
+#                        else:
+#                            print typestr, meth
+
                         completions.append(comp)
                 except Exception, msg:
                     dbg("[pycomp][err] inner completion: %s [stmt='%s']:" % (msg, stmt))

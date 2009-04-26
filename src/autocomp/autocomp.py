@@ -28,7 +28,7 @@ __revision__ = "$Revision$"
 import wx.stc as stc
 
 # Local imports
-import completer
+from completer import *
 import simplecomp
 
 #--------------------------------------------------------------------------#

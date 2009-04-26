@@ -91,6 +91,10 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             for keys in _GetMacKeyBindings():
                 self.CmdKeyAssign(*keys)
 
+        # Setup Autocomp images
+        # TODO: should be called on theme change messages
+        self.RegisterImages()
+
         # Event Handlers
         self.Bind(wx.stc.EVT_STC_CHANGE, self.OnChanged)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
@@ -593,6 +597,17 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self._code['clexer'](self, self.GetEndStyled(), evt.GetPosition())
         else:
             evt.Skip()
+
+    def RegisterImages(self):
+        """Register the images for the autocomp popup list"""
+        images = [(autocomp.IMG_FUNCTION, ed_glob.ID_FUNCT_TYPE),
+                  (autocomp.IMG_CLASS, ed_glob.ID_CLASS_TYPE),
+                  (autocomp.IMG_VARIABLE, ed_glob.ID_VARIABLE_TYPE),
+                  (autocomp.IMG_ELEMENT, ed_glob.ID_ELEM_TYPE)]
+        for idx, img in images:
+            bmp = wx.ArtProvider.GetBitmap(str(img), wx.ART_MENU)
+            if bmp.IsOk():
+                self.RegisterImage(idx, bmp)
 
     def SetDocument(self, doc):
         """Change the document object used.

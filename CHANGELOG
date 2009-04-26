@@ -31,6 +31,7 @@ NEW: [features/improvments]
 +New version of FileBrowser plugin. (adds search in directory option).
 +Add option for extended autocompletion to include results from the simple
 completer in with results.
++Add support for showing images in the autocompletion popup list.
 
 BUG FIXES:
 +Fix Launch config not properly being initialized when config panel accessed

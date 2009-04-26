@@ -17,9 +17,22 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
+__all__ = [ 'IMG_FUNCTION', 'IMG_METHOD', 'IMG_CLASS', 'IMG_ATTRIBUTE',
+            'IMG_VARIABLE', 'IMG_ELEMENT' ]
+
 #--------------------------------------------------------------------------#
 # Imports
 import wx
+
+#--------------------------------------------------------------------------#
+
+# Image Type Ids
+IMG_FUNCTION, \
+IMG_METHOD, \
+IMG_CLASS, \
+IMG_ATTRIBUTE, \
+IMG_VARIABLE, \
+IMG_ELEMENT  = range(1, 7)
 
 #--------------------------------------------------------------------------#
 

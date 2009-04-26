@@ -254,7 +254,13 @@ ART = { ed_glob.ID_ABOUT  : u'about.png',
         ed_glob.ID_ZOOM_IN : u'zoomi.png',
         ed_glob.ID_ZOOM_OUT : u'zoomo.png',
         ed_glob.ID_ZOOM_NORMAL : u'zoomd.png',
-        ed_glob.ID_READONLY : u'readonly.png'
+        ed_glob.ID_READONLY : u'readonly.png',
+
+        # code elements
+        ed_glob.ID_CLASS_TYPE : u'class.png',
+        ed_glob.ID_FUNCT_TYPE : u'function.png',
+        ed_glob.ID_ELEM_TYPE : u'element.png',
+        ed_glob.ID_VARIABLE_TYPE : u'variable.png'
 }
 
 # File Type Art
