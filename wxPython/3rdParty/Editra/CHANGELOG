@@ -10,12 +10,17 @@ Change Log:
 Changes since last release:
 
 VERSION 0.4.85
-DATE 0x/xx/2009
+DATE 04/26/2009
 25th Alpha Release
 
 NEWS:
 
-
+This release includes some important bug fixes and performance improvements
+for when loading large files (10MB+). In addition to this there are some new
+and improved vi commands as well as some alternate default key binding profiles.
+Hopefully this will be the last release of the 0.4 series as things are shaping
+up for the 0.5 development cycle. For further details on this release please
+review the following release notes.
 
 NEW: [features/improvments]
 +Greatly improved performance of loading large files.
@@ -46,6 +51,7 @@ from plugin dialog for first time.
 tab left in the window it was moved from. (filebrowser bug).
 +Fix condition where saving the session file could potentially potentially be
 passed the incorrect type.
++Fix error in loading files that have an improper magic encoding comment.
 
 #-----------------------------------------------------------------------------#
 
