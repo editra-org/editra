@@ -22,6 +22,10 @@ Hopefully this will be the last release of the 0.4 series as things are shaping
 up for the 0.5 development cycle. For further details on this release please
 review the following release notes.
 
+Please also note that if you are using the Projects plugin that you wil also
+need to update it to the newly released 1.0 version due to some api changes that
+make 0.9 incompatible with 1.0.
+
 NEW: [features/improvments]
 +Greatly improved performance of loading large files.
 +Add Count feature to find dialog for counting number of matches in a buffer.
