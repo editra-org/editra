@@ -322,6 +322,9 @@ class ViKeyHandler(KeyHandler):
                 repeat = 1
             elif rcmd == u'O':
                 kargs['before'] = True
+                kargs['indent'] = True
+            elif rcmd == u'o':
+                kargs['indent'] = True
 
             # Start an undo action so all changes can be rolled back at once
             self.stc.BeginUndoAction()

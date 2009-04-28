@@ -212,18 +212,23 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.EndUndoAction()
 
     #---- Begin Function Definitions ----#
-    def AddLine(self, before=False):
+    def AddLine(self, before=False, indent=False):
         """Add a new line to the document
-        @param before: whether to add the line before current pos or not
+        @keyword before: whether to add the line before current pos or not
+        @keyword indent: autoindent the new line
         @postcondition: a new line is added to the document
 
         """
         if before:
             self.LineUp()
+
         self.LineEnd()
-        self.AutoIndent()
-        # We need LineEnd first because AutoIdent works as if
-        # we pressed enter at caret position
+
+        if indent:
+            self.AutoIndent()
+        else:
+            self.InsertText(self.GetCurrentPos(), self.GetEOLChar())
+            self.LineDown()
 
     def Bookmark(self, action):
         """Handles bookmark actions
