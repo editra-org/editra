@@ -312,7 +312,7 @@ class PyCompleter(object):
                             comp['word'] += '('
                             comp['abbr'] += '(' + _cleanstr(self.get_arguments(inst))
                             comp['type'] = "function"
-                        elif "method" in typestr:
+                        elif "method" in typestr or "slot wrapper" in typestr:
                             comp['word'] += '('
                             comp['abbr'] += '(' + _cleanstr(self.get_arguments(inst))
                             comp['type'] = "method"
@@ -323,9 +323,11 @@ class PyCompleter(object):
                             comp['word'] += '('
                             comp['abbr'] += '('
                             comp['type'] = "class"
-                        elif "attribute" in typestr:
+                        elif "attribute" in typestr or \
+                             (not typestr.startswith('__') and \
+                              not typestr.startswith('<')):
                             comp['type'] = "attribute"
-                        elif "property" in typestr:
+                        elif "property" in typestr: 
                             comp['type'] = "property"
 #                        else:
 #                            print typestr, meth
