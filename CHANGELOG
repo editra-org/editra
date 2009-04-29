@@ -9,6 +9,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.x.xx
+DATE 0x/xx/2009
+26th Alpha Release
+
+NEWS:
+
+
+NEW: [features/improvements]
+
+
+BUG FIXES:
++Fix attribute error that could occur with extended autocomp (patch from cowo)
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.4.85
 DATE 04/26/2009
 25th Alpha Release

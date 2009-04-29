@@ -74,7 +74,7 @@ class Completer(completer.BaseCompleter):
 
         """
         if command is None or (len(command) and command[0].isdigit()):
-            return ''
+            return list()
 
         try:
             cmpl = PyCompleter()
