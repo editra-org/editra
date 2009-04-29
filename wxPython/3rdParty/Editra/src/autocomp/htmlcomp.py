@@ -105,14 +105,14 @@ class Completer(completer.BaseCompleter):
 
         """
         if command in [None, u'']:
-            return u''
+            return list()
 
         buff = self.GetBuffer()
         cpos = buff.GetCurrentPos()
 
         # Check if we are in a php region or not
         if buff.GetStyleAt(cpos) not in HTML_AREA:
-            return u''
+            return list()
 
         cline = buff.GetCurrentLine()
 
