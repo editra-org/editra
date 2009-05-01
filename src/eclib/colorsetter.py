@@ -102,6 +102,7 @@ class ColorSetter(wx.Panel):
 
         self._preval = value
         evt = ColorSetterEvent(csEVT_COLORSETTER, self.GetId(), value)
+        evt.SetEventObject(self)
         wx.PostEvent(self.GetParent(), evt)
 
     def __UpdateValues(self):
