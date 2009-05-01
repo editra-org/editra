@@ -23,6 +23,7 @@ import re
 import platform
 import traceback
 import time
+import urllib2
 import webbrowser
 import codecs
 import locale
@@ -415,7 +416,11 @@ class ErrorDialog(wx.Dialog):
         elif e_id == ID_SEND:
             msg = "mailto:%s?subject=Error Report&body=%s"
             addr = "bugs@%s" % (ed_glob.HOME_PAGE.replace("http://", '', 1))
-            msg = msg % (addr, self.err_msg)
+            if wx.Platform != '__WXMAC__':
+                msg = urllib2.quote(self.err_msg)
+            else:
+                msg = self.err_msg
+            msg = msg % (addr, msg)
             msg = msg.replace("'", '')
             webbrowser.open(msg)
             self.Close()
