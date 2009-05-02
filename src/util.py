@@ -443,6 +443,20 @@ def MakeConfigDir(name):
     except (OSError, IOError):
         pass
 
+def RepairConfigState(path):
+    """Repair the state of profile path, updating and creating it
+    it does not exist.
+    @param path: path of profile
+
+    """
+    if os.path.isabs(path) and os.path.exists(path):
+        return path
+    else:
+        # Need to fix some stuff up
+        CreateConfigDir()
+        import profiler
+        return profiler.Profile_Get("MYPROFILE")
+
 def CreateConfigDir():
     """ Creates the user config directory its default sub
     directories and any of the default config files.
@@ -472,6 +486,7 @@ def CreateConfigDir():
     import profiler
     profiler.Profile().LoadDefaults()
     profiler.Profile_Set("MYPROFILE", dest_file)
+    profiler.Profile().Write(dest_file)
     profiler.UpdateProfileLoader()
 
 def ResolvConfigDir(config_dir, sys_only=False):

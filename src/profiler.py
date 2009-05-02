@@ -232,12 +232,11 @@ class Profile(dict):
             # Only write if given an absolute path
             if not os.path.isabs(path):
                 return False
-
             self.Set('MYPROFILE', path)
-            UpdateProfileLoader()
             fhandle = open(path, 'wb')
             cPickle.dump(self.copy(), fhandle, cPickle.HIGHEST_PROTOCOL)
             fhandle.close()
+            UpdateProfileLoader()
         except (IOError, cPickle.PickleError), msg:
             dev_tool.DEBUGP(u"[profile][err] %s" % msg)
             return False
@@ -457,6 +456,7 @@ def ProfileVersionStr():
 
 def UpdateProfileLoader():
     """Updates Loader File
+    @precondition: MYPROFILE has been set
     @postcondition: on disk profile loader is updated
     @return: 0 if no error, non zero for error condition
 
@@ -466,7 +466,7 @@ def UpdateProfileLoader():
         return 1
 
     prof_name = Profile_Get('MYPROFILE')
-    if not prof_name:
+    if not prof_name or not os.path.isabs(prof_name):
         prof_name = CONFIG['PROFILE_DIR'] + 'default.ppb'
 
     if not os.path.exists(prof_name):

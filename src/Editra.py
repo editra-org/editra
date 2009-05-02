@@ -675,12 +675,15 @@ def InitConfig():
     profile_updated = False
     if util.HasConfigDir() and os.path.exists(ed_glob.CONFIG['PROFILE_DIR']):
         if profiler.ProfileIsCurrent():
-            profiler.Profile().Load(profiler.GetProfileStr())
+            pstr = profiler.GetProfileStr()
+            pstr = util.RepairConfigState(pstr)
+            profiler.Profile().Load(pstr)
         else:
             dev_tool.DEBUGP("[InitConfig][info] Updating Profile to current version")
 
             # Load and update profile
             pstr = profiler.GetProfileStr()
+            pstr = util.RepairConfigState(pstr)
             profiler.Profile().Load(pstr)
             profiler.Profile().Update()
 
@@ -794,7 +797,6 @@ def UpgradeOldInstall():
     if os.path.exists(old_cdir) and \
        base.lower().rstrip(os.sep) != old_cdir.lower().rstrip(os.sep):
         for item in os.listdir(old_cdir):
-            print item
             try:
                 dest = os.path.join(base, item)
                 item = os.path.join(old_cdir, item)
