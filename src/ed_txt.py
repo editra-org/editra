@@ -17,14 +17,12 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Imports
-import os
 import sys
 import re
 import time
 import wx
 import threading
 import codecs
-import encodings
 import locale
 import types
 from StringIO import StringIO
@@ -33,7 +31,7 @@ from StringIO import StringIO
 from util import Log
 from profiler import Profile_Get
 import ed_msg
-from ebmlib import GetFileModTime, GetFileSize
+import ebmlib
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -73,27 +71,22 @@ class WriteError(Exception):
 
 #--------------------------------------------------------------------------#
 
-class EdFile(object):
+class EdFile(ebmlib.FileObjectImpl):
     """Wrapper for representing a file object that stores data
     about the file encoding and path.
 
     """
-    def __init__(self, path='', modtime=0):
+    def __init__(self, path=u'', modtime=0):
         """Create the file wrapper object
         @param path: the absolute path to the file
 
         """
-        object.__init__(self)
+        ebmlib.FileObjectImpl.__init__(self, path, modtime)
 
         # Attribtues
-        self._handle = None
         self._magic = dict(comment=None, bad=False)
         self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
-        self.open = False
-        self.path = path
         self.bom = None
-        self.modtime = modtime
-        self.last_err = None
         self._mcallback = list()
 
     def AddModifiedCallback(self, callback):
@@ -103,46 +96,9 @@ class EdFile(object):
         """
         self._mcallback.append(callback)
 
-    def ClearLastError(self):
-        """Reset the error marker on this file"""
-        del self.last_err
-        self.last_err = None
-
-    def Close(self):
-        """Close the file handle
-        @note: this is normally done automatically after a read/write operation
-
-        """
-        try:
-            self._handle.close()
-        except:
-            pass
-
-        self.open = False
-
     def CleanUp(self):
         """Cleanup callback"""
         pass
-
-    def DoOpen(self, mode):
-        """Opens and creates the internal file object
-        @param mode: mode to open file in
-        @return: True if opened, False if not
-        @postcondition: self._handle is set to the open handle
-
-        """
-        if not len(self.path):
-            return False
-
-        try:
-            file_h = open(self.path, mode)
-        except (IOError, OSError), msg:
-            self.last_err = msg
-            return False
-        else:
-            self._handle = file_h
-            self.open = True
-            return True
 
     @property
     def Encoding(self):
@@ -172,22 +128,6 @@ class EdFile(object):
         """
         return self.encoding
 
-    def GetExtension(self):
-        """Get the files extension if it has one else simply return the
-        filename minus the path.
-        @return: string file extension (no dot)
-
-        """
-        fname = os.path.split(self.path)
-        return fname[-1].split(os.extsep)[-1].lower()
-
-    def GetLastError(self):
-        """Return the last error that occured when using this file
-        @return: err traceback or None
-
-        """
-        return str(self.last_err).replace("u'", "'")
-
     def GetMagic(self):
         """Get the magic comment if one was present
         @return: string or None
@@ -195,55 +135,12 @@ class EdFile(object):
         """
         return self._magic['comment']
 
-    def GetModtime(self):
-        """Get the timestamp of this files last modification"""
-        return self.modtime
-
-    def GetPath(self):
-        """Get the path of the file
-        @return: string
-
-        """
-        return self.path
-
-    def GetSize(self):
-        """Get the size of the file
-        @return: int
-
-        """
-        if self.path:
-            return GetFileSize(self.path)
-        else:
-            return 0
-
     def HasBom(self):
         """Return whether the file has a bom byte or not
         @return: bool
 
         """
         return self.bom is not None
-
-    def IsOpen(self):
-        """Check if file is open or not
-        @return: bool
-
-        """
-        return self.open
-
-    def IsReadOnly(self):
-        """Is the file Read Only
-        @return: bool
-
-        """
-        if os.path.exists(self.path):
-            return not os.access(self.path, os.R_OK|os.W_OK)
-        else:
-            return False
-
-    @property
-    def Modtime(self):
-        """File modification time propery"""
-        return self.GetModtime()
 
     def Read(self, store=None, chunk=512):
         """Get the contents of the file as a string, automatically handling
@@ -256,8 +153,8 @@ class EdFile(object):
 
         """
         if self.DoOpen('rb'):
-            lines = [ self._handle.readline() for x in range(2) ]
-            self._handle.seek(0)
+            lines = [ self.Handle.readline() for x in range(2) ]
+            self.Handle.seek(0)
             enc = None
             if len(lines):
                 enc = CheckBom(lines[0])
@@ -274,7 +171,7 @@ class EdFile(object):
             if enc is not None:
                 self.encoding = enc
             try:
-                reader = codecs.getreader(self.encoding)(self._handle)
+                reader = codecs.getreader(self.encoding)(self.Handle)
                 txt = u''
                 if store is None:
                     while 1:
@@ -288,12 +185,12 @@ class EdFile(object):
             except Exception, msg:
                 Log("[ed_txt][err] Error while reading with %s" % self.encoding)
                 Log("[ed_txt][err] %s" % msg)
-                self.last_err = str(msg)
+                self.SetLastError(unicode(msg))
                 self.Close()
                 if self._magic['comment']:
                     self._magic['bad'] = True
 
-                enc, txt = FallbackReader(self.path)
+                enc, txt = FallbackReader(self.GetPath())
                 if enc is not None:
                     Log("[ed_txt][info] Fallback reader succeeded with: %s" % enc)
                     # TODO: don't clear the error and allow the client to
@@ -307,11 +204,11 @@ class EdFile(object):
                 Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
                 txt = txt.replace(self.bom, u'', 1)
 
-            Log("[ed_txt][info] Decoded %s with %s" % (self.path, self.encoding))
-            self.SetModTime(GetFileModTime(self.path))
+            Log("[ed_txt][info] Decoded %s with %s" % (self.GetPath(), self.encoding))
+            self.SetModTime(ebmlib.GetFileModTime(self.GetPath()))
             return txt
         else:
-            raise ReadError, self.last_err
+            raise ReadError, self.GetLastError()
 
     def ReadAsync(self, control):
         """Read the file asynchronously on a separate thread
@@ -319,7 +216,7 @@ class EdFile(object):
 
         """
         pid = control.GetTopLevelParent().GetId()
-        filesize = GetFileSize(self.path)
+        filesize = ebmlib.GetFileSize(self.GetPath())
         ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 1, filesize))
         thread = FileReadThread(control, self.ReadGenerator, 4096)
         thread.start()
@@ -333,8 +230,8 @@ class EdFile(object):
 
         """
         if self.DoOpen('rb'):
-            lines = [ self._handle.readline() for x in range(2) ]
-            self._handle.seek(0)
+            lines = [ self.Handle.readline() for x in range(2) ]
+            self.Handle.seek(0)
             enc = None
             if len(lines):
                 enc = CheckBom(lines[0])
@@ -352,7 +249,7 @@ class EdFile(object):
                 self.encoding = enc
 
             try:
-                reader = codecs.getreader(self.encoding)(self._handle)
+                reader = codecs.getreader(self.encoding)(self.Handle)
                 while 1:
                     tmp = reader.read(chunk)
                     if not len(tmp):
@@ -362,7 +259,7 @@ class EdFile(object):
             except Exception, msg:
                 Log("[ed_txt][err] Error while reading with %s" % self.encoding)
                 Log("[ed_txt][err] %s" % msg)
-                self.last_err = unicode(msg)
+                self.SetLastError(unicode(msg))
                 self.Close()
                 if self._magic['comment']:
                     self._magic['bad'] = True
@@ -374,15 +271,10 @@ class EdFile(object):
 #                else:
 #                    raise UnicodeDecodeError, msg
 
-            Log("[ed_txt][info] Decoded %s with %s" % (self.path, self.encoding))
-            self.SetModTime(GetFileModTime(self.path))
+            Log("[ed_txt][info] Decoded %s with %s" % (self.GetPath(), self.encoding))
+            self.SetModTime(ebmlib.GetFileModTime(self.GetPath()))
         else:
-            raise ReadError, self.last_err
-
-    @property
-    def ReadOnly(self):
-        """Is the file read only?"""
-        return self.IsReadOnly()
+            raise ReadError, self.GetLastError()
 
     def RemoveModifiedCallback(self, callback):
         """Remove a registered callback
@@ -394,14 +286,10 @@ class EdFile(object):
 
     def ResetAll(self):
         """Reset all attributes of this file"""
-        self._handle = None
+        super(EdFile, self).ResetAll()
         self._magic = dict(comment=None, bad=False)
         self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
-        self.open = False
-        self.path = ''
         self.bom = None
-        self.modtime = 0
-        self.last_err = None
 
     def SetEncoding(self, enc):
         """Explicitly set/change the encoding of the file
@@ -411,20 +299,6 @@ class EdFile(object):
         if enc is None:
             enc = DEFAULT_ENCODING
         self.encoding = enc
-
-    def SetPath(self, path):
-        """Set the path of the file
-        @param path: absolute path to file
-
-        """
-        self.path = path
-
-    def SetModTime(self, mtime):
-        """Set the modtime of this file
-        @param mtime: long int to set modtime to
-
-        """
-        self.modtime = mtime
 
     def ReadLines(self):
         """Get the contents of the file as a list of lines
@@ -452,16 +326,16 @@ class EdFile(object):
 
         # Open and write the file
         if self.DoOpen('wb'):
-            Log("[ed_txt][info] Opened %s, writing as %s" % (self.path, self.encoding))
-            writer = codecs.getwriter(self.encoding)(self._handle)
+            Log("[ed_txt][info] Opened %s, writing as %s" % (self.GetPath(), self.encoding))
+            writer = codecs.getwriter(self.encoding)(self.Handle)
             if self.HasBom():
                 Log("[ed_txt][info] Adding BOM back to text")
                 value = self.bom + value
             writer.write(value)
             writer.close()
-            Log("[ed_txt][info] %s was written successfully" % self.path)
+            Log("[ed_txt][info] %s was written successfully" % self.GetPath())
         else:
-            raise WriteError, self.last_err
+            raise WriteError, self.GetLastError()
 
 #-----------------------------------------------------------------------------#
 

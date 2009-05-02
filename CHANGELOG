@@ -21,6 +21,8 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Fix attribute error that could occur with extended autocomp (patch from cowo)
++Properly escape text in body of Error Reporter message so that it is a proper
+link webbrower to open.
 
 #-----------------------------------------------------------------------------#
 
