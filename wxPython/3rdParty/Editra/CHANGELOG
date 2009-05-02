@@ -9,17 +9,17 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.x.xx
-DATE 0x/xx/2009
+VERSION 0.4.88
+DATE 05/02/2009
 26th Alpha Release
 
 NEWS:
 
-
-NEW: [features/improvements]
-
+Quick bug fix release for settings not being able to be saved on a new install.
 
 BUG FIXES:
++Fix major issue with profile not being properly initialized on a new install
+that would cause settings to not be saved.
 +Fix attribute error that could occur with extended autocomp (patch from cowo)
 +Properly escape text in body of Error Reporter message so that it is a proper
 link webbrower to open.
