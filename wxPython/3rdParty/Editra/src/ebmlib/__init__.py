@@ -17,6 +17,8 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 
+# Text Utils
 from searcheng import *
 from fchecker import *
 from fileutil import *
+from fileimpl import *
