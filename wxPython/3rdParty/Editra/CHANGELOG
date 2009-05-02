@@ -22,7 +22,7 @@ BUG FIXES:
 that would cause settings to not be saved.
 +Fix attribute error that could occur with extended autocomp (patch from cowo)
 +Properly escape text in body of Error Reporter message so that it is a proper
-link webbrower to open.
+link for webbrower to open.
 
 #-----------------------------------------------------------------------------#
 
