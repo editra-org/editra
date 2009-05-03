@@ -425,6 +425,10 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 curr_pos -= 1
             else:
                 break
+
+        for char in cmd_lmt:
+            cmd = cmd.replace(char, u'')
+
         return cmd.strip()
 
     def GetCommentChars(self):

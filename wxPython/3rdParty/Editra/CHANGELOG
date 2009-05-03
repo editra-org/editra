@@ -9,6 +9,22 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.4.xx
+DATE 0x/xx/2009
+27th Alpha Release
+
+NEWS:
+
+
+NEW: [features/improvements]
+
+
+BUG FIXES:
++Fix python autocomp from failing when word was next to a boundry character.
+
+#-----------------------------------------------------------------------------#
+Changes since last release:
+
 VERSION 0.4.88
 DATE 05/02/2009
 26th Alpha Release
