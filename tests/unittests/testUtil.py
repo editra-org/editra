@@ -26,8 +26,6 @@ import common
 
 # Module to test
 import util
-import eclib
-import ebmlib
 
 #-----------------------------------------------------------------------------#
 # Test Class
@@ -41,19 +39,6 @@ class UtilTest(unittest.TestCase):
         self.app.Destroy()
 
     #---- Tests ----#
-    def testAdjustColour(self):
-        """Test that a valid colour results are returned"""
-        c = wx.Colour(125, 125, 125)
-
-        # Check that the color was brightened
-        c2 = eclib.AdjustColour(c, 50)
-        self.assertTrue(sum(c.Get()) < sum(c2.Get()),
-                        "Failed to lighten colour")
-
-        # Check that the color was darkened
-        c2 = eclib.AdjustColour(c, -50)
-        self.assertTrue(sum(c.Get()) > sum(c2.Get()),
-                        "Failed to darken colour")
 
     def testGetFileName(self):
         """Test that getting the file name from a string returns the correct
