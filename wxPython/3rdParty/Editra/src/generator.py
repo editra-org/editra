@@ -35,6 +35,7 @@ import ed_menu
 from ed_style import StyleItem
 import util
 import plugin
+import ebmlib
 import eclib
 
 #--------------------------------------------------------------------------#
@@ -206,7 +207,7 @@ class Html(plugin.Plugin):
                "<meta name=\"Generator\" content=\"Editra/%s\">\n" \
                "<meta http-equiv=\"content-type\" content=\"text/html; " \
                "charset=utf-8\">" \
-               "\n</head>" % (util.GetFileName(self.stc.GetFileName()),
+               "\n</head>" % (ebmlib.GetFileName(self.stc.GetFileName()),
                               ed_glob.VERSION)
 
     def GenerateBody(self):

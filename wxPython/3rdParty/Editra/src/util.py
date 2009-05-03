@@ -373,13 +373,6 @@ def GetFileWriter(file_name, enc='utf-8'):
         writer = file_h
     return writer
 
-def GetPathName(path):
-    """Gets the path minus filename
-    @param path: full path to get base of
-
-    """
-    return os.path.split(path)[0]
-
 def GetFileManagerCmd():
     """Get the file manager open command for the current os. Under linux
     it will check for xdg-open, nautilus, konqueror, and Thunar, it will then
@@ -400,21 +393,6 @@ def GetFileManagerCmd():
                 return cmd
         else:
             return 'nautilus'
-
-def GetFileName(path):
-    """Gets last atom on end of string as filename
-    @param path: full path to get filename from
-
-    """
-    return os.path.split(path)[-1]
-
-def GetExtension(file_str):
-    """Gets last atom at end of string as extension if
-    no extension whole string is returned
-    @param file_str: path or file name to get extension from
-
-    """
-    return file_str.split('.')[-1]
 
 def HasConfigDir(loc=u""):
     """ Checks if the user has a config directory and returns True

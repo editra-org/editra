@@ -44,6 +44,7 @@ import generator
 import plugin
 import perspective as viewmgr
 import iface
+import ebmlib
 import eclib
 
 # Function Aliases
@@ -442,15 +443,15 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                     if _PGET('OPEN_NW', default=False):
                         wx.GetApp().OpenNewWindow(path)
                     else:
-                        self.nb.OpenPage(util.GetPathName(path),
-                                         util.GetFileName(path))
+                        self.nb.OpenPage(ebmlib.GetPathName(path),
+                                         ebmlib.GetFileName(path))
                         self.nb.GoCurrentPage()
 
             dlg.Destroy()
         else:
             self.LOG("[ed_main][info] CMD Open File: %s" % fname)
-            self.nb.OpenPage(util.GetPathName(fname),
-                             util.GetFileName(fname), quiet=True)
+            self.nb.OpenPage(ebmlib.GetPathName(fname),
+                             ebmlib.GetFileName(fname), quiet=True)
             self.Raise()
 
     def GetCommandbar(self):
@@ -616,7 +617,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             return
 
         for ctrl in ctrls:
-            fname = util.GetFileName(ctrl[1].GetFileName())
+            fname = ebmlib.GetFileName(ctrl[1].GetFileName())
             if fname != '':
                 fpath = ctrl[1].GetFileName()
                 result = ctrl[1].SaveFile(fpath)
@@ -663,7 +664,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             dlg.Destroy()
 
             result = ctrl.SaveFile(path)
-            fname = util.GetFileName(ctrl.GetFileName())
+            fname = ebmlib.GetFileName(ctrl.GetFileName())
             if not result:
                 err = ctrl.GetDocument().GetLastError()
                 ed_mdlg.SaveErrorDlg(self, fname, err)

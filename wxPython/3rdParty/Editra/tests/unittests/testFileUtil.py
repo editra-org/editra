@@ -38,15 +38,54 @@ class FileUtilTest(unittest.TestCase):
         common.CleanTempDir()
 
     #---- Tests ----#
+
+    def testGetFileExtension(self):
+        """Test getting a files extension"""
+        ext = ebmlib.GetFileExtension(u'hello.txt')
+        self.assertTrue(ext == u'txt')
+
+        ext = ebmlib.GetFileExtension(u'hello.py')
+        self.assertTrue(ext == u'py')
+
+        ext = ebmlib.GetFileExtension(u'hello.txt.tmp')
+        self.assertTrue(ext == u'tmp')
+
     def testGetFileModTime(self):
         """Test getting a files modtime"""
         mtime = ebmlib.GetFileModTime(self.fpath)
         self.assertNotEqual(mtime, 0, "Mtime was: " + str(mtime))
 
+    def testGetFileName(self):
+        """Test that getting the file name from a string returns the correct
+        string.
+
+        """
+        roots = (("Home", "foo", "projects"), ("usr", "bin"),
+                 ("Users", "bar", "Desktop"))
+        fname = "test.py"
+        paths = [os.path.join(os.sep.join(root), fname) for root in roots]
+        for path in paths:
+            self.assertEqual(fname, ebmlib.GetFileName(path),
+                             "ebmlib.GetFileName(%s) != %s" % (path, fname))
+
     def testGetFileSize(self):
         """Test getting a files size"""
         self.assertTrue(ebmlib.GetFileSize(self.fpath) != 0)
         self.assertTrue(ebmlib.GetFileSize(u'SomeFakeFile.txt') == 0)
+
+    def testGetPathName(self):
+        """Test that getting the path name from a string returns the correct
+        string.
+
+        """
+        roots = (("Home", "foo", "projects"), ("usr", "bin"),
+                 ("Users", "bar", "Desktop"))
+        fname = "test.py"
+        paths = [os.sep.join(root) for root in roots]
+        for path in paths:
+            tmp = os.path.join(path, fname)
+            self.assertEqual(path, ebmlib.GetPathName(tmp),
+                             "ebmlib.GetPathName(%s) != %s" % (tmp, path))
 
     def testGetUniqueName(self):
         """Test getting a unique file name at a given path"""
