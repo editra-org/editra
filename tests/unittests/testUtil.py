@@ -68,11 +68,6 @@ class UtilTest(unittest.TestCase):
             self.assertEqual(fname, util.GetFileName(path),
                              "util.GetFileName(%s) != %s" % (path, fname))
 
-    def testGetFileModTime(self):
-        """Test getting a files modtime"""
-        mtime = ebmlib.GetFileModTime(self.path)
-        self.assertNotEqual(mtime, 0, "Mtime was: " + str(mtime))
-
     def testGetPathName(self):
         """Test that getting the path name from a string returns the correct
         string.
