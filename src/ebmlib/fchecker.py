@@ -70,8 +70,10 @@ class FileTypeChecker(object):
             return False
 
     def IsReadableText(self, fname):
-        """Is the given path readable as text
+        """Is the given path readable as text. Will return True if the
+        file is accessable by current user and is plain text.
         @param fname: filename
+        @return: bool
 
         """
         f_ok = False

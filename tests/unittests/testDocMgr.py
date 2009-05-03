@@ -24,7 +24,7 @@ import doctools
 #-----------------------------------------------------------------------------#
 # Test Class
 
-class DocPositionMgrTest(unittest.TestCase):
+class DocMgrTest(unittest.TestCase):
     def setUp(self):
         self.mgr = doctools.DocPositionMgr()
 

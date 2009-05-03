@@ -1,6 +1,6 @@
 ###############################################################################
 # Name: testSearchEngine                                                      #
-# Purpose: Unittest for ed_search.SearchEngine                                #
+# Purpose: Unittest for ebmlib.SearchEngine                                #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
@@ -17,7 +17,7 @@ __revision__ = "$Revision$"
 import unittest
 
 # Module to test
-import ed_search
+import ebmlib
 
 #-----------------------------------------------------------------------------#
 # Search Pool
@@ -39,19 +39,19 @@ as doing multiline replaces.
 class SearchEngineTest(unittest.TestCase):
     def setUp(self):
         """Setup the test items"""
-        self._def_eng = ed_search.SearchEngine(u"", regex=False, down=True,
+        self._def_eng = ebmlib.SearchEngine(u"", regex=False, down=True,
                                                matchcase=False, wholeword=False)
-        self._ww_eng = ed_search.SearchEngine(u"", regex=False, down=True,
+        self._ww_eng = ebmlib.SearchEngine(u"", regex=False, down=True,
                                               matchcase=False, wholeword=True)
-        self._mc_eng = ed_search.SearchEngine(u"", regex=False, down=True,
+        self._mc_eng = ebmlib.SearchEngine(u"", regex=False, down=True,
                                               matchcase=True, wholeword=False)
-        self._regex_eng = ed_search.SearchEngine(u"", regex=True, down=True,
+        self._regex_eng = ebmlib.SearchEngine(u"", regex=True, down=True,
                                                  matchcase=False, wholeword=False)
-        self._regexmc_eng = ed_search.SearchEngine(u"", regex=True, down=True,
+        self._regexmc_eng = ebmlib.SearchEngine(u"", regex=True, down=True,
                                                   matchcase=True, wholeword=False)
-        self._regww_eng = ed_search.SearchEngine(u"", regex=True, down=True,
+        self._regww_eng = ebmlib.SearchEngine(u"", regex=True, down=True,
                                                  matchcase=False, wholeword=True)
-        self._all_eng = ed_search.SearchEngine(u"", regex=True, down=True,
+        self._all_eng = ebmlib.SearchEngine(u"", regex=True, down=True,
                                                matchcase=True, wholeword=True)
 
     def tearDown(self):
