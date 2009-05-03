@@ -32,7 +32,7 @@ import ebmlib
 class EdFileTest(unittest.TestCase):
     def setUp(self):
         self.app = common.EdApp(False)
-        self.path = os.path.abspath('./data/test_read_utf8.txt')
+        self.path = common.GetDataFilePath(u'test_read_utf8.txt')
         self.file = ed_txt.EdFile(self.path)
         self.mtime = ebmlib.GetFileModTime(self.path)
 

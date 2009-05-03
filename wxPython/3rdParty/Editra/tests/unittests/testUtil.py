@@ -21,6 +21,9 @@ import wx
 import os
 import unittest
 
+# Local modules
+import common
+
 # Module to test
 import util
 import eclib
@@ -32,7 +35,7 @@ import ebmlib
 class UtilTest(unittest.TestCase):
     def setUp(self):
         self.app = wx.App(False)
-        self.path = os.path.abspath('./data/test_read_utf8.txt')
+        self.path = common.GetDataFilePath(u'test_read_utf8.txt')
 
     def tearDown(self):
         self.app.Destroy()

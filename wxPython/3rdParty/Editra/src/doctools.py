@@ -104,7 +104,7 @@ class DocPositionMgr(object):
             return None
 
         # If at end wrap to begining
-        if self._cpos >= len(self._cpos):
+        if self._cpos >= len(self._poscache):
             self._cpos = 0
 
         rval = None

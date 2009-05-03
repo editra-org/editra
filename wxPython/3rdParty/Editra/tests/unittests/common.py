@@ -12,6 +12,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import os
 import wx
 
 #-----------------------------------------------------------------------------#
@@ -19,3 +20,14 @@ import wx
 class EdApp(wx.App):
     def GetLog(self):
         return lambda msg: None
+
+#-----------------------------------------------------------------------------#
+
+def GetDataFilePath(fname):
+    """Get the absolute path of the given data file
+    @param fname: filename
+    @return: string
+
+    """
+    path = os.path.join(u'.', u'data', fname)
+    return os.path.abspath(path)
