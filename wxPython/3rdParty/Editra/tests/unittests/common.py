@@ -13,6 +13,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Imports
 import os
+import shutil
 import wx
 
 #-----------------------------------------------------------------------------#
@@ -23,6 +24,24 @@ class EdApp(wx.App):
 
 #-----------------------------------------------------------------------------#
 
+def CleanTempDir():
+    """Clean all files from the temporary directory"""
+    tdir = GetTempDir()
+    for path in os.listdir(tdir):
+        fpath = os.path.join(tdir, path)
+        if os.path.isdir(fpath):
+            shutil.rmtree(fpath)
+        else:
+            os.remove(fpath)
+
+def GetDataDir():
+    """Get the path to the test data directory
+    @return: string
+
+    """
+    path = os.path.join(u'.', u'data')
+    return os.path.abspath(path)
+
 def GetDataFilePath(fname):
     """Get the absolute path of the given data file
     @param fname: filename
@@ -30,4 +49,12 @@ def GetDataFilePath(fname):
 
     """
     path = os.path.join(u'.', u'data', fname)
+    return os.path.abspath(path)
+
+def GetTempDir():
+    """Get the path to the test temp directory
+    @return: string
+
+    """
+    path = os.path.join(u'.', u'temp')
     return os.path.abspath(path)
