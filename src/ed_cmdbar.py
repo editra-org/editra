@@ -35,6 +35,7 @@ import ed_glob
 import ed_search
 import ed_event
 import ed_msg
+import ebmlib
 import eclib
 
 _ = wx.GetTranslation
@@ -422,7 +423,7 @@ class CommandExecuter(eclib.CommandEntryBase):
         if os.path.exists(cmd):
             frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, cmd)
         else:
-            frame.nb.OpenPage(util.GetPathName(cmd), util.GetFileName(cmd))
+            frame.nb.OpenPage(ebmlib.GetPathName(cmd), ebmlib.GetFileName(cmd))
 
     def ExecuteCommand(self, cmd_str):
         """Interprets and executes a command then hides the control

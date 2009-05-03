@@ -18,7 +18,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = [ 'GetFileModTime', 'GetFileSize', 'GetUniqueName', 'MakeNewFile',
-            'MakeNewFolder' ]
+            'MakeNewFolder', 'GetFileExtension', 'GetFileName', 'GetPathName' ]
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -26,6 +26,14 @@ import os
 import stat
 
 #-----------------------------------------------------------------------------#
+
+def GetFileExtension(file_str):
+    """Gets last atom at end of string as extension if
+    no extension whole string is returned
+    @param file_str: path or file name to get extension from
+
+    """
+    return file_str.split('.')[-1]
 
 def GetFileModTime(file_name):
     """Returns the time that the given file was last modified on
@@ -38,6 +46,13 @@ def GetFileModTime(file_name):
         mod_time = 0
     return mod_time
 
+def GetFileName(path):
+    """Gets last atom on end of string as filename
+    @param path: full path to get filename from
+
+    """
+    return os.path.split(path)[-1]
+
 def GetFileSize(path):
     """Get the size of the file at a given path
     @param path: Path to file
@@ -48,6 +63,13 @@ def GetFileSize(path):
         return os.stat(path)[stat.ST_SIZE]
     except:
         return 0
+
+def GetPathName(path):
+    """Gets the path minus filename
+    @param path: full path to get base of
+
+    """
+    return os.path.split(path)[0]
 
 #-----------------------------------------------------------------------------#
 

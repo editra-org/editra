@@ -34,6 +34,7 @@ import util
 import ed_msg
 import ed_txt
 import ed_mdlg
+import ebmlib
 import eclib
 from extern import flatnotebook as FNB
 
@@ -496,7 +497,7 @@ class EdPages(FNB.FlatNotebook):
         if title:
             filename = title
         else:
-            filename = util.GetFileName(path)
+            filename = ebmlib.GetFileName(path)
 
         if need_add:
             self.AddPage(nbuff, filename)
@@ -529,7 +530,7 @@ class EdPages(FNB.FlatNotebook):
 
         # Load the files data
         path = fileobj.GetPath()
-        filename = util.GetFileName(path)
+        filename = ebmlib.GetFileName(path)
         control.SetDocument(fileobj)
         result = control.ReloadFile()
 
@@ -843,8 +844,8 @@ class EdPages(FNB.FlatNotebook):
                 valid_files.append(fname)
 
         for fname in valid_files:
-            pathname = util.GetPathName(fname)
-            the_file = util.GetFileName(fname)
+            pathname = ebmlib.GetPathName(fname)
+            the_file = ebmlib.GetFileName(fname)
             self.OpenPage(pathname, the_file)
             self.frame.PushStatusText(_("Opened file: %s") % fname, \
                                       ed_glob.SB_INFO)
