@@ -356,6 +356,19 @@ class SegmentBook(ctrlbox.ControlBox):
         """
         raise NotImplementedError
 
+    def Refresh(self):
+        """Refresh the segmentbar
+        @todo: temporary HACK till rework of SegmentBar class image handling
+
+        """
+        segbar = self.GetSegmentBar()
+        for page in range(self.GetPageCount()):
+            idx = self.GetPageImage(page)
+            bmp = self._imglist[idx]
+            segbar.SetSegmentImage(page, bmp)
+        segbar.Refresh()
+        super(SegmentBook, self).Refresh()
+
     def SetImageList(self, imglist):
         """Set the notebooks image list
         @param imglist: wxImageList

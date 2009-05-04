@@ -176,13 +176,7 @@ class PrefTools(eclib.SegmentBook):
 
         # Attributes
         self._imglst = list()
-        self._imglst.append(MakeThemeTool(ed_glob.ID_PREF))
-        self._imglst.append(MakeThemeTool(ed_glob.ID_THEME))
-        self._imglst.append(MakeThemeTool(ed_glob.ID_DOCPROP))
-        self._imglst.append(MakeThemeTool(ed_glob.ID_WEB))
-        self._imglst.append(MakeThemeTool(ed_glob.ID_ADVANCED))
-        self.SetImageList(self._imglst)
-        self.SetUsePyImageList(True)
+        self.__InitImgList()
 
         self.AddPage(GeneralPanel(self), _("General"),
                      img_id=self.GENERAL_PG)
@@ -198,6 +192,31 @@ class PrefTools(eclib.SegmentBook):
         # Event Handlers
         self.Bind(eclib.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(eclib.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
+
+        # Message Handlers
+        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
+
+    def __del__(self):
+        ed_msg.Unsubscribe(self.OnThemeChange)
+
+    def __InitImgList(self):
+        """Setup the image list for the SegmentBook"""
+        dorefresh = False
+        if len(self._imglst):
+            del self._imglst
+            self._imglst = list()
+            dorefresh = True
+
+        self._imglst.append(MakeThemeTool(ed_glob.ID_PREF))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_THEME))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_DOCPROP))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_WEB))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_ADVANCED))
+        self.SetImageList(self._imglst)
+        self.SetUsePyImageList(True)
+
+        if dorefresh:
+            self.Refresh()
 
     def OnPageChanging(self, evt):
         sel = evt.GetSelection()
@@ -230,6 +249,10 @@ class PrefTools(eclib.SegmentBook):
         page.Thaw()
         if evt is not None:
             evt.Skip()
+
+    def OnThemeChange(self, msg):
+        """Update icons when the theme changes"""
+        self.__InitImgList()
 
 #-----------------------------------------------------------------------------#
 
