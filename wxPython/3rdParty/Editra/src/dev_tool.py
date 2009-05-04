@@ -417,10 +417,10 @@ class ErrorDialog(wx.Dialog):
             msg = "mailto:%s?subject=Error Report&body=%s"
             addr = "bugs@%s" % (ed_glob.HOME_PAGE.replace("http://", '', 1))
             if wx.Platform != '__WXMAC__':
-                msg = urllib2.quote(self.err_msg)
+                body = urllib2.quote(self.err_msg)
             else:
-                msg = self.err_msg
-            msg = msg % (addr, msg)
+                body = self.err_msg
+            msg = msg % (addr, body)
             msg = msg.replace("'", '')
             webbrowser.open(msg)
             self.Close()
