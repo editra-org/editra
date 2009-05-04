@@ -29,6 +29,7 @@ import wx.lib.delayedresult as delayedresult
 import ed_glob
 import plugin
 import ed_event
+import ed_msg
 import util
 import ed_txt
 from profiler import Profile_Get, Profile_Set
@@ -111,16 +112,7 @@ class PluginDialog(wx.Frame):
         self._imglst = list()
 
         # Setup
-        self._imglst.append(MakeThemeTool(ed_glob.ID_PREF))
-        self._imglst.append(MakeThemeTool(ed_glob.ID_WEB))
-        self._imglst.append(MakeThemeTool(ed_glob.ID_PACKAGE))
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_TOOLBAR, (32, 32))
-        self._imglst.append(bmp)
-        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF),
-                                       wx.ART_TOOLBAR, (32, 32))
-        self._imglst.append(bmp)
-        self._nb.SetImageList(self._imglst)
-        self._nb.SetUsePyImageList(True)
+        self.__InitImageList()
 
         self._nb.AddPage(self._cfg_pg, _("Configure"), img_id=IMG_CONFIG)
         self._nb.AddPage(self._dl_pg, _("Download"), img_id=IMG_DOWNLOAD)
@@ -144,6 +136,34 @@ class PluginDialog(wx.Frame):
         # Event Handlers
         self.Bind(eclib.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
+
+        # Message Handlers
+        ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
+
+    def __del__(self):
+        ed_msg.Unsubscribe(self.OnThemeChange)
+
+    def __InitImageList(self):
+        """Initialize the segmentbooks image list"""
+        dorefresh = False
+        if len(self._imglst):
+            del self._imglst
+            self._imglst = list()
+            dorefresh = True
+
+        self._imglst.append(MakeThemeTool(ed_glob.ID_PREF))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_WEB))
+        self._imglst.append(MakeThemeTool(ed_glob.ID_PACKAGE))
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_TOOLBAR, (32, 32))
+        self._imglst.append(bmp)
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF),
+                                       wx.ART_TOOLBAR, (32, 32))
+        self._imglst.append(bmp)
+        self._nb.SetImageList(self._imglst)
+        self._nb.SetUsePyImageList(True)
+
+        if dorefresh:
+            self._nb.Refresh()
 
     def OnClose(self, evt):
         """Handles closing the dialog and unregistering it from
@@ -173,6 +193,10 @@ class PluginDialog(wx.Frame):
 
         wx.GetApp().UnRegisterWindow(repr(self))
         evt.Skip()
+
+    def OnThemeChange(self, msg):
+        """Update icons on theme change message"""
+        self.__InitImageList()
 
     def Show(self, show=True):
         """Shows the dialog

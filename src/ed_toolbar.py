@@ -59,6 +59,9 @@ class EdToolBar(wx.ToolBar):
 
         self.Realize()
 
+    def __del__(self):
+        ed_msg.Unsubscribe(self.OnThemeChange)
+
     #---- End Init ----#
 
     #---- Function Definitions----#
