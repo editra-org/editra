@@ -32,9 +32,30 @@ import util
 
 class UtilTest(unittest.TestCase):
     def setUp(self):
-        self.path = common.GetDataFilePath(u'test_read_utf8.txt')
+        self.fpath = common.GetDataFilePath(u'test_read_utf8.txt')
+        self.bpath = common.GetDataFilePath(u'image_test.png')
 
     def tearDown(self):
         pass
 
     #---- Tests ----#
+
+    def testFilterFiles(self):
+        """Test the file filter function"""
+        rlist = util.FilterFiles([self.fpath, self.bpath])
+        self.assertEquals(len(rlist), 1)
+
+    def testGetAllEncodings(self):
+        """Test getting the list of available system encodings"""
+        encs = util.GetAllEncodings()
+        self.assertTrue(len(encs) > 0)
+
+        for enc in encs:
+            self.assertTrue(isinstance(enc, basestring))
+
+    def testGetFileManagerCmd(self):
+        """Test retrieving the systems filemanager command"""
+        cmd = util.GetFileManagerCmd()
+        self.assertTrue(isinstance(cmd, basestring))
+
+        self.assertTrue(len(cmd) > 0)
