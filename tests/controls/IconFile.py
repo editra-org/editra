@@ -2,7 +2,10 @@
 #----------------------------------------------------------------------
 # Icon Data
 # All icons from the Tango Icon Set
-from src.extern.embeddedimage import PyEmbeddedImage
+try:
+    from wx.lib.embeddedimage import PyEmbeddedImage
+except:
+    from src.extern.embeddedimage import PyEmbeddedImage
 
 Book = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAkdJ"
