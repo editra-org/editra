@@ -18,12 +18,25 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = [ 'GetFileModTime', 'GetFileSize', 'GetUniqueName', 'MakeNewFile',
-            'MakeNewFolder', 'GetFileExtension', 'GetFileName', 'GetPathName' ]
+            'MakeNewFolder', 'GetFileExtension', 'GetFileName', 'GetPathName',
+            'ResolveRealPath', 'IsLink' ]
 
 #-----------------------------------------------------------------------------#
 # Imports
 import os
+import platform
 import stat
+
+UNIX = WIN = False
+if platform.system().lower() in ['windows', 'microsoft']:
+    WIN = True
+    try:
+        # Check for if win32 extensions are available
+        import win32com.client as win32client
+    except ImportError:
+        win32client = None
+else:
+    UNIX = True
 
 #-----------------------------------------------------------------------------#
 
@@ -70,6 +83,32 @@ def GetPathName(path):
 
     """
     return os.path.split(path)[0]
+
+def IsLink(path):
+    """Is the file a link
+    @return: bool
+
+    """
+    if WIN:
+        return path.endswith(".lnk") or os.path.islink(path)
+    else:
+        return os.path.islink(path)
+
+def ResolveRealPath(link):
+    """Return the real path of the link file
+    @param link: path of link file
+    @return: string
+
+    """
+    assert IsLink(link), "ResolveRealPath expects a link file!"
+    realpath = link
+    if WIN and win32client is not None:
+        shell = win32client.Dispatch("WScript.Shell")
+        shortcut = shell.CreateShortCut(link)
+        realpath = shortcut.Targetpath
+    else:
+        realpath = os.path.realpath(link)
+    return realpath
 
 #-----------------------------------------------------------------------------#
 
