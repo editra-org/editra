@@ -576,6 +576,12 @@ class EdPages(FNB.FlatNotebook):
         """
         path2file = os.path.join(path, filename)
 
+        # Resolve links to real file
+        if ebmlib.IsLink(path2file):
+            path2file = ebmlib.ResolveRealPath(path2file)
+            path = ebmlib.GetPathName(path2file)
+            filename = ebmlib.GetFileName(path2file)
+
         if self.DocDuplicated(path2file):
             return
 
