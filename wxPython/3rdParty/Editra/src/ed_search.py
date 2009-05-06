@@ -460,12 +460,16 @@ class SearchController(object):
                 value = replacestring
         else:
             value = replacestring
+
+        sel = self._stc().GetSelection()
+        if sel[0] == sel[1]:
+            return
+
         self._stc().ReplaceSelection(value)
 
         # Go to the next match
         # Fake event object for on Find Handler
-        tevt = eclib.FindEvent(eclib.edEVT_FIND_NEXT,
-                                 ed_glob.ID_FIND_PREVIOUS)
+        tevt = eclib.FindEvent(eclib.edEVT_FIND_NEXT, ed_glob.ID_FIND_PREVIOUS)
         self.OnFind(tevt, True)
 
     def OnReplaceAll(self, evt):
