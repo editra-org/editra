@@ -189,12 +189,9 @@ class EdMenu(wx.Menu):
         @param item: item to set bitmap for
 
         """
-        try:
-            bmp = wx.ArtProvider.GetBitmap(str(item.GetId()), wx.ART_MENU)
-            if not bmp.IsNull():
-                item.SetBitmap(bmp)
-        finally:
-            pass
+        bmp = wx.ArtProvider.GetBitmap(str(item.GetId()), wx.ART_MENU)
+        if not bmp.IsNull():
+            item.SetBitmap(bmp)
 
 #-----------------------------------------------------------------------------#
 
