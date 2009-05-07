@@ -197,7 +197,7 @@ class DocPositionMgr(object):
                     util.Log("[docpositionmgr][err] %s" % str(msg))
                     continue
                 else:
-                    self.AddRecord(vals)
+                    self._records[vals[0]] = vals[1]
 
             util.Log("[docpositionmgr][info] successfully loaded book")
             return True
