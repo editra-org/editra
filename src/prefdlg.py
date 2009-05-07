@@ -131,7 +131,7 @@ class PreferencesDialog(wx.Frame):
             wx.GetApp().UnRegisterWindow(repr(self))
 
         # Save profile settings
-        profiler.Profile().Write(profiler.Profile_Get('MYPROFILE'))
+        profiler.TheProfile.Write(profiler.Profile_Get('MYPROFILE'))
 
         evt.Skip()
 

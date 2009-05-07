@@ -462,9 +462,9 @@ def CreateConfigDir():
             MakeConfigDir(cfg)
 
     import profiler
-    profiler.Profile().LoadDefaults()
+    profiler.TheProfile.LoadDefaults()
     profiler.Profile_Set("MYPROFILE", dest_file)
-    profiler.Profile().Write(dest_file)
+    profiler.TheProfile.Write(dest_file)
     profiler.UpdateProfileLoader()
 
 def ResolvConfigDir(config_dir, sys_only=False):
