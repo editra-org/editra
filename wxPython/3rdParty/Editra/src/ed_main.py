@@ -694,7 +694,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                 wx.SAVE | wx.OVERWRITE_PROMPT)
 
             if dlg.ShowModal() == wx.ID_OK:
-                profiler.Profile().Write(dlg.GetPath())
+                profiler.TheProfile.Write(dlg.GetPath())
                 self.PushStatusText(_("Profile Saved as: %s") % \
                                     dlg.GetFilename(), SB_INFO)
             dlg.Destroy()
@@ -715,7 +715,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
             result = dlg.ShowModal()
             if result == wx.ID_OK:
-                profiler.Profile().Load(dlg.GetPath())
+                profiler.TheProfile.Load(dlg.GetPath())
                 self.PushStatusText(_("Loaded Profile: %s") % \
                                     dlg.GetFilename(), SB_INFO)
             dlg.Destroy()
@@ -901,7 +901,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Update profile
         ppath = _PGET('MYPROFILE')
-        profiler.Profile().Write(ppath)
+        profiler.TheProfile.Write(ppath)
         self.LOG("[ed_main][info] Saving profile to %s" % ppath)
 
         # Post exit notice to all aui panes
