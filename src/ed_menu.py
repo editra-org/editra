@@ -66,7 +66,7 @@ class EdMenu(wx.Menu):
         """
         if use_bmp and item.GetKind() == wx.ITEM_NORMAL:
             self.SetItemBitmap(item)
-        wx.Menu.AppendItem(self, item)
+        super(EdMenu, self).AppendItem(item)
 
     def Insert(self, pos, id_, text=u'', helpstr=u'', \
                kind=wx.ITEM_NORMAL, use_bmp=True):
@@ -76,7 +76,7 @@ class EdMenu(wx.Menu):
                           available in the ArtProvider
 
         """
-        item = wx.Menu.Insert(self, pos, id_, text, helpstr, kind)
+        item = super(EdMenu, self).Insert(pos, id_, text, helpstr, kind)
         if use_bmp and kind == wx.ITEM_NORMAL:
             self.SetItemBitmap(item)
         return item
