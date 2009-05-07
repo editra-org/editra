@@ -128,7 +128,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 profiler.Profile_Set('SESSION_KEY', key)
                 profiler.Profile_Set('ISBINARY', hasattr(sys, 'frozen'))
                 path = profiler.Profile_Get('MYPROFILE')
-                profiler.Profile().Write(path)
+                profiler.TheProfile.Write(path)
                 try:
                     self._server = ed_ipc.EdIpcServer(self, profiler.Profile_Get('SESSION_KEY'))
                     self._server.start()
@@ -233,7 +233,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         """
         self._pluginmgr.WritePluginConfig()
-        profiler.Profile().Write(profiler.Profile_Get('MYPROFILE'))
+        profiler.TheProfile.Write(profiler.Profile_Get('MYPROFILE'))
         if not self._lock or force:
             if hasattr(self, 'server'):
                 self.server.ShutDown()
@@ -657,11 +657,18 @@ def InitConfig():
     @postcondition: all configuration data is set
 
     """
-    # Look for a profile directory on the system level. If this directory exists
-    # Use it instead of the user one. This will allow for running Editra from
-    # a portable drive or for system administrators to enforce settings on a
-    # system installed version.
-    config_base = util.ResolvConfigDir(u'.Editra', True)
+    # Check if a custom config directory was specified on the commandline
+    if ed_glob.CONFIG['CONFIG_BASE'] is not None:
+        # TODO: there is a bug when the first time the config is created
+        #       where the settings will not be saved until second launching.
+        config_base = os.path.abspath(ed_glob.CONFIG['CONFIG_BASE'])
+    else:
+        # Look for a profile directory on the system level. If this directory
+        # exists Use it instead of the user one. This will allow for running
+        # Editra from a portable drive or for system administrators to enforce
+        # settings on a system installed version.
+        config_base = util.ResolvConfigDir(u'.Editra', True) 
+
     if os.path.exists(config_base):
         ed_glob.CONFIG['CONFIG_BASE'] = config_base
         ed_glob.CONFIG['PROFILE_DIR'] = os.path.join(config_base, u"profiles")
@@ -677,15 +684,15 @@ def InitConfig():
         if profiler.ProfileIsCurrent():
             pstr = profiler.GetProfileStr()
             pstr = util.RepairConfigState(pstr)
-            profiler.Profile().Load(pstr)
+            profiler.TheProfile.Load(pstr)
         else:
             dev_tool.DEBUGP("[InitConfig][info] Updating Profile to current version")
 
             # Load and update profile
             pstr = profiler.GetProfileStr()
             pstr = util.RepairConfigState(pstr)
-            profiler.Profile().Load(pstr)
-            profiler.Profile().Update()
+            profiler.TheProfile.Load(pstr)
+            profiler.TheProfile.Update()
 
             #---- Temporary Profile Adaptions ----#
 
@@ -714,7 +721,7 @@ def InitConfig():
             #---- End Temporary Profile Adaptions ----#
 
             # Write out updated profile
-            profiler.Profile().Write(pstr)
+            profiler.TheProfile.Write(pstr)
 
             # When upgrading from an older version make sure all
             # config directories are available.
@@ -819,8 +826,8 @@ def UpgradeOldInstall():
         prof = os.path.basename(pstr)
         pstr = os.path.join(base, u"profiles", prof)
         if os.path.exists(pstr):
-            profiler.Profile().Load(pstr)
-            profiler.Profile().Update()
+            profiler.TheProfile.Load(pstr)
+            profiler.TheProfile.Update()
             profiler.UpdateProfileLoader()
 
         if not err:
@@ -840,20 +847,23 @@ def PrintHelp():
 
     """
     print ("Editra - %s - Developers Text Editor\n"
-       "Cody Precord (2005-2008)\n\n"
+       "Cody Precord (2005-2009)\n\n"
        "usage: Editra [arguments] [files... ]\n\n"
        "Short Arguments:\n"
-       "  -d         Turn on console debugging (-dd for verbose debug)\n"
-       "  -D         Turn off console debugging (overrides preferences)\n"
-       "  -h         Show this help message\n"
-       "  -p         Run Editra in the profiler\n"
-       "  -v         Print version number and exit\n"
-       "  -S         Disable single instance checker\n"
+       "  -c    Set custom configuration directory at runtime\n"
+       "  -d    Turn on console debugging (-dd for verbose debug)\n"
+       "  -D    Turn off console debugging (overrides preferences)\n"
+       "  -h    Show this help message\n"
+       "  -p    Run Editra in the profiler (outputs to editra.prof).\n"
+       "  -v    Print version number and exit\n"
+       "  -S    Disable single instance checker\n"
        "\nLong Arguments:\n"
-       "  --debug    Turn on console debugging\n"
-       "  --help     Show this help message\n"
-       "  --auth     Print the ipc server info\n"
-       "  --version  Print version number and exit\n"
+       "  --confdir arg     Set custom configuration directory at runtime\n"
+       "  --debug           Turn on console debugging\n"
+       "  --help            Show this help message\n"
+       "  --auth            Print the ipc server info\n"
+       "  --version         Print version number and exit\n"
+       "  --profileOut arg  Run Editra in the profier (arg is output file)\n"
       ) % ed_glob.VERSION
     os._exit(0)
 
@@ -861,36 +871,46 @@ def PrintHelp():
 
 def ProcessCommandLine():
     """Process the command line switches
-    @return: tuple ([switches,], [args,])
+    @return: tuple ({switches,}, [args,])
 
     """
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "dhpvDS",
-                                   ['debug', 'help', 'version', 'auth'])
+        items, args = getopt.getopt(sys.argv[1:], "dhpvDSc",
+                                   ['debug', 'help', 'version', 'auth',
+                                    'configdir=', 'profileOut='])
     except getopt.GetoptError, msg:
-        return list(), list()
-
+        # Raise error to console and exit
+        sys.stderr.write(str(msg) + os.linesep)
+        PrintHelp()
+    
     # Process command line options
-    opts = [opt[0] for opt in opts if len(opt) == 2]
-    for opt in list(opts):
+    opts = dict(items)
+    for opt, value in dict(opts).items():
         if opt in ['-h', '--help']:
             PrintHelp()
         elif opt in ['-v', '--version']:
             print ed_glob.VERSION
             os._exit(0)
-        elif opt in ['-d', '--debug'] and '-D' not in opts:
+        elif opt in ['-d', '--debug'] and '-D' not in opts.keys():
             # If the debug flag is set more than once go into verbose mode
             if ed_glob.DEBUG:
                 ed_glob.VDEBUG = True
             ed_glob.DEBUG = True
-            opts.remove(opt)
+            opts.pop(opt)
         elif opt == '-D':
             ed_glob.DEBUG = False
             ed_glob.VDEBUG = False
-            opts.remove('-D')
+            opts.pop('-D')
         elif opt == '-S':
-            ed_glob.SINGLE = False # Disable single instance checker
-            opts.remove(opt)
+            # Disable single instance checker
+            ed_glob.SINGLE = False
+            opts.pop(opt)
+        elif opt in ['-c', '--configdir']:
+            ed_glob.CONFIG['CONFIG_BASE'] = value
+            opts.pop(opt)
+        elif opt == '--profileOut':
+            opts['-p'] = value
+            opts.pop('--profileOut')
         else:
             pass
 
@@ -908,10 +928,15 @@ def Main():
     opts, args = ProcessCommandLine()
 
     if '-p' in opts:
-        opts.remove('-p')
+        p_file = opts['-p']
+        opts.pop('-p')
+
+        if not len(p_file):
+            # Fall back to default output file
+            p_file = "editra.prof"
+            
         import hotshot
-        # TODO: make output file configurable via commandline
-        prof = hotshot.Profile("editra.prof")
+        prof = hotshot.Profile(p_file)
         prof.runcall(_Main, opts, args)
         prof.close()
     else:
@@ -936,7 +961,7 @@ def _Main(opts, args):
 
     # Print ipc server authentication info
     if '--auth' in opts:
-        opts.remove('--auth')
+        opts.pop('--auth')
         print "port=%d,key=%s" % (ed_ipc.EDPORT,
                                   profiler.Profile_Get('SESSION_KEY'))
 
