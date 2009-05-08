@@ -521,7 +521,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 if isinstance(fname, basestring) and fname:
                     # TODO: find out why these errors are happening
                     #       when loading the pickled strings on some systems
-                    #       The pickled strings are in unicode format.
+                    #       The pickled strings are not in unicode format.
                     try:
                         self.filehistory.AddFileToHistory(fname)
                     except wx.PyAssertionError:

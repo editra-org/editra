@@ -142,10 +142,11 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         # Setup Plugins after locale as they may have resource that need to
         # be loaded.
-        self._pluginmgr = plugin.PluginManager()
+        if self._isfirst:
+            self._pluginmgr = plugin.PluginManager()
 
-        self._log("[app][info] Registering Editra's ArtProvider")
-        wx.ArtProvider.PushProvider(ed_art.EditraArt())
+            self._log("[app][info] Registering Editra's ArtProvider")
+            wx.ArtProvider.PushProvider(ed_art.EditraArt())
 
     def AddMessageCatalog(self, name, path):
         """Add a catalog lookup path to the app
