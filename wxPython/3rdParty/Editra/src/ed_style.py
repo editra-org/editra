@@ -54,6 +54,7 @@ class StyleItem(object):
            will require changes to the StyleMgr and Editor as well.
 
     """
+    __slots__ = ('null', 'fore', 'face', 'back', 'size', '_exattr')
     def __init__(self, fore=wx.EmptyString, back=wx.EmptyString,
                        face=wx.EmptyString, size=wx.EmptyString,
                        ex=list()):
@@ -85,6 +86,8 @@ class StyleItem(object):
         self.size = u""        # Font point size
         self._exattr = list()   # Extra attributes
 
+        # Necessary to support old style assignments...
+        # TODO: Drop support in future
         for attr, value in (("fore", fore), ("face", face),
                             ("back", back), ("size", size)):
             self.SetNamedAttr(attr, value)
