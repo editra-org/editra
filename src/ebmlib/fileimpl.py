@@ -46,6 +46,15 @@ class FileObjectImpl(object):
         del self.last_err
         self.last_err = None
 
+    def Clone(self):
+        """Clone the file object
+        @return: FileObject
+
+        """
+        fileobj = FileObjectImpl(self._path, self._modtime)
+        fileobj.SetLastError(self.last_err)
+        return fileobj
+
     def Close(self):
         """Close the file handle
         @note: this is normally done automatically after a read/write operation
@@ -179,6 +188,8 @@ class FileObjectImpl(object):
 
         """
         self._modtime = mtime
+
+    #--- SHould be overridden by subclass ---#
 
     def Read(self):
         """Open/Read the file

@@ -90,6 +90,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.LOG = wx.GetApp().GetLog()
         self._loading = None
         self.key_handler = KeyHandler(self)
+        self._backup_done = False
+        self._bktimer = wx.Timer(self)
 
         # Macro Attributes
         self._macro = list()
@@ -117,6 +119,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_TIMER, self.OnBackupTimer)
 
         # Async file load events
         self.Bind(ed_txt.EVT_FILE_LOAD, self.OnLoadProgress)
@@ -323,6 +326,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.ToggleLineNumbers(_PGET('SHOW_LN'))
         self.SetViEmulationMode(_PGET('VI_EMU'))
         self.SetViewEdgeGuide(_PGET('SHOW_EDGE'))
+        self.EnableAutoBackup(_PGET('AUTOBACKUP'))
         # NOTE: disabled because it is more annoying than it is benificial.
 #        self.SetEndAtLastLine(False)
 
@@ -336,6 +340,19 @@ class EditraStc(ed_basestc.EditraBaseStc):
             self.UpperCase()
         else:
             self.LowerCase()
+
+    def EnableAutoBackup(self, enable):
+        """Enable automatic backups
+        @param enable: bool
+
+        """
+        if enable:
+            # TODO: make backup interval configurable
+            if not self._bktimer.IsRunning():
+                self._bktimer.Start(30000) # every 30 seconds
+        else:
+            if self._bktimer.IsRunning():
+                self._bktimer.Stop()
 
     def InvertCase(self):
         """Invert the case of the selected text
@@ -489,6 +506,30 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         """
         return self._config['autocomp']
+
+    def OnBackupTimer(self, evt):
+        """Backup the buffer to a backup file
+        @param evt: wx.TimerEvent
+
+        """
+        # If the file is different than the last save point make the backup.
+        bkupmgr = ebmlib.FileBackupMgr()
+        if not self._backup_done and bkupmgr.IsBackupNewer(self.GetFileName()):
+            writer = bkupmgr.GetBackupWriter(self.File)
+            try:
+                writer(self.GetText())
+            except:
+                return
+            msg = _("File backup performed: %s") % self.GetFileName()
+            nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
+                                        msg, ed_glob.SB_INFO)
+            wx.PostEvent(self.GetTopLevelParent(), nevt)
+            self._backup_done = True
+
+    def OnModified(self, evt):
+        """Overrides base modified handler"""
+        super(EditraStc, self).OnModified(evt)
+        self._backup_done = False
 
     def OnKeyDown(self, evt):
         """Handles keydown events, currently only deals with

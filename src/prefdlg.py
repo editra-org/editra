@@ -352,6 +352,10 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
         enc_sz.AddMany([(wx.StaticText(self, label=_("Prefered Encoding") + u":"),
                         0, wx.ALIGN_CENTER_VERTICAL), ((5, 5),), (enc_ch, 1)])
 
+        autobk_cb = wx.CheckBox(self, ed_glob.ID_PREF_AUTOBKUP,
+                             _("Automatically Backup Files"))
+        autobk_cb.SetValue(Profile_Get('AUTOBACKUP'))
+        autobk_cb.SetToolTipString(_("Backup buffer to file periodically"))
         win_cb = wx.CheckBox(self, ed_glob.ID_NEW_WINDOW,
                              _("Open files in new windows by default"))
         win_cb.SetValue(Profile_Get('OPEN_NW'))
@@ -381,7 +385,7 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
                          0, wx.ALIGN_CENTER_VERTICAL)])
 
         # Layout items
-        sizer = wx.FlexGridSizer(19, 2, 5, 5)
+        sizer = wx.FlexGridSizer(20, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self,
                         label=_("Startup Settings") + u": "),
@@ -398,6 +402,7 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
                        (wx.StaticText(self, label=_("File Settings") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (enc_sz, 0),
                        ((5, 5),), (fhsizer, 0),
+                       ((5, 5),), (autobk_cb, 0),
                        ((5, 5),), (win_cb, 0),
                        ((5, 5),), (pos_cb, 0),
                        ((5, 5),), (chkmod_cb, 0),
@@ -430,6 +435,10 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
             val = e_obj.GetValue()
             Profile_Set(ed_glob.ID_2_PROF[e_id], val)
             self.FindWindowById(ed_glob.ID_PREF_AUTO_RELOAD).Enable(val)
+        elif e_id == ed_glob.ID_PREF_AUTOBKUP:
+            enable = e_obj.GetValue()
+            Profile_Set(ed_glob.ID_2_PROF[e_id], enable)
+            DoUpdates('EnableAutoBackup', [enable,])
         else:
             pass
         evt.Skip()
