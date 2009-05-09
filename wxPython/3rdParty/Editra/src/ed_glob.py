@@ -149,6 +149,7 @@ ID_PREF          = wx.ID_PREFERENCES
 # Prefrence Dlg Ids
 ID_PREF_LANG     = wx.NewId()
 ID_PREF_AALIAS   = wx.NewId()
+ID_PREF_AUTOBKUP = wx.NewId()
 ID_PREF_AUTO_RELOAD = wx.NewId()
 ID_PREF_AUTOCOMPEX = wx.NewId()
 ID_PREF_AUTOTRIM = wx.NewId()
@@ -315,6 +316,7 @@ ID_2_PROF = {
              ID_TRANSPARENCY      : 'ALPHA',
              ID_PREF_UNINDENT     : 'BSUNINDENT',
              ID_APP_SPLASH        : 'APPSPLASH',
+             ID_PREF_AUTOBKUP     : 'AUTOBACKUP',
              ID_AUTOCOMP          : 'AUTO_COMP',
              ID_PREF_AUTOCOMPEX   : 'AUTO_COMP_EX',
              ID_AUTOINDENT        : 'AUTO_INDENT',

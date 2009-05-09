@@ -100,6 +100,20 @@ class EdFile(ebmlib.FileObjectImpl):
         """Cleanup callback"""
         pass
 
+    def Clone(self):
+        """Clone the file object
+        @return: EdFile
+
+        """
+        fileobj = EdFile(self._path, self._modtime)
+        fileobj.SetLastError(self.last_err)
+        fileobj.SetEncoding(self.encoding)
+        fileobj.bom = self.bom
+        fileobj._magic = dict(self._magic)
+        for cback in self._mcallback:
+            fileobj.AddModifiedCallback(cback)
+        return fileobj
+
     @property
     def Encoding(self):
         """File encoding property"""
@@ -317,8 +331,6 @@ class EdFile(ebmlib.FileObjectImpl):
         # Check if a magic comment was added or changed
         tbuff = StringIO(value)
         enc = CheckMagicComment([ tbuff.readline() for x in range(2) ])
-        tbuff.close()
-        del tbuff
 
         # Update encoding if necessary
         if enc is not None:
@@ -330,8 +342,11 @@ class EdFile(ebmlib.FileObjectImpl):
             writer = codecs.getwriter(self.encoding)(self.Handle)
             if self.HasBom():
                 Log("[ed_txt][info] Adding BOM back to text")
-                value = self.bom + value
-            writer.write(value)
+                writer.write(self.bom)
+
+            writer.write(tbuff.getvalue())
+            tbuff.close()
+            del tbuff
             writer.close()
             Log("[ed_txt][info] %s was written successfully" % self.GetPath())
         else:

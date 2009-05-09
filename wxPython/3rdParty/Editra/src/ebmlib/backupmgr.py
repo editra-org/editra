@@ -35,16 +35,29 @@ class FileBackupMgr(object):
         object.__init__(self)
 
         # Attributes
-        
+        self.template = u"%s~"
+        self.files = dict()
 
-    @staticmethod
-    def GetBackupFilename(fname):
+    def GetBackupFilename(self, fname):
         """Get the unique name for the files backup copy
         @param fname: string (file path)
         @return: string
 
         """
-        return u"%s~" % fname
+        return self.template % fname
+
+    def GetBackupWriter(self, fileobj):
+        """Create a backup filewriter method to backup a files contents
+        with.
+        @param fileobj: object implementing fileimpl.FileObjectImpl interface
+        @return: callable(text) to create backup with
+
+        """
+        curr_name = fileobj.GetPath()
+        nfile = fileobj.Clone()
+        fname = self.GetBackupFilename(nfile.GetPath())
+        nfile.SetPath(fname)
+        return nfile.Write
 
     def HasBackup(self, fname):
         """Check if a given file has a backup file available or not
@@ -93,3 +106,11 @@ class FileBackupMgr(object):
 
         """
         raise NotImplementedError, "TODO: once threadpool is finished"
+
+    def SetBackupFileTemplate(self, tstr):
+        """Set the filename template for generating the backupfile name
+        @param tstr: template string i.e) %s~
+
+        """
+        assert tstr.count("%s") == 1, "Format statment must only have one arg"
+        self.template = tstr
