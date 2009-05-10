@@ -212,3 +212,4 @@ class FileObjectImpl(object):
         """
         if self.DoOpen('wb'):
             self._handle.write(value)
+            self._handle.close()
