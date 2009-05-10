@@ -90,7 +90,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.LOG = wx.GetApp().GetLog()
         self._loading = None
         self.key_handler = KeyHandler(self)
-        self._backup_done = False
+        self._backup_done = True
         self._bktimer = wx.Timer(self)
 
         # Macro Attributes
@@ -508,19 +508,25 @@ class EditraStc(ed_basestc.EditraBaseStc):
         return self._config['autocomp']
 
     def OnBackupTimer(self, evt):
-        """Backup the buffer to a backup file
+        """Backup the buffer to a backup file.
         @param evt: wx.TimerEvent
 
         """
+        fname = self.GetFileName()
+        # If the file is loading or is over 5MB don't do automatic backups.
+        if self.IsLoading() or ebmlib.GetFileSize(fname) > 5242880:
+            return
+
         # If the file is different than the last save point make the backup.
-        bkupmgr = ebmlib.FileBackupMgr()
-        if not self._backup_done and bkupmgr.IsBackupNewer(self.GetFileName()):
+        bkupmgr = ebmlib.FileBackupMgr(None, u"%s.edbkup")
+        if not self._backup_done and \
+           (not bkupmgr.HasBackup(fname) or bkupmgr.IsBackupNewer(fname)):
             writer = bkupmgr.GetBackupWriter(self.File)
             try:
                 writer(self.GetText())
             except:
                 return
-            msg = _("File backup performed: %s") % self.GetFileName()
+            msg = _("File backup performed: %s") % fname
             nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
                                         msg, ed_glob.SB_INFO)
             wx.PostEvent(self.GetTopLevelParent(), nevt)
@@ -529,7 +535,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
     def OnModified(self, evt):
         """Overrides base modified handler"""
         super(EditraStc, self).OnModified(evt)
-        self._backup_done = False
+        if not self.IsLoading():
+            self._backup_done = False
 
     def OnKeyDown(self, evt):
         """Handles keydown events, currently only deals with

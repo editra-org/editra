@@ -26,17 +26,42 @@ import shutil
 
 # Local Imports
 import fileutil
+import fchecker
 
 #-----------------------------------------------------------------------------#
 
 class FileBackupMgr(object):
     """File backup creator and manager"""
-    def __init__(self):
+    def __init__(self, header=None, template=u"%s~"):
+        """Create a BackupManager
+        @keyword header: header to id backups with (Text files only!!)
+        @keyword template: template string for naming backup file with
+
+        """
         object.__init__(self)
 
         # Attributes
-        self.template = u"%s~"
-        self.files = dict()
+        self.checker = fchecker.FileTypeChecker()
+        self.header = header       # Backup id header
+        self.template = template   # Filename template
+
+    def _CheckHeader(self, fname):
+        """Check if the backup file has a header that matches the
+        header used to identify backup files.
+        @param fname: name of file to check
+        @return: bool (True if header is ok, False otherwise)
+
+        """
+        isok = False
+        try:
+            handle = open(fname)
+            line = handle.readline()
+            isok = line.startswith(self.header)
+        except:
+            isok = False
+        finally:
+            handle.close()
+        return isok
 
     def GetBackupFilename(self, fname):
         """Get the unique name for the files backup copy
@@ -44,7 +69,16 @@ class FileBackupMgr(object):
         @return: string
 
         """
-        return self.template % fname
+        rname = self.template % fname
+        if self.header is not None and \
+           not self.checker.IsBinary(fname) and \
+           os.path.exists(rname):
+            # Make sure that the template backup name does not match
+            # an existing file that is not a backup file.
+            while not self._CheckHeader(rname):
+                rname = self.template % rname
+                
+        return rname
 
     def GetBackupWriter(self, fileobj):
         """Create a backup filewriter method to backup a files contents
@@ -53,10 +87,12 @@ class FileBackupMgr(object):
         @return: callable(text) to create backup with
 
         """
-        curr_name = fileobj.GetPath()
         nfile = fileobj.Clone()
         fname = self.GetBackupFilename(nfile.GetPath())
         nfile.SetPath(fname)
+        # Write the header if it is enabled
+        if self.header is not None and not self.checker.IsBinary(fname):
+            nfile.Write(self.header + os.linesep)
         return nfile.Write
 
     def HasBackup(self, fname):
@@ -105,7 +141,7 @@ class FileBackupMgr(object):
         @todo: Not implemented yet
 
         """
-        raise NotImplementedError, "TODO: once threadpool is finished"
+        raise NotImplementedError("TODO: implement once threadpool is finished")
 
     def SetBackupFileTemplate(self, tstr):
         """Set the filename template for generating the backupfile name
@@ -114,3 +150,11 @@ class FileBackupMgr(object):
         """
         assert tstr.count("%s") == 1, "Format statment must only have one arg"
         self.template = tstr
+
+    def SetHeader(self, header):
+        """Set the header string for identifying a file as a backup
+        @param header: string (single line only)
+
+        """
+        assert '\n' not in header, "Header must only be a single line"
+        self.header = header
