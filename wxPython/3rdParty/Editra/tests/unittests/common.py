@@ -58,3 +58,16 @@ def GetTempDir():
     """
     path = os.path.join(u'.', u'temp')
     return os.path.abspath(path)
+
+def MakeTempFile(fname):
+    """Make a new file in the temp directory with a give name
+    @param fname: file name
+    @return: new file path
+
+    """
+    path = os.path.join(GetTempDir(), fname)
+    if not os.path.exists(path):
+        handle = open(path, "wb")
+        handle.write(" ")
+        handle.close()
+    return path
