@@ -24,3 +24,6 @@ from fileutil import *
 from fileimpl import *
 
 from backupmgr import *
+
+# Storage Classes
+from histcache import *
