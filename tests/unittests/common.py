@@ -28,6 +28,9 @@ def CleanTempDir():
     """Clean all files from the temporary directory"""
     tdir = GetTempDir()
     for path in os.listdir(tdir):
+        if path.startswith(u'.'):
+            continue
+
         fpath = os.path.join(tdir, path)
         if os.path.isdir(fpath):
             shutil.rmtree(fpath)
