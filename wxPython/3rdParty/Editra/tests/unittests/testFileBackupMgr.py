@@ -59,7 +59,7 @@ class FileBackupMgrTest(unittest.TestCase):
         fname = common.MakeTempFile("test2.txt")
         fobj = ebmlib.FileObjectImpl(fname)
         self.assertFalse(self.bkup.IsBackupNewer(fname))
-        time.sleep(.55) # make sure mod time is different
+        time.sleep(1) # make sure modtime is different
         writer = self.bkup.GetBackupWriter(fobj)
         writer("TEST BACKUP")
         bname = self.bkup.GetBackupFilename(fname)
