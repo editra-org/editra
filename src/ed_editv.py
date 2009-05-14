@@ -36,6 +36,21 @@ from ebmlib import GetFileModTime
 
 _ = wx.GetTranslation
 
+def modalcheck(func):
+    """Decorator method to add extra modality guards to functions that
+    show modal dialogs. Arg 0 must be 'self'
+
+    """
+    def WrapModal(*args, **kwargs):
+        self = args[0]
+        self._has_dlg = True
+        func(*args, **kwargs)
+        self._has_dlg = False
+
+    WrapModal.__name__ = func.__name__
+    WrapModal.__doc__ = func.__doc__
+    return WrapModal
+
 #--------------------------------------------------------------------------#
 
 class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
@@ -51,6 +66,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         # Attributes
         self._ignore_del = False
+        self._has_dlg = False
 
         # Initialize the classes position manager for the first control
         # that is created only.
@@ -86,7 +102,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         if self.IsLoading():
             return
 
-        if Profile_Get('CHECKMOD'):
+        if not self._has_dlg and Profile_Get('CHECKMOD'):
             cfile = self.GetFileName()
             lmod = GetFileModTime(cfile)
             mtime = self.GetModTime()
@@ -101,20 +117,23 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                 else:
                     wx.CallAfter(self.AskToReload, cfile)
 
-            # Check for changes to permissions
-            readonly = self._nb.ImageIsReadOnly(self.GetTabIndex())
-            if self.File.IsReadOnly() != readonly:
-                if readonly:
-                    # File is no longer read only
-                    self._nb.SetPageImage(self.GetTabIndex(),
-                                          str(self.GetLangId()))
-                else:
-                    # File has changed to be readonly
-                    self._nb.SetPageImage(self.GetTabIndex(),
-                                          ed_glob.ID_READONLY)
+        # Check for changes to permissions
+        readonly = self._nb.ImageIsReadOnly(self.GetTabIndex())
+        if self.File.IsReadOnly() != readonly:
+            if readonly:
+                # File is no longer read only
+                self._nb.SetPageImage(self.GetTabIndex(),
+                                      str(self.GetLangId()))
             else:
-                pass
+                # File has changed to be readonly
+                self._nb.SetPageImage(self.GetTabIndex(),
+                                      ed_glob.ID_READONLY)
+            self._nb.Refresh()
 
+        else:
+            pass
+
+    @modalcheck
     def DoReloadFile(self):
         """Reload the current file"""
         ret, rmsg = self.ReloadFile()
@@ -234,6 +253,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         self.PopupMenu(EdEditorView.RCLICK_MENU)
         evt.Skip()
 
+    @modalcheck
     def PromptToReSave(self, cfile):
         """Show a dialog prompting to resave the current file
         @param cfile: the file in question
@@ -253,6 +273,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         else:
             self.SetModTime(0)
 
+    @modalcheck
     def AskToReload(self, cfile):
         """Show a dialog asking if the file should be reloaded
         @param cfile: the file to prompt for a reload of
