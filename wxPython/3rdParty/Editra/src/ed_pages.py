@@ -40,6 +40,7 @@ from extern import flatnotebook as FNB
 
 #--------------------------------------------------------------------------#
 # Globals
+ID_IDLE_TIMER = wx.NewId()
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -65,6 +66,7 @@ class EdPages(FNB.FlatNotebook):
 
         # Notebook attributes
         self.LOG = wx.GetApp().GetLog()
+        self._idletimer = wx.Timer(self, ID_IDLE_TIMER)
         self.DocMgr = ed_editv.EdEditorView.DOCMGR
         self._searchctrl = ed_search.SearchController(self, self.GetCurrentCtrl)
         self._searchctrl.SetLookinChoices(Profile_Get('SEARCH_LOC',
@@ -102,7 +104,7 @@ class EdPages(FNB.FlatNotebook):
         self._pages.Bind(wx.EVT_MIDDLE_UP, self.OnMClick)
         self.Bind(FNB.EVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU, self.OnTabMenu)
         self.Bind(wx.EVT_MENU, self.OnMenu)
-        self.Bind(wx.EVT_IDLE, self.OnIdle)
+        self.Bind(wx.EVT_TIMER, self.OnIdle, id=ID_IDLE_TIMER)
 
         # Message handlers
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
@@ -111,6 +113,7 @@ class EdPages(FNB.FlatNotebook):
 
         # Add a blank page
         self.NewPage()
+        self._idletimer.Start(333) # Do idle checks 3 times a second
 
     #---- End Init ----#
 
@@ -867,15 +870,6 @@ class EdPages(FNB.FlatNotebook):
             page = self.GetCurrentPage()
             if page is not None:
                 page.DoOnIdle()
-
-#            # Update document indicator state
-#            if hasattr(page, 'GetDocument'):
-#                doc = page.GetDocument()
-#                sel = self.GetSelection()
-#                img = self.GetPageImage(sel)
-#                roidx = self._index[ed_glob.ID_READONLY]
-#                if doc.ReadOnly and img != roidx:
-#                    FNB.FlatNotebook.SetPageImage(sel, roidx)
 
     def OnLeftUp(self, evt):
         """Traps clicks sent to page close buttons and
