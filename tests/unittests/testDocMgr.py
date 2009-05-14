@@ -38,8 +38,9 @@ class DocMgrTest(unittest.TestCase):
 
     #---- Tests ----#
     def testGetBook(self):
-        """Test that the position book is properly created."""
-        self.assertTrue(isinstance(self.mgr.GetBook(), dict))
+        """Test that the path of the book is set"""
+        book = self.mgr.GetBook()
+        self.assertTrue(book is None, "book == %s" % book)
 
     def testGetPos(self):
         """Test fetching file positions from the manager."""
@@ -61,15 +62,39 @@ class DocMgrTest(unittest.TestCase):
         self.mgr.AddNaviPosition('test5.py', 45)
         self.mgr.AddNaviPosition('test6.py', 998)
 
-        # Should be at the end of the cache so next should be first item
+        # Move back to begining of cache
+        self.mgr.GetPreviousNaviPos()
+        self.mgr.GetPreviousNaviPos()
+        self.mgr.GetPreviousNaviPos()
+        self.mgr.GetPreviousNaviPos()
+
         pos = self.mgr.GetNextNaviPos() # next in cache
-        self.assertEqual(pos, 200)
+        self.assertEqual(pos[1], 200)
 
         pos = self.mgr.GetNextNaviPos()
-        self.assertEqual(pos, 83)
+        self.assertEqual(pos[1], 83)
 
         pos = self.mgr.GetNextNaviPos()
-        self.assertEqual(pos, 45)
+        self.assertEqual(pos[1], 45)
 
-        pos = self.mgr.GetNextNaviPos('test5.py')
-        self.assertEqual(pos, 83)
+#        pos = self.mgr.GetNextNaviPos('test5.py')
+#        self.assertEqual(pos[1], 83)
+
+    def testGetPreviousNaviPos(self):
+        """Test Getting the previous position in the history and retrieving
+        items from the navigator cache
+
+        """
+        self.mgr.AddNaviPosition('test4.py', 200)
+        self.mgr.AddNaviPosition('test5.py', 83)
+        self.mgr.AddNaviPosition('test5.py', 45)
+        self.mgr.AddNaviPosition('test6.py', 998)
+
+        pos = self.mgr.GetPreviousNaviPos()
+        self.assertEqual(pos[1], 998)
+
+        pos = self.mgr.GetPreviousNaviPos()
+        self.assertEqual(pos[1], 45)
+
+        pos = self.mgr.GetPreviousNaviPos()
+        self.assertEqual(pos[1], 83)

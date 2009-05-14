@@ -23,6 +23,7 @@ import sys
 # Editra Libraries
 import util
 from profiler import Profile_Get
+import ebmlib
 
 #--------------------------------------------------------------------------#
 
@@ -46,8 +47,7 @@ class DocPositionMgr(object):
         self._records = dict()
 
         # Non persisted navigation cache
-        self._poscache = list()
-        self._cpos = -1
+        self._poscache = ebmlib.HistoryCache(100) # save last 100 positions
 
     def InitPositionCache(self, book_path):
         """Initialize and load the on disk document position cache.
@@ -65,12 +65,7 @@ class DocPositionMgr(object):
         @param pos: position
 
         """
-        clen = len(self._poscache)
-        if self._cpos+1 != clen:
-            self._poscache = self._poscache[:self._cpos]
-
-        self._poscache.append((fname, pos))
-        self._cpos = len(self._poscache) - 1
+        self._poscache.PutItem((fname, pos))
 
     def AddRecord(self, vals):
         """Adds a record to the dictionary from a list of the
@@ -98,19 +93,11 @@ class DocPositionMgr(object):
         the given file.
         @param fname: filename (note currently not supported)
         @return: int or None
+        @note: fname is currently not used
 
         """
-        if not len(self._poscache):
-            return None
-
-        # If at end wrap to begining
-        if self._cpos >= len(self._poscache):
-            self._cpos = 0
-
-        rval = None
-        # Get the position at the current history position marker
-        rval = self._poscache[self._cpos]
-        self._cpos += 1
+        item = self._poscache.GetNextItem()
+        return item
 
     def GetPreviousNaviPos(self, fname=None):
         """Get the last stored navigation position
@@ -118,26 +105,11 @@ class DocPositionMgr(object):
         the given file.
         @param fname: filename (note currently not supported)
         @return: int or None
+        @note: fname is currently not used
 
         """
-        if not len(self._poscache):
-            return None
-
-        # If past begining wrap to the end
-        if self._cpos < 0:
-            self._cpos = len(self._cpos) - 1
-
-        rval = None
-#        if fname is None:
-        # Get the position at the current history position marker
-        rval = self._poscache[self._cpos]
-        self._cpos -= 1
-#        else:
-#            # Get the last known position for the given file
-#            idx = 0
-#            for name, pos in reversed(self._poscache[:self._cpos]):
-#                if name == fname:
-#                    rval = pos
+        item = self._poscache.GetPreviousItem()
+        return item
 
     def GetPos(self, name):
         """Get the position record for a given filename
