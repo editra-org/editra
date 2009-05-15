@@ -97,6 +97,20 @@ class Code(object):
         """
         return self.scope
 
+    def GetType(self):
+        """Get the objects type identifier
+        @return: string
+
+        """
+        return self.type
+
+    def SetType(self, objtype):
+        """Set the object type id string
+        @param objtype: string
+
+        """
+        self.type = objtype
+
 #-----------------------------------------------------------------------------#
 
 class Scope(Code):
