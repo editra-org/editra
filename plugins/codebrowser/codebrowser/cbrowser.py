@@ -153,9 +153,13 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         """
         img = self.icons.get(cobj.type, None)
+
+        # Try and find an appropriate fallback icon
         if img is None:
             if isinstance(cobj, taglib.Function):
                 img = self.icons['function']
+            elif isinstance(cobj, taglib.Class):
+                impg = self.icons['class']
             elif isinstance(cobj, taglib.Scope):
                 img = self.icons['section']
             else:
