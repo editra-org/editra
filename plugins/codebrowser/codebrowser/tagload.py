@@ -64,7 +64,8 @@ LOAD_MAP = { synglob.ID_LANG_ADA : TAGLIB + 'adatags',
              synglob.ID_LANG_VALA : TAGLIB + 'valatags',
              synglob.ID_LANG_VBSCRIPT : TAGLIB + 'vbstags',
              synglob.ID_LANG_VERILOG : TAGLIB + 'verilogtags',
-             synglob.ID_LANG_XML : TAGLIB + 'xmltags' }
+             synglob.ID_LANG_XML : TAGLIB + 'xmltags',
+             synglob.ID_LANG_XTEXT: TAGLIB + 'xtexttags' }
 
 # Compatibility for older versions of Editra
 if hasattr(synglob, 'ID_LANG_SYSVERILOG'):
