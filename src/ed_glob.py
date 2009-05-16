@@ -297,8 +297,8 @@ ID_METHOD_TYPE = wx.NewId()
 SB_INFO          = 0
 SB_BUFF          = 1
 SB_LEXER         = 2
-SB_READONLY      = 3
-SB_ENCODING      = 4
+SB_ENCODING      = 3
+SB_EOL           = 4
 SB_ROWCOL        = 5
 
 # Print Mode Identifiers
