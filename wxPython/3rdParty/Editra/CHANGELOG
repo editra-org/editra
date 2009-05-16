@@ -21,6 +21,8 @@ NEW: [features/improvements]
 +Patch from (hasan aljudy) to show cwd and add e! command to commandbar
 +Automatically show path completion list when doing an e or cd command.
 +Display the documents EOL mode in the status bar.
++Add support for XText (patch from igor.dejanovic).
++Support XText in Codebrowser (patch from igor.dejanovic).
 
 BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.

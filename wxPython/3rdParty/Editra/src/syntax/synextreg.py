@@ -283,6 +283,10 @@ LANG_S = u'S'
 ID_LANG_GROOVY = _NewId()
 LANG_GROOVY = u'Groovy'
 
+ID_LANG_XTEXT = _NewId()
+LANG_XTEXT = u'Xtext'
+
+
 #---- End Language Identifier Keys ----#
 
 # Default extensions to file type mapping
@@ -364,6 +368,7 @@ EXT_MAP = {
            'axl dtd plist rdf svg xml xrc xsd xsl xslt xul' : LANG_XML,
            'yaml yml'           : LANG_YAML,
            'groovy'             : LANG_GROOVY,
+           'xtext'               : LANG_XTEXT,
           }
 
 
