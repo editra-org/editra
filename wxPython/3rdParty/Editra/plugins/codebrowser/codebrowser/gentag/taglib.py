@@ -89,6 +89,13 @@ class Code(object):
         """
         return self.name
 
+    def SetName(self, objname):
+       """Set the name of this code object
+       @param objname: string
+
+       """
+       self.name = objname
+
     def GetScope(self):
         """Get the scope this object belongs to, if it returns None
         the scope of the object is at the global/top level.
