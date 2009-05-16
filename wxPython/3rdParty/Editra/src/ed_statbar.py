@@ -21,6 +21,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Imports
 import wx
+import wx.stc
 
 # Editra Libraries
 import ed_glob
@@ -29,6 +30,10 @@ import ed_msg
 from syntax.syntax import GetFtypeDisplayName
 from eclib.pstatbar import ProgressStatusBar
 from extern.decorlib import anythread
+
+#--------------------------------------------------------------------------#
+ 
+_ = wx.GetTranslation
 
 #--------------------------------------------------------------------------#
 
@@ -41,15 +46,25 @@ class EdStatBar(ProgressStatusBar):
     def __init__(self, parent):
         ProgressStatusBar.__init__(self, parent, style=wx.ST_SIZEGRIP)
 
-        # Setup
+        # Attributes
         self._pid = parent.GetId() # Save parents id for filtering msgs
         self._widths = list()
+        self._cleanup_timer = wx.Timer(self, EdStatBar.ID_CLEANUP_TIMER)
+        self._eolmenu = wx.Menu()
+
+        # Setup
         self.SetFieldsCount(6) # Info, vi stuff, line/progress
         self.SetStatusWidths([-1, 90, 40, 40, 40, 155])
-        self._cleanup_timer = wx.Timer(self, EdStatBar.ID_CLEANUP_TIMER)
+        self._eolmenu.Append(ed_glob.ID_EOL_MAC, u"CR",
+                             _("Change line endings to %s") % u"CR")
+        self._eolmenu.Append(ed_glob.ID_EOL_WIN, u"CRLF",
+                             _("Change line endings to %s") % u"CRLF")
+        self._eolmenu.Append(ed_glob.ID_EOL_UNIX, u"LF",
+                             _("Change line endings to %s") % u"LF")
 
         # Event Handlers
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
+        self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_TIMER, self.OnExpireMessage,
                   id=EdStatBar.ID_CLEANUP_TIMER)
 
@@ -96,8 +111,8 @@ class EdStatBar(ProgressStatusBar):
         # NOTE: Order of fields is important
         for field in [ed_glob.SB_BUFF,
                       ed_glob.SB_LEXER,
-                      ed_glob.SB_READONLY,
                       ed_glob.SB_ENCODING,
+                      ed_glob.SB_EOL,
                       ed_glob.SB_ROWCOL]:
             width = self.GetTextExtent(self.GetStatusText(field))[0]
             widths.append(width)
@@ -138,6 +153,18 @@ class EdStatBar(ProgressStatusBar):
             mw = self.GetParent()
             mpane = mw.GetEditPane()
             mpane.ShowCommandControl(ed_glob.ID_GOTO_LINE)
+        else:
+            evt.Skip()
+
+    def OnLeftUp(self, evt):
+        """Handle left clicks on the status bar
+        @param evt: wx.MouseEvent
+
+        """
+        pt = evt.GetPosition()
+        if self.GetFieldRect(ed_glob.SB_EOL).Contains(pt):
+            rect = self.GetFieldRect(ed_glob.SB_EOL)
+            self.PopupMenu(self._eolmenu, (rect.x, rect.y))
         else:
             evt.Skip()
 
@@ -233,10 +260,13 @@ class EdStatBar(ProgressStatusBar):
                          GetFtypeDisplayName(cbuff.GetLangId()),
                          ed_glob.SB_LEXER)
 
-    #        pstatbar.ProgressStatusBar.SetStatusText(self,
-    #                                                 ,
-    #                                                 ed_glob.SB_READONLY)
+            eol = { wx.stc.STC_EOL_CR : u"CR",
+                    wx.stc.STC_EOL_LF : u"LF",
+                    wx.stc.STC_EOL_CRLF : u"CRLF" }
+            wx.CallAfter(self.__SetStatusText,
+                         eol[cbuff.GetEOLMode()],
+                         ed_glob.SB_EOL)
+
         except wx.PyDeadObjectError:
             # May be called asyncronasly after the control is already dead
             return
-
