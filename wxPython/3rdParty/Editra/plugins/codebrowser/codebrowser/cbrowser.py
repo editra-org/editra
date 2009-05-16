@@ -159,7 +159,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             if isinstance(cobj, taglib.Function):
                 img = self.icons['function']
             elif isinstance(cobj, taglib.Class):
-                impg = self.icons['class']
+                img = self.icons['class']
             elif isinstance(cobj, taglib.Scope):
                 img = self.icons['section']
             else:
