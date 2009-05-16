@@ -18,6 +18,7 @@ NEWS:
 
 NEW: [features/improvements]
 +Add automatic file backup option to periodically backup buffer contents.
++Patch from (hasan aljudy) to show cwd and add e! command to commandbar
 
 BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.

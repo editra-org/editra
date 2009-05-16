@@ -251,8 +251,10 @@ class CommandEntryBar(CommandBarBase):
 
         # Setup
         cmd_lbl = wx.StaticText(self, label=_("Command") + ": ")
+        self.info_lbl = wx.StaticText(self, label="")
         self.AddControl(cmd_lbl, wx.ALIGN_LEFT)
         self.AddControl(self.ctrl, wx.ALIGN_LEFT)
+        self.AddControl(self.info_lbl, wx.ALIGN_LEFT)
 
         # HACK: workaround bug in mac control that resets size to
         #       that of the default variant after any text has been
@@ -444,6 +446,9 @@ class CommandExecuter(eclib.CommandEntryBase):
                 self.Quit()
         elif cmd.startswith(u'e '):
             self.EditCommand(cmd)
+        elif cmd.rstrip() == u'e!':
+            ctrl = frame.nb.GetCurrentCtrl()
+            ctrl.RevertToSaved()
         elif self.RE_GO_WIN.match(cmd):
             self.GoWindow(cmd)
         elif re.match(self.RE_GO_BUFFER, cmd):
@@ -669,6 +674,10 @@ class CommandExecuter(eclib.CommandEntryBase):
 
         """
         val = self.GetValue()
+        cwd_info = ""
+        if val.strip() in ['cwd', 'e', 'cd']:
+            cwd_info = "   " + _(u"cwd: ") + self._curdir
+        self.Parent.info_lbl.SetLabel(cwd_info)
         if self._popup.IsShown():
             if not len(val):
                 self._popup.Hide()
