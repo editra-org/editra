@@ -673,6 +673,11 @@ class CommandExecuter(eclib.CommandEntryBase):
         @param evt: event that called this handler
 
         """
+        e_key = evt.GetKeyCode()
+        if e_key == wx.WXK_ESCAPE:
+            evt.Skip()
+            return
+
         val = self.GetValue()
         cwd_info = ""
         if val.strip() in ['cwd', 'e', 'cd']:
@@ -683,6 +688,10 @@ class CommandExecuter(eclib.CommandEntryBase):
                 self._popup.Hide()
             else:
                 wx.CallAfter(self.UpdateAutoComp)
+        else:
+            if self._popup.HasSuggestions():
+                    self._AdjustValue(self._popup.GetSelection())
+            self.ListDir()
         self._AdjustSize()
         evt.Skip()
 
