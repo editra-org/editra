@@ -18,11 +18,12 @@ NEWS:
 
 NEW: [features/improvements]
 +Add automatic file backup option to periodically backup buffer contents.
-+Patch from (hasan aljudy) to show cwd and add e! command to commandbar
++Patch from (Hasan Aljudy) to show cwd and add e! command to commandbar
 +Automatically show path completion list when doing an e or cd command.
 +Display the documents EOL mode in the status bar.
-+Add support for XText (patch from igor.dejanovic).
-+Support XText in Codebrowser (patch from igor.dejanovic).
++Add support for XText (patch from Igor Dejanovic).
++Support XText in Codebrowser (patch from Igor Dejanovic).
++Complete re-write of vi emulation support (patch from Hasan Aljudy)
 
 BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.
