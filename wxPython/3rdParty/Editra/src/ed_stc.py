@@ -215,23 +215,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.EndUndoAction()
 
     #---- Begin Function Definitions ----#
-    def AddLine(self, before=False, indent=False):
-        """Add a new line to the document
-        @keyword before: whether to add the line before current pos or not
-        @keyword indent: autoindent the new line
-        @postcondition: a new line is added to the document
-
-        """
-        if before:
-            self.LineUp()
-
-        self.LineEnd()
-
-        if indent:
-            self.AutoIndent()
-        else:
-            self.InsertText(self.GetCurrentPos(), self.GetEOLChar())
-            self.LineDown()
 
     def Bookmark(self, action):
         """Handles bookmark actions
@@ -263,6 +246,16 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         if mark != -1:
             self.GotoLine(mark)
+
+    # TODO: DO NOT use these methods anywhere new they will be removed soon
+    def ShowCommandBar(self):
+        """Open the command bar"""
+        self.GetTopLevelParent().GetEditPane().ShowCommandControl(ed_glob.ID_COMMAND)
+
+    def ShowFindBar(self):
+        """Open the quick-find bar"""
+        self.GetTopLevelParent().GetEditPane().ShowCommandControl(ed_glob.ID_QUICK_FIND)
+    # END TODO
 
     def GetBookmarks(self):
         """Gets a list of all lines containing bookmarks
@@ -1428,123 +1421,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
         if lineNum is None:
             lineNum = self.GetCurrentLine()
         super(EditraStc, self).ToggleFold(lineNum)
-
-    def MoveCurrentPos(self, offset, extend=False):
-        """Move caret by the given offset
-        @note: only use it for movement within a line
-
-        """
-        if offset > 0:
-            step = self.CharRight #XXX breaks RTL, but is RTL supported?
-            if extend:
-                step = self.CharRightExtend
-        else:
-            step = self.CharLeft
-            if extend:
-                step = self.CharLeftExtend
-
-        #XXX is there a better reliable way than repeating basic movements?
-        repeat = abs(offset)
-        for i in range(repeat):
-            step()
-
-    def _FindChar(self, char, repeat=1, reverse=False, extra_offset=0):
-        """Find the position of the next (ith) 'char' character
-        on the current line
-
-        @note used by vim motions for finding a character on a line (f,F,t,T)
-        @param char: the char to be found
-        @keyword repeat: how many times to repeat the serach
-        @keyword reverse: whether to search backwards
-        @keyword extra_offset: extra offset to be applied to the return value
-
-        @return: offset from caret position
-
-        """
-        text, pos = self.GetCurLine()
-        oldpos = pos
-        if not reverse:
-            for i in range(repeat):
-                pos = text.find(char, pos+1) # pos is on the char itself
-                if pos == -1:
-                    break # -1 + 1 = 0
-        else:
-            for i in range(repeat):
-                pos = text.rfind(char, 0, pos)
-                if pos == -1:
-                    break # TEST not sure but we need this as well
-
-        # if pos == -1 then the char was not found
-        # but offset could be arbitrary
-        # (although should never be other than 0 or -1) so do a bound check
-        newpos = pos + extra_offset
-        if newpos not in range(len(text)):
-            return 0
-
-        return newpos - oldpos;
-
-    def FindNextChar(self, char, repeat=1, extend=False):
-        """Move caret to the next (ith) occurance of char on the current line
-        @note: This is a vim motion
-        @keyword repeat: int determining ith occurance to move to
-        @keyword extend: whether to extend selection or not
-
-        """
-        offset = self._FindChar(char, repeat)
-        self.MoveCurrentPos(offset, extend)
-
-    def FindPrevChar(self, char, repeat=1, extend=False):
-        """Move caret to the previous (ith) occurance of char on the current line
-        @note: This is a vim motion
-        @keyword repeat: int determining ith occurance to move to
-        @keyword extend: whether to extend selection or not
-
-        """
-
-        offset = self._FindChar(char, repeat, reverse=True)
-        self.MoveCurrentPos(offset, extend)
-
-    def FindTillNextChar(self, char, repeat=1, extend=False):
-        """Move caret until right before the next ith occurance of char
-
-        @note: This is a vim motion
-        @keyword repeat: int determining ith occurance to move to
-        @keyword extend: whether to extend selection or not
-
-        """
-        offset = self._FindChar(char, repeat, extra_offset=-1)
-        self.MoveCurrentPos(offset, extend)
-
-    def FindTillPrevChar(self, char, repeat=1, extend=False):
-        """Move caret until right before the previous ith occurance of char
-
-        @note: This is a vim motion
-        @keyword repeat: int determining ith occurance to move to
-        @keyword extend: whether to extend selection or not
-
-        """
-        offset = self._FindChar(char, repeat, reverse=True, extra_offset=-1)
-        self.MoveCurrentPos(offset, extend)
-
-
-    def GetIdentifierUnderCursor(self):
-        """Returns the identifier under the cursor (if any)"""
-        line, pos = self.GetCurLine()
-        while pos > 0: # rewind to first char of identifier
-            c = line[pos-1]
-            if c == '_' or c.isalnum():
-               pos = pos - 1
-            else:
-                break
-
-        start = pos
-        while pos < len(line): # find end of identifier
-            c = line[pos]
-            if c == '_' or c.isalnum():
-               pos = pos + 1
-            else:
-                break
-        return line[start:pos]
 
     def WordLeft(self):
         """Move caret to begining of previous word

@@ -106,6 +106,24 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     #---- Public Methods ----#
 
+    def AddLine(self, before=False, indent=False):
+        """Add a new line to the document
+        @keyword before: whether to add the line before current pos or not
+        @keyword indent: autoindent the new line
+        @postcondition: a new line is added to the document
+
+        """
+        if before:
+            self.LineUp()
+
+        self.LineEnd()
+
+        if indent:
+            self.AutoIndent()
+        else:
+            self.InsertText(self.GetCurrentPos(), self.GetEOLChar())
+            self.LineDown()
+
     def AutoIndent(self):
         """Indent from the current postion to match the indentation
         of the previous line.
@@ -143,6 +161,18 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # after we have been deleted.
         if isinstance(self, wx.stc.StyledTextCtrl):
             super(EditraBaseStc, self).BraceBadLight(pos)
+
+    def SetBlockCaret(self):
+        """Change caret style to block"""
+        # XXX: This doesn't seem to be working with this wxPython version.
+#        self.SendMsg(msg=2512, lp=2)
+        # Alternatively, just make the caret a bit thicker!
+        self.SetCaretWidth(3)
+
+    def SetLineCaret(self):
+        """Change caret style to line"""
+        self.SetCaretWidth(1)
+#        self.SendMsg(2512, 1)
 
     def BraceHighlight(self, pos1, pos2):
         """Highlight characters at pos1 and pos2
@@ -355,6 +385,36 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetZoom(0)
         return self.GetZoom()
 
+    def FindChar(self, char, repeat=1, reverse=False, extra_offset=0):
+        """Find the position of the next (ith) 'char' character
+        on the current line and move caret to it
+
+        @note: used by vim motions for finding a character on a line (f,F,t,T)
+        @param char: the character to be found
+        @keyword repeat: how many times to repeat the serach
+        @keyword reverse: whether to search backwards
+        @keyword extra_offset: extra offset to be applied to the movement
+
+        """
+        text, pos = self.GetCurLine()
+        oldpos = pos
+        if not reverse:
+            # search forward
+            for i in range(repeat):
+                pos = text.find(char, pos+1)
+                if pos == -1:
+                    return
+        else:
+            # search backward
+            for i in range(repeat):
+                pos = text.rfind(char, 0, pos)
+                if pos == -1:
+                    return
+
+        newpos = pos + extra_offset
+        if newpos in range(len(text)):
+            self.MoveCurrentPos(newpos - oldpos)
+
     @property
     def File(self):
         return self.file
@@ -564,6 +624,16 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             return True
 
+    def MoveCaretPos(self, offset):
+        """Move caret by the given offset
+        @param offset: int (+ move right, - move left)
+
+        """
+        pos = max(self.GetCurrentPos() + offset, 0)
+        pos = min(pos, self.GetLength())
+        self.GotoPos(pos)
+        self.ChooseCaretX()
+
     def OnChanged(self, evt):
         """Handles updates that need to take place after
         the control has been modified.
@@ -615,6 +685,36 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             bmp = wx.ArtProvider.GetBitmap(str(img), wx.ART_MENU)
             if bmp.IsOk():
                 self.RegisterImage(idx, bmp)
+
+    def SearchText(self, text, regex=False, back=False):
+        """Search for text forward or backward
+        @param text: string
+        @keyword regex: bool
+        @keyword back: bool
+
+        """
+        flags = wx.stc.STC_FIND_MATCHCASE
+        if regex:
+            flags = flags | wx.stc.STC_FIND_REGEXP
+
+        self.SearchAnchor()
+        if not back:
+            # Search forward
+            res = self.SearchNext(flags, text)
+            if res == -1:
+                # Nothing found, search from top
+                self.DocumentStart()
+                self.SearchAnchor()
+                res = self.SearchNext(flags, text)
+        else:
+            # Search backward
+            res = self.SearchPrev(flags, text)
+            if res == -1:
+                # Nothing found, search from bottom
+                self.DocumentEnd()
+                self.SearchAnchor()
+                res = self.SearchPrev(flags, text)
+        return res # returns -1 if nothing found even after wrapping around
 
     def SetDocument(self, doc):
         """Change the document object used.
