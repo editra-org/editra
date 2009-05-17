@@ -106,6 +106,11 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     #---- Public Methods ----#
 
+    def AddBookmark(self):
+        """Add a bookmark and return its handle"""
+        cline = self.GetCurrentLine()
+        return self.MarkerAdd(cline, MARK_MARGIN)
+
     def AddLine(self, before=False, indent=False):
         """Add a new line to the document
         @keyword before: whether to add the line before current pos or not
@@ -413,7 +418,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         newpos = pos + extra_offset
         if newpos in range(len(text)):
-            self.MoveCurrentPos(newpos - oldpos)
+            self.MoveCaretPos(newpos - oldpos)
 
     @property
     def File(self):

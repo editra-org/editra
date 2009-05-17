@@ -120,8 +120,8 @@ class Clipboard(object):
         else:
             return u''
 
-    @staticmethod
-    def SystemSet(text):
+    @classmethod
+    def SystemSet(cls, text):
         """Set text into the system clipboard
         @param text: string
         @return: bool
