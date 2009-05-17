@@ -62,7 +62,10 @@ class SearchController(object):
         self._li_sel   = 0
         self._filters  = None
         self._clients = list()
-        self._engine = None
+        self._engine = ebmlib.SearchEngine(u"") # For incremental searches
+
+        # Setup
+        self._engine.SetResultFormatter(FormatResult)
 
         # Event handlers
         self._parent.Bind(eclib.EVT_FIND, self.OnFind)
@@ -258,8 +261,7 @@ class SearchController(object):
             if not findnext and evt.GetId() == ed_glob.ID_FIND_PREVIOUS:
                 flags |= eclib.AFR_UP
 
-            evt = eclib.FindEvent(eclib.edEVT_FIND_NEXT,
-                                    flags=flags)
+            evt = eclib.FindEvent(eclib.edEVT_FIND_NEXT, flags=flags)
             evt.SetFindString(data.GetFindString())
 
         stc = self._stc()
@@ -267,14 +269,14 @@ class SearchController(object):
 
         # Create the search engine
         isdown = not evt.IsUp()
-        engine = ebmlib.SearchEngine(data.GetFindString(), evt.IsRegEx(),
-                                     isdown, evt.IsMatchCase(),
-                                     evt.IsWholeWord())
-        engine.SetResultFormatter(FormatResult)
-        self._engine = engine
+        self._engine.SetQuery(data.GetFindString())
+        self._engine.SetFlags(isregex=evt.IsRegEx(),
+                              matchcase=evt.IsMatchCase(),
+                              wholeword=evt.IsWholeWord(),
+                              down=isdown)
 
         # Check if expression was valid or not
-        if engine.GetQueryObject() is None:
+        if self._engine.GetQueryObject() is None:
             wx.MessageBox(_("Invalid expression \"%s\"") % engine.GetQuery(),
                           _("Regex Compile Error"),
                           style=wx.OK|wx.CENTER|wx.ICON_ERROR)
@@ -282,7 +284,7 @@ class SearchController(object):
 
         # XXX: may be inefficent to copy whole buffer each time for files
         #      that are large.
-        engine.SetSearchPool(stc.GetTextRaw())
+        self._engine.SetSearchPool(stc.GetTextRaw())
 
         # Check if the direction changed
         ldir = self._posinfo['ldir']
@@ -304,7 +306,7 @@ class SearchController(object):
                     spos = end
 
         # Do the find
-        match = engine.Find(spos)
+        match = self._engine.Find(spos)
         if match is not None:
             start, end = match
 
@@ -327,11 +329,11 @@ class SearchController(object):
         else:
             # try search from top again
             if isdown:
-                match = engine.Find(0)
+                match = self._engine.Find(0)
                 ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
                                   (ed_glob.SB_INFO, _("Search wrapped to top")))
             else:
-                match = engine.Find(-1)
+                match = self._engine.Find(-1)
                 ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
                                   (ed_glob.SB_INFO,
                                   _("Search wrapped to bottom")))

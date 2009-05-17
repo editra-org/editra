@@ -92,6 +92,11 @@ class SearchEngine(object):
         except:
             self._regex = None
 
+    def ClearPool(self):
+        """Clear the search pool"""
+        del self._pool
+        self._pool = u""
+
     def Find(self, spos=0):
         """Find the next match based on the state of the search engine
         @keyword spos: search start position
@@ -350,6 +355,14 @@ class SearchEngine(object):
                 setattr(self, attr, val)
         self._CompileRegex()
 
+    def SetMatchCase(self, case=True):
+        """Set whether the engine will use case sensative searches
+        @keyword case: bool
+
+        """
+        self._matchcase = case
+        self._CompileRegex()
+
     def SetResultFormatter(self, funct):
         """Set the result formatter function
         @param funct: callable(filename, linenum, matchstr)
@@ -375,4 +388,13 @@ class SearchEngine(object):
 
         """
         self._query = query
+        self._CompileRegex()
+
+    def SetUseRegex(self, use=True):
+        """Set whether the engine is using regular expresion searches or
+        not.
+        @keyword use: bool
+
+        """
+        self._isregex = use
         self._CompileRegex()
