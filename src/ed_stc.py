@@ -972,9 +972,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         elif e_id == ed_glob.ID_WORD_WRAP:
             self.SetWrapMode(not self.GetWrapMode())
         elif e_id == ed_glob.ID_JOIN_LINES:
-            self.SetTargetStart(self.GetSelectionStart())
-            self.SetTargetEnd(self.GetSelectionEnd())
-            self.LinesJoin()
+            self.LinesJoinSelected()
         elif e_id == ed_glob.ID_INDENT_GUIDES:
             self.SetIndentationGuides(not bool(self.GetIndentationGuides()))
         elif e_id == ed_glob.ID_HLCARET_LINE:
@@ -1196,6 +1194,15 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetTargetStart(self.PositionFromLine(sline))
         self.SetTargetEnd(self.GetLineEndPosition(eline))
         self.ReplaceTarget(u' '.join(lines))
+
+    def LinesJoinSelected(self):
+        """Similar to LinesJoin, but operates on selection
+        @see: LinesJoin
+
+        """
+        self.SetTargetStart(self.GetSelectionStart())
+        self.SetTargetEnd(self.GetSelectionEnd())
+        self.LinesJoin()
 
     def LineMoveUp(self):
         """Move the current line up"""
