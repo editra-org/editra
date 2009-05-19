@@ -876,7 +876,7 @@ def ProcessCommandLine():
 
     """
     try:
-        items, args = getopt.getopt(sys.argv[1:], "dhpvDSc",
+        items, args = getopt.getopt(sys.argv[1:], "dhp:vDSc:",
                                    ['debug', 'help', 'version', 'auth',
                                     'configdir=', 'profileOut='])
     except getopt.GetoptError, msg:
