@@ -287,7 +287,10 @@ class EditraCommander(object):
 
     def OpenLine(self):
         """Open a new line below the current line"""
-        self.stc.AddLine()
+        # TODO: watch out if AutoIndent gets "fixed" so that it doesn't
+        #       open a new line by itself!
+        self.GotoLineEnd()
+        self.stc.AutoIndent()
 
     def OpenLineUp(self):
         """Open a new line above the current line"""
@@ -1097,6 +1100,7 @@ def Change(editor, repeat, cmd):
         editor.PopColumn(restore)
         return return_value
     pre_selected = False
+    line_motion = False
     if editor.HasSelection():
         pre_selected = True
         if len(cmd) > 1:
@@ -1116,6 +1120,7 @@ def Change(editor, repeat, cmd):
             repeat = repeat * motion_repeat
         if motion_cmd == cmd:
             # Oerate on whole line
+            line_motion = True
             editor.PushColumn()
             editor.SelectLines(repeat)
         else:
@@ -1136,6 +1141,7 @@ def Change(editor, repeat, cmd):
             editor.EndSelection()
 
             if motion_cmd[0] in LINE_MOTION_PREFIXES:
+                line_motion = True
                 editor.SelectFullLines()
 
     cmd_map = {
@@ -1147,10 +1153,14 @@ def Change(editor, repeat, cmd):
           }
 
     cmd_map[cmd]()
-    editor.PopColumn(restore=(cmd not in [u'd', u'c']))
 
-    if cmd == u'c': # HACK? special cases for 'cc'
-        if motion == cmd:
+    restore_x = cmd in (u'y', u'<', u'>') or cmd == u'd' and line_motion
+    editor.PopColumn(restore_x)
+
+    # XXX:Some special case handling
+    #     Not the most elegant way though ..
+    if cmd == u'c':
+        if line_motion:
             editor.OpenLineUp()
 
     if cmd not in u'c':
@@ -1349,5 +1359,4 @@ MOTION_HANDLERS = [h for h in HANDLERS if h.is_motion]
 #       would probably require yet another huge rewrite of this module.
 #       So watch out if things get out of control with many such hacks.
 # These are motions that, if operated on, the operation should happen
-# on whole lines.
-LINE_MOTION_PREFIXES = [u'\'', u'G', u'{', u'}']
+# on whole lines.LINE_MOTION_PREFIXES = [u'\'', u'G', u'{', u'}']

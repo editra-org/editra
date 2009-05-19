@@ -96,7 +96,7 @@ class ViKeyHandler(KeyHandler):
     VISUAL, \
         = range(3)
 
-    def __init__(self, stc):
+    def __init__(self, stc, use_normal_default=False):
         KeyHandler.__init__(self, stc)
 
         # Attributes
@@ -107,7 +107,10 @@ class ViKeyHandler(KeyHandler):
         self.buffer = u''
 
         # Insert mode by defauly
-        self.InsertMode()
+        if use_normal_default:
+            self.NormalMode()
+        else:
+            self.InsertMode()
 
     def ClearMode(self):
         """Clear the mode back to default input mode"""

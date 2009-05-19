@@ -572,7 +572,7 @@ class DocGenPanel(wx.Panel):
                            choices=[_("Old Macintosh (\\r)"), _("Unix (\\n)"),
                                     _("Windows (\\r\\n)")])
         eolmode.SetSelection(Profile_Get('EOL_MODE'))
-                        
+
         eolsz.AddMany([(wx.StaticText(self,
                         label=_("Default EOL Mode") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
@@ -662,10 +662,10 @@ class DocGenPanel(wx.Panel):
         @param evt: Event that called this handler
 
         """
-        # XXX Why when running on windows this and other imports randomly 
+        # XXX Why when running on windows this and other imports randomly
         #     become None. I have been unable to reproduce this behavior myself
         #     but have recieved enough error reports about it to beleive it.
-        #     If they were actually NoneTypes the dialog would not be able to 
+        #     If they were actually NoneTypes the dialog would not be able to
         #     be shown so this is very strange!!
         global ed_glob
         if ed_glob is None:
@@ -768,6 +768,12 @@ class DocCodePanel(wx.Panel):
         ai_cb.SetValue(Profile_Get('AUTO_INDENT'))
         vi_cb = wx.CheckBox(self, ed_glob.ID_VI_MODE, _("Enable Vi Emulation"))
         vi_cb.SetValue(Profile_Get('VI_EMU'))
+        vi_ncb = wx.CheckBox(self, ed_glob.ID_VI_NORMAL_DEFAULT,
+                             _("Start in Normal Mode"))
+        vi_ncb.SetValue(Profile_Get('VI_NORMAL_DEFAULT'))
+        vi_ncb.Enable(vi_cb.GetValue())
+        vi_ncb_sz = wx.BoxSizer(wx.HORIZONTAL)
+        vi_ncb_sz.AddMany([((16, -1), 0), (vi_ncb, 0)])
 
         # Layout the controls
         sizer = wx.FlexGridSizer(14, 2, 5, 5)
@@ -786,6 +792,7 @@ class DocCodePanel(wx.Panel):
                        ((5, 5), 0), (compex_sz, 0),
                        ((5, 5), 0), (ai_cb, 0),
                        ((5, 5), 0), (vi_cb, 0),
+                       ((5, 5), 0), (vi_ncb_sz, 0),
                        ((10, 10), 0), ((10, 10), 0)])
         msizer = wx.BoxSizer(wx.HORIZONTAL)
         msizer.AddMany([((10, 10), 0), (sizer, 1, wx.EXPAND), ((10, 10), 0)])
@@ -801,6 +808,7 @@ class DocCodePanel(wx.Panel):
                     ed_glob.ID_INDENT_GUIDES, ed_glob.ID_FOLDING,
                     ed_glob.ID_AUTOCOMP, ed_glob.ID_AUTOINDENT,
                     ed_glob.ID_PREF_EDGE, ed_glob.ID_VI_MODE,
+                    ed_glob.ID_VI_NORMAL_DEFAULT,
                     ed_glob.ID_PREF_DLEXER, ed_glob.ID_HLCARET_LINE,
                     ed_glob.ID_PREF_AUTOCOMPEX):
 
@@ -818,6 +826,10 @@ class DocCodePanel(wx.Panel):
                     spin.Enable(e_val)
             elif e_id == ed_glob.ID_AUTOCOMP:
                 cbox = self.FindWindowById(ed_glob.ID_PREF_AUTOCOMPEX)
+                if cbox is not None:
+                    cbox.Enable(e_val)
+            elif e_id == ed_glob.ID_VI_MODE:
+                cbox = self.FindWindowById(ed_glob.ID_VI_NORMAL_DEFAULT)
                 if cbox is not None:
                     cbox.Enable(e_val)
 
