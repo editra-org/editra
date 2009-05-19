@@ -29,6 +29,7 @@ NEW: [features/improvements]
 BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.
 +Don't do a replace when there is no selection.
++Fix number of minor bugs related to finding accented characters.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:

@@ -42,6 +42,16 @@ import ebmlib
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 
+class EdSearchEngine(ebmlib.SearchEngine):
+    def SetQuery(self, query):
+        """Set the query string"""
+        if isinstance(query, types.UnicodeType):
+            # Encode to UTF-8 as used internally by the stc
+            query = query.encode('utf-8')
+        super(EdSearchEngine, self).SetQuery(query)
+
+#--------------------------------------------------------------------------#
+
 class SearchController(object):
     """Controls the interface to the text search engine"""
     def __init__(self, owner, getstc):
@@ -62,7 +72,7 @@ class SearchController(object):
         self._li_sel   = 0
         self._filters  = None
         self._clients = list()
-        self._engine = ebmlib.SearchEngine(u"") # For incremental searches
+        self._engine = EdSearchEngine(u"") # For incremental searches
 
         # Setup
         self._engine.SetResultFormatter(FormatResult)
@@ -277,7 +287,8 @@ class SearchController(object):
 
         # Check if expression was valid or not
         if self._engine.GetQueryObject() is None:
-            wx.MessageBox(_("Invalid expression \"%s\"") % engine.GetQuery(),
+            fail = ed_txt.DecodeString(self._engine.GetQuery(), 'utf-8')
+            wx.MessageBox(_("Invalid expression \"%s\"") % fail,
                           _("Regex Compile Error"),
                           style=wx.OK|wx.CENTER|wx.ICON_ERROR)
             return
@@ -354,9 +365,10 @@ class SearchController(object):
                 stc.EnsureVisible(line)
             else:
                 self._posinfo['found'] = -1
+                fail = ed_txt.DecodeString(self._engine.GetQuery(), 'utf-8')
                 ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
-                                  (ed_glob.SB_INFO,
-                                  _("\"%s\" was not found") % engine.GetQuery()))
+                                   (ed_glob.SB_INFO,
+                                   _("\"%s\" was not found") % fail))
 
     def OnFindAll(self, evt):
         """Find all results for the given query and display results in a
