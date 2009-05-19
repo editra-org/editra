@@ -317,7 +317,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.ToggleAutoIndent(_PGET('AUTO_INDENT'))
         self.ToggleBracketHL(_PGET('BRACKETHL'))
         self.ToggleLineNumbers(_PGET('SHOW_LN'))
-        self.SetViEmulationMode(_PGET('VI_EMU'))
+        self.SetViEmulationMode(_PGET('VI_EMU'), _PGET('VI_NORMAL_DEFAULT'))
         self.SetViewEdgeGuide(_PGET('SHOW_EDGE'))
         self.EnableAutoBackup(_PGET('AUTOBACKUP'))
         # NOTE: disabled because it is more annoying than it is benificial.
@@ -1258,15 +1258,17 @@ class EditraStc(ed_basestc.EditraBaseStc):
         mode = mode_map.get(mode, wx.stc.STC_EOL_LF)
         super(EditraStc, self).SetEOLMode(mode)
 
-    def SetViEmulationMode(self, use_vi):
+    def SetViEmulationMode(self, use_vi, use_normal=False):
         """Activate/Deactivate Vi eumulation mode
         @param use_vi: Turn vi emulation on/off
         @type use_vi: boolean
+        @keyword use_normal: Start in normal mode
+        @type use_normal: boolean
 
         """
         self.key_handler.ClearMode()
         if use_vi:
-            self.key_handler = ViKeyHandler(self)
+            self.key_handler = ViKeyHandler(self, use_normal)
         else:
             self.key_handler = KeyHandler(self)
 

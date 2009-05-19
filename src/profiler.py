@@ -99,6 +99,7 @@ _DEFAULTS = {
            'USETABS'    : False,            # Use tabs instead of spaces
            'USE_PROXY'  : False,            # Use Proxy server settings?
            'VI_EMU'     : False,            # Use Vi emulation mode
+           'VI_NORMAL_DEFAULT' : False,     # Use Normal mode by default
            'WARN_EOL'   : True,             # Warn about mixed eol characters
            'WRAP'       : False,            # Use Wordwrap
            'WSIZE'      : (700, 450)        # Mainwindow size

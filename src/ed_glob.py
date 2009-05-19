@@ -41,7 +41,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
             'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE', 'ID_SHOW_SB',
             'ID_REVERT_FILE', 'ID_RELOAD_ENC', 'ID_DOCPROP', 'ID_PASTE_AFTER',
-            'ID_COLUMN_MODE', 'ID_PANELIST', 'ID_MAXIMIZE_EDITOR', 
+            'ID_COLUMN_MODE', 'ID_PANELIST', 'ID_MAXIMIZE_EDITOR',
             'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS',
             'ID_SAVE_SESSION', 'ID_LOAD_SESSION']
 
@@ -281,6 +281,7 @@ ID_THEME             = wx.NewId()
 ID_USB               = wx.NewId()
 ID_UP                = wx.ID_UP
 ID_VI_MODE           = wx.NewId()
+ID_VI_NORMAL_DEFAULT = wx.NewId()
 ID_WEB               = wx.NewId()
 ID_READONLY          = wx.NewId()
 
@@ -359,6 +360,7 @@ ID_2_PROF = {
              ID_VIEW_TOOL         : 'TOOLBAR',
              ID_PREF_TABS         : 'USETABS',
              ID_VI_MODE           : 'VI_EMU',
+             ID_VI_NORMAL_DEFAULT : 'VI_NORMAL_DEFAULT',
              ID_PREF_WARN_EOL     : 'WARN_EOL',
              ID_WORD_WRAP         : 'WRAP',
 }
@@ -368,7 +370,7 @@ EOL_MODE_LF   = 1
 EOL_MODE_CRLF = 2
 def EOLModeMap():
     """Get the eol mode map"""
-    # Maintenance Note: ints must be kept in sync with EDSTC_EOL_* in edstc 
+    # Maintenance Note: ints must be kept in sync with EDSTC_EOL_* in edstc
     return { EOL_MODE_CR : _("Old Machintosh") + u" (\\r)",
              EOL_MODE_LF : _("Unix") + u" (\\n)",
              EOL_MODE_CRLF : _("Windows") + u" (\\r\\n)"}
