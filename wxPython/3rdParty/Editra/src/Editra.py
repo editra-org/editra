@@ -878,7 +878,7 @@ def ProcessCommandLine():
     try:
         items, args = getopt.getopt(sys.argv[1:], "dhp:vDSc:",
                                    ['debug', 'help', 'version', 'auth',
-                                    'configdir=', 'profileOut='])
+                                    'confdir=', 'profileOut='])
     except getopt.GetoptError, msg:
         # Raise error to console and exit
         sys.stderr.write(str(msg) + os.linesep)
@@ -906,7 +906,7 @@ def ProcessCommandLine():
             # Disable single instance checker
             ed_glob.SINGLE = False
             opts.pop(opt)
-        elif opt in ['-c', '--configdir']:
+        elif opt in ['-c', '--confdir']:
             ed_glob.CONFIG['CONFIG_BASE'] = value
             opts.pop(opt)
         elif opt == '--profileOut':
