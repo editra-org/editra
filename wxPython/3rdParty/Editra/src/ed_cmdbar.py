@@ -814,7 +814,46 @@ class LineCtrl(eclib.CommandEntryBase):
 #-----------------------------------------------------------------------------#
 # TODO: merge the common parts of these two classes into a single base class
 
-class PopupList(wx.MiniFrame):
+class PopupListBase(object):
+    """Common functionality between Popuplist GTK and Mac"""
+    def GetSelection(self):
+        """Get the string that is currently selected in the list
+        @return: string selection
+
+        """
+        return self._list.GetStringSelection()
+
+    def HasSelection(self):
+        """Tells whether anything in the list is selected"""
+        return self._list.GetSelection() != wx.NOT_FOUND
+
+    def HasSuggestions(self):
+        """Tell whether the list is showing suggestions"""
+        return self.IsShown() and self.ListCount() > 0
+
+    def ListCount(self):
+        """return the number of elements in the popup list"""
+        return self._list.GetCount()
+
+    def GetListCtrl(self):
+        """Get the ListBox control of the popupwindow"""
+        return self._list
+
+    def GetChoices(self):
+        """Get the items as a list
+        @return: list of strings
+
+        """
+        return self._list.GetStrings()
+
+    def SetSelection(self, index):
+        """Set the selection in the list by index
+        @param index: zero based index to set selection by
+
+        """
+        self._list.SetSelection(index)
+
+class PopupList(wx.MiniFrame, PopupListBase):
     """Popup window with a listbox in it"""
     def __init__(self, parent, choices=list(), pos=wx.DefaultPosition):
 
@@ -870,52 +909,6 @@ class PopupList(wx.MiniFrame):
         parent = self.GetParent()
         parent.Raise()
         parent.SetFocus()
-
-    def AdvanceSelection(self, down=True):
-        """Advance the selection in the list
-        @keyword down: move selection down or up
-
-        """
-        csel = self._list.GetSelection()
-        if csel != wx.NOT_FOUND:
-            if down:
-                csel += 1
-            else:
-                csel -= 1
-                csel = max(csel, 0)
-
-            if csel < len(self._list.GetItems()):
-                self._list.SetSelection(csel)
-
-    def GetChoices(self):
-        """Get the items as a list
-        @return: list of strings
-
-        """
-        return self._list.GetStrings()
-
-    def GetListCtrl(self):
-        """Get the ListBox control of the popupwindow"""
-        return self._list
-
-    def GetSelection(self):
-        """Get the string that is currently selected in the list
-        @return: string selection
-
-        """
-        return self._list.GetStringSelection()
-
-    def HasSelection(self):
-        """Tells whether anything in the list is selected"""
-        return self._list.GetSelection() != wx.NOT_FOUND
-
-    def HasSuggestions(self):
-        """Tell whether the list is showing suggestions"""
-        return self.IsShown() and self.ListCount() > 0
-
-    def ListCount(self):
-        """return the number of elements in the popup list"""
-        return self._list.GetCount()
 
     def OnFocus(self, evt):
         """Raise and reset the focus to the parent window whenever
@@ -980,13 +973,6 @@ class PopupList(wx.MiniFrame):
         if count > 0:
             self._list.SetSelection(selection)
 
-    def SetSelection(self, index):
-        """Set the selection in the list by index
-        @param index: zero based index to set selection by
-
-        """
-        self._list.SetSelection(index)
-
     def SetStringSelection(self, text):
         """Set the list selection by using a string value
         @param text: string to select in list
@@ -1009,7 +995,7 @@ class PopupList(wx.MiniFrame):
 
 #----------------------------------------------------------------------------#
 
-class PopupWinList(wx.PopupWindow):
+class PopupWinList(wx.PopupWindow, PopupListBase):
     """Popuplist for Windows/GTK"""
     def __init__(self, parent, choices=list(), pos=wx.DefaultPosition):
         """Create the popup window and its list control"""
@@ -1030,58 +1016,6 @@ class PopupWinList(wx.PopupWindow):
 
         # Event Handlers
         self.Bind(wx.EVT_SIZE, self.OnSize)
-
-    def AdvanceSelection(self, down=True):
-        """Advance the selection in the list
-        @keyword down: move selection down or up
-
-        """
-        item_count = self._list.GetCount()
-        if item_count == 0:
-            return
-        csel = self._list.GetSelection()
-        if csel == wx.NOT_FOUND:
-            if down:
-                csel = 0
-            else:
-                csel = -1
-        else:
-            if down:
-                csel += 1
-            else:
-                csel -= 1
-
-        # If it's -1 actually, but just in case something
-        # crazy happens and it drops even below -1
-        if csel < 0:
-            csel = item_count - 1
-        if csel >= item_count:
-            csel = 0
-        self._list.SetSelection(csel)
-        self._list.EnsureVisible(csel)
-
-    def GetListCtrl(self):
-        """Get the ListBox control of the popupwindow"""
-        return self._list
-
-    def GetSelection(self):
-        """Get the string that is currently selected in the list
-        @return: string selection
-
-        """
-        return self._list.GetStringSelection()
-
-    def HasSelection(self):
-        """Tells whether anything in the list is selected"""
-        return self._list.GetSelection() != wx.NOT_FOUND
-
-    def HasSuggestions(self):
-        """Tell whether the list is showing suggestions"""
-        return self.IsShown() and self.ListCount() > 0
-
-    def ListCount(self):
-        """return the number of elements in the popup list"""
-        return self._list.GetCount()
 
     def OnSize(self, evt):
         """Resize the list box to the correct size to fit."""
