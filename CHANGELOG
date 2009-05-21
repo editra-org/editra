@@ -30,6 +30,7 @@ BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.
 +Don't do a replace when there is no selection.
 +Fix number of minor bugs related to finding accented characters.
++Fix bug in batch file comment command, ensure a space is between 'rem' and the comment text.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
