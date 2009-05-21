@@ -65,6 +65,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         wx.TreeCtrl.__init__(self, parent, id, pos, size, style)
 
         # Attributes
+        self._log = wx.GetApp().GetLog()
         self._mw = parent
         self._menu = None
         self._selected = None
@@ -74,7 +75,11 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.icons = dict()
         self.il = None
 
+        # struct used in buffer-tree sync
+        self._ds_flat = list() # list of tuples - [(line, item_id),(line, item_id)...]
+
         self._timer = wx.Timer(self)
+        self._sync_timer = wx.Timer(self)
         self._cpage = None
         self._force = False
 
@@ -95,12 +100,14 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnMenu)
-        self.Bind(wx.EVT_TIMER, self.OnStartJob)
+        self.Bind(wx.EVT_TIMER, self.OnStartJob, self._timer)
+        self.Bind(wx.EVT_TIMER, self.OnSyncTimer, self._sync_timer)
         self.Bind(EVT_JOB_FINISHED, self.OnTagsReady)
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_SAVED)
+        ed_msg.Subscribe(self.OnSyncTree, ed_msg.EDMSG_UI_STC_KEYUP)
 
         # Backwards compatibility
         if hasattr(ed_msg, 'EDMSG_UI_STC_LEXER') and \
@@ -117,6 +124,44 @@ class CodeBrowserTree(wx.TreeCtrl):
     def _GetCurrentCtrl(self):
         """Get the current buffer"""
         return self._mw.GetNotebook().GetCurrentCtrl()
+
+    def _GetFQN(self, node):
+        """Returns fully qualified name of the tree node in the form
+        ...grandparent.parent.child
+        @param node: node id
+        """
+        rval=""
+        if node and node.IsOk():
+            parent = self.GetItemParent(node)
+            if parent:
+                rval = u'%s.%s' % (self._GetFQN(parent), self.GetItemText(node))
+            else:
+                rval = self.GetItemText(node)
+            
+            # Strip line information as this could be changed
+            if u'[' in rval:
+                rval = rval[:rval.index(u'[')-1]
+        
+        return rval
+
+    
+    def _FindNodeForLine(self, line):
+        """Returns node id of the docstruct element given line belongs to
+        @param line: line number
+        @returns: tree node id
+        """
+        # HACK This should probably be done with bisect search
+        rval = None
+        line += 1
+        if self._ds_flat:
+            for citem in self._ds_flat:
+                if citem[0] < line:
+                    cline = citem[0]
+                    rval = citem[1]
+                else:
+                    break
+        self._log("[codebrowser][info] For line %d found item %s" % (line, self._GetFQN(rval)))
+        return rval
 
     def _SetupImageList(self):
         """Setup the image list for the tree"""
@@ -166,6 +211,23 @@ class CodeBrowserTree(wx.TreeCtrl):
                 img = self.icons['variable']
         return img
 
+    def _SyncTree(self):
+        """Synchronize tree node selection with current position in the text
+        """
+        line = self._GetCurrentCtrl().GetCurrentLineNum()
+        self._log("[codebrowser][info] Syncing tree for position %d" % line)
+        scope_item = self._FindNodeForLine(line)
+        if scope_item:
+            selected = self.GetSelection()
+            if selected:
+                if selected != scope_item:
+                    self.ToggleItemSelection(selected)
+                    self.ToggleItemSelection(scope_item)
+            else:
+                self.ToggleItemSelection(scope_item)
+                
+            self.EnsureVisible(scope_item)
+
     def _ShouldUpdate(self):
         """Check whether the tree should do an update or not
         @return: bool
@@ -199,6 +261,7 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         """
         item_id = self.AppendItem(node, u"%s [%d]" % (cobj.GetName(), 1 + cobj.GetLine()), img)
+        self._ds_flat.append((cobj.GetLine(), item_id))
         self.SetPyData(item_id, cobj.GetLine())
         # If the item is a scope it may have sub items
         if isinstance(cobj, taglib.Scope):
@@ -359,9 +422,30 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
         evt.Check(pane.IsShown())
+        
+    def OnSyncTree(self, msg):
+        """Handler for tree synchronization.
+        Uses a one shot timer to optimize multiple fast caret movement events.
+        """
+        
+        if not self.GetTopLevelParent().IsActive():
+            return # Don't process message 
+        
+        if self._sync_timer.IsRunning():
+            self._sync_timer.Stop()
+        
+        #One shot timer for tree sync
+        self._sync_timer.Start(300, True)
+
+    def OnSyncTimer(self, evt):
+        """Sync tree selection with the current position.
+        Fired by the timer event from self._sync_timer.
+        """
+        self._SyncTree()
 
     def OnStartJob(self, evt):
         """Start the tree update job
+        
         @param evt: wxTimerEvent
 
         """
@@ -431,7 +515,7 @@ class CodeBrowserTree(wx.TreeCtrl):
 
             # Start the oneshot timer for beginning the tag generator job
             self._timer.Start(300, True)
-
+    
     def OnShowBrowser(self, evt):
         """Show the browser pane
         @param evt: wx.MenuEvent
@@ -453,6 +537,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         self._cdoc = tags
         self.DeleteChildren(self.root)
+        self._ds_flat = list()
         # Check and add any common types in the document first
 
         # Global Variables
@@ -474,6 +559,9 @@ class CodeBrowserTree(wx.TreeCtrl):
         for node in [ node for node in self.nodes.values()
                       if node is not None and node != self.nodes['globals']]:
             self.Expand(node)
+        
+        self._ds_flat.sort(cmp=lambda x,y: cmp(x[0],y[0]))
+        self._SyncTree()
 
 #--------------------------------------------------------------------------#
 # Tag Generator Thread
