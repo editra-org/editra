@@ -609,12 +609,16 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """
         if name in self._windows:
             self._windows.pop(name)
-            cur_top = self.GetTopWindow()
+            
             if not len(self._windows):
                 self._log("[app][info] No more open windows shutting down")
                 self.Exit()
                 return
 
+            # TODO: WXBUG? calling GetTopWindow when there are no more top
+            #       level windows causes a crash under MSW. Moving this line
+            #       above the previous check can reproduce the error.
+            cur_top = self.GetTopWindow()
             if name == repr(cur_top):
                 found = False
                 for key in self._windows:
