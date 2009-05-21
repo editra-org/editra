@@ -648,11 +648,13 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def PostPositionEvent(self):
         """Post an event to update the status of the line/column"""
-        pos = self.GetPos()
-        msg = _("Line: %(lnum)d  Column: %(cnum)d") % dict(lnum=pos[0], cnum=pos[1])
+        line, column = self.GetPos()
+        pinfo = dict(lnum=line, cnum=column)
+        msg = _("Line: %(lnum)d  Column: %(cnum)d") % pinfo
         nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
                                     msg, ed_glob.SB_ROWCOL)
         wx.PostEvent(self.GetTopLevelParent(), nevt)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_POS_CHANGED, pinfo)
 
     def OnRecordMacro(self, evt):
         """Records macro events

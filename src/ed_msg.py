@@ -143,6 +143,9 @@ EDMSG_UI_STC_ALL = EDMSG_UI_ALL + ('stc',)
 # msgdata == ((x, y), keycode)
 EDMSG_UI_STC_KEYUP = EDMSG_UI_STC_ALL + ('keyup',)
 
+# msgdata == dict(lnum=line, cnum=column)
+EDMSG_UI_STC_POS_CHANGED = EDMSG_UI_STC_ALL + ('position',)
+
 # Lexer Changed
 # msgdata == (filename, filetype id)
 EDMSG_UI_STC_LEXER = EDMSG_UI_STC_ALL + ('lexer',)

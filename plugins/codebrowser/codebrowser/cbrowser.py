@@ -101,13 +101,13 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnMenu)
         self.Bind(wx.EVT_TIMER, self.OnStartJob, self._timer)
-        self.Bind(wx.EVT_TIMER, self.OnSyncTimer, self._sync_timer)
+        self.Bind(wx.EVT_TIMER, lambda evt: self._SyncTree(), self._sync_timer)
         self.Bind(EVT_JOB_FINISHED, self.OnTagsReady)
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_SAVED)
-        ed_msg.Subscribe(self.OnSyncTree, ed_msg.EDMSG_UI_STC_KEYUP)
+        ed_msg.Subscribe(self.OnSyncTree, ed_msg.EDMSG_UI_STC_POS_CHANGED)
 
         # Backwards compatibility
         if hasattr(ed_msg, 'EDMSG_UI_STC_LEXER') and \
@@ -120,6 +120,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         ed_msg.Unsubscribe(self.OnUpdateTree)
         ed_msg.Unsubscribe(self.OnThemeChange)
         ed_msg.Unsubscribe(self.OnUpdateFont)
+        ed_msg.Unsubscribe(self.OnSyncTree)
 
     def _GetCurrentCtrl(self):
         """Get the current buffer"""
@@ -426,8 +427,8 @@ class CodeBrowserTree(wx.TreeCtrl):
     def OnSyncTree(self, msg):
         """Handler for tree synchronization.
         Uses a one shot timer to optimize multiple fast caret movement events.
+
         """
-        
         if not self.GetTopLevelParent().IsActive():
             return # Don't process message 
         
@@ -436,12 +437,6 @@ class CodeBrowserTree(wx.TreeCtrl):
         
         #One shot timer for tree sync
         self._sync_timer.Start(300, True)
-
-    def OnSyncTimer(self, evt):
-        """Sync tree selection with the current position.
-        Fired by the timer event from self._sync_timer.
-        """
-        self._SyncTree()
 
     def OnStartJob(self, evt):
         """Start the tree update job
