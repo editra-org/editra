@@ -108,6 +108,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_SAVED)
         ed_msg.Subscribe(self.OnSyncTree, ed_msg.EDMSG_UI_STC_POS_CHANGED)
+        ed_msg.Subscribe(self.OnEditorRestore, ed_msg.EDMSG_UI_STC_RESTORE)
 
         # Backwards compatibility
         if hasattr(ed_msg, 'EDMSG_UI_STC_LEXER') and \
@@ -121,6 +122,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         ed_msg.Unsubscribe(self.OnThemeChange)
         ed_msg.Unsubscribe(self.OnUpdateFont)
         ed_msg.Unsubscribe(self.OnSyncTree)
+        ed_msg.Unsubscribe(self.OnEditorRestore)
 
     def _GetCurrentCtrl(self):
         """Get the current buffer"""
@@ -215,6 +217,8 @@ class CodeBrowserTree(wx.TreeCtrl):
     def _SyncTree(self):
         """Synchronize tree node selection with current position in the text
         """
+        if not self._ShouldUpdate():
+            return
         line = self._GetCurrentCtrl().GetCurrentLineNum()
         self._log("[codebrowser][info] Syncing tree for position %d" % line)
         scope_item = self._FindNodeForLine(line)
@@ -380,6 +384,10 @@ class CodeBrowserTree(wx.TreeCtrl):
                 self.GotoElement(self._selected)
         else:
             evt.Skip()
+            
+    def OnEditorRestore(self, msg):
+        """Called when editor size is unmaximized"""
+        self.OnUpdateTree()
 
     def OnThemeChange(self, msg):
         """Update the images when Editra's theme changes
@@ -431,6 +439,9 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         if not self.GetTopLevelParent().IsActive():
             return # Don't process message 
+        
+        if not self._ShouldUpdate():
+            return # If panel is not visible don't update
         
         if self._sync_timer.IsRunning():
             self._sync_timer.Stop()
@@ -487,6 +498,10 @@ class CodeBrowserTree(wx.TreeCtrl):
         # Don't update when this window is not Active
         istop = wx.GetApp().GetTopWindow() == self._mw
         if not force and not self._mw.IsActive() and not istop:
+            return
+        
+        # Don't update if panel is not visible
+        if not self._ShouldUpdate():
             return
 
         page = self._GetCurrentCtrl()
