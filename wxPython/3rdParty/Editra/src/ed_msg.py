@@ -135,7 +135,7 @@ EDMSG_PROGRESS_STATE = EDMSG_UI_ALL + ('statbar', 'progbar', 'state')
 # msgdata == (field id, text)
 EDMSG_UI_SB_TXT = EDMSG_UI_ALL + ('statbar', 'text')
 
-## Text Buffer
+## Text Buffer ##
 
 # Root message for the text buffer
 EDMSG_UI_STC_ALL = EDMSG_UI_ALL + ('stc',)
@@ -145,6 +145,9 @@ EDMSG_UI_STC_KEYUP = EDMSG_UI_STC_ALL + ('keyup',)
 
 # msgdata == dict(lnum=line, cnum=column)
 EDMSG_UI_STC_POS_CHANGED = EDMSG_UI_STC_ALL + ('position',)
+
+# Editor control size restored (msgdata == None)
+EDMSG_UI_STC_RESTORE = EDMSG_UI_STC_ALL + ('restore',)
 
 # Lexer Changed
 # msgdata == (filename, filetype id)
