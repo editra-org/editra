@@ -437,9 +437,9 @@ class EditraCommander(object):
             return None
 
         if current < first:
-            amt = 0.15
+            amt = 0.7
         else:
-            amt = 0.85
+            amt = 0.3
         self._Scroll(amt)
 
     def _Scroll(self, amt):
@@ -1110,7 +1110,7 @@ def Change(editor, repeat, cmd):
         cmd = cmd[0]
     else:
         if len(cmd) == 1:
-            return ret(NeedMore)
+            return ret(NeedMore, False)
 
         cmd, motion = cmd[0], cmd[1:]
         if motion.isdigit():
@@ -1359,4 +1359,5 @@ MOTION_HANDLERS = [h for h in HANDLERS if h.is_motion]
 #       would probably require yet another huge rewrite of this module.
 #       So watch out if things get out of control with many such hacks.
 # These are motions that, if operated on, the operation should happen
-# on whole lines.LINE_MOTION_PREFIXES = [u'\'', u'G', u'{', u'}']
+# on whole lines.
+LINE_MOTION_PREFIXES = [u'\'', u'G', u'{', u'}', u'H', u'L', u'M']
