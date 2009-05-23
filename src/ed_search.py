@@ -446,9 +446,9 @@ class SearchController(object):
             Profile_Set('SEARCH_FILTER', self._filters)
 
             # Destroy it
-            self._finddlg.Destroy()
+#            self._finddlg.Destroy()
 
-        self._finddlg = None
+#        self._finddlg = None
         evt.Skip()
 
     def OnOptionChanged(self, evt):
@@ -563,6 +563,7 @@ class SearchController(object):
         else:
             # Dialog is open already so just update it
             self._UpdateDialogState(eid)
+            self._finddlg.Show()
             self._finddlg.Raise()
         self._finddlg.SetFocus()
 
