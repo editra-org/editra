@@ -26,6 +26,7 @@ NEW: [features/improvements]
 +Complete re-write of vi emulation support (patch from Hasan Aljudy)
 +Add option to start in Normal mode by default when using vi emulation (patch from Hasan Aljudy).
 +Codebrowser syncronizes with caret position. (patch from Igor Dejanovic)
++Find dialog remembers last position throughout session.
 
 BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.
