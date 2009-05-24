@@ -146,8 +146,13 @@ class CodeBrowserTree(wx.TreeCtrl):
                 rval = rval[:rval.index(u'[')-1]
         
         return rval
-
     
+    def _ClearTree(self):
+        """Clear the tree and caches"""
+        self._cdoc = None
+        self._ds_flat = list()
+        self.DeleteChildren(self.root)
+
     def _FindNodeForLine(self, line):
         """Returns node id of the docstruct element given line belongs to
         @param line: line number
@@ -483,8 +488,7 @@ class CodeBrowserTree(wx.TreeCtrl):
                                   StringIO.StringIO(self._cpage.GetText()))
             wx.CallLater(75, thread.start)
         else:
-            self._cdoc = None
-            self.DeleteChildren(self.root)
+            self._ClearTree()
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
                                (self._mw.GetId(), False))
             return
@@ -509,8 +513,7 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         # If its a blank document just clear out
         if not len(cfname):
-            self._cdoc = None
-            self.DeleteChildren(self.root)
+            self._ClearTree()
             return
 
         # If document job is same as current don't start a new one
@@ -545,9 +548,8 @@ class CodeBrowserTree(wx.TreeCtrl):
         @param tags: DocStruct object
 
         """
+        self._ClearTree()
         self._cdoc = tags
-        self.DeleteChildren(self.root)
-        self._ds_flat = list()
         # Check and add any common types in the document first
 
         # Global Variables
