@@ -35,6 +35,8 @@ BUG FIXES:
 +Fix bug in batch file comment command, ensure a space is between 'rem' and the comment text.
 +Fix bug on Windows that could cause an unhandled exception error when closing the
 preferences dialog after closing the last main window.
++Fix regression in html autocomp where cursor position would be incorrectly
+placed after the inserted tag.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
