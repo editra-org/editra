@@ -214,7 +214,7 @@ def PostMessage(msgtype, msgdata=None, context=None):
     """
     if context is not None:
         context = str(context)
-        Publisher().sendMessage((context,) + msgtype, msgdata)
+        Publisher().sendMessage(msgtype + (context,), msgdata)
     else:
         Publisher().sendMessage(msgtype, msgdata)
             
@@ -244,7 +244,7 @@ def Subscribe(callback, msgtype=EDMSG_ALL, context=None):
     """
     if context is not None:
         context = str(context)
-        Publisher().subscribe(callback, (context,) + msgtype)
+        Publisher().subscribe(callback, msgtype + (context,))
     else:
         Publisher().subscribe(callback, msgtype)        
 
@@ -262,9 +262,9 @@ def Unsubscribe(callback, messages=None, context=None):
     else:
         context = str(context)
         if not isinstance(messages, list):
-            Publisher().unsubscribe(callback, (context,) + messages)
+            Publisher().unsubscribe(callback, messages + (context,))
         else:
-            Publisher().unsubscribe(callback, [ (context,) + m for m in messages])
+            Publisher().unsubscribe(callback, [ m + (context,) for m in messages])
 
 #-----------------------------------------------------------------------------#
 
