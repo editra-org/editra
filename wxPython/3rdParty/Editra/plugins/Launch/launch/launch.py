@@ -64,6 +64,7 @@ class LaunchWindow(eclib.ControlBox):
         eclib.ControlBox.__init__(self, parent)
 
         # Attributes
+        self._log = wx.GetApp().GetLog()
         self._mw = self.__FindMainWindow()
         self._buffer = OutputDisplay(self)
         self._fnames = list()
@@ -111,8 +112,10 @@ class LaunchWindow(eclib.ControlBox):
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_OPENED)
+#        ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_SAVED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
-        ed_msg.Subscribe(self.OnLexerChange, ed_msg.EDMSG_UI_STC_LEXER)
+        ed_msg.Subscribe(self.OnLexerChange, ed_msg.EDMSG_UI_STC_LEXER, 
+                         context=self.GetTopLevelParent().GetId())
         ed_msg.Subscribe(self.OnConfigExit, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
         ed_msg.Subscribe(self.OnRunMsg, MSG_RUN_LAUNCH)
         ed_msg.Subscribe(self.OnRunLastMsg, MSG_RUN_LAST)
@@ -123,7 +126,8 @@ class LaunchWindow(eclib.ControlBox):
         ed_msg.Unsubscribe(self.OnPageChanged)
         ed_msg.Unsubscribe(self.OnFileOpened)
         ed_msg.Unsubscribe(self.OnThemeChanged)
-        ed_msg.Unsubscribe(self.OnLexerChange)
+        ed_msg.Unsubscribe(self.OnLexerChange,
+                           context=self.GetTopLevelParent().GetId())
         ed_msg.Unsubscribe(self.OnConfigExit)
         ed_msg.Unsubscribe(self.OnRunMsg)
         ed_msg.Unsubscribe(self.OnRunLastMsg)
@@ -325,8 +329,8 @@ class LaunchWindow(eclib.ControlBox):
         @param msg: Message object
 
         """
-        if not self._mw.IsActive():
-            return
+        self._log("[launch][info] Lexer changed handler - context %d" %
+                  self.GetTopLevelParent().GetId())
 
         mdata = msg.GetData()
         # For backwards compatibility with older message format
