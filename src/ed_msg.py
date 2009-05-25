@@ -203,16 +203,20 @@ EDMSG_DSP_FONT = EDMSG_ALL + ('dfont',)
 #--------------------------------------------------------------------------#
 # Public Api
 
-def PostMessage(msgtype, msgdata=None):
+def PostMessage(msgtype, msgdata=None, context=None):
     """Post a message containing the msgdata to all listeners that are
-    interested in the given msgtype.
+    interested in the given msgtype from the given context. If context
+    is None than default context is assumed.
+    Message is always propagated to the default context.
     @param msgtype: Message Type EDMSG_*
     @keyword msgdata: Message data to pass to listener (can be anything)
-
+    @keyword context: Context of the message.
     """
+    if context:
+        Publisher().sendMessage((context,) + msgtype, msgdata)
     Publisher().sendMessage(msgtype, msgdata)
-
-def Subscribe(callback, msgtype=EDMSG_ALL):
+            
+def Subscribe(callback, msgtype=EDMSG_ALL, context=None):
     """Subscribe your listener function to listen for an action of type msgtype.
     The callback must be a function or a _bound_ method that accepts one
     parameter for the actions message. The message that is sent to the callback
@@ -232,19 +236,31 @@ def Subscribe(callback, msgtype=EDMSG_ALL):
 
     @param callback: Callable function or bound method
     @keyword msgtype: Message to subscribe to (default to all)
-
+    @keyword context: Context of the message resolved at runtime.
+                    For example, an Id of the top level window sending the message.
+                    Message is always sent to default context also.
     """
-    Publisher().subscribe(callback, msgtype)
+    if context:
+        Publisher().subscribe(callback, (context,) + msgtype)
+    else:
+        Publisher().subscribe(callback, msgtype)        
 
-def Unsubscribe(callback, messages=None):
+def Unsubscribe(callback, messages=None, context=None):
     """Remove a listener so that it doesn't get sent messages for msgtype. If
     msgtype is not specified the listener will be removed for all msgtypes that
     it is associated with.
     @param callback: Function or bound method to remove subscription for
     @keyword messages: EDMSG_* val or list of EDMSG_* vals
+    @keyword context: context of the messages
 
-    """
-    Publisher().unsubscribe(callback, messages)
+    """    
+    if not context:
+        Publisher().unsubscribe(callback, messages)
+    else:
+        if not isinstance(messages, list):
+            Publisher().unsubscribe(callback, (context,) + messages)
+        else:
+            Publisher().unsubscribe(callback, [ (context,) + m for m in messages])
 
 #-----------------------------------------------------------------------------#
 

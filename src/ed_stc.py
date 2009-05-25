@@ -1682,6 +1682,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
         super(EditraStc, self).ConfigureLexer(file_ext)
 
         # Notify that lexer has changed
+        self.LOG("[ed_stc][info] Lexer change notification for context %d" %
+                 self.GetTopLevelParent().GetId())
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER,
-                           (self.GetFileName(), self.GetLangId()))
+                           (self.GetFileName(), self.GetLangId()),
+                           context=self.GetTopLevelParent().GetId())
         return True
