@@ -114,7 +114,9 @@ class CodeBrowserTree(wx.TreeCtrl):
         if hasattr(ed_msg, 'EDMSG_UI_STC_LEXER') and \
            hasattr(ed_msg, 'EDMSG_DSP_FONT'):
             ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
-            ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_STC_LEXER)
+            ed_msg.Subscribe(self.OnUpdateTree,
+                             ed_msg.EDMSG_UI_STC_LEXER,
+                             self._mw.GetId())
 
     def __del__(self):
         """Unsubscribe from messages on del"""
