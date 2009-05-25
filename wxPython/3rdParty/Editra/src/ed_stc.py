@@ -1669,8 +1669,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
             self.SetFileName(path)
 
         wx.CallAfter(ed_msg.PostMessage,
-                    ed_msg.EDMSG_FILE_SAVED,
-                    (path, self.GetLangId()))
+                     ed_msg.EDMSG_FILE_SAVED,
+                     (path, self.GetLangId()))
 
         return result
 

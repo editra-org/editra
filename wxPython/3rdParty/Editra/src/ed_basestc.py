@@ -836,7 +836,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
             self.AutoCompShow(pos - self.WordStartPosition(pos, True), lst)
 
-            if len(lst) == 1 and self._code['compsvc'].GetAutoCompAfter():
+            if self._code['compsvc'].GetAutoCompAfter():
                 super(EditraBaseStc, self).GotoPos(pos)
             self.EndUndoAction()
             self.SetFocus()
