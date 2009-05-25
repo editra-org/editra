@@ -212,9 +212,11 @@ def PostMessage(msgtype, msgdata=None, context=None):
     @keyword msgdata: Message data to pass to listener (can be anything)
     @keyword context: Context of the message.
     """
-    if context:
+    if context is not None:
+        context = str(context)
         Publisher().sendMessage((context,) + msgtype, msgdata)
-    Publisher().sendMessage(msgtype, msgdata)
+    else:
+        Publisher().sendMessage(msgtype, msgdata)
             
 def Subscribe(callback, msgtype=EDMSG_ALL, context=None):
     """Subscribe your listener function to listen for an action of type msgtype.
@@ -240,7 +242,8 @@ def Subscribe(callback, msgtype=EDMSG_ALL, context=None):
                     For example, an Id of the top level window sending the message.
                     Message is always sent to default context also.
     """
-    if context:
+    if context is not None:
+        context = str(context)
         Publisher().subscribe(callback, (context,) + msgtype)
     else:
         Publisher().subscribe(callback, msgtype)        
@@ -257,6 +260,7 @@ def Unsubscribe(callback, messages=None, context=None):
     if not context:
         Publisher().unsubscribe(callback, messages)
     else:
+        context = str(context)
         if not isinstance(messages, list):
             Publisher().unsubscribe(callback, (context,) + messages)
         else:
