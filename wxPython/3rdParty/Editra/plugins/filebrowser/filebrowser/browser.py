@@ -631,9 +631,9 @@ class FileBrowser(wx.GenericDirCtrl):
         @todo: check if message is from a page closing and avoid updates
 
         """
-        
         nbdata = msg.GetData()
-        if nbdata[0].GetPageCount() < nbdata[1]:
+        pg_count = nbdata[0].GetPageCount()
+        if pg_count < nbdata[1] and nbdata[1] >= 0:
             return # must have closed all pages in the notebook
 
         page = nbdata[0].GetPage(nbdata[1])
