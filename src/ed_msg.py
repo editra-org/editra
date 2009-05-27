@@ -274,11 +274,12 @@ def mwcontext(func):
     """
     def ContextWrap(self, msg):
         """Check and only call the method if the message is in the
-        context of the main window.
+        context of the main window or no context was specified.
 
         """
         mw = self.GetMainWindow()
-        if mw.GetId() == msg.GetContext():
+        context = msg.GetContext()
+        if context is None or mw.GetId() == context:
             func(self, msg)
 
     ContextWrap.__name__ = func.__name__
