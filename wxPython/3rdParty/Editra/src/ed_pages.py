@@ -518,7 +518,9 @@ class EdPages(FNB.FlatNotebook):
         self.control = nbuff
         self.GoCurrentPage()
         self.GetTopLevelParent().Thaw()
-        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, nbuff.GetFileName())
+        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED,
+                           nbuff.GetFileName(),
+                           context=self.frame.GetId())
 
     def OpenFileObject(self, fileobj):
         """Open a new text editor page with the given file object. The file
@@ -564,7 +566,9 @@ class EdPages(FNB.FlatNotebook):
 
         # Refocus on selected page
         self.GoCurrentPage()
-        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.control.GetFileName())
+        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED,
+                           self.control.GetFileName(),
+                           context=self.frame.GetId())
 
         if Profile_Get('WARN_EOL', default=True):
             self.control.CheckEOL()
@@ -705,7 +709,9 @@ class EdPages(FNB.FlatNotebook):
             self.control.GotoPos(pos)
             self.control.ScrollToColumn(0)
 
-        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.control.GetFileName())
+        ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED,
+                           self.control.GetFileName(),
+                           context=self.frame.GetId())
 
     def GoCurrentPage(self):
         """Move Focus to Currently Selected Page.

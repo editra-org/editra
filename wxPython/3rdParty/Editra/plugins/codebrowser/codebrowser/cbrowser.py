@@ -103,6 +103,8 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.Bind(wx.EVT_TIMER, self.OnStartJob, self._timer)
         self.Bind(wx.EVT_TIMER, lambda evt: self._SyncTree(), self._sync_timer)
         self.Bind(EVT_JOB_FINISHED, self.OnTagsReady)
+
+        # Editra Message Handlers
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_OPENED)
@@ -114,9 +116,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         if hasattr(ed_msg, 'EDMSG_UI_STC_LEXER') and \
            hasattr(ed_msg, 'EDMSG_DSP_FONT'):
             ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
-            ed_msg.Subscribe(self.OnUpdateTree,
-                             ed_msg.EDMSG_UI_STC_LEXER,
-                             self._mw.GetId())
+            ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_STC_LEXER)
 
     def __del__(self):
         """Unsubscribe from messages on del"""
@@ -330,6 +330,10 @@ class CodeBrowserTree(wx.TreeCtrl):
         for key in self.nodes.keys():
             self.nodes[key] = None
 
+    def GetMainWindow(self):
+        """Get this panels main window"""
+        return self._mw
+
     def GotoElement(self, tree_id):
         """Navigate the cursor to the element identified in the
         code browser tree.
@@ -391,7 +395,8 @@ class CodeBrowserTree(wx.TreeCtrl):
                 self.GotoElement(self._selected)
         else:
             evt.Skip()
-            
+
+    @ed_msg.mwcontext
     def OnEditorRestore(self, msg):
         """Called when editor size is unmaximized"""
         self.OnUpdateTree()
@@ -438,15 +443,13 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         pane = self._mw.GetFrameManager().GetPane(PANE_NAME)
         evt.Check(pane.IsShown())
-        
+
+    @ed_msg.mwcontext
     def OnSyncTree(self, msg):
         """Handler for tree synchronization.
         Uses a one shot timer to optimize multiple fast caret movement events.
 
         """
-        if not self.GetTopLevelParent().IsActive():
-            return # Don't process message 
-        
         if not self._ShouldUpdate():
             return # If panel is not visible don't update
         
@@ -501,10 +504,14 @@ class CodeBrowserTree(wx.TreeCtrl):
         @keyword force: Force update
 
         """
-        # Don't update when this window is not Active
-        istop = wx.GetApp().GetTopWindow() == self._mw
-        if not force and not self._mw.IsActive() and not istop:
-            return
+        # Check for if update should be skipped
+        if not force:
+            context = None
+            if msg is not None:
+                context = msg.GetContext()
+
+            if context is not None and context != self._mw.GetId():
+                return
         
         # Don't update if panel is not visible
         if not self._ShouldUpdate():

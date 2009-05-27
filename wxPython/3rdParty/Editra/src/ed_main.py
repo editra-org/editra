@@ -967,7 +967,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         paneInfo = self._mgr.GetPane("EditPane")
         if paneInfo.IsMaximized():
             self._mgr.RestorePane(paneInfo)
-            ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_RESTORE)
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_RESTORE, context=self.GetId())
         else:
             self._mgr.RestoreMaximizedPane()
             self._mgr.MaximizePane(paneInfo)
