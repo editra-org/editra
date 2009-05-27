@@ -111,18 +111,22 @@ EDMSG_UI_NB = EDMSG_UI_ALL + ('mnotebook',)
 # msgdata == (ref to notebook, 
 #             index of previous selection,
 #             index of current selection)
+# context == MainWindow ID
 EDMSG_UI_NB_CHANGING = EDMSG_UI_NB + ('pgchanging',)
 
 # Notebook page changed
 # msgdata == (ref to notebook, index of currently selected page)
+# context == MainWindow ID
 EDMSG_UI_NB_CHANGED = EDMSG_UI_NB + ('pgchanged',)
 
 # Page is about to close
 # msgdata == (ref to notebook, index of page that is closing)
+# context == MainWindow ID
 EDMSG_UI_NB_CLOSING = EDMSG_UI_NB + ('pgclosing',)
 
 # Page has just been closed
 # msgdata == (ref to notebook, index of page that is now selected)
+# context == MainWindow ID
 EDMSG_UI_NB_CLOSED = EDMSG_UI_NB + ('pgclosed',)
 
 # Post message to show the progress indicator of the MainWindow

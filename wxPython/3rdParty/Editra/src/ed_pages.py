@@ -915,7 +915,9 @@ class EdPages(FNB.FlatNotebook):
         if isinstance(self.control, wx.Window):
             self.control.DoDeactivateTab()
 
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGING, (self,) + pages)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGING,
+                           (self,) + pages,
+                           context=self.frame.GetId())
 
     def ChangePage(self, pg_num, old=-2):
         """Change the page and focus to the the given page id
@@ -978,7 +980,8 @@ class EdPages(FNB.FlatNotebook):
 
         evt.Skip()
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSING,
-                           (self, self.GetSelection()))
+                           (self, self.GetSelection()),
+                           context=self.frame.GetId())
 
     def OnPageClosed(self, evt):
         """Handles Paged Closed Event
@@ -990,7 +993,9 @@ class EdPages(FNB.FlatNotebook):
         evt.Skip()
         self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
         self.UpdateIndexes()
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED, (self, cpage))
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED,
+                           (self, cpage),
+                           context=self.frame.GetId())
 
     #---- End Event Handlers ----#
 
