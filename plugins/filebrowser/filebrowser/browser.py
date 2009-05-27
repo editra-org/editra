@@ -375,6 +375,8 @@ class FileBrowser(wx.GenericDirCtrl):
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnOpen)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnMenu)
+
+        # Editra Message Handlers
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnPageChange, ed_msg.EDMSG_UI_NB_CHANGED)
 #        self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnDragStart)
@@ -504,6 +506,10 @@ class FileBrowser(wx.GenericDirCtrl):
 
         return r_txt + os.sep.join(path)
 
+    def GetMainWindow(self):
+        """Get the main window, needed by L{ed_msg.mwcontext}"""
+        return self._mw
+
     def GetPaths(self):
         """Gets a list of abs paths of the selected items"""
         ret_val = list()
@@ -625,6 +631,7 @@ class FileBrowser(wx.GenericDirCtrl):
         self.OpenFiles(files)
         ed_msg.Subscribe(self.OnPageChange, ed_msg.EDMSG_UI_NB_CHANGED)
 
+    @ed_msg.mwcontext
     def OnPageChange(self, msg):
         """Syncronize selection with the notebook page changes
         @param msg: MessageObject
