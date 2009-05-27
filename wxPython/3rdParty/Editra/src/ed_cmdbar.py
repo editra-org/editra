@@ -358,9 +358,10 @@ class CommandExecuter(eclib.CommandEntryBase):
             self.SetValue(" ".join([cval[0], val]))
         self.SetInsertionPoint(self.GetLastPosition())
 
-    def _UpdateCwd(self, msg=None):
+    def _UpdateCwd(self, msg):
         """Update the current working directory to that of the current
         buffer.
+        @param msg: Message Object
 
         """
         # Only Update if we are the currently active window
