@@ -38,6 +38,7 @@ preferences dialog after closing the last main window.
 +Fix regression in html autocomp where cursor position would be incorrectly
 placed after the inserted tag.
 +Fix Launch not updating after a Save As on Linux.
++Fix unicode handling error in session file saving.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
