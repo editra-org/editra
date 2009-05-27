@@ -942,7 +942,9 @@ class EdPages(FNB.FlatNotebook):
             cpage = old
 
         if not self.frame.IsExiting() and cpage != pg_num:
-            ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED, (self, pg_num))
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
+                               (self, pg_num),
+                               context=self.frame.GetId())
 
     def OnPageChanged(self, evt):
         """Actions to do after a page change
