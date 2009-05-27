@@ -131,6 +131,10 @@ class EdStatBar(ProgressStatusBar):
             self._widths = widths
             self.SetStatusWidths(self._widths)
 
+    def GetMainWindow(self):
+        """Method required for L{ed_msg.mwcontext}"""
+        return self.GetParent()
+
     def OnExpireMessage(self, evt):
         """Handle Expiring the status message when the oneshot timer
         tells us it has expired.
@@ -193,6 +197,7 @@ class EdStatBar(ProgressStatusBar):
                 # TODO: findout where stray stop event is coming from...
                 self.Stop()
 
+    @ed_msg.mwcontext
     def OnUpdateDoc(self, msg):
         """Update document related fields
         @param msg: Message Object
