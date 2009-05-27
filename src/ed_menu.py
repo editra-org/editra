@@ -372,7 +372,7 @@ class KeyBinder(object):
     def SetBinding(cls, item_id, keys):
         """Set the keybinding of a menu id
         @param item_id: item to set
-        @param keys: string or list of key strings
+        @param keys: string or list of key strings ['Ctrl', 'S']
 
         """
         if isinstance(keys, basestring):
