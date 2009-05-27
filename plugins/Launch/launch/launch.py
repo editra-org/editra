@@ -113,9 +113,7 @@ class LaunchWindow(eclib.ControlBox):
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
-        ed_msg.Subscribe(self.OnLexerChange,
-                         ed_msg.EDMSG_UI_STC_LEXER, 
-                         context=self._mw.GetId())
+        ed_msg.Subscribe(self.OnLexerChange, ed_msg.EDMSG_UI_STC_LEXER)
         ed_msg.Subscribe(self.OnConfigExit, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
         ed_msg.Subscribe(self.OnRunMsg, MSG_RUN_LAUNCH)
         ed_msg.Subscribe(self.OnRunLastMsg, MSG_RUN_LAST)
@@ -302,15 +300,12 @@ class LaunchWindow(eclib.ControlBox):
         Profile_Set(LAUNCH_KEY, handlers.GetState())
         self.UpdateBufferColors()
 
+    @ed_msg.mwcontext
     def OnFileOpened(self, msg):
         """Reset state when a file open message is recieved
         @param msg: Message Object
 
         """
-        # Only update when in the active window
-        if not self._mw.IsActive():
-            return
-
         # Update the file choice control
         self._config['lang'] = GetLangIdFromMW(self._mw)
         self.UpdateCurrentFiles(self._config['lang'])
@@ -321,6 +316,7 @@ class LaunchWindow(eclib.ControlBox):
         # Setup filetype settings
         self.RefreshControlBar()
 
+    @ed_msg.mwcontext
     def OnLexerChange(self, msg):
         """Update the status of the currently associated file
         when a file is saved. Used for updating after a file type has
@@ -329,7 +325,7 @@ class LaunchWindow(eclib.ControlBox):
 
         """
         self._log("[launch][info] Lexer changed handler - context %d" %
-                  self.GetTopLevelParent().GetId())
+                  self._mw.GetId())
 
         mdata = msg.GetData()
         # For backwards compatibility with older message format

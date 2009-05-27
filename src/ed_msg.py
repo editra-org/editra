@@ -80,15 +80,21 @@ EDMSG_FILE_ALL = EDMSG_ALL + ('file',)
 EDMSG_FILE_OPENING = EDMSG_FILE_ALL + ('opening',)
 
 # File was just opened / msgdata == file path
+# context == MainWindows ID
 EDMSG_FILE_OPENED = EDMSG_FILE_ALL + ('opened',)
 
+# TODO: using MainWindow as context for now, but may make more sense to use
+#       the buffer instead.
+
 # File save requested / msgdata == (filename, filetypeId)
+# context == MainWindows ID
 # Note: All listeners of this message are processed *before* the save takes
 #       place. Meaning the listeners block the save action until they are
 #       finished.
 EDMSG_FILE_SAVE = EDMSG_FILE_ALL + ('save',)
 
 # File just written to disk / msgdata == (filename, filetypeId)
+# context == MainWindows ID
 EDMSG_FILE_SAVED = EDMSG_FILE_ALL + ('saved',)
 
 #---- End File Action Messages ----#
@@ -144,6 +150,7 @@ EDMSG_UI_STC_ALL = EDMSG_UI_ALL + ('stc',)
 EDMSG_UI_STC_KEYUP = EDMSG_UI_STC_ALL + ('keyup',)
 
 # msgdata == dict(lnum=line, cnum=column)
+# context == MainWindows ID
 EDMSG_UI_STC_POS_CHANGED = EDMSG_UI_STC_ALL + ('position',)
 
 # Editor control size restored (msgdata == None)
@@ -151,6 +158,7 @@ EDMSG_UI_STC_RESTORE = EDMSG_UI_STC_ALL + ('restore',)
 
 # Lexer Changed
 # msgdata == (filename, filetype id)
+# context == MainWindows ID
 EDMSG_UI_STC_LEXER = EDMSG_UI_STC_ALL + ('lexer',)
 
 # Buffer Changed
@@ -211,14 +219,11 @@ def PostMessage(msgtype, msgdata=None, context=None):
     @param msgtype: Message Type EDMSG_*
     @keyword msgdata: Message data to pass to listener (can be anything)
     @keyword context: Context of the message.
+
     """
-    if context is not None:
-        context = str(context)
-        Publisher().sendMessage(msgtype + (context,), msgdata)
-    else:
-        Publisher().sendMessage(msgtype, msgdata)
+    Publisher().sendMessage(msgtype, msgdata, context=context)
             
-def Subscribe(callback, msgtype=EDMSG_ALL, context=None):
+def Subscribe(callback, msgtype=EDMSG_ALL):
     """Subscribe your listener function to listen for an action of type msgtype.
     The callback must be a function or a _bound_ method that accepts one
     parameter for the actions message. The message that is sent to the callback
@@ -238,33 +243,43 @@ def Subscribe(callback, msgtype=EDMSG_ALL, context=None):
 
     @param callback: Callable function or bound method
     @keyword msgtype: Message to subscribe to (default to all)
-    @keyword context: Context of the message resolved at runtime.
-                    For example, an Id of the top level window sending the message.
-                    Message is always sent to default context also.
-    """
-    if context is not None:
-        context = str(context)
-        Publisher().subscribe(callback, msgtype + (context,))
-    else:
-        Publisher().subscribe(callback, msgtype)        
 
-def Unsubscribe(callback, messages=None, context=None):
+    """
+    Publisher().subscribe(callback, msgtype)
+
+def Unsubscribe(callback, messages=None):
     """Remove a listener so that it doesn't get sent messages for msgtype. If
     msgtype is not specified the listener will be removed for all msgtypes that
     it is associated with.
     @param callback: Function or bound method to remove subscription for
     @keyword messages: EDMSG_* val or list of EDMSG_* vals
-    @keyword context: context of the messages
 
     """    
-    if not context:
-        Publisher().unsubscribe(callback, messages)
-    else:
-        context = str(context)
-        if not isinstance(messages, list):
-            Publisher().unsubscribe(callback, messages + (context,))
-        else:
-            Publisher().unsubscribe(callback, [ m + (context,) for m in messages])
+    Publisher().unsubscribe(callback, messages)
+
+
+#---- Helper Decorators ----#
+
+def mwcontext(func):
+    """Helper decorator for checking if the message is in context of the
+    main window. Class that uses this to wrap its message handlers must
+    have a GetMainWindow method that returns a reference to the MainWindow
+    instance that owns the object.
+    @param funct: callable(self, msg)
+
+    """
+    def ContextWrap(self, msg):
+        """Check and only call the method if the message is in the
+        context of the main window.
+
+        """
+        mw = self.GetMainWindow()
+        if mw.GetId() == msg.GetContext():
+            func(self, msg)
+
+    ContextWrap.__name__ = func.__name__
+    ContextWrap.__doc__ = func.__doc__
+    return ContextWrap
 
 #-----------------------------------------------------------------------------#
 

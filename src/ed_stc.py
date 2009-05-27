@@ -653,8 +653,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
         msg = _("Line: %(lnum)d  Column: %(cnum)d") % pinfo
         nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
                                     msg, ed_glob.SB_ROWCOL)
-        wx.PostEvent(self.GetTopLevelParent(), nevt)
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_POS_CHANGED, pinfo)
+        tlw = self.GetTopLevelParent()
+        wx.PostEvent(tlw, nevt)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_POS_CHANGED, pinfo, tlw.GetId())
 
     def OnRecordMacro(self, evt):
         """Records macro events
@@ -1601,7 +1602,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
                 return False, msg
             else:
                 self.GotoPos(cpos)
-                ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED, self.GetFileName())
+                context = self.GetTopLevelParent().GetId()
+                ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED,
+                                   self.GetFileName(), context)
                 return True, ''
         else:
             self.LOG("[ed_stc][err] %s does not exists, cant reload." % cfile)
@@ -1641,8 +1644,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """
         result = True
         try:
+            tlw_id = self.GetTopLevelParent().GetId()
             ed_msg.PostMessage(ed_msg.EDMSG_FILE_SAVE,
-                               (path, self.GetLangId()))
+                               (path, self.GetLangId()), tlw_id)
             self.File.SetPath(path)
             self.LOG("[ed_stc][info] Writing file %s, with encoding %s" % \
                      (path, self.File.GetEncoding()))
@@ -1670,7 +1674,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         wx.CallAfter(ed_msg.PostMessage,
                      ed_msg.EDMSG_FILE_SAVED,
-                     (path, self.GetLangId()))
+                     (path, self.GetLangId()),
+                     tlw_id)
 
         return result
 
