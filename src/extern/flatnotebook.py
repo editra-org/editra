@@ -750,14 +750,22 @@ def DrawButton(dc, rect, focus, upperTabs):
     top = wx.RectPP(rect.GetTopLeft(), rightPt)
     bottom = wx.RectPP(leftPt, rect.GetBottomRight())
 
-    topStartColor = wx.WHITE
-
-    if not focus:
-        topStartColor = LightColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 50)
-
     topEndColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-    bottomStartColor = topEndColor
-    bottomEndColor = topEndColor
+
+    if wx.Platform != '__WXGTK__':
+        # This type of gradient causes visibility issues with some dark
+        # GTK themes so don't use on GTK for now.
+        topStartColor = wx.WHITE
+        if not focus:
+            topStartColor = LightColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 50)
+
+        bottomStartColor = topEndColor
+        bottomEndColor = topEndColor
+    else:
+        # Make whole tab same color on gtk
+        if not focus:
+            topEndColour = LightColour(topEndColor, 30)
+        bottomEndColor = bottomStartColor = topStartColor = topEndColor
 
     # Incase we use bottom tabs, switch the colors
     if upperTabs:
