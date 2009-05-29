@@ -164,6 +164,35 @@ def SkipWhitespace(line, idx):
     """
     return idx + (len(line[idx:]) - len(line[idx:].lstrip()))
 
+def FindStringEnd(line, idx):
+   """Walk through the string until the next non escaped matching ending
+   quotation is found. Returning the current state of the parse. The first
+   character in the given line should be the begining of the string.
+   @param line: line of text
+   @param idx: current index in parse document
+   @return: (idx, still_string)
+
+   """
+   start = line[0] # Save the beging quote so we can find the end quote
+   escaped = False
+   for pos, char in enumerate(line):
+       idx += 1
+       if escaped:
+           escaped = False
+           continue
+
+       if char == '\\':
+           escaped = True
+           continue
+
+       if not escaped and pos > 0 and char == start:
+           still_string = False
+           break
+   else:
+       still_string = True
+
+   return (idx, still_string)
+
 #-----------------------------------------------------------------------------#
 
 class ELexer(object):
