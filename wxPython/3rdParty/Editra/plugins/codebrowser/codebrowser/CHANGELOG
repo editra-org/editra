@@ -4,8 +4,21 @@
 
 #-----------------------------------------------------------------------------#
 
-Version 0.8
+Version 0.9
 Released: 0x/xx/2009
+
+New:
++Syncronizes tree view with the current position in the document.
+(patch from Igor Dejanovic)
++Add support for XText. (patch from Igor Dejanovic)
+
+Bug Fixes:
++Fix incorrect string handling in php parser.
+
+#-----------------------------------------------------------------------------#
+
+Version 0.8
+Released: 05/02/2009
 
 New:
 +Delay thread creation timing to reduce number of uneeded jobs that are started.
