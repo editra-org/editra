@@ -134,6 +134,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         """Returns fully qualified name of the tree node in the form
         ...grandparent.parent.child
         @param node: node id
+
         """
         rval=""
         if node and node.IsOk():
