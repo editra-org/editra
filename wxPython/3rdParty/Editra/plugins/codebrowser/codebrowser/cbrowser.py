@@ -160,6 +160,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         """Returns node id of the docstruct element given line belongs to
         @param line: line number
         @returns: tree node id
+
         """
         # HACK This should probably be done with bisect search
         rval = None
@@ -171,7 +172,9 @@ class CodeBrowserTree(wx.TreeCtrl):
                     rval = citem[1]
                 else:
                     break
-        self._log("[codebrowser][info] For line %d found item %s" % (line, self._GetFQN(rval)))
+
+#        self._log("[codebrowser][info] For line %d found item %s" % \
+#                  (line, self._GetFQN(rval)))
         return rval
 
     def _SetupImageList(self):
