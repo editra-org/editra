@@ -52,9 +52,12 @@ class Code(object):
 
         """
         object.__init__(self)
+
+        # Attributes
         self.name = name
         self.line = line
         self.type = obj
+        self.doc = name
         self.scope = scope
 
     def __eq__(self, other):
@@ -75,12 +78,33 @@ class Code(object):
         else:
             return self.name
 
+    def GetDocumentation(self):
+        """Get any documentation associated with this object
+        @return: documentation string
+
+        """
+        return self.doc
+
+    def SetDocumentation(self, doc):
+        """Set the documentation string for this object
+        @param doc: documenation string
+
+        """
+        self.doc = doc
+
     def GetLine(self):
         """Returns the line of the code object
         @return: int
 
         """
         return self.line
+
+    def SetLine(self, line):
+        """Set this items line number
+        @param line: int
+
+        """
+        self.line = line
 
     def GetName(self):
         """Get the name of this code object
