@@ -201,6 +201,8 @@ ID_LANG_BOO = _NewId()
 LANG_BOO = u'Boo'
 ID_LANG_PYTHON = _NewId()
 LANG_PYTHON = u'Python'
+ID_LANG_COBRA = _NewId()
+LANG_COBRA = u'Cobra'
 
 # Use LEX_MATLAB
 ID_LANG_MATLAB = _NewId()
@@ -301,6 +303,7 @@ EXT_MAP = {
            'boo'                : LANG_BOO,
            'c h'                : LANG_C,
            'ml mli'             : LANG_CAML,
+           'cobra'              : LANG_COBRA,
            'cfm cfc cfml dbm'   : LANG_COLDFUSION,
            'cc c++ cpp cxx hh h++ hpp hxx' : LANG_CPP,
            'csh'                : LANG_CSH,
