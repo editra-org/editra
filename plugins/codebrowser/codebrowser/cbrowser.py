@@ -138,16 +138,17 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         rval=""
         if node and node.IsOk():
+            path = [self.GetItemText(node)]
             parent = self.GetItemParent(node)
-            if parent:
-                rval = u'%s.%s' % (self._GetFQN(parent), self.GetItemText(node))
-            else:
-                rval = self.GetItemText(node)
+            root = self.GetRootItem()
+            while parent and parent.IsOk() and parent != root:
+                path.append(self.GetItemText(parent))
+                parent = self.GetItemParent(parent)
             
-            # Strip line information as this could be changed
-            if u'[' in rval:
-                rval = rval[:rval.index(u'[')-1]
-        
+            # Join path elements and strip line information as this could be changed
+            path.reverse()
+            rval = '.'.join([p.split(u'[')[0].strip() for p in path])
+            
         return rval
     
     def _ClearTree(self):
