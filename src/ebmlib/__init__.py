@@ -28,3 +28,6 @@ from backupmgr import *
 # Storage Classes
 from histcache import *
 from clipboard import *
+
+# Misc
+from miscutil import *
