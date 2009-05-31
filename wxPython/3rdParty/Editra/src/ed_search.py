@@ -43,6 +43,41 @@ _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 
 class EdSearchEngine(ebmlib.SearchEngine):
+    def __init__(self, query, regex=True, down=True,
+                 matchcase=True, wholeword=False):
+        ebmlib.SearchEngine.__init__(self, query, regex, down,
+                                     matchcase, wholeword)
+        # Atttributes
+        self._offset = 0
+
+    def FormatResult(self, fname, lnum, match):
+        """Format the search result string for find all action that is performed
+        on a selection.
+        @return: string
+        @todo: better unicode handling
+
+        """
+        fname = ed_txt.DecodeString(fname, sys.getfilesystemencoding())
+        if not isinstance(fname, types.UnicodeType):
+            fname = _("DECODING ERROR")
+
+        match = ed_txt.DecodeString(match)
+        if not isinstance(match, types.UnicodeType):
+            match = _("DECODING ERROR")
+        else:
+            match = u" " + match.lstrip()
+
+        rstring = u"%(fname)s (%(lnum)d): %(match)s"
+        lnum = lnum + self._offset + 1
+        return rstring % dict(fname=fname, lnum=lnum, match=match)
+
+    def SetOffset(self, offset):
+        """Set the offset for a search in selection action
+        @param offset: int
+
+        """
+        self._offset = offset
+
     def SetQuery(self, query):
         """Set the query string"""
         if isinstance(query, types.UnicodeType):
@@ -75,7 +110,7 @@ class SearchController(object):
         self._engine = EdSearchEngine(u"") # For incremental searches
 
         # Setup
-        self._engine.SetResultFormatter(FormatResult)
+        self._engine.SetResultFormatter(self._engine.FormatResult)
 
         # Event handlers
         self._parent.Bind(eclib.EVT_FIND, self.OnFind)
@@ -240,9 +275,19 @@ class SearchController(object):
 
         # Create the search engine
         query = evt.GetFindString()
+        mode = evt.GetSearchType()
         engine = ebmlib.SearchEngine(query, evt.IsRegEx(),
                                      True, evt.IsMatchCase(), evt.IsWholeWord())
-        engine.SetSearchPool(stc.GetTextRaw())
+
+        if mode == eclib.LOCATION_CURRENT_DOC:
+            engine.SetSearchPool(stc.GetTextRaw())
+        elif mode == eclib.LOCATION_IN_SELECTION:
+            engine.SetSearchPool(stc.GetSelectedTextRaw())
+        else:
+            # TODO: report that this is not supported yet
+            #       this case should not happen as the count button is currently
+            #       disabled for any conditions that fall into this case.
+            return
 
         matches = engine.FindAll()
         if matches:
@@ -381,9 +426,9 @@ class SearchController(object):
             return
 
         # Create a new search engine object
-        engine = ebmlib.SearchEngine(query, evt.IsRegEx(), True,
-                                     evt.IsMatchCase(), evt.IsWholeWord())
-        engine.SetResultFormatter(FormatResult)
+        engine = EdSearchEngine(query, evt.IsRegEx(), True,
+                                evt.IsMatchCase(), evt.IsWholeWord())
+        engine.SetResultFormatter(engine.FormatResult)
 
         # Send the search function over to any interested parties that wish
         # to process the results.
@@ -397,6 +442,14 @@ class SearchController(object):
                 engine.SetSearchPool(stc.GetTextRaw())
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                    (engine.FindAllLines,))
+        if smode == eclib.LOCATION_IN_SELECTION:
+            stc = self._stc()
+            sel_s = min(stc.GetSelection())
+            offset = stc.LineFromPosition(sel_s)
+            engine.SetOffset(offset)
+            engine.SetSearchPool(stc.GetSelectedTextRaw())
+            ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
+                               (engine.FindAllLines,))
         elif smode == eclib.LOCATION_OPEN_DOCS:
             files = [fname.GetFileName()
                      for fname in self._parent.GetTextControls()]
@@ -493,12 +546,11 @@ class SearchController(object):
         """
         smode = evt.GetSearchType()
         rstring = evt.GetReplaceString()
-        engine = ebmlib.SearchEngine(evt.GetFindString(), evt.IsRegEx(),
-                                     True, evt.IsMatchCase(), evt.IsWholeWord())
-        engine.SetResultFormatter(FormatResult)
+        engine = EdSearchEngine(evt.GetFindString(), evt.IsRegEx(),
+                                True, evt.IsMatchCase(), evt.IsWholeWord())
+        engine.SetResultFormatter(engine.FormatResult)
 
         results = 0
-
         if smode == eclib.LOCATION_CURRENT_DOC:
             stc = self._stc()
             engine.SetSearchPool(stc.GetTextRaw())
@@ -506,6 +558,26 @@ class SearchController(object):
             if matches is not None:
                 self.ReplaceInStc(stc, matches, rstring, evt.IsRegEx())
                 results = len(matches)
+        elif smode == eclib.LOCATION_IN_SELECTION:
+            stc = self._stc()
+            engine.SetSearchPool(stc.GetSelectedTextRaw())
+            matches = engine.FindAll()
+            if matches is not None:
+                self.ReplaceInStcSelection(stc, matches, rstring, evt.IsRegEx())
+                results = len(matches)
+#            regex = engine.GetQueryObject()
+#            if regex is not None:
+#                text = engine.GetSearchPool()
+#                def replaceString(match):
+#                    if evt.IsRegEx():
+#                        value = match.expand(rstring.encode('utf-8')).decode('utf-8')
+#                    else:
+#                        value = rstring
+#                    return value
+#                text = regex.sub(replaceString, text)
+#                stc.ReplaceSelection(text)
+            else:
+                pass # TODO: notify of no matches?
         elif smode == eclib.LOCATION_OPEN_DOCS:
             for ctrl in self._parent.GetTextControls():
                 engine.SetSearchPool(ctrl.GetTextRaw())
@@ -592,13 +664,31 @@ class SearchController(object):
     def ReplaceInStc(stc, matches, rstring, isregex=True):
         """Replace the strings at the position in the given StyledTextCtrl
         @param stc: StyledTextCtrl
-        @param matches: list of tuples [(s1, e1), (s2, e2)]
+        @param matches: list of match objects
         @param rstring: Replace string
 
         """
         stc.BeginUndoAction()
         for match in reversed(matches):
             start, end = match.span()
+            if isregex:
+                value = match.expand(rstring.encode('utf-8')).decode('utf-8')
+            else:
+                value = rstring
+            stc.SetTargetStart(start)
+            stc.SetTargetEnd(end)
+            stc.ReplaceTarget(value)
+        stc.EndUndoAction()
+
+    @staticmethod
+    def ReplaceInStcSelection(stc, matches, rstring, isregex=True):
+        """Replace all the matches in the selection"""
+        sel_s = min(stc.GetSelection())
+        stc.BeginUndoAction()
+        for match in reversed(matches):
+            start, end = match.span()
+            start += sel_s
+            end += sel_s
             if isregex:
                 value = match.expand(rstring.encode('utf-8')).decode('utf-8')
             else:
@@ -643,27 +733,6 @@ class SearchController(object):
         """Refresh controls that are associated with this controllers data."""
         if self._finddlg is not None:
             self._finddlg.RefreshFindOptions()
-
-#-----------------------------------------------------------------------------#
-
-def FormatResult(fname, lnum, match):
-    """Format the search result string
-    @return: string
-    @todo: better unicode handling
-
-    """
-    fname = ed_txt.DecodeString(fname, sys.getfilesystemencoding())
-    if not isinstance(fname, types.UnicodeType):
-        fname = _("DECODING ERROR")
-
-    match = ed_txt.DecodeString(match)
-    if not isinstance(match, types.UnicodeType):
-        match = _("DECODING ERROR")
-    else:
-        match = u" " + match.lstrip()
-
-    rstring = u"%(fname)s (%(lnum)d): %(match)s"
-    return rstring % dict(fname=fname, lnum=lnum+1, match=match)
 
 #-----------------------------------------------------------------------------#
 

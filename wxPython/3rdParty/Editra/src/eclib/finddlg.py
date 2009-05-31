@@ -49,7 +49,7 @@ __all__ = ["FindBox", "FindEvent", "FindPanel", "FindReplaceDlg",
            "AFR_NOUPDOWN", "AFR_NOWHOLEWORD", "AFR_NOMATCHCASE", "AFR_NOREGEX",
            "AFR_NOFILTER", "AFR_NOOPTIONS",
 
-           "LOCATION_CURRENT_DOC",
+           "LOCATION_CURRENT_DOC", "LOCATION_IN_SELECTION",
            "LOCATION_OPEN_DOCS", "LOCATION_IN_FILES", "LOCATION_MAX",
 
            "edEVT_FIND_CLOSE", "EVT_FIND_CLOSE", "edEVT_FIND", "EVT_FIND",
@@ -91,9 +91,10 @@ AFR_NOOPTIONS   = 2048          # Hide all options in the dialog
 
 # Search Location Parameters (NOTE: must be kept in sync with Lookin List)
 LOCATION_CURRENT_DOC  = 0
-LOCATION_OPEN_DOCS    = 1
-LOCATION_IN_FILES     = 2
-LOCATION_MAX          = 2
+LOCATION_IN_SELECTION = 1
+LOCATION_OPEN_DOCS    = 2
+LOCATION_IN_FILES     = 3
+LOCATION_MAX          = 3
 
 # Control Names
 FindBoxName = "EdFindBox"
@@ -693,7 +694,8 @@ class FindPanel(wx.Panel):
         self._mode = style
         self._ftxt = wx.TextCtrl(self, value=fdata.GetFindString())
         self._rtxt = wx.TextCtrl(self, value=fdata.GetReplaceString())
-        locations = [_("Current Document"), _("Open Documents")]
+        locations = [_("Current Document"), _("Selected Text"),
+                     _("Open Documents")]
         self._lookin = wx.Choice(self, ID_LOOKIN, choices=locations)
         self._lookin.SetSelection(0)
         self._filterlbl = wx.StaticText(self, label=_("File Filters:"))
@@ -920,18 +922,26 @@ class FindPanel(wx.Panel):
         find_all = self.FindWindowById(ID_FIND_ALL)
         replace = self.FindWindowById(wx.ID_REPLACE)
         replace_all = self.FindWindowById(ID_REPLACE_ALL)
+        count = self.FindWindowById(ID_COUNT)
 
-        if self._lookin.GetSelection() > LOCATION_CURRENT_DOC:
+        lookin = self._lookin.GetSelection()
+        if  lookin > LOCATION_IN_SELECTION:
             if self._mode == AFR_STYLE_FINDDIALOG:
                 find_all.SetDefault()
             else:
                 replace_all.SetDefault()
             find.Disable()
             replace.Disable()
+            count.Disable()
+        elif lookin == LOCATION_IN_SELECTION:
+            find.Disable()
+            replace.Disable()
+            replace_all.SetDefault()
         else:
             find.SetDefault()
             find.Enable()
             replace.Enable()
+            count.Enable()
 
     #------------------------------------------------------#
 
