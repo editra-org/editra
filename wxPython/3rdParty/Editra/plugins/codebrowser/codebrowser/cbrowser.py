@@ -238,10 +238,10 @@ class CodeBrowserTree(wx.TreeCtrl):
             selected = self.GetSelection()
             if selected:
                 if selected != scope_item:
-                    self.ToggleItemSelection(selected)
-                    self.ToggleItemSelection(scope_item)
+                    self.Unselect()
+                    self.SelectItem(scope_item)
             else:
-                self.ToggleItemSelection(scope_item)
+                self.SelectItem(scope_item)
                 
             self.EnsureVisible(scope_item)
 
