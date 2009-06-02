@@ -41,6 +41,7 @@ preferences dialog after closing the last main window.
 placed after the inserted tag.
 +Fix Launch not updating after a Save As on Linux.
 +Fix unicode handling error in session file saving.
++Fix Editra Style Sheet output from Style Editor to be in sorted order.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
