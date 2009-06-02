@@ -334,7 +334,10 @@ class StyleEditor(wx.Dialog):
         dvals = ';\n\t\t'.join([item.replace(',', ' ')
                                 for item in ditem.GetAsList() ]) + ';'
         sty_sheet.append(''.join(['default_style {\n\t\t', dvals, '\n\n}\n\n']))
-        for tag, item in self.styles_new.iteritems():
+
+        tags = sorted(self.styles_new.keys())
+        for tag in tags:
+            item = self.styles_new[tag]
             if item.IsNull() or tag == 'default_style':
                 continue
 
