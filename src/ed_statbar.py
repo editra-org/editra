@@ -74,6 +74,7 @@ class EdStatBar(ProgressStatusBar):
         ed_msg.Subscribe(self.OnUpdateText, ed_msg.EDMSG_UI_SB_TXT)
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_FILE_SAVED)
+        ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_UI_STC_LEXER)
 
     def __del__(self):
