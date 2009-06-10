@@ -345,17 +345,24 @@ class ConfigPanel(wx.Panel):
         keys = sorted([ ed_txt.DecodeString(name)
                         for name in config.keys() ],
                       key=unicode.lower)
+
         for item in keys:
             val = config[item]
             self._list.Freeze()
             mod = sys.modules.get(item)
+            dist = p_mgr.GetPluginDistro(item)
+            if dist is not None:
+                item = dist.project_name
+                version = dist.version
+            else:
+                version = str(getattr(mod, '__version__', _("Unknown")))
+
             pin = PluginData()
             pin.SetName(item)
             desc = getattr(mod, '__doc__', _("No Description Available"))
             pin.SetDescription(desc.strip())
             pin.SetAuthor(getattr(mod, '__author__', _("Unknown")))
-            pin.SetVersion(str(getattr(mod, '__version__', _("Unknown"))))
-
+            pin.SetVersion(version)
             pbi = PBPluginItem(self._list, mod, None, item, pin.GetVersion(),
                                pin.GetDescription(), pin.GetAuthor())
 
@@ -388,14 +395,22 @@ class ConfigPanel(wx.Panel):
                       key=unicode.lower)
         bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_TOOLBAR, (32, 32))
         msg = _("This plugin requires a newer version of Editra.")
+
         for item in keys:
             val = errors[item]
             self._list.Freeze()
             mod = sys.modules.get(val)
+            dist = p_mgr.GetPluginDistro(item)
+            if dist is not None:
+                item = dist.project_name
+                version = dist.version
+            else:
+                version = str(getattr(mod, '__version__', _("Unknown")))
+
             pin = PluginData()
             pin.SetName(item)
             pin.SetAuthor(getattr(mod, '__author__', _("Unknown")))
-            pin.SetVersion(str(getattr(mod, '__version__', _("Unknown"))))
+            pin.SetVersion(version)
             pbi = PluginErrorItem(self._list, bmp, item, pin.GetVersion(),
                                   msg, pin.GetAuthor())
 
