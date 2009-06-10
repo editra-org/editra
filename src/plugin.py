@@ -377,10 +377,14 @@ class PluginManager(object):
                                   ed_glob.CONFIG['SYS_PLUGIN_DIR']]))
         sys.path.extend(self._pi_path)
         self._env = self.CreateEnvironment(self._pi_path)
+
+        # TODO: combine all of these into single object
         self._plugins = dict()      # Set of available plugins
         self._enabled = dict()      # Set of enabled plugins
+        self._distros = dict()      # Set of distrobution objects
         self._loaded = list()       # List of 
         self._obsolete = dict()     # Obsolete plugins list
+
         self.InitPlugins(self._env)
         self.RefreshConfig()
 
@@ -485,13 +489,18 @@ class PluginManager(object):
 
     def EnablePlugin(self, plugin, enable=True):
         """Enables a named plugin.
-        @param plugin: plugin to enable/disable
+        @param plugin: plugin to enable/disable (case insensitive)
         @param enable: should plugin be enabled or disabled
         @precondition: plugin must be managed by this manager instance
         @postcondition: plugin is added to activate list for activation on
                         next program start.
 
         """
+        for name in self._config:
+            if name.lower() == plugin.lower():
+                plugin = name
+                break
+
         self._config[plugin] = enable
         for cls in self._enabled:
             if cls.__module__ == plugin:
@@ -531,6 +540,25 @@ class PluginManager(object):
         """
         return self._plugins
 
+    def GetPluginDistro(self, pname):
+        """Get the distrobution object for a given plugin name
+        @param pname: plugin name
+        @return: Distrobution
+
+        """
+        for name, distro in self._distros.iteritems():
+            if pname.lower() == name.lower():
+                return distro
+        else:
+            return None
+
+    def GetPluginDistros(self):
+        """Get the plugin distrobution objects
+        @return: dict(name=Distrobution)
+
+        """
+        return self._distros
+
     def InitPlugins(self, env):
         """Initializes the plugins that are contained in the given
         environment. After calling this the list of available plugins
@@ -553,6 +581,7 @@ class PluginManager(object):
 
             egg = pkg_env[name][0]  # egg is of type Distrobution
             egg.activate()
+            editra_version = CalcVersionValue(ed_glob.VERSION)
             for name in egg.get_entry_map(ENTRYPOINT):
                 try:
                     # Only load a given entrypoint once
@@ -573,8 +602,9 @@ class PluginManager(object):
                             self.LOG("[pluginmgr][info] Creating Instance of %s" % name)
                             instance = cls(self)
                             minv = CalcVersionValue(instance.GetMinVersion())
-                            if minv <= CalcVersionValue(ed_glob.VERSION):
+                            if minv <= editra_version:
                                 self._plugins[cls] = cls(self)
+                                self._distros[egg.project_name] = egg
                             else:
                                 # Save plugins that are not compatible with
                                 # this version to use for notifications.
