@@ -134,8 +134,7 @@ def CommentPattern(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_BATCH:
-        # NOTE: trailing space is significant.
-        return [u'rem ']
+        return [u'::']
     else:
         return list()
 
