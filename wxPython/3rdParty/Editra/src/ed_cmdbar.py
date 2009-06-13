@@ -253,15 +253,15 @@ class CommandEntryBar(CommandBarBase):
         cmd_lbl = wx.StaticText(self, label=_("Command") + ": ")
         self.info_lbl = wx.StaticText(self, label="")
         self.AddControl(cmd_lbl, wx.ALIGN_LEFT)
-        self.AddControl(self.ctrl, wx.ALIGN_LEFT)
-        self.AddControl(self.info_lbl, wx.ALIGN_LEFT)
+        self.AddControl(self.ctrl, 1, wx.ALIGN_LEFT)
+        self.AddControl(self.info_lbl, wx.ALIGN_RIGHT)
 
         # HACK: workaround bug in mac control that resets size to
         #       that of the default variant after any text has been
         #       typed in it. Note it reports the best size as the default
         #       variant and causes layout issues. wxBUG
         if wx.Platform == '__WXMAC__':
-            self.ctrl.SetSizeHints(150, 16, 150, 16)
+            self.ctrl.SetSizeHints(200, 16, -1, 16)
 
 #-----------------------------------------------------------------------------#
 
@@ -328,23 +328,27 @@ class CommandExecuter(eclib.CommandEntryBase):
     def _AdjustSize(self):
         """Checks width of text as its added and dynamically resizes
         the control as needed.
+        @todo: re-enable after resizing issue can be resolved
 
         """
-        ext = self.GetTextExtent(self.GetValue())[0]
-        curr_w, curr_h = self.GetClientSizeTuple()
-        if ext > curr_w * .5:
-            max_w = self.GetParent().GetClientSize().GetWidth() * .8
-            nwidth = min(ext * 1.3, max_w)
-            pwidth = self._popup.GetBestSize()[0]
-            if pwidth > nwidth:
-                nwidth = pwidth
-            self.SetClientSize((nwidth, curr_h))
-            self._popup.SetSize((nwidth, -1))
-        elif ((curr_w > ext * 1.18) and curr_w > 150):
-            nwidth = max(ext * 1.18, 150)
-            self.SetClientSize((nwidth, curr_h))
-        else:
-            pass
+        pass
+#        ext = self.GetTextExtent(self.GetValue())[0]
+#        curr_w, curr_h = self.GetClientSizeTuple()
+#        if ext > curr_w * .5:
+#            max_w = self.GetParent().GetClientSize().GetWidth() * .8
+#            nwidth = min(ext * 1.3, max_w)
+#            pwidth = self._popup.GetBestSize()[0]
+#            if pwidth > nwidth:
+#                nwidth = pwidth
+#            self.SetClientSize((nwidth, curr_h))
+#            self._popup.SetSize((nwidth, -1))
+#            self.GetParent().Layout()
+#        elif ((curr_w > ext * 1.18) and curr_w > 150):
+#            nwidth = max(ext * 1.18, 150)
+#            self.SetClientSize((nwidth, curr_h))
+#            self.GetParent().Layout()
+#        else:
+#            pass
 
     def _AdjustValue(self, val):
         """Adjust value of input string as autocomp provides new values
@@ -387,9 +391,18 @@ class CommandExecuter(eclib.CommandEntryBase):
                 path = os.path.join(self._curdir, path)
 
         if os.path.exists(path) and os.path.isdir(path):
-            os.chdir(path)
-            self._curdir = os.path.abspath(os.path.curdir) + os.sep
+            if os.access(path, os.R_OK):
+                os.chdir(path)
+                self._curdir = os.path.abspath(os.path.curdir) + os.sep
+            else:
+                # Doesn't have permissions
+                ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                                  (ed_glob.SB_INFO,
+                                   _("Can't change directory to: %s") % path))
+                wx.Bell()
+                self.Clear()
         else:
+            # Invalid path
             self.Clear()
             wx.Bell()
 
@@ -580,6 +593,15 @@ class CommandExecuter(eclib.CommandEntryBase):
         head = os.path.join(curdir, head)
         if not os.path.isdir(head):
             return []
+
+        # Return empty list of user does not have
+        # read access to the directory
+        if not os.access(head, os.R_OK):
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                              (ed_glob.SB_INFO,
+                               _("Access Denied: %s") % head))
+            wx.Bell() # Beep to alert
+            return list()
 
         # We expanded head, so trim the suggestion list of its head
         # so we can add the tail of the suggestion back to the original head
@@ -817,6 +839,24 @@ class LineCtrl(eclib.CommandEntryBase):
 
 class PopupListBase(object):
     """Common functionality between Popuplist GTK and Mac"""
+
+    def AdvanceSelection(self, next=True):
+        """Advance the list selection
+        @keyword next: goto the next or previous selection
+        @type next: bool
+
+        """
+        sel = self._list.GetSelection()
+        if next:
+            count = self._list.GetCount()
+            sel += 1
+            if sel < count:
+                self._list.SetSelection(sel)
+        else:
+            sel -= 1
+            if sel >= 0:
+                self._list.SetSelection(sel)
+
     def GetSelection(self):
         """Get the string that is currently selected in the list
         @return: string selection
@@ -865,6 +905,7 @@ class PopupList(wx.MiniFrame, PopupListBase):
             style = style | wx.SIMPLE_BORDER
 
         wx.MiniFrame.__init__(self, parent, pos=pos, style=style)
+        PopupListBase.__init__(self)
 
         # Attributes
         self._list = wx.ListBox(self, choices=choices,
@@ -1001,6 +1042,7 @@ class PopupWinList(wx.PopupWindow, PopupListBase):
     def __init__(self, parent, choices=list(), pos=wx.DefaultPosition):
         """Create the popup window and its list control"""
         wx.PopupWindow.__init__(self, parent)
+        PopupListBase.__init__(self)
 
         # Attributes
         self._list = wx.ListBox(self, choices=choices, pos=(0, 0),
