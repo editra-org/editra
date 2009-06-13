@@ -433,10 +433,11 @@ class CommandExecuter(eclib.CommandEntryBase):
         # e fname: edit file
         cmd = cmd[1:].strip()
         frame = self.GetTopLevelParent()
+        cmd = ebmlib.GetPathFromURI(cmd)
         if not os.path.isabs(cmd):
             cmd = os.path.join(self._curdir, cmd)
 
-        if os.path.exists(cmd):
+        if ebmlib.PathExists(cmd):
             frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, cmd)
         else:
             frame.nb.OpenPage(ebmlib.GetPathName(cmd), ebmlib.GetFileName(cmd))
