@@ -14,12 +14,11 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
-import wx
 import os
 import types
 import unittest
 
-# Local imports
+# Local unittest imports
 import common
 
 # Module(s) to test

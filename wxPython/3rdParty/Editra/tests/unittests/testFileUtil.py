@@ -15,7 +15,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Imports
 import os
-import wx
+import platform
 import unittest
 
 # Local modules
@@ -73,6 +73,33 @@ class FileUtilTest(unittest.TestCase):
         self.assertTrue(ebmlib.GetFileSize(self.fpath) != 0)
         self.assertTrue(ebmlib.GetFileSize(u'SomeFakeFile.txt') == 0)
 
+    def testPathExists(self):
+        """Test if a path exists"""
+        path = common.GetDataFilePath(u'test_read_utf8.txt')
+        fail = common.GetDataFilePath(u'fake_file.txt')
+
+        # Test regular file paths
+        self.assertTrue(ebmlib.PathExists(path))
+        self.assertFalse(ebmlib.PathExists(fail))
+
+        # Test URI
+        path = u"file://" + path
+        fail = u"file://" + fail
+        self.assertTrue(ebmlib.PathExists(path))
+        self.assertFalse(ebmlib.PathExists(fail))
+
+    def testGetPathFromURI(self):
+        """Test getting a real file path from a file:// uri"""
+        if platform.system().lower() in ('windows', 'microsoft'):
+            path = ebmlib.GetPathFromURI(u"file://C:/Users/test/test.txt")
+            self.assertEquals(path, u"C:\\Users\\test\\test.txt")
+        else:
+            path = ebmlib.GetPathFromURI(u"file://Users/test/test.txt")
+            self.assertEquals(path, u"/Users/test/test.txt")
+
+            path = ebmlib.GetPathFromURI(u"/Users/test")
+            self.assertEquals(path, u"/Users/test")
+
     def testGetPathName(self):
         """Test that getting the path name from a string returns the correct
         string.
@@ -84,8 +111,9 @@ class FileUtilTest(unittest.TestCase):
         paths = [os.sep.join(root) for root in roots]
         for path in paths:
             tmp = os.path.join(path, fname)
-            self.assertEqual(path, ebmlib.GetPathName(tmp),
-                             "ebmlib.GetPathName(%s) != %s" % (tmp, path))
+            result = ebmlib.GetPathName(tmp)
+            self.assertEqual(path, result,
+                             "%s != %s" % (result, path))
 
     def testGetUniqueName(self):
         """Test getting a unique file name at a given path"""
