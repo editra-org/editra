@@ -28,7 +28,8 @@ NEW: [features/improvements]
 +Add option to start in Normal mode by default when using vi emulation (patch from Hasan Aljudy).
 +Codebrowser syncronizes with caret position. (patch from Igor Dejanovic)
 +Find dialog remembers last position throughout session.
-+Add support for the Cobra programming language
++Add support for the Cobra programming language.
++Support opening files by a uri.
 
 BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.
