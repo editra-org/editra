@@ -19,12 +19,13 @@ __revision__ = "$Revision$"
 
 __all__ = [ 'GetFileModTime', 'GetFileSize', 'GetUniqueName', 'MakeNewFile',
             'MakeNewFolder', 'GetFileExtension', 'GetFileName', 'GetPathName',
-            'ResolveRealPath', 'IsLink' ]
+            'ResolveRealPath', 'IsLink', 'GetPathFromURI', 'PathExists']
 
 #-----------------------------------------------------------------------------#
 # Imports
 import os
 import platform
+import urllib2
 import stat
 
 UNIX = WIN = False
@@ -37,6 +38,22 @@ if platform.system().lower() in ['windows', 'microsoft']:
         win32client = None
 else:
     UNIX = True
+
+#-----------------------------------------------------------------------------#
+
+def uri2path(func):
+    """Decorator method to convert path arguments that may be uri's to
+    real file system paths. Arg 0 must be a file path or uri.
+
+    """
+    def WrapURI(*args, **kwargs):
+        args = list(args)
+        args[0] = GetPathFromURI(args[0])
+        return func(*args, **kwargs)
+
+    WrapURI.__name__ = func.__name__
+    WrapURI.__doc__ = func.__doc__
+    return WrapURI
 
 #-----------------------------------------------------------------------------#
 
@@ -66,6 +83,7 @@ def GetFileName(path):
     """
     return os.path.split(path)[-1]
 
+@uri2path
 def GetFileSize(path):
     """Get the size of the file at a given path
     @param path: Path to file
@@ -77,6 +95,28 @@ def GetFileSize(path):
     except:
         return 0
 
+def GetPathFromURI(path):
+    """Get a local path from a file:// uri
+    @return: normalized path
+
+    """
+    if path.startswith(u"file:"):
+        path = path.replace(u"file:", u"")
+        path = path.lstrip(u"/")
+        if platform.system().lower() in ('windows', 'microsoft'):
+            path = path.replace(u"/", u"\\")
+            if len(path) >= 2 and path[1] != u':':
+                # A valid windows file uri should start with the drive
+                # letter. If not make the assumption that it should be
+                # the C: drive.
+                path = u"C:\\\\" + path
+        else:
+            path = u"/" + path
+        path = urllib2.unquote(path)
+
+    return path
+
+@uri2path
 def GetPathName(path):
     """Gets the path minus filename
     @param path: full path to get base of
@@ -84,6 +124,7 @@ def GetPathName(path):
     """
     return os.path.split(path)[0]
 
+@uri2path
 def IsLink(path):
     """Is the file a link
     @return: bool
@@ -94,6 +135,16 @@ def IsLink(path):
     else:
         return os.path.islink(path)
 
+@uri2path
+def PathExists(path):
+    """Does the path exist.
+    @param path: file path or uri
+    @return: bool
+
+    """
+    return os.path.exists(path)
+
+@uri2path
 def ResolveRealPath(link):
     """Return the real path of the link file
     @param link: path of link file

@@ -33,7 +33,7 @@ class FileObjectImpl(object):
         object.__init__(self)
 
         # Attributes
-        self._path = path
+        self._path = fileutil.GetPathFromURI(path)
         self._modtime = modtime
 
         self._handle = None
@@ -180,7 +180,7 @@ class FileObjectImpl(object):
         @param path: absolute path to file
 
         """
-        self._path = path
+        self._path = fileutil.GetPathFromURI(path)
 
     def SetModTime(self, mtime):
         """Set the modtime of this file
@@ -204,7 +204,7 @@ class FileObjectImpl(object):
                 pass
 
         return txt
-    
+
     def Write(self, value):
         """Open/Write the value to disk
         @param value: string

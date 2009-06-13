@@ -78,7 +78,8 @@ class EdFile(ebmlib.FileObjectImpl):
     """
     def __init__(self, path=u'', modtime=0):
         """Create the file wrapper object
-        @param path: the absolute path to the file
+        @keyword path: the absolute path to the file
+        @keyword modtime: file modification time
 
         """
         ebmlib.FileObjectImpl.__init__(self, path, modtime)
@@ -105,7 +106,7 @@ class EdFile(ebmlib.FileObjectImpl):
         @return: EdFile
 
         """
-        fileobj = EdFile(self._path, self._modtime)
+        fileobj = EdFile(self.GetPath(), self.GetModtime())
         fileobj.SetLastError(self.last_err)
         fileobj.SetEncoding(self.encoding)
         fileobj.bom = self.bom
