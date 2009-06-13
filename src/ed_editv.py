@@ -38,7 +38,7 @@ _ = wx.GetTranslation
 
 def modalcheck(func):
     """Decorator method to add extra modality guards to functions that
-    show modal dialogs. Arg 0 must be 'self'
+    show modal dialogs. Arg 0 must be a Window instance.
 
     """
     def WrapModal(*args, **kwargs):
