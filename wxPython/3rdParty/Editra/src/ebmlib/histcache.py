@@ -86,7 +86,9 @@ class HistoryCache(object):
 
         """
         item = None
-        if self.cpos >= 0:
+        if self.cpos >= 0 and len(self._list) > 0:
+            if self.cpos == len(self._list):
+                self.cpos -= 1
             item = self._list[self.cpos]
             self.cpos -= 1
         return item

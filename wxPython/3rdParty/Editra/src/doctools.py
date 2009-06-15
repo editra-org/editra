@@ -35,6 +35,8 @@ class DocPositionMgr(object):
     @note: saves config to ~/.Editra/cache/
 
     """
+    _poscache = ebmlib.HistoryCache(100)
+
     def __init__(self):
         """Creates the position manager object
 
@@ -46,9 +48,6 @@ class DocPositionMgr(object):
         self._book = None
         self._records = dict()
 
-        # Non persisted navigation cache
-        self._poscache = ebmlib.HistoryCache(100) # save last 100 positions
-
     def InitPositionCache(self, book_path):
         """Initialize and load the on disk document position cache.
         @param book_path: path to on disk cache
@@ -59,13 +58,14 @@ class DocPositionMgr(object):
         if Profile_Get('SAVE_POS'):
             self.LoadBook(book_path)
 
-    def AddNaviPosition(self, fname, pos):
+    @classmethod
+    def AddNaviPosition(cls, fname, pos):
         """Add a new postion to the navigation cache
         @param fname: file name
         @param pos: position
 
         """
-        self._poscache.PutItem((fname, pos))
+        cls._poscache.PutItem((fname, pos))
 
     def AddRecord(self, vals):
         """Adds a record to the dictionary from a list of the
@@ -87,7 +87,8 @@ class DocPositionMgr(object):
         """
         return self._book
 
-    def GetNextNaviPos(self, fname=None):
+    @classmethod
+    def GetNextNaviPos(cls, fname=None):
         """Get the next stored navigation position
         The optional fname parameter will get the next found position for
         the given file.
@@ -96,10 +97,11 @@ class DocPositionMgr(object):
         @note: fname is currently not used
 
         """
-        item = self._poscache.GetNextItem()
+        item = cls._poscache.GetNextItem()
         return item
 
-    def GetPreviousNaviPos(self, fname=None):
+    @classmethod
+    def GetPreviousNaviPos(cls, fname=None):
         """Get the last stored navigation position
         The optional fname parameter will get the last found position for
         the given file.
@@ -108,7 +110,7 @@ class DocPositionMgr(object):
         @note: fname is currently not used
 
         """
-        item = self._poscache.GetPreviousItem()
+        item = cls._poscache.GetPreviousItem()
         return item
 
     def GetPos(self, name):
