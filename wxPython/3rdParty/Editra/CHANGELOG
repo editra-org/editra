@@ -43,6 +43,8 @@ placed after the inserted tag.
 +Fix Launch not updating after a Save As on Linux.
 +Fix unicode handling error in session file saving.
 +Fix Editra Style Sheet output from Style Editor to be in sorted order.
++Fix improper highlighting in django and mako templates due to improper handling
+of Windows eol characters.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:

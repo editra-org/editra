@@ -111,7 +111,9 @@ def StyleText(stc, start, end):
     cpos = 0
     stc.StartStyling(cpos, 0x1f)
     lexer = get_lexer_by_name("html+mako")
-    for token, txt in lexer.get_tokens(stc.GetTextRange(0, end)):
+    doctxt = stc.GetTextRange(0, end)
+    wineol = stc.GetEOLChar() == "\r\n"
+    for token, txt in lexer.get_tokens(doctxt):
 #        print token, txt
         style = TOKEN_MAP.get(token, STC_MAKO_DEFAULT)
         if style == STC_MAKO_PREPROCESSOR and txt.startswith(u'#'):
@@ -120,6 +122,9 @@ def StyleText(stc, start, end):
 #            style = STC_MAKO_STRINGEOL
 
         tlen = len(txt)
+        if wineol and "\n" in txt:
+            tlen += txt.count("\n")
+
         if tlen:
             stc.SetStyling(tlen, style)
         cpos += tlen
