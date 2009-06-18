@@ -89,7 +89,7 @@ if __name__ == '__main__':
         import run
     except ImportError:
         app = wx.PySimpleApp(False)
-        frame = wx.Frame(None, title="ColorSetter Demo")
+        frame = wx.Frame(None, title="File Info Dialog Demo")
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(TestPanel(frame, TestLog()), 1, wx.EXPAND)
         frame.CreateStatusBar()
