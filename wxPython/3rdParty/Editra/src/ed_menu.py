@@ -57,6 +57,16 @@ class EdMenu(wx.Menu):
         self.AppendItem(item, use_bmp)
         return item
 
+    def AppendEx(self, id_, text=u'', helpstr=u'',
+                 kind=wx.ITEM_NORMAL, use_bmp=True):
+        """Like L{Append} but automatically applies keybindings to text
+        based on item id.
+
+        """
+        binding = EdMenuBar.keybinder.GetBinding(id_)
+        item = self.Append(id_, text+binding, helpstr, kind, use_bmp)
+        return item
+
     def AppendItem(self, item, use_bmp=True):
         """Appends a MenuItem to the menu and adds an associated
         bitmap if one is available, unless use_bmp is set to false.
@@ -467,85 +477,60 @@ class EdMenuBar(wx.MenuBar):
         """
         filemenu = EdMenu()
         filehist = self._menus['filehistory'] = EdMenu()
-        filemenu.Append(ed_glob.ID_NEW, _("&New Tab") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEW),
-                        _("Start a new file in a new tab"))
-        filemenu.Append(ed_glob.ID_NEW_WINDOW, _("New &Window") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEW_WINDOW),
+        filemenu.AppendEx(ed_glob.ID_NEW, _("&New Tab"),
+                          _("Start a new file in a new tab"))
+        filemenu.AppendEx(ed_glob.ID_NEW_WINDOW, _("New &Window"),
                         _("Start a new file in a new window"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_OPEN, _("&Open") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_OPEN),
-                        _("Open"))
+        filemenu.AppendEx(ed_glob.ID_OPEN, _("&Open"), _("Open"))
         ## Setup File History in the File Menu
         filemenu.AppendMenu(ed_glob.ID_FHIST, _("Open &Recent"),
                             filehist, _("Recently Opened Files"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_CLOSE, _("&Close Tab") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSE),
+        filemenu.AppendEx(ed_glob.ID_CLOSE, _("&Close Tab"),
                         _("Close Current Tab"))
-        filemenu.Append(ed_glob.ID_CLOSE_WINDOW,
-                        _("Close Window") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSE_WINDOW),
-                        _("Close the current window"))
-        filemenu.Append(ed_glob.ID_CLOSEALL, _("Close All Tabs") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CLOSEALL),
+        filemenu.AppendEx(ed_glob.ID_CLOSE_WINDOW,
+                        _("Close Window") , _("Close the current window"))
+        filemenu.AppendEx(ed_glob.ID_CLOSEALL, _("Close All Tabs"),
                         _("Close all open tabs"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_SAVE, _("&Save") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVE),
-                        _("Save Current File"))
-        filemenu.Append(ed_glob.ID_SAVEAS, _("Save &As") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVEAS),
-                        _("Save As"))
-        filemenu.Append(ed_glob.ID_SAVEALL, _("Save All") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVEALL),
+        filemenu.AppendEx(ed_glob.ID_SAVE, _("&Save"), _("Save Current File"))
+        filemenu.AppendEx(ed_glob.ID_SAVEAS, _("Save &As"), _("Save As"))
+        filemenu.AppendEx(ed_glob.ID_SAVEALL, _("Save All"),
                         _("Save all open pages"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_REVERT_FILE, _("Revert to Saved") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_REVERT_FILE),
+        filemenu.AppendEx(ed_glob.ID_REVERT_FILE, _("Revert to Saved"),
                         _("Revert file to last save point"))
-        filemenu.Append(ed_glob.ID_RELOAD_ENC, _("Reload with Encoding") + \
-                        u"..." + EdMenuBar.keybinder.GetBinding(ed_glob.ID_RELOAD_ENC),
+        filemenu.AppendEx(ed_glob.ID_RELOAD_ENC, _("Reload with Encoding..."),
                         _("Reload the file with a specified encoding"))
         filemenu.AppendSeparator()
 
         # Profile
         pmenu = EdMenu()
-        pmenu.Append(ed_glob.ID_SAVE_PROFILE, _("Save Profile") + \
-                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVE_PROFILE),
+        pmenu.AppendEx(ed_glob.ID_SAVE_PROFILE, _("Save Profile"),
                      _("Save Current Settings to a New Profile"))
-        pmenu.Append(ed_glob.ID_LOAD_PROFILE, _("Load Profile") + \
-                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_LOAD_PROFILE),
+        pmenu.AppendEx(ed_glob.ID_LOAD_PROFILE, _("Load Profile"),
                      _("Load a Custom Profile"))
         filemenu.AppendSubMenu(pmenu, _("Profile"),
                                _("Load and save custom Profiles"))
 
         # Sessions
         smenu = EdMenu()
-        smenu.Append(ed_glob.ID_SAVE_SESSION, _("Save Session") + \
-                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_SAVE_SESSION),
+        smenu.AppendEx(ed_glob.ID_SAVE_SESSION, _("Save Session"),
                      _("Save the current session."))
-        smenu.Append(ed_glob.ID_LOAD_SESSION, _("Load Session") + \
-                     EdMenuBar.keybinder.GetBinding(ed_glob.ID_LOAD_SESSION),
+        smenu.AppendEx(ed_glob.ID_LOAD_SESSION, _("Load Session"),
                      _("Load a saved session."))
         filemenu.AppendSubMenu(smenu, _("Sessions"),
                                _("Load and save custom sessions."))
 
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_PRINT_SU, _("Page Set&up") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRINT_SU),
+        filemenu.AppendEx(ed_glob.ID_PRINT_SU, _("Page Set&up"),
                         _("Configure Printer"))
-        filemenu.Append(ed_glob.ID_PRINT_PRE, _("Print Pre&view") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRINT_PRE),
+        filemenu.AppendEx(ed_glob.ID_PRINT_PRE, _("Print Pre&view"),
                         _("Preview Printout"))
-        filemenu.Append(ed_glob.ID_PRINT, _("&Print") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRINT),
-                        _("Print Current File"))
+        filemenu.AppendEx(ed_glob.ID_PRINT, _("&Print"), _("Print Current File"))
         filemenu.AppendSeparator()
-        filemenu.Append(ed_glob.ID_EXIT, _("E&xit") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_EXIT),
-                        _("Exit the Program"))
+        filemenu.AppendEx(ed_glob.ID_EXIT, _("E&xit"), _("Exit the Program"))
 
         # Attach to menubar and save reference
         self.Append(filemenu, _("&File"))
@@ -557,101 +542,70 @@ class EdMenuBar(wx.MenuBar):
 
         """
         editmenu = EdMenu()
-        editmenu.Append(ed_glob.ID_UNDO, _("&Undo") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_UNDO),
-                        _("Undo Last Action"))
-        editmenu.Append(ed_glob.ID_REDO, _("Redo") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_REDO),
-                        _("Redo Last Undo"))
+        editmenu.AppendEx(ed_glob.ID_UNDO, _("&Undo"), _("Undo Last Action"))
+        editmenu.AppendEx(ed_glob.ID_REDO, _("Redo"), _("Redo Last Undo"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_CUT, _("Cu&t") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CUT),
-                        _("Cut Selected Text from File"))
-        editmenu.Append(ed_glob.ID_COPY, _("&Copy") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_COPY),
+        editmenu.AppendEx(ed_glob.ID_CUT, _("Cu&t"),
+                          _("Cut Selected Text from File"))
+        editmenu.AppendEx(ed_glob.ID_COPY, _("&Copy"),
                         _("Copy Selected Text to Clipboard"))
-        editmenu.Append(ed_glob.ID_PASTE, _("&Paste") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PASTE),
+        editmenu.AppendEx(ed_glob.ID_PASTE, _("&Paste"),
                         _("Paste Text from Clipboard to File"))
-        editmenu.Append(ed_glob.ID_PASTE_AFTER, _("P&aste After") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PASTE_AFTER),
+        editmenu.AppendEx(ed_glob.ID_PASTE_AFTER, _("P&aste After"),
                         _("Paste Text from Clipboard to File after the cursor"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_SELECTALL, _("Select &All") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SELECTALL),
+        editmenu.AppendEx(ed_glob.ID_SELECTALL, _("Select &All"),
                         _("Select All Text in Document"))
-        editmenu.Append(ed_glob.ID_COLUMN_MODE, _("Column Mode") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_COLUMN_MODE),
+        editmenu.AppendEx(ed_glob.ID_COLUMN_MODE, _("Column Mode"),
                         _("Enable column edit mode."), wx.ITEM_CHECK)
         editmenu.AppendSeparator()
         linemenu = EdMenu()
-        linemenu.Append(ed_glob.ID_LINE_AFTER, _("New Line After") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_LINE_AFTER),
+        linemenu.AppendEx(ed_glob.ID_LINE_AFTER, _("New Line After"),
                          _("Add a new line after the current line"))
-        linemenu.Append(ed_glob.ID_LINE_BEFORE,
-                        _("New Line Before") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_LINE_BEFORE),
+        linemenu.AppendEx(ed_glob.ID_LINE_BEFORE, _("New Line Before"),
                         _("Add a new line before the current line"))
         linemenu.AppendSeparator()
-        linemenu.Append(ed_glob.ID_CUT_LINE, _("Cut Line") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CUT_LINE),
+        linemenu.AppendEx(ed_glob.ID_CUT_LINE, _("Cut Line"),
                         _("Cut Current Line"))
-        linemenu.Append(ed_glob.ID_DELETE_LINE, _("Delete Line") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DELETE_LINE),
+        linemenu.AppendEx(ed_glob.ID_DELETE_LINE, _("Delete Line"),
                         _("Delete the selected line(s)"))
-        linemenu.Append(ed_glob.ID_COPY_LINE, _("Copy Line") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_COPY_LINE),
+        linemenu.AppendEx(ed_glob.ID_COPY_LINE, _("Copy Line"),
                         _("Copy Current Line"))
-        linemenu.Append(ed_glob.ID_DUP_LINE,
-                        _("Duplicate Line") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DUP_LINE),
+        linemenu.AppendEx(ed_glob.ID_DUP_LINE, _("Duplicate Line"),
                         _("Duplicate the current line"))
         linemenu.AppendSeparator()
-        linemenu.Append(ed_glob.ID_JOIN_LINES, _("Join Lines") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_JOIN_LINES),
+        linemenu.AppendEx(ed_glob.ID_JOIN_LINES, _("Join Lines"),
                         _("Join the Selected Lines"))
-        linemenu.Append(ed_glob.ID_TRANSPOSE, _("Transpose Line") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TRANSPOSE),
+        linemenu.AppendEx(ed_glob.ID_TRANSPOSE, _("Transpose Line"),
                         _("Transpose the current line with the previous one"))
-        linemenu.Append(ed_glob.ID_LINE_MOVE_UP, _("Move Current Line Up") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_LINE_MOVE_UP),
+        linemenu.AppendEx(ed_glob.ID_LINE_MOVE_UP, _("Move Current Line Up"),
                         _("Move the current line up"))
-        linemenu.Append(ed_glob.ID_LINE_MOVE_DOWN,
-                        _("Move Current Line Down") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_LINE_MOVE_DOWN),
+        linemenu.AppendEx(ed_glob.ID_LINE_MOVE_DOWN,
+                        _("Move Current Line Down"),
                         _("Move the current line down"))
         editmenu.AppendMenu(ed_glob.ID_LINE_EDIT, _("Line Edit"), linemenu,
                             _("Commands that affect an entire line"))
         bookmenu = EdMenu()
-        bookmenu.Append(ed_glob.ID_ADD_BM, _("Toggle Bookmark") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ADD_BM),
+        bookmenu.AppendEx(ed_glob.ID_ADD_BM, _("Toggle Bookmark"),
                         _("Toggle bookmark of the current line"))
-        bookmenu.Append(ed_glob.ID_DEL_ALL_BM, _("Remove All Bookmarks") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DEL_ALL_BM),
+        bookmenu.AppendEx(ed_glob.ID_DEL_ALL_BM, _("Remove All Bookmarks"),
                         _("Remove all bookmarks from the current document"))
         editmenu.AppendMenu(ed_glob.ID_BOOKMARK, _("Bookmarks"),  bookmenu,
                             _("Add and remove bookmarks"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_FIND, _("&Find") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND),
-                        _("Find Text"))
-        editmenu.Append(ed_glob.ID_FIND_REPLACE, _("Find/R&eplace") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_REPLACE),
+        editmenu.AppendEx(ed_glob.ID_FIND, _("&Find"), _("Find Text"))
+        editmenu.AppendEx(ed_glob.ID_FIND_REPLACE, _("Find/R&eplace"),
                         _("Find and Replace Text"))
-        editmenu.Append(ed_glob.ID_QUICK_FIND, _("&Quick Find") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_QUICK_FIND),
+        editmenu.AppendEx(ed_glob.ID_QUICK_FIND, _("&Quick Find"),
                         _("Open the Quick Find Bar"))
-        editmenu.Append(ed_glob.ID_FIND_PREVIOUS, _("Find Previous") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_PREVIOUS),
+        editmenu.AppendEx(ed_glob.ID_FIND_PREVIOUS, _("Find Previous"),
                         _("Goto previous match"))
-        editmenu.Append(ed_glob.ID_FIND_NEXT, _("Find Next") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_NEXT),
+        editmenu.AppendEx(ed_glob.ID_FIND_NEXT, _("Find Next"),
                         _("Goto the next match"))
-        editmenu.Append(ed_glob.ID_FIND_SELECTED, _("Find Selected") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_FIND_SELECTED))
+        editmenu.AppendEx(ed_glob.ID_FIND_SELECTED, _("Find Selected"),
+                          _("Search for the currently selected phrase"))
         editmenu.AppendSeparator()
-        editmenu.Append(ed_glob.ID_PREF, _("Pr&eferences") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PREF),
+        editmenu.AppendEx(ed_glob.ID_PREF, _("Pr&eferences"),
                         _("Edit Preferences / Settings"))
 
         # Attach to menubar and save ref
@@ -664,84 +618,59 @@ class EdMenuBar(wx.MenuBar):
 
         """
         viewmenu = EdMenu()
-        viewmenu.Append(ed_glob.ID_ZOOM_OUT, _("Zoom Out") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ZOOM_OUT),
-                        _("Zoom Out"))
-        viewmenu.Append(ed_glob.ID_ZOOM_IN, _("Zoom In") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ZOOM_IN),
-                        _("Zoom In"))
-        viewmenu.Append(ed_glob.ID_ZOOM_NORMAL, _("Zoom Default") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ZOOM_NORMAL),
+        viewmenu.AppendEx(ed_glob.ID_ZOOM_OUT, _("Zoom Out"), _("Zoom Out"))
+        viewmenu.AppendEx(ed_glob.ID_ZOOM_IN, _("Zoom In"), _("Zoom In"))
+        viewmenu.AppendEx(ed_glob.ID_ZOOM_NORMAL, _("Zoom Default"),
                         _("Zoom Default"))
         viewmenu.AppendSeparator()
         viewedit = self._menus['viewedit'] = EdMenu()
-        viewedit.Append(ed_glob.ID_HLCARET_LINE, _("Highlight Caret Line") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_HLCARET_LINE),
+        viewedit.AppendEx(ed_glob.ID_HLCARET_LINE, _("Highlight Caret Line"),
                         _("Highlight the background of the current line"),
                         wx.ITEM_CHECK)
-        viewedit.Append(ed_glob.ID_INDENT_GUIDES,
-                        _("Indentation Guides") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_INDENT_GUIDES),
-                        _("Show Indentation Guides"),
-                        wx.ITEM_CHECK)
-        viewedit.Append(ed_glob.ID_SHOW_EDGE, _("Show Edge Guide") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_EDGE),
+        viewedit.AppendEx(ed_glob.ID_INDENT_GUIDES, _("Indentation Guides"),
+                        _("Show Indentation Guides"), wx.ITEM_CHECK)
+        viewedit.AppendEx(ed_glob.ID_SHOW_EDGE, _("Show Edge Guide"),
                         _("Show the edge column guide"), wx.ITEM_CHECK)
-        viewedit.Append(ed_glob.ID_SHOW_EOL, _("Show EOL Markers") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_EOL),
+        viewedit.AppendEx(ed_glob.ID_SHOW_EOL, _("Show EOL Markers"),
                         _("Show EOL Markers"), wx.ITEM_CHECK)
-        viewedit.Append(ed_glob.ID_SHOW_LN, _("Show Line Numbers") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_LN),
+        viewedit.AppendEx(ed_glob.ID_SHOW_LN, _("Show Line Numbers"),
                         _("Show Line Number Margin"), wx.ITEM_CHECK)
-        viewedit.Append(ed_glob.ID_SHOW_WS, _("Show Whitespace") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_WS),
+        viewedit.AppendEx(ed_glob.ID_SHOW_WS, _("Show Whitespace"),
                         _("Show Whitespace Markers"), wx.ITEM_CHECK)
         viewmenu.AppendSubMenu(self._menus['viewedit'], _("Editor"), \
                                _("Toggle Editor View Options"))
         viewfold = self._menus['viewfold'] = EdMenu()
-        viewfold.Append(ed_glob.ID_TOGGLE_FOLD, _("Toggle fold") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLE_FOLD),
+        viewfold.AppendEx(ed_glob.ID_TOGGLE_FOLD, _("Toggle fold"),
                         _("Toggle current fold"))
-        viewfold.Append(ed_glob.ID_TOGGLE_ALL_FOLDS, _("Toggle all folds") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLE_ALL_FOLDS),
+        viewfold.AppendEx(ed_glob.ID_TOGGLE_ALL_FOLDS, _("Toggle all folds"),
                         _("Toggle all folds"))
         viewmenu.AppendSubMenu(self._menus['viewfold'], _("Code Folding"), \
                                _("Code folding toggle actions"))
 
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_PANELIST, _("Pane Navigator") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PANELIST),
+        viewmenu.AppendEx(ed_glob.ID_PANELIST, _("Pane Navigator"),
                         _("View pane selection list"))
-        viewmenu.Append(ed_glob.ID_MAXIMIZE_EDITOR, _("Maximize Editor") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_MAXIMIZE_EDITOR),
+        viewmenu.AppendEx(ed_glob.ID_MAXIMIZE_EDITOR, _("Maximize Editor"),
                         _("Toggle Editor Maximization"))
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_GOTO_LINE, _("&Goto Line") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_LINE),
+        viewmenu.AppendEx(ed_glob.ID_GOTO_LINE, _("&Goto Line"),
                         _("Goto Line Number"))
-        viewmenu.Append(ed_glob.ID_GOTO_MBRACE, _("Goto Matching Brace") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_MBRACE),
+        viewmenu.AppendEx(ed_glob.ID_GOTO_MBRACE, _("Goto Matching Brace"),
                         _("Move caret matching brace"))
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_NEXT_POS, _("Next Position") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEXT_POS),
+        viewmenu.AppendEx(ed_glob.ID_NEXT_POS, _("Next Position"),
                         _("Goto next position in history."))
-        viewmenu.Append(ed_glob.ID_PRE_POS, _("Previous Position") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRE_POS),
+        viewmenu.AppendEx(ed_glob.ID_PRE_POS, _("Previous Position"),
                         _("Goto previous position in history."))
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_NEXT_MARK, _("Next Bookmark") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEXT_MARK),
+        viewmenu.AppendEx(ed_glob.ID_NEXT_MARK, _("Next Bookmark"),
                         _("View Line of Next Bookmark"))
-        viewmenu.Append(ed_glob.ID_PRE_MARK, _("Previous Bookmark") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRE_MARK),
+        viewmenu.AppendEx(ed_glob.ID_PRE_MARK, _("Previous Bookmark"),
                         _("View Line of Previous Bookmark"))
         viewmenu.AppendSeparator()
-        viewmenu.Append(ed_glob.ID_SHOW_SB, ("Status &Bar") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_SB),
+        viewmenu.AppendEx(ed_glob.ID_SHOW_SB, ("Status &Bar"),
                         _("Show Status Bar"), wx.ITEM_CHECK)
-        viewmenu.Append(ed_glob.ID_VIEW_TOOL, _("&Toolbar") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_VIEW_TOOL),
+        viewmenu.AppendEx(ed_glob.ID_VIEW_TOOL, _("&Toolbar"),
                         _("Show Toolbar"), wx.ITEM_CHECK)
 
         # Attach to menubar
@@ -754,65 +683,50 @@ class EdMenuBar(wx.MenuBar):
 
         """
         formatmenu = EdMenu()
-        formatmenu.Append(ed_glob.ID_FONT, _("&Font") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_FONT),
+        formatmenu.AppendEx(ed_glob.ID_FONT, _("&Font"),
                           _("Change Font Settings"))
         formatmenu.AppendSeparator()
-        formatmenu.Append(ed_glob.ID_TOGGLECOMMENT, _("Toggle Comment") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TOGGLECOMMENT),
+        formatmenu.AppendEx(ed_glob.ID_TOGGLECOMMENT, _("Toggle Comment"),
                           _("Toggle comment on the selected line(s)"))
         formatmenu.AppendSeparator()
 
-        formatmenu.Append(ed_glob.ID_INDENT, _("Indent Lines") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_INDENT),
+        formatmenu.AppendEx(ed_glob.ID_INDENT, _("Indent Lines"),
                           _("Indent the selected lines"))
-        formatmenu.Append(ed_glob.ID_UNINDENT, _("Unindent Lines") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_UNINDENT),
+        formatmenu.AppendEx(ed_glob.ID_UNINDENT, _("Unindent Lines"),
                           _("Unindent the selected lines"))
         formatmenu.AppendSeparator()
-        formatmenu.Append(ed_glob.ID_TO_UPPER,  _("Uppercase") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TO_UPPER),
+        formatmenu.AppendEx(ed_glob.ID_TO_UPPER,  _("Uppercase"),
                           _("Convert selected text to all uppercase letters"))
-        formatmenu.Append(ed_glob.ID_TO_LOWER,  _("Lowercase") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TO_LOWER),
+        formatmenu.AppendEx(ed_glob.ID_TO_LOWER,  _("Lowercase"),
                           _("Convert selected text to all lowercase letters"))
         formatmenu.AppendSeparator()
-        formatmenu.Append(ed_glob.ID_USE_SOFTTABS,
-                          _("Use Soft Tabs") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_USE_SOFTTABS),
+        formatmenu.AppendEx(ed_glob.ID_USE_SOFTTABS, _("Use Soft Tabs"),
                           _("Insert spaces instead of tab "
                             "characters with tab key"), wx.ITEM_CHECK)
-        formatmenu.Append(ed_glob.ID_WORD_WRAP, _("Word Wrap") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_WORD_WRAP),
+        formatmenu.AppendEx(ed_glob.ID_WORD_WRAP, _("Word Wrap"),
                           _("Wrap Text Horizontally"), wx.ITEM_CHECK)
         formatmenu.AppendSeparator()
 
         # Whitespace submenu
         whitespace = self._menus['whitespaceformat'] = EdMenu()
-        whitespace.Append(ed_glob.ID_SPACE_TO_TAB, _("Spaces to Tabs") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_SPACE_TO_TAB),
+        whitespace.AppendEx(ed_glob.ID_SPACE_TO_TAB, _("Spaces to Tabs"),
                           _("Convert spaces to tabs in selected/all text"))
-        whitespace.Append(ed_glob.ID_TAB_TO_SPACE, _("Tabs to Spaces") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TAB_TO_SPACE),
+        whitespace.AppendEx(ed_glob.ID_TAB_TO_SPACE, _("Tabs to Spaces"),
                           _("Convert tabs to spaces in selected/all text"))
-        whitespace.Append(ed_glob.ID_TRIM_WS, _("Trim Trailing Whitespace") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_TRIM_WS),
+        whitespace.AppendEx(ed_glob.ID_TRIM_WS, _("Trim Trailing Whitespace"),
                           _("Remove trailing whitespace"))
         formatmenu.AppendMenu(ed_glob.ID_WS_FORMAT, _("Whitespace"), whitespace,
                               _("Whitespace formating commands"))
 
         # Line EOL formatting submenu
         lineformat = self._menus['lineformat'] = EdMenu()
-        lineformat.Append(ed_glob.ID_EOL_MAC, _("Old Macintosh (\\r)") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_MAC),
+        lineformat.AppendEx(ed_glob.ID_EOL_MAC, _("Old Macintosh (\\r)"),
                           _("Format all EOL characters to %s Mode") % \
                           _(u"Old Macintosh (\\r)"), wx.ITEM_CHECK)
-        lineformat.Append(ed_glob.ID_EOL_UNIX, _("Unix (\\n)") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_UNIX),
+        lineformat.AppendEx(ed_glob.ID_EOL_UNIX, _("Unix (\\n)"),
                           _("Format all EOL characters to %s Mode") % \
                           _(u"Unix (\\n)"), wx.ITEM_CHECK)
-        lineformat.Append(ed_glob.ID_EOL_WIN, _("Windows (\\r\\n)") + \
-                          EdMenuBar.keybinder.GetBinding(ed_glob.ID_EOL_WIN),
+        lineformat.AppendEx(ed_glob.ID_EOL_WIN, _("Windows (\\r\\n)"),
                           _("Format all EOL characters to %s Mode") % \
                           _("Windows (\\r\\n)"), wx.ITEM_CHECK)
         formatmenu.AppendMenu(ed_glob.ID_EOL_MODE, _("EOL Mode"), lineformat,
@@ -828,21 +742,16 @@ class EdMenuBar(wx.MenuBar):
 
         """
         settingsmenu = EdMenu()
-        settingsmenu.Append(ed_glob.ID_AUTOCOMP, _("Auto-Completion") + \
-                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_AUTOCOMP),
+        settingsmenu.AppendEx(ed_glob.ID_AUTOCOMP, _("Auto-Completion"),
                             _("Use Auto Completion when available"), wx.ITEM_CHECK)
-        settingsmenu.Append(ed_glob.ID_AUTOINDENT, _("Auto-Indent") + \
-                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_AUTOINDENT),
+        settingsmenu.AppendEx(ed_glob.ID_AUTOINDENT, _("Auto-Indent"),
                             _("Toggle Auto-Indentation functionality"),
                             wx.ITEM_CHECK)
-        settingsmenu.Append(ed_glob.ID_BRACKETHL, _("Bracket Highlighting") + \
-                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_BRACKETHL),
+        settingsmenu.AppendEx(ed_glob.ID_BRACKETHL, _("Bracket Highlighting"),
                             _("Highlight Brackets/Braces"), wx.ITEM_CHECK)
-        settingsmenu.Append(ed_glob.ID_FOLDING, _("Code Folding") + \
-                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_FOLDING),
+        settingsmenu.AppendEx(ed_glob.ID_FOLDING, _("Code Folding"),
                             _("Toggle Code Folding"), wx.ITEM_CHECK)
-        settingsmenu.Append(ed_glob.ID_SYNTAX, _("Syntax Highlighting") + \
-                            EdMenuBar.keybinder.GetBinding(ed_glob.ID_SYNTAX),
+        settingsmenu.AppendEx(ed_glob.ID_SYNTAX, _("Syntax Highlighting"),
                             _("Color Highlight Code Syntax"), wx.ITEM_CHECK)
 
         # Lexer Menu Appended later by main frame
@@ -855,14 +764,11 @@ class EdMenuBar(wx.MenuBar):
 
         """
         toolsmenu = EdMenu()
-        toolsmenu.Append(ed_glob.ID_COMMAND, _("Editor Command") + \
-                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_COMMAND),
+        toolsmenu.AppendEx(ed_glob.ID_COMMAND, _("Editor Command"),
                          _("Goto command buffer"))
-        toolsmenu.Append(ed_glob.ID_PLUGMGR, _("Plugin Manager") + \
-                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_PLUGMGR),
+        toolsmenu.AppendEx(ed_glob.ID_PLUGMGR, _("Plugin Manager"),
                          _("Manage, Download, and Install plugins"))
-        toolsmenu.Append(ed_glob.ID_STYLE_EDIT, _("Style Editor") + \
-                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_STYLE_EDIT),
+        toolsmenu.AppendEx(ed_glob.ID_STYLE_EDIT, _("Style Editor"),
                          _("Edit the way syntax is highlighted"))
         toolsmenu.AppendSeparator()
 #         macro = EdMenu()
@@ -883,21 +789,16 @@ class EdMenuBar(wx.MenuBar):
 
         """
         helpmenu = EdMenu()
-        helpmenu.Append(ed_glob.ID_ABOUT, _("&About") + u"..." + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_ABOUT),
+        helpmenu.AppendEx(ed_glob.ID_ABOUT, _("&About..."),
                         _("About") + u"...")
-        helpmenu.Append(ed_glob.ID_HOMEPAGE, _("Project Homepage") + u"..." + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_HOMEPAGE),
+        helpmenu.AppendEx(ed_glob.ID_HOMEPAGE, _("Project Homepage..."),
                         _("Visit the project homepage %s") % ed_glob.HOME_PAGE)
-        helpmenu.Append(ed_glob.ID_DOCUMENTATION,
-                        _("Online Documentation") + u"..." + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_DOCUMENTATION),
+        helpmenu.AppendEx(ed_glob.ID_DOCUMENTATION,
+                        _("Online Documentation..."),
                         _("Online project documentation and help guides"))
-        helpmenu.Append(ed_glob.ID_TRANSLATE, _("Translate Editra") + u"..." + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_TRANSLATE),
+        helpmenu.AppendEx(ed_glob.ID_TRANSLATE, _("Translate Editra..."),
                         _("Editra translations project"))
-        helpmenu.Append(ed_glob.ID_CONTACT, _("Feedback") + \
-                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_CONTACT),
+        helpmenu.AppendEx(ed_glob.ID_CONTACT, _("Feedback"),
                         _("Send bug reports and suggestions"))
 
         # Attach to menubar
