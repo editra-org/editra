@@ -56,6 +56,30 @@ OPERATORS = "./\?[]{}<>!@#$%^&*():=-+\"';,"
 
 #-------------------------------------------------------------------------#
 
+def jumpaction(func):
+    """Decorator method to notify clients about jump actions"""
+    def WrapJump(*args, **kwargs):
+        stc = args[0]
+        pos = stc.GetCurrentPos()
+        line = stc.GetCurrentLine()
+        func(*args, **kwargs)
+        cpos = stc.GetCurrentPos()
+        cline = stc.GetCurrentLine()
+        fname = stc.GetFileName()
+
+        mdata = dict(fname=fname,
+                     prepos=pos, preline=line,
+                     lnum=cline, pos=cpos)
+        tlw = stc.GetTopLevelParent()
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_POS_JUMPED, mdata, tlw.GetId()) 
+
+    WrapJump.__name__ = func.__name__
+    WrapJump.__doc__ = func.__doc__
+    return WrapJump
+
+
+#-------------------------------------------------------------------------#
+
 class EditraStc(ed_basestc.EditraBaseStc):
     """Defines a styled text control for editing text
     @summary: Subclass of wx.stc.StyledTextCtrl and L{ed_style.StyleMgr}.
@@ -428,6 +452,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             column = linelen
         self.GotoPos(lstart + column)
 
+    @jumpaction
     def GotoLine(self, line):
         """Move caret to begining given line number
         @param line: line to go to (int)
@@ -445,13 +470,32 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetYCaretPolicy(wx.stc.STC_CARET_EVEN, 0)
         self.PostPositionEvent()
 
+    @jumpaction
     def GotoPos(self, pos):
         """Override StyledTextCtrl.GotoPos
-        @param pos: position in buffer to move carat to (int)
+        @param pos: position in buffer to move caret to (int)
 
         """
         super(EditraStc, self).GotoPos(pos)
         self.PostPositionEvent()
+
+    def SetCaretPos(self, pos):
+        """Set the caret position without posting jump events
+        @param pos: position to go to
+
+        """
+        super(EditraStc, self).GotoPos(pos)
+        self.PostPositionEvent()
+
+    def GotoIndentPos(self, line=None):
+        """Move the caret to the end of the indentation
+        on the given line.
+        @param line: line to go to
+
+        """
+        if line is None:
+            line = self.GetCurrentLine()
+        self.GotoPos(self.GetLineIndentPosition(line))
 
     def SetCurrentCol(self, column):
         """Set the current column position on the currently line
@@ -466,16 +510,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
         if column > linelen:
             column = linelen
         self.SetCurrentPos(lstart + column)
-
-    def GotoIndentPos(self, line=None):
-        """Move the caret to the end of the indentation
-        on the given line.
-        @param line: line to go to
-
-        """
-        if line is None:
-            line = self.GetCurrentLine()
-        self.GotoPos(self.GetLineIndentPosition(line))
 
     def DeleteForward(self):
         """Delete the selection, or if there is no selection, then
@@ -643,8 +677,10 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """
         evt.Skip()
         self.PostPositionEvent()
+        tlw = self.GetTopLevelParent()
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_KEYUP,
-                           (evt.GetPositionTuple(), evt.GetKeyCode()))
+                           (evt.GetPositionTuple(), evt.GetKeyCode()),
+                           tlw.GetId())
 
     def PostPositionEvent(self):
         """Post an event to update the status of the line/column"""

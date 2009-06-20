@@ -157,6 +157,12 @@ EDMSG_UI_STC_KEYUP = EDMSG_UI_STC_ALL + ('keyup',)
 # context == MainWindows ID
 EDMSG_UI_STC_POS_CHANGED = EDMSG_UI_STC_ALL + ('position',)
 
+# msgdata == dict(fname=fname,
+#                 prepos=pos, preline=line,
+#                 lnum=cline, pos=cpos)
+# context == MainWIndow ID
+EDMSG_UI_STC_POS_JUMPED = EDMSG_UI_STC_ALL + ('jump',)
+
 # Editor control size restored (msgdata == None)
 EDMSG_UI_STC_RESTORE = EDMSG_UI_STC_ALL + ('restore',)
 

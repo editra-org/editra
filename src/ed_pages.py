@@ -45,6 +45,8 @@ ID_IDLE_TIMER = wx.NewId()
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 
+#--------------------------------------------------------------------------#
+
 class EdPages(FNB.FlatNotebook):
     """Editras editor buffer botebook
     @todo: allow for tab styles to be configurable (maybe)
@@ -109,6 +111,7 @@ class EdPages(FNB.FlatNotebook):
         # Message handlers
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_NOTEBOOK)
+        ed_msg.Subscribe(self.OnUpdatePosCache, ed_msg.EDMSG_UI_STC_POS_JUMPED)
         ed_msg.RegisterCallback(self.OnDocPointerRequest, ed_msg.EDREQ_DOCPOINTER)
 
         # Add a blank page
@@ -119,6 +122,7 @@ class EdPages(FNB.FlatNotebook):
 
     def __del__(self):
         ed_msg.Unsubscribe(self.OnThemeChanged)
+        ed_msg.Unsubscribe(self.OnUpdatePosCache)
         ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
 
     #---- Function Definitions ----#
@@ -272,7 +276,10 @@ class EdPages(FNB.FlatNotebook):
                  (ed_glob.ID_FIND_REPLACE, self._searchctrl.OnShowFindDlg),
                  (ed_glob.ID_FIND_NEXT, self._searchctrl.OnFind),
                  (ed_glob.ID_FIND_PREVIOUS, self._searchctrl.OnFind),
-                 (ed_glob.ID_FIND_SELECTED, self._searchctrl.OnFindSelected)]
+                 (ed_glob.ID_FIND_SELECTED, self._searchctrl.OnFindSelected),
+                 (ed_glob.ID_NEXT_POS, self.OnNavigateToPos),
+                 (ed_glob.ID_PRE_POS, self.OnNavigateToPos)]
+
         return rlist
 
     def GetUiHandlers(self):
@@ -281,7 +288,9 @@ class EdPages(FNB.FlatNotebook):
 
         """
         return [(ed_glob.ID_FIND_NEXT, self._searchctrl.OnUpdateFindUI),
-                (ed_glob.ID_FIND_PREVIOUS, self._searchctrl.OnUpdateFindUI)]
+                (ed_glob.ID_FIND_PREVIOUS, self._searchctrl.OnUpdateFindUI),
+                (ed_glob.ID_NEXT_POS, self.OnUpdateNaviUI),
+                (ed_glob.ID_PRE_POS, self.OnUpdateNaviUI)]
 
     def InsertPage(self, index, page, text, select=True, imageId=-1):
         """Insert a page into the notebook"""
@@ -450,6 +459,46 @@ class EdPages(FNB.FlatNotebook):
         else:
             evt.Skip()
 
+    def OnNavigateToPos(self, evt):
+        """Handle buffer position history navigation events"""
+        e_id = evt.GetId()
+        fname, pos = (None, None)
+        cname = self.control.GetFileName()
+        cpos = self.control.GetCurrentPos()
+        if e_id == ed_glob.ID_NEXT_POS:
+            if self.DocMgr.CanNavigateNext():
+                fname, pos = self.DocMgr.GetNextNaviPos()
+                if (fname, pos) == (cname, cpos):
+                    fname, pos = (None, None)
+                    tmp = self.DocMgr.GetNextNaviPos()
+                    if tmp is not None:
+                        fname, pos = tmp
+        elif e_id == ed_glob.ID_PRE_POS:
+            if self.DocMgr.CanNavigatePrev():
+                fname, pos = self.DocMgr.GetPreviousNaviPos()
+                if (fname, pos) == (cname, cpos):
+                    fname, pos = (None, None)
+                    tmp = self.DocMgr.GetPreviousNaviPos()
+                    if tmp is not None:
+                        fname, pos = tmp
+        else:
+            evt.Skip()
+            return
+
+        ctrl = self.FindBuffer(fname)
+        if ctrl is None:
+            # Open the file in the editor
+            if fname is not None:
+                self.OpenPage(ebmlib.GetPathName(fname),
+                              ebmlib.GetFileName(fname))
+                self.control.SetCaretPos(pos)
+        else:
+            # Raise page to top and goto position
+            pages = [self.GetPage(page) for page in xrange(self.GetPageCount())]
+            idx = pages.index(ctrl)
+            self.ChangePage(idx)
+            ctrl.SetCaretPos(pos)
+
     def OnTabMenu(self, evt):
         """Show the tab context menu"""
         # Destroy any existing menu
@@ -471,6 +520,30 @@ class EdPages(FNB.FlatNotebook):
 
         """
         self.UpdateAllImages()
+
+    def OnUpdatePosCache(self, msg):
+        """Update the position cache for buffer position changes
+        @param msg: message data
+
+        """
+        if self._ses_load:
+            return
+
+        tlw = self.GetTopLevelParent()
+        if tlw.GetId() == msg.GetContext():
+            data = msg.GetData()
+            self.DocMgr.AddNaviPosition(data['fname'], data['prepos'])
+            self.DocMgr.AddNaviPosition(data['fname'], data['pos'])
+
+    def OnUpdateNaviUI(self, evt):
+        """UpdateUI handler for position navigator"""
+        e_id = evt.GetId()
+        if e_id == ed_glob.ID_NEXT_POS:
+            evt.Enable(self.DocMgr.CanNavigateNext())
+        elif e_id == ed_glob.ID_PRE_POS:
+            evt.Enable(self.DocMgr.CanNavigatePrev())
+        else:
+            evt.Skip()
 
     def OpenDocPointer(self, ptr, doc, title=u''):
         """Open a page using an stc document poiner
@@ -494,7 +567,7 @@ class EdPages(FNB.FlatNotebook):
         path = nbuff.GetFileName()
         if Profile_Get('SAVE_POS'):
             pos = self.DocMgr.GetPos(path)
-            nbuff.GotoPos(pos)
+            nbuff.SetCaretPos(pos)
             nbuff.ScrollToColumn(0)
 
         if title:
@@ -706,7 +779,7 @@ class EdPages(FNB.FlatNotebook):
         """Perform post file open actions"""
         if Profile_Get('SAVE_POS'):
             pos = self.DocMgr.GetPos(self.control.GetFileName())
-            self.control.GotoPos(pos)
+            self.control.SetCaretPos(pos)
             self.control.ScrollToColumn(0)
 
         ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED,
@@ -807,6 +880,18 @@ class EdPages(FNB.FlatNotebook):
             if fpath == ctrl.GetFileName():
                 return True
         return False
+
+    def FindBuffer(self, fpath):
+        """Find the buffer containing the given file
+        @param fpath: full path of file to look for
+        @return: EdStc or None
+        @todo: handle matching based on the buffer control itself
+
+        """
+        for ctrl in self.GetTextControls():
+            if fpath == ctrl.GetFileName():
+                return ctrl
+        return None
 
     #---- Event Handlers ----#
     def OnDrop(self, files):

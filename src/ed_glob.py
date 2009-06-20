@@ -43,7 +43,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_REVERT_FILE', 'ID_RELOAD_ENC', 'ID_DOCPROP', 'ID_PASTE_AFTER',
             'ID_COLUMN_MODE', 'ID_PANELIST', 'ID_MAXIMIZE_EDITOR',
             'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS',
-            'ID_SAVE_SESSION', 'ID_LOAD_SESSION']
+            'ID_SAVE_SESSION', 'ID_LOAD_SESSION', 'ID_NEXT_POS', 'ID_PRE_POS']
 
 #---- Project Info ----#
 # The project info was moved to another module so it could be accessed
@@ -197,6 +197,8 @@ ID_GOTO_LINE     = wx.NewId()
 ID_GOTO_MBRACE   = wx.NewId()
 ID_TOGGLE_FOLD   = wx.NewId()
 ID_TOGGLE_ALL_FOLDS = wx.NewId()
+ID_NEXT_POS      = wx.NewId()
+ID_PRE_POS       = wx.NewId()
 ID_NEXT_MARK     = wx.ID_FORWARD
 ID_PRE_MARK      = wx.ID_BACKWARD
 ID_MAXIMIZE_EDITOR = wx.NewId()

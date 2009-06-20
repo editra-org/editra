@@ -723,6 +723,13 @@ class EdMenuBar(wx.MenuBar):
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_GOTO_MBRACE),
                         _("Move caret matching brace"))
         viewmenu.AppendSeparator()
+        viewmenu.Append(ed_glob.ID_NEXT_POS, _("Next Position") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEXT_POS),
+                        _("Goto next position in history."))
+        viewmenu.Append(ed_glob.ID_PRE_POS, _("Previous Position") + \
+                        EdMenuBar.keybinder.GetBinding(ed_glob.ID_PRE_POS),
+                        _("Goto previous position in history."))
+        viewmenu.AppendSeparator()
         viewmenu.Append(ed_glob.ID_NEXT_MARK, _("Next Bookmark") + \
                         EdMenuBar.keybinder.GetBinding(ed_glob.ID_NEXT_MARK),
                         _("View Line of Next Bookmark"))
@@ -1057,6 +1064,8 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_GOTO_LINE : (u"Ctrl", u"G"),
                      ed_glob.ID_GOTO_MBRACE : (u"Ctrl", u"Shift", u"B"),
                      ed_glob.ID_TOGGLE_FOLD : (u"Ctrl", u"Shift", u"T"),
+                     ed_glob.ID_NEXT_POS : (u"Ctrl", u"Shift", u">"),
+                     ed_glob.ID_PRE_POS : (u"Ctrl", u"Shift", u"<"),
                      ed_glob.ID_NEXT_MARK : (u"Alt", u"Right"), # Win/Linux
                      ed_glob.ID_PRE_MARK : (u"Alt", u"Left"), # Win/Linux
                      ed_glob.ID_SHOW_SHELF : (u"Ctrl", u"Alt", u"S"),
@@ -1075,7 +1084,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_LAUNCH_LAST : (u"Shift", u"F5")
                      }
 
-# Set some platform specific keybindigs
+# Set some platform specific keybindings
 if wx.Platform == '__WXMAC__':
     _DEFAULT_BINDING[ed_glob.ID_NEXT_MARK] = (u"Ctrl", u"Down")
     _DEFAULT_BINDING[ed_glob.ID_PRE_MARK] = (u"Ctrl", u"Up")
