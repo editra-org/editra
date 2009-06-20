@@ -107,14 +107,35 @@ class HistoryCacheTest(unittest.TestCase):
         self.cache.GetPreviousItem()
         self.assertFalse(self.cache.HasPrevious())
 
+    def testPeek(self):
+        """Test peeking at the next/prev item in the cache."""
+        self.cache.Clear()
+        self.assertEquals(self.cache.PeekNext(), None)
+        self.assertEquals(self.cache.PeekNext(), None)
+        self.assertEquals(self.cache.PeekPrevious(), None)
+        self.assertEquals(self.cache.PeekPrevious(), None)
+        self.cache.PutItem("hello")
+        self.cache.PutItem("hello1")
+        self.assertEquals(self.cache.PeekPrevious(), "hello1")
+        self.assertEquals(self.cache.PeekNext(), None)
+        self.cache.PutItem("hello2")
+        self.cache.PutItem("hello3")
+        self.assertEquals(self.cache.PeekPrevious(), "hello3")
+        self.assertEquals(self.cache.PeekPrevious(), "hello3")
+        self.cache.GetPreviousItem() # move back one position
+        self.assertEquals(self.cache.PeekPrevious(), "hello2")
+        self.assertEquals(self.cache.PeekPrevious(), "hello2")
+        self.assertEquals(self.cache.PeekNext(), "hello3")
+        self.assertEquals(self.cache.PeekNext(), "hello3")
+
     def testPutItem(self):
-       """Test putting an item in the cache"""
-       self.cache.Clear()
-       self.cache.PutItem("hello")
-       self.assertTrue(self.cache.GetSize() == 1)
-       self.cache.PutItem("hello2")
-       self.cache.PutItem("hello3")
-       self.assertTrue(self.cache.GetSize() == 3)
+        """Test putting an item in the cache"""
+        self.cache.Clear()
+        self.cache.PutItem("hello")
+        self.assertTrue(self.cache.GetSize() == 1)
+        self.cache.PutItem("hello2")
+        self.cache.PutItem("hello3")
+        self.assertTrue(self.cache.GetSize() == 3)
 
     def testSetMaxSize(self):
         """Test setting the max size of the cache"""

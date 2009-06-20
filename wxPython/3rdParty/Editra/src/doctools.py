@@ -65,6 +65,12 @@ class DocPositionMgr(object):
         @param pos: position
 
         """
+        # Don't put two identical positions in the cache next to eachother
+        pre = cls._poscache.PeekPrevious()
+        next = cls._poscache.PeekNext()
+        if (fname, pos) in (pre, next):
+            return
+
         cls._poscache.PutItem((fname, pos))
 
     def AddRecord(self, vals):
@@ -80,12 +86,37 @@ class DocPositionMgr(object):
         else:
             return False
 
+    @classmethod
+    def CanNavigateNext(cls):
+        """Are there more cached navigation positions?
+        @return: bool
+
+        """
+        return cls._poscache.HasNext()
+
+    @classmethod
+    def CanNavigatePrev(cls):
+        """Are there previous cached navigation positions?
+        @return: bool
+
+        """
+        return cls._poscache.HasPrevious()
+
+    @classmethod
+    def FlushNaviCache(cls):
+        """Clear the navigation cache"""
+        cls._poscache.Clear()
+
+    @classmethod
+    def GetNaviCacheSize(cls):
+        return cls._poscache.GetSize()
+
     def GetBook(self):
         """Returns the current book used by this object
         @return: path to book used by this manager
 
         """
-        return self._book
+        return self._book        
 
     @classmethod
     def GetNextNaviPos(cls, fname=None):
@@ -175,6 +206,21 @@ class DocPositionMgr(object):
 
             util.Log("[docpositionmgr][info] successfully loaded book")
             return True
+
+    @classmethod
+    def PeekNavi(cls, pre=False):
+        """Peek into the navigation cache
+        @param pre: bool
+
+        """
+        if pre:
+            if cls._poscache.HasPrevious():
+                print "DO PREVIOUS!!"
+                return cls._poscache.PeekPrevious()
+        else:
+            if cls._poscache.HasNext():
+                return cls._poscache.PeekNext()
+        return None, None
 
     def WriteBook(self):
         """Writes the collection of files=pos to the config file

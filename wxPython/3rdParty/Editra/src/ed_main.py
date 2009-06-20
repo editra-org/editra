@@ -1110,7 +1110,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                          ID_TRIM_WS, ID_SHOW_EDGE, ID_MACRO_START,
                          ID_MACRO_STOP, ID_MACRO_PLAY, ID_TO_LOWER,
                          ID_TO_UPPER, ID_USE_SOFTTABS,
-                         ID_GOTO_MBRACE, ID_HLCARET_LINE, ID_REVERT_FILE
+                         ID_GOTO_MBRACE, ID_HLCARET_LINE, ID_REVERT_FILE,
                          ])
         menu_ids.extend(active_only)
 

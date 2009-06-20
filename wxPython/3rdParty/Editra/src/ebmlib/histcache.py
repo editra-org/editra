@@ -98,7 +98,8 @@ class HistoryCache(object):
         @return: bool
 
         """
-        more = self.cpos >= 0
+        llen = len(self._list)
+        more = ((self.cpos >= 0) and llen and (self.cpos < llen))
         return more
 
     def HasNext(self):
@@ -109,8 +110,30 @@ class HistoryCache(object):
         if self.cpos == -1 and len(self._list):
             more = True
         else:
-            more = self.cpos >= 0 and self.cpos < len(self._list)
+            more = self.cpos >= 0 and self.cpos < (len(self._list) - 1)
         return more
+
+    def PeekNext(self):
+        """Return the next item in the cache without modifing the
+        currently managed position.
+        @return: cache object
+
+        """
+        if self.HasNext():
+            return self._list[self.cpos+1]
+        else:
+            return None
+
+    def PeekPrevious(self):
+        """Return the previous item in the cache without modifing the
+        currently managed position.
+        @return: cache object
+
+        """
+        if self.HasPrevious():
+            return self._list[self.cpos]
+        else:
+            return None
 
     def PutItem(self, item):
         """Put an item on the top of the cache

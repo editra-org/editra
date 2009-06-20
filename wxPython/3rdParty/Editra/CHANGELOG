@@ -19,6 +19,8 @@ NEWS:
 NEW: [features/improvements]
 +Add automatic file backup option to periodically backup buffer contents.
 +Add Search/Replace in selection option to find dialog.
++Remembers recent caret positions between jumps and allows for quick navigation
+between them.
 +Patch from (Hasan Aljudy) to show cwd and add e! command to commandbar
 +Automatically show path completion list when doing an e or cd command.
 +Display the documents EOL mode in the status bar.

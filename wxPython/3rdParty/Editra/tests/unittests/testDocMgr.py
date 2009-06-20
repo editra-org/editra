@@ -52,11 +52,27 @@ class DocMgrTest(unittest.TestCase):
         self.assertEqual(self.mgr.GetPos('fakefile.txt'), 0)
 
     #-- Test Position Navigator cache --#
+    def testCanNavigate(self):
+        """Test CanNavigateNext/Prev functions"""
+        self.mgr.FlushNaviCache()
+        self.assertFalse(self.mgr.CanNavigatePrev())
+        self.assertFalse(self.mgr.CanNavigateNext())
+        self.mgr.AddNaviPosition('test4.py', 200)
+        self.assertTrue(self.mgr.CanNavigatePrev())
+        self.mgr.AddNaviPosition('test5.py', 83)
+        self.mgr.AddNaviPosition('test5.py', 45)
+        self.mgr.AddNaviPosition('test6.py', 998)
+        self.assertFalse(self.mgr.CanNavigateNext())
+        self.mgr.GetPreviousNaviPos()
+        self.mgr.GetPreviousNaviPos()
+        self.assertTrue(self.mgr.CanNavigateNext())
+
     def testGetNextNaviPos(self):
         """Test Getting the next position in the history and retrieving
         items from the navigator cache
 
         """
+        self.mgr.FlushNaviCache()
         self.mgr.AddNaviPosition('test4.py', 200)
         self.mgr.AddNaviPosition('test5.py', 83)
         self.mgr.AddNaviPosition('test5.py', 45)
@@ -85,6 +101,7 @@ class DocMgrTest(unittest.TestCase):
         items from the navigator cache
 
         """
+        self.mgr.FlushNaviCache()
         self.mgr.AddNaviPosition('test4.py', 200)
         self.mgr.AddNaviPosition('test5.py', 83)
         self.mgr.AddNaviPosition('test5.py', 45)
