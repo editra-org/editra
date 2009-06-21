@@ -17,7 +17,8 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = [ 'HistoryCache', 'HIST_CACHE_UNLIMITED']
+__all__ = [ 'HistoryCache', 'HIST_CACHE_UNLIMITED',
+            'CycleCache']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -154,3 +155,93 @@ class HistoryCache(object):
         assert max_size > 0 or max_size == 1, "Invalid max size"
         self.max_size = max_size
         self._Resize()
+
+#-----------------------------------------------------------------------------#
+
+class CycleCache(object):
+    """A simple circular cache. All items are added to the end of the cache
+    regardless of the current reference position. As items are accessed from
+    the cache the cache reference pointer is incremeneted, if it passes the
+    end it will go back to the beginning.
+
+    """
+    def __init__(self, size):
+        """Initialize the cache.
+        @param size: cache size
+
+        """
+        object.__init__(self)
+
+        # Attributes
+        self._list = list()
+        self._cpos = -1
+        self._size = size
+
+    def __len__(self):
+        return len(self._list)
+
+    def _NextIndex(self):
+        """Get the next index in the cache
+        @return: int
+
+        """
+        idx = self._cpos 
+        idx -= 1
+        if abs(idx) > len(self._list):
+            idx = -1
+        return idx
+
+    def Clear(self):
+        """Clear the cache"""
+        del self._list
+        self._list = list()
+
+    def GetCurrentSize(self):
+        """Get the size of the cache
+        @return: int
+
+        """
+        return len(self._list)
+
+    def GetNext(self):
+        """Get the next item in the cache and increment the
+        current position.
+        @return: object
+
+        """
+        item = self._list[self._cpos]
+        self._cpos = self._NextIndex()
+        return item
+
+    def PeekNext(self):
+        """Look the next item in the cache
+        @return: object
+
+        """
+        item = self._list[self._cpos]
+        return item
+
+    def PeekPrev(self):
+        """Look the next item in the cache
+        @return: object
+
+        """
+        idx = self._cpos + 1
+        if idx == 0:
+            idx = -1 * len(self._list)
+        item = self._list[idx]
+        return item
+
+    def PutItem(self, item):
+        """Put an item in the cache
+        @param item: object
+
+        """
+        llen = len(self._list)
+        if llen and (llen == self._size):
+            del self._list[0]
+        self._list.append(item)
+
+    def Reset(self):
+        """Reset the list reference pointer"""
+        self._cpos = -1
