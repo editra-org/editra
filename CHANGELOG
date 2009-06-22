@@ -9,14 +9,24 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.4.xx
+VERSION 0.4.95
 DATE 0x/xx/2009
 27th Alpha Release
 
 NEWS:
 
+Had planned to wait till 0.5 was ready before doing another release but there
+have been too many good enhancements made due to all the great patches submitted
+during this cycle to wait for the last push to 0.5 to complete before releasing.
+
+Some of the main new features include buffer syncronziation with the codebrowser
+plugin, completely re-worked vi emulation support, position history, and
+clipboard ring. See below for more detailed list of changes.
+
 
 NEW: [features/improvements]
++Clipboard history feature, can now cycle through recent clipboard entries when
+pasting text into the document.
 +Add automatic file backup option to periodically backup buffer contents.
 +Add Search/Replace in selection option to find dialog.
 +Remembers recent caret positions between jumps and allows for quick navigation

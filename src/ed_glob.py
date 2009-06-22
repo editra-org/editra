@@ -43,7 +43,8 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_REVERT_FILE', 'ID_RELOAD_ENC', 'ID_DOCPROP', 'ID_PASTE_AFTER',
             'ID_COLUMN_MODE', 'ID_PANELIST', 'ID_MAXIMIZE_EDITOR',
             'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS',
-            'ID_SAVE_SESSION', 'ID_LOAD_SESSION', 'ID_NEXT_POS', 'ID_PRE_POS']
+            'ID_SAVE_SESSION', 'ID_LOAD_SESSION', 'ID_NEXT_POS', 'ID_PRE_POS',
+            'ID_CYCLE_CLIPBOARD']
 
 #---- Project Info ----#
 # The project info was moved to another module so it could be accessed
@@ -114,6 +115,7 @@ ID_REDO          = wx.ID_REDO
 ID_CUT           = wx.ID_CUT
 ID_COPY          = wx.ID_COPY
 ID_PASTE         = wx.ID_PASTE
+ID_CYCLE_CLIPBOARD = wx.NewId()
 ID_PASTE_AFTER   = wx.NewId()
 ID_SELECTALL     = wx.ID_SELECTALL
 ID_COLUMN_MODE   = wx.NewId()

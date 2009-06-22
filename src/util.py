@@ -233,6 +233,28 @@ class DropTargetFT(wx.PyDropTarget):
 
 #---- End FileDropTarget ----#
 
+class EdClipboard(ebmlib.CycleCache):
+    def IsAtIndex(self, txt):
+        """Is the passed in phrase at the current cycle index in the
+        cache. Used to check if index should be reset or to continue in
+        the cycle.
+        @param txt: selected text
+
+        """
+        pre = self.PeekPrev()
+        next = self.PeekNext()
+        if txt in (pre, next):
+            return True
+        else:
+            return False
+
+    def Put(self, txt):
+        """Put some text in the clipboard"""
+        pre = self.PeekPrev()
+        next = self.PeekNext()
+        if len(txt) and txt not in (pre, next):
+            self.PutItem(txt)
+
 #---- Misc Common Function Library ----#
 # Used for holding the primary selection on mac/msw
 FAKE_CLIPBOARD = None

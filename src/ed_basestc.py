@@ -575,6 +575,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         return (self.GetCurrentLine() + 1, self.GetColumn(self.GetCurrentPos()))
 
+    GetRange = wx.stc.StyledTextCtrl.GetTextRange
+
     def IsColumnMode(self):
         """Is the buffer in column edit mode
         @return: bool
