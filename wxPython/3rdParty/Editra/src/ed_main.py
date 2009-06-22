@@ -59,6 +59,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     @todo: modularize the event handling more (pubsub?)
 
     """
+    # Clipboard ring is limited to 25, why? Because any more is a waste of
+    # memory and an inefficient waste of your time to cyle through.
+    CLIPBOARD = util.EdClipboard(25)
     PRINTER = None
 
     def __init__(self, parent, id_, wsize, title):
@@ -174,6 +177,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
                                        # Edit Menu
                                        (ID_PASTE_AFTER, self.DispatchToControl),
+                                       (ID_CYCLE_CLIPBOARD, self.DispatchToControl),
                                        (ID_COLUMN_MODE, self.DispatchToControl),
                                        (ID_TOGGLE_FOLD, self.DispatchToControl),
                                        (ID_TOGGLE_ALL_FOLDS, self.DispatchToControl),
@@ -221,6 +225,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      (ID_CUT, self.OnUpdateClipboardUI),
                                      (ID_PASTE, self.OnUpdateClipboardUI),
                                      (ID_PASTE_AFTER, self.OnUpdateClipboardUI),
+                                     (ID_CYCLE_CLIPBOARD, self.OnUpdateClipboardUI),
                                      (ID_UNDO, self.OnUpdateClipboardUI),
                                      (ID_REDO, self.OnUpdateClipboardUI),
                                      (ID_COLUMN_MODE, self.OnUpdateClipboardUI),
@@ -1079,27 +1084,50 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_SELECTALL, ID_UNDO, ID_REDO, ID_CUT, ID_COPY,
                         ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE,
                         ID_PASTE_AFTER, ID_COLUMN_MODE, ID_TOGGLE_FOLD,
+                        ID_CYCLE_CLIPBOARD,
                         ID_TOGGLE_ALL_FOLDS, ID_DELETE_LINE ]
 
         # Special handling for common clipboard related actions
         has_focus = self.FindFocus()
-        if has_focus != ctrl and e_id in active_only:
-            if has_focus is not None:
-                if e_id == ID_PASTE and hasattr(has_focus, 'Paste'):
-                    has_focus.Paste()
-                elif e_id == ID_CUT and hasattr(has_focus, 'Cut'):
-                    has_focus.Cut()
-                elif e_id == ID_COPY and hasattr(has_focus, 'Copy'):
-                    has_focus.Copy()
-                elif e_id == ID_REDO and hasattr(has_focus, 'Redo'):
-                    has_focus.Redo()
-                elif e_id == ID_UNDO and hasattr(has_focus, 'Undo'):
-                    has_focus.Undo()
+        if has_focus is not None:
+            if e_id == ID_PASTE and hasattr(has_focus, 'Paste'):
+                has_focus.Paste()
+                return
+            elif e_id == ID_CYCLE_CLIPBOARD:
+                start, end = has_focus.GetSelection()
+                start, end = min(start, end), max(start, end)
+                txt = has_focus.GetRange(start, end)
+                if not MainWindow.CLIPBOARD.IsAtIndex(txt):
+                    MainWindow.CLIPBOARD.Reset()
+
+                next = MainWindow.CLIPBOARD.GetNext()
+                if isinstance(has_focus, wx.stc.StyledTextCtrl):
+                    has_focus.ReplaceSelection(next)
+                elif hasattr(has_focus, 'Replace'):
+                    has_focus.Replace(start, end, next)
                 else:
-                    evt.Skip()
-            else:
-                evt.Skip()
-            return
+                    return
+
+                has_focus.SetSelection(start, start+len(next))
+                return
+            elif e_id == ID_CUT and hasattr(has_focus, 'Cut'):
+                start, end = has_focus.GetSelection()
+                txt = has_focus.GetRange(start, end)
+                MainWindow.CLIPBOARD.Put(txt)
+                has_focus.Cut()
+                return
+            elif e_id == ID_COPY and hasattr(has_focus, 'Copy'):
+                start, end = has_focus.GetSelection()
+                txt = has_focus.GetRange(start, end)
+                MainWindow.CLIPBOARD.Put(txt)
+                has_focus.Copy()
+                return
+            elif e_id == ID_REDO and hasattr(has_focus, 'Redo'):
+                has_focus.Redo()
+                return
+            elif e_id == ID_UNDO and hasattr(has_focus, 'Undo'):
+                has_focus.Undo()
+                return
 
         menu_ids = list(syntax.SYNTAX_IDS)
         menu_ids.extend([ID_SHOW_EOL, ID_SHOW_WS, ID_INDENT_GUIDES, ID_SYNTAX,
@@ -1217,7 +1245,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             if hasattr(focus, 'CanRedo'):
                 enable = focus.CanRedo()
             evt.Enable(enable)
-        elif e_id in (ID_PASTE, ID_PASTE_AFTER):
+        elif e_id in (ID_PASTE, ID_PASTE_AFTER, ID_CYCLE_CLIPBOARD):
             if hasattr(focus, 'CanPaste'):
                 enable = focus.CanPaste()
             evt.Enable(enable)

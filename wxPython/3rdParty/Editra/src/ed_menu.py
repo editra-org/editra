@@ -553,6 +553,8 @@ class EdMenuBar(wx.MenuBar):
                         _("Paste Text from Clipboard to File"))
         editmenu.AppendEx(ed_glob.ID_PASTE_AFTER, _("P&aste After"),
                         _("Paste Text from Clipboard to File after the cursor"))
+        editmenu.AppendEx(ed_glob.ID_CYCLE_CLIPBOARD, _("Cycle Clipboard"),
+                        _("Cycle through recent clipboard text"))
         editmenu.AppendSeparator()
         editmenu.AppendEx(ed_glob.ID_SELECTALL, _("Select &All"),
                         _("Select All Text in Document"))
@@ -938,6 +940,7 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_COPY : (u"Ctrl", u"C"),
                      ed_glob.ID_PASTE : (u"Ctrl", u"V"),
                      ed_glob.ID_PASTE_AFTER : (u"Ctrl", u"Shift", u"V"),
+                     ed_glob.ID_CYCLE_CLIPBOARD : (u"Ctrl", u"I"),
                      ed_glob.ID_SELECTALL : (u"Ctrl", u"A"),
                      ed_glob.ID_COLUMN_MODE : (u"Ctrl", u"Shift", u"|"),
                      ed_glob.ID_LINE_AFTER : (u"Ctrl", u"L"),
