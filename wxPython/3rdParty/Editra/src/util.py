@@ -239,7 +239,9 @@ class EdClipboard(ebmlib.CycleCache):
         # Initialize the clipboard if it hasn't been loaded yet and
         # there is something in the system clipboard
         if self.GetCurrentSize() == 0:
-            self.Put(GetClipboardText())
+            txt = GetClipboardText()
+            if txt is not None:
+                self.Put(txt)
 
         return super(EdClipboard, self).GetNext()
 

@@ -1458,7 +1458,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         txt = util.GetClipboardText()
-        if cls.CLIPBOARD.IsAtIndex(txt):
+        if txt is None or cls.CLIPBOARD.IsAtIndex(txt):
             return
 
         # Something new has come in from an external program
