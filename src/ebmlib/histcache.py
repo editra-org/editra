@@ -180,7 +180,7 @@ class CycleCache(object):
     def __len__(self):
         return len(self._list)
 
-    def _NextIndex(self):
+    def NextIndex(self):
         """Get the next index in the cache
         @return: int
 
@@ -210,7 +210,7 @@ class CycleCache(object):
 
         """
         item = self._list[self._cpos]
-        self._cpos = self._NextIndex()
+        self._cpos = self.NextIndex()
         return item
 
     def PeekNext(self):
