@@ -434,6 +434,9 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """
         if evt.GetActive():
             self._log("[app][info] I'm Awake!!")
+            # Refresh Clipboard Ring
+            ed_main.MainWindow.UpdateClipboardRing()
+
 #            frame = self.GetTopWindow()
 #            if frame is not None:
 #                if frame.IsIconized():

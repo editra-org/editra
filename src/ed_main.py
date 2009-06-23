@@ -1450,6 +1450,21 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             name = " - " + name
         wx.Frame.SetTitle(self, title + name)
 
+    @classmethod
+    def UpdateClipboardRing(cls):
+        """Update the clipboard ring to sync it with the
+        system clipboard.
+        @note: for internal use only
+
+        """
+        txt = util.GetClipboardText()
+        if cls.CLIPBOARD.IsAtIndex(txt):
+            return
+
+        # Something new has come in from an external program
+        cls.CLIPBOARD.Reset()
+        cls.CLIPBOARD.Put(txt)
+
 #-----------------------------------------------------------------------------#
 # Event handlers that don't need to be part of the class
 
