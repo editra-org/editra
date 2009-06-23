@@ -234,6 +234,15 @@ class DropTargetFT(wx.PyDropTarget):
 #---- End FileDropTarget ----#
 
 class EdClipboard(ebmlib.CycleCache):
+    def GetNext(self):
+        """Get the next item in the cache"""
+        # Initialize the clipboard if it hasn't been loaded yet and
+        # there is something in the system clipboard
+        if self.GetCurrentSize() == 0:
+            self.Put(GetClipboardText())
+
+        return super(EdClipboard, self).GetNext()
+
     def IsAtIndex(self, txt):
         """Is the passed in phrase at the current cycle index in the
         cache. Used to check if index should be reset or to continue in
