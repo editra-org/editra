@@ -10,13 +10,13 @@ Change Log:
 Changes since last release:
 
 VERSION 0.4.95
-DATE 0x/xx/2009
+DATE 06/22/2009
 27th Alpha Release
 
 NEWS:
 
 Had planned to wait till 0.5 was ready before doing another release but there
-have been too many good enhancements made due to all the great patches submitted
+have been too many good enhancements added due to all the great patches submitted
 during this cycle to wait for the last push to 0.5 to complete before releasing.
 
 Some of the main new features include buffer syncronziation with the codebrowser
@@ -42,6 +42,7 @@ between them.
 +Find dialog remembers last position throughout session.
 +Add support for the Cobra programming language.
 +Support opening files by a uri.
++Add Croation translation, updated (Brazilian, French, and Russian).
 
 BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.
