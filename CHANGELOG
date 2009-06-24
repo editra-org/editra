@@ -10,7 +10,7 @@ Change Log:
 Changes since last release:
 
 VERSION 0.4.95
-DATE 06/22/2009
+DATE 06/23/2009
 27th Alpha Release
 
 NEWS:
@@ -42,7 +42,7 @@ between them.
 +Find dialog remembers last position throughout session.
 +Add support for the Cobra programming language.
 +Support opening files by a uri.
-+Add Croation translation, updated (Brazilian, French, and Russian).
++Add Croatian translation, updated (Brazilian, French, and Russian).
 
 BUG FIXES:
 +Fix python autocomp from failing when word was next to a boundry character.
