@@ -1089,6 +1089,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Special handling for common clipboard related actions
         has_focus = self.FindFocus()
+        is_stc = isinstance(has_focus, wx.stc.StyledTextCtrl)
         if has_focus is not None:
             if e_id == ID_PASTE and hasattr(has_focus, 'Paste'):
                 has_focus.Paste()
@@ -1096,12 +1097,20 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             elif e_id == ID_CYCLE_CLIPBOARD:
                 start, end = has_focus.GetSelection()
                 start, end = min(start, end), max(start, end)
-                txt = has_focus.GetRange(start, end)
+
+                if is_stc:
+                    txt = has_focus.GetTextRange(start, end)
+                elif hasattr(has_focus, 'GetRange'):
+                    txt = has_focus.GetRange(start, end)
+                else:
+                    self.LOG("[ed_main][warn] no range meth in cycle clipboard")
+                    return
+
                 if not MainWindow.CLIPBOARD.IsAtIndex(txt):
                     MainWindow.CLIPBOARD.Reset()
 
                 next = MainWindow.CLIPBOARD.GetNext()
-                if isinstance(has_focus, wx.stc.StyledTextCtrl):
+                if is_stc:
                     has_focus.ReplaceSelection(next)
                 elif hasattr(has_focus, 'Replace'):
                     has_focus.Replace(start, end, next)
@@ -1112,13 +1121,19 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 return
             elif e_id == ID_CUT and hasattr(has_focus, 'Cut'):
                 start, end = has_focus.GetSelection()
-                txt = has_focus.GetRange(start, end)
+                if is_stc:
+                    txt = has_focus.GetTextRange(start, end)
+                elif hasattr(has_focus, 'GetRange'):
+                    txt = has_focus.GetRange(start, end)
                 MainWindow.CLIPBOARD.Put(txt)
                 has_focus.Cut()
                 return
             elif e_id == ID_COPY and hasattr(has_focus, 'Copy'):
                 start, end = has_focus.GetSelection()
-                txt = has_focus.GetRange(start, end)
+                if is_stc:
+                    txt = has_focus.GetTextRange(start, end)
+                elif hasattr(has_focus, 'GetRange'):
+                    txt = has_focus.GetRange(start, end)
                 MainWindow.CLIPBOARD.Put(txt)
                 has_focus.Copy()
                 return

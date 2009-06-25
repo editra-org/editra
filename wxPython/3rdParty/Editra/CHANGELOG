@@ -9,6 +9,19 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.5.0
+DATE 0x/xx/2009
+28th Alpha Release
+
+NEWS:
+
+NEW: [features/enhancements]
+
+BUG FIXES:
++Fix copying from OutputBuffer
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.4.95
 DATE 06/23/2009
 27th Alpha Release
