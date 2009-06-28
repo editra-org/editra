@@ -134,13 +134,19 @@ class SearchController(object):
         @param e_id: Dialog Type Id
 
         """
+        # TODO: find out why parent is not a Window in some cases...
+        if not isinstance(self._parent, wx.Window):
+            parent = wx.GetApp().ActiveWindow()
+        else:
+            parent = self._parent
+
         if e_id == ed_glob.ID_FIND_REPLACE:
-            dlg = eclib.AdvFindReplaceDlg(self._parent, self._data,
-                                            (_("Find"), _("Find/Replace")),
-                                            eclib.AFR_STYLE_REPLACEDIALOG)
+            dlg = eclib.AdvFindReplaceDlg(parent, self._data,
+                                          (_("Find"), _("Find/Replace")),
+                                          eclib.AFR_STYLE_REPLACEDIALOG)
         elif e_id == ed_glob.ID_FIND:
-            dlg = eclib.AdvFindReplaceDlg(self._parent, self._data,
-                                            (_("Find"), _("Find/Replace")))
+            dlg = eclib.AdvFindReplaceDlg(parent, self._data,
+                                          (_("Find"), _("Find/Replace")))
         else:
             dlg = None
 
