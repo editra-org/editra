@@ -33,8 +33,6 @@ import ed_crypt
 import dev_tool
 import syntax.syntax as syntax
 import syntax.synglob as synglob
-import eclib # TODO: Temporary till refs to HexToRGB and AdjustColor are
-             #       no longer used anywhere
 import ebmlib
 
 _ = wx.GetTranslation
@@ -234,6 +232,10 @@ class DropTargetFT(wx.PyDropTarget):
 #---- End FileDropTarget ----#
 
 class EdClipboard(ebmlib.CycleCache):
+    """Local clipboard object
+    @todo: make into a singleton
+
+    """
     def GetNext(self):
         """Get the next item in the cache"""
         # Initialize the clipboard if it hasn't been loaded yet and
