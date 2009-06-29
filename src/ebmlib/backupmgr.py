@@ -54,11 +54,12 @@ class FileBackupMgr(object):
         """
         isok = False
         try:
-            handle = open(fname)
-            line = handle.readline()
-            isok = line.startswith(self.header)
-        except:
-            isok = False
+            try:
+                handle = open(fname)
+                line = handle.readline()
+                isok = line.startswith(self.header)
+            except:
+                isok = False
         finally:
             handle.close()
         return isok
