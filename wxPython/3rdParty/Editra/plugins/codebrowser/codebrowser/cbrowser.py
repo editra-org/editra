@@ -349,7 +349,10 @@ class CodeBrowserTree(wx.TreeCtrl):
         if line is not None:
             ctrl = self._mw.GetNotebook().GetCurrentCtrl()
             ctrl.GotoLine(line)
-            ctrl.SetFocus()
+
+            # Need CallAfter to make the focus work on Windows
+            # Otherwise the tree control will reclaim the focus
+            wx.CallAfter(ctrl.SetFocus)
 
     def OnActivated(self, evt):
         """Handle when an item is clicked on
