@@ -19,6 +19,7 @@ NEW: [features/enhancements]
 
 BUG FIXES:
 +Fix copying from OutputBuffer
++Fix some minor translation issues.
 
 #-----------------------------------------------------------------------------#
 
