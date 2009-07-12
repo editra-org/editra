@@ -306,7 +306,8 @@ class EdPages(FNB.FlatNotebook):
         try:
             f_handle = open(session, 'wb')
         except (IOError, OSError), msg:
-            return (_("Error Saving Session File"),  ed_txt.DecodeString(msg))
+            smsg = str(msg)
+            return (_("Error Saving Session File"),  ed_txt.DecodeString(smsg))
 
         try:
             sdata = dict(win1=self.GetFileNames())
