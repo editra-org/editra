@@ -21,6 +21,7 @@ BUG FIXES:
 +Fix copying from OutputBuffer.
 +Fix some error handling if file session handling.
 +Fix some minor translation issues.
++Don't reposition caret if it was moved during a threaded load operation.
 
 #-----------------------------------------------------------------------------#
 

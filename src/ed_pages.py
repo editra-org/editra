@@ -730,7 +730,6 @@ class EdPages(FNB.FlatNotebook):
                 control.Destroy()
             else:
                 # We where using an existing buffer so reset it
-                "CLEARED IT"
                 control.SetText('')
                 control.SetDocument(ed_txt.EdFile())
                 control.SetSavePoint()
@@ -778,7 +777,10 @@ class EdPages(FNB.FlatNotebook):
 
     def DoPostLoad(self):
         """Perform post file open actions"""
-        if Profile_Get('SAVE_POS'):
+        # Set last known caret position if the user setting is enabled
+        # and the caret position has not been changed during a threaded
+        # file loading operation.
+        if Profile_Get('SAVE_POS') and self.control.GetCurrentPos() <= 0:
             pos = self.DocMgr.GetPos(self.control.GetFileName())
             self.control.SetCaretPos(pos)
             self.control.ScrollToColumn(0)
