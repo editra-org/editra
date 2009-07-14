@@ -993,8 +993,17 @@ class StyleMgr(object):
         sback = self.GetItemByName('select_style')
         if not sback.IsNull():
             sback = sback.GetBack()
+            sback = eclib.HexToRGB(sback)
+            sback = wx.Colour(*sback)
         else:
             sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+
+        # If selection colour is dark make the foreground white
+        # else use the default settings.
+        if sum(sback.Get()) < 384:
+            self.SetSelForeground(True, wx.WHITE)
+        else:
+            self.SetSelForeground(False, wx.BLACK)
         self.SetSelBackground(True, sback)
 
         wspace = self.GetItemByName('whitespace_style')
