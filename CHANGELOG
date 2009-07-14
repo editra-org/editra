@@ -22,6 +22,8 @@ BUG FIXES:
 +Fix some error handling if file session handling.
 +Fix some minor translation issues.
 +Don't reposition caret if it was moved during a threaded load operation.
++Fix some errors with setting custom highlighting colors.
++Set highlight foreground colour to White when selection colour is dark.
 
 #-----------------------------------------------------------------------------#
 
