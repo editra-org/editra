@@ -738,6 +738,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             self.WordLeftExtend()
             self.SetCurrentPos(self.GetCurrentPos() + len(self.GetEOLChar()))
 
+    @jumpaction
     def OnLeftUp(self, evt):
         """Set primary selection and inform mainwindow that cursor position
         has changed.

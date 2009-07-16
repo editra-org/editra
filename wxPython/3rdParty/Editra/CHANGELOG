@@ -16,6 +16,7 @@ DATE 0x/xx/2009
 NEWS:
 
 NEW: [features/enhancements]
++Record position changes from mouse clicks in position navigation history.
 
 BUG FIXES:
 +Fix copying from OutputBuffer.
