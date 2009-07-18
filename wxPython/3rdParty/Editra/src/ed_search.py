@@ -191,14 +191,15 @@ class SearchController(object):
                     return
                 self._finddlg.SetTransparent(240)
     #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
-                self._finddlg.Show()
             else:
-                # Dialog is open already so just update it
+                # Dialog has been created already so just update it
                 self._UpdateDialogState(ed_glob.ID_FIND)
-                self._finddlg.Raise()
 
             if 'lookin' in data:
                 self._finddlg.SetLookinPath(data.get('lookin'))
+
+            self._finddlg.Show()
+            self._finddlg.Raise()
             self._finddlg.SetFocus()
         else:
             return
