@@ -7,6 +7,7 @@ Version 1.5:
 xx/xx/2009
 
 - Fix crash due to improper page checking in notebook sync feature.
+- Fix crash on windows when clicking on search in directory menu.
 
 Version 1.4:
 04/18/2009
