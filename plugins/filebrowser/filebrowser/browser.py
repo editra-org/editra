@@ -570,8 +570,9 @@ class FileBrowser(wx.GenericDirCtrl):
             worker = OpenerThread([os.path.dirname(fname) for fname in paths])
             worker.start()
         elif e_id == ID_SEARCH_DIR:
-            path = self.GetPath()
-            if path:
+            paths = self.GetPaths()
+            if len(paths):
+                path = paths[0] # Go off of the first selected item
                 if not os.path.isdir(path):
                     path = os.path.dirname(path)
                 mdata = dict(mainw=self._mw, lookin=path)
