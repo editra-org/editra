@@ -29,6 +29,7 @@ BUG FIXES:
  some issues when the dialog had already been created.
 +Fix search in directory crash on windows when accessing it from filebrowser.
 +Files with embedded NUL bytes can now be loaded properly.
++Properly handle filenames that have spaces in them in the Launch plugin.
 
 #-----------------------------------------------------------------------------#
 

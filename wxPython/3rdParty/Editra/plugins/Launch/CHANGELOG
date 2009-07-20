@@ -6,6 +6,11 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.4:
+
++Fix handling for files that have spaces in their names.
+
+#-----------------------------------------------------------------------------#
 Version 1.3
 
 +Use context sensitive messages for signaling updates, fixes failure to upate

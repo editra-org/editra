@@ -460,6 +460,11 @@ class LaunchWindow(eclib.ControlBox):
 
         handler = handlers.GetHandlerById(ftype)
         path, fname = os.path.split(fname)
+        if wx.Platform == '__WXMSW__':
+            fname = "\"" + fname + "\""
+        else:
+            fname = fname.replace(u' ', '\\ ')
+
         self._worker = eclib.ProcessThread(self._buffer,
                                            cmd, fname,
                                            args, path,
