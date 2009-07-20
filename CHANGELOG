@@ -28,6 +28,7 @@ BUG FIXES:
 +Fix search in directory message handler in search controller that caused
  some issues when the dialog had already been created.
 +Fix search in directory crash on windows when accessing it from filebrowser.
++Files with embedded NUL bytes can now be loaded properly.
 
 #-----------------------------------------------------------------------------#
 
