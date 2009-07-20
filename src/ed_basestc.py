@@ -619,7 +619,10 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.file.SetPath(path)
         txt = self.file.Read()
         if txt is not None:
-            self.SetText(txt)
+            if self.file.IsRawBytes():
+                self.AddStyledText(txt)
+            else:
+                self.SetText(txt)
         else:
             self.file.SetPath('')
             return False
