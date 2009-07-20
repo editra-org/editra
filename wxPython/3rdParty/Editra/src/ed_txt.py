@@ -86,9 +86,16 @@ class EdFile(ebmlib.FileObjectImpl):
 
         # Attribtues
         self._magic = dict(comment=None, bad=False)
-        self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
+        self.encoding = None
         self.bom = None
         self._mcallback = list()
+        self.__buffer = None
+        self._raw = False           # Raw bytes?
+
+    def _ResetBuffer(self):
+        if self.__buffer is not None:
+            del self.__buffer
+        self.__buffer = StringIO()
 
     def AddModifiedCallback(self, callback):
         """Set modified callback method
@@ -115,10 +122,75 @@ class EdFile(ebmlib.FileObjectImpl):
             fileobj.AddModifiedCallback(cback)
         return fileobj
 
+    def DecodeText(self):
+        """Decode the text in the buffer and return a unicode string.
+        @return: unicode or str
+
+        """
+        assert self.__buffer is not None, "No buffer!"
+        bytes = self.__buffer.getvalue()
+        ustr = u""
+        try:
+            if self.bom is not None:
+                Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
+                ustr = ustr.replace(self.bom, '', 1)
+
+            ustr = bytes.decode(self.encoding)
+        except UnicodeDecodeError, msg:
+            Log("[ed_txt][err] Error while reading with %s" % self.encoding)
+            Log("[ed_txt][err] %s" % msg)
+            self.SetLastError(unicode(msg))
+            self.Close()
+            if self._magic['comment']:
+                self._magic['bad'] = True
+            # Return the raw bytes to put into the buffer
+            ustr = '\0'.join(bytes)+'\0'
+            self._raw = True
+        else:
+            # Log success
+            Log("[ed_txt][info] Decoded %s with %s" % \
+                (self.GetPath(), self.encoding))
+
+        return ustr
+
+    def DetectEncoding(self):
+        """Try to determine the files encoding
+        @precondition: File handle has been opened and is valid
+        @postcondition: encoding and bom attributes will be set
+
+        """
+        if self.encoding != None:
+            msg = ("[ed_txt][info] DetectEncoding, skipping do to user set "
+                   "encoding: %s") % self.encoding
+            Log(msg)
+            return
+
+        assert self.Handle is not None, "File handle not initialized"
+        lines = [ self.Handle.readline() for x in range(2) ]
+        self.Handle.seek(0)
+        enc = None
+        if len(lines):
+            # First check for a Byte Order Mark
+            enc = CheckBom(lines[0])
+
+            # If no byte-order mark check for an encoding comment
+            if enc is None:
+                self.bom = None
+                if not self._magic['bad']:
+                    enc = CheckMagicComment(lines)
+                    if enc:
+                        self._magic['comment'] = enc
+            else:
+                Log("[ed_txt][info] File Has %s BOM" % enc)
+                self.bom = unicode(BOM.get(enc, None), enc)
+
+        if enc is not None:
+            self.encoding = enc
+
     @property
     def Encoding(self):
         """File encoding property"""
-        return self.encoding
+        return self.GetEncoding()
 
     def FireModified(self):
         """Fire the modified callback(s)"""
@@ -141,6 +213,9 @@ class EdFile(ebmlib.FileObjectImpl):
         @return: string encoding name
 
         """
+        if self.encoding is None:
+            # Guard against early entry
+            return Profile_Get('ENCODING', default=DEFAULT_ENCODING)
         return self.encoding
 
     def GetMagic(self):
@@ -157,70 +232,38 @@ class EdFile(ebmlib.FileObjectImpl):
         """
         return self.bom is not None
 
-    def Read(self, store=None, chunk=512):
+    def IsRawBytes(self):
+        """Were only raw bytes read during the last read operation?
+        @return: bool
+
+        """
+        return self._raw
+
+    def Read(self, chunk=512):
         """Get the contents of the file as a string, automatically handling
         any decoding that may be needed.
-
-        @keyword store: generator method to pass read results through
         @keyword chunk: read size
-        @note: the store param overrides incremental
         @return: unicode str
 
         """
         if self.DoOpen('rb'):
-            lines = [ self.Handle.readline() for x in range(2) ]
-            self.Handle.seek(0)
-            enc = None
-            if len(lines):
-                enc = CheckBom(lines[0])
-                if enc is None:
-                    self.bom = None
-                    if not self._magic['bad']:
-                        enc = CheckMagicComment(lines)
-                        if enc:
-                            self._magic['comment'] = enc
-                else:
-                    Log("[ed_txt][info] File Has %s BOM" % enc)
-                    self.bom = unicode(BOM.get(enc, None), enc)
+            self.DetectEncoding()
 
-            if enc is not None:
-                self.encoding = enc
-            try:
-                reader = codecs.getreader(self.encoding)(self.Handle)
-                txt = u''
-                if store is None:
-                    while 1:
-                        tmp = reader.read(chunk)
-                        if not len(tmp):
-                            break
-                        txt += tmp
-                else:
-                    store(reader, chunk)
-                reader.close()
-            except Exception, msg:
-                Log("[ed_txt][err] Error while reading with %s" % self.encoding)
-                Log("[ed_txt][err] %s" % msg)
-                self.SetLastError(unicode(msg))
-                self.Close()
-                if self._magic['comment']:
-                    self._magic['bad'] = True
+            if self.encoding is None:
+                # fall back to user setting
+                self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
 
-                enc, txt = FallbackReader(self.GetPath())
-                if enc is not None:
-                    Log("[ed_txt][info] Fallback reader succeeded with: %s" % enc)
-                    # TODO: don't clear the error and allow the client to
-                    #       analyze it for error reporting.
-                    self.ClearLastError()
-                    self.encoding = enc
-                else:
-                    raise UnicodeDecodeError, msg
+            self._ResetBuffer()
 
-            if self.bom is not None:
-                Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
-                txt = txt.replace(self.bom, u'', 1)
+            tmp = self.Handle.read(chunk)
+            while len(tmp):
+                self.__buffer.write(tmp)
+                tmp = self.Handle.read(chunk)
 
-            Log("[ed_txt][info] Decoded %s with %s" % (self.GetPath(), self.encoding))
+            self.Close()
+            txt = self.DecodeText()
             self.SetModTime(ebmlib.GetFileModTime(self.GetPath()))
+            self._ResetBuffer()
             return txt
         else:
             raise ReadError, self.GetLastError()
@@ -245,23 +288,7 @@ class EdFile(ebmlib.FileObjectImpl):
 
         """
         if self.DoOpen('rb'):
-            lines = [ self.Handle.readline() for x in range(2) ]
-            self.Handle.seek(0)
-            enc = None
-            if len(lines):
-                enc = CheckBom(lines[0])
-                if enc is None:
-                    self.bom = None
-                    if not self._magic['bad']:
-                        enc = CheckMagicComment(lines)
-                        if enc:
-                            self._magic['comment'] = enc
-                else:
-                    Log("[ed_txt][info] File Has %s BOM" % enc)
-                    self.bom = unicode(BOM.get(enc, None), enc)
-
-            if enc is not None:
-                self.encoding = enc
+            self.DetectEncoding()
 
             try:
                 reader = codecs.getreader(self.encoding)(self.Handle)

@@ -390,7 +390,6 @@ class EdPages(FNB.FlatNotebook):
         """
         self.Freeze()
         self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
-        self.control.SetEncoding(Profile_Get('ENCODING'))
         self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
         self.AddPage(self.control)
         self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
