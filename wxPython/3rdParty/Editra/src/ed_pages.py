@@ -643,7 +643,7 @@ class EdPages(FNB.FlatNotebook):
                            self.control.GetFileName(),
                            context=self.frame.GetId())
 
-        if Profile_Get('WARN_EOL', default=True):
+        if Profile_Get('WARN_EOL', default=True) and not fileobj.IsRawBytes():
             self.control.CheckEOL()
 
     def OpenPage(self, path, filename, quiet=False):
@@ -763,7 +763,7 @@ class EdPages(FNB.FlatNotebook):
         else:
             self.SetPageImage(cpage, str(self.control.GetLangId()))
 
-        if Profile_Get('WARN_EOL', default=True):
+        if Profile_Get('WARN_EOL', default=True) and not doc.IsRawBytes():
             self.control.CheckEOL()
 
         if not control.IsLoading():

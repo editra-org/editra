@@ -151,6 +151,15 @@ class EdFile(ebmlib.FileObjectImpl):
             Log("[ed_txt][info] Decoded %s with %s" % \
                 (self.GetPath(), self.encoding))
 
+        # Scintilla bug, SetText will quit at first null found in the
+        # string. So join the raw bytes and stuff them in the buffer instead.
+        # TODO: are there other control characters that need to be checked
+        #       for besides NUL?
+        if not self._raw and '\0' in ustr:
+            # Return the raw bytes to put into the buffer
+            ustr = '\0'.join(bytes)+'\0'
+            self._raw = True
+
         return ustr
 
     def DetectEncoding(self):
