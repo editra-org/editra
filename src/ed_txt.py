@@ -195,6 +195,8 @@ class EdFile(ebmlib.FileObjectImpl):
 
         if enc is not None:
             self.encoding = enc
+        elif self.encoding is None:
+            self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
 
     @property
     def Encoding(self):
