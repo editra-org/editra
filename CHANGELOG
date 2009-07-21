@@ -32,6 +32,8 @@ BUG FIXES:
 +Properly handle filenames that have spaces in them in the Launch plugin.
 +Fix saving of files where pasted in text would cause the encoding of the text
  to fail on write to disk.
++Fix direction choices not being disabled for search in files operation in
+ Find dialog.
 
 #-----------------------------------------------------------------------------#
 

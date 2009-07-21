@@ -113,6 +113,7 @@ ID_FIND_ALL = wx.NewId()
 ID_REPLACE_ALL = wx.NewId()
 ID_OPTION_CHANGE = wx.NewId()
 ID_CHOOSE_DIR = wx.NewId()
+ID_DIR_BOX = wx.NewId()
 
 _ = wx.GetTranslation
 
@@ -784,7 +785,7 @@ class FindPanel(wx.Panel):
 
         # Search Direction Box
         self._sizers['dir'] = wx.BoxSizer(wx.VERTICAL)
-        dbox = wx.StaticBox(self, label=_("Direction"))
+        dbox = wx.StaticBox(self, id=ID_DIR_BOX, label=_("Direction"))
         dboxsz = wx.StaticBoxSizer(dbox, wx.HORIZONTAL)
         dboxsz.AddMany([(wx.RadioButton(self, wx.ID_UP, _("Up")), 0),
                         ((20, 5), 0),
@@ -908,6 +909,11 @@ class FindPanel(wx.Panel):
         in_files = bool(self._lookin.GetSelection() >= LOCATION_MAX)
         self.FindWindowById(ID_RECURSE).Enable(in_files)
         flags = self._fdata.GetFlags()
+
+        # Disable direction settings when searcing in file since they
+        # are ignored anyway.
+        for cid in (wx.ID_UP, wx.ID_DOWN, ID_DIR_BOX):
+            self.FindWindowById(cid).Enable(not in_files)
 
         # Only update visibility of file filter field if it is enabled
         if not (flags & AFR_NOFILTER):
