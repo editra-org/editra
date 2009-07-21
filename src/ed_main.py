@@ -621,6 +621,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Skip()
             return
 
+        # TODO: detect when save fails due to encoding and prompt to
+        #       request an encoding from the user.
         for ctrl in ctrls:
             fname = ebmlib.GetFileName(ctrl[1].GetFileName())
             if fname != '':

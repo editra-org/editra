@@ -22,6 +22,7 @@ from searcheng import *
 from fchecker import *
 from fileutil import *
 from fileimpl import *
+from txtutil import *
 
 from backupmgr import *
 
