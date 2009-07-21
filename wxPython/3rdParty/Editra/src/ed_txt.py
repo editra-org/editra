@@ -138,7 +138,7 @@ class EdFile(ebmlib.FileObjectImpl):
             ustr = bytes.decode(self.encoding)
         except UnicodeDecodeError, msg:
             Log("[ed_txt][err] Error while reading with %s" % self.encoding)
-            Log("[ed_txt][err] %s" % msg)
+            Log("[ed_txt][err] %s" % unicode(msg))
             self.SetLastError(unicode(msg))
             self.Close()
             if self._magic['comment']:
@@ -200,6 +200,42 @@ class EdFile(ebmlib.FileObjectImpl):
     def Encoding(self):
         """File encoding property"""
         return self.GetEncoding()
+
+    def EncodeText(self):
+        """Encode the buffered text to prepare it to be written to disk
+        @return: str
+
+        """
+        txt = self.__buffer.getvalue()
+        if not ebmlib.IsUnicode(txt):
+            return txt # Already a string so just return it
+
+        stxt = ''
+        encs = GetEncodings()
+        if self.encoding is None:
+            self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
+        encs.insert(0, self.encoding)
+        cenc = self.encoding
+
+        for enc in encs:
+            try:
+                stxt = txt.encode(enc)
+                self.encoding = enc
+            except UnicodeEncodeError, msg:
+                Log("[ed_txt][err] Failed to encode text with %s" % self.encoding)
+                Log("[ed_txt][err] %s" % str(msg))
+                self.SetLastError(unicode(msg))
+            else:
+                break
+        else:
+            raise
+
+        # Log if the encoding changed due to encoding errors
+        if self.encoding != cenc:
+            Log("[ed_txt][warn] Used encoding %s differs from original %s" %\
+                (self.encoding, cenc))
+
+        return stxt
 
     def FireModified(self):
         """Fire the modified callback(s)"""
@@ -338,6 +374,7 @@ class EdFile(ebmlib.FileObjectImpl):
     def ResetAll(self):
         """Reset all attributes of this file"""
         super(EdFile, self).ResetAll()
+        self._ResetBuffer()
         self._magic = dict(comment=None, bad=False)
         self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
         self.bom = None
@@ -366,25 +403,30 @@ class EdFile(ebmlib.FileObjectImpl):
 
         """
         # Check if a magic comment was added or changed
-        tbuff = StringIO(value)
-        enc = CheckMagicComment([ tbuff.readline() for x in range(2) ])
+        self._ResetBuffer()
+        self.__buffer.write(value)
+        enc = CheckMagicComment([ self.__buffer.readline() for x in range(2) ])
+        self.__buffer.seek(0)
 
         # Update encoding if necessary
         if enc is not None:
+            Log("[ed_txt][info] Write: found magic comment: %s" % enc)
             self.encoding = enc
 
         # Open and write the file
         if self.DoOpen('wb'):
+            txt = self.EncodeText() # Convert back to string
+
             Log("[ed_txt][info] Opened %s, writing as %s" % (self.GetPath(), self.encoding))
-            writer = codecs.getwriter(self.encoding)(self.Handle)
+            
             if self.HasBom():
                 Log("[ed_txt][info] Adding BOM back to text")
-                writer.write(self.bom)
+                self.Handle.write(self.bom)
 
-            writer.write(tbuff.getvalue())
-            tbuff.close()
-            del tbuff
-            writer.close()
+            self.Handle.write(txt)
+            self.Handle.flush()
+            self._ResetBuffer()
+            self.Close()
             Log("[ed_txt][info] %s was written successfully" % self.GetPath())
         else:
             raise WriteError, self.GetLastError()

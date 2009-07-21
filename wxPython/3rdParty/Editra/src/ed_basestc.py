@@ -22,11 +22,13 @@ __revision__ = "$Revision$"
 # Imports
 import wx
 import wx.stc
+import types
 
 # Editra Imports
 import ed_glob
 import ed_style
 import eclib
+import ebmlib
 import ed_msg
 import ed_txt
 from syntax import syntax
@@ -619,7 +621,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.file.SetPath(path)
         txt = self.file.Read()
         if txt is not None:
-            if self.file.IsRawBytes():
+            if self.file.IsRawBytes() and not ebmlib.IsUnicode(txt):
                 self.AddStyledText(txt)
             else:
                 self.SetText(txt)
