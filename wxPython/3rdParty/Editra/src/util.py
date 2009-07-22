@@ -19,7 +19,6 @@ __revision__ = "$Revision$"
 # Imports
 import os
 import sys
-import types
 import mimetypes
 import encodings
 import codecs
@@ -536,14 +535,14 @@ def ResolvConfigDir(config_dir, sys_only=False):
         path = os.sep.join(path.split(os.sep)[:-2])
         path =  path + os.sep + config_dir + os.sep
         if os.path.exists(path):
-            if not isinstance(path, types.UnicodeType):
+            if not ebmlib.IsUnicode(path):
                 path = unicode(path, sys.getfilesystemencoding())
             return path
 
     # If we get here we need to do some platform dependant lookup
     # to find everything.
     path = sys.argv[0]
-    if not isinstance(path, types.UnicodeType):
+    if not ebmlib.IsUnicode(path):
         path = unicode(path, sys.getfilesystemencoding())
 
     # If it is a link get the real path
@@ -588,7 +587,7 @@ def ResolvConfigDir(config_dir, sys_only=False):
     path = os.path.normpath(pro_path) + os.sep
 
     # Make sure path is unicode
-    if not isinstance(path, types.UnicodeType):
+    if not ebmlib.IsUnicode(path):
         path = unicode(path, sys.getdefaultencoding())
 
     return path

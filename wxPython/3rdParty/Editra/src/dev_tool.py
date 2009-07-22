@@ -27,12 +27,12 @@ import urllib2
 import webbrowser
 import codecs
 import locale
-import types
 import wx
 
 # Editra Libraries
 import ed_glob
 import ed_msg
+from ebmlib import IsUnicode
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -219,7 +219,7 @@ def DecodeString(string, encoding=None):
     if encoding is None:
         encoding = DEFAULT_ENCODING
 
-    if not isinstance(string, types.UnicodeType):
+    if not IsUnicode(string):
         try:
             rtxt = codecs.getdecoder(encoding)(string)[0]
         except Exception, msg:
