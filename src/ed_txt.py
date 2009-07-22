@@ -569,7 +569,7 @@ def DecodeString(string, encoding=None):
     if encoding is None:
         encoding = DEFAULT_ENCODING
 
-    if not isinstance(string, types.UnicodeType):
+    if not ebmlib.IsUnicode(string):
         try:
             rtxt = codecs.getdecoder(encoding)(string)[0]
         except Exception, msg:
@@ -593,7 +593,7 @@ def EncodeString(string, encoding=None):
     if not encoding:
         encoding = DEFAULT_ENCODING
 
-    if isinstance(string, types.UnicodeType):
+    if ebmlib.IsUnicode(string):
         try:
             rtxt = codecs.getencoder(encoding)(string)[0]
         except LookupError:

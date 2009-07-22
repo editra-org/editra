@@ -23,7 +23,6 @@ __revision__ = "$Revision$"
 import os
 import sys
 import re
-import types
 import wx
 
 # Local imports
@@ -43,6 +42,7 @@ _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 
 class EdSearchEngine(ebmlib.SearchEngine):
+    """Text searching engine"""
     def __init__(self, query, regex=True, down=True,
                  matchcase=True, wholeword=False):
         ebmlib.SearchEngine.__init__(self, query, regex, down,
@@ -58,11 +58,11 @@ class EdSearchEngine(ebmlib.SearchEngine):
 
         """
         fname = ed_txt.DecodeString(fname, sys.getfilesystemencoding())
-        if not isinstance(fname, types.UnicodeType):
+        if not ebmlib.IsUnicode(fname):
             fname = _("DECODING ERROR")
 
         match = ed_txt.DecodeString(match)
-        if not isinstance(match, types.UnicodeType):
+        if not ebmlib.IsUnicode(match):
             match = _("DECODING ERROR")
         else:
             match = u" " + match.lstrip()
@@ -80,7 +80,7 @@ class EdSearchEngine(ebmlib.SearchEngine):
 
     def SetQuery(self, query):
         """Set the query string"""
-        if isinstance(query, types.UnicodeType):
+        if ebmlib.IsUnicode(query):
             # Encode to UTF-8 as used internally by the stc
             query = query.encode('utf-8')
         super(EdSearchEngine, self).SetQuery(query)
