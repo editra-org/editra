@@ -1697,7 +1697,12 @@ class EditraStc(ed_basestc.EditraBaseStc):
                               style=wx.OK|wx.CENTER|wx.ICON_WARNING)
                 return True
             else:
-                self.File.Write(self.GetText())
+                if not self.File.IsRawBytes():
+                    self.File.Write(self.GetText())
+                else:
+                    nchars = self.GetTextLength()
+                    txt = self.GetStyledText(0, nchars)[0:nchars*2:2]
+                    self.File.Write(txt)
         except Exception, msg:
             result = False
             self.LOG("[ed_stc][err] There was an error saving %s" % path)
