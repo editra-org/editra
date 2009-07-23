@@ -87,6 +87,16 @@ class FileObjectImpl(object):
             self.open = True
             return True
 
+    def Exists(self):
+        """Does the file exist on disk?
+        @return: bool
+
+        """
+        if self._path:
+            return fileutil.PathExists(self._path)
+        else:
+            return False
+
     def GetExtension(self):
         """Get the files extension if it has one else simply return the
         filename minus the path.

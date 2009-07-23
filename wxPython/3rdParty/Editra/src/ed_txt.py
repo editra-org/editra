@@ -128,6 +128,8 @@ class EdFile(ebmlib.FileObjectImpl):
 
         """
         assert self.__buffer is not None, "No buffer!"
+        assert self.encoding is not None, "Encoding Not Set!"
+
         bytes = self.__buffer.getvalue()
         ustr = u""
         try:
@@ -195,7 +197,7 @@ class EdFile(ebmlib.FileObjectImpl):
 
         if enc is not None:
             self.encoding = enc
-        elif self.encoding is None:
+        else:
             self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
 
     @property
