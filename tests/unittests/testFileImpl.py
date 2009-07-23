@@ -49,6 +49,12 @@ class FileImplTest(unittest.TestCase):
         txt = self.file.Read()
         self.assertTrue(len(txt))
 
+    def testExists(self):
+        """Test if the file exists"""
+        self.assertTrue(self.file.Exists())
+        nfile = ebmlib.FileObjectImpl('some_fake_file')
+        self.assertFalse(nfile.Exists())
+
     def testGetExtension(self):
         """Test getting the file extension"""
         self.assertTrue(self.file.GetExtension() == 'txt')

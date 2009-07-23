@@ -16,6 +16,7 @@ __revision__ = "$Revision$"
 # Imports
 import wx
 import os
+import locale
 import types
 import unittest
 
@@ -26,18 +27,24 @@ import common
 import ed_txt
 import util
 import ebmlib
+import profiler
 
 #-----------------------------------------------------------------------------#
 
 class EdFileTest(unittest.TestCase):
     def setUp(self):
+        profiler.Profile_Set('ENCODING', locale.getpreferredencoding())
+
         self.app = common.EdApp(False)
         self.path = common.GetDataFilePath(u'test_read_utf8.txt')
         self.file = ed_txt.EdFile(self.path)
+        self.rpath = common.GetDataFilePath(u'embedded_nulls.txt')
+        self.rfile = ed_txt.EdFile(self.rpath)
         self.mtime = ebmlib.GetFileModTime(self.path)
 
     def tearDown(self):
         self.file.Close()
+        self.rfile.Close()
 
     #---- Tests ----#
     def testRead(self):
@@ -67,6 +74,20 @@ class EdFileTest(unittest.TestCase):
     def testHasBom(self):
         """Test checking if file has a bom marker or not"""
         self.assertFalse(self.file.HasBom(), "File has a BOM")
+
+    def testIsRawBytes(self):
+        """Test reading a file that can't be properly encoded and was
+        read as raw bytes.
+
+        """
+        txt = self.file.Read()
+        self.assertTrue(ebmlib.IsUnicode(txt))
+        self.assertFalse(self.file.IsRawBytes())
+
+        self.assertTrue(self.rfile.Exists())
+        txt = self.rfile.Read()
+        self.assertFalse(ebmlib.IsUnicode(txt))
+        self.assertTrue(self.rfile.IsRawBytes())
 
     def testIsReadOnly(self):
         """Test if the file is read only or not"""
