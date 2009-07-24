@@ -3959,7 +3959,7 @@ class PageContainer(wx.Panel):
         
         where, tabIdx = self.HitTest(event.GetPosition())
 
-        if where in [FNB_TAB, FNB_TAB_X]:
+        if where in [FNB_TAB, FNB_TAB_X] and tabIdx < len(self._pagesInfoVec):
 
             if self._pagesInfoVec[tabIdx].GetEnabled():
                 # Fire events and eventually (if allowed) change selection
