@@ -529,7 +529,14 @@ class SearchController(object):
         if evt.IsRegEx() and self._engine is not None:
             match = self._engine.GetLastMatch()
             if match is not None:
-                value = match.expand(replacestring)
+                try:
+                    value = match.expand(replacestring)
+                except re.error, err:
+                    msg = _("Error in regular expression expansion."
+                            "The replace action cannot be completed.\n\n"
+                            "Error Message: %s") % err.message
+                    wx.MessageBox(msg, _("Replace Error"), wx.OK|wx.ICON_ERROR)
+                    return
             else:
                 value = replacestring
         else:
@@ -679,7 +686,14 @@ class SearchController(object):
         for match in reversed(matches):
             start, end = match.span()
             if isregex:
-                value = match.expand(rstring.encode('utf-8')).decode('utf-8')
+                try:
+                    value = match.expand(rstring.encode('utf-8')).decode('utf-8')
+                except re.error, err:
+                    msg = _("Error in regular expression expansion."
+                            "The replace action cannot be completed.\n\n"
+                            "Error Message: %s") % err.message
+                    wx.MessageBox(msg, _("Replace Error"), wx.OK|wx.ICON_ERROR)
+                    break
             else:
                 value = rstring
             stc.SetTargetStart(start)
