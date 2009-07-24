@@ -696,7 +696,7 @@ class StyleMgr(object):
         ## Build style data tree
         # Tree Level 1 split tag from data
         style_tree = [style.split(u"{") for style in style_data.split(u'}')]
-        if len(style_tree) and style_tree[-1][0] == wx.EmptyString:
+        if len(style_tree) and len(style_tree[-1]) and not style_tree[-1][0]:
             style_tree.pop()
 
         # Check for Level 1 Syntax Errors
