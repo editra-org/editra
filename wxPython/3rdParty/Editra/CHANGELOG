@@ -34,6 +34,8 @@ BUG FIXES:
  to fail on write to disk.
 +Fix direction choices not being disabled for search in files operation in
  Find dialog.
++Fix error handling for when incorrect regular expressions are used in a
+ replace statement.
 
 #-----------------------------------------------------------------------------#
 
