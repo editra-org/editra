@@ -128,6 +128,8 @@ class SearchController(object):
     def __del__(self):
         """Cleanup message handlers"""
         ed_msg.Unsubscribe(self._OnShowFindMsg)
+        if self._finddlg is not None:
+            self._finddlg.Destroy()
 
     def _CreateNewDialog(self, e_id):
         """Create and set the controlers find dialog
@@ -504,11 +506,6 @@ class SearchController(object):
             # Save the most recent choices of search locations
             Profile_Set('SEARCH_LOC', choices)
             Profile_Set('SEARCH_FILTER', self._filters)
-
-            # Destroy it
-#            self._finddlg.Destroy()
-
-#        self._finddlg = None
         evt.Skip()
 
     def OnOptionChanged(self, evt):
