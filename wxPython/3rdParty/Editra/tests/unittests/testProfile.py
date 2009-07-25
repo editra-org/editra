@@ -82,6 +82,14 @@ class ProfileTest(unittest.TestCase):
 #        self._profile.Set('VALUE2', "string")
 #        self._profile.Write(
 
+    def testSingleton(self):
+        """Test that only the single instance of the Profile can be used"""
+        self._profile.Set('UNIQUEVALUE', 'MYVALUE!!')
+        new_profile = profiler.Profile()
+        val = new_profile.Get('UNIQUEVALUE')
+        self.assertEquals(val, 'MYVALUE!!')
+        self.assertTrue(self._profile is new_profile)
+
     def testWrite(self):
         """Test writing the settings out to disk."""
         pass

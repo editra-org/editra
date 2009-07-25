@@ -38,9 +38,13 @@ class EdFileTest(unittest.TestCase):
         self.app = common.EdApp(False)
         self.path = common.GetDataFilePath(u'test_read_utf8.txt')
         self.file = ed_txt.EdFile(self.path)
+        self.mtime = ebmlib.GetFileModTime(self.path)
+
         self.rpath = common.GetDataFilePath(u'embedded_nulls.txt')
         self.rfile = ed_txt.EdFile(self.rpath)
-        self.mtime = ebmlib.GetFileModTime(self.path)
+
+        self.ipath = common.GetDataFilePath(u'image_test.png')
+        self.img = ed_txt.EdFile(self.ipath)
 
     def tearDown(self):
         self.file.Close()
@@ -84,9 +88,11 @@ class EdFileTest(unittest.TestCase):
         self.assertTrue(ebmlib.IsUnicode(txt))
         self.assertFalse(self.file.IsRawBytes())
 
-        self.assertTrue(self.rfile.Exists())
         txt = self.rfile.Read()
         self.assertFalse(ebmlib.IsUnicode(txt))
+        self.assertTrue(self.rfile.IsRawBytes())
+
+        bytes = self.img.Read()
         self.assertTrue(self.rfile.IsRawBytes())
 
     def testIsReadOnly(self):
