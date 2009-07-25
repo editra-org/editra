@@ -16,11 +16,26 @@ import os
 import shutil
 import wx
 
+# Imports for bootstrapping Editra
+import plugin
+import profiler
+
 #-----------------------------------------------------------------------------#
 
 class EdApp(wx.App):
+    def OnInit(self):
+        self.pmgr = plugin.PluginManager()
+
+        # Bare minimum profile bootstrap
+        profiler.Profile_Set('ICONS', 'Tango')
+
+        return True
+
     def GetLog(self):
         return lambda msg: None
+
+    def GetPluginManager(self):
+        return self.pmgr
 
 #-----------------------------------------------------------------------------#
 
@@ -61,6 +76,15 @@ def GetTempDir():
     """
     path = os.path.join(u'.', u'temp')
     return os.path.abspath(path)
+
+def GetThemeDir():
+    """Get the packages theme directory path
+    @return: string
+
+    """
+    tpath = os.path.join(u"..", u"..", u"pixmaps", u"theme")
+    tpath = os.path.abspath(tpath)
+    return tpath
 
 def MakeTempFile(fname):
     """Make a new file in the temp directory with a give name
