@@ -37,6 +37,7 @@ BUG FIXES:
 +Fix error handling for when incorrect regular expressions are used in a
  replace statement.
 +Fix error that could occur when right clicking on tab area.
++Fix off by one error in vim jump to line command.
 
 #-----------------------------------------------------------------------------#
 

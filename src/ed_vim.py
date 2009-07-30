@@ -266,7 +266,9 @@ class EditraCommander(object):
 
     def GotoLine(self, line):
         """Goto the start of indentation of given line"""
-        pos = self.stc.PositionFromLine(line)
+        # PostionFromLine returns the position past the last character on the
+        # line. So need to look at previous line to get the correct position.
+        pos = self.stc.PositionFromLine(max(0,line-1))
         self._SetPos(pos)
         self.GotoIndentStart()
 
