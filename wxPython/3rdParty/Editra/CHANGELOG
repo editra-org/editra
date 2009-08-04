@@ -16,6 +16,7 @@ DATE 0x/xx/2009
 NEWS:
 
 NEW: [features/enhancements]
++BackTab can no be used to compress space that is embedded in a line.
 +Record position changes from mouse clicks in position navigation history.
 
 BUG FIXES:

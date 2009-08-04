@@ -159,6 +159,56 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.AddText(txt)
         self.EnsureCaretVisible()
 
+    def BackTab(self):
+        """Unindent or remove excess whitespace to left of cursor"""
+        sel = self.GetSelection()
+        if sel[0] == sel[1]:
+            # There is no selection
+            cpos = self.GetCurrentPos()
+            cline = self.GetCurrentLine()
+            cipos = self.GetLineIndentPosition(cline)
+            if cpos <= cipos:
+                # In indentation so simply backtab
+                super(EditraBaseStc, self).BackTab()
+            else:
+                # In middle of line somewhere
+                text = self.GetLine(cline)
+                column = max(0, self.GetColumn(cpos) - 1)
+                if text[column].isspace():
+
+                    # Find the end of the whitespace
+                    end = column
+                    while end < len(text) and text[end].isspace():
+                        end += 1
+
+                    # Find the start of the whitespace
+                    end -= 1
+                    start = end
+                    while end > 0 and text[start].isspace():
+                        start -= 1
+
+                    diff = end - start
+                    if diff > 1:
+                        # There is space to compress
+                        isize = self.GetIndent()
+                        if isize < diff:
+                            # More space than indent to remove
+                            repeat = isize
+                        else:
+                            # Less than one indent width to remove
+                            repeat = end - (start + 1)
+
+                        # Update the control
+                        self.BeginUndoAction()
+                        self.SetCurrentPos(cpos + (end - column))
+                        for x in range(repeat):
+                            self.DeleteBack()
+                        self.EndUndoAction()
+
+        else:
+            # There is a selection
+            super(EditraBaseStc, self).BackTab()
+
     def BraceBadLight(self, pos):
         """Highlight the character at the given position
         @param pos: position of character to highlight with STC_STYLE_BRACEBAD
