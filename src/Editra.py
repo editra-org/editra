@@ -849,18 +849,22 @@ def UpgradeOldInstall():
 
 #--------------------------------------------------------------------------#
 
-def PrintHelp():
+def PrintHelp(err=None):
     """Print command line help
     @postcondition: Help is printed and program exits
 
     """
-    print ("Editra - %s - Developers Text Editor\n"
+    if err is not None:
+        sys.stderr.write(err + os.linesep)
+
+    print(("Editra - %s - Developers Text Editor\n"
        "Cody Precord (2005-2009)\n\n"
        "usage: Editra [arguments] [files... ]\n\n"
        "Short Arguments:\n"
        "  -c    Set custom configuration directory at runtime\n"
        "  -d    Turn on console debugging (-dd for verbose debug)\n"
        "  -D    Turn off console debugging (overrides preferences)\n"
+       "  -g    Open file to line (i.e Editra -g 10 file.txt)\n"
        "  -h    Show this help message\n"
        "  -p    Run Editra in the profiler (outputs to editra.prof).\n"
        "  -v    Print version number and exit\n"
@@ -872,8 +876,12 @@ def PrintHelp():
        "  --auth            Print the ipc server info\n"
        "  --version         Print version number and exit\n"
        "  --profileOut arg  Run Editra in the profier (arg is output file)\n"
-      ) % ed_glob.VERSION
-    os._exit(0)
+      ) % ed_glob.VERSION)
+
+    if err is None:
+        os._exit(0)
+    else:
+        os._exit(1)
 
 #--------------------------------------------------------------------------#
 
@@ -883,13 +891,12 @@ def ProcessCommandLine():
 
     """
     try:
-        items, args = getopt.getopt(sys.argv[1:], "dhp:vDSc:",
+        items, args = getopt.getopt(sys.argv[1:], "dg:hp:vDSc:",
                                    ['debug', 'help', 'version', 'auth',
                                     'confdir=', 'profileOut='])
     except getopt.GetoptError, msg:
         # Raise error to console and exit
-        sys.stderr.write(str(msg) + os.linesep)
-        PrintHelp()
+        PrintHelp(str(msg))
     
     # Process command line options
     opts = dict(items)
@@ -897,7 +904,7 @@ def ProcessCommandLine():
         if opt in ['-h', '--help']:
             PrintHelp()
         elif opt in ['-v', '--version']:
-            print ed_glob.VERSION
+            print(ed_glob.VERSION)
             os._exit(0)
         elif opt in ['-d', '--debug'] and '-D' not in opts.keys():
             # If the debug flag is set more than once go into verbose mode
@@ -919,6 +926,10 @@ def ProcessCommandLine():
         elif opt == '--profileOut':
             opts['-p'] = value
             opts.pop('--profileOut')
+        elif opt == '-g':
+            # Validate argument passed to -g
+            if not value.isdigit():
+                PrintHelp("error: -g requires a number as an argument!")
         else:
             pass
 
@@ -1010,20 +1021,26 @@ def _Main(opts, args):
     if wx.Platform == '__WXMSW__':
         wx.PostEvent(frame, wx.ActivateEvent(wx.wxEVT_ACTIVATE, True))
 
-    # Do update check, only check if its been more than a day since the last
-    # check
+    # Do update check if preferences say its ok to do so
     isadmin = os.access(ed_glob.CONFIG['INSTALL_DIR'], os.R_OK|os.W_OK)
     if isadmin and profiler.Profile_Get('CHECKUPDATE', default=True):
         uthread = updater.UpdateThread(editra_app, ID_UPDATE_CHECK)
         uthread.start()
 
-    for arg in args:
-        try:
-            arg = os.path.abspath(arg)
-            fname = ed_txt.DecodeString(arg, sys.getfilesystemencoding())
-            frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname)
-        except IndexError:
-            dev_tool.DEBUGP("[main][err] IndexError on commandline args")
+    if len(args):
+        line = -1
+        if '-g' in opts:
+            line = max(0, int(opts.pop('-g')) - 1)
+
+        # TODO: should line arg only be applied to the first file name or all?
+        #       currently apply to all.
+        for arg in args:
+            try:
+                arg = os.path.abspath(arg)
+                fname = ed_txt.DecodeString(arg, sys.getfilesystemencoding())
+                frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname, line)
+            except IndexError:
+                dev_tool.DEBUGP("[main][err] IndexError on commandline args")
 
     # Notify that profile was updated
     if editra_app.GetProfileUpdated():
@@ -1032,7 +1049,7 @@ def _Main(opts, args):
         profiler.Profile_Del('WPOS')
         wx.MessageBox(_("Your profile has been updated to the latest "
                         "version") + u"\n" + \
-                      _("Please check the preferences dialog to check "
+                      _("Please check the preferences dialog to verify "
                         "your preferences"),
                       _("Profile Updated"))
 

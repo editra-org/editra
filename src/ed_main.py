@@ -417,12 +417,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         else:
             self._handlers['ui'].append((menu_id, handler))
 
-    def DoOpen(self, evt, fname=u''):
+    def DoOpen(self, evt, fname=u'', lnum=-1):
         """ Do the work of opening a file and placing it
         in a new notebook page.
         @keyword fname: can be optionally specified to open
                         a file without opening a FileDialog
         @type fname: string
+        @keyword lnum: Explicitly set the line number to open the file to
+        @type lnum: int
 
         """
         try:
@@ -457,6 +459,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self.LOG("[ed_main][info] CMD Open File: %s" % fname)
             self.nb.OpenPage(ebmlib.GetPathName(fname),
                              ebmlib.GetFileName(fname), quiet=True)
+            self.nb.GoCurrentPage()
+
+            # lnum arg is only used with command line open
+            if lnum >= 0:
+                buff = self.nb.GetCurrentCtrl()
+                buff.GotoLine(lnum)
+
             self.Raise()
 
     def GetCommandbar(self):
