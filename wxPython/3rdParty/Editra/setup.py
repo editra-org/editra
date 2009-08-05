@@ -359,6 +359,14 @@ else:
     else:
         from distutils.core import setup
 
+    # Make sure to delete any existing MANIFEST file beforehand to
+    # prevent stale file lists
+    if os.path.exists('MANIFEST'):
+        try:
+            os.remove('MANIFEST')
+        except OSError:
+            pass
+
     setup(
         name = NAME,
         scripts = ['Editra', 'Editra.pyw'],
