@@ -18,6 +18,7 @@ NEWS:
 NEW: [features/enhancements]
 +BackTab can no be used to compress space that is embedded in a line.
 +Record position changes from mouse clicks in position navigation history.
++Add command line switch -g for specifying line to open file to.
 
 BUG FIXES:
 +Fix copying from OutputBuffer.
