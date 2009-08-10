@@ -42,6 +42,7 @@ ID_EXECUTABLES = wx.NewId()
 
 # Misc Panel
 ID_AUTOCLEAR = wx.NewId()
+ID_ERROR_BEEP = wx.NewId()
 
 # Color Buttons
 ID_DEF_BACK = wx.NewId()
@@ -155,6 +156,7 @@ class ConfigNotebook(wx.Notebook):
             buff.Hide()
             Profile_Set(LAUNCH_PREFS,
                         dict(autoclear=False,
+                             errorbeep=False,
                              defaultf=buff.GetDefaultForeground().Get(),
                              defaultb=buff.GetDefaultBackground().Get(),
                              errorf=buff.GetErrorForeground().Get(),
@@ -408,6 +410,9 @@ class MiscPanel(wx.Panel):
         clear_cb = wx.CheckBox(self, ID_AUTOCLEAR,
                                _("Automatically clear buffer between runs"))
         clear_cb.SetValue(cfg.get('autoclear', False))
+        error_cb = wx.CheckBox(self, ID_ERROR_BEEP,
+                               _("Audible feedback when errors are detected"))
+        error_cb.SetValue(cfg.get('errorbeep', False))
 
         # Colors
         colors = dict()
@@ -459,6 +464,7 @@ class MiscPanel(wx.Panel):
         msizer.AddMany([((5, 5), 0),
                         (wx.StaticText(self, label=("Actions") + u":"), 0),
                         ((5, 5), 0), (clear_cb, 0),
+                        ((5, 5), 0), (error_cb, 0),
                         ((10, 10), 0), (wx.StaticLine(self), 0, wx.EXPAND),
                         ((10, 10), 0),
                         (boxsz, 1, wx.EXPAND)])
@@ -473,6 +479,8 @@ class MiscPanel(wx.Panel):
         cfg = Profile_Get(LAUNCH_PREFS, default=dict())
         if e_id == ID_AUTOCLEAR:
             cfg['autoclear'] = e_val
+        elif e_id == ID_ERROR_BEEP:
+            cfg['errorbeep'] = e_val
         else:
             evt.Skip()
 

@@ -9,6 +9,7 @@
 Version 1.4:
 
 +Fix handling for files that have spaces in their names.
++Add option to provide audible feedback for when errors are detected.
 
 #-----------------------------------------------------------------------------#
 Version 1.3

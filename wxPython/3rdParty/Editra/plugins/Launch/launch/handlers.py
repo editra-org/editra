@@ -82,6 +82,11 @@ ANSI = {
         #'[49m' : default
         }
 
+# Style Types
+STYLE_NORMAL = 0
+STYLE_INFO   = 1
+STYLE_ERROR  = 2
+
 # Process Start/Exit Regular Expression
 RE_PROC_SE = re.compile('>{3,3}.*' + os.linesep)
 
@@ -241,11 +246,18 @@ class FileTypeHandler(object):
 
         """
         # Highlight Start and End lines in info style
+        finfo = False
         for info in RE_PROC_SE.finditer(txt):
             sty_s = start + info.start()
             sty_e = start + info.end()
             stc.StartStyling(sty_s, 0xff)
             stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_INFO)
+            finfo = True
+
+        if finfo:
+            return STYLE_INFO, False
+        else:
+            return STYLE_NORMAL, False
 
 #-----------------------------------------------------------------------------#
 
@@ -300,12 +312,13 @@ class BashHandler(FileTypeHandler):
 
     def StyleText(self, stc, start, txt):
         """Style NSIS output messages"""
-        if _StyleError(stc, start, txt, BashHandler.RE_BASH_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(BashHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, BashHandler.RE_BASH_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(BashHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -353,12 +366,13 @@ class CamlHandler(FileTypeHandler):
 
     def StyleText(self, stc, start, txt):
         """Style OCaml Information and Error messages from script output."""
-        if _StyleError(stc, start, txt, CamlHandler.RE_CAML_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(CamlHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, CamlHandler.RE_CAML_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(CamlHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -417,12 +431,13 @@ class HaskellHandler(FileTypeHandler):
 
     def StyleText(self, stc, start, txt):
         """Style GHC Information and Error messages from script output."""
-        if _StyleError(stc, start, txt, HaskellHandler.RE_HASKELL_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(HaskellHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, HaskellHandler.RE_HASKELL_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(HaskellHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -448,12 +463,13 @@ class HaxeHandler(FileTypeHandler):
 
     def StyleText(self, stc, start, txt):
         """Style haXe output messages"""
-        if _StyleError(stc, start, txt, HaxeHandler.RE_HAXE_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(HaxeHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, HaxeHandler.RE_HAXE_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(HaxeHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -538,12 +554,13 @@ class LuaHandler(FileTypeHandler):
 
     def StyleText(self, stc, start, txt):
         """Style NSIS output messages"""
-        if _StyleError(stc, start, txt, LuaHandler.RE_LUA_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(LuaHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, LuaHandler.RE_LUA_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(LuaHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -581,12 +598,13 @@ class NSISHandler(FileTypeHandler):
 
     def StyleText(self, stc, start, txt):
         """Style NSIS output messages"""
-        if _StyleError(stc, start, txt, NSISHandler.RE_NSIS_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(NSISHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, NSISHandler.RE_NSIS_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(NSISHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -615,12 +633,13 @@ class PhpHandler(FileTypeHandler):
         output.
 
         """
-        if _StyleError(stc, start, txt, PhpHandler.RE_PHP_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(PhpHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, PhpHandler.RE_PHP_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(PhpHandler, self).StyleText(stc, start, txt)[0]
+        return max(sty, err)
 
 #-----------------------------------------------------------------------------#
 
@@ -660,12 +679,13 @@ class PerlHandler(FileTypeHandler):
         output.
 
         """
-        if _StyleError(stc, start, txt, PerlHandler.RE_PERL_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(PerlHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, PerlHandler.RE_PERL_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(PerlHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -729,13 +749,19 @@ class PythonHandler(FileTypeHandler):
         output.
 
         """
-        if _StyleError(stc, start, txt, PythonHandler.RE_PY_ERROR) or \
-           _StyleError(stc, start, txt, PythonHandler.RE_PL_ERR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(PythonHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, PythonHandler.RE_PY_ERROR)
+        if more:
+            sty, more = _StyleError(stc, start, txt, PythonHandler.RE_PL_ERR)
+
+        if not err:
+            err = sty
+
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(PythonHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -775,12 +801,13 @@ class RubyHandler(FileTypeHandler):
 
     def StyleText(self, stc, start, txt):
         """Style NSIS output messages"""
-        if _StyleError(stc, start, txt, RubyHandler.RE_RUBY_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(RubyHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, RubyHandler.RE_RUBY_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(RubyHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -818,13 +845,14 @@ class TCLHandler(FileTypeHandler):
         _OpenToLine(ifile, line, mainw)
 
     def StyleText(self, stc, start, txt):
-        """Style NSIS output messages"""
-        if _StyleError(stc, start, txt, TCLHandler.RE_TCL_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(TCLHandler, self).StyleText(stc, start, txt)
+        """Style TCL output messages"""
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, TCLHandler.RE_TCL_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(TCLHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 
@@ -851,12 +879,13 @@ class VBScriptHandler(FileTypeHandler):
 
     def StyleText(self, stc, start, txt):
         """Style VBScript Information and Error messages from script output."""
-        if _StyleError(stc, start, txt, VBScriptHandler.RE_VBS_ERROR):
-            return
-        else:
-            # Highlight Start end lines this is what the
-            # base classes method does.
-            super(VBScriptHandler, self).StyleText(stc, start, txt)
+        sty = STYLE_NORMAL
+        err, more = _StyleError(stc, start, txt, VBScriptHandler.RE_VBS_ERROR)
+        if err:
+            err = STYLE_ERROR
+        if more:
+            sty = super(VBScriptHandler, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
 
 #-----------------------------------------------------------------------------#
 # Handler Object Dictionary
@@ -946,15 +975,20 @@ def _StyleError(stc, start, txt, regex):
     @param start: start of text just added to buffer
     @param txt: text that was just added
     @param regex: regular expression object for matching the errors
-    @return: bool (True if match), (False if no match)
+    @return: (bool errfound, bool more)
 
     """
+    found_err = False
+    more = False
+    sty_e = start
     for group in regex.finditer(txt):
         sty_s = start + group.start()
         sty_e = start + group.end()
         stc.StartStyling(sty_s, 0xff)
         stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_ERROR)
-    else:
-        return False
+        found_err = True
 
-    return True
+    if sty_e != start + len(txt):
+        more = True
+
+    return found_err, more
