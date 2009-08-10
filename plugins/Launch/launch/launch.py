@@ -87,6 +87,7 @@ class LaunchWindow(eclib.ControlBox):
         if self._prefs is None:
             Profile_Set(cfgdlg.LAUNCH_PREFS,
                         dict(autoclear=False,
+                             errorbeep=False,
                              defaultf=self._buffer.GetDefaultForeground().Get(),
                              defaultb=self._buffer.GetDefaultBackground().Get(),
                              errorf=self._buffer.GetErrorForeground().Get(),
@@ -97,6 +98,7 @@ class LaunchWindow(eclib.ControlBox):
                              warnb=self._buffer.GetWarningBackground().Get()))
             self._prefs = Profile_Get(cfgdlg.LAUNCH_PREFS)
 
+        self._buffer.SetPrefs(self._prefs)
         self.UpdateBufferColors()
         cbuffer = self._mw.GetNotebook().GetCurrentCtrl()
         self.SetupControlBar(cbuffer)
@@ -614,6 +616,7 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         # Attributes
         self._mw = parent.GetMainWindow()
         self._cfile = ''
+        self._prefs = dict()
 
         # Setup
         font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN,
@@ -629,7 +632,11 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
 
         """
         handler = self.GetCurrentHandler()
-        handler.StyleText(self, start, txt)
+        style = handler.StyleText(self, start, txt)
+
+        # Ring the bell if there was an error and option is enabled
+        if style == handlers.STYLE_ERROR and self._prefs.get('errorbeep', False):
+            wx.Bell()
 
     def DoFilterInput(self, txt):
         """Filter the incoming input
@@ -670,6 +677,13 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         lang_id = self.GetParent().GetLastRun()[1]
         handler = handlers.GetHandlerById(lang_id)
         return handler
+
+    def SetPrefs(self, prefs):
+        """Set the launch prefs
+        @param prefs: dict
+
+        """
+        self._prefs = prefs
 
 #-----------------------------------------------------------------------------#
 def GetLangIdFromMW(mainw):
