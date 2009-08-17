@@ -287,7 +287,8 @@ def GetClipboardText(primary=False):
 
     text_obj = wx.TextDataObject()
     rtxt = None
-    if wx.TheClipboard.Open():
+    
+    if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
         if wx.TheClipboard.GetData(text_obj):
             rtxt = text_obj.GetText()
         wx.TheClipboard.Close()
@@ -315,7 +316,7 @@ def SetClipboardText(txt, primary=False):
 
     data_o = wx.TextDataObject()
     data_o.SetText(txt)
-    if wx.TheClipboard.Open():
+    if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
         wx.TheClipboard.SetData(data_o)
         wx.TheClipboard.Close()
         if primary and wx.Platform == '__WXGTK__':
