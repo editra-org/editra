@@ -42,6 +42,7 @@ BUG FIXES:
 +Fix off by one error in vim jump to line command.
 +Fix some clipboard related issues when running under gtk.
 +Fix tab scrolling rate
++Handle errors due to failed socket connection in IPC server
 
 #-----------------------------------------------------------------------------#
 
