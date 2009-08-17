@@ -10,7 +10,7 @@ Change Log:
 Changes since last release:
 
 VERSION 0.5.0
-DATE 0x/xx/2009
+DATE 08/xx/2009
 28th Alpha Release
 
 NEWS:
@@ -40,6 +40,7 @@ BUG FIXES:
  replace statement.
 +Fix error that could occur when right clicking on tab area.
 +Fix off by one error in vim jump to line command.
++Fix some clipboard related issues when running under gtk.
 
 #-----------------------------------------------------------------------------#
 
