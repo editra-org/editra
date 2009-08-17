@@ -863,14 +863,16 @@ class FNBDropTarget(wx.DropTarget):
 
     def OnData(self, x, y, dragres):
         """ Handles the OnData() method to call the real DnD routine. """
-        
-        if not self.GetData():
-            return wx.DragNone
+        try:
+            if not self.GetData():
+                return wx.DragNone
 
-        draginfo = self._dataobject.GetData()
-        drginfo = cPickle.loads(draginfo)
-        
-        return self._parent.OnDropTarget(x, y, drginfo.GetPageIndex(), drginfo.GetContainer())
+            draginfo = self._dataobject.GetData()
+            drginfo = cPickle.loads(draginfo)
+            
+            return self._parent.OnDropTarget(x, y, drginfo.GetPageIndex(), drginfo.GetContainer())
+        except wx.PyAssertionError:
+            return wx.DragCancel
 
 
 # ---------------------------------------------------------------------------- #
