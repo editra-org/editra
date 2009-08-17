@@ -3941,7 +3941,7 @@ class PageContainer(wx.Panel):
     def OnMouseWheel(self, event):
         """ Scroll tabs when the mouse whee """
         delta = event.GetWheelRotation()
-        for tab in range(abs(delta)):
+        for tab in range(abs(delta/event.GetWheelDelta())):
             if delta > 0:
                 before = self._nLeftButtonStatus
                 self._nLeftButtonStatus = FNB_BTN_PRESSED
