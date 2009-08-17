@@ -41,6 +41,7 @@ BUG FIXES:
 +Fix error that could occur when right clicking on tab area.
 +Fix off by one error in vim jump to line command.
 +Fix some clipboard related issues when running under gtk.
++Fix tab scrolling rate
 
 #-----------------------------------------------------------------------------#
 
