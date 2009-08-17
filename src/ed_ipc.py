@@ -146,30 +146,34 @@ class EdIpcServer(threading.Thread):
 
         """
         while not self._exit:
-            client, addr = self.socket.accept()
+            try:
+                client, addr = self.socket.accept()
 
-            if self._exit:
-                break
-
-            # Block for upto 2 seconds while reading
-            start = time.time()
-            recieved = u''
-            while time.time() < start + 2:
-                recieved += client.recv(4096)
-                if recieved.endswith(MSGEND):
+                if self._exit:
                     break
 
-            # If message key is correct and the message is ended, process
-            # the input and dispatch to the app.
-            if recieved.startswith(self.__key) and recieved.endswith(MSGEND):
-                recieved = recieved.replace(self.__key, u'', 1)
-                # Get the separate commands
-                cmds = [ cmd
-                         for cmd in recieved.rstrip(MSGEND).split(u";")
-                         if len(cmd) ]
+                # Block for upto 2 seconds while reading
+                start = time.time()
+                recieved = u''
+                while time.time() < start + 2:
+                    recieved += client.recv(4096)
+                    if recieved.endswith(MSGEND):
+                        break
 
-                evt = IpcServerEvent(edEVT_COMMAND_RECV, wx.ID_ANY, cmds)
-                wx.CallAfter(wx.PostEvent, self.app, evt)
+                # If message key is correct and the message is ended, process
+                # the input and dispatch to the app.
+                if recieved.startswith(self.__key) and recieved.endswith(MSGEND):
+                    recieved = recieved.replace(self.__key, u'', 1)
+                    # Get the separate commands
+                    cmds = [ cmd
+                             for cmd in recieved.rstrip(MSGEND).split(u";")
+                             if len(cmd) ]
+
+                    evt = IpcServerEvent(edEVT_COMMAND_RECV, wx.ID_ANY, cmds)
+                    wx.CallAfter(wx.PostEvent, self.app, evt)
+            except socket.error:
+                # TODO: Better error handling
+                self._exit = True
 
         # Shutdown Server
         try:
