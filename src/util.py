@@ -528,6 +528,14 @@ def ResolvConfigDir(config_dir, sys_only=False):
         if os.path.exists(user_config):
             return user_config + os.sep
 
+    # Check if the user path has already been resolved once before
+    if ed_glob.CONFIG['CONFIG_DIR'] != u"":
+        tmp = os.path.join(ed_glob.CONFIG['CONFIG_DIR'], config_dir)
+        if os.path.exists(tmp):
+            return tmp
+        else:
+            del tmp
+
     # The following lines are used only when Editra is being run as a
     # source package. If the found path does not exist then Editra is
     # running as as a built package.
