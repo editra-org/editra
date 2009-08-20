@@ -528,9 +528,10 @@ def ResolvConfigDir(config_dir, sys_only=False):
         if os.path.exists(user_config):
             return user_config + os.sep
 
-    # Check if the user path has already been resolved once before
-    if ed_glob.CONFIG['CONFIG_DIR'] != u"":
-        tmp = os.path.join(ed_glob.CONFIG['CONFIG_DIR'], config_dir)
+    # Check if the system install path has already been resolved once before
+    if ed_glob.CONFIG['INSTALL_DIR'] != u"":
+        tmp = os.path.join(ed_glob.CONFIG['INSTALL_DIR'], config_dir)
+        tmp = os.path.normpath(tmp) + os.sep
         if os.path.exists(tmp):
             return tmp
         else:
