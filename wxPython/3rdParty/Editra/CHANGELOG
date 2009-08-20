@@ -10,10 +10,16 @@ Change Log:
 Changes since last release:
 
 VERSION 0.5.0
-DATE 08/xx/2009
+DATE 08/20/2009
 28th Alpha Release
 
 NEWS:
+
+This release contains a large number of important bug fixes. Due to various
+outside issues that have limited my development time the last few monthes I have
+decided to change the focus to bug fixes for this release and most of the 
+features I had slated for 0.5 have been pushed back to the later 0.5 series 
+releases in order focus on stability for 0.5.
 
 NEW: [features/enhancements]
 +BackTab can no be used to compress space that is embedded in a line.
@@ -41,7 +47,7 @@ BUG FIXES:
 +Fix error that could occur when right clicking on tab area.
 +Fix off by one error in vim jump to line command.
 +Fix some clipboard related issues when running under gtk.
-+Fix tab scrolling rate
++Fix tab scrolling rate on gtk
 +Handle errors due to failed socket connection in IPC server
 
 #-----------------------------------------------------------------------------#
