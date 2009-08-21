@@ -1,4 +1,4 @@
-# Polish translation for editra
+# Hungarian translation for editra
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the editra package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,43 +8,41 @@ msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-20 22:06-0500\n"
-"PO-Revision-Date: 2009-03-15 05:04+0000\n"
-"Last-Translator: pp/bs <Unknown>\n"
-"Language-Team: Polish <pl@li.org>\n"
+"PO-Revision-Date: 2009-08-06 17:33+0000\n"
+"Last-Translator: Gergely Szarka <gszarka@invitel.hu>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-03-28 19:36+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 02:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../../src/ed_search.py:425
 #, python-format
 msgid "\"%s\" was not found"
-msgstr "Nie znaleziono \"%s\""
+msgstr "\"%s\" nem található"
 
 #: ../../src/ed_search.py:622
 #, python-format
 msgid "%d matches were replaced."
-msgstr "Zamieniono %d razy."
+msgstr "%d találat lecserélve"
 
 #: ../../src/util.py:361
 #, python-format
 msgid "%s Source File"
-msgstr "%s Plik Źródłowy"
+msgstr "%s Forrás fájl"
 
 #: ../../src/ed_main.py:580
 #, fuzzy, python-format
 msgid ""
 "%s could not be found.\n"
 "Perhaps it's been moved or deleted."
-msgstr ""
-"%s nie został odnaleziony\n"
-"Być może został przeniesiony albo skasowany"
+msgstr "%s nem található"
 
 #: ../../src/ed_stc.py:1648
 #, python-format
 msgid "%s does not exist"
-msgstr "%s nie istnieje"
+msgstr "%s nem létezik"
 
 #: ../../src/ed_editv.py:263
 #, python-format
@@ -52,10 +50,7 @@ msgid ""
 "%s has been deleted since its last save point.\n"
 "\n"
 "Would you like to save it again?"
-msgstr ""
-"%s został skasowany od czasu ostatniego zapisu.\n"
-"\n"
-"Czy chciałbyś zapisać go ponownie?"
+msgstr "%s törölve lett az utolsó mentés óta"
 
 #: ../../src/ed_editv.py:283
 #, fuzzy, python-format
@@ -63,107 +58,104 @@ msgid ""
 "%s has been modified by another application.\n"
 "\n"
 "Would you like to reload it?"
-msgstr ""
-"%s został zmodyfikowany przez inną aplikację.\n"
-"\n"
-"Czy chcesz go odświeżyć?"
+msgstr "%s -t egy másik alkalmazás módosította"
 
 #: ../../src/ed_menu.py:794
 #, fuzzy
 msgid "&About..."
-msgstr "&O programie"
+msgstr "&Névjegy"
 
 #: ../../src/ed_menu.py:490
 msgid "&Close Tab"
-msgstr ""
+msgstr "&Fül bezárása"
 
 #: ../../src/ed_menu.py:550
 msgid "&Copy"
-msgstr "&Kopiuj"
+msgstr "&Másolás"
 
 #: ../../src/ed_menu.py:614
 msgid "&Edit"
-msgstr "&Edycja"
+msgstr "&Szerkesztés"
 
 #: ../../src/ed_menu.py:536
 msgid "&File"
-msgstr "&Plik"
+msgstr "&Fájl"
 
 #: ../../src/ed_menu.py:598
 msgid "&Find"
-msgstr "&Znajdź"
+msgstr "&Keresés"
 
 #: ../../src/ed_menu.py:688
 msgid "&Font"
-msgstr "&Czcionka"
+msgstr "&Betűtípus"
 
 #: ../../src/ed_menu.py:658
 msgid "&Goto Line"
-msgstr "&Przejdź do linii"
+msgstr "&Ugrás a sorra"
 
 #: ../../src/ed_main.py:151 ../../src/ed_menu.py:807
 msgid "&Help"
-msgstr "&Pomoc"
+msgstr "&Súgó"
 
 #: ../../src/ed_menu.py:480
 msgid "&New Tab"
-msgstr "&Nowa karta"
+msgstr "&Új lap"
 
 #: ../../src/ed_menu.py:485
 msgid "&Open"
-msgstr "&Otwórz"
+msgstr "&Megnyitás"
 
 #: ../../src/ed_menu.py:552
 msgid "&Paste"
-msgstr "&Wklej"
+msgstr "&Beillesztés"
 
 #: ../../src/ed_menu.py:531
 msgid "&Print"
-msgstr "&Drukuj"
+msgstr "&Nyomtatás"
 
 #: ../../src/ed_menu.py:601
 msgid "&Quick Find"
-msgstr "&Szybkie znajdowanie"
+msgstr "&Gyorskeresés"
 
 #: ../../src/ed_menu.py:497
 msgid "&Save"
-msgstr "&Zapisz"
+msgstr "&Mentés"
 
 #: ../../src/ed_menu.py:760
 msgid "&Settings"
-msgstr "&Ustawienia"
+msgstr "&Beállítások"
 
 #: ../../src/ed_menu.py:675
 msgid "&Toolbar"
-msgstr "&Pasek narzędzi"
+msgstr "&Eszköztár"
 
 #: ../../src/ed_menu.py:785
 msgid "&Tools"
-msgstr "&Narzędzia"
+msgstr "&Eszközök"
 
 #: ../../src/ed_menu.py:545
 msgid "&Undo"
-msgstr "&Cofnij"
+msgstr "&Visszavonás"
 
 #: ../../src/ed_menu.py:679
 msgid "&View"
-msgstr "&Widok"
+msgstr "&Nézet"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:304
 msgid "**Alias**"
-msgstr ""
+msgstr "**Álnév**"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:304
 msgid "**New Value**"
-msgstr "**Nowa wartość**"
+msgstr "**Új Érték**"
 
 #: ../../src/dev_tool.py:475 ../../plugins/Launch/launch/launch.py:532
 msgid "Abort"
-msgstr "Przerwij"
+msgstr "Megszakítás"
 
 #: ../../src/ed_menu.py:795
 msgid "About"
-msgstr "O Aplikacji"
+msgstr "Névjegy"
 
 #: ../../src/ed_cmdbar.py:603
 #, python-format
@@ -172,31 +164,31 @@ msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:240
 msgid "Add a new executable"
-msgstr ""
+msgstr "Futtatható állomány hozzáadása"
 
 #: ../../src/ed_menu.py:566
 msgid "Add a new line after the current line"
-msgstr "Dodaj nową linię po obecnej"
+msgstr "Új sor beszúrása a jelenlegi után"
 
 #: ../../src/ed_menu.py:568
 msgid "Add a new line before the current line"
-msgstr "Dodaj nową linię przed obecną"
+msgstr "Új sor beszúrása a jelenlegi elé"
 
 #: ../../src/ed_menu.py:596
 msgid "Add and remove bookmarks"
-msgstr "Dodaj lub usuń zakładkę"
+msgstr "Könyvjelzők hozzáadása/törlése"
 
 #: ../../src/prefdlg.py:189
 msgid "Advanced"
-msgstr "Zaawansowane"
+msgstr "Speciális"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:519
 msgid "Alias"
-msgstr "Alias"
+msgstr "Álnév"
 
 #: ../../src/ed_log.py:170 ../../src/ed_log.py:247
 msgid "All"
-msgstr "Wszystko"
+msgstr "Mind"
 
 #: ../../src/Editra.py:561
 #, python-format
@@ -204,24 +196,24 @@ msgid ""
 "An updated version of Editra is available\n"
 "Would you like to download Editra %s now?"
 msgstr ""
-"Dostępna jest nowsza wersja programu Editra\n"
-"Czy chciałbyś teraz ściągnąć program Editra %s ?"
+"Az Editra egy új verziója elérhető\n"
+"Szeretnéd most letölteni az Editra %s -t?"
 
 #: ../../src/prefdlg.py:582
 msgid "AntiAliasing"
-msgstr "AntiAliasing"
+msgstr "Élsimítás"
 
 #: ../../src/prefdlg.py:183
 msgid "Appearance"
-msgstr "Wygląd"
+msgstr "Megjelenés"
 
 #: ../../src/prefdlg.py:1598
 msgid "Apply"
-msgstr "Zastosuj"
+msgstr "Alkalmaz"
 
 #: ../../src/style_editor.py:665
 msgid "Attributes"
-msgstr "Atrybuty"
+msgstr "Jellemzők"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:414
 msgid "Audible feedback when errors are detected"
@@ -234,15 +226,15 @@ msgstr ""
 #: ../../src/plugdlg.py:939 ../../src/plugdlg.py:1075
 #, python-format
 msgid "Author: %s"
-msgstr "Autor: %s"
+msgstr "Szerző: %s"
 
 #: ../../src/ed_menu.py:747 ../../src/prefdlg.py:757
 msgid "Auto-Completion"
-msgstr "Automatyczne uzupełnianie"
+msgstr "Automatikus kiegészítés"
 
 #: ../../src/ed_menu.py:749 ../../src/prefdlg.py:767
 msgid "Auto-Indent"
-msgstr "Auto-Wcięcia"
+msgstr "Automatikus behúzás"
 
 #: ../../src/prefdlg.py:356
 msgid "Automatically Backup Files"
@@ -250,27 +242,27 @@ msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:411
 msgid "Automatically clear buffer between runs"
-msgstr "Automatycznie wyczyść bufor między uruchomieniami"
+msgstr "Gyorsítótár automatikus törlése"
 
 #: ../../src/prefdlg.py:371
 msgid "Automatically reload files when changes are detected on disk"
-msgstr "Automatycznie ładuje pliki od nowa gdy nastąpią zmiany na dysku"
+msgstr ""
 
 #: ../../src/perspective.py:74
 msgid "Automatically save/use window state from last session"
-msgstr "Automatycznie zapisuj/przywracaj stan okien z poprzedniej sesji"
+msgstr "Automatikusan mentse/használja az ablak állapotot az előző munkamentből"
 
 #: ../../src/prefdlg.py:559
 msgid "Automatically trim whitespace on save"
-msgstr "Automatycznie obcinaj białe znaki przy zapisie"
+msgstr ""
 
 #: ../../src/style_editor.py:654 ../../plugins/Launch/launch/cfgdlg.py:431
 msgid "Background"
-msgstr "Tło"
+msgstr "Háttér"
 
 #: ../../src/prefdlg.py:565
 msgid "Backspace Unindents"
-msgstr "Backspace kasuje wcięcia"
+msgstr "A Backspace törli a bekezdést"
 
 #: ../../src/prefdlg.py:358
 msgid "Backup buffer to file periodically"
@@ -278,90 +270,90 @@ msgstr ""
 
 #: ../../src/style_editor.py:196
 msgid "Base new theme on existing one"
-msgstr ""
+msgstr "Új téma létrehozása egy már létező alapján"
 
 #: ../../src/prefdlg.py:1572
 msgid "Binding"
-msgstr "Powiązanie"
+msgstr "Kötés"
 
 #: ../../src/prefdlg.py:1986
 msgid "Black/White"
-msgstr "Czarno-biały"
+msgstr "Fekete-fehér"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:417
 msgid "Bookmark Selected Path(s)"
-msgstr "Wybrana(-e) ścieżka(-i) zakładek"
+msgstr ""
 
 #: ../../src/ed_menu.py:595
 msgid "Bookmarks"
-msgstr "Zakładki"
+msgstr "Könyvjelzők"
 
 #: ../../src/ed_menu.py:752 ../../src/prefdlg.py:737
 msgid "Bracket Highlighting"
-msgstr "Podświetlenie nawiasów"
+msgstr "Zárójel kiemelés"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:538
 msgid "Browse"
-msgstr "Przeglądaj"
+msgstr "Tallózás"
 
 #: ../../src/ed_cmdbar.py:401
 #, fuzzy, python-format
 msgid "Can't change directory to: %s"
-msgstr "Zmień widok na \"%s\""
+msgstr "Nézet megváltoztatása erre: \"%s\""
 
 #: ../../src/ed_search.py:1226 ../../src/style_editor.py:139
 #: ../../src/updater.py:567
 msgid "Cancel"
-msgstr "Anuluj"
+msgstr "Mégse"
 
 #: ../../src/updater.py:644
 msgid "Canceled"
-msgstr "Anulowano"
+msgstr "Megszakítva"
 
 #: ../../src/ed_menu.py:689
 msgid "Change Font Settings"
-msgstr "Zmień ustawienia czcionki"
+msgstr "Betűtípus beállítások megváltoztatása"
 
 #: ../../src/ed_statbar.py:59 ../../src/ed_statbar.py:61
 #: ../../src/ed_statbar.py:63
 #, fuzzy, python-format
 msgid "Change line endings to %s"
-msgstr "Zmień widok na \"%s\""
+msgstr "Nézet megváltoztatása erre: \"%s\""
 
 #: ../../src/perspective.py:129
 #, python-format
 msgid "Change view to \"%s\""
-msgstr "Zmień widok na \"%s\""
+msgstr "Nézet megváltoztatása erre: \"%s\""
 
 #: ../../src/style_editor.py:749
 #, python-format
 msgid "Changed color scheme to %s"
-msgstr "Zmień schemat kolorów na %s"
+msgstr "Színséma megváltoztatása erre: \"%s\""
 
 #: ../../src/prefdlg.py:274
 msgid "Changes made in this dialog are saved in your current profile. Some Items such as Language require the program to be restarted before taking effect."
-msgstr "Zmiany dokonane w tym oknie zostały zachowane w twoim obecnym profilu. Niektóre, takie jak język, wymagają ponownego uruchomienia programu."
+msgstr "A párbeszédpanelben történt változások mentésre kerültek a jelenlegi profilba. Néhány elem, például a nyelv életbelépéséhez a programot újra kell indítani."
 
 #: ../../src/plugdlg.py:230
 msgid "Changes will take affect once the program has been restarted"
-msgstr "Zmiany odniosą efekt po ponownym uruchomieniu programu"
+msgstr "A változtatások a program újraindítása után lépnek érvénybe."
 
 #: ../../src/prefdlg.py:1357
 msgid "Check"
-msgstr "Sprawdź"
+msgstr "Ellenőrzés"
 
 #: ../../src/prefdlg.py:324
 msgid "Check for updates on startup"
-msgstr "Szukaj aktualizacji przy uruchomieniu programu"
+msgstr "Frissítések keresése a program indulásakor"
 
 #: ../../src/prefdlg.py:366
 msgid "Check if on disk file has been modified by others"
-msgstr "Sprawdź czy plik na dysku został zmodyfikowany przez innych"
+msgstr "Ellenőrizze, hogy a fájlt nem módosították-e mások"
 
 #: ../../src/eclib/finddlg.py:776
 #, fuzzy
 msgid "Choose Folder"
-msgstr "Wybierz plik"
+msgstr "Megnyitás"
 
 #: ../../src/eclib/finddlg.py:1090
 msgid "Choose Search Folder"
@@ -369,15 +361,15 @@ msgstr ""
 
 #: ../../src/ed_main.py:442
 msgid "Choose a File"
-msgstr "Wybierz plik"
+msgstr "Megnyitás"
 
 #: ../../src/ed_main.py:672
 msgid "Choose a Save Location"
-msgstr "Wybierz miejsce zapisu"
+msgstr "Mentés helye"
 
 #: ../../src/ed_pages.py:160
 msgid "Choose an Encoding"
-msgstr "Wybierz kodowanie"
+msgstr "Kódolás kiválasztása"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:547
 msgid "Choose and executable"
@@ -386,58 +378,58 @@ msgstr ""
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:265
 msgid "Class Definitions"
-msgstr "Definicja Klasy"
+msgstr "Osztálydefiníciók"
 
 #: ../../src/ed_log.py:140 ../../src/ed_search.py:1235
 #: ../../plugins/Launch/launch/launch.py:186
 #: ../../plugins/PyShell/PyShell/__init__.py:114
 msgid "Clear"
-msgstr "Wyczyść"
+msgstr "Törlés"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:516
 msgid "Click on an item to edit"
-msgstr "Kliknij na elemencie aby edytować"
+msgstr "Válasszd ki a szerkesztendő elemet"
 
 #: ../../src/ed_editv.py:185
 #, python-format
 msgid "Close \"%s\""
-msgstr "Zamknij \"%s\""
+msgstr "\"%s\" bezárása"
 
 #: ../../src/ed_editv.py:186
 msgid "Close All"
-msgstr "Zamknij wszystkie"
+msgstr "Összes bezárása"
 
 #: ../../src/ed_menu.py:494
 msgid "Close All Tabs"
-msgstr "Zamknięcie wszystkich kart"
+msgstr "Összes fül bezárása"
 
 #: ../../src/ed_menu.py:491
 msgid "Close Current Tab"
-msgstr "Zamknij bieżącą kartę"
+msgstr "Aktuális fül bezárása"
 
 #: ../../src/ed_menu.py:493
 msgid "Close Window"
-msgstr "Zamknij okno"
+msgstr "Ablak bezárása"
 
 #: ../../src/ed_menu.py:495
 msgid "Close all open tabs"
-msgstr "Zamknij wszystkie otwarte karty"
+msgstr "Összes fül bezárása"
 
 #: ../../src/ed_menu.py:493
 msgid "Close the current window"
-msgstr "Zamknij bieżące okno"
+msgstr "Az aktuális ablak bezárása"
 
 #: ../../src/prefdlg.py:495
 msgid "Code"
-msgstr "Kod"
+msgstr "Kód"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:89
 msgid "Code Browser"
-msgstr "Przeglądarka kodu"
+msgstr "Forrás Böngésző"
 
 #: ../../src/ed_menu.py:649 ../../src/ed_menu.py:754 ../../src/prefdlg.py:739
 msgid "Code Folding"
-msgstr "Zwijanie kodu"
+msgstr "Kódkibontás"
 
 #: ../../src/ed_menu.py:650
 msgid "Code folding toggle actions"
@@ -449,23 +441,23 @@ msgstr ""
 
 #: ../../src/style_editor.py:638
 msgid "Color"
-msgstr "Kolor"
+msgstr "Szín"
 
 #: ../../src/ed_menu.py:757
 msgid "Color Highlight Code Syntax"
-msgstr "Kolorowanie składni kodu"
+msgstr "Szintaxis színezés"
 
 #: ../../src/prefdlg.py:912 ../../plugins/PyShell/PyShell/__init__.py:109
 msgid "Color Scheme"
-msgstr "Schemat kolorów"
+msgstr "Szín séma"
 
 #: ../../src/prefdlg.py:1988
 msgid "Colour/Default"
-msgstr "Kolorowy/Domyślny"
+msgstr ""
 
 #: ../../src/prefdlg.py:1987
 msgid "Colour/White"
-msgstr "Kolorowy/Biały"
+msgstr ""
 
 #: ../../src/ed_menu.py:561
 msgid "Column Mode"
@@ -473,112 +465,112 @@ msgstr ""
 
 #: ../../src/ed_cmdbar.py:253
 msgid "Command"
-msgstr "Polecenie"
+msgstr "Parancs"
 
 #: ../../src/ed_menu.py:589
 msgid "Commands that affect an entire line"
-msgstr "Polecenia dotyczące całej linii"
+msgstr "Parancsok amelyek teljses sorra érvényesek"
 
 #: ../../src/prefdlg.py:1167
 msgid "Configuration"
-msgstr "Konfiguracja"
+msgstr "Beállítások"
 
 #: ../../src/plugdlg.py:190
 #, fuzzy
 msgid "Configuration Changes Made"
-msgstr "Konfiguracja"
+msgstr "Beállítások"
 
 #: ../../src/plugdlg.py:117 ../../src/plugdlg.py:944
 msgid "Configure"
-msgstr "Konfiguruj"
+msgstr "Beállítás"
 
 #: ../../src/ed_menu.py:528
 msgid "Configure Printer"
-msgstr "Konfiguruj drukarkę"
+msgstr "Nyomtató beállítása"
 
 #: ../../src/ed_menu.py:703
 msgid "Convert selected text to all lowercase letters"
-msgstr "Przekształć zaznaczenie na wyłącznie małe litery"
+msgstr "Kijelölt szöveg kisbetűssé alakítása"
 
 #: ../../src/ed_menu.py:701
 msgid "Convert selected text to all uppercase letters"
-msgstr "Przekształć zaznaczenie na wyłącznie duże litery"
+msgstr "Kijelölt szöveg nagybetűssé alakítása"
 
 #: ../../src/ed_menu.py:715
 msgid "Convert spaces to tabs in selected/all text"
-msgstr "Przekształć spacje na znaki tabulacji w zaznaczonym/całym tekście"
+msgstr "Betűköz tabulátorrá alakítása a kijelölt/teljes szövegben"
 
 #: ../../src/ed_menu.py:717
 msgid "Convert tabs to spaces in selected/all text"
-msgstr "Przekształć znaki tabulacji na spacje w zaznaczonym/całym tekście"
+msgstr "Tabulátorok betűközökké alakítása a kijelölt/teljes szövegben"
 
 #: ../../src/ed_editv.py:305 ../../src/ed_toolbar.py:85
 msgid "Copy"
-msgstr "Kopiuj"
+msgstr "Másolás"
 
 #: ../../src/ed_menu.py:575
 msgid "Copy Current Line"
-msgstr "Skopiuj aktualną linię"
+msgstr "Jelenlegi sor másolása"
 
 #: ../../src/ed_editv.py:188
 msgid "Copy Full Path"
-msgstr "Kopiuj pełną ścieżkę"
+msgstr ""
 
 #: ../../src/ed_menu.py:574
 msgid "Copy Line"
-msgstr "Skopiuj linię"
+msgstr "Sor másolása"
 
 #: ../../src/ed_menu.py:551 ../../src/ed_toolbar.py:86
 msgid "Copy Selected Text to Clipboard"
-msgstr "Skopiuj zaznaczony tekst do schowka"
+msgstr "Kiválasztott szöveg vágólapra másolása"
 
 #: ../../src/ed_main.py:1518
 msgid "Copyright"
-msgstr "Copyright"
+msgstr "Szerzői jog"
 
 #: ../../src/eclib/finddlg.py:831
 #, fuzzy
 msgid "Count"
-msgstr "Wytnij"
+msgstr "Kivágás"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:429
 #: ../../plugins/filebrowser/filebrowser/browser.py:548
 #, python-format
 msgid "Create Archive of \"%s\""
-msgstr "Utwórz archiwum \"%s\""
+msgstr "Archívum készítése ebből: \"%s\""
 
 #: ../../src/eclib/infodlg.py:187
 msgid "Created"
-msgstr "Utworzone"
+msgstr "Létrehozva"
 
 #: ../../src/ed_menu.py:548
 msgid "Cu&t"
-msgstr "&Wytnij"
+msgstr "&Kivágás"
 
 #: ../../src/eclib/finddlg.py:698
 msgid "Current Document"
-msgstr "Bieżącym dokumencie"
+msgstr "Aktuális dokumentum"
 
 #: ../../src/ed_editv.py:304 ../../src/ed_toolbar.py:83
 msgid "Cut"
-msgstr "Wytnij"
+msgstr "Kivágás"
 
 #: ../../src/ed_menu.py:571
 msgid "Cut Current Line"
-msgstr "Wytnij aktualną linię"
+msgstr "Jelenlegi sor kivágása"
 
 #: ../../src/ed_menu.py:570
 msgid "Cut Line"
-msgstr "Wytnij linię"
+msgstr "Sor kivágása"
 
 #: ../../src/ed_menu.py:549 ../../src/ed_toolbar.py:84
 msgid "Cut Selected Text from File"
-msgstr "Wytnij zaznaczony tekst z pliku"
+msgstr "Kijelölt szöveg kivágása a fájlból"
 
 #: ../../src/ed_menu.py:556
 #, fuzzy
 msgid "Cycle Clipboard"
-msgstr "Skopiuj zaznaczony tekst do schowka"
+msgstr "Kiválasztott szöveg vágólapra másolása"
 
 #: ../../src/ed_menu.py:557
 msgid "Cycle through recent clipboard text"
@@ -586,152 +578,149 @@ msgstr ""
 
 #: ../../src/ed_search.py:62 ../../src/ed_search.py:66
 msgid "DECODING ERROR"
-msgstr "BŁĄD DEKODOWANIA"
+msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:226
 msgid "Default"
-msgstr "Domyślny"
+msgstr "Alapértelmezett"
 
 #: ../../src/prefdlg.py:577
 msgid "Default EOL Mode"
-msgstr "Domyślny tryb EOL"
+msgstr "Alapértelmezett EOL mód"
 
 #: ../../src/prefdlg.py:730
 msgid "Default Lexer"
-msgstr "Domyślny Lexer"
+msgstr "Alapértelmezett szótár"
 
 #: ../../src/prefdlg.py:1025
 msgid "Default Perspective"
-msgstr "Domyślna perspektywa"
+msgstr "Alapértelmezett nézőpont"
 
 #: ../../src/prefdlg.py:728
 msgid "Default highlighing for new documents"
-msgstr "Domyślne podświetlenie dla nowym dokumentów"
+msgstr "Alapértelmezett szövegszín az új dokumentumokban"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 msgid "Defines"
-msgstr ""
+msgstr "Meghatározások"
 
 #: ../../src/prefdlg.py:1541
 msgid "Delete"
-msgstr "Usuń"
+msgstr "Törlés"
 
 #: ../../src/ed_menu.py:572
 msgid "Delete Line"
-msgstr "Skasuj wiersz"
+msgstr "Sor törlése"
 
 #: ../../src/perspective.py:237
 msgid "Delete Perspective"
-msgstr "Usuń perspektywę"
+msgstr ""
 
 #: ../../src/perspective.py:71
 msgid "Delete Saved View"
-msgstr "Usuń zapisany widok"
+msgstr ""
 
 #: ../../src/ed_menu.py:573
 msgid "Delete the selected line(s)"
-msgstr "Skasowanie zaznaczonych wierszy"
+msgstr "Kiválaszott sorok törlése"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:488
 #: ../../plugins/filebrowser/filebrowser/browser.py:655
 msgid "Desktop"
-msgstr "Pulpit"
+msgstr "Asztal"
 
 #: ../../src/eclib/finddlg.py:788
 msgid "Direction"
-msgstr "Kierunek"
+msgstr "Irány"
 
 #: ../../src/prefdlg.py:311
 msgid "Disable Error Reporter"
-msgstr "Domyślny reporter błędów"
+msgstr ""
 
 #: ../../src/prefdlg.py:1067
 msgid "Display Font"
-msgstr "Czcionka wyświetlania"
+msgstr "Betűtípus"
 
 #: ../../src/plugdlg.py:177
 msgid "Do you wish to exit?"
-msgstr "Czy chcesz wyjść?"
+msgstr "Biztos, hogy ki akar lépni?"
 
 #: ../../src/ed_pages.py:927
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
 "\n"
 "Warning: opening many files at once may cause the editor to temporarily  freeze."
 msgstr ""
-"Czy chcesz otworzyć wszystkie %d pliki z tego katalogu\n"
-"\n"
-"Ostrzeżenie: otwieranie wielu plików jednocześnie może tymczasowo zamrozić program"
 
 #: ../../src/prefdlg.py:185
 msgid "Document"
-msgstr "Dokument"
+msgstr "Dokumentum"
 
 #: ../../src/eclib/finddlg.py:792
 msgid "Down"
-msgstr "W dół"
+msgstr "Le"
 
 #: ../../src/plugdlg.py:118 ../../src/plugdlg.py:449 ../../src/plugdlg.py:1054
 #: ../../src/prefdlg.py:1352
 msgid "Download"
-msgstr "Pobierz"
+msgstr "Letöltés"
 
 #: ../../src/plugdlg.py:472
 msgid "Downloaded"
-msgstr "Pobrano"
+msgstr "Letöltve"
 
 #: ../../src/plugdlg.py:583 ../../src/updater.py:603
 msgid "Downloading"
-msgstr "Pobieranie"
+msgstr "Letöltés"
 
 #: ../../src/updater.py:566
 #, python-format
 msgid "Downloading To: %s"
-msgstr "Pobieranie do: %s"
+msgstr ""
 
 #: ../../src/Editra.py:567 ../../src/prefdlg.py:1393
 msgid "Downloading Update"
-msgstr "Pobieranie aktualizacji"
+msgstr "Frissítés letöltése"
 
 #: ../../src/updater.py:564
 #, python-format
 msgid "Downloading: %s"
-msgstr "Pobieranie: %s"
+msgstr "A következő letöltése: %s"
 
 #: ../../src/plugdlg.py:176
 msgid "Downloads are incomplete"
-msgstr "Pobieranie nie jest zakończone"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:428
 msgid "Duplicate"
-msgstr "Powiel"
+msgstr "Megkettőzés"
 
 #: ../../src/ed_menu.py:576
 msgid "Duplicate Line"
-msgstr "Powiel linię"
+msgstr "Sor megkettőzése"
 
 #: ../../src/ed_menu.py:577
 msgid "Duplicate the current line"
-msgstr "Powiel aktualną linię"
+msgstr "Jelenlegi sor megkettőzése"
 
 #: ../../src/ed_menu.py:533
 msgid "E&xit"
-msgstr "&Wyjdź"
+msgstr "&Kilépés"
 
 #: ../../src/ed_menu.py:734
 msgid "EOL Mode"
-msgstr "Tryb EOL"
+msgstr "EOL mód"
 
 #: ../../src/ed_main.py:645
 #, python-format
 msgid "ERROR: %s"
-msgstr "BŁĄD: %s"
+msgstr "Hiba: %s"
 
 #: ../../src/ed_main.py:688
 #, python-format
 msgid "ERROR: Failed to save %s"
-msgstr "BŁĄD: Nie udało się zapisać %s"
+msgstr ""
 
 #: ../../src/prefdlg.py:741
 msgid "Edge Guide"
@@ -739,31 +728,31 @@ msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:413
 msgid "Edit"
-msgstr "Edycja"
+msgstr "Szerkesztés"
 
 #: ../../src/ed_menu.py:611
 msgid "Edit Preferences / Settings"
-msgstr "Edytuj preferencje / ustawienia"
+msgstr "Beállítások szerkesztése"
 
 #: ../../src/ed_menu.py:774
 msgid "Edit the way syntax is highlighted"
-msgstr "Edytuj sposób podświetlania składni"
+msgstr ""
 
 #: ../../src/ed_menu.py:642
 msgid "Editor"
-msgstr "Edytor"
+msgstr "Szerkesztő"
 
 #: ../../src/ed_menu.py:769
 msgid "Editor Command"
-msgstr "Polecenie edytora"
+msgstr ""
 
 #: ../../src/prefdlg.py:295
 msgid "Editor Mode"
-msgstr "Tryb edytora"
+msgstr "Szerkesztő mód"
 
 #: ../../src/ed_log.py:79
 msgid "Editra Log"
-msgstr "Log Editry"
+msgstr "Editra napló"
 
 #: ../../src/ed_mdlg.py:85
 #, python-format
@@ -773,76 +762,72 @@ msgid ""
 "Error:\n"
 "%(errormsg)s"
 msgstr ""
-"Editra nie mogła otworzyć %(filename)s\n"
-"\n"
-"Błąd:\n"
-"%(errormsg)s"
 
 #: ../../src/ed_main.py:1508
 msgid "Editra is a programmers text editor."
-msgstr "Editra jest programistycznym edytorem tekstowym."
+msgstr ""
 
 #: ../../src/ed_menu.py:802
 msgid "Editra translations project"
-msgstr "Projekt tłumaczeń programu Editra"
+msgstr ""
 
 #: ../../src/ed_pages.py:358
 #, fuzzy
 msgid "Empty File"
-msgstr "Otwórz Plik"
+msgstr "Fájl megnyitása"
 
 #: ../../src/plugdlg.py:940
 msgid "Enable"
-msgstr "Włącz"
+msgstr "Engedélyezés"
 
 #: ../../src/prefdlg.py:769
 msgid "Enable Vi Emulation"
-msgstr "Włącz emulację Vi"
+msgstr "Vi emuláció engedélyezése"
 
 #: ../../src/ed_menu.py:562
 msgid "Enable column edit mode."
-msgstr "Włącz tryb edycji kolumnami."
+msgstr ""
 
 #: ../../src/prefdlg.py:350
 msgid "Encoding to try when auto detection fails"
-msgstr "Kodowanie, które należy wypróbować gdy zawiedzie automatyczne wykrywanie"
+msgstr ""
 
 #: ../../src/ed_menu.py:735
 msgid "End of line character formatting"
-msgstr "Formatowanie znaku końca linii"
+msgstr ""
 
 #: ../../src/eclib/colorsetter.py:82
 msgid "Enter a hex color value"
-msgstr "Wpisz kod koloru szesnastkowo"
+msgstr ""
 
 #: ../../src/style_editor.py:292
 msgid "Enter style sheet name"
-msgstr "Podaj nazwę arkusza stylów"
+msgstr ""
 
 #: ../../src/prefdlg.py:1736
 msgid "Enter the name of the new key profile"
-msgstr "Wpisz nazwę nowego profilu klucza"
+msgstr ""
 
 #: ../../src/eclib/finddlg.py:809
 msgid "Enter wildcard shell patterns for matching files (*.txt)."
-msgstr "Wprowadź maskę określające pasujące pliki (*.txt)."
+msgstr ""
 
 #: ../../src/ed_editv.py:145 ../../src/plugdlg.py:829
 msgid "Error"
-msgstr "Błąd"
+msgstr "Hiba"
 
 #: ../../src/ed_mdlg.py:87
 msgid "Error Opening File"
-msgstr "Błąd w czasie otwierania pliku"
+msgstr "Hiba a fájl megnyitásakor"
 
 #: ../../src/ed_pages.py:310
 #, fuzzy
 msgid "Error Saving Session File"
-msgstr "Błąd w czasie otwierania pliku"
+msgstr "Hiba a fájl megnyitásakor"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:441
 msgid "Error Text"
-msgstr "Komunikat o błędzie"
+msgstr "Hibaszöveg"
 
 #: ../../src/dev_tool.py:471
 msgid "Error Traceback:"
@@ -870,40 +855,40 @@ msgstr ""
 #: ../../src/ed_main.py:1442
 #, python-format
 msgid "Error: Unable to open %s"
-msgstr "Błąd: Nie można otworzyć %s"
+msgstr ""
 
 #: ../../src/plugdlg.py:127
 #, fuzzy
 msgid "Errors"
-msgstr "Błąd"
+msgstr "Hiba"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:520
 msgid "Executable Commands"
-msgstr "Polecenia wykonywalne"
+msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:211
 msgid "Executables"
-msgstr "Pliki wykonywalne"
+msgstr "Végrehajtható állományok"
 
 #: ../../plugins/Launch/launch/launch.py:663
 msgid "Exit Code"
-msgstr "Kod wyjścia"
+msgstr ""
 
 #: ../../src/ed_menu.py:533
 msgid "Exit the Program"
-msgstr "Wyjdź z programu"
+msgstr "Kilépés a programból"
 
 #: ../../src/dev_tool.py:476
 msgid "Exit the application"
-msgstr "Zakończ aplikację"
+msgstr "Kilépés az alkalmazásból"
 
 #: ../../src/style_editor.py:141
 msgid "Export"
-msgstr "Eksportuj"
+msgstr "Exportálás"
 
 #: ../../src/style_editor.py:293
 msgid "Export Style Sheet"
-msgstr "Eksportuj arkusz stylów"
+msgstr "Stíluslap exportálása"
 
 #: ../../src/prefdlg.py:760
 msgid "Extended Auto-Comp"
@@ -911,15 +896,15 @@ msgstr ""
 
 #: ../../src/prefdlg.py:1875
 msgid "Extensions (space separated, no dots)"
-msgstr "Rozszerzenia (oddzielone spacjami, bez kropek)"
+msgstr ""
 
 #: ../../src/ed_menu.py:738
 msgid "F&ormat"
-msgstr "F&ormat"
+msgstr "F&ormátum"
 
 #: ../../src/updater.py:682
 msgid "Failed"
-msgstr "Niepowodzenie"
+msgstr "Sikertelen"
 
 #: ../../src/ed_print.py:112
 msgid "Failed to create print preview"
@@ -928,7 +913,7 @@ msgstr ""
 #: ../../src/plugdlg.py:831
 #, python-format
 msgid "Failed to install %d plugins"
-msgstr "Zainstalowanie %d wtyczek nie powiodło się"
+msgstr ""
 
 #: ../../src/ed_editv.py:143
 #, python-format
@@ -936,13 +921,11 @@ msgid ""
 "Failed to reload %(filename)s:\n"
 "Error: %(errmsg)s"
 msgstr ""
-"Nie udało się ponownie załadować %(filename)s:\n"
-"Błąd: %(errmsg)s"
 
 #: ../../src/ed_main.py:1202
 #, python-format
 msgid "Failed to reload the file with: %(encoding)s"
-msgstr "Nie udało się ponownie załadować pliku z użyciem kodowania %(encoding)s"
+msgstr ""
 
 #: ../../src/ed_mdlg.py:104
 #, python-format
@@ -952,34 +935,30 @@ msgid ""
 "Error:\n"
 "%(errormsg)s"
 msgstr ""
-"Nie udało się zapisać: %(filename)s\n"
-"\n"
-"Błąd:\n"
-"%(errormsg)s"
 
 #: ../../src/ed_menu.py:803
 msgid "Feedback"
-msgstr "Opinia zwrotna"
+msgstr "Visszajelzés"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:232
 msgid "File Browser"
-msgstr "Przeglądarka plików"
+msgstr "Fájlböngésző"
 
 #: ../../src/eclib/finddlg.py:702
 msgid "File Filters:"
-msgstr ""
+msgstr "Fájlszűrők:"
 
 #: ../../src/prefdlg.py:330
 msgid "File History Length"
-msgstr "Wielkość pliku historii"
+msgstr ""
 
 #: ../../src/ed_main.py:582
 msgid "File Not Found"
-msgstr "Nie znaleziono pliku"
+msgstr "A fájl nem található"
 
 #: ../../src/prefdlg.py:402
 msgid "File Settings"
-msgstr "Ustawienia pliku"
+msgstr "Fájlbeállítások"
 
 #: ../../src/eclib/infodlg.py:109
 msgid "File Stat Failed"
@@ -987,7 +966,7 @@ msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:206
 msgid "File Type"
-msgstr "Typ pliku"
+msgstr "Fájltípus"
 
 #: ../../src/ed_stc.py:556
 #, python-format
@@ -996,105 +975,103 @@ msgstr ""
 
 #: ../../src/ed_stc.py:1695
 msgid "File is Read Only and cannot be saved"
-msgstr "Plik ma atrybut \"tylko do odczytu\" i nie może zostać zapisany"
+msgstr ""
 
 #: ../../src/ed_pages.py:199
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
 msgstr ""
-"Plik jest już otwarty na istniejącej stronie.\n"
-"Chcesz otworzyć go ponownie?"
 
 #: ../../src/ed_search.py:1280
 #, python-format
 msgid "Files Searched: %d"
-msgstr "Przeszukano plików: %d"
+msgstr ""
 
 #: ../../src/prefdlg.py:906
 msgid "Filetype Associations"
-msgstr "Powiązania typów plików"
+msgstr ""
 
 #: ../../src/ed_cmdbar.py:141 ../../src/ed_search.py:147
 #: ../../src/ed_search.py:151 ../../src/ed_toolbar.py:90
 #: ../../src/eclib/finddlg.py:621 ../../src/eclib/finddlg.py:753
 #: ../../src/eclib/finddlg.py:829
 msgid "Find"
-msgstr "Znajdź"
+msgstr "Keresés"
 
 #: ../../src/eclib/finddlg.py:832
 msgid "Find All"
-msgstr "Znajdź wszystkie"
+msgstr "Összes keresése"
 
 #: ../../src/ed_search.py:309
 #, fuzzy
 msgid "Find Count"
-msgstr "Opcje wyszukiwania"
+msgstr "Keresési beállítások"
 
 #: ../../src/ed_menu.py:605
 msgid "Find Next"
-msgstr "Znajdź następny"
+msgstr "Következő keresése"
 
 #: ../../src/eclib/finddlg.py:798
 msgid "Find Options"
-msgstr "Opcje wyszukiwania"
+msgstr "Keresési beállítások"
 
 #: ../../src/ed_menu.py:603
 msgid "Find Previous"
-msgstr "Znajdź poprzedni"
+msgstr "Előző keresése"
 
 #: ../../src/ed_menu.py:607
 msgid "Find Selected"
-msgstr "Znajdź zaznaczone"
+msgstr "Kiválasztott keresése"
 
 #: ../../src/ed_menu.py:598 ../../src/ed_toolbar.py:90
 msgid "Find Text"
-msgstr "Znajdź tekst"
+msgstr "Szöveg keresése"
 
 #: ../../src/ed_menu.py:600 ../../src/ed_toolbar.py:92
 msgid "Find and Replace Text"
-msgstr "Znajdź i Zamień"
+msgstr "Szöveg keresése és cseréje"
 
 #: ../../src/eclib/finddlg.py:751
 msgid "Find what"
-msgstr "Znajdź:"
+msgstr "Ezt keresse"
 
 #: ../../src/ed_menu.py:599
 msgid "Find/R&eplace"
-msgstr "Znajdź/Z&amień"
+msgstr "Keresés/&Csere"
 
 #: ../../src/ed_search.py:147 ../../src/ed_search.py:151
 #: ../../src/ed_toolbar.py:91
 msgid "Find/Replace"
-msgstr "Znajdź/Zamień"
+msgstr "Keresés/Csere"
 
 #: ../../src/updater.py:679
 msgid "Finished"
-msgstr "Zakończono"
+msgstr "Befejezve"
 
 #: ../../src/plugdlg.py:475
 msgid "Finshed downloading plugins"
-msgstr "Zakończono pobieranie wtyczek"
+msgstr ""
 
 #: ../../src/util.py:349 ../../src/eclib/infodlg.py:286
 msgid "Folder"
-msgstr "Folder"
+msgstr "Mappa"
 
 #: ../../src/style_editor.py:686
 msgid "Font"
-msgstr "Czcionka"
+msgstr "Betűtípus"
 
 #: ../../src/style_editor.py:681
 msgid "Font Settings"
-msgstr "Konfiguracja czcionek"
+msgstr "Betűtípus beállítások"
 
 #: ../../src/style_editor.py:642 ../../plugins/Launch/launch/cfgdlg.py:428
 msgid "Foreground"
-msgstr "Kolor pierwszoplanowy"
+msgstr "Előtér"
 
 #: ../../src/prefdlg.py:611
 msgid "Format"
-msgstr "Format"
+msgstr "Formátum"
 
 #: ../../src/ed_stc.py:1078
 msgid "Format EOL?"
@@ -1107,69 +1084,69 @@ msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:49
 msgid "Function Definitions"
-msgstr "Definicje funkcji"
+msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:55
 msgid "Functions"
-msgstr "Funkcje"
+msgstr "Függvények"
 
 #: ../../src/prefdlg.py:181 ../../src/prefdlg.py:494 ../../src/prefdlg.py:781
 #: ../../plugins/Launch/launch/cfgdlg.py:171
 msgid "General"
-msgstr "Ogólnie"
+msgstr "Általános"
 
 #: ../../src/generator.py:289 ../../src/generator.py:676
 #: ../../src/generator.py:879
 #, python-format
 msgid "Generate %s"
-msgstr "Utwórz %s"
+msgstr "%s generálása"
 
 #: ../../src/generator.py:116
 msgid "Generate Code and Documents"
-msgstr "Utwórz kod i dokumenty"
+msgstr ""
 
 #: ../../src/generator.py:290 ../../src/generator.py:880
 #, python-format
 msgid "Generate a %s version of the current document"
-msgstr "Utwórz wersję %s aktualnego dokumentu"
+msgstr ""
 
 #: ../../src/generator.py:677
 #, python-format
 msgid "Generate an %s version of the current document"
-msgstr "Utwórz wersję %s aktualnego dokumentu"
+msgstr ""
 
 #: ../../src/generator.py:115
 msgid "Generator"
-msgstr "Generator"
+msgstr "Létrehozó"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:422
 msgid "Get Info"
-msgstr "Pobierz Informacje"
+msgstr "Információ"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Global Variables"
-msgstr "Zmienne globalne"
+msgstr "Globális változók"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:378
 #, python-format
 msgid "Goto \"%s\""
-msgstr "Przejdź do \"%s\""
+msgstr "Ugrás a következőre: \"%s\""
 
 #: ../../src/ed_cmdbar.py:279
 msgid "Goto Line"
-msgstr "Przejdź do linii"
+msgstr "Ugrás sorra:"
 
 #: ../../src/ed_menu.py:659
 msgid "Goto Line Number"
-msgstr "Przejdź do linii numer"
+msgstr ""
 
 #: ../../src/ed_menu.py:660
 msgid "Goto Matching Brace"
-msgstr "Przejdź do drugiego nawiasu z pary"
+msgstr ""
 
 #: ../../src/ed_menu.py:770
 msgid "Goto command buffer"
-msgstr "Przejdź do bufora poleceń"
+msgstr ""
 
 #: ../../src/ed_menu.py:664
 msgid "Goto next position in history."
@@ -1177,16 +1154,15 @@ msgstr ""
 
 #: ../../src/ed_menu.py:604
 msgid "Goto previous match"
-msgstr "Przejdź do poprzedniego wystąpienia"
+msgstr ""
 
 #: ../../src/ed_menu.py:666
-#, fuzzy
 msgid "Goto previous position in history."
-msgstr "Przejdź do poprzedniego wystąpienia"
+msgstr ""
 
 #: ../../src/ed_menu.py:606
 msgid "Goto the next match"
-msgstr "Przejdź do następnego wystąpienia"
+msgstr ""
 
 #: ../../src/prefdlg.py:745
 msgid "Guide Column"
@@ -1194,7 +1170,7 @@ msgstr ""
 
 #: ../../src/ed_menu.py:753
 msgid "Highlight Brackets/Braces"
-msgstr "Podświetl nawiasy"
+msgstr ""
 
 #: ../../src/ed_menu.py:629 ../../src/prefdlg.py:750
 msgid "Highlight Caret Line"
@@ -1202,39 +1178,39 @@ msgstr ""
 
 #: ../../src/ed_menu.py:630
 msgid "Highlight the background of the current line"
-msgstr "Podświetl tło bieżącego wiersza"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:486
 msgid "Home directory"
-msgstr "Katalog domowy"
+msgstr "Saját mappa"
 
 #: ../../src/ed_main.py:1510
 msgid "Homepage"
-msgstr "Strona Domowa"
+msgstr "Honlap"
 
 #: ../../src/prefdlg.py:1003
 msgid "Icon Theme"
-msgstr "Motyw ikon"
+msgstr "Ikontéma"
 
 #: ../../src/prefdlg.py:1048
 msgid "Icons"
-msgstr "Ikony"
+msgstr "Ikonok"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Identities"
-msgstr "Tożsamości"
+msgstr "Azonosítók"
 
 #: ../../src/ed_menu.py:695
 msgid "Indent Lines"
-msgstr "Wcięcia wierszy"
+msgstr "Sorok behúzása"
 
 #: ../../src/prefdlg.py:551
 msgid "Indent Width"
-msgstr "Szerokość wcięcia"
+msgstr "Behúzás szélessége"
 
 #: ../../src/ed_menu.py:696
 msgid "Indent the selected lines"
-msgstr "Zrób wcięcia w zaznaczonych liniach"
+msgstr "Kiválasztott sorok behúzása"
 
 #: ../../src/ed_menu.py:632 ../../src/prefdlg.py:753
 msgid "Indentation Guides"
@@ -1242,11 +1218,11 @@ msgstr ""
 
 #: ../../src/eclib/infodlg.py:52
 msgid "Info"
-msgstr "Informacje"
+msgstr "Információ"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:448
 msgid "Info Text"
-msgstr "Tekst informcacyjny"
+msgstr ""
 
 #: ../../src/prefdlg.py:790
 msgid "Input Helpers"
@@ -1254,95 +1230,93 @@ msgstr ""
 
 #: ../../src/ed_menu.py:706
 msgid "Insert spaces instead of tab characters with tab key"
-msgstr "Wstawiaj spacje zamiast tabów za pomocą klawisza tab"
+msgstr ""
 
 #: ../../src/plugdlg.py:119 ../../src/plugdlg.py:754
 msgid "Install"
-msgstr "Instaluj"
+msgstr "Telepítés"
 
 #: ../../src/plugdlg.py:761
 msgid ""
 "Install the plugins for all users\n"
 " **requires administrative privileges**"
 msgstr ""
-"Instaluj wtyczki dla wszystkich użytkowników\n"
-" **wymaga uprawnień administracyjnych**"
 
 #: ../../src/plugdlg.py:758
 msgid "Install the plugins only for the current user"
-msgstr "Instaluj wtyczki wyłącznie dla aktualnego użytkownika"
+msgstr ""
 
 #: ../../src/plugdlg.py:833
 msgid "Installation Error"
-msgstr "Błąd instalacji"
+msgstr "Telepítési hiba"
 
 #: ../../src/prefdlg.py:1333
 msgid "Installed Version"
-msgstr "Zainstalowana wersja"
+msgstr "Telepített verzió"
 
 #: ../../src/ed_pages.py:338
 #, fuzzy
 msgid "Invalid File"
-msgstr "Nieprawidłowy plik: %s"
+msgstr "Érvénytelen fájl: %s"
 
 #: ../../src/ed_search.py:345
 #, python-format
 msgid "Invalid expression \"%s\""
-msgstr "Nieprawidłowe wyrażenie \"%s\""
+msgstr "Érvénytelen kifejezés: \"%s\""
 
 #: ../../src/ed_pages.py:352
 #, fuzzy
 msgid "Invalid file"
-msgstr "Nieprawidłowy plik: %s"
+msgstr "Érvénytelen fájl: %s"
 
 #: ../../src/ed_pages.py:911
 #, python-format
 msgid "Invalid file: %s"
-msgstr "Nieprawidłowy plik: %s"
+msgstr "Érvénytelen fájl: %s"
 
 #: ../../src/prefdlg.py:1989
 msgid "Inverse"
-msgstr ""
+msgstr "Megfordítás"
 
 #: ../../src/ed_menu.py:579
 msgid "Join Lines"
-msgstr "Połącz wiersze"
+msgstr "Sorok összevonása"
 
 #: ../../src/ed_menu.py:580
 msgid "Join the Selected Lines"
-msgstr "Dołącz zaznaczone linie"
+msgstr "Kiválasztott sorok összevonása"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:101
 msgid "Jump to Saved Path"
-msgstr "Przeskocz do zapisanej ścieżki"
+msgstr ""
 
 #: ../../src/prefdlg.py:1568
 msgid "Key"
-msgstr "Klucz"
+msgstr "Kulcs"
 
 #: ../../src/prefdlg.py:1537
 msgid "Key Profile"
-msgstr "Profil klucza"
+msgstr "Kulcsprofil"
 
 #: ../../src/prefdlg.py:1445
 msgid "Keybindings"
-msgstr "Skróty klawiszowe"
+msgstr "Billentyűparancsok"
 
 #: ../../src/eclib/infodlg.py:176
 msgid "Kind"
-msgstr "Rodzaj"
+msgstr "Fajta"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Labels"
-msgstr "Etykiety"
+msgstr "Cimkék"
 
 #: ../../src/prefdlg.py:381
 msgid "Language"
-msgstr "Język"
+msgstr "Nyelv"
 
 #: ../../src/prefdlg.py:1339
 msgid "Latest Version"
-msgstr "Najnowsza wersja"
+msgstr "Legutóbbi verzió"
 
 #: ../../plugins/Launch/launch/__init__.py:140
 msgid "Launch"
@@ -1354,7 +1328,7 @@ msgstr ""
 
 #: ../../src/prefdlg.py:1053
 msgid "Layout"
-msgstr "Układ"
+msgstr "Elrendezés"
 
 #: ../../src/prefdlg.py:1873
 msgid "Lexer"
@@ -1366,7 +1340,7 @@ msgstr ""
 
 #: ../../src/ed_main.py:1512
 msgid "License: wxWindows (see COPYING.txt for full license)"
-msgstr "Licencja: wxWindows (zobacz COPYING.txt aby przeczytać pełną licencję)"
+msgstr ""
 
 #: ../../src/ed_menu.py:588
 msgid "Line Edit"
@@ -1375,101 +1349,99 @@ msgstr ""
 #: ../../src/ed_stc.py:689
 #, python-format
 msgid "Line: %(lnum)d  Column: %(cnum)d"
-msgstr "Wiersz: %(lnum)d Kolumna: %(cnum)d"
+msgstr ""
 
 #: ../../src/prefdlg.py:313
 msgid "Load Last Session"
-msgstr "Uruchom ostatnią sesję"
+msgstr ""
 
 #: ../../src/ed_menu.py:512
 msgid "Load Profile"
-msgstr "Wczytaj profil"
+msgstr "Profil betöltése"
 
 #: ../../src/ed_menu.py:521
 #, fuzzy
 msgid "Load Session"
-msgstr "Uruchom ostatnią sesję"
+msgstr "Legutóbbi verzió"
 
 #: ../../src/ed_main.py:728 ../../src/ed_menu.py:513
 msgid "Load a Custom Profile"
-msgstr "Załaduj profil użytkownika"
+msgstr ""
 
 #: ../../src/ed_main.py:779
 #, fuzzy
 msgid "Load a Session file"
-msgstr "Uruchom ostatnią sesję"
+msgstr "Profil betöltése"
 
 #: ../../src/ed_menu.py:522
-#, fuzzy
 msgid "Load a saved session."
-msgstr "Uruchom ostatnią sesję"
+msgstr ""
 
 #: ../../src/ed_menu.py:515
 msgid "Load and save custom Profiles"
-msgstr "Załaduj i zapisz profile niestandardowe"
+msgstr ""
 
 #: ../../src/ed_menu.py:524
-#, fuzzy
 msgid "Load and save custom sessions."
-msgstr "Załaduj i zapisz profile niestandardowe"
+msgstr ""
 
 #: ../../src/prefdlg.py:315
 msgid "Load files from last session on startup"
-msgstr "Załaduj pliki z ostatniej sesji podczas startu"
+msgstr ""
 
 #: ../../src/ed_main.py:735
 #, python-format
 msgid "Loaded Profile: %s"
-msgstr "Załaduj Profil: %s"
+msgstr "Betöltött profil: %s"
 
 #: ../../src/ed_main.py:793
 #, fuzzy, python-format
 msgid "Loaded Session: %s"
-msgstr "Uruchom ostatnią sesję"
+msgstr "Betöltött profil: %s"
 
 #: ../../src/prefdlg.py:412
 msgid "Locale Settings"
-msgstr "Ustawienia regionalne"
+msgstr "Nyelvi beállítások"
 
 #: ../../src/eclib/finddlg.py:779
 msgid "Look in"
-msgstr "Szukaj w"
+msgstr ""
 
 #: ../../src/ed_menu.py:702
 msgid "Lowercase"
-msgstr "Małe litery"
+msgstr "Kisbetűs"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Macro Definitions"
-msgstr "Definicje makr"
+msgstr "Makródefiníciók"
 
 #: ../../src/ed_script.py:201 ../../src/ed_script.py:211
 msgid "Macro Manager"
-msgstr "Menadżer makropoleceń"
+msgstr "Makrókezelő"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Macros"
-msgstr "Makra"
+msgstr "Makrók"
 
 #: ../../src/prefdlg.py:1043
 msgid "Main display font for various UI components"
-msgstr "Główna czcionka do wyświetlania różnych elementów GUI"
+msgstr ""
 
 #: ../../src/ed_menu.py:772
 msgid "Manage, Download, and Install plugins"
-msgstr "Zarządzaj, pobierz i zainstaluj wtyczki"
+msgstr ""
 
 #: ../../src/ed_main.py:145
 msgid "Manually Set a Lexer/Syntax"
-msgstr "Ręcznie ustaw składnię/Lexer"
+msgstr ""
 
 #: ../../src/ed_cmdbar.py:154
 msgid "Match Case"
-msgstr "Uwzględnij wielkość liter"
+msgstr "Nagybetűérzékeny"
 
 #: ../../src/eclib/finddlg.py:800
 msgid "Match case"
-msgstr "Uwzględnij wielkość liter"
+msgstr "Nagybetűérzékeny"
 
 #: ../../src/ed_main.py:1395 ../../src/ed_menu.py:655
 msgid "Maximize Editor"
@@ -1477,11 +1449,11 @@ msgstr ""
 
 #: ../../src/prefdlg.py:1550
 msgid "Menu"
-msgstr "Menu"
+msgstr "Menü"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:172
 msgid "Misc"
-msgstr "Różne"
+msgstr "Egyéb"
 
 #: ../../src/ed_pages.py:374
 msgid "Missing session files"
@@ -1493,35 +1465,32 @@ msgid ""
 "\n"
 "Would you like to format them to all be the same?"
 msgstr ""
-"Wykryto znaki EOL różnych typów.\n"
-"\n"
-"Czy chcesz je wszystkie zamienić na znaki tego samego typu?"
 
 #: ../../src/eclib/infodlg.py:157 ../../src/eclib/infodlg.py:189
 msgid "Modified"
-msgstr "Zmodyfikowane"
+msgstr "Megváltoztatva"
 
 #: ../../src/prefdlg.py:1560
 msgid "Modifier 1"
-msgstr "Modyfikator 1"
+msgstr ""
 
 #: ../../src/prefdlg.py:1564
 msgid "Modifier 2"
-msgstr "Modyfikator 2"
+msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:55
 msgid "Modules"
-msgstr "Moduły"
+msgstr "Modulok"
 
 #: ../../src/ed_menu.py:586
 #, fuzzy
 msgid "Move Current Line Down"
-msgstr "Skopiuj aktualną linię"
+msgstr "Jelenlegi sor másolása"
 
 #: ../../src/ed_menu.py:583
 #, fuzzy
 msgid "Move Current Line Up"
-msgstr "Skopiuj aktualną linię"
+msgstr "Jelenlegi sor másolása"
 
 #: ../../src/ed_editv.py:182
 msgid "Move Tab to New Window"
@@ -1534,69 +1503,69 @@ msgstr ""
 #: ../../src/ed_menu.py:587
 #, fuzzy
 msgid "Move the current line down"
-msgstr "Zamknij bieżące okno"
+msgstr "Az aktuális ablak bezárása"
 
 #: ../../src/ed_menu.py:584
 #, fuzzy
 msgid "Move the current line up"
-msgstr "Powiel aktualną linię"
+msgstr "Jelenlegi sor megkettőzése"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:62
 msgid "Move to Recycle Bin"
-msgstr "Przenieś do kosza"
+msgstr "Áthelyezés a kukába"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:64
 msgid "Move to Trash"
-msgstr "Przenieś do kosza"
+msgstr "Áthelyezés a kukába"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Namespaces"
-msgstr "Przestrzenie nazw"
+msgstr "Névterek"
 
 #: ../../src/prefdlg.py:187
 msgid "Network"
-msgstr "Sieć"
+msgstr "Hálózat"
 
 #: ../../src/ed_toolbar.py:74 ../../src/prefdlg.py:1540
 #: ../../src/style_editor.py:198
 msgid "New"
-msgstr "Nowy"
+msgstr "Új"
 
 #: ../../src/ed_menu.py:482
 msgid "New &Window"
-msgstr "Nowe &okno"
+msgstr "Új &ablak"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:426
 msgid "New File"
-msgstr "Nowy Plik"
+msgstr "Új fájl"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:425
 msgid "New Folder"
-msgstr "Nowy Folder"
+msgstr "Új mappa"
 
 #: ../../src/ed_menu.py:565
 msgid "New Line After"
-msgstr "Nowa linia po"
+msgstr "Új sor ez után"
 
 #: ../../src/ed_menu.py:567
 msgid "New Line Before"
-msgstr "Nowa linia przed"
+msgstr "Új sor ez előtt"
 
 #: ../../src/prefdlg.py:1735
 msgid "New Profile"
-msgstr "Nowy profil"
+msgstr "Új profil"
 
 #: ../../src/ed_editv.py:181
 msgid "New Tab"
-msgstr "Nowa karta"
+msgstr "Új fül"
 
 #: ../../src/ed_cmdbar.py:143
 msgid "Next"
-msgstr "Dalej"
+msgstr "Következő"
 
 #: ../../src/ed_menu.py:668
 msgid "Next Bookmark"
-msgstr "Następna zakładka"
+msgstr "Következő könyvjelző"
 
 #: ../../src/ed_menu.py:663
 msgid "Next Position"
@@ -1604,56 +1573,57 @@ msgstr ""
 
 #: ../../src/plugdlg.py:362
 msgid "No Description Available"
-msgstr "Opis niedostępny"
+msgstr "Nincs elérhető leírás"
 
 #: ../../src/ed_pages.py:921
 msgid "No Valid Files to Open"
-msgstr "Brak prawidłowych plików do otwarcia"
+msgstr ""
 
 #: ../../src/prefdlg.py:1634
 msgid "None"
-msgstr "Brak"
+msgstr "Semmi"
 
 #: ../../src/prefdlg.py:1990
 msgid "Normal"
-msgstr ""
+msgstr "Normál"
 
 #: ../../src/ed_search.py:602
 msgid "Not implemented"
-msgstr "Niezaimplementowane"
+msgstr "Nincs megvalósítva"
 
 #: ../../src/style_editor.py:137
 msgid "Ok"
-msgstr "OK"
+msgstr "Ok"
 
 #: ../../src/ed_glob.py:378 ../../src/ed_mdlg.py:137
+#, fuzzy
 msgid "Old Machintosh (\\r)"
-msgstr ""
+msgstr "Régi Macintosh (\\r)"
 
 #: ../../src/ed_menu.py:725 ../../src/ed_menu.py:727 ../../src/prefdlg.py:572
 msgid "Old Macintosh (\\r)"
-msgstr ""
+msgstr "Régi Macintosh (\\r)"
 
 #: ../../src/ed_menu.py:799
 #, fuzzy
 msgid "Online Documentation..."
-msgstr "Dokumentacja w Internecie"
+msgstr "Online documentáció"
 
 #: ../../src/ed_menu.py:800
 msgid "Online project documentation and help guides"
-msgstr "Dokumentacja online i przewodniki pomocy"
+msgstr ""
 
 #: ../../src/ed_menu.py:485 ../../src/ed_toolbar.py:75
 msgid "Open"
-msgstr "Otwórz"
+msgstr "Megnyitás"
 
 #: ../../src/ed_menu.py:487
 msgid "Open &Recent"
-msgstr ""
+msgstr "Leg&utóbbi megnyitása"
 
 #: ../../plugins/PyShell/PyShell/__init__.py:66
 msgid "Open A Python Shell"
-msgstr "Otwórz interpreter poleceń języka Python"
+msgstr "Python shell megnyitása"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:90
 msgid "Open Code Browser Sidepanel"
@@ -1665,11 +1635,11 @@ msgstr ""
 
 #: ../../src/eclib/finddlg.py:699
 msgid "Open Documents"
-msgstr "Otwartych dokumentach"
+msgstr "Dokumentumok megnyitása"
 
 #: ../../src/ed_pages.py:201
 msgid "Open File"
-msgstr "Otwórz Plik"
+msgstr "Fájl megnyitása"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:233
 msgid "Open File Browser Sidepanel"
@@ -1677,42 +1647,42 @@ msgstr ""
 
 #: ../../src/prefdlg.py:360
 msgid "Open files in new windows by default"
-msgstr "Domyślnie otwieracj pliki w nowym oknie"
+msgstr ""
 
 #: ../../src/ed_menu.py:602
 msgid "Open the Quick Find Bar"
-msgstr "Otwórz pasek szybkiego wyszukiwania"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:414
 msgid "Open with "
-msgstr "Otwórz z "
+msgstr ""
 
 #: ../../src/ed_pages.py:952
 #, python-format
 msgid "Opened file: %s"
-msgstr "Otwórz plik: %s"
+msgstr ""
 
 #: ../../src/ed_main.py:1439
 #, python-format
 msgid "Opening %s"
-msgstr "Otwieranie %s"
+msgstr "%s megnyitása"
 
 #: ../../src/ed_menu.py:554
 msgid "P&aste After"
-msgstr "Wklej &za"
+msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Packages"
-msgstr "Pakiety"
+msgstr "Csomagok"
 
 #: ../../src/ed_menu.py:527
 msgid "Page Set&up"
-msgstr "&Ustawienia strony"
+msgstr "&Oldalbeállítás"
 
 #: ../../src/ed_print.py:229
 #, python-format
 msgid "Page: %d"
-msgstr "Strona: %d"
+msgstr "Oldal: %d"
 
 #: ../../src/ed_menu.py:653
 msgid "Pane Navigator"
@@ -1720,19 +1690,19 @@ msgstr ""
 
 #: ../../src/prefdlg.py:1233
 msgid "Password"
-msgstr "Hasło"
+msgstr "Jelszó"
 
 #: ../../src/ed_editv.py:306 ../../src/ed_toolbar.py:87
 msgid "Paste"
-msgstr "Wklej"
+msgstr "Beillesztés"
 
 #: ../../src/ed_menu.py:553 ../../src/ed_toolbar.py:88
 msgid "Paste Text from Clipboard to File"
-msgstr "Wklej tekst ze schowka do pliku"
+msgstr ""
 
 #: ../../src/ed_menu.py:555
 msgid "Paste Text from Clipboard to File after the cursor"
-msgstr "Wklej tekst ze schowa do pliku za pozycją kursora"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:109
 msgid "Pathmarks"
@@ -1740,7 +1710,7 @@ msgstr ""
 
 #: ../../src/eclib/infodlg.py:191
 msgid "Permissions"
-msgstr "Uprawnienia"
+msgstr "Engedélyek"
 
 #: ../../src/perspective.py:219
 msgid "Perspective Name"
@@ -1756,11 +1726,11 @@ msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:434
 msgid "Plain Text"
-msgstr "Zwykły tekst"
+msgstr "Egyszerű szöveg"
 
 #: ../../src/ed_main.py:1511
 msgid "Platform Info"
-msgstr "Informacje nt. platformy"
+msgstr ""
 
 #: ../../src/Editra.py:844
 msgid "Please check the preferences dialog to check your preferences"
@@ -1772,74 +1742,74 @@ msgstr ""
 
 #: ../../src/ed_main.py:1053 ../../src/ed_menu.py:771
 msgid "Plugin Manager"
-msgstr "Menadżer Wtyczek"
+msgstr "Bővítmény kezelő"
 
 #: ../../src/prefdlg.py:1218
 msgid "Port Number"
-msgstr "Numer portu"
+msgstr "Portszám"
 
 #: ../../src/ed_menu.py:610
 msgid "Pr&eferences"
-msgstr "Pr&eferencje"
+msgstr "&Beállítások"
 
 #: ../../src/prefdlg.py:352
 msgid "Prefered Encoding"
-msgstr "Preferowane kodowanie"
+msgstr ""
 
 #: ../../src/prefdlg.py:99
 msgid "Preferences - Editra"
-msgstr "Preferencje - Editra"
+msgstr ""
 
 #: ../../src/style_editor.py:130
 msgid "Preview"
-msgstr "Podgląd"
+msgstr "Előnézet"
 
 #: ../../src/ed_menu.py:530
 msgid "Preview Printout"
-msgstr "Podgląd wydruku"
+msgstr ""
 
 #: ../../src/ed_cmdbar.py:150
 msgid "Previous"
-msgstr "Wstecz"
+msgstr "Előző"
 
 #: ../../src/ed_menu.py:670
 msgid "Previous Bookmark"
-msgstr "Poprzednia zakładka"
+msgstr "Előző könyvjelző"
 
 #: ../../src/ed_menu.py:665
 #, fuzzy
 msgid "Previous Position"
-msgstr "Poprzednia zakładka"
+msgstr "Előző könyvjelző"
 
 #: ../../src/prefdlg.py:626
 msgid "Primary Font"
-msgstr "Główna czcionka"
+msgstr "Elsődleges betűtípus"
 
 #: ../../src/ed_toolbar.py:77
 msgid "Print"
-msgstr "Drukuj"
+msgstr "Nyomtatás"
 
 #: ../../src/ed_menu.py:531 ../../src/ed_toolbar.py:78
 msgid "Print Current File"
-msgstr "Drukuj aktualny plik"
+msgstr ""
 
 #: ../../src/ed_print.py:113
 #, fuzzy
 msgid "Print Error"
-msgstr "Zgłoś błąd"
+msgstr "Hiba jelentése"
 
 #: ../../src/ed_menu.py:529
 msgid "Print Pre&view"
-msgstr "Podgląd &wydruku"
+msgstr ""
 
 #: ../../src/ed_print.py:105
 msgid "Print Preview"
-msgstr "Podgląd Wydruku"
+msgstr "Nyomtatási előnézet"
 
 #: ../../src/ed_print.py:131
 #, fuzzy
 msgid "Printer Error"
-msgstr "Zgłoś błąd"
+msgstr "Hiba jelentése"
 
 #: ../../src/prefdlg.py:303
 msgid "Printer Mode"
@@ -1847,7 +1817,7 @@ msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:52
 msgid "Procedure Definitions"
-msgstr "Definicje procedury"
+msgstr ""
 
 #: ../../src/ed_main.py:709 ../../src/ed_main.py:730 ../../src/ed_menu.py:514
 msgid "Profile"
@@ -1856,11 +1826,11 @@ msgstr "Profil"
 #: ../../src/ed_main.py:714
 #, python-format
 msgid "Profile Saved as: %s"
-msgstr "Profil zapisany jako: %s"
+msgstr ""
 
 #: ../../src/Editra.py:846 ../../src/Editra.py:1054
 msgid "Profile Updated"
-msgstr "Profil został uaktualniony"
+msgstr "Profil frissítve"
 
 #: ../../plugins/Launch/launch/launch.py:155
 msgid "Program Executable Command"
@@ -1868,32 +1838,32 @@ msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:52
 msgid "Programs"
-msgstr "Programy"
+msgstr "Programok"
 
 #: ../../src/ed_menu.py:796
 #, fuzzy
 msgid "Project Homepage..."
-msgstr "Strona WWW projektu"
+msgstr "Projekt honlapja"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:52
 msgid "Protocols"
-msgstr "Protokoły"
+msgstr "Protokollok"
 
 #: ../../src/prefdlg.py:1204
 msgid "Proxy Settings"
-msgstr "Ustawienia Proxy"
+msgstr "Proxybeállítások"
 
 #: ../../src/prefdlg.py:1214
 msgid "Proxy URL"
-msgstr "URL proxy"
+msgstr "Proxy címe"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:55
 msgid "Public Functions"
-msgstr ""
+msgstr "Publikus függvények"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:56
 msgid "Public Subroutines"
-msgstr ""
+msgstr "Publikus szubrutinok"
 
 #: ../../src/iface.py:295
 msgid "Put an item on the Shelf"
@@ -1902,40 +1872,40 @@ msgstr ""
 #: ../../src/updater.py:672
 #, python-format
 msgid "Rate: %.2f Kb/s"
-msgstr "Prędkość: %.2f Kb/s"
+msgstr ""
 
 #: ../../plugins/Launch/launch/__init__.py:100
 msgid "Re-run the last run program"
-msgstr "Uruchom ponownie ostatnio uruchamiany program"
+msgstr ""
 
 #: ../../src/ed_stc.py:1696
 msgid "Read Only"
-msgstr "Tylko do odczytu"
+msgstr "Csak olvasható"
 
 #: ../../src/ed_search.py:785
 msgid "Recent Searches"
-msgstr "Ostatnie wyszukiwania"
+msgstr "Legutóbbi keresések"
 
 #: ../../src/ed_menu.py:488
 msgid "Recently Opened Files"
-msgstr "Ostatnio otwierane pliki"
+msgstr ""
 
 #: ../../src/ed_stc.py:1346
 msgid "Recording Finished"
-msgstr "Zapisywanie zostało zakończone"
+msgstr "Rögzítés befejezve"
 
 #: ../../src/ed_stc.py:1333
 msgid "Recording Macro"
-msgstr "Makro zapisujące"
+msgstr "Makró rögzítése"
 
 #: ../../src/ed_editv.py:302 ../../src/ed_menu.py:546
 #: ../../src/ed_toolbar.py:81
 msgid "Redo"
-msgstr "Powtórz"
+msgstr "Újra"
 
 #: ../../src/ed_menu.py:546 ../../src/ed_toolbar.py:81
 msgid "Redo Last Undo"
-msgstr "Przywróć ostatnią cofniętą operację"
+msgstr ""
 
 #: ../../src/ed_search.py:346
 msgid "Regex Compile Error"
@@ -1943,97 +1913,96 @@ msgstr ""
 
 #: ../../src/ed_cmdbar.py:158
 msgid "Regular Expression"
-msgstr "Wyrażenie regularne"
+msgstr "Reguláris kifejezés"
 
 #: ../../src/eclib/finddlg.py:802
 msgid "Regular expression"
-msgstr "Wyrażenie regularne"
+msgstr "Reguláris kifejezés"
 
 #: ../../src/ed_editv.py:286
 msgid "Reload File?"
-msgstr "Ponownie załadować plik?"
+msgstr "Fájl újratöltése?"
 
 #: ../../src/ed_menu.py:505
 msgid "Reload the file with a specified encoding"
-msgstr "Ponownie załaduj plik używając wskazanego kodowania"
+msgstr ""
 
 #: ../../src/ed_main.py:1190
 msgid "Reload with Encoding"
-msgstr "Ponownie załaduj uzywając kodowania"
+msgstr ""
 
 #: ../../src/ed_menu.py:504
-#, fuzzy
 msgid "Reload with Encoding..."
-msgstr "Ponownie załaduj uzywając kodowania"
+msgstr ""
 
 #: ../../src/prefdlg.py:363
 msgid "Remember File Position"
-msgstr "Zapamiętaj pozycję pliku"
+msgstr ""
 
 #: ../../src/prefdlg.py:1033
 msgid "Remember Window Position on Exit"
-msgstr "Zapamiętaj położenie okna przy wychodzeniu"
+msgstr ""
 
 #: ../../src/prefdlg.py:1030
 msgid "Remember Window Size on Exit"
-msgstr "Zapamiętaj rozmiar okna przy wychodzeniu"
+msgstr ""
 
 #: ../../src/ed_menu.py:593
 msgid "Remove All Bookmarks"
-msgstr "Usuń wszystkie zakładki"
+msgstr "Összes könyvjelző eltávolítása"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:103
 msgid "Remove Saved Path"
-msgstr "Usuń zapamietaną ścieżkę"
+msgstr ""
 
 #: ../../src/ed_menu.py:594
 msgid "Remove all bookmarks from the current document"
-msgstr "Usuń wszystkie zakładki z bieżącego dokumentu"
+msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:242
 msgid "Remove selection from list"
-msgstr "Usuń zaznaczone z listy"
+msgstr ""
 
 #: ../../src/ed_menu.py:719
 msgid "Remove trailing whitespace"
-msgstr "Usuń zbędne białe znaki na końcu wiersza"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:423
 msgid "Rename"
-msgstr "Zmień nazwę"
+msgstr "Átnevezés"
 
 #: ../../src/eclib/finddlg.py:624 ../../src/eclib/finddlg.py:830
 msgid "Replace"
-msgstr "Zamień"
+msgstr "Áthelyezés"
 
 #: ../../src/eclib/finddlg.py:833
 msgid "Replace All"
-msgstr "Zamień wszystkie"
+msgstr "Összes áthelyezése"
 
 #: ../../src/ed_search.py:535 ../../src/ed_search.py:692
 #, fuzzy
 msgid "Replace Error"
-msgstr "Zgłoś błąd"
+msgstr "Hiba jelentése"
 
 #: ../../src/eclib/finddlg.py:764
 msgid "Replace with"
-msgstr "Zamień na"
+msgstr "Csere ezzel:"
 
 #: ../../src/dev_tool.py:477
 msgid "Report Error"
-msgstr "Zgłoś błąd"
+msgstr "Hiba jelentése"
 
 #: ../../src/ed_editv.py:266
 msgid "Resave File?"
-msgstr "Ponownie zapisać plik?"
+msgstr "Fájl újramentése?"
 
 #: ../../src/ed_main.py:1397
 msgid "Restore Editor"
-msgstr ""
+msgstr "Szerkesztő visszaállítása"
 
 #: ../../src/plugdlg.py:664
 msgid "Retrieving Plugin List"
-msgstr "Pobierz listę wtyczek"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:415
 msgid "Reveal in "
@@ -2041,29 +2010,29 @@ msgstr ""
 
 #: ../../src/ed_menu.py:503
 msgid "Revert file to last save point"
-msgstr "Przywróć plik do postaci z ostatniego zapisu"
+msgstr ""
 
 #: ../../src/prefdlg.py:923 ../../src/prefdlg.py:1596
 msgid "Revert to Default"
-msgstr "Przywróć domyślne"
+msgstr ""
 
 #: ../../src/ed_menu.py:502
 msgid "Revert to Saved"
-msgstr "Przywróć do postaci zapisanej"
+msgstr ""
 
 #: ../../plugins/Launch/launch/__init__.py:93
 #: ../../plugins/Launch/launch/launch.py:178
 #: ../../plugins/Launch/launch/launch.py:538
 msgid "Run"
-msgstr "Wykonaj"
+msgstr "Futtatás"
 
 #: ../../plugins/Launch/launch/__init__.py:98
 msgid "Run last executed"
-msgstr "Uruchom ostatnio wywołany program"
+msgstr ""
 
 #: ../../plugins/Launch/launch/__init__.py:76
 msgid "Run script from current buffer"
-msgstr "Wykonaj skrypt z bieżącego bufora"
+msgstr ""
 
 #: ../../plugins/Launch/launch/__init__.py:95
 msgid "Run the file associated with the current buffer in Launch"
@@ -2071,44 +2040,44 @@ msgstr ""
 
 #: ../../src/ed_toolbar.py:76
 msgid "Save"
-msgstr "Zapisz"
+msgstr "Mentés"
 
 #: ../../src/ed_editv.py:184
 #, python-format
 msgid "Save \"%s\""
-msgstr "Zapisz \"%s\""
+msgstr "\"%s\" mentése"
 
 #: ../../src/ed_menu.py:498
 msgid "Save &As"
-msgstr "Zapisz j&ako"
+msgstr "Mentés &másként"
 
 #: ../../src/ed_menu.py:499
 msgid "Save All"
-msgstr "Zapisz wszystko"
+msgstr "Összes mentése"
 
 #: ../../src/ed_menu.py:498
 msgid "Save As"
-msgstr "Zapisz jako"
+msgstr "Mentés másként..."
 
 #: ../../src/ed_main.py:1459
 msgid "Save Changes?"
-msgstr "Czy zapisać zmiany?"
+msgstr "Változtatások mentése?"
 
 #: ../../src/ed_menu.py:497 ../../src/ed_toolbar.py:76
 msgid "Save Current File"
-msgstr "Zapisz bieżący plik"
+msgstr "Aktuális fájl mentése"
 
 #: ../../src/ed_menu.py:511
 msgid "Save Current Settings to a New Profile"
-msgstr "Zapisz bieżące ustawienia w nowym profilu"
+msgstr ""
 
 #: ../../src/perspective.py:69
 msgid "Save Current View"
-msgstr "Zapisz bieżący widok"
+msgstr "Jelenlegi nézet mentése"
 
 #: ../../src/ed_mdlg.py:106
 msgid "Save Error"
-msgstr "Błąd zapisu"
+msgstr "Mentési hiba"
 
 #: ../../src/perspective.py:220
 msgid "Save Perspective"
@@ -2116,64 +2085,64 @@ msgstr ""
 
 #: ../../src/ed_menu.py:510
 msgid "Save Profile"
-msgstr "Zapisz profil"
+msgstr "Profil mentése"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:100
 msgid "Save Selected Paths"
-msgstr "Zapisz wybrane ścieżki"
+msgstr ""
 
 #: ../../src/ed_menu.py:519
 #, fuzzy
 msgid "Save Session"
-msgstr "Zapisz style"
+msgstr "Stílusok mentése"
 
 #: ../../src/style_editor.py:252
 msgid "Save Styles"
-msgstr "Zapisz style"
+msgstr "Stílusok mentése"
 
 #: ../../src/ed_menu.py:500
 msgid "Save all open pages"
-msgstr "Zapisz wszystkie otwarte strony"
+msgstr "Összes megnyitott oldal mentése"
 
 #: ../../src/ed_menu.py:520
 #, fuzzy
 msgid "Save the current session."
-msgstr "Zapisz układ bieżącego okna"
+msgstr "Jelenlegi sor megkettőzése"
 
 #: ../../src/perspective.py:70
 msgid "Save the current window layout"
-msgstr "Zapisz układ bieżącego okna"
+msgstr ""
 
 #: ../../src/ed_main.py:691
 #, python-format
 msgid "Saved File As: %s"
-msgstr "Zapisano plik jako: %s"
+msgstr ""
 
 #: ../../src/ed_main.py:642
 #, python-format
 msgid "Saved File: %s"
-msgstr "Zapisano plik: %s"
+msgstr ""
 
 #: ../../plugins/Launch/launch/launch.py:168
 msgid "Script Arguments"
-msgstr "Argumenty Skryptu"
+msgstr "Szkriptargumentumok"
 
 #: ../../src/ed_search.py:1279
 #, python-format
 msgid "Search Complete: %d matching lines where found."
-msgstr "Wyszukiwanie ukończone: znaleziono %d pasujących wierszy."
+msgstr ""
 
 #: ../../src/eclib/finddlg.py:803
 msgid "Search Recursively"
-msgstr "Szukaj rekurencyjnie"
+msgstr "Rekurzív keresés"
 
 #: ../../src/ed_search.py:1253
 msgid "Search Started"
-msgstr "Wyszukiwanie rozpoczęte"
+msgstr "Keresés elindítva"
 
 #: ../../src/ed_search.py:1272
 msgid "Search complete"
-msgstr "Wyszukiwanie zakończone"
+msgstr "Keresés befejezve"
 
 #: ../../src/ed_menu.py:608
 msgid "Search for the currently selected phrase"
@@ -2182,7 +2151,7 @@ msgstr ""
 #: ../../plugins/filebrowser/filebrowser/browser.py:420
 #, fuzzy
 msgid "Search in directory"
-msgstr "Katalog domowy"
+msgstr "Saját mappa"
 
 #: ../../src/ed_search.py:404
 msgid "Search wrapped to bottom"
@@ -2195,40 +2164,40 @@ msgstr ""
 #: ../../src/ed_search.py:1363
 #, python-format
 msgid "Searching in: %s"
-msgstr "Wyszukiwanie w: %s"
+msgstr ""
 
 #: ../../src/prefdlg.py:629
 msgid "Secondary Font"
-msgstr "Czcionka dodatkowa"
+msgstr "Másodlagos betűtípus"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:53
 msgid "Sections"
-msgstr "Sekcje"
+msgstr ""
 
 #: ../../src/ed_menu.py:559
 msgid "Select &All"
-msgstr "Wybierz &wszystkie"
+msgstr "Min&dent kijelöl"
 
 #: ../../src/ed_editv.py:311
 msgid "Select All"
-msgstr "Zaznacz wszystko"
+msgstr "Mindent kijelöl"
 
 #: ../../src/ed_menu.py:560
 msgid "Select All Text in Document"
-msgstr "Zaznacz cały tekst dokumentu"
+msgstr ""
 
 #: ../../src/ed_main.py:1189
 msgid "Select an encoding to reload the file with"
-msgstr "Zaznacz w jakim kodowaniu załadować ponownie plik"
+msgstr ""
 
 #: ../../src/plugdlg.py:490
 msgid "Select plugins to download"
-msgstr "Zaznacz wtyczki do ściągnięcia"
+msgstr ""
 
 #: ../../src/eclib/finddlg.py:698
 #, fuzzy
 msgid "Selected Text"
-msgstr "Wytnij zaznaczony tekst z pliku"
+msgstr "Kijelölt szöveg kivágása a fájlból"
 
 #: ../../src/ed_pages.py:353
 msgid "Selected file is not a valid session file"
@@ -2236,22 +2205,22 @@ msgstr ""
 
 #: ../../src/ed_menu.py:804
 msgid "Send bug reports and suggestions"
-msgstr "Wyślij raporty o błędach i własne propozycje"
+msgstr ""
 
 #: ../../src/ed_main.py:754 ../../src/ed_main.py:781
 #, fuzzy
 msgid "Session"
-msgstr "Uprawnienia"
+msgstr "Engedélyek"
 
 #: ../../src/ed_main.py:769
-#, fuzzy, python-format
+#, python-format
 msgid "Session Saved as: %s"
-msgstr "Profil zapisany jako: %s"
+msgstr ""
 
 #: ../../src/ed_pages.py:338
 #, fuzzy
 msgid "Session file doesn't exist."
-msgstr "%s nie istnieje"
+msgstr "%s nem létezik"
 
 #: ../../src/ed_pages.py:358
 msgid "Session file is empty."
@@ -2260,11 +2229,11 @@ msgstr ""
 #: ../../src/ed_menu.py:523
 #, fuzzy
 msgid "Sessions"
-msgstr "Sekcje"
+msgstr "Engedélyek"
 
 #: ../../src/eclib/ecpickers.py:80
 msgid "Set Font"
-msgstr "Ustawienie czcionki"
+msgstr "Betűtípus beállítása"
 
 #: ../../src/style_editor.py:177
 msgid "Set the preview file type"
@@ -2272,19 +2241,19 @@ msgstr ""
 
 #: ../../src/prefdlg.py:604
 msgid "Sets a secondary font used for special regions when syntax highlighting is in use"
-msgstr "Ustaw czcionkę dodatkową używaną w określonych miejscach przy włączonym kolorowaniu składni."
+msgstr ""
 
 #: ../../src/prefdlg.py:599
 msgid "Sets the main/default font of the document"
-msgstr "Ustawia podstawową/domyślną czcionkę dokumentu"
+msgstr ""
 
 #: ../../plugins/Launch/launch/launch.py:148
 msgid "Settings"
-msgstr "Ustawienia"
+msgstr "Beállítások"
 
 #: ../../src/iface.py:294
 msgid "Shelf"
-msgstr ""
+msgstr "Polc"
 
 #: ../../src/ed_menu.py:636 ../../src/ed_menu.py:637 ../../src/prefdlg.py:584
 msgid "Show EOL Markers"
@@ -2296,11 +2265,11 @@ msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:218
 msgid "Show Hidden Files"
-msgstr "Pokaż Ukryte Pliki"
+msgstr "Rejtett fájlok megjelenítése"
 
 #: ../../src/prefdlg.py:1014
 msgid "Show Icons on Tabs"
-msgstr "Pokaż ikony na kartach"
+msgstr ""
 
 #: ../../src/ed_menu.py:633
 msgid "Show Indentation Guides"
@@ -2308,11 +2277,11 @@ msgstr ""
 
 #: ../../src/ed_menu.py:639
 msgid "Show Line Number Margin"
-msgstr "Pokaż margines z numerami wierszy"
+msgstr ""
 
 #: ../../src/ed_menu.py:638 ../../src/prefdlg.py:586
 msgid "Show Line Numbers"
-msgstr "Pokaż numery wierszy"
+msgstr "Sorszámozás megjelenítése"
 
 #: ../../src/iface.py:192
 msgid "Show Shelf"
@@ -2320,23 +2289,23 @@ msgstr ""
 
 #: ../../src/prefdlg.py:317
 msgid "Show Splash Screen"
-msgstr "Wyświetlaj ekran początkowy"
+msgstr ""
 
 #: ../../src/ed_menu.py:674 ../../src/prefdlg.py:1035
 msgid "Show Status Bar"
-msgstr "Pokaż pasek stanu"
+msgstr "Állapotsor megjelenítése"
 
 #: ../../src/ed_menu.py:676 ../../src/prefdlg.py:1037
 msgid "Show Toolbar"
-msgstr "Wyświetlaj pasek narzędzi"
+msgstr "Eszköztár megjelenítése"
 
 #: ../../src/ed_menu.py:640 ../../src/prefdlg.py:588
 msgid "Show Whitespace"
-msgstr "Pokaż białe znaki"
+msgstr ""
 
 #: ../../src/ed_menu.py:641
 msgid "Show Whitespace Markers"
-msgstr "Pokaż znaczniki białych znaków"
+msgstr ""
 
 #: ../../src/ed_log.py:132
 msgid "Show output from"
@@ -2352,7 +2321,7 @@ msgstr ""
 
 #: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:183
 msgid "Size"
-msgstr "Rozmiar"
+msgstr "Méret"
 
 #: ../../src/ed_pages.py:375
 msgid "Some files in saved session could not be found on disk:\n"
@@ -2360,31 +2329,31 @@ msgstr ""
 
 #: ../../src/style_editor.py:250
 msgid "Some styles have been changed would you like to save before exiting?"
-msgstr "Niektóre style zostały zmienione. Czy chcesz je zapisać przed wyjściem?"
+msgstr ""
 
 #: ../../src/ed_search.py:601
 msgid "Sorry will be ready for next version"
-msgstr "Przykro nam, będzie to dostępne w kolejnej wersji"
+msgstr ""
 
 #: ../../src/ed_menu.py:714
 msgid "Spaces to Tabs"
-msgstr "Spacje na znaki tabulacji"
+msgstr ""
 
 #: ../../src/ed_toolbar.py:74
 msgid "Start a New File"
-msgstr "Rozpocznij tworzenie nowego pliku"
+msgstr ""
 
 #: ../../src/style_editor.py:199
 msgid "Start a blank new style"
-msgstr "Rozpocznij tworzenie nowego pustego stylu"
+msgstr ""
 
 #: ../../src/ed_menu.py:481
 msgid "Start a new file in a new tab"
-msgstr "Rozpocznij tworzenie nowego pliku w nowej zakładce"
+msgstr ""
 
 #: ../../src/ed_menu.py:483
 msgid "Start a new file in a new window"
-msgstr "Rozpocznij tworzenie nowego pliku w nowym oknie"
+msgstr ""
 
 #: ../../src/prefdlg.py:772
 msgid "Start in Normal Mode"
@@ -2392,15 +2361,15 @@ msgstr ""
 
 #: ../../src/prefdlg.py:391
 msgid "Startup Settings"
-msgstr "Ustawienia uruchamiania"
+msgstr "Indítási beállítások"
 
 #: ../../src/updater.py:289
 msgid "Status Unknown"
-msgstr "Status nieznany"
+msgstr ""
 
 #: ../../src/ed_menu.py:773 ../../src/style_editor.py:63
 msgid "Style Editor"
-msgstr "Edytor stylów"
+msgstr "Stílus szerkesztő"
 
 #: ../../src/style_editor.py:216
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:53
@@ -2413,15 +2382,15 @@ msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:54
 msgid "Subroutine Declarations"
-msgstr "Deklaracje podprogramów"
+msgstr ""
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:53
 msgid "Subroutines"
-msgstr "Podprogramy"
+msgstr "Eljárások"
 
 #: ../../src/plugdlg.py:822
 msgid "Successfully Installed Plugins"
-msgstr "Pomyślnie zainstalowane wtyczki"
+msgstr ""
 
 #: ../../src/syntax/syntax.py:229
 #, python-format
@@ -2430,23 +2399,23 @@ msgstr ""
 
 #: ../../src/style_editor.py:174
 msgid "Syntax Files"
-msgstr "Pliki składni"
+msgstr ""
 
 #: ../../src/ed_menu.py:756 ../../src/prefdlg.py:496 ../../src/prefdlg.py:897
 msgid "Syntax Highlighting"
-msgstr "Podświetlanie składni"
+msgstr "Szintaxiskiemelés"
 
 #: ../../src/plugdlg.py:760
 msgid "System Directory"
-msgstr "Katalog systemowy"
+msgstr ""
 
 #: ../../src/prefdlg.py:543
 msgid "Tab Width"
-msgstr "Szerokość tabulatora"
+msgstr "Tabulátorok szélessége"
 
 #: ../../src/ed_menu.py:716
 msgid "Tabs to Spaces"
-msgstr "Znaki tabulacji na spacje"
+msgstr "A tabulátorok szóközökké konvertálása"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:54
 msgid "Task Definitions"
@@ -2454,11 +2423,11 @@ msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:403
 msgid "Text Colors"
-msgstr "Kolory tekstu"
+msgstr ""
 
 #: ../../src/util.py:353
 msgid "Text Document"
-msgstr "Dokument tekstowy"
+msgstr "Szöveges dokumentum"
 
 #: ../../src/ed_pages.py:150
 #, python-format
@@ -2468,10 +2437,6 @@ msgid ""
 "Choose an encoding and select Ok to open the file with the chosen encoding.\n"
 "Click Cancel to abort opening the file"
 msgstr ""
-"Nie można określić kodowania \"%s\".\n"
-"\n"
-"Wybierz sposób kodowania i kliknij Ok, aby otworzyć plik z wybranym kodowaniem.\n"
-"Kliknij Anuluj, aby przerwać otwieranie pliku"
 
 #: ../../src/ed_main.py:1456
 #, python-format
@@ -2480,9 +2445,6 @@ msgid ""
 "\n"
 "Would you like to save the changes?"
 msgstr ""
-"Plik: \"%s\" został zmodyfikowany od czasu ostatniego zapisu.\n"
-"\n"
-"Czy chcesz zapisać zmiany?"
 
 #: ../../src/ed_search.py:308
 #, python-format
@@ -2492,7 +2454,7 @@ msgstr ""
 #: ../../src/ed_pages.py:919
 #, python-format
 msgid "There are no files that Editra can open in %s"
-msgstr "W %s nie ma plików, które można otwierać w programie Editra."
+msgstr ""
 
 #: ../../src/ed_print.py:129
 msgid ""
@@ -2506,11 +2468,11 @@ msgstr ""
 
 #: ../../src/ed_editv.py:309
 msgid "To Lowercase"
-msgstr "Na małe literu"
+msgstr ""
 
 #: ../../src/ed_editv.py:308
 msgid "To Uppercase"
-msgstr "Na duże litery"
+msgstr ""
 
 #: ../../src/plugdlg.py:743
 msgid ""
@@ -2518,18 +2480,15 @@ msgid ""
 "\n"
 "To remove an item select it and hit Delete or Backspace."
 msgstr ""
-"Aby dodać nowy element, przeciągnij plik wtyczki na listę.\n"
-"\n"
-"Aby usunąć element, wybierz go i naciśnij Delete lub Backspace."
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:93
 #, python-format
 msgid "To open multiple files at once %s+Click to select the desired files/folders then hit Enter to open them all at once"
-msgstr "Aby otworzyć wiele plików za jednym razem, wykonuj %s+kliknięcie w celu zaznaczenia żądanych plików/folderów, następnie naciśnij Enter by otworzyć je wszystkie naraz."
+msgstr ""
 
 #: ../../src/ed_menu.py:750
 msgid "Toggle Auto-Indentation functionality"
-msgstr "Włącz automatyczne tworzenie wcięć"
+msgstr ""
 
 #: ../../src/ed_menu.py:591
 msgid "Toggle Bookmark"
@@ -2541,19 +2500,19 @@ msgstr ""
 
 #: ../../src/ed_menu.py:691
 msgid "Toggle Comment"
-msgstr "Przełącz komentarze"
+msgstr ""
 
 #: ../../src/ed_menu.py:656
 msgid "Toggle Editor Maximization"
-msgstr "Przełącz maksymalizację edytora"
+msgstr ""
 
 #: ../../src/ed_menu.py:643
 msgid "Toggle Editor View Options"
-msgstr "Przełącz opcje widoku edytora"
+msgstr ""
 
 #: ../../src/ed_menu.py:647 ../../src/ed_menu.py:648
 msgid "Toggle all folds"
-msgstr ""
+msgstr "Minden blokk szétnyitása"
 
 #: ../../src/ed_menu.py:592
 msgid "Toggle bookmark of the current line"
@@ -2561,28 +2520,28 @@ msgstr ""
 
 #: ../../src/ed_menu.py:692
 msgid "Toggle comment on the selected line(s)"
-msgstr "Przełącz komentarze w wybranych wierszach"
+msgstr ""
 
 #: ../../src/ed_menu.py:646
 msgid "Toggle current fold"
-msgstr ""
+msgstr "Aktuális blokk be/kikapcsolása"
 
 #: ../../src/ed_menu.py:645
 msgid "Toggle fold"
-msgstr ""
+msgstr "Blokk be/kikapcsolása"
 
 #: ../../src/prefdlg.py:1008
 msgid "Toolbar Icon Size"
-msgstr "Rozmiar ikon na pasku narzędziowym"
+msgstr "Eszköztárikonok mérete"
 
 #: ../../src/ed_menu.py:801
 #, fuzzy
 msgid "Translate Editra..."
-msgstr "Przetłumacz program Editra"
+msgstr "Editra fordítása"
 
 #: ../../src/prefdlg.py:1061
 msgid "Transparency"
-msgstr "Przezroczystość"
+msgstr "Átlátszóság"
 
 #: ../../src/ed_menu.py:581
 msgid "Transpose Line"
@@ -2594,39 +2553,39 @@ msgstr ""
 
 #: ../../src/ed_menu.py:718
 msgid "Trim Trailing Whitespace"
-msgstr "Obetnij niepotrzebne białe znaki na końcu"
+msgstr ""
 
 #: ../../src/prefdlg.py:592
 msgid "Turn off for better performance"
-msgstr "Wyłącz aby uzyskać lepszą wydajność"
+msgstr ""
 
 #: ../../src/util.py:176
 msgid "Unable to accept dropped file or text"
-msgstr "Nie można przyjąć upuszczonego pliku lub tekstu"
+msgstr ""
 
 #: ../../src/plugdlg.py:495
 msgid "Unable to retrieve plugin list"
-msgstr "Nie można odszukać listy wtyczek"
+msgstr ""
 
 #: ../../src/updater.py:144
 msgid "Unable to retrieve version info"
-msgstr "Nie można odszukać informacji o wersji"
+msgstr ""
 
 #: ../../src/ed_editv.py:301 ../../src/ed_toolbar.py:80
 msgid "Undo"
-msgstr "Cofnij"
+msgstr "Visszavonás"
 
 #: ../../src/ed_menu.py:545 ../../src/ed_toolbar.py:80
 msgid "Undo Last Action"
-msgstr "Cofnij ostatnią czynność"
+msgstr ""
 
 #: ../../src/ed_menu.py:697
 msgid "Unindent Lines"
-msgstr "Usuń wcięcia wierszy"
+msgstr ""
 
 #: ../../src/ed_menu.py:698
 msgid "Unindent the selected lines"
-msgstr "Usuń wcięcia wybranych wierszy"
+msgstr ""
 
 #: ../../src/ed_glob.py:379 ../../src/ed_mdlg.py:137 ../../src/ed_menu.py:728
 #: ../../src/ed_menu.py:730 ../../src/prefdlg.py:572
@@ -2637,12 +2596,12 @@ msgstr "Unix (\\n)"
 #: ../../src/plugdlg.py:412 ../../src/util.py:359
 #: ../../src/eclib/infodlg.py:292
 msgid "Unknown"
-msgstr "Nieznany"
+msgstr "Ismeretlen"
 
 #: ../../src/ed_pages.py:219
 #, python-format
 msgid "Untitled - %d"
-msgstr "Bez tytułu - %d"
+msgstr ""
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:596
 msgid "Untitled_File"
@@ -2654,27 +2613,27 @@ msgstr ""
 
 #: ../../src/eclib/finddlg.py:790
 msgid "Up"
-msgstr ""
+msgstr "Fel"
 
 #: ../../src/prefdlg.py:1171
 msgid "Update"
-msgstr "Aktualizuj"
+msgstr "Frissítés"
 
 #: ../../src/Editra.py:563
 msgid "Update Available"
-msgstr "Dostępna aktualizacja"
+msgstr "Elérhető frissítés"
 
 #: ../../src/ed_menu.py:700
 msgid "Uppercase"
-msgstr "Wielkie litery"
+msgstr "Nagybetűs"
 
 #: ../../src/ed_menu.py:748
 msgid "Use Auto Completion when available"
-msgstr "Używaj automatycznego uzupełniania gdy jest dostępne"
+msgstr ""
 
 #: ../../src/prefdlg.py:1209
 msgid "Use Proxy"
-msgstr "Korzystaj z proxy"
+msgstr "Proxy használata"
 
 #: ../../src/ed_menu.py:705
 msgid "Use Soft Tabs"
@@ -2682,15 +2641,15 @@ msgstr ""
 
 #: ../../src/prefdlg.py:562
 msgid "Use Tabs Instead of Spaces"
-msgstr "Używaj znaków tabulacji zamiast spacji"
+msgstr ""
 
 #: ../../src/plugdlg.py:756
 msgid "User Directory"
-msgstr "Katalog użytkownika"
+msgstr "Saját könyvtár"
 
 #: ../../src/prefdlg.py:1226
 msgid "Username"
-msgstr "Nazwa użytkownika"
+msgstr "Felhasználónév"
 
 #: ../../src/ed_log.py:80
 msgid "View Editra's console log"
@@ -2706,11 +2665,11 @@ msgstr ""
 
 #: ../../src/prefdlg.py:619
 msgid "View Options"
-msgstr "Widok opcji"
+msgstr ""
 
 #: ../../src/ed_script.py:202
 msgid "View and Edit Macros"
-msgstr "Obejrzyj i edytuj makra"
+msgstr ""
 
 #: ../../src/ed_menu.py:654
 msgid "View pane selection list"
@@ -2719,7 +2678,7 @@ msgstr ""
 #: ../../src/ed_menu.py:797
 #, python-format
 msgid "Visit the project homepage %s"
-msgstr "Odwiedź stronę WWW projektu %s"
+msgstr ""
 
 #: ../../src/prefdlg.py:735
 msgid "Visual Helpers"
@@ -2727,11 +2686,11 @@ msgstr ""
 
 #: ../../src/prefdlg.py:376
 msgid "Warn when mixed eol characters are detected"
-msgstr "Ostrzegaj gdy wykryto różne znaki końca pliku (eol)"
+msgstr ""
 
 #: ../../plugins/Launch/launch/cfgdlg.py:455
 msgid "Warning Text"
-msgstr "Tekst ostrzeżenia"
+msgstr ""
 
 #: ../../src/prefdlg.py:763
 msgid "Warning suggestions will include context insensitive results"
@@ -2739,28 +2698,27 @@ msgstr ""
 
 #: ../../src/eclib/infodlg.py:185
 msgid "Where"
-msgstr "Skąd"
+msgstr "Hol"
 
 #: ../../src/ed_main.py:707
 msgid "Where to Save Profile?"
-msgstr "Gdzie zapisać profil?"
+msgstr ""
 
 #: ../../src/ed_main.py:752
-#, fuzzy
 msgid "Where to Save Session?"
-msgstr "Gdzie zapisać profil?"
+msgstr ""
 
 #: ../../src/ed_menu.py:720
 msgid "Whitespace"
-msgstr "Biały znak"
+msgstr "Elválasztókarakterek"
 
 #: ../../src/ed_menu.py:721
 msgid "Whitespace formating commands"
-msgstr "Polecenia formatowania białych znaków."
+msgstr ""
 
 #: ../../src/eclib/finddlg.py:801
 msgid "Whole word"
-msgstr "Cały wyraz"
+msgstr "Egész szó"
 
 #: ../../src/ed_glob.py:380 ../../src/ed_mdlg.py:138 ../../src/ed_menu.py:731
 #: ../../src/ed_menu.py:733 ../../src/prefdlg.py:573
@@ -2769,16 +2727,16 @@ msgstr "Windows (\\r\\n)"
 
 #: ../../src/ed_menu.py:708 ../../src/prefdlg.py:590
 msgid "Word Wrap"
-msgstr "Zawijanie wierszy"
+msgstr "Szavak tördelése"
 
 #: ../../src/ed_menu.py:709
 msgid "Wrap Text Horizontally"
-msgstr "Zawijaj tekst poziomo"
+msgstr ""
 
 #: ../../src/ed_main.py:1509
 #, python-format
 msgid "Written in 100%% Python."
-msgstr "Napisane w 100%% w języku Python."
+msgstr ""
 
 #: ../../src/plugdlg.py:188
 msgid "You must restart Editra before your changes will take full affect."
@@ -2786,7 +2744,7 @@ msgstr ""
 
 #: ../../src/Editra.py:842 ../../src/Editra.py:1050
 msgid "Your profile has been updated to the latest version"
-msgstr "Twój profil został zaktualizowany do najnowszej wersji"
+msgstr ""
 
 #: ../../src/ed_menu.py:625 ../../src/ed_menu.py:626
 msgid "Zoom Default"
@@ -2794,11 +2752,11 @@ msgstr ""
 
 #: ../../src/ed_menu.py:624
 msgid "Zoom In"
-msgstr "Powiększ"
+msgstr "Nagyítás"
 
 #: ../../src/ed_menu.py:623
 msgid "Zoom Out"
-msgstr "Pomniejsz"
+msgstr "Kicsinyítés"
 
 #: ../../plugins/Launch/launch/launch.py:165
 msgid "args"
@@ -2806,7 +2764,7 @@ msgstr ""
 
 #: ../../src/style_editor.py:669
 msgid "bold"
-msgstr "pogrubiony"
+msgstr "félkövér"
 
 #: ../../src/ed_cmdbar.py:708
 msgid "cwd: "
@@ -2822,26 +2780,23 @@ msgstr ""
 
 #: ../../src/style_editor.py:671
 msgid "italic"
-msgstr "kursywa"
+msgstr "dőlt"
 
 #: ../../src/style_editor.py:672
 msgid "underline"
-msgstr "podkreślenie"
+msgstr "aláhúzás"
 
-#~ msgid "Finished Installing Plugins"
-#~ msgstr "Zakończono instalację wtyczek"
-
-#~ msgid "Go to configuration page?"
-#~ msgstr "Przejść do strony konfiguracji?"
+#~ msgid "Old Machintosh"
+#~ msgstr "Régi Machintosh"
 
 #~ msgid "Unix"
 #~ msgstr "Unix"
 
 #~ msgid "Untitled"
-#~ msgstr "Bez tytułu"
+#~ msgstr "Névtelen"
 
 #~ msgid "Windows"
-#~ msgstr "Okna"
+#~ msgstr "Windows"
 
 #~ msgid "whole word: %s"
-#~ msgstr "całe słowo: %s"
+#~ msgstr "egész dszó: %s"
