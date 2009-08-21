@@ -23,6 +23,14 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+
+# Due to some methods that were added in 2.8.3 being used in a large number
+# of places Editra has become incompatable with wxPython 2.8.1.1 and earlier.
+# So ensure correct version of wxPython can be loaded
+if not hasattr(sys, 'frozen'):
+    import wxversion
+    wxversion.select('2.8.3')
+
 import base64
 import locale
 import time
@@ -37,14 +45,6 @@ try:
     import wx.lib.eventStack as events
 except:
     import extern.events as events
-
-# Due to some methods that were added in 2.8.3 being used in a large number
-# of places Editra has become incompatable with wxPython 2.8.1.1 and earlier.
-# TODO: add a message dialog to display this, or look into the cause of the
-#       issues of using wxversion on windows.
-if not hasattr(sys, 'frozen') and wx.VERSION < (2, 8, 3, ''):
-    print "VersionError: Editra requires wxPython 2.8.3 or higher"
-    print "              Your version is %s" % wx.VERSION_STRING
 
 # Try and import a system installed version of pkg_resources else fallback to
 # the one bundled with Editra's source.
