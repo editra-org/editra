@@ -19,6 +19,7 @@ NEW: [features/improvements]
 +Add Hungarian, Romanian, and Slovak translations.
 
 BUG FIXES:
++Fix error in handling BOM when saving files that could result in data loss.
 +Use wxversion to make sure that Editra is started with wxPython2.8 or later.
 
 #-----------------------------------------------------------------------------#
