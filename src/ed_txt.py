@@ -135,7 +135,7 @@ class EdFile(ebmlib.FileObjectImpl):
         try:
             if self.bom is not None:
                 Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
-                ustr = ustr.replace(self.bom, '', 1)
+                ustr = bytes.replace(self.bom, '', 1)
 
             ustr = bytes.decode(self.encoding)
         except UnicodeDecodeError, msg:
@@ -193,7 +193,7 @@ class EdFile(ebmlib.FileObjectImpl):
                         self._magic['comment'] = enc
             else:
                 Log("[ed_txt][info] File Has %s BOM" % enc)
-                self.bom = unicode(BOM.get(enc, None), enc)
+                self.bom = BOM.get(enc, None)
 
         if enc is not None:
             self.encoding = enc
