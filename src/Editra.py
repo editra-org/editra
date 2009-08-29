@@ -1014,6 +1014,7 @@ def _Main(opts, args):
             profiler.Profile_Set('LAST_SESSION', u'')
         else:
             frame.GetNotebook().LoadSessionFile(session)
+        del session
 
     # Unlike wxMac/wxGTK Windows doesn't post an activate event when a window
     # is first shown, so do it manually to make sure all event handlers get
