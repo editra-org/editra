@@ -37,6 +37,7 @@ import ed_event
 import ed_msg
 import ebmlib
 import eclib
+from profiler import Profile_Get, Profile_Set
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -61,6 +62,7 @@ XButton = PyEmbeddedImage(
 ID_CLOSE_BUTTON = wx.NewId()
 ID_SEARCH_NEXT = wx.NewId()
 ID_SEARCH_PRE = wx.NewId()
+ID_FIND_ALL = wx.NewId()
 ID_MATCH_CASE = wx.NewId()
 ID_REGEX = wx.NewId()
 
@@ -79,6 +81,8 @@ class CommandBarBase(eclib.ControlBar):
 
         # Attributes
         self._parent = parent
+        self._menu = None
+        self._menu_enabled = True
         self.ctrl = None
         self.close_b = eclib.PlateButton(self, ID_CLOSE_BUTTON,
                                          bmp=XButton.GetBitmap(),
@@ -89,6 +93,8 @@ class CommandBarBase(eclib.ControlBar):
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnClose, self.close_b)
+        self.Bind(wx.EVT_CONTEXT_MENU, self.OnContext)
+        self.Bind(wx.EVT_MENU, self.OnContextMenu)
 
     def OnClose(self, evt):
         """Handles events from the buttons on the bar
@@ -101,6 +107,87 @@ class CommandBarBase(eclib.ControlBar):
         else:
             evt.Skip()
 
+    def OnContext(self, evt):
+        """Show the custom menu"""
+        if self._menu_enabled:
+            if self._menu is None:
+                # Lazy init the menu
+                self._menu = wx.Menu(_("Customize"))
+                to_menu = list()
+                for child in self.GetChildren():
+                    if self.IsCustomizable(child):
+                        to_menu.append(child)
+
+                if len(to_menu):
+                    to_menu.sort(key=wx.Window.GetLabel)
+                    for item in to_menu:
+                        if not item.GetLabel():
+                            continue
+
+                        self._menu.Append(item.GetId(),
+                                          item.GetLabel(),
+                                          kind=wx.ITEM_CHECK)
+                        self._menu.Check(item.GetId(), item.IsShown())
+
+            self.PopupMenu(self._menu)
+        else:
+            evt.Skip()
+
+    def OnContextMenu(self, evt):
+        """Hide and Show controls"""
+        e_id = evt.GetId()
+        ctrl = self.FindWindowById(e_id)
+        if ctrl is not None:
+            ctrl.Show(not ctrl.IsShown())
+            self.Layout()
+
+            # Update the persistant configuration
+            key = self.GetConfigKey()
+            if key is not None:
+                cfg = Profile_Get('CTRLBAR', default=dict())
+                state = self.GetControlStates()
+                cfg[key] = state
+
+    def EnableMenu(self, enable=True):
+        """Enable the popup customization menu
+        @keyword enable: bool
+
+        """
+        self._menu_enabled = enable
+        if not enable and self._menu is not None:
+            self._menu.Destroy()
+            self._menu = None
+
+    def GetConfigKey(self):
+        """Get the key to use for the layout config persistance.
+        @return: string
+        @note: override in subclasses
+
+        """
+        return None
+
+    def GetControlStates(self):
+        """Get the map of control name id's to their shown state True/False
+        @return: dict()
+
+        """
+        state = dict()
+        for child in self.GetChildren():
+            if self.IsCustomizable(child):
+                state[child.GetName()] = child.IsShown()
+        return state
+
+    def SetControlStates(self, state):
+        """Set visibility state of the customizable controls
+        @param state: dict(ctrl_name=bool)
+
+        """
+        for name, show in state.iteritems():
+            ctrl = self.FindWindowByName(name)
+            if ctrl is not None:
+                ctrl.Show(show)
+        self.Layout()
+
     def Hide(self):
         """Hides the control and notifies the parent
         @postcondition: commandbar is hidden
@@ -111,6 +198,17 @@ class CommandBarBase(eclib.ControlBar):
         self._parent.SendSizeEvent()
         self._parent.nb.GetCurrentCtrl().SetFocus()
         return True
+
+    def IsCustomizable(self, ctrl):
+        """Is the control of a type that can be customized
+        @param ctrl: wx.Window
+        @return: bool
+
+        """
+        ok = (ctrl is not self.close_b)
+        ok = ok and (isinstance(ctrl, wx.CheckBox) or \
+                     isinstance(ctrl, eclib.PlateButton))
+        return ok
 
     def SetControl(self, ctrl):
         """Set the main control of this command bar
@@ -141,21 +239,32 @@ class SearchBar(CommandBarBase):
         f_lbl = wx.StaticText(self, label=_("Find") + u": ")
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOWN), wx.ART_MENU)
         next_btn = eclib.PlateButton(self, ID_SEARCH_NEXT, _("Next"),
-                                     t_bmp, style=eclib.PB_STYLE_NOBG)
+                                     t_bmp, style=eclib.PB_STYLE_NOBG,
+                                     name="NextBtn")
         self.AddControl(f_lbl, wx.ALIGN_LEFT)
         self.AddControl(self.ctrl, wx.ALIGN_LEFT)
         self.AddControl(next_btn, wx.ALIGN_LEFT)
 
         t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_UP), wx.ART_MENU)
         pre_btn = eclib.PlateButton(self, ID_SEARCH_PRE, _("Previous"),
-                                    t_bmp, style=eclib.PB_STYLE_NOBG)
+                                    t_bmp, style=eclib.PB_STYLE_NOBG,
+                                    name="PreBtn")
         self.AddControl(pre_btn, wx.ALIGN_LEFT)
 
-        match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"))
+        t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FIND), wx.ART_MENU)
+        fa_btn = eclib.PlateButton(self, ID_FIND_ALL, _("Find All"),
+                                   t_bmp, style=eclib.PB_STYLE_NOBG,
+                                   name="FindAllBtn")
+        self.AddControl(fa_btn)
+        fa_btn.Show(False) # Hide this button by default
+
+        match_case = wx.CheckBox(self, ID_MATCH_CASE, _("Match Case"),
+                                 name="MatchCase")
         match_case.SetValue(self.ctrl.IsMatchCase())
         self.AddControl(match_case, wx.ALIGN_LEFT)
 
-        regex_cb = wx.CheckBox(self, ID_REGEX, _("Regular Expression"))
+        regex_cb = wx.CheckBox(self, ID_REGEX, _("Regular Expression"),
+                               name="RegEx")
         regex_cb.SetValue(self.ctrl.IsRegEx())
         self.AddControl(regex_cb, wx.ALIGN_LEFT)
 
@@ -172,6 +281,11 @@ class SearchBar(CommandBarBase):
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
         self._sctrl.RegisterClient(self)
 
+        # Set user customizable layout
+        state = Profile_Get('CTRLBAR', default=dict())
+        cfg = state.get(self.GetConfigKey(), dict())
+        self.SetControlStates(cfg)
+
     def __del__(self):
         ed_msg.Unsubscribe(self.OnThemeChange)
         self._sctrl.RemoveClient(self)
@@ -184,6 +298,8 @@ class SearchBar(CommandBarBase):
         e_id = evt.GetId()
         if e_id in [ID_SEARCH_NEXT, ID_SEARCH_PRE]:
             self.ctrl.DoSearch(e_id == ID_SEARCH_NEXT)
+        elif e_id == ID_FIND_ALL:
+            self.ctrl.FindAll()
         else:
             evt.Skip()
 
@@ -239,6 +355,13 @@ class SearchBar(CommandBarBase):
             pre.Update()
             pre.Refresh()
 
+    def GetConfigKey(self):
+        """Get the key to use for the layout config persistance.
+        @return: string
+
+        """
+        return 'SearchBar'
+
 #-----------------------------------------------------------------------------#
 
 class CommandEntryBar(CommandBarBase):
@@ -276,6 +399,7 @@ class GotoLineBar(CommandBarBase):
                                  size=(100, -1)))
 
         # Setup
+        self.EnableMenu(False)
         go_lbl = wx.StaticText(self, label=_("Goto Line") + ": ")
         self.AddControl(go_lbl, wx.ALIGN_LEFT)
         self.AddControl(self.ctrl, wx.ALIGN_LEFT)
@@ -310,6 +434,9 @@ class CommandExecuter(eclib.CommandEntryBase):
             self._curdir = os.path.abspath(os.curdir) + os.sep
         else:
             self._curdir = wx.GetHomeDir() + os.sep
+
+        # Setup
+        self.EnableMenu(False)
 
         if wx.Platform == '__WXMAC__':
             self._popup = PopupList(self)

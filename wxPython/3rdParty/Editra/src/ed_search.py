@@ -820,6 +820,12 @@ class EdSearchCtrl(wx.SearchCtrl):
             data.SetFlags(self._flags)
             self.FindService.RefreshControls()
 
+    def FindAll(self):
+        """Fire off a FindAll job in the current buffer"""
+        evt = eclib.FindEvent(eclib.edEVT_FIND_ALL, flags=self._flags)
+        evt.SetFindString(self.GetValue())
+        self.FindService.OnFindAll(evt)
+
     def DoSearch(self, next=True):
         """Do the search and move the selection
         @keyword next: search next or previous
