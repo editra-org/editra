@@ -29,7 +29,7 @@ import sys
 # So ensure correct version of wxPython can be loaded
 if not hasattr(sys, 'frozen'):
     import wxversion
-    wxversion.select('2.8.3')
+    wxversion.ensureMinimal('2.8')
 
 import base64
 import locale
