@@ -335,7 +335,7 @@ class PlateButton(wx.PyControl):
 
     def Disable(self):
         """Disable the control"""
-        wx.PyControl.Disable(self)
+        super(PlateButton, self).Disable()
         self.Refresh()
 
     def DoGetBestSize(self):
@@ -369,7 +369,7 @@ class PlateButton(wx.PyControl):
 
     def Enable(self, enable=True):
         """Enable/Disable the control"""
-        wx.PyControl.Enable(self, enable)
+        super(PlateButton, self).Enable(enable)
         self.Refresh()
 
     def GetBackgroundBrush(self, dc):
@@ -542,11 +542,11 @@ class PlateButton(wx.PyControl):
         """Set this control to have the focus"""
         if self._state['cur'] != PLATE_PRESSED:
             self.SetState(PLATE_HIGHLIGHT)
-        wx.PyControl.SetFocus(self)
+        super(PlateButton, self).SetFocus()
 
     def SetFont(self, font):
         """Adjust size of control when font changes"""
-        wx.PyControl.SetFont(self, font)
+        super(PlateButton, self).SetFont(font)
         self.InvalidateBestSize()
 
     def SetLabel(self, label):
@@ -554,7 +554,7 @@ class PlateButton(wx.PyControl):
         @param label: lable string
 
         """
-        wx.PyControl.SetLabel(self, label)
+        super(PlateButton, self).SetLabel(label)
         self.InvalidateBestSize()
 
     def SetLabelColor(self, normal, hlight=wx.NullColor):
@@ -638,7 +638,7 @@ class PlateButton(wx.PyControl):
 
     def SetWindowVariant(self, variant):
         """Set the variant/font size of this control"""
-        wx.PyControl.SetWindowVariant(self, variant)
+        super(PlateButton, self).SetWindowVariant(variant)
         self.InvalidateBestSize()
 
     def ShouldInheritColours(self):
