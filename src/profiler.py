@@ -50,6 +50,7 @@ _DEFAULTS = {
            'AUTO_RELOAD' : False,           # Automatically reload files?
            'BRACKETHL'  : True,             # Use bracket highlighting
            'BSUNINDENT' : True,             # Backspace Unindents
+           'CTRLBAR'    : dict(),           # ControlBar layouts
            'CHECKMOD'   : True,             # Auto check file for file mod
            'CHECKUPDATE': True,             # Check for updates on start
            'CODE_FOLD'  : True,             # Use code folding
