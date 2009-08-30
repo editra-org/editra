@@ -139,7 +139,7 @@ class CommandBarBase(eclib.ControlBar):
         e_id = evt.GetId()
         ctrl = self.FindWindowById(e_id)
         if ctrl is not None:
-            ctrl.Show(not ctrl.IsShown())
+            self.ShowControl(ctrl.GetName(), not ctrl.IsShown())
             self.Layout()
 
             # Update the persistant configuration
@@ -184,9 +184,7 @@ class CommandBarBase(eclib.ControlBar):
 
         """
         for name, show in state.iteritems():
-            ctrl = self.FindWindowByName(name)
-            if ctrl is not None:
-                ctrl.Show(show)
+            self.ShowControl(name, show)
         self.Layout()
 
     def Hide(self):
@@ -199,6 +197,24 @@ class CommandBarBase(eclib.ControlBar):
         self._parent.SendSizeEvent()
         self._parent.nb.GetCurrentCtrl().SetFocus()
         return True
+
+    def ShowControl(self, ctrl_name, show=True):
+        """Show/Hide a control
+        @param ctrl_name: string
+        @note: assumes all left aligned controls
+
+        """
+        sizer = self.GetControlSizer()
+        next = False
+        for item in sizer.GetChildren():
+            if next:
+                if item.IsSpacer():
+                    item.Show(show)
+                break
+
+            if item.Window and item.Window.GetName() == ctrl_name:
+                item.Show(show)
+                next = True
 
     def IsCustomizable(self, ctrl):
         """Is the control of a type that can be customized
@@ -396,6 +412,9 @@ class CommandEntryBar(CommandBarBase):
         if wx.Platform == '__WXMAC__':
             self.ctrl.SetSizeHints(200, 16, -1, 16)
 
+        # Setup
+        self.EnableMenu(False)
+
 #-----------------------------------------------------------------------------#
 
 class GotoLineBar(CommandBarBase):
@@ -444,9 +463,6 @@ class CommandExecuter(eclib.CommandEntryBase):
             self._curdir = os.path.abspath(os.curdir) + os.sep
         else:
             self._curdir = wx.GetHomeDir() + os.sep
-
-        # Setup
-        self.EnableMenu(False)
 
         if wx.Platform == '__WXMAC__':
             self._popup = PopupList(self)

@@ -439,6 +439,20 @@ class ControlBar(wx.PyPanel):
             self._sizer.Add(spacer, 0)
             self._sizer.Add(tool, 0, align|wx.ALIGN_CENTER_VERTICAL)
 
+    def GetControlSizer(self):
+        """Get the sizer that is used to layout the contols (horizontal sizer)
+        @return: wx.BoxSizer
+
+        """
+        return self._sizer
+
+    def GetControlSpacing(self):
+        """Get the spacing used between controls
+        @return: size tuple
+
+        """
+        return self._spacing
+
     def DoPaintBackground(self, dc, rect, color, color2):
         """Paint the background of the given rect based on the style of
         the control bar.
