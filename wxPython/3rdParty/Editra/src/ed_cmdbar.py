@@ -64,6 +64,7 @@ ID_SEARCH_NEXT = wx.NewId()
 ID_SEARCH_PRE = wx.NewId()
 ID_FIND_ALL = wx.NewId()
 ID_MATCH_CASE = wx.NewId()
+ID_WHOLE_WORD = wx.NewId()
 ID_REGEX = wx.NewId()
 
 #-----------------------------------------------------------------------------#
@@ -262,6 +263,12 @@ class SearchBar(CommandBarBase):
                                  name="MatchCase")
         match_case.SetValue(self.ctrl.IsMatchCase())
         self.AddControl(match_case, wx.ALIGN_LEFT)
+        match_case.Show(False) # Hide by default
+
+        ww_cb = wx.CheckBox(self, ID_WHOLE_WORD,
+                            _("Whole Word"), name="WholeWord")
+        ww_cb.SetValue(self.ctrl.IsWholeWord())
+        self.AddControl(ww_cb, wx.ALIGN_LEFT)
 
         regex_cb = wx.CheckBox(self, ID_REGEX, _("Regular Expression"),
                                name="RegEx")
@@ -309,11 +316,13 @@ class SearchBar(CommandBarBase):
 
         """
         e_id = evt.GetId()
-        if e_id in (ID_MATCH_CASE, ID_REGEX):
+        if e_id in (ID_MATCH_CASE, ID_REGEX, ID_WHOLE_WORD):
             ctrl = self.FindWindowById(e_id)
             if ctrl != None:
                 if e_id == ID_MATCH_CASE:
                     flag = eclib.AFR_MATCHCASE
+                elif e_id == ID_WHOLE_WORD:
+                    flag = eclib.AFR_WHOLEWORD
                 else:
                     flag = eclib.AFR_REGEX
 
@@ -333,6 +342,7 @@ class SearchBar(CommandBarBase):
         """
         self.FindWindowById(ID_MATCH_CASE).SetValue(evt.IsMatchCase())
         self.FindWindowById(ID_REGEX).SetValue(evt.IsRegEx())
+        self.FindWindowById(ID_WHOLE_WORD).SetValue(evt.IsWholeWord())
 
     def OnThemeChange(self, msg):
         """Update icons when the theme has changed
