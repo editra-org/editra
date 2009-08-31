@@ -25,8 +25,9 @@ __revision__ = "$Revision$"
 
 
 __all__ = ['auinavi', 'choicedlg', 'colorsetter', 'ctrlbox', 'eclutil',
-           'ecpickers', 'elistmix', 'encdlg', 'finddlg', 'infodlg', 'panelbox',
-           'outbuff', 'platebtn', 'pstatbar', 'segmentbk', 'txtentry']
+           'ecpickers', 'elistmix', 'encdlg', 'errdlg', 'finddlg', 'infodlg',
+           'panelbox', 'outbuff', 'platebtn', 'pstatbar', 'segmentbk',
+           'txtentry']
 
 #-----------------------------------------------------------------------------#
 
@@ -38,6 +39,7 @@ from eclutil import *
 from ecpickers import *
 from elistmix import *
 from encdlg import *
+from errdlg import *
 from finddlg import *
 from infodlg import *
 from outbuff import *
@@ -48,4 +50,4 @@ from segmentbk import *
 from txtentry import *
 
 # TODO: Delete module entries once all plugins have been updated to not 
-#       import them sepearatly.
+#       import them separately.
