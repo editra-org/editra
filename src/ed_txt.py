@@ -135,7 +135,7 @@ class EdFile(ebmlib.FileObjectImpl):
         try:
             if self.bom is not None:
                 Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
-                ustr = bytes.replace(self.bom, '', 1)
+                bytes = bytes.replace(self.bom, '', 1)
 
             ustr = bytes.decode(self.encoding)
         except UnicodeDecodeError, msg:
