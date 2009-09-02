@@ -78,11 +78,13 @@ class EclibDemoFrame(wx.Frame):
         self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnTreeSel)
 
     def OnTreeSel(self, evt):
+        self.Freeze()
         item = evt.GetItem()
         name = self.tree.GetItemText(item)
         module = self._loader.GetModule(name)
         if module:
             self.pane.RefreshPages(self.tree.GetItemPyData(item), module) 
+        self.Thaw()
 
 #-----------------------------------------------------------------------------#
 
@@ -98,13 +100,14 @@ class EclibDemoBook(wx.Notebook):
         # Setup
         self.AddPage(self.doc, "Info")
         self.AddPage(self.code, "Demo Code")
-
+        self.doc.SetFont(wx.FFont(12, wx.MODERN))
 
     def RefreshPages(self, path, module):
         if self.GetPageCount() == 3:
             self.DeletePage(2) # Recreate demo page
 
-        self.doc.SetPage(module.overview.replace('\n', '<br>'))
+        overview = module.overview.replace('<', '&lt;').replace('>', '&gt;')
+        self.doc.SetPage("<pre>%s</pre>" % overview)
         f = open(path, 'r')
         t = f.read()
         f.close()
@@ -112,7 +115,9 @@ class EclibDemoBook(wx.Notebook):
         self.code.SetText(t)
 
         # Init the demo object
-        self.AddPage(module.TestPanel(self, wx.GetApp().GetLog()), module.title, True)
+        self.SetSelection(0)
+        page = module.TestPanel(self, wx.GetApp().GetLog())
+        self.AddPage(page, module.title)
 
 #-----------------------------------------------------------------------------#
 
@@ -251,7 +256,8 @@ class ModuleLoader(object):
         self.modules = modules
 
     def GetModule(self, modname):
-        """
+        """Get the reference to the requested demo module, importing
+        it as necessary.
 
         """
         self.LoadModule(modname)
