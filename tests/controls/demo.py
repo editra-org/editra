@@ -56,7 +56,6 @@ class EclibDemoFrame(wx.Frame):
 
         # Attributes
         self.mgr = aui.AuiManager(self,
-                                  aui.AUI_MGR_TRANSPARENT_HINT|\
                                   aui.AUI_MGR_ALLOW_ACTIVE_PANE|\
                                   aui.AUI_MGR_LIVE_RESIZE)
         self.tree = EclibDemoTree(self)
@@ -66,8 +65,8 @@ class EclibDemoFrame(wx.Frame):
         # Setup
         self.mgr.AddPane(self.tree,
                          aui.AuiPaneInfo().Left().Layer(0).\
-                             Caption("Demos").CloseButton(False).\
-                             MinSize((200,-1)))
+                             Caption("Test Modules").CloseButton(False).\
+                             MinSize((220,-1)))
         self.mgr.AddPane(self.pane,
                          aui.AuiPaneInfo().CenterPane().\
                              Layer(1).CloseButton(False).MinSize((450,400)))
@@ -103,6 +102,7 @@ class EclibDemoBook(wx.Notebook):
         self.doc.SetFont(wx.FFont(12, wx.MODERN))
 
     def RefreshPages(self, path, module):
+        sel = self.GetSelection()
         if self.GetPageCount() == 3:
             self.DeletePage(2) # Recreate demo page
 
@@ -115,9 +115,9 @@ class EclibDemoBook(wx.Notebook):
         self.code.SetText(t)
 
         # Init the demo object
-        self.SetSelection(0)
         page = module.TestPanel(self, wx.GetApp().GetLog())
         self.AddPage(page, module.title)
+        self.SetSelection(sel)
 
 #-----------------------------------------------------------------------------#
 
@@ -184,7 +184,7 @@ class PythonStc(stc.StyledTextCtrl):
 
         self.SetProperty("fold", "1")
         self.SetProperty("tab.timmy.whinge.level", "1")
-        self.SetMargins(0,0)
+        self.SetMargins(3,3)
 
         self.SetMarginType(1, stc.STC_MARGIN_NUMBER)
         self.SetMarginMask(1, 0)
