@@ -9,7 +9,32 @@
 """
 Editra Control Library: Error Reporter Dialog
 
-Dialog for displaying exceptions and reporting errors to application maintainer
+Dialog for displaying exceptions and reporting errors to application maintainer.
+This dialog is intended as a base class and should be subclassed to fit the
+applications needs.
+
+This dialog should be initiated inside of a sys.excepthook handler.
+
+Example:
+
+sys.excepthook = ExceptHook
+...
+def ExceptionHook(exctype, value, trace):
+    # Format the traceback
+    ftrace = ErrorDialog.FormatTrace(exctype, value, trace)
+
+    # Ensure that error gets raised to console as well
+    print ftrace
+
+    # If abort has been set and we get here again do a more forcefull shutdown
+    if ErrorDialog.ABORT:
+        os._exit(1)
+
+    # Prevent multiple reporter dialogs from opening at once
+    if not ErrorDialog.REPORTER_ACTIVE and not ErrorDialog.ABORT:
+        dlg = ErrorDialog(ftrace)
+        dlg.ShowModal()
+        dlg.Destroy()
 
 @summary: Error Reporter Dialog
 
