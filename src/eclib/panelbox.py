@@ -9,6 +9,26 @@
 """
 Editra Control Library: PanelBox
 
+Class PanelBox:
+
+ListBox like container class that accepts custom panels as items in the list.
+
+Class PanelBoxItemBase:
+
+Base class for all PanelBoxItems. Provides the basic functionality for a custom
+subclass to interact with the PanelBox container list.
+
+Class PanelBoxItem:
+
+Simple PanelBoxItem that has support for displaying an Icon, Main text, and a
+a user defined sub item.
+
++-------------------------+
+|                         |
+| ICON   label            |
+|        sub item         |
++-------------------------+
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"

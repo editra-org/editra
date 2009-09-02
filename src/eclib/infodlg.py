@@ -11,6 +11,12 @@ FileInfo.py
 
 Dialog for displaying file information.
 
+Displays information on:
+  * Filename and Path
+  * File Size
+  * Read/Write/Execute permissions
+  * Creation/Modification times
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
