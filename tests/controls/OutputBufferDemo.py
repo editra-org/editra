@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Test file for testing the OutputBuffer (eclib.outbuff) module and controls. This
+Test file for testing the OutputBuffer (eclib.eclib) module and controls. This
 demo/test contains a small application for running 'ping' and other command line
 commands and then displaying their output. Special text styling is provided for
 ping to highlight and create hotspot regions on IP and website addresses.
@@ -29,8 +29,8 @@ import sys
 import re
 import wx
 
-sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib.outbuff as outbuff
+#sys.path.insert(0, os.path.abspath('../../src'))
+import eclib
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -125,14 +125,14 @@ class TestPanel(wx.Panel):
 STARTED_STR = 'ProcessThread Started'
 FINISHED_STR = 'ProcessThread Finished'
 
-class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
+class ProcessOutputBuffer(eclib.OutputBuffer, eclib.ProcessBufferMixin):
     """Custom output buffer for processing output from running ping"""
     RE_ADDR = re.compile(r' ([a-z0-9]+\.[a-z0-9]+\.{0,1})+')
-    ADDRESS_STYLE = outbuff.OPB_STYLE_MAX + 1
+    ADDRESS_STYLE = eclib.OPB_STYLE_MAX + 1
 
     def __init__(self, parent, log):
-        outbuff.OutputBuffer.__init__(self, parent)
-        outbuff.ProcessBufferMixin.__init__(self, update=125)
+        eclib.OutputBuffer.__init__(self, parent)
+        eclib.ProcessBufferMixin.__init__(self, update=125)
 
         # Attributes
         self.log = log
@@ -152,7 +152,7 @@ class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
 
     def ApplyStyles(self, ind, txt):
         """Highlight the begining and process exit text in the buffer
-        Tests overriding of the ApplyStyles method from L{outbuff.OutputBuffer}
+        Tests overriding of the ApplyStyles method from L{eclib.OutputBuffer}
         This is called every time text is added to the output buffer.
         @param ind: Index of text insertion point in buffer
         @param txt: the text that was just inserted at ind
@@ -171,11 +171,11 @@ class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         if start >= 0:
             sty_s = ind + start
             slen = len(STARTED_STR)
-            style = outbuff.OPB_STYLE_INFO
+            style = eclib.OPB_STYLE_INFO
         elif end >= 0:
             sty_s = ind + end
             slen = len(FINISHED_STR)
-            style = outbuff.OPB_STYLE_WARN
+            style = eclib.OPB_STYLE_WARN
         else:
             return
 
@@ -184,7 +184,7 @@ class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         self.SetStyling(slen, style)
 
     def DoHotSpotClicked(self, pos, line):
-        """Overridden method from base L{outbuff.OutputBuffer} class.
+        """Overridden method from base L{eclib.OutputBuffer} class.
         This method is called whenever a hotspot in the output buffer is
         clicked on.
         @param pos: Click postion in buffer
@@ -201,8 +201,8 @@ class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
     def DoProcessStart(self, cmd=''):
         """Do any necessary preprocessing before a process is started.
         This method is called directly before the process in the
-        L{outbuff.ProcessThread} is started. This method is an overridden 
-        method of the L{outbuff.ProcessBufferMixin} super class.
+        L{eclib.ProcessThread} is started. This method is an overridden 
+        method of the L{eclib.ProcessBufferMixin} super class.
         @keyword cmd: Command string used to start the process
 
         """
@@ -210,8 +210,8 @@ class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
 
     def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited
-        This method is called when a L{outbuff.ProcessThread} has exited and
-        is an overridden method from the L{outbuff.ProcessBufferMixin} super
+        This method is called when a L{eclib.ProcessThread} has exited and
+        is an overridden method from the L{eclib.ProcessBufferMixin} super
         class.
         @keyword code: Exit code of the process
 
@@ -253,7 +253,7 @@ class ProcessOutputBuffer(outbuff.OutputBuffer, outbuff.ProcessBufferMixin):
         @param cmd: Command string (i.e 'ping localhost')
 
         """
-        proc = outbuff.ProcessThread(self, cmd)
+        proc = eclib.ProcessThread(self, cmd)
         self._threads.append((proc, cmd))
         self._threads[-1][0].start()
         
@@ -271,7 +271,8 @@ class TestLog:
 
 #----------------------------------------------------------------------
 
-overview = outbuff.__doc__
+overview = eclib.outbuff.__doc__
+title = "OutputBuffer"
 
 #-----------------------------------------------------------------------------#
 # Run the Test

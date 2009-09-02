@@ -23,8 +23,8 @@ import webbrowser
 import wx
 import wx.lib.scrolledpanel as scrolled
 
-sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib as eclib
+#sys.path.insert(0, os.path.abspath('../../src'))
+import eclib
 
 from IconFile import *
 
@@ -241,12 +241,12 @@ class TestLog:
 
 #----------------------------------------------------------------------
 
-overview = __doc__
+overview = eclib.platebtn.__doc__
+title = "PlateButton"
 
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
     try:
-        import sys
         import run
     except ImportError:
         app = wx.PySimpleApp(False)

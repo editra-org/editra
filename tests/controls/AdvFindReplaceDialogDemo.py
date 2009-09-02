@@ -21,8 +21,8 @@ import sys
 import os
 import wx
 
-sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib.finddlg as finddlg
+#sys.path.insert(0, os.path.abspath('../../src'))
+import eclib
 
 #-----------------------------------------------------------------------------#
 ID_DEFAULT = wx.NewId()
@@ -38,28 +38,28 @@ ID_MINIMAL = wx.NewId()
 # There are a large number of possible flag/style combinations here are just a
 # few examples for creating different versions of the dialog.
 DIALOG_MAP = {ID_DEFAULT : (wx.FindReplaceData(),
-                            finddlg.AFR_STYLE_FINDDIALOG,
+                            eclib.AFR_STYLE_FINDDIALOG,
                             "Default Find Dialog"),
               ID_DIALOG  : (wx.FindReplaceData(),
-                            finddlg.AFR_STYLE_NON_FLOATING,
+                            eclib.AFR_STYLE_NON_FLOATING,
                             "Non Floating Find Dialog"),
               ID_REPLACE : (wx.FindReplaceData(),
-                            finddlg.AFR_STYLE_REPLACEDIALOG,
+                            eclib.AFR_STYLE_REPLACEDIALOG,
                             "Default Replace Dialog"),
-              ID_NOOPTS  : (wx.FindReplaceData(finddlg.AFR_NOOPTIONS),
-                           finddlg.AFR_STYLE_FINDDIALOG,
+              ID_NOOPTS  : (wx.FindReplaceData(eclib.AFR_NOOPTIONS),
+                           eclib.AFR_STYLE_FINDDIALOG,
                            "Options Hidden"),
-              ID_REGEX   : (wx.FindReplaceData(finddlg.AFR_REGEX),
-                            finddlg.AFR_STYLE_FINDDIALOG,
+              ID_REGEX   : (wx.FindReplaceData(eclib.AFR_REGEX),
+                            eclib.AFR_STYLE_FINDDIALOG,
                             "Regex Selected"),
-              ID_NOLOOK  : (wx.FindReplaceData(finddlg.AFR_NOLOOKIN),
-                            finddlg.AFR_STYLE_FINDDIALOG,
+              ID_NOLOOK  : (wx.FindReplaceData(eclib.AFR_NOLOOKIN),
+                            eclib.AFR_STYLE_FINDDIALOG,
                             "Lookin Hidden"),
-              ID_NOWHOLEW : (wx.FindReplaceData(finddlg.AFR_NOWHOLEWORD),
-                             finddlg.AFR_STYLE_FINDDIALOG,
+              ID_NOWHOLEW : (wx.FindReplaceData(eclib.AFR_NOWHOLEWORD),
+                             eclib.AFR_STYLE_FINDDIALOG,
                              "Whole Word Disabled"),
-              ID_MINIMAL : (wx.FindReplaceData(finddlg.AFR_NOLOOKIN|finddlg.AFR_NOOPTIONS|finddlg.AFR_NOUPDOWN),
-                            finddlg.AFR_STYLE_FINDDIALOG,
+              ID_MINIMAL : (wx.FindReplaceData(eclib.AFR_NOLOOKIN|eclib.AFR_NOOPTIONS|eclib.AFR_NOUPDOWN),
+                            eclib.AFR_STYLE_FINDDIALOG,
                             "All Options Hidden")}
 
 BUTTONS = [(ID_DEFAULT, "Default"), (ID_DIALOG, "Non-Floating"),
@@ -83,12 +83,12 @@ class TestPanel(wx.Panel):
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
-        self.Bind(finddlg.EVT_FIND, self.OnFind)
-        self.Bind(finddlg.EVT_FIND_ALL, self.OnFind)
-        self.Bind(finddlg.EVT_FIND_NEXT, self.OnFind)
-        self.Bind(finddlg.EVT_REPLACE, self.OnFind)
-        self.Bind(finddlg.EVT_REPLACE_ALL, self.OnFind)
-        self.Bind(finddlg.EVT_FIND_CLOSE, self.OnFindClose)
+        self.Bind(eclib.EVT_FIND, self.OnFind)
+        self.Bind(eclib.EVT_FIND_ALL, self.OnFind)
+        self.Bind(eclib.EVT_FIND_NEXT, self.OnFind)
+        self.Bind(eclib.EVT_REPLACE, self.OnFind)
+        self.Bind(eclib.EVT_REPLACE_ALL, self.OnFind)
+        self.Bind(eclib.EVT_FIND_CLOSE, self.OnFindClose)
 
     def __DoLayout(self):
         """Layout the panel"""
@@ -108,7 +108,7 @@ class TestPanel(wx.Panel):
         e_id = evt.GetId()
         if e_id in DIALOG_MAP:
             self.data, style, title = DIALOG_MAP[e_id]
-            self.dlg = finddlg.AdvFindReplaceDlg(self, self.data, title, style)
+            self.dlg = eclib.AdvFindReplaceDlg(self, self.data, title, style)
             self.dlg.Show()
         else:
             evt.Skip()
@@ -141,9 +141,13 @@ class TestLog:
         print msg
 
 #-----------------------------------------------------------------------------#
+
+overview = eclib.finddlg.__doc__
+title = "AdvFindReplaceDlg"
+
+#-----------------------------------------------------------------------------#
 if __name__ == '__main__':
     try:
-        import sys
         import run
     except ImportError:
         app = wx.PySimpleApp(False)

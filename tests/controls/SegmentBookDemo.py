@@ -21,20 +21,19 @@ import sys
 import os
 import wx
 
-sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib.segmentbk as segmentbk
-import src.eclib.ctrlbox as ctrlbox
+#sys.path.insert(0, os.path.abspath('../../src'))
+import eclib
 
 # Local imports
 import IconFile
 
 #-----------------------------------------------------------------------------#
 
-class TestPanel(segmentbk.SegmentBook):
+class TestPanel(eclib.SegmentBook):
     def __init__(self, parent, log):
-        segmentbk.SegmentBook.__init__(self, parent,
-                                       style=segmentbk.SEGBOOK_STYLE_NO_DIVIDERS|\
-                                             segmentbk.SEGBOOK_STYLE_LABELS)
+        eclib.SegmentBook.__init__(self, parent,
+                                       style=eclib.SEGBOOK_STYLE_NO_DIVIDERS|\
+                                             eclib.SEGBOOK_STYLE_LABELS)
 
         # Attributes
         self.log = log
@@ -66,16 +65,16 @@ class TestPanel(segmentbk.SegmentBook):
         self.AddPage(todo, "TODO List", img_id=1)
 
         # Add a sub controlbar
-        cbar = ctrlbox.ControlBar(self, style=ctrlbox.CTRLBAR_STYLE_GRADIENT)
+        cbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
         cbar.SetVMargin(3, 3)
         self.SetControlBar(cbar, wx.BOTTOM)
         cbar.AddControl(wx.Button(cbar, wx.ID_NEW))
         cbar.AddControl(wx.Button(cbar, wx.ID_DELETE))
 
         # Event Handlers
-        self.Bind(segmentbk.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
-        self.Bind(segmentbk.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
-        self.Bind(segmentbk.EVT_SB_PAGE_CONTEXT_MENU, self.OnPageMenu)
+        self.Bind(eclib.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
+        self.Bind(eclib.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(eclib.EVT_SB_PAGE_CONTEXT_MENU, self.OnPageMenu)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_MENU, self.OnButton, id=wx.ID_NEW)
         self.Bind(wx.EVT_MENU, self.OnButton, id=wx.ID_DELETE)
@@ -138,9 +137,13 @@ class TestLog:
 
 #-----------------------------------------------------------------------------#
 
+overview = eclib.segmentbk.__doc__
+title = "SegmentBook"
+
+#-----------------------------------------------------------------------------#
+
 if __name__ == '__main__':
     try:
-        import sys
         import run
     except ImportError:
         app = wx.PySimpleApp(False)

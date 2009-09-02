@@ -22,8 +22,8 @@ import sys
 import wx
 
 # Put local Editra.eclib package on the path
-sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib as eclib
+#sys.path.insert(0, os.path.abspath('../../src'))
+import eclib as eclib
 
 # Local imports
 import IconFile
@@ -46,11 +46,11 @@ class TestPanel(eclib.PanelBox):
         devil = IconFile.Devil.GetBitmap()
         home = IconFile.Home.GetBitmap()
 
-        items = [(monkey, "Monkey Buisness"),
-                 (devil,  "Little Devil"),
-                 (home,   "Home Base"),
+        items = [(monkey, "Bananas, Bananas, Bananas!!"),
+                 (devil,  "Label Text"),
+                 (home,   "Home"),
                  (devil,  "A longer label to put into the panelbox item"),
-                 (monkey, "Have you ever played monkey ball?") ]
+                 (monkey, "More Bananas, Bananas, Bananas!!") ]
 
         for bmp, label in (items * 3):
             pbi = TestPanelBoxItem(self, bmp, label, self.log)
@@ -104,12 +104,12 @@ class TestLog:
 
 #----------------------------------------------------------------------
 
-overview = __doc__
+overview = eclib.panelbox.__doc__
+title = "PanelBox"
 
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
     try:
-        import sys
         import run
     except ImportError:
         app = wx.PySimpleApp(False)

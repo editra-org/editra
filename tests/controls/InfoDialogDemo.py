@@ -24,8 +24,8 @@ import wx
 import IconFile
 
 # Put local package on the path
-sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib as eclib
+#sys.path.insert(0, os.path.abspath('../../src'))
+import eclib
 
 #-----------------------------------------------------------------------------#
 
@@ -80,7 +80,8 @@ class TestLog:
 
 #----------------------------------------------------------------------
 
-overview = __doc__
+overview = eclib.infodlg.__doc__
+title = "FileInfoDlg"
 
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
