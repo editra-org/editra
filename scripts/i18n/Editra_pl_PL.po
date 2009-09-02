@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 22:06-0500\n"
+"POT-Creation-Date: 2009-09-02 18:41-0500\n"
 "PO-Revision-Date: 2009-03-15 05:04+0000\n"
 "Last-Translator: pp/bs <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -157,7 +157,7 @@ msgstr ""
 msgid "**New Value**"
 msgstr "**Nowa wartość**"
 
-#: ../../src/dev_tool.py:475 ../../plugins/Launch/launch/launch.py:532
+#: ../../plugins/Launch/launch/launch.py:532
 msgid "Abort"
 msgstr "Przerwij"
 
@@ -165,7 +165,7 @@ msgstr "Przerwij"
 msgid "About"
 msgstr "O Aplikacji"
 
-#: ../../src/ed_cmdbar.py:603
+#: ../../src/ed_cmdbar.py:756
 #, python-format
 msgid "Access Denied: %s"
 msgstr ""
@@ -304,12 +304,12 @@ msgstr "Podświetlenie nawiasów"
 msgid "Browse"
 msgstr "Przeglądaj"
 
-#: ../../src/ed_cmdbar.py:401
+#: ../../src/ed_cmdbar.py:554
 #, fuzzy, python-format
 msgid "Can't change directory to: %s"
 msgstr "Zmień widok na \"%s\""
 
-#: ../../src/ed_search.py:1226 ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1232 ../../src/style_editor.py:139
 #: ../../src/updater.py:567
 msgid "Cancel"
 msgstr "Anuluj"
@@ -388,7 +388,7 @@ msgstr ""
 msgid "Class Definitions"
 msgstr "Definicja Klasy"
 
-#: ../../src/ed_log.py:140 ../../src/ed_search.py:1235
+#: ../../src/ed_log.py:140 ../../src/ed_search.py:1241
 #: ../../plugins/Launch/launch/launch.py:186
 #: ../../plugins/PyShell/PyShell/__init__.py:114
 msgid "Clear"
@@ -471,7 +471,7 @@ msgstr "Kolorowy/Biały"
 msgid "Column Mode"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:253
+#: ../../src/ed_cmdbar.py:402
 msgid "Command"
 msgstr "Polecenie"
 
@@ -547,7 +547,7 @@ msgstr "Wytnij"
 msgid "Create Archive of \"%s\""
 msgstr "Utwórz archiwum \"%s\""
 
-#: ../../src/eclib/infodlg.py:187
+#: ../../src/eclib/infodlg.py:193
 msgid "Created"
 msgstr "Utworzone"
 
@@ -558,6 +558,10 @@ msgstr "&Wytnij"
 #: ../../src/eclib/finddlg.py:698
 msgid "Current Document"
 msgstr "Bieżącym dokumencie"
+
+#: ../../src/ed_cmdbar.py:116
+msgid "Customize"
+msgstr ""
 
 #: ../../src/ed_editv.py:304 ../../src/ed_toolbar.py:83
 msgid "Cut"
@@ -844,10 +848,6 @@ msgstr "Błąd w czasie otwierania pliku"
 msgid "Error Text"
 msgstr "Komunikat o błędzie"
 
-#: ../../src/dev_tool.py:471
-msgid "Error Traceback:"
-msgstr ""
-
 #: ../../src/ed_search.py:532 ../../src/ed_search.py:689
 #, python-format
 msgid ""
@@ -856,11 +856,7 @@ msgid ""
 "Error Message: %s"
 msgstr ""
 
-#: ../../src/dev_tool.py:371
-msgid "Error/Crash Reporter"
-msgstr ""
-
-#: ../../src/dev_tool.py:467
+#: ../../src/dev_tool.py:240
 msgid ""
 "Error: Something unexpected happend\n"
 "Help improve Editra by clicking on Report Error\n"
@@ -892,10 +888,6 @@ msgstr "Kod wyjścia"
 #: ../../src/ed_menu.py:533
 msgid "Exit the Program"
 msgstr "Wyjdź z programu"
-
-#: ../../src/dev_tool.py:476
-msgid "Exit the application"
-msgstr "Zakończ aplikację"
 
 #: ../../src/style_editor.py:141
 msgid "Export"
@@ -981,7 +973,7 @@ msgstr "Nie znaleziono pliku"
 msgid "File Settings"
 msgstr "Ustawienia pliku"
 
-#: ../../src/eclib/infodlg.py:109
+#: ../../src/eclib/infodlg.py:115
 msgid "File Stat Failed"
 msgstr ""
 
@@ -1006,7 +998,7 @@ msgstr ""
 "Plik jest już otwarty na istniejącej stronie.\n"
 "Chcesz otworzyć go ponownie?"
 
-#: ../../src/ed_search.py:1280
+#: ../../src/ed_search.py:1286
 #, python-format
 msgid "Files Searched: %d"
 msgstr "Przeszukano plików: %d"
@@ -1015,14 +1007,14 @@ msgstr "Przeszukano plików: %d"
 msgid "Filetype Associations"
 msgstr "Powiązania typów plików"
 
-#: ../../src/ed_cmdbar.py:141 ../../src/ed_search.py:147
+#: ../../src/ed_cmdbar.py:256 ../../src/ed_search.py:147
 #: ../../src/ed_search.py:151 ../../src/ed_toolbar.py:90
 #: ../../src/eclib/finddlg.py:621 ../../src/eclib/finddlg.py:753
 #: ../../src/eclib/finddlg.py:829
 msgid "Find"
 msgstr "Znajdź"
 
-#: ../../src/eclib/finddlg.py:832
+#: ../../src/ed_cmdbar.py:272 ../../src/eclib/finddlg.py:832
 msgid "Find All"
 msgstr "Znajdź wszystkie"
 
@@ -1076,7 +1068,7 @@ msgstr "Zakończono"
 msgid "Finshed downloading plugins"
 msgstr "Zakończono pobieranie wtyczek"
 
-#: ../../src/util.py:349 ../../src/eclib/infodlg.py:286
+#: ../../src/util.py:349 ../../src/eclib/infodlg.py:292
 msgid "Folder"
 msgstr "Folder"
 
@@ -1155,7 +1147,7 @@ msgstr "Zmienne globalne"
 msgid "Goto \"%s\""
 msgstr "Przejdź do \"%s\""
 
-#: ../../src/ed_cmdbar.py:279
+#: ../../src/ed_cmdbar.py:432
 msgid "Goto Line"
 msgstr "Przejdź do linii"
 
@@ -1240,7 +1232,7 @@ msgstr "Zrób wcięcia w zaznaczonych liniach"
 msgid "Indentation Guides"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:52
+#: ../../src/eclib/infodlg.py:58
 msgid "Info"
 msgstr "Informacje"
 
@@ -1328,7 +1320,7 @@ msgstr "Profil klucza"
 msgid "Keybindings"
 msgstr "Skróty klawiszowe"
 
-#: ../../src/eclib/infodlg.py:176
+#: ../../src/eclib/infodlg.py:182
 msgid "Kind"
 msgstr "Rodzaj"
 
@@ -1463,7 +1455,7 @@ msgstr "Zarządzaj, pobierz i zainstaluj wtyczki"
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Ręcznie ustaw składnię/Lexer"
 
-#: ../../src/ed_cmdbar.py:154
+#: ../../src/ed_cmdbar.py:278
 msgid "Match Case"
 msgstr "Uwzględnij wielkość liter"
 
@@ -1497,7 +1489,7 @@ msgstr ""
 "\n"
 "Czy chcesz je wszystkie zamienić na znaki tego samego typu?"
 
-#: ../../src/eclib/infodlg.py:157 ../../src/eclib/infodlg.py:189
+#: ../../src/eclib/infodlg.py:163 ../../src/eclib/infodlg.py:195
 msgid "Modified"
 msgstr "Zmodyfikowane"
 
@@ -1590,7 +1582,7 @@ msgstr "Nowy profil"
 msgid "New Tab"
 msgstr "Nowa karta"
 
-#: ../../src/ed_cmdbar.py:143
+#: ../../src/ed_cmdbar.py:258
 msgid "Next"
 msgstr "Dalej"
 
@@ -1738,7 +1730,7 @@ msgstr "Wklej tekst ze schowa do pliku za pozycją kursora"
 msgid "Pathmarks"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:191
+#: ../../src/eclib/infodlg.py:197
 msgid "Permissions"
 msgstr "Uprawnienia"
 
@@ -1766,7 +1758,7 @@ msgstr "Informacje nt. platformy"
 msgid "Please check the preferences dialog to check your preferences"
 msgstr ""
 
-#: ../../src/Editra.py:1052
+#: ../../src/Editra.py:1053
 msgid "Please check the preferences dialog to verify your preferences"
 msgstr ""
 
@@ -1798,7 +1790,7 @@ msgstr "Podgląd"
 msgid "Preview Printout"
 msgstr "Podgląd wydruku"
 
-#: ../../src/ed_cmdbar.py:150
+#: ../../src/ed_cmdbar.py:266
 msgid "Previous"
 msgstr "Wstecz"
 
@@ -1858,7 +1850,7 @@ msgstr "Profil"
 msgid "Profile Saved as: %s"
 msgstr "Profil zapisany jako: %s"
 
-#: ../../src/Editra.py:846 ../../src/Editra.py:1054
+#: ../../src/Editra.py:846 ../../src/Editra.py:1055
 msgid "Profile Updated"
 msgstr "Profil został uaktualniony"
 
@@ -1941,7 +1933,7 @@ msgstr "Przywróć ostatnią cofniętą operację"
 msgid "Regex Compile Error"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:158
+#: ../../src/ed_cmdbar.py:289
 msgid "Regular Expression"
 msgstr "Wyrażenie regularne"
 
@@ -2018,10 +2010,6 @@ msgstr "Zgłoś błąd"
 #: ../../src/eclib/finddlg.py:764
 msgid "Replace with"
 msgstr "Zamień na"
-
-#: ../../src/dev_tool.py:477
-msgid "Report Error"
-msgstr "Zgłoś błąd"
 
 #: ../../src/ed_editv.py:266
 msgid "Resave File?"
@@ -2158,7 +2146,7 @@ msgstr "Zapisano plik: %s"
 msgid "Script Arguments"
 msgstr "Argumenty Skryptu"
 
-#: ../../src/ed_search.py:1279
+#: ../../src/ed_search.py:1285
 #, python-format
 msgid "Search Complete: %d matching lines where found."
 msgstr "Wyszukiwanie ukończone: znaleziono %d pasujących wierszy."
@@ -2167,11 +2155,11 @@ msgstr "Wyszukiwanie ukończone: znaleziono %d pasujących wierszy."
 msgid "Search Recursively"
 msgstr "Szukaj rekurencyjnie"
 
-#: ../../src/ed_search.py:1253
+#: ../../src/ed_search.py:1259
 msgid "Search Started"
 msgstr "Wyszukiwanie rozpoczęte"
 
-#: ../../src/ed_search.py:1272
+#: ../../src/ed_search.py:1278
 msgid "Search complete"
 msgstr "Wyszukiwanie zakończone"
 
@@ -2192,7 +2180,7 @@ msgstr ""
 msgid "Search wrapped to top"
 msgstr ""
 
-#: ../../src/ed_search.py:1363
+#: ../../src/ed_search.py:1369
 #, python-format
 msgid "Searching in: %s"
 msgstr "Wyszukiwanie w: %s"
@@ -2350,7 +2338,7 @@ msgstr ""
 msgid "Show the edge column guide"
 msgstr ""
 
-#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:183
+#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:189
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -2635,7 +2623,7 @@ msgstr "Unix (\\n)"
 
 #: ../../src/plugdlg.py:358 ../../src/plugdlg.py:364 ../../src/plugdlg.py:408
 #: ../../src/plugdlg.py:412 ../../src/util.py:359
-#: ../../src/eclib/infodlg.py:292
+#: ../../src/eclib/infodlg.py:298
 msgid "Unknown"
 msgstr "Nieznany"
 
@@ -2737,7 +2725,7 @@ msgstr "Tekst ostrzeżenia"
 msgid "Warning suggestions will include context insensitive results"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:185
+#: ../../src/eclib/infodlg.py:191
 msgid "Where"
 msgstr "Skąd"
 
@@ -2757,6 +2745,11 @@ msgstr "Biały znak"
 #: ../../src/ed_menu.py:721
 msgid "Whitespace formating commands"
 msgstr "Polecenia formatowania białych znaków."
+
+#: ../../src/ed_cmdbar.py:285
+#, fuzzy
+msgid "Whole Word"
+msgstr "Cały wyraz"
 
 #: ../../src/eclib/finddlg.py:801
 msgid "Whole word"
@@ -2784,7 +2777,7 @@ msgstr "Napisane w 100%% w języku Python."
 msgid "You must restart Editra before your changes will take full affect."
 msgstr ""
 
-#: ../../src/Editra.py:842 ../../src/Editra.py:1050
+#: ../../src/Editra.py:842 ../../src/Editra.py:1051
 msgid "Your profile has been updated to the latest version"
 msgstr "Twój profil został zaktualizowany do najnowszej wersji"
 
@@ -2808,7 +2801,7 @@ msgstr ""
 msgid "bold"
 msgstr "pogrubiony"
 
-#: ../../src/ed_cmdbar.py:708
+#: ../../src/ed_cmdbar.py:861
 msgid "cwd: "
 msgstr ""
 
@@ -2828,11 +2821,17 @@ msgstr "kursywa"
 msgid "underline"
 msgstr "podkreślenie"
 
+#~ msgid "Exit the application"
+#~ msgstr "Zakończ aplikację"
+
 #~ msgid "Finished Installing Plugins"
 #~ msgstr "Zakończono instalację wtyczek"
 
 #~ msgid "Go to configuration page?"
 #~ msgstr "Przejść do strony konfiguracji?"
+
+#~ msgid "Report Error"
+#~ msgstr "Zgłoś błąd"
 
 #~ msgid "Unix"
 #~ msgstr "Unix"

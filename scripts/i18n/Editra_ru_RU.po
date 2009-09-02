@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 22:06-0500\n"
+"POT-Creation-Date: 2009-09-02 18:41-0500\n"
 "PO-Revision-Date: 2009-08-07 11:38+0000\n"
 "Last-Translator: Sergey Abramkin <sergey@abramk.in>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -157,7 +157,7 @@ msgstr "Псевдоним"
 msgid "**New Value**"
 msgstr "***Новая переменная***"
 
-#: ../../src/dev_tool.py:475 ../../plugins/Launch/launch/launch.py:532
+#: ../../plugins/Launch/launch/launch.py:532
 msgid "Abort"
 msgstr "Прервать"
 
@@ -165,7 +165,7 @@ msgstr "Прервать"
 msgid "About"
 msgstr "О программе"
 
-#: ../../src/ed_cmdbar.py:603
+#: ../../src/ed_cmdbar.py:756
 #, python-format
 msgid "Access Denied: %s"
 msgstr ""
@@ -304,12 +304,12 @@ msgstr "Кронштейн подсветки"
 msgid "Browse"
 msgstr "Обзор"
 
-#: ../../src/ed_cmdbar.py:401
+#: ../../src/ed_cmdbar.py:554
 #, fuzzy, python-format
 msgid "Can't change directory to: %s"
 msgstr "Сменить вид на \"%s\""
 
-#: ../../src/ed_search.py:1226 ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1232 ../../src/style_editor.py:139
 #: ../../src/updater.py:567
 msgid "Cancel"
 msgstr "Отменить"
@@ -388,7 +388,7 @@ msgstr "Выбрать и исполнить"
 msgid "Class Definitions"
 msgstr "Определение Класса"
 
-#: ../../src/ed_log.py:140 ../../src/ed_search.py:1235
+#: ../../src/ed_log.py:140 ../../src/ed_search.py:1241
 #: ../../plugins/Launch/launch/launch.py:186
 #: ../../plugins/PyShell/PyShell/__init__.py:114
 msgid "Clear"
@@ -471,7 +471,7 @@ msgstr "Белый"
 msgid "Column Mode"
 msgstr "Столбцы"
 
-#: ../../src/ed_cmdbar.py:253
+#: ../../src/ed_cmdbar.py:402
 msgid "Command"
 msgstr "Команда"
 
@@ -547,7 +547,7 @@ msgstr "Вырезать"
 msgid "Create Archive of \"%s\""
 msgstr "Архивировать \"%s\""
 
-#: ../../src/eclib/infodlg.py:187
+#: ../../src/eclib/infodlg.py:193
 msgid "Created"
 msgstr "Создан"
 
@@ -558,6 +558,10 @@ msgstr "&Вырезать"
 #: ../../src/eclib/finddlg.py:698
 msgid "Current Document"
 msgstr "Текущий документ"
+
+#: ../../src/ed_cmdbar.py:116
+msgid "Customize"
+msgstr ""
 
 #: ../../src/ed_editv.py:304 ../../src/ed_toolbar.py:83
 msgid "Cut"
@@ -844,10 +848,6 @@ msgstr "Ошибка открытия файла"
 msgid "Error Text"
 msgstr "Текст Ошибки"
 
-#: ../../src/dev_tool.py:471
-msgid "Error Traceback:"
-msgstr "Error Traceback:"
-
 #: ../../src/ed_search.py:532 ../../src/ed_search.py:689
 #, python-format
 msgid ""
@@ -856,11 +856,7 @@ msgid ""
 "Error Message: %s"
 msgstr ""
 
-#: ../../src/dev_tool.py:371
-msgid "Error/Crash Reporter"
-msgstr "Отчёт об ошибках/падениях программы"
-
-#: ../../src/dev_tool.py:467
+#: ../../src/dev_tool.py:240
 msgid ""
 "Error: Something unexpected happend\n"
 "Help improve Editra by clicking on Report Error\n"
@@ -895,10 +891,6 @@ msgstr "Код выхода"
 #: ../../src/ed_menu.py:533
 msgid "Exit the Program"
 msgstr "Покинуть программу"
-
-#: ../../src/dev_tool.py:476
-msgid "Exit the application"
-msgstr "Выйти из программы"
 
 #: ../../src/style_editor.py:141
 msgid "Export"
@@ -978,7 +970,7 @@ msgstr "Файл не найден"
 msgid "File Settings"
 msgstr "Файловые установки"
 
-#: ../../src/eclib/infodlg.py:109
+#: ../../src/eclib/infodlg.py:115
 msgid "File Stat Failed"
 msgstr ""
 
@@ -1003,7 +995,7 @@ msgstr ""
 "Файл уже открыт в существующей странице.\n"
 "Хотите открыть его снова?"
 
-#: ../../src/ed_search.py:1280
+#: ../../src/ed_search.py:1286
 #, python-format
 msgid "Files Searched: %d"
 msgstr "Найдено файлов: %d"
@@ -1012,14 +1004,14 @@ msgstr "Найдено файлов: %d"
 msgid "Filetype Associations"
 msgstr "Ассоциация файлов"
 
-#: ../../src/ed_cmdbar.py:141 ../../src/ed_search.py:147
+#: ../../src/ed_cmdbar.py:256 ../../src/ed_search.py:147
 #: ../../src/ed_search.py:151 ../../src/ed_toolbar.py:90
 #: ../../src/eclib/finddlg.py:621 ../../src/eclib/finddlg.py:753
 #: ../../src/eclib/finddlg.py:829
 msgid "Find"
 msgstr "Найти"
 
-#: ../../src/eclib/finddlg.py:832
+#: ../../src/ed_cmdbar.py:272 ../../src/eclib/finddlg.py:832
 msgid "Find All"
 msgstr "Найти все"
 
@@ -1073,7 +1065,7 @@ msgstr "Готово"
 msgid "Finshed downloading plugins"
 msgstr "Закачка плагинов завершена"
 
-#: ../../src/util.py:349 ../../src/eclib/infodlg.py:286
+#: ../../src/util.py:349 ../../src/eclib/infodlg.py:292
 msgid "Folder"
 msgstr "Каталог"
 
@@ -1152,7 +1144,7 @@ msgstr "Глобальные переменные"
 msgid "Goto \"%s\""
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:279
+#: ../../src/ed_cmdbar.py:432
 msgid "Goto Line"
 msgstr "Перейти к строке"
 
@@ -1237,7 +1229,7 @@ msgstr "Отступить выделенные линии"
 msgid "Indentation Guides"
 msgstr "Отступы руководства"
 
-#: ../../src/eclib/infodlg.py:52
+#: ../../src/eclib/infodlg.py:58
 msgid "Info"
 msgstr "Информация"
 
@@ -1325,7 +1317,7 @@ msgstr ""
 msgid "Keybindings"
 msgstr "Сочетание клавиш"
 
-#: ../../src/eclib/infodlg.py:176
+#: ../../src/eclib/infodlg.py:182
 msgid "Kind"
 msgstr "Тип"
 
@@ -1460,7 +1452,7 @@ msgstr "Управлять, Загрузить и Установить плаг�
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Ручная подстройка Лексера/Синтаксиса"
 
-#: ../../src/ed_cmdbar.py:154
+#: ../../src/ed_cmdbar.py:278
 msgid "Match Case"
 msgstr "С учётом регистра"
 
@@ -1491,7 +1483,7 @@ msgid ""
 "Would you like to format them to all be the same?"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:157 ../../src/eclib/infodlg.py:189
+#: ../../src/eclib/infodlg.py:163 ../../src/eclib/infodlg.py:195
 msgid "Modified"
 msgstr "Изменен"
 
@@ -1584,7 +1576,7 @@ msgstr "Создать профиль"
 msgid "New Tab"
 msgstr "Новая вкладка"
 
-#: ../../src/ed_cmdbar.py:143
+#: ../../src/ed_cmdbar.py:258
 msgid "Next"
 msgstr "Далее"
 
@@ -1732,7 +1724,7 @@ msgstr ""
 msgid "Pathmarks"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:191
+#: ../../src/eclib/infodlg.py:197
 msgid "Permissions"
 msgstr "Права"
 
@@ -1760,7 +1752,7 @@ msgstr ""
 msgid "Please check the preferences dialog to check your preferences"
 msgstr ""
 
-#: ../../src/Editra.py:1052
+#: ../../src/Editra.py:1053
 msgid "Please check the preferences dialog to verify your preferences"
 msgstr ""
 
@@ -1792,7 +1784,7 @@ msgstr "Предпросмотр"
 msgid "Preview Printout"
 msgstr "Предпросмотр распечатки"
 
-#: ../../src/ed_cmdbar.py:150
+#: ../../src/ed_cmdbar.py:266
 msgid "Previous"
 msgstr "Предыдущий"
 
@@ -1852,7 +1844,7 @@ msgstr "Профиль"
 msgid "Profile Saved as: %s"
 msgstr "Профиль сохранен как: %s"
 
-#: ../../src/Editra.py:846 ../../src/Editra.py:1054
+#: ../../src/Editra.py:846 ../../src/Editra.py:1055
 msgid "Profile Updated"
 msgstr "Профиль обновлен"
 
@@ -1935,7 +1927,7 @@ msgstr "Вернуть последние откаты"
 msgid "Regex Compile Error"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:158
+#: ../../src/ed_cmdbar.py:289
 msgid "Regular Expression"
 msgstr "Регулярное выражение"
 
@@ -2011,10 +2003,6 @@ msgstr "Сообщить об ошибке"
 #: ../../src/eclib/finddlg.py:764
 msgid "Replace with"
 msgstr "Заменить на"
-
-#: ../../src/dev_tool.py:477
-msgid "Report Error"
-msgstr "Сообщить об ошибке"
 
 #: ../../src/ed_editv.py:266
 msgid "Resave File?"
@@ -2151,7 +2139,7 @@ msgstr "Файл сохранен: %s"
 msgid "Script Arguments"
 msgstr ""
 
-#: ../../src/ed_search.py:1279
+#: ../../src/ed_search.py:1285
 #, python-format
 msgid "Search Complete: %d matching lines where found."
 msgstr ""
@@ -2160,11 +2148,11 @@ msgstr ""
 msgid "Search Recursively"
 msgstr ""
 
-#: ../../src/ed_search.py:1253
+#: ../../src/ed_search.py:1259
 msgid "Search Started"
 msgstr ""
 
-#: ../../src/ed_search.py:1272
+#: ../../src/ed_search.py:1278
 msgid "Search complete"
 msgstr ""
 
@@ -2185,7 +2173,7 @@ msgstr ""
 msgid "Search wrapped to top"
 msgstr ""
 
-#: ../../src/ed_search.py:1363
+#: ../../src/ed_search.py:1369
 #, python-format
 msgid "Searching in: %s"
 msgstr ""
@@ -2343,7 +2331,7 @@ msgstr "Показывать эту полку"
 msgid "Show the edge column guide"
 msgstr "Показать границы столбцов"
 
-#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:183
+#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:189
 msgid "Size"
 msgstr "Размер"
 
@@ -2624,7 +2612,7 @@ msgstr "Unix (\\n)"
 
 #: ../../src/plugdlg.py:358 ../../src/plugdlg.py:364 ../../src/plugdlg.py:408
 #: ../../src/plugdlg.py:412 ../../src/util.py:359
-#: ../../src/eclib/infodlg.py:292
+#: ../../src/eclib/infodlg.py:298
 msgid "Unknown"
 msgstr "Неизвестно"
 
@@ -2726,7 +2714,7 @@ msgstr ""
 msgid "Warning suggestions will include context insensitive results"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:185
+#: ../../src/eclib/infodlg.py:191
 msgid "Where"
 msgstr "Где"
 
@@ -2746,6 +2734,10 @@ msgstr "Пробелы"
 #: ../../src/ed_menu.py:721
 msgid "Whitespace formating commands"
 msgstr "Команды форматирования пробелов"
+
+#: ../../src/ed_cmdbar.py:285
+msgid "Whole Word"
+msgstr ""
 
 #: ../../src/eclib/finddlg.py:801
 msgid "Whole word"
@@ -2773,7 +2765,7 @@ msgstr ""
 msgid "You must restart Editra before your changes will take full affect."
 msgstr ""
 
-#: ../../src/Editra.py:842 ../../src/Editra.py:1050
+#: ../../src/Editra.py:842 ../../src/Editra.py:1051
 msgid "Your profile has been updated to the latest version"
 msgstr "Ваш профиль был обновлен до последней версии"
 
@@ -2797,7 +2789,7 @@ msgstr ""
 msgid "bold"
 msgstr "жирный"
 
-#: ../../src/ed_cmdbar.py:708
+#: ../../src/ed_cmdbar.py:861
 msgid "cwd: "
 msgstr ""
 
@@ -2817,11 +2809,23 @@ msgstr "курсив"
 msgid "underline"
 msgstr "подчеркивание"
 
+#~ msgid "Error Traceback:"
+#~ msgstr "Error Traceback:"
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Отчёт об ошибках/падениях программы"
+
+#~ msgid "Exit the application"
+#~ msgstr "Выйти из программы"
+
 #~ msgid "Finished Installing Plugins"
 #~ msgstr "Установка плагинов завершена"
 
 #~ msgid "Go to configuration page?"
 #~ msgstr "Начать конфигурация страницы?"
+
+#~ msgid "Report Error"
+#~ msgstr "Сообщить об ошибке"
 
 #~ msgid "Unix"
 #~ msgstr "Unix"
