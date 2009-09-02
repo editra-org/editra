@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 22:06-0500\n"
+"POT-Creation-Date: 2009-09-02 18:41-0500\n"
 "PO-Revision-Date: 2008-08-05 07:56+0000\n"
 "Last-Translator: Ihor Chomko <igorchomko@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,7 +153,7 @@ msgstr "**Аліас**"
 msgid "**New Value**"
 msgstr "**Нова змінна**"
 
-#: ../../src/dev_tool.py:475 ../../plugins/Launch/launch/launch.py:532
+#: ../../plugins/Launch/launch/launch.py:532
 msgid "Abort"
 msgstr "Відмінити"
 
@@ -161,7 +161,7 @@ msgstr "Відмінити"
 msgid "About"
 msgstr "Про"
 
-#: ../../src/ed_cmdbar.py:603
+#: ../../src/ed_cmdbar.py:756
 #, python-format
 msgid "Access Denied: %s"
 msgstr ""
@@ -301,12 +301,12 @@ msgstr "Кронштейн підсвічування"
 msgid "Browse"
 msgstr "Браузер Кодів"
 
-#: ../../src/ed_cmdbar.py:401
+#: ../../src/ed_cmdbar.py:554
 #, fuzzy, python-format
 msgid "Can't change directory to: %s"
 msgstr "Змінити вигляд до \"%s\""
 
-#: ../../src/ed_search.py:1226 ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1232 ../../src/style_editor.py:139
 #: ../../src/updater.py:567
 msgid "Cancel"
 msgstr "Скасувати"
@@ -388,7 +388,7 @@ msgstr "Додати нового виконуваного"
 msgid "Class Definitions"
 msgstr "Визначення Класу"
 
-#: ../../src/ed_log.py:140 ../../src/ed_search.py:1235
+#: ../../src/ed_log.py:140 ../../src/ed_search.py:1241
 #: ../../plugins/Launch/launch/launch.py:186
 #: ../../plugins/PyShell/PyShell/__init__.py:114
 msgid "Clear"
@@ -475,7 +475,7 @@ msgstr ""
 msgid "Column Mode"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:253
+#: ../../src/ed_cmdbar.py:402
 msgid "Command"
 msgstr "Команда"
 
@@ -551,7 +551,7 @@ msgstr "Вирізати"
 msgid "Create Archive of \"%s\""
 msgstr "Створити архів \"%s\""
 
-#: ../../src/eclib/infodlg.py:187
+#: ../../src/eclib/infodlg.py:193
 msgid "Created"
 msgstr "Створено"
 
@@ -563,6 +563,10 @@ msgstr "Ви&різати"
 #, fuzzy
 msgid "Current Document"
 msgstr "Текстовий документ"
+
+#: ../../src/ed_cmdbar.py:116
+msgid "Customize"
+msgstr ""
 
 #: ../../src/ed_editv.py:304 ../../src/ed_toolbar.py:83
 msgid "Cut"
@@ -859,11 +863,6 @@ msgstr "Помилка при відкриванні файлу"
 msgid "Error Text"
 msgstr "Неправильний текст"
 
-#: ../../src/dev_tool.py:471
-#, fuzzy
-msgid "Error Traceback:"
-msgstr "Помилка зворотнього трасування"
-
 #: ../../src/ed_search.py:532 ../../src/ed_search.py:689
 #, python-format
 msgid ""
@@ -872,12 +871,7 @@ msgid ""
 "Error Message: %s"
 msgstr ""
 
-#: ../../src/dev_tool.py:371
-#, fuzzy
-msgid "Error/Crash Reporter"
-msgstr "Заблокувати Генератора Помилок"
-
-#: ../../src/dev_tool.py:467
+#: ../../src/dev_tool.py:240
 #, fuzzy
 msgid ""
 "Error: Something unexpected happend\n"
@@ -913,10 +907,6 @@ msgstr "Вийти з коду"
 #: ../../src/ed_menu.py:533
 msgid "Exit the Program"
 msgstr "Вийти з Програми"
-
-#: ../../src/dev_tool.py:476
-msgid "Exit the application"
-msgstr ""
 
 #: ../../src/style_editor.py:141
 msgid "Export"
@@ -1005,7 +995,7 @@ msgstr "Файл не знайдено"
 msgid "File Settings"
 msgstr "Установки файлу"
 
-#: ../../src/eclib/infodlg.py:109
+#: ../../src/eclib/infodlg.py:115
 msgid "File Stat Failed"
 msgstr "Невдала статистика файлу"
 
@@ -1030,7 +1020,7 @@ msgstr ""
 "Файл вже відкритий на цій сторінці.\n"
 "Не бажаєте відкрити його ще раз?"
 
-#: ../../src/ed_search.py:1280
+#: ../../src/ed_search.py:1286
 #, python-format
 msgid "Files Searched: %d"
 msgstr ""
@@ -1039,14 +1029,14 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "Асоціації типів файлів"
 
-#: ../../src/ed_cmdbar.py:141 ../../src/ed_search.py:147
+#: ../../src/ed_cmdbar.py:256 ../../src/ed_search.py:147
 #: ../../src/ed_search.py:151 ../../src/ed_toolbar.py:90
 #: ../../src/eclib/finddlg.py:621 ../../src/eclib/finddlg.py:753
 #: ../../src/eclib/finddlg.py:829
 msgid "Find"
 msgstr "Шукати"
 
-#: ../../src/eclib/finddlg.py:832
+#: ../../src/ed_cmdbar.py:272 ../../src/eclib/finddlg.py:832
 #, fuzzy
 msgid "Find All"
 msgstr "Шукати"
@@ -1106,7 +1096,7 @@ msgstr "Завершено"
 msgid "Finshed downloading plugins"
 msgstr "Завершено завантаження додатків"
 
-#: ../../src/util.py:349 ../../src/eclib/infodlg.py:286
+#: ../../src/util.py:349 ../../src/eclib/infodlg.py:292
 msgid "Folder"
 msgstr "Папка"
 
@@ -1187,7 +1177,7 @@ msgstr "Глобальні змінні"
 msgid "Goto \"%s\""
 msgstr "Перейти до \"%s\""
 
-#: ../../src/ed_cmdbar.py:279
+#: ../../src/ed_cmdbar.py:432
 msgid "Goto Line"
 msgstr "Перейти на лінійку"
 
@@ -1272,7 +1262,7 @@ msgstr "Відступити обрані лінійки"
 msgid "Indentation Guides"
 msgstr "Направляючі відступу"
 
-#: ../../src/eclib/infodlg.py:52
+#: ../../src/eclib/infodlg.py:58
 msgid "Info"
 msgstr "Інформація"
 
@@ -1360,7 +1350,7 @@ msgstr "Профіль клавіші"
 msgid "Keybindings"
 msgstr "Комбінації клавіш"
 
-#: ../../src/eclib/infodlg.py:176
+#: ../../src/eclib/infodlg.py:182
 msgid "Kind"
 msgstr "Розряд"
 
@@ -1496,7 +1486,7 @@ msgstr "Організувати,Завантажити та Встановит�
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Встановити Лексичний аналізатор/Синтаксис вручну"
 
-#: ../../src/ed_cmdbar.py:154
+#: ../../src/ed_cmdbar.py:278
 msgid "Match Case"
 msgstr "Звірити регістр"
 
@@ -1528,7 +1518,7 @@ msgid ""
 "Would you like to format them to all be the same?"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:157 ../../src/eclib/infodlg.py:189
+#: ../../src/eclib/infodlg.py:163 ../../src/eclib/infodlg.py:195
 msgid "Modified"
 msgstr "Модифіковано"
 
@@ -1623,7 +1613,7 @@ msgstr "Новий профіль"
 msgid "New Tab"
 msgstr "&Новий Табулятор"
 
-#: ../../src/ed_cmdbar.py:143
+#: ../../src/ed_cmdbar.py:258
 msgid "Next"
 msgstr "Далі"
 
@@ -1777,7 +1767,7 @@ msgstr "Вставити текст у файл з буферу обміну"
 msgid "Pathmarks"
 msgstr "Маркери шляху"
 
-#: ../../src/eclib/infodlg.py:191
+#: ../../src/eclib/infodlg.py:197
 msgid "Permissions"
 msgstr "Дозволи"
 
@@ -1806,7 +1796,7 @@ msgstr "Інформація щодо платформи"
 msgid "Please check the preferences dialog to check your preferences"
 msgstr "Перевірте,будь-ласка, діалог налаштувань для перезавантаження ваших преференцій"
 
-#: ../../src/Editra.py:1052
+#: ../../src/Editra.py:1053
 #, fuzzy
 msgid "Please check the preferences dialog to verify your preferences"
 msgstr "Перевірте,будь-ласка, діалог налаштувань для перезавантаження ваших преференцій"
@@ -1840,7 +1830,7 @@ msgstr "Попередній перегляд"
 msgid "Preview Printout"
 msgstr "Попередній перегляд роздруковки"
 
-#: ../../src/ed_cmdbar.py:150
+#: ../../src/ed_cmdbar.py:266
 msgid "Previous"
 msgstr "Попередній"
 
@@ -1900,7 +1890,7 @@ msgstr "Профіль"
 msgid "Profile Saved as: %s"
 msgstr "Профіль збережено як: %s"
 
-#: ../../src/Editra.py:846 ../../src/Editra.py:1054
+#: ../../src/Editra.py:846 ../../src/Editra.py:1055
 msgid "Profile Updated"
 msgstr "Профіль оновлено"
 
@@ -1984,7 +1974,7 @@ msgstr "Відновити останню відміну"
 msgid "Regex Compile Error"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:158
+#: ../../src/ed_cmdbar.py:289
 msgid "Regular Expression"
 msgstr ""
 
@@ -2063,10 +2053,6 @@ msgstr "Повідомити про помилку"
 #, fuzzy
 msgid "Replace with"
 msgstr "Відкрити за допомогою "
-
-#: ../../src/dev_tool.py:477
-msgid "Report Error"
-msgstr "Повідомити про помилку"
 
 #: ../../src/ed_editv.py:266
 msgid "Resave File?"
@@ -2205,7 +2191,7 @@ msgstr "Збережений файл: %s"
 msgid "Script Arguments"
 msgstr "Аргументи скрипта"
 
-#: ../../src/ed_search.py:1279
+#: ../../src/ed_search.py:1285
 #, python-format
 msgid "Search Complete: %d matching lines where found."
 msgstr ""
@@ -2214,11 +2200,11 @@ msgstr ""
 msgid "Search Recursively"
 msgstr ""
 
-#: ../../src/ed_search.py:1253
+#: ../../src/ed_search.py:1259
 msgid "Search Started"
 msgstr ""
 
-#: ../../src/ed_search.py:1272
+#: ../../src/ed_search.py:1278
 msgid "Search complete"
 msgstr ""
 
@@ -2239,7 +2225,7 @@ msgstr ""
 msgid "Search wrapped to top"
 msgstr ""
 
-#: ../../src/ed_search.py:1363
+#: ../../src/ed_search.py:1369
 #, python-format
 msgid "Searching in: %s"
 msgstr ""
@@ -2397,7 +2383,7 @@ msgstr "Показати Поличку"
 msgid "Show the edge column guide"
 msgstr "Показати направляючого країв стовпця"
 
-#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:183
+#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:189
 msgid "Size"
 msgstr "Розмір"
 
@@ -2686,7 +2672,7 @@ msgstr "Unix (\\n)"
 
 #: ../../src/plugdlg.py:358 ../../src/plugdlg.py:364 ../../src/plugdlg.py:408
 #: ../../src/plugdlg.py:412 ../../src/util.py:359
-#: ../../src/eclib/infodlg.py:292
+#: ../../src/eclib/infodlg.py:298
 msgid "Unknown"
 msgstr "Невідомий"
 
@@ -2789,7 +2775,7 @@ msgstr "Текст попередження"
 msgid "Warning suggestions will include context insensitive results"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:185
+#: ../../src/eclib/infodlg.py:191
 msgid "Where"
 msgstr "Де"
 
@@ -2809,6 +2795,10 @@ msgstr "Пробільний символ"
 #: ../../src/ed_menu.py:721
 msgid "Whitespace formating commands"
 msgstr "Команди форматування пробільного символу"
+
+#: ../../src/ed_cmdbar.py:285
+msgid "Whole Word"
+msgstr ""
 
 #: ../../src/eclib/finddlg.py:801
 msgid "Whole word"
@@ -2836,7 +2826,7 @@ msgstr "Написано на 100%% Python."
 msgid "You must restart Editra before your changes will take full affect."
 msgstr ""
 
-#: ../../src/Editra.py:842 ../../src/Editra.py:1050
+#: ../../src/Editra.py:842 ../../src/Editra.py:1051
 msgid "Your profile has been updated to the latest version"
 msgstr "Ваш профіль було оновлено до наступної версії"
 
@@ -2860,7 +2850,7 @@ msgstr "args"
 msgid "bold"
 msgstr "жирний"
 
-#: ../../src/ed_cmdbar.py:708
+#: ../../src/ed_cmdbar.py:861
 msgid "cwd: "
 msgstr ""
 
@@ -2902,6 +2892,14 @@ msgstr "підкреслення"
 #~ msgstr "Помилка кодування"
 
 #, fuzzy
+#~ msgid "Error Traceback:"
+#~ msgstr "Помилка зворотнього трасування"
+
+#, fuzzy
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Заблокувати Генератора Помилок"
+
+#, fuzzy
 #~ msgid "Find Results"
 #~ msgstr "Пошук тексту"
 
@@ -2933,6 +2931,9 @@ msgstr "підкреслення"
 #~ msgstr ""
 #~ "Замінити усе завершене\n"
 #~ "Весь загал %d співпадінь було замінено"
+
+#~ msgid "Report Error"
+#~ msgstr "Повідомити про помилку"
 
 #~ msgid "Select the desired plugins and then Click Download"
 #~ msgstr "Виберіть бажані додатки і натисніть кнопку Завантажити"

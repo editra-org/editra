@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 22:06-0500\n"
+"POT-Creation-Date: 2009-09-02 18:41-0500\n"
 "PO-Revision-Date: 2008-11-27 19:03+0000\n"
 "Last-Translator: Peter Magnusson <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -158,7 +158,7 @@ msgstr ""
 msgid "**New Value**"
 msgstr "**Nytt Värde**"
 
-#: ../../src/dev_tool.py:475 ../../plugins/Launch/launch/launch.py:532
+#: ../../plugins/Launch/launch/launch.py:532
 msgid "Abort"
 msgstr "Avbryt"
 
@@ -166,7 +166,7 @@ msgstr "Avbryt"
 msgid "About"
 msgstr "Om"
 
-#: ../../src/ed_cmdbar.py:603
+#: ../../src/ed_cmdbar.py:756
 #, python-format
 msgid "Access Denied: %s"
 msgstr ""
@@ -306,12 +306,12 @@ msgstr ""
 msgid "Browse"
 msgstr "Filbläddrare"
 
-#: ../../src/ed_cmdbar.py:401
+#: ../../src/ed_cmdbar.py:554
 #, fuzzy, python-format
 msgid "Can't change directory to: %s"
 msgstr "Ändra vy till \"%s\""
 
-#: ../../src/ed_search.py:1226 ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1232 ../../src/style_editor.py:139
 #: ../../src/updater.py:567
 msgid "Cancel"
 msgstr "Avbryt"
@@ -391,7 +391,7 @@ msgstr "Lägg till en ny exekverbar fil"
 msgid "Class Definitions"
 msgstr "Klassdefinitioner"
 
-#: ../../src/ed_log.py:140 ../../src/ed_search.py:1235
+#: ../../src/ed_log.py:140 ../../src/ed_search.py:1241
 #: ../../plugins/Launch/launch/launch.py:186
 #: ../../plugins/PyShell/PyShell/__init__.py:114
 msgid "Clear"
@@ -476,7 +476,7 @@ msgstr "Färg/Vit"
 msgid "Column Mode"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:253
+#: ../../src/ed_cmdbar.py:402
 msgid "Command"
 msgstr "Kommando"
 
@@ -552,7 +552,7 @@ msgstr "Klipp ut"
 msgid "Create Archive of \"%s\""
 msgstr "Skapa Arkiv av \"%s\""
 
-#: ../../src/eclib/infodlg.py:187
+#: ../../src/eclib/infodlg.py:193
 msgid "Created"
 msgstr "Skapad"
 
@@ -563,6 +563,10 @@ msgstr "Klipp u&t"
 #: ../../src/eclib/finddlg.py:698
 msgid "Current Document"
 msgstr "Aktuellt Dokument"
+
+#: ../../src/ed_cmdbar.py:116
+msgid "Customize"
+msgstr ""
 
 #: ../../src/ed_editv.py:304 ../../src/ed_toolbar.py:83
 msgid "Cut"
@@ -852,10 +856,6 @@ msgstr "Fel vid försök att öppna fil"
 msgid "Error Text"
 msgstr "Feltext"
 
-#: ../../src/dev_tool.py:471
-msgid "Error Traceback:"
-msgstr "Felspårning:"
-
 #: ../../src/ed_search.py:532 ../../src/ed_search.py:689
 #, python-format
 msgid ""
@@ -864,11 +864,7 @@ msgid ""
 "Error Message: %s"
 msgstr ""
 
-#: ../../src/dev_tool.py:371
-msgid "Error/Crash Reporter"
-msgstr "Fel-/Krashrapporterare"
-
-#: ../../src/dev_tool.py:467
+#: ../../src/dev_tool.py:240
 msgid ""
 "Error: Something unexpected happend\n"
 "Help improve Editra by clicking on Report Error\n"
@@ -903,10 +899,6 @@ msgstr ""
 #: ../../src/ed_menu.py:533
 msgid "Exit the Program"
 msgstr "Avsluta programmet"
-
-#: ../../src/dev_tool.py:476
-msgid "Exit the application"
-msgstr "Avsluta applikationen"
 
 #: ../../src/style_editor.py:141
 msgid "Export"
@@ -992,7 +984,7 @@ msgstr "Filen hittades inte"
 msgid "File Settings"
 msgstr "Filinställningar"
 
-#: ../../src/eclib/infodlg.py:109
+#: ../../src/eclib/infodlg.py:115
 msgid "File Stat Failed"
 msgstr ""
 
@@ -1017,7 +1009,7 @@ msgstr ""
 "Filen är redan öppen i en existerande sida.\n"
 "Vill du öppna den igen?"
 
-#: ../../src/ed_search.py:1280
+#: ../../src/ed_search.py:1286
 #, python-format
 msgid "Files Searched: %d"
 msgstr ""
@@ -1026,14 +1018,14 @@ msgstr ""
 msgid "Filetype Associations"
 msgstr "Filtypsassociationer"
 
-#: ../../src/ed_cmdbar.py:141 ../../src/ed_search.py:147
+#: ../../src/ed_cmdbar.py:256 ../../src/ed_search.py:147
 #: ../../src/ed_search.py:151 ../../src/ed_toolbar.py:90
 #: ../../src/eclib/finddlg.py:621 ../../src/eclib/finddlg.py:753
 #: ../../src/eclib/finddlg.py:829
 msgid "Find"
 msgstr "Sök"
 
-#: ../../src/eclib/finddlg.py:832
+#: ../../src/ed_cmdbar.py:272 ../../src/eclib/finddlg.py:832
 msgid "Find All"
 msgstr "Sök alla"
 
@@ -1089,7 +1081,7 @@ msgstr "Färdigt"
 msgid "Finshed downloading plugins"
 msgstr "Slutfört nerladdning av tillägg"
 
-#: ../../src/util.py:349 ../../src/eclib/infodlg.py:286
+#: ../../src/util.py:349 ../../src/eclib/infodlg.py:292
 msgid "Folder"
 msgstr "Mapp"
 
@@ -1170,7 +1162,7 @@ msgstr "Globala variabler"
 msgid "Goto \"%s\""
 msgstr "Gå till \"%s\""
 
-#: ../../src/ed_cmdbar.py:279
+#: ../../src/ed_cmdbar.py:432
 msgid "Goto Line"
 msgstr "Gå till rad"
 
@@ -1257,7 +1249,7 @@ msgstr "Indentera valda rader"
 msgid "Indentation Guides"
 msgstr "Indeteringsguider"
 
-#: ../../src/eclib/infodlg.py:52
+#: ../../src/eclib/infodlg.py:58
 msgid "Info"
 msgstr "Info"
 
@@ -1345,7 +1337,7 @@ msgstr ""
 msgid "Keybindings"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:176
+#: ../../src/eclib/infodlg.py:182
 msgid "Kind"
 msgstr ""
 
@@ -1480,7 +1472,7 @@ msgstr "Hantera, Ladda ner och Installera tillägg"
 msgid "Manually Set a Lexer/Syntax"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:154
+#: ../../src/ed_cmdbar.py:278
 msgid "Match Case"
 msgstr "Skiftlägeskänslig"
 
@@ -1511,7 +1503,7 @@ msgid ""
 "Would you like to format them to all be the same?"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:157 ../../src/eclib/infodlg.py:189
+#: ../../src/eclib/infodlg.py:163 ../../src/eclib/infodlg.py:195
 msgid "Modified"
 msgstr "Ändrad"
 
@@ -1605,7 +1597,7 @@ msgstr "Ny profil"
 msgid "New Tab"
 msgstr "Ny flik"
 
-#: ../../src/ed_cmdbar.py:143
+#: ../../src/ed_cmdbar.py:258
 msgid "Next"
 msgstr "Nästa"
 
@@ -1753,7 +1745,7 @@ msgstr "Klistra in text från urklipp till fil efter markören"
 msgid "Pathmarks"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:191
+#: ../../src/eclib/infodlg.py:197
 msgid "Permissions"
 msgstr "Rättigheter"
 
@@ -1781,7 +1773,7 @@ msgstr "Plattformsinfo"
 msgid "Please check the preferences dialog to check your preferences"
 msgstr ""
 
-#: ../../src/Editra.py:1052
+#: ../../src/Editra.py:1053
 msgid "Please check the preferences dialog to verify your preferences"
 msgstr ""
 
@@ -1813,7 +1805,7 @@ msgstr "Förhandsvisning"
 msgid "Preview Printout"
 msgstr "Förhandsgranska utskrift"
 
-#: ../../src/ed_cmdbar.py:150
+#: ../../src/ed_cmdbar.py:266
 msgid "Previous"
 msgstr "Föregående"
 
@@ -1873,7 +1865,7 @@ msgstr "Profil"
 msgid "Profile Saved as: %s"
 msgstr "Profil sparad som: %s"
 
-#: ../../src/Editra.py:846 ../../src/Editra.py:1054
+#: ../../src/Editra.py:846 ../../src/Editra.py:1055
 msgid "Profile Updated"
 msgstr "Profil uppdaterad"
 
@@ -1957,7 +1949,7 @@ msgstr ""
 msgid "Regex Compile Error"
 msgstr ""
 
-#: ../../src/ed_cmdbar.py:158
+#: ../../src/ed_cmdbar.py:289
 #, fuzzy
 msgid "Regular Expression"
 msgstr "Reguljärt uttryck"
@@ -2034,10 +2026,6 @@ msgstr "Rapportera fel"
 #: ../../src/eclib/finddlg.py:764
 msgid "Replace with"
 msgstr "Ersätt med"
-
-#: ../../src/dev_tool.py:477
-msgid "Report Error"
-msgstr "Rapportera fel"
 
 #: ../../src/ed_editv.py:266
 msgid "Resave File?"
@@ -2175,7 +2163,7 @@ msgstr "Sparad fil: %s"
 msgid "Script Arguments"
 msgstr "Skriptargument"
 
-#: ../../src/ed_search.py:1279
+#: ../../src/ed_search.py:1285
 #, fuzzy, python-format
 msgid "Search Complete: %d matching lines where found."
 msgstr "Sökning klar: %d matchande rader hittades"
@@ -2184,11 +2172,11 @@ msgstr "Sökning klar: %d matchande rader hittades"
 msgid "Search Recursively"
 msgstr "Sök rekursivt"
 
-#: ../../src/ed_search.py:1253
+#: ../../src/ed_search.py:1259
 msgid "Search Started"
 msgstr "Sökning startad"
 
-#: ../../src/ed_search.py:1272
+#: ../../src/ed_search.py:1278
 msgid "Search complete"
 msgstr "Sökning klar"
 
@@ -2209,7 +2197,7 @@ msgstr ""
 msgid "Search wrapped to top"
 msgstr ""
 
-#: ../../src/ed_search.py:1363
+#: ../../src/ed_search.py:1369
 #, fuzzy, python-format
 msgid "Searching in: %s"
 msgstr "Söker i : %s"
@@ -2367,7 +2355,7 @@ msgstr ""
 msgid "Show the edge column guide"
 msgstr ""
 
-#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:183
+#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:189
 msgid "Size"
 msgstr "Storlek"
 
@@ -2647,7 +2635,7 @@ msgstr ""
 
 #: ../../src/plugdlg.py:358 ../../src/plugdlg.py:364 ../../src/plugdlg.py:408
 #: ../../src/plugdlg.py:412 ../../src/util.py:359
-#: ../../src/eclib/infodlg.py:292
+#: ../../src/eclib/infodlg.py:298
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -2750,7 +2738,7 @@ msgstr "Varningstext"
 msgid "Warning suggestions will include context insensitive results"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:185
+#: ../../src/eclib/infodlg.py:191
 msgid "Where"
 msgstr ""
 
@@ -2768,6 +2756,10 @@ msgstr "Blanktecken"
 
 #: ../../src/ed_menu.py:721
 msgid "Whitespace formating commands"
+msgstr ""
+
+#: ../../src/ed_cmdbar.py:285
+msgid "Whole Word"
 msgstr ""
 
 #: ../../src/eclib/finddlg.py:801
@@ -2796,7 +2788,7 @@ msgstr "Skrivet i 100%% Python"
 msgid "You must restart Editra before your changes will take full affect."
 msgstr ""
 
-#: ../../src/Editra.py:842 ../../src/Editra.py:1050
+#: ../../src/Editra.py:842 ../../src/Editra.py:1051
 msgid "Your profile has been updated to the latest version"
 msgstr "Din profil har uppdaterats till den senaste versionen"
 
@@ -2820,7 +2812,7 @@ msgstr ""
 msgid "bold"
 msgstr "fet"
 
-#: ../../src/ed_cmdbar.py:708
+#: ../../src/ed_cmdbar.py:861
 msgid "cwd: "
 msgstr ""
 
@@ -2852,6 +2844,15 @@ msgstr "understruken"
 #~ msgid "Description"
 #~ msgstr "Beskrivning"
 
+#~ msgid "Error Traceback:"
+#~ msgstr "Felspårning:"
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Fel-/Krashrapporterare"
+
+#~ msgid "Exit the application"
+#~ msgstr "Avsluta applikationen"
+
 #~ msgid "Find Results"
 #~ msgstr "Sökresultat"
 
@@ -2863,6 +2864,9 @@ msgstr "understruken"
 
 #~ msgid "Plugin"
 #~ msgstr "Instick"
+
+#~ msgid "Report Error"
+#~ msgstr "Rapportera fel"
 
 #~ msgid "Select the desired plugins and then Click Download"
 #~ msgstr "Välj önskat tillägg och klicka sedan på Ladda ner"

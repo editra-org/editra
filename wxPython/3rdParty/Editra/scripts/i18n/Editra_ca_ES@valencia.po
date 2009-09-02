@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 22:06-0500\n"
+"POT-Creation-Date: 2009-09-02 18:41-0500\n"
 "PO-Revision-Date: 2009-03-15 17:02+0100\n"
 "Last-Translator: vjatv <vjatv@yahoo.es>\n"
 "Language-Team: Softwarevalencia\n"
@@ -154,7 +154,7 @@ msgstr "**Alies**"
 msgid "**New Value**"
 msgstr "**Nou Valor**"
 
-#: ../../src/dev_tool.py:475 ../../plugins/Launch/launch/launch.py:532
+#: ../../plugins/Launch/launch/launch.py:532
 msgid "Abort"
 msgstr "Abortar"
 
@@ -162,7 +162,7 @@ msgstr "Abortar"
 msgid "About"
 msgstr "Al voltant de"
 
-#: ../../src/ed_cmdbar.py:603
+#: ../../src/ed_cmdbar.py:756
 #, python-format
 msgid "Access Denied: %s"
 msgstr ""
@@ -301,12 +301,12 @@ msgstr "Resaltat de claus"
 msgid "Browse"
 msgstr "Navegar"
 
-#: ../../src/ed_cmdbar.py:401
+#: ../../src/ed_cmdbar.py:554
 #, fuzzy, python-format
 msgid "Can't change directory to: %s"
 msgstr "Canviar vista a \"%s\""
 
-#: ../../src/ed_search.py:1226 ../../src/style_editor.py:139
+#: ../../src/ed_search.py:1232 ../../src/style_editor.py:139
 #: ../../src/updater.py:567
 msgid "Cancel"
 msgstr "Cancelar"
@@ -386,7 +386,7 @@ msgstr "Afegir un nou eixecutable"
 msgid "Class Definitions"
 msgstr "Definicions de Classe"
 
-#: ../../src/ed_log.py:140 ../../src/ed_search.py:1235
+#: ../../src/ed_log.py:140 ../../src/ed_search.py:1241
 #: ../../plugins/Launch/launch/launch.py:186
 #: ../../plugins/PyShell/PyShell/__init__.py:114
 msgid "Clear"
@@ -469,7 +469,7 @@ msgstr "Color/Blanc"
 msgid "Column Mode"
 msgstr "Modo columna"
 
-#: ../../src/ed_cmdbar.py:253
+#: ../../src/ed_cmdbar.py:402
 msgid "Command"
 msgstr "Comandament"
 
@@ -545,7 +545,7 @@ msgstr "Tallar"
 msgid "Create Archive of \"%s\""
 msgstr "Crear archiu de \"%s\""
 
-#: ../../src/eclib/infodlg.py:187
+#: ../../src/eclib/infodlg.py:193
 msgid "Created"
 msgstr "Creat"
 
@@ -556,6 +556,10 @@ msgstr "Tal&lar"
 #: ../../src/eclib/finddlg.py:698
 msgid "Current Document"
 msgstr "Document actual"
+
+#: ../../src/ed_cmdbar.py:116
+msgid "Customize"
+msgstr ""
 
 #: ../../src/ed_editv.py:304 ../../src/ed_toolbar.py:83
 msgid "Cut"
@@ -844,10 +848,6 @@ msgstr "Erro Obrint Archiu"
 msgid "Error Text"
 msgstr "Erro de text"
 
-#: ../../src/dev_tool.py:471
-msgid "Error Traceback:"
-msgstr "Traça de l'Erro:"
-
 #: ../../src/ed_search.py:532 ../../src/ed_search.py:689
 #, python-format
 msgid ""
@@ -856,12 +856,7 @@ msgid ""
 "Error Message: %s"
 msgstr ""
 
-#: ../../src/dev_tool.py:371
-#, fuzzy
-msgid "Error/Crash Reporter"
-msgstr "Deshabilitar Informe d'Erros"
-
-#: ../../src/dev_tool.py:467
+#: ../../src/dev_tool.py:240
 #, fuzzy
 msgid ""
 "Error: Something unexpected happend\n"
@@ -897,10 +892,6 @@ msgstr "Còdic d'eixida"
 #: ../../src/ed_menu.py:533
 msgid "Exit the Program"
 msgstr "Eixir del Programa"
-
-#: ../../src/dev_tool.py:476
-msgid "Exit the application"
-msgstr "Eixir de l'aplicació"
 
 #: ../../src/style_editor.py:141
 msgid "Export"
@@ -986,7 +977,7 @@ msgstr "Archiu No Trobat"
 msgid "File Settings"
 msgstr "Ajusts d'Archius"
 
-#: ../../src/eclib/infodlg.py:109
+#: ../../src/eclib/infodlg.py:115
 msgid "File Stat Failed"
 msgstr "Fallo d'Escomençament d'archiu "
 
@@ -1011,7 +1002,7 @@ msgstr ""
 "L'archiu ya està obert.\n"
 "¿Vols obrir-lo de nou?"
 
-#: ../../src/ed_search.py:1280
+#: ../../src/ed_search.py:1286
 #, python-format
 msgid "Files Searched: %d"
 msgstr "Archius  buscats: %d"
@@ -1020,14 +1011,14 @@ msgstr "Archius  buscats: %d"
 msgid "Filetype Associations"
 msgstr "Associacions de tipos d'archius"
 
-#: ../../src/ed_cmdbar.py:141 ../../src/ed_search.py:147
+#: ../../src/ed_cmdbar.py:256 ../../src/ed_search.py:147
 #: ../../src/ed_search.py:151 ../../src/ed_toolbar.py:90
 #: ../../src/eclib/finddlg.py:621 ../../src/eclib/finddlg.py:753
 #: ../../src/eclib/finddlg.py:829
 msgid "Find"
 msgstr "Buscar"
 
-#: ../../src/eclib/finddlg.py:832
+#: ../../src/ed_cmdbar.py:272 ../../src/eclib/finddlg.py:832
 msgid "Find All"
 msgstr "Trobar-ho tot"
 
@@ -1082,7 +1073,7 @@ msgstr "Finalisat"
 msgid "Finshed downloading plugins"
 msgstr "S'ha completat la descàrrega dels complements"
 
-#: ../../src/util.py:349 ../../src/eclib/infodlg.py:286
+#: ../../src/util.py:349 ../../src/eclib/infodlg.py:292
 msgid "Folder"
 msgstr "Carpeta"
 
@@ -1162,7 +1153,7 @@ msgstr "Variables Globals"
 msgid "Goto \"%s\""
 msgstr "Anar \"%s\""
 
-#: ../../src/ed_cmdbar.py:279
+#: ../../src/ed_cmdbar.py:432
 msgid "Goto Line"
 msgstr "Anar a la llínea"
 
@@ -1247,7 +1238,7 @@ msgstr "Sangnar les llínees seleccionades"
 msgid "Indentation Guides"
 msgstr "Guies de sangnat"
 
-#: ../../src/eclib/infodlg.py:52
+#: ../../src/eclib/infodlg.py:58
 msgid "Info"
 msgstr "Info"
 
@@ -1335,7 +1326,7 @@ msgstr "Perfil Clau"
 msgid "Keybindings"
 msgstr "Claus d'encuadernació"
 
-#: ../../src/eclib/infodlg.py:176
+#: ../../src/eclib/infodlg.py:182
 msgid "Kind"
 msgstr "Tipo"
 
@@ -1470,7 +1461,7 @@ msgstr "Gestionar, descarregar e instalar complements"
 msgid "Manually Set a Lexer/Syntax"
 msgstr "Establir lèxic/sintaxis manualment"
 
-#: ../../src/ed_cmdbar.py:154
+#: ../../src/ed_cmdbar.py:278
 msgid "Match Case"
 msgstr "Comprovar MAYÚSCULES/minúscules"
 
@@ -1504,7 +1495,7 @@ msgstr ""
 "\n"
 "¿Vols formatejar-los per a que siguen tots iguals?"
 
-#: ../../src/eclib/infodlg.py:157 ../../src/eclib/infodlg.py:189
+#: ../../src/eclib/infodlg.py:163 ../../src/eclib/infodlg.py:195
 msgid "Modified"
 msgstr "Modificat"
 
@@ -1598,7 +1589,7 @@ msgstr "Nou perfil"
 msgid "New Tab"
 msgstr "Nova pestanya"
 
-#: ../../src/ed_cmdbar.py:143
+#: ../../src/ed_cmdbar.py:258
 msgid "Next"
 msgstr "Següent"
 
@@ -1747,7 +1738,7 @@ msgstr "Apegar text del portapapers a l'archiu a continuació del cursor"
 msgid "Pathmarks"
 msgstr "Ruta dels marcadors"
 
-#: ../../src/eclib/infodlg.py:191
+#: ../../src/eclib/infodlg.py:197
 msgid "Permissions"
 msgstr "Permisos"
 
@@ -1775,7 +1766,7 @@ msgstr "Informació de plataforma"
 msgid "Please check the preferences dialog to check your preferences"
 msgstr "Per favor comprove el diàlec preferent per a comprovar les seues preferències"
 
-#: ../../src/Editra.py:1052
+#: ../../src/Editra.py:1053
 #, fuzzy
 msgid "Please check the preferences dialog to verify your preferences"
 msgstr "Per favor comprove el diàlec preferent per a comprovar les seues preferències"
@@ -1808,7 +1799,7 @@ msgstr "Vista previa"
 msgid "Preview Printout"
 msgstr "Vista previa de l'impressió"
 
-#: ../../src/ed_cmdbar.py:150
+#: ../../src/ed_cmdbar.py:266
 msgid "Previous"
 msgstr "Anterior"
 
@@ -1868,7 +1859,7 @@ msgstr "Perfil"
 msgid "Profile Saved as: %s"
 msgstr "Perfil guardat com: %s"
 
-#: ../../src/Editra.py:846 ../../src/Editra.py:1054
+#: ../../src/Editra.py:846 ../../src/Editra.py:1055
 msgid "Profile Updated"
 msgstr "Perfil actualisat"
 
@@ -1952,7 +1943,7 @@ msgstr "Refer l'última acció"
 msgid "Regex Compile Error"
 msgstr "Erro de compilació Regex"
 
-#: ../../src/ed_cmdbar.py:158
+#: ../../src/ed_cmdbar.py:289
 msgid "Regular Expression"
 msgstr "Expressió regular"
 
@@ -2029,10 +2020,6 @@ msgstr "Informe d'erro"
 #: ../../src/eclib/finddlg.py:764
 msgid "Replace with"
 msgstr "Reemplaçar en"
-
-#: ../../src/dev_tool.py:477
-msgid "Report Error"
-msgstr "Informe d'erro"
 
 #: ../../src/ed_editv.py:266
 msgid "Resave File?"
@@ -2169,7 +2156,7 @@ msgstr "Archiu guardat: %s"
 msgid "Script Arguments"
 msgstr "Arguments del script"
 
-#: ../../src/ed_search.py:1279
+#: ../../src/ed_search.py:1285
 #, python-format
 msgid "Search Complete: %d matching lines where found."
 msgstr "Busca completa: s'han trobat %d llínees coincidents."
@@ -2178,11 +2165,11 @@ msgstr "Busca completa: s'han trobat %d llínees coincidents."
 msgid "Search Recursively"
 msgstr "Buscar recursivament"
 
-#: ../../src/ed_search.py:1253
+#: ../../src/ed_search.py:1259
 msgid "Search Started"
 msgstr "Escomençar busca"
 
-#: ../../src/ed_search.py:1272
+#: ../../src/ed_search.py:1278
 msgid "Search complete"
 msgstr "Busca completa"
 
@@ -2203,7 +2190,7 @@ msgstr "Busca cíclica cap avant"
 msgid "Search wrapped to top"
 msgstr "Busca cíclica cap arrere"
 
-#: ../../src/ed_search.py:1363
+#: ../../src/ed_search.py:1369
 #, python-format
 msgid "Searching in: %s"
 msgstr "Buscant en: %s"
@@ -2361,7 +2348,7 @@ msgstr "Mostrar l'estant"
 msgid "Show the edge column guide"
 msgstr "Mostrar el marge de la guia de la columna"
 
-#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:183
+#: ../../src/style_editor.py:698 ../../src/eclib/infodlg.py:189
 msgid "Size"
 msgstr "Tamany"
 
@@ -2652,7 +2639,7 @@ msgstr "Unix (\\n)"
 
 #: ../../src/plugdlg.py:358 ../../src/plugdlg.py:364 ../../src/plugdlg.py:408
 #: ../../src/plugdlg.py:412 ../../src/util.py:359
-#: ../../src/eclib/infodlg.py:292
+#: ../../src/eclib/infodlg.py:298
 msgid "Unknown"
 msgstr "Desconegut"
 
@@ -2755,7 +2742,7 @@ msgstr "Text d'avís"
 msgid "Warning suggestions will include context insensitive results"
 msgstr ""
 
-#: ../../src/eclib/infodlg.py:185
+#: ../../src/eclib/infodlg.py:191
 msgid "Where"
 msgstr "On"
 
@@ -2775,6 +2762,11 @@ msgstr "Espai en blanc"
 #: ../../src/ed_menu.py:721
 msgid "Whitespace formating commands"
 msgstr "Comandaments de formateig d'espais"
+
+#: ../../src/ed_cmdbar.py:285
+#, fuzzy
+msgid "Whole Word"
+msgstr "Paraula sancera"
 
 #: ../../src/eclib/finddlg.py:801
 msgid "Whole word"
@@ -2802,7 +2794,7 @@ msgstr "Escrit 100%% en Python"
 msgid "You must restart Editra before your changes will take full affect."
 msgstr ""
 
-#: ../../src/Editra.py:842 ../../src/Editra.py:1050
+#: ../../src/Editra.py:842 ../../src/Editra.py:1051
 msgid "Your profile has been updated to the latest version"
 msgstr "El perfil s'ha actualisat a l'última versió"
 
@@ -2826,7 +2818,7 @@ msgstr "args"
 msgid "bold"
 msgstr "negreta"
 
-#: ../../src/ed_cmdbar.py:708
+#: ../../src/ed_cmdbar.py:861
 msgid "cwd: "
 msgstr ""
 
@@ -2867,6 +2859,16 @@ msgstr "subrallat"
 #~ msgid "Encoding Error"
 #~ msgstr "Erro de codificat"
 
+#~ msgid "Error Traceback:"
+#~ msgstr "Traça de l'Erro:"
+
+#, fuzzy
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Deshabilitar Informe d'Erros"
+
+#~ msgid "Exit the application"
+#~ msgstr "Eixir de l'aplicació"
+
 #~ msgid "Find Results"
 #~ msgstr "Resultats de la busca"
 
@@ -2897,6 +2899,9 @@ msgstr "subrallat"
 #~ msgstr ""
 #~ "S'ha completat el Reemplaçar-ho tot\n"
 #~ "S'han reemplaçat un total de %d coincidències"
+
+#~ msgid "Report Error"
+#~ msgstr "Informe d'erro"
 
 #~ msgid "Select the desired plugins and then Click Download"
 #~ msgstr "Selecciona els complements desijats i pulsa Descarregar"

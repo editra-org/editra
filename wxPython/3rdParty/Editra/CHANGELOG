@@ -9,15 +9,20 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.xx
-DATE xx/xx/2009
+VERSION 0.5.05
+DATE 09/02/2009
 29th Alpha Release
 
 NEWS:
 
+Important bug fix release to fix a critical regression with handling of files that have
+BOM characters in them. All users of release 0.5 should quickly update to this
+release as the bug could lead to data loss.
+
 NEW: [features/improvements]
 +Find bar is now customizable via right click menu.
-+Add Hungarian, Romanian, and Slovak translations.
++Add Hungarian, Galician, Romanian, and Slovak translations.
++Updated translations
 
 BUG FIXES:
 +Fix error in handling BOM when saving files that could result in data loss.
