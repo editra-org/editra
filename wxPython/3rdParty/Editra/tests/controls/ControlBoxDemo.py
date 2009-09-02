@@ -22,8 +22,8 @@ import sys
 import os
 import wx
 
-sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib as eclib
+#sys.path.insert(0, os.path.abspath('../../src'))
+import eclib
 
 # Local imports
 import IconFile
@@ -196,9 +196,13 @@ class TestLog:
 
 #-----------------------------------------------------------------------------#
 
+overview = eclib.ctrlbox.__doc__
+title = "ControlBox"
+
+#-----------------------------------------------------------------------------#
+
 if __name__ == '__main__':
     try:
-        import sys
         import run
     except ImportError:
         app = wx.PySimpleApp(False)

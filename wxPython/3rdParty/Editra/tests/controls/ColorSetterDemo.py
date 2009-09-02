@@ -22,8 +22,8 @@ import sys
 import wx
 
 # Put local package on the path
-sys.path.insert(0, os.path.abspath('../../'))
-import src.eclib as eclib
+#sys.path.insert(0, os.path.abspath('../../src'))
+import eclib
 
 #-----------------------------------------------------------------------------#
 
@@ -83,7 +83,8 @@ class TestLog:
 
 #----------------------------------------------------------------------
 
-overview = __doc__
+overview = eclib.colorsetter.__doc__
+title = "ColorSetter"
 
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
