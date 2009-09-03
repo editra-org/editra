@@ -114,6 +114,10 @@ class CommandBarBase(eclib.ControlBar):
             if self._menu is None:
                 # Lazy init the menu
                 self._menu = wx.Menu(_("Customize"))
+                # Ensure the label is disabled (wxMSW Bug)
+                item = self._menu.GetMenuItems()[0]
+                self._menu.Enable(item.GetId(), False)
+
                 to_menu = list()
                 for child in self.GetChildren():
                     if self.IsCustomizable(child):
