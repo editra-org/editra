@@ -16,6 +16,7 @@ __revision__ = "$Revision$"
 # Imports
 import wx
 import os
+import codecs
 import locale
 import types
 import unittest
@@ -46,6 +47,9 @@ class EdFileTest(unittest.TestCase):
         self.ipath = common.GetDataFilePath(u'image_test.png')
         self.img = ed_txt.EdFile(self.ipath)
 
+        self.bpath = common.GetDataFilePath(u'test_read_utf8_bom.txt')
+        self.utf8_bom_file = ed_txt.EdFile(self.bpath)
+
     def tearDown(self):
         self.file.Close()
         self.rfile.Close()
@@ -54,7 +58,36 @@ class EdFileTest(unittest.TestCase):
     def testRead(self):
         """Test reading from the file and getting the text"""
         txt = self.file.Read()
+        self.assertFalse(self.file.HasBom())
         self.assertTrue(len(txt))
+
+    def testReadUTF8Bom(self):
+        """Test reading a utf8 bom file"""
+        txt = self.utf8_bom_file.Read()
+        self.assertTrue(self.utf8_bom_file.HasBom())
+        self.assertTrue(len(txt))
+
+    def testWriteUTF8Bom(self):
+        """Test writing a file that has utf8 bom character"""
+        txt = self.utf8_bom_file.Read()
+        self.assertTrue(self.utf8_bom_file.HasBom())
+
+        
+        new_path = os.path.join(common.GetTempDir(), ebmlib.GetFileName(self.bpath))
+        self.utf8_bom_file.SetPath(new_path) # write to test temp dir
+        self.utf8_bom_file.Write(txt)
+
+        # Open and verify that BOM was correctly written back
+        f = open(new_path, 'rb')
+        ntxt = f.read()
+        f.close()
+        self.assertTrue(ntxt.startswith(codecs.BOM_UTF8))
+
+        # Ensure that BOM was only written once
+        tmp = ntxt.lstrip(codecs.BOM_UTF8)
+        self.assertFalse(tmp.startswith(codecs.BOM_UTF8))
+        tmp = tmp.decode('utf-8')
+        self.assertEquals(txt, tmp)
 
     def testGetEncoding(self):
         """Test the encoding detection"""
@@ -68,6 +101,14 @@ class EdFileTest(unittest.TestCase):
     def testGetPath(self):
         """Test getting the files path"""
         self.assertTrue(self.file.GetPath() == self.path)
+
+    def testGetMagic(self):
+        """Test getting the magic comment"""
+        self.file.Read()
+        self.assertTrue(self.file.GetMagic())
+
+        self.img.Read()
+        self.assertFalse(self.img.GetMagic())
 
     def testGetModTime(self):
         """Test getting the files last modification time"""
