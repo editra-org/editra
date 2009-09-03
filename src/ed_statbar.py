@@ -51,6 +51,7 @@ class EdStatBar(ProgressStatusBar):
         self._widths = list()
         self._cleanup_timer = wx.Timer(self, EdStatBar.ID_CLEANUP_TIMER)
         self._eolmenu = wx.Menu()
+        self._log = wx.GetApp().GetLog()
 
         # Setup
         self.SetFieldsCount(6) # Info, vi stuff, line/progress
@@ -82,7 +83,7 @@ class EdStatBar(ProgressStatusBar):
         ed_msg.Unsubscribe(self.OnProgress)
         ed_msg.Unsubscribe(self.OnUpdateText)
         ed_msg.Unsubscribe(self.OnUpdateDoc)
-        ProgressStatusBar.__del__(self)
+        super(ProgressStatusBar, self).__del__()
 
     def __SetStatusText(self, txt, field):
         """Safe method to use for setting status text with CallAfter.
@@ -91,7 +92,7 @@ class EdStatBar(ProgressStatusBar):
 
         """
         try:
-            ProgressStatusBar.SetStatusText(self, txt, field)
+            super(EdStatBar, self).SetStatusText(txt, field)
             self.AdjustFieldWidths()
 
             if field == ed_glob.SB_INFO:
@@ -101,6 +102,9 @@ class EdStatBar(ProgressStatusBar):
                 self._cleanup_timer.Start(10000, True)
         except wx.PyDeadObjectError:
             pass
+        except TypeError, err:
+            self._log("[estatbar][err] Bad status message: %s" % str(txt))
+            self._log("[estatbar][err] %s" % err)
 
     def AdjustFieldWidths(self):
         """Adust each field width of status bar basing on the field text
