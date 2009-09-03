@@ -47,7 +47,8 @@ __all__ = ["FindBox", "FindEvent", "FindPanel", "FindReplaceDlg",
            "AFR_UP", "AFR_WHOLEWORD", 
            "AFR_MATCHCASE", "AFR_REGEX", "AFR_RECURSIVE", "AFR_NOLOOKIN",
            "AFR_NOUPDOWN", "AFR_NOWHOLEWORD", "AFR_NOMATCHCASE", "AFR_NOREGEX",
-           "AFR_NOFILTER", "AFR_NOOPTIONS",
+           "AFR_NOFILTER", "AFR_NOOPTIONS", "AFR_NO_COUNT", "AFR_NO_ALL_BTN",
+           "AFR_SIMPLE",
 
            "LOCATION_CURRENT_DOC", "LOCATION_IN_SELECTION",
            "LOCATION_OPEN_DOCS", "LOCATION_IN_FILES", "LOCATION_MAX",
@@ -88,6 +89,12 @@ AFR_NOMATCHCASE = 256           # Hide the Match Case option in the dialog
 AFR_NOREGEX     = 512           # Hide the Regular Expression option
 AFR_NOFILTER    = 1024          # Hide the File Filter option
 AFR_NOOPTIONS   = 2048          # Hide all options in the dialog
+AFR_NO_COUNT    = 4096          # Hide Count Button
+AFR_NO_ALL_BTN  = 8192          # Hide Find All / Replace All buttons
+
+# Convenience Flags
+AFR_SIMPLE = (AFR_NOLOOKIN | AFR_NOOPTIONS | AFR_NOUPDOWN | \
+              AFR_NO_COUNT | AFR_NO_ALL_BTN)
 
 # Search Location Parameters (NOTE: must be kept in sync with Lookin List)
 LOCATION_CURRENT_DOC  = 0
@@ -883,11 +890,25 @@ class FindPanel(wx.Panel):
 
         """
         if find:
-            show = (wx.ID_FIND, ID_COUNT, ID_FIND_ALL, 'fspacer')
-            hide = (wx.ID_REPLACE, ID_REPLACE_ALL, 'frspacer')
+            show = [wx.ID_FIND, ID_COUNT, ID_FIND_ALL, 'fspacer']
+            hide = [wx.ID_REPLACE, ID_REPLACE_ALL, 'frspacer']
         else:
-            show = (wx.ID_REPLACE, ID_REPLACE_ALL, 'frspacer')
-            hide = (ID_FIND_ALL, ID_COUNT, 'fspacer')
+            show = [wx.ID_REPLACE, ID_REPLACE_ALL, 'frspacer']
+            hide = [ID_FIND_ALL, ID_COUNT, 'fspacer']
+
+        # Hide extra buttons as per configured preference
+        flags = self._fdata.GetFlags()
+        if flags & AFR_NO_COUNT and ID_COUNT in show:
+            show.remove(ID_COUNT)
+            hide.append(ID_COUNT)
+
+        if flags & AFR_NO_ALL_BTN:
+            if ID_FIND_ALL in show:
+                show.remove(ID_FIND_ALL)
+                hide.append(ID_FIND_ALL)
+            if ID_REPLACE_ALL in show:
+                show.remove(ID_REPLACE_ALL)
+                hide.append(ID_REPLACE_ALL)
 
         for ctrl in show:
             if isinstance(ctrl, basestring):
