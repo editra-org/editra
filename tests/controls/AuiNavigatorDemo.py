@@ -25,7 +25,7 @@ import wx.aui as aui
 import IconFile
 
 # Put local package on the path
-sys.path.insert(0, os.path.abspath('../../src'))
+#sys.path.insert(0, os.path.abspath('../../src'))
 import eclib
 
 #-----------------------------------------------------------------------------#
@@ -49,7 +49,7 @@ class TestPanel(wx.Panel):
             panes.append(tmp)
 
         if wx.Platform != '__WXMAC__':
-            txt = wx.StaticText(panes[0], label="Ctrl+Tab to activate navigator")
+            txt = wx.StaticText(panes[0], label="Ctrl+1 to activate navigator")
         else:
             txt = wx.StaticText(panes[0], label="Alt+Tab to activate navigator")
         sizer = wx.BoxSizer()
@@ -74,7 +74,7 @@ class TestPanel(wx.Panel):
 
         tlw = self.GetTopLevelParent()
         if wx.Platform != '__WXMAC__':
-            tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL, wx.WXK_TAB, ID_NAVI)])
+            tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL, ord('1'), ID_NAVI)])
         else:
             tbl = wx.AcceleratorTable([(wx.ACCEL_ALT, wx.WXK_TAB, ID_NAVI)])
         tlw.SetAcceleratorTable(tbl)
