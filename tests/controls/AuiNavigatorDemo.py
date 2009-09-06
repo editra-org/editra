@@ -85,8 +85,9 @@ class TestPanel(wx.Panel):
     def OnDestroy(self, evt):
         # DEMO hack unbind event handler on delete
         tlw = self.GetTopLevelParent()
-        tlw.Unbind(wx.EVT_MENU, tlw, id=ID_NAVI)
-        tlw.SetAcceleratorTable(wx.AcceleratorTable([]))
+        if tlw is not None:
+            tlw.Unbind(wx.EVT_MENU, tlw, id=ID_NAVI)
+            tlw.SetAcceleratorTable(wx.AcceleratorTable([]))
 
     def OnNavigate(self, evt):
         """Make use of the AuiPaneNavigator"""
