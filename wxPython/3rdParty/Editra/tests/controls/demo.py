@@ -97,7 +97,12 @@ class EclibDemoBook(wx.Notebook):
         self.code = PythonStc(self)
 
         # Setup
+        f = open(__file__, 'r')
+        t = f.read()
+        f.close()
+        self.code.SetText(t)
         self.AddPage(self.doc, "Info")
+        self.SetDocText(eclib.__doc__)
         self.AddPage(self.code, "Demo Code")
         self.doc.SetFont(wx.FFont(12, wx.MODERN))
 
@@ -106,8 +111,7 @@ class EclibDemoBook(wx.Notebook):
         if self.GetPageCount() == 3:
             self.DeletePage(2) # Recreate demo page
 
-        overview = module.overview.replace('<', '&lt;').replace('>', '&gt;')
-        self.doc.SetPage("<pre>%s</pre>" % overview)
+        self.SetDocText(module.overview)
         f = open(path, 'r')
         t = f.read()
         f.close()
@@ -118,6 +122,10 @@ class EclibDemoBook(wx.Notebook):
         page = module.TestPanel(self, wx.GetApp().GetLog())
         self.AddPage(page, module.title)
         self.SetSelection(sel)
+
+    def SetDocText(self, txt):
+        overview = txt.replace('<', '&lt;').replace('>', '&gt;')
+        self.doc.SetPage("<pre>%s</pre>" % overview)
 
 #-----------------------------------------------------------------------------#
 
