@@ -603,6 +603,8 @@ class SegmentBar(ControlBar):
         dc.DrawBitmap(bmp, bpos[0], bpos[1], bmp.GetMask() != None)
 
         if draw_label:
+            lcolor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+            dc.SetTextForeground(lcolor)
             twidth, theight = button['lsize']
             typos = height - theight - 2
             trect = wx.Rect(xpos, typos, self._segsize[0], theight + 3)
