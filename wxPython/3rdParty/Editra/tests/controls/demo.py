@@ -55,9 +55,7 @@ class EclibDemoFrame(wx.Frame):
         wx.Frame.__init__(self, None, title=title, size=(850, 550))
 
         # Attributes
-        self.mgr = aui.AuiManager(self,
-                                  aui.AUI_MGR_ALLOW_ACTIVE_PANE|\
-                                  aui.AUI_MGR_LIVE_RESIZE)
+        self.mgr = aui.AuiManager(self, aui.AUI_MGR_ALLOW_ACTIVE_PANE)
         self.tree = EclibDemoTree(self)
         self.pane = EclibDemoBook(self)
         self._loader = ModuleLoader(FindDemoModules(os.path.abspath('.')))
