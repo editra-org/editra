@@ -207,6 +207,7 @@ class ControlBox(wx.PyPanel):
         already exist.
         @keyword pos: wx.TOP (default) or wx.BOTTOM
         @postcondition: A top aligned L{ControlBar} is created.
+        @return: ControlBar
 
         """
         cbar = self.GetControlBar(pos)
@@ -215,6 +216,7 @@ class ControlBox(wx.PyPanel):
                               style=CTRLBAR_STYLE_GRADIENT)
 
             self.SetControlBar(cbar, pos)
+        return cbar
 
     def GetControlBar(self, pos=wx.TOP):
         """Get the L{ControlBar} used by this window
