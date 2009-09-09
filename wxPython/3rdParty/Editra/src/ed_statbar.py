@@ -44,7 +44,7 @@ class EdStatBar(ProgressStatusBar):
     """
     ID_CLEANUP_TIMER = wx.NewId()
     def __init__(self, parent):
-        ProgressStatusBar.__init__(self, parent, style=wx.ST_SIZEGRIP)
+        super(EdStatBar, self).__init__(parent, style=wx.ST_SIZEGRIP)
 
         # Attributes
         self._pid = parent.GetId() # Save parents id for filtering msgs
@@ -83,7 +83,7 @@ class EdStatBar(ProgressStatusBar):
         ed_msg.Unsubscribe(self.OnProgress)
         ed_msg.Unsubscribe(self.OnUpdateText)
         ed_msg.Unsubscribe(self.OnUpdateDoc)
-        super(ProgressStatusBar, self).__del__()
+        super(EdStatBar, self).__del__()
 
     def __SetStatusText(self, txt, field):
         """Safe method to use for setting status text with CallAfter.
