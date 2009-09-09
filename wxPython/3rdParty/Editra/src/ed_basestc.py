@@ -71,6 +71,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           lang_id=0)        # Language ID from syntax module
 
         self.vert_edit = vertedit.VertEdit(self)
+        self._line_num = True # Show line numbers
 
         # Set Up Margins
         ## Outer Left Margin Bookmarks
@@ -442,6 +443,17 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.SetZoom(0)
         return self.GetZoom()
 
+    def EnableLineNumbers(self, enable=True):
+        """Enable/Disable line number margin
+        @keyword enable: bool
+
+        """
+        if enable:
+            self.SetMarginWidth(NUM_MARGIN, 30)
+        else:
+            self.SetMarginWidth(NUM_MARGIN, 0)
+        self._line_num = enable
+
     def FindChar(self, char, repeat=1, reverse=False, extra_offset=0):
         """Find the position of the next (ith) 'char' character
         on the current line and move caret to it
@@ -703,19 +715,20 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @type evt: wx.stc.StyledTextEvent
 
         """
-        # Adjust line number margin width to expand as needed when line
-        # number width over fills the area.
-        lines = self.GetLineCount()
-        mwidth = self.GetTextExtent(str(lines))[0]
+        if self._line_num:
+            # Adjust line number margin width to expand as needed when line
+            # number width over fills the area.
+            lines = self.GetLineCount()
+            mwidth = self.GetTextExtent(str(lines))[0]
 
-        if wx.Platform == '__WXMAC__':
-            adj = 2
-        else:
-            adj = 8
+            if wx.Platform == '__WXMAC__':
+                adj = 2
+            else:
+                adj = 8
 
-        nwidth = max(15, mwidth + adj)
-        if self.GetMarginWidth(NUM_MARGIN) != nwidth:
-            self.SetMarginWidth(NUM_MARGIN, nwidth)
+            nwidth = max(15, mwidth + adj)
+            if self.GetMarginWidth(NUM_MARGIN) != nwidth:
+                self.SetMarginWidth(NUM_MARGIN, nwidth)
 
         wx.PostEvent(self.GetParent(), evt)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CHANGED)
@@ -953,9 +966,9 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         if (switch is None and \
             not self.GetMarginWidth(NUM_MARGIN)) or switch:
-            self.SetMarginWidth(NUM_MARGIN, 30)
+            self.EnableLineNumbers(True)
         else:
-            self.SetMarginWidth(NUM_MARGIN, 0)
+            self.EnableLineNumbers(False)
 
     @property
     def VertEdit(self):
