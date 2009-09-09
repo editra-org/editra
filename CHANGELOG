@@ -15,6 +15,20 @@ DATE 09/02/2009
 
 NEWS:
 
+NEW: [features/improvements]
+
+BUG FIXES:
++Fix some color issues when running under GTK.
++Fix line number preference not being remebered on startup.
+
+#-----------------------------------------------------------------------------#
+
+VERSION 0.5.05
+DATE 09/02/2009
+29th Alpha Release
+
+NEWS:
+
 Important bug fix release to fix a critical regression with handling of files that have
 BOM characters in them. All users of release 0.5 should quickly update to this
 release as the bug could lead to data loss.
