@@ -36,6 +36,7 @@ import ed_event
 import ed_msg
 import ed_menu
 import ed_print
+import ed_shelf
 import ed_statbar
 import ed_mdlg
 import prefdlg
@@ -286,9 +287,12 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         addons.Init(self)
         self._handlers['menu'].extend(addons.GetEventHandlers())
         self._handlers['ui'].extend(addons.GetEventHandlers(ui_evt=True))
-        self._shelf = iface.Shelf(plgmgr)
-        self._shelf.Init(self)
-        self._handlers['ui'].extend(self._shelf.GetUiHandlers())
+        shelf = ed_shelf.Shelf(plgmgr)
+        shelf.Init(self)
+        self._handlers['ui'].extend(shelf.GetUiHandlers())
+        self._shelf = ed_shelf.Shelf.delegate
+        ed_shelf.Shelf.delegate = None
+
         self.LOG("[ed_main][info] Loading Generator plugins")
         generator.Generator(plgmgr).InstallMenu(menbar.GetMenuByName("tools"))
 
