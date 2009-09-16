@@ -25,6 +25,7 @@ import os
 # Editra Libraries
 import ed_glob
 import ed_menu
+import ed_msg
 import ed_stc
 import ed_tab
 from doctools import DocPositionMgr
@@ -67,6 +68,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         # Attributes
         self._ignore_del = False
         self._has_dlg = False
+        self._mdata = dict(menu=None, handlers=list(), buff=self)
 
         # Initialize the classes position manager for the first control
         # that is created only.
@@ -79,9 +81,32 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         # Need to relay the menu events from the context menu to the top level
         # window to be handled on gtk. Other platforms don't require this.
-        if wx.Platform == '__WXGTK__':
-            self.Bind(wx.EVT_MENU,
-                      lambda evt: wx.PostEvent(self.GetTopLevelParent(), evt))
+        self.Bind(wx.EVT_MENU, self.OnMenuEvent)
+
+    def _MakeMenu(self):
+        """Make the buffers context menu"""
+        menu = ed_menu.EdMenu()
+        menu.Append(ed_glob.ID_UNDO, _("Undo"))
+        menu.Append(ed_glob.ID_REDO, _("Redo"))
+        menu.AppendSeparator()
+        menu.Append(ed_glob.ID_CUT, _("Cut"))
+        menu.Append(ed_glob.ID_COPY, _("Copy"))
+        menu.Append(ed_glob.ID_PASTE, _("Paste"))
+        menu.AppendSeparator()
+        menu.Append(ed_glob.ID_TO_UPPER, _("To Uppercase"))
+        menu.Append(ed_glob.ID_TO_LOWER, _("To Lowercase"))
+        menu.AppendSeparator()
+        menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
+
+        # Allow clients to customize the context menu
+        cid = self.GetTopLevelParent().GetId()
+        self._mdata['menu'] = menu
+        self._mdata['handlers'] = list()
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CONTEXT_MENU,
+                           self._mdata,
+                           self.GetId())
+
+        return menu
 
     #---- EdTab Methods ----#
 
@@ -248,10 +273,33 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     def OnContextMenu(self, evt):
         """Handle right click menu events in the buffer"""
-        if EdEditorView.RCLICK_MENU is None:
-            EdEditorView.RCLICK_MENU = MakeMenu()
+        if EdEditorView.RCLICK_MENU is not None:
+            EdEditorView.RCLICK_MENU.Destroy()
+            EdEditorView.RCLICK_MENU = None
+
+        EdEditorView.RCLICK_MENU = self._MakeMenu()
         self.PopupMenu(EdEditorView.RCLICK_MENU)
         evt.Skip()
+
+    def OnMenuEvent(self, evt):
+        """Handle context menu events"""
+        e_id = evt.GetId()
+        handler = None
+        for hndlr in self._mdata['handlers']:
+            if e_id == hndlr[0]:
+                handler = hndlr[1]
+                break
+
+        # Handle custom menu items
+        if handler is not None:
+            handler(self)
+        else:
+            # Need to relay to tlw on gtk for it to get handled, other
+            # platforms do not require this.
+            if wx.Platform == '__WXGTK__':
+                wx.PostEvent(self.GetTopLevelParent(), evt)
+            else:
+                evt.Skip()
 
     @modalcheck
     def PromptToReSave(self, cfile):
@@ -294,19 +342,3 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             self.SetModTime(GetFileModTime(cfile))
 
 #-----------------------------------------------------------------------------#
-
-def MakeMenu():
-    """Make the buffers context menu"""
-    menu = ed_menu.EdMenu()
-    menu.Append(ed_glob.ID_UNDO, _("Undo"))
-    menu.Append(ed_glob.ID_REDO, _("Redo"))
-    menu.AppendSeparator()
-    menu.Append(ed_glob.ID_CUT, _("Cut"))
-    menu.Append(ed_glob.ID_COPY, _("Copy"))
-    menu.Append(ed_glob.ID_PASTE, _("Paste"))
-    menu.AppendSeparator()
-    menu.Append(ed_glob.ID_TO_UPPER, _("To Uppercase"))
-    menu.Append(ed_glob.ID_TO_LOWER, _("To Lowercase"))
-    menu.AppendSeparator()
-    menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
-    return menu

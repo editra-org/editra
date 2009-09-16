@@ -17,6 +17,7 @@ NEWS:
 
 NEW: [features/improvements]
 +Plugins can now be uninstalled through plugin manager.
++New api for plugins and other clients to customize buffer context menu.
 
 BUG FIXES:
 +Return unique sorted list of terms when using extended autocomp.
