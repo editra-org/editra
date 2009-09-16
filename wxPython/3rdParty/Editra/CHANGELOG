@@ -9,17 +9,18 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.05
-DATE 09/02/2009
-29th Alpha Release
+VERSION 0.5.xx
+DATE xx/xx/2009
+30th Alpha Release
 
 NEWS:
 
 NEW: [features/improvements]
++Plugins can now be uninstalled through plugin manager.
 
 BUG FIXES:
 +Fix some color issues when running under GTK.
-+Fix line number preference not being remebered on startup.
++Fix line number preference not being remembered on startup.
 
 #-----------------------------------------------------------------------------#
 

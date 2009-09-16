@@ -67,13 +67,14 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import shutil
 import wx
 
 # Editra Libraries
 import ed_glob
 from ed_txt import EncodeString
 import util
-from profiler import CalcVersionValue
+from profiler import CalcVersionValue, Profile_Get, Profile_Set
 
 # Try to use the system version of pkg_resources if available else fall
 # back to the bundled version. Mostly for binary versions of Editra.
@@ -90,6 +91,8 @@ except ImportError:
 ENTRYPOINT = 'Editra.plugins'
 PLUGIN_CONFIG = "plugin.cfg"
 _implements = []
+
+_ = wx.GetTranslation
 
 #--------------------------------------------------------------------------#
 
@@ -173,10 +176,7 @@ class PluginMeta(type):
 class Plugin(object):
     """Base class for all plugin type objects"""
     __metaclass__ = PluginMeta
-
-    @property
-    def __name__(self):
-        return 'EdPlugin'
+    __name__ = 'EdPlugin'
 
     def __new__(cls, pluginmgr):
         """Only one instance of each plugin is allowed to exist
@@ -194,7 +194,14 @@ class Plugin(object):
             self.pluginmgr = self
             return self
 
-        self = pluginmgr.GetPlugins().get(cls)
+        plugins = pluginmgr.GetPlugins()
+        self = plugins.get(cls)
+
+        # Check if it is a default plugin
+        if self is None:
+            defaults = pluginmgr.GetDefaultPlugins()
+            self = defaults.get(cls)
+
         if self is None:
             self = super(Plugin, cls).__new__(cls)
             self.pluginmgr = pluginmgr
@@ -275,48 +282,87 @@ class PluginData(object):
 
         """
         object.__init__(self)
+
+        # Attributes
         self._name = name
         self._description = descript
         self._author = author
         self._version = ver
 
-    def GetName(self):
-        """@return: Plugin's name string"""
-        return self._name
+        self._enabled = False
+        self._installed = True
 
-    def GetDescription(self):
-        """@return: Plugins description string"""
-        return self._description
+        self._inst = None
+        self._cls = None
+        self._distro = None
+
+    @property
+    def Distribution(self):
+        """Distrobution object"""
+        return self.GetDist()
+
+    @property
+    def Class(self):
+        """Class Reference"""
+        return self.GetClass()
+
+    def Enable(self, enable=True):
+        """Enable the plugin
+        @param enable: bool
+
+        """
+        self._enabled = enabled
 
     def GetAuthor(self):
         """@return: Author of the plugin"""
         return self._author
 
+    def GetClass(self):
+        """@return class object of the plugin"""
+        return self._cls
+
+    def GetDescription(self):
+        """@return: Plugins description string"""
+        return self._description
+
+    def GetDist(self):
+        """Return the dist object associated with this plugin
+        @return: Distribution
+
+        """
+        return self._distro
+
+    def GetInstance(self):
+        """Get the plugin instance
+        @return: Plugin
+
+        """
+        return self._inst
+
+    def GetName(self):
+        """@return: Plugin's name string"""
+        return self._name
+
     def GetVersion(self):
         """@return: Plugin's version string"""
         return self._version
 
-    def SetName(self, name):
-        """Sets the plugins name string
-        @param name: String to name plugin with
-        @postcondition: Plugins name string is set
+    @property
+    def Instance(self):
+        """Plugin Instance"""
+        return self.GetInstance()
+
+    def IsEnabled(self):
+        """Is the plugin enabled
+        @return: bool
 
         """
-        if not isinstance(name, basestring):
-            try:
-                name = str(name)
-            except (ValueError, TypeError):
-                name = u''
-        self._name = name
+        return self._enabled
 
-    def SetDescription(self, descript):
-        """@return: Plugins description string"""
-        if not isinstance(descript, basestring):
-            try:
-                descript = str(descript)
-            except (ValueError, TypeError):
-                descript = u''
-        self._description = descript
+    @property
+    def Module(self):
+        """Plugin Module Reference"""
+        return getattr(self.GetInstance(), '__module__', None)
 
     def SetAuthor(self, author):
         """Sets the author attribute
@@ -330,6 +376,49 @@ class PluginData(object):
             except (ValueError, TypeError):
                 author = u''
         self._author = author
+
+    def SetClass(self, cls):
+        """Set the class used to create this plugins instance
+        @param cls: class
+
+        """
+        self._cls = cls
+
+    def SetDescription(self, descript):
+        """@return: Plugins description string"""
+        if not isinstance(descript, basestring):
+            try:
+                descript = str(descript)
+            except (ValueError, TypeError):
+                descript = u''
+        self._description = descript
+
+    def SetDist(self, distro):
+        """Set the distribution object
+        @param dist: Distribution
+
+        """
+        self._distro = distro
+
+    def SetInstance(self, inst):
+        """Set the plugin instance
+        @param inst: Plugin instance
+
+        """
+        self._inst = inst
+
+    def SetName(self, name):
+        """Sets the plugins name string
+        @param name: String to name plugin with
+        @postcondition: Plugins name string is set
+
+        """
+        if not isinstance(name, basestring):
+            try:
+                name = str(name)
+            except (ValueError, TypeError):
+                name = u''
+        self._name = name
 
     def SetVersion(self, ver):
         """Sets the version attribute of the plugin.
@@ -372,16 +461,18 @@ class PluginManager(object):
         """
         object.__init__(self)
         self.LOG = wx.GetApp().GetLog()
+        self.RemoveUninstalled()
+
         self._config = self.LoadPluginConfig() # Enabled/Disabled Plugins
         self._pi_path = list(set([ed_glob.CONFIG['PLUGIN_DIR'], 
                                   ed_glob.CONFIG['SYS_PLUGIN_DIR']]))
         sys.path.extend(self._pi_path)
         self._env = self.CreateEnvironment(self._pi_path)
 
-        # TODO: combine all of these into single object
-        self._plugins = dict()      # Set of available plugins
+        # TODO: Combine enabled into pdata
+        self._pdata = dict()        # Plugin data
+        self._defaults = dict()     # Default plugins
         self._enabled = dict()      # Set of enabled plugins
-        self._distros = dict()      # Set of distrobution objects
         self._loaded = list()       # List of 
         self._obsolete = dict()     # Obsolete plugins list
 
@@ -397,7 +488,7 @@ class PluginManager(object):
         @param cobj: object to look for in loaded plugins
 
         """
-        return cobj in self._plugins
+        return cobj in [obj.GetClass() for obj in self._pdata]
 
     def __getitem__(self, cls):
         """Gets and returns the instance of given class if it has
@@ -416,8 +507,17 @@ class PluginManager(object):
         if not self._enabled[cls]:
             return None
 
-        plugin = self._plugins.get(cls)
-        if not plugin:
+#        plugin = self._plugins.get(cls)
+        plugin = None
+        pdata = self._pdata.get(cls, None)
+        if pdata is not None:
+            plugin = pdata.GetInstance()
+        else:
+            # Check defaults
+            plugin = self._defaults.get(cls, None)
+
+        # Plugin not instantiated yet
+        if plugin is None:
             if cls not in PluginMeta._plugins:
                 self.LOG("[pluginmgr][err] %s Not Registered" % cls.__name__)
             try:
@@ -425,6 +525,7 @@ class PluginManager(object):
             except (AttributeError, TypeError), msg:
                 self.LOG("[pluginmgr][err] Unable in initialize plugin")
                 self.LOG("[pluginmgr][err] %s" % str(msg))
+
         return plugin
 
     #---- End Private Members ----#
@@ -516,6 +617,13 @@ class PluginManager(object):
         self.RefreshConfig()
         return self._config
 
+    def GetDefaultPlugins(self):
+        """Get the loaded default plugins
+        @return: dict(cls=instance)
+
+        """
+        return self._defaults
+
     def GetEnvironment(self):
         """Returns the evironment that the plugin manager is currently
         running with.
@@ -538,7 +646,10 @@ class PluginManager(object):
         @rtype: dict
 
         """
-        return self._plugins
+        plugins = dict()
+        for pdata in self._pdata.values():
+            plugins[pdata.GetClass()] = pdata.GetInstance()
+        return plugins
 
     def GetPluginDistro(self, pname):
         """Get the distrobution object for a given plugin name
@@ -546,9 +657,9 @@ class PluginManager(object):
         @return: Distrobution
 
         """
-        for name, distro in self._distros.iteritems():
-            if pname.lower() == name.lower():
-                return distro
+        for pdata in self._pdata.values():
+            if pname.lower() == pdata.GetName().lower():
+                return pdata.GetDist()
         else:
             return None
 
@@ -557,7 +668,10 @@ class PluginManager(object):
         @return: dict(name=Distrobution)
 
         """
-        return self._distros
+        distros = dict()
+        for name, pdata in self._pdata:
+            distros[name] = pdata.GetDist()
+        return distros
 
     def InitPlugins(self, env):
         """Initializes the plugins that are contained in the given
@@ -598,13 +712,23 @@ class PluginManager(object):
                     try:
                         # Only initialize plugins that haven't already been
                         # initialized
-                        if cls not in self._plugins:
+                        if cls not in self._pdata:
                             self.LOG("[pluginmgr][info] Creating Instance of %s" % name)
                             instance = cls(self)
                             minv = CalcVersionValue(instance.GetMinVersion())
                             if minv <= editra_version:
-                                self._plugins[cls] = cls(self)
-                                self._distros[egg.project_name] = egg
+                                mod = instance.__module__
+                                desc = getattr(mod, '__doc__', _("No Description Available"))
+                                auth = getattr(mod, '__author__', _("Unknown"))
+                                pdata = PluginData(egg.project_name,
+                                                   desc.strip(),
+                                                   auth.strip(),
+                                                   egg.version)
+                                pdata.SetDist(egg)
+                                pdata.SetInstance(instance)
+                                pdata.SetClass(cls)
+                                self._pdata[cls] = pdata
+                                self.LOG("[pluginmgr][info] Cached Plugin: %s" % egg.project_name)
                             else:
                                 # Save plugins that are not compatible with
                                 # this version to use for notifications.
@@ -619,9 +743,9 @@ class PluginManager(object):
             obj = d_pi.split(".")
             mod = ".".join(obj[:-1])
             entry = __import__(mod, globals(), globals(), ['__name__'])
-            if hasattr(entry, obj[-1]):
+            if hasattr(entry, obj[-1]) and entry not in self._defaults:
                 entry = getattr(entry, obj[-1])
-                entry(self)
+                self._defaults[entry] = entry(self)
 
         return True
 
@@ -630,7 +754,7 @@ class PluginManager(object):
         @status: currently not implemented
 
         """
-        pass
+        raise NotImplementedError
         
     def LoadPluginConfig(self):
         """Loads the plugin config file for the current user if
@@ -669,7 +793,8 @@ class PluginManager(object):
                         exist any longer are removed from the config
 
         """
-        plugins = [ plugin.__module__ for plugin in self._plugins ]
+        plugins = [ plugin.GetInstance().__module__
+                    for plugin in self._pdata.values() ]
 
         config = dict()
         for item in self._config:
@@ -698,12 +823,37 @@ class PluginManager(object):
         self.RefreshConfig()
         self.UpdateConfig()
 
+    def RemoveUninstalled(self):
+        """Remove all uninstalled plugins
+        @todo: need error reporting and handling file permissions
+        @todo: handle multiple older versions that are installed
+        @todo: handle when installed in multiple locations
+
+        """
+        plist = Profile_Get('UNINSTALL_PLUGINS', default=list())
+        for path in list(plist):
+            try:
+                if os.path.isdir(path):
+                    shutil.rmtree(path)
+                else:
+                    os.remove(path)
+            except OSError:
+                # TODO: don't delete from list, so it can be kept to report
+                #       removal errors to user.
+                if not os.path.exists(path):
+                    plist.remove(path)
+                continue
+            else:
+                self.LOG("[pluginmgr][info] Uninstalled: %s" % path)
+                plist.remove(path)
+        Profile_Set('UNINSTALL_PLUGINS', plist)
+
     def UnloadPluginByName(self, name):
         """Unloads a named plugin.
         @status: currently not implemented
 
         """
-        pass
+        raise NotImplementedError
         
     def UpdateConfig(self):
         """Updates the in memory config data to recognize
@@ -713,11 +863,12 @@ class PluginManager(object):
                         on the configuration data.
 
         """
-        for plugin in self._plugins:
-            if self._config.get(self._plugins[plugin].__module__):
+        for pdata in self._pdata.values():
+            plugin = pdata.GetClass()
+            if self._config.get(plugin.__module__):
                 self._enabled[plugin] = True
             else:
-                self._config[self._plugins[plugin].__module__] = False
+                self._config[plugin.__module__] = False
                 self._enabled[plugin] = False
 
     def WritePluginConfig(self):
