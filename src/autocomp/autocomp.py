@@ -97,6 +97,8 @@ def GetAutoCompList(self, command):
     data = self.BaseGetAutoCompList(command)
     exdata = self.scomp.GetAutoCompList(command)
     data.extend(exdata)
+    data = list(set(data))
+    data.sort()
     return data
 
 class CompleterFactory(object):
