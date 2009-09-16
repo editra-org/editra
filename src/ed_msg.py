@@ -176,6 +176,13 @@ EDMSG_UI_STC_LEXER = EDMSG_UI_STC_ALL + ('lexer',)
 # msgdata == None
 EDMSG_UI_STC_CHANGED = EDMSG_UI_STC_ALL + ('changed',)
 
+# Customize Context Menu
+# Add custom menu items and handlers to the buffers right click menu
+# msgdata == dict(menu=wxMenu, handlers=[(menu_id, evt_handler), buff=EdStc])
+# Usage: append new items to menu, append id, handler tuple to handlers list
+# def handler(buffer)
+EDMSG_UI_STC_CONTEXT_MENU = EDMSG_UI_STC_ALL + ('custommenu',)
+
 #---- End UI Action Messages ----#
 
 #---- Menu Messages ----#
