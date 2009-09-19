@@ -139,6 +139,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         self.Bind(wx.stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
+        self.Bind(wx.stc.EVT_STC_USERLISTSELECTION, self.OnUserListSel)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
@@ -807,6 +808,15 @@ class EditraStc(ed_basestc.EditraBaseStc):
         # XXX: handle when column mode is enabled
         if self.VertEdit.Enabled:
             self.VertEdit.OnUpdateUI(evt)
+        evt.Skip()
+
+    def OnUserListSel(self, evt):
+        """Callback hook for userlist selections"""
+        mdata = dict(ltype=evt.GetListType(),
+                     text=evt.GetText(),
+                     stc=self)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_USERLIST_SEL, mdata,
+                           context=self.GetTopLevelParent().GetId())
         evt.Skip()
 
     def OnMarginClick(self, evt):

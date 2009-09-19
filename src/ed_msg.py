@@ -183,6 +183,10 @@ EDMSG_UI_STC_CHANGED = EDMSG_UI_STC_ALL + ('changed',)
 # def handler(buffer)
 EDMSG_UI_STC_CONTEXT_MENU = EDMSG_UI_STC_ALL + ('custommenu',)
 
+# UserList Selection
+# msgdata == dict(ltype=int, text=string, stc=EditraStc)
+EDMSG_UI_STC_USERLIST_SEL = EDMSG_UI_STC_ALL + ('userlistsel',)
+
 #---- End UI Action Messages ----#
 
 #---- Menu Messages ----#
