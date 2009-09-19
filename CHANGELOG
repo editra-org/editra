@@ -23,6 +23,7 @@ BUG FIXES:
 +Return unique sorted list of terms when using extended autocomp.
 +Fix some color issues when running under GTK.
 +Fix line number preference not being remembered on startup.
++Fix error in handling corrupted session files.
 
 #-----------------------------------------------------------------------------#
 
