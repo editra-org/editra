@@ -101,8 +101,13 @@ class SegmentBook(ctrlbox.ControlBox):
         self._use_pylist = False
 
         # Setup
-        bstyle = ctrlbox.CTRLBAR_STYLE_GRADIENT | \
-                 ctrlbox.CTRLBAR_STYLE_BORDER_BOTTOM
+        bstyle = ctrlbox.CTRLBAR_STYLE_BORDER_BOTTOM
+
+        # Disable gradient on GTK due to coloring issues and having
+        # to deal with various themes.
+        if wx.Platform != '__WXGTK__':
+            bstyle |= ctrlbox.CTRLBAR_STYLE_GRADIENT
+                 
         if style & SEGBOOK_STYLE_NO_DIVIDERS:
             bstyle |= ctrlbox.CTRLBAR_STYLE_NO_DIVIDERS
         if style & SEGBOOK_STYLE_LABELS:
