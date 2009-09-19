@@ -335,6 +335,7 @@ class EdPages(FNB.FlatNotebook):
 
         # Invalid file
         if f_handle is None:
+            self._ses_load = False
             return (_("Invalid File"), _("Session file doesn't exist."))
 
         # Load and validate file
@@ -346,15 +347,16 @@ class EdPages(FNB.FlatNotebook):
                 flist = flist.get('win1', list()) 
                 for item in flist:
                     if type(item) not in (unicode, str):
-                        raise TypeError('Invalid item in unpickled sequence')
-            except (cPickle.UnpicklingError, TypeError), e:
-                dlg.Destroy()
-                return (_('Invalid file'),
-                        _('Selected file is not a valid session file'))
+                        raise TypeError("Invalid item in unpickled sequence")
+            except (cPickle.UnpicklingError, TypeError, EOFError), e:
+                self._ses_load = False
+                return (_("Invalid file"),
+                        _("Selected file is not a valid session file"))
         finally:
             f_handle.close()
 
         if not len(flist):
+            self._ses_load = False
             return (_("Empty File"), _("Session file is empty."))
 
         # Close current files
@@ -374,6 +376,7 @@ class EdPages(FNB.FlatNotebook):
             rmsg = (_("Missing session files"),
                     _("Some files in saved session could not be found on disk:\n")+
                     u'\n'.join(missingfns))
+            self._ses_load = False
             return rmsg
 
         self._ses_load = False
