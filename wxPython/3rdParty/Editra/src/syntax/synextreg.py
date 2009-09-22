@@ -531,7 +531,7 @@ class ExtensionRegister(dict):
         """Like Associate but overrides any current settings instead of
         just adding to them.
         @param ftype: File type description string
-        @param ext: file extension to set
+        @param ext: space separated list of file extensions to set
 
         """
         self.__setitem__(ftype, list(set(ext.split())))
