@@ -95,7 +95,7 @@ class EdStatBar(ProgressStatusBar):
             super(EdStatBar, self).SetStatusText(txt, field)
             self.AdjustFieldWidths()
 
-            if field == ed_glob.SB_INFO:
+            if field == ed_glob.SB_INFO and txt != u'':
                 # Start the expiration countdown
                 if self._cleanup_timer.IsRunning():
                     self._cleanup_timer.Stop()

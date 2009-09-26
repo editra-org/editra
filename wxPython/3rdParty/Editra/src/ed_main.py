@@ -1471,6 +1471,16 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         return result
 
+    def PushStatusText(self, txt, field):
+        """Override so that our custom status bar's method gets called
+        do to these wxFrame methods not being exposed as virtuals.
+
+        """
+        sb = self.GetStatusBar()
+        sb.PushStatusText(txt, field)
+
+    SetStatusText = PushStatusText
+
     def SetTitle(self, title=u''):
         """Sets the windows title
         @param title: The text to tag on to the default frame title
