@@ -71,6 +71,16 @@ EDMSG_LOG_ERROR = EDMSG_LOG_INFO + ('err',)
 
 #---- End Log Messages ----#
 
+#---- Configuration Messages ----#
+
+# These messages will be sent when there are configuration
+# changes in the current user profile. Messages will be in
+# the format of (editra,config,PROFILE_KEY)
+# mdata == Profile[PROFILE_KEY]
+EDMSG_PROFILE_CHANGE = EDMSG_ALL + ('config',)
+
+#---- End Configuration Messages ----#
+
 #---- File Action Messages ----#
 
 # Recieve notification of all file actions
@@ -178,7 +188,8 @@ EDMSG_UI_STC_CHANGED = EDMSG_UI_STC_ALL + ('changed',)
 
 # Customize Context Menu
 # Add custom menu items and handlers to the buffers right click menu
-# msgdata == dict(menu=wxMenu, handlers=[(menu_id, evt_handler), buff=EdStc])
+# msgdata == dict(menu=wxMenu, handlers=[(menu_id, evt_handler(buff, evt))], 
+#                 buff=EdStc, position=int_buff_pos)
 # Usage: append new items to menu, append id, handler tuple to handlers list
 # def handler(buffer)
 EDMSG_UI_STC_CONTEXT_MENU = EDMSG_UI_STC_ALL + ('custommenu',)
