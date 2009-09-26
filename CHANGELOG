@@ -20,12 +20,14 @@ NEW: [features/improvements]
 +New api for plugins and other clients to customize buffer context menu.
 
 BUG FIXES:
++Fix crash that could occur when loading some binary data into buffer.
 +Return unique sorted list of terms when using extended autocomp.
 +Fix some color issues when running under GTK.
 +Fix line number preference not being remembered on startup.
 +Fix error in handling corrupted session files.
 +Fix bug in auto clearing of status text that would let timer to continue
  running unecessarly.
++Fix errors that could occur occasionly when setting status text.
 
 #-----------------------------------------------------------------------------#
 
