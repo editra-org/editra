@@ -100,7 +100,11 @@ class EdStatBar(ProgressStatusBar):
                 if self._cleanup_timer.IsRunning():
                     self._cleanup_timer.Stop()
                 self._cleanup_timer.Start(10000, True)
-        except wx.PyDeadObjectError:
+        except wx.PyDeadObjectError, wx.PyAssertionError:
+            # Getting some odd assertion errors on wxMac so just trap
+            # and ignore them for now
+            # glyphCount == (text.length()+1)" failed at graphics.cpp(2048)
+            # in GetPartialTextExtents()
             pass
         except TypeError, err:
             self._log("[estatbar][err] Bad status message: %s" % str(txt))

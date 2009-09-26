@@ -223,7 +223,10 @@ class ProgressStatusBar(wx.StatusBar):
             if self.tmp is None:
                 self.tmp = txt
         else:
-            super(ProgressStatusBar, self).SetStatusText(txt, number)
+            try:
+                super(ProgressStatusBar, self).SetStatusText(txt, number)
+            except wx.PyAssertionError:
+                pass
 
     # Alias for SetStatusText
     PushStatusText = SetStatusText
