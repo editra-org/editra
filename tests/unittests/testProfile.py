@@ -20,6 +20,7 @@ __revision__ = "$Revision$"
 import unittest
 
 # Module to test
+import ed_msg
 import profiler
 
 #-----------------------------------------------------------------------------#
@@ -28,11 +29,26 @@ class ProfileTest(unittest.TestCase):
     def setUp(self):
         # Create the singleton profile object
         self._profile = profiler.TheProfile
+        ed_msg.Subscribe(self.OnConfigMsg,
+                         ed_msg.EDMSG_PROFILE_CHANGE + ('test',))
 
     def tearDown(self):
-        pass
+        ed_msg.Unsubscribe(self.OnConfigMsg)
+
+    def OnConfigMsg(self, msg):
+        mtype = msg.GetType()
+        mdata = msg.GetData()
+        self.assertEquals(mtype[-1], 'test') 
+        self.assertEquals(mdata, "TEST VALUE")
 
     #---- Begin Test Cases ----#
+
+    def testConfigMessage(self):
+        """Test configuration message notifications
+        @see: OnConfigMsg
+
+        """
+        self._profile.Set('test', "TEST VALUE")
 
     def testIdentity(self):
         """Test that only one profile object can be created."""

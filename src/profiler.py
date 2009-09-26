@@ -34,6 +34,7 @@ import wx
 from ed_glob import CONFIG, PROG_NAME, VERSION, PRINT_BLACK_WHITE, EOL_MODE_LF
 import util
 import dev_tool
+import ed_msg
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -90,6 +91,9 @@ _DEFAULTS = {
            'SHOW_EOL'   : False,            # Show EOL markers
            'SHOW_LN'    : True,             # Show Line Numbers
            'SHOW_WS'    : False,            # Show whitespace markers
+           'SPELLCHECK' : dict(auto=False,
+                               dict='en_US',
+                               epath=None), # Spell checking preferences
            'STATBAR'    : True,             # Show Status Bar
            'SYNTAX'     : True,             # Use Syntax Highlighting
            'SYNTHEME'   : 'Default',        # Syntax Highlight color scheme
@@ -223,6 +227,9 @@ class Profile(dict):
             self.__setitem__(index, val)
         else:
             self.__setitem__(index, _FromObject(val, fmt))
+
+        # Notify all clients with the configuration change message
+        ed_msg.PostMessage(ed_msg.EDMSG_PROFILE_CHANGE + (index,), val) 
 
     def Write(self, path):
         """Write the dataset of this profile as a pickle
