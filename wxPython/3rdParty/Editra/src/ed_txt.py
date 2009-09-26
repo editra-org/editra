@@ -76,6 +76,8 @@ class EdFile(ebmlib.FileObjectImpl):
     about the file encoding and path.
 
     """
+    _Checker = ebmlib.FileTypeChecker()
+
     def __init__(self, path=u'', modtime=0):
         """Create the file wrapper object
         @keyword path: the absolute path to the file
@@ -91,6 +93,18 @@ class EdFile(ebmlib.FileObjectImpl):
         self._mcallback = list()
         self.__buffer = None
         self._raw = False           # Raw bytes?
+
+    def _HandleRawBytes(self, bytes):
+        """Handle preping raw bytes for return to the buffer
+        @param bytes: raw read bytes
+        @return: string
+
+        """
+        if self._magic['comment']:
+            self._magic['bad'] = True
+        # Return the raw bytes to put into the buffer
+        self._raw = True
+        return '\0'.join(bytes)+'\0'
 
     def _ResetBuffer(self):
         if self.__buffer is not None:
@@ -133,25 +147,28 @@ class EdFile(ebmlib.FileObjectImpl):
         bytes = self.__buffer.getvalue()
         ustr = u""
         try:
-            if self.bom is not None:
-                Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
-                bytes = bytes.replace(self.bom, '', 1)
+            if not EdFile._Checker.IsBinaryBytes(bytes):
+                if self.bom is not None:
+                    Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
+                    bytes = bytes.replace(self.bom, '', 1)
 
-            ustr = bytes.decode(self.encoding)
+                ustr = bytes.decode(self.encoding)
+            else:
+                # Binary data was read
+                Log("[ed_txt][info] Binary bytes where read")
+                ustr = self._HandleRawBytes(bytes)
         except UnicodeDecodeError, msg:
             Log("[ed_txt][err] Error while reading with %s" % self.encoding)
             Log("[ed_txt][err] %s" % unicode(msg))
             self.SetLastError(unicode(msg))
             self.Close()
-            if self._magic['comment']:
-                self._magic['bad'] = True
-            # Return the raw bytes to put into the buffer
-            ustr = '\0'.join(bytes)+'\0'
-            self._raw = True
+            # Decoding failed so convert to raw bytes for display
+            ustr = self._HandleRawBytes(bytes)
         else:
             # Log success
-            Log("[ed_txt][info] Decoded %s with %s" % \
-                (self.GetPath(), self.encoding))
+            if not self._raw:
+                Log("[ed_txt][info] Decoded %s with %s" % \
+                    (self.GetPath(), self.encoding))
 
         # Scintilla bug, SetText will quit at first null found in the
         # string. So join the raw bytes and stuff them in the buffer instead.
@@ -161,6 +178,13 @@ class EdFile(ebmlib.FileObjectImpl):
             # Return the raw bytes to put into the buffer
             ustr = '\0'.join(bytes)+'\0'
             self._raw = True
+
+        if self._raw:
+            # TODO: wx/Scintilla Bug?
+            # Replace \x05 with a space as it causes the buffer
+            # to crash when its inserted.
+            ustr = ustr.replace('\x05', ' ')
+            self.SetEncoding('binary')
 
         return ustr
 
@@ -288,6 +312,10 @@ class EdFile(ebmlib.FileObjectImpl):
         """
         return self._raw
 
+    def IsReadOnly(self):
+        """Return as read only when file is read only or if raw bytes"""
+        return super(EdFile, self).IsReadOnly() or self.IsRawBytes()
+
     def Read(self, chunk=512):
         """Get the contents of the file as a string, automatically handling
         any decoding that may be needed.
@@ -361,7 +389,6 @@ class EdFile(ebmlib.FileObjectImpl):
 #                    self.encoding = enc
 #                else:
 #                    raise UnicodeDecodeError, msg
-
             Log("[ed_txt][info] Decoded %s with %s" % (self.GetPath(), self.encoding))
             self.SetModTime(ebmlib.GetFileModTime(self.GetPath()))
         else:

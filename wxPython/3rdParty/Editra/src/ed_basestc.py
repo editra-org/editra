@@ -641,6 +641,17 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     GetRange = wx.stc.StyledTextCtrl.GetTextRange
 
+    def GetWordFromPosition(self, pos):
+        """Get the word at the given position
+        @param pos: int
+        @return: (string, int_start, int_end)
+
+        """
+        end = self.WordEndPosition(pos, True)
+        start = self.WordStartPosition(pos, True)
+        word = self.GetTextRange(start, end)
+        return (word, start, end)
+
     def IsColumnMode(self):
         """Is the buffer in column edit mode
         @return: bool
@@ -685,6 +696,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if txt is not None:
             if self.file.IsRawBytes() and not ebmlib.IsUnicode(txt):
                 self.AddStyledText(txt)
+                self.SetReadOnly(True) # Dont allow editing of raw bytes
             else:
                 self.SetText(txt)
         else:
