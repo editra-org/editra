@@ -44,6 +44,17 @@ class FileTypeCheckerTest(unittest.TestCase):
         self.assertTrue(self.checker.IsBinary(self.bpath))
         self.assertFalse(self.checker.IsBinary(self.fpath))
 
+    def testIsBinaryBytes(self):
+        """Test checking for binary bytes in a string"""
+        f = open(self.bpath, 'rb')
+        bytes = f.read()
+        f.close()
+        self.assertTrue(self.checker.IsBinaryBytes(bytes))
+        f = open(self.fpath, 'rb')
+        bytes = f.read()
+        f.close()
+        self.assertFalse(self.checker.IsBinaryBytes(bytes))
+
     def testIsReadableText(self):
         """Test if the file is a readable as text."""
         self.assertTrue(self.checker.IsReadableText(self.fpath))
