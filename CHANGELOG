@@ -24,6 +24,8 @@ BUG FIXES:
 +Fix some color issues when running under GTK.
 +Fix line number preference not being remembered on startup.
 +Fix error in handling corrupted session files.
++Fix bug in auto clearing of status text that would let timer to continue
+ running unecessarly.
 
 #-----------------------------------------------------------------------------#
 
