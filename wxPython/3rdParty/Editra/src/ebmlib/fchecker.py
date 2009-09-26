@@ -63,11 +63,18 @@ class FileTypeChecker(object):
         if handle is not None:
             bytes = handle.read(self._preread)
             handle.close()
-            nontext = bytes.translate(FileTypeChecker.ALLBYTES,
-                                      FileTypeChecker.TXTCHARS)
-            return bool(nontext)
+            return self.IsBinaryBytes(bytes)
         else:
             return False
+
+    def IsBinaryBytes(self, bytes):
+        """Check if the given string is composed of binary bytes
+        @param bytes: string
+
+        """
+        nontext = bytes.translate(FileTypeChecker.ALLBYTES,
+                                  FileTypeChecker.TXTCHARS)
+        return bool(nontext)
 
     def IsReadableText(self, fname):
         """Is the given path readable as text. Will return True if the
