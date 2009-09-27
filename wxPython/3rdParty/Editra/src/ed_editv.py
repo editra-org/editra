@@ -50,6 +50,7 @@ def modalcheck(func):
 
     """
     def WrapModal(*args, **kwargs):
+        """Wrapper method to guard against multiple dialogs being shown"""
         self = args[0]
         self._has_dlg = True
         func(*args, **kwargs)
@@ -127,7 +128,6 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
 
         # Allow clients to customize the context menu
-        cid = self.GetTopLevelParent().GetId()
         self._mdata['menu'] = menu
         self._mdata['handlers'] = list()
         self._mdata['position'] = self.PositionFromPoint(self.ScreenToClient(pos))
@@ -145,7 +145,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             item = menu.Insert(0, EdEditorView.ID_NO_SUGGEST, _("No Suggestions"))
             item.Enable(False)
         else:
-            sugg = reversed(sugg[:min(len(sugg),3)])
+            sugg = reversed(sugg[:min(len(sugg), 3)])
             ids = (ID_SPELL_1, ID_SPELL_2, ID_SPELL_3)
             del self._spell_data['choices']
             self._spell_data['choices'] = list()
@@ -331,12 +331,12 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             if path is not None:
                 SetClipboardText(path)
         elif e_id == ed_glob.ID_MOVE_TAB:
-            t = self.GetTopLevelParent()
             frame = wx.GetApp().OpenNewWindow()
-            nb = frame.GetNotebook()
+            nbook = frame.GetNotebook()
             parent = self.GetParent()
             pg_txt = parent.GetRawPageText(parent.GetSelection())
-            nb.OpenDocPointer(self.GetDocPointer(), self.GetDocument(), pg_txt)
+            nbook.OpenDocPointer(self.GetDocPointer(),
+                                 self.GetDocument(), pg_txt)
             self._ignore_del = True
             wx.CallAfter(parent.ClosePage)
         elif wx.Platform == '__WXGTK__' and \
