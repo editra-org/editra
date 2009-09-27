@@ -222,6 +222,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         """Reload the current file"""
         ret, rmsg = self.ReloadFile()
         if not ret:
+            cfile = self.GetFileName()
             errmap = dict(filename=cfile, errmsg=rmsg)
             mdlg = wx.MessageDialog(self,
                                     _("Failed to reload %(filename)s:\n"
