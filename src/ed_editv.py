@@ -33,7 +33,14 @@ from profiler import Profile_Get
 from util import Log, SetClipboardText
 from ebmlib import GetFileModTime
 
+# External libs
+from extern.stcspellcheck import STCSpellCheck
+
 #--------------------------------------------------------------------------#
+
+ID_SPELL_1 = wx.NewId()
+ID_SPELL_2 = wx.NewId()
+ID_SPELL_3 = wx.NewId()
 
 _ = wx.GetTranslation
 
@@ -56,6 +63,7 @@ def modalcheck(func):
 
 class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     """Tab editor view for main notebook control."""
+    ID_NO_SUGGEST = wx.NewId()
     DOCMGR = DocPositionMgr()
     RCLICK_MENU = None
 
@@ -69,12 +77,22 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         self._ignore_del = False
         self._has_dlg = False
         self._mdata = dict(menu=None, handlers=list(), buff=self)
+        self._lprio = 0     # Idle event priority counter
+        self._spell = STCSpellCheck(self, check_region=self.IsNonCode)
+        spref = Profile_Get('SPELLCHECK', default=dict())
+        self._spell_data = dict(choices=list(),
+                                word=('', -1, -1),
+                                enabled=spref.get('auto', False))
 
         # Initialize the classes position manager for the first control
         # that is created only.
         if not EdEditorView.DOCMGR.IsInitialized():
             EdEditorView.DOCMGR.InitPositionCache(ed_glob.CONFIG['CACHE_DIR'] + \
                                                   os.sep + u'positions')
+
+        self._spell.clearAll()
+        self._spell.setDefaultLanguage(spref.get('dict', 'en_US'))
+        self._spell.startIdleProcessing()
 
         # Context Menu Events
         self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
@@ -83,8 +101,18 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         # window to be handled on gtk. Other platforms don't require this.
         self.Bind(wx.EVT_MENU, self.OnMenuEvent)
 
-    def _MakeMenu(self):
-        """Make the buffers context menu"""
+        ed_msg.Subscribe(self.OnConfigMsg,
+                         ed_msg.EDMSG_PROFILE_CHANGE + ('SPELLCHECK',))
+
+    def __del__(self):
+        ed_msg.Unsubscribe(self.OnConfigMsg)
+        super(EdEditorView, self).__del__()
+
+    def _MakeMenu(self, pos):
+        """Make the buffers context menu,
+        @param pos: mouse click position
+
+        """
         menu = ed_menu.EdMenu()
         menu.Append(ed_glob.ID_UNDO, _("Undo"))
         menu.Append(ed_glob.ID_REDO, _("Redo"))
@@ -102,9 +130,30 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         cid = self.GetTopLevelParent().GetId()
         self._mdata['menu'] = menu
         self._mdata['handlers'] = list()
+        self._mdata['position'] = self.PositionFromPoint(self.ScreenToClient(pos))
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CONTEXT_MENU,
                            self._mdata,
                            self.GetId())
+
+        # Spell checking
+        # TODO: de-couple to the forthcoming buffer service interface
+        menu.InsertSeparator(0)
+        words = self.GetWordFromPosition(self._mdata['position'])
+        self._spell_data['word'] = words
+        sugg = self._spell.getSuggestions(words[0])
+        if not len(sugg):
+            item = menu.Insert(0, EdEditorView.ID_NO_SUGGEST, _("No Suggestions"))
+            item.Enable(False)
+        else:
+            sugg = reversed(sugg[:min(len(sugg),3)])
+            ids = (ID_SPELL_1, ID_SPELL_2, ID_SPELL_3)
+            del self._spell_data['choices']
+            self._spell_data['choices'] = list()
+            for idx, sug in enumerate(sugg):
+                id_ = ids[idx] 
+                self._mdata['handlers'].append((id_, self.OnSpelling))
+                self._spell_data['choices'].append((id_, sug))
+                menu.Insert(0, id_, sug)
 
         return menu
 
@@ -157,6 +206,16 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         else:
             pass
+
+        # Handle Low(er) priority idle events
+        self._lprio += 1
+        if self._lprio == 2:
+            self._lprio = 0 # Reset counter
+            # Do spell checking
+            # TODO: Add generic subscriber hook and move spell checking and
+            #       and other low priority idle handling there
+            if self._spell_data['enabled']:
+                self._spell.processIdleBlock()
 
     @modalcheck
     def DoReloadFile(self):
@@ -245,6 +304,24 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         return result
 
+    def OnSpelling(self, buff, evt):
+        """Context menu subscriber callback
+        @param buff: buffer menu event happened in
+        @param evt: MenuEvent
+
+        """
+        e_id = evt.GetId()
+        replace = None
+        for choice in self._spell_data['choices']:
+            if e_id == choice[0]:
+                replace = choice[1]
+                break
+
+        if replace is not None:
+            buff.SetTargetStart(self._spell_data['word'][1])
+            buff.SetTargetEnd(self._spell_data['word'][2])
+            buff.ReplaceTarget(replace)
+
     def OnTabMenu(self, evt):
         """Tab menu event handler"""
         e_id = evt.GetId()
@@ -271,13 +348,31 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     #---- End EdTab Methods ----#
 
+    def IsNonCode(self, pos):
+        """Is the passed in position in a non code region
+        @param pos: buffer position
+        @return: bool
+
+        """
+        return self.IsComment(pos) or self.IsString(pos)
+
+    def OnConfigMsg(self, msg):
+        """Update config based on profile changes"""
+        mtype = msg.GetType()
+        mdata = msg.GetData()
+        if mtype[-1] == 'SPELLCHECK':
+            self._spell_data['enabled'] = mdata.get('auto', False)
+            self._spell.setDefaultLanguage(mdata.get('dict', 'en_US'))
+            if not self._spell_data['enabled']:
+                self._spell.clearAll()
+
     def OnContextMenu(self, evt):
         """Handle right click menu events in the buffer"""
         if EdEditorView.RCLICK_MENU is not None:
             EdEditorView.RCLICK_MENU.Destroy()
             EdEditorView.RCLICK_MENU = None
 
-        EdEditorView.RCLICK_MENU = self._MakeMenu()
+        EdEditorView.RCLICK_MENU = self._MakeMenu(evt.GetPosition())
         self.PopupMenu(EdEditorView.RCLICK_MENU)
         evt.Skip()
 
@@ -292,7 +387,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         # Handle custom menu items
         if handler is not None:
-            handler(self)
+            handler(self, evt)
         else:
             # Need to relay to tlw on gtk for it to get handled, other
             # platforms do not require this.
@@ -300,6 +395,20 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                 wx.PostEvent(self.GetTopLevelParent(), evt)
             else:
                 evt.Skip()
+
+    def OnModified(self, evt):
+        """Overrides EditraBaseStc.OnModified"""
+        super(EdEditorView, self).OnModified(evt)
+
+        # Handle word changes to update spell checking
+        # TODO: limit via preferences and move to buffer service once
+        #       implemented.
+        mod = evt.GetModificationType() 
+        if mod & wx.stc.STC_MOD_INSERTTEXT or mod & wx.stc.STC_MOD_DELETETEXT: 
+            pos = evt.GetPosition() 
+            last = pos + evt.GetLength() 
+            self._spell.addDirtyRange(pos, last, evt.GetLinesAdded(),
+                                      mod & wx.stc.STC_MOD_DELETETEXT) 
 
     @modalcheck
     def PromptToReSave(self, cfile):
@@ -340,5 +449,14 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             self.DoReloadFile()
         else:
             self.SetModTime(GetFileModTime(cfile))
+
+    def SetLexer(self, lexer):
+        """Override to toggle spell check context"""
+        super(EdEditorView, self).SetLexer(lexer)
+
+        if lexer == wx.stc.STC_LEX_NULL:
+            self._spell.setCheckRegion(lambda p: True)
+        else:
+            self._spell.setCheckRegion(self.IsNonCode)
 
 #-----------------------------------------------------------------------------#

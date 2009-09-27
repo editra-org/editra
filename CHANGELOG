@@ -16,8 +16,12 @@ DATE xx/xx/2009
 NEWS:
 
 NEW: [features/improvements]
++Spell checking support (requires enchant)
 +Plugins can now be uninstalled through plugin manager.
+
+LIBRARY:
 +New api for plugins and other clients to customize buffer context menu.
++New profile api's for registering for notifications of profile changes.
 
 BUG FIXES:
 +Fix crash that could occur when loading some binary data into buffer.
@@ -26,8 +30,8 @@ BUG FIXES:
 +Fix line number preference not being remembered on startup.
 +Fix error in handling corrupted session files.
 +Fix bug in auto clearing of status text that would let timer to continue
- running unecessarly.
-+Fix errors that could occur occasionly when setting status text.
+ running unnecessarily.
++Fix errors that could occur occasionally when setting status text.
 
 #-----------------------------------------------------------------------------#
 
@@ -59,7 +63,7 @@ DATE 08/20/2009
 NEWS:
 
 This release contains a large number of important bug fixes. Due to various
-outside issues that have limited my development time the last few monthes I have
+outside issues that have limited my development time the last few months I have
 decided to change the focus to bug fixes for this release and most of the 
 features I had slated for 0.5 have been pushed back to the later 0.5 series 
 releases in order focus on stability for 0.5.
@@ -105,7 +109,7 @@ Had planned to wait till 0.5 was ready before doing another release but there
 have been too many good enhancements added due to all the great patches submitted
 during this cycle to wait for the last push to 0.5 to complete before releasing.
 
-Some of the main new features include buffer syncronziation with the codebrowser
+Some of the main new features include buffer synchronization with the codebrowser
 plugin, completely re-worked vi emulation support, position history, and
 clipboard ring. See below for more detailed list of changes.
 
@@ -124,14 +128,14 @@ between them.
 +Support XText in Codebrowser (patch from Igor Dejanovic).
 +Complete re-write of vi emulation support (patch from Hasan Aljudy)
 +Add option to start in Normal mode by default when using vi emulation (patch from Hasan Aljudy).
-+Codebrowser syncronizes with caret position. (patch from Igor Dejanovic)
++Codebrowser synchronizes with caret position. (patch from Igor Dejanovic)
 +Find dialog remembers last position throughout session.
 +Add support for the Cobra programming language.
 +Support opening files by a uri.
 +Add Croatian translation, updated (Brazilian, French, and Russian).
 
 BUG FIXES:
-+Fix python autocomp from failing when word was next to a boundry character.
++Fix python autocomp from failing when word was next to a boundary character.
 +Don't do a replace when there is no selection.
 +Fix number of minor bugs related to finding accented characters.
 +Fix bug in batch file comment command, ensure a space is between 'rem' and the comment text.
@@ -140,7 +144,7 @@ preferences dialog after closing the last main window.
 +Fix regression in html autocomp where cursor position would be incorrectly
 placed after the inserted tag.
 +Fix Launch not updating after a Save As on Linux.
-+Fix unicode handling error in session file saving.
++Fix Unicode handling error in session file saving.
 +Fix Editra Style Sheet output from Style Editor to be in sorted order.
 +Fix improper highlighting in django and mako templates due to improper handling
 of Windows eol characters.
@@ -182,7 +186,7 @@ Please also note that if you are using the Projects plugin that you wil also
 need to update it to the newly released 1.0 version due to some api changes that
 make 0.9 incompatible with 1.0.
 
-NEW: [features/improvments]
+NEW: [features/improvements]
 +Greatly improved performance of loading large files.
 +Add Count feature to find dialog for counting number of matches in a buffer.
 +Add Vim find char motions (patch from hasan.aljudy).
@@ -230,11 +234,11 @@ File session support has also been improved to allow for saving and loading of
 multiple custom sessions. Due to format changes the upgrade will require any
 session from previous installations to be overwritten.
 
-NEW: [features/enhancments]
+NEW: [features/enhancements]
 +New Plugin Manager Dialog.
 +Improved configuration options for plugins.
 +Incompatible plugins are now displayed in PluginManager with message explaining why.
-+Some basic autocompletion support for CSS.
++Some basic auto-completion support for CSS.
 +Improved support for sessions. Multiple custom sessions can not be saved and
 reloaded (modified code from Erik Tollerud).
 +Add shortcut for LineDelete to delete line without modifying clipboard.
@@ -245,7 +249,7 @@ BUG FIXES:
 +Fix incorrect page count shown in print previews.
 +Remember print settings throughout session and for every frame.
 +Fix error when doing Copy Path from tab right click menu.
-+Fix incorrectly showing autocompletion options under some cases in php files.
++Fix incorrectly showing auto-completion options under some cases in php files.
 +Fix condition where window could be placed at (0, 0) on OSX which causes the
  frame to be placed behind the menubar.
 +Fix improper detection of when to auto-unindent in Python files.
@@ -256,7 +260,7 @@ in the indentation space of a line.
 on Linux.
 +Fix error that could occur while trying to save filehistory on exit.
 +Fix toolbar not resizing properly when changing icon size on osx.
-+Fix error in highlighing of DTD.
++Fix error in highlighting of DTD.
 +Fix titlebar showing incorrect text for untitled files.
 
 #-----------------------------------------------------------------------------#
@@ -267,11 +271,11 @@ DATE 02/20/2009
 
 NEWS:
 This release contains a large number of bug fixes and improvements. Most notably
-there has been a fair amount of work done on the autocompletions support. All
+there has been a fair amount of work done on the auto-completions support. All
 file types now have support for some basic word completion help. HTML and XML
 now have support for smart input assistance and completion tips.
 
-NEW: [features/improvments]
+NEW: [features/improvements]
 +Add autocompletion support for HTML/XML documents.
 +Instantly start searching for selected text (Win/Lin Ctrl+F3, OSX Cmd+3)
 +Launch adds support for OCaml (patch from quode),
@@ -334,7 +338,7 @@ NEW: [features/improvements]
 +New version of Launch with support for R.
 
 BUG FIXES:
-+Fix find options not properly being syncronized between dialog and find bar.
++Fix find options not properly being synchronized between dialog and find bar.
 +Fix event handlers not properly getting connected when going from 2 -> 1 open windows.
 +Fix eol mode settings in preferences.
 +Fix search bar text not being colored properly on msw/gtk.
