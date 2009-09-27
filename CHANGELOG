@@ -32,6 +32,7 @@ BUG FIXES:
 +Fix bug in auto clearing of status text that would let timer to continue
  running unnecessarily.
 +Fix errors that could occur occasionally when setting status text.
++Fix bug in error reporting when file reload fails.
 
 #-----------------------------------------------------------------------------#
 
