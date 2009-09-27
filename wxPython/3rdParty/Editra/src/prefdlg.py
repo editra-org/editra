@@ -539,8 +539,8 @@ class GeneralFilePanel(wx.Panel):
         dlbl = wx.StaticText(self, label=_("Dictionary") + u":")
         sdh_sz.AddMany([(dlbl, 0, wx.ALIGN_CENTER_VERTICAL),
                          ((5, 5), 0),
-                         (dict_ch, 0, wx.ALIGN_CENTER_VERTICAL)])
-        sboxsz.AddMany([(auto_cb, 0), ((5,5),0), (sdh_sz, 0)])
+                         (dict_ch, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)])
+        sboxsz.AddMany([(auto_cb, 0), ((5,5),0), (sdh_sz, 0, wx.EXPAND)])
 
         if not stcspellcheck.STCSpellCheck.isEnchantOk():
             for ctrl in (auto_cb, dict_ch, dlbl):
