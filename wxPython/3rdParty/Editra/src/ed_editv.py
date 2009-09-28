@@ -215,7 +215,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             # TODO: Add generic subscriber hook and move spell checking and
             #       and other low priority idle handling there
             if self._spell_data['enabled']:
-                self._spell.processIdleBlock()
+                self._spell.processCurrentlyVisibleBlock()
 
     @modalcheck
     def DoReloadFile(self):

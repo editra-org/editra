@@ -127,12 +127,13 @@ class STCSpellCheck(object):
         else:
             self._spell_check_region = lambda s: True
         self._spelling_debug = False
-        self.dirty_range_count_per_idle = 5
-
+        
         self._spelling_last_idle_line = -1
+        self.dirty_range_count_per_idle = 5
+        
         self._no_update = False
         self._last_block = -1
-
+        
         self.clearDirtyRanges()
 
     def setIndicator(self, indicator=None, color=None, style=None):
@@ -305,12 +306,11 @@ class STCSpellCheck(object):
         
         # Remove any old spelling indicators
         mask = self._spelling_indicator_mask
-        count = end - start 
-        if count <= 0: 
-            if self._spelling_debug: 
-                print("No need to check range: start=%d end=%d count=%d" % (start, end, count)) 
-            return 
-
+        count = end - start
+        if count <= 0:
+            if self._spelling_debug:
+                print("No need to check range: start=%d end=%d count=%d" % (start, end, count))
+            return
         self.stc.StartStyling(start, mask)
         self.stc.SetStyling(count, 0)
         
@@ -426,7 +426,7 @@ class STCSpellCheck(object):
         """Process a block of lines during idle time.
         
         This method is designed to be called during idle processing and will
-        spell checks a small number of lines.  The next idle processing event
+        spell check a small number of lines.  The next idle processing event
         will continue from where the previous call left off, and in this way
         over some number of idle events will spell check the entire document.
         
@@ -434,6 +434,28 @@ class STCSpellCheck(object):
         further calls to this method will immediately return.  Calling
         L{startIdleProcessing} will cause the idle processing to start
         checking from the beginning of the document.
+        """
+        self.processDirtyRanges()
+        if self._spelling_last_idle_line < 0:
+            return
+        if self._spelling_debug:
+            print("Idle processing page starting at line %d" % self._spelling_last_idle_line)
+        self.checkLines(self._spelling_last_idle_line)
+        self._spelling_last_idle_line += self.stc.LinesOnScreen()
+        if self._spelling_last_idle_line > self.stc.GetLineCount():
+            self._spelling_last_idle_line = -1
+            return False
+        return True
+
+    def processCurrentlyVisibleBlock(self):
+        """Alternate method to check lines during idle time.
+        
+        This method is designed to be called during idle processing and will
+        spell check the currently visible block of lines.  Once the visible
+        block has been checked, repeatedly calling this method will have
+        no effect until the line position changes (or in the less frequent
+        occurrence when the number of lines on screen changes by resizing
+        the window).
         """
         self.processDirtyRanges()
 
@@ -515,10 +537,11 @@ class STCSpellCheck(object):
             self.current_word_end += count
         elif start <= self.current_word_end:
             self.current_word_end += count
-            # Prevent nonsensical word end if lots of text have been deleted 
-            if self.current_word_end < self.current_word_start: 
-                self.current_word_end = self.current_word_start 
-
+            # Prevent nonsensical word end if lots of text have been deleted
+            if self.current_word_end < self.current_word_start:
+                #print("word start = %d, word end = %d" % (self.current_word_start, self.current_word_end))
+                self.current_word_end = self.current_word_start
+            
         if lines_added > 0:
             start = self.current_dirty_start
             line = self.stc.LineFromPosition(start)
