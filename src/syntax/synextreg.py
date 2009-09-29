@@ -102,6 +102,8 @@ ID_LANG_PIKE = _NewId()
 LANG_PIKE = u'Pike'
 ID_LANG_SQUIRREL = _NewId()
 LANG_SQUIRREL = u'Squirrel'
+ID_LANG_STATA = _NewId()
+LANG_STATA = u'Stata'
 ID_LANG_VALA = _NewId()
 LANG_VALA = u'Vala'
 
@@ -281,10 +283,8 @@ ID_LANG_R = _NewId()
 LANG_R = u'R'
 ID_LANG_S = _NewId()
 LANG_S = u'S'
-
 ID_LANG_GROOVY = _NewId()
 LANG_GROOVY = u'Groovy'
-
 ID_LANG_XTEXT = _NewId()
 LANG_XTEXT = u'Xtext'
 
@@ -353,7 +353,8 @@ EXT_MAP = {
            'ini inf reg url cfg cnf' : LANG_PROPS,
            'ai ps'              : LANG_PS,
            'py pyw python'      : LANG_PYTHON,
-           'r'                  : LANG_R,        
+           'r'                  : LANG_R,
+           'do ado'             : LANG_STATA,
            'rake rb rbw rbx gemspec' : LANG_RUBY,
            's'                  : LANG_S,
            'scm smd ss'         : LANG_SCHEME,

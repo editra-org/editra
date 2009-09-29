@@ -519,6 +519,17 @@ class KornHandler(FileTypeHandler):
 
 #-----------------------------------------------------------------------------#
 
+class STATAHandler(FileTypeHandler):
+    """FileTypeHandler for Stata"""
+    def __init__(self):
+        FileTypeHandler.__init__(self)
+        self.commands = dict(stata='stata', xstata='xstata')
+        self.default = 'stata'
+
+    __name__ = 'Stata'
+
+#-----------------------------------------------------------------------------#
+
 class LatexHandler(FileTypeHandler):
     """FileTypeHandler for LaTex"""
     def __init__(self):
@@ -905,6 +916,7 @@ HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_HTML    : HTMLHandler(),
             synglob.ID_LANG_INNO    : InnoSetupHandler(),
             synglob.ID_LANG_LATEX   : LatexHandler(),
+            synglob.ID_LANG_STATA   : STATAHandler(),
             synglob.ID_LANG_LUA     : LuaHandler(),
             synglob.ID_LANG_NEWLISP : NewLispHandler(),
             synglob.ID_LANG_NSIS    : NSISHandler(),
