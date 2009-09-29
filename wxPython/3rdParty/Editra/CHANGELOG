@@ -18,6 +18,7 @@ NEWS:
 NEW: [features/improvements]
 +Spell checking support (requires enchant)
 +Plugins can now be uninstalled through plugin manager.
++Add support for STATA (patch from Jean Eid).
 
 LIBRARY:
 +New api for plugins and other clients to customize buffer context menu.
