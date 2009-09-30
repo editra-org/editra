@@ -20,8 +20,8 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Local Imports
 import synglob
-import html
-from cpp import AutoIndenter
+import _html
+from _cpp import AutoIndenter
 
 #-----------------------------------------------------------------------------#
 
@@ -384,7 +384,7 @@ PHP_FUNC = ("__construct __autoload __destruct __get __set __isset __unset "
             "mcrypt_module_get_algo_block_size imagepsslantfont count ")
 
 # HTML Keywords
-HTML_KEYWORDS = html.Keywords()
+HTML_KEYWORDS = _html.Keywords()
 
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [ ('STC_HPHP_DEFAULT', 'default_style'),
@@ -424,7 +424,7 @@ def SyntaxSpec(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_PHP:
-        return html.SYNTAX_ITEMS + SYNTAX_ITEMS
+        return _html.SYNTAX_ITEMS + SYNTAX_ITEMS
     else:
         return list()
 
@@ -434,7 +434,7 @@ def Properties(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_PHP:
-        return [html.FOLD, html.FLD_HTML]
+        return [_html.FOLD, _html.FLD_HTML]
     else:
         return list()
 

@@ -21,7 +21,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Local Imports
 import synglob
-from css import AutoIndenter
+from _css import AutoIndenter
 
 #-----------------------------------------------------------------------------#
 

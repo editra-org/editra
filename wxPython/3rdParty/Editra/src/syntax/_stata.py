@@ -21,7 +21,7 @@ import re
 
 # Local imports
 import synglob
-from cpp import AutoIndenter
+from _cpp import AutoIndenter
 
 #-----------------------------------------------------------------------------#
 

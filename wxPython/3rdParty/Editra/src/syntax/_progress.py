@@ -18,7 +18,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Imports
 import synglob
-import sql
+import _sql
 
 #-----------------------------------------------------------------------------#
 
@@ -249,7 +249,7 @@ def SyntaxSpec(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_4GL:
-        return sql.SYNTAX_ITEMS
+        return _sql.SYNTAX_ITEMS
     else:
         return list()
 
@@ -259,7 +259,7 @@ def Properties(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_4GL:
-        return [sql.FOLD,]
+        return [_sql.FOLD,]
     else:
         return list()
 
