@@ -77,7 +77,7 @@ CF_TAGS = ("cfabort cfapplet cfapplication cfargument cfassociate cfbreak "
            "cftry cfupdate cfwddx cfxml")
 
 # JavaScript Keywords (see javascript.py)
-JS_KEYWORDS = (1, javascript.KeywordString(synglob.ID_LANG_JS))
+JS_KEYWORDS = (1, _javascript.KeywordString(synglob.ID_LANG_JS))
 
 # VBScript Keywords (currently unsupported)
 VBS_KEYWORDS = (2, "")
