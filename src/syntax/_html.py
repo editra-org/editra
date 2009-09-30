@@ -23,6 +23,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import synglob
 
+import _javascript
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Specifications ----#
@@ -76,7 +77,6 @@ CF_TAGS = ("cfabort cfapplet cfapplication cfargument cfassociate cfbreak "
            "cftry cfupdate cfwddx cfxml")
 
 # JavaScript Keywords (see javascript.py)
-import javascript
 JS_KEYWORDS = (1, javascript.KeywordString(synglob.ID_LANG_JS))
 
 # VBScript Keywords (currently unsupported)
@@ -187,7 +187,7 @@ def SyntaxSpec(lang_id=0):
     @param lang_id: used for selecting a specific subset of syntax specs
 
     """
-    return SYNTAX_ITEMS + javascript.SYNTAX_ITEMS
+    return SYNTAX_ITEMS + _javascript.SYNTAX_ITEMS
 
 def Properties(lang_id=0):
     """Returns a list of Extra Properties to set

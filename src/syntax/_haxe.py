@@ -18,7 +18,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Local Imports
 import synglob
-import cpp
+import _cpp
 
 #-----------------------------------------------------------------------------#
 
@@ -48,7 +48,7 @@ def Keywords(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_HAXE:
-        return [HAXE_KW, HAXE_TYPES, cpp.DOC_KEYWORDS]
+        return [HAXE_KW, HAXE_TYPES, _cpp.DOC_KEYWORDS]
     else:
         return list()
 
@@ -58,7 +58,7 @@ def SyntaxSpec(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_HAXE:
-        return cpp.SYNTAX_ITEMS
+        return _cpp.SYNTAX_ITEMS
     else:
         return list()
 
@@ -68,7 +68,7 @@ def Properties(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_HAXE:
-        return [cpp.FOLD,]
+        return [_cpp.FOLD,]
     else:
         return list()
 
@@ -84,7 +84,7 @@ def CommentPattern(lang_id=0):
 
 #---- End Required Module Functions ----#
 
-AutoIndenter = cpp.AutoIndenter
+AutoIndenter = _cpp.AutoIndenter
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString():

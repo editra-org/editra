@@ -20,7 +20,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Local Imports
 import synglob
-from cpp import AutoIndenter
+from _cpp import AutoIndenter
 
 #-----------------------------------------------------------------------------#
 

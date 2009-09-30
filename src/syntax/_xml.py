@@ -21,6 +21,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Dependencies
 import synglob
+import _html
 
 #-----------------------------------------------------------------------------#
 
@@ -31,11 +32,10 @@ XML_KEYWORDS = ("rss atom pubDate channel version title link description "
                 "language generator item")
 
 # SGML Keywords
-import html
-SGML_KEYWORDS = html.KeywordString(synglob.ID_LANG_SGML)
+SGML_KEYWORDS = _html.KeywordString(synglob.ID_LANG_SGML)
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = html.SYNTAX_ITEMS
+SYNTAX_ITEMS = _html.SYNTAX_ITEMS
 
 #---- Extra Properties ----#
 # See html.py
@@ -61,7 +61,7 @@ def Properties(lang_id=0):
     @param lang_id: used to select a specific set of properties
 
     """
-    return [html.FOLD, html.FLD_HTML]
+    return [_html.FOLD, _html.FLD_HTML]
 
 def CommentPattern(lang_id=0):
     """Returns a list of characters used to comment a block of code

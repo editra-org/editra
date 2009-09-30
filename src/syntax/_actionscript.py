@@ -20,7 +20,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Local Imports
 import synglob
-import cpp
+import _cpp
 
 #-----------------------------------------------------------------------------#
 
@@ -73,7 +73,7 @@ def SyntaxSpec(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_AS:
-        return cpp.SYNTAX_ITEMS
+        return _cpp.SYNTAX_ITEMS
     else:
         return list()
 
@@ -83,7 +83,7 @@ def Properties(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_AS:
-        return [cpp.FOLD, cpp.FOLD_PRE]
+        return [_cpp.FOLD, _cpp.FOLD_PRE]
     else:
         return list()
 
@@ -99,7 +99,7 @@ def CommentPattern(lang_id=0):
 
 #---- End Required Functions ----#
 
-AutoIndenter = cpp.AutoIndenter
+AutoIndenter = _cpp.AutoIndenter
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString():

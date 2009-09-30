@@ -19,7 +19,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 import synglob
-import python
+import _python
 
 #-----------------------------------------------------------------------------#
 
@@ -35,7 +35,7 @@ BOO_KW = (0, "abstract and as AST break callable cast char class constructor "
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [x for x in python.SYNTAX_ITEMS if x[0] != 'STC_P_DECORATOR']
+SYNTAX_ITEMS = [x for x in _python.SYNTAX_ITEMS if x[0] != 'STC_P_DECORATOR']
 SYNTAX_ITEMS.append(('STC_P_DECORATOR', 'default_style'))
 
 #---- Extra Properties ----#
@@ -69,7 +69,7 @@ def Properties(lang_id=0):
 
     """
     if lang_id == synglob.ID_LANG_BOO:
-        return python.Properties(synglob.ID_LANG_PYTHON)
+        return _python.Properties(synglob.ID_LANG_PYTHON)
     else:
         return list()
 

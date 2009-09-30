@@ -1,13 +1,16 @@
 ###############################################################################
-# Name: ferite.py                                                             #
-# Purpose: Syntax Definitions for the Ferite Scripting Language               #
+# Name: props.py                                                              #
+# Purpose: Define Properties/ini syntax for highlighting and other features   #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2007 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 """
-@summary: Lexer configuration module for Ferite Scripting Language
+FILE: props.py
+AUTHOR: Cody Precord
+@summary: Lexer configuration module for properties/config files
+          (ini, cfg, ect..).
 
 """
 
@@ -16,34 +19,24 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
-# Local Imports
 import synglob
-import cpp
 
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Definitions ----#
-FERITE_KW = (0, "false null self super true abstract alias and arguments "
-                "attribute_missing break case class closure conformsToProtocol "
-                "constructor continue default deliver destructor diliver "
-                "directive do else extends eval final fix for function global "
-                "handle if iferr implements include instanceof isa "
-                "method_missing modifies monitor namespace new or private "
-                "protected protocol public raise recipient rename return "
-                "static switch uses using while")
-
-FERITE_TYPES = (1, "boolean string number array object void XML Unix Sys "
-                   "String Stream Serialize RMI Posix Number Network Math "
-                   "FileSystem Console Array Regexp XSLT")
 
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-# Same as CPP
-#SYNTAX_ITEMS = 
+SYNTAX_ITEMS = [('STC_PROPS_ASSIGNMENT', 'operator_style'),
+                ('STC_PROPS_COMMENT', 'comment_style'),
+                ('STC_PROPS_DEFAULT', 'default_style'),
+                ('STC_PROPS_DEFVAL', 'string_style'),
+                ('STC_PROPS_KEY', 'scalar_style'),
+                ('STC_PROPS_SECTION', 'keyword_style')]
 
 #---- Extra Properties ----#
-
+FOLD = ('fold', '1')
 #-----------------------------------------------------------------------------#
 
 #---- Required Module Functions ----#
@@ -52,8 +45,8 @@ def Keywords(lang_id=0):
     @keyword lang_id: used to select specific subset of keywords
 
     """
-    if lang_id == synglob.ID_LANG_FERITE:
-        return [FERITE_KW, FERITE_TYPES, cpp.DOC_KEYWORDS]
+    if lang_id == synglob.ID_LANG_PROPS:
+        return list()
     else:
         return list()
 
@@ -62,8 +55,8 @@ def SyntaxSpec(lang_id=0):
     @keyword lang_id: used for selecting a specific subset of syntax specs
 
     """
-    if lang_id == synglob.ID_LANG_FERITE:
-        return cpp.SYNTAX_ITEMS
+    if lang_id == synglob.ID_LANG_PROPS:
+        return SYNTAX_ITEMS
     else:
         return list()
 
@@ -72,8 +65,8 @@ def Properties(lang_id=0):
     @keyword lang_id: used to select a specific set of properties
 
     """
-    if lang_id == synglob.ID_LANG_FERITE:
-        return [cpp.FOLD,]
+    if lang_id == synglob.ID_LANG_PROPS:
+        return [FOLD]
     else:
         return list()
 
@@ -82,14 +75,12 @@ def CommentPattern(lang_id=0):
     @keyword lang_id: used to select a specific subset of comment pattern(s)
 
     """
-    if lang_id == synglob.ID_LANG_FERITE:
-        return ['//',]
+    if lang_id == synglob.ID_LANG_PROPS:
+        return list(u'#')
     else:
         return list()
 
 #---- End Required Module Functions ----#
-
-AutoIndenter = cpp.AutoIndenter
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString():

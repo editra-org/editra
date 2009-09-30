@@ -1,13 +1,13 @@
 ###############################################################################
-# Name: squirrel.py                                                           #
-# Purpose: Syntax Definitions for Squirrel programming language               #
+# Name: ferite.py                                                             #
+# Purpose: Syntax Definitions for the Ferite Scripting Language               #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
 ###############################################################################
 
 """
-@summary: Lexer configuration module for Squirrel Programming Language
+@summary: Lexer configuration module for Ferite Scripting Language
 
 """
 
@@ -18,26 +18,31 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Local Imports
 import synglob
-import cpp
+import _cpp
 
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Definitions ----#
-SQUIRREL_KW = (0, "break case catch class clone continue const default "
-                  "delegate delete do else enum extends for foreach function "
-                  "if in local null resume return switch this throw try typeof "
-                  "while parent yield constructor vargc vargv instanceof true "
-                  "false static")
+FERITE_KW = (0, "false null self super true abstract alias and arguments "
+                "attribute_missing break case class closure conformsToProtocol "
+                "constructor continue default deliver destructor diliver "
+                "directive do else extends eval final fix for function global "
+                "handle if iferr implements include instanceof isa "
+                "method_missing modifies monitor namespace new or private "
+                "protected protocol public raise recipient rename return "
+                "static switch uses using while")
 
-SQUIRREL_TYPES = (1, "")
+FERITE_TYPES = (1, "boolean string number array object void XML Unix Sys "
+                   "String Stream Serialize RMI Posix Number Network Math "
+                   "FileSystem Console Array Regexp XSLT")
 
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
 # Same as CPP
+#SYNTAX_ITEMS = 
 
 #---- Extra Properties ----#
-# Same as CPP
 
 #-----------------------------------------------------------------------------#
 
@@ -47,8 +52,8 @@ def Keywords(lang_id=0):
     @keyword lang_id: used to select specific subset of keywords
 
     """
-    if lang_id == synglob.ID_LANG_SQUIRREL:
-        return [SQUIRREL_KW, SQUIRREL_TYPES, cpp.DOC_KEYWORDS]
+    if lang_id == synglob.ID_LANG_FERITE:
+        return [FERITE_KW, FERITE_TYPES, _cpp.DOC_KEYWORDS]
     else:
         return list()
 
@@ -57,8 +62,8 @@ def SyntaxSpec(lang_id=0):
     @keyword lang_id: used for selecting a specific subset of syntax specs
 
     """
-    if lang_id == synglob.ID_LANG_SQUIRREL:
-        return cpp.SYNTAX_ITEMS
+    if lang_id == synglob.ID_LANG_FERITE:
+        return _cpp.SYNTAX_ITEMS
     else:
         return list()
 
@@ -67,8 +72,8 @@ def Properties(lang_id=0):
     @keyword lang_id: used to select a specific set of properties
 
     """
-    if lang_id == synglob.ID_LANG_SQUIRREL:
-        return [cpp.FOLD,]
+    if lang_id == synglob.ID_LANG_FERITE:
+        return [_cpp.FOLD,]
     else:
         return list()
 
@@ -77,14 +82,14 @@ def CommentPattern(lang_id=0):
     @keyword lang_id: used to select a specific subset of comment pattern(s)
 
     """
-    if lang_id == synglob.ID_LANG_SQUIRREL:
-        return ['//']
+    if lang_id == synglob.ID_LANG_FERITE:
+        return ['//',]
     else:
         return list()
 
 #---- End Required Module Functions ----#
 
-AutoIndenter = cpp.AutoIndenter
+AutoIndenter = _cpp.AutoIndenter
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString():
