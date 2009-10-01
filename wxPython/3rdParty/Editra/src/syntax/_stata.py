@@ -368,7 +368,8 @@ MAIN_KEYWORDS =  (0,
                   white strip ralloc acplot stack symmetry omodel 
                   allcross dups iia sdtest vplplot summvl labsumm 
                   loopplot elapse istdize blogit2 sparl vallab gologit 
-                   mkstrsn poisml trpois0 cenpois sssplot hausman stcstat
+                  mkstrsn poisml trpois0 cenpois sssplot hausman stcstat
+                  forvalues
                   """
 )
 
@@ -389,7 +390,7 @@ SYNTAX_ITEMS = [ ('STC_C_DEFAULT', 'default_style'),
                  ('STC_C_PREPROCESSOR', 'pre_style'),
                  ('STC_C_REGEX', 'pre_style'),
                  ('STC_C_STRING', 'string_style'),
-                 ('STC_C_STRINGEOL', 'stringeol_style'),
+                 ('STC_C_STRINGEOL', 'default_style'),
                  ('STC_C_UUID', 'pre_style'),
                  ('STC_C_VERBATIM', 'number2_style'),
                  ('STC_C_WORD', 'keyword_style'),
