@@ -69,6 +69,17 @@ def GetDataFilePath(fname):
     path = os.path.join(u'.', u'data', fname)
     return os.path.abspath(path)
 
+def GetFileContents(path):
+    """Get the contents of the given file
+    @param path: string
+    @return: string
+
+    """
+    handle = open(path, 'rb')
+    txt = handle.read()
+    handle.close()
+    return txt
+
 def GetTempDir():
     """Get the path to the test temp directory
     @return: string
