@@ -10,7 +10,7 @@ version attribute used to tell Editra the file has changed since last load
    lang attribute specifies the filetypes name
    lexer attribute specifies the scintilla lexer to use
    -->
-   <syntax lang="Python" lexer="STC_LEX_PYTHON">
+   <syntax language="Python" lexer="STC_LEX_PYTHON">
 
       <!-- KeywordList must be a child of syntax it specifes the keywords
       used by the language.
@@ -68,7 +68,4 @@ version attribute used to tell Editra the file has changed since last load
       </featurelist>
 
    </syntax>
-
-   <launch>
-   </launch>
 </editra>
