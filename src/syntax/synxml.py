@@ -15,7 +15,7 @@
 
 xml_spec = """
 <editra version="1">
-   <syntax lang="Python" lexer="STC_LEX_PYTHON">
+   <syntax language="Python" lexer="STC_LEX_PYTHON">
 
       <keywordlist>
          <keywords value="0">
@@ -46,8 +46,6 @@ xml_spec = """
 
    </syntax>
 
-   <launch>
-   </launch>
 </editra>
 
 """
@@ -58,6 +56,7 @@ __revision__ = "$Revision$"
 
 #----------------------------------------------------------------------------#
 # Imports
+import os
 from xml import sax
 import wx.stc as stc
 
@@ -69,7 +68,7 @@ EXML_KEYWORDLIST = u"keywordlist"
 EXML_KEYWORDS    = u"keywords"
 EXML_SYNSPECLIST = u"syntaxspeclist"
 EXML_SYNTAXSPEC  = u"syntaxspec"
-EXML_PROPERYLIST = u"propertylist"
+EXML_PROPERTYLIST = u"propertylist"
 EXML_PROPERTY    = u"property"
 EXML_COMMENTPAT  = u"commentpattern"
 EXML_FEATURELIST = u"extensionlist"
@@ -93,7 +92,9 @@ class EditraXml(sax.ContentHandler):
         sax.ContentHandler.__init__(self)
 
         # Attributes
-        self.name = u''             # Tag name
+        self.name   = u''            # Tag name
+        self.level  = 0              # Set the level of the element
+        self.indent = 3              # Indentation
 
         self._context = None         # Current parse context
         self._reg_handler = dict()   # Registered parse handlers
@@ -131,11 +132,51 @@ class EditraXml(sax.ContentHandler):
                 # No current context or context is self
                 pass
 
+    def GetXml(self):
+        """Get the xml representation of this object
+        @return: string
+
+        """
+        ident = self.GetIndentationStr()
+        xml = ident + self.GetStartTag()
+        xml += (self.GetSubElements() + os.linesep)
+        xml += (ident + self.GetEndTag())
+        return xml
+
+    def GetSubElements(self):
+        """Get the sub elements
+        @return: string
+
+        """
+        xml = u''
+        for handler in self.GetHandlers():
+            handler.SetLevel(self.Level + 1)
+            xml += (os.linesep + handler.GetXml())
+        return xml
+
+    def GetStartTag(self):
+        return u"<%s>" % self.name
+
+    def GetEndTag(self):
+        return u"</%s>" % self.name
+
     #---- External Api ----#
 
     @property
     def Context(self):
         return self._context
+
+    @property
+    def Indentation(self):
+        return self.indent
+
+    @property
+    def Level(self):
+        return self.level
+
+    @property
+    def Name(self):
+        return self.name
 
     def GetHandler(self, tag):
         """Get the handler associated with the given tag
@@ -143,7 +184,35 @@ class EditraXml(sax.ContentHandler):
         @return: EditraXml object or None
 
         """
-        return self.reg_handler.get(tag, None)
+        return self._reg_handler.get(tag, None)
+
+    def GetHandlers(self):
+        """Get all the handlers registered with this element
+        @return: list of EditraXml objects
+
+        """
+        return self._reg_handler.values()
+
+    def GetIndentation(self):
+        """Get the indentation string
+        @return: int
+
+        """
+        return self.indent
+
+    def GetIndentationStr(self):
+        """Get the indentation string taking level into consideration
+        @return: string
+
+        """
+        return (self.indent * u" ") * self.level
+
+    def GetLevel(self):
+        """Get the level of this element
+        @return: int
+
+        """
+        return self.level
 
     def GetName(self):
         """Get the tag name for the handler
@@ -151,18 +220,6 @@ class EditraXml(sax.ContentHandler):
 
         """
         return self.name
-
-    @property
-    def Name(self):
-        return self.name
-
-    def SetName(self, tag):
-        """Set this handlers tag name used for identifying the open and
-        end tags.
-        @param tag: string
-
-        """
-        self.name = tag
 
     def RegisterHandler(self, handler):
         """Register a handler for a tag. Parsing will be delegated to the
@@ -172,7 +229,30 @@ class EditraXml(sax.ContentHandler):
         """
         tag = handler.GetName()
         assert tag not in self._reg_handler, "%s already registered!" % tag
+        handler.SetLevel(self.Level + 1)
         self._reg_handler[tag] = handler
+
+    def SetIndentation(self, indent):
+        """Set the indentation level
+        @param indent: int
+
+        """
+        self.indent = indent
+
+    def SetLevel(self, level):
+        """Set the level of this element
+        @param level: int
+
+        """
+        self.level = level
+
+    def SetName(self, tag):
+        """Set this handlers tag name used for identifying the open and
+        end tags.
+        @param tag: string
+
+        """
+        self.name = tag
 
 #----------------------------------------------------------------------------#
 
@@ -188,6 +268,7 @@ class FileTypeHandler(EditraXml):
 
         # Setup
         self.SetName(EXML_START)
+        self.SetIndentation(3)
         self.RegisterHandler(self.syntax)
 
     def startElement(self, name, attrs):
@@ -202,6 +283,9 @@ class FileTypeHandler(EditraXml):
             self._start = False
         else:
             EditraXml.endElement(self, name)
+
+    def GetStartTag(self):
+        return u"<%s version=\"%s\">" % (self.GetName(), self.Version)
 
     #---- Get External Api ----#
 
@@ -222,6 +306,10 @@ class FileTypeHandler(EditraXml):
     def SyntaxSpec(self):
         return self.GetSyntaxSpec()
 
+    @property
+    def Version(self):
+        return self._version
+
     # Getters
     def GetCommentPattern(self):
         """Get the comment pattern list
@@ -241,7 +329,7 @@ class FileTypeHandler(EditraXml):
     def GetFeature(self, fet):
         """Get the callable associated with the given feature
         @param fet: string
-        @return: callable or None
+        @return: string
 
         """
         fetxml = self.syntax.GetFeatureXml()
@@ -272,6 +360,7 @@ class Syntax(EditraXml):
 
         # Attributes
         self.language = u"Plain Text"
+        self.lexstr = u"STC_LEX_NULL"
         self.lexer = stc.STC_LEX_NULL
 
         # Sub Xml Objects
@@ -296,9 +385,29 @@ class Syntax(EditraXml):
             lexval = getattr(stc, lexer, None)
             assert lexval is not None, "Invalid Lexer: %s" % lexer
             self.language = lang
+            self.lexstr = lexer
             self.lexer = lexval
         else:
             EditraXml.startElement(self, name, attrs)
+
+    def GetStartTag(self):
+        return u"<%s %s=\"%s\" %s=\"%s\">" % (self.Name, EXML_LANG, 
+                                              self.language, EXML_LEXER,
+                                              self.lexstr)
+
+    def GetSubElements(self):
+        """Get the SubElements xml string
+        @return: string
+
+        """
+        xml = EditraXml.GetSubElements(self)
+        ident = self.GetIndentationStr() + (self.Indentation * u" ")
+        xml += os.linesep
+        cpat = u" ".join(self.GetCommentPattern())
+        comment = u"<%s %s=\"%s\">" % (EXML_COMMENTPAT, EXML_VALUE, cpat.strip())
+        xml += os.linesep
+        xml += (ident + comment)
+        return xml
 
     #---- External Api ----#
 
@@ -369,6 +478,22 @@ class KeywordList(EditraXml):
             if len(chars):
                 self._current.extend(chars)
 
+    def GetSubElements(self):
+        xml = u""
+        tag = u"<%s %s=" % (EXML_KEYWORDS, EXML_VALUE)
+        tag += "\"%s\">"
+        end = u"</%s>" % EXML_KEYWORDS
+        ident = self.GetIndentationStr() + (self.Indentation * u" ")
+        for key in sorted(self._keywords.keys()):
+            xml += os.linesep + ident
+            xml += (tag % key)
+            xml += os.linesep + ident
+            words = (self.Indentation * u" ") + u" ".join(self._keywords[key])
+            xml += words
+            xml += os.linesep + ident
+            xml += end
+        return xml
+
     #---- External Api ----#
 
     def GetKeywords(self):
@@ -417,6 +542,16 @@ class SyntaxSpecList(EditraXml):
             # Raise?
             pass
 
+    def GetSubElements(self):
+        xml = u""
+        tag = u"<%s %s=" % (EXML_SYNTAXSPEC, EXML_VALUE)
+        tag += ("\"%s\" " + EXML_TAG + "=\"%s\"/>")
+        ident = self.GetIndentationStr() + (self.Indentation * u" ")
+        for spec in self._specs:
+            xml += os.linesep + ident
+            xml += (tag % spec)
+        return xml
+        
     #---- External Api ----#
 
     def GetStyleSpecs(self):
@@ -436,7 +571,7 @@ class PropertyList(EditraXml):
         self.properties = list()
 
         # Setup
-        self.SetName(EXML_PROPERYLIST)
+        self.SetName(EXML_PROPERTYLIST)
 
     def startElement(self, name, attrs):
         if name == EXML_PROPERTY:
@@ -447,11 +582,15 @@ class PropertyList(EditraXml):
         else:
             pass
 
-    def endElement(self, name):
-        pass
-
-    def characters(self, chars):
-        pass
+    def GetSubElements(self):
+        xml = u""
+        tag = u"<%s %s=" % (EXML_PROPERTY, EXML_VALUE)
+        tag += ("\"%s\" " + EXML_ENABLE + "=\"%s\"/>")
+        ident = self.GetIndentationStr() + (self.Indentation * u" ")
+        for prop in self.properties:
+            xml += os.linesep + ident
+            xml += (tag % prop)
+        return xml
 
     #---- External Api ----#
 
@@ -481,11 +620,20 @@ class FeatureList(EditraXml):
         else:
             EditraXml.startElement(self, name, attrs)
 
+    def GetSubElements(self):
+        xml = u""
+        tag = u"<%s %s=" % (EXML_FEATURE, EXML_METHOD)
+        tag += ("\"%s\" " + EXML_SOURCE + "=\"%s\"/>")
+        for feature in self._features.iteritems():
+            xml += os.linesep
+            xml += (tag % feature)
+        return xml
+
     #---- External Api ----#
 
     def GetFeature(self, fet):
         """Get the callable feature by name
-        @param fet: string
+        @param fet: string (module name)
 
         """
         feature = None
@@ -513,3 +661,4 @@ if __name__ == '__main__':
     print h.GetProperties()
     print h.GetSyntaxSpec()
     print h.GetCommentPattern()
+    print h.GetXml()

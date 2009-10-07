@@ -17,3 +17,10 @@ For all differn't file types and languages supported by Editra
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
+
+#-----------------------------------------------------------------------------#
+# Setup Namespace
+
+from synxml import *
+
+#-----------------------------------------------------------------------------#
