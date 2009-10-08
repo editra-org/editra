@@ -82,6 +82,7 @@ EXML_SOURCE  = u"source"
 EXML_TAG     = u"tag"
 EXML_VALUE   = u"value"
 EXML_VERSION = u"version"
+EXML_NAME    = u"name"
 
 #----------------------------------------------------------------------------#
 
