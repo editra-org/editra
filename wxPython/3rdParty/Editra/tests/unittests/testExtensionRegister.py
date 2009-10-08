@@ -93,3 +93,10 @@ class ExtensionRegisterTest(unittest.TestCase):
 
         for e in d:
             self.assertFalse(e in n)
+
+    def testGetFileExtension(self):
+        """Test the module function GetFileExtensions"""
+        ext = self.reg.GetAllExtensions()
+        self.assertTrue(isinstance(ext, list))
+        for item in ext:
+            self.assertTrue(isinstance(item, basestring))
