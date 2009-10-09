@@ -27,7 +27,7 @@ import wx.stc
 import ed_glob
 import util
 import ed_msg
-from syntax.syntax import GetFtypeDisplayName
+from syntax.synglob import GetDescriptionFromId
 from eclib.pstatbar import ProgressStatusBar
 from extern.decorlib import anythread
 
@@ -271,7 +271,7 @@ class EdStatBar(ProgressStatusBar):
             wx.CallAfter(self.__SetStatusText, doc.GetEncoding(),
                          ed_glob.SB_ENCODING)
             wx.CallAfter(self.__SetStatusText,
-                         GetFtypeDisplayName(cbuff.GetLangId()),
+                         GetDescriptionFromId(cbuff.GetLangId()),
                          ed_glob.SB_LEXER)
 
             eol = { wx.stc.STC_EOL_CR : u"CR",

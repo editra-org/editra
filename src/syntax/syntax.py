@@ -222,7 +222,7 @@ def GenLexerMenu():
     for key in synglob.LANG_MAP:
         f_types[key] = synglob.LANG_MAP[key][LANG_ID]
     f_order = list(f_types)
-    f_order.sort(NoCaseCmp)
+    f_order.sort(key=unicode.lower)
 
     for lang in f_order:
         lex_menu.Append(f_types[lang], lang, 
@@ -249,29 +249,32 @@ def GenFileFilters():
     for key in f_dict:
         tmp = u" (%s)|%s|" % (f_dict[key][1:], f_dict[key][1:])
         filters.append(key + tmp)
-    filters.sort(NoCaseCmp)
+    filters.sort(key=unicode.lower)
     filters.insert(0, u"All Files (*)|*|")
     filters[-1] = filters[-1][:-1] # IMPORTANT trim last '|' from item in list
     return filters
 
 def GetLexerList():
-    """Gets a list of unique file lexer configurations available
-    @return: list of all lexer identifiers
+    """Gets the list of all supported file types
+    @return: list of strings
 
     """ 
-    f_types = dict()
-    for key, val in synglob.LANG_MAP.iteritems():
-        f_types[key] = val[LANG_ID]
-    f_order = list(f_types)
-    f_order.sort()
-    return f_order
+    f_types = synglob.LANG_MAP.keys()
+    f_types.sort(key=unicode.lower)
+    return f_types
 
 #---- Syntax id set ----#
+SYNTAX_IDS = None
+
 def SyntaxIds():
     """Gets a list of all Syntax Ids and returns it
     @return: list of all syntax language ids
 
     """
+    # Use the cached list if its available
+    if SYNTAX_IDS is not None:
+        return SYNTAX_IDS
+
     s_glob = dir(synglob)
     syn_ids = list()
     for item in s_glob:
@@ -300,20 +303,6 @@ def GetExtFromId(ext_id):
     ftype = synglob.GetDescriptionFromId(ext_id)
     return extreg[ftype][0]
 
-def GetFtypeDisplayName(lang_id):
-    """Get the file type display string for the given lang_id
-    @param lang_id: ID_LANG_*
-    @todo: make file types translatable
-
-    """
-    for item in dir(synglob):
-        if item.startswith("ID_LANG"):
-            if getattr(synglob, item) == lang_id:
-                return getattr(synglob, item[3:], u"Plain Text")
-    else:
-        return u"Plain Text"
-
-
 def GetIdFromExt(ext):
     """Get the language id from the given file extension
     @param ext: file extension (no dot)
@@ -335,14 +324,3 @@ def GetTypeFromExt(ext):
 
     """
     return ExtensionRegister().FileTypeFromExt(ext)
-
-#-----------------------------------------------------------------------------#
-# Utility
-def NoCaseCmp(x, y):
-    """Case insensitive sort method"""
-    if x.lower() < y.lower():
-        return -1
-    elif x.lower() > y.lower():
-        return 1
-    else:
-        return 0
