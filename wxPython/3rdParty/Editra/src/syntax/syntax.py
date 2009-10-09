@@ -116,7 +116,7 @@ class SyntaxMgr(object):
         lexdat = synglob.LANG_MAP.get(ftype)
         mod = None
         if lexdat:
-            mod = lexdat[2]
+            mod = lexdat[MODULE]
         return mod
 
     def GetLangId(self, ext):
@@ -126,7 +126,7 @@ class SyntaxMgr(object):
 
         """
         ftype = self._extreg.FileTypeFromExt(ext)
-        return synglob.LANG_MAP[ftype][0]
+        return synglob.LANG_MAP[ftype][LANG_ID]
 
     def IsModLoaded(self, modname):
         """Checks if a module has already been loaded
