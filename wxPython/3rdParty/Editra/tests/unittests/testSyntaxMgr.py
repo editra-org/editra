@@ -19,6 +19,7 @@ import unittest
 # Module to test
 import syntax.syntax as syntax
 import syntax.synglob as synglob
+import syntax.syndata as syndata
 
 #-----------------------------------------------------------------------------#
 # Test Class
@@ -59,21 +60,21 @@ class SyntaxMgrTest(unittest.TestCase):
 
     def testSyntaxData(self):
         """Test getting the syntax data"""
-        data = self.mgr.SyntaxData('html')
-        self.assertTrue(isinstance(data, dict))
-        self.assertTrue(isinstance(data[syntax.LEXER], int))
-        kw = data[syntax.KEYWORDS]
+        data = self.mgr.GetSyntaxData('html')
+        self.assertTrue(isinstance(data, syndata.SyntaxDataBase))
+        self.assertTrue(isinstance(data.Lexer, int))
+        kw = data.Keywords
         self.assertTrue(isinstance(kw, list))
         self.assertTrue(isinstance(kw[0], tuple))
-        spec = data[syntax.SYNSPEC]
+        spec = data.SyntaxSpec
         self.assertTrue(isinstance(spec, list))
         self.assertTrue(isinstance(spec[0], tuple))
         self.assertTrue(isinstance(spec[0][0], basestring))
-        props = data[syntax.PROPERTIES]
+        props = data.Properties
         self.assertTrue(isinstance(props, list))
-        lang = data[syntax.LANGUAGE]
+        lang = data.LangId
         self.assertTrue(isinstance(lang, int))
-        comment = data[syntax.COMMENT]
+        comment = data.CommentPattern
         self.assertTrue(isinstance(comment, list))
         self.assertTrue(isinstance(comment[0], basestring))
 
