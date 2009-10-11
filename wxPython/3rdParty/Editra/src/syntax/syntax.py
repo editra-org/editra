@@ -48,8 +48,7 @@ import synglob
 
 # Used to index the tuple returned by getting data from EXT_REG
 LANG_ID    = 0
-LEXER_ID   = 1
-MODULE     = 2
+MODULE     = 1
 
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
