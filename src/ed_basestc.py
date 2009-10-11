@@ -343,21 +343,16 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             self.SetStyleBits(5)
 
-        keywords = syn_data.Keywords
-        synspec = syn_data.SyntaxSpec
-        props = syn_data.Properties
-        comment = syn_data.CommentPattern
-
         # Set Lexer
         self.SetLexer(lexer)
         # Set Keywords
-        self.SetKeyWords(keywords)
+        self.SetKeyWords(syn_data.Keywords)
         # Set Lexer/Syntax Specifications
-        self.SetSyntax(synspec)
+        self.SetSyntax(syn_data.SyntaxSpec)
         # Set Extra Properties
-        self.SetProperties(props)
+        self.SetProperties(syn_data.Properties)
         # Set Comment Pattern
-        self._code['comment'] = comment
+        self._code['comment'] = syn_data.CommentPattern
 
         # Get Extension Features
         clexer = syn_data.GetFeature(synglob.FEATURE_STYLETEXT)
