@@ -89,8 +89,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
-# Dependancies
+# Imports
+import wx.stc as stc
+
+# Local Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 
@@ -354,64 +358,35 @@ SQL_BACKTICKS_IDENTIFIER = ("lexer.sql.backticks.identifier", "0")
 
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """ Returns Specified Keywords List
-    @keyword lang_id: used to select specific subset of keywords
-                    (ID_LANG_SQL and ID_LANG_PLSQL supported)
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for PL/SQL""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id in [ synglob.ID_LANG_SQL, synglob.ID_LANG_PLSQL ]:
+        # Setup
+        self.SetLexer(stc.STC_LEX_SQL)
+
+    def GetKeywords(self):
+        """ Returns Specified Keywords List """
         common = [ SQL_KW, SQL_DBO, SQL_PLD, SQL_UKW1, SQL_UKW2, SQL_UKW4 ]
-        if lang_id == synglob.ID_LANG_SQL:
+        if self.LangId == synglob.ID_LANG_SQL:
             common.append(SQL_PLUS)
         else:
             common.extend([SQL_PKG, SQL_UKW3])
         return common
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """ Syntax Specifications
-    @keyword lang_id: used for selecting a specific subset of syntax specs
-                                   (ID_LANG_SQL and ID_LANG_PLSQL supported)
-
-    """
-    if lang_id in [ synglob.ID_LANG_SQL, synglob.ID_LANG_PLSQL ]:
+    def GetSyntaxSpec(self):
+        """ Syntax Specifications """
         return SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """ Returns a list of Extra Properties to set
-    @keyword lang_id: used to select a specific set of properties
-                   (ID_LANG_SQL and ID_LANG_PLSQL supported)
+    def GetProperties(self):
+        """ Returns a list of Extra Properties to set """
+        if self.LangId == synglob.ID_LANG_SQL:
+            return [FOLD]
+        else:
+            return [FOLD, FOLD_COMMENT, FOLD_COMPACT, FOLD_SQL_ONLY_BEGIN,
+                    SQL_BACKSLASH_ESCAPES, SQL_BACKTICKS_IDENTIFIER]
 
-    """
-    if lang_id == synglob.ID_LANG_SQL:
-        return [FOLD]
-    elif lang_id == synglob.ID_LANG_PLSQL:
-        return [FOLD, FOLD_COMMENT, FOLD_COMPACT, FOLD_SQL_ONLY_BEGIN,
-                SQL_BACKSLASH_ESCAPES, SQL_BACKTICKS_IDENTIFIER]
-    else:
-        return list()
-
-def CommentPattern(lang_id=0):
-    """ Returns a list of characters used to comment a block of code
-    @keyword lang_id: used to select a specific subset of comment pattern(s)
-                                   (ID_LANG_SQL and ID_LANG_PLSQL supported)
-
-    """
-    if lang_id in [synglob.ID_LANG_SQL, synglob.ID_LANG_PLSQL]:
+    def GetCommentPattern(self):
+        """ Returns a list of characters used to comment a block of code """
         return [u'--']
-    else:
-        return list()
-#---- End Required Module Functions ----#
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """ Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None

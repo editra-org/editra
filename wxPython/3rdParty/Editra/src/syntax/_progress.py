@@ -17,7 +17,11 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx.stc as stc
+
+# Local Imports
 import synglob
+import syndata
 import _sql
 
 #-----------------------------------------------------------------------------#
@@ -233,43 +237,26 @@ PROG_OP = (7, "absolute accelerator across add-first add-last advise alert-box "
 
 #-----------------------------------------------------------------------------#
 
-def Keywords(lang_id=0):
-    """Progress 4GL keyword specifications
-    @keyword lang_id: Language ID
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Progress 4GL""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_4GL:
+        # Setup
+        self.SetLexer(stc.STC_LEX_SQL)
+
+    def GetKeywords(self):
+        """Progress 4GL keyword specifications """
         return [PROG_KW, PROG_TYPES, PROG_OP]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @keyword lang_id: Language ID
-
-    """
-    if lang_id == synglob.ID_LANG_4GL:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return _sql.SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Language properties for folding ect...
-    @keyword lang_id: Language ID
-
-    """
-    if lang_id == synglob.ID_LANG_4GL:
+    def GetProperties(self):
+        """Language properties for folding ect... """
         return [_sql.FOLD,]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Comment pattern
-    @keyword lang_id: Language ID
-
-    """
-    if lang_id == synglob.ID_LANG_4GL:
+    def GetCommentPattern(self):
+        """Comment pattern """
         return [u'/*', u'*/']
-    else:
-        return list()
-

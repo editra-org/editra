@@ -32,6 +32,7 @@ import ebmlib
 import ed_msg
 import ed_txt
 from syntax import syntax
+from syntax import synglob
 from autocomp import autocomp
 from extern import vertedit
 from profiler import Profile_Get
@@ -322,15 +323,12 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @param file_ext: a file extension to configure the lexer from
 
         """
-        syn_data = self._code['synmgr'].SyntaxData(file_ext)
+        syn_data = self._code['synmgr'].GetSyntaxData(file_ext)
 
         # Set the ID of the selected lexer
-        try:
-            self._code['lang_id'] = syn_data[syntax.LANGUAGE]
-        except KeyError:
-            self._code['lang_id'] = 0
+        self._code['lang_id'] = syn_data.LangId
 
-        lexer = syn_data[syntax.LEXER]
+        lexer = syn_data.Lexer
         # Check for special cases
         # TODO: add fetch method to check if container lexer requires extra
         #       style bytes beyond the default 5.
@@ -345,35 +343,10 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             self.SetStyleBits(5)
 
-        try:
-            keywords = syn_data[syntax.KEYWORDS]
-        except KeyError:
-            keywords = []
-
-        try:
-            synspec = syn_data[syntax.SYNSPEC]
-        except KeyError:
-            synspec = []
-
-        try:
-            props = syn_data[syntax.PROPERTIES]
-        except KeyError:
-            props = []
-
-        try:
-            comment = syn_data[syntax.COMMENT]
-        except KeyError:
-            comment = []
-
-        try:
-            clexer = syn_data[syntax.CLEXER]
-        except KeyError:
-            clexer = None
-
-        try:
-            indenter = syn_data[syntax.INDENTER]
-        except KeyError:
-            indenter = None
+        keywords = syn_data.Keywords
+        synspec = syn_data.SyntaxSpec
+        props = syn_data.Properties
+        comment = syn_data.CommentPattern
 
         # Set Lexer
         self.SetLexer(lexer)
@@ -385,6 +358,11 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetProperties(props)
         # Set Comment Pattern
         self._code['comment'] = comment
+
+        # Get Extension Features
+        clexer = syn_data.GetFeature(synglob.FEATURE_STYLETEXT)
+        indenter = syn_data.GetFeature(synglob.FEATURE_AUTOINDENT)
+
         # Set the Container Lexer Method
         self._code['clexer'] = clexer
         # Auto-indenter function

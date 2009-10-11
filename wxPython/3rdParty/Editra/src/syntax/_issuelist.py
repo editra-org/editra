@@ -20,10 +20,11 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
-import wx.stc
+import wx.stc as stc
 
 #Local Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 # Style Id's
@@ -53,47 +54,28 @@ SYNTAX_ITEMS = [
     (STC_ISSL_PINK,    'char_style'),
     ]
    
-#---- Extra Properties ----#
-
 issl_table = ';+-?.#~'
 
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for IssueLists
+    This class is primarly intended as an example to creating a custom
+    lexer
 
-    """
-    if lang_id == synglob.ID_LANG_ISSL:
-        return [ ]
+    """ 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
+        # Setup
+        self.SetLexer(stc.STC_LEX_CONTAINER)
+        self.RegisterFeature(synglob.FEATURE_STYLETEXT, StyleText)
 
-    """
-    if lang_id == synglob.ID_LANG_ISSL:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id == synglob.ID_LANG_ISSL:
-        return [ ]
-
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_ISSL:
-        return [ ]
-
 #---- End Required Module Functions ----#
-
 
 # ; comment
 # + done

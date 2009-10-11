@@ -20,10 +20,12 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx.stc as stc
 import re
 
 # Local Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 
@@ -125,50 +127,41 @@ SYNTAX_ITEMS = [('STC_F_COMMENT', 'comment_style'),
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
 FOLD_COMP = ("fold.compact", "1")
+
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Fortran 77/95""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id in [synglob.ID_LANG_F77, synglob.ID_LANG_F95]:
+        # Setup
+        if self.LangId == synglob.ID_LANG_F77:
+            self.SetLexer(stc.STC_LEX_F77)
+        else:
+            self.SetLexer(stc.STC_LEX_FORTRAN)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, AutoIndenter)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         return [FORT_KEYWORDS, FORT_FUNC , FORT_EXT]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id in [synglob.ID_LANG_F77, synglob.ID_LANG_F95]:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id in [synglob.ID_LANG_F77, synglob.ID_LANG_F95]:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [FOLD, FOLD_COMP]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_F77:
-        return ['*']
-    elif lang_id == synglob.ID_LANG_F95:
-        return ['!']
-    else:
-        return list()
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
+        if self.LangId == synglob.ID_LANG_F77:
+            return ['*']
+        elif self.LangId == synglob.ID_LANG_F95:
+            return ['!']
+        else:
+            return list()
 
 #---- End Required Module Functions ----#
 
@@ -202,13 +195,3 @@ def AutoIndenter(stc, pos, ichar):
         rtxt += ichar
 
     return rtxt
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#

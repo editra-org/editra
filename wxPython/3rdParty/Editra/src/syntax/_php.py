@@ -18,8 +18,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Imports
+import wx.stc as stc
+
 # Local Imports
 import synglob
+import syndata
 import _html
 from _cpp import AutoIndenter
 
@@ -383,9 +387,6 @@ PHP_FUNC = ("__construct __autoload __destruct __get __set __isset __unset "
             "mcrypt_module_is_block_algorithm imagepsencodefont "
             "mcrypt_module_get_algo_block_size imagepsslantfont count ")
 
-# HTML Keywords
-HTML_KEYWORDS = _html.Keywords()
-
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [ ('STC_HPHP_DEFAULT', 'default_style'),
                  ('STC_HPHP_COMMENT', 'comment_style'),
@@ -399,57 +400,39 @@ SYNTAX_ITEMS = [ ('STC_HPHP_DEFAULT', 'default_style'),
                  ('STC_HPHP_VARIABLE', 'pre2_style'),
                  ('STC_HPHP_WORD', 'keyword_style') ]
 
-#---- Extra Properties ----#
-# Inherited from html.py
-
 #------------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Php""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_PHP:
+        # Setup
+        self.SetLexer(stc.STC_LEX_HTML)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, AutoIndenter)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         # Support Embedded HTML highlighting
-        keywords = HTML_KEYWORDS
+        html = _html.SyntaxData(synglob.ID_LANG_HTML)
+        keywords = html.GetKeywords()
         keywords.append((4, PHP_KEYWORDS))
         return keywords
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id == synglob.ID_LANG_PHP:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return _html.SYNTAX_ITEMS + SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id == synglob.ID_LANG_PHP:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [_html.FOLD, _html.FLD_HTML]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-    @note: assuming pure php code for comment character(s)
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code
+        @note: assuming pure php code for comment character(s)
 
-    """
-    if lang_id == synglob.ID_LANG_PHP:
+        """
         return [u'//']
-    else:
-        return list()
-
-#---- End Required Functions ----#
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString(option=0):

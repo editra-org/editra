@@ -18,8 +18,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Imports
+import wx.stc as stc
+
 # Local Imports
 import synglob
+import syndata
 import _cpp
 
 #-----------------------------------------------------------------------------#
@@ -56,57 +60,39 @@ AS_TYPES = ("AS3 flash_proxy object_proxy flash accessibility display errors "
 
 #------------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """ActionScript SyntaxData"""
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_AS:
+        # Setup
+        self.SetLexer(stc.STC_LEX_CPP)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, _cpp.AutoIndenter)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List
+        @param lang_id: used to select specific subset of keywords
+
+        """
         return [(0, AS_KEYWORDS), (1, AS_TYPES)]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
+    def GetSyntaxSpec(self):
+        """Syntax Specifications
+        @param lang_id: used for selecting a specific subset of syntax specs
 
-    """
-    if lang_id == synglob.ID_LANG_AS:
+        """
         return _cpp.SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set
+        @param lang_id: used to select a specific set of properties
 
-    """
-    if lang_id == synglob.ID_LANG_AS:
+        """
         return [_cpp.FOLD, _cpp.FOLD_PRE]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code
+        @param lang_id: used to select a specific subset of comment pattern(s)
 
-    """
-    if lang_id == synglob.ID_LANG_AS:
+        """
         return [u'//']
-    else:
-        return list()
-
-#---- End Required Functions ----#
-
-AutoIndenter = _cpp.AutoIndenter
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#

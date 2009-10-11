@@ -19,10 +19,12 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx.stc as stc
 import re
 
-# Syntax Package Imports
+# Local Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 
@@ -110,49 +112,33 @@ FOLD_COMP = ("fold.compact", "1")
 
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @keyword lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Inno Setup Scripts""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_INNO:
+        # Setup
+        self.SetLexer(stc.STC_LEX_INNOSETUP)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, AutoIndenter)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         return [SECTION_KW, KEYWORDS, PARAM_KW, PREPROC_KW, PASCAL_KW]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @keyword lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id == synglob.ID_LANG_INNO:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @keyword lang_id: used to select a specific set of properties
-
-    """
-    if lang_id == synglob.ID_LANG_INNO:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [FOLD]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @keyword lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    # Note: Inno can also use pascal comments (i.e {})
-    if lang_id == synglob.ID_LANG_INNO:
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
+        # Note: Inno can also use pascal comments (i.e {})
         return [u';']
-    else:
-        return list()
 
-#---- End Required Module Functions ----#
+#-----------------------------------------------------------------------------#
 
 def AutoIndenter(stc, pos, ichar):
     """Auto indent Inno Setup Scripts. uses \n the text buffer will
@@ -183,13 +169,3 @@ def AutoIndenter(stc, pos, ichar):
         rtxt += ichar
 
     return rtxt
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#

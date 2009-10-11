@@ -31,6 +31,11 @@ import wx.stc as stc
 from synextreg import *
 
 #-----------------------------------------------------------------------------#
+# Feature Identifiers
+FEATURE_AUTOINDENT = u"AutoIndenter"
+FEATURE_STYLETEXT = u"StyleText"
+
+#-----------------------------------------------------------------------------#
 
 # Maps file types to syntax definitions
 LANG_MAP = {LANG_4GL    : (ID_LANG_4GL,    stc.STC_LEX_SQL,      '_progress'),

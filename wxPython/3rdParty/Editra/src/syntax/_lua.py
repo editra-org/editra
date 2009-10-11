@@ -19,6 +19,13 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Imports
+import wx.stc as stc
+
+# Local Imports
+import syndata
+
+#-----------------------------------------------------------------------------#
 
 #---- Keyword Definitions ----#
 # Keywords
@@ -99,43 +106,26 @@ FOLD_COMP = ("fold.compact", "1")
 
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Lua""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    return [LUA_KEYWORDS, LUA_FUNCT, LUA_STR, LUA_CO]
+        # Setup
+        self.SetLexer(stc.STC_LEX_LUA)
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
+        return [LUA_KEYWORDS, LUA_FUNCT, LUA_STR, LUA_CO]
 
-    """
-    return SYNTAX_ITEMS
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
+        return SYNTAX_ITEMS
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set"""
+        return [FOLD, FOLD_COMP]
 
-    """
-    return [FOLD, FOLD_COMP]
-
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    return [u'--']
-
-#---- End Required Module Functions ----#
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
+        return [u'--']

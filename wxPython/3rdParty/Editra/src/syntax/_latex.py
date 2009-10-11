@@ -19,8 +19,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
-# Dependancies
+# Imports
+import wx.stc as stc
+
+# Local Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 
@@ -61,59 +65,31 @@ SYNTAX_ITEMS2 = [ ('STC_L_DEFAULT', 'default_style'),
                  ('STC_L_MATH', 'operator_style'),
                  ('STC_L_TAG', 'keyword_style')]
 
-#---- Extra Properties ----#
-# None
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for LaTeX/TeX""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id in [synglob.ID_LANG_LATEX, synglob.ID_LANG_TEX]:
+        # Setup
+        # TODO: change to LEX_TEX for TeX?
+        if self.LangId == synglob.ID_LANG_LATEX:
+            self.SetLexer(stc.STC_LEX_LATEX)
+        else:
+            self.SetLexer(stc.STC_LEX_TEX)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         return [TEX_KW]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
+        if self.LangId == synglob.ID_LANG_TEX:
+            return SYNTAX_ITEMS1
+        else:
+            return SYNTAX_ITEMS2
 
-    """
-    if lang_id in [synglob.ID_LANG_LATEX, synglob.ID_LANG_TEX]:
-        return SYNTAX_ITEMS1
-    else:
-        return SYNTAX_ITEMS2
-
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id in [synglob.ID_LANG_LATEX, synglob.ID_LANG_TEX]:
-        return list()
-    else:
-        return list()
-
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id in [synglob.ID_LANG_LATEX, synglob.ID_LANG_TEX]:
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
         return [u'%']
-    else:
-        return list()
-
-#---- End Required Module Functions ----#
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString(option=0):
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#

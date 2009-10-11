@@ -9,7 +9,7 @@
 # Plugin Metadata
 """Adds a PyShell to the Shelf"""
 __author__ = "Cody Precord"
-__version__ = "0.7"
+__version__ = "0.8"
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -158,8 +158,8 @@ class EdPyShell(shell.Shell, ed_style.StyleMgr):
         self.SetStyleBits(5)
         self._shell_style = style
         mgr = syntax.SyntaxMgr(ed_glob.CONFIG['CACHE_DIR'])
-        syn_data = mgr.SyntaxData('py')
-        synspec = syn_data[syntax.SYNSPEC]
+        syn_data = mgr.GetSyntaxData('py')
+        synspec = syn_data.SyntaxSpec
         self.SetLexer(wx.stc.STC_LEX_PYTHON)
         self.SetSyntax(synspec)
 

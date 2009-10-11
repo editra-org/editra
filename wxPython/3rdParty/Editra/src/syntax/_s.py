@@ -21,10 +21,11 @@ __revision__ = "$Revision$"
 # Imports
 from pygments.token import Token
 from pygments.lexers import get_lexer_by_name
-import wx.stc
+import wx.stc as stc
 
 #Local Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 # Style Id's
@@ -41,7 +42,6 @@ STC_S_KEYWORD = range(7)
 
 #---- Keyword Specifications ----#
 
-# Python Keywords
 KEYWORDS = "for while if else break return function NULL NA TRUE FALSE"
 
 #---- Syntax Style Specs ----#
@@ -53,46 +53,32 @@ SYNTAX_ITEMS = [ (STC_S_DEFAULT,   'default_style'),
                  (STC_S_OPERATOR,  'operator_style'),
                  (STC_S_KEYWORD,   'keyword_style') ]
 
-#---- Extra Properties ----#
+#-----------------------------------------------------------------------------#
+
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for R and S""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
+
+        # Setup
+        self.SetLexer(stc.STC_LEX_CONTAINER)
+        self.RegisterFeature(synglob.FEATURE_STYLETEXT, StyleText)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
+        return [(1, KEYWORDS)]
+
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
+        return SYNTAX_ITEMS
+
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
+        return [u"#",]
 
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
-
-    """
-    if lang_id in [synglob.ID_LANG_R, synglob.ID_LANG_S]:
-        return [(1, KEYWORDS)]
-
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id in [synglob.ID_LANG_R, synglob.ID_LANG_S]:
-        return SYNTAX_ITEMS
-
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id in [synglob.ID_LANG_R, synglob.ID_LANG_S]:
-        return []
-
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id in [synglob.ID_LANG_R, synglob.ID_LANG_S]:
-        return [u"#",]
-
-#---- End Required Module Functions ----#
-
-def StyleText(stc, start, end):
+def StyleText(_stc, start, end):
     """Style the text
     @param stc: Styled text control instance
     @param start: Start position
@@ -102,10 +88,10 @@ def StyleText(stc, start, end):
 
     """
     cpos = 0
-    stc.StartStyling(cpos, 0x1f)
+    _stc.StartStyling(cpos, 0x1f)
     lexer = get_lexer_by_name("s")
-    is_wineol = stc.GetEOLMode() == wx.stc.STC_EOL_CRLF
-    for token, txt in lexer.get_tokens(stc.GetTextRange(0, end)):
+    is_wineol = _stc.GetEOLMode() == stc.STC_EOL_CRLF
+    for token, txt in lexer.get_tokens(_stc.GetTextRange(0, end)):
         style = TOKEN_MAP.get(token, STC_S_DEFAULT)
 
         tlen = len(txt)
@@ -115,9 +101,9 @@ def StyleText(stc, start, end):
             tlen += txt.count("\n")
 
         if tlen:
-            stc.SetStyling(tlen, style)
+            _stc.SetStyling(tlen, style)
         cpos += tlen
-        stc.StartStyling(cpos, 0x1f)
+        _stc.StartStyling(cpos, 0x1f)
 
 #-----------------------------------------------------------------------------#
 
