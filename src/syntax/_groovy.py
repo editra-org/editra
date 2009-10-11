@@ -18,8 +18,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Imports
+import wx.stc as stc
+
 # Local Imports
 import synglob
+import syndata
 from _cpp import AutoIndenter
 
 #-----------------------------------------------------------------------------#
@@ -28,183 +32,30 @@ from _cpp import AutoIndenter
 
 MAIN_KEYWORDS = (0, 
 """
-as
-assert
-Boolean
-Byte
-Character
-Class
-Double
-Float
-Integer
-Long
-Number
-Object
-Short
-String
-property
-void
-abstract
-assert
-boolean
-break
-byte
-case
-catch
-char
-class
-const
-continue
-default
-do
-double
-else
-extends
-false
-final
-finally
-float
-for
-goto
-if
-implements
-import
-instanceof
-in
-int
-interface
-long
-native
-new
-null
-package
-private
-protected
-public
-return
-short
-static
-strictfp
-super
-switch
-synchronized
-this
-throw
-throws
-transient
-true
-try
-void
-volatile
-while
-def
+as assert Boolean Byte Character Class Double Float Integer Long Number Object 
+Short String property void abstract assert boolean break byte case catch char 
+class const continue default do double else extends false final finally float 
+for goto if implements import instanceof in int interface long native new null 
+package private protected public return short static strictfp super switch 
+synchronized this throw throws transient true try void volatile while def
 """
 )
 
 SECONDARY_KEYWORDS= (1, 
 """
-abs
-accept
-allProperties
-and
-any
-append
-asImmutable
-asSynchronized
-asWritable
-center
-collect
-compareTo
-contains
-count
-decodeBase64
-div
-dump
-each
-eachByte
-eachFile
-eachFileRecurse
-eachLine
-eachMatch
-eachProperty
-eachPropertyName
-eachWithIndex
-encodeBase64
-every
-execute
-filterLine
-find
-findAll
-findIndexOf
-flatten
-getErr
-getIn
-getOut
-getText
-inject
-inspect
-intersect
-intdiv
-invokeMethod
-isCase
-join
-leftShift
-max
-min
-minus
-mod
-multiply
-negate
-newInputStream
-newOutputStream
-newPrintWriter
-newReader
-newWriter
-next
-or
-padLeft
-padRight
-plus
-pop
-previous
-print
-println
-readBytes
-readLine
-readLines
-reverse
-reverseEach
-rightShift
-rightShiftUnsigned
-round
-size
-sort
-splitEachLine
-step
-subMap
-times
-toDouble
-toFloat
-toInteger
-tokenize
-toList
-toLong
-toURL
-transformChar
-transformLine
-upto
-use
-waitForOrKill
-withInputStream
-withOutputStream
-withPrintWriter
-withReader
-withStream
-withStreams
-withWriter
-withWriterAppend
-write
-writeLine
+abs accept allProperties and any append asImmutable asSynchronized asWritable 
+center collect compareTo contains count decodeBase64 div dump each eachByte 
+eachFile eachFileRecurse eachLine eachMatch eachProperty eachPropertyName 
+eachWithIndex encodeBase64 every execute filterLine find findAll findIndexOf 
+flatten getErr getIn getOut getText inject inspect intersect intdiv invokeMethod 
+isCase join leftShift max min minus mod multiply negate newInputStream 
+newOutputStream newPrintWriter newReader newWriter next or padLeft padRight 
+plus pop previous print println readBytes readLine readLines reverse 
+reverseEach rightShift rightShiftUnsigned round size sort splitEachLine step 
+subMap times toDouble toFloat toInteger tokenize toList toLong toURL 
+transformChar transformLine upto use waitForOrKill withInputStream 
+withOutputStream withPrintWriter withReader withStream withStreams withWriter 
+withWriterAppend write writeLine
 """
 )
 
@@ -237,58 +88,30 @@ FOLD_PRE = ("styling.within.preprocessor", "0")
 FOLD_COM = ("fold.comment", "1")
 FOLD_COMP = ("fold.compact", "1")
 FOLD_ELSE = ("fold.at.else", "0")
+
 #------------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Groovy""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_GROOVY:
+        # Setup
+        self.SetLexer(stc.STC_LEX_CPP)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, AutoIndenter)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         return [MAIN_KEYWORDS, SECONDARY_KEYWORDS]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id == synglob.ID_LANG_GROOVY:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    return list()
-    if lang_id == synglob.ID_LANG_GROOVY:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [FOLD, FOLD_PRE]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_GROOVY:
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
         return [ u'//' ]
-    else:
-        return list()
-
-#---- End Required Functions ----#
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#

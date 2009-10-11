@@ -20,10 +20,12 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx.stc as stc
 import re
 
 # Local Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 
@@ -76,50 +78,35 @@ SYNTAX_ITEMS = [ ('STC_RB_BACKTICKS', 'scalar_style'),
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
 TIMMY = ("fold.timmy.whinge.level", "1")
+
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Ruby""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_RUBY:
+        # Setup
+        self.SetLexer(stc.STC_LEX_RUBY)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, AutoIndenter)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         return [RUBY_KW]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id == synglob.ID_LANG_RUBY:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id == synglob.ID_LANG_RUBY:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [FOLD, TIMMY]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_RUBY:
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
         return [u'#']
-    else:
-        return list()
 
-#---- End Required Module Functions ----#
+#-----------------------------------------------------------------------------#
 
 def AutoIndenter(stc, pos, ichar):
     """Auto indent cpp code. uses \n the text buffer will handle any

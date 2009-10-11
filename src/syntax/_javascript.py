@@ -19,8 +19,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Imports
+import wx.stc as stc
+
 # Local Imports
 import synglob
+import syndata
 import _cpp
 
 #-----------------------------------------------------------------------------#
@@ -67,50 +71,36 @@ SYNTAX_ITEMS = [ ('STC_HJ_COMMENT', 'comment_style'),
 
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for JavaScript""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_JS:
+        # Setup
+        self.SetLexer(stc.STC_LEX_CPP)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, _cpp.AutoIndenter)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         return [JS_KEYWORDS,]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
+    def GetSyntaxSpec(self):
+        """Syntax Specifications
+        @param lang_id: used for selecting a specific subset of syntax specs
 
-    """
-    if lang_id == synglob.ID_LANG_HTML:
-        return SYNTAX_ITEMS
-    else:
-        return _cpp.SYNTAX_ITEMS
+        """
+        if self.LangId == synglob.ID_LANG_HTML:
+            return SYNTAX_ITEMS
+        else:
+            return _cpp.SYNTAX_ITEMS
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id == synglob.ID_LANG_JS:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [("fold", "1")]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_JS:
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
         return [u'//']
-    else:
-        return list()
-
-#---- End Required Module Functions ----#
-
-AutoIndenter = _cpp.AutoIndenter
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString(option=0):
@@ -121,5 +111,3 @@ def KeywordString(option=0):
     return JS_KEYWORDS[1]
 
 #---- End Syntax Modules Internal Functions ----#
-
-#-----------------------------------------------------------------------------#

@@ -19,10 +19,12 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx.stc as stc
 import re
 
 # Local imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 
@@ -127,77 +129,61 @@ ALLOW_DOLLARS = ("lexer.cpp.allow.dollars", "1")
 
 #------------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for many C like languages""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    keywords = list()
-    kw1_str = [C_KEYWORDS]
-    kw2_str = [C_TYPES]
-    if lang_id == synglob.ID_LANG_CPP:
-        kw1_str.append(CPP_KEYWORDS)
-        kw2_str.append(CPP_TYPES)
-    elif lang_id == synglob.ID_LANG_CSHARP:
-        kw1_str = [CSHARP_KW]
-        kw2_str = [CSHARP_TYPES]
-    elif lang_id == synglob.ID_LANG_OBJC:
-        kw1_str.append(OBJC_KEYWORDS)
-        kw2_str.append(OBJC_TYPES)
-    elif lang_id == synglob.ID_LANG_VALA:
-        kw1_str = [VALA_KEYWORDS]
-        kw2_str = [VALA_TYPES]
-    else:
-        pass
+        # Setup
+        self.SetLexer(stc.STC_LEX_CPP)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, AutoIndenter)
 
-    keywords.append((0, " ".join(kw1_str)))
-    keywords.append((1, " ".join(kw2_str)))
-    keywords.append(DOC_KEYWORDS)
-    return keywords
+    def GetKeywords(self):
+        """Returns Specified Keywords List"""
+        keywords = list()
+        kw1_str = [C_KEYWORDS]
+        kw2_str = [C_TYPES]
+        if self.LangId == synglob.ID_LANG_CPP:
+            kw1_str.append(CPP_KEYWORDS)
+            kw2_str.append(CPP_TYPES)
+        elif self.LangId == synglob.ID_LANG_CSHARP:
+            kw1_str = [CSHARP_KW]
+            kw2_str = [CSHARP_TYPES]
+        elif self.LangId == synglob.ID_LANG_OBJC:
+            kw1_str.append(OBJC_KEYWORDS)
+            kw2_str.append(OBJC_TYPES)
+        elif self.LangId == synglob.ID_LANG_VALA:
+            kw1_str = [VALA_KEYWORDS]
+            kw2_str = [VALA_TYPES]
+        else:
+            pass
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
+        keywords.append((0, " ".join(kw1_str)))
+        keywords.append((1, " ".join(kw2_str)))
+        keywords.append(DOC_KEYWORDS)
+        return keywords
 
-    """
-    if lang_id in [ synglob.ID_LANG_C,
-                    synglob.ID_LANG_CPP,
-                    synglob.ID_LANG_CSHARP,
-                    synglob.ID_LANG_OBJC,
-                    synglob.ID_LANG_VALA ]:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id in [ synglob.ID_LANG_C,
-                    synglob.ID_LANG_CPP,
-                    synglob.ID_LANG_CSHARP,
-                    synglob.ID_LANG_OBJC,
-                    synglob.ID_LANG_VALA ]:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set"""
         return [FOLD, FOLD_PRE, FOLD_COM]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code
 
-    """
-    if lang_id in [ synglob.ID_LANG_CPP,
-                    synglob.ID_LANG_CSHARP,
-                    synglob.ID_LANG_OBJC,
-                    synglob.ID_LANG_VALA ]:
-        return [u'//']
-    else:
-        return [u'/*', u'*/']
+        """
+        if self.LangId in [ synglob.ID_LANG_CPP,
+                            synglob.ID_LANG_CSHARP,
+                            synglob.ID_LANG_OBJC,
+                            synglob.ID_LANG_VALA ]:
+            return [u'//']
+        else:
+            return [u'/*', u'*/']
 
-#---- End Required Functions ----#
+#-----------------------------------------------------------------------------#
 
 def AutoIndenter(stc, pos, ichar):
     """Auto indent cpp code. uses \n the text buffer will
@@ -229,13 +215,3 @@ def AutoIndenter(stc, pos, ichar):
         rtxt += ichar
 
     return rtxt
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#

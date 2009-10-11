@@ -19,11 +19,13 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx.stc as stc
 from pygments.token import Token
 from pygments.lexers import get_lexer_by_name
 
-#Local Imports
+# Local Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
 # Style Id's
@@ -62,44 +64,30 @@ SYNTAX_ITEMS = [ (STC_MAKO_DEFAULT, 'default_style'),
                  (STC_MAKO_BUILTIN, 'keyword4_style'),
                  (STC_MAKO_KEYWORD, 'keyword_style'), ]
 
-#---- Extra Properties ----#
-
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Mako""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_MAKO:
+        # Setup
+        self.SetLexer(stc.STC_LEX_CONTAINER)
+        self.RegisterFeature(synglob.FEATURE_STYLETEXT, StyleText)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         return [(1, KEYWORDS)]
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id == synglob.ID_LANG_MAKO:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
-
-    """
-    if lang_id == synglob.ID_LANG_MAKO:
-        return []
-
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_MAKO:
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
         return [u"#",]
 
-#---- End Required Module Functions ----#
+#-----------------------------------------------------------------------------#
 
 def StyleText(stc, start, end):
     """Style the text

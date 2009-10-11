@@ -20,10 +20,14 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
-# Dependancies
-import synglob
+# Imports
+import wx.stc as stc
 
+# Local Imports
+import synglob
+import syndata
 import _javascript
+
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Specifications ----#
@@ -171,37 +175,33 @@ FLD_HTML = ("fold.html", "1")
 
 #------------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @param lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Html and related languages""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_COLDFUSION:
-        return [(HTML_TAGS[0], HTML_TAGS[1] + " " + CF_TAGS), JS_KEYWORDS]
-    else:
-        return [HTML_TAGS, JS_KEYWORDS, SGML_KEYWORDS]
+        # Setup
+        self.SetLexer(stc.STC_LEX_HTML)
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @param lang_id: used for selecting a specific subset of syntax specs
+    def GetKeywords(self):
+        """Returns Specified Keywords List"""
+        if self.LangId == synglob.ID_LANG_COLDFUSION:
+            return [(HTML_TAGS[0], HTML_TAGS[1] + " " + CF_TAGS), JS_KEYWORDS]
+        else:
+            return [HTML_TAGS, JS_KEYWORDS, SGML_KEYWORDS]
 
-    """
-    return SYNTAX_ITEMS + _javascript.SYNTAX_ITEMS
+    def GetSyntaxSpec(self):
+        """Syntax Specifications"""
+        return SYNTAX_ITEMS + _javascript.SYNTAX_ITEMS
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @param lang_id: used to select a specific set of properties
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set"""
+        return [FOLD, FLD_HTML]
 
-    """
-    return [FOLD, FLD_HTML]
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code"""
+        return [u'<!--', u'-->']
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @param lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    return [u'<!--', u'-->']
 #---- End Required Functions ----#
 
 #---- Syntax Modules Internal Functions ----#

@@ -19,13 +19,14 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Imports
+import wx.stc as stc
+
+# Imports
 import synglob
+import syndata
 
 #-----------------------------------------------------------------------------#
-
-#---- Keyword Definitions ----#
-
-#---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [('STC_PROPS_ASSIGNMENT', 'operator_style'),
@@ -37,57 +38,25 @@ SYNTAX_ITEMS = [('STC_PROPS_ASSIGNMENT', 'operator_style'),
 
 #---- Extra Properties ----#
 FOLD = ('fold', '1')
+
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @keyword lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for Properties files""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_PROPS:
-        return list()
-    else:
-        return list()
+        # Setup
+        self.SetLexer(stc.STC_LEX_PROPERTIES)
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @keyword lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id == synglob.ID_LANG_PROPS:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @keyword lang_id: used to select a specific set of properties
-
-    """
-    if lang_id == synglob.ID_LANG_PROPS:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [FOLD]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @keyword lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_PROPS:
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
         return list(u'#')
-    else:
-        return list()
-
-#---- End Required Module Functions ----#
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#

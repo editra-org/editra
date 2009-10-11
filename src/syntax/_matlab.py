@@ -18,7 +18,13 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Imports
+import wx.stc as stc
+
+# Local Imports
 import synglob
+import syndata
+
 #-----------------------------------------------------------------------------#
 
 #---- Keyword Definitions ----#
@@ -44,61 +50,42 @@ SYNTAX_ITEMS = [('STC_MATLAB_COMMAND', 'funct_style'),
 
 #---- Extra Properties ----#
 FOLD = ('fold', '1')
+
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @keyword lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for MatLab and Octave""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_MATLAB:
-        return [MATLAB_KW]
-    elif lang_id == synglob.ID_LANG_OCTAVE:
-        return [OCTAVE_KW]
-    else:
-        return list()
+        # Setup
+        if self.LangId == synglob.ID_LANG_MATLAB:
+            self.SetLexer(stc.STC_LEX_MATLAB)
+        else:
+            self.SetLexer(stc.STC_LEX_OCTAVE)
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @keyword lang_id: used for selecting a specific subset of syntax specs
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
+        if self.LangId == synglob.ID_LANG_MATLAB:
+            return [MATLAB_KW]
+        elif self.LangId == synglob.ID_LANG_OCTAVE:
+            return [OCTAVE_KW]
+        else:
+            return list()
 
-    """
-    if lang_id in [synglob.ID_LANG_MATLAB, synglob.ID_LANG_OCTAVE]:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @keyword lang_id: used to select a specific set of properties
-
-    """
-    if lang_id in [synglob.ID_LANG_MATLAB, synglob.ID_LANG_OCTAVE]:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [FOLD]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @keyword lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_MATLAB:
-        return [u'%']
-    elif lang_id == synglob.ID_LANG_OCTAVE:
-        return [u'#']
-    else:
-        return list()
-
-#---- End Required Module Functions ----#
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
+        if self.LangId == synglob.ID_LANG_MATLAB:
+            return [u'%']
+        elif self.LangId == synglob.ID_LANG_OCTAVE:
+            return [u'#']
+        else:
+            return list()

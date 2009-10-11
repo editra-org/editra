@@ -51,18 +51,10 @@ LANG_ID    = 0
 LEXER_ID   = 1
 MODULE     = 2
 
-# Constants for getting values from SyntaxData's return dictionary
-KEYWORDS   = 0    # Keyword set(s)
-LEXER      = 1    # Lexer to use
-SYNSPEC    = 2    # Highligter specs
-PROPERTIES = 3    # Extra Properties
-LANGUAGE   = 4    # Language ID
-COMMENT    = 5    # Gets the comment characters pattern
-CLEXER     = 6    # Container Lexer Styler Method
-INDENTER   = 7    # Auto-indenter method
-
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
+# Imports
+import syndata
 
 # Needed by other modules that use this api
 from synextreg import ExtensionRegister, GetFileExtensions
@@ -171,7 +163,7 @@ class SyntaxMgr(object):
             return False
         return True
 
-    def SyntaxData(self, ext):
+    def GetSyntaxData(self, ext):
         """Fetches the language data based on a file extention string. The file
         extension is used to look up the default lexer actions from the EXT_REG
         dictionary.
@@ -181,12 +173,10 @@ class SyntaxMgr(object):
 
         """
         # The Return Value
-        syn_data = dict()
         lex_cfg = synglob.LANG_MAP[self._extreg.FileTypeFromExt(ext)]
 
-        syn_data[LEXER] = lex_cfg[LEXER_ID]
         if lex_cfg[LANG_ID] == synglob.ID_LANG_TXT:
-            syn_data[LANGUAGE] = lex_cfg[LANG_ID]
+            syn_data = syndata.SyntaxDataBase()
 
         # Check if module is loaded and load if necessary
         if not self.LoadModule(lex_cfg[MODULE]):
@@ -196,17 +186,7 @@ class SyntaxMgr(object):
         # This little bit of code fetches the keyword/syntax 
         # spec set(s) from the specified module
         mod = self._loaded[lex_cfg[MODULE]]  #HACK
-        syn_data[KEYWORDS] = mod.Keywords(lex_cfg[LANG_ID])
-        syn_data[SYNSPEC] = mod.SyntaxSpec(lex_cfg[LANG_ID])
-        syn_data[PROPERTIES] = mod.Properties(lex_cfg[LANG_ID])
-        syn_data[LANGUAGE] = lex_cfg[LANG_ID]
-        syn_data[COMMENT] = mod.CommentPattern(lex_cfg[LANG_ID])
-        if syn_data[LEXER] == wx.stc.STC_LEX_CONTAINER:
-            syn_data[CLEXER] = mod.StyleText
-        else:
-            syn_data[CLEXER] = None
-        syn_data[INDENTER] = getattr(mod, 'AutoIndenter', None)
-
+        syn_data = mod.SyntaxData(lex_cfg[LANG_ID])
         return syn_data
 
 #-----------------------------------------------------------------------------#

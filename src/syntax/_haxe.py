@@ -16,8 +16,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
+# Imports
+import wx.stc as stc
+
 # Local Imports
 import synglob
+import syndata
 import _cpp
 
 #-----------------------------------------------------------------------------#
@@ -33,65 +37,29 @@ HAXE_TYPES = (1, "Bool Enum false Float Int null String true Void ")
 
 #---- End Keyword Definitions ----#
 
-#---- Syntax Style Specs ----#
-# Same as CPP
-
-#---- Extra Properties ----#
-# Same as CPP
-
 #-----------------------------------------------------------------------------#
 
-#---- Required Module Functions ----#
-def Keywords(lang_id=0):
-    """Returns Specified Keywords List
-    @keyword lang_id: used to select specific subset of keywords
+class SyntaxData(syndata.SyntaxDataBase):
+    """SyntaxData object for HaXe""" 
+    def __init__(self, langid):
+        syndata.SyntaxDataBase.__init__(self, langid)
 
-    """
-    if lang_id == synglob.ID_LANG_HAXE:
+        # Setup
+        self.SetLexer(stc.STC_LEX_CPP)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, _cpp.AutoIndenter)
+
+    def GetKeywords(self):
+        """Returns Specified Keywords List """
         return [HAXE_KW, HAXE_TYPES, _cpp.DOC_KEYWORDS]
-    else:
-        return list()
 
-def SyntaxSpec(lang_id=0):
-    """Syntax Specifications
-    @keyword lang_id: used for selecting a specific subset of syntax specs
-
-    """
-    if lang_id == synglob.ID_LANG_HAXE:
+    def GetSyntaxSpec(self):
+        """Syntax Specifications """
         return _cpp.SYNTAX_ITEMS
-    else:
-        return list()
 
-def Properties(lang_id=0):
-    """Returns a list of Extra Properties to set
-    @keyword lang_id: used to select a specific set of properties
-
-    """
-    if lang_id == synglob.ID_LANG_HAXE:
+    def GetProperties(self):
+        """Returns a list of Extra Properties to set """
         return [_cpp.FOLD,]
-    else:
-        return list()
 
-def CommentPattern(lang_id=0):
-    """Returns a list of characters used to comment a block of code
-    @keyword lang_id: used to select a specific subset of comment pattern(s)
-
-    """
-    if lang_id == synglob.ID_LANG_HAXE:
+    def GetCommentPattern(self):
+        """Returns a list of characters used to comment a block of code """
         return ['//']
-    else:
-        return list()
-
-#---- End Required Module Functions ----#
-
-AutoIndenter = _cpp.AutoIndenter
-
-#---- Syntax Modules Internal Functions ----#
-def KeywordString():
-    """Returns the specified Keyword String
-    @note: not used by most modules
-
-    """
-    return None
-
-#---- End Syntax Modules Internal Functions ----#
