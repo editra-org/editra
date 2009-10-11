@@ -140,7 +140,8 @@ def HexToRGB(hex_str):
 def EmptyBitmapRGBA(width, height):
     """Create an empty bitmap with an alpha channel"""
     bmp = wx.EmptyBitmap(width, height, 32)
-    bmp.UseAlpha()
+    if hasattr(bmp, 'UseAlpha'):
+        bmp.UseAlpha()
     return bmp
 
 #-----------------------------------------------------------------------------#
