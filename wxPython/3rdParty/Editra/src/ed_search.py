@@ -487,8 +487,8 @@ class SearchController(object):
             evt.Skip()
 
     def OnFindClose(self, evt):
-        """Destroy Find Dialog After Cancel is clicked in it
-        @param evt: event that called this handler
+        """Process storing search dialog state when it is closed
+        @param evt: findlg.EVT_FIND_CLOSE
 
         """
         if self._finddlg is not None:
@@ -507,6 +507,7 @@ class SearchController(object):
             Profile_Set('SEARCH_LOC', choices)
             Profile_Set('SEARCH_FILTER', self._filters)
         evt.Skip()
+        self._parent.SetFocus()
 
     def OnOptionChanged(self, evt):
         """Handle when the find options are changed in the dialog"""
