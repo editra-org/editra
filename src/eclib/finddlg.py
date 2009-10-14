@@ -402,8 +402,8 @@ class FindReplaceDlgBase:
         data.SetFindString(self._panel._ftxt.GetValue())
         data.SetReplaceString(self._panel._rtxt.GetValue())
         evt = FindEvent(edEVT_FIND_CLOSE, self.GetId())
-        wx.PostEvent(self.GetParent(), evt)
         self.Hide()
+        wx.PostEvent(self.GetParent(), evt)
 
     def _OnModeChange(self, evt):
         """Update the the dialog when the mode changes"""
