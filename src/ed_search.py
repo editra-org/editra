@@ -324,6 +324,10 @@ class SearchController(object):
             flags = data.GetFlags()
             if not findnext and evt.GetId() == ed_glob.ID_FIND_PREVIOUS:
                 flags |= eclib.AFR_UP
+            elif eclib.AFR_UP & flags:
+                # Not a find previous request so make sure that
+                # the search up flag is cleared.
+                flags ^= eclib.AFR_UP
 
             evt = eclib.FindEvent(eclib.edEVT_FIND_NEXT, flags=flags)
             evt.SetFindString(data.GetFindString())
