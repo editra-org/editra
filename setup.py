@@ -35,6 +35,8 @@ __revision__ = "$Revision$"
 import os
 import sys
 import glob
+import shutil
+import zipfile
 import src.info as info
 import src.syntax.synextreg as synextreg # So we can get file extensions
 
@@ -241,8 +243,11 @@ MANIFEST_TEMPLATE = '''
 RT_MANIFEST = 24
 #---- End Global Settings ----#
 
-#---- Setup Windows EXE ----#
-if __platform__ == "win32" and 'py2exe' in sys.argv:
+
+#---- Packaging Functions ----#
+
+def BuildPy2Exe():
+    """Generate the Py2exe files"""
     from distutils.core import setup
     try:
         import py2exe
@@ -276,8 +281,8 @@ if __platform__ == "win32" and 'py2exe' in sys.argv:
         data_files = GenerateBinPackageFiles(),
         )
 
-#---- Setup MacOSX APP ----#
-elif __platform__ == "darwin" and 'py2app' in sys.argv:
+def BuildOSXApp():
+    """Build the OSX Applet"""
     # Check for setuptools and ask to download if it is not available
     import src.extern.ez_setup as ez_setup
     ez_setup.use_setuptools()
@@ -334,9 +339,8 @@ elif __platform__ == "darwin" and 'py2app' in sys.argv:
         setup_requires = ['py2app'],
         )
 
-#---- Other Platform(s)/Source module install ----#
-else:
-
+def DoSourcePackage():
+    """Build a source package or do a source install"""
     # Get the package data
     DATA = GenerateSrcPackageFiles()
 
@@ -386,3 +390,60 @@ else:
         package_data = { NAME : DATA },
         classifiers= CLASSIFIERS,
         )
+
+def BuildECLibDemo():
+    """Build the Editra Control Library Demo package"""
+    assert 'eclib' in sys.argv, "Should only be called for eclib build"
+
+    DATA = [ "../src/eclib/*.py", "../tests/controls/*.py"]
+
+    if not os.path.exists('dist'):
+        os.mkdir('dist')
+
+    if os.path.exists('dist/eclibdemo.zip'):
+        os.remove('dist/eclibdemo.zip')
+
+    if os.path.exists('dist/eclibdemo'):
+        shutil.rmtree('dist/eclibdemo')
+
+    # Copy the Files
+    os.mkdir('dist/eclibdemo')
+    shutil.copytree('src/eclib', 'dist/eclibdemo/eclib')
+    shutil.copytree('tests/controls', 'dist/eclibdemo/demo')
+    f = open(os.path.abspath('./dist/eclibdemo/__init__.py'), 'wb')
+    f.close()
+
+    # Zip it up
+    os.chdir('dist')
+    zfile = zipfile.ZipFile('ECLibDemo.zip', 'w',
+                            compression=zipfile.ZIP_DEFLATED)
+    files = list()
+    for dpath, dname, fnames in os.walk('eclibdemo'):
+        files.extend([ os.path.join(dpath, fname).\
+                       lstrip(os.path.sep) 
+                       for fname in fnames])
+    for fname in files:
+        zfile.write(fname.encode(sys.getfilesystemencoding()))
+    os.chdir('../')
+
+def CleanBuild():
+    """Cleanup all build related files"""
+    if os.path.exists('MANIFEST'):
+        os.remove('MANIFEST')
+    for path in ('dist', 'build'):
+        if os.path.exists(path):
+            shutil.rmtree(path)
+
+#----------------------------------------------------------------------------#
+
+if __name__ == '__main__':
+    if __platform__ == "win32" and 'py2exe' in sys.argv:
+        BuildPy2Exe()
+    elif __platform__ == "darwin" and 'py2app' in sys.argv:
+        BuildOSXApp()
+    elif 'eclib' in sys.argv:
+        BuildECLibDemo()
+    elif 'clean' in sys.argv:
+        CleanBuild()
+    else:
+        DoSourcePackage()
