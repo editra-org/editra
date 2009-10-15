@@ -3,5 +3,5 @@ Editra. Each module is a simple application that can be run to see the control
 in action.
 
 To run one of the tests simply change to this directory type 
-'python $TEST_MODULE.py' at the command line to open the test program.
+'python demo.py' at the command line to open the test program.
 

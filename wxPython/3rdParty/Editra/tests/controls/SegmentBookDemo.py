@@ -53,16 +53,16 @@ class TestPanel(eclib.SegmentBook):
 
         self.AddPage(wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Hello"),
                      "Text Editor", img_id=0)
-        self.AddPage(wx.GenericDirCtrl(self), "File Browser", img_id=1)
+        bpanel = wx.Panel(self)
+        bpanel.SetBackgroundColour(wx.BLUE)
+        self.AddPage(bpanel, "Blue Panel", img_id=1)
         self.AddPage(wx.TextCtrl(self, style=wx.TE_MULTILINE, value="Test Control"),
                      "Text Editor2", img_id=0)
-        todo = wx.ListBox(self, choices=['Wake up',
-                                         'Finish Event handling',
-                                         'Take a nap',
-                                         'Procrastinate for a while',
-                                         'Drink some coffee',
-                                         'Check in code'])
-        self.AddPage(todo, "TODO List", img_id=1)
+        todo = wx.ListBox(self, choices=['http://editra.org',
+                                         'http://wxpython.org',
+                                         'http://python.org',
+                                         'http://xkcd.com'])
+        self.AddPage(todo, "Favorites", img_id=1)
 
         # Add a sub controlbar
         cbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
