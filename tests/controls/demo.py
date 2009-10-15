@@ -27,7 +27,11 @@ import wx.stc as stc
 
 #-----------------------------------------------------------------------------#
 # TODO
-sys.path.insert(0, os.path.abspath('../../src'))
+if os.getcwd().endswith('demo'):
+    sys.path.insert(0, os.path.abspath('../'))
+else:
+    sys.path.insert(0, os.path.abspath('../../src'))
+
 import eclib
 
 #-----------------------------------------------------------------------------#
