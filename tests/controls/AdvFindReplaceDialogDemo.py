@@ -123,6 +123,7 @@ class TestPanel(wx.Panel):
         if e_id in DIALOG_MAP:
             self.data, style, title = DIALOG_MAP[e_id]
             self.dlg = eclib.AdvFindReplaceDlg(self, self.data, title, style)
+            self.dlg.CenterOnParent()
             self.dlg.Show()
         else:
             evt.Skip()
