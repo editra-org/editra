@@ -28,6 +28,7 @@ import eclib
 ID_DEFAULT = wx.NewId()
 ID_DIALOG  = wx.NewId()
 ID_REPLACE = wx.NewId()
+ID_NOUPDOWN = wx.NewId()
 ID_NOOPTS  = wx.NewId()
 ID_REGEX   = wx.NewId()
 ID_NOLOOK  = wx.NewId()
@@ -48,6 +49,9 @@ DIALOG_MAP = {ID_DEFAULT : (wx.FindReplaceData(),
               ID_REPLACE : (wx.FindReplaceData(),
                             eclib.AFR_STYLE_REPLACEDIALOG,
                             "Default Replace Dialog"),
+              ID_NOUPDOWN : (wx.FindReplaceData(eclib.AFR_NOUPDOWN),
+                            eclib.AFR_STYLE_REPLACEDIALOG,
+                            "No Up/Down Option"),
               ID_NOOPTS  : (wx.FindReplaceData(eclib.AFR_NOOPTIONS),
                            eclib.AFR_STYLE_FINDDIALOG,
                            "Options Hidden"),
@@ -71,7 +75,8 @@ DIALOG_MAP = {ID_DEFAULT : (wx.FindReplaceData(),
                             "All Options Hidden")}
 
 BUTTONS = [(ID_DEFAULT, "Default"), (ID_DIALOG, "Non-Floating"),
-           (ID_REPLACE, "Replace Dialog"), (ID_NOOPTS, "Options Hidden"),
+           (ID_REPLACE, "Replace Dialog"), (ID_NOUPDOWN, "No Up/Down Option"),
+           (ID_NOOPTS, "Options Hidden"),
            (ID_REGEX, "Regular Expression"), (ID_NOLOOK, "Lookin Hidden"),
            (ID_NOWHOLEW, "Whole Word Disabled"), (ID_NO_COUNT, "No Count Button"),
            (ID_NO_ALL_ACT, "No Find/Replace All"), (ID_MINIMAL, "Minimal")]
