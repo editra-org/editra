@@ -35,6 +35,7 @@ ID_NOLOOK  = wx.NewId()
 ID_NOWHOLEW = wx.NewId()
 ID_NO_COUNT = wx.NewId()
 ID_NO_ALL_ACT = wx.NewId()
+ID_NO_MODE_SELECT = wx.NewId()
 ID_MINIMAL = wx.NewId()
 
 #-----------------------------------------------------------------------------#
@@ -70,6 +71,9 @@ DIALOG_MAP = {ID_DEFAULT : (wx.FindReplaceData(),
               ID_NO_ALL_ACT : (wx.FindReplaceData(eclib.AFR_NO_ALL_BTN),
                              eclib.AFR_STYLE_FINDDIALOG,
                              "No Find/Replace All"),
+              ID_NO_MODE_SELECT : (wx.FindReplaceData(),
+                             eclib.AFR_STYLE_FINDDIALOG|eclib.AFR_STYLE_NO_MODE_SELECT,
+                             "No Mode Select"),
               ID_MINIMAL : (wx.FindReplaceData(eclib.AFR_SIMPLE),
                             eclib.AFR_STYLE_FINDDIALOG,
                             "All Options Hidden")}
@@ -79,7 +83,8 @@ BUTTONS = [(ID_DEFAULT, "Default"), (ID_DIALOG, "Non-Floating"),
            (ID_NOOPTS, "Options Hidden"),
            (ID_REGEX, "Regular Expression"), (ID_NOLOOK, "Lookin Hidden"),
            (ID_NOWHOLEW, "Whole Word Disabled"), (ID_NO_COUNT, "No Count Button"),
-           (ID_NO_ALL_ACT, "No Find/Replace All"), (ID_MINIMAL, "Minimal")]
+           (ID_NO_ALL_ACT, "No Find/Replace All"),
+           (ID_NO_MODE_SELECT, "No Mode Select"), (ID_MINIMAL, "Minimal")]
 
 #-----------------------------------------------------------------------------#
 

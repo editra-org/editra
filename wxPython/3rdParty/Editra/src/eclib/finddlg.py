@@ -42,7 +42,7 @@ __all__ = ["FindBox", "FindEvent", "FindPanel", "FindReplaceDlg",
            "MiniFindReplaceDlg", "AdvFindReplaceDlg",
 
            "AFR_STYLE_FINDDIALOG", "AFR_STYLE_REPLACEDIALOG",
-           "AFR_STYLE_NON_FLOATING",
+           "AFR_STYLE_NON_FLOATING", "AFR_STYLE_NO_MODE_SELECT",
            
            "AFR_UP", "AFR_WHOLEWORD", 
            "AFR_MATCHCASE", "AFR_REGEX", "AFR_RECURSIVE", "AFR_NOLOOKIN",
@@ -72,9 +72,10 @@ import platebtn
 # Globals
 
 # Style Flags
-AFR_STYLE_FINDDIALOG    = 0
-AFR_STYLE_REPLACEDIALOG = 1
-AFR_STYLE_NON_FLOATING  = 2
+AFR_STYLE_FINDDIALOG        = 0 # Start dialog in Find mode
+AFR_STYLE_REPLACEDIALOG     = 1 # Start dialog in Replace mode
+AFR_STYLE_NON_FLOATING      = 2 # Use a standard dialog as the tlw
+AFR_STYLE_NO_MODE_SELECT    = 4 # Hide the mode selector buttons
 
 # FindReplaceData Flags
 AFR_UP          = 1             # Set dialogs Search Up flag
@@ -346,6 +347,7 @@ def AdvFindReplaceDlg(parent, fdata, title, style=AFR_STYLE_FINDDIALOG):
         dlg = FindReplaceDlg(parent, fdata, title, style)
     else:
         dlg = MiniFindReplaceDlg(parent, fdata, title, style)
+
     return dlg
 
 #--------------------------------------------------------------------------#
@@ -641,6 +643,9 @@ class FindBox(ctrlbox.ControlBox):
         ctrlbar.AddControl(self.replace, wx.ALIGN_LEFT)
         self.SetControlBar(ctrlbar)
         self.SetWindow(self._fpanel)
+
+        if style & AFR_STYLE_NO_MODE_SELECT:
+            self.GetControlBar().Hide()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
