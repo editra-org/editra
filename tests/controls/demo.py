@@ -9,6 +9,10 @@
 """
 Editra Control Library Demo / Test Application
 
+This application is used for running the ui test modules for the Editra
+Control Library. The demo modules loaded by this application are primarly
+intended as samples for exercising the various control apis.
+
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
@@ -105,7 +109,7 @@ class EclibDemoBook(wx.Notebook):
         f.close()
         self.code.SetText(t)
         self.AddPage(self.doc, "Info")
-        self.SetDocText(eclib.__doc__)
+        self.SetDocText(__doc__)
         self.AddPage(self.code, "Demo Code")
         self.doc.SetFont(wx.FFont(12, wx.MODERN))
 
