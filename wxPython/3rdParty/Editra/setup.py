@@ -396,26 +396,38 @@ def BuildECLibDemo():
     assert 'eclib' in sys.argv, "Should only be called for eclib build"
 
     DATA = [ "../src/eclib/*.py", "../tests/controls/*.py"]
+    OUT = 'dist/eclibdemo'
 
+    Log("Cleaning up files")
     if not os.path.exists('dist'):
         os.mkdir('dist')
 
     if os.path.exists('dist/eclibdemo.zip'):
         os.remove('dist/eclibdemo.zip')
 
-    if os.path.exists('dist/eclibdemo'):
-        shutil.rmtree('dist/eclibdemo')
+    if os.path.exists(OUT):
+        shutil.rmtree(OUT)
 
     # Copy the Files
-    os.mkdir('dist/eclibdemo')
+    Log("Preparing output package...")
+    os.mkdir(OUT)
     shutil.copytree('src/eclib', 'dist/eclibdemo/eclib')
     shutil.copytree('tests/controls', 'dist/eclibdemo/demo')
+    shutil.copy('COPYING', 'dist/eclibdemo/')
     f = open(os.path.abspath('./dist/eclibdemo/__init__.py'), 'wb')
     f.close()
 
+    # Make the launcher
+    f = open(os.path.abspath('./dist/eclibdemo/RunDemo.py'), 'wb')
+    f.write("import os\nos.chdir('demo')\n"
+            "import demo.demo as demo\n"
+            "demo.Main()\nos.chdir('..')")
+    f.close()
+
     # Zip it up
+    Log("Create zip file")
     os.chdir('dist')
-    zfile = zipfile.ZipFile('ECLibDemo.zip', 'w',
+    zfile = zipfile.ZipFile('eclibdemo.zip', 'w',
                             compression=zipfile.ZIP_DEFLATED)
     files = list()
     for dpath, dname, fnames in os.walk('eclibdemo'):
@@ -425,14 +437,20 @@ def BuildECLibDemo():
     for fname in files:
         zfile.write(fname.encode(sys.getfilesystemencoding()))
     os.chdir('../')
+    Log("ECLIB Demo build is complete")
 
 def CleanBuild():
     """Cleanup all build related files"""
     if os.path.exists('MANIFEST'):
         os.remove('MANIFEST')
-    for path in ('dist', 'build'):
+    for path in ('dist', 'build', 'tmp'):
         if os.path.exists(path):
             shutil.rmtree(path)
+
+def Log(msg):
+    """Write to the build log"""
+    # TODO add log file, just write to console for now
+    print(msg)
 
 #----------------------------------------------------------------------------#
 
