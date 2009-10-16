@@ -62,7 +62,8 @@ class EclibDemoFrame(wx.Frame):
         self.mgr = aui.AuiManager(self, aui.AUI_MGR_ALLOW_ACTIVE_PANE)
         self.tree = EclibDemoTree(self)
         self.pane = EclibDemoBook(self)
-        self._loader = ModuleLoader(FindDemoModules(os.path.abspath('.')))
+        path = os.path.dirname(__file__)
+        self._loader = ModuleLoader(FindDemoModules(os.path.abspath(path)))
 
         # Setup
         self.mgr.AddPane(self.tree,
