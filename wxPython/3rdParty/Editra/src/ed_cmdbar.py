@@ -146,7 +146,7 @@ class CommandBarBase(eclib.ControlBar):
             self.ShowControl(ctrl.GetName(), not ctrl.IsShown())
             self.Layout()
 
-            # Update the persistant configuration
+            # Update the persistent configuration
             key = self.GetConfigKey()
             if key is not None:
                 cfg = Profile_Get('CTRLBAR', default=dict())
@@ -164,7 +164,7 @@ class CommandBarBase(eclib.ControlBar):
             self._menu = None
 
     def GetConfigKey(self):
-        """Get the key to use for the layout config persistance.
+        """Get the key to use for the layout config persistence.
         @return: string
         @note: override in subclasses
 
@@ -194,12 +194,13 @@ class CommandBarBase(eclib.ControlBar):
     def Hide(self):
         """Hides the control and notifies the parent
         @postcondition: commandbar is hidden
-        @todo: dont reference nb directly here
+        @todo: don't reference nb directly here
 
         """
         super(CommandBarBase, self).Hide()
         self._parent.SendSizeEvent()
-        self._parent.nb.GetCurrentCtrl().SetFocus()
+        nb = self._parent.GetNotebook()
+        nb.GetCurrentCtrl().SetFocus()
         return True
 
     def ShowControl(self, ctrl_name, show=True):
@@ -386,7 +387,7 @@ class SearchBar(CommandBarBase):
             pre.Refresh()
 
     def GetConfigKey(self):
-        """Get the key to use for the layout config persistance.
+        """Get the key to use for the layout config persistence.
         @return: string
 
         """
@@ -448,7 +449,7 @@ class GotoLineBar(CommandBarBase):
 
 class CommandExecuter(eclib.CommandEntryBase):
     """Part of the Vi emulation, opens a minibuffer to execute EX commands.
-    @note: based on search ctrl so we get the nice roudned edges on wxmac.
+    @note: based on search ctrl so we get the nice rounded edges on wxmac.
 
     """
     RE_GO_BUFFER = re.compile('[0-9]*[nN]{1,1}')
@@ -812,7 +813,7 @@ class CommandExecuter(eclib.CommandEntryBase):
 
     def OnKeyDown(self, evt):
         """Records the key sequence that has been entered and
-        performs actions based on that keysequence.
+        performs actions based on that key sequence.
         @param evt: event that called this handler
 
         """
@@ -877,7 +878,7 @@ class CommandExecuter(eclib.CommandEntryBase):
         evt.Skip()
 
     def OnPopupNotify(self, evt):
-        """Recieve the selections from the popup list
+        """Receive the selections from the popup list
         @param evt: event that called this handler
 
         """
@@ -901,7 +902,7 @@ class CommandExecuter(eclib.CommandEntryBase):
         evt.Skip()
 
     def RestoreFocus(self):
-        """Restore focus and cursor postion
+        """Restore focus and cursor position
         @postcondition: ctrl has focus and cursor is moved to last position
 
         """
@@ -947,7 +948,7 @@ class LineCtrl(eclib.CommandEntryBase):
     """
     def __init__(self, parent, id_, get_doc, size=wx.DefaultSize):
         """Initializes the LineCtrl control and its attributes.
-        @param get_doc: callback method for retreiving a reference to the
+        @param get_doc: callback method for retrieving a reference to the
                         current document.
 
         """
@@ -1121,7 +1122,7 @@ class PopupList(wx.MiniFrame, PopupListBase):
         evt.Skip()
 
     def OnKeyUp(self, evt):
-        """Process key upevents in the control
+        """Process key up events in the control
         @param evt: event that called this handler
 
         """

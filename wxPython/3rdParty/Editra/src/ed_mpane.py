@@ -48,6 +48,13 @@ class MainPanel(eclib.ControlBox):
         # Layout
         self.SetWindow(self.nb)
 
+    def GetNotebook(self):
+        """Get the main notebook control
+        @return: EdPages instance
+
+        """
+        return self.nb
+
     def HideCommandBar(self):
         """Hide the command bar"""
         self.GetControlBar(wx.BOTTOM).Hide()
