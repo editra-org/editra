@@ -141,6 +141,11 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         words = self.GetWordFromPosition(self._mdata['position'])
         self._spell_data['word'] = words
         sugg = self._spell.getSuggestions(words[0])
+
+        # Don't give suggestions if the selected word is in the suggestions list
+        if words[0] in sugg:
+            sugg = list()
+
         if not len(sugg):
             item = menu.Insert(0, EdEditorView.ID_NO_SUGGEST, _("No Suggestions"))
             item.Enable(False)
