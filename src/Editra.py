@@ -148,6 +148,15 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             self._log("[app][info] Registering Editra's ArtProvider")
             wx.ArtProvider.PushProvider(ed_art.EditraArt())
 
+        # Check if libenchant has been loaded or need to be
+        import extern.stcspellcheck as stcspellcheck
+        checker = stcspellcheck.STCSpellCheck
+        if not checker.isEnchantOk():
+            spref = profiler.Profile_Get('SPELLCHECK', default=dict())
+            libpath = spref.get('epath', u'')
+            checker.reloadEnchant(libpath)
+            # TODO: log if load fails here
+
     def AddMessageCatalog(self, name, path):
         """Add a catalog lookup path to the app
         @param name: name of catalog (i.e 'projects')
@@ -192,15 +201,6 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         # Setup the Error Reporter
         if profiler.Profile_Get('REPORTER', 'bool', True):
             sys.excepthook = dev_tool.ExceptionHook
-
-        # Check if libenchant has been loaded or need to be
-        import extern.stcspellcheck as stcspellcheck
-        checker = stcspellcheck.STCSpellCheck
-        if not checker.isEnchantOk():
-            spref = profiler.Profile_Get('SPELLCHECK', default=dict())
-            libpath = spref.get('epath', u'')
-            checker.reloadEnchant(libpath)
-            # TODO: log if load fails here
 
         #---- Bind Events ----#
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
