@@ -34,7 +34,7 @@ BUG FIXES:
  running unnecessarily.
 +Fix errors that could occur occasionally when setting status text.
 +Fix bug in error reporting when file reload fails.
-+Fix some compatilibity issues with wxPython 2.8.4
++Fix some compatibility issues with wxPython 2.8.4
 +Fix issue where search direction could get stuck in search previous when using
  the quick search shortcuts.
 

@@ -19,7 +19,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import wx
 import ed_glob
 import ed_msg
@@ -94,10 +94,10 @@ class EdToolBar(wx.ToolBar):
 
     def AddSimpleTool(self, tool_id, lbl, helpstr):
         """Overides the default function to allow for easier tool
-        generation/placement by automatically getting an appropriat icon from
+        generation/placement by automatically getting an appropriate icon from
         the art provider.
         @param tool_id: Id of tool to add
-        @param lbl: tool lable
+        @param lbl: tool label
         @param helpstr: tool help string
 
         """
