@@ -37,6 +37,7 @@ import sys
 import glob
 import shutil
 import zipfile
+import time
 import src.info as info
 import src.syntax.synextreg as synextreg # So we can get file extensions
 
@@ -338,6 +339,70 @@ def BuildOSXApp():
         data_files = DATA_FILES,
         setup_requires = ['py2app'],
         )
+
+    CreateDMG(VERSION)
+
+def CreateDMG(version):
+    """Create an OSX DMG
+    @param version: version number string
+
+    """
+    Log("Creating DMG for osx installer...")
+
+    assert os.path.exists('dist')
+    os.chdir('dist')
+    vname = "Editra-%s" % version
+    fname = vname + ".dmg"
+    mpath = "/Volumes/Editra-%s" % version
+    comp = "Editra-%s_2.dmg" % version
+
+    if os.path.exists("dist/%s" % fname):
+        Log("Found image from previous running")
+        os.remove("dist/%s" % fname)
+
+    # Create the temporary image
+    Log("Creating disk image...")
+    os.system("hdiutil create -size 75m -fs HFS+ -volname %s %s" % (vname, fname))
+    Log("Mounting disk image...")
+    os.system("hdiutil mount %s" % fname) # Mount the image
+
+    # Move installation files to the new image
+    Log("Copying installation files to installer image...")
+    if not os.path.exists(mpath + "/.bk"):
+        os.mkdir(mpath + "/.bk")
+    shutil.copy2("../pixmaps/installer/inst_bk.png", mpath + "/.bk/inst_bk.png")
+    os.system("ditto -rsrcFork Editra.app %s/Editra.app" % mpath)
+    
+    Log("Configuring Finder View Options...")
+    shutil.copy2("../scripts/installer/INSTALLER_DS_Store", mpath + "/.DS_Store")
+    f = open("tmpscript", 'w')
+    f.write(APPLE_SCRIPT % vname)
+    f.close()
+    os.system("osascript tmpscript")
+    os.remove("tmpscript")
+
+    # Unmount the image
+    Log("Unmounting the installer image...")
+    os.system("hdiutil eject %s" % mpath)
+
+    # Create the compressed image
+    Log("Converting the disk image to a compressed format...")
+    os.system("hdiutil convert %s -format UDZO -imagekey zlib-level=9 -o %s" % (fname, comp))
+
+    # Cleanup
+    Log("Cleaning up temporary installer build files...")
+    os.remove(fname)
+    os.rename(comp, fname)
+
+# Template for controlling finder via apple script
+APPLE_SCRIPT = """
+tell application "Finder"
+    tell disk ("%s" as string)
+        set opts to the icon view options of container window
+        set background picture of opts to file ".bk:inst_bk.png"
+    end tell
+end tell
+"""
 
 def DoSourcePackage():
     """Build a source package or do a source install"""
