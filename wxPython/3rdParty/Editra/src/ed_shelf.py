@@ -66,7 +66,7 @@ class Shelf(plugin.Plugin):
     delegate = None
 
     def GetUiHandlers(self):
-        """Gets the update ui handlers for the shelfs menu
+        """Gets the update ui handlers for the shelf's menu
         @return: [(ID, handler),]
 
         """
@@ -163,11 +163,11 @@ class EdShelfBook(FNB.FlatNotebook):
         return self._imglst
 
     def AddItem(self, item, name, imgid=-1):
-        """Add an item to the shelfs notebook. This is usefull for interacting
+        """Add an item to the shelf's notebook. This is useful for interacting
         with the Shelf from outside its interface. It may be necessary to
         call L{EnsureShelfVisible} before or after adding an item if you wish
         the shelf to be shown when the item is added.
-        @param item: A panel like instance to add to the shelfs notebook
+        @param item: A panel like instance to add to the shelf's notebook
         @param name: Items name used for page text in notebook
 
         """
@@ -180,7 +180,7 @@ class EdShelfBook(FNB.FlatNotebook):
 
     @mainwinonly
     def EnsureShelfVisible(self):
-        """Make sure the Shelf is visable
+        """Make sure the Shelf is visible
         @precondition: Shelf.Init has been called
         @postcondition: Shelf is shown
 

@@ -91,7 +91,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
                  style=0, use_dt=True):
         """Initializes a control and sets the default objects for
         Tracking events that occur in the control.
-        @keyword use_dt: wheter to use a drop target or not
+        @keyword use_dt: whether to use a drop target or not
 
         """
         ed_basestc.EditraBaseStc.__init__(self, parent, id_, pos, size, style)
@@ -321,7 +321,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def Configure(self):
         """Configures the editors settings by using profile values
-        @postcondition: all profile dependant attributes are configured
+        @postcondition: all profile dependent attributes are configured
 
         """
 #        self.SetControlCharSymbol(172)
@@ -345,7 +345,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetViEmulationMode(_PGET('VI_EMU'), _PGET('VI_NORMAL_DEFAULT'))
         self.SetViewEdgeGuide(_PGET('SHOW_EDGE'))
         self.EnableAutoBackup(_PGET('AUTOBACKUP'))
-        # NOTE: disabled because it is more annoying than it is benificial.
+        # NOTE: disabled because it is more annoying than it is beneficial.
 #        self.SetEndAtLastLine(False)
 
     def ConvertCase(self, upper=False):
@@ -455,7 +455,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     @jumpaction
     def GotoLine(self, line):
-        """Move caret to begining given line number
+        """Move caret to beginning given line number
         @param line: line to go to (int)
 
         """
@@ -606,11 +606,11 @@ class EditraStc(ed_basestc.EditraBaseStc):
             evt.Skip()
 
     def OnChar(self, evt):
-        """Handles Char events that arent caught by the
+        """Handles Char events that aren't caught by the
         KEY_DOWN event.
         @param evt: event that called this handler
         @type evt: wx.EVT_CHAR
-        @todo: autocomp/calltip lookup can be very cpu intesive it may
+        @todo: autocomp/calltip lookup can be very cpu intensive it may
                be better to try and process it on a separate thread to
                prevent a slow down in the input of text into the buffer
 
@@ -760,7 +760,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         pid = self.GetTopLevelParent().GetId()
         if evt.GetState() == ed_txt.FL_STATE_READING:
             if evt.HasText():
-                # TODO: gauge gauge updates working properly
+                # TODO: get gauge updates working properly
 #                sb = self.GetTopLevelParent().GetStatusBar()
 #                gauge = sb.GetGauge()
 #                gauge.SetValue(evt.GetProgress())
@@ -1094,7 +1094,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
                     super(EditraStc, self).SetEOLMode(sel)
                 dlg.Destroy()
             else:
-                # The end of line character is different from the prefered
+                # The end of line character is different from the preferred
                 # user setting for end of line. So change our eol mode to
                 # preserve that of what the document is using.
                 mode = eol_map.get(eol, wx.stc.STC_EOL_LF)
@@ -1152,7 +1152,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         return self.LineFromPosition(self.GetCurrentPos())
 
     def GetEOLModeId(self):
-        """Gets the id of the eol format. Convinience for updating
+        """Gets the id of the eol format. Convenience for updating
         menu ui.
         @return: id of the eol mode of this document
 
@@ -1295,7 +1295,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
                 self.InitCompleter()
 
     def SetEOLMode(self, mode):
-        """Sets the EOL mode from a string descript
+        """Sets the EOL mode from a string description
         @param mode: eol mode to set
         @note: overrides StyledTextCtrl.SetEOLMode
 
@@ -1309,7 +1309,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         super(EditraStc, self).SetEOLMode(mode)
 
     def SetViEmulationMode(self, use_vi, use_normal=False):
-        """Activate/Deactivate Vi eumulation mode
+        """Activate/Deactivate Vi emulation mode
         @param use_vi: Turn vi emulation on/off
         @type use_vi: boolean
         @keyword use_normal: Start in normal mode
@@ -1482,7 +1482,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         super(EditraStc, self).ToggleFold(lineNum)
 
     def WordLeft(self):
-        """Move caret to begining of previous word
+        """Move caret to beginning of previous word
         @note: override builtin to include extra characters in word
 
         """
@@ -1494,7 +1494,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetWordChars('')
 
     def WordLeftExtend(self):
-        """Extend selection to begining of previous word
+        """Extend selection to beginning of previous word
         @note: override builtin to include extra characters in word
 
         """
@@ -1506,7 +1506,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetWordChars('')
 
     def WordPartLeft(self):
-        """Move the caret left to the next change in capitalization/puncuation
+        """Move the caret left to the next change in capitalization/punctuation
         @note: overrides default function to not count whitespace as words
 
         """
@@ -1516,7 +1516,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             super(EditraStc, self).WordPartLeft()
 
     def WordPartLeftExtend(self):
-        """Extend selection left to the next change in capitalization/puncuation
+        """Extend selection left to the next change in capitalization/punctuation
         @note: overrides default function to not count whitespace as words
 
         """
@@ -1536,7 +1536,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             super(EditraStc, self).WordPartRight()
 
     def WordPartRightEnd(self):
-        """Move caret to end of next change in capitalization/puncuation
+        """Move caret to end of next change in capitalization/punctuation
         @postcondition: caret is moved
 
         """
@@ -1547,7 +1547,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             self.CharLeft()
 
     def WordPartRightEndExtend(self):
-        """Extend selection to end of next change in capitalization/puncuation
+        """Extend selection to end of next change in capitalization/punctuation
         @postcondition: selection is extended
 
         """
@@ -1558,7 +1558,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             self.CharLeftExtend()
 
     def WordPartRightExtend(self):
-        """Extend selection to start of next change in capitalization/puncuation
+        """Extend selection to start of next change in capitalization/punctuation
         @postcondition: selection is extended
 
         """
@@ -1568,7 +1568,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             super(EditraStc, self).WordPartRightExtend()
 
     def WordRight(self):
-        """Move caret to begining of next word
+        """Move caret to beginning of next word
         @note: override builtin to include extra characters in word
 
         """
@@ -1592,7 +1592,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetWordChars('')
 
     def WordRightExtend(self):
-        """Extend selection to begining of next word
+        """Extend selection to beginning of next word
         @note: override builtin to include extra characters in word
 
         """
@@ -1732,7 +1732,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         return result
 
     def ConfigureLexer(self, file_ext):
-        """Sets Lexer and Lexer Keywords for the specifed file extension
+        """Sets Lexer and Lexer Keywords for the specified file extension
         @param file_ext: a file extension to configure the lexer from
 
         """
