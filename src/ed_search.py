@@ -132,7 +132,7 @@ class SearchController(object):
             self._finddlg.Destroy()
 
     def _CreateNewDialog(self, e_id):
-        """Create and set the controlers find dialog
+        """Create and set the controllers find dialog
         @param e_id: Dialog Type Id
 
         """
@@ -245,7 +245,7 @@ class SearchController(object):
         return rtext
 
     def GetData(self):
-        """Get the contollers FindReplaceData
+        """Get the controllers FindReplaceData
         @return: wx.FindReplaceData
 
         """
@@ -262,7 +262,7 @@ class SearchController(object):
         """Returns the position value of the last found search item
         if the last search resulted in nothing being found then the
         return value will -1.
-        @return: position of last search opperation
+        @return: position of last search operation
         @rtype: int
 
         """
@@ -351,7 +351,7 @@ class SearchController(object):
                           style=wx.OK|wx.CENTER|wx.ICON_ERROR)
             return
 
-        # XXX: may be inefficent to copy whole buffer each time for files
+        # XXX: may be inefficient to copy whole buffer each time for files
         #      that are large.
         self._engine.SetSearchPool(stc.GetTextRaw())
 
@@ -861,7 +861,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         else:
             # ?wxBUG? cant set text back to black after changing color
             # But setting it to this almost black color works. Most likely its
-            # due to bit masking but I havent looked at the source so I am not
+            # due to bit masking but I haven't looked at the source so I am not
             # sure
             if self._txtctrl is None:
                 self.SetForegroundColour(wx.ColourRGB(0 | 1 | 0))

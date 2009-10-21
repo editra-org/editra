@@ -111,7 +111,7 @@ class EdStatBar(ProgressStatusBar):
             self._log("[estatbar][err] %s" % err)
 
     def AdjustFieldWidths(self):
-        """Adust each field width of status bar basing on the field text
+        """Adjust each field width of status bar basing on the field text
         @return: None
 
         """
@@ -232,7 +232,7 @@ class EdStatBar(ProgressStatusBar):
             wx.CallAfter(self.__SetStatusText, txt, field)
 
     def OnUpdateText(self, msg):
-        """Update the status bar text based on the recieved message
+        """Update the status bar text based on the received message
         @param msg: Message Object
 
         """
