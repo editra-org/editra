@@ -50,7 +50,7 @@ __all__ = [# Classes
            'TimeStamp']
 
 #----------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import os
 import sys
 import platform

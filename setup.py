@@ -345,6 +345,7 @@ def BuildOSXApp():
 def CreateDMG(version):
     """Create an OSX DMG
     @param version: version number string
+    @todo: cleanup and generalize
 
     """
     Log("Creating DMG for osx installer...")
@@ -394,7 +395,7 @@ def CreateDMG(version):
     os.remove(fname)
     os.rename(comp, fname)
 
-# Template for controlling finder via apple script
+# Template for controlling some finder options via apple script
 APPLE_SCRIPT = """
 tell application "Finder"
     tell disk ("%s" as string)
@@ -510,6 +511,7 @@ def CleanBuild():
         os.remove('MANIFEST')
     for path in ('dist', 'build', 'tmp'):
         if os.path.exists(path):
+            Log("Cleaning %s..." % path)
             shutil.rmtree(path)
 
 def Log(msg):
