@@ -14,11 +14,11 @@ Base class for autocompletion providers to implement the completion interface.
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__cvsid__ = "$Id$"
+__svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = [ 'IMG_FUNCTION', 'IMG_METHOD', 'IMG_CLASS', 'IMG_ATTRIBUTE',
-            'IMG_VARIABLE', 'IMG_ELEMENT', 'IMG_PROPERTY' ]
+            'IMG_VARIABLE', 'IMG_ELEMENT', 'IMG_PROPERTY', 'BaseCompleter' ]
 
 #--------------------------------------------------------------------------#
 # Imports

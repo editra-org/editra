@@ -33,7 +33,7 @@ import ed_msg
 import ed_txt
 from syntax import syntax
 from syntax import synglob
-from autocomp import autocomp
+import autocomp
 from extern import vertedit
 from profiler import Profile_Get
 
