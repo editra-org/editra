@@ -20,23 +20,23 @@ makes the calls to the other support objects/functions in this library.
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__cvsid__ = "$Id$"
+__svnid__ = "$Id$"
 __revision__ = "$Revision$"
+__all__ = ['AutoCompService',]
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import wx.stc as stc
 
 # Local imports
-from completer import *
 import simplecomp
 
 #--------------------------------------------------------------------------#
 
 class AutoCompService(object):
-    """Interface to retrieve and provide autcompletion and
+    """Interface to retrieve and provide autocompletion and
     calltip information to an stc control. The plain text
-    (empty) completion provider is built in. All other provders
+    (empty) completion provider is built in. All other providers
     are loaded from external modules on request.
 
     """
