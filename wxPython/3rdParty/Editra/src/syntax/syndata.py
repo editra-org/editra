@@ -121,3 +121,10 @@ class SyntaxDataBase(object):
     def SetLexer(self, lex):
         """Set the lexer object for this data object"""
         self._lexer = lex
+
+    def SetLangId(self, lid):
+        """Set the language identifier
+        @param lid: int
+
+        """
+        self._langid = lid

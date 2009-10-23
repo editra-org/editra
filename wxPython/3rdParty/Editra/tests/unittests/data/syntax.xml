@@ -1,6 +1,7 @@
-<!-- Test data for testing syntax lib xml serialziation -->
+<!-- Test data for testing syntax lib xml serialization -->
 <editra version="1">
-   <syntax language="Python" lexer="STC_LEX_PYTHON">
+   <syntax language="Python" lexer="STC_LEX_PYTHON" id="ID_LANG_PYTHON">
+      <associations value="py pyw"/>
       <keywordlist>
          <keywords value="0">
              if else elif for while in

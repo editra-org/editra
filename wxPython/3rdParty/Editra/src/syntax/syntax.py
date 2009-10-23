@@ -41,7 +41,6 @@ __revision__ = "$Revision$"
 # Dependencies
 import wx
 import os
-import synglob
 
 #-----------------------------------------------------------------------------#
 # Data Objects / Constants
@@ -53,7 +52,9 @@ MODULE     = 1
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 # Imports
+import synglob
 import syndata
+import synxml
 
 # Needed by other modules that use this api
 from synextreg import ExtensionRegister, GetFileExtensions
@@ -84,7 +85,13 @@ class SyntaxMgr(object):
                 self._extreg.LoadFromConfig(self._config)
             else:
                 self._extreg.LoadDefault()
+
             self._loaded = dict()
+
+            # Syntax mode extensions
+            self._extensions = dict()   # loaded extensions "py" : PythonMode()
+            if self._config:
+                self.LoadExtensions(self._config)
 
     def __new__(cls, config=None):
         """Ensure only a single instance is shared amongst
@@ -187,6 +194,18 @@ class SyntaxMgr(object):
         mod = self._loaded[lex_cfg[MODULE]]  #HACK
         syn_data = mod.SyntaxData(lex_cfg[LANG_ID])
         return syn_data
+
+    def LoadExtensions(self, path):
+        """Load all extensions found at the extension path
+        @param path: path to look for extension on
+
+        """
+        pass
+#        for fname in os.listdir(path):
+#            if fname.endswith(u".edxml"):
+#                fpath = os.path.join(path, fname)
+#                modeh = synxml.LoadHandler(fpath)
+#                # TODO: create syntax data from handler
 
 #-----------------------------------------------------------------------------#
 
