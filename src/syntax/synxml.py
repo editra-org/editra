@@ -9,13 +9,15 @@
 
 """ Interface for extending language support through the use of xml files
 
-@summary: Editra Xml implementation
+@summary: EditraXml Implementation
 
 """
 
 xml_spec = """
 <editra version="1">
-   <syntax language="Python" lexer="STC_LEX_PYTHON">
+   <syntax language="Python" lexer="STC_LEX_PYTHON" id="ID_LANG_PYTHON">
+
+      <associations value="py pyw"/>
 
       <keywordlist>
          <keywords value="0">
@@ -38,10 +40,10 @@ xml_spec = """
 
       <commentpattern value="#"/>
 
-      <extensionlist>
-         <extension method="AutoIndenter" source="myextension.py"/>
-         <!-- <extension method="StyleText" source="myextension.py"/> -->
-      </extensionlist>
+      <featurelist>
+         <feature method="AutoIndenter" source="myextension.py"/>
+         <!-- <feature method="StyleText" source="myextension.py"/> -->
+      </featurelist>
 
    </syntax>
 
@@ -61,17 +63,18 @@ import wx.stc as stc
 
 #----------------------------------------------------------------------------#
 # Tag Definitions
-EXML_START       = u"editra"
-EXML_SYNTAX      = u"syntax"
-EXML_KEYWORDLIST = u"keywordlist"
-EXML_KEYWORDS    = u"keywords"
-EXML_SYNSPECLIST = u"syntaxspeclist"
-EXML_SYNTAXSPEC  = u"syntaxspec"
+EXML_START        = u"editra"
+EXML_SYNTAX       = u"syntax"
+EXML_KEYWORDLIST  = u"keywordlist"
+EXML_KEYWORDS     = u"keywords"
+EXML_SYNSPECLIST  = u"syntaxspeclist"
+EXML_SYNTAXSPEC   = u"syntaxspec"
 EXML_PROPERTYLIST = u"propertylist"
-EXML_PROPERTY    = u"property"
-EXML_COMMENTPAT  = u"commentpattern"
-EXML_FEATURELIST = u"featurelist"
-EXML_FEATURE     = u"feature"
+EXML_PROPERTY     = u"property"
+EXML_COMMENTPAT   = u"commentpattern"
+EXML_FEATURELIST  = u"featurelist"
+EXML_FEATURE      = u"feature"
+EXML_ASSOCIATIONS = u"associations"
 
 # Attributes
 EXML_ENABLE  = u"enable"
@@ -83,6 +86,7 @@ EXML_TAG     = u"tag"
 EXML_VALUE   = u"value"
 EXML_VERSION = u"version"
 EXML_NAME    = u"name"
+EXML_ID      = u"id"
 
 #----------------------------------------------------------------------------#
 
@@ -176,6 +180,7 @@ class EditraXml(sax.ContentHandler):
         """Load the object from from disk
         @precondition: path has been set
         @return: bool
+        @todo: set error state on failed loads
 
         """
         assert self.path is not None, "Must SetPath before calling Load"
@@ -185,7 +190,7 @@ class EditraXml(sax.ContentHandler):
             handle.close()
             txt = txt.decode('utf-8') # xml is utf-8 by specification
             self.LoadFromString(txt)
-        except (OSError, UnicodeDecodeError):
+        except (OSError, IOError, UnicodeDecodeError):
             return False
         else:
             return True
@@ -307,7 +312,7 @@ class EditraXml(sax.ContentHandler):
 
 #----------------------------------------------------------------------------#
 
-class FileTypeHandler(EditraXml):
+class SyntaxModeHandler(EditraXml):
     """Main Xml interface to extending filetype handling support"""
     def __init__(self, path=None):
         EditraXml.__init__(self, path)
@@ -346,8 +351,16 @@ class FileTypeHandler(EditraXml):
         return self.GetCommentPattern()
 
     @property
+    def FileExtensions(self):
+        return self.GetFileExtensions()
+
+    @property
     def Keywords(self):
         return self.GetKeywords()
+
+    @property
+    def LangId(self):
+        return self.GetLangId()
 
     @property
     def Properties(self):
@@ -369,6 +382,13 @@ class FileTypeHandler(EditraXml):
         """
         return self.syntax.GetCommentPattern()
 
+    def GetFileExtensions(self):
+        """Get the list of associated file extensions
+        @return: list of strings
+
+        """
+        return self.syntax.GetFileExtensions()
+
     def GetKeywords(self):
         """Get the keyword list
         @return: list of tuples [(idx, ['word', 'word2',]),]
@@ -377,7 +397,7 @@ class FileTypeHandler(EditraXml):
         kwxml = self.syntax.GetKeywordXml()
         return kwxml.GetKeywords()
 
-    def GetFeature(self, fet):
+    def GetFeatureFromXml(self, fet):
         """Get the callable associated with the given feature
         @param fet: string
         @return: string
@@ -394,6 +414,13 @@ class FileTypeHandler(EditraXml):
         spxml = self.syntax.GetSyntaxSpecXml()
         return spxml.GetStyleSpecs()
 
+    def GetLangId(self):
+        """Get the language id string
+        @return: str "ID_LANG_"
+
+        """
+        return self.syntax.GetLangId()
+
     def GetProperties(self):
         """Get the property defs
         @return: list of tuples [("fold", "1"),]
@@ -405,14 +432,16 @@ class FileTypeHandler(EditraXml):
 #----------------------------------------------------------------------------#
 
 class Syntax(EditraXml):
-    """Syntax definition for intializing a Scintilla Lexer"""
+    """Syntax definition for initializing a Scintilla Lexer"""
     def __init__(self):
         EditraXml.__init__(self)
 
         # Attributes
         self.language = u"Plain Text"
+        self.langid = u"ID_LANG_TXT"
         self.lexstr = u"STC_LEX_NULL"
         self.lexer = stc.STC_LEX_NULL
+        self.file_ext = list()
 
         # Sub Xml Objects
         self.keywords = KeywordList()
@@ -432,12 +461,17 @@ class Syntax(EditraXml):
         """Parse the Syntax Xml"""
         if name == EXML_COMMENTPAT:
             self.comment = attrs.get(EXML_VALUE, '').split()
+        elif name == EXML_ASSOCIATIONS:
+            self.file_ext = attrs.get(EXML_VALUE, '').split()
         elif name == self.Name:
             lang = attrs.get(EXML_LANG, u"Plain Text")
+            langid = attrs.get(EXML_ID, u"ID_LANG_TXT")
+            assert langid.startswith(u"ID_LANG_"), "id must start with ID_LANG_"
             lexer = attrs.get(EXML_LEXER, 'STC_LEX_NULL')
             lexval = getattr(stc, lexer, None)
             assert lexval is not None, "Invalid Lexer: %s" % lexer
             self.language = lang
+            self.langid = langid
             self.lexstr = lexer
             self.lexer = lexval
         else:
@@ -445,9 +479,10 @@ class Syntax(EditraXml):
 
     def GetStartTag(self):
         """Get the syntax opening tag and attributes"""
-        return u"<%s %s=\"%s\" %s=\"%s\">" % (self.Name, EXML_LANG, 
-                                              self.language, EXML_LEXER,
-                                              self.lexstr)
+        return u"<%s %s=\"%s\" %s=\"%s\" %s=\"%s\">" % (self.Name, EXML_LANG, 
+                                                        self.language, EXML_LEXER,
+                                                        self.lexstr, EXML_ID,
+                                                        self.langid)
 
     def GetSubElements(self):
         """Get the SubElements xml string
@@ -458,9 +493,12 @@ class Syntax(EditraXml):
         ident = self.GetIndentationStr() + (self.Indentation * u" ")
         xml += os.linesep
         cpat = u" ".join(self.GetCommentPattern())
-        comment = u"<%s %s=\"%s\">" % (EXML_COMMENTPAT, EXML_VALUE, cpat.strip())
+        comment = u"<%s %s=\"%s\"/>" % (EXML_COMMENTPAT, EXML_VALUE, cpat.strip())
         xml += os.linesep
         xml += (ident + comment)
+        xml += os.linesep
+        fileext = u"<%s %s=\"%s\"/>" % (EXML_ASSOCIATIONS, EXML_VALUE, u" ".join(self.file_ext))
+        xml += (ident + fileext)
         return xml
 
     #---- External Api ----#
@@ -476,6 +514,10 @@ class Syntax(EditraXml):
         """Get the FeatureList xml object"""
         return self.features
 
+    def GetFileExtensions(self):
+        """Get the list of associated file extensions"""
+        return self.file_ext
+
     def GetKeywordXml(self):
         """Get the Keyword Xml object"""
         return self.keywords
@@ -486,6 +528,13 @@ class Syntax(EditraXml):
 
         """
         return self.language
+
+    def GetLangId(self):
+        """Get the language id
+        @return: string
+
+        """
+        return self.langid
 
     def GetLexer(self):
         """Get the lexer to use for this language
@@ -698,8 +747,9 @@ class FeatureList(EditraXml):
         xml = u""
         tag = u"<%s %s=" % (EXML_FEATURE, EXML_METHOD)
         tag += ("\"%s\" " + EXML_SOURCE + "=\"%s\"/>")
+        ident = self.GetIndentationStr() + (self.Indentation * u" ")
         for feature in self._features.iteritems():
-            xml += os.linesep
+            xml += (os.linesep + ident)
             xml += (tag % feature)
         return xml
 
@@ -718,9 +768,12 @@ class FeatureList(EditraXml):
 
 #----------------------------------------------------------------------------#
 
-def LoadHandler():
-    """Load and intialize a FileTypeHandler from an on disk xml config file
-    @return: FileTypeHandler instance
+def LoadHandler(path):
+    """Load and initialize a SyntaxModeHandler from an on disk xml config file
+    @param path: path to an EditraXml file to load a handler from
+    @return: SyntaxModeHandler instance
 
     """
-    raise NotImplementedError
+    synmode = SyntaxModeHandler(path)
+    synmode.LoadFromDisk()
+    return synmode

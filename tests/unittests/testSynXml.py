@@ -30,7 +30,7 @@ class SynXmlTest(unittest.TestCase):
     def setUp(self):
         self.path = common.GetDataFilePath(u'syntax.xml')
         self.xml = common.GetFileContents(self.path)
-        self.fhandle = syntax.FileTypeHandler(self.path)
+        self.fhandle = syntax.SyntaxModeHandler(self.path)
         self.fhandle.LoadFromDisk()
 
     def tearDown(self):
@@ -40,14 +40,14 @@ class SynXmlTest(unittest.TestCase):
 
     def testGetXml(self):
         """Test getting the xml representation"""
-        tmp_h = syntax.FileTypeHandler()
+        tmp_h = syntax.SyntaxModeHandler()
         tmp_h.LoadFromString(self.xml)
 
         x1 = self.fhandle.GetXml()
         x2 = tmp_h.GetXml()
         self.assertEquals(x1, x2)
 
-    #---- FileTypeHandler tests ----#
+    #---- SyntaxModeHandler tests ----#
 
     def testGetCommentPattern(self):
         """Get retrieving the comment pattern from the xml"""
@@ -56,10 +56,22 @@ class SynXmlTest(unittest.TestCase):
         self.assertEquals(self.fhandle.CommentPattern, [u"#",],
                           "pattern is: %s" % self.fhandle.CommentPattern)
 
-    def testGetFeature(self):
+    def testGetFeatureFromXml(self):
         """Test retrieving a feature"""
-        feat = self.fhandle.GetFeature(u'AutoIndenter')
+        feat = self.fhandle.GetFeatureFromXml(u'AutoIndenter')
         self.assertEquals(feat, u'myextension.py')
+
+    def testGetFileExtensions(self):
+        """Test getting the file extension list"""
+        exts = self.fhandle.GetFileExtensions()
+        self.assertTrue(isinstance(exts, list))
+        for ext in exts:
+            self.assertTrue(isinstance(ext, basestring))
+
+    def testGetLangId(self):
+        """Test getting the language identifier string"""
+        lid = self.fhandle.GetLangId()
+        self.assertEquals(lid, 'ID_LANG_PYTHON')
 
     def testGetKeywords(self):
         """Test getting the keywords from the xml"""
