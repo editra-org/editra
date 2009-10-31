@@ -399,14 +399,7 @@ class StyleMgr(object):
 
         """
         for data in self.syntax_set:
-            # If its a standard lexer the style id will be stored as
-            # a string. If its a container lexer it is the id.
-            if isinstance(data[0], basestring):
-                s_id = getattr(wx.stc, data[0])
-            else:
-                s_id = data[0]
-
-            if style_id == s_id:
+            if style_id == data[0]:
                 return data[1]
 
         return 'default_style'
@@ -921,21 +914,12 @@ class StyleMgr(object):
         # Parses Syntax Specifications list, ignoring all bad values
         self.UpdateBaseStyles()
         valid_settings = list()
+        lexer = self.GetLexer()
         for syn in syn_lst:
             if len(syn) != 2:
                 continue
             else:
-                if self.GetLexer() == wx.stc.STC_LEX_CONTAINER:
-                    self.StyleSetSpec(syn[0], self.GetStyleByName(syn[1]))
-                else:
-                    if not isinstance(syn[0], basestring) or \
-                       not hasattr(wx.stc, syn[0]):
-                        continue
-                    elif not isinstance(syn[1], basestring):
-                        continue
-                    else:
-                        self.StyleSetSpec(getattr(wx.stc, syn[0]), \
-                                          self.GetStyleByName(syn[1]))
+                self.StyleSetSpec(syn[0], self.GetStyleByName(syn[1]))
                 valid_settings.append(syn)
 
         self.syntax_set = valid_settings
