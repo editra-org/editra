@@ -52,7 +52,7 @@ CTRL_SHIFT = wx.stc.STC_SCMOD_CTRL|wx.stc.STC_SCMOD_SHIFT
 
 class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     """Base StyledTextCtrl that provides all the base code editing
-    functionatlity.
+    functionality.
 
     """
     ED_STC_MASK_MARKERS = ~wx.stc.STC_MASK_FOLDERS
@@ -828,7 +828,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         kwlist = kwlist.split()         # Split into a list of words
         kwlist = list(set(kwlist))      # Uniqueify the list
-        kwlist.sort()                   # Sort into alphbetical order
+        kwlist.sort()                   # Sort into alphabetical order
 
         # Can't have ? in scintilla autocomp list unless specifying an image
         if '?' in kwlist:
