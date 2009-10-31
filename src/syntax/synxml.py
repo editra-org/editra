@@ -363,6 +363,10 @@ class SyntaxModeHandler(EditraXml):
         return self.GetLangId()
 
     @property
+    def Lexer(self):
+        return self.GetLexer()
+
+    @property
     def Properties(self):
         return self.GetProperties()
 
@@ -420,6 +424,20 @@ class SyntaxModeHandler(EditraXml):
 
         """
         return self.syntax.GetLangId()
+
+    def GetLanguage(self):
+        """Get the language name string
+        @return: string
+
+        """
+        return self.syntax.GetLanguage()
+
+    def GetLexer(self):
+        """Get the lexer id
+        @return: wx.stc.STC_LEX_
+
+        """
+        return self.syntax.GetLexer()
 
     def GetProperties(self):
         """Get the property defs

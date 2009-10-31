@@ -12,9 +12,11 @@
 """
 FILE: synextreg.py
 LANGUAGE: Python
-@summary: This module defines all supported language/filetype indentifiers and
+@summary: This module defines all supported language/filetype identifiers and
           an extension register for mapping file extensions to filetypes.
 @see: synglob.py for more details on how this data is used
+
+@note: Don't use this module directly for internal use only
 
 """
 
@@ -288,7 +290,6 @@ LANG_GROOVY = u'Groovy'
 ID_LANG_XTEXT = _NewId()
 LANG_XTEXT = u'Xtext'
 
-
 #---- End Language Identifier Keys ----#
 
 # Default extensions to file type mapping
@@ -509,7 +510,7 @@ class ExtensionRegister(dict):
             self.__setitem__(EXT_MAP[key], key.split())
 
     def LoadFromConfig(self, config):
-        """Load the extention register with values from a config file
+        """Load the extension register with values from a config file
         @param config: path to config file to load settings from
 
         """
@@ -537,6 +538,7 @@ class ExtensionRegister(dict):
         """
         self.__setitem__(ftype, list(set(ext.split())))
 
+#-----------------------------------------------------------------------------#
 
 def GetFileExtensions():
     """Gets a sorted list of all file extensions the editor is configured
@@ -546,5 +548,18 @@ def GetFileExtensions():
     """
     extreg = ExtensionRegister()
     return extreg.GetAllExtensions()
+
+def RegisterNewLangId(langId, langName):
+    """Register a new language identifier
+    @param langId: "ID_LANG_FOO"
+    @param langName: "Foo"
+    @return: int
+
+    """
+    gdict = globals()
+    if langId not in gdict:
+        gdict[langId] = _NewId()
+        gdict[langId[3:]] = langName
+    return gdict[langId]
 
 #-----------------------------------------------------------------------------#
