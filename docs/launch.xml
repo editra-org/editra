@@ -13,7 +13,7 @@
       <commandlist default="python">
          <!-- Commands that are available to be executed
          name attribute is the alias that will be shown in the dropdown list
-         execute attribute is the actuall command that will be run
+         execute attribute is the actual command that will be run
          -->
          <command name="python" execute="python2.5 -u"/>
          <command name="pylint" execute="/usr/local/bin/pylint"/>
