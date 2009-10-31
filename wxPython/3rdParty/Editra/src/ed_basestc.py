@@ -134,7 +134,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             self.LineDown()
 
     def AutoIndent(self):
-        """Indent from the current postion to match the indentation
+        """Indent from the current position to match the indentation
         of the previous line.
         @postcondition: proper type of white space is added from current pos
                         to match that of indentation in above line
@@ -253,7 +253,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def Comment(self, start, end, uncomment=False):
         """(Un)Comments a line or a selected block of text
         in a document.
-        @param start: begining line (int)
+        @param start: beginning line (int)
         @param end: end line (int)
         @keyword uncomment: uncomment selection
 
@@ -319,7 +319,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 #        self.AutoCompSetFillUps(self._code['compsvc'].GetAutoCompFillups())
 
     def ConfigureLexer(self, file_ext):
-        """Sets Lexer and Lexer Keywords for the specifed file extension
+        """Sets Lexer and Lexer Keywords for the specified file extension
         @param file_ext: a file extension to configure the lexer from
 
         """
@@ -433,7 +433,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         @note: used by vim motions for finding a character on a line (f,F,t,T)
         @param char: the character to be found
-        @keyword repeat: how many times to repeat the serach
+        @keyword repeat: how many times to repeat the search
         @keyword reverse: whether to search backwards
         @keyword extra_offset: extra offset to be applied to the movement
 
@@ -497,7 +497,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.Colourise(0, -1)
 
     def FireModified(self):
-        """Fire a modifed event"""
+        """Fire a modified event"""
         self.OnChanged(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_CHANGE,
                                               self.GetId()))
 
@@ -508,7 +508,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @todo: fillups are currently disabled. See note in Configure.
 
         """
-        # NOTE: the column position retuned by GetCurLine is not correct
+        # NOTE: the column position returned by GetCurLine is not correct
         #       for multibyte characters.
         line, col = self.GetCurLine()
         col = self.GetColumn(self.GetCurrentPos())
@@ -594,7 +594,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         return self._code['keywords']
 
     def GetLangId(self):
-        """Returns the language identifer of this control
+        """Returns the language identifier of this control
         @return: language identifier of document
         @rtype: int
 
@@ -669,7 +669,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if txt is not None:
             if self.file.IsRawBytes() and not ebmlib.IsUnicode(txt):
                 self.AddStyledText(txt)
-                self.SetReadOnly(True) # Dont allow editing of raw bytes
+                self.SetReadOnly(True) # Don't allow editing of raw bytes
             else:
                 self.SetText(txt)
         else:
@@ -807,8 +807,6 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def SetKeyWords(self, kw_lst):
         """Sets the keywords from a list of keyword sets
         @param kw_lst: [ (KWLVL, "KEWORDS"), (KWLVL2, "KEYWORDS2"), ect...]
-        @todo: look into if the uniquifying of the list has a more optimal
-               solution.
 
         """
         # Parse Keyword Settings List simply ignoring bad values and badly
@@ -827,7 +825,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     super(EditraBaseStc, self).SetKeyWords(keyw[0], keyw[1])
 
         kwlist = kwlist.split()         # Split into a list of words
-        kwlist = list(set(kwlist))      # Uniqueify the list
+        kwlist = list(set(kwlist))      # Remove duplicates from the list
         kwlist.sort()                   # Sort into alphabetical order
 
         # Can't have ? in scintilla autocomp list unless specifying an image
@@ -926,7 +924,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if end > start and self.GetColumn(sel[1]) == 0:
                 end = end - 1
 
-            # Analyze the seleted line(s)
+            # Analyze the selected line(s)
             comment = 0
             for line in range(start, end+1):
                 txt = self.GetLine(line)
