@@ -37,6 +37,7 @@ BUG FIXES:
 +Fix some compatibility issues with wxPython 2.8.4
 +Fix issue where search direction could get stuck in search previous when using
  the quick search shortcuts.
++Fix crash that could occur when showing find dialog under certain cases.
 
 #-----------------------------------------------------------------------------#
 
