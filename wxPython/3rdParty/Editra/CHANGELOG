@@ -9,8 +9,8 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.xx
-DATE xx/xx/2009
+VERSION 0.5.15
+DATE 10/31/2009
 30th Alpha Release
 
 NEWS:
@@ -18,7 +18,7 @@ NEWS:
 NEW: [features/improvements]
 +Syntax highlighting can be extended and overridden by user defined extensions.
 +Spell checking support (requires enchant)
-+Plugins can now be uninstalled through plugin manager.
++Plugins can now be un-installed through plugin manager.
 +Add support for STATA (patch from Jean Eid).
 
 LIBRARY:
