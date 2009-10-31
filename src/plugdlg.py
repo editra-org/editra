@@ -338,7 +338,7 @@ class ConfigPanel(eclib.ControlBox):
         this function will clear the list and Repopulate it
         with current config values. Returns the number of
         items populated to the list
-        @postcondition: list is popluated with all plugins that are
+        @postcondition: list is populated with all plugins that are
                         currently loaded and sets the checkmarks accordingly
         @return: number of items added to list
 
@@ -375,6 +375,7 @@ class ConfigPanel(eclib.ControlBox):
             pbi = PBPluginItem(self._list, mod, pdata, None)
 
             pbi.SetChecked(val)
+            util.Log("[pluginmgr][info] Adding %s to list" % item)
             self._list.AppendItem(pbi)
             if pbi.GetInstallPath() in uninstalled:
                 pbi.Enable(False)
@@ -389,7 +390,7 @@ class ConfigPanel(eclib.ControlBox):
         this function will clear the list and Repopulate it
         with current config values. Returns the number of
         items populated to the list
-        @postcondition: list is popluated with all plugins that are
+        @postcondition: list is populated with all plugins that are
                         currently loaded and sets the checkmarks accordingly
         @return: number of items added to list
 
@@ -625,7 +626,7 @@ class DownloadPanel(eclib.ControlBox):
     def PopulateList(self):
         """Populates the list control based off data in the plugin data
         list. The plugin data list is set as a result of calling UpdateList
-        it is not recomended to call this directly.
+        it is not recommended to call this directly.
 
         @return: number of items added to control
 
@@ -677,7 +678,7 @@ class DownloadPanel(eclib.ControlBox):
 #-----------------------------------------------------------------------------#
 # Download utility functions
 
-# The obtained meta data must be served as a file that is formated
+# The obtained meta data must be served as a file that is formatted
 # as follows. Each meta data item must be on a single line with
 # each set of meta data for different plugins separated by three
 # hash marks '###'.
@@ -828,7 +829,7 @@ class InstallPanel(eclib.ControlBox):
             # All plugins installed correctly
             grand_p = self.GetTopLevelParent()
             grand_p.SetStatusText(_("Successfully Installed Plugins"), 0)
-            # Note: need to do this because Setselection doesn't fire a
+            # Note: need to do this because SetSelection doesn't fire a
             #       page change.
             wx.GetApp().GetPluginManager().ReInit()
             self.GetParent().SetSelection(CONFIG_PG)
