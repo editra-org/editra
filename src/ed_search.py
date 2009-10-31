@@ -138,7 +138,7 @@ class SearchController(object):
         """
         # TODO: find out why parent is not a Window in some cases...
         if not isinstance(self._parent, wx.Window):
-            parent = wx.GetApp().ActiveWindow()
+            parent = wx.GetApp().GetActiveWindow()
         else:
             parent = self._parent
 
