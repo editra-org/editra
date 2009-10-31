@@ -16,6 +16,7 @@ DATE xx/xx/2009
 NEWS:
 
 NEW: [features/improvements]
++Syntax highlighting can be extended and overridden by user defined extensions.
 +Spell checking support (requires enchant)
 +Plugins can now be uninstalled through plugin manager.
 +Add support for STATA (patch from Jean Eid).

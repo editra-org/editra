@@ -81,17 +81,12 @@ class SyntaxMgr(object):
             SyntaxMgr.first = False
             self._extreg = ExtensionRegister()
             self._config = config
-            if self._config:
-                self._extreg.LoadFromConfig(self._config)
-            else:
-                self._extreg.LoadDefault()
-
             self._loaded = dict()
 
             # Syntax mode extensions
             self._extensions = dict()   # loaded extensions "py" : PythonMode()
-            if self._config:
-                self.LoadExtensions(self._config)
+
+            self.InitConfig()
 
     def __new__(cls, config=None):
         """Ensure only a single instance is shared amongst
@@ -125,6 +120,16 @@ class SyntaxMgr(object):
         """
         ftype = self._extreg.FileTypeFromExt(ext)
         return synglob.LANG_MAP[ftype][LANG_ID]
+
+    def InitConfig(self):
+        """Initialize the SyntaxMgr's configuration state"""
+        if self._config:
+            self._extreg.LoadFromConfig(self._config)
+        else:
+            self._extreg.LoadDefault()
+
+        if self._config:
+            self.LoadExtensions(self._config)
 
     def IsModLoaded(self, modname):
         """Checks if a module has already been loaded
@@ -196,7 +201,7 @@ class SyntaxMgr(object):
 
         # This little bit of code fetches the keyword/syntax 
         # spec set(s) from the specified module
-        mod = self._loaded[lex_cfg[MODULE]]  #HACK
+        mod = self._loaded[lex_cfg[MODULE]]
         syn_data = mod.SyntaxData(lex_cfg[LANG_ID])
         return syn_data
 
@@ -209,10 +214,22 @@ class SyntaxMgr(object):
             if fname.endswith(u".edxml"):
                 fpath = os.path.join(path, fname)
                 modeh = synxml.LoadHandler(fpath)
-                # TODO: Check that xml load succeeded!
-                sdata = SynExtensionDelegate(modeh)
-                self._extensions[sdata.GetXmlObject().GetLanguage()] = sdata
-                sdata.GetXmlObject().GetXml()
+
+                if modeh.IsOk():
+                    sdata = SynExtensionDelegate(modeh)
+                    self._extensions[sdata.GetXmlObject().GetLanguage()] = sdata
+                else:
+                    pass
+                    #TODO: report error
+
+    def SetConfigDir(self, path):
+        """Set the path to locate config information at. The SyntaxMgr will
+        look for file type associations in a file called synmap and will load
+        syntax extensions from .edxml files found at this path.
+        @param path: string
+
+        """
+        self._config = path
 
 #-----------------------------------------------------------------------------#
 
@@ -393,7 +410,8 @@ def GetTypeFromExt(ext):
 
 def _RegisterExtensionHandler(xml_obj):
     """Register an ExtensionHandler with this module.
-    @todo: this is a temporary hack
+    @todo: this is a temporary hack till what to do with the language id's
+           is decided.
 
     """
     # Create an ID value for the lang id string

@@ -29,7 +29,10 @@ import syntax
 class SynXmlTest(unittest.TestCase):
     def setUp(self):
         self.path = common.GetDataFilePath(u'syntax.xml')
+        self.bad = common.GetDataFilePath(u'bad.xml')
         self.xml = common.GetFileContents(self.path)
+        self.badxml = common.GetFileContents(self.bad)
+
         self.fhandle = syntax.SyntaxModeHandler(self.path)
         self.fhandle.LoadFromDisk()
 
@@ -68,11 +71,6 @@ class SynXmlTest(unittest.TestCase):
         for ext in exts:
             self.assertTrue(isinstance(ext, basestring))
 
-    def testGetLangId(self):
-        """Test getting the language identifier string"""
-        lid = self.fhandle.GetLangId()
-        self.assertEquals(lid, 'ID_LANG_PYTHON')
-
     def testGetKeywords(self):
         """Test getting the keywords from the xml"""
         kwords = self.fhandle.GetKeywords()
@@ -82,6 +80,11 @@ class SynXmlTest(unittest.TestCase):
         self.assertEquals(kwords[0][0], 0, "not sorted")
         self.assertTrue(u'else' in kwords[0][1])
         self.assertTrue(u'str' in kwords[1][1])
+
+    def testGetLangId(self):
+        """Test getting the language identifier string"""
+        lid = self.fhandle.GetLangId()
+        self.assertEquals(lid, 'ID_LANG_PYTHON')
 
     def testGetProperties(self):
         """Test getting the property list from the xml"""
@@ -93,7 +96,7 @@ class SynXmlTest(unittest.TestCase):
         self.assertEquals(props[0][1], "1")
 
     def testGetSyntaxSpec(self):
-        """Test geting the syntax specifications from the xml"""
+        """Test getting the syntax specifications from the xml"""
         spec = self.fhandle.GetSyntaxSpec()
         self.assertTrue(isinstance(spec, list))
         self.assertTrue(isinstance(spec[0], tuple))
@@ -102,6 +105,17 @@ class SynXmlTest(unittest.TestCase):
                           "val was: %s" % spec[0][0])
         self.assertEquals(spec[0][1], "default_style",
                           "val was: %s" % spec[0][1])
+
+    def testIsOk(self):
+        """Test IsOk method"""
+        tmp_h = syntax.SyntaxModeHandler(self.path)
+        tmp_h.LoadFromDisk()
+        self.assertTrue(tmp_h.IsOk())
+        self.assertTrue(tmp_h.Ok)
+        tmp_h = syntax.SyntaxModeHandler(self.bad)
+        tmp_h.LoadFromDisk()
+        self.assertFalse(tmp_h.IsOk())
+        self.assertFalse(tmp_h.Ok)
 
     def testVersion(self):
         """Test the xml version attribute"""

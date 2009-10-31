@@ -100,6 +100,7 @@ class EditraXml(sax.ContentHandler):
         self.level  = 0              # Set the level of the element
         self.indent = 3              # Indentation
         self.path = path
+        self._ok = False             # Did the object load correctly
 
         self._context = None         # Current parse context
         self._reg_handler = dict()   # Registered parse handlers
@@ -190,13 +191,15 @@ class EditraXml(sax.ContentHandler):
             handle.close()
             txt = txt.decode('utf-8') # xml is utf-8 by specification
             self.LoadFromString(txt)
-        except (OSError, IOError, UnicodeDecodeError):
+        except (sax.SAXException, OSError, IOError, UnicodeDecodeError):
+            self._ok = False
             return False
         else:
+            self._ok = True
             return True
 
     def LoadFromString(self, txt):
-        """Load and intialize the object from an xml string
+        """Load and initialize the object from an xml string
         @param txt: string
 
         """
@@ -219,6 +222,10 @@ class EditraXml(sax.ContentHandler):
     @property
     def Name(self):
         return self.name
+
+    @property
+    def Ok(self):
+        return self.IsOk()
 
     def GetHandler(self, tag):
         """Get the handler associated with the given tag
@@ -270,9 +277,16 @@ class EditraXml(sax.ContentHandler):
         """
         return self.path
 
+    def IsOk(self):
+        """Did the object load from file correctly?
+        return: bool
+
+        """
+        return self._ok
+
     def RegisterHandler(self, handler):
         """Register a handler for a tag. Parsing will be delegated to the
-        the registered handler untill its end tag is encountered.
+        the registered handler until its end tag is encountered.
         @param handler: EditraXml instance
 
         """
