@@ -392,12 +392,20 @@ def GetTypeFromExt(ext):
     return ExtensionRegister().FileTypeFromExt(ext)
 
 def _RegisterExtensionHandler(xml_obj):
-    """Register an ExtensionHandler with this module."""
+    """Register an ExtensionHandler with this module.
+    @todo: this is a temporary hack
+
+    """
     # Create an ID value for the lang id string
-    rid = RegisterNewLangId(xml_obj.GetLangId(), xml_obj.GetLanguage())
+    langId = xml_obj.GetLangId() 
+    rid = RegisterNewLangId(langId, xml_obj.GetLanguage())
+    setattr(synglob, langId, rid)
+    setattr(synglob, langId[3:], xml_obj.GetLanguage())
+
     # Register file extensions with extension register
     ExtensionRegister().Associate(xml_obj.GetLanguage(),
                                   u" ".join(xml_obj.FileExtensions))
+
     # Update static syntax id list
     if rid not in SYNTAX_IDS:
         SYNTAX_IDS.append(rid)
