@@ -69,7 +69,7 @@ class SyntaxMgrTest(unittest.TestCase):
         spec = data.SyntaxSpec
         self.assertTrue(isinstance(spec, list))
         self.assertTrue(isinstance(spec[0], tuple))
-        self.assertTrue(isinstance(spec[0][0], basestring))
+        self.assertTrue(isinstance(spec[0][0], int))
         props = data.Properties
         self.assertTrue(isinstance(props, list))
         lang = data.LangId

@@ -125,7 +125,7 @@ LANG_MAP = {LANG_4GL    : (ID_LANG_4GL,       '_progress'),
 # Used when manually setting lexer from a menu/dialog
 def GetDescriptionFromId(lang_id):
     """Get the programming languages description string from the given
-    lanugage id. If no correspoding language is found the plain text
+    language id. If no corresponding language is found the plain text
     description is returned.
     @param lang_id: Language Identifier ID
     @note: requires that all languages are defined in ID_LANG_NAME, LANG_NAME
