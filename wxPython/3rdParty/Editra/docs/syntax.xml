@@ -12,12 +12,12 @@ version attribute used to tell Editra the file has changed since last load
    -->
    <syntax language="Python" lexer="STC_LEX_PYTHON">
 
-      <!-- KeywordList must be a child of syntax it specifes the keywords
+      <!-- KeywordList must be a child of syntax it specifies the keywords
       used by the language.
       -->
       <keywordlist>
          <!-- Keywords hold the actual keyword data in character data
-         value attribute specifes the keyword sets id/index.
+         value attribute specifies the keyword sets id/index.
          -->
          <keywords value="0">
              if else elif for while in
@@ -30,7 +30,7 @@ version attribute used to tell Editra the file has changed since last load
       <!-- SyntaxSpecList must be a child of syntax and it specifies how the
       text is to be styled. For built in lexers the value attribute should be
       a constant used for the set lexer. For custom lexers it should be an
-      integer that specifes the custom style id. The tag attribute specifies
+      integer that specifies the custom style id. The tag attribute specifies
       the style used by Editra's internal styling system to highlight the text
       -->
       <syntaxspeclist>
@@ -54,7 +54,7 @@ version attribute used to tell Editra the file has changed since last load
       builtin functionality.
       method attribute is used to specify the name of the method that has
       an implementation available.
-      source attribute specifes the relative path to where the impementation
+      source attribute specifies the relative path to where the implementation
       can be found
       
       Current Method features that can be implemented
