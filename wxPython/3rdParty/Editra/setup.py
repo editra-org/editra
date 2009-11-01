@@ -289,6 +289,8 @@ def BuildOSXApp():
     ez_setup.use_setuptools()
     from setuptools import setup
 
+    CleanBuild()
+
     PLIST = dict(CFBundleName = info.PROG_NAME,
              CFBundleIconFile = 'Editra.icns',
              CFBundleShortVersionString = info.VERSION,
@@ -375,12 +377,14 @@ def CreateDMG(version):
     os.system("ditto -rsrcFork Editra.app %s/Editra.app" % mpath)
     
     Log("Configuring Finder View Options...")
-    shutil.copy2("../scripts/installer/INSTALLER_DS_Store", mpath + "/.DS_Store")
+#    shutil.copy2("../scripts/installer/INSTALLER_DS_Store", mpath + "/.DS_Store")
+#    os.chmod(mpath + "/.DS_Store", 777)
     f = open("tmpscript", 'w')
     f.write(APPLE_SCRIPT % vname)
     f.close()
-    os.system("osascript tmpscript")
+    status = os.system("osascript tmpscript")
     os.remove("tmpscript")
+    Log("Applescript return status: %d" % status)
 
     # Unmount the image
     Log("Unmounting the installer image...")
@@ -399,8 +403,24 @@ def CreateDMG(version):
 APPLE_SCRIPT = """
 tell application "Finder"
     tell disk ("%s" as string)
+        open
+        
+        tell container window
+            set current view to icon view
+            set toolbar visible to false
+            set statusbar visible to false
+            set the bounds to {10, 60, 522, 402}
+            set statusbar visible to false
+        end tell
+
         set opts to the icon view options of container window
+        tell opts
+            set icon size to 128
+        end tell
         set background picture of opts to file ".bk:inst_bk.png"
+        set position of item "Editra.app" to {260, 145}
+
+        update without registering applications
     end tell
 end tell
 """
