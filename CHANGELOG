@@ -15,6 +15,11 @@ DATE 10/31/2009
 
 NEWS:
 
+This release contains a a large number of internal changes. New features include
+the ability to customize syntax highlighting and add new file type support
+through xml files. Spell checking is now also supported through the use of the
+enchant spell checking library.
+
 NEW: [features/improvements]
 +Syntax highlighting can be extended and overridden by user defined extensions.
 +Spell checking support (requires enchant)
