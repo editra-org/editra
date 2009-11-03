@@ -157,7 +157,7 @@ class EdFile(ebmlib.FileObjectImpl):
                 # Binary data was read
                 Log("[ed_txt][info] Binary bytes where read")
                 ustr = self._HandleRawBytes(bytes)
-        except UnicodeDecodeError, msg:
+        except (UnicodeDecodeError, LookupError), msg:
             Log("[ed_txt][err] Error while reading with %s" % self.encoding)
             Log("[ed_txt][err] %s" % unicode(msg))
             self.SetLastError(unicode(msg))
