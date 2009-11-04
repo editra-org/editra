@@ -785,11 +785,18 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.file = doc
 
     def SetEncoding(self, enc):
-        """Sets the encoding of the current document
+        """Sets the encoding of the document
         @param enc: encoding to set for document
 
         """
         self.file.SetEncoding(enc)
+
+    def GetEncoding(self):
+        """Get the document objects encoding
+        @return: string
+
+        """ 
+        return self.file.GetEncoding()
 
     def SetFileName(self, path):
         """Set the buffers filename attributes from the given path"""

@@ -16,6 +16,8 @@ DATE 10/31/2009
 NEWS:
 
 NEW: [features/improvements]
++Clicking on encoding field in statusbar will allow encoding of current document
+ to be converted.
 
 LIBRARY:
 

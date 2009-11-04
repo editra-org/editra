@@ -28,7 +28,7 @@ import ed_glob
 import util
 import ed_msg
 from syntax.synglob import GetDescriptionFromId
-from eclib.pstatbar import ProgressStatusBar
+from eclib import ProgressStatusBar, EncodingDialog
 from extern.decorlib import anythread
 
 #--------------------------------------------------------------------------#
@@ -178,6 +178,25 @@ class EdStatBar(ProgressStatusBar):
         if self.GetFieldRect(ed_glob.SB_EOL).Contains(pt):
             rect = self.GetFieldRect(ed_glob.SB_EOL)
             self.PopupMenu(self._eolmenu, (rect.x, rect.y))
+        elif self.GetFieldRect(ed_glob.SB_ENCODING).Contains(pt):
+            nb = self.GetTopLevelParent().GetNotebook()
+            buff = nb.GetCurrentCtrl()
+            dlg = EncodingDialog(nb,
+                                 msg=_("Change the encoding of the current document."),
+                                 title=_("Change Encoding"),
+                                 default=buff.GetEncoding())
+            bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOCPROP),
+                                           wx.ART_OTHER)
+            if bmp.IsOk():
+                dlg.SetBitmap(bmp)
+            dlg.CenterOnParent()
+
+            # TODO: should add EdFile callbacks for modification events instead
+            #       of using explicit statusbar refresh.
+            if dlg.ShowModal() == wx.ID_OK:
+                buff.SetEncoding(dlg.GetEncoding())
+                self.UpdateFields()
+            dlg.Destroy()
         else:
             evt.Skip()
 
