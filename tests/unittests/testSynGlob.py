@@ -45,3 +45,18 @@ class SynGlobTest(unittest.TestCase):
 
         desc = synglob.GetDescriptionFromId(100)
         self.assertEquals(desc, synglob.LANG_TXT)
+
+    def testGetIdFromDescription(self):
+        """Get getting a language id from its description string"""
+        id_ = synglob.GetIdFromDescription(u"Python")
+        self.assertEquals(id_, synglob.ID_LANG_PYTHON)
+
+        id_ = synglob.GetIdFromDescription(u"python")
+        self.assertEquals(id_, synglob.ID_LANG_PYTHON)
+
+        id_ = synglob.GetIdFromDescription(u"C")
+        self.assertEquals(id_, synglob.ID_LANG_C)
+
+        id_ = synglob.GetIdFromDescription(u"SomeFakeLang")
+        self.assertEquals(id_, synglob.ID_LANG_TXT)
+

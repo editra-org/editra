@@ -22,5 +22,6 @@ __revision__ = "$Revision$"
 # Setup Namespace
 
 from synxml import *
+from synglob import GetIdFromDescription, GetDescriptionFromId
 
 #-----------------------------------------------------------------------------#
