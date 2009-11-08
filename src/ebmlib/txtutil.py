@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Editra Buisness Model Library: Text Utilities
+Editra Business Model Library: Text Utilities
 
 Utility functions for managing and working with text.
 
