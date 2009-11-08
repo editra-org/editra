@@ -216,7 +216,10 @@ class EdPages(FNB.FlatNotebook):
         """Add a page to the notebook"""
         if not len(text):
             self.pg_num += 1
-            text = _("Untitled - %d") % self.pg_num
+            if self.pg_num != 0:
+                text = _("untitled %d") % self.pg_num
+            else:
+                text = _("untitled")
         page.SetTabLabel(text)
         super(EdPages, self).AddPage(page, text, select, imgId)
         sel = self.GetSelection()
@@ -224,7 +227,7 @@ class EdPages(FNB.FlatNotebook):
         self.UpdateIndexes()
 
     def DocDuplicated(self, path):
-        """Check for if the given path is open elswhere and duplicate the
+        """Check for if the given path is open elsewhere and duplicate the
         docpointer.
         @param path: string
 
