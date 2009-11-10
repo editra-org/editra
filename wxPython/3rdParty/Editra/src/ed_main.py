@@ -443,7 +443,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             elif not hasattr(sys, 'frozen'):
                 fdir = os.curdir
 
-            dlg = wx.FileDialog(self, _("Choose a File"), fdir, "",
+            dlg = wx.FileDialog(self, _("Editra: Open"), fdir, "",
                                 ''.join(syntax.GenFileFilters()),
                                 wx.OPEN | wx.MULTIPLE)
             dlg.SetFilterIndex(_PGET('FFILTER', 'int', 0))
