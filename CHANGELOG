@@ -16,6 +16,7 @@ DATE 10/31/2009
 NEWS:
 
 NEW: [features/improvements]
++New version of Launch plugin (new handlers can be added via xml interface)
 +Clicking on encoding field in statusbar will allow encoding of current document
  to be converted.
 

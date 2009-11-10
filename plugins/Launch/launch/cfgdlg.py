@@ -149,7 +149,7 @@ class ConfigNotebook(wx.Notebook):
     def __init__(self, parent):
         wx.Notebook.__init__(self, parent)
 
-        # Make sure config has been intialized
+        # Make sure config has been initialized
         prefs = Profile_Get(LAUNCH_PREFS, default=None)
         if prefs is None:
             buff = eclib.OutputBuffer(self)

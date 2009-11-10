@@ -5,7 +5,7 @@
    <!-- Defines a Launch handler
    name parameter is the file type name that the handler is associated with
    -->
-   <handler name="Python">
+   <handler name="Python" id="ID_LANG_PYTHON">
 
       <!-- List of commands that are available to the launcher
       default attribute specifies the default command to use
@@ -23,6 +23,13 @@
       lines in the processes output
       -->
       <error pattern="File &quot;(.+)&quot;, line ([0-9]+)"/>
-      
+
+      <!-- Regular Expression for getting the filename and line number
+      from text that is highlighted as an error. This is usually the same as
+      the error pattern. This regular expression must have 2 groups in it the
+      first group is the filename and the second is a digit for the line number.
+      -->
+      <hotspot pattern="File &quot;(.+)&quot;, line ([0-9]+)"/>
+
    </handler>
 </launch>

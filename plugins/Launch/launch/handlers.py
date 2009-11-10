@@ -47,6 +47,9 @@ import re
 import eclib.outbuff as outbuff
 import syntax.synglob as synglob
 
+# Local Imports
+import launchxml
+
 #-----------------------------------------------------------------------------#
 # Globals
 DEFAULT_HANDLER = 'handler'
@@ -59,7 +62,7 @@ RE_ANSI_BLOCK = re.compile('\[[34][0-9]m*.*?\[m')
 RE_ANSI_END = re.compile(r'\[[0]{0,1}m')
 RE_ANSI_ESC = re.compile('\[[0-9]+m')
 ANSI = {
-        ## Forground colours ##
+        ## Foreground colours ##
         '[30m' : (1, '#000000'),  # Black
         '[31m' : (2, '#FF0000'),  # Red
         '[32m' : (3, '#00FF00'),  # Green
@@ -106,6 +109,24 @@ def GetHandlerByName(name):
             return handler
     else:
         return HANDLERS[0]
+
+def InitCustomHandlers(path):
+    """Init the custom handlers defined in the launch.xml file
+    @param path: path to directory to find the launch xml in
+    @return: bool
+
+    """
+    loaded = False
+    path = os.path.join(path, u'launch.xml')
+    if os.path.exists(path):
+        lxml = launchxml.LaunchXml()
+        lxml.SetPath(path)
+        loaded = lxml.LoadFromDisk()
+
+        if loaded:
+            for hndlr in lxml.GetHandlers().values():
+                HANDLERS[hndlr.GetLangId()] = XmlHandlerDelegate(hndlr)
+    return loaded
 
 def GetState():
     """Get a dictionary capturing the current state of all handlers
@@ -167,7 +188,7 @@ class FileTypeHandler(object):
         return sorted(self.commands.items())
 
     def GetDefault(self):
-        """Get the prefered default command
+        """Get the preferred default command
         @return: string
 
         """
@@ -228,7 +249,7 @@ class FileTypeHandler(object):
 
     def SetDefault(self, cmd):
         """Set the prefered default command
-        @param cmd: Command alias/path tuple to set as the preffered one
+        @param cmd: Command alias/path tuple to set as the preferred one
         @postcondition: if cmd is not in the saved command list it will be
                         added to that list.
 
@@ -899,6 +920,54 @@ class VBScriptHandler(FileTypeHandler):
         return max(err, sty)
 
 #-----------------------------------------------------------------------------#
+
+class XmlHandlerDelegate(FileTypeHandler):
+    """Delegate class for creating new filetype handlers from a Launch
+    Xml object.
+
+    """
+    def __init__(self, xmlobj):
+        """Create the object from the Launch XML Object"""
+        FileTypeHandler.__init__(self)
+
+        # Attributes
+        self._xml = xmlobj
+        self._errpat = self._xml.GetErrorPattern()
+        self._hotspot = self._xml.GetHotSpotPattern()
+
+        # FileTypeHandler implementation
+        self.commands = self._xml.GetCommands()
+        self.default = self._xml.GetDefaultCommand()
+        self._name = self._xml.GetLang()
+
+    @property
+    def __name__(self):
+        return self._name
+
+    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+        """Handle hotspot navigation if it has been defined by the custom
+        handler.
+
+        """
+        if self._hotspot is not None:
+            ifile, line = _FindFileLine(outbuffer, line, fname,
+                                        VBScriptHandler.RE_VBS_ERROR)
+            _OpenToLine(ifile, line, mainw)
+        else:
+            return None
+
+    def StyleText(self, stc, start, txt):
+        """Highlight text if an error pattern was defined."""
+        sty = STYLE_NORMAL
+        if self._errpat is not None:
+            err, more = _StyleError(stc, start, txt, self._errpat)
+            if err:
+                err = STYLE_ERROR
+            if more:
+                sty = super(XmlHandlerDelegate, self).StyleText(stc, start, txt)[0]
+        return max(err, sty)
+
+#-----------------------------------------------------------------------------#
 # Handler Object Dictionary
 # Create an instance of each Handler to use as a persistent object
 HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
@@ -941,7 +1010,7 @@ def _FindFileLine(outbuffer, line, fname, regex):
     @param outbuffer: OutputBuffer instance
     @param line: in the buffer
     @param fname: Filname that generated the error message
-    @param regex: a regular exression with two groups the first group needs to
+    @param regex: a regular expression with two groups the first group needs to
                   match the filename. The second group needs to match the line
                   number that the error is reporting
 
