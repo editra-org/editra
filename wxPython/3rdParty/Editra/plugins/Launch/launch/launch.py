@@ -22,6 +22,7 @@ import wx.stc
 # Local Imports
 import handlers
 import cfgdlg
+import launchxml
 
 # Editra Libraries
 import ed_glob
@@ -81,6 +82,9 @@ class LaunchWindow(eclib.ControlBox):
 
         # Setup
         self.__DoLayout()
+        if not handlers.InitCustomHandlers(ed_glob.CONFIG['CACHE_DIR']):
+            util.Log(u"[launch][warn] failed to load launch extensions")
+
         hstate = Profile_Get(LAUNCH_KEY)
         if hstate is not None:
             handlers.SetState(hstate)
@@ -304,7 +308,7 @@ class LaunchWindow(eclib.ControlBox):
 
     @ed_msg.mwcontext
     def OnFileOpened(self, msg):
-        """Reset state when a file open message is recieved
+        """Reset state when a file open message is received
         @param msg: Message Object
 
         """
