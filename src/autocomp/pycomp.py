@@ -137,7 +137,31 @@ class Completer(completer.BaseCompleter):
         @param command: command to get calltip for
 
         """
-        return self._GetCompletionInfo(command, calltip=True)
+        # get the relevant text
+        alltext = self._GetCompletionInfo(command, calltip=True)
+       
+        # split the text into natural paragraphs (a blank line separated)
+        paratext = alltext.split("\n\n")
+       
+        # add text by paragragh until text limit or all paragraghs
+        textlimit = 800
+        if len(paratext[0]) < textlimit:
+            numpara = len(paratext)
+            calltiptext = paratext[0]
+            ii = 1
+            while ii < numpara and \
+                  (len(calltiptext) + len(paratext[ii])) < textlimit:
+                calltiptext = calltiptext + "\n\n" + paratext[ii]
+                ii = ii + 1
+
+            # if not all texts are added, add "[...]"
+            if ii < numpara:
+                calltiptext = calltiptext + "\n[...]"
+        # present the function signature only (first newline)
+        else:
+            calltiptext = alltext.split("\n")[0]
+           
+        return calltiptext
 
 #-----------------------------------------------------------------------------#
 # This code below is a modified and adapted version of the pythoncomplete 
