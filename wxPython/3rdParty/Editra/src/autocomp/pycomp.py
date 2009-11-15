@@ -74,6 +74,8 @@ class Completer(completer.BaseCompleter):
 
         """
         if command is None or (len(command) and command[0].isdigit()):
+            if calltip:
+                return u""
             return list()
 
         try:
@@ -94,7 +96,7 @@ class Completer(completer.BaseCompleter):
             if calltip:
                 return cmpl.get_completions(command + '(', '', calltip)
             else:
-                # Get Autocompletion List
+                # Get Auto-completion List
                 complst = cmpl.get_completions(command)
                 sigs = list()
                 for sig in complst:
@@ -132,7 +134,7 @@ class Completer(completer.BaseCompleter):
         return self._GetCompletionInfo(command)
 
     def GetCallTip(self, command):
-        """Returns the formated calltip string for the command.
+        """Returns the formatted calltip string for the command.
         If the namespace command is unset the locals namespace is used.
         @param command: command to get calltip for
 
@@ -143,7 +145,7 @@ class Completer(completer.BaseCompleter):
         # split the text into natural paragraphs (a blank line separated)
         paratext = alltext.split("\n\n")
        
-        # add text by paragragh until text limit or all paragraghs
+        # add text by paragraph until text limit or all paragraphs
         textlimit = 800
         if len(paratext[0]) < textlimit:
             numpara = len(paratext)
@@ -279,14 +281,16 @@ class PyCompleter(object):
                 if ctip:
                     # Use introspect for calltips for now until some
                     # issues are sorted out with the main parser
-                    return introspect.getCallTip(_sanitize(stmt), 
-                                                 self.compldict)[2]
+                    tip = introspect.getCallTip(_sanitize(stmt), 
+                                                self.compldict)[2]
+                    if not isinstance(tip, basestring):
+                        tip = u""
+                    return tip
                 else:
                     result = eval(_sanitize(stmt[:-1]), self.compldict)
-
-                doc = max(getattr(result, '__doc__', ''), ' ')
-                return [{'word' : _cleanstr(self.get_arguments(result)), 
-                         'info' : _cleanstr(doc)}]
+                    doc = max(getattr(result, '__doc__', ''), ' ')
+                    return [{'word' : _cleanstr(self.get_arguments(result)), 
+                             'info' : _cleanstr(doc)}]
             elif ridx == -1:
                 match = stmt
                 compdict = self.compldict

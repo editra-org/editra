@@ -352,7 +352,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             app.SetTopWindow(self)
 
             # HACK find better way to do this later. It seems that on gtk the
-            #      window doesnt get activated until later than it does on the
+            #      window doesn't get activated until later than it does on the
             #      other platforms. So for panels that depend on updating their
             #      initial state we need to send out a fake update message here.
             if wx.Platform == '__WXGTK__':
@@ -362,7 +362,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         else:
             self.SetExtraStyle(0)
 
-            # HACK set update ui events back to proccess all here in case
+            # HACK set update ui events back to process all here in case
             # opened dialog needs them. Not sure why this is necessary but it
             # is the only solution I could find to fix the external find
             # dialogs so that their buttons become enabled when typing in the
@@ -387,7 +387,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """Add a file to the windows file history as well as any
         other open windows history.
         @param fname: name of file to add
-        @todo: change the file history to a centrally manaaged object that
+        @todo: change the file history to a centrally managed object that
                all windows pull from to avoid this quick solution.
 
         """
