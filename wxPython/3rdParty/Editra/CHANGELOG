@@ -25,6 +25,7 @@ LIBRARY:
 BUG FIXES:
 +Fix error in handling of unknown encodings.
 +Trim long python calltips to ensure that function signature is visible (patch from appliedmath)
++Fix issue with opening files via relative path from commandline
 
 #-----------------------------------------------------------------------------#
 

@@ -105,15 +105,26 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             self._instance = wx.SingleInstanceChecker(instance_name)
             if self._instance.IsAnotherRunning():
                 try:
-                    opts, args = getopt.getopt(sys.argv[1:], "dhv",
-                                               ['debug', 'help', 'version'])
+                    opts, args = ProcessCommandLine()
                 except getopt.GetoptError, msg:
                     self._log("[app][err] %s" % str(msg))
                     args = list()
+                    opts = dict()
 
                 if not len(args):
                     args.append(APP_CMD_OPEN_WINDOW)
+                else:
+                    # TODO: move to serialize all args as xml
+                    nargs = list()
+                    for p in args:
+                        try:
+                            p = os.path.abspath(p)
+                        except:
+                            pass
+                        nargs.append(p)
+                    args = nargs
 
+                # TODO: need to process other command line options as well i.e) -g
                 rval = ed_ipc.SendCommands(args, profiler.Profile_Get('SESSION_KEY'))
                 # If sending the command failed then let the editor startup
                 # a new instance
