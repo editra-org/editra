@@ -55,9 +55,7 @@ class StyleItem(object):
 
     """
     __slots__ = ('null', 'fore', 'face', 'back', 'size', '_exattr')
-    def __init__(self, fore=wx.EmptyString, back=wx.EmptyString,
-                       face=wx.EmptyString, size=wx.EmptyString,
-                       ex=list()):
+    def __init__(self, fore=u"", back=u"", face=u"", size=u"", ex=None):
         """Initiliazes the Style Object.
 
         @keyword fore: Specifies the forground color (hex string)
@@ -78,13 +76,19 @@ class StyleItem(object):
         """
         object.__init__(self)
 
+        # Workaround for issue of using a list as a default parameter
+        # was retaining values from previous calls for some yet to
+        # determine reasons.
+        if ex is None:
+            ex = list()
+            
         # Attributes
         self.null = False
         self.fore = u""        # Foreground color hex code
         self.face = u""        # Font face name
         self.back = u""        # Background color hex code
         self.size = u""        # Font point size
-        self._exattr = list()   # Extra attributes
+        self._exattr = ex      # Extra attributes
 
         # Necessary to support old style assignments...
         # TODO: Drop support in future
@@ -387,7 +391,7 @@ class StyleMgr(object):
                 sty_dict[key] = NullStyleItem()
             else:
                 sty_dict[key] = StyleItem("#000000", "#FFFFFF",
-                                          "%(primary)s", "%(size)d")
+                                          "%(primary)s", "%(size)d")#, ex=list())
         return sty_dict
 
     def FindTagById(self, style_id):
@@ -1061,8 +1065,8 @@ DEF_STYLE_DICT = \
          'scalar2_style' : StyleItem("#AB37F2", face="%(secondary)s"),
          'select_style' : NullStyleItem(), # Use system default colour
          'string_style' : StyleItem("#FF3AFF", ex=["bold",]),
-         'stringeol_style' : StyleItem("#000000", "#EEC0EE", \
-                                       "%(secondary)s", ["bold", "eol"]),
+         'stringeol_style' : StyleItem("#000000", "#EEC0EE",
+                                       "%(secondary)s", ex=["bold", "eol"]),
          'unknown_style' : StyleItem("#FFFFFF", "#DD0101", ex=["bold", "eol"]),
          'userkw_style' : StyleItem(),
          'whitespace_style' : StyleItem('#838383')
