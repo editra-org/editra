@@ -9,6 +9,7 @@
 Version 1.5:
 
 +New filetype handlers can be added through the new xml interface
++Notification of invalid commands are now properly reported on windows.
 +Add support for Stata (patch from Jean Eid)
 
 #-----------------------------------------------------------------------------#
