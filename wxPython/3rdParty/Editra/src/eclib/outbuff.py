@@ -766,12 +766,20 @@ class ProcessThread(threading.Thread):
                                                        self._cmd['args']]])
 
         use_shell = not subprocess.mswindows
-        self._proc = subprocess.Popen(command.strip(),
-                                      stdout=subprocess.PIPE,
-                                      stderr=subprocess.STDOUT,
-                                      shell=use_shell,
-                                      cwd=self._cwd,
-                                      env=self._env)
+        err = None
+        try:
+            self._proc = subprocess.Popen(command.strip(),
+                                          stdout=subprocess.PIPE,
+                                          stderr=subprocess.STDOUT,
+                                          shell=use_shell,
+                                          cwd=self._cwd,
+                                          env=self._env)
+        except OSError, msg:
+            # NOTE: throws WindowsError on Windows which is a subclass of
+            #       OSError, so it will still get caught here.
+            # TODO: add separate callback event for these kind of errors?
+            err =  OutputBufferEvent(edEVT_UPDATE_TEXT,
+                                     self._parent.GetId(), unicode(msg))
 
         evt = OutputBufferEvent(edEVT_PROCESS_START,
                                 self._parent.GetId(),
@@ -779,7 +787,7 @@ class ProcessThread(threading.Thread):
         wx.PostEvent(self._parent, evt)
 
         # Read from stdout while there is output from process
-        while True:
+        while not err and True:
             if self.abort:
                 self.__KillPid(self._proc.pid)
                 self.__DoOneRead()
@@ -797,12 +805,17 @@ class ProcessThread(threading.Thread):
                 if not more:
                     break
 
-        try:
-            result = self._proc.wait()
-        except OSError:
+        # Notify of error in running the process
+        if err is not None:
+            wx.PostEvent(self._parent, err)
             result = -1
+        else:
+            try:
+                result = self._proc.wait()
+            except OSError:
+                result = -1
 
-        # Notify that proccess has exited
+        # Notify that process has exited
         # Pack the exit code as the events value
         evt = OutputBufferEvent(edEVT_PROCESS_EXIT, self._parent.GetId(), result)
         wx.PostEvent(self._parent, evt)
