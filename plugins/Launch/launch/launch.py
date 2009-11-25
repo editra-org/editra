@@ -662,6 +662,15 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         handler.HandleHotSpot(self._mw, self, line, fname)
         self.GetParent().SetupControlBar(GetTextBuffer(self._mw))
 
+    def DoProcessError(self, code):
+        """Handle notifications of when an error occurs in the process
+        @param code: an OBP error code
+        @return: None
+
+        """
+        if code == eclib.OPB_ERROR_INVALID_COMMAND:
+            self.AppendUpdate(_("The requested command could not be executed."))
+
     def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited"""
         self.AppendUpdate(">>> %s: %d%s" % (_("Exit Code"), code, os.linesep))
