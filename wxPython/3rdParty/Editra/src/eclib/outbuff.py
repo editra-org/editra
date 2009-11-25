@@ -67,10 +67,13 @@ __revision__ = "$Revision$"
 __all__ = ["OutputBuffer", "OutputBufferEvent", "ProcessBufferMixin",
            "ProcessThread", "TaskThread", "OPB_STYLE_DEFAULT", "OPB_STYLE_INFO",
            "OPB_STYLE_WARN", "OPB_STYLE_ERROR", "OPB_STYLE_MAX",
+
+           "OPB_ERROR_NONE", "OPB_ERROR_INVALID_COMMAND",
+
            "edEVT_PROCESS_START", "EVT_PROCESS_START", "edEVT_TASK_START",
            "EVT_TASK_START", "edEVT_UPDATE_TEXT", "EVT_UPDATE_TEXT",
            "edEVT_PROCESS_EXIT", "EVT_PROCESS_EXIT", "edEVT_TASK_COMPLETE",
-           "EVT_TASK_COMPLETE"]
+           "EVT_TASK_COMPLETE", "edEVT_PROCESS_ERROR", "EVT_PROCESS_ERROR"]
 
 #--------------------------------------------------------------------------#
 # Imports
@@ -109,9 +112,13 @@ OPB_ALL_STYLES = (wx.stc.STC_STYLE_DEFAULT, wx.stc.STC_STYLE_CONTROLCHAR,
                   OPB_STYLE_DEFAULT, OPB_STYLE_ERROR, OPB_STYLE_INFO,
                   OPB_STYLE_WARN)
 
+# Error Codes
+OPB_ERROR_NONE            = 0
+OPB_ERROR_INVALID_COMMAND = -1
+
 #--------------------------------------------------------------------------#
 
-# Event for notifying that the proces has started running
+# Event for notifying that the process has started running
 # GetValue will return the command line string that started the process
 edEVT_PROCESS_START = wx.NewEventType()
 EVT_PROCESS_START = wx.PyEventBinder(edEVT_PROCESS_START, 1)
@@ -133,6 +140,10 @@ EVT_PROCESS_EXIT = wx.PyEventBinder(edEVT_PROCESS_EXIT, 1)
 # Event to notify that a process has completed
 edEVT_TASK_COMPLETE = wx.NewEventType()
 EVT_TASK_COMPLETE = wx.PyEventBinder(edEVT_TASK_COMPLETE, 1)
+
+# Event to notify that an error occurred in the process
+edEVT_PROCESS_ERROR = wx.NewEventType()
+EVT_PROCESS_ERROR = wx.PyEventBinder(edEVT_PROCESS_ERROR, 1)
 
 class OutputBufferEvent(wx.PyCommandEvent):
     """Event for data transfer and signaling actions in the L{OutputBuffer}"""
@@ -547,6 +558,11 @@ class ProcessBufferMixin:
         self.Bind(EVT_PROCESS_START, self._OnProcessStart)
         self.Bind(EVT_UPDATE_TEXT, self._OnProcessUpdate)
         self.Bind(EVT_PROCESS_EXIT, self._OnProcessExit)
+        self.Bind(EVT_PROCESS_ERROR, self._OnProcessError)
+
+    def _OnProcessError(self, evt):
+        """Handle EVT_PROCESS_ERROR"""
+        self.DoProcessError(evt.GetValue())
 
     def _OnProcessExit(self, evt):
         """Handles EVT_PROCESS_EXIT"""
@@ -572,11 +588,21 @@ class ProcessBufferMixin:
         """
         return txt
 
+    def DoProcessError(self, code):
+        """Override this method to do any ui notification of when errors happen
+        in running the process.
+        @param code: an OBP error code
+        @return: None
+
+        """
+        pass
+
     def DoProcessExit(self, code=0):
         """Override this method to do any post processing after the running
         task has exited. Typically this is a good place to call
         L{OutputBuffer.Stop} to stop the buffers timer.
         @keyword code: Exit code of program
+        @return: None
 
         """
         self.Stop()
@@ -585,6 +611,7 @@ class ProcessBufferMixin:
         """Override this method to do any pre processing before starting
         a processes output.
         @keyword cmd: Command used to start program
+        @return: None
 
         """
         pass
@@ -777,9 +804,9 @@ class ProcessThread(threading.Thread):
         except OSError, msg:
             # NOTE: throws WindowsError on Windows which is a subclass of
             #       OSError, so it will still get caught here.
-            # TODO: add separate callback event for these kind of errors?
-            err =  OutputBufferEvent(edEVT_UPDATE_TEXT,
-                                     self._parent.GetId(), unicode(msg))
+            err =  OutputBufferEvent(edEVT_PROCESS_ERROR,
+                                     self._parent.GetId(),
+                                     OPB_ERROR_INVALID_COMMAND)
 
         evt = OutputBufferEvent(edEVT_PROCESS_START,
                                 self._parent.GetId(),
