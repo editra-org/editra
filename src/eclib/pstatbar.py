@@ -214,7 +214,7 @@ class ProgressStatusBar(wx.StatusBar):
     def SetStatusText(self, txt, number=0):
         """Override wx.StatusBar method to prevent text from being
         put in when the progress indicator is running. Any text that
-        comes when it is running is buffered to be displayed afterwards.
+        comes when it is running is buffered to be displayed afterwords.
         @param txt: Text to put on status bar
         @keyword number: Section number to put text in
 

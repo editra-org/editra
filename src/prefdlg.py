@@ -105,7 +105,7 @@ class PreferencesDialog(wx.Frame):
         util.SetWindowIcon(self)
 
         # Extra Styles
-        self.SetTransparent(Profile_Get('ALPHA', 'int', 255))
+        self.SetTransparent(Profile_Get('ALPHA', default=255))
 
         # Attributes
         self._accel = wx.AcceleratorTable([(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CLOSE)])
