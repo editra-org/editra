@@ -518,9 +518,9 @@ class StyleMgr(object):
         """
         if self.HasNamedStyle(name):
             item = StyleMgr.STYLES[self.style_set][name]
-            ival = unicode(item)
 
             # Set font value if need be
+            ival = unicode(item)
             if u"%" in ival:
                 val = ival % self.fonts
                 item = StyleItem()

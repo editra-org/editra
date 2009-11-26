@@ -199,7 +199,7 @@ class EdShelfBook(FNB.FlatNotebook):
         """
         count = 0
         for page in xrange(self.GetPageCount()):
-            if item_name == re.sub(PGNUM_PAT, u'', self.GetPageText(page), 1):
+            if self.GetPageText(page).startswith(item_name):
                 count = count + 1
         return count
 

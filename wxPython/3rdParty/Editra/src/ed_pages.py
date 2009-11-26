@@ -245,10 +245,7 @@ class EdPages(FNB.FlatNotebook):
         @return: window object contained in current page or None
 
         """
-        if hasattr(self, 'control'):
-            return self.control
-        else:
-            return None
+        return self.control
 
     def GetFileNames(self):
         """Gets the name of all open files in the notebook

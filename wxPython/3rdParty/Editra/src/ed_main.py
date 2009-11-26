@@ -324,7 +324,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if self._loaded and len(app.GetMainWindows()) == 1:
             if active:
                 wx.GetApp().SetTopWindow(self)
-                wx.UpdateUIEvent.SetUpdateInterval(205)
+                wx.UpdateUIEvent.SetUpdateInterval(215)
                 wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
                 self.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
             else:
@@ -339,7 +339,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self._loaded = True
 
             # Slow the update interval to reduce overhead
-            wx.UpdateUIEvent.SetUpdateInterval(205)
+            wx.UpdateUIEvent.SetUpdateInterval(215)
             wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
             self.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
 
