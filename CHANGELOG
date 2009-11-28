@@ -9,11 +9,15 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.15
-DATE 10/31/2009
+VERSION 0.5.xx
+DATE xx/xx/2009
 30th Alpha Release
 
 NEWS:
+
+Compatibility with older Editra Style Sheet's modifier syntax has been removed,
+style sheet made for pre 0.4 release version may have trouble properly loading 
+in this version.
 
 NEW: [features/improvements]
 +New version of Launch plugin (new handlers can be added via xml interface)
