@@ -203,6 +203,13 @@ class EdShelfBook(FNB.FlatNotebook):
                 count = count + 1
         return count
 
+    def GetMainWindow(self):
+        """Get the main window that this shelf instance was created for
+        @return: ed_main.MainWindow
+
+        """
+        return self._parent
+
     def GetOpen(self):
         """Get the list of open shelf items
         @return: list
@@ -365,7 +372,7 @@ class EdShelfDelegate(object):
         @return: reference to ed_main.MainWindow or None
 
         """
-        return self._shelf.GetParent()
+        return self._shelf.GetMainWindow()
 
     def GetWindow(self):
         """Return reference to the Shelfs window component
