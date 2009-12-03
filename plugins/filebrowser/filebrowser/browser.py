@@ -641,8 +641,10 @@ class FileBrowser(wx.GenericDirCtrl):
         """
         nbdata = msg.GetData()
         pg_count = nbdata[0].GetPageCount()
-        if pg_count < nbdata[1] and nbdata[1] >= 0:
-            return # must have closed all pages in the notebook
+        if nbdata[1] > pg_count  or nbdata[1] < 0:
+            # Page is out of range, something has changed since the message was
+            # sent.
+            return
 
         page = nbdata[0].GetPage(nbdata[1])
         path = page.GetFileName()

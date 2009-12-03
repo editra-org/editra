@@ -32,6 +32,7 @@ BUG FIXES:
 +Trim long python calltips to ensure that function signature is visible (patch from appliedmath)
 +Fix issue with opening files via relative path from commandline
 +Fix error when adding shelf items to an undocked shelf window
++Fix index error in page synchronization of filebrowser plugin
 
 #-----------------------------------------------------------------------------#
 
