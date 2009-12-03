@@ -176,11 +176,13 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 # In middle of line somewhere
                 text = self.GetLine(cline)
                 column = max(0, self.GetColumn(cpos) - 1)
-                if text[column].isspace():
+                if len(text) > column and text[column].isspace():
 
                     # Find the end of the whitespace
                     end = column
-                    while end < len(text) and text[end].isspace():
+                    while end < len(text) and \
+                          text[end].isspace() and \
+                          text[end] not in '\r\n':
                         end += 1
 
                     # Find the start of the whitespace
