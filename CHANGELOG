@@ -23,6 +23,7 @@ NEW: [features/improvements]
 +New version of Launch plugin (new handlers can be added via xml interface)
 +Clicking on encoding field in statusbar will allow encoding of current document
  to be converted.
++Some performance improvements
 
 LIBRARY:
 
@@ -30,6 +31,7 @@ BUG FIXES:
 +Fix error in handling of unknown encodings.
 +Trim long python calltips to ensure that function signature is visible (patch from appliedmath)
 +Fix issue with opening files via relative path from commandline
++Fix error when adding shelf items to an undocked shelf window
 
 #-----------------------------------------------------------------------------#
 
