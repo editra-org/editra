@@ -132,7 +132,7 @@ class Generator(plugin.Plugin):
         for observer in self.observers:
             if observer.GetId() == e_id:
                 gentext = observer.Generate(txt_ctrl)
-        util.Log("[generator][info] Generation time %f" % (time.time() - start))
+                util.Log("[generator][info] Generation time %f" % (time.time() - start))
         return gentext
 
 #-----------------------------------------------------------------------------#
