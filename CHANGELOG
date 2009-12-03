@@ -33,6 +33,8 @@ BUG FIXES:
 +Fix issue with opening files via relative path from commandline
 +Fix error when adding shelf items to an undocked shelf window
 +Fix index error in page synchronization of filebrowser plugin
++Fix index error in BackTab functionality
++Fix BackTab at end of line deleting eol characters 
 
 #-----------------------------------------------------------------------------#
 
