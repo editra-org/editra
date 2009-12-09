@@ -34,7 +34,8 @@ BUG FIXES:
 +Fix error when adding shelf items to an undocked shelf window
 +Fix index error in page synchronization of filebrowser plugin
 +Fix index error in BackTab functionality
-+Fix BackTab at end of line deleting eol characters 
++Fix BackTab at end of line deleting eol characters
++Fix startup errors caused by files that were left over from previous installs
 
 #-----------------------------------------------------------------------------#
 

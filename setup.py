@@ -41,6 +41,21 @@ import time
 import src.info as info
 import src.syntax.synextreg as synextreg # So we can get file extensions
 
+# Version Check(s)
+if sys.version_info < (2, 5):
+    sys.stderr.write("[ERROR] Not a supported Python version. Need 2.5+\n")
+    sys.exit(1)
+
+try:
+    import wx
+except ImportError:
+    sys.stderr.write("[ERROR] wxPython2.8 is required.\n")
+    sys.exit(1)
+else:
+    if wx.VERSION < (2, 8, 3):
+        sys.stderr.write("[ERROR] wxPython 2.8.3+ is required.\n")
+        sys.exit(1)
+
 #---- System Platform ----#
 __platform__ = os.sys.platform
 
@@ -459,6 +474,20 @@ def DoSourcePackage():
             print "To build an egg setuptools must be installed"
     else:
         from distutils.core import setup
+
+    # Try to remove possibly conflicting files from an old install
+    try:
+        import Editra
+        path = Editra.__file__
+        if '__init__' in path:
+            path = os.path.dirname(path)
+            path = os.path.join(path, 'src')
+            del sys.modules['Editra']
+            shutil.rmtree(path)
+    except (ImportError, OSError):
+        pass
+    except:
+        sys.stderr.write("[ERROR] Failed to remove old source files")
 
     # Make sure to delete any existing MANIFEST file beforehand to
     # prevent stale file lists
