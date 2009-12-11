@@ -286,13 +286,23 @@ def BuildPy2Exe():
     sys.path.append(os.path.abspath('src/'))
     sys.path.append(os.path.abspath('src/extern'))
 
+    DATA_FILES = GenerateBinPackageFiles()
+    try:
+        import enchant
+    except ImportError:
+        pass
+    else:
+        from enchant import utils as enutil
+        DATA_FILES += enutil.win32_data_files()
+
     setup(
         name = NAME,
         version = VERSION,
         options = {"py2exe" : {"compressed" : 1,
                                "optimize" : 1,
                                "bundle_files" : 2,
-                               "includes" : INCLUDES }},
+                               "includes" : INCLUDES,
+                               "excludes" : ["Tkinter",] }},
         windows = [{"script": "src/Editra.py",
                     "icon_resources": [(0, ICON['Win'])],
                     "other_resources" : [(RT_MANIFEST, 1,
@@ -305,7 +315,7 @@ def BuildPy2Exe():
         maintainer_email = AUTHOR_EMAIL,
         license = LICENSE,
         url = URL,
-        data_files = GenerateBinPackageFiles(),
+        data_files = DATA_FILES,
         )
 
 def BuildOSXApp():
@@ -515,6 +525,7 @@ def DoSourcePackage():
         package_dir = { NAME : '.' },
         package_data = { NAME : DATA },
         classifiers= CLASSIFIERS,
+        install_requires = ['wxPython',]
         )
 
 def BuildECLibDemo():
