@@ -20,12 +20,12 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import os
 import sys
 
 # Due to some methods that were added in 2.8.3 being used in a large number
-# of places Editra has become incompatable with wxPython 2.8.1.1 and earlier.
+# of places Editra has become incompatible with wxPython 2.8.1.1 and earlier.
 # So ensure correct version of wxPython can be loaded
 if not hasattr(sys, 'frozen'):
     import wxversion
@@ -67,12 +67,13 @@ import updater
 import plugin
 import ed_ipc
 import ed_msg
+import ebmlib
 
 #--------------------------------------------------------------------------#
 # Global Variables
 ID_UPDATE_CHECK = wx.NewId()
 
-# Commands (here temporarly)
+# Commands (here temporarily)
 APP_CMD_OPEN_WINDOW = u"Editra.OpenWindow"
 
 _ = wx.GetTranslation
@@ -118,7 +119,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                     nargs = list()
                     for p in args:
                         try:
-                            p = os.path.abspath(p)
+                            p = ebmlib.GetAbsPath(p)
                         except:
                             pass
                         nargs.append(p)
@@ -987,7 +988,7 @@ def _Main(opts, args):
     @param args: Commandline arguments
 
     """
-    # Put extern subpackage on path so that bundled external dependancies
+    # Put extern subpackage on path so that bundled external dependencies
     # can be found if needed.
     if not hasattr(sys, 'frozen'):
         epath = os.path.join(os.path.dirname(__file__), 'extern')
@@ -1057,7 +1058,7 @@ def _Main(opts, args):
         #       currently apply to all.
         for arg in args:
             try:
-                arg = os.path.abspath(arg)
+                arg = ebmlib.GetAbsPath(arg)
                 fname = ed_txt.DecodeString(arg, sys.getfilesystemencoding())
                 frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname, line)
             except IndexError:
