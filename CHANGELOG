@@ -38,6 +38,7 @@ BUG FIXES:
 +Fix startup errors caused by files that were left over from previous installs.
 +Fix issue where Windows binary installer would misplace files that could cause
 subprocess commands to fail.
++Fix issue in handling short form paths on Windows by converting to long name.
 
 #-----------------------------------------------------------------------------#
 
