@@ -996,7 +996,6 @@ HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_PYTHON  : PythonHandler(),
             synglob.ID_LANG_R       : RHandler(),
             synglob.ID_LANG_RUBY    : RubyHandler(),
-            synglob.ID_LANG_TEX     : LatexHandler(),
             synglob.ID_LANG_TCL     : TCLHandler(),
             synglob.ID_LANG_VBSCRIPT : VBScriptHandler() }
 
