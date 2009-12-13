@@ -24,6 +24,8 @@ NEW: [features/improvements]
 +Clicking on encoding field in statusbar will allow encoding of current document
  to be converted.
 +Some performance improvements
++The -g command line switch now will work when existing instance of Editra is
+ already running.
 
 LIBRARY:
 
