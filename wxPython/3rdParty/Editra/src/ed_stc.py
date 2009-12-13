@@ -841,7 +841,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
                     elif evt.GetControl() or \
                         (wx.Platform == '__WXMAC__' and evt.GetAlt()):
                         # Contract all subnodes of clicked one
-                        # Note: using Alt as Ctrl can not be recieved for
+                        # Note: using Alt as Ctrl can not be received for
                         # clicks on mac (Scintilla Bug).
                         if self.GetFoldExpanded(line_clicked):
                             self.SetFoldExpanded(line_clicked, False)
