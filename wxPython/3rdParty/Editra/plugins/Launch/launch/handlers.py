@@ -199,7 +199,7 @@ class FileTypeHandler(object):
         command under.
 
         """
-        return os.environ
+        return dict(os.environ)
 
     def GetName(self):
         """Get the name of this handler"""
@@ -755,7 +755,7 @@ class PythonHandler(FileTypeHandler):
     def GetEnvironment(self):
         """Get the environment to run the python script in"""
         if not hasattr(sys, 'frozen') or sys.platform.startswith('win'):
-            proc_env = os.environ.copy()
+            proc_env = super(PythonHandler, self).GetEnvironment()
         else:
             proc_env = dict()
 

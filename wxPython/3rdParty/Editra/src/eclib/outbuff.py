@@ -83,6 +83,7 @@ import time
 import errno
 import signal
 import threading
+import types
 import subprocess
 import wx
 import wx.stc
@@ -662,7 +663,15 @@ class ProcessThread(threading.Thread):
         self._parent = parent       # Parent Window/Event Handler
         self._cwd = cwd             # Path at which to run from
         self._cmd = dict(cmd=command, file=fname, args=args)
-        self._env = env
+
+        # Make sure the environment is sane it must be all strings
+        nenv = dict(env) # make a copy to manipulate
+        for k, v in env.iteritems():
+            if isinstance(v, types.UnicodeType):
+                nenv[k] = v.encode(sys.getfilesystemencoding())
+            elif not isinstance(v, basestring):
+                nenv.pop(k)
+        self._env = nenv
 
         # Setup
         self.setDaemon(True)
