@@ -10,7 +10,7 @@
 Editra Control Library Demo / Test Application
 
 This application is used for running the ui test modules for the Editra
-Control Library. The demo modules loaded by this application are primarly
+Control Library. The demo modules loaded by this application are primarily
 intended as samples for exercising the various control apis.
 
 """
