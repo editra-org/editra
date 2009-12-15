@@ -95,7 +95,7 @@ class PreferencesDialog(wx.Frame):
 
     def __init__(self, parent, id_=wx.ID_ANY,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.TAB_TRAVERSAL):
-        """Initialises the preference dialog
+        """Initializes the preference dialog
         @param parent: The parent window of this window
         @param id_: The id of this window
 
@@ -547,7 +547,7 @@ class GeneralFilePanel(wx.Panel):
                 ctrl.Enable(False)
 
         liblbl = wx.StaticText(self, label=_("Enchant Path") + u":")
-        libpath = os.environ.get('PYENCHANT_LIBRARY_PATH', u'')
+        libpath = os.environ.get('PYENCHANT_LIBRARY_PATH', '')
         prefpath = sprefs.get('epath', libpath)
         libpicker = wx.FilePickerCtrl(self, ID_PREF_ENCHANT_PATH,
                                       path=libpath,
