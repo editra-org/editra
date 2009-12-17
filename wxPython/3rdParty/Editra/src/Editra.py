@@ -254,8 +254,8 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._pluginmgr.WritePluginConfig()
         profiler.TheProfile.Write(profiler.Profile_Get('MYPROFILE'))
         if not self._lock or force:
-            if hasattr(self, 'server'):
-                self.server.ShutDown()
+            if hasattr(self, '_server'):
+                self._server.Shutdown()
 
             try:
                 # Cleanup the instance checker

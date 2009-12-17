@@ -18,7 +18,8 @@ NEWS:
 NEW: [features/improvements]
 
 BUG FIXES:
-+Fix Unicode handling for filenames when opening files from the command line
++Fix Unicode handling for filenames when opening files from the command line.
++Fix bug in not properly shutting down ipc server on exit app event.
 
 #-----------------------------------------------------------------------------#
 

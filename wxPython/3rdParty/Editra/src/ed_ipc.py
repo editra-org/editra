@@ -143,7 +143,7 @@ class EdIpcServer(threading.Thread):
         """Tell the server to exit"""
         self._exit = True
         # Wake up the server in case its waiting
-        SendCommands(['quit', ], self.__key)
+        SendCommands(IPCCommand(), self.__key)
 
     def run(self):
         """Start the server. The server runs in blocking mode, this
