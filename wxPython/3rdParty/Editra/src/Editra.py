@@ -1061,8 +1061,8 @@ def _Main(opts, args):
         #       currently apply to all.
         for arg in args:
             try:
-                arg = ebmlib.GetAbsPath(arg)
                 fname = ed_txt.DecodeString(arg, sys.getfilesystemencoding())
+                fname = ebmlib.GetAbsPath(fname)
                 frame.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname, line)
             except IndexError:
                 dev_tool.DEBUGP("[main][err] IndexError on commandline args")
