@@ -143,6 +143,7 @@ class EdIpcServer(threading.Thread):
         """Tell the server to exit"""
         self._exit = True
         # Wake up the server in case its waiting
+        # TODO: should add a specific exit event message
         SendCommands(IPCCommand(), self.__key)
 
     def run(self):
