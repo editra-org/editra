@@ -306,7 +306,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         if self.GetModify():
             # TODO: Move this method down from the frame to here
             result = self.GetTopLevelParent().ModifySave()
-            result = result in (wx.ID_OK, wx.ID_NO)
+            result = result in (wx.ID_YES, wx.ID_OK, wx.ID_NO)
 
         return result
 
