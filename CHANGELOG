@@ -24,6 +24,7 @@ BUG FIXES:
 file action takes place.
 +Fix duplicate entries in autocomp lists that could occur when using extended
 autocomp (patch from cowo78)
++Fix replace action not being working when up is selected as the the find direction.
 
 #-----------------------------------------------------------------------------#
 
