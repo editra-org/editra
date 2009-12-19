@@ -26,6 +26,7 @@ __all__ = ['AutoCompService',]
 
 #--------------------------------------------------------------------------#
 # Dependencies
+import wx
 import wx.stc as stc
 
 # Local imports
@@ -94,12 +95,12 @@ def GetAutoCompList(self, command):
     'smart' completer.
 
     """
-    data = self.BaseGetAutoCompList(command)
-    exdata = self.scomp.GetAutoCompList(command)
-    data.extend(exdata)
-    data = list(set(data))
-    data.sort()
-    return data
+    baseList = self.BaseGetAutoCompList(command)
+    scompList = self.scomp.GetAutoCompList(command)
+    # Wipeout duplicates by creating a set, then sort data alphabetically
+    rlist = list(set().union(baseList, scompList))
+    rlist.sort()
+    return rlist
 
 class CompleterFactory(object):
     """Factory for creating composite completer objects"""
