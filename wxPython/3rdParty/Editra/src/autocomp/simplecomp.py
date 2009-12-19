@@ -47,7 +47,11 @@ class Completer(completer.BaseCompleter):
 
         """
         bf = self.GetBuffer()
-        kwlst = bf.GetKeywords()
+        # A list of Symbol(keyword, TYPE_UNKNOWN)
+        kwlst = map(
+            lambda kw: completer.Symbol(kw, completer.TYPE_UNKNOWN),
+            bf.GetKeywords()
+        )
 
         if command in (None, u''):
             return kwlst
@@ -84,8 +88,6 @@ class Completer(completer.BaseCompleter):
         if self.GetCaseSensitive():
             flags |= stc.STC_FIND_MATCHCASE
 
-        # TODO: find out why calling this with an empty command string causes
-        #       a program lockup...
         posFind = bf.FindText(minPos, maxPos, command, flags)
         while posFind >= 0 and posFind < maxPos:
             wordEnd = posFind + len(command)
@@ -96,8 +98,9 @@ class Completer(completer.BaseCompleter):
                 wordLength = wordEnd - posFind
                 if wordLength > len(command):
                     word = bf.GetTextRange(posFind, wordEnd)
-                    if not wordsNear.count(word):
-                        wordsNear.append(word)
+                    sym = completer.Symbol(word, completer.TYPE_UNKNOWN)
+                    if not wordsNear.count(sym):
+                        wordsNear.append(sym)
                         maxWordLength = max(maxWordLength, wordLength)
                         nWords += 1
 

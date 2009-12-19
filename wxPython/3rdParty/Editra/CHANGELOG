@@ -18,10 +18,12 @@ NEWS:
 NEW: [features/improvements]
 
 BUG FIXES:
-+Fix Unicode handling for filenames when opening files from the command line.
++Fix Unicode handling for file names when opening files from the command line.
 +Fix bug in not properly shutting down ipc server on exit app event.
 +Fix bug in not automatically continuing with the window closure when a modified
 file action takes place.
++Fix duplicate entries in autocomp lists that could occur when using extended
+autocomp (patch from cowo78)
 
 #-----------------------------------------------------------------------------#
 
