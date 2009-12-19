@@ -551,9 +551,13 @@ class SearchController(object):
         self._stc().ReplaceSelection(value)
 
         # Go to the next match
-        # Fake event object for on Find Handler
-        tevt = eclib.FindEvent(eclib.edEVT_FIND_NEXT, ed_glob.ID_FIND_PREVIOUS)
-        self.OnFind(tevt, True)
+        eid = ed_glob.ID_FIND_NEXT
+        if evt.IsUp():
+            eid = ed_glob.ID_FIND_PREVIOUS
+        tevt = eclib.FindEvent(eclib.edEVT_FIND_NEXT, eid)
+        tevt.SetFlags(evt.GetFlags())
+        tevt.SetFindString(evt.GetFindString())
+        self.OnFind(tevt)
 
     def OnReplaceAll(self, evt):
         """Replace all instance of the search string with the given
