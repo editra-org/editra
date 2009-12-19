@@ -209,8 +209,10 @@ class CycleCache(object):
         @return: object
 
         """
-        item = self._list[self._cpos]
-        self._cpos = self.NextIndex()
+        item = None
+        if len(self._list): 
+            item = self._list[self._cpos]
+            self._cpos = self.NextIndex()
         return item
 
     def PeekNext(self):
@@ -218,10 +220,9 @@ class CycleCache(object):
         @return: object
 
         """
+        item = None
         if abs(self._cpos) < len(self._list):
             item = self._list[self._cpos]
-        else:
-            item = None
         return item
 
     def PeekPrev(self):
