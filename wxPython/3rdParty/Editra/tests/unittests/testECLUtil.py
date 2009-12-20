@@ -84,4 +84,5 @@ class ECLUtilTest(unittest.TestCase):
         c = eclib.HexToRGB("#FF00FF")
         self.assertEquals(c, [255, 0, 255])
 
+        self.assertRaises(IndexError, eclib.HexToRGB, u"")
         self.assertRaises(ValueError, eclib.HexToRGB, "FF23GG")
