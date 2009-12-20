@@ -48,6 +48,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import sys
 import wx
 import threading
 import socket
@@ -56,6 +57,7 @@ import time
 
 # Editra Libs
 import syntax
+import ebmlib
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -306,6 +308,8 @@ class IPCFileList(syntax.EditraXml):
         tmp = u"<%s %s=\"" % (EDXML_FILE, syntax.EXML_VALUE)
         tmp += u"%s\"/>"
         for fname in self._files:
+            if not ebmlib.IsUnicode(fname):
+                fname = fname.decode(sys.getfilesystemencoding())
             xmlstr += tmp % fname
         return xmlstr
 
