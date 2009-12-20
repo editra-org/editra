@@ -952,7 +952,7 @@ class StyleMgr(object):
         self.CallTipSetForeground(calltip.GetFore())
 
         sback = self.GetItemByName('select_style')
-        if not sback.IsNull():
+        if not sback.IsNull() and len(sback.GetBack()):
             sback = sback.GetBack()
             sback = eclib.HexToRGB(sback)
             sback = wx.Colour(*sback)

@@ -26,7 +26,8 @@ file action takes place.
 autocomp (patch from cowo78)
 +Fix replace action not being working when up is selected as the the find direction.
 +Fix index error when accessing empty history cache.
-+Fix error in returning a list instead of a string when getcalltip fails. 
++Fix error in returning a list instead of a string when getcalltip fails.
++Fix error handling for when select_style has no background color defined. 
 
 #-----------------------------------------------------------------------------#
 
