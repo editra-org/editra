@@ -85,7 +85,8 @@ class Completer(completer.BaseCompleter):
             # chance of getting the proper completions
             fname = self._buffer.GetFileName()
             if fname:
-                sys.path.insert(0, os.path.dirname(fname))
+                fpath = os.path.dirname(fname)
+                sys.path.insert(0, fpath)
 
             cmpl.evalsource(self._buffer.GetText(),
                             self._buffer.GetCurrentLine())
@@ -122,7 +123,10 @@ class Completer(completer.BaseCompleter):
         except Exception, msg:
             self._log("[pycomp][err] _GetCompletionInfo: %s, %s" % \
                       (sys.exc_info()[0], sys.exc_info()[1]))
-            return []
+            if calltip:
+                return u""
+            else:
+                return []
         
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a 
