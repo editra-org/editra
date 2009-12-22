@@ -10,7 +10,7 @@
 
 ; Global Variables
 !define PRODUCT_NAME "Editra"
-!define PRODUCT_VERSION "0.5.25"
+!define PRODUCT_VERSION "0.5.30"
 !define PRODUCT_PUBLISHER "Cody Precord"
 !define PRODUCT_WEB_SITE "http://editra.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}.exe"
@@ -48,7 +48,7 @@ SetCompressor lzma
 !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchEditra"
 !insertmacro MUI_PAGE_FINISH
 
-; Uninstaller pages
+; Un-Installer pages
 !insertmacro MUI_UNPAGE_INSTFILES
 
 ; Language files
