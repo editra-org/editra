@@ -74,8 +74,13 @@ def GetAbsPath(path):
     
     """
     rpath = os.path.abspath(path)
-    if WIN and win32api is not None:
-        rpath = win32api.GetLongPathName(rpath)
+    # Resolve short path notation on Windows when possible
+    if WIN and win32api is not None and u"~" in rpath:
+        try:
+            rpath = win32api.GetLongPathName(rpath)
+        except Exception:
+            # Ignore errors from win32api calls
+            pass
     return rpath
 
 def GetFileExtension(file_str):

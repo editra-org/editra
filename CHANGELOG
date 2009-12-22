@@ -11,7 +11,19 @@ Changes since last release:
 
 VERSION 0.5.30
 DATE 12/21/2009
-31th Alpha Release
+32nd Alpha Release
+
+NEWS:
+
+BUG FIXES:
++Fix error introduced into extended autocomp in previous release.
++Handle win32api errors from calls to GetLongPathName.
+
+#-----------------------------------------------------------------------------#
+
+VERSION 0.5.30
+DATE 12/21/2009
+31st Alpha Release
 
 NEWS:
 
