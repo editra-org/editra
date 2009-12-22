@@ -98,7 +98,8 @@ def GetAutoCompList(self, command):
     baseList = self.BaseGetAutoCompList(command)
     scompList = self.scomp.GetAutoCompList(command)
     # Wipeout duplicates by creating a set, then sort data alphabetically
-    rlist = list(set().union(baseList, scompList))
+    baseList.extend(scompList)
+    rlist = list(set(baseList))
     rlist.sort()
     return rlist
 
