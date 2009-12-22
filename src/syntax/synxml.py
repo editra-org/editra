@@ -108,6 +108,9 @@ class EditraXml(sax.ContentHandler):
     def __eq__(self, other):
         return self.GetXml() == other.GetXml()
 
+    def __str__(self):
+        return self.GetXml()
+
     #---- Internal Parser Api ----#
 
     def startElement(self, name, attrs):
