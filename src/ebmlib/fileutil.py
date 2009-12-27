@@ -77,7 +77,7 @@ def GetAbsPath(path):
     # Resolve short path notation on Windows when possible
     if WIN and win32api is not None and u"~" in rpath:
         try:
-            rpath = win32api.GetLongPathName(rpath)
+            rpath = win32api.GetLongPathNameW(rpath)
         except Exception:
             # Ignore errors from win32api calls
             pass
