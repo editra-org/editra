@@ -290,6 +290,10 @@ class KeyBinder(object):
         if not os.path.exists(kprof):
             # Must be a system supplied keyprofile
             rname = u"%s%s.ekeys" % (ed_glob.CONFIG['KEYPROF_DIR'], rname)
+            if not os.path.exists(rname):
+                # Doesn't exist at syspath either so instead assume it is a new
+                # custom user defined key profile.
+                rname = kprof
         else:
             rname = kprof
 
