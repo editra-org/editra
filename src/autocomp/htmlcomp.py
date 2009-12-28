@@ -94,7 +94,7 @@ class Completer(completer.BaseCompleter):
         self.SetAutoCompKeys([ord('>'), ord('<')])
         self.SetAutoCompStops(' ')
         self.SetAutoCompFillups('')
-        self.SetAutoCompAfter(False) # Insert Text after cursor on completions
+        self.SetAutoCompAfter(True) # Insert Text after cursor on completions
 
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a
