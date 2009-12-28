@@ -18,6 +18,7 @@ NEWS:
 BUG FIXES:
 +Fix error introduced into extended autocomp in previous release.
 +Handle win32api errors from calls to GetLongPathName.
++Restore html/xml autocomp behavior to put cursor between tags that are inserted.
 
 #-----------------------------------------------------------------------------#
 
