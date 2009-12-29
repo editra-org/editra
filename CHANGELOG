@@ -9,11 +9,14 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.30
-DATE 12/21/2009
+VERSION 0.5.32
+DATE 12/28/2009
 32nd Alpha Release
 
 NEWS:
+
+Another quick bug fix release to address some critical issues that were still
+present after the last release.
 
 BUG FIXES:
 +Fix error introduced into extended autocomp in previous release.
