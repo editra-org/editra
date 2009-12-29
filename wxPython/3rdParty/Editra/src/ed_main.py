@@ -1445,32 +1445,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         except:
             self.PushStatusText(_("Error: Unable to open %s") % page, SB_INFO)
 
-    def ModifySave(self):
-        """Called when document has been modified prompting
-        a message dialog asking if the user would like to save
-        the document before closing.
-        @return: Result value of whether the file was saved or not
-
-        """
-        name = self.nb.GetCurrentCtrl().GetFileName()
-        if name == u"":
-            name = self.nb.GetPageText(self.nb.GetSelection())
-
-        dlg = wx.MessageDialog(self,
-                                _("The file: \"%s\" has been modified since "
-                                  "the last save point.\n\nWould you like to "
-                                  "save the changes?") % name,
-                               _("Save Changes?"),
-                               wx.YES_NO | wx.YES_DEFAULT | wx.CANCEL | \
-                               wx.ICON_INFORMATION)
-        result = dlg.ShowModal()
-        dlg.Destroy()
-
-        if result == wx.ID_YES:
-            self.OnSave(wx.MenuEvent(wx.wxEVT_COMMAND_MENU_SELECTED, ID_SAVE))
-
-        return result
-
     def PushStatusText(self, txt, field):
         """Override so that our custom status bar's method gets called
         do to these wxFrame methods not being exposed as virtuals.

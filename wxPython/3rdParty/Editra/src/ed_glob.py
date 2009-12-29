@@ -94,6 +94,7 @@ ID_OPEN          = wx.ID_OPEN
 ID_FHIST         = wx.NewId()
 ID_CLOSE         = wx.ID_CLOSE
 ID_CLOSEALL      = wx.ID_CLOSE_ALL
+ID_CLOSE_OTHERS  = wx.NewId()
 ID_CLOSE_WINDOW  = wx.NewId()
 ID_SAVE          = wx.ID_SAVE
 ID_SAVEAS        = wx.ID_SAVEAS
