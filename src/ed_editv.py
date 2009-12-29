@@ -263,6 +263,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         """Get the tab menu
         @return: wx.Menu
         @todo: move logic from notebook to here
+        @todo: generalize generic actions to base class (close, new, etc..)
 
         """
         ptxt = self.GetTabLabel()
@@ -273,6 +274,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         menu.AppendSeparator()
         menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
         menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
+        menu.Append(ed_glob.ID_CLOSE_OTHERS, _("Close Other Tabs"))
         menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
         menu.AppendSeparator()
         menu.Append(ed_glob.ID_COPY_PATH, _("Copy Full Path"))
@@ -304,8 +306,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         result = True
         if self.GetModify():
-            # TODO: Move this method down from the frame to here
-            result = self.GetTopLevelParent().ModifySave()
+            result = self.ModifySave()
             result = result in (wx.ID_YES, wx.ID_OK, wx.ID_NO)
 
         return result
@@ -344,6 +345,10 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                                  self.GetDocument(), pg_txt)
             self._ignore_del = True
             wx.CallAfter(parent.ClosePage)
+        elif e_id == ed_glob.ID_CLOSE_OTHERS:
+            parent = self.GetParent()
+            if hasattr(parent, 'CloseOtherPages'):
+                parent.CloseOtherPages()
         elif wx.Platform == '__WXGTK__' and \
              e_id in (ed_glob.ID_CLOSE, ed_glob.ID_CLOSEALL):
             # Need to relay events up to toplevel window on GTK for them to
@@ -466,3 +471,33 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             self._spell.setCheckRegion(self.IsNonCode)
 
 #-----------------------------------------------------------------------------#
+
+    def ModifySave(self):
+        """Called when document has been modified prompting
+        a message dialog asking if the user would like to save
+        the document before closing.
+        @return: Result value of whether the file was saved or not
+
+        """
+        name = self.GetFileName()
+        if name == u"":
+            name = self.GetTabLabel()
+
+        dlg = wx.MessageDialog(self,
+                                _("The file: \"%s\" has been modified since "
+                                  "the last save point.\n\nWould you like to "
+                                  "save the changes?") % name,
+                               _("Save Changes?"),
+                               wx.YES_NO | wx.YES_DEFAULT | wx.CANCEL | \
+                               wx.ICON_INFORMATION)
+        result = dlg.ShowModal()
+        dlg.Destroy()
+
+        # HACK
+        if result == wx.ID_YES:
+            evt = wx.MenuEvent(wx.wxEVT_COMMAND_MENU_SELECTED, ed_glob.ID_SAVE)
+            tlw = self.GetTopLevelParent()
+            if hasattr(tlw, 'OnSave'):
+                tlw.OnSave(evt)
+
+        return result

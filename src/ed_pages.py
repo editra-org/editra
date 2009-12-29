@@ -1098,6 +1098,24 @@ class EdPages(FNB.FlatNotebook):
             if not self.ClosePage():
                 break
 
+    def CloseOtherPages(self):
+        """Close all but the currently selected tab"""
+        cpage = self.GetCurrentPage()
+        to_del = list()
+        for pnum in range(self.GetPageCount()):
+            page = self.GetPage(pnum)
+            if not page:
+                break
+            if not (page == cpage):
+                if page.CanCloseTab():
+                    to_del.append(pnum)
+
+        if len(to_del):
+            to_del.sort()
+            to_del.reverse()
+            for pnum in to_del:
+                self.DeletePage(pnum)
+
     def ClosePage(self):
         """Closes Currently Selected Page
         @return: bool
