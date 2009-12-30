@@ -100,6 +100,7 @@ class EdFile(ebmlib.FileObjectImpl):
         @return: string
 
         """
+        Log("[ed_txt][info] HandleRawBytes called")
         if self._magic['comment']:
             self._magic['bad'] = True
         # Return the raw bytes to put into the buffer
@@ -152,6 +153,7 @@ class EdFile(ebmlib.FileObjectImpl):
                     Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
                     bytes = bytes.replace(self.bom, '', 1)
 
+                Log("[ed_txt][info] Attempting to decode with: %s" % self.encoding)
                 ustr = bytes.decode(self.encoding)
             else:
                 # Binary data was read
@@ -176,6 +178,7 @@ class EdFile(ebmlib.FileObjectImpl):
         #       for besides NUL?
         if not self._raw and '\0' in ustr:
             # Return the raw bytes to put into the buffer
+            Log("[ed_txt][info] DecodeText - joining nul terminators")
             ustr = '\0'.join(bytes)+'\0'
             self._raw = True
 
@@ -183,6 +186,7 @@ class EdFile(ebmlib.FileObjectImpl):
             # TODO: wx/Scintilla Bug?
             # Replace \x05 with a space as it causes the buffer
             # to crash when its inserted.
+            Log("[ed_txt][info] DecodeText - raw - set encoding to binary")
             ustr = ustr.replace('\x05', ' ')
             self.SetEncoding('binary')
 
@@ -329,6 +333,8 @@ class EdFile(ebmlib.FileObjectImpl):
             if self.encoding is None:
                 # fall back to user setting
                 self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
+                Log(("[ed_txt][warn] Failed to detect encoding "
+                    "falling back to default: %s") % self.encoding)
 
             self._ResetBuffer()
 
@@ -343,6 +349,7 @@ class EdFile(ebmlib.FileObjectImpl):
             self._ResetBuffer()
             return txt
         else:
+            Log("[ed_txt][err] Read Error: %s" % self.GetLastError())
             raise ReadError, self.GetLastError()
 
     def ReadAsync(self, control):
@@ -382,6 +389,7 @@ class EdFile(ebmlib.FileObjectImpl):
                 self.Close()
                 if self._magic['comment']:
                     self._magic['bad'] = True
+            else:
 
                 # TODO: handle incremental mode for 
 #                enc, txt = FallbackReader(self.path)
@@ -389,8 +397,8 @@ class EdFile(ebmlib.FileObjectImpl):
 #                    self.encoding = enc
 #                else:
 #                    raise UnicodeDecodeError, msg
-            Log("[ed_txt][info] Decoded %s with %s" % (self.GetPath(), self.encoding))
-            self.SetModTime(ebmlib.GetFileModTime(self.GetPath()))
+                Log("[ed_txt][info] Decoded %s with %s" % (self.GetPath(), self.encoding))
+                self.SetModTime(ebmlib.GetFileModTime(self.GetPath()))
         else:
             raise ReadError, self.GetLastError()
 
