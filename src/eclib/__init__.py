@@ -22,6 +22,7 @@ __all__ = ['auinavi', 'choicedlg', 'colorsetter', 'ctrlbox', 'eclutil',
            'txtentry']
 
 #-----------------------------------------------------------------------------#
+from ecbasewin import *
 
 from auinavi import *
 from choicedlg import *
@@ -32,6 +33,7 @@ from ecpickers import *
 from elistmix import *
 from encdlg import *
 from errdlg import *
+from filterdlg import *
 from finddlg import *
 from infodlg import *
 from outbuff import *
