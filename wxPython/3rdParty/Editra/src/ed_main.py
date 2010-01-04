@@ -141,9 +141,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         ## Setup additional menu items
         self.filehistory.UseMenu(menbar.GetMenuByName("filehistory"))
-        menbar.GetMenuByName("settings").AppendMenu(ID_LEXER, _("Lexers"),
-                                                    syntax.GenLexerMenu(),
-                                              _("Manually Set a Lexer/Syntax"))
 
         # On mac, do this to make help menu appear in correct location
         # Note it must be done before setting the menu bar and after the
@@ -195,6 +192,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
                                        # Format Menu
                                        (ID_FONT, self.OnFont),
+
+                                       # Settings menu
+                                       (ID_LEXER_CUSTOM, self.OnCustomizeLangMenu),
 
                                        # Tool Menu
                                        (ID_COMMAND, self.OnCommandBar),
@@ -1412,6 +1412,31 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         e_id = evt.GetId()
         if e_id in (ID_QUICK_FIND, ID_GOTO_LINE, ID_COMMAND):
             self._mpane.ShowCommandControl(e_id)
+        else:
+            evt.Skip()
+
+    def OnCustomizeLangMenu(self, evt):
+        """Show the lexer menu customization dialog"""
+        if evt.GetId() == ID_LEXER_CUSTOM:
+            dlg = eclib.FilterDialog(self, title=_("Customize Menu"),
+                                     style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
+            mconfig = _PGET("LEXERMENU", default=list())
+            flters = dict()
+            for item in syntax.SyntaxNames():
+                if item in mconfig:
+                    flters[item] = True
+                else:
+                    flters[item] = False
+            dlg.SetListValues(flters)
+            dlg.SetInitialSize()
+            dlg.CenterOnParent()
+
+            if dlg.ShowModal() == wx.ID_OK:
+                includes = dlg.GetIncludes()
+                includes.sort()
+                _PSET("LEXERMENU", includes)
+                ed_msg.PostMessage(ed_msg.EDMSG_CREATE_LEXER_MENU)
+            dlg.Destroy()
         else:
             evt.Skip()
 

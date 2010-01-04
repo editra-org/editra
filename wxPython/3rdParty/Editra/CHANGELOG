@@ -9,6 +9,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.5.xx
+DATE xx/xx/20xx
+33rd Alpha Release
+
+NEWS:
+
+
+NEW: [features/improvements]
++What items are displayed in the Lexer menu are now configurable
+
+BUG FIXES:
++Fix some minor vhdl highlighting issues.
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.5.32
 DATE 12/28/2009
 32nd Alpha Release

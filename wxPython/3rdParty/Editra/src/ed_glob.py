@@ -44,7 +44,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_COLUMN_MODE', 'ID_PANELIST', 'ID_MAXIMIZE_EDITOR',
             'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS',
             'ID_SAVE_SESSION', 'ID_LOAD_SESSION', 'ID_NEXT_POS', 'ID_PRE_POS',
-            'ID_CYCLE_CLIPBOARD']
+            'ID_CYCLE_CLIPBOARD', 'ID_LEXER_CUSTOM']
 
 #---- Project Info ----#
 # The project info was moved to another module so it could be accessed
@@ -149,7 +149,7 @@ if wx.Platform == '__WXMAC__':
 ID_QUICK_FIND    = wx.NewId()
 ID_PREF          = wx.ID_PREFERENCES
 
-# Prefrence Dlg Ids
+# Preference Dlg Ids
 ID_PREF_LANG     = wx.NewId()
 ID_PREF_AALIAS   = wx.NewId()
 ID_PREF_AUTOBKUP = wx.NewId()
@@ -233,6 +233,7 @@ ID_SYN_OFF       = wx.NewId()
 ID_FOLDING       = wx.NewId()
 ID_BRACKETHL     = wx.NewId()
 ID_LEXER         = wx.NewId()
+ID_LEXER_CUSTOM  = wx.NewId()
 
 # Tool Menu IDs
 ID_COMMAND       = wx.NewId()

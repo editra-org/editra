@@ -210,6 +210,10 @@ EDMSG_MENU_REBIND = EDMSG_MENU + ('rebind',)
 # msgdata == keyprofile name
 EDMSG_MENU_LOADPROFILE = EDMSG_MENU + ('load',)
 
+# Message to recreate the lexer menu
+# msgdata == None
+EDMSG_CREATE_LEXER_MENU = EDMSG_MENU + ('lexer',)
+
 #---- End Menu Messages ----#
 
 #---- Find Actions ----#

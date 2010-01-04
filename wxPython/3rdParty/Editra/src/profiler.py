@@ -73,6 +73,7 @@ _DEFAULTS = {
            'KEY_PROFILE': None,             # Keybinding profile
            'LANG'       : 'Default',        # UI language
            'LASTCHECK'  : 0,                # Last time update check was done
+           #'LEXERMENU'  : [lang_name,]     # Created on an as needed basis
            'MAXIMIZED'  : False,            # Was window maximized on exit
            'MODE'       : 'CODE',           # Overall editor mode
            'MYPROFILE'  : 'default.ppb',    # Path to profile file
