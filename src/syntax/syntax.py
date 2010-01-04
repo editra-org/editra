@@ -362,16 +362,24 @@ def SyntaxIds():
     syn_ids = list()
     for item in dir(synglob):
         if item.startswith("ID_LANG"):
-            syn_ids.append(item)
-    
-    # Fetch actual values
-    ret_ids = list()
-    for syn_id in syn_ids:
-        ret_ids.append(getattr(synglob, syn_id))
+            syn_ids.append(getattr(synglob, item))
 
-    return ret_ids
+    return syn_ids
 
 SYNTAX_IDS = SyntaxIds()
+
+def SyntaxNames():
+    """Gets a list of all Syntax Labels
+    @return: list of strings
+
+    """
+    syn_list = list()
+    for item in dir(synglob):
+        if item.startswith("LANG_"):
+            val = getattr(synglob, item)
+            if isinstance(val, basestring):
+                syn_list.append(val)
+    return syn_list
 
 #---- End Syntax ids ----#
 
