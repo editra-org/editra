@@ -36,6 +36,9 @@ from syntax import synglob
 import autocomp
 from extern import vertedit
 from profiler import Profile_Get
+import plugin
+import iface
+import util
 
 #-----------------------------------------------------------------------------#
 
@@ -310,7 +313,15 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.AutoCompSetAutoHide(False)
         self.AutoCompSetChooseSingle(True)
         extend = Profile_Get('AUTO_COMP_EX') # Using extended autocomp?
-        self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self, extend)
+
+        # Check for plugins that may extend or override functionality for this
+        # file type.
+        autocomp_ext = AutoCompExtension(wx.GetApp().GetPluginManager())
+        completer = autocomp_ext.GetCompleter(self)
+        if completer is not None:
+            self._code['compsvc'] = completer
+        else:
+            self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self, extend)
         self.AutoCompSetIgnoreCase(not self._code['compsvc'].GetCaseSensitive())
         self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
         # TODO: come back to this it can cause some annoying behavior where
@@ -996,6 +1007,26 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
         self.vert_edit.SetBlockColor(sback)
         self.DefineMarkers()
+
+#-----------------------------------------------------------------------------#
+
+class AutoCompExtension(plugin.Plugin):
+    """Plugin that Extends the autocomp feature"""
+    observers = plugin.ExtensionPoint(iface.AutoCompI)
+    def GetCompleter(self, buff):
+        """Get the completer for the specified file type id
+        @param buff: EditraStc instance
+
+        """
+        ftypeid = buff.GetLangId()
+        for observer in self.observers:
+            try:
+                if observer.GetFileTypeId() == ftypeid:
+                    return observer.GetCompleter(buff)
+            except Exception, msg:
+                util.Log("[ed_basestc][err] GetCompleter Extension: %s" % str(msg))
+        else:
+            return None
 
 #-----------------------------------------------------------------------------#
 
