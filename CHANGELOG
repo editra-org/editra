@@ -19,8 +19,12 @@ NEWS:
 NEW: [features/improvements]
 +What items are displayed in the Lexer menu are now configurable
 
+LIBRARY:
++New plugin interface for adding autocompletion providers added (iface.AutocompI)
+
 BUG FIXES:
 +Fix some minor vhdl highlighting issues.
++Fix exception that could occur when syntax highlighting extensions are removed.
 
 #-----------------------------------------------------------------------------#
 
