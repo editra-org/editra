@@ -312,16 +312,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         self.AutoCompSetAutoHide(False)
         self.AutoCompSetChooseSingle(True)
-        extend = Profile_Get('AUTO_COMP_EX') # Using extended autocomp?
-
-        # Check for plugins that may extend or override functionality for this
-        # file type.
-        autocomp_ext = AutoCompExtension(wx.GetApp().GetPluginManager())
-        completer = autocomp_ext.GetCompleter(self)
-        if completer is not None:
-            self._code['compsvc'] = completer
-        else:
-            self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self, extend)
+        self.InitCompleter()
         self.AutoCompSetIgnoreCase(not self._code['compsvc'].GetCaseSensitive())
         self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
         # TODO: come back to this it can cause some annoying behavior where
@@ -655,8 +646,19 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         return 'comment' in self.FindTagById(self.GetStyleAt(pos))
 
     def InitCompleter(self):
-        """(Re)Initialize a completer object for this buffer"""
-        self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self)
+        """(Re)Initialize a completer object for this buffer
+        @todo: handle extended autocomp for plugins?
+
+        """
+        # Check for plugins that may extend or override functionality for this
+        # file type.
+        autocomp_ext = AutoCompExtension(wx.GetApp().GetPluginManager())
+        completer = autocomp_ext.GetCompleter(self)
+        if completer is not None:
+            self._code['compsvc'] = completer
+        else:
+            extend = Profile_Get('AUTO_COMP_EX') # Using extended autocomp?
+            self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self, extend)
 
     def IsString(self, pos):
         """Is the given position in a string region of the current buffer
