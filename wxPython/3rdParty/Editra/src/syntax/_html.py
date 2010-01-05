@@ -27,6 +27,7 @@ import wx.stc as stc
 import synglob
 import syndata
 import _javascript
+import _vbscript
 
 #-----------------------------------------------------------------------------#
 
@@ -84,7 +85,7 @@ CF_TAGS = ("cfabort cfapplet cfapplication cfargument cfassociate cfbreak "
 JS_KEYWORDS = (1, _javascript.KeywordString(synglob.ID_LANG_JS))
 
 # VBScript Keywords (currently unsupported)
-VBS_KEYWORDS = (2, "")
+VBS_KEYWORDS = (2, _vbscript.VBS_KW)
 
 # Python Keywords (see python.py)
 PY_KEYWORDS = (3, "")
@@ -141,6 +142,7 @@ SYNTAX_ITEMS = [ ('STC_H_DEFAULT', 'default_style'),
                  ('STC_H_XCCOMMENT', 'comment_style'),
                  ('STC_H_XMLEND', 'scalar_style'),
                  ('STC_H_XMLSTART', 'scalar_style'),
+
                  # Embedded JavaScript
                  ('STC_HJ_COMMENT', 'comment_style'),
                  ('STC_HJ_COMMENTDOC', 'comment_style'),
@@ -155,6 +157,7 @@ SYNTAX_ITEMS = [ ('STC_H_DEFAULT', 'default_style'),
                  ('STC_HJ_STRINGEOL', 'default_style'), # STYLE ME
                  ('STC_HJ_SYMBOLS', 'default_style'), # STYLE ME
                  ('STC_HJ_WORD', 'default_style'), # STYLE ME
+
                  ('STC_HJA_COMMENT', 'comment_style'),
                  ('STC_HJA_COMMENTDOC', 'comment_style'),
                  ('STC_HJA_COMMENTLINE', 'comment_style'),
@@ -167,7 +170,16 @@ SYNTAX_ITEMS = [ ('STC_H_DEFAULT', 'default_style'),
                  ('STC_HJA_START', 'default_style'), # STYLE ME
                  ('STC_HJA_STRINGEOL', 'default_style'), # STYLE ME
                  ('STC_HJA_SYMBOLS', 'default_style'), # STYLE ME
-                 ('STC_HJA_WORD', 'default_style')  ]
+                 ('STC_HJA_WORD', 'default_style'),
+                 
+                 ('STC_HBA_DEFAULT', 'operator_style'), # Styles ( ) ?
+                 ('STC_HBA_COMMENTLINE', 'comment_style'),
+                 ('STC_HBA_IDENTIFIER', 'default_style'), # TODO
+                 ('STC_HBA_NUMBER', 'number_style'),
+                 ('STC_HBA_START', 'default_style'), # TODO
+                 ('STC_HBA_STRING', 'string_style'),
+                 ('STC_HBA_STRINGEOL', 'stringeol_style'),
+                 ('STC_HBA_WORD', 'keyword_style')  ]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
@@ -188,7 +200,7 @@ class SyntaxData(syndata.SyntaxDataBase):
         if self.LangId == synglob.ID_LANG_COLDFUSION:
             return [(HTML_TAGS[0], HTML_TAGS[1] + " " + CF_TAGS), JS_KEYWORDS]
         else:
-            return [HTML_TAGS, JS_KEYWORDS, SGML_KEYWORDS]
+            return [HTML_TAGS, JS_KEYWORDS, SGML_KEYWORDS, VBS_KEYWORDS]
 
     def GetSyntaxSpec(self):
         """Syntax Specifications"""
