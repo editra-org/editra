@@ -19,7 +19,7 @@ __revision__ = "$Revision$"
 
 __all__ = [ 'TYPE_FUNCTION', 'TYPE_METHOD', 'TYPE_CLASS', 'TYPE_ATTRIBUTE',
             'TYPE_VARIABLE', 'TYPE_ELEMENT', 'TYPE_PROPERTY', 'TYPE_UNKNOWN',
-            'BaseCompleter', 'Symbol' ]
+            'BaseCompleter', 'Symbol', 'CreateSymbols' ]
 
 #--------------------------------------------------------------------------#
 # Imports
