@@ -189,7 +189,11 @@ class SyntaxMgr(object):
             syn_data = self._extensions[lang]
             return syn_data
 
-        lex_cfg = synglob.LANG_MAP[lang]
+        # Check for extensions that may have been removed
+        if lang not in synglob.LANG_MAP:
+            self._extreg.Remove(lang)
+
+        lex_cfg = synglob.LANG_MAP.get(lang, synglob.LANG_MAP[synglob.LANG_TXT])
 
         if lex_cfg[LANG_ID] == synglob.ID_LANG_TXT:
             syn_data = syndata.SyntaxDataBase()
