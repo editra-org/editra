@@ -59,7 +59,12 @@ __revision__ = "$Revision$"
 # Imports
 import os
 from xml import sax
-import wx.stc as stc
+
+# Workaround for building packages when wx is not available
+try:
+    import wx.stc as stc
+except ImportError:
+    pass
 
 #----------------------------------------------------------------------------#
 # Tag Definitions
