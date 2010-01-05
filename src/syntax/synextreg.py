@@ -529,6 +529,17 @@ class ExtensionRegister(dict):
                 exts = tmp[1].split(u':')
                 self.__setitem__(ftype, exts)
 
+    def Remove(self, ftype):
+        """Remove a filetype from the register
+        @param ftype: File tyep description string
+        @return: bool removed or not
+
+        """
+        if ftype in self:
+            del self[ftype]
+            return True
+        return False
+
     def SetAssociation(self, ftype, ext):
         """Like Associate but overrides any current settings instead of
         just adding to them.
