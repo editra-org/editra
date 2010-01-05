@@ -17,7 +17,8 @@ NEWS:
 
 
 NEW: [features/improvements]
-+What items are displayed in the Lexer menu are now configurable
++What items are displayed in the Lexer menu are now configurable.
++Basic support for highlighting asp script embedded in html files.
 
 LIBRARY:
 +New plugin interface for adding autocompletion providers added (iface.AutocompI)
