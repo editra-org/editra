@@ -630,11 +630,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             return
 
         elif key_code in cmpl.GetAutoCompKeys():
-            if self.AutoCompActive():
-                self.AutoCompCancel()
-
-            if self.CallTipActive():
-                self.CallTipCancel()
+            self.HidePopups()
 
             command = self.GetCommandStr() + unichr(key_code)
             self.AddText(unichr(key_code))
@@ -995,11 +991,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
                     ed_glob.ID_ADD_BM    : self.Bookmark,
                     ed_glob.ID_DEL_ALL_BM : self.Bookmark}
 
-        if self.CallTipActive():
-            self.CallTipCancel()
-
-        if self.AutoCompActive():
-            self.AutoCompCancel()
+        # Hide autocomp popups
+        self.HidePopups()
 
         if e_obj.GetClassName() == "wxToolBar" or e_id in e_map:
             if e_id in e_map:

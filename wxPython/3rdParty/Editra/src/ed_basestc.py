@@ -645,6 +645,14 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         pos = max(0, pos-1)
         return 'comment' in self.FindTagById(self.GetStyleAt(pos))
 
+    def HidePopups(self):
+        """Hide autocomp/calltip popup windows if any are active"""
+        if self.AutoCompActive():
+            self.AutoCompCancel()
+
+        if self.CallTipActive():
+            self.CallTipCancel()
+
     def InitCompleter(self):
         """(Re)Initialize a completer object for this buffer
         @todo: handle extended autocomp for plugins?

@@ -103,7 +103,8 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         self.Bind(wx.EVT_MENU, self.OnMenuEvent)
 
         # Hide autocomp/calltips when window looses focus
-        self.Bind(wx.EVT_KILL_FOCUS, lambda evt: self.DoDeactivateTab())
+        # TODO: decide on whether this belongs in base class or not
+        self.Bind(wx.EVT_KILL_FOCUS, lambda evt: self.HidePopups())
 
         ed_msg.Subscribe(self.OnConfigMsg,
                          ed_msg.EDMSG_PROFILE_CHANGE + ('SPELLCHECK',))
@@ -172,11 +173,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         the active tab.
 
         """
-        if self.AutoCompActive():
-            self.AutoCompCancel()
-
-        if self.CallTipActive():
-            self.CallTipCancel()
+        self.HidePopups()
 
     def DoOnIdle(self):
         """Check if the file has been modified and prompt a warning"""
