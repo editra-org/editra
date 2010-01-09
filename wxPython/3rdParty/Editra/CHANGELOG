@@ -26,6 +26,7 @@ LIBRARY:
 BUG FIXES:
 +Fix some minor vhdl highlighting issues.
 +Fix exception that could occur when syntax highlighting extensions are removed.
++Fix issue where autocomp/callip popups would not get hidden when they should.
 
 #-----------------------------------------------------------------------------#
 

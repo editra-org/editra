@@ -102,6 +102,9 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         # window to be handled on gtk. Other platforms don't require this.
         self.Bind(wx.EVT_MENU, self.OnMenuEvent)
 
+        # Hide autocomp/calltips when window looses focus
+        self.Bind(wx.EVT_KILL_FOCUS, lambda evt: self.DoDeactivateTab())
+
         ed_msg.Subscribe(self.OnConfigMsg,
                          ed_msg.EDMSG_PROFILE_CHANGE + ('SPELLCHECK',))
 

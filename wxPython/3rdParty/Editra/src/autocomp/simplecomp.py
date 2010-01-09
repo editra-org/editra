@@ -58,7 +58,7 @@ class Completer(completer.BaseCompleter):
 
         fillups = self.GetAutoCompFillups()
         if command[0].isdigit() or (command[-1] in fillups):
-            return kwlst
+            return list()
 
         currentPos = bf.GetCurrentPos()
 
