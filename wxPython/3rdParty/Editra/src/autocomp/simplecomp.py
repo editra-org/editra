@@ -39,7 +39,6 @@ class Completer(completer.BaseCompleter):
         self.SetCallTipKeys([])
         self.SetCallTipCancel([])
         self.SetCaseSensitive(False)
-        self.SetAutoCompAfter(False) # Insert Text after cursor on completions
 
     def _GetCompletionInfo(self, command, calltip=False):
         """Get Completion list or Calltip

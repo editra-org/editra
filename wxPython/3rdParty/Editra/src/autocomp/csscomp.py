@@ -48,8 +48,7 @@ class Completer(completer.BaseCompleter):
         self.SetAutoCompFillups('')
         self.SetCallTipKeys([ord('('), ])
         self.SetCallTipCancel([ord(')'), wx.WXK_RETURN])
-        self.SetAutoCompAfter(False) # Insert Text after cursor on completions
-
+        
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a
         command string. If namespace is not specified the lookup
