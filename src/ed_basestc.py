@@ -105,6 +105,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Event Handlers
         self.Bind(wx.stc.EVT_STC_CHANGE, self.OnChanged)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
+        self.Bind(wx.stc.EVT_STC_AUTOCOMP_SELECTION, self.OnAutoCompSel)
 
     def __del__(self):
         # Cleanup the file object callbacks
@@ -716,6 +717,12 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.GotoPos(pos)
         self.ChooseCaretX()
 
+    def OnAutoCompSel(self, evt):
+        """Handle when an item is inserted from the autocomp list"""
+        text = evt.GetText()
+        cpos = evt.GetPosition()
+        self._code['compsvc'].OnCompletionInserted(cpos, text)
+
     def OnChanged(self, evt):
         """Handles updates that need to take place after
         the control has been modified.
@@ -922,8 +929,13 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                 return
             self.AutoCompShow(pos - self.WordStartPosition(pos, True), lst)
 
-            if self._code['compsvc'].GetAutoCompAfter():
-                super(EditraBaseStc, self).GotoPos(pos)
+            # Check if something was inserted due to there only being a 
+            # single choice returned from the completer and allow the completer
+            # to adjust caret position as necessary.
+            curpos = self.GetCurrentPos()
+            if curpos != pos:
+                text = self.GetTextRange(pos, curpos)
+                self._code['compsvc'].OnCompletionInserted(pos, text)
             self.EndUndoAction()
             self.SetFocus()
 

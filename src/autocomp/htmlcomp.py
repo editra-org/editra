@@ -94,7 +94,6 @@ class Completer(completer.BaseCompleter):
         self.SetAutoCompKeys([ord('>'), ord('<')])
         self.SetAutoCompStops(' ')
         self.SetAutoCompFillups('')
-        self.SetAutoCompAfter(True) # Insert Text after cursor on completions
 
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a
@@ -151,6 +150,18 @@ class Completer(completer.BaseCompleter):
                     break
 
         return list()
+
+    def OnCompletionInserted(self, pos, text):
+        """Handle adjusting caret position after some insertions.
+        @param pos: position caret was at before insertion
+        @param text: text that was inserted
+
+        """
+        buff = self.GetBuffer()
+        if text.startswith(u"</"):
+            buff.SetCurrentPos(pos) # move caret back between the tags
+            # HACK: SetCurrentPos causes text to be selected
+            buff.SetSelection(pos, pos)
 
 #--------------------------------------------------------------------------#
 

@@ -144,15 +144,16 @@ class BaseCompleter(object):
         """
         return u''
 
-    #--- End override in subclass ----#
-
-    def GetAutoCompAfter(self):
-        """Should text insterted by autocomp be placed after the cursor
-        or before it.
-        @return: bool
+    def OnCompletionInserted(self, pos, text):
+        """Called by the buffer when an autocomp selection has been inserted.
+        The completer can override this method to 
+        @param pos: Position the caret was at before the insertion
+        @param text: text that was inserted at pos
 
         """
-        return self._autocomp_after
+        pass
+
+    #--- End override in subclass ----#
 
     def GetAutoCompKeys(self):
         """Returns the list of key codes for activating the autocompletion.
@@ -249,14 +250,6 @@ class BaseCompleter(object):
 
         """
         return self._case_sensitive
-
-    def SetAutoCompAfter(self, after=False):
-        """Set if text insterted by autocomp should be placed after the cursor
-        or before it.
-        @keyword after: bool
-
-        """
-        self._autocomp_after = after
 
     def SetCaseSensitive(self, sensitive):
         """Set whether this completer is case sensitive or not
