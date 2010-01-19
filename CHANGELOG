@@ -29,6 +29,8 @@ BUG FIXES:
 +Fix issue where autocomp/callip popups would not get hidden when they should.
 +Fix issue where window could be restored off screen when extra displays have
 been removed from the system between running the program.
++Fix issue where tab label would incorrectly show a modified state after loading
+a large file in incremental mode.
 
 #-----------------------------------------------------------------------------#
 
