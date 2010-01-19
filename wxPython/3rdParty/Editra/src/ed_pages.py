@@ -1213,6 +1213,12 @@ class EdPages(FNB.FlatNotebook):
         try:
             e_id = evt.GetId()
             if self.control.GetId() == e_id:
+
+                # Wait till file is completely loaded before updating ui based
+                # on modification events.
+                if self.control.IsLoading():
+                    return
+
                 pg_num = self.GetSelection()
                 title = self.GetPageText(pg_num)
                 if self.control.GetModify():
