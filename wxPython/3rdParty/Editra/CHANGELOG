@@ -27,6 +27,8 @@ BUG FIXES:
 +Fix some minor vhdl highlighting issues.
 +Fix exception that could occur when syntax highlighting extensions are removed.
 +Fix issue where autocomp/callip popups would not get hidden when they should.
++Fix issue where window could be restored off screen when extra displays have
+been removed from the system between running the program.
 
 #-----------------------------------------------------------------------------#
 
