@@ -161,7 +161,7 @@ class LaunchWindow(eclib.ControlBox):
 
         # Script Label
         ctrlbar.AddControl((5, 5), wx.ALIGN_LEFT)
-        self._chFiles = wx.Choice(ctrlbar, choices=[''])
+        self._chFiles = wx.Choice(ctrlbar, wx.ID_ANY)#, choices=[''])
         ctrlbar.AddControl(self._chFiles, wx.ALIGN_LEFT)
 
         # Args
@@ -339,7 +339,10 @@ class LaunchWindow(eclib.ControlBox):
             return
 
         fname, ftype = msg.GetData()
-        if ftype != self._config['lang']:
+        # Update regardless of whether lexer has changed or not as the buffer
+        # may have the lexer set before the file was saved to disk.
+        if fname:
+            #if ftype != self._config['lang']:
             self.UpdateCurrentFiles(ftype)
             self.SetControlBarState(fname, ftype)
 
@@ -446,6 +449,7 @@ class LaunchWindow(eclib.ControlBox):
             self._isready = False
             for ctrl in (exe_ch, args_txt, run_btn, self._chFiles):
                 ctrl.Disable()
+            self._chFiles.Clear()
 
     def Run(self, fname, cmd, args, ftype):
         """Run the given file
@@ -602,9 +606,10 @@ class LaunchWindow(eclib.ControlBox):
 
         items = [ os.path.basename(fname) for fname in self._fnames ]
         try:
-            self._chFiles.SetItems(items)
-            if len(self._fnames):
-                self._chFiles.SetToolTipString(self._fnames[0])
+            if len(u''.join(items)):
+                self._chFiles.SetItems(items)
+                if len(self._fnames):
+                    self._chFiles.SetToolTipString(self._fnames[0])
         except TypeError:
             util.Log("[Launch][err] UpdateCurrent Files: " + str(items))
             self._chFiles.SetItems([''])
