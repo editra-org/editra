@@ -471,9 +471,9 @@ class LaunchWindow(eclib.ControlBox):
         handler = handlers.GetHandlerById(ftype)
         path, fname = os.path.split(fname)
         if wx.Platform == '__WXMSW__':
-            fname = "\"" + fname + "\""
+            fname = u"\"" + fname + u"\""
         else:
-            fname = fname.replace(u' ', '\\ ')
+            fname = fname.replace(u' ', u'\\ ')
 
         self._worker = eclib.ProcessThread(self._buffer,
                                            cmd, fname,
@@ -667,14 +667,19 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         handler.HandleHotSpot(self._mw, self, line, fname)
         self.GetParent().SetupControlBar(GetTextBuffer(self._mw))
 
-    def DoProcessError(self, code):
+    def DoProcessError(self, code, excdata=None):
         """Handle notifications of when an error occurs in the process
         @param code: an OBP error code
+        @keyword excdata: Exception string
         @return: None
 
         """
         if code == eclib.OPB_ERROR_INVALID_COMMAND:
-            self.AppendUpdate(_("The requested command could not be executed."))
+            self.AppendUpdate(_("The requested command could not be executed.") + u"\n")
+
+        # Log the raw exception data to the log as well
+        if excdata is not None:
+            util.Log(u"[launch][err] %s" % excdata)
 
     def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited"""
