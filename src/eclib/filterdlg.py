@@ -33,6 +33,7 @@ _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
 class FilterDialog(ecbasewin.ECBaseDlg):
+    """Dialog that allows adding and removing items from a filter list"""
     def __init__(self, parent, id=wx.ID_ANY, title=u"",
                  pos=wx.DefaultPosition, size=wx.DefaultSize, 
                  style=wx.DEFAULT_DIALOG_STYLE, name=u"FilterDialog"):
@@ -47,6 +48,7 @@ class FilterDialog(ecbasewin.ECBaseDlg):
 #-----------------------------------------------------------------------------#
 
 class FilterPanel(wx.Panel):
+    """Filter dialog panel"""
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
 
