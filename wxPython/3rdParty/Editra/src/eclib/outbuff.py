@@ -151,7 +151,10 @@ class OutputBufferEvent(wx.PyCommandEvent):
     def __init__(self, etype, eid=wx.ID_ANY, value=''):
         """Creates the event object"""
         wx.PyCommandEvent.__init__(self, etype, eid)
+
+        # Attributes
         self._value = value
+        self._errmsg = None
 
     def GetValue(self):
         """Returns the value from the event.
@@ -159,6 +162,24 @@ class OutputBufferEvent(wx.PyCommandEvent):
 
         """
         return self._value
+
+    def GetErrorMessage(self):
+        """Get the error message value
+        @return: Exception traceback string or None
+
+        """
+        return self._errmsg
+
+    def SetErrorMessage(self, msg):
+        """Set the error message value
+        @param msg: Exception traceback string
+
+        """
+        try:
+            tmsg = unicode(msg)
+        except:
+            tmsg = None
+        self._errmsg = msg
 
 #--------------------------------------------------------------------------#
 
@@ -563,7 +584,7 @@ class ProcessBufferMixin:
 
     def _OnProcessError(self, evt):
         """Handle EVT_PROCESS_ERROR"""
-        self.DoProcessError(evt.GetValue())
+        self.DoProcessError(evt.GetValue(), evt.GetErrorMessage())
 
     def _OnProcessExit(self, evt):
         """Handles EVT_PROCESS_EXIT"""
@@ -589,10 +610,11 @@ class ProcessBufferMixin:
         """
         return txt
 
-    def DoProcessError(self, code):
+    def DoProcessError(self, code, excdata=None):
         """Override this method to do any ui notification of when errors happen
         in running the process.
         @param code: an OBP error code
+        @keyword excdata: Exception Data from process error
         @return: None
 
         """
@@ -801,6 +823,7 @@ class ProcessThread(threading.Thread):
                                                        self._cmd['file'],
                                                        self._cmd['args']]])
 
+        
         use_shell = not subprocess.mswindows
         err = None
         try:
@@ -816,6 +839,7 @@ class ProcessThread(threading.Thread):
             err =  OutputBufferEvent(edEVT_PROCESS_ERROR,
                                      self._parent.GetId(),
                                      OPB_ERROR_INVALID_COMMAND)
+            err.SetErrorMessage(msg)
 
         evt = OutputBufferEvent(edEVT_PROCESS_START,
                                 self._parent.GetId(),
