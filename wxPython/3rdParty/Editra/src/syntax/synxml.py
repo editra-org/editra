@@ -500,7 +500,14 @@ class Syntax(EditraXml):
     def startElement(self, name, attrs):
         """Parse the Syntax Xml"""
         if name == EXML_COMMENTPAT:
-            self.comment = attrs.get(EXML_VALUE, '').split()
+            val = attrs.get(EXML_VALUE, '')
+            tmp = val.split()
+            # Trailing space may be significant for some comments
+            if len(tmp) == 1:
+                comment = [val,]
+            else:
+                comment = tmp
+            self.comment = comment
         elif name == EXML_ASSOCIATIONS:
             self.file_ext = attrs.get(EXML_VALUE, '').split()
         elif name == self.Name:
