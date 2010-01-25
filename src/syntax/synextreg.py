@@ -131,6 +131,10 @@ LANG_FLAGSHIP = u'FlagShip'
 ID_LANG_F77 = _NewId()
 LANG_F77 = u'Fortran 77'
 
+# Use LEX_FORTH
+ID_LANG_FORTH = _NewId()
+LANG_FORTH = u"Forth"
+
 # Use LEX_FORTRAN
 ID_LANG_F95 = _NewId()
 LANG_F95 = u'Fortran 95'
@@ -320,8 +324,9 @@ EXT_MAP = {
            'ess'                : LANG_ESS,
            'f for'              : LANG_F77,
            'f90 f95 f2k fpp'    : LANG_F95,
-           'prg'                : LANG_FLAGSHIP,
            'fe'                 : LANG_FERITE,
+           'fth 4th fs seq'     : LANG_FORTH,
+           'prg'                : LANG_FLAGSHIP,
            'gc gui'             : LANG_GUI4CLI,
            'hs'                 : LANG_HASKELL,
            'hx hxml'            : LANG_HAXE,
