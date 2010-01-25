@@ -861,13 +861,15 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     kwlist += keyw[1]
                     super(EditraBaseStc, self).SetKeyWords(keyw[0], keyw[1])
 
+        # Can't have ? in scintilla autocomp list unless specifying an image
+        # TODO: this should be handled by the autocomp service
+        if '?' in kwlist:
+            kwlist.replace('?', '')
+
         kwlist = kwlist.split()         # Split into a list of words
         kwlist = list(set(kwlist))      # Remove duplicates from the list
         kwlist.sort()                   # Sort into alphabetical order
 
-        # Can't have ? in scintilla autocomp list unless specifying an image
-        if '?' in kwlist:
-            kwlist.remove('?')
         self._code['keywords'] = kwlist
 
     def SetLexer(self, lexer):
