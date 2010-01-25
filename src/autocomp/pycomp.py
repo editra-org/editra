@@ -372,6 +372,8 @@ class PyCompleter(object):
             return completions
         except Exception, msg:
             dbg("[pycomp][err] get_completions: %s [stmt='%s']" % (msg, stmt))
+            if ctip:
+                return u""
             return []
 
 #-----------------------------------------------------------------------------#

@@ -35,6 +35,8 @@ BUG FIXES:
 been removed from the system between running the program.
 +Fix issue where tab label would incorrectly show a modified state after loading
 a large file in incremental mode.
++Fix bug in python autocompleter that could raise an error when retrieving a 
+calltip under some conditions.
 
 #-----------------------------------------------------------------------------#
 
