@@ -32,28 +32,42 @@ import elistmix
 #-----------------------------------------------------------------------------#
 # Globals
 
+# Style Flags
+FMD_DEFAULT_STYLE = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER
+FMD_NO_DELETE = 1
+
+
 _ = wx.GetTranslation
 
 #-----------------------------------------------------------------------------#
 
 class FileMgrDialog(ecbasewin.ECBaseDlg):
     def __init__(self, parent, id=wx.ID_ANY, title=u"",
-                 path=os.curdir, filter="*",
+                 defaultPath=os.curdir, defaultFile=u'', filter="*",
                  pos=wx.DefaultPosition, size=wx.DefaultSize, 
-                 style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER,
+                 style=FMD_DEFAULT_STYLE,
                  name=u"FileMgrDialog"):
         ecbasewin.ECBaseDlg.__init__(self, parent, id, title,
                                      pos, size, style, name)
 
         # Attributes
-        self.SetPanel(FileMgrPanel(self, path, filter))
+
+        # Setup
+        panel = FileMgrPanel(self, defaultPath, defaultFile, filter)
+        self.SetPanel(panel)
+        panel.EnableDeleteOption(not (FMD_NO_DELETE & style))
 
         # Event Handlers
+        self.Bind(wx.EVT_BUTTON, self.OnSave, id=wx.ID_SAVE)
+
+    def OnSave(self, evt):
+        """Exit the dialog"""
+        self.EndModal(wx.ID_OK)
 
 #-----------------------------------------------------------------------------#
 
 class FileMgrPanel(wx.Panel):
-    def __init__(self, parent, path, filter):
+    def __init__(self, parent, path, fname, filter):
         wx.Panel.__init__(self, parent)
 
         # Attributes
@@ -63,15 +77,18 @@ class FileMgrPanel(wx.Panel):
         self._filter = filter
 
         # Setup
-        self.__DoLayout()
+        self.__DoLayout(fname)
 
         # Event Handlers
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=wx.ID_SAVE)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=wx.ID_DELETE)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnFileSelected)
 
-    def __DoLayout(self):
-        """Layout the panel"""
+    def __DoLayout(self, fname):
+        """Layout the panel
+        @param fname: default filename
+
+        """
         vsizer = wx.BoxSizer(wx.VERTICAL)
         statbox = wx.StaticBox(self)
         sbsizer = wx.StaticBoxSizer(statbox, wx.VERTICAL)
@@ -80,6 +97,9 @@ class FileMgrPanel(wx.Panel):
         self._flist = FileList(self)
         self._flist.LoadFiles(self._path, self._filter)
         sbsizer.Add(self._flist, 1, wx.EXPAND)
+        item = self._flist.FindItem(0, fname)
+        if item != wx.NOT_FOUND:
+            self._flist.Select(item)
 
         fbtnsz = wx.BoxSizer(wx.HORIZONTAL)
         dbtn = wx.Button(self, wx.ID_DELETE)
@@ -100,6 +120,7 @@ class FileMgrPanel(wx.Panel):
         hsizer.AddMany([(sa_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
                         ((5, 5), 0),
                         (self._entry, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
+        self._entry.SetValue(fname)
         vsizer.Add(hsizer, 0, wx.EXPAND|wx.ALL, 10)
         vsizer.Add((10, 10), 0)
 
@@ -115,6 +136,16 @@ class FileMgrPanel(wx.Panel):
 
         self.SetSizer(vsizer)
 
+    def EnableDeleteOption(self, enable=True):
+        """Enable/Disable the Delete Option
+        @keyword enable: bool
+
+        """
+        del_btn = self.FindWindowById(wx.ID_DELETE)
+        del_btn.Show(enable)
+        self.Layout()
+
+    @ecbasewin.expose(FileMgrDialog)
     def GetSelectedFile(self):
         """Get the selected filename
         @return: string
@@ -155,7 +186,8 @@ class FileList(wx.ListCtrl,
         wx.ListCtrl.__init__(self, parent,
                              style=wx.LC_REPORT|
                                    wx.LC_SORT_ASCENDING|
-                                   wx.LC_VRULES)
+                                   wx.LC_VRULES|
+                                   wx.LC_SINGLE_SEL)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         elistmix.ListRowHighlighter.__init__(self)
 
@@ -199,7 +231,8 @@ class FileList(wx.ListCtrl,
 if __name__ == '__main__':
     app = wx.App(False)
     frame = wx.Frame(None)
-    dlg = FileMgrDialog(frame, title="HELLO", filter="*.py")
+    dlg = FileMgrDialog(frame, title="HELLO", defaultFile=u'eclutil.py',
+                        filter="*.py", style=FMD_DEFAULT_STYLE)
     dlg.ShowModal()
     frame.Destroy()
     app.MainLoop()
