@@ -742,9 +742,4 @@ def UpdateBufferStyles(sheet):
     # Only update if the sheet has changed
     if sheet is None or sheet == Profile_Get('SYNTHEME'):
         return
-
     Profile_Set('SYNTHEME', sheet)
-    for mainw in wx.GetApp().GetMainWindows():
-        mainw.nb.UpdateTextControls('UpdateAllStyles')
-        mainw.SetStatusText(_("Changed color scheme to %s") % \
-                            sheet, ed_glob.SB_INFO)
