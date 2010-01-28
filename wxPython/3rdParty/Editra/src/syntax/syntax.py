@@ -396,7 +396,10 @@ def GetExtFromId(ext_id):
     """
     extreg = ExtensionRegister()
     ftype = synglob.GetDescriptionFromId(ext_id)
-    return extreg[ftype][0]
+    rval = u''
+    if len(extreg[ftype]):
+        rval = extreg[ftype][0]
+    return rval
 
 def GetIdFromExt(ext):
     """Get the language id from the given file extension
