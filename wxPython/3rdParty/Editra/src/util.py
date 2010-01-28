@@ -49,11 +49,15 @@ class DropTargetFT(wx.PyDropTarget):
 
         """
         wx.PyDropTarget.__init__(self)
+
+        # Attributes
         self.window = window
         self._data = dict(data=None, fdata=None, tdata=None,
                           tcallb=textcallback, fcallb=filecallback)
         self._tmp = None
         self._lastp = None
+
+        # Setup
         self.InitObjects()
 
     def CreateDragString(self, txt):
