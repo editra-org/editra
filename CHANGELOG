@@ -39,6 +39,8 @@ a large file in incremental mode.
 calltip under some conditions.
 +Fix issue with detecting magic encoding if it was changed after the buffer
 was loaded on subsequent saves.
++Fix bug in reloading of buffers after encoding error is detected that would
+result in them always becoming a read only buffer.
 
 #-----------------------------------------------------------------------------#
 
