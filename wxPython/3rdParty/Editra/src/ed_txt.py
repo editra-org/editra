@@ -86,7 +86,7 @@ class EdFile(ebmlib.FileObjectImpl):
         """
         ebmlib.FileObjectImpl.__init__(self, path, modtime)
 
-        # Attribtues
+        # Attributes
         self._magic = dict(comment=None, bad=False)
         self.encoding = None
         self.bom = None
@@ -108,9 +108,11 @@ class EdFile(ebmlib.FileObjectImpl):
         return '\0'.join(bytes)+'\0'
 
     def _ResetBuffer(self):
+        Log("[ed_txt][info] Resetting buffer")
         if self.__buffer is not None:
             del self.__buffer
         self.__buffer = StringIO()
+        self._raw = False
 
     def AddModifiedCallback(self, callback):
         """Set modified callback method
@@ -214,6 +216,7 @@ class EdFile(ebmlib.FileObjectImpl):
 
             # If no byte-order mark check for an encoding comment
             if enc is None:
+                Log("[ed_txt][info] DetectEncoding - Check magic comment")
                 self.bom = None
                 if not self._magic['bad']:
                     enc = CheckMagicComment(lines)
@@ -223,10 +226,11 @@ class EdFile(ebmlib.FileObjectImpl):
                 Log("[ed_txt][info] File Has %s BOM" % enc)
                 self.bom = BOM.get(enc, None)
 
-        if enc is not None:
-            self.encoding = enc
-        else:
-            self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
+        if enc is None:
+            enc = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
+
+        Log("[ed_txt][info] DetectEncoding - Set Encoding to %s" % enc)
+        self.encoding = enc 
 
     @property
     def Encoding(self):
@@ -338,10 +342,12 @@ class EdFile(ebmlib.FileObjectImpl):
 
             self._ResetBuffer()
 
+            Log("[ed_txt][info] Read - Start reading")
             tmp = self.Handle.read(chunk)
             while len(tmp):
                 self.__buffer.write(tmp)
                 tmp = self.Handle.read(chunk)
+            Log("[ed_txt][info] Read - End reading")
 
             self.Close()
             txt = self.DecodeText()
@@ -444,6 +450,7 @@ class EdFile(ebmlib.FileObjectImpl):
         # Check if a magic comment was added or changed
         self._ResetBuffer()
         self.__buffer.write(value)
+        self.__buffer.seek(0)
         enc = CheckMagicComment([ self.__buffer.readline() for x in range(2) ])
         self.__buffer.seek(0)
 
@@ -582,6 +589,7 @@ def CheckMagicComment(lines):
     @return: encoding or None
 
     """
+    Log("[ed_txt][err] %s" % str(lines))
     enc = None
     for line in lines:
         match = RE_MAGIC_COMMENT.search(line)

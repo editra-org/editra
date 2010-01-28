@@ -37,6 +37,8 @@ been removed from the system between running the program.
 a large file in incremental mode.
 +Fix bug in python autocompleter that could raise an error when retrieving a 
 calltip under some conditions.
++Fix issue with detecting magic encoding if it was changed after the buffer
+was loaded on subsequent saves.
 
 #-----------------------------------------------------------------------------#
 
