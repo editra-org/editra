@@ -41,6 +41,8 @@ calltip under some conditions.
 was loaded on subsequent saves.
 +Fix bug in reloading of buffers after encoding error is detected that would
 result in them always becoming a read only buffer.
++Fix bug in retrieving file extension for file types that have no extensions
+associated with them.
 
 #-----------------------------------------------------------------------------#
 
