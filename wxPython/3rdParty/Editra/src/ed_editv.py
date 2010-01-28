@@ -108,6 +108,12 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         ed_msg.Subscribe(self.OnConfigMsg,
                          ed_msg.EDMSG_PROFILE_CHANGE + ('SPELLCHECK',))
+        ed_msg.Subscribe(self.OnConfigMsg,
+                         ed_msg.EDMSG_PROFILE_CHANGE + ('AUTOBACKUP',))
+        ed_msg.Subscribe(self.OnConfigMsg,
+                         ed_msg.EDMSG_PROFILE_CHANGE + ('SYNTHEME',))
+        ed_msg.Subscribe(self.OnConfigMsg,
+                         ed_msg.EDMSG_PROFILE_CHANGE + ('SYNTAX',))
 
     def __del__(self):
         ed_msg.Unsubscribe(self.OnConfigMsg)
@@ -376,6 +382,14 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             self._spell.setDefaultLanguage(mdata.get('dict', 'en_US'))
             if not self._spell_data['enabled']:
                 self._spell.clearAll()
+        elif mtype[-1] == 'AUTOBACKUP':
+            self.EnableAutoBackup(Profile_Get('AUTOBACKUP'))
+        elif mtype[-1] == 'SYNTHEME':
+            self.UpdateAllStyles()
+        elif mtype[-1] == 'SYNTAX':
+            self.SyntaxOnOff(Profile_Get('SYNTAX'))
+        elif mtype[-1] == 'AUTO_COMP_EX':
+            self.ConfigureAutoComp()
 
     def OnContextMenu(self, evt):
         """Handle right click menu events in the buffer"""

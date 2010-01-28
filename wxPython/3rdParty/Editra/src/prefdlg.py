@@ -326,7 +326,6 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
             self.FindWindowById(ed_glob.ID_PREF_AUTO_RELOAD).Enable(val)
         elif e_id == ed_glob.ID_PREF_AUTOBKUP:
             Profile_Set(ed_glob.ID_2_PROF[e_id], val)
-            DoUpdates('EnableAutoBackup', [val,])
         elif e_id == ID_PREF_AUTO_SPELL:
             spref = Profile_Get('SPELLCHECK', default=dict())
             spref['auto'] = val
@@ -951,7 +950,7 @@ class DocCodePanel(wx.Panel):
                     cbox.Enable(e_val)
 
             if e_id == ed_glob.ID_PREF_AUTOCOMPEX:
-                meth = 'ConfigureAutoComp'
+                return
 
             # Inform views of preference changes
             wx.CallLater(25, DoUpdates, meth, args)
@@ -1068,19 +1067,8 @@ class DocSyntaxPanel(wx.Panel):
         """
         e_id = evt.GetId()
         e_obj = evt.GetEventObject()
-        if e_id == ed_glob.ID_PREF_SYNTHEME:
+        if e_id in (ed_glob.ID_PREF_SYNTHEME, ed_glob.ID_SYNTAX):
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_obj.GetValue())
-
-            for mainw in wx.GetApp().GetMainWindows():
-                mainw.nb.UpdateTextControls('UpdateAllStyles')
-
-        elif e_id == ed_glob.ID_SYNTAX:
-            val = e_obj.GetValue()
-            Profile_Set(ed_glob.ID_2_PROF[e_id], val)
-
-            for mainw in wx.GetApp().GetMainWindows():
-                mainw.nb.UpdateTextControls('SyntaxOnOff', [val])
-
         else:
             evt.Skip()
 
