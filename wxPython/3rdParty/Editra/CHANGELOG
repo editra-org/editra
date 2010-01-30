@@ -22,6 +22,7 @@ NEW: [features/improvements]
 +New version of Launch plugin with some bug fixes.
 +Add Close Others option to right click tab menu to close all but the selected tab.
 +Add support for Forth files.
++Add support for Java to CodeBrowser (patch from Eric Gaudet)
 
 LIBRARY:
 +New plugin interface for adding autocompletion providers added (iface.AutocompI)
