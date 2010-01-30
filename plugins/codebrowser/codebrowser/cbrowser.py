@@ -53,7 +53,7 @@ STRINGS = ( _("Class Definitions"), _("Defines"), _("Function Definitions"),
             _("Sections"), _("Style Tags"), _("Subroutines"),
             _("Subroutine Declarations"), _("Task Definitions"), 
             _("Modules"), _("Functions"), _("Public Functions"),
-            _("Public Subroutines") )
+            _("Public Subroutines"), _("Imports") )
 del STRINGS
 
 #--------------------------------------------------------------------------#
@@ -262,7 +262,10 @@ class CodeBrowserTree(wx.TreeCtrl):
 
         """
         if self.nodes.get('classes', None) is None:
-            croot = self.AppendItem(self.GetRootItem(), _("Class Definitions"))
+            desc = self._cdoc.GetElementDescription('class')
+            if desc == 'class':
+                desc = "Class Definitions"
+            croot = self.AppendItem(self.GetRootItem(), _(desc))
             self.SetItemHasChildren(croot)
             self.SetPyData(croot, None)
             self.SetItemImage(croot, self.icons['class'])
