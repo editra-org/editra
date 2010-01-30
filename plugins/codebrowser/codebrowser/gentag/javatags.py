@@ -69,6 +69,8 @@ def GenerateTags(buff):
     # Simple line based parser, likely not to be accurate in all cases
     for lnum, line in enumerate(buff):
 
+        lastLevel = currentLevel
+
         line = line.strip()
         if len(line)==0:
             continue
@@ -129,7 +131,7 @@ def GenerateTags(buff):
             #print "CLASS", cname
             continue
 
-        if len(lastClass) == currentLevel:
+        if len(lastClass) == lastLevel:
             match = RE_METH.match(line)
             if match:
                 groups = match.groups()
