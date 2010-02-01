@@ -11,6 +11,7 @@ Version 1.6:
 +Fix issue with run list not updating to enabled state properly when saving some
 files for the first time.
 +Add logging of error messages when run command fails.
++Fix bug in custom xml hotspot handlers.
 
 #-----------------------------------------------------------------------------#
 Version 1.5:
