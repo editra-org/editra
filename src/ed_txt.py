@@ -95,7 +95,7 @@ class EdFile(ebmlib.FileObjectImpl):
         self._raw = False           # Raw bytes?
 
     def _HandleRawBytes(self, bytes):
-        """Handle preping raw bytes for return to the buffer
+        """Handle prepping raw bytes for return to the buffer
         @param bytes: raw read bytes
         @return: string
 
@@ -112,7 +112,6 @@ class EdFile(ebmlib.FileObjectImpl):
         if self.__buffer is not None:
             del self.__buffer
         self.__buffer = StringIO()
-        self._raw = False
 
     def AddModifiedCallback(self, callback):
         """Set modified callback method
@@ -341,6 +340,7 @@ class EdFile(ebmlib.FileObjectImpl):
                     "falling back to default: %s") % self.encoding)
 
             self._ResetBuffer()
+            self._raw = False
 
             Log("[ed_txt][info] Read - Start reading")
             tmp = self.Handle.read(chunk)
