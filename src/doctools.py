@@ -192,7 +192,7 @@ class DocPositionMgr(object):
 
             for line in lines:
                 line = line.strip()
-                vals = line.split(u'=')
+                vals = line.rsplit(u'=', 1)
                 if len(vals) != 2 or not os.path.exists(vals[0]):
                     continue
 
