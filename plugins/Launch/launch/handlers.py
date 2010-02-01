@@ -950,8 +950,7 @@ class XmlHandlerDelegate(FileTypeHandler):
 
         """
         if self._hotspot is not None:
-            ifile, line = _FindFileLine(outbuffer, line, fname,
-                                        VBScriptHandler.RE_VBS_ERROR)
+            ifile, line = _FindFileLine(outbuffer, line, fname, self._hotspot)
             _OpenToLine(ifile, line, mainw)
         else:
             return None
