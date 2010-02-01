@@ -1451,7 +1451,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if e_id == ID_HOMEPAGE:
             page = HOME_PAGE
         elif e_id == ID_DOCUMENTATION:
-            page = HOME_PAGE + "/?page=doc"
+            page = HOME_PAGE + "/documentation"
         elif e_id == ID_TRANSLATE:
             page = I18N_PAGE
         elif e_id == ID_CONTACT:
