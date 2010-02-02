@@ -21,8 +21,9 @@ NEW: [features/improvements]
 +Basic support for highlighting asp script embedded in html files.
 +New version of Launch plugin with some bug fixes.
 +Add Close Others option to right click tab menu to close all but the selected tab.
-+Add support for Forth files.
++Add support for highlighting Forth source files.
 +Add support for Java to CodeBrowser (patch from Eric Gaudet)
++Add support for Diff files to CodeBrowser (patch from Eric Gaudet)
 
 LIBRARY:
 +New plugin interface for adding autocompletion providers added (iface.AutocompI)
