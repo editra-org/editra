@@ -13,6 +13,8 @@ DocStruct generator for for patch files (diff). Unified diff based on svn format
 """
 
 __author__ = "Eric Gaudet"
+__svnid__ = "$Id$"
+__revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 
