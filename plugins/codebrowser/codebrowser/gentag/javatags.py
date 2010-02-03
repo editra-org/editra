@@ -41,6 +41,8 @@ RE_VAR   = re.compile(r"("+STR_SCOPE+")?\s*("+STR_FINAL_OR_STATIC+")?\s*("+STR_T
 RE_CLASS = re.compile(r"("+STR_SCOPE+")?\s*.*\s*class\s+("+STR_NAME+")")
 RE_METH  = re.compile(r"("+STR_SCOPE+")?\s*("+STR_FINAL_OR_STATIC+")?\s*("+STR_METHOD_DECLARATION+")?\s*("+STR_TYPE+")?\s+("+STR_NAME+")\s*\(([^)]*)\(?")
 
+RE_COMMENT_INLINE = re.compile('(/\*.*?\*/)')
+
 #--------------------------------------------------------------------------#
 
 def GenerateTags(buff):
@@ -63,19 +65,35 @@ def GenerateTags(buff):
     lastClass = []
     imports = None
 
-    # Note: comments can begin with // /*
-
     # Parse the buffer
     # Simple line based parser, likely not to be accurate in all cases
     for lnum, line in enumerate(buff):
 
         lastLevel = currentLevel
 
-        line = line.strip()
-        if len(line)==0:
-            continue
+        # remove trailing comments
+        cut = line.find('//')
+        if cut>-1:
+            line = line[:cut]
+
+        RE_COMMENT_INLINE.sub('',line)
 
         if inComment:
+            cut = line.find('*/')
+            if cut>-1:
+                line = line[cut+2:]
+                inComment = False
+            else:
+                continue
+
+        # remove starting comments
+        cut = line.find('/*')
+        if cut>-1:
+            line = line[:cut]
+            inComment = True
+
+        line = line.strip()
+        if len(line)==0:
             continue
 
         diff = line.count('{') - line.count('}')
