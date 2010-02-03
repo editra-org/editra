@@ -16,7 +16,8 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ["FileMgrDialog",]
+__all__ = ["FileMgrDialog",
+           "FMD_DEFAULT_STYLE", "FMD_NO_DELETE"]
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -80,6 +81,7 @@ class FileMgrPanel(wx.Panel):
         self.__DoLayout(fname)
 
         # Event Handlers
+        self.Bind(wx.EVT_BUTTON, self.OnDelete, id=wx.ID_DELETE)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=wx.ID_SAVE)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=wx.ID_DELETE)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnFileSelected)
@@ -158,6 +160,25 @@ class FileMgrPanel(wx.Panel):
             return fname
         return u""
 
+    def OnDelete(self, evt):
+        """Prompt to delete file the selected file"""
+        fname = self.GetSelectedFile()
+        if fname and os.path.exists(fname):
+            if wx.MessageBox(_("Are you sure want to delete %s?") % fname,
+                             _("Delete File?"),
+                             wx.ICON_WARNING|wx.OK|wx.CANCEL|wx.CENTER,
+                             self) == wx.OK:
+                try:
+                    os.remove(fname)
+                except OSError:
+                    wx.MessageBox(_("Unable to delete %s") % fname,
+                                  _("Delete Error"),
+                                  wx.ICON_ERROR|wx.OK|wx.CENTER)
+                else:
+                    # Refresh the list
+                    self._flist.DeleteAllItems()
+                    self._flist.LoadFiles(self._path, self._filter)
+
     def OnFileSelected(self, evt):
         """Update the name in the save as field when a selection is made
         in the list control.
@@ -232,7 +253,7 @@ if __name__ == '__main__':
     app = wx.App(False)
     frame = wx.Frame(None)
     dlg = FileMgrDialog(frame, title="HELLO", defaultFile=u'eclutil.py',
-                        filter="*.py", style=FMD_DEFAULT_STYLE)
+                        style=FMD_DEFAULT_STYLE)
     dlg.ShowModal()
     frame.Destroy()
     app.MainLoop()
