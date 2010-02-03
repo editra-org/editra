@@ -28,7 +28,7 @@ import ed_glob
 from profiler import Profile_Get
 import plugin
 import iface
-import extern.flatnotebook as FNB
+import extern.aui as aui
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -133,17 +133,16 @@ class Shelf(plugin.Plugin):
 
 #--------------------------------------------------------------------------#
 
-class EdShelfBook(FNB.FlatNotebook):
+class EdShelfBook(aui.AuiNotebook):
     """Shelf notebook control"""
     def __init__(self, parent):
-        FNB.FlatNotebook.__init__(self, parent,
-                                  style=FNB.FNB_FF2 |
-                                        FNB.FNB_X_ON_TAB |
-                                        FNB.FNB_BACKGROUND_GRADIENT |
-                                        FNB.FNB_NODRAG |
-                                        FNB.FNB_BOTTOM |
-                                        FNB.FNB_NO_X_BUTTON |
-                                        FNB.FNB_MOUSE_MIDDLE_CLOSES_TABS)
+        style = aui.AUI_NB_BOTTOM | \
+                aui.AUI_NB_TAB_SPLIT | \
+                aui.AUI_NB_SCROLL_BUTTONS | \
+                aui.AUI_NB_CLOSE_ON_ACTIVE_TAB
+        if wx.Platform == '__WXMAC__':
+            style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
+        aui.AuiNotebook.__init__(self, parent, style=style)
 
         # Attributes
         self._parent = parent

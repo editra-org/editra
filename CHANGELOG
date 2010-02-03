@@ -17,6 +17,8 @@ NEWS:
 
 
 NEW: [features/improvements]
++Tabs can be dragged out to split notebooks so that buffers and Shelf items
+can be viewed side by side.
 +What items are displayed in the Lexer menu are now configurable.
 +Basic support for highlighting asp script embedded in html files.
 +New version of Launch plugin with some bug fixes.
