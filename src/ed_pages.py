@@ -60,7 +60,7 @@ class EdPages(aui.AuiNotebook):
                 aui.AUI_NB_WINDOWLIST_BUTTON | \
                 aui.AUI_NB_SMART_TABS | \
                 aui.AUI_NB_USE_IMAGES_DROPDOWN | \
-                aui.AUI_NB_TAB_EXTERNAL_MOVE
+                aui.AUI_NB_TAB_EXTERNAL_MOVE #| \
 #                aui.AUI_NB_SASH_DCLICK_UNSPLIT
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
@@ -93,6 +93,9 @@ class EdPages(aui.AuiNotebook):
         robmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_READONLY), wx.ART_MENU)
         self._index[ed_glob.ID_READONLY] = imgl.Add(robmp)
         self.SetImageList(imgl)
+
+        # Set custom options
+        self.SetSashDClickUnsplit(True)
 
         # Notebook Events
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
@@ -386,6 +389,7 @@ class EdPages(aui.AuiNotebook):
         if self.GetPageCount() == 0:
             self.NewPage()
 
+        self.Refresh()
         return None
 
     def NewPage(self):
