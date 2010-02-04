@@ -48,6 +48,12 @@ class MainPanel(eclib.ControlBox):
         # Layout
         self.SetWindow(self.nb)
 
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEB)
+
+    def OnEB(self, evt):
+        """Empty method to fix notebook flashing issue on MSW"""
+        pass
+
     def GetNotebook(self):
         """Get the main notebook control
         @return: EdPages instance
