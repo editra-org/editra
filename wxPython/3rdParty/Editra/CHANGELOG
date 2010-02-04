@@ -48,6 +48,8 @@ result in them always becoming a read only buffer.
 +Fix bug in retrieving file extension for file types that have no extensions
 associated with them.
 +Fix bad link to online documentation in Help menu
++Default to English local when localized resource for LANGUAGE_DEFAULT are not 
+available.
 
 #-----------------------------------------------------------------------------#
 
