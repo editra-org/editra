@@ -958,6 +958,7 @@ class XmlHandlerDelegate(FileTypeHandler):
     def StyleText(self, stc, start, txt):
         """Highlight text if an error pattern was defined."""
         sty = STYLE_NORMAL
+        err = STYLE_NORMAL
         if self._errpat is not None:
             err, more = _StyleError(stc, start, txt, self._errpat)
             if err:
