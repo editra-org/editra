@@ -923,6 +923,14 @@ class EditraStc(ed_basestc.EditraBaseStc):
                 line = line + 1
         return line
 
+    def ExpandAll(self):
+        """Expand all folded code blocks"""
+        line_count = self.GetLineCount()
+        for line_num in xrange(line_count):
+            if self.GetFoldLevel(line_num) & wx.stc.STC_FOLDLEVELHEADERFLAG:
+                if not self.GetFoldExpanded(line_num):
+                    self.Expand(line_num, True)
+
     def FindLexer(self, set_ext=u''):
         """Sets Text Controls Lexer Based on File Extension
         @param set_ext: explicit extension to use in search
@@ -1423,6 +1431,10 @@ class EditraStc(ed_basestc.EditraBaseStc):
         else:
             self.LOG("[ed_stc][evt] Code Folding Turned Off")
             self._config['folding'] = False
+
+            # Ensure all code blocks have been expanded
+            self.ExpandAll()
+
             self.SetMarginWidth(ed_basestc.FOLD_MARGIN, 0)
 
     def SyntaxOnOff(self, switch=None):
