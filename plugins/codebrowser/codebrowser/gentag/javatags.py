@@ -42,6 +42,9 @@ RE_CLASS = re.compile(r"("+STR_SCOPE+")?\s*.*\s*class\s+("+STR_NAME+")")
 RE_METH  = re.compile(r"("+STR_SCOPE+")?\s*("+STR_FINAL_OR_STATIC+")?\s*("+STR_METHOD_DECLARATION+")?\s*("+STR_TYPE+")?\s+("+STR_NAME+")\s*\(([^)]*)\(?")
 
 RE_COMMENT_INLINE = re.compile('(/\*.*?\*/)')
+RE_STRING_INLINE  = re.compile('(".*?")')
+RE_BACKSLASHEDQUOTE_INLINE  = re.compile(r'(\\")')
+RE_CHARACTER_INLINE = re.compile(r"('[{}]')")
 
 #--------------------------------------------------------------------------#
 
@@ -76,7 +79,7 @@ def GenerateTags(buff):
         if cut>-1:
             line = line[:cut]
 
-        RE_COMMENT_INLINE.sub('',line)
+        line = RE_COMMENT_INLINE.sub('',line)
 
         if inComment:
             cut = line.find('*/')
@@ -96,7 +99,13 @@ def GenerateTags(buff):
         if len(line)==0:
             continue
 
-        diff = line.count('{') - line.count('}')
+        lineCodeOnly = line[:]
+        lineCodeOnly = RE_BACKSLASHEDQUOTE_INLINE.sub("'",lineCodeOnly)
+        lineCodeOnly = RE_STRING_INLINE.sub('',lineCodeOnly)
+        lineCodeOnly = RE_CHARACTER_INLINE.sub('',lineCodeOnly)
+        #print "[[[",lineCodeOnly,"]]]"
+
+        diff = lineCodeOnly.count('{') - lineCodeOnly.count('}')
         currentLevel += diff
 
         #print "<<<",line,">>>", lnum, currentLevel, diff, len(lastClass), inComment
