@@ -194,11 +194,7 @@ class EditraXml(sax.ContentHandler):
         """
         assert self.path is not None, "Must SetPath before calling Load"
         try:
-            handle = open(self.path, "rb")
-            txt = handle.read()
-            handle.close()
-            txt = txt.decode('utf-8') # xml is utf-8 by specification
-            self.LoadFromString(txt)
+            sax.parse(self.path, self)
         except (sax.SAXException, OSError, IOError, UnicodeDecodeError):
             self._ok = False
             return False
