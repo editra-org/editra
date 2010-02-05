@@ -50,6 +50,7 @@ associated with them.
 +Fix bad link to online documentation in Help menu
 +Default to English local when localized resource for LANGUAGE_DEFAULT are not 
 available.
++Fix issue with folded code dissappearing when folding option is toggled off.
 
 #-----------------------------------------------------------------------------#
 
