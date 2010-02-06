@@ -170,7 +170,9 @@ class EdShelfBook(aui.AuiNotebook):
         @param name: Items name used for page text in notebook
 
         """
-        self.AddPage(item, u"%s - %d" % (name, self._open.get(name, 0)))
+        self.AddPage(item, 
+                     u"%s - %d" % (name, self._open.get(name, 0)),
+                     select=True)
 
         # Set the tab icon
         if imgid >= 0 and Profile_Get('TABICONS', default=True):
