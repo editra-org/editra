@@ -22,7 +22,6 @@ import wx.stc
 # Local Imports
 import handlers
 import cfgdlg
-import launchxml
 
 # Editra Libraries
 import ed_glob
@@ -45,6 +44,7 @@ LAUNCH_KEY = 'Launch.Config'
 # Custom Messages
 MSG_RUN_LAUNCH = ('launch', 'run')
 MSG_RUN_LAST = ('launch', 'runlast')
+MSG_LAUNCH_REGISTER = ('launch', 'registerhandler') # msgdata == xml string
 
 # Value request messages
 REQUEST_ACTIVE = 'Launch.IsActive'
@@ -56,6 +56,18 @@ _ = wx.GetTranslation
 def OnStoreConfig(msg):
     Profile_Set(LAUNCH_KEY, handlers.GetState())
 ed_msg.Subscribe(OnStoreConfig, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
+
+def OnRegisterHandler(msg):
+    """Register a custom handler
+    @param msg: dict(xml=xml_str, loaded=bool)
+
+    """
+    data = msg.GetData()
+    loaded = False
+    if isinstance(data, dict) and 'xml' in data:
+        loaded = handlers.LoadCustomHandler(data['xml'])
+    data['loaded'] = loaded
+ed_msg.Subscribe(OnRegisterHandler, MSG_LAUNCH_REGISTER)
 
 #-----------------------------------------------------------------------------#
 
