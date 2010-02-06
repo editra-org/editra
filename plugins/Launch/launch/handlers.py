@@ -128,6 +128,22 @@ def InitCustomHandlers(path):
                 HANDLERS[hndlr.GetLangId()] = XmlHandlerDelegate(hndlr)
     return loaded
 
+def LoadCustomHandler(xml_str):
+    """Load a custom Launch handler an xml string
+    @param xml_str: Launch Xml String
+    @return: bool
+
+    """
+    try:
+        lxml = launchxml.LaunchXml()
+        lxml.LoadFromString(xml_str)
+        for hndlr in lxml.GetHandlers().values():
+            HANDLERS[hndlr.GetLangId()] = XmlHandlerDelegate(hndlr)
+    except:
+        return False
+    else:
+        return True
+
 def GetState():
     """Get a dictionary capturing the current state of all handlers
     @return: dict { handlername : (default, [commands]) }
