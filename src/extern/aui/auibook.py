@@ -2103,8 +2103,8 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
                     else:
                         self._drag_image.BeginDragBounded(wx.Point(0,0), self, self.GetParent())
                         
-                    self._drag_image.Show()
                     self._drag_image.Move(pos)
+                    self._drag_image.Show()
 
         if not wnd:
             evt2 = AuiNotebookEvent(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, self.GetId())
