@@ -12,6 +12,7 @@ Version 1.6:
 files for the first time.
 +Add logging of error messages when run command fails.
 +Fix bug in custom xml hotspot handlers.
++Suppress showing command window when running scripts on Windows.
 
 #-----------------------------------------------------------------------------#
 Version 1.5:
