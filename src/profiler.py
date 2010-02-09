@@ -44,6 +44,7 @@ _DEFAULTS = {
            'AALIASING'  : False,            # Use Anti-Aliasing if availble
            'APPSPLASH'  : True,             # Show splash at startup
            'AUTOBACKUP' : False,            # Automatically backup files
+           'AUTOBACKUP_PATH' : '',          # Backup path
            'AUTO_COMP'  : True,             # Use Auto-comp if available
            'AUTO_COMP_EX' : False,          # Use extended autocompletion
            'AUTO_INDENT': True,             # Use Auto Indent
