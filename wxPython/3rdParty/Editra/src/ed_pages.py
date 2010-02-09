@@ -76,6 +76,7 @@ class EdPages(aui.AuiNotebook):
         self._searchctrl.SetFileFilters(Profile_Get('SEARCH_FILTER', default=''))
 
         self.pg_num = -1              # Track new pages (aka untitled docs)
+        self.mdown = -1
         self.control = None
         self.frame = self.GetTopLevelParent() # MainWindow
         self._index = dict()          # image list index
@@ -398,11 +399,13 @@ class EdPages(aui.AuiNotebook):
         @postcondition: a new page with an untitled document is opened
 
         """
+        self.Freeze()
         self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
         self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
         self.control.Hide()
         self.AddPage(self.control)
         self.control.Show()
+        self.Thaw()
 
         # Set the control up the the preferred default lexer
         dlexer = Profile_Get('DEFAULT_LEX', 'str', 'Plain Text')
@@ -461,16 +464,19 @@ class EdPages(aui.AuiNotebook):
         @param evt: aui.EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN
 
         """
-        self.LOG("[ed_pages][evt] OnMClickDown: %d" % evt.GetSelection())
+        self.mdown = evt.GetSelection()
+        self.SetSelection(self.mdown)
+        self.LOG("[ed_pages][evt] OnMClickDown: %d" % self.mdown)
 
     def OnMClickUp(self, evt):
         """Handle tab middle click event
         @param evt: aui.EVT_AUINOTEBOOK_TAB_MIDDLE_UP
 
         """
-        # Ensure that the tab that was clicked is the selected tab
-        self.SetSelection(evt.GetSelection())
-        self.ClosePage()
+        sel = evt.GetSelection()
+        if sel == self.mdown:
+            self.ClosePage()
+        self.mdown = -1
 
     def OnNavigateToPos(self, evt):
         """Handle buffer position history navigation events"""
