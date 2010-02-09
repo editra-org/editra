@@ -104,7 +104,8 @@ class EdPages(aui.AuiNotebook):
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSED, self.OnPageClosed)
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_DCLICK, self.OnTabLeftDClick)
         self.Bind(aui.EVT_AUINOTEBOOK_BG_DCLICK, self.OnBGLeftDClick)
-        self.Bind(aui.EVT_AUINOTEBOOK_TAB_MIDDLE_UP, self.OnMClick)
+        self.Bind(aui.EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, self.OnMClickDown)
+        self.Bind(aui.EVT_AUINOTEBOOK_TAB_MIDDLE_UP, self.OnMClickUp)
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_RIGHT_UP, self.OnTabMenu)
 
         self.Bind(wx.stc.EVT_STC_CHANGE, self.OnUpdatePageText)
@@ -455,7 +456,14 @@ class EdPages(aui.AuiNotebook):
         """
         self.NewPage()
 
-    def OnMClick(self, evt):
+    def OnMClickDown(self, evt):
+        """Handle tab middle mouse button down click event
+        @param evt: aui.EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN
+
+        """
+        self.LOG("[ed_pages][evt] OnMClickDown: %d" % evt.GetSelection())
+
+    def OnMClickUp(self, evt):
         """Handle tab middle click event
         @param evt: aui.EVT_AUINOTEBOOK_TAB_MIDDLE_UP
 
@@ -1110,6 +1118,8 @@ class EdPages(aui.AuiNotebook):
         pg_num = self.GetSelection()
 
         if result and deletepg:
+            page = self.GetPage(pg_num)
+            page.DoTabClosing()
             self.DeletePage(pg_num)
             self.GoCurrentPage()
 
