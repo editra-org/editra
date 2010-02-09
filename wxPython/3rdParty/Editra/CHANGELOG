@@ -26,6 +26,7 @@ can be viewed side by side.
 +Add support for highlighting Forth source files.
 +Add support for Java to CodeBrowser (patch from Eric Gaudet)
 +Add support for Diff files to CodeBrowser (patch from Eric Gaudet)
++Custom autobackup directory can be configured.
 
 LIBRARY:
 +New plugin interface for adding autocompletion providers added (iface.AutocompI)
