@@ -823,6 +823,11 @@ class ProcessThread(threading.Thread):
                                                        self._cmd['file'],
                                                        self._cmd['args']]])
 
+        if sys.platform.lower().startswith('win'):            
+            suinfo = subprocess.STARTUPINFO()
+            suinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        else:
+            suinfo = None
         
         use_shell = not subprocess.mswindows
         err = None
@@ -832,7 +837,8 @@ class ProcessThread(threading.Thread):
                                           stderr=subprocess.STDOUT,
                                           shell=use_shell,
                                           cwd=self._cwd,
-                                          env=self._env)
+                                          env=self._env,
+                                          startupinfo=suinfo)
         except OSError, msg:
             # NOTE: throws WindowsError on Windows which is a subclass of
             #       OSError, so it will still get caught here.
