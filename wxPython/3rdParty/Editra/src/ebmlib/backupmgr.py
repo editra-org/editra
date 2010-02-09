@@ -44,6 +44,7 @@ class FileBackupMgr(object):
         self.checker = fchecker.FileTypeChecker()
         self.header = header       # Backup id header
         self.template = template   # Filename template
+        self.bkupdir = u""
 
     def _CheckHeader(self, fname):
         """Check if the backup file has a header that matches the
@@ -70,6 +71,10 @@ class FileBackupMgr(object):
         @return: string
 
         """
+        if self.bkupdir:
+            tmp = fileutil.GetFileName(fname)
+            fname = os.path.join(self.bkupdir, tmp)
+
         rname = self.template % fname
         if self.header is not None and \
            not self.checker.IsBinary(fname) and \
@@ -143,6 +148,15 @@ class FileBackupMgr(object):
 
         """
         raise NotImplementedError("TODO: implement once threadpool is finished")
+
+    def SetBackupDirectory(self, path):
+        """Set the backup directory to use for all backups created by this
+        manager instance. Setting the path to an empty string will set the
+        default behavior to write the backup to the same directory as the
+        where the file that is being backedup is located.
+
+        """
+        self.bkupdir = path 
 
     def SetBackupFileTemplate(self, tstr):
         """Set the filename template for generating the backupfile name

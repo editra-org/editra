@@ -547,6 +547,10 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         # If the file is different than the last save point make the backup.
         bkupmgr = ebmlib.FileBackupMgr(None, u"%s.edbkup")
+        path = _PGET('AUTOBACKUP_PATH', default=u"")
+        if path and os.path.exists(path):
+            bkupmgr.SetBackupDirectory(path)
+
         if not self._backup_done and \
            (not bkupmgr.HasBackup(fname) or bkupmgr.IsBackupNewer(fname)):
             writer = bkupmgr.GetBackupWriter(self.File)

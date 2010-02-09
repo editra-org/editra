@@ -48,6 +48,8 @@ ID_CHECK_UPDATE = wx.NewId()
 ID_DOWNLOAD     = wx.NewId()
 ID_UPDATE_MSG   = wx.NewId()
 
+ID_PREF_BKUP_PATH = wx.NewId()
+ID_PREF_BKUP_LBL = wx.NewId()
 ID_PREF_AUTO_SPELL = wx.NewId()
 ID_PREF_SPELL_DICT = wx.NewId()
 ID_PREF_ENCHANT_PATH = wx.NewId()
@@ -452,6 +454,15 @@ class GeneralFilePanel(wx.Panel):
         self._DoLayout()
 
         # Event Handlers
+        self.Bind(wx.EVT_CHECKBOX,
+                  self.OnAutoBkup,
+                  id=ed_glob.ID_PREF_AUTOBKUP)
+        self.Bind(wx.EVT_CHECKBOX,
+                  self.OnCustomBackupPath,
+                  id=ID_PREF_BKUP_LBL)
+        self.Bind(wx.EVT_DIRPICKER_CHANGED,
+                  self.OnDirChange,
+                  id=ID_PREF_BKUP_PATH)
         self.Bind(wx.EVT_FILEPICKER_CHANGED,
                   self.OnFileChange,
                   id=ID_PREF_ENCHANT_PATH)
@@ -486,8 +497,25 @@ class GeneralFilePanel(wx.Panel):
 
         autobk_cb = wx.CheckBox(self, ed_glob.ID_PREF_AUTOBKUP,
                              _("Automatically Backup Files"))
-        autobk_cb.SetValue(Profile_Get('AUTOBACKUP'))
+        bAutoBkup = Profile_Get('AUTOBACKUP', default=False)
+        autobk_cb.SetValue(bAutoBkup)
         autobk_cb.SetToolTipString(_("Backup buffer to file periodically"))
+        bdir = Profile_Get('AUTOBACKUP_PATH', default="")
+        bkup_path_lbl = wx.CheckBox(self, ID_PREF_BKUP_LBL,
+                                    label=_("Backup Path:"))
+        bkup_path_lbl.SetValue(bool(bdir))
+        bkup_path = wx.DirPickerCtrl(self, ID_PREF_BKUP_PATH,
+                                     path=bdir,
+                                     style=wx.DIRP_CHANGE_DIR|wx.DIRP_USE_TEXTCTRL)
+        bkup_path.SetToolTipString(_("Used to set a custom backup path. "
+                                     "If not specified the backup will be "
+                                     "put in the same directory as the file."))
+        bkup_path_lbl.Enable(bAutoBkup)
+        bkup_path.Enable(bAutoBkup)
+        bkup_p_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        bkup_p_sizer.AddMany([(bkup_path_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                              ((5, 5), 0),
+                              (bkup_path, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)])
         win_cb = wx.CheckBox(self, ed_glob.ID_NEW_WINDOW,
                              _("Open files in new windows by default"))
         win_cb.SetValue(Profile_Get('OPEN_NW'))
@@ -509,12 +537,13 @@ class GeneralFilePanel(wx.Panel):
         eolwarn_cb.SetValue(Profile_Get('WARN_EOL', default=True))
 
         # Layout items
-        sizer = wx.FlexGridSizer(9, 2, 5, 5)
+        sizer = wx.FlexGridSizer(10, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("File Settings") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (enc_sz, 0),
                        ((5, 5),), (fhsizer, 0),
                        ((5, 5),), (autobk_cb, 0),
+                       ((5, 5),), (bkup_p_sizer, 1, wx.EXPAND),
                        ((5, 5),), (win_cb, 0),
                        ((5, 5),), (pos_cb, 0),
                        ((5, 5),), (chkmod_cb, 0),
@@ -566,6 +595,41 @@ class GeneralFilePanel(wx.Panel):
         msizer = wx.BoxSizer(wx.HORIZONTAL)
         msizer.AddMany([((10, 10), 0), (vsizer, 1, wx.EXPAND), ((10, 10), 0)])
         self.SetSizer(msizer)
+
+    def OnAutoBkup(self, evt):
+        """Enable/Disable the backup path controls
+        The profile is updated by L{GeneralPanel} so the event must be skipped
+
+        """
+        blbl = self.FindWindowById(ID_PREF_BKUP_LBL)
+        if blbl:
+            e_obj = evt.GetEventObject()
+            val = e_obj.GetValue()
+            blbl.Enable(val)
+            dpick = self.FindWindowById(ID_PREF_BKUP_PATH)
+            bpath = Profile_Get('AUTOBACKUP_PATH', default="")
+            dpick.SetPath(bpath)
+            if not val:
+                dpick = self.FindWindowById(ID_PREF_BKUP_PATH)
+                dpick.Enable(False)
+        evt.Skip()
+
+    def OnCustomBackupPath(self, evt):
+        """Enable the use of a custom backup path"""
+        e_obj = evt.GetEventObject()
+        eval = e_obj.GetValue()
+        dpick = self.FindWindowById(ID_PREF_BKUP_PATH)
+        if not eval:
+            dpick.SetPath(u"")
+            Profile_Set('AUTOBACKUP_PATH', u"")
+        dpick.Enable(eval)
+
+    def OnDirChange(self, evt):
+        """Update the backup directory path"""
+        path = evt.GetPath().strip()
+        bpath = Profile_Get('AUTOBACKUP_PATH', default="")
+        if bpath != path:
+            Profile_Set('AUTOBACKUP_PATH', path)
 
     def OnFileChange(self, evt):
         """Update enchant path and attempt to reload enchant if necessary"""
