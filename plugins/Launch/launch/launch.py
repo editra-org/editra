@@ -27,7 +27,9 @@ import cfgdlg
 import ed_glob
 import util
 from profiler import Profile_Get, Profile_Set
+import ed_txt
 import ed_msg
+import ebmlib
 import eclib
 
 #-----------------------------------------------------------------------------#
@@ -691,7 +693,13 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
 
         # Log the raw exception data to the log as well
         if excdata is not None:
-            util.Log(u"[launch][err] %s" % excdata)
+            try:
+                excstr = str(excdata)
+                if not ebmlib.IsUnicode(excstr):
+                    excstr = ed_txt.DecodeString(excstr)
+                util.Log(u"[launch][err] %s" % excdata)
+            except UnicodeDecodeError:
+                util.Log(u"[launch][err] error decoding log message string")
 
     def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited"""
