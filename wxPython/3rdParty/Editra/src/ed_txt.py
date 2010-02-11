@@ -589,7 +589,7 @@ def CheckMagicComment(lines):
     @return: encoding or None
 
     """
-    Log("[ed_txt][err] %s" % str(lines))
+    Log("[ed_txt][info] CheckMagicComment: %s" % str(lines))
     enc = None
     for line in lines:
         match = RE_MAGIC_COMMENT.search(line)
