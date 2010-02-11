@@ -375,20 +375,20 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     def OnConfigMsg(self, msg):
         """Update config based on profile changes"""
-        mtype = msg.GetType()
+        mtype = msg.GetType()[-1]
         mdata = msg.GetData()
-        if mtype[-1] == 'SPELLCHECK':
+        if mtype == 'SPELLCHECK':
             self._spell_data['enabled'] = mdata.get('auto', False)
             self._spell.setDefaultLanguage(mdata.get('dict', 'en_US'))
             if not self._spell_data['enabled']:
                 self._spell.clearAll()
-        elif mtype[-1] == 'AUTOBACKUP':
+        elif mtype == 'AUTOBACKUP':
             self.EnableAutoBackup(Profile_Get('AUTOBACKUP'))
-        elif mtype[-1] == 'SYNTHEME':
+        elif mtype == 'SYNTHEME':
             self.UpdateAllStyles()
-        elif mtype[-1] == 'SYNTAX':
+        elif mtype == 'SYNTAX':
             self.SyntaxOnOff(Profile_Get('SYNTAX'))
-        elif mtype[-1] == 'AUTO_COMP_EX':
+        elif mtype == 'AUTO_COMP_EX':
             self.ConfigureAutoComp()
 
     def OnContextMenu(self, evt):
