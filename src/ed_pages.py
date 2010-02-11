@@ -108,6 +108,7 @@ class EdPages(aui.AuiNotebook):
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, self.OnMClickDown)
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_MIDDLE_UP, self.OnMClickUp)
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_RIGHT_UP, self.OnTabMenu)
+        self.Bind(aui.EVT_AUINOTEBOOK_ALLOW_DND, self.OnAllowDnD)
 
         self.Bind(wx.stc.EVT_STC_CHANGE, self.OnUpdatePageText)
         self.Bind(wx.EVT_MENU, self.OnMenu)
@@ -417,6 +418,12 @@ class EdPages(aui.AuiNotebook):
         # Set the modified callback notifier
         doc = self.control.GetDocument()
         doc.AddModifiedCallback(self.control.FireModified)
+
+    def OnAllowDnD(self, evt):
+        """Handle allowing tab drag and drop events"""
+        dsource = evt.GetDragSource()
+        if isinstance(dsource, EdPages):
+            evt.Allow()
 
     def OnMenu(self, evt):
         """Handle context menu events
