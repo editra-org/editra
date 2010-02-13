@@ -46,17 +46,16 @@ if sys.version_info < (2, 5):
     sys.stderr.write("[ERROR] Not a supported Python version. Need 2.5+\n")
     sys.exit(1)
 
-# TODO: disabled due to it causing build issues when building eggs/source
-#       packages that use python versions that don't have wx installed.
-#try:
-#    import wx
-#except ImportError:
-#    sys.stderr.write("[ERROR] wxPython2.8 is required.\n")
-#    sys.exit(1)
-#else:
-#    if wx.VERSION < (2, 8, 3):
-#        sys.stderr.write("[ERROR] wxPython 2.8.3+ is required.\n")
-#        sys.exit(1)
+try:
+    import wx
+except ImportError:
+    if 'bdist_egg' not in sys.argv:
+        sys.stderr.write("[ERROR] wxPython2.8 is required.\n")
+        sys.exit(1)
+else:
+    if wx.VERSION < (2, 8, 8):
+        sys.stderr.write("[ERROR] wxPython 2.8.8+ is required.\n")
+        sys.exit(1)
 
 #---- System Platform ----#
 __platform__ = os.sys.platform
