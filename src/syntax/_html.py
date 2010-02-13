@@ -43,6 +43,11 @@ HTML_TAGS = (0, "address applet area a base basefont big blockquote br caption "
                 # HTML 4.0 Tags
                 "abbr acronym bdo button col label colgroup del fieldset "
                 "iframe ins legend object optgroup q s tbody tfoot thead "
+                # HTML 5 Tags
+                "article aside audio canvas command datalist details dialog "
+                "embed figcaption figure footer header hgroup keygen mark "
+                "meter nav output progress rp rt ruby section source time "
+                "video "
                 # Tag Attributes / Arguments
                 "action align alink alt archive background bgcolor border "
                 "bordercolor cellpadding cellspacing checked class clear "
@@ -57,6 +62,13 @@ HTML_TAGS = (0, "address applet area a base basefont big blockquote br caption "
                 "frame headers hreflang lang language longdesc multiple nohref "
                 "nowrap profile readonly rules scheme scope standby style "
                 "summary tabindex valuetype version "
+                # HTML 5 Tag Attributes / Arguments
+                "async autocomplete contenteditable contextmenu date "
+                "datetime-local draggable email formaction formenctype "
+                "formmethod formnovalidate formtarget hidden list manifest max "
+                "media min month novalidate number pattern ping range required "
+                "reversed role sandbox scoped seamless search sizes spellcheck "
+                "srcdoc step tel week "
                 # DHTML Support
                 "dtml-var dtml-if dtml-unless dtml-in dtml-with dtml-let "
                 "dtml-call dtml-raise dtml-try dtml-comment dtml-tree")
