@@ -27,6 +27,7 @@ can be viewed side by side.
 +Add support for Java to CodeBrowser (patch from Eric Gaudet)
 +Add support for Diff files to CodeBrowser (patch from Eric Gaudet)
 +Custom autobackup directory can be configured.
++Extend HTML support to support HTML5 syntax (patch from Hagn99)
 
 LIBRARY:
 +New plugin interface for adding autocompletion providers added (iface.AutocompI)
@@ -51,7 +52,7 @@ associated with them.
 +Fix bad link to online documentation in Help menu
 +Default to English local when localized resource for LANGUAGE_DEFAULT are not 
 available.
-+Fix issue with folded code dissappearing when folding option is toggled off.
++Fix issue with folded code disappearing when folding option is toggled off.
 
 #-----------------------------------------------------------------------------#
 
