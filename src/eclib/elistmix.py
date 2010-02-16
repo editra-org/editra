@@ -79,7 +79,7 @@ class ListRowHighlighter:
     def SetHighlightColor(self, color):
         """Set the color used to highlight the rows. Call L{RefreshRows} after
         this if you wish to update all the rows highlight colors.
-        @param color: wx.Color or None to set default
+        @param color: wx.Colour or None to set default
 
         """
         self._color = color
