@@ -414,11 +414,8 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         if handler is not None:
             handler(self, evt)
         else:
-            # Need to relay to tlw on gtk for it to get handled, other
-            # platforms do not require this.
-            if wx.Platform == '__WXGTK__':
-                wx.PostEvent(self.GetTopLevelParent(), evt)
-            else:
+            self.ControlDispatch(evt)
+            if evt.GetSkipped():
                 evt.Skip()
 
     def OnModified(self, evt):
