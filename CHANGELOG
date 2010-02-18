@@ -28,6 +28,7 @@ can be viewed side by side.
 +Add support for Diff files to CodeBrowser (patch from Eric Gaudet)
 +Custom autobackup directory can be configured.
 +Extend HTML support to support HTML5 syntax (patch from Hagn99)
++Add --no-clean option to source file installer to skip old file cleanup.
 
 LIBRARY:
 +New plugin interface for adding autocompletion providers added (iface.AutocompI)
