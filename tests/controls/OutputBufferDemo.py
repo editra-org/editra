@@ -253,7 +253,7 @@ class ProcessOutputBuffer(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         @param cmd: Command string (i.e 'ping localhost')
 
         """
-        proc = eclib.ProcessThread(self, cmd)
+        proc = eclib.ProcessThread(self, cmd, env=os.environ)
         self._threads.append((proc, cmd))
         self._threads[-1][0].start()
         
