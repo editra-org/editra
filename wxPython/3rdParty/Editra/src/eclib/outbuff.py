@@ -657,7 +657,7 @@ class ProcessThread(threading.Thread):
 
     """
     def __init__(self, parent, command, fname='',
-                 args=list(), cwd=None, env=None):
+                 args=list(), cwd=None, env=dict()):
         """Initialize the ProcessThread object
         Example:
           >>> myproc = ProcessThread(myframe, '/usr/local/bin/python',
