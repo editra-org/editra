@@ -9,18 +9,18 @@
 """
 Editra Control Library: OutputBuffer
 
-This module contains classes that are usefull for displaying output from running
-tasks and processes. The classes are divided into three main catagories, gui
+This module contains classes that are useful for displaying output from running
+tasks and processes. The classes are divided into three main categories, gui
 classes, mixins, and thread classes. All the classes can be used together to
-easily create multithreaded gui display classes without neededing to worry about
+easily create multithreaded gui display classes without needing to worry about
 the details and thread safety of the gui.
 
 For example usage of these classes see ed_log and the Editra's Launch plugin
 
 Class OutputBuffer:
-This is the main class exported by ths module. It provides a readonly output
+This is the main class exported by this module. It provides a readonly output
 display buffer that when used with the other classes in this module provides an
-easy way to display continous output from other processes and threads. It
+easy way to display continuous output from other processes and threads. It
 provides two methods for subclasses to override if they wish to perform custom
 handling.
 
@@ -37,11 +37,11 @@ OutputBuffer is used with a L{ProcessThread}. It provides three methods that can
 be overridden in subclasses to perform extra processing.
 
   - DoProcessStart: Called as the process is being started in the ProcessThread,
-                    it recieves the process command string as an argument.
+                    it receives the process command string as an argument.
   - DoFilterInput: Called as each chunk of output comes from the running process
                    use it to filter the results before displaying them in the
                    buffer.
-  - DoProcessExit: Called when the running process has exited. It recieves the
+  - DoProcessExit: Called when the running process has exited. It receives the
                    processes exit code as a parameter.
 
 Class ProcessThread:
@@ -49,7 +49,7 @@ Thread class for running subprocesses and posting the output to an
 L{OutputBuffer} via events.
 
 Class TaskThread:
-Thread class for running a callable. For optimal performance and resposiveness
+Thread class for running a callable. For optimal performance and responsiveness
 the callable should be a generator object. All results are directed to an
 L{OutputBuffer} through its AppendUpdate method.
 
@@ -829,7 +829,7 @@ class ProcessThread(threading.Thread):
         else:
             suinfo = None
         
-        use_shell = not subprocess.mswindows
+        use_shell = True #not subprocess.mswindows
         err = None
         try:
             self._proc = subprocess.Popen(command.strip(),
