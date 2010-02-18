@@ -537,7 +537,7 @@ class GeneralFilePanel(wx.Panel):
         eolwarn_cb.SetValue(Profile_Get('WARN_EOL', default=True))
 
         # Layout items
-        sizer = wx.FlexGridSizer(10, 2, 5, 5)
+        sizer = wx.FlexGridSizer(11, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("File Settings") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (enc_sz, 0),
@@ -956,7 +956,7 @@ class DocCodePanel(wx.Panel):
         vi_ncb_sz.AddMany([((16, -1), 0), (vi_ncb, 0)])
 
         # Layout the controls
-        sizer = wx.FlexGridSizer(14, 2, 5, 5)
+        sizer = wx.FlexGridSizer(15, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("General") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (dlex_sz, 0),
@@ -1694,12 +1694,12 @@ class KeyBindingPanel(wx.Panel):
         kprofiles = self.binder.GetKeyProfiles()
         # Add an empty selection for the default profile
         if len(kprofiles):
-            kprofiles.insert(0, '')
+            kprofiles.insert(0, u'')
         cprofile = Profile_Get('KEY_PROFILE', default=None)
         profiles = wx.Choice(self, ed_glob.ID_KEY_PROFILES, choices=kprofiles)
         profiles.Enable(len(kprofiles))
         if cprofile is None:
-            profiles.SetStringSelection('')
+            profiles.SetStringSelection(u'')
         else:
             profiles.SetStringSelection(cprofile)
         profsz.AddMany([spacer,
