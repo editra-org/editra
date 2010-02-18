@@ -23,6 +23,7 @@
 
    4) Install as a python package
       - python setup.py install
+            - '--no-clean' can be specified to skip old file cleanup
 
  @summary: Used for building the editra distribution files and installations
 
@@ -487,18 +488,21 @@ def DoSourcePackage():
         from distutils.core import setup
 
     # Try to remove possibly conflicting files from an old install
-    try:
-        import Editra
-        path = Editra.__file__
-        if '__init__' in path:
-            path = os.path.dirname(path)
-            path = os.path.join(path, 'src')
-            del sys.modules['Editra']
-            shutil.rmtree(path)
-    except (ImportError, OSError):
-        pass
-    except:
-        sys.stderr.write("[ERROR] Failed to remove old source files")
+    if '--no-clean' not in sys.argv:
+        try:
+            import Editra
+            path = Editra.__file__
+            if '__init__' in path:
+                path = os.path.dirname(path)
+                path = os.path.join(path, 'src')
+                del sys.modules['Editra']
+                shutil.rmtree(path)
+        except (ImportError, OSError):
+            pass
+        except:
+            sys.stderr.write("[ERROR] Failed to remove old source files")
+    else:
+        sys.argv.remove('--no-clean')
 
     # Make sure to delete any existing MANIFEST file beforehand to
     # prevent stale file lists
