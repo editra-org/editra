@@ -139,7 +139,9 @@ class EdShelfBook(aui.AuiNotebook):
         style = aui.AUI_NB_BOTTOM | \
                 aui.AUI_NB_TAB_SPLIT | \
                 aui.AUI_NB_SCROLL_BUTTONS | \
-                aui.AUI_NB_CLOSE_ON_ACTIVE_TAB
+                aui.AUI_NB_CLOSE_ON_ACTIVE_TAB | \
+                aui.AUI_NB_TAB_MOVE | \
+                aui.AUI_NB_DRAW_DND_TAB
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
         aui.AuiNotebook.__init__(self, parent, style=style)
@@ -152,6 +154,7 @@ class EdShelfBook(aui.AuiNotebook):
 
         # Setup
         self.SetImageList(self._imglst)
+        self.SetSashDClickUnsplit(True)
 
     @property
     def ImgIdx(self):
