@@ -335,7 +335,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Add or remove handlers from the event stack
         if active:
-            wx.GetApp().SetTopWindow(self)
+            app.SetTopWindow(self)
             self._loaded = True
 
             # Slow the update interval to reduce overhead
@@ -348,8 +348,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
             for handler in self._handlers['ui']:
                 app.AddUIHandlerForID(*handler)
-
-            app.SetTopWindow(self)
 
             # HACK find better way to do this later. It seems that on gtk the
             #      window doesn't get activated until later than it does on the
