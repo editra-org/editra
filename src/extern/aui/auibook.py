@@ -2109,7 +2109,6 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
                     self._drag_img_offset = (pos[0] - page.rect.x,
                                              pos[1] - page.rect.y)
 
-                    self._drag_image.Move(pos)
                     self._drag_image.Show()
 
         if not wnd:
@@ -2732,6 +2731,10 @@ class AuiNotebook(wx.PyControl):
             else:
                 tab_part = tabs[0:tabs.index('|')]
           
+            if "=" not in tab_part:
+                # No pages in this perspective...
+                return False
+
             # Get pane name
             pane_name = tab_part[0:tab_part.index("=")]
 
