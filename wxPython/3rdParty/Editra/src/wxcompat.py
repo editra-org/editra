@@ -43,8 +43,3 @@ if wx.Platform == '__WXMAC__':
 if wx.VERSION < (2, 8, 6, 0, ''):
     wx.MenuItem.GetItemLabel = wx.MenuItem.GetText
     wx.MenuItem.GetItemLabelText = wx.MenuItem.GetLabel
-
-# HACK temporary bandaid to allow the the program to run until a replacement
-#      for this method can be found.
-if wx.VERSION >= (2, 9, 0, 0, ''):
-    wx.Brush.MacSetTheme = lambda x, y: x
