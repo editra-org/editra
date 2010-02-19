@@ -60,8 +60,8 @@ class EdPages(aui.AuiNotebook):
                 aui.AUI_NB_WINDOWLIST_BUTTON | \
                 aui.AUI_NB_SMART_TABS | \
                 aui.AUI_NB_USE_IMAGES_DROPDOWN | \
-                aui.AUI_NB_TAB_EXTERNAL_MOVE #| \
-#                aui.AUI_NB_SASH_DCLICK_UNSPLIT
+                aui.AUI_NB_TAB_EXTERNAL_MOVE # | \
+#                aui.AUI_NB_TAB_FIXED_WIDTH
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
         aui.AuiNotebook.__init__(self, parent, id_num, style=style)
@@ -400,13 +400,11 @@ class EdPages(aui.AuiNotebook):
         @postcondition: a new page with an untitled document is opened
 
         """
-        self.Freeze()
         self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
         self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
         self.control.Hide()
         self.AddPage(self.control)
         self.control.Show()
-        self.Thaw()
 
         # Set the control up the the preferred default lexer
         dlexer = Profile_Get('DEFAULT_LEX', 'str', 'Plain Text')
