@@ -685,7 +685,11 @@ class SettingsPanel(wx.Panel):
         fsizer = wx.BoxSizer(wx.HORIZONTAL)
         flbl = wx.StaticText(self, label=_("Font") + u": ")
         fontenum = wx.FontEnumerator()
-        fontenum.EnumerateFacenames(fixedWidthOnly=True)
+        if wx.Platform == '__WXMAC__':
+            # FixedWidthOnly Asserts on wxMac
+            fontenum.EnumerateFacenames(fixedWidthOnly=False)
+        else:
+            fontenum.EnumerateFacenames(fixedWidthOnly=True)
         font_lst = ["%(primary)s", "%(secondary)s"]
         font_lst.extend(sorted(fontenum.GetFacenames()))
         fchoice = wx.Choice(self, ID_FONT, choices=font_lst)
