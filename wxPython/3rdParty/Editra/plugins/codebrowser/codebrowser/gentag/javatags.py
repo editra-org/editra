@@ -38,7 +38,7 @@ RE_PACKAGE = re.compile(r"package\s+("+STR_CLASS_PATH+");")
 RE_IMPORT = re.compile(r"import\s+("+STR_CLASS_PATH+");")
 RE_CONST = re.compile(r"("+STR_SCOPE+")?\s*("+STR_FINAL_AND_STATIC+")\s*("+STR_TYPE+")\s+("+STR_NAME+")\s*[^;]*")
 RE_VAR   = re.compile(r"("+STR_SCOPE+")?\s*("+STR_FINAL_OR_STATIC+")?\s*("+STR_TYPE+")\s+("+STR_NAME+")\s*[^;]*")
-RE_CLASS = re.compile(r"("+STR_SCOPE+")?\s*.*\s*class\s+("+STR_NAME+")")
+RE_CLASS = re.compile(r"("+STR_SCOPE+")?\s*.*\s*(class|interface)\s+("+STR_NAME+")")
 RE_METH  = re.compile(r"("+STR_SCOPE+")?\s*("+STR_FINAL_OR_STATIC+")?\s*("+STR_METHOD_DECLARATION+")?\s*("+STR_TYPE+")?\s+("+STR_NAME+")\s*\(([^)]*)\(?")
 
 RE_COMMENT_INLINE = re.compile('(/\*.*?\*/)')
@@ -74,6 +74,12 @@ def GenerateTags(buff):
 
         lastLevel = currentLevel
 
+        lineCodeOnly = line[:]
+        lineCodeOnly = RE_BACKSLASHEDQUOTE_INLINE.sub("'",lineCodeOnly)
+        lineCodeOnly = RE_STRING_INLINE.sub('',lineCodeOnly)
+        lineCodeOnly = RE_CHARACTER_INLINE.sub('',lineCodeOnly)
+        #print "[[[",lineCodeOnly,"]]]"
+        
         # remove trailing comments
         cut = line.find('//')
         if cut>-1:
@@ -99,16 +105,10 @@ def GenerateTags(buff):
         if len(line)==0:
             continue
 
-        lineCodeOnly = line[:]
-        lineCodeOnly = RE_BACKSLASHEDQUOTE_INLINE.sub("'",lineCodeOnly)
-        lineCodeOnly = RE_STRING_INLINE.sub('',lineCodeOnly)
-        lineCodeOnly = RE_CHARACTER_INLINE.sub('',lineCodeOnly)
-        #print "[[[",lineCodeOnly,"]]]"
-
         diff = lineCodeOnly.count('{') - lineCodeOnly.count('}')
         currentLevel += diff
 
-        #print "<<<",line,">>>", lnum, currentLevel, diff, len(lastClass), inComment
+        print "<<<",line,">>>", lnum, currentLevel, diff, len(lastClass), inComment
         if diff < 0:
             while len(lastClass) > currentLevel:
                 #print "POP", len(lastClass), currentLevel, lastClass[-1]
@@ -164,8 +164,16 @@ def GenerateTags(buff):
                 groups = match.groups()
                 prefix = ''
                 methodSignature = groups[-2]
+                warning = None
                 if groups[3] == None:
-                    prefix = '>'
+                    contructor_for = lastClass[-1].GetName()
+                    if contructor_for[0] == '$':
+                      contructor_for = contructor_for[2:]
+                    if groups[-2] == contructor_for:
+                        prefix = '>'
+                    else:
+                        warning = 'tag_red'
+                        methodSignature += ' - ???'
                 else:
                     methodSignature += ' - ' +  groups[3]
                 methodSignature += ' ('
@@ -177,10 +185,12 @@ def GenerateTags(buff):
                     methodSignature = prefix + ' ' + methodSignature
                 if groups[-1]:
                     methodSignature += groups[-1]
-
                 if line.find(')') > -1:
                     methodSignature += ')'
-                    lastClass[-1].AddMethod(taglib.Method(methodSignature, lnum))
+                    cobj = taglib.Method(methodSignature, lnum)
+                    if warning:
+                        cobj.type = warning
+                    lastClass[-1].AddMethod(cobj)
                     #print "METH", groups, methodSignature, lastClass[-1]
                     methodSignature = None
                 else:
@@ -202,6 +212,9 @@ def GenerateTags(buff):
                 groups = match.groups()
                 #print "VAR", groups, lastClass[-1]
                 cname = groups[-1] + ' - ' +  groups[-2]
+                #print groups[-2]
+                if groups[-2][:6]=='throws':
+                    continue
                 if groups[1] and (groups[1].find('static') > -1):
                     cname = '_ ' + cname
                 cobj = taglib.Variable(cname, lnum)
