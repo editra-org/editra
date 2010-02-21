@@ -312,8 +312,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         self.AutoCompSetAutoHide(False)
-        self.AutoCompSetChooseSingle(True)
         self.InitCompleter()
+        self.AutoCompSetChooseSingle(self._code['compsvc'].GetChooseSingle())
         self.AutoCompSetIgnoreCase(not self._code['compsvc'].GetCaseSensitive())
         self.AutoCompStops(self._code['compsvc'].GetAutoCompStops())
         # TODO: come back to this it can cause some annoying behavior where

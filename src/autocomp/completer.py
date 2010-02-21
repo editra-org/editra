@@ -119,6 +119,7 @@ class BaseCompleter(object):
         self._log = wx.GetApp().GetLog()
         self._case_sensitive = False
         self._autocomp_after = False
+        self._choose_single = True
 
         self._autocomp_keys = list()
         self._autocomp_stop = u''
@@ -257,6 +258,22 @@ class BaseCompleter(object):
 
         """
         self._case_sensitive = sensitive
+
+    def GetChooseSingle(self):
+        """Get whether the completer should automatically choose a selection
+        when there is only one symbol in the completion list.
+        @return: bool
+
+        """
+        return self._choose_single
+
+    def SetChooseSingle(self, single):
+        """Set whether the completer should automatically choose a selection
+        when there is only one symbol in the completion list.
+        @param single: bool
+
+        """
+        self._choose_single = single
 
     def ShouldCheck(self, cpos):
         """Should completions be attempted
