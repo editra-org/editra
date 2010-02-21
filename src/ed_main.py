@@ -206,7 +206,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_HOMEPAGE, self.OnHelp),
                                        (ID_DOCUMENTATION, self.OnHelp),
                                        (ID_TRANSLATE, self.OnHelp),
-                                       (ID_CONTACT, self.OnHelp)])
+                                       (ID_CONTACT, self.OnHelp),
+                                       (ID_BUG_TRACKER, self.OnHelp)])
 
         self._handlers['menu'].extend([(l_id, self.DispatchToControl)
                                        for l_id in syntax.SYNTAX_IDS])
@@ -1455,6 +1456,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         elif e_id == ID_CONTACT:
             webbrowser.open("mailto:%s" % CONTACT_MAIL)
             return
+        elif e_id == ID_BUG_TRACKER:
+            page = "http://code.google.com/p/editra/issues/list"
         else:
             evt.Skip()
             return
