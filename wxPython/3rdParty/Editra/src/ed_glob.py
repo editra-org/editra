@@ -37,7 +37,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_FOLDING', 'ID_BRACKETHL', 'ID_LEXER',
             'ID_PLUGMGR', 'ID_STYLE_EDIT', 'ID_MACRO_START', 'ID_MACRO_STOP',
             'ID_MACRO_PLAY', 'ID_ABOUT', 'ID_HOMEPAGE', 'ID_CONTACT',
-            'ID_DOCUMENTATION', 'ID_COMMAND',
+            'ID_BUG_TRACKER', 'ID_DOCUMENTATION', 'ID_COMMAND',
             'ID_USE_SOFTTABS', 'ID_DUP_LINE', 'ID_TRANSLATE',
             'I18N_PAGE', 'ID_GOTO_MBRACE', 'ID_HLCARET_LINE', 'ID_SHOW_SB',
             'ID_REVERT_FILE', 'ID_RELOAD_ENC', 'ID_DOCPROP', 'ID_PASTE_AFTER',
@@ -255,6 +255,7 @@ ID_HOMEPAGE      = wx.ID_HOME
 ID_DOCUMENTATION = wx.NewId()
 ID_TRANSLATE     = wx.NewId()
 ID_CONTACT       = wx.NewId()
+ID_BUG_TRACKER   = wx.NewId()
 
 # Misc IDs
 ID_ADVANCED          = wx.NewId()

@@ -835,6 +835,7 @@ class EdMenuBar(wx.MenuBar):
                         _("Online project documentation and help guides"))
         helpmenu.AppendEx(ed_glob.ID_TRANSLATE, _("Translate Editra..."),
                         _("Editra translations project"))
+        helpmenu.AppendEx(ed_glob.ID_BUG_TRACKER, _("Bug Tracker..."))
         helpmenu.AppendEx(ed_glob.ID_CONTACT, _("Feedback"),
                         _("Send bug reports and suggestions"))
 
