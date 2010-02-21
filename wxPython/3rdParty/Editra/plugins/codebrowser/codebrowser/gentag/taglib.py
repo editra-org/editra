@@ -191,15 +191,9 @@ class Scope(Code):
         @return: list of dict
 
         """
-        def cmptup(x, y):
-            if x[1] < y[1]:
-                return -1
-            elif x[1] == y[1]:
-                return 0
-            else:
-                return 1
-
-        sorder = [ key for key, val in sorted(self.prio.items(), cmptup, reverse=True) ]
+        sorder = [ key for key, val in sorted(self.prio.items(),
+                                              key=lambda x: x[1],
+                                              reverse=True) ]
         rlist = list()
         for key in sorder:
             if key in self.elements:
