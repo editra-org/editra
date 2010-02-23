@@ -11,7 +11,7 @@
 """
 Main launch script for the Editor. It first tries to look for Editra on the
 local path and if it is not there it tries to import the Main method
-from where Editra would be installed if it was installed using disutils
+from where Editra would be installed if it was installed using distutils
 
 @summary: Editra's main launch script for Windows
 
@@ -22,7 +22,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import sys
 import os
 
