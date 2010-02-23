@@ -375,8 +375,6 @@ class EdPages(aui.AuiNotebook):
             if os.path.exists(loadfn) and os.access(loadfn, os.R_OK):
                 self.OpenPage(os.path.dirname(loadfn),
                               os.path.basename(loadfn))
-                # Give feedback as files are loaded
-                self.Update()
             else:
                 missingfns.append(loadfn)
                 
