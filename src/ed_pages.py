@@ -398,11 +398,13 @@ class EdPages(aui.AuiNotebook):
         @postcondition: a new page with an untitled document is opened
 
         """
+        self.Freeze()
         self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
         self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
         self.control.Hide()
         self.AddPage(self.control)
         self.control.Show()
+        self.Thaw()
 
         # Set the control up the the preferred default lexer
         dlexer = Profile_Get('DEFAULT_LEX', 'str', 'Plain Text')
