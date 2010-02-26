@@ -93,6 +93,7 @@ if subprocess.mswindows:
     import msvcrt
     import ctypes
 else:
+    import shlex
     import select
     import fcntl
 
@@ -657,7 +658,8 @@ class ProcessThread(threading.Thread):
 
     """
     def __init__(self, parent, command, fname='',
-                 args=list(), cwd=None, env=dict()):
+                 args=list(), cwd=None, env=dict(),
+                 use_shell=True):
         """Initialize the ProcessThread object
         Example:
           >>> myproc = ProcessThread(myframe, '/usr/local/bin/python',
@@ -672,6 +674,8 @@ class ProcessThread(threading.Thread):
         @keyword cwd: Directory to execute process from or None to use current
         @keyword env: Environment to run the process in (dictionary) or None to
                       use default.
+        @keyword use_shell: Specify whether a shell should be used to launch 
+                            program or run directly
 
         """
         threading.Thread.__init__(self)
@@ -685,6 +689,8 @@ class ProcessThread(threading.Thread):
         self._parent = parent       # Parent Window/Event Handler
         self._cwd = cwd             # Path at which to run from
         self._cmd = dict(cmd=command, file=fname, args=args)
+        self._use_shell = use_shell
+        self._sig_abort = signal.SIGTERM    # default signal to kill process
 
         # Make sure the environment is sane it must be all strings
         nenv = dict(env) # make a copy to manipulate
@@ -784,7 +790,7 @@ class ProcessThread(threading.Thread):
 
             # Try to kill the group
             try:
-                os.kill(pid, signal.SIGKILL)
+                os.kill(pid, self._sig_abort)
             except OSError, msg:
                 pass
 
@@ -808,8 +814,9 @@ class ProcessThread(threading.Thread):
             ctypes.windll.kernel32.CloseHandle(handle)
 
     #---- Public Member Functions ----#
-    def Abort(self):
+    def Abort(self, sig=signal.SIGTERM):
         """Abort the running process and return control to the main thread"""
+        self._sig_abort = sig
         self.abort = True
 
     def run(self):
@@ -819,9 +826,15 @@ class ProcessThread(threading.Thread):
         @note: overridden from Thread
 
         """
+        # using shell, Popen will need a string, else it must be a sequence
+        # use shlex for complex command line tokenization/parsing
         command = u' '.join([item.strip() for item in [self._cmd['cmd'],
                                                        self._cmd['file'],
                                                        self._cmd['args']]])
+        command = command.strip()
+        if not self._use_shell and not subprocess.mswindows:
+            # shlex does not support unicode
+            command = shlex.split(command.encode(sys.getfilesystemencoding()))
 
         if sys.platform.lower().startswith('win'):            
             suinfo = subprocess.STARTUPINFO()
@@ -829,13 +842,12 @@ class ProcessThread(threading.Thread):
         else:
             suinfo = None
         
-        use_shell = True #not subprocess.mswindows
         err = None
         try:
-            self._proc = subprocess.Popen(command.strip(),
+            self._proc = subprocess.Popen(command,
                                           stdout=subprocess.PIPE,
                                           stderr=subprocess.STDOUT,
-                                          shell=use_shell,
+                                          shell=self._use_shell,
                                           cwd=self._cwd,
                                           env=self._env,
                                           startupinfo=suinfo)
@@ -849,7 +861,7 @@ class ProcessThread(threading.Thread):
 
         evt = OutputBufferEvent(edEVT_PROCESS_START,
                                 self._parent.GetId(),
-                                command.strip())
+                                command)
         wx.PostEvent(self._parent, evt)
 
         # Read from stdout while there is output from process
