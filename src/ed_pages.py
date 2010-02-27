@@ -525,21 +525,27 @@ class EdPages(aui.AuiNotebook):
 
     def OnTabMenu(self, evt):
         """Show the tab context menu"""
-        # Destroy any existing menu
         if self._menu is not None:
-            self._menu.Destroy()
-            self._menu = None
+            self._menu.Clear()
 
         # Construct the menu
         tab = evt.GetSelection()
         if tab != self.GetSelection():
             self.SetSelection(evt.GetSelection())
+
         ctab = self.GetCurrentPage()
         if ctab is not None:
-            self._menu = ctab.GetTabMenu()
+            if self._menu is None:
+                self._menu = ebmlib.ContextMenuManager()
+            menu = ctab.GetTabMenu()
+            self._menu.SetMenu(menu)
 
+            # Allow clients to customize the menu prior to showing it
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_TABMENU, self._menu)
+
+        # Show the menu
         if self._menu is not None:
-            self.PopupMenu(self._menu)
+            self.PopupMenu(self._menu.Menu)
 
     def OnThemeChanged(self, msg):
         """Update icons when the theme has changed
@@ -1053,8 +1059,6 @@ class EdPages(aui.AuiNotebook):
         page = self.GetCurrentPage()
         page.DoTabSelected()
 
-#        self.EnsureVisible(cpage)
-
     def OnPageClosing(self, evt):
         """Checks page status to flag warnings before closing
         @param evt: event that called this handler
@@ -1082,6 +1086,8 @@ class EdPages(aui.AuiNotebook):
         @type evt: aui.EVT_AUINOTEBOOK_PAGE_CLOSED
 
         """
+        frame = self.GetTopLevelParent()
+        frame.Freeze()
         cpage = self.GetSelection()
         evt.Skip()
         self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
@@ -1089,6 +1095,11 @@ class EdPages(aui.AuiNotebook):
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED,
                            (self, cpage),
                            context=self.frame.GetId())
+
+        if not self.GetPageCount() and \
+           hasattr(frame, 'IsExiting') and not frame.IsExiting():
+            self.NewPage()
+        frame.Thaw()
 
     #---- End Event Handlers ----#
 
@@ -1134,11 +1145,14 @@ class EdPages(aui.AuiNotebook):
             self.DeletePage(pg_num)
             self.GoCurrentPage()
 
-        frame.Thaw()
-
+        # Calling DeletePage doesn't cause a PageClosed event to fire
+        # So need to handle this here.
         if not self.GetPageCount() and \
            hasattr(frame, 'IsExiting') and not frame.IsExiting():
             self.NewPage()
+
+        frame.Thaw()
+
         return result
 
     def CanClosePage(self):

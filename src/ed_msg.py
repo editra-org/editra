@@ -139,6 +139,11 @@ EDMSG_UI_NB_CLOSING = EDMSG_UI_NB + ('pgclosing',)
 # context == MainWindow ID
 EDMSG_UI_NB_CLOSED = EDMSG_UI_NB + ('pgclosed',)
 
+# Tab Menu requested
+# msgdata == ContextMenuManager
+# menu = ContextMenuMenuManager.GetMenu()
+EDMSG_UI_NB_TABMENU = EDMSG_UI_NB + ('tabmenu',)
+
 # Post message to show the progress indicator of the MainWindow
 # msgdata == (frame id, True / False)
 EDMSG_PROGRESS_SHOW = EDMSG_UI_ALL + ('statbar', 'progbar', 'show')
@@ -188,9 +193,9 @@ EDMSG_UI_STC_CHANGED = EDMSG_UI_STC_ALL + ('changed',)
 
 # Customize Context Menu
 # Add custom menu items and handlers to the buffers right click menu
-# msgdata == dict(menu=wxMenu, handlers=[(menu_id, evt_handler(buff, evt))], 
-#                 buff=EdStc, position=int_buff_pos)
-# Usage: append new items to menu, append id, handler tuple to handlers list
+# msgdata = ContextMenuManager
+# ContextMenuManager.AddHandler(menu_id, handler)
+# menu = ContextMenuManager.GetMenu()
 # def handler(buffer, event_obj)
 EDMSG_UI_STC_CONTEXT_MENU = EDMSG_UI_STC_ALL + ('custommenu',)
 
