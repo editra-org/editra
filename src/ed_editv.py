@@ -66,7 +66,6 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     """Tab editor view for main notebook control."""
     ID_NO_SUGGEST = wx.NewId()
     DOCMGR = DocPositionMgr()
-    RCLICK_MENU = ContextMenuManager()
 
     def __init__(self, parent, id_=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0, use_dt=True):
@@ -78,6 +77,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         self._ignore_del = False
         self._has_dlg = False
         self._lprio = 0     # Idle event priority counter
+        self._menu = ContextMenuManager()
         self._spell = STCSpellCheck(self, check_region=self.IsNonCode)
         spref = Profile_Get('SPELLCHECK', default=dict())
         self._spell_data = dict(choices=list(),
@@ -125,6 +125,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         the active tab.
 
         """
+        self._menu.Clear()
         self.HidePopups()
 
     def DoOnIdle(self):
@@ -339,7 +340,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     def OnContextMenu(self, evt):
         """Handle right click menu events in the buffer"""
-        EdEditorView.RCLICK_MENU.Clear()
+        self._menu.Clear()
 
         menu = ed_menu.EdMenu()
         menu.Append(ed_glob.ID_UNDO, _("Undo"))
@@ -355,13 +356,13 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
 
         # Allow clients to customize the context menu
-        EdEditorView.RCLICK_MENU.SetMenu(menu)
+        self._menu.SetMenu(menu)
         pos = evt.GetPosition()
         bpos = self.PositionFromPoint(self.ScreenToClient(pos))
-        EdEditorView.RCLICK_MENU.SetPosition(bpos)
+        self._menu.SetPosition(bpos)
+        self._menu.AddUserData('buffer', self)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CONTEXT_MENU,
-                           EdEditorView.RCLICK_MENU,
-                           self.GetId())
+                           self._menu, self.GetId())
 
         # Spell checking
         # TODO: de-couple to the forthcoming buffer service interface
@@ -384,17 +385,17 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             self._spell_data['choices'] = list()
             for idx, sug in enumerate(sugg):
                 id_ = ids[idx] 
-                EdEditorView.RCLICK_MENU.AddHandler(id_, self.OnSpelling)
+                self._menu.AddHandler(id_, self.OnSpelling)
                 self._spell_data['choices'].append((id_, sug))
                 menu.Insert(0, id_, sug)
 
-        self.PopupMenu(EdEditorView.RCLICK_MENU.Menu)
+        self.PopupMenu(self._menu.Menu)
         evt.Skip()
 
     def OnMenuEvent(self, evt):
         """Handle context menu events"""
         e_id = evt.GetId()
-        handler = EdEditorView.RCLICK_MENU.GetHandler(e_id)
+        handler = self._menu.GetHandler(e_id)
 
         # Handle custom menu items
         if handler is not None:
