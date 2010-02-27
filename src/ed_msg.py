@@ -143,6 +143,7 @@ EDMSG_UI_NB_CLOSED = EDMSG_UI_NB + ('pgclosed',)
 # msgdata == ContextMenuManager
 # menu = ContextMenuManager.GetMenu()
 # ContextMenuManager.AddHandler(ID_MENU_ID, handler(buffer, event))
+# page = ContextMenuManager.GetUserData("page")
 EDMSG_UI_NB_TABMENU = EDMSG_UI_NB + ('tabmenu',)
 
 # Post message to show the progress indicator of the MainWindow
