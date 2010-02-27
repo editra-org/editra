@@ -360,7 +360,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         pos = evt.GetPosition()
         bpos = self.PositionFromPoint(self.ScreenToClient(pos))
         self._menu.SetPosition(bpos)
-        self._menu.AddUserData('buffer', self)
+        self._menu.SetUserData('buffer', self)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CONTEXT_MENU,
                            self._menu, self.GetId())
 

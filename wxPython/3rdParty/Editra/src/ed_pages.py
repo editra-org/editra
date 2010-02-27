@@ -542,6 +542,7 @@ class EdPages(aui.AuiNotebook):
                 self._menu = ebmlib.ContextMenuManager()
             menu = ctab.GetTabMenu()
             self._menu.SetMenu(menu)
+            self._menu.SetUserData("page", ctab)
 
             # Allow clients to customize the menu prior to showing it
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_TABMENU, self._menu)

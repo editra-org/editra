@@ -52,14 +52,6 @@ class ContextMenuManager(object):
         """
         self._handlers[evt_id] = handler
 
-    def AddUserData(self, key, data):
-        """Add custom user data to the manager
-        @param key: unique key used to retrieve the data later
-        @param data: user data
-
-        """
-        self._userdata[key] = data
-
     def Clear(self):
         """Clear all handlers and destroy the menu"""
         self._handlers.clear()
@@ -75,19 +67,26 @@ class ContextMenuManager(object):
         """
         return self._handlers.get(evt_id, None)
 
-    def GetUserData(self, key):
-        """Get user data
-        @param key: data id key
-
-        """
-        return self._userdata.get(key, None)
-
     def GetMenu(self):
         """Get the menu that is being managed by this manager
         @return: wxMenu
 
         """
         return self._menu
+
+    def GetPosition(self):
+        """Get the menu position
+        @return: tuple (int, int)
+
+        """
+        return self._pos
+
+    def GetUserData(self, key):
+        """Get user data
+        @param key: data id key
+
+        """
+        return self._userdata.get(key, None)
 
     def SetMenu(self, menu):
         """Set the menu that this manager should manage
@@ -104,10 +103,10 @@ class ContextMenuManager(object):
         """
         self._pos = pos
 
-    def GetPosition(self):
-        """Get the menu position
-        @return: tuple (int, int)
+    def SetUserData(self, key, data):
+        """Add custom user data to the manager
+        @param key: unique key used to retrieve the data later
+        @param data: user data
 
         """
-        return self._pos
-
+        self._userdata[key] = data
