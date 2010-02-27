@@ -429,7 +429,10 @@ class EdPages(aui.AuiNotebook):
 
         """
         ctab = self.GetCurrentPage()
-        if ctab is not None:
+        handler = self._menu.GetHandler(evt.GetId())
+        if handler is not None:
+            handler(ctab, evt)
+        elif ctab is not None:
             ctab.OnTabMenu(evt)
         else:
             evt.Skip()
