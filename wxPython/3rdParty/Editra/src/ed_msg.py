@@ -198,6 +198,7 @@ EDMSG_UI_STC_CHANGED = EDMSG_UI_STC_ALL + ('changed',)
 # ContextMenuManager.AddHandler(menu_id, handler)
 # menu = ContextMenuManager.GetMenu()
 # def handler(buffer, event_obj)
+# ContextMenuManager.GetData('buffer')
 EDMSG_UI_STC_CONTEXT_MENU = EDMSG_UI_STC_ALL + ('custommenu',)
 
 # UserList Selection
