@@ -32,3 +32,4 @@ from clipboard import *
 
 # Misc
 from miscutil import *
+from cmenumgr import *

@@ -31,7 +31,7 @@ import ed_tab
 from doctools import DocPositionMgr
 from profiler import Profile_Get
 from util import Log, SetClipboardText
-from ebmlib import GetFileModTime
+from ebmlib import GetFileModTime, ContextMenuManager
 
 # External libs
 from extern.stcspellcheck import STCSpellCheck
@@ -66,7 +66,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     """Tab editor view for main notebook control."""
     ID_NO_SUGGEST = wx.NewId()
     DOCMGR = DocPositionMgr()
-    RCLICK_MENU = None
+    RCLICK_MENU = ContextMenuManager()
 
     def __init__(self, parent, id_=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0, use_dt=True):
@@ -77,7 +77,6 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         # Attributes
         self._ignore_del = False
         self._has_dlg = False
-        self._mdata = dict(menu=None, handlers=list(), buff=self)
         self._lprio = 0     # Idle event priority counter
         self._spell = STCSpellCheck(self, check_region=self.IsNonCode)
         spref = Profile_Get('SPELLCHECK', default=dict())
@@ -118,59 +117,6 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     def __del__(self):
         ed_msg.Unsubscribe(self.OnConfigMsg)
         super(EdEditorView, self).__del__()
-
-    def _MakeMenu(self, pos):
-        """Make the buffers context menu,
-        @param pos: mouse click position
-
-        """
-        menu = ed_menu.EdMenu()
-        menu.Append(ed_glob.ID_UNDO, _("Undo"))
-        menu.Append(ed_glob.ID_REDO, _("Redo"))
-        menu.AppendSeparator()
-        menu.Append(ed_glob.ID_CUT, _("Cut"))
-        menu.Append(ed_glob.ID_COPY, _("Copy"))
-        menu.Append(ed_glob.ID_PASTE, _("Paste"))
-        menu.AppendSeparator()
-        menu.Append(ed_glob.ID_TO_UPPER, _("To Uppercase"))
-        menu.Append(ed_glob.ID_TO_LOWER, _("To Lowercase"))
-        menu.AppendSeparator()
-        menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
-
-        # Allow clients to customize the context menu
-        self._mdata['menu'] = menu
-        self._mdata['handlers'] = list()
-        self._mdata['position'] = self.PositionFromPoint(self.ScreenToClient(pos))
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CONTEXT_MENU,
-                           self._mdata,
-                           self.GetId())
-
-        # Spell checking
-        # TODO: de-couple to the forthcoming buffer service interface
-        menu.InsertSeparator(0)
-        words = self.GetWordFromPosition(self._mdata['position'])
-        self._spell_data['word'] = words
-        sugg = self._spell.getSuggestions(words[0])
-
-        # Don't give suggestions if the selected word is in the suggestions list
-        if words[0] in sugg:
-            sugg = list()
-
-        if not len(sugg):
-            item = menu.Insert(0, EdEditorView.ID_NO_SUGGEST, _("No Suggestions"))
-            item.Enable(False)
-        else:
-            sugg = reversed(sugg[:min(len(sugg), 3)])
-            ids = (ID_SPELL_1, ID_SPELL_2, ID_SPELL_3)
-            del self._spell_data['choices']
-            self._spell_data['choices'] = list()
-            for idx, sug in enumerate(sugg):
-                id_ = ids[idx] 
-                self._mdata['handlers'].append((id_, self.OnSpelling))
-                self._spell_data['choices'].append((id_, sug))
-                menu.Insert(0, id_, sug)
-
-        return menu
 
     #---- EdTab Methods ----#
 
@@ -393,22 +339,62 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     def OnContextMenu(self, evt):
         """Handle right click menu events in the buffer"""
-        if EdEditorView.RCLICK_MENU is not None:
-            EdEditorView.RCLICK_MENU.Destroy()
-            EdEditorView.RCLICK_MENU = None
+        EdEditorView.RCLICK_MENU.Clear()
 
-        EdEditorView.RCLICK_MENU = self._MakeMenu(evt.GetPosition())
-        self.PopupMenu(EdEditorView.RCLICK_MENU)
+        menu = ed_menu.EdMenu()
+        menu.Append(ed_glob.ID_UNDO, _("Undo"))
+        menu.Append(ed_glob.ID_REDO, _("Redo"))
+        menu.AppendSeparator()
+        menu.Append(ed_glob.ID_CUT, _("Cut"))
+        menu.Append(ed_glob.ID_COPY, _("Copy"))
+        menu.Append(ed_glob.ID_PASTE, _("Paste"))
+        menu.AppendSeparator()
+        menu.Append(ed_glob.ID_TO_UPPER, _("To Uppercase"))
+        menu.Append(ed_glob.ID_TO_LOWER, _("To Lowercase"))
+        menu.AppendSeparator()
+        menu.Append(ed_glob.ID_SELECTALL, _("Select All"))
+
+        # Allow clients to customize the context menu
+        EdEditorView.RCLICK_MENU.SetMenu(menu)
+        pos = evt.GetPosition()
+        bpos = self.PositionFromPoint(self.ScreenToClient(pos))
+        EdEditorView.RCLICK_MENU.SetPosition(bpos)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CONTEXT_MENU,
+                           EdEditorView.RCLICK_MENU,
+                           self.GetId())
+
+        # Spell checking
+        # TODO: de-couple to the forthcoming buffer service interface
+        menu.InsertSeparator(0)
+        words = self.GetWordFromPosition(bpos)
+        self._spell_data['word'] = words
+        sugg = self._spell.getSuggestions(words[0])
+
+        # Don't give suggestions if the selected word is in the suggestions list
+        if words[0] in sugg:
+            sugg = list()
+
+        if not len(sugg):
+            item = menu.Insert(0, EdEditorView.ID_NO_SUGGEST, _("No Suggestions"))
+            item.Enable(False)
+        else:
+            sugg = reversed(sugg[:min(len(sugg), 3)])
+            ids = (ID_SPELL_1, ID_SPELL_2, ID_SPELL_3)
+            del self._spell_data['choices']
+            self._spell_data['choices'] = list()
+            for idx, sug in enumerate(sugg):
+                id_ = ids[idx] 
+                EdEditorView.RCLICK_MENU.AddHandler(id_, self.OnSpelling)
+                self._spell_data['choices'].append((id_, sug))
+                menu.Insert(0, id_, sug)
+
+        self.PopupMenu(EdEditorView.RCLICK_MENU.Menu)
         evt.Skip()
 
     def OnMenuEvent(self, evt):
         """Handle context menu events"""
         e_id = evt.GetId()
-        handler = None
-        for hndlr in self._mdata['handlers']:
-            if e_id == hndlr[0]:
-                handler = hndlr[1]
-                break
+        handler = EdEditorView.RCLICK_MENU.GetHandler(e_id)
 
         # Handle custom menu items
         if handler is not None:
