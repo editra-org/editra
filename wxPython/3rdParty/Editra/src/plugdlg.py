@@ -966,6 +966,8 @@ class PBPluginItem(eclib.PanelBoxItemBase):
             if not os.access(ipath, os.R_OK|os.W_OK):
                 self._uninstall.Show(False)
         else:
+            util.Log("[pluginmgr][warn] cant find plugin path for %s" % \
+                     self._pdata.GetName())
             self._uninstall.Show(False) # Should not happen
 
         font = self._title.GetFont()
