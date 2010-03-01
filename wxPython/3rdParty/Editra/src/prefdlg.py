@@ -1662,19 +1662,12 @@ class KeyBindingPanel(wx.Panel):
         self.menumap = dict()
 
         # Load the Menu Map
-        def _tupSort(tup1, tup2):
-            """Method for sorting the menu tuples"""
-            if tup1[1] > tup2[1]:
-                return 1
-            elif tup1[1] < tup2[1]:
-                return -1
-            else:
-                return 0
         for item in self.menub.GetMenuMap():
             for key, val in item.iteritems():
-                if isinstance(val[0], int):
-                    val = val[1:]
-                self.menumap[key] = sorted(val, _tupSort)
+                if len(val):
+                    if isinstance(val[0], int):
+                        val = val[1:]
+                    self.menumap[key] = sorted(val, key=lambda x: x[1])
 
         # Layout
         self._DoLayout()
