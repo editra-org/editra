@@ -168,6 +168,7 @@ EDMSG_UI_SB_TXT = EDMSG_UI_ALL + ('statbar', 'text')
 EDMSG_UI_STC_ALL = EDMSG_UI_ALL + ('stc',)
 
 # msgdata == ((x, y), keycode)
+# context == MainWindows ID
 EDMSG_UI_STC_KEYUP = EDMSG_UI_STC_ALL + ('keyup',)
 
 # msgdata == dict(lnum=line, cnum=column)
@@ -177,7 +178,7 @@ EDMSG_UI_STC_POS_CHANGED = EDMSG_UI_STC_ALL + ('position',)
 # msgdata == dict(fname=fname,
 #                 prepos=pos, preline=line,
 #                 lnum=cline, pos=cpos)
-# context == MainWIndow ID
+# context == MainWindow ID
 EDMSG_UI_STC_POS_JUMPED = EDMSG_UI_STC_ALL + ('jump',)
 
 # Editor control size restored (msgdata == None)
