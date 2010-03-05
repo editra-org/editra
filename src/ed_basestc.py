@@ -736,17 +736,16 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             lines = self.GetLineCount()
             mwidth = self.GetTextExtent(str(lines))[0]
 
+            adj = 8
             if wx.Platform == '__WXMAC__':
                 adj = 2
-            else:
-                adj = 8
 
             nwidth = max(15, mwidth + adj)
             if self.GetMarginWidth(NUM_MARGIN) != nwidth:
                 self.SetMarginWidth(NUM_MARGIN, nwidth)
 
         wx.PostEvent(self.GetParent(), evt)
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CHANGED)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CHANGED, context=self)
 
     def OnModified(self, evt):
         """Handle modify events, includes style changes!"""
