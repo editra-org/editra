@@ -322,6 +322,7 @@ def mwcontext(func):
         context of the main window or no context was specified.
 
         """
+        assert hasattr(self, 'GetMainWindow'), "Must declare a GetMainWindow method"
         mw = self.GetMainWindow()
         context = msg.GetContext()
         if context is None or mw.GetId() == context:
@@ -329,6 +330,23 @@ def mwcontext(func):
 
     ContextWrap.__name__ = func.__name__
     ContextWrap.__doc__ = func.__doc__
+    return ContextWrap
+
+def wincontext(func):
+    """Decorator to filter messages based on a window. Class must declare
+    a GetWindow method that returns the window that the messages context
+    should be filtered on.
+    @param funct: callable(self, msg)
+
+    """
+    def ContextWrap(self, msg):
+        assert hasattr(self, 'GetWindow'), "Must define a GetWindow method"
+        context = msg.GetContext()
+        if isinstance(context, wx.Window) and context is self.GetWindow():
+            funct(self, msg)
+
+    ContextWrap.__name__ = funct.__name__
+    ContextWrap.__doc__ = funct.__doc__
     return ContextWrap
 
 #-----------------------------------------------------------------------------#
