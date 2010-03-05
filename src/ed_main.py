@@ -100,7 +100,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._handlers = dict(menu=list(), ui=list())
 
         #---- Setup File History ----#
-        self.filehistory = wx.FileHistory(_PGET('FHIST_LVL', 'int', 5))
+        self.filehistory = wx.FileHistory(_PGET('FHIST_LVL', 'int', 9))
 
         #---- Status bar on bottom of window ----#
         self.SetStatusBar(ed_statbar.EdStatBar(self))
@@ -303,6 +303,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         ed_msg.PostMessage(ed_msg.EDMSG_DSP_FONT,
                            _PGET('FONT3', 'font', wx.NORMAL_FONT))
 
+        # Message Handlers
+        ed_msg.Subscribe(self.OnUpdateFileHistory, ed_msg.EDMSG_ADD_FILE_HISTORY)
+
         # HACK: for gtk as most linux window managers manage the windows alpha
         #       and set it when its created.
         wx.CallAfter(self.InitWindowAlpha)
@@ -382,6 +385,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         evt.Skip()
 
+    def OnUpdateFileHistory(self, msg):
+        """Update filehistory menu for new files that were opened
+        @param msg: Message object (data == filename)
+
+        """
+        self.filehistory.AddFileToHistory(msg.GetData())
+
     def AddFileToHistory(self, fname):
         """Add a file to the windows file history as well as any
         other open windows history.
@@ -390,9 +400,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                all windows pull from to avoid this quick solution.
 
         """
-        for win in wx.GetApp().GetMainWindows():
-            if hasattr(win, 'filehistory'):
-                win.filehistory.AddFileToHistory(fname)
+        if _PGET('FHIST_LVL', 'int', 9) > 0:
+            ed_msg.PostMessage(ed_msg.EDMSG_ADD_FILE_HISTORY, fname)
 
     def AddMenuHandler(self, menu_id, handler):
         """Add a menu event handler to the handler stack
@@ -649,10 +658,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                     ed_mdlg.SaveErrorDlg(self, fname, err)
                     ctrl[1].GetDocument().ResetAll()
             else:
-                ret_val = self.OnSaveAs(ID_SAVEAS, ctrl[0], ctrl[1])
-                if ret_val:
-                    self._last_save = ctrl[1].GetFileName()
-                    self.AddFileToHistory(self._last_save)
+                self.OnSaveAs(ID_SAVEAS, ctrl[0], ctrl[1])
 
     def OnSaveAs(self, evt, title=u'', page=None):
         """Save File Using a new/different name
@@ -696,7 +702,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 self.nb.SetPageText(self.nb.GetSelection(), fname)
                 self.nb.GetCurrentCtrl().FindLexer()
                 self.nb.UpdatePageImage()
-            return result
+                self.AddToHistory(ctrl.GetFileName())
         else:
             dlg.Destroy()
 
