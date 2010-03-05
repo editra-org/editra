@@ -251,6 +251,10 @@ EDMSG_THEME_NOTEBOOK = EDMSG_ALL + ('nb', 'theme')
 # Signal that the font preferences for the ui have changed (msgdata == font)
 EDMSG_DSP_FONT = EDMSG_ALL + ('dfont',)
 
+# Add file to file history
+# msgdata == filename
+EDMSG_ADD_FILE_HISTORY = EDMSG_ALL + ('filehistory',)
+
 #---- End Misc Messages ----#
 
 #--------------------------------------------------------------------------#
