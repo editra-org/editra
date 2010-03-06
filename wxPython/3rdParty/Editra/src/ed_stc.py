@@ -636,8 +636,13 @@ class EditraStc(ed_basestc.EditraBaseStc):
         elif key_code in cmpl.GetAutoCompKeys():
             self.HidePopups()
 
-            command = self.GetCommandStr() + unichr(key_code)
-            self.AddText(unichr(key_code))
+            uchr = unichr(key_code)
+            command = self.GetCommandStr() + uchr
+            if not self.HasSelection():
+                self.AddText(uchr)
+            else:
+                self.ReplaceSelection(uchr)
+
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
 
@@ -652,8 +657,14 @@ class EditraStc(ed_basestc.EditraBaseStc):
         elif key_code in cmpl.GetCallTipKeys():
             if self.AutoCompActive():
                 self.AutoCompCancel()
+
             command = self.GetCommandStr()
-            self.AddText(unichr(key_code))
+            uchr = unichr(key_code)
+            if not self.HasSelection():
+                self.AddText(uchr)
+            else:
+                self.ReplaceSelection(uchr)
+
             if self._config['autocomp']:
                 self.ShowCallTip(command)
 

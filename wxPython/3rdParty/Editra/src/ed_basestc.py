@@ -252,7 +252,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def CanCopy(self):
         """Check if copy/cut is possible"""
-        return self.GetSelectionStart() != self.GetSelectionEnd()
+        return self.HasSelection()
 
     CanCut = CanCopy
 
@@ -645,6 +645,14 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         pos = max(0, pos-1)
         return 'comment' in self.FindTagById(self.GetStyleAt(pos))
+
+    def HasSelection(self):
+        """Check if there is a selection in the buffer
+        @return: bool
+
+        """
+        sel = self.GetSelection()
+        return sel[0] != sel[1]
 
     def HidePopups(self):
         """Hide autocomp/calltip popup windows if any are active"""
