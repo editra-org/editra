@@ -702,7 +702,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 self.nb.SetPageText(self.nb.GetSelection(), fname)
                 self.nb.GetCurrentCtrl().FindLexer()
                 self.nb.UpdatePageImage()
-                self.AddToHistory(ctrl.GetFileName())
+                self.AddFileToHistory(ctrl.GetFileName())
         else:
             dlg.Destroy()
 
