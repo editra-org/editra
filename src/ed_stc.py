@@ -638,10 +638,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
             uchr = unichr(key_code)
             command = self.GetCommandStr() + uchr
-            if not self.HasSelection():
-                self.AddText(uchr)
-            else:
-                self.ReplaceSelection(uchr)
+            self.PutText(uchr)
 
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
@@ -660,10 +657,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
             command = self.GetCommandStr()
             uchr = unichr(key_code)
-            if not self.HasSelection():
-                self.AddText(uchr)
-            else:
-                self.ReplaceSelection(uchr)
+            self.PutText(uchr)
 
             if self._config['autocomp']:
                 self.ShowCallTip(command)

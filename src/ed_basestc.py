@@ -769,6 +769,22 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             evt.Skip()
 
+    def PutText(self, text):
+        """Put text in the buffer. Like AddText but does the right thing
+        depending upon the input mode and buffer state.
+        @param text: string
+
+        """
+        if not self.HasSelection():
+            cpos = self.GetCurrentPos()
+            lepos = self.GetLineEndPosition(self.GetCurrentLine())
+            if self.GetOvertype() and cpos != lepos:
+                self.CharRight()
+                self.DeleteBack()
+            self.AddText(text)
+        else:
+            self.ReplaceSelection(text)
+
     def RegisterImages(self):
         """Register the images for the autocomp popup list"""
         images = [(autocomp.TYPE_FUNCTION, ed_glob.ID_FUNCT_TYPE),
