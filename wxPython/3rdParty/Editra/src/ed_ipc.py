@@ -63,7 +63,7 @@ import ebmlib
 # Globals
 
 # Port choosing algorithm ;)
-EDPORT = 10 * int('ed', 16) + sum(ord(x) for x in "itr") + int('a', 16) 
+EDPORT = (10 * int('ed', 16) + sum(ord(x) for x in "itr") + int('a', 16)) * 10
 MSGEND = u"*EDEND*"
 
 # Xml Implementation
