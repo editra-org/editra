@@ -9,12 +9,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.xx
-DATE xx/xx/20xx
+VERSION 0.5.51
+DATE 03/14/2010
 33rd Alpha Release
 
 NEWS:
 
+This release was initially going to be held until wxPython 2.8.11 was released
+but it seems to be delayed so this release will still have some minor issues
+when running on OSX 10.6.
+
+There are a number of new features in this release. The tabs in the notebooks
+can be dragged out to split the notebook into separate views so that files can
+be viewed side by side. This feature has also been extended to the Shelf window.
+There are also new versions of the CodeBrowser and Launch plugins included with
+this release. For detailed changes please review the changelog below.
 
 NEW: [features/improvements]
 +Tabs can be dragged out to split notebooks so that buffers and Shelf items
