@@ -15,6 +15,19 @@ DATE 03/14/2010
 
 NEWS:
 
+NEW: [features/improvements]
+
+BUG FIXES:
++Unsubscribe from file history messages on window deletion
+
+#-----------------------------------------------------------------------------#
+
+VERSION 0.5.51
+DATE 03/14/2010
+33rd Alpha Release
+
+NEWS:
+
 This release was initially going to be held until wxPython 2.8.11 was released
 but it seems to be delayed so this release will still have some minor issues
 when running on OSX 10.6.

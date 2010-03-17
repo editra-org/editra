@@ -312,6 +312,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     __name__ = u"MainWindow"
 
+    def __del__(self):
+        ed_msg.Unsubscribe(self.OnUpdateFileHistory)
+
     #---- End Private Member Functions/Variables ----#
 
     #---- Begin Public Member Function ----#
