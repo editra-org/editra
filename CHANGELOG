@@ -19,6 +19,7 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Unsubscribe from file history messages on window deletion
++Fix issue in handling invalid data in custom style sheets.
 
 #-----------------------------------------------------------------------------#
 
