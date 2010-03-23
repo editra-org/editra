@@ -104,6 +104,8 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         # Hide autocomp/calltips when window looses focus
         # TODO: decide on whether this belongs in base class or not
         self.Bind(wx.EVT_KILL_FOCUS, lambda evt: self.HidePopups())
+#        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        self.Bind(wx.EVT_LEFT_UP, self.OnSetFocus)
 
         ed_msg.Subscribe(self.OnConfigMsg,
                          ed_msg.EDMSG_PROFILE_CHANGE + ('SPELLCHECK',))
@@ -263,6 +265,15 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             result = result in (wx.ID_YES, wx.ID_OK, wx.ID_NO)
 
         return result
+
+    def OnSetFocus(self, evt):
+        """Make sure that the currently selected tab is this one"""
+        evt.Skip()
+        parent = self.GetParent()
+        csel = parent.GetSelection()
+        idx = self.GetTabIndex()
+        if csel != idx:
+            parent.SetSelection(idx)
 
     def OnSpelling(self, buff, evt):
         """Context menu subscriber callback
