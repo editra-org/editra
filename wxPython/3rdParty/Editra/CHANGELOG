@@ -18,8 +18,10 @@ NEWS:
 NEW: [features/improvements]
 
 BUG FIXES:
-+Unsubscribe from file history messages on window deletion
++Fix issue with tab selection events not being sent in split notebook.
++Unsubscribe from file history messages on window deletion.
 +Fix issue in handling invalid data in custom style sheets.
++Fix issue with search being incremented when control key was pressed.
 
 #-----------------------------------------------------------------------------#
 
