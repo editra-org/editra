@@ -19,6 +19,7 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Fix issue with tab selection events not being sent in split notebook.
++Fix page change notifications not being sent under certain tab close scenarios.
 +Unsubscribe from file history messages on window deletion.
 +Fix issue in handling invalid data in custom style sheets.
 +Fix issue with search being incremented when control key was pressed.

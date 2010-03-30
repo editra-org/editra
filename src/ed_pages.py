@@ -41,7 +41,7 @@ from extern import aui
 #--------------------------------------------------------------------------#
 # Globals
 ID_IDLE_TIMER = wx.NewId()
-
+SIMULATED_EVT_ID = -1
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
 
@@ -132,6 +132,7 @@ class EdPages(aui.AuiNotebook):
         ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
 
     #---- Function Definitions ----#
+    
     def _HandleEncodingError(self, control):
         """Handle trying to reload the file the file with a different encoding
         Until it suceeds or gives up.
@@ -184,7 +185,7 @@ class EdPages(aui.AuiNotebook):
                 if ok:
                     return True
                 else:
-                    # Artifically add a short pause, because if its not there
+                    # Artificially add a short pause, because if its not there
                     # the dialog will be shown again so fast it wont seem
                     # like reloading the file was even tried.
                     wx.Sleep(1)
@@ -398,13 +399,16 @@ class EdPages(aui.AuiNotebook):
         @postcondition: a new page with an untitled document is opened
 
         """
-        self.Freeze()
-        self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
-        self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
-        self.control.Hide()
-        self.AddPage(self.control)
-        self.control.Show()
-        self.Thaw()
+        frame = self.GetTopLevelParent()
+        frame.Freeze()
+        try:
+            self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
+            self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
+            self.control.Hide()
+            self.AddPage(self.control)
+            self.control.Show()
+        finally:
+            frame.Thaw()
 
         # Set the control up the the preferred default lexer
         dlexer = Profile_Get('DEFAULT_LEX', 'str', 'Plain Text')
@@ -1069,17 +1073,17 @@ class EdPages(aui.AuiNotebook):
         @type evt: aui.EVT_AUINOTEBOOK_PAGE_CLOSE
 
         """
-        if self.CanClosePage():
-            self.LOG("[ed_pages][evt] Closing Page: #%d" % self.GetSelection())
+        page = self.GetPage(evt.GetSelection())
+        if page and page.CanCloseTab():
+            sel = self.GetSelection()
+            self.LOG("[ed_pages][evt] Closing Page: #%d" % sel)
 
             # Call the tab specific close handler
-            page = self.GetCurrentPage()
-            if page is not None:
-                page.DoTabClosing()
+            page.DoTabClosing()
 
             evt.Skip()
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSING,
-                               (self, self.GetSelection()),
+                               (self, sel),
                                context=self.frame.GetId())
         else:
             evt.Veto()
@@ -1092,20 +1096,50 @@ class EdPages(aui.AuiNotebook):
         """
         frame = self.GetTopLevelParent()
         frame.Freeze()
-        cpage = self.GetSelection()
-        evt.Skip()
-        self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
-        self.UpdateIndexes()
-        ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED,
-                           (self, cpage),
-                           context=self.frame.GetId())
+        try:
+            cpage = evt.GetSelection() #self.GetSelection()
+            evt.Skip()
+            self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
+            self.UpdateIndexes()
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED,
+                               (self, cpage),
+                               context=self.frame.GetId())
 
-        if not self.GetPageCount() and \
-           hasattr(frame, 'IsExiting') and not frame.IsExiting():
-            self.NewPage()
-        frame.Thaw()
+            if not self.GetPageCount() and \
+               hasattr(frame, 'IsExiting') and not frame.IsExiting():
+                self.NewPage()
+        finally:
+            frame.Thaw()
 
     #---- End Event Handlers ----#
+
+    def _ClosePageNum(self, idx, deletepg=True):
+        """Close the given page
+        @param idx: int
+        @keyword deletepg: bool (Internal Use Only!)
+        @return bool: was page deleted?
+
+        """
+        frame = self.GetTopLevelParent()
+
+        frame.Freeze()
+        try:
+            page = self.GetPage(idx)
+            result = page.CanCloseTab()
+
+            if result and deletepg:
+                evt = aui.AuiNotebookEvent(aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE,
+                                           SIMULATED_EVT_ID)
+                self.OnPageClosing(evt)
+                self.DeletePage(idx)
+                evt = aui.AuiNotebookEvent(aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED,
+                                           SIMULATED_EVT_ID)
+                evt.SetSelection(idx)
+                self.OnPageClosed(evt)
+        finally:
+            frame.Thaw()
+
+        return result
 
     def CloseAllPages(self):
         """Closes all open pages"""
@@ -1129,34 +1163,16 @@ class EdPages(aui.AuiNotebook):
             to_del.sort()
             to_del.reverse()
             for pnum in to_del:
-                self.DeletePage(pnum)
+                self._ClosePageNum(pnum)
 
     def ClosePage(self, deletepg=True):
-        """Closes Currently Selected Page
+        """Closes currently selected page
         @keyword deletepg: bool (actually delete the page) internal use only
         @return: bool
 
         """
-        frame = self.GetTopLevelParent()
-
-        frame.Freeze()
-        result = self.CanClosePage()
-        pg_num = self.GetSelection()
-
-        if result and deletepg:
-            page = self.GetPage(pg_num)
-            page.DoTabClosing()
-            self.DeletePage(pg_num)
-            self.GoCurrentPage()
-
-        # Calling DeletePage doesn't cause a PageClosed event to fire
-        # So need to handle this here.
-        if not self.GetPageCount() and \
-           hasattr(frame, 'IsExiting') and not frame.IsExiting():
-            self.NewPage()
-
-        frame.Thaw()
-
+        pnum = self.GetSelection()
+        result = self._ClosePageNum(pnum, deletepg)
         return result
 
     def CanClosePage(self):
