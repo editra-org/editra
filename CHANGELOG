@@ -9,9 +9,9 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.51
-DATE 03/14/2010
-33rd Alpha Release
+VERSION 0.5.xx
+DATE 0x/xx/2010
+34th Alpha Release
 
 NEWS:
 
@@ -24,6 +24,7 @@ BUG FIXES:
 +Fix issue in handling invalid data in custom style sheets.
 +Fix issue with search being incremented when control key was pressed.
 +Fix crash that could occur when iterating syntax globals during startup.
++Fix issue with portable profiles not loading when install directory path changes.
 
 #-----------------------------------------------------------------------------#
 
