@@ -432,13 +432,17 @@ class EdPages(aui.AuiNotebook):
         @param evt: wx.MenuEvent
 
         """
-        ctab = self.GetCurrentPage()
-        handler = self._menu.GetHandler(evt.GetId())
-        if handler is not None:
-            handler(ctab, evt)
-        elif ctab is not None:
-            ctab.OnTabMenu(evt)
+        if self._menu is not None:
+            ctab = self.GetCurrentPage()
+            handler = self._menu.GetHandler(evt.GetId())
+            if handler is not None:
+                handler(ctab, evt)
+            elif ctab is not None:
+                ctab.OnTabMenu(evt)
+            else:
+                evt.Skip()
         else:
+            self.LOG("[ed_pages][warn] OnMenu: Menu is None!")
             evt.Skip()
 
     def OnDocPointerRequest(self, args):

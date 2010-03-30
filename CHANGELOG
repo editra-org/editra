@@ -25,6 +25,7 @@ BUG FIXES:
 +Fix issue with search being incremented when control key was pressed.
 +Fix crash that could occur when iterating syntax globals during startup.
 +Fix issue with portable profiles not loading when install directory path changes.
++Fix crash that could occur when tab menu handler is called with no context manager.
 
 #-----------------------------------------------------------------------------#
 
