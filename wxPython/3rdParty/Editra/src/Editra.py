@@ -708,6 +708,7 @@ def InitConfig():
         ed_glob.CONFIG['CONFIG_BASE'] = config_base
         ed_glob.CONFIG['PROFILE_DIR'] = os.path.join(config_base, u"profiles")
         ed_glob.CONFIG['PROFILE_DIR'] += os.sep
+        ed_glob.CONFIG['ISLOCAL'] = True
     else:
         config_base = wx.StandardPaths.Get().GetUserDataDir()
         ed_glob.CONFIG['PROFILE_DIR'] = util.ResolvConfigDir(u"profiles")
@@ -718,6 +719,10 @@ def InitConfig():
     if util.HasConfigDir() and os.path.exists(ed_glob.CONFIG['PROFILE_DIR']):
         if profiler.ProfileIsCurrent():
             pstr = profiler.GetProfileStr()
+            # If using local(portable) config the profile string is stored
+            # as a relative path that just names the config file.
+            if ed_glob.CONFIG['ISLOCAL']:
+                pstr = os.path.join(ed_glob.CONFIG['PROFILE_DIR'], pstr)
             pstr = util.RepairConfigState(pstr)
             profiler.TheProfile.Load(pstr)
         else:
@@ -756,7 +761,7 @@ def InitConfig():
             if isinstance(profiler.Profile_Get('PRINT_MODE'), basestring):
                 profiler.Profile_Set('PRINT_MODE', ed_glob.PRINT_BLACK_WHITE)
 
-            # Simplifications to eol mode persistance (0.4.28)
+            # Simplifications to eol mode persistence (0.4.28)
             # Keep for now till plugins are updated
             #profiler.Profile_Del('EOL') # changed to EOL_MODE
 

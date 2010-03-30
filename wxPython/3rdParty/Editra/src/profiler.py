@@ -482,6 +482,10 @@ def UpdateProfileLoader():
                                  os.path.basename(prof_name))
         Profile_Set('MYPROFILE', prof_name)
 
+    # Use just the relative profile name for local(portable) config paths
+    if CONFIG['ISLOCAL']:
+        prof_name = os.path.basename(prof_name)
+
     writer.write(prof_name)
     writer.write(u"\nVERSION\t" + VERSION)
     writer.close()

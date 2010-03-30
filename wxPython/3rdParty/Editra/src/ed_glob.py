@@ -66,6 +66,7 @@ import wxcompat
 #---- Configuration Locations ----#
 # Values set when main loads
 CONFIG = {
+          'ISLOCAL'     : False, # Using local config (no abs path)
           'CONFIG_BASE' : None, # Set if config base is in nonstandard location
           'INSTALL_DIR' : "",   # Instal directory
           'CONFIG_DIR'  : "",   # Root configration directory
