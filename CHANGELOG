@@ -22,6 +22,7 @@ BUG FIXES:
 +Unsubscribe from file history messages on window deletion.
 +Fix issue in handling invalid data in custom style sheets.
 +Fix issue with search being incremented when control key was pressed.
++Fix crash that could occur when iterating syntax globals during startup.
 
 #-----------------------------------------------------------------------------#
 
