@@ -16,6 +16,7 @@ DATE 0x/xx/2010
 NEWS:
 
 NEW: [features/improvements]
++Improvements to Verilog and SysVerilog highlighting (patch from akhailtash)
 
 BUG FIXES:
 +Fix issue with tab selection events not being sent in split notebook.
