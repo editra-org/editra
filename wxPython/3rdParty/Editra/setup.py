@@ -232,7 +232,7 @@ INCLUDES = ['syntax.*', 'ed_log', 'shutil', 'subprocess', 'zipfile',
             'pygments.filters.*', 'pygments.styles.*', 'ftplib',
             'extern.flatnotebook'] # temporary till all references can be removed
 if sys.platform.startswith('win'):
-    INCLUDES.extend(['ctypes'])
+    INCLUDES.extend(['ctypes', 'ctypes.wintypes'])
 else:
     INCLUDES.extend(['pty', 'tty'])
 
