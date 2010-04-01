@@ -284,12 +284,3 @@ class ChoicePanel(wx.Panel):
         self._selidx = self._choices.GetSelection()
 
 #--------------------------------------------------------------------------#
-
-# Test
-if __name__ == '__main__':
-    app = wx.App(False)
-    dlg = ChoiceDialog(None, msg="Choose an letter",
-                       title="letters", choices=['a', 'b', 'c', 'd'],
-                       default="c", style=wx.OK|wx.CANCEL|wx.ICON_WARNING)
-    dlg.ShowModal()
-    print dlg, dlg.GetSelection()
