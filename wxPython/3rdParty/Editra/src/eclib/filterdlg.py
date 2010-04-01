@@ -60,6 +60,8 @@ class FilterPanel(wx.Panel):
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateButton, id=wx.ID_ADD)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateButton, id=wx.ID_REMOVE)
         
     def __DoLayout(self):
         """Layout the panel"""
@@ -163,14 +165,15 @@ class FilterPanel(wx.Panel):
         else:
             evt.Skip()
 
-#-----------------------------------------------------------------------------#
-if __name__ == '__main__':
-    app = wx.App(False)
-    dlg = FilterDialog(None, style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
-    dlg.SetListValues(dict(apple=True, orange=False,
-                           banana=False, peach=False,
-                           mango=True, strawberry=False))
-    dlg.ShowModal()
-    dlg.Destroy()
-    app.MainLoop()
+    def OnUpdateButton(self, evt):
+        """Enable/Disable the Add/Remove buttons based on
+        selections in the list.
 
+        """
+        e_id = evt.GetId()
+        if e_id == wx.ID_ADD:
+            evt.Enable(len(self._left.GetSelections()))
+        elif e_id == wx.ID_REMOVE:
+            evt.Enable(len(self._right.GetSelections()))
+        else:
+            evt.Skip()
