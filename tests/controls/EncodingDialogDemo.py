@@ -1,13 +1,13 @@
 ###############################################################################
-# Name: ChoiceDialogDemo.py                                                   #
-# Purpose: Test and demo file for eclib.ChoiceDialog                          #
+# Name: EncodingDialogDemo.py                                                 #
+# Purpose: Test and demo file for eclib.EncodingDialog                        #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2010 Cody Precord <staff@editra.org>                         #
 # Licence: wxWindows Licence                                                  #
 ###############################################################################
 
 """
-Test file for testing the ChoiceDialog.
+Test file for testing the EncodingDialog.
 
 """
 
@@ -34,8 +34,7 @@ class TestPanel(wx.Panel):
         wx.Panel.__init__(self, parent, wx.ID_ANY, size=(500,500))
 
         # Attributes
-        self.chLetter = wx.Button(self, label="Choose a Letter")
-        self.chNumber = wx.Button(self, label="Choose a Number")
+        self.btnDlg = wx.Button(self, label="Show Encoding Dialog")
         self.log = log
 
         # Layout
@@ -47,29 +46,21 @@ class TestPanel(wx.Panel):
     def __DoLayout(self):
         """Layout the panel"""
         vsizer = wx.BoxSizer(wx.VERTICAL)
-        vsizer.Add(self.chLetter, 0, wx.ALIGN_CENTER|wx.TOP, 20)
-        vsizer.Add(self.chNumber, 0, wx.ALIGN_CENTER|wx.TOP, 20)
+        vsizer.Add(self.btnDlg, 0, wx.ALIGN_CENTER|wx.TOP, 20)
         self.SetSizer(vsizer)
 
     def OnShowDialogBtn(self, evt):
         """Show one of the test dialogs"""
         e_obj = evt.GetEventObject()
-        dlg = None
-        
-        if e_obj == self.chLetter:
-            l = "abcdefghijklmnopqrstuvwxyz"
-            dlg = eclib.ChoiceDialog(None, msg="Choose an letter",
-                       title="Letter Dialog", choices=list(l),
-                       default="m", style=wx.OK|wx.CANCEL|wx.ICON_WARNING)
-        elif e_obj == self.chNumber:
-            dlg = eclib.ChoiceDialog(None, msg="Choose an number",
-                       title="Number Dialog", choices=map(unicode, range(20)),
-                       default="3", style=wx.OK|wx.CANCEL|wx.ICON_WARNING)
-
-        if dlg is not None:
-            dlg.SetBitmap(IconFile.Monkey.GetBitmap())
+        if e_obj == self.btnDlg:
+            dlg = eclib.EncodingDialog(self, msg="Select an encoding",
+                                       title="Encoding Dialog",
+                                       elist=eclib.GetAllEncodings(),
+                                       default="utf-8")
+            dlg.SetBitmap(IconFile.Home.GetBitmap())
             if dlg.ShowModal() == wx.ID_OK:
-                self.log.write("Got Value: %s" % dlg.GetStringSelection())
+                enc = dlg.GetEncoding()
+                self.log.write("Got Encoding: %s" % enc)
             dlg.Destroy()
 
 #----------------------------------------------------------------------
@@ -87,8 +78,8 @@ class TestLog:
 
 #----------------------------------------------------------------------
 
-overview = eclib.choicedlg.__doc__
-title = "ChoiceDialog"
+overview = eclib.encdlg.__doc__
+title = "EncodingDialog"
 
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
@@ -96,7 +87,7 @@ if __name__ == '__main__':
         import run
     except ImportError:
         app = wx.PySimpleApp(False)
-        frame = wx.Frame(None, title="ChoiceDialog Demo")
+        frame = wx.Frame(None, title="EncodingDialog Demo")
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(TestPanel(frame, TestLog()), 1, wx.EXPAND)
         frame.CreateStatusBar()
