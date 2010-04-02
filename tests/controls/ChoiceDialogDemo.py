@@ -41,7 +41,7 @@ class TestPanel(wx.Panel):
         # Layout
         self.__DoLayout()
 
-        # Event Handers
+        # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnShowDialogBtn)
 
     def __DoLayout(self):
@@ -68,6 +68,7 @@ class TestPanel(wx.Panel):
 
         if dlg is not None:
             dlg.SetBitmap(IconFile.Monkey.GetBitmap())
+            dlg.CenterOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 self.log.write("Got Value: %s" % dlg.GetStringSelection())
             dlg.Destroy()

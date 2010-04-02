@@ -40,7 +40,7 @@ class TestPanel(wx.Panel):
         # Layout
         self.__DoLayout()
 
-        # Event Handers
+        # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnShowDialogBtn)
 
     def __DoLayout(self):
@@ -63,6 +63,7 @@ class TestPanel(wx.Panel):
                            banana=False, peach=False,
                            mango=True, strawberry=False)
             dlg.SetListValues(values)
+            dlg.CenterOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 includes = dlg.GetIncludes()
                 excludes = dlg.GetExcludes()

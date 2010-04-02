@@ -40,7 +40,7 @@ class TestPanel(wx.Panel):
         # Layout
         self.__DoLayout()
 
-        # Event Handers
+        # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnShowDialogBtn)
 
     def __DoLayout(self):
@@ -58,6 +58,7 @@ class TestPanel(wx.Panel):
                                        elist=eclib.GetAllEncodings(),
                                        default="utf-8")
             dlg.SetBitmap(IconFile.Home.GetBitmap())
+            dlg.CenterOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 enc = dlg.GetEncoding()
                 self.log.write("Got Encoding: %s" % enc)
