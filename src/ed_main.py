@@ -393,7 +393,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param msg: Message object (data == filename)
 
         """
-        self.filehistory.AddFileToHistory(msg.GetData())
+        try:
+            self.filehistory.AddFileToHistory(msg.GetData())
+        except wx.PyAssertionError:
+            # ignore errors that wxMac sometimes raises about unicode data
+            pass
 
     def AddFileToHistory(self, fname):
         """Add a file to the windows file history as well as any
