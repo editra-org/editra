@@ -53,7 +53,9 @@ class TestPanel(wx.Panel):
         """Show one of the test dialogs"""
         e_obj = evt.GetEventObject()
         if e_obj == self.btnDlg:
-            dlg = eclib.FilterDialog(self, title="Filter Some Fruit")
+            dlg = eclib.FilterDialog(self, title="Filter Some Fruit",
+                                     style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
+            dlg.SetInitialSize()
             # Dialog is populated using a map of string to bool values
             # False means put in the not included list
             # True means put in the includes list
