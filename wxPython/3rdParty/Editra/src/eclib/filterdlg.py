@@ -53,8 +53,8 @@ class FilterPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         # Attributes
-        self._left  = wx.ListBox(self, style=wx.LB_MULTIPLE|wx.LB_SORT)
-        self._right = wx.ListBox(self, style=wx.LB_MULTIPLE)
+        self._left  = wx.ListBox(self, style=wx.LB_EXTENDED|wx.LB_SORT)
+        self._right = wx.ListBox(self, style=wx.LB_EXTENDED)
 
         self.__DoLayout()
 
