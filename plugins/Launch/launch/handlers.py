@@ -1041,7 +1041,7 @@ def _FindFileLine(outbuffer, line, fname, regex):
 
     # If not an absolute path then the error is relative to the
     # script that produced this error message.
-    if not os.path.isabs(ifile):
+    if ifile is not None and not os.path.isabs(ifile):
         dname = os.path.split(fname)[0]
         ifile = os.path.join(dname, ifile)
 
