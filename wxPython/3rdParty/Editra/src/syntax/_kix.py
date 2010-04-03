@@ -65,17 +65,17 @@ MACROS = (2, "address build color comment cpu crlf csd curdir date day domain "
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_KIX_COMMENT', 'comment_style'),
-                ('STC_KIX_DEFAULT', 'default_style'),
-                ('STC_KIX_FUNCTIONS', 'funct_style'),
-                ('STC_KIX_IDENTIFIER', 'default_style'),
-                ('STC_KIX_KEYWORD', 'keyword_style'),
-                ('STC_KIX_MACRO', 'pre_style'),
-                ('STC_KIX_NUMBER', 'number_style'),
-                ('STC_KIX_OPERATOR', 'operator_style'),
-                ('STC_KIX_STRING1', 'char_style'),
-                ('STC_KIX_STRING2', 'string_style'),
-                ('STC_KIX_VAR', 'scalar_style')]
+SYNTAX_ITEMS = [(stc.STC_KIX_COMMENT, 'comment_style'),
+                (stc.STC_KIX_DEFAULT, 'default_style'),
+                (stc.STC_KIX_FUNCTIONS, 'funct_style'),
+                (stc.STC_KIX_IDENTIFIER, 'default_style'),
+                (stc.STC_KIX_KEYWORD, 'keyword_style'),
+                (stc.STC_KIX_MACRO, 'pre_style'),
+                (stc.STC_KIX_NUMBER, 'number_style'),
+                (stc.STC_KIX_OPERATOR, 'operator_style'),
+                (stc.STC_KIX_STRING1, 'char_style'),
+                (stc.STC_KIX_STRING2, 'string_style'),
+                (stc.STC_KIX_VAR, 'scalar_style')]
 
 #-----------------------------------------------------------------------------#
 

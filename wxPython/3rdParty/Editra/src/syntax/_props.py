@@ -29,12 +29,12 @@ import syndata
 #-----------------------------------------------------------------------------#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_PROPS_ASSIGNMENT', 'operator_style'),
-                ('STC_PROPS_COMMENT', 'comment_style'),
-                ('STC_PROPS_DEFAULT', 'default_style'),
-                ('STC_PROPS_DEFVAL', 'string_style'),
-                ('STC_PROPS_KEY', 'scalar_style'),
-                ('STC_PROPS_SECTION', 'keyword_style')]
+SYNTAX_ITEMS = [(stc.STC_PROPS_ASSIGNMENT, 'operator_style'),
+                (stc.STC_PROPS_COMMENT,   'comment_style'),
+                (stc.STC_PROPS_DEFAULT,   'default_style'),
+                (stc.STC_PROPS_DEFVAL,    'string_style'),
+                (stc.STC_PROPS_KEY,       'scalar_style'),
+                (stc.STC_PROPS_SECTION,   'keyword_style')]
 
 #---- Extra Properties ----#
 FOLD = ('fold', '1')

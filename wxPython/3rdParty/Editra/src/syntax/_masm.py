@@ -156,21 +156,21 @@ MASM_EXT_INST = (5, "addpd addps addsd addss andpd andps andnpd andnps cmpeqpd "
                     "ucomiss unpckhpd unpckhps unpcklpd unpcklps xorpd xorps")
 
 #---- Language Styling Specs ----#
-SYNTAX_ITEMS = [ ('STC_ASM_DEFAULT', 'default_style'),
-                 ('STC_ASM_CHARACTER', 'char_style'),
-                 ('STC_ASM_COMMENT', 'comment_style'),
-                 ('STC_ASM_COMMENTBLOCK', 'comment_style'),
-                 ('STC_ASM_CPUINSTRUCTION', 'keyword_style'),
-                 ('STC_ASM_DIRECTIVE', 'keyword3_style'),
-                 ('STC_ASM_DIRECTIVEOPERAND', 'keyword4_style'),
-                 ('STC_ASM_EXTINSTRUCTION', 'funct_style'),
-                 ('STC_ASM_IDENTIFIER', 'default_style'),
-                 ('STC_ASM_MATHINSTRUCTION', 'keyword_style'),
-                 ('STC_ASM_NUMBER', 'number_style'),
-                 ('STC_ASM_OPERATOR', 'operator_style'),
-                 ('STC_ASM_REGISTER', 'keyword2_style'),
-                 ('STC_ASM_STRING', 'string_style'),
-                 ('STC_ASM_STRINGEOL', 'stringeol_style') ]
+SYNTAX_ITEMS = [ (stc.STC_ASM_DEFAULT, 'default_style'),
+                 (stc.STC_ASM_CHARACTER, 'char_style'),
+                 (stc.STC_ASM_COMMENT, 'comment_style'),
+                 (stc.STC_ASM_COMMENTBLOCK, 'comment_style'),
+                 (stc.STC_ASM_CPUINSTRUCTION, 'keyword_style'),
+                 (stc.STC_ASM_DIRECTIVE, 'keyword3_style'),
+                 (stc.STC_ASM_DIRECTIVEOPERAND, 'keyword4_style'),
+                 (stc.STC_ASM_EXTINSTRUCTION, 'funct_style'),
+                 (stc.STC_ASM_IDENTIFIER, 'default_style'),
+                 (stc.STC_ASM_MATHINSTRUCTION, 'keyword_style'),
+                 (stc.STC_ASM_NUMBER, 'number_style'),
+                 (stc.STC_ASM_OPERATOR, 'operator_style'),
+                 (stc.STC_ASM_REGISTER, 'keyword2_style'),
+                 (stc.STC_ASM_STRING, 'string_style'),
+                 (stc.STC_ASM_STRINGEOL, 'stringeol_style') ]
 
 #-----------------------------------------------------------------------------#
 

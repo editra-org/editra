@@ -81,23 +81,23 @@ CSS2_KEYWORDS = (2, "src stemv stemh slope ascent descent widths bbox baseline "
                     "digits continuous separate show hide once ")
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [ ('STC_CSS_DEFAULT', 'default_style'),
-                 ('STC_CSS_ATTRIBUTE', 'funct_style'),
-                 ('STC_CSS_CLASS', 'global_style'),
-                 ('STC_CSS_COMMENT', 'comment_style'),
-                 ('STC_CSS_DIRECTIVE', 'directive_style'),
-                 ('STC_CSS_DOUBLESTRING', 'string_style'),
-                 ('STC_CSS_ID', 'scalar_style'),
-                 ('STC_CSS_IDENTIFIER', 'keyword_style'),
-                 ('STC_CSS_IDENTIFIER2', 'keyword3_style'),
-                 ('STC_CSS_IMPORTANT', 'error_style'),
-                 ('STC_CSS_OPERATOR', 'operator_style'),
-                 ('STC_CSS_PSEUDOCLASS', 'scalar_style'),
-                 ('STC_CSS_SINGLESTRING', 'string_style'),
-                 ('STC_CSS_TAG', 'keyword_style'),
-                 ('STC_CSS_UNKNOWN_IDENTIFIER', 'unknown_style'),
-                 ('STC_CSS_UNKNOWN_PSEUDOCLASS', 'unknown_style'),
-                 ('STC_CSS_VALUE', 'char_style') ]
+SYNTAX_ITEMS = [ (stc.STC_CSS_DEFAULT, 'default_style'),
+                 (stc.STC_CSS_ATTRIBUTE, 'funct_style'),
+                 (stc.STC_CSS_CLASS, 'global_style'),
+                 (stc.STC_CSS_COMMENT, 'comment_style'),
+                 (stc.STC_CSS_DIRECTIVE, 'directive_style'),
+                 (stc.STC_CSS_DOUBLESTRING, 'string_style'),
+                 (stc.STC_CSS_ID, 'scalar_style'),
+                 (stc.STC_CSS_IDENTIFIER, 'keyword_style'),
+                 (stc.STC_CSS_IDENTIFIER2, 'keyword3_style'),
+                 (stc.STC_CSS_IMPORTANT, 'error_style'),
+                 (stc.STC_CSS_OPERATOR, 'operator_style'),
+                 (stc.STC_CSS_PSEUDOCLASS, 'scalar_style'),
+                 (stc.STC_CSS_SINGLESTRING, 'string_style'),
+                 (stc.STC_CSS_TAG, 'keyword_style'),
+                 (stc.STC_CSS_UNKNOWN_IDENTIFIER, 'unknown_style'),
+                 (stc.STC_CSS_UNKNOWN_PSEUDOCLASS, 'unknown_style'),
+                 (stc.STC_CSS_VALUE, 'char_style') ]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")

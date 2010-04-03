@@ -48,7 +48,7 @@ class SyntaxDataBase(object):
 
     @property
     def LangId(self):
-        return self._langid
+        return self.GetLangId()
 
     @property
     def Lexer(self):
@@ -86,6 +86,13 @@ class SyntaxDataBase(object):
 
         """
         return list()
+
+    def GetLangId(self):
+        """Get the language id
+        @return: int
+
+        """
+        return self._langid
 
     def GetLexer(self):
         """Get the lexer id

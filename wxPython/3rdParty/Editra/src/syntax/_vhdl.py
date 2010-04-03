@@ -79,21 +79,21 @@ VHDL_STDT = (5, "bit bit_vector character boolean integer real time string "
 VHDL_UKW = (6, "")
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [ ('STC_VHDL_DEFAULT', 'default_style'),
-                 ('STC_VHDL_ATTRIBUTE', 'default_style'), # NEEDS STYLE
-                 ('STC_VHDL_COMMENT', 'comment_style'),
-                 ('STC_VHDL_COMMENTLINEBANG', 'comment_style'),
-                 ('STC_VHDL_IDENTIFIER', 'default_style'),
-                 ('STC_VHDL_KEYWORD', 'keyword_style'),
-                 ('STC_VHDL_NUMBER', 'default_style'),
-                 ('STC_VHDL_OPERATOR', 'operator_style'),
-                 ('STC_VHDL_STDFUNCTION', 'funct_style'),
-                 ('STC_VHDL_STDOPERATOR', 'operator_style'),
-                 ('STC_VHDL_STDPACKAGE', 'pre_style'),
-                 ('STC_VHDL_STDTYPE', 'class_style'),
-                 ('STC_VHDL_STRING', 'string_style'),
-                 ('STC_VHDL_STRINGEOL', 'stringeol_style'),
-                 ('STC_VHDL_USERWORD', 'default_style') ]
+SYNTAX_ITEMS = [ (stc.STC_VHDL_DEFAULT, 'default_style'),
+                 (stc.STC_VHDL_ATTRIBUTE, 'default_style'), # NEEDS STYLE
+                 (stc.STC_VHDL_COMMENT, 'comment_style'),
+                 (stc.STC_VHDL_COMMENTLINEBANG, 'comment_style'),
+                 (stc.STC_VHDL_IDENTIFIER, 'default_style'),
+                 (stc.STC_VHDL_KEYWORD, 'keyword_style'),
+                 (stc.STC_VHDL_NUMBER, 'default_style'),
+                 (stc.STC_VHDL_OPERATOR, 'operator_style'),
+                 (stc.STC_VHDL_STDFUNCTION, 'funct_style'),
+                 (stc.STC_VHDL_STDOPERATOR, 'operator_style'),
+                 (stc.STC_VHDL_STDPACKAGE, 'pre_style'),
+                 (stc.STC_VHDL_STDTYPE, 'class_style'),
+                 (stc.STC_VHDL_STRING, 'string_style'),
+                 (stc.STC_VHDL_STRINGEOL, 'stringeol_style'),
+                 (stc.STC_VHDL_USERWORD, 'default_style') ]
 
 #---- Extra Property Specifications ----#
 FOLD = ("fold", "1")

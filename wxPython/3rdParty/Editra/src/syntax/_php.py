@@ -388,17 +388,17 @@ PHP_FUNC = ("__construct __autoload __destruct __get __set __isset __unset "
             "mcrypt_module_get_algo_block_size imagepsslantfont count ")
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [ ('STC_HPHP_DEFAULT', 'default_style'),
-                 ('STC_HPHP_COMMENT', 'comment_style'),
-                 ('STC_HPHP_COMMENTLINE', 'comment_style'),
-                 ('STC_HPHP_COMPLEX_VARIABLE', 'pre_style'), #STYLE ME
-                 ('STC_HPHP_HSTRING', 'string_style'),
-                 ('STC_HPHP_HSTRING_VARIABLE', 'scalar_style'), # STYLE ME
-                 ('STC_HPHP_NUMBER', 'number_style'),
-                 ('STC_HPHP_OPERATOR', 'operator_style'),
-                 ('STC_HPHP_SIMPLESTRING', 'string_style'),
-                 ('STC_HPHP_VARIABLE', 'pre2_style'),
-                 ('STC_HPHP_WORD', 'keyword_style') ]
+SYNTAX_ITEMS = [ (stc.STC_HPHP_DEFAULT,      'default_style'),
+                 (stc.STC_HPHP_COMMENT,      'comment_style'),
+                 (stc.STC_HPHP_COMMENTLINE,  'comment_style'),
+                 (stc.STC_HPHP_COMPLEX_VARIABLE, 'pre_style'), #STYLE ME
+                 (stc.STC_HPHP_HSTRING,      'string_style'),
+                 (stc.STC_HPHP_HSTRING_VARIABLE, 'scalar_style'), # STYLE ME
+                 (stc.STC_HPHP_NUMBER,       'number_style'),
+                 (stc.STC_HPHP_OPERATOR,     'operator_style'),
+                 (stc.STC_HPHP_SIMPLESTRING, 'string_style'),
+                 (stc.STC_HPHP_VARIABLE,     'pre2_style'),
+                 (stc.STC_HPHP_WORD,         'keyword_style') ]
 
 #------------------------------------------------------------------------------#
 

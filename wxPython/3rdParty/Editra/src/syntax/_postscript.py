@@ -123,22 +123,22 @@ RIP_OP = (3, ".begintransparencygroup .begintransparencymask .bytestring "
 USER_DEF = (4, "")
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [ ('STC_PS_DEFAULT', 'default_style'),
-                 ('STC_PS_BADSTRINGCHAR', 'unknown_style'),
-                 ('STC_PS_BASE85STRING', 'string_style'),
-                 ('STC_PS_COMMENT', 'comment_style'),
-                 ('STC_PS_DSC_COMMENT', 'comment_style'),
-                 ('STC_PS_DSC_VALUE', 'comment_style'), # STYLE ME
-                 ('STC_PS_HEXSTRING', 'number_style'),
-                 ('STC_PS_IMMEVAL', 'comment_style'), # STYLE ME
-                 ('STC_PS_KEYWORD', 'class_style'),
-                 ('STC_PS_LITERAL', 'scalar2_style'),
-                 ('STC_PS_NAME', 'keyword_style'),
-                 ('STC_PS_NUMBER', 'number_style'),
-                 ('STC_PS_PAREN_ARRAY', 'default_style'), # STYLE ME
-                 ('STC_PS_PAREN_DICT', 'default_style'), # STYLE ME
-                 ('STC_PS_PAREN_PROC', 'default_style'), # STYLE ME
-                 ('STC_PS_TEXT', 'default_style') ]
+SYNTAX_ITEMS = [ (stc.STC_PS_DEFAULT, 'default_style'),
+                 (stc.STC_PS_BADSTRINGCHAR, 'unknown_style'),
+                 (stc.STC_PS_BASE85STRING, 'string_style'),
+                 (stc.STC_PS_COMMENT, 'comment_style'),
+                 (stc.STC_PS_DSC_COMMENT, 'comment_style'),
+                 (stc.STC_PS_DSC_VALUE, 'comment_style'), # STYLE ME
+                 (stc.STC_PS_HEXSTRING, 'number_style'),
+                 (stc.STC_PS_IMMEVAL, 'comment_style'), # STYLE ME
+                 (stc.STC_PS_KEYWORD, 'class_style'),
+                 (stc.STC_PS_LITERAL, 'scalar2_style'),
+                 (stc.STC_PS_NAME, 'keyword_style'),
+                 (stc.STC_PS_NUMBER, 'number_style'),
+                 (stc.STC_PS_PAREN_ARRAY, 'default_style'), # STYLE ME
+                 (stc.STC_PS_PAREN_DICT, 'default_style'), # STYLE ME
+                 (stc.STC_PS_PAREN_PROC, 'default_style'), # STYLE ME
+                 (stc.STC_PS_TEXT, 'default_style') ]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")

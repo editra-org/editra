@@ -53,22 +53,22 @@ BUILTINS = list(set(BUILTINS))
 PY_BIN = (1, u" ".join(sorted(BUILTINS)))
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [ ('STC_P_DEFAULT', 'default_style'),
-                 ('STC_P_CHARACTER', 'char_style'),
-                 ('STC_P_CLASSNAME', 'class_style'),
-                 ('STC_P_COMMENTBLOCK', 'comment_style'),
-                 ('STC_P_COMMENTLINE', 'comment_style'),
-                 ('STC_P_DECORATOR', 'decor_style'),
-                 ('STC_P_DEFNAME', 'keyword3_style'),
-                 ('STC_P_IDENTIFIER', 'default_style'),
-                 ('STC_P_NUMBER', 'number_style'),
-                 ('STC_P_OPERATOR', 'operator_style'),
-                 ('STC_P_STRING', 'string_style'),
-                 ('STC_P_STRINGEOL', 'stringeol_style'),
-                 ('STC_P_TRIPLE', 'string_style'),
-                 ('STC_P_TRIPLEDOUBLE', 'string_style'),
-                 ('STC_P_WORD', 'keyword_style'),
-                 ('STC_P_WORD2', 'userkw_style')]
+SYNTAX_ITEMS = [ (stc.STC_P_DEFAULT, 'default_style'),
+                 (stc.STC_P_CHARACTER, 'char_style'),
+                 (stc.STC_P_CLASSNAME, 'class_style'),
+                 (stc.STC_P_COMMENTBLOCK, 'comment_style'),
+                 (stc.STC_P_COMMENTLINE, 'comment_style'),
+                 (stc.STC_P_DECORATOR, 'decor_style'),
+                 (stc.STC_P_DEFNAME, 'keyword3_style'),
+                 (stc.STC_P_IDENTIFIER, 'default_style'),
+                 (stc.STC_P_NUMBER, 'number_style'),
+                 (stc.STC_P_OPERATOR, 'operator_style'),
+                 (stc.STC_P_STRING, 'string_style'),
+                 (stc.STC_P_STRINGEOL, 'stringeol_style'),
+                 (stc.STC_P_TRIPLE, 'string_style'),
+                 (stc.STC_P_TRIPLEDOUBLE, 'string_style'),
+                 (stc.STC_P_WORD, 'keyword_style'),
+                 (stc.STC_P_WORD2, 'userkw_style')]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")

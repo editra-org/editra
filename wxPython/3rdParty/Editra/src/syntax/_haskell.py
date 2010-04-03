@@ -36,23 +36,23 @@ HA_KEYWORDS = (0, "as case class data default deriving do forall foreign "
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_HA_CAPITAL', 'default_style'),
-                ('STC_HA_CHARACTER', 'char_style'),
-                ('STC_HA_CLASS', 'class_style'),
-                ('STC_HA_COMMENTBLOCK', 'comment_style'),
-                ('STC_HA_COMMENTBLOCK2', 'comment_style'),
-                ('STC_HA_COMMENTBLOCK3', 'comment_style'),
-                ('STC_HA_COMMENTLINE', 'comment_style'),
-                ('STC_HA_DATA', 'default_style'),
-                ('STC_HA_DEFAULT', 'default_style'),
-                ('STC_HA_IDENTIFIER', 'default_style'),
-                ('STC_HA_IMPORT', 'default_style'), # possibly use custom style
-                ('STC_HA_INSTANCE', 'default_style'),
-                ('STC_HA_KEYWORD', 'keyword_style'),
-                ('STC_HA_MODULE', 'default_style'),
-                ('STC_HA_NUMBER', 'number_style'),
-                ('STC_HA_OPERATOR', 'operator_style'),
-                ('STC_HA_STRING', 'string_style')]
+SYNTAX_ITEMS = [(stc.STC_HA_CAPITAL, 'default_style'),
+                (stc.STC_HA_CHARACTER, 'char_style'),
+                (stc.STC_HA_CLASS, 'class_style'),
+                (stc.STC_HA_COMMENTBLOCK, 'comment_style'),
+                (stc.STC_HA_COMMENTBLOCK2, 'comment_style'),
+                (stc.STC_HA_COMMENTBLOCK3, 'comment_style'),
+                (stc.STC_HA_COMMENTLINE, 'comment_style'),
+                (stc.STC_HA_DATA, 'default_style'),
+                (stc.STC_HA_DEFAULT, 'default_style'),
+                (stc.STC_HA_IDENTIFIER, 'default_style'),
+                (stc.STC_HA_IMPORT, 'default_style'), # possibly use custom style
+                (stc.STC_HA_INSTANCE, 'default_style'),
+                (stc.STC_HA_KEYWORD, 'keyword_style'),
+                (stc.STC_HA_MODULE, 'default_style'),
+                (stc.STC_HA_NUMBER, 'number_style'),
+                (stc.STC_HA_OPERATOR, 'operator_style'),
+                (stc.STC_HA_STRING, 'string_style')]
 
 #---- Extra Properties ----#
 FOLD = ('fold', '1')

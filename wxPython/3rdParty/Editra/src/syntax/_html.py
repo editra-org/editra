@@ -122,76 +122,76 @@ SGML_KEYWORDS = (5, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION")
 SGML_BLOCK = (7, "")
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [ ('STC_H_DEFAULT', 'default_style'),
-                 ('STC_H_ASP', 'array_style'),
-                 ('STC_H_ASPAT', 'array_style'),
-                 ('STC_H_ATTRIBUTE', 'keyword2_style'),
-                 ('STC_H_ATTRIBUTEUNKNOWN', 'error_style'),
-                 ('STC_H_CDATA', 'default_style'), # Style ME
-                 ('STC_H_COMMENT', 'comment_style'),
-                 ('STC_H_DOUBLESTRING', 'string_style'),
-                 ('STC_H_ENTITY', 'default_style'), # Style ME
-                 ('STC_H_NUMBER', 'number_style'),
-                 ('STC_H_OTHER', 'default_style'),  # Style ME
-                 ('STC_H_QUESTION', 'scalar_style'),
-                 ('STC_H_SCRIPT', 'funct_style'), # STYLE ME
-                 ('STC_H_SGML_1ST_PARAM', 'keyword2_style'), # STYLE ME
-                 ('STC_H_SGML_1ST_PARAM_COMMENT', 'comment_style'),
-                 ('STC_H_SGML_BLOCK_DEFAULT', 'default_style'), # STYLE ME
-                 ('STC_H_SGML_COMMAND', 'keyword_style'), # STYLE ME
-                 ('STC_H_SGML_COMMENT', 'comment_style'),
-                 ('STC_H_SGML_DEFAULT', 'array_style'), # STYLE ME
-                 ('STC_H_SGML_DOUBLESTRING', 'string_style'),
-                 ('STC_H_SGML_ENTITY', 'default_style'), # STYLE ME
-                 ('STC_H_SGML_ERROR', 'error_style'),
-                 ('STC_H_SGML_SIMPLESTRING', 'string_style'),
-                 ('STC_H_SGML_SPECIAL', 'default_style'), # STYLE ME
-                 ('STC_H_SINGLESTRING', 'string_style'),
-                 ('STC_H_TAG', 'keyword_style'),
-                 ('STC_H_TAGEND', 'keyword_style'),
-                 ('STC_H_TAGUNKNOWN', 'error_style'),
-                 ('STC_H_VALUE', 'number_style'),
-                 ('STC_H_XCCOMMENT', 'comment_style'),
-                 ('STC_H_XMLEND', 'scalar_style'),
-                 ('STC_H_XMLSTART', 'scalar_style'),
+SYNTAX_ITEMS = [ (stc.STC_H_DEFAULT, 'default_style'),
+                 (stc.STC_H_ASP, 'array_style'),
+                 (stc.STC_H_ASPAT, 'array_style'),
+                 (stc.STC_H_ATTRIBUTE, 'keyword2_style'),
+                 (stc.STC_H_ATTRIBUTEUNKNOWN, 'error_style'),
+                 (stc.STC_H_CDATA, 'default_style'), # Style ME
+                 (stc.STC_H_COMMENT, 'comment_style'),
+                 (stc.STC_H_DOUBLESTRING, 'string_style'),
+                 (stc.STC_H_ENTITY, 'default_style'), # Style ME
+                 (stc.STC_H_NUMBER, 'number_style'),
+                 (stc.STC_H_OTHER, 'default_style'),  # Style ME
+                 (stc.STC_H_QUESTION, 'scalar_style'),
+                 (stc.STC_H_SCRIPT, 'funct_style'), # STYLE ME
+                 (stc.STC_H_SGML_1ST_PARAM, 'keyword2_style'), # STYLE ME
+                 (stc.STC_H_SGML_1ST_PARAM_COMMENT, 'comment_style'),
+                 (stc.STC_H_SGML_BLOCK_DEFAULT, 'default_style'), # STYLE ME
+                 (stc.STC_H_SGML_COMMAND, 'keyword_style'), # STYLE ME
+                 (stc.STC_H_SGML_COMMENT, 'comment_style'),
+                 (stc.STC_H_SGML_DEFAULT, 'array_style'), # STYLE ME
+                 (stc.STC_H_SGML_DOUBLESTRING, 'string_style'),
+                 (stc.STC_H_SGML_ENTITY, 'default_style'), # STYLE ME
+                 (stc.STC_H_SGML_ERROR, 'error_style'),
+                 (stc.STC_H_SGML_SIMPLESTRING, 'string_style'),
+                 (stc.STC_H_SGML_SPECIAL, 'default_style'), # STYLE ME
+                 (stc.STC_H_SINGLESTRING, 'string_style'),
+                 (stc.STC_H_TAG, 'keyword_style'),
+                 (stc.STC_H_TAGEND, 'keyword_style'),
+                 (stc.STC_H_TAGUNKNOWN, 'error_style'),
+                 (stc.STC_H_VALUE, 'number_style'),
+                 (stc.STC_H_XCCOMMENT, 'comment_style'),
+                 (stc.STC_H_XMLEND, 'scalar_style'),
+                 (stc.STC_H_XMLSTART, 'scalar_style'),
 
                  # Embedded JavaScript
-                 ('STC_HJ_COMMENT', 'comment_style'),
-                 ('STC_HJ_COMMENTDOC', 'comment_style'),
-                 ('STC_HJ_COMMENTLINE', 'comment_style'),
-                 ('STC_HJ_DEFAULT', 'default_style'),
-                 ('STC_HJ_DOUBLESTRING', 'default_style'), # STYLE ME
-                 ('STC_HJ_KEYWORD', 'default_style'), # STYLE ME
-                 ('STC_HJ_NUMBER', 'default_style'), # STYLE ME
-                 ('STC_HJ_REGEX', 'default_style'), # STYLE ME
-                 ('STC_HJ_SINGLESTRING', 'default_style'), # STYLE ME
-                 ('STC_HJ_START', 'default_style'), # STYLE ME
-                 ('STC_HJ_STRINGEOL', 'default_style'), # STYLE ME
-                 ('STC_HJ_SYMBOLS', 'default_style'), # STYLE ME
-                 ('STC_HJ_WORD', 'default_style'), # STYLE ME
+                 (stc.STC_HJ_COMMENT, 'comment_style'),
+                 (stc.STC_HJ_COMMENTDOC, 'comment_style'),
+                 (stc.STC_HJ_COMMENTLINE, 'comment_style'),
+                 (stc.STC_HJ_DEFAULT, 'default_style'),
+                 (stc.STC_HJ_DOUBLESTRING, 'default_style'), # STYLE ME
+                 (stc.STC_HJ_KEYWORD, 'default_style'), # STYLE ME
+                 (stc.STC_HJ_NUMBER, 'default_style'), # STYLE ME
+                 (stc.STC_HJ_REGEX, 'default_style'), # STYLE ME
+                 (stc.STC_HJ_SINGLESTRING, 'default_style'), # STYLE ME
+                 (stc.STC_HJ_START, 'default_style'), # STYLE ME
+                 (stc.STC_HJ_STRINGEOL, 'default_style'), # STYLE ME
+                 (stc.STC_HJ_SYMBOLS, 'default_style'), # STYLE ME
+                 (stc.STC_HJ_WORD, 'default_style'), # STYLE ME
 
-                 ('STC_HJA_COMMENT', 'comment_style'),
-                 ('STC_HJA_COMMENTDOC', 'comment_style'),
-                 ('STC_HJA_COMMENTLINE', 'comment_style'),
-                 ('STC_HJA_DEFAULT', 'default_style'),
-                 ('STC_HJA_DOUBLESTRING', 'default_style'), # STYLE ME
-                 ('STC_HJA_KEYWORD', 'default_style'), # STYLE ME
-                 ('STC_HJA_NUMBER', 'default_style'), # STYLE ME
-                 ('STC_HJA_REGEX', 'default_style'), # STYLE ME # STYLE ME
-                 ('STC_HJA_SINGLESTRING', 'default_style'), # STYLE ME
-                 ('STC_HJA_START', 'default_style'), # STYLE ME
-                 ('STC_HJA_STRINGEOL', 'default_style'), # STYLE ME
-                 ('STC_HJA_SYMBOLS', 'default_style'), # STYLE ME
-                 ('STC_HJA_WORD', 'default_style'),
+                 (stc.STC_HJA_COMMENT, 'comment_style'),
+                 (stc.STC_HJA_COMMENTDOC, 'comment_style'),
+                 (stc.STC_HJA_COMMENTLINE, 'comment_style'),
+                 (stc.STC_HJA_DEFAULT, 'default_style'),
+                 (stc.STC_HJA_DOUBLESTRING, 'default_style'), # STYLE ME
+                 (stc.STC_HJA_KEYWORD, 'default_style'), # STYLE ME
+                 (stc.STC_HJA_NUMBER, 'default_style'), # STYLE ME
+                 (stc.STC_HJA_REGEX, 'default_style'), # STYLE ME # STYLE ME
+                 (stc.STC_HJA_SINGLESTRING, 'default_style'), # STYLE ME
+                 (stc.STC_HJA_START, 'default_style'), # STYLE ME
+                 (stc.STC_HJA_STRINGEOL, 'default_style'), # STYLE ME
+                 (stc.STC_HJA_SYMBOLS, 'default_style'), # STYLE ME
+                 (stc.STC_HJA_WORD, 'default_style'),
                  
-                 ('STC_HBA_DEFAULT', 'operator_style'), # Styles ( ) ?
-                 ('STC_HBA_COMMENTLINE', 'comment_style'),
-                 ('STC_HBA_IDENTIFIER', 'default_style'), # TODO
-                 ('STC_HBA_NUMBER', 'number_style'),
-                 ('STC_HBA_START', 'default_style'), # TODO
-                 ('STC_HBA_STRING', 'string_style'),
-                 ('STC_HBA_STRINGEOL', 'stringeol_style'),
-                 ('STC_HBA_WORD', 'keyword_style')  ]
+                 (stc.STC_HBA_DEFAULT, 'operator_style'), # Styles ( ) ?
+                 (stc.STC_HBA_COMMENTLINE, 'comment_style'),
+                 (stc.STC_HBA_IDENTIFIER, 'default_style'), # TODO
+                 (stc.STC_HBA_NUMBER, 'number_style'),
+                 (stc.STC_HBA_START, 'default_style'), # TODO
+                 (stc.STC_HBA_STRING, 'string_style'),
+                 (stc.STC_HBA_STRINGEOL, 'stringeol_style'),
+                 (stc.STC_HBA_WORD, 'keyword_style')  ]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")

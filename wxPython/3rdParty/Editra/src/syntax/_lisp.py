@@ -355,18 +355,18 @@ NEWLISP_KEYWORDS = (1, "$ $0 $1 $10 $11 $12 $13 $14 $15 $2 $3 $4 $5 $6 $7 $8 "
                        "$9 $args $idx $main-args MAIN :")
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [ ('STC_LISP_DEFAULT', 'default_style'),
-                 ('STC_LISP_COMMENT', 'comment_style'),
-                 ('STC_LISP_MULTI_COMMENT', 'comment_style'),
-                 ('STC_LISP_IDENTIFIER', 'default_style'),
-                 ('STC_LISP_KEYWORD', 'keyword_style'),
-                 ('STC_LISP_KEYWORD_KW', 'keyword2_style'),
-                 ('STC_LISP_NUMBER', 'number_style'),
-                 ('STC_LISP_OPERATOR', 'operator_style'),
-                 ('STC_LISP_SPECIAL', 'operator_style'),
-                 ('STC_LISP_STRING', 'string_style'),
-                 ('STC_LISP_STRINGEOL', 'stringeol_style'),
-                 ('STC_LISP_SYMBOL', 'scalar_style') ]
+SYNTAX_ITEMS = [ (stc.STC_LISP_DEFAULT, 'default_style'),
+                 (stc.STC_LISP_COMMENT, 'comment_style'),
+                 (stc.STC_LISP_MULTI_COMMENT, 'comment_style'),
+                 (stc.STC_LISP_IDENTIFIER, 'default_style'),
+                 (stc.STC_LISP_KEYWORD, 'keyword_style'),
+                 (stc.STC_LISP_KEYWORD_KW, 'keyword2_style'),
+                 (stc.STC_LISP_NUMBER, 'number_style'),
+                 (stc.STC_LISP_OPERATOR, 'operator_style'),
+                 (stc.STC_LISP_SPECIAL, 'operator_style'),
+                 (stc.STC_LISP_STRING, 'string_style'),
+                 (stc.STC_LISP_STRINGEOL, 'stringeol_style'),
+                 (stc.STC_LISP_SYMBOL, 'scalar_style') ]
 
 #---- Extra Properties ----#
 FOLD = ('fold', '1')

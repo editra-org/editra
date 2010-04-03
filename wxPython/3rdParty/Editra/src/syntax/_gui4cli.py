@@ -103,16 +103,16 @@ COMMANDS = (4, "ADD ADDRESS ADDUNIQUE APPEND APPVAR ASSIGN AUTO BRANCH BROWSER "
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_GC_ATTRIBUTE', 'keyword3_style'),
-                ('STC_GC_COMMAND', 'keyword2_style'),
-                ('STC_GC_COMMENTBLOCK', 'comment_style'),
-                ('STC_GC_COMMENTLINE', 'comment_style'),
-                ('STC_GC_CONTROL', 'keyword_style'),
-                ('STC_GC_DEFAULT', 'default_style'),
-                ('STC_GC_EVENT', 'keyword4_style'),
-                ('STC_GC_GLOBAL', 'global_style'),
-                ('STC_GC_OPERATOR', 'operator_style'),
-                ('STC_GC_STRING', 'string_style')]
+SYNTAX_ITEMS = [(stc.STC_GC_ATTRIBUTE, 'keyword3_style'),
+                (stc.STC_GC_COMMAND, 'keyword2_style'),
+                (stc.STC_GC_COMMENTBLOCK, 'comment_style'),
+                (stc.STC_GC_COMMENTLINE, 'comment_style'),
+                (stc.STC_GC_CONTROL, 'keyword_style'),
+                (stc.STC_GC_DEFAULT, 'default_style'),
+                (stc.STC_GC_EVENT, 'keyword4_style'),
+                (stc.STC_GC_GLOBAL, 'global_style'),
+                (stc.STC_GC_OPERATOR, 'operator_style'),
+                (stc.STC_GC_STRING, 'string_style')]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
