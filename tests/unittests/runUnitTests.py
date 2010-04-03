@@ -30,6 +30,7 @@ from optparse import OptionParser
 
 # Put Editra/src on the 
 sys.path.append(os.path.abspath("../../src"))
+sys.path.append(os.path.abspath("../../src/extern"))
 
 # ----------------- Helper Functions / Classes ---------------------
 
