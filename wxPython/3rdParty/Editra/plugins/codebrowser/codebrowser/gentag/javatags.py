@@ -108,7 +108,7 @@ def GenerateTags(buff):
         diff = lineCodeOnly.count('{') - lineCodeOnly.count('}')
         currentLevel += diff
 
-        print "<<<",line,">>>", lnum, currentLevel, diff, len(lastClass), inComment
+#        print "<<<",line,">>>", lnum, currentLevel, diff, len(lastClass), inComment
         if diff < 0:
             while len(lastClass) > currentLevel:
                 #print "POP", len(lastClass), currentLevel, lastClass[-1]
