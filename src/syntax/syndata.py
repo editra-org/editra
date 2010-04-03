@@ -60,16 +60,7 @@ class SyntaxDataBase(object):
 
     @property
     def SyntaxSpec(self):
-        """@todo: update syntax spec files to remove need for this workaround"""
-        spec = self.GetSyntaxSpec()
-        if len(spec) and isinstance(spec[0][0], basestring):
-            newspec = list()
-            for val, tag in spec:
-                sid = getattr(stc, val, None)
-                if sid is not None:
-                    newspec.append((sid, tag))
-            spec = newspec
-        return spec
+        return self.GetSyntaxSpec()
 
     #---- Interface Methods ----#
 
