@@ -386,9 +386,9 @@ EXT_MAP = {
 
 class ExtensionRegister(dict):
     """A data storage class for managing mappings of
-    file types to file extentions. The register is created
+    file types to file extensions. The register is created
     as a singleton.
-    @status: initial implimentation
+    @status: initial implementation
 
     """
     instance = None
@@ -536,7 +536,7 @@ class ExtensionRegister(dict):
 
     def Remove(self, ftype):
         """Remove a filetype from the register
-        @param ftype: File tyep description string
+        @param ftype: File type description string
         @return: bool removed or not
 
         """
