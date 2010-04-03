@@ -317,20 +317,20 @@ USER_KW = ( 3, "" )
 
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [
-    ('STC_V_COMMENT',         'comment_style'  ),
-    ('STC_V_COMMENTLINE',     'comment_style'  ),
-    ('STC_V_COMMENTLINEBANG', 'comment_style'  ),
-    ('STC_V_DEFAULT',         'default_style'  ),
-    ('STC_V_IDENTIFIER',      'default_style'  ),
-    ('STC_V_NUMBER',          'number_style'   ),
-    ('STC_V_OPERATOR',        'operator_style' ),
-    ('STC_V_PREPROCESSOR',    'pre_style'      ),
-    ('STC_V_STRING',          'string_style'   ),
-    ('STC_V_STRINGEOL',       'stringeol_style'),
-    ('STC_V_USER',            'default_style'  ),
-    ('STC_V_WORD',            'keyword_style'  ),
-    ('STC_V_WORD2',           'keyword2_style' ),
-    ('STC_V_WORD3',           'scalar_style'   )
+    (stc.STC_V_COMMENT,         'comment_style'  ),
+    (stc.STC_V_COMMENTLINE,     'comment_style'  ),
+    (stc.STC_V_COMMENTLINEBANG, 'comment_style'  ),
+    (stc.STC_V_DEFAULT,         'default_style'  ),
+    (stc.STC_V_IDENTIFIER,      'default_style'  ),
+    (stc.STC_V_NUMBER,          'number_style'   ),
+    (stc.STC_V_OPERATOR,        'operator_style' ),
+    (stc.STC_V_PREPROCESSOR,    'pre_style'      ),
+    (stc.STC_V_STRING,          'string_style'   ),
+    (stc.STC_V_STRINGEOL,       'stringeol_style'),
+    (stc.STC_V_USER,            'default_style'  ),
+    (stc.STC_V_WORD,            'keyword_style'  ),
+    (stc.STC_V_WORD2,           'keyword2_style' ),
+    (stc.STC_V_WORD3,           'scalar_style'   )
 ]
 
 #---- Extra Properties ----#

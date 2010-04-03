@@ -144,28 +144,28 @@ USER4_KW = (8, "")
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_TCL_BLOCK_COMMENT', 'comment_style'),
-                 ('STC_TCL_COMMENT', 'comment_style'),
-                 ('STC_TCL_COMMENTLINE', 'comment_style'),
-                 ('STC_TCL_COMMENT_BOX', 'comment_style'),
-                 ('STC_TCL_DEFAULT', 'default_style'),
-                 ('STC_TCL_EXPAND', 'default_style'), # STYLE NEEDED
-                 ('STC_TCL_IDENTIFIER', 'default_style'),
-                 ('STC_TCL_IN_QUOTE', 'string_style'),
-                 ('STC_TCL_MODIFIER', 'default_style'), # STYLE NEEDED
-                 ('STC_TCL_NUMBER', 'number_style'),
-                 ('STC_TCL_OPERATOR', 'operator_style'),
-                 ('STC_TCL_SUBSTITUTION', 'scalar_style'),
-                 ('STC_TCL_SUB_BRACE', 'string_style'), # STYLE NEEDED
-                 ('STC_TCL_WORD', 'keyword_style'),        # tcl_kw
-                 ('STC_TCL_WORD2', 'keyword2_style'),      # tk_kw
-                 ('STC_TCL_WORD3', 'keyword3_style'),      # itcl_kw
-                 ('STC_TCL_WORD4', 'keyword4_style'),      # tkCommands
-                 ('STC_TCL_WORD5', 'default_style'),
-                 ('STC_TCL_WORD6', 'default_style'),
-                 ('STC_TCL_WORD7', 'default_style'),
-                 ('STC_TCL_WORD8', 'default_style'),
-                 ('STC_TCL_WORD_IN_QUOTE', 'default_style')]
+SYNTAX_ITEMS = [ (stc.STC_TCL_BLOCK_COMMENT, 'comment_style'),
+                 (stc.STC_TCL_COMMENT, 'comment_style'),
+                 (stc.STC_TCL_COMMENTLINE, 'comment_style'),
+                 (stc.STC_TCL_COMMENT_BOX, 'comment_style'),
+                 (stc.STC_TCL_DEFAULT, 'default_style'),
+                 (stc.STC_TCL_EXPAND, 'default_style'), # STYLE NEEDED
+                 (stc.STC_TCL_IDENTIFIER, 'default_style'),
+                 (stc.STC_TCL_IN_QUOTE, 'string_style'),
+                 (stc.STC_TCL_MODIFIER, 'default_style'), # STYLE NEEDED
+                 (stc.STC_TCL_NUMBER, 'number_style'),
+                 (stc.STC_TCL_OPERATOR, 'operator_style'),
+                 (stc.STC_TCL_SUBSTITUTION, 'scalar_style'),
+                 (stc.STC_TCL_SUB_BRACE, 'string_style'), # STYLE NEEDED
+                 (stc.STC_TCL_WORD, 'keyword_style'),        # tcl_kw
+                 (stc.STC_TCL_WORD2, 'keyword2_style'),      # tk_kw
+                 (stc.STC_TCL_WORD3, 'keyword3_style'),      # itcl_kw
+                 (stc.STC_TCL_WORD4, 'keyword4_style'),      # tkCommands
+                 (stc.STC_TCL_WORD5, 'default_style'),
+                 (stc.STC_TCL_WORD6, 'default_style'),
+                 (stc.STC_TCL_WORD7, 'default_style'),
+                 (stc.STC_TCL_WORD8, 'default_style'),
+                 (stc.STC_TCL_WORD_IN_QUOTE, 'default_style')]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")

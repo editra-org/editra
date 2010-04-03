@@ -108,21 +108,21 @@ FORT_EXT = (2, "cdabs cdcos cdexp cdlog cdsin cdsqrt cotan cotand dcmplx "
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_F_COMMENT', 'comment_style'),
-                ('STC_F_CONTINUATION', 'default_style'), # NEED STYLE
-                ('STC_F_DEFAULT', 'default_style'),
-                ('STC_F_IDENTIFIER', 'default_style'),
-                ('STC_F_LABEL', 'number2_style'), # NEED STYLE
-                ('STC_F_NUMBER', 'number_style'),
-                ('STC_F_OPERATOR', 'operator_style'),
-                ('STC_F_OPERATOR2', 'operator_style'), # NEED STYLE
-                ('STC_F_PREPROCESSOR', 'pre_style'),
-                ('STC_F_STRING1', 'string_style'),
-                ('STC_F_STRING2', 'string_style'),
-                ('STC_F_STRINGEOL', 'stringeol_style'),
-                ('STC_F_WORD', 'keyword_style'),
-                ('STC_F_WORD2', 'keyword3_style'),
-                ('STC_F_WORD3', 'funct_style')]
+SYNTAX_ITEMS = [(stc.STC_F_COMMENT, 'comment_style'),
+                (stc.STC_F_CONTINUATION, 'default_style'), # NEED STYLE
+                (stc.STC_F_DEFAULT, 'default_style'),
+                (stc.STC_F_IDENTIFIER, 'default_style'),
+                (stc.STC_F_LABEL, 'number2_style'), # NEED STYLE
+                (stc.STC_F_NUMBER, 'number_style'),
+                (stc.STC_F_OPERATOR, 'operator_style'),
+                (stc.STC_F_OPERATOR2, 'operator_style'), # NEED STYLE
+                (stc.STC_F_PREPROCESSOR, 'pre_style'),
+                (stc.STC_F_STRING1, 'string_style'),
+                (stc.STC_F_STRING2, 'string_style'),
+                (stc.STC_F_STRINGEOL, 'stringeol_style'),
+                (stc.STC_F_WORD, 'keyword_style'),
+                (stc.STC_F_WORD2, 'keyword3_style'),
+                (stc.STC_F_WORD3, 'funct_style')]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")

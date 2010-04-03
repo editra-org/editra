@@ -51,19 +51,19 @@ ROMAINIAN = (6, "")
 
 #---- Syntax Style Specs ----#
 # TeX
-SYNTAX_ITEMS1 = [ ('STC_TEX_DEFAULT', 'default_style'),
-                 ('STC_TEX_COMMAND', 'keyword_style'),
-                 ('STC_TEX_GROUP', 'scalar_style'),
-                 ('STC_TEX_SPECIAL', 'operator_style'),
-                 ('STC_TEX_SYMBOL', 'number_style'),
-                 ('STC_TEX_TEXT', 'default_style') ]
+SYNTAX_ITEMS1 = [(stc.STC_TEX_DEFAULT, 'default_style'),
+                 (stc.STC_TEX_COMMAND, 'keyword_style'),
+                 (stc.STC_TEX_GROUP, 'scalar_style'),
+                 (stc.STC_TEX_SPECIAL, 'operator_style'),
+                 (stc.STC_TEX_SYMBOL, 'number_style'),
+                 (stc.STC_TEX_TEXT, 'default_style') ]
 
 # LaTeX
-SYNTAX_ITEMS2 = [ ('STC_L_DEFAULT', 'default_style'),
-                 ('STC_L_COMMAND', 'pre_style'),
-                 ('STC_L_COMMENT', 'comment_style'),
-                 ('STC_L_MATH', 'operator_style'),
-                 ('STC_L_TAG', 'keyword_style')]
+SYNTAX_ITEMS2 = [(stc.STC_L_DEFAULT, 'default_style'),
+                 (stc.STC_L_COMMAND, 'pre_style'),
+                 (stc.STC_L_COMMENT, 'comment_style'),
+                 (stc.STC_L_MATH, 'operator_style'),
+                 (stc.STC_L_TAG, 'keyword_style')]
 
 #-----------------------------------------------------------------------------#
 

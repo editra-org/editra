@@ -33,13 +33,13 @@ import syndata
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_DIFF_ADDED', 'global_style'),
-                ('STC_DIFF_COMMAND', 'pre_style'),
-                ('STC_DIFF_COMMENT', 'comment_style'),
-                ('STC_DIFF_DEFAULT', 'default_style'),
-                ('STC_DIFF_DELETED', 'error_style'),
-                ('STC_DIFF_HEADER', 'comment_style'),
-                ('STC_DIFF_POSITION', 'pre_style')]
+SYNTAX_ITEMS = [(stc.STC_DIFF_ADDED,    'global_style'),
+                (stc.STC_DIFF_COMMAND,  'pre_style'),
+                (stc.STC_DIFF_COMMENT,  'comment_style'),
+                (stc.STC_DIFF_DEFAULT,  'default_style'),
+                (stc.STC_DIFF_DELETED,  'error_style'),
+                (stc.STC_DIFF_HEADER,   'comment_style'),
+                (stc.STC_DIFF_POSITION, 'pre_style')]
 
 #---- Extra Properties ----#
 FOLD = ('fold', '1')

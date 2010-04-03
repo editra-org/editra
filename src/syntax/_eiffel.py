@@ -41,15 +41,15 @@ EIFFEL_KW = (0, "alias all and any as bit boolean check class character clone "
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_EIFFEL_CHARACTER', 'char_style'),
-                ('STC_EIFFEL_COMMENTLINE', 'comment_style'),
-                ('STC_EIFFEL_DEFAULT', 'default_style'),
-                ('STC_EIFFEL_IDENTIFIER', 'default_style'),
-                ('STC_EIFFEL_NUMBER', 'number_style'),
-                ('STC_EIFFEL_OPERATOR', 'operator_style'),
-                ('STC_EIFFEL_STRING', 'string_style'),
-                ('STC_EIFFEL_STRINGEOL', 'stringeol_style'),
-                ('STC_EIFFEL_WORD', 'keyword_style')]
+SYNTAX_ITEMS = [(stc.STC_EIFFEL_CHARACTER, 'char_style'),
+                (stc.STC_EIFFEL_COMMENTLINE, 'comment_style'),
+                (stc.STC_EIFFEL_DEFAULT, 'default_style'),
+                (stc.STC_EIFFEL_IDENTIFIER, 'default_style'),
+                (stc.STC_EIFFEL_NUMBER, 'number_style'),
+                (stc.STC_EIFFEL_OPERATOR, 'operator_style'),
+                (stc.STC_EIFFEL_STRING, 'string_style'),
+                (stc.STC_EIFFEL_STRINGEOL, 'stringeol_style'),
+                (stc.STC_EIFFEL_WORD, 'keyword_style')]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")

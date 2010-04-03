@@ -41,7 +41,7 @@ BOO_KW = (0, "abstract and as AST break callable cast char class constructor "
 
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [x for x in _python.SYNTAX_ITEMS if x[0] != 'STC_P_DECORATOR']
-SYNTAX_ITEMS.append(('STC_P_DECORATOR', 'default_style'))
+SYNTAX_ITEMS.append((stc.STC_P_DECORATOR, 'default_style'))
 
 #---- Extra Properties ----#
 

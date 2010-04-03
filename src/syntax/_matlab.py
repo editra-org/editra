@@ -38,15 +38,15 @@ OCTAVE_KW = (0, "break case catch continue do else elseif end "
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_MATLAB_COMMAND', 'funct_style'),
-                ('STC_MATLAB_COMMENT', 'comment_style'),
-                ('STC_MATLAB_DEFAULT', 'default_style'),
-                ('STC_MATLAB_DOUBLEQUOTESTRING', 'string_style'),
-                ('STC_MATLAB_IDENTIFIER', 'default_style'),
-                ('STC_MATLAB_KEYWORD', 'keyword_style'),
-                ('STC_MATLAB_NUMBER', 'number_style'),
-                ('STC_MATLAB_OPERATOR', 'operator_style'),
-                ('STC_MATLAB_STRING', 'string_style')]
+SYNTAX_ITEMS = [(stc.STC_MATLAB_COMMAND, 'funct_style'),
+                (stc.STC_MATLAB_COMMENT, 'comment_style'),
+                (stc.STC_MATLAB_DEFAULT, 'default_style'),
+                (stc.STC_MATLAB_DOUBLEQUOTESTRING, 'string_style'),
+                (stc.STC_MATLAB_IDENTIFIER, 'default_style'),
+                (stc.STC_MATLAB_KEYWORD, 'keyword_style'),
+                (stc.STC_MATLAB_NUMBER, 'number_style'),
+                (stc.STC_MATLAB_OPERATOR, 'operator_style'),
+                (stc.STC_MATLAB_STRING, 'string_style')]
 
 #---- Extra Properties ----#
 FOLD = ('fold', '1')

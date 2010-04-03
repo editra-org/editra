@@ -92,19 +92,19 @@ USER_DEF = (5, "")
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [('STC_INNO_COMMENT', 'comment_style'),
-                ('STC_INNO_COMMENT_PASCAL', 'comment_style'),
-                ('STC_INNO_DEFAULT', 'default_style'),
-                ('STC_INNO_IDENTIFIER', 'default_style'),
-                ('STC_INNO_KEYWORD', 'keyword_style'),
-                ('STC_INNO_KEYWORD_PASCAL', 'keyword4_style'),
-                ('STC_INNO_KEYWORD_USER', 'default_style'),
-                ('STC_INNO_PARAMETER', 'keyword2_style'),
-                ('STC_INNO_PREPROC', 'pre_style'),
-                ('STC_INNO_PREPROC_INLINE', 'pre_style'),
-                ('STC_INNO_SECTION', 'scalar_style'),
-                ('STC_INNO_STRING_DOUBLE', 'string_style'),
-                ('STC_INNO_STRING_SINGLE', 'char_style')]
+SYNTAX_ITEMS = [(stc.STC_INNO_COMMENT, 'comment_style'),
+                (stc.STC_INNO_COMMENT_PASCAL, 'comment_style'),
+                (stc.STC_INNO_DEFAULT, 'default_style'),
+                (stc.STC_INNO_IDENTIFIER, 'default_style'),
+                (stc.STC_INNO_KEYWORD, 'keyword_style'),
+                (stc.STC_INNO_KEYWORD_PASCAL, 'keyword4_style'),
+                (stc.STC_INNO_KEYWORD_USER, 'default_style'),
+                (stc.STC_INNO_PARAMETER, 'keyword2_style'),
+                (stc.STC_INNO_PREPROC, 'pre_style'),
+                (stc.STC_INNO_PREPROC_INLINE, 'pre_style'),
+                (stc.STC_INNO_SECTION, 'scalar_style'),
+                (stc.STC_INNO_STRING_DOUBLE, 'string_style'),
+                (stc.STC_INNO_STRING_SINGLE, 'char_style')]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
