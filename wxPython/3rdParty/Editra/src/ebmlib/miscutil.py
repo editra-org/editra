@@ -25,7 +25,7 @@ __all__ = [ 'MinMax', ]
 #-----------------------------------------------------------------------------#
 
 def MinMax(arg1, arg2):
-    """Return an ordered tuple of the minumum and maximum value
+    """Return an ordered tuple of the minimum and maximum value
     of the two args.
     @return: tuple
 
