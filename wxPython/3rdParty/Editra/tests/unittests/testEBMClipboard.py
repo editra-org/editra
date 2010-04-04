@@ -34,7 +34,7 @@ class EBMClipboardTest(unittest.TestCase):
         self.cb.DeleteAll() # Delete all clipboard registers
 
     def testSwitch(self):
-        self.assertRaises(Exception, self.cb.Switch, 1)
+        self.assertRaises(ebmlib.ClipboardException, self.cb.Switch, 1)
         self.cb.Switch('m')
         self.cb.Set("HELLO")
         val = self.cb.Get()
