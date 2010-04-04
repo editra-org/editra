@@ -1,13 +1,13 @@
 ###############################################################################
-# Name: histcache.py                                                          #
-# Purpose: History Cache                                                      #
-# Author: Cody Precord <cprecord@editra.org>                                  #
+# Name: clipboard.py                                                          #
+# Purpose: Vim like clipboard                                                 #
+# Author: Hasan Aljudy                                                        #
 # Copyright: (c) 2009 Cody Precord <staff@editra.org>                         #
 # Licence: wxWindows Licence                                                  #
 ###############################################################################
 
 """
-Editra Buisness Model Library: Clipboard
+Editra Business Model Library: Clipboard
 
 Clipboard helper class
 
@@ -39,6 +39,17 @@ class Clipboard(object):
     current = u'"'
 
     @classmethod
+    def ClearAll(cls):
+        """Clear all registers"""
+        for reg in cls.registers:
+            cls.registers[reg] = u''
+
+    @classmethod
+    def DeleteAll(cls):
+        """Delete all registers"""
+        cls.registers.clear()
+
+    @classmethod
     def Switch(cls, reg):
         """Switch to register
         @param reg: char
@@ -50,13 +61,12 @@ class Clipboard(object):
             raise Exception(u"Switched to invalid register name")
 
     @classmethod
-    def NextFree(cls, reg):
+    def NextFree(cls):
         """Switch to the next free register. If current register is free, no
         switching happens.
 
         A free register is one that's either unused or has no content
 
-        @param reg: char
         @note: This is not used yet.
 
         """
@@ -72,8 +82,8 @@ class Clipboard(object):
     def AllUsed(cls):
         """Get a dictionary mapping all used clipboards (plus the system
         clipboard) to their content.
-
         @note: This is not used yet.
+        @return: dict
 
         """
         cmd_map = { u'"': cls.SystemGet() }
@@ -88,7 +98,7 @@ class Clipboard(object):
         if cls.current == u'"':
             return cls.SystemGet()
         else:
-            return cls.registers.get( cls.current, u'' )
+            return cls.registers.get(cls.current, u'')
 
     @classmethod
     def Set(cls, text):
