@@ -17,11 +17,16 @@ __author__ = "Hasan Aljudy"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = [ 'Clipboard',]
+__all__ = [ 'Clipboard', 'ClipboardException']
 
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
+
+#-----------------------------------------------------------------------------#
+
+class ClipboardException(Exception):
+    pass
 
 #-----------------------------------------------------------------------------#
 
@@ -58,7 +63,7 @@ class Clipboard(object):
         if reg in cls.NAMES or reg == u'"':
             cls.current = reg
         else:
-            raise Exception(u"Switched to invalid register name")
+            raise ClipboardException(u"Switched to invalid register name")
 
     @classmethod
     def NextFree(cls):
