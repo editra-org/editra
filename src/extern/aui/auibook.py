@@ -1871,9 +1871,6 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
 
         self._on_button = False
         
-        if self.HasCapture():
-            self.ReleaseMouse()
-
         if self._is_dragging:
             
             self._is_dragging = False
@@ -1889,7 +1886,13 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
             evt.SetEventObject(self)
             self.GetEventHandler().ProcessEvent(evt)
 
+            if self.HasCapture():
+                self.ReleaseMouse()
+
             return
+
+        if self.HasCapture():
+            self.ReleaseMouse()
     
         if self._pressed_button:
         
@@ -2606,7 +2609,7 @@ class AuiNotebook(wx.PyControl):
         self._mgr.Update()
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
-#        self.Bind(wx.EVT_CHILD_FOCUS, self.OnChildFocusNotebook)
+        self.Bind(wx.EVT_CHILD_FOCUS, self.OnChildFocusNotebook)
         self.Bind(EVT_AUINOTEBOOK_PAGE_CHANGING, self.OnTabClicked,
                   id=AuiBaseTabCtrlId, id2=AuiBaseTabCtrlId+500)
         self.Bind(EVT_AUINOTEBOOK_BEGIN_DRAG, self.OnTabBeginDrag,
@@ -4776,6 +4779,8 @@ class AuiNotebook(wx.PyControl):
         # child, which would then enter this handler and call
         # SetSelection, which is not desired turn tab dragging.
 
+        event.Skip()
+        
         all_panes = self._mgr.GetAllPanes()
         for pane in all_panes:
             if pane.name == "dummy":

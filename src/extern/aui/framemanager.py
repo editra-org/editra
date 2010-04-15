@@ -13,7 +13,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 23 Dec 2005
-# Latest Revision: 01 Feb 2010, 15.00 GMT
+# Latest Revision: 13 Apr 2010, 10.00 GMT
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
 # Write To Me At:
@@ -1765,7 +1765,10 @@ class AuiPaneInfo(object):
             state &= ~flag
 
         self.state = state
-        
+
+        if flag in [self.buttonClose, self.buttonMaximize, self.buttonMinimize, self.buttonPin]:
+            self.ResetButtons()
+            
         return self
     
     
@@ -1778,6 +1781,32 @@ class AuiPaneInfo(object):
         
         return (self.state & flag and [True] or [False])[0]
 
+
+    def ResetButtons(self):
+        """
+        Resets all the buttons and recreates them from scratch depending on the
+        L{AuiPaneInfo} flags.
+        """
+
+        floating = self.HasFlag(self.optionFloating)
+        self.buttons = []
+
+        if not floating and self.HasMinimizeButton():
+            button = AuiPaneButton(AUI_BUTTON_MINIMIZE)
+            self.buttons.append(button)
+    
+        if not floating and self.HasMaximizeButton():
+            button = AuiPaneButton(AUI_BUTTON_MAXIMIZE_RESTORE)
+            self.buttons.append(button)
+
+        if not floating and self.HasPinButton():
+            button = AuiPaneButton(AUI_BUTTON_PIN)
+            self.buttons.append(button)
+
+        if self.HasCloseButton():
+            button = AuiPaneButton(AUI_BUTTON_CLOSE)
+            self.buttons.append(button)
+        
 
     def CountButtons(self):
         """ Returns the number of visible buttons in the docked pane. """
@@ -3821,7 +3850,7 @@ def AuiManager_HasLiveResize(manager):
 
     :param `manager`: an instance of L{AuiManager}.
 
-    :note: Thie method always returns ``True`` on wxMac as this platform doesn't have
+    :note: This method always returns ``True`` on wxMac as this platform doesn't have
      the ability to use `wx.ScreenDC` to draw sashes.
     """
 
@@ -3842,7 +3871,7 @@ def AuiManager_UseNativeMiniframes(manager):
 
     :param `manager`: an instance of L{AuiManager}.
 
-    :note: Thie method always returns ``True`` on wxMac as this platform doesn't have
+    :note: This method always returns ``True`` on wxMac as this platform doesn't have
      the ability to use custom drawn miniframes.
     """
 
@@ -6153,6 +6182,15 @@ class AuiManager(wx.EvtHandler):
                         pFrame.SetDimensions(p.floating_pos.x, p.floating_pos.y,
                                              p.floating_size.x, p.floating_size.y, wx.SIZE_USE_EXISTING)
 
+                    # update whether the pane is resizable or not
+                    style = p.frame.GetWindowStyleFlag()
+                    if p.IsFixed():
+                        style &= ~wx.RESIZE_BORDER
+                    else:
+                        style |= wx.RESIZE_BORDER
+
+                    p.frame.SetWindowStyleFlag(style)
+
                     if pFrame.IsShown() != p.IsShown():
                         p.needsTransparency = True
                         pFrame.Show(p.IsShown())
@@ -6169,8 +6207,6 @@ class AuiManager(wx.EvtHandler):
                     p.best_size = p.window.GetBestSize()
 
                 if p.window and not p.IsNotebookPage() and p.window.IsShown() != p.IsShown():
-                    # reduce flicker
-                    p.window.SetSize((0, 0))
                     p.window.Show(p.IsShown())
 
             if pFrame and p.needsTransparency:
@@ -8878,7 +8914,9 @@ class AuiManager(wx.EvtHandler):
         """
 
         if self._action == actionResize:
+##            self._frame.Freeze()
             self.OnLeftUp_Resize(event)
+##            self._frame.Thaw()
         
         elif self._action == actionClickButton:
             self.OnLeftUp_ClickButton(event)
