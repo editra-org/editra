@@ -64,7 +64,7 @@ class EdPages(aui.AuiNotebook):
 #                aui.AUI_NB_TAB_FIXED_WIDTH
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
-        aui.AuiNotebook.__init__(self, parent, id_num, style=style)
+        aui.AuiNotebook.__init__(self, parent, id_num, agwStyle=style)
 
         # Notebook attributes
         self.LOG = wx.GetApp().GetLog()
