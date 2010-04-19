@@ -820,7 +820,7 @@ class AuiTabContainer(object):
     which can be used as a tab control in the normal sense.
     """
 
-    def __init__(self):
+    def __init__(self, auiNotebook):
         """
         Default class constructor.
         Used internally, do not call it in your code!
@@ -835,6 +835,7 @@ class AuiTabContainer(object):
         self._tab_close_buttons = []
         
         self._rect = wx.Rect()
+        self._auiNotebook = auiNotebook
         
         self.AddButton(AUI_BUTTON_LEFT, wx.LEFT)
         self.AddButton(AUI_BUTTON_RIGHT, wx.RIGHT)
@@ -975,7 +976,8 @@ class AuiTabContainer(object):
         self._rect = rect
 
         if self._art:
-            self._art.SetSizingInfo(rect.GetSize(), len(self._pages))
+            minMaxTabWidth = self._auiNotebook.GetMinMaxTabWidth()
+            self._art.SetSizingInfo(rect.GetSize(), len(self._pages), minMaxTabWidth)
 
 
     def AddPage(self, page, info):
@@ -993,7 +995,8 @@ class AuiTabContainer(object):
 
         # let the art provider know how many pages we have
         if self._art:
-            self._art.SetSizingInfo(self._rect.GetSize(), len(self._pages))
+            minMaxTabWidth = self._auiNotebook.GetMinMaxTabWidth()
+            self._art.SetSizingInfo(self._rect.GetSize(), len(self._pages), minMaxTabWidth)
         
         return True
 
@@ -1017,7 +1020,8 @@ class AuiTabContainer(object):
 
         # let the art provider know how many pages we have
         if self._art:
-            self._art.SetSizingInfo(self._rect.GetSize(), len(self._pages))
+            minMaxTabWidth = self._auiNotebook.GetMinMaxTabWidth()
+            self._art.SetSizingInfo(self._rect.GetSize(), len(self._pages), minMaxTabWidth)
         
         return True
     
@@ -1053,13 +1057,15 @@ class AuiTabContainer(object):
         :param `wnd`: an instance of `wx.Window`, a window associated with this tab.
         """
 
+        minMaxTabWidth = self._auiNotebook.GetMinMaxTabWidth()
+
         for page in self._pages:
             if page.window == wnd:
                 self._pages.remove(page)
                 
                 # let the art provider know how many pages we have
                 if self._art:
-                    self._art.SetSizingInfo(self._rect.GetSize(), len(self._pages))
+                    self._art.SetSizingInfo(self._rect.GetSize(), len(self._pages), minMaxTabWidth)
 
                 return True
             
@@ -1710,7 +1716,7 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         """
 
         wx.PyControl.__init__(self, parent, id, pos, size, style, name="AuiTabCtrl")
-        AuiTabContainer.__init__(self)
+        AuiTabContainer.__init__(self, parent)
 
         self._click_pt = wx.Point(-1, -1)
         self._is_dragging = False
@@ -2586,7 +2592,7 @@ class AuiNotebook(wx.PyPanel):
          chosen by either the windowing system or wxPython, depending on platform;
         :param `size`: the control size. A value of (-1, -1) indicates a default size,
          chosen by either the windowing system or wxPython, depending on platform;
-        :param `style`: the window style;
+        :param `style`: the underlying `wx.PyPanel` window style;
         :param `agwStyle`: the AGW-specific window style. This can be a combination of the following bits:
         
          ==================================== ==================================
@@ -2629,10 +2635,11 @@ class AuiNotebook(wx.PyPanel):
         self._requested_bmp_size = wx.Size(-1, -1)
         self._requested_tabctrl_height = -1
         self._textCtrl = None
+        self._tabBounds = (-1, -1)
 
         wx.PyPanel.__init__(self, parent, id, pos, size, style|wx.BORDER_NONE|wx.TAB_TRAVERSAL)
         self._mgr = framemanager.AuiManager()
-        self._tabs = AuiTabContainer()
+        self._tabs = AuiTabContainer(self)
 
         self.InitNotebook(agwStyle)
 
@@ -3317,6 +3324,42 @@ class AuiNotebook(wx.PyPanel):
         """
 
         return self._sash_dclick_unsplit
+    
+
+    def SetMinMaxTabWidth(self, minTabWidth, maxTabWidth):
+        """
+        Sets the minimum and/or the maximum tab widths for L{AuiNotebook} when the
+        ``AUI_NB_TAB_FIXED_WIDTH`` style is defined.
+
+        Pass -1 to either `minTabWidth` or `maxTabWidth` to reset to the default tab
+        width behaviour for L{AuiNotebook}.
+
+        :param `minTabWidth`: the minimum allowed tab width, in pixels;
+        :param `maxTabWidth`: the maximum allowed tab width, in pixels.
+
+        :note: Minimum and maximum tabs widths are used only when the ``AUI_NB_TAB_FIXED_WIDTH``
+         style is present.
+        """
+
+        if minTabWidth > maxTabWidth:
+            raise Exception("Minimum tab width must be less or equal than maximum tab width")
+
+        self._tabBounds = (minTabWidth, maxTabWidth)
+        self.SetAGWWindowStyleFlag(self._agwFlags)
+
+
+    def GetMinMaxTabWidth(self):
+        """
+        Returns the minimum and the maximum tab widths for L{AuiNotebook} when the
+        ``AUI_NB_TAB_FIXED_WIDTH`` style is defined.
+
+        :note: Minimum and maximum tabs widths are used only when the ``AUI_NB_TAB_FIXED_WIDTH``
+         style is present.
+
+        :see: L{SetMinMaxTabWidth} for more information.         
+        """
+
+        return self._tabBounds
     
 
     def GetPageIndex(self, page_wnd):
@@ -4107,6 +4150,27 @@ class AuiNotebook(wx.PyPanel):
         pos1, pos2 = self.ClientToScreen(pos1), self.ClientToScreen(pos2)
         win1, win2 = wx.FindWindowAtPoint(pos1), wx.FindWindowAtPoint(pos2)
 
+        if isinstance(win1, wx.ScrollBar):
+            # Hopefully it will work
+            shift = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X) + 2
+            if part.orientation == wx.HORIZONTAL:
+                pos1.y -= shift
+            else:
+                pos1.x -= shift
+                
+            pos1 = self.ClientToScreen(pos1)
+            win1 = wx.FindWindowAtPoint(pos1)
+
+        if isinstance(win2, wx.ScrollBar):
+            shift = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_Y) + 2
+            if part.orientation == wx.HORIZONTAL:
+                pos2.y += shift
+            else:
+                pos2.x += shift
+
+            pos2 = self.ClientToScreen(pos2)
+            win2 = wx.FindWindowAtPoint(pos2)
+
         if not win1 or not win2:
             # How did we get here?
             return
@@ -4154,7 +4218,6 @@ class AuiNotebook(wx.PyPanel):
         self._mgr.Update()
         if selection > 0:
             wx.CallAfter(dest_tabs.MakeTabVisible, selection, self)
-        
     
     def OnSize(self, event):
         """
