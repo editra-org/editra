@@ -60,8 +60,8 @@ class EdPages(aui.AuiNotebook):
                 aui.AUI_NB_WINDOWLIST_BUTTON | \
                 aui.AUI_NB_SMART_TABS | \
                 aui.AUI_NB_USE_IMAGES_DROPDOWN | \
-                aui.AUI_NB_TAB_EXTERNAL_MOVE # | \
-#                aui.AUI_NB_TAB_FIXED_WIDTH
+                aui.AUI_NB_TAB_EXTERNAL_MOVE | \
+                aui.AUI_NB_TAB_FIXED_WIDTH
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
         aui.AuiNotebook.__init__(self, parent, id_num, agwStyle=style)
@@ -97,6 +97,7 @@ class EdPages(aui.AuiNotebook):
 
         # Set custom options
         self.SetSashDClickUnsplit(True)
+        self.SetMinMaxTabWidth(125, 135)
 
         # Notebook Events
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
@@ -894,7 +895,10 @@ class EdPages(aui.AuiNotebook):
         @return: bool
 
         """
-        return self.GetPageImage(index) == self._index[ed_glob.ID_READONLY]
+        bReadOnly = False
+        if index < self.GetPageCount():
+            bReadOnly = self.GetPageImage(index) == self._index[ed_glob.ID_READONLY]
+        return bReadOnly
 
     def SetPageText(self, pg_num, txt):
         """Set the pages tab text
