@@ -4152,7 +4152,8 @@ class AuiNotebook(wx.PyPanel):
 
         if isinstance(win1, wx.ScrollBar):
             # Hopefully it will work
-            shift = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X) + 2
+            pos1 = wx.Point(*pos)
+            shift = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X) + 2*(sash_size+1)
             if part.orientation == wx.HORIZONTAL:
                 pos1.y -= shift
             else:
@@ -4162,7 +4163,8 @@ class AuiNotebook(wx.PyPanel):
             win1 = wx.FindWindowAtPoint(pos1)
 
         if isinstance(win2, wx.ScrollBar):
-            shift = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_Y) + 2
+            pos2 = wx.Point(*pos)
+            shift = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X) + 2*(sash_size+1)
             if part.orientation == wx.HORIZONTAL:
                 pos2.y += shift
             else:
@@ -4218,6 +4220,7 @@ class AuiNotebook(wx.PyPanel):
         self._mgr.Update()
         if selection > 0:
             wx.CallAfter(dest_tabs.MakeTabVisible, selection, self)
+        
     
     def OnSize(self, event):
         """
