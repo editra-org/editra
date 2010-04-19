@@ -29,6 +29,8 @@ BUG FIXES:
 +Fix crash that could occur when tab menu handler is called with no context manager.
 +Handle errors that can occur when adding items to file history.
 +Fix crash from selecting invalid register when using vim mode.
++Ctrl+Tab functionality for switching tabs has been restored.
++Double click on split notebook sash now properly unsplits the notebook on OSX.
 
 #-----------------------------------------------------------------------------#
 
