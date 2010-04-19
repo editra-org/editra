@@ -219,15 +219,18 @@ class AuiDefaultTabArt(object):
         return self._agwFlags
     
             
-    def SetSizingInfo(self, tab_ctrl_size, tab_count):
+    def SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth):
         """
         Sets the tab sizing information.
         
         :param `tab_ctrl_size`: the size of the tab control area;
-        :param `tab_count`: the number of tabs.
+        :param `tab_count`: the number of tabs;
+        :param `minMaxTabWidth`: the minimum and maximum tab widths to be used
+         when the ``AUI_NB_TAB_FIXED_WIDTH`` style is active.
         """
         
         self._fixed_tab_width = 100
+        minTabWidth, maxTabWidth = minMaxTabWidth
 
         tot_width = tab_ctrl_size.x - self.GetIndentSize() - 4
         agwFlags = self.GetAGWFlags()
@@ -248,6 +251,11 @@ class AuiDefaultTabArt(object):
 
         if self._fixed_tab_width > 220:
             self._fixed_tab_width = 220
+
+        if minTabWidth > -1:
+            self._fixed_tab_width = max(self._fixed_tab_width, minTabWidth)
+        if maxTabWidth > -1:
+            self._fixed_tab_width = min(self._fixed_tab_width, maxTabWidth)
 
         self._tab_ctrl_height = tab_ctrl_size.y
     
@@ -1037,15 +1045,18 @@ class AuiSimpleTabArt(object):
         return self._agwFlags
     
 
-    def SetSizingInfo(self, tab_ctrl_size, tab_count):
+    def SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth):
         """
         Sets the tab sizing information.
         
         :param `tab_ctrl_size`: the size of the tab control area;
-        :param `tab_count`: the number of tabs.
+        :param `tab_count`: the number of tabs;
+        :param `minMaxTabWidth`: the minimum and maximum tab widths to be used
+         when the ``AUI_NB_TAB_FIXED_WIDTH`` style is active.
         """
         
         self._fixed_tab_width = 100
+        minTabWidth, maxTabWidth = minMaxTabWidth
 
         tot_width = tab_ctrl_size.x - self.GetIndentSize() - 4
 
@@ -1065,6 +1076,11 @@ class AuiSimpleTabArt(object):
 
         if self._fixed_tab_width > 220:
             self._fixed_tab_width = 220
+
+        if minTabWidth > -1:
+            self._fixed_tab_width = max(self._fixed_tab_width, minTabWidth)
+        if maxTabWidth > -1:
+            self._fixed_tab_width = min(self._fixed_tab_width, maxTabWidth)
 
         self._tab_ctrl_height = tab_ctrl_size.y
         
@@ -2111,15 +2127,24 @@ class VC8TabArt(AuiDefaultTabArt):
         return art
 
 
-    def SetSizingInfo(self, tab_ctrl_size, tab_count):
+    def SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth):
         """
         Sets the tab sizing information.
         
         :param `tab_ctrl_size`: the size of the tab control area;
-        :param `tab_count`: the number of tabs.
+        :param `tab_count`: the number of tabs;
+        :param `minMaxTabWidth`: the minimum and maximum tab widths to be used
+         when the ``AUI_NB_TAB_FIXED_WIDTH`` style is active.
         """
         
-        AuiDefaultTabArt.SetSizingInfo(self, tab_ctrl_size, tab_count)
+        AuiDefaultTabArt.SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth)
+
+        minTabWidth, maxTabWidth = minMaxTabWidth
+        if minTabWidth > -1:
+            self._fixed_tab_width = max(self._fixed_tab_width, minTabWidth)
+        if maxTabWidth > -1:
+            self._fixed_tab_width = min(self._fixed_tab_width, maxTabWidth)
+        
         self._fixed_tab_width -= 5
 
 
@@ -2494,15 +2519,24 @@ class ChromeTabArt(AuiDefaultTabArt):
         return art
 
 
-    def SetSizingInfo(self, tab_ctrl_size, tab_count):
+    def SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth):
         """
         Sets the tab sizing information.
         
         :param `tab_ctrl_size`: the size of the tab control area;
-        :param `tab_count`: the number of tabs.
+        :param `tab_count`: the number of tabs;
+        :param `minMaxTabWidth`: the minimum and maximum tab widths to be used
+         when the ``AUI_NB_TAB_FIXED_WIDTH`` style is active.
         """
         
-        AuiDefaultTabArt.SetSizingInfo(self, tab_ctrl_size, tab_count)
+        AuiDefaultTabArt.SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth)
+
+        minTabWidth, maxTabWidth = minMaxTabWidth
+        if minTabWidth > -1:
+            self._fixed_tab_width = max(self._fixed_tab_width, minTabWidth)
+        if maxTabWidth > -1:
+            self._fixed_tab_width = min(self._fixed_tab_width, maxTabWidth)
+
         self._fixed_tab_width -= 5
 
 
