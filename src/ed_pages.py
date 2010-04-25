@@ -898,6 +898,8 @@ class EdPages(aui.AuiNotebook):
         bReadOnly = False
         if index < self.GetPageCount():
             bReadOnly = self.GetPageImage(index) == self._index[ed_glob.ID_READONLY]
+        else:
+            self.LOG("[ed_pages][warn] ImageIsReadOnly: Bad index: %d" % index)
         return bReadOnly
 
     def SetPageText(self, pg_num, txt):
