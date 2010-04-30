@@ -31,6 +31,7 @@ BUG FIXES:
 +Fix crash from selecting invalid register when using vim mode.
 +Ctrl+Tab functionality for switching tabs has been restored.
 +Double click on split notebook sash now properly unsplits the notebook on OSX.
++Fix Python auto-indenter not indenting after 'with' statements.
 
 #-----------------------------------------------------------------------------#
 
