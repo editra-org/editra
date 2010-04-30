@@ -32,7 +32,7 @@ import syndata
 
 # Indenter keywords
 INDENT_KW = (u"def", u"if", u"elif", u"else", u"for", u"while",
-             u"class", u"try", u"except", u"finally")
+             u"class", u"try", u"except", u"finally", u"with")
 UNINDENT_KW = (u"return", u"raise", u"break", u"continue",
                u"pass", u"exit", u"quit")
 
@@ -72,7 +72,7 @@ SYNTAX_ITEMS = [ (stc.STC_P_DEFAULT, 'default_style'),
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
-TIMMY = ("tab.timmy.whinge.level", "1") # Mark Inconsistant indentation
+TIMMY = ("tab.timmy.whinge.level", "1") # Mark Inconsistent indentation
 
 #-----------------------------------------------------------------------------#
 
