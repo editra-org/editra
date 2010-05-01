@@ -1006,7 +1006,7 @@ class EdPages(aui.AuiNotebook):
     def OnIdle(self, evt):
         """Update tabs and check if files have been modified
         @param evt: Event that called this handler
-        @type evt: wx.IdleEvent
+        @type evt: wx.TimerEvent
 
         """
         if wx.GetApp().IsActive():
