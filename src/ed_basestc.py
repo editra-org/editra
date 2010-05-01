@@ -654,6 +654,19 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         sel = self.GetSelection()
         return sel[0] != sel[1]
 
+    def HasMultilineSelection(self):
+        """Is the selection over multiple lines?
+        @return: bool
+
+        """
+        bMulti = False
+        sel = self.GetSelection()
+        if sel[0] != sel[1]:
+            sline = self.LineFromPosition(sel[0])
+            eline = self.LineFromPosition(sel[1])
+            bMulti = sline != eline
+        return bMulti
+
     def HidePopups(self):
         """Hide autocomp/calltip popup windows if any are active"""
         if self.AutoCompActive():
