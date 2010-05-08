@@ -144,7 +144,7 @@ class EdShelfBook(aui.AuiNotebook):
                 aui.AUI_NB_DRAW_DND_TAB
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
-        aui.AuiNotebook.__init__(self, parent, style=style)
+        aui.AuiNotebook.__init__(self, parent, agwStyle=style)
 
         # Attributes
         self._parent = parent
