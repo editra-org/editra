@@ -27,7 +27,7 @@ import sys
 # Due to some methods that were added in 2.8.3 being used in a large number
 # of places Editra has become incompatible with wxPython 2.8.1.1 and earlier.
 # So ensure correct version of wxPython can be loaded
-if not hasattr(sys, 'frozen'):
+if not hasattr(sys, 'frozen') and 'wx' not in sys.modules:
     import wxversion
     wxversion.ensureMinimal('2.8')
 
