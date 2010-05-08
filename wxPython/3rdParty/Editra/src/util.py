@@ -137,8 +137,8 @@ class DropTargetFT(wx.PyDropTarget):
     def OnDragOver(self, x_cord, y_cord, drag_result):
         """Called when the cursor is moved during a drag action
         @return: result of drag over
-        @todo: For some reason the carrat postion changes which can be seen
-               by the brackets getting highlighted. However the actual carrat
+        @todo: For some reason the caret position changes which can be seen
+               by the brackets getting highlighted. However the actual caret
                is not moved.
 
         """
