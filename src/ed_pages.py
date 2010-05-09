@@ -844,7 +844,7 @@ class EdPages(aui.AuiNotebook):
             return current_page
 
         control = self.GetPage(current_page)
-        control.SetFocus()
+#        control.SetFocus()
         self.control = control
         return current_page
 
@@ -1045,7 +1045,7 @@ class EdPages(aui.AuiNotebook):
 
         # Get the window that is the current page
         window = self.GetPage(pg_num)
-        window.SetFocus()
+#        window.SetFocus()
         self.control = window
 
         # Update Frame Title
@@ -1070,12 +1070,13 @@ class EdPages(aui.AuiNotebook):
         """
         cpage = evt.GetSelection()
         self.ChangePage(cpage, old=evt.GetOldSelection())
-        evt.Skip()
         self.LOG("[ed_pages][evt] Page Changed to %d" % cpage)
         
         # Call the tab specific selection handler
         page = self.GetCurrentPage()
-        page.DoTabSelected()
+        if page:
+            page.DoTabSelected()
+        self.GoCurrentPage()
 
     def OnPageClosing(self, evt):
         """Checks page status to flag warnings before closing
