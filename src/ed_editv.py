@@ -257,12 +257,15 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         """
         if self._ignore_del:
+            self._ignore_del = False
             return True
 
         result = True
         if self.GetModify():
             result = self.ModifySave()
             result = result in (wx.ID_YES, wx.ID_OK, wx.ID_NO)
+            if result:
+                self._ignore_del = True
 
         return result
 
