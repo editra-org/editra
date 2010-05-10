@@ -32,6 +32,7 @@ BUG FIXES:
 +Ctrl+Tab functionality for switching tabs has been restored.
 +Double click on split notebook sash now properly unsplits the notebook on OSX.
 +Fix Python auto-indenter not indenting after 'with' statements.
++Fix handling of improper paths when typing in command mode.
 
 #-----------------------------------------------------------------------------#
 

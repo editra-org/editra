@@ -764,12 +764,17 @@ class CommandExecuter(eclib.CommandEntryBase):
 
         # We expanded head, so trim the suggestion list of its head
         # so we can add the tail of the suggestion back to the original head
-        candidates = [os.path.basename(p) for p in os.listdir(head)
-                      if p.startswith(tail)]
-        candidates = [append_slash(os.path.join(os.path.dirname(path), cand))
-                      for cand in candidates]
-        if not files:
-            candidates = [cand for cand in candidates if os.path.isdir(cand)]
+        try:
+            candidates = [os.path.basename(p) for p in os.listdir(head)
+                          if p.startswith(tail)]
+            candidates = [append_slash(os.path.join(os.path.dirname(path), cand))
+                          for cand in candidates]
+            if not files:
+                candidates = [cand for cand in candidates if os.path.isdir(cand)]
+        except OSError:
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
+                               (ed_glob.SB_INFO, _("Invalid Path")))
+            candidates = list()
 
         return sorted(list(set(candidates)))
 
