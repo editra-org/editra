@@ -868,15 +868,6 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Set the buffers filename attributes from the given path"""
         self.file.SetPath(path)
 
-    def SetFocus(self):
-        """Set the focus to this control
-        @note: overridden as a hack for msw
-
-        """
-        super(EditraBaseStc, self).SetFocus()
-        if wx.Platform == '__WXMSW__':
-            wx.PostEvent(self, wx.FocusEvent(wx.wxEVT_SET_FOCUS, self.GetId()))
-
     def SetKeyWords(self, kw_lst):
         """Sets the keywords from a list of keyword sets
         @param kw_lst: [ (KWLVL, "KEWORDS"), (KWLVL2, "KEYWORDS2"), ect...]

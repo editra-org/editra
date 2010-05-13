@@ -104,7 +104,6 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         # Hide autocomp/calltips when window looses focus
         # TODO: decide on whether this belongs in base class or not
         self.Bind(wx.EVT_KILL_FOCUS, lambda evt: self.HidePopups())
-#        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
         self.Bind(wx.EVT_LEFT_UP, self.OnSetFocus)
 
         ed_msg.Subscribe(self.OnConfigMsg,
