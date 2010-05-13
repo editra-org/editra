@@ -746,11 +746,11 @@ class TabNavigatorWindow(wx.Dialog):
 
         bk = self.GetParent()
         self._selectedItem = self._listBox.GetSelection()
-        iter = self._indexMap[self._selectedItem]
-        bk.SetSelection(iter)
-
         self.EndModal(wx.ID_OK)
         
+    def GetSelectedPage(self):
+        """ Gets the page index that was selected when the dialog was closed """
+        return self._indexMap[self._selectedItem]
 
     def OnPanelPaint(self, event):
         """
@@ -4989,8 +4989,14 @@ class AuiNotebook(wx.PyPanel):
                     self._popupWin = TabNavigatorWindow(self, self._naviIcon)
                     self._popupWin.SetReturnCode(wx.ID_OK)
                     self._popupWin.ShowModal()
+                    idx = self._popupWin.GetSelectedPage()
                     self._popupWin.Destroy()
                     self._popupWin = None
+                    # Need to do CallAfter so that the selection and its
+                    # associated events get processed outside the context of
+                    # this key event. Not doing so causes odd issues with the
+                    # window focus under certain use cases on Windows.
+                    wx.CallAfter(self.SetSelection, idx, True)
                 else:
                     # a dialog is already opened
                     self._popupWin.OnNavigationKey(event)
