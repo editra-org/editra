@@ -673,7 +673,12 @@ class EditraStc(ed_basestc.EditraBaseStc):
             evt.Skip()
             if self.CallTipActive():
                 self.CallTipCancel()
+#        elif key_code == wx.WXK_TAB and \
+#             True not in (evt.ControlDown(), evt.CmdDown(), 
+#                          evt.ShiftDown(), evt.AltDown()):
+#            self.Tab() # <- So action can be overridden
         else:
+#            print "IS TAB", key_code, wx.WXK_TAB
             evt.Skip()
 
     def OnKeyUp(self, evt):
@@ -1462,6 +1467,28 @@ class EditraStc(ed_basestc.EditraBaseStc):
             self.ClearDocumentStyle()
             self.UpdateBaseStyles()
         return 0
+
+    def Tab(self):
+        """Override base method to ensure that folded blocks get unfolded
+        prior to changing the indentation.
+
+        """
+        # TODO: unfolding of folded blocks during block indent
+#        lines = list()
+#        if self.HasSelection():
+#            sel = self.GetSelection()
+#            sline = self.LineFromPosition(sel[0])
+#            eline = self.LineFromPosition(sel[1])
+#            lines = range(sline, eline+1)
+#        else:
+#            cline = self.GetCurrentLine()
+#            lines = [cline, cline+1]
+
+#        for line_num in lines:
+#            if self.GetFoldLevel(line_num) & wx.stc.STC_FOLDLEVELHEADERFLAG:
+#                if not self.GetFoldExpanded(line_num):
+#                    self.Expand(line_num, True)
+        super(EditraStc, self).Tab()
 
     def ToggleAutoIndent(self, switch=None):
         """Toggles Auto-indent On and Off
