@@ -15,7 +15,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 
 AUTHOR = 'Cody Precord'
-VERSION = '0.5.52'
+VERSION = '0.5.60'
 PROG_NAME = 'Editra'
 HOME_PAGE = "http://editra.org"
 I18N_PAGE = "https://translations.launchpad.net/editra/trunk/+pots/editra"
