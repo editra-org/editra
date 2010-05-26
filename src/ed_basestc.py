@@ -217,16 +217,6 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             # There is a selection
             super(EditraBaseStc, self).BackTab()
 
-    def BraceBadLight(self, pos):
-        """Highlight the character at the given position
-        @param pos: position of character to highlight with STC_STYLE_BRACEBAD
-
-        """
-        # Check if we are still alive or not, as this may be called
-        # after we have been deleted.
-        if isinstance(self, wx.stc.StyledTextCtrl):
-            super(EditraBaseStc, self).BraceBadLight(pos)
-
     def SetBlockCaret(self):
         """Change caret style to block"""
         # XXX: This doesn't seem to be working with this wxPython version.
@@ -239,6 +229,16 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.SetCaretWidth(1)
 #        self.SendMsg(2512, 1)
 
+    def BraceBadLight(self, pos):
+        """Highlight the character at the given position
+        @param pos: position of character to highlight with STC_STYLE_BRACEBAD
+
+        """
+        # Check if we are still alive or not, as this may be called
+        # after we have been deleted.
+        if self:
+            super(EditraBaseStc, self).BraceBadLight(pos)
+
     def BraceHighlight(self, pos1, pos2):
         """Highlight characters at pos1 and pos2
         @param pos1: position of char 1
@@ -247,7 +247,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         # Check if we are still alive or not, as this may be called
         # after we have been deleted.
-        if isinstance(self, wx.stc.StyledTextCtrl):
+        if self:
             super(EditraBaseStc, self).BraceHighlight(pos1, pos2)
 
     def CanCopy(self):

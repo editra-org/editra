@@ -289,6 +289,17 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """
         return [mark for mark in xrange(self.GetLineCount()) if self.MarkerGet(mark)]
 
+    def DoBraceHighlight(self):
+        """Perform a brace matching highlight
+        @note: intended for internal use only
+        """
+        brace_at_caret, brace_opposite = self.GetBracePair()
+        # CallAfter necessary to reduce CG warnings on Mac
+        if brace_at_caret != -1  and brace_opposite == -1:
+            wx.CallAfter(self.BraceBadLight, brace_at_caret)
+        else:
+            wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
+
     def GetBracePair(self):
         """Get a tuple of the positions in the buffer where the brace at the
         current caret position and its match are. if a brace doesn't have a
@@ -808,12 +819,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """
         # If disabled just skip the event
         if self._config['brackethl']:
-            brace_at_caret, brace_opposite = self.GetBracePair()
-            # CallAfter necessary to reduce CG warnings on Mac
-            if brace_at_caret != -1  and brace_opposite == -1:
-                wx.CallAfter(self.BraceBadLight, brace_at_caret)
-            else:
-                wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
+            self.DoBraceHighlight()
 
         # XXX: handle when column mode is enabled
         if self.VertEdit.Enabled:
@@ -1508,9 +1514,13 @@ class EditraStc(ed_basestc.EditraBaseStc):
         if (switch is None and not self._config['brackethl']) or switch:
             self.LOG("[ed_stc][evt] Bracket Highlighting Turned On")
             self._config['brackethl'] = True
+            # Make sure to highlight a brace if next to on when turning it on
+            self.DoBraceHighlight()
         else:
             self.LOG("[ed_stc][evt] Bracket Highlighting Turned Off")
             self._config['brackethl'] = False
+            # Make sure that if there was a highlighted brace it gets cleared
+            wx.CallAfter(self.BraceHighlight, -1, -1)
 
     def ToggleFold(self, lineNum=None):
         """Toggle the fold at the given line number. If lineNum is
