@@ -9,6 +9,19 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.5.xx
+DATE 0x/xx/2010
+35th Alpha Release
+
+NEWS:
+
+NEW: [features/improvements]
+
+BUG FIXES:
++Fix braces not getting un-highlighted when toggling setting on and off.
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.5.60
 DATE 05/16/2010
 34th Alpha Release
