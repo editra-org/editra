@@ -406,20 +406,28 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         """
         window = self.GetTopWindow()
-        if isinstance(window, ed_main.MainWindow):
-            try:
-                encoding = sys.getfilesystemencoding()
-                window.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN,
-                              ed_txt.DecodeString(filename, encoding),
-                              line)
+        if not isinstance(window, ed_main.MainWindow):
+            window = None
+
+        try:
+            encoding = sys.getfilesystemencoding()
+            fname = ed_txt.DecodeString(filename, encoding)
+
+            if profiler.Profile_Get('OPEN_NW', default=False):
+                self.OpenNewWindow(fname, window)
+            elif window:
+                window.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname, line)
 
                 # Make sure the window is brought to the front
                 if window.IsIconized():
                     window.Iconize(False)
                 window.Raise()
-            except Exception, msg:
-                self._log("[app][err] Failed to open drop file: %s" % str(msg))
-                pass
+            else:
+                # Some unlikely error condition
+                self._log("[app][err] OpenFile unknown error: %s" % filename)
+                
+        except Exception, msg:
+            self._log("[app][err] Failed to open file: %s" % str(msg))
 
     def MacNewFile(self):
         """Stub for future use"""

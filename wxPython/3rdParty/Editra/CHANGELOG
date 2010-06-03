@@ -20,6 +20,7 @@ NEW: [features/improvements]
 BUG FIXES:
 +Fix braces not getting un-highlighted when toggling setting on and off.
 +Fix incorrect handling of xml in IPC server (patch from rqsall)
++Fix file open from commandline not respecting open files in new windows option.
 
 #-----------------------------------------------------------------------------#
 
