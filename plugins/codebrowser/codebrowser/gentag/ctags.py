@@ -55,7 +55,7 @@ def GenerateTags(buff):
     kwords = ("if else for while switch case catch")
     txt = buff.read()
 
-    # Get class/method/function defintions
+    # Get class/method/function definitions
     for match in RE_METH.finditer(txt):
         fname = match.group(2)
         if fname and fname not in kwords:
@@ -70,9 +70,11 @@ def GenerateTags(buff):
                     rtags.AddClass(cobj)
                 cobj.AddMethod(taglib.Method(u'::'.join(scopes[1:]), line))
             else:
+                fname = fname.replace("*", "")
+                fname = fname.replace("&", "")
                 rtags.AddFunction(taglib.Function(fname, line))
 
-    # Find all Macro defintions
+    # Find all Macro definitions
     for match in RE_DEF.finditer(txt):
         line = txt.count('\n', 0, match.start(1))
         rtags.AddElement('macro', taglib.Macro(match.group(1), line))
