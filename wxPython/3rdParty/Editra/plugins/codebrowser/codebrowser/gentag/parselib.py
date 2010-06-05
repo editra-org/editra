@@ -7,12 +7,10 @@
 ###############################################################################
 
 """
-FILE: parselib.py
-AUTHOR: Cody Precord
-LANGUAGE: Python
-SUMMARY:
-    Contains misc common parsing helper functions used by the various parsers
+Contains misc common parsing helper functions used by the various parsers
 in this library.
+
+@summary: Common helper functions for tag generators.
 
 """
 
@@ -69,7 +67,7 @@ def GetFirstIdentifier(line):
     """Extract the first identifier from the given line. Identifiers are
     classified as the first contiguous string of characters that only contains
     AlphaNumeric or "_" character. In other words [a-zA-Z0-9_]+.
-    @return: identifer name or None
+    @return: identifier name or None
 
     """
     name = ''
@@ -85,11 +83,11 @@ def GetFirstIdentifier(line):
         return None
 
 def GetTokenParenLeft(line, exchars='_'):
-    """Get the first identifer token to the left of the first opening paren
+    """Get the first identifier token to the left of the first opening paren
     found in the given line.
     @param line: line to search
     @example: function myfunct(param1) => myfunct
-    @keyword exchars: Extra non-alphnumeric characters that can be in the token
+    @keyword exchars: Extra non-alphanumeric characters that can be in the token
     @return: string or None
 
     """
@@ -112,8 +110,8 @@ def GetTokenParenLeft(line, exchars='_'):
     return None
 
 def IsGoodName(name, exchars='_'):
-    """Check if the name is a valid identifier name or not. A valid identifer
-    is a string that only has alpha numeric and/or the specifed exchars in it.
+    """Check if the name is a valid identifier name or not. A valid identifier
+    is a string that only has alpha numeric and/or the specified exchars in it.
     Also meaning it matches the following character class [a-zA-Z_][a-zA-Z0-8_]+
     @param name: name to check
     @keyword exchars: extra non alphanumeric characters that are valid
@@ -132,7 +130,7 @@ def IsGoodName(name, exchars='_'):
 
 def IsToken(line, idx, name, ignorecase=False):
     """Check if the given item is a token or not. The function will return
-    True if the item at the given index matches the name and is preceeded and
+    True if the item at the given index matches the name and is preceded and
     followed by whitespace. It will return False otherwise.
     @param line: string to check
     @param idx: index in string to look from
@@ -167,13 +165,13 @@ def SkipWhitespace(line, idx):
 def FindStringEnd(line, idx):
    """Walk through the string until the next non escaped matching ending
    quotation is found. Returning the current state of the parse. The first
-   character in the given line should be the begining of the string.
+   character in the given line should be the beginning of the string.
    @param line: line of text
    @param idx: current index in parse document
    @return: (idx, still_string)
 
    """
-   start = line[0] # Save the beging quote so we can find the end quote
+   start = line[0] # Save the beginning quote so we can find the end quote
    escaped = False
    for pos, char in enumerate(line):
        idx += 1
