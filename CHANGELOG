@@ -9,7 +9,6 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-<<<<<<< .mine
 VERSION 0.5.xx
 DATE 0x/xx/2010
 35th Alpha Release
@@ -17,20 +16,7 @@ DATE 0x/xx/2010
 NEWS:
 
 NEW: [features/improvements]
-
-BUG FIXES:
-
-
-#-----------------------------------------------------------------------------#
-
-=======
-VERSION 0.5.xx
-DATE 0x/xx/2010
-35th Alpha Release
-
-NEWS:
-
-NEW: [features/improvements]
++Improved TCL/Tk Highlighting
 
 BUG FIXES:
 +Fix braces not getting un-highlighted when toggling setting on and off.
@@ -39,7 +25,6 @@ BUG FIXES:
 
 #-----------------------------------------------------------------------------#
 
->>>>>>> .r64491
 VERSION 0.5.60
 DATE 05/16/2010
 34th Alpha Release
