@@ -8,6 +8,7 @@ Version 1.1
 Released: 0x/xx/2010
 
 +Fix display of function names that had * or & prefixed to them
++Major improvement to Tcl/Tk support. Supports SNIT syntax, packages, variables.
 
 #-----------------------------------------------------------------------------#
 
@@ -16,7 +17,6 @@ Released: 03/15/2010
 
 +Add support for Java (patch from Eric Gaudet)
 +Add support for Diff files (patch from Eric Gaudet)
-
 
 #-----------------------------------------------------------------------------#
 
