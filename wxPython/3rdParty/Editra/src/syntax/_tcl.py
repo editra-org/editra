@@ -55,7 +55,7 @@ TK_KW = (1, "bell bind bindtags bitmap button canvas checkbutton clipboard "
 ITCL_KW = (2, "@scope body class code common component configbody constructor "
               "define destructor hull import inherit itcl itk itk_component "
               "itk_initialize itk_interior itk_option iwidgets keep method "
-              "private protected public")
+              "private protected public typemethod typevariable")
 
 TK_COMMANDS = (3, "tk_bisque tk_chooseColor tk_dialog tk_focusFollowsMouse "
                   "tk_focusNext tk_focusPrev tk_getOpenFile tk_getSaveFile "
