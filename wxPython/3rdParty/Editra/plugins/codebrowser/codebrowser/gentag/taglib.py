@@ -39,7 +39,7 @@ __revision__ = "$Revision$"
 
 class Code(object):
     """Code representation objects base class all code elements should
-    inheirit from this class.
+    inherit from this class.
 
     """
     def __init__(self, name, line, obj="code", scope=None):
