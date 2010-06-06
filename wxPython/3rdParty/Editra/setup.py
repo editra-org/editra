@@ -151,6 +151,7 @@ def GenerateBinPackageFiles():
         data.append("pixmaps/editra_doc.icns")
         pixlist.extend(["pixmaps/editra.icns", "pixmaps/editra_doc.icns"])
     elif sys.platform.startswith("win"):
+        data.extend(glob.glob("include/windows/*.*"))
         pixlist.append("pixmaps/editra.ico")
 
     data.append(("pixmaps", pixlist))
@@ -307,8 +308,8 @@ def BuildPy2Exe():
                                "excludes" : ["Tkinter",] }},
         windows = [{"script": "src/Editra.py",
                     "icon_resources": [(0, ICON['Win'])],
-                    "other_resources" : [(RT_MANIFEST, 1,
-                                          MANIFEST_TEMPLATE % dict(prog=NAME))],
+#                    "other_resources" : [(RT_MANIFEST, 1,
+#                                          MANIFEST_TEMPLATE % dict(prog=NAME))],
                   }],
         description = NAME,
         author = AUTHOR,
