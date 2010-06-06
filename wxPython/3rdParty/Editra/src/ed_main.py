@@ -108,14 +108,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         #---- End Statusbar Setup ----#
 
-        #---- Notebook that contains the editting buffers ----#
+        #---- Notebook that contains the editing buffers ----#
         self._mpane = ed_mpane.MainPanel(self)
         self.nb = self._mpane.GetWindow()
         self._mgr.AddPane(self._mpane, wx.aui.AuiPaneInfo(). \
                           Name("EditPane").Center().Layer(1).Dockable(False). \
                           CloseButton(False).MaximizeButton(False). \
                           CaptionVisible(False))
-        self._mpane.InitCommandBar() # <- required due to nb dependancies...
+        self._mpane.InitCommandBar() # <- required due to nb dependencies...
 
         #---- Command Bar ----#
         self._mpane.HideCommandBar()

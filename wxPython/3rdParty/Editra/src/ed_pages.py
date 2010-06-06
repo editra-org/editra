@@ -1138,9 +1138,13 @@ class EdPages(aui.AuiNotebook):
             page = self.GetPage(idx)
             result = page.CanCloseTab()
 
+            # TODO: this makes very little sense, why did this deletepg
+            #       value get added, this function is useless when it
+            #       is not true...
             if result and deletepg:
                 evt = aui.AuiNotebookEvent(aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE,
                                            SIMULATED_EVT_ID)
+                evt.SetSelection(idx)
                 self.OnPageClosing(evt)
                 self.DeletePage(idx)
                 evt = aui.AuiNotebookEvent(aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED,
@@ -1265,7 +1269,7 @@ class EdPages(aui.AuiNotebook):
         @param evt: event that called this handler
         @type evt: stc.EVT_STC_MODIFY (unused)
         @note: this method must complete its work very fast it gets
-               called everytime a character is entered or removed from
+               called every time a character is entered or removed from
                the document.
 
         """
