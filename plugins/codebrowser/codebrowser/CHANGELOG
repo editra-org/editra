@@ -5,10 +5,11 @@
 #-----------------------------------------------------------------------------#
 
 Version 1.1
-Released: 0x/xx/2010
+Released: 06/05/2010
 
-+Fix display of function names that had * or & prefixed to them
++Fix display of C function names that had * or & prefixed to them
 +Major improvement to Tcl/Tk support. Supports SNIT syntax, packages, variables.
++Expanded support for CSS (still needs work though)
 
 #-----------------------------------------------------------------------------#
 
@@ -24,7 +25,7 @@ Version 0.9
 Released: 06/14/2009
 
 New:
-+Syncronizes tree view with the current position in the document.
++Synchronizes tree view with the current position in the document.
 (patch from Igor Dejanovic)
 +Add support for XText. (patch from Igor Dejanovic)
 

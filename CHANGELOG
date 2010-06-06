@@ -17,7 +17,7 @@ NEWS:
 
 NEW: [features/improvements]
 +Improved TCL/Tk Highlighting
-+Updated CodeBrowser Plugin 1.1 (improved Tcl/Tk, C Support)
++Updated CodeBrowser Plugin 1.1 (improved Tcl/Tk, C, and CSS Support)
 
 BUG FIXES:
 +Fix braces not getting un-highlighted when toggling setting on and off.
