@@ -245,17 +245,38 @@ URL = "http://editra.org"
 
 VERSION = info.VERSION
 
-MANIFEST_TEMPLATE = '''
+MANIFEST_TEMPLATE = """
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
-<assemblyIdentity
+  <assemblyIdentity
     version="5.0.0.0"
     processorArchitecture="x86"
     name="%(prog)s"
     type="win32"
-/>
-<description>%(prog)s</description>
-<dependency>
+  />
+  <description>%(prog)s</description>
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel
+            level="asInvoker"
+            uiAccess="false">
+        </requestedExecutionLevel>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity
+            type="win32"
+            name="Microsoft.VC90.CRT"
+            version="9.0.21022.8"
+            processorArchitecture="x86"
+            publicKeyToken="1fc8b3b9a1e18e3b">
+      </assemblyIdentity>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly>
         <assemblyIdentity
             type="win32"
@@ -266,9 +287,9 @@ MANIFEST_TEMPLATE = '''
             language="*"
         />
     </dependentAssembly>
-</dependency>
+  </dependency>
 </assembly>
-'''
+"""
 
 RT_MANIFEST = 24
 #---- End Global Settings ----#
@@ -305,11 +326,12 @@ def BuildPy2Exe():
                                "optimize" : 1,
                                "bundle_files" : 2,
                                "includes" : INCLUDES,
-                               "excludes" : ["Tkinter",] }},
+                               "excludes" : ["Tkinter",],
+                               "dll_excludes": [ "MSVCP90.dll" ] }},
         windows = [{"script": "src/Editra.py",
                     "icon_resources": [(0, ICON['Win'])],
-#                    "other_resources" : [(RT_MANIFEST, 1,
-#                                          MANIFEST_TEMPLATE % dict(prog=NAME))],
+                    "other_resources" : [(RT_MANIFEST, 1,
+                                          MANIFEST_TEMPLATE % dict(prog=NAME))],
                   }],
         description = NAME,
         author = AUTHOR,
