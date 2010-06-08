@@ -106,6 +106,7 @@ class LaunchWindow(eclib.ControlBox):
             Profile_Set(cfgdlg.LAUNCH_PREFS,
                         dict(autoclear=False,
                              errorbeep=False,
+                             wrapoutput=False,
                              defaultf=self._buffer.GetDefaultForeground().Get(),
                              defaultb=self._buffer.GetDefaultBackground().Get(),
                              errorf=self._buffer.GetErrorForeground().Get(),
@@ -317,7 +318,14 @@ class LaunchWindow(eclib.ControlBox):
         """
         util.Log("[Launch][info] Saving config to profile")
         self.RefreshControlBar()
-        Profile_Set(LAUNCH_KEY, handlers.GetState())
+        Profile_Set(LAUNCH_KEY, handlers.GetState()) # TODO is this necessary see other handler
+        # Update wordwrapping
+        mode = wx.stc.STC_WRAP_NONE
+        if self._prefs.get('wrapoutput', False):
+            mode = wx.stc.STC_WRAP_WORD # should we do wrap char?
+        wrapmode = self._buffer.GetWrapMode()
+        if wrapmode != mode:
+            self._buffer.SetWrapMode(mode)
         self.UpdateBufferColors()
 
     @ed_msg.mwcontext

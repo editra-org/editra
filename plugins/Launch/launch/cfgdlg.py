@@ -43,6 +43,7 @@ ID_EXECUTABLES = wx.NewId()
 # Misc Panel
 ID_AUTOCLEAR = wx.NewId()
 ID_ERROR_BEEP = wx.NewId()
+ID_WRAP_OUTPUT = wx.NewId()
 
 # Color Buttons
 ID_DEF_BACK = wx.NewId()
@@ -157,6 +158,7 @@ class ConfigNotebook(wx.Notebook):
             Profile_Set(LAUNCH_PREFS,
                         dict(autoclear=False,
                              errorbeep=False,
+                             wrapoutput=False,
                              defaultf=buff.GetDefaultForeground().Get(),
                              defaultb=buff.GetDefaultBackground().Get(),
                              errorf=buff.GetErrorForeground().Get(),
@@ -413,6 +415,9 @@ class MiscPanel(wx.Panel):
         error_cb = wx.CheckBox(self, ID_ERROR_BEEP,
                                _("Audible feedback when errors are detected"))
         error_cb.SetValue(cfg.get('errorbeep', False))
+        wrap_cb = wx.CheckBox(self, ID_WRAP_OUTPUT,
+                              _("Wrap lines in output buffer"))
+        wrap_cb.SetValue(cfg.get('wrapoutput', False))
 
         # Colors
         colors = dict()
@@ -465,6 +470,7 @@ class MiscPanel(wx.Panel):
                         (wx.StaticText(self, label=("Actions") + u":"), 0),
                         ((5, 5), 0), (clear_cb, 0),
                         ((5, 5), 0), (error_cb, 0),
+                        ((5, 5), 0), (wrap_cb, 0),
                         ((10, 10), 0), (wx.StaticLine(self), 0, wx.EXPAND),
                         ((10, 10), 0),
                         (boxsz, 1, wx.EXPAND)])
@@ -481,6 +487,8 @@ class MiscPanel(wx.Panel):
             cfg['autoclear'] = e_val
         elif e_id == ID_ERROR_BEEP:
             cfg['errorbeep'] = e_val
+        elif e_id == ID_WRAP_OUTPUT:
+            cfg['wrapoutput'] = e_val
         else:
             evt.Skip()
 
