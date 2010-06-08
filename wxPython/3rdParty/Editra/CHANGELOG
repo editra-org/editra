@@ -18,6 +18,7 @@ NEWS:
 NEW: [features/improvements]
 +Improved TCL/Tk Highlighting
 +Updated CodeBrowser Plugin 1.1 (improved Tcl/Tk, C, and CSS Support)
++New version of Launch Plugin 1.7 (support word wrapping in output buffer)
 
 BUG FIXES:
 +Fix braces not getting un-highlighted when toggling setting on and off.
