@@ -24,6 +24,7 @@ BUG FIXES:
 +Fix incorrect handling of xml in IPC server (patch from rqsall)
 +Fix file open from commandline not respecting open files in new windows option.
 +Fix incorrect closer notifications that could occur when using the close tab shortcut.
++Fix crash that could occur due to Python autocompletion executing a SystemExit exception.
 
 #-----------------------------------------------------------------------------#
 

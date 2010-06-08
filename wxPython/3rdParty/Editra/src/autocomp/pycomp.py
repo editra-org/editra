@@ -120,7 +120,7 @@ class Completer(completer.BaseCompleter):
                 sigs.sort(lambda x, y: cmp(x.Name.upper(), y.Name.upper()))
                 return sigs
 
-        except Exception, msg:
+        except BaseException, msg:
             self._log("[pycomp][err] _GetCompletionInfo: %s, %s" % \
                       (sys.exc_info()[0], sys.exc_info()[1]))
             if calltip:
