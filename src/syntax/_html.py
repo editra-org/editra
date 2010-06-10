@@ -206,6 +206,7 @@ class SyntaxData(syndata.SyntaxDataBase):
 
         # Setup
         self.SetLexer(stc.STC_LEX_HTML)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, AutoIndenter)
 
     def GetKeywords(self):
         """Returns Specified Keywords List"""
@@ -226,7 +227,61 @@ class SyntaxData(syndata.SyntaxDataBase):
         """Returns a list of characters used to comment a block of code"""
         return [u'<!--', u'-->']
 
-#---- End Required Functions ----#
+#-----------------------------------------------------------------------------#
+
+def AutoIndenter(estc, pos, ichar):
+    """Auto indent python code.
+    @param estc: EditraStyledTextCtrl
+    @param pos: current carat position
+    @param ichar: Indentation character
+
+    """
+    rtxt = u''
+    line = estc.GetCurrentLine()
+    spos = estc.PositionFromLine(line)
+    text = estc.GetTextRange(spos, pos)
+    epos = estc.GetLineEndPosition(line)
+    inspace = text.isspace()
+
+    # Cursor is in the indent area somewhere
+    if inspace:
+        return u"\n" + text
+
+    # Check if the cursor is in column 0 and just return newline.
+    if not len(text):
+        return u"\n"
+
+    if ichar == u"\t":
+        tabw = estc.GetTabWidth()
+    else:
+        tabw = estc.GetIndent()
+
+    # Standard indent to match previous line
+    indent = estc.GetLineIndentation(line)
+    levels = indent / tabw
+    end_spaces = ((indent - (tabw * levels)) * u" ")
+    rtxt = u"\n" + (ichar * levels) + end_spaces
+
+    # Check if we need some 'special' indentation
+    tmp = text.rstrip()
+    if tmp.endswith(u">"):
+        # At a tag check for if we need extra indentation
+        tagstart = tmp.rfind(u"<")
+        if tagstart >= 0:
+            tagval = tmp[tagstart:]
+            if not tagval.startswith(u"</") and \
+               not tagval.endswith(u"/>") and \
+               not tagval.endswith(u"?>"):
+                # Cursor is after an opening tag so we need to indent more
+                # First match to the starting tag
+                levels = (tagstart / tabw) # Add an extra level
+                end_spaces = ((tagstart - (tabw * levels)) * u" ")
+                rtxt = u"\n" + (ichar * (levels+1)) + end_spaces
+
+    # EOL correction
+    txt = rtxt.replace(u'\n', estc.GetEOLChar())
+    # Put text in the buffer
+    estc.AddText(txt)
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString(option=0):

@@ -19,6 +19,7 @@ NEW: [features/improvements]
 +Improved TCL/Tk Highlighting
 +Updated CodeBrowser Plugin 1.1 (improved Tcl/Tk, C, and CSS Support)
 +New version of Launch Plugin 1.7 (support word wrapping in output buffer)
++Improved AutoIndent functionality for HTML/XML
 
 LIBRARY:
 +Syntax modules that provide AutoIndenters are now responsible for adding the
