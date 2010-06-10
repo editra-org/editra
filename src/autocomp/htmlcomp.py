@@ -146,7 +146,8 @@ class Completer(completer.BaseCompleter):
                            not tag[0] in ('!', '/'):
                             rtag = u"</" + tag + u">"
                             if tag in NLINE_TAGS:
-                                rtag = buff.GetEOLChar() + rtag
+                                buff.AutoIndent()
+                                buff.BackTab()
 
                             if not parts[-1].endswith('>'):
                                 rtag = u">" + rtag
@@ -162,7 +163,7 @@ class Completer(completer.BaseCompleter):
 
         """
         buff = self.GetBuffer()
-        if text.startswith(u"</"):
+        if text.strip().startswith(u"</"):
             buff.SetCurrentPos(pos) # move caret back between the tags
             # HACK: SetCurrentPos causes text to be selected
             buff.SetSelection(pos, pos)

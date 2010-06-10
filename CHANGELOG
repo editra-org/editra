@@ -20,6 +20,7 @@ NEW: [features/improvements]
 +Updated CodeBrowser Plugin 1.1 (improved Tcl/Tk, C, and CSS Support)
 +New version of Launch Plugin 1.7 (support word wrapping in output buffer)
 +Improved AutoIndent functionality for HTML/XML
++Improve behavior of HTML autocomp
 
 LIBRARY:
 +Syntax modules that provide AutoIndenters are now responsible for adding the
