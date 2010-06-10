@@ -25,6 +25,7 @@ import cfgdlg
 
 # Editra Libraries
 import ed_glob
+import ed_basestc
 import util
 from profiler import Profile_Get, Profile_Set
 import ed_txt
@@ -83,6 +84,7 @@ class LaunchWindow(eclib.ControlBox):
         self._mw = self.__FindMainWindow()
         self._buffer = OutputDisplay(self)
         self._fnames = list()
+        self._lockFile = None # Created in __DoLayout
         self._chFiles = None # Created in __DoLayout
         self._worker = None
         self._busy = False
@@ -131,6 +133,7 @@ class LaunchWindow(eclib.ControlBox):
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
+        self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
@@ -176,6 +179,9 @@ class LaunchWindow(eclib.ControlBox):
 
         # Script Label
         ctrlbar.AddControl((5, 5), wx.ALIGN_LEFT)
+        self._lockFile = wx.CheckBox(ctrlbar, wx.ID_ANY)
+        self._lockFile.SetToolTipString(_("Lock File"))
+        ctrlbar.AddControl(self._lockFile, wx.ALIGN_LEFT)
         self._chFiles = wx.Choice(ctrlbar, wx.ID_ANY)#, choices=[''])
         ctrlbar.AddControl(self._chFiles, wx.ALIGN_LEFT)
 
@@ -183,9 +189,9 @@ class LaunchWindow(eclib.ControlBox):
         ctrlbar.AddControl((5, 5), wx.ALIGN_LEFT)
         ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("args") + ":"),
                            wx.ALIGN_LEFT)
-        args = wx.TextCtrl(ctrlbar, ID_ARGS)
-        args.SetToolTipString(_("Script Arguments"))
-        ctrlbar.AddControl(args, wx.ALIGN_LEFT)
+        args = wx.TextCtrl(ctrlbar, ID_ARGS, size=(100,-1))
+        args.SetToolTipString(_("Arguments"))
+        ctrlbar.AddControl(args, wx.ALIGN_LEFT, 1)
 
         # Spacer
         ctrlbar.AddStretchSpacer()
@@ -311,6 +317,21 @@ class LaunchWindow(eclib.ControlBox):
         else:
             evt.Skip()
 
+    def OnCheck(self, evt):
+        """CheckBox for Lock File was clicked"""
+        e_obj = evt.GetEventObject()
+        if e_obj is self._lockFile:
+            if self._lockFile.IsChecked():
+                self._chFiles.Disable()
+            else:
+                self._chFiles.Enable()
+                cbuff = GetTextBuffer(self._mw)
+                if isinstance(cbuff, ed_basestc.EditraBaseStc):
+                    self.UpdateCurrentFiles(cbuff.GetLangId())
+                    self.SetupControlBar(cbuff)
+        else:
+            evt.Skip()
+
     def OnConfigExit(self, msg):
         """Update current state when the config dialog has been closed
         @param msg: Message Object
@@ -334,6 +355,9 @@ class LaunchWindow(eclib.ControlBox):
         @param msg: Message Object
 
         """
+        if self._lockFile.IsChecked():
+            return # Mode is locked ignore update
+
         # Update the file choice control
         self._config['lang'] = GetLangIdFromMW(self._mw)
         self.UpdateCurrentFiles(self._config['lang'])
@@ -355,6 +379,9 @@ class LaunchWindow(eclib.ControlBox):
         self._log("[launch][info] Lexer changed handler - context %d" %
                   self._mw.GetId())
 
+        if self._lockFile.IsChecked():
+            return # Mode is locked ignore update
+
         mdata = msg.GetData()
         # For backwards compatibility with older message format
         if mdata is None:
@@ -368,21 +395,25 @@ class LaunchWindow(eclib.ControlBox):
             self.UpdateCurrentFiles(ftype)
             self.SetControlBarState(fname, ftype)
 
+    @ed_msg.mwcontext
     def OnPageChanged(self, msg):
         """Update the status of the currently associated file
         when the page changes in the main notebook.
         @param msg: Message object
 
         """
-        # Only update when in the active window
-        if not self._mw.IsActive():
+        # The current mode is locked
+        if self._lockFile.IsChecked():
             return
 
         mval = msg.GetData()
         ctrl = mval[0].GetCurrentCtrl()
-        self.UpdateCurrentFiles(ctrl.GetLangId())
-        if hasattr(ctrl, 'GetFileName'):
+        if isinstance(ctrl, ed_basestc.EditraBaseStc):
+            self.UpdateCurrentFiles(ctrl.GetLangId())
             self.SetupControlBar(ctrl)
+        else:
+            self._log("[launch][info] Non STC object in notebook")
+            return # Doesn't implement EdStc interface
 
     def OnRunMsg(self, msg):
         """Run or abort a launch process if this is the current 
@@ -447,7 +478,6 @@ class LaunchWindow(eclib.ControlBox):
         args_txt = self.FindWindowById(ID_ARGS)
         run_btn = self.FindWindowById(ID_RUN)
 
-        # Set control states
         csel = exe_ch.GetStringSelection()
         exe_ch.SetItems(cmds)
         if len(cmds):
@@ -455,8 +485,10 @@ class LaunchWindow(eclib.ControlBox):
 
         util.Log("[Launch][info] Found commands %s" % str(cmds))
         if handler.GetName() != handlers.DEFAULT_HANDLER and len(self.GetFile()):
-            for ctrl in (exe_ch, args_txt, run_btn, self._chFiles):
+            for ctrl in (exe_ch, args_txt, run_btn,
+                         self._chFiles, self._lockFile):
                 ctrl.Enable()
+
             self._isready = True
 
             if self._config['lang'] == self._config['prelang'] and len(csel):
@@ -469,7 +501,8 @@ class LaunchWindow(eclib.ControlBox):
             self.GetControlBar().Layout()
         else:
             self._isready = False
-            for ctrl in (exe_ch, args_txt, run_btn, self._chFiles):
+            for ctrl in (exe_ch, args_txt, run_btn,
+                         self._chFiles, self._lockFile):
                 ctrl.Disable()
             self._chFiles.Clear()
 
