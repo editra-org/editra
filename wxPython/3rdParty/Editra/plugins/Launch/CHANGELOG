@@ -11,6 +11,8 @@ Version 1.7:
 +Fix crash that could occur when clicking on some hotspots where the pattern
 matching would return None.
 +Add Word Wrap option to output buffer.
++Add Lock File option to control bar to prevent the notebook syncronization from
+happening.
 
 #-----------------------------------------------------------------------------#
 Version 1.6:
