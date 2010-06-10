@@ -98,20 +98,18 @@ class SyntaxData(syndata.SyntaxDataBase):
 
 #-----------------------------------------------------------------------------#
 
-def AutoIndenter(stc, pos, ichar):
-    """Auto indent cobra code. uses \n the text buffer will
-    handle any eol character formatting.
-    @param stc: EditraStyledTextCtrl
+def AutoIndenter(estc, pos, ichar):
+    """Auto indent cobra code.
+    @param estc: EditraStyledTextCtrl
     @param pos: current carat position
     @param ichar: Indentation character
-    @return: string
 
     """
     rtxt = u''
-    line = stc.GetCurrentLine()
-    spos = stc.PositionFromLine(line)
-    text = stc.GetTextRange(spos, pos)
-    epos = stc.GetLineEndPosition(line)
+    line = estc.GetCurrentLine()
+    spos = estc.PositionFromLine(line)
+    text = estc.GetTextRange(spos, pos)
+    epos = estc.GetLineEndPosition(line)
     inspace = text.isspace()
 
     # Cursor is in the indent area somewhere
@@ -122,11 +120,11 @@ def AutoIndenter(stc, pos, ichar):
     if not len(text):
         return u"\n"
 
-    indent = stc.GetLineIndentation(line)
+    indent = estc.GetLineIndentation(line)
     if ichar == u"\t":
-        tabw = stc.GetTabWidth()
+        tabw = estc.GetTabWidth()
     else:
-        tabw = stc.GetIndent()
+        tabw = estc.GetIndent()
 
     i_space = indent / tabw
     end_spaces = ((indent - (tabw * i_space)) * u" ")
@@ -149,4 +147,7 @@ def AutoIndenter(stc, pos, ichar):
         elif rpos >= len(rval):
             rval = u"\n"
 
-    return rval
+    # EOL correction
+    txt = rval.replace(u'\n', estc.GetEOLChar())
+    # Put text in the buffer
+    estc.AddText(txt)

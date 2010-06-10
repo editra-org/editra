@@ -120,20 +120,19 @@ def StyleText(stc, start, end):
         if tlen:
             stc.SetStyling(len(txt), style)
 
-def AutoIndenter(stc, pos, ichar):
-    """Auto indent xtext code. uses \n the text buffer will
-    handle any eol character formatting.
+def AutoIndenter(estc, pos, ichar):
+    """Auto indent xtext code.
     This code is based on python AutoIndenter.
-    @param stc: EditraStyledTextCtrl
+    @param estc: EditraStyledTextCtrl
     @param pos: current carat position
     @param ichar: Indentation character
     @return: string
 
     """
     rtxt = u''
-    line = stc.GetCurrentLine()
-    spos = stc.PositionFromLine(line)
-    text = stc.GetTextRange(spos, pos)
+    line = estc.GetCurrentLine()
+    spos = estc.PositionFromLine(line)
+    text = estc.GetTextRange(spos, pos)
     inspace = text.isspace()
 
     # Cursor is in the indent area somewhere or in the column 0.
@@ -144,11 +143,11 @@ def AutoIndenter(stc, pos, ichar):
     if text.endswith(";"):
         return u"\n"
 
-    indent = stc.GetLineIndentation(line)
+    indent = estc.GetLineIndentation(line)
     if ichar == u"\t":
-        tabw = stc.GetTabWidth()
+        tabw = estc.GetTabWidth()
     else:
-        tabw = stc.GetIndent()
+        tabw = estc.GetIndent()
 
     i_space = indent / tabw
     end_spaces = ((indent - (tabw * i_space)) * u" ")
@@ -158,7 +157,10 @@ def AutoIndenter(stc, pos, ichar):
 
     rval = u"\n" + ichar * i_space + end_spaces
 
-    return rval
+    # EOL correction
+    txt = rval.replace(u'\n', estc.GetEOLChar())
+    # Put text in the buffer
+    estc.AddText(txt)
 
 #-----------------------------------------------------------------------------#
 

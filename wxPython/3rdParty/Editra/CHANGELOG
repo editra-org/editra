@@ -20,6 +20,10 @@ NEW: [features/improvements]
 +Updated CodeBrowser Plugin 1.1 (improved Tcl/Tk, C, and CSS Support)
 +New version of Launch Plugin 1.7 (support word wrapping in output buffer)
 
+LIBRARY:
++Syntax modules that provide AutoIndenters are now responsible for adding the
+text to the buffers them self instead of returning a string to the EditraStc.
+
 BUG FIXES:
 +Fix braces not getting un-highlighted when toggling setting on and off.
 +Fix incorrect handling of xml in IPC server (patch from rqsall)

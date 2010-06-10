@@ -139,16 +139,16 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def AutoIndent(self):
         """Indent from the current position to match the indentation
-        of the previous line.
-        @postcondition: proper type of white space is added from current pos
-                        to match that of indentation in above line
+        of the previous line. Unless the current file type has registered
+        a custom AutoIndenter in which case it will implement its own
+        behavior.
+
         """
         cpos = self.GetCurrentPos()
 
         # Check if a special purpose indenter has been registered
         if self._code['indenter'] is not None:
-            txt = self._code['indenter'](self, cpos, self.GetIndentChar())
-            txt = txt.replace('\n', self.GetEOLChar())
+            self._code['indenter'](self, cpos, self.GetIndentChar())
         else:
             # Default Indenter
             line = self.GetCurrentLine()
@@ -161,8 +161,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             i_space = indent / self.GetTabWidth()
             ndent = self.GetEOLChar() + self.GetIndentChar() * i_space
             txt = ndent + ((indent - (self.GetTabWidth() * i_space)) * u' ')
+            self.AddText(txt)
 
-        self.AddText(txt)
         self.EnsureCaretVisible()
 
     def BackTab(self):
