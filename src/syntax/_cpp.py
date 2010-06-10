@@ -185,24 +185,23 @@ class SyntaxData(syndata.SyntaxDataBase):
 
 #-----------------------------------------------------------------------------#
 
-def AutoIndenter(stc, pos, ichar):
-    """Auto indent cpp code. uses \n the text buffer will
-    handle any eol character formatting.
-    @param stc: EditraStyledTextCtrl
+def AutoIndenter(estc, pos, ichar):
+    """Auto indent cpp code.
+    @param estc: EditraStyledTextCtrl
     @param pos: current carat position
     @param ichar: Indentation character
     @return: string
 
     """
     rtxt = u''
-    line = stc.GetCurrentLine()
-    text = stc.GetTextRange(stc.PositionFromLine(line), pos)
+    line = estc.GetCurrentLine()
+    text = estc.GetTextRange(estc.PositionFromLine(line), pos)
 
-    indent = stc.GetLineIndentation(line)
+    indent = estc.GetLineIndentation(line)
     if ichar == u"\t":
-        tabw = stc.GetTabWidth()
+        tabw = estc.GetTabWidth()
     else:
-        tabw = stc.GetIndent()
+        tabw = estc.GetIndent()
 
     i_space = indent / tabw
     ndent = u"\n" + ichar * i_space
@@ -214,4 +213,7 @@ def AutoIndenter(stc, pos, ichar):
     if text.endswith('{') or cdef_pat.match(text) or case_pat.match(text):
         rtxt += ichar
 
-    return rtxt
+    # EOL correction
+    txt = rtxt.replace(u'\n', estc.GetEOLChar())
+    # Put text in the buffer
+    estc.AddText(txt)

@@ -43,6 +43,7 @@ class SyntaxData(syndata.SyntaxDataBase):
 
         # Setup
         self.SetLexer(stc.STC_LEX_XML)
+        self.RegisterFeature(synglob.FEATURE_AUTOINDENT, AutoIndenter)
 
     def GetKeywords(self):
         """Returns Specified Keywords List """
