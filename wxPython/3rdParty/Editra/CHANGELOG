@@ -32,6 +32,7 @@ BUG FIXES:
 +Fix file open from commandline not respecting open files in new windows option.
 +Fix incorrect closer notifications that could occur when using the close tab shortcut.
 +Fix crash that could occur due to Python autocompletion executing a SystemExit exception.
++Fix Shelf tabs not updating when show icons on tab option is toggled.
 
 #-----------------------------------------------------------------------------#
 
