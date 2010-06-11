@@ -148,7 +148,9 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         # Check if a special purpose indenter has been registered
         if self._code['indenter'] is not None:
+            self.BeginUndoAction()
             self._code['indenter'](self, cpos, self.GetIndentChar())
+            self.EndUndoAction()
         else:
             # Default Indenter
             line = self.GetCurrentLine()
