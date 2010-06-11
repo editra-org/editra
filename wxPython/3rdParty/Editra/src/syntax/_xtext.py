@@ -133,15 +133,18 @@ def AutoIndenter(estc, pos, ichar):
     line = estc.GetCurrentLine()
     spos = estc.PositionFromLine(line)
     text = estc.GetTextRange(spos, pos)
+    eolch = estc.GetEOLChar()
     inspace = text.isspace()
 
     # Cursor is in the indent area somewhere or in the column 0.
     if inspace or not len(text):
-        return u"\n" + text
+        estc.AddText(eolch + text)
+        return
 
     text = text.strip()
     if text.endswith(";"):
-        return u"\n"
+        estc.AddText(eolch)
+        return
 
     indent = estc.GetLineIndentation(line)
     if ichar == u"\t":

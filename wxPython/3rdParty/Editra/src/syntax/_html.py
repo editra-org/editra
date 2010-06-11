@@ -241,15 +241,18 @@ def AutoIndenter(estc, pos, ichar):
     spos = estc.PositionFromLine(line)
     text = estc.GetTextRange(spos, pos)
     epos = estc.GetLineEndPosition(line)
+    eolch = estc.GetEOLChar()
     inspace = text.isspace()
 
     # Cursor is in the indent area somewhere
     if inspace:
-        return u"\n" + text
+        estc.AddText(eolch + txt)
+        return
 
     # Check if the cursor is in column 0 and just return newline.
     if not len(text):
-        return u"\n"
+        estc.AddText(eolch)
+        return
 
     if ichar == u"\t":
         tabw = estc.GetTabWidth()
@@ -260,7 +263,7 @@ def AutoIndenter(estc, pos, ichar):
     indent = estc.GetLineIndentation(line)
     levels = indent / tabw
     end_spaces = ((indent - (tabw * levels)) * u" ")
-    rtxt = u"\n" + (ichar * levels) + end_spaces
+    rtxt = eolch + (ichar * levels) + end_spaces
 
     # Check if we need some 'special' indentation
     tmp = text.rstrip()
@@ -276,10 +279,10 @@ def AutoIndenter(estc, pos, ichar):
                 # First match to the starting tag
                 levels = (tagstart / tabw) # Add an extra level
                 end_spaces = ((tagstart - (tabw * levels)) * u" ")
-                rtxt = u"\n" + (ichar * (levels+1)) + end_spaces
+                rtxt = eolch + (ichar * (levels+1)) + end_spaces
 
     # EOL correction
-    txt = rtxt.replace(u'\n', estc.GetEOLChar())
+    txt = rtxt.replace(u'\n', eolch)
     # Put text in the buffer
     estc.AddText(txt)
 
