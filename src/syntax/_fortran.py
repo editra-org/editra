@@ -173,8 +173,9 @@ def AutoIndenter(estc, pos, ichar):
 
     """
     rtxt = u''
-    line = stc.GetCurrentLine()
-    text = stc.GetTextRange(stc.PositionFromLine(line), pos)
+    line = estc.GetCurrentLine()
+    text = estc.GetTextRange(estc.PositionFromLine(line), pos)
+    eolch = estc.GetEOLChar()
 
     indent = estc.GetLineIndentation(line)
     if ichar == u"\t":
@@ -183,7 +184,7 @@ def AutoIndenter(estc, pos, ichar):
         tabw = estc.GetIndent()
 
     i_space = indent / tabw
-    ndent = u"\n" + ichar * i_space
+    ndent = eolch + ichar * i_space
     rtxt = ndent + ((indent - (tabw * i_space)) * u' ')
 
     blks = '(program|function|subroutine|if|do|while)'
@@ -192,7 +193,5 @@ def AutoIndenter(estc, pos, ichar):
     if text.endswith('{') or blk_pat.match(text) or text == 'else':
         rtxt += ichar
 
-    # EOL correction
-    txt = rtxt.replace(u'\n', estc.GetEOLChar())
     # Put text in the buffer
-    estc.AddText(txt)
+    estc.AddText(rtxt)

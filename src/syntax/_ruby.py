@@ -118,6 +118,7 @@ def AutoIndenter(estc, pos, ichar):
     rtxt = u''
     line = estc.GetCurrentLine()
     text = estc.GetTextRange(estc.PositionFromLine(line), pos)
+    eolch = estc.GetEOLChar()
 
     indent = estc.GetLineIndentation(line)
     if ichar == u"\t":
@@ -126,7 +127,7 @@ def AutoIndenter(estc, pos, ichar):
         tabw = estc.GetIndent()
 
     i_space = indent / tabw
-    ndent = u"\n" + ichar * i_space
+    ndent = eolch + ichar * i_space
     rtxt = ndent + ((indent - (tabw * i_space)) * u' ')
 
     def_pat = re.compile('\s*(class|def)\s+[a-zA-Z_][a-zA-Z0-9_]*')
@@ -134,10 +135,8 @@ def AutoIndenter(estc, pos, ichar):
     if text.endswith('{') or def_pat.match(text):
         rtxt += ichar
 
-    # EOL correction
-    txt = rtxt.replace(u'\n', estc.GetEOLChar())
     # Put text in the buffer
-    estc.AddText(txt)
+    estc.AddText(rtxt)
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString(option=0):

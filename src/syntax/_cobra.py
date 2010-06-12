@@ -142,15 +142,13 @@ def AutoIndenter(estc, pos, ichar):
         elif tokens[-1].endswith(u"\\"):
             i_space += 1
 
-    rval = u"\n" + (ichar * i_space) + end_spaces
+    rval = eolch + (ichar * i_space) + end_spaces
     if inspace and ichar != u"\t":
         rpos = indent - (pos - spos)
         if rpos < len(rval) and rpos > 0:
             rval = rval[:-rpos]
         elif rpos >= len(rval):
-            rval = u"\n"
+            rval = eolch
 
-    # EOL correction
-    txt = rval.replace(u'\n', estc.GetEOLChar())
     # Put text in the buffer
-    estc.AddText(txt)
+    estc.AddText(rval)
