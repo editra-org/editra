@@ -9,8 +9,8 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.xx
-DATE 0x/xx/2010
+VERSION 0.5.70
+DATE 06/12/2010
 35th Alpha Release
 
 NEWS:
@@ -18,7 +18,7 @@ NEWS:
 NEW: [features/improvements]
 +Improved TCL/Tk Highlighting
 +Updated CodeBrowser Plugin 1.1 (improved Tcl/Tk, C, and CSS Support)
-+New version of Launch Plugin 1.7 (word wrap and lock file options)
++Update Launch Plugin 1.7 (word wrap and lock file options)
 +Improved AutoIndent functionality for HTML/XML
 +Improve behavior of HTML autocomp
 
