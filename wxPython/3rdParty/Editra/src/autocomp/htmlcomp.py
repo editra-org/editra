@@ -146,8 +146,10 @@ class Completer(completer.BaseCompleter):
                            not tag[0] in ('!', '/'):
                             rtag = u"</" + tag + u">"
                             if tag in NLINE_TAGS:
+                                buff.BeginUndoAction()
                                 buff.AutoIndent()
                                 buff.BackTab()
+                                buff.EndUndoAction()
 
                             if not parts[-1].endswith('>'):
                                 rtag = u">" + rtag
@@ -167,6 +169,7 @@ class Completer(completer.BaseCompleter):
             buff.SetCurrentPos(pos) # move caret back between the tags
             # HACK: SetCurrentPos causes text to be selected
             buff.SetSelection(pos, pos)
+            buff.AutoIndent()
 
 #--------------------------------------------------------------------------#
 
