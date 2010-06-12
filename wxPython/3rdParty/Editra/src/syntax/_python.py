@@ -110,7 +110,6 @@ def AutoIndenter(estc, pos, ichar):
     @param ichar: Indentation character
 
     """
-    rtxt = u''
     line = estc.GetCurrentLine()
     spos = estc.PositionFromLine(line)
     text = estc.GetTextRange(spos, pos)
@@ -155,19 +154,16 @@ def AutoIndenter(estc, pos, ichar):
         elif tokens[0] in UNINDENT_KW:
             i_space = max(i_space - 1, 0)
 
-    rval = u"\n" + (ichar * i_space) + end_spaces
+    rval = eolch + (ichar * i_space) + end_spaces
     if inspace and ichar != u"\t":
         rpos = indent - (pos - spos)
         if rpos < len(rval) and rpos > 0:
             rval = rval[:-rpos]
         elif rpos >= len(rval):
-            rval = u"\n"
-
-    # EOL correction
-    txt = rval.replace(u'\n', eolch)
+            rval = eolch
 
     # Put text in the buffer
-    estc.AddText(txt)
+    estc.AddText(rval)
 
 #---- End Required Module Functions ----#
 

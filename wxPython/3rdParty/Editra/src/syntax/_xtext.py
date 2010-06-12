@@ -158,12 +158,10 @@ def AutoIndenter(estc, pos, ichar):
     if text.endswith(u":"):
         i_space += 1
 
-    rval = u"\n" + ichar * i_space + end_spaces
+    rtxt = eolch + ichar * i_space + end_spaces
 
-    # EOL correction
-    txt = rval.replace(u'\n', estc.GetEOLChar())
     # Put text in the buffer
-    estc.AddText(txt)
+    estc.AddText(rtxt)
 
 #-----------------------------------------------------------------------------#
 

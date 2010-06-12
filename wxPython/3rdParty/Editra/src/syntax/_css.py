@@ -140,6 +140,7 @@ def AutoIndenter(estc, pos, ichar):
     rtxt = u''
     line = estc.GetCurrentLine()
     text = estc.GetTextRange(estc.PositionFromLine(line), pos)
+    eolch = estc.GetEOLChar()
 
     indent = estc.GetLineIndentation(line)
     if ichar == u"\t":
@@ -148,13 +149,11 @@ def AutoIndenter(estc, pos, ichar):
         tabw = estc.GetIndent()
 
     i_space = indent / tabw
-    ndent = u"\n" + ichar * i_space
+    ndent = eolch + ichar * i_space
     rtxt = ndent + ((indent - (tabw * i_space)) * u' ')
 
     if text.endswith('{'):
         rtxt += ichar
 
-    # EOL correction
-    txt = rtxt.replace(u'\n', estc.GetEOLChar())
     # Put text in the buffer
-    estc.AddText(txt)
+    estc.AddText(rtxt)

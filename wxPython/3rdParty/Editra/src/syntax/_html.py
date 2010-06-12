@@ -281,10 +281,8 @@ def AutoIndenter(estc, pos, ichar):
                 end_spaces = ((tagstart - (tabw * levels)) * u" ")
                 rtxt = eolch + (ichar * (levels+1)) + end_spaces
 
-    # EOL correction
-    txt = rtxt.replace(u'\n', eolch)
     # Put text in the buffer
-    estc.AddText(txt)
+    estc.AddText(rtxt)
 
 #---- Syntax Modules Internal Functions ----#
 def KeywordString(option=0):
