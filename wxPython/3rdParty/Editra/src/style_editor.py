@@ -727,14 +727,6 @@ class PreviewPanel(eclib.ControlBox):
         self.preview.EmptyUndoBuffer()
         return True
 
-    def GetStyleSet(self):
-        """Accessor to STC"""
-        return self.preview.GetStyleSet()
-
-    def SetStyles(self, name, style_dict, nomerge=False):
-        """Accessor to STC"""
-        self.preview.SetStyles(name, style_dict, nomerge)
-
 #-----------------------------------------------------------------------------#
 # Utility functions
 def DuplicateStyleDict(style_dict):
