@@ -374,7 +374,7 @@ EXT_MAP = {
            'bas cls ctl frm vb' : LANG_VB,
            'vbs dsm'            : LANG_VBSCRIPT,
            'v'                  : LANG_VERILOG,
-           'vh vhdl'            : LANG_VHDL,
+           'vh vhdl vhd'        : LANG_VHDL,
            'axl dtd plist rdf svg xml xrc xsd xsl xslt xul' : LANG_XML,
            'yaml yml'           : LANG_YAML,
            'groovy'             : LANG_GROOVY,
