@@ -113,7 +113,6 @@ def AutoIndenter(estc, pos, ichar):
     line = estc.GetCurrentLine()
     spos = estc.PositionFromLine(line)
     text = estc.GetTextRange(spos, pos)
-    epos = estc.GetLineEndPosition(line)
     eolch = estc.GetEOLChar()
     inspace = text.isspace()
 
