@@ -246,7 +246,7 @@ def AutoIndenter(estc, pos, ichar):
 
     # Cursor is in the indent area somewhere
     if inspace:
-        estc.AddText(eolch + txt)
+        estc.AddText(eolch + text)
         return
 
     # Check if the cursor is in column 0 and just return newline.

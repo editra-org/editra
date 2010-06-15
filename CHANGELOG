@@ -18,6 +18,7 @@ NEWS:
 NEW: [features/improvements]
 
 BUG FIXES:
++Fix error in HTML autocompletion.
 
 #-----------------------------------------------------------------------------#
 
