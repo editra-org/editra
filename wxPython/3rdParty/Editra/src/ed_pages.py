@@ -73,7 +73,7 @@ class EdPages(aui.AuiNotebook):
         self._searchctrl = ed_search.SearchController(self, self.GetCurrentCtrl)
         self._searchctrl.SetLookinChoices(Profile_Get('SEARCH_LOC',
                                                       default=list()))
-        self._searchctrl.SetFileFilters(Profile_Get('SEARCH_FILTER', default=''))
+        self._searchctrl.SetFileFilters(Profile_Get('SEARCH_FILTER', default=u''))
 
         self.pg_num = -1              # Track new pages (aka untitled docs)
         self.mdown = -1
@@ -119,7 +119,8 @@ class EdPages(aui.AuiNotebook):
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_NOTEBOOK)
         ed_msg.Subscribe(self.OnUpdatePosCache, ed_msg.EDMSG_UI_STC_POS_JUMPED)
-        ed_msg.RegisterCallback(self.OnDocPointerRequest, ed_msg.EDREQ_DOCPOINTER)
+        ed_msg.RegisterCallback(self.OnDocPointerRequest,
+                                ed_msg.EDREQ_DOCPOINTER)
 
         # Add a blank page
         self.NewPage()

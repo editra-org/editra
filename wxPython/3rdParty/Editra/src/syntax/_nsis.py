@@ -23,7 +23,6 @@ __revision__ = "$Revision$"
 import wx.stc as stc
 
 # Local Imports
-import synglob
 import syndata
 
 #-----------------------------------------------------------------------------#

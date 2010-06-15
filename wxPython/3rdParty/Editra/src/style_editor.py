@@ -664,6 +664,7 @@ class PreviewPanel(eclib.ControlBox):
         eclib.ControlBox.__init__(self, parent)
 
         # Attributes
+        self.LOG = wx.GetApp().GetLog()
         self.preview = ed_basestc.EditraBaseStc(self, wx.ID_ANY, size=(-1, 200),
                                                 style=wx.SUNKEN_BORDER)
 

@@ -22,7 +22,6 @@ __revision__ = "$Revision$"
 # Imports
 import wx
 import wx.stc
-import types
 
 # Editra Imports
 import ed_glob
@@ -466,6 +465,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     @property
     def File(self):
+        """Reference to this buffers file object"""
         return self.file
 
     def FindLexer(self, set_ext=u''):
