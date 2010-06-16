@@ -189,9 +189,11 @@ class StyleEditor(wx.Dialog):
         style_lbl = wx.StaticText(self.ctrl_pane, label=_("Style Tags") + u": ")
         style_tags = self.styles_orig.keys()
         style_lst = wx.ListBox(self.ctrl_pane, ID_STYLES,
-                               choices=sorted(style_tags), style=wx.LB_SINGLE)
+                               size=(-1, 130), # Need explicit size for MSW...
+                               choices=sorted(style_tags),
+                               style=wx.LB_SINGLE)
         style_sizer2.AddMany([(style_lbl, 0, wx.ALIGN_LEFT),
-                             (style_lst, 1, wx.EXPAND)])
+                             (style_lst, 0, wx.EXPAND)])
         style_sizer.Add(style_sizer2, 1, wx.EXPAND|wx.LEFT|wx.RIGHT, 10)
         return style_sizer
 
@@ -571,8 +573,8 @@ class SettingsPanel(wx.Panel):
 
         # Settings top
         setting_sizer.Add((10, 10))
-        cbox_sizer = wx.StaticBoxSizer(wx.StaticBox(self,
-                                          label=_("Color") + u":"), wx.VERTICAL)
+        sbox = wx.StaticBox(self, label=_("Color") + u":")
+        cbox_sizer = wx.StaticBoxSizer(sbox, wx.VERTICAL)
 
         # Foreground
         fground_sizer = wx.BoxSizer(wx.HORIZONTAL)
