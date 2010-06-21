@@ -123,8 +123,8 @@ Section "Editra Core" SEC01
 
   ; Add the shortcuts to the start menu and desktop
   CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Editra.lnk" "$INSTDIR\Editra.exe"
-  CreateShortCut "$DESKTOP\Editra.lnk" "$INSTDIR\Editra.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Editra.lnk" "$INSTDIR\Editra.exe" "" "$INSTDIR\${MUI_ICON}"
+  CreateShortCut "$DESKTOP\Editra.lnk" "$INSTDIR\Editra.exe"  "" "$INSTDIR\${MUI_ICON}"
 SectionEnd
 
 ; Enabled if Add openwith entry is checked
