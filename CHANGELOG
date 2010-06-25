@@ -19,7 +19,7 @@ This release addresses a critical bug in the handling of HTML/XML files.
 BUG FIXES:
 +Fix error in HTML autocompletion.
 +Fix application icon not showing up on Windows Vista and 7.
-+Fix spellchecker dependancies missing in Windows binary builds.
++Fix spellchecker dependencies missing in Windows binary builds.
 
 #-----------------------------------------------------------------------------#
 
