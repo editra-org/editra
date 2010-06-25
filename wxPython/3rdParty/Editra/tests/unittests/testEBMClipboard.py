@@ -45,10 +45,10 @@ class EBMClipboardTest(unittest.TestCase):
 
     def testNextFree(self):
         self.cb.NextFree()
-        self.assertEquals(self.cb.current, u'a')
+        self.assertEquals(self.cb.current, 'a')
         self.cb.Set("TEST")
         self.cb.NextFree()
-        self.assertEquals(self.cb.current, u'b')
+        self.assertEquals(self.cb.current, 'b')
 
     def testAllUsed(self):
         used = self.cb.AllUsed()
@@ -60,7 +60,7 @@ class EBMClipboardTest(unittest.TestCase):
         used = self.cb.AllUsed()
         self.assertTrue('"' in used)
         self.assertTrue('a' in used)
-        self.assertTrue('b' in used)
+        self.assertTrue('b' in used, "Used: %s" % repr(used))
         
     def testGetSet(self):
         self.cb.Switch("a")
