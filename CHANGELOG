@@ -9,6 +9,19 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.5.xx
+DATE 0x/xx/2010
+37th Alpha Release
+
+NEWS:
+
+NEW: [features/enhancements]
++ Add support for DSP56K assembly
+
+BUG FIXES:
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.5.72
 DATE 06/24/2010
 36th Alpha Release
