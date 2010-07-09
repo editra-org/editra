@@ -51,7 +51,9 @@ LANG_ADA = u'Ada'
 
 #---- Use LEX_ASM ----#
 ID_LANG_ASM  = _NewId()
-LANG_ASM = u'Assembly Code'
+LANG_ASM = u'GNU Assembly'
+ID_LANG_DSP56K = _NewId()
+LANG_DSP56K = u'DSP56K Assembly'
 ID_LANG_68K  = _NewId()
 LANG_68K = u'68k Assembly'
 ID_LANG_MASM = _NewId()
@@ -299,10 +301,12 @@ LANG_XTEXT = u'Xtext'
 # Default extensions to file type mapping
 EXT_MAP = {
            '4gl'                : LANG_4GL,
+           '56k'                : LANG_DSP56K,
            '68k'                : LANG_68K,
            'ada adb ads a'      : LANG_ADA,
            'conf htaccess'      : LANG_APACHE,
            'as asc mx'          : LANG_AS,
+           'gasm'               : LANG_ASM,
            'bsh sh configure'   : LANG_BASH,
            'bat cmd'            : LANG_BATCH,
            'boo'                : LANG_BOO,

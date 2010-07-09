@@ -39,10 +39,12 @@ FEATURE_STYLETEXT = u"StyleText"
 
 # Maps file types to syntax definitions
 LANG_MAP = {LANG_4GL    : (ID_LANG_4GL,       '_progress'),
+            LANG_DSP56K : (ID_LANG_DSP56K,    '_asm68k'),
             LANG_68K    : (ID_LANG_68K,       '_asm68k'),
             LANG_ADA    : (ID_LANG_ADA,       '_ada'),
             LANG_APACHE : (ID_LANG_APACHE,    '_apache'),
             LANG_AS     : (ID_LANG_AS,        '_actionscript'),
+            LANG_ASM    : (ID_LANG_ASM,       '_asm'),
             LANG_BASH   : (ID_LANG_BASH,      '_sh'),
             LANG_BATCH  : (ID_LANG_BATCH,     '_batch'),
             LANG_BOO    : (ID_LANG_BOO,       '_boo'),
