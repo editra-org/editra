@@ -16,9 +16,11 @@ DATE 0x/xx/2010
 NEWS:
 
 NEW: [features/enhancements]
-+ Add support for DSP56K assembly
++Add support for DSP56K assembly
 
 BUG FIXES:
++Fix bug in style sheet parsing that was not properly setting undefined style
+tags to the default_style.
 
 #-----------------------------------------------------------------------------#
 

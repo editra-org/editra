@@ -121,6 +121,15 @@ class StyleItem(object):
         style_str = u",".join(style_str)
         return style_str.rstrip(u",")
 
+    def Clone(self):
+        """Make and return a copy of this object"""
+        nitem = StyleItem(self.fore, self.back,
+                          self.face, self.size,
+                          self._exattr)
+        if self.null:
+            nitem.Nullify()
+        return nitem
+        
     #---- Get Functions ----#
     def GetAsList(self):
         """Returns a list of attr:value strings
@@ -381,7 +390,7 @@ class StyleMgr(object):
         """
         sty_dict = dict()
         for key in DEF_STYLE_DICT.keys():
-            if key in ('select_style', 'whitespace_style'):
+            if key in ('select_style',):
                 sty_dict[key] = NullStyleItem()
             else:
                 sty_dict[key] = StyleItem("#000000", "#FFFFFF",
@@ -662,6 +671,15 @@ class StyleMgr(object):
                     style_set[tag].SetBack(default.GetBack())
                 if not style_set[tag].GetSize():
                     style_set[tag].SetSize(default.GetSize())
+
+            # Now need to pack in undefined styles that are part of
+            # the standard set.
+            for tag in DEF_STYLE_DICT.keys():
+                if tag not in style_set:
+                    if tag == 'select_style':
+                        style_set[tag] = NullStyleItem()
+                    else:
+                        style_set[tag] = default.Clone()
         else:
             pass
         return style_set
@@ -874,7 +892,7 @@ class StyleMgr(object):
             # Set any undefined styles to match the default_style
             for tag, item in defaultd.iteritems():
                 if tag not in style_dict:
-                    if tag in ['select_style', 'whitespace_style']:
+                    if tag in ('select_style',):
                         style_dict[tag] = NullStyleItem()
                     else:
                         style_dict[tag] = style_dict['default_style']
@@ -971,9 +989,8 @@ class StyleMgr(object):
         self.SetSelBackground(True, sback)
 
         wspace = self.GetItemByName('whitespace_style')
-        if not wspace.IsNull():
-            self.SetWhitespaceBackground(True, wspace.GetBack())
-            self.SetWhitespaceForeground(True, wspace.GetFore())
+        self.SetWhitespaceBackground(True, wspace.GetBack())
+        self.SetWhitespaceForeground(True, wspace.GetFore())
 
         self.SetCaretForeground(self.GetDefaultForeColour())
         self.SetCaretLineBack(self.GetItemByName('caret_line').GetBack())
