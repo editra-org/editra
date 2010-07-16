@@ -34,7 +34,7 @@ class StyleMgrTest(unittest.TestCase):
         self.dd = dict(ed_style.DEF_STYLE_DICT)
         self.bstr = ["fore:#000000", "back:#FFFFFF",
                      "face:%(primary)s", "size:%(size)d"]
-        self.stylesheet = common.GetDataFilePath('Dessert.ess')
+        self.stylesheet = common.GetDataFilePath('no_whitespace_style.ess')
 
     def tearDown(self):
         pass
