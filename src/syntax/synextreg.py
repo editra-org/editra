@@ -102,6 +102,8 @@ ID_LANG_JAVA = _NewId()
 LANG_JAVA = u'Java'
 ID_LANG_OBJC = _NewId()
 LANG_OBJC = u'Objective C'
+ID_LANG_OOC = _NewId()
+LANG_OOC = u'OOC'
 ID_LANG_PIKE = _NewId()
 LANG_PIKE = u'Pike'
 ID_LANG_SQUIRREL = _NewId()
@@ -355,6 +357,7 @@ EXT_MAP = {
            'nsi nsh'            : LANG_NSIS,
            'mm m'               : LANG_OBJC,
            'oct octave'         : LANG_OCTAVE,
+           'ooc'                : LANG_OOC,
            'dfm dpk dpr inc p pas pp' : LANG_PASCAL,
            'cgi pl pm pod'      : LANG_PERL,
            'php php3 phtml phtm' : LANG_PHP,

@@ -17,6 +17,7 @@ NEWS:
 
 NEW: [features/enhancements]
 +Add support for DSP56K assembly
++Add support for OOC programming language
 
 BUG FIXES:
 +Fix bug in style sheet parsing that was not properly setting undefined style
