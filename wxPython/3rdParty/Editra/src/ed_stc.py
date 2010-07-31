@@ -95,7 +95,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @keyword use_dt: whether to use a drop target or not
 
         """
-        ed_basestc.EditraBaseStc.__init__(self, parent, id_, pos, size, style)
+        super(EditraStc, self).__init__(parent, id_, pos, size, style)
 
         self.SetModEventMask(wx.stc.STC_PERFORMED_UNDO | \
                              wx.stc.STC_PERFORMED_REDO | \
@@ -1672,8 +1672,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
         else:
             ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENING, path)
             self.file.SetPath(path)
-            self.file.ReadAsync(self)
             self._loading = wx.BusyCursor()
+            self.file.ReadAsync(self)
             return True
 
     def ReloadFile(self):
