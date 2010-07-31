@@ -468,6 +468,13 @@ class SearchController(object):
                      for fname in self._parent.GetTextControls()]
             ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                (engine.SearchInFiles, [files,], dict()))
+        elif smode == eclib.LOCATION_IN_CURRENT_DIR:
+            stc = self._stc()
+            path = ebmlib.GetPathName(stc.GetFileName())
+            engine.SetFileFilters(evt.GetFileFilters())
+            ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
+                               (engine.SearchInDirectory,
+                               [path,], dict(recursive=evt.IsRecursive())))
         elif smode == eclib.LOCATION_IN_FILES:
             path = evt.GetDirectory()
             engine.SetFileFilters(evt.GetFileFilters())
@@ -501,9 +508,9 @@ class SearchController(object):
             self._li_sel = self._finddlg.GetLookinSelection()
             self._filters = self._finddlg.GetFileFilters()
 
-            # Store in profile. Only save most recent 5 in history
-            if len(self._li_choices) > 5:
-                choices = self._li_choices[-5:]
+            # Store in profile. Only save most recent 8 in history
+            if len(self._li_choices) > 8:
+                choices = self._li_choices[-8:]
             else:
                 choices = self._li_choices
 
@@ -605,9 +612,9 @@ class SearchController(object):
                 if matches is not None:
                     self.ReplaceInStc(ctrl, matches, rstring, evt.IsRegEx())
                     results += len(matches)
-        elif smode == eclib.LOCATION_IN_FILES:
+        elif smode in (eclib.LOCATION_IN_CURRENT_DIR, eclib.LOCATION_IN_FILES):
             dlg = wx.MessageDialog(self._parent,
-                                   _("Sorry will be ready for next version"),
+                                   _("Sorry will be ready for future version"),
                                    _("Not implemented"),
 #                                   _("Warning this cannot be undone!"),
 #                                   _("Do Replace All?"),

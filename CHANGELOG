@@ -16,6 +16,8 @@ DATE 0x/xx/2010
 NEWS:
 
 NEW: [features/enhancements]
++Add Search in Current Directory option to Find/Replace Dialog
++Increase persistence limit for search in directory history
 +Add support for DSP56K assembly
 +Add support for OOC programming language
 
