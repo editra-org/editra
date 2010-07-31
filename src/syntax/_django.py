@@ -117,7 +117,6 @@ def StyleText(stc, start, end):
 #            style = STC_DJANGO_STRINGEOL
 
         tlen = len(txt)
-        print type(txt)
         if wineol and "\n" in txt:
             tlen += txt.count("\n")
 
