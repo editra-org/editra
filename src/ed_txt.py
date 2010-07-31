@@ -226,6 +226,10 @@ class EdFile(ebmlib.FileObjectImpl):
                 self.bom = BOM.get(enc, None)
 
         if enc is None:
+            Log("[ed_txt][info] Doing brute force encoding check")
+            enc = GuessEncoding(self.GetPath(), 4096)
+
+        if enc is None:
             enc = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
 
         Log("[ed_txt][info] DetectEncoding - Set Encoding to %s" % enc)
@@ -363,6 +367,7 @@ class EdFile(ebmlib.FileObjectImpl):
         @param control: text control to send text to
 
         """
+        Log("[ed_txt][info] EdFile.ReadAsync()")
         pid = control.GetTopLevelParent().GetId()
         filesize = ebmlib.GetFileSize(self.GetPath())
         ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 1, filesize))
@@ -667,6 +672,26 @@ def FallbackReader(fname):
             return (enc, txt)
 
     return (None, None)
+
+def GuessEncoding(fname, sample):
+    """Attempt to guess an encoding
+    @param fname: filename
+    @param sample: pre-read amount
+    @return: encoding or None
+
+    """
+    for enc in GetEncodings():
+        try:
+            handle = open(fname, 'rb')
+            reader = codecs.getreader(enc)(handle)
+            txt = reader.read(sample)
+            reader.close()
+        except Exception, msg:
+            handle.close()
+            continue
+        else:
+            return enc
+    return None
 
 def GetEncodings():
     """Get a list of possible encodings to try from the locale information
