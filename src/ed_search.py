@@ -1016,7 +1016,6 @@ class EdSearchCtrl(wx.SearchCtrl):
 
         """
         if evt.GetEventType() != wx.wxEVT_KEY_UP:
-            print "SKIPPY"
             evt.Skip()
             return
 

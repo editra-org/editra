@@ -100,6 +100,14 @@ def StyleText(stc, start, end):
     lexer = get_lexer_by_name("html+django")
     doctxt = stc.GetTextRange(0, end)
     wineol = stc.GetEOLChar() == "\r\n"
+
+    # Need to convert to UTF-8 in order to calculate
+    # correct positions in STC.
+    try:
+        doctxt = doctxt.encode('utf-8')
+    except:
+        pass
+
     for token, txt in lexer.get_tokens(doctxt):
 #        print token, txt
         style = TOKEN_MAP.get(token, STC_DJANGO_DEFAULT)
@@ -109,6 +117,7 @@ def StyleText(stc, start, end):
 #            style = STC_DJANGO_STRINGEOL
 
         tlen = len(txt)
+        print type(txt)
         if wineol and "\n" in txt:
             tlen += txt.count("\n")
 

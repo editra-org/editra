@@ -23,6 +23,7 @@ BUG FIXES:
 +Fix bug in style sheet parsing that was not properly setting undefined style
 tags to the default_style.
 +Fix encoding detection issue that could lead to unhanded exception error.
++Fix handling of Unicode text by Django lexer.
 
 #-----------------------------------------------------------------------------#
 
