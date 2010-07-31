@@ -45,7 +45,8 @@ except (LookupError, TypeError):
 
 # File Helper Functions
 BOM = { 'utf-8' : codecs.BOM_UTF8,
-        'utf-16' : codecs.BOM }
+        'utf-16' : codecs.BOM,
+        'utf-32' : codecs.BOM_UTF32 }
 
 # Regex for extracting magic comments from source files
 # i.e *-* coding: utf-8 *-*, encoding=utf-8, ect...
@@ -84,7 +85,7 @@ class EdFile(ebmlib.FileObjectImpl):
         @keyword modtime: file modification time
 
         """
-        ebmlib.FileObjectImpl.__init__(self, path, modtime)
+        super(EdFile, self).__init__(path, modtime)
 
         # Attributes
         self._magic = dict(comment=None, bad=False)
@@ -580,6 +581,7 @@ def CheckBom(line):
     @return: encoding or None
 
     """
+    Log("[ed_txt][info] CheckBom called")
     has_bom = None
     for enc, bom in BOM.iteritems():
         if line.startswith(bom):

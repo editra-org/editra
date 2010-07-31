@@ -45,8 +45,8 @@ class EdSearchEngine(ebmlib.SearchEngine):
     """Text searching engine"""
     def __init__(self, query, regex=True, down=True,
                  matchcase=True, wholeword=False):
-        ebmlib.SearchEngine.__init__(self, query, regex, down,
-                                     matchcase, wholeword)
+        super(EdSearchEngine, self).__init__(query, regex, down,
+                                             matchcase, wholeword)
         # Atttributes
         self._offset = 0
 
@@ -95,7 +95,7 @@ class SearchController(object):
         @param getstc: Callable to get the current buffer with
 
         """
-        object.__init__(self)
+        super(SearchController, self).__init__()
 
         # Attributes
         self._parent   = owner
@@ -777,7 +777,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         @param menulen: max length of history menu
 
         """
-        wx.SearchCtrl.__init__(self, parent, id_, value, pos, size, style)
+        super(EdSearchCtrl, self).__init__(parent, id_, value, pos, size, style)
 
         # Attributes
         self._parent     = parent
@@ -1198,7 +1198,7 @@ class SearchResultScreen(eclib.ControlBox):
         @param parent: parent window
 
         """
-        eclib.ControlBox.__init__(self, parent)
+        super(SearchResultScreen, self).__init__(parent)
 
         # Attributes
         self._meth = None
@@ -1342,7 +1342,7 @@ class SearchResultList(eclib.OutputBuffer):
     STY_SEARCH_MATCH = eclib.OPB_STYLE_MAX + 1
     RE_FIND_MATCH = re.compile('(.+) \(([0-9]+)\)\: .+')
     def __init__(self, parent):
-        eclib.OutputBuffer.__init__(self, parent)
+        super(SearchResultList, self).__init__(parent)
 
         # Attributes
         self._files = 0

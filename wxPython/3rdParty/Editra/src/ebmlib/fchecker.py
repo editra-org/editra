@@ -35,7 +35,7 @@ class FileTypeChecker(object):
         @keyword preread: number of bytes to read for checking file type
 
         """
-        object.__init__(self)
+        super(FileTypeChecker, self).__init__()
 
         # Attributes
         self._preread = preread
