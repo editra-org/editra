@@ -29,7 +29,6 @@ import ed_style
 
 class StyleMgrTest(unittest.TestCase):
     def setUp(self):
-        self.app = common.EdApp(False)
         self.mgr = ed_style.StyleMgr()
         self.dd = dict(ed_style.DEF_STYLE_DICT)
         self.bstr = ["fore:#000000", "back:#FFFFFF",

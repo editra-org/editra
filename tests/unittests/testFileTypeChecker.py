@@ -6,9 +6,7 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
-"""Unittest cases for testing the FileTypeChecker class
-
-"""
+"""Unittest cases for testing the FileTypeChecker class """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"

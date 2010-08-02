@@ -32,12 +32,11 @@ class ThemeTest(unittest.TestCase):
     """Tests the BitmapProvier class"""
     def setUp(self):
         ed_glob.CONFIG['THEME_DIR'] = common.GetThemeDir()
-        self.app = common.EdApp(False)
-        pmgr = self.app.GetPluginManager()
+        pmgr = wx.GetApp().GetPluginManager()
         self.bmpprov = ed_theme.BitmapProvider(pmgr)
 
     def tearDown(self):
-        self.app.Exit()
+        pass
 
     #---- Test Cases ----#
 

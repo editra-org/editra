@@ -31,12 +31,11 @@ import ed_art
 class ArtProviderTest(unittest.TestCase):
     """Tests the ArtProvider class"""
     def setUp(self):
-        self.app = common.EdApp(False)
         ap = ed_art.EditraArt()
         wx.ArtProvider.Push(ap)
 
     def tearDown(self):
-        self.app.Exit()
+        pass
 
     #---- Test Cases ----#
 
@@ -45,6 +44,7 @@ class ArtProviderTest(unittest.TestCase):
         ap = wx.ArtProvider()
         bmp = ap.GetBitmap(str(ed_glob.ID_COPY), wx.ART_MENU)
         self.assertTrue(bmp.IsOk())
+        self.assertEquals(bmp.GetSize(), (16, 16))
 
         bmp = ap.GetBitmap(str(ed_glob.ID_COPY), wx.ART_TOOLBAR)
         self.assertTrue(bmp.IsOk())
