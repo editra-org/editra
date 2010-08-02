@@ -911,7 +911,7 @@ def PrintHelp(err=None):
         sys.stderr.write(err + os.linesep)
 
     print(("Editra - %s - Developers Text Editor\n"
-       "Cody Precord (2005-2009)\n\n"
+       "Cody Precord (2005-2010)\n\n"
        "usage: Editra [arguments] [files... ]\n\n"
        "Short Arguments:\n"
        "  -c    Set custom configuration directory at runtime\n"
@@ -928,7 +928,7 @@ def PrintHelp(err=None):
        "  --help            Show this help message\n"
        "  --auth            Print the ipc server info\n"
        "  --version         Print version number and exit\n"
-       "  --profileOut arg  Run Editra in the profier (arg is output file)\n"
+       "  --profileOut arg  Run Editra in the profiler (arg is output file)\n"
       ) % ed_glob.VERSION)
 
     if err is None:

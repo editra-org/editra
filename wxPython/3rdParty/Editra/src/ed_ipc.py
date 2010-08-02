@@ -116,13 +116,14 @@ class EdIpcServer(threading.Thread):
     @todo: investigate possible security issues
 
     """
-    def __init__(self, app, key):
+    def __init__(self, app, key, port=EDPORT):
         """Create the server thread
         @param app: Application object the server belongs to
         @param key: Unique user authentication key (string)
+        @keyword port: TCP port to attempt to connect to
 
         """
-        threading.Thread.__init__(self)
+        super(EdIpcServer, self).__init__()
 
         # Attributes
         self._exit = False
@@ -132,14 +133,15 @@ class EdIpcServer(threading.Thread):
 
         # Setup
         ## Try new ports till we find one that we can use
-        global EDPORT
         while True:
             try:
-                self.socket.bind(('127.0.0.1', EDPORT))
+                self.socket.bind(('127.0.0.1', port))
                 break
             except:
-                EDPORT += 1
+                port += 1
 
+        global EDPORT
+        EDPORT = port
         self.socket.listen(5)
 
     def Shutdown(self):
@@ -394,5 +396,8 @@ class IPCArgList(syntax.EditraXml):
         @param flist: list of tuples
 
         """
+        assert isinstance(args, list)
+        for arg in args:
+            assert isinstance(arg, tuple)
         self._args = args
     

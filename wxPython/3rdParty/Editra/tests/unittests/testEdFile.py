@@ -34,9 +34,11 @@ import profiler
 
 class EdFileTest(unittest.TestCase):
     def setUp(self):
-        profiler.Profile_Set('ENCODING', locale.getpreferredencoding())
-
+        # NEED this otherwise GetApp calls fail for some yet to be
+        # determined reason even though an App has been created earlier
+        # in runUnitTests...
         self.app = common.EdApp(False)
+
         self.path = common.GetDataFilePath(u'test_read_utf8.txt')
         self.file = ed_txt.EdFile(self.path)
         self.mtime = ebmlib.GetFileModTime(self.path)
@@ -55,6 +57,16 @@ class EdFileTest(unittest.TestCase):
         self.rfile.Close()
 
     #---- Tests ----#
+    def testClone(self):
+        """Test making a copy of a file object"""
+        clone = self.file.Clone()
+        self.assertEquals(clone.GetPath(), self.file.GetPath())
+        self.assertEquals(clone.Encoding, self.file.Encoding)
+        self.assertEquals(clone.GetMagic(), self.file.GetMagic())
+        self.assertEquals(clone.HasBom(), self.file.HasBom())
+        self.assertEquals(clone.IsRawBytes(), self.file.IsRawBytes())
+        self.assertEquals(clone.IsReadOnly(), self.file.IsReadOnly())
+
     def testRead(self):
         """Test reading from the file and getting the text"""
         txt = self.file.Read()
@@ -72,7 +84,6 @@ class EdFileTest(unittest.TestCase):
         txt = self.utf8_bom_file.Read()
         self.assertTrue(self.utf8_bom_file.HasBom())
 
-        
         new_path = os.path.join(common.GetTempDir(), ebmlib.GetFileName(self.bpath))
         self.utf8_bom_file.SetPath(new_path) # write to test temp dir
         self.utf8_bom_file.Write(txt)

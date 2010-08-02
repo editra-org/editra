@@ -57,6 +57,8 @@ class EBMClipboardTest(unittest.TestCase):
         self.cb.Set("Test1")
         self.cb.NextFree()
         self.cb.Set("Test2")
+        self.cb.NextFree()
+        self.cb.Set("Test3")
         used = self.cb.AllUsed()
         self.assertTrue('"' in used)
         self.assertTrue('a' in used)

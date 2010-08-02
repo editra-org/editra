@@ -13,6 +13,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Imports
 import os
+import locale
 import shutil
 import wx
 
@@ -27,6 +28,7 @@ class EdApp(wx.App):
         self.pmgr = plugin.PluginManager()
 
         # Bare minimum profile bootstrap
+        profiler.Profile_Set('ENCODING', locale.getpreferredencoding())
         profiler.Profile_Set('ICONS', 'Tango')
 
         return True
