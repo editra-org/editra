@@ -41,6 +41,11 @@ class EdApp(wx.App):
 
 #-----------------------------------------------------------------------------#
 
+class TestFrame(wx.Frame):
+    pass
+
+#-----------------------------------------------------------------------------#
+
 def CleanTempDir():
     """Clean all files from the temporary directory"""
     tdir = GetTempDir()
