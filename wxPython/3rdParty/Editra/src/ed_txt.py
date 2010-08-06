@@ -94,6 +94,7 @@ class EdFile(ebmlib.FileObjectImpl):
         self._mcallback = list()
         self.__buffer = None
         self._raw = False           # Raw bytes?
+        self._fuzzy_enc = False
 
     def _HandleRawBytes(self, bytes):
         """Handle prepping raw bytes for return to the buffer
@@ -135,6 +136,7 @@ class EdFile(ebmlib.FileObjectImpl):
         fileobj.SetEncoding(self.encoding)
         fileobj.bom = self.bom
         fileobj._magic = dict(self._magic)
+        fileobj._fuzzy_enc = self._fuzzy_enc
         for cback in self._mcallback:
             fileobj.AddModifiedCallback(cback)
         return fileobj
@@ -150,13 +152,32 @@ class EdFile(ebmlib.FileObjectImpl):
         bytes = self.__buffer.getvalue()
         ustr = u""
         try:
-            if not EdFile._Checker.IsBinaryBytes(bytes):
+            if not self._fuzzy_enc or not EdFile._Checker.IsBinaryBytes(bytes):
                 if self.bom is not None:
                     Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
                     bytes = bytes.replace(self.bom, '', 1)
 
                 Log("[ed_txt][info] Attempting to decode with: %s" % self.encoding)
                 ustr = bytes.decode(self.encoding)
+                # TODO: temporary...maybe
+                # Check for utf-16 encodings which use double bytes
+                # can result in NULLs in the string if decoded with
+                # other encodings.
+                if not self.encoding.startswith('utf') and '\0' in ustr:
+                    Log("[ed_txt][info] NULL terminators found in decoded str")
+                    Log("[ed_txt][info] Attempting UTF-16 detection...")
+                    for utf_encoding in ('utf_16_le', 'utf_16_be'):
+                        try:
+                            tmpstr = bytes.decode(utf_encoding)
+                        except UnicodeDecodeError:
+                            pass
+                        else:
+                            self.encoding = utf_encoding
+                            ustr = tmpstr
+                            Log("[ed_txt][info] %s detected" % utf_encoding)
+                            break
+                    else:
+                        Log("[ed_txt][info] No valid UTF-16 bytes detected")
             else:
                 # Binary data was read
                 Log("[ed_txt][info] Binary bytes where read")
@@ -191,6 +212,7 @@ class EdFile(ebmlib.FileObjectImpl):
             Log("[ed_txt][info] DecodeText - raw - set encoding to binary")
             ustr = ustr.replace('\x05', ' ')
             self.SetEncoding('binary')
+            self._raw = True
 
         return ustr
 
@@ -231,6 +253,7 @@ class EdFile(ebmlib.FileObjectImpl):
             enc = GuessEncoding(self.GetPath(), 4096)
 
         if enc is None:
+            self._fuzzy_enc = True
             enc = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
 
         Log("[ed_txt][info] DetectEncoding - Set Encoding to %s" % enc)

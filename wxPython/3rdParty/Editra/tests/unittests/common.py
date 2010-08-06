@@ -95,6 +95,15 @@ def GetTempDir():
     path = os.path.join(u'.', u'temp')
     return os.path.abspath(path)
 
+def GetTempFilePath(fname):
+    """Get a path for a file in the temp directory
+    @param fname: File name to get path for
+    @return: string
+
+    """
+    tdir = GetTempDir()
+    return os.path.join(tdir, fname)
+
 def GetThemeDir():
     """Get the packages theme directory path
     @return: string
