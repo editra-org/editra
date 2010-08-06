@@ -37,7 +37,7 @@ EVT_FONT_CHANGED = wx.PyEventBinder(edEVT_FONT_CHANGED, 1)
 class FontChangeEvent(wx.PyCommandEvent):
     """General notification event"""
     def __init__(self, etype, eid, value=None, obj=None):
-        wx.PyCommandEvent.__init__(self, etype, eid)
+        super(FontChangeEvent, self).__init__(etype, eid)
 
         # Attributes
         self._value = value
@@ -65,7 +65,7 @@ class PyFontPicker(wx.Panel):
         @param default: The font to initialize as selected in the control
 
         """
-        wx.Panel.__init__(self, parent, id_, style=wx.NO_BORDER)
+        super(PyFontPicker, self).__init__(parent, id_, style=wx.NO_BORDER)
 
         # Attributes
         if default == wx.NullFont:

@@ -35,8 +35,8 @@ class CommandEntryBase(wx.SearchCtrl):
         if validator != wx.DefaultValidator:
             clone = validator.Clone()
 
-        wx.SearchCtrl.__init__(self, parent, id, value, pos,
-                               size, style, validator, name)
+        super(CommandEntryBase, self).__init__(parent, id, value, pos,
+                                               size, style, validator, name)
 
         # Attributes
         self._txtctrl = None  # For msw/gtk

@@ -37,8 +37,8 @@ class FilterDialog(ecbasewin.ECBaseDlg):
     def __init__(self, parent, id=wx.ID_ANY, title=u"",
                  pos=wx.DefaultPosition, size=wx.DefaultSize, 
                  style=wx.DEFAULT_DIALOG_STYLE, name=u"FilterDialog"):
-        ecbasewin.ECBaseDlg.__init__(self, parent, id, title,
-                                     pos, size, style, name)
+        super(FilterDialog, self).__init__(parent, id, title,
+                                           pos, size, style, name)
 
         # Attributes
         self.SetPanel(FilterPanel(self))
@@ -50,7 +50,7 @@ class FilterDialog(ecbasewin.ECBaseDlg):
 class FilterPanel(wx.Panel):
     """Filter dialog panel"""
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+        super(FilterPanel, self).__init__(parent)
 
         # Attributes
         self._left  = wx.ListBox(self, style=wx.LB_EXTENDED|wx.LB_SORT)

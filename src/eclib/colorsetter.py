@@ -66,7 +66,7 @@ class ColorSetter(wx.Panel):
         @keyword label: the hex string value to go in the text portion
 
         """
-        wx.Panel.__init__(self, parent, id_)
+        super(ColorSetter, self).__init__(parent, id_)
 
         if isinstance(color, tuple):
             color = wx.Colour(*color)
@@ -222,7 +222,7 @@ class HexValidator(wx.PyValidator):
         """Initialize the validator
 
         """
-        wx.PyValidator.__init__(self)
+        super(HexValidator, self).__init__()
 
         # Event Handlers
         self.Bind(wx.EVT_CHAR, self.OnChar)

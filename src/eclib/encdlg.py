@@ -64,8 +64,8 @@ class EncodingDialog(choicedlg.ChoiceDialog):
         else:
             sel = locale.getpreferredencoding(False)
 
-        choicedlg.ChoiceDialog.__init__(self, parent, id, msg, title,
-                                        elist, sel, pos, size, style)
+        super(EncodingDialog, self).__init__(parent, id, msg, title,
+                                             elist, sel, pos, size, style)
 
     def GetEncoding(self):
         """Get the selected encoding
@@ -89,11 +89,3 @@ def GetAllEncodings():
     return elist
 
 #--------------------------------------------------------------------------#
-
-# Test
-if __name__ == '__main__':
-    app = wx.App(False)
-    dlg = EncodingDialog(None, msg="Choose an Encoding",
-                         title="Encodings", default="utf-8")
-    dlg.ShowModal()
-    print dlg, dlg.GetEncoding()
