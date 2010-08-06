@@ -32,8 +32,10 @@ class EdIpcTest(unittest.TestCase):
     """Tests for the ipc functions of ed_ipc"""
     def setUp(self):
         self.handler = wx.EvtHandler()
-        port = ed_ipc.EDPORT + 1
-        self.server = ed_ipc.EdIpcServer(self.handler, "foo", port)
+        self.port = ed_ipc.EDPORT + 1
+        self.key = "foo"
+        self.recieved = False
+        self.server = ed_ipc.EdIpcServer(self.handler, self.key, self.port)
 
         self.handler.Bind(ed_ipc.EVT_COMMAND_RECV, self.OnIpcMsg)
 
@@ -41,9 +43,10 @@ class EdIpcTest(unittest.TestCase):
         self.server.Shutdown()
         time.sleep(.5) # Give server time to shutdown
         self.handler.Unbind(ed_ipc.EVT_COMMAND_RECV)
+        self.recieved = False
 
     def OnIpcMsg(self, event):
-        print "EVENT RECIEVED"
+        self.recieved = True
 
     #---- Functional Tests ----#
 
@@ -61,5 +64,10 @@ class EdIpcTest(unittest.TestCase):
         self.assertEquals(xmlobj.GetFiles(), flist)
         args = newobj.GetArgs()
         self.assertEquals(args, xmlobj.GetArgs())
+
+    def testSendCommands(self):
+        command = ed_ipc.IPCCommand()
+        rval = ed_ipc.SendCommands(command, self.key)
+        self.assertTrue(rval)
 
 #-----------------------------------------------------------------------------#
