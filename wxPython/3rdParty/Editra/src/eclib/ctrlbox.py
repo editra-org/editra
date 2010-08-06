@@ -117,7 +117,7 @@ EVT_SEGMENT_CLOSE = wx.PyEventBinder(edEVT_SEGMENT_CLOSE, 1)
 class SegmentBarEvent(wx.PyCommandEvent):
     """SegmentBar Button Event"""
     def __init__(self, etype, id=0):
-        wx.PyCommandEvent.__init__(self, etype, id)
+        super(SegmentBarEvent, self).__init__(etype, id)
 
         # Attributes
         self.notify = wx.NotifyEvent(etype, id)
@@ -170,7 +170,7 @@ class ControlBox(wx.PyPanel):
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.TAB_TRAVERSAL|wx.NO_BORDER,
                  name=CTRLBOX_NAME_STR):
-        wx.PyPanel.__init__(self, parent, id, pos, size, style, name)
+        super(ControlBox, self).__init__(parent, id, pos, size, style, name)
 
         # Attributes
         self._sizer = wx.BoxSizer(wx.VERTICAL)
@@ -336,8 +336,8 @@ class ControlBar(wx.PyPanel):
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=CTRLBAR_STYLE_DEFAULT,
                  name=CTRLBAR_NAME_STR):
-        wx.PyPanel.__init__(self, parent, id, pos, size,
-                            wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
+        super(ControlBar, self).__init__(parent, id, pos, size,
+                                         wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
 
         # Attributes
         self._style = style
@@ -541,7 +541,7 @@ class SegmentBar(ControlBar):
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=CTRLBAR_STYLE_DEFAULT,
                  name=SEGBAR_NAME_STR):
-        ControlBar.__init__(self, parent, id, pos, size, style, name)
+        super(SegmentBar, self).__init__(parent, id, pos, size, style, name)
 
         # Attributes
         self._buttons = list()

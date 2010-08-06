@@ -129,8 +129,9 @@ class PlateButton(wx.PyControl):
         @keyword style: Button style
 
         """
-        wx.PyControl.__init__(self, parent, id, pos, size,
-                              wx.BORDER_NONE|wx.TRANSPARENT_WINDOW, name=name)
+        super(PlateButton, self).__init__(parent, id, pos, size,
+                                          wx.BORDER_NONE|wx.TRANSPARENT_WINDOW,
+                                          name=name)
 
         # Attributes
         self.InheritAttributes()

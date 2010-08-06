@@ -55,7 +55,7 @@ class PanelBox(scrolled.ScrolledPanel):
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.HSCROLL|wx.VSCROLL,
                  name=u"PanelBox"):
-        scrolled.ScrolledPanel.__init__(self, parent, id, pos, size, style, name)
+        super(PanelBox, self).__init__(parent, id, pos, size, style, name)
 
         # Attributes
         self._items = list()
@@ -297,7 +297,8 @@ class PanelBoxItemBase(wx.PyPanel):
     """Base L{PanelBox} Item"""
     def __init__(self, parent):
         """Create a PanelBoxItem"""
-        wx.PyPanel.__init__(self, parent, style=wx.NO_BORDER|wx.TAB_TRAVERSAL)
+        super(PanelBoxItemBase, self).__init__(parent,
+                                               style=wx.NO_BORDER|wx.TAB_TRAVERSAL)
 
         # Attributes
         self._selected = False
@@ -409,7 +410,7 @@ class PanelBoxItem(PanelBoxItemBase):
         @keyword sub: Window object or None
 
         """
-        PanelBoxItemBase.__init__(self, parent)
+        super(PanelBoxItem, self).__init__(parent)
 
         # Attributes
         self._bmp = bmp
@@ -474,22 +475,3 @@ class PanelBoxItem(PanelBoxItemBase):
 
         """
         pass
-
-#--------------------------------------------------------------------------#
-
-if __name__ == '__main__':
-    app = wx.App(False)
-    frame = wx.Frame(None, title="Test PanelBox")
-    panel = PanelBox(frame)
-    bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_TOOLBAR, (32, 32))
-    for num in range(15):
-        if num % 2:
-            secondary = wx.StaticText(panel, label="PanelBoxItem test")
-        else:
-            secondary = wx.Gauge(panel, size=(-1, 16))
-            secondary.Pulse()
-
-        pi = PanelBoxItem(panel, bmp, "Test Label", secondary)
-        panel.AppendItem(pi)
-    frame.Show()
-    app.MainLoop()

@@ -10,7 +10,7 @@
 Editra Control Library: SegmentBook
 
 A L{SegmentBook} is a Toolbook like class derived from a ControlBox and
-SegmentBar. Allows for a multipage control with Icons w/ optional text as
+SegmentBar. Allows for a multi page control with Icons w/ optional text as
 page buttons.
 
 +-----------------------------------------+
@@ -71,7 +71,7 @@ EVT_SB_PAGE_CONTEXT_MENU = wx.PyEventBinder(edEVT_SB_PAGE_CONTEXT_MENU, 1)
 class SegmentBookEvent(wx.NotebookEvent):
     """SegmentBook event"""
     def __init__(self, etype=wx.wxEVT_NULL, id=-1, sel=-1, old_sel=-1):
-        wx.NotebookEvent.__init__(self, etype, id, sel, old_sel)
+        super(SegmentBookEvent, self).__init__(etype, id, sel, old_sel)
 
 #-----------------------------------------------------------------------------#
 # Global constants
@@ -91,9 +91,9 @@ class SegmentBook(ctrlbox.ControlBox):
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=SEGBOOK_STYLE_DEFAULT,
                  name=SEGBOOK_NAME_STR):
-        """Initialie the SegmentBook"""
-        ctrlbox.ControlBox.__init__(self, parent, id, pos, size,
-                                    wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
+        """Initialize the SegmentBook"""
+        super(SegmentBook, self).__init__(parent, id, pos, size,
+                                          wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
 
         # Attributes
         self._pages = list()

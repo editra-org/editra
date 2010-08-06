@@ -137,7 +137,8 @@ class ErrorDialog(wx.Dialog):
 
         """
         ErrorDialog.REPORTER_ACTIVE = True
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style, name)
+        super(ErrorDialog, self).__init__(parent, id, title, pos,
+                                          size, style, name)
         
         # Give message to ErrorReporter
         ErrorReporter().AddMessage(message)
@@ -301,7 +302,7 @@ class ErrorPanel(wx.Panel):
         @param msg: Error message to display
 
         """
-        wx.Panel.__init__(self, parent)
+        super(ErrorPanel, self).__init__(parent)
 
         # Attributes
         self.err_msg = msg

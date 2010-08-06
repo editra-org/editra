@@ -54,7 +54,8 @@ class AuiPaneNavigator(wx.Dialog):
         @keyword title: string (dialog title)
 
         """
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, "", style=wx.STAY_ON_TOP)
+        super(AuiPaneNavigator, self).__init__(parent, wx.ID_ANY,
+                                               "", style=wx.STAY_ON_TOP)
 
         # Attributes
         self._auimgr = auiMgr

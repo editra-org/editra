@@ -53,7 +53,8 @@ class ECBaseDlg(wx.Dialog):
     def __init__(self, parent, id=wx.ID_ANY, title=u"",
                  pos=wx.DefaultPosition, size=wx.DefaultSize, 
                  style=wx.DEFAULT_DIALOG_STYLE, name=u"ECBaseDialog"):
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style, name)
+        super(ECBaseDlg, self).__init__(parent, id, title, pos,
+                                        size, style, name)
 
         # Attributes
         self._panel = None

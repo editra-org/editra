@@ -46,7 +46,7 @@ class ProgressStatusBar(wx.StatusBar):
         @param parent: Frame this status bar belongs to
 
         """
-        wx.StatusBar.__init__(self, parent, id_, style, name)
+        super(ProgressStatusBar, self).__init__(parent, id_, style, name)
   
         # Attributes
         self._changed = False   # position has changed ?
