@@ -59,6 +59,7 @@ class EdFileTest(unittest.TestCase):
     def tearDown(self):
         self.file.Close()
         self.rfile.Close()
+        common.CleanTempDir()
 
     #---- Tests ----#
     def testClone(self):
@@ -76,6 +77,17 @@ class EdFileTest(unittest.TestCase):
         txt = self.file.Read()
         self.assertFalse(self.file.HasBom())
         self.assertTrue(len(txt))
+
+    def testReadNonPrintChars(self):
+        """Test reading a plain text file that has a non printable
+        character in it.
+        """
+        path = common.GetDataFilePath(u'non_print_char.txt')
+        fileobj = ed_txt.EdFile(path)
+        txt = fileobj.Read()
+        self.assertTrue(type(txt) == types.UnicodeType)
+        self.assertFalse(fileobj.IsRawBytes())
+        self.assertFalse(fileobj.IsReadOnly())
 
     #---- Encoding Tests ----#
 
