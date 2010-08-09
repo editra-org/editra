@@ -1,5 +1,5 @@
 ###############################################################################
-# Name: __ini__.py                                                            #
+# Name: __init__.py                                                           #
 # Purpose: CodeBrowser Plugin                                                 #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
@@ -18,10 +18,10 @@ import wx.aui
 # Editra Libraries
 import iface
 import plugin
-from profiler import Profile_Get, Profile_Set
 
 # Local imports
 import cbrowser
+import cbconfig
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -66,3 +66,30 @@ class CodeBrowser(plugin.Plugin):
     def GetUIHandlers(self):
         """Pass Ui handlers to main window for management"""
         return [(cbrowser.ID_CODEBROWSER, self._codebrowser.OnUpdateMenu)]
+
+#-----------------------------------------------------------------------------#
+
+# Configuration Interface
+
+def GetConfigObject():
+    return CBConfigObject()
+
+class CBConfigObject(plugin.PluginConfigObject):
+    """Plugin configuration object for CodeBrowser
+    Provides configuration panel for plugin dialog.
+
+    """
+    def GetConfigPanel(self, parent):
+        """Get the configuration panel for this plugin
+        @param parent: parent window for the panel
+        @return: wxPanel
+
+        """
+        return cbconfig.CBConfigPanel(parent)
+
+    def GetLabel(self):
+        """Get the label for this config panel
+        @return string
+
+        """
+        return _("CodeBrowser")
