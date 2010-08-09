@@ -33,6 +33,7 @@ from profiler import Profile_Get, Profile_Set
 import ed_msg
 
 # Local Imports
+import cbconfig
 import gentag.taglib as taglib
 from tagload import TagLoader
 import IconFile
@@ -62,7 +63,7 @@ class CodeBrowserTree(wx.TreeCtrl):
     def __init__(self, parent, id=ID_BROWSER,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.TR_DEFAULT_STYLE|wx.TR_HIDE_ROOT):
-        wx.TreeCtrl.__init__(self, parent, id, pos, size, style)
+        super(CodeBrowserTree, self).__init__(parent, id, pos, size, style)
 
         # Attributes
         self._log = wx.GetApp().GetLog()
@@ -99,6 +100,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         # Event Handlers
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnContext)
+        self.Bind(wx.EVT_TREE_ITEM_EXPANDED, self.OnExpanding)
         self.Bind(wx.EVT_MENU, self.OnMenu)
         self.Bind(wx.EVT_TIMER, self.OnStartJob, self._timer)
         self.Bind(wx.EVT_TIMER, lambda evt: self._SyncTree(), self._sync_timer)
@@ -319,7 +321,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         # Check if there is a node for this Code object
         if self.nodes.get(obj.type, None) is None:
-            # Look for a description to use as catagory title
+            # Look for a description to use as category title
             if self._cdoc is not None:
                 desc = self._cdoc.GetElementDescription(obj.type).title()
             else:
@@ -388,13 +390,17 @@ class CodeBrowserTree(wx.TreeCtrl):
         @return: -1, 0, 1
 
         """
-        txt1 = self.GetItemText(item1).lower()
-        txt2 = self.GetItemText(item2).lower()
-#        txt1 = self.GetPyData(item1)
-#        txt2 = self.GetPyData(item2)
-        if txt1 < txt2:
+        sortopt = cbconfig.GetSortOption()
+        if sortopt == cbconfig.CB_ALPHA_SORT:
+            val1 = self.GetItemText(item1).lower()
+            val2 = self.GetItemText(item2).lower()
+        else:
+            val1 = self.GetPyData(item1)
+            val2 = self.GetPyData(item2)
+
+        if val1 < val2:
             return -1
-        elif txt1 == txt2:
+        elif val1 == val2:
             return 0
         else:
             return 1
@@ -411,6 +417,11 @@ class CodeBrowserTree(wx.TreeCtrl):
     def OnEditorRestore(self, msg):
         """Called when editor size is unmaximized"""
         self.OnUpdateTree()
+
+    def OnExpanding(self, evt):
+        """Update sorting"""
+        item = evt.GetItem()
+        self.SortChildren(item)
 
     def OnThemeChange(self, msg):
         """Update the images when Editra's theme changes
