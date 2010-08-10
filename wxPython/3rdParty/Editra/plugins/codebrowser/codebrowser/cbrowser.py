@@ -113,6 +113,8 @@ class CodeBrowserTree(wx.TreeCtrl):
         ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_FILE_SAVED)
         ed_msg.Subscribe(self.OnSyncTree, ed_msg.EDMSG_UI_STC_POS_CHANGED)
         ed_msg.Subscribe(self.OnEditorRestore, ed_msg.EDMSG_UI_STC_RESTORE)
+        ed_msg.Subscribe(self.OnBrowserCfg,
+                         ed_msg.EDMSG_PROFILE_CHANGE + (cbconfig.CB_PROFILE_KEY,))
 
         # Backwards compatibility
         if hasattr(ed_msg, 'EDMSG_UI_STC_LEXER') and \
@@ -392,9 +394,11 @@ class CodeBrowserTree(wx.TreeCtrl):
         """
         sortopt = cbconfig.GetSortOption()
         if sortopt == cbconfig.CB_ALPHA_SORT:
+            # Sort items by name
             val1 = self.GetItemText(item1).lower()
             val2 = self.GetItemText(item2).lower()
         else:
+            # Sort items by line number
             val1 = self.GetPyData(item1)
             val2 = self.GetPyData(item2)
 
@@ -404,6 +408,22 @@ class CodeBrowserTree(wx.TreeCtrl):
             return 0
         else:
             return 1
+
+    def OnBrowserCfg(self, msg):
+        """Profile update message for when CodeBrowser
+        configuration is updated.
+
+        """
+        # Resort all items
+        def SortAllItems(parent):
+            item, cookie = self.GetFirstChild(parent)
+            while item:
+                if self.ItemHasChildren(item):
+                    if self.IsExpanded(item):
+                        self.SortChildren(item)
+                    SortAllItems(item)
+                item, cookie = self.GetNextChild(parent, cookie)
+        SortAllItems(self.root)
 
     def OnMenu(self, evt):
         """Handle the context menu events"""
