@@ -27,6 +27,9 @@ tags to the default_style.
 +Fix encoding detection issue that could lead to unhanded exception error.
 +Fix handling of Unicode text by Django lexer.
 +Fix issues with detecting UTF-16 encoded files that don't have a BOM.
++Fix not being able to run executables in Launch that have spaces in their
+paths on Windows.
++Fix issues with aborting processes with Launch plugin on Windows.
 
 #-----------------------------------------------------------------------------#
 
