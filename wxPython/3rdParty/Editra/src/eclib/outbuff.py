@@ -833,11 +833,23 @@ class ProcessThread(threading.Thread):
                                                        self._cmd['file'],
                                                        self._cmd['args']]])
         command = command.strip()
+        # TODO: exception handling and notification to main thread
+        #       when encoding fails.
+        command = command.encode(sys.getfilesystemencoding())
         if not self._use_shell and not subprocess.mswindows:
-            # shlex does not support Unicode
-            command = shlex.split(command.encode(sys.getfilesystemencoding()))
+            # Note: shlex does not support Unicode
+            command = shlex.split(command)
 
-        if sys.platform.lower().startswith('win'):            
+        # TODO: if a file path to the exe has any spaces in it on Windows
+        #       and use_shell is True then the command will fail. Must force
+        #       to False under this condition.
+        use_shell = self._use_shell and not subprocess.mswindows
+        # TODO: See about supporting use_shell on Windows it causes lots of
+        #       issues with gui apps and killing processes when it is True.
+        if use_shell and subprocess.mswindows:
+            # Don't set this flag if we are not using the shell on
+            # Windows as it will cause any gui app to not show on the
+            # display!
             suinfo = subprocess.STARTUPINFO()
             suinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         else:
@@ -848,7 +860,7 @@ class ProcessThread(threading.Thread):
             self._proc = subprocess.Popen(command,
                                           stdout=subprocess.PIPE,
                                           stderr=subprocess.STDOUT,
-                                          shell=self._use_shell,
+                                          shell=use_shell,
                                           cwd=self._cwd,
                                           env=self._env,
                                           startupinfo=suinfo)
