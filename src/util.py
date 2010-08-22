@@ -190,7 +190,7 @@ class DropTargetFT(wx.PyDropTarget):
             elif len(text) > 0:
                 if self._data['tcallb'] is not None:
                     self._data['tcallb'](text)
-                else:
+                elif hasattr(self.window, 'DoDropText'):
                     self.window.DoDropText(x_cord, y_cord, text)
         self.InitObjects()
         return drag_result
