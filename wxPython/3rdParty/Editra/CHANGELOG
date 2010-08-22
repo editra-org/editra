@@ -30,6 +30,7 @@ tags to the default_style.
 +Fix not being able to run executables in Launch that have spaces in their
 paths on Windows.
 +Fix issues with aborting processes with Launch plugin on Windows.
++Fix crash that could occur if text was dragged over PluginMgr ListBox.
 
 #-----------------------------------------------------------------------------#
 
