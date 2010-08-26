@@ -454,12 +454,11 @@ class EdPages(aui.AuiNotebook):
 
         """
         sender, path = args
-        if sender != self:
-            for buf in self.GetTextControls():
-                if buf.GetFileName() == path:
-                    return buf
-
-        return ed_msg.NullValue()
+        for buf in self.GetTextControls():
+            if buf.GetFileName() == path:
+                return buf
+        else:
+            return ed_msg.NullValue()
 
     def OnTabLeftDClick(self, evt):
         """Handle left double clicks and open new tab when in empty area.

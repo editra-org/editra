@@ -20,6 +20,7 @@ NEW: [features/enhancements]
 +Increase persistence limit for search in directory history
 +Add support for DSP56K assembly
 +Add support for OOC programming language
++Support multiple views of the same file within the same window.
 
 BUG FIXES:
 +Fix bug in style sheet parsing that was not properly setting undefined style
