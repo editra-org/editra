@@ -192,6 +192,10 @@ LANG_LUA = u'Lua'
 ID_LANG_MSSQL = _NewId()
 LANG_MSSQL = u'Microsoft SQL'
 
+# Use LEX_NONMEM
+ID_LANG_NONMEM = _NewId()
+LANG_NONMEM = u'NONMEM Control Stream'
+
 # Use LEX_NSIS
 ID_LANG_NSIS = _NewId()
 LANG_NSIS = u'Nullsoft Installer Script'
@@ -354,6 +358,7 @@ EXT_MAP = {
            'matlab'             : LANG_MATLAB,
            'mssql'              : LANG_MSSQL,
            'nasm'               : LANG_NASM,
+           'ctl'                : LANG_NONMEM,
            'nsi nsh'            : LANG_NSIS,
            'mm m'               : LANG_OBJC,
            'oct octave'         : LANG_OCTAVE,
@@ -378,7 +383,7 @@ EXT_MAP = {
            'itcl tcl tk'        : LANG_TCL,
            'txt'                : LANG_TXT,
            'vala'               : LANG_VALA,
-           'bas cls ctl frm vb' : LANG_VB,
+           'bas cls frm vb'     : LANG_VB,
            'vbs dsm'            : LANG_VBSCRIPT,
            'v'                  : LANG_VERILOG,
            'vh vhdl vhd'        : LANG_VHDL,

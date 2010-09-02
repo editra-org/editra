@@ -21,6 +21,7 @@ NEW: [features/enhancements]
 +Add support for DSP56K assembly
 +Add support for OOC programming language
 +Support multiple views of the same file within the same window.
++Add support for NONMEM Control Stream files (patch from Robert McLeay)
 
 BUG FIXES:
 +Fix bug in style sheet parsing that was not properly setting undefined style
