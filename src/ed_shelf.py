@@ -353,12 +353,10 @@ class EdShelfDelegate(object):
 
         """
         rval = list()
-        if self._shelf is None:
-            return rval
-
-        for page in xrange(self._shelf.GetPageCount()):
-            rval.append(re.sub(PGNUM_PAT, u'', 
-                        self._shelf.GetPageText(page), 1))
+        if self._shelf is not None:
+            for page in xrange(self._shelf.GetPageCount()):
+                rval.append(re.sub(PGNUM_PAT, u'', 
+                            self._shelf.GetPageText(page), 1))
         return rval
 
     def GetMenu(self):
@@ -401,7 +399,7 @@ class EdShelfDelegate(object):
 
     def GetWindow(self):
         """Return reference to the Shelfs window component
-        @return: FlatnoteBook
+        @return: AuiNotebook
 
         """
         return self._shelf
