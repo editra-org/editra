@@ -48,7 +48,7 @@ class DropTargetFT(wx.PyDropTarget):
         @param window: window to recieve drop objects
 
         """
-        wx.PyDropTarget.__init__(self)
+        super(DropTargetFT, self).__init__()
 
         # Attributes
         self.window = window
