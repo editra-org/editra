@@ -54,7 +54,7 @@ class FileInfoDlg(wx.MiniFrame):
 
         """
         self._fname = fname.split(os.path.sep)[-1]
-        super(FileInfoDlg, self).__init__(self, parent,
+        super(FileInfoDlg, self).__init__(parent,
                                           title="%s  %s" % (self._fname, _("Info")),
                                           style=wx.DEFAULT_DIALOG_STYLE)
 
