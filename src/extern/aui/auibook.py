@@ -4349,6 +4349,7 @@ class AuiNotebook(wx.PyPanel):
                 
                 src_tab = dest_tabs.GetWindowFromIdx(src_idx)
                 dest_tabs.MovePage(src_tab, dest_idx)
+                self._tabs.MovePage(self._tabs.GetPage(src_idx).window, dest_idx)
                 dest_tabs.SetActivePage(dest_idx)
                 dest_tabs.DoShowHide()
                 dest_tabs.Refresh()
