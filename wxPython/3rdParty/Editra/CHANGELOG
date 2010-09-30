@@ -22,6 +22,7 @@ NEW: [features/enhancements]
 +Add support for OOC programming language
 +Support multiple views of the same file within the same window.
 +Add support for NONMEM Control Stream files (patch from Robert McLeay)
++Updated CodeBrowser plugin 1.2 (sort view by line number or alphabetically)
 
 BUG FIXES:
 +Fix bug in style sheet parsing that was not properly setting undefined style
@@ -33,6 +34,8 @@ tags to the default_style.
 paths on Windows.
 +Fix issues with aborting processes with Launch plugin on Windows.
 +Fix crash that could occur if text was dragged over PluginMgr ListBox.
++Fix issue in Shelf tabs not being restored in correct order
++Fix issue where context menu on editor tabs could refer to wrong tab.
 
 #-----------------------------------------------------------------------------#
 
