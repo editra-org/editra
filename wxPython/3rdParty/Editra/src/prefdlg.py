@@ -74,7 +74,7 @@ def MakeThemeTool(tool_id):
 
 class PreferencesPanelBase(object):
     def __init__(self):
-        object.__init__(self)
+        super(PreferencesPanelBase, self).__init__()
 
         # Attributes
         self._layout_done = False
@@ -102,8 +102,9 @@ class PreferencesDialog(wx.Frame):
         @param id_: The id of this window
 
         """
-        wx.Frame.__init__(self, parent, id_,
-                          _("Preferences - Editra"), style=style)
+        super(PreferencesDialog, self).__init__(self, parent, id_,
+                                                _("Preferences - Editra"),
+                                                style=style)
         util.SetWindowIcon(self)
 
         # Extra Styles
@@ -177,9 +178,9 @@ class PrefTools(eclib.SegmentBook):
                changed the toolbook icons cannont be updated instantly.
 
         """
-        eclib.SegmentBook.__init__(self, parent, wx.ID_ANY,
-                                       style=eclib.SEGBOOK_STYLE_LABELS|\
-                                             eclib.SEGBOOK_STYLE_NO_DIVIDERS)
+        super(PrefTools, self).__init__(parent, wx.ID_ANY,
+                                        style=eclib.SEGBOOK_STYLE_LABELS|\
+                                              eclib.SEGBOOK_STYLE_NO_DIVIDERS)
 
         # Attributes
         self._imglst = list()
@@ -370,7 +371,7 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
 class GeneralStartupPanel(wx.Panel):
     """General Startup Settings"""
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+        super(GeneralStartupPanel, self).__init__(parent)
 
         # Attributes
 
@@ -446,7 +447,7 @@ class GeneralStartupPanel(wx.Panel):
 
 class GeneralFilePanel(wx.Panel):
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+        super(GeneralFilePanel, self).__init__(parent)
 
         # Attributes
         
@@ -702,7 +703,7 @@ class DocGenPanel(wx.Panel):
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent)
+        super(DocGenPanel, self).__init__(parent)
 
         # Layout
         self._DoLayout()
@@ -884,7 +885,7 @@ class DocCodePanel(wx.Panel):
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent)
+        super(DocCodePanel, self).__init__(parent)
 
         # Layout
         self._DoLayout()
@@ -1051,7 +1052,7 @@ class DocSyntaxPanel(wx.Panel):
         @param parent: parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent)
+        super(DocSyntaxPanel, self).__init__(parent)
 
         # Attributes
         self._elist = ExtListCtrl(self)
@@ -1355,7 +1356,7 @@ ID_PASSWORD = wx.NewId()
 class NetConfigPage(wx.Panel):
     """Configuration page for network and proxy settings"""
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+        super(NetConfigPage, self).__init__(parent)
 
         # Layout
         self._DoLayout()
@@ -1484,7 +1485,7 @@ class UpdatePage(wx.Panel):
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent)
+        super(UpdatePage, self).__init__(parent)
 
         # Layout
         self._DoLayout()
@@ -1599,7 +1600,7 @@ class AdvancedPanel(wx.Panel):
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
+        super(AdvancedPanel, self).__init__(parent, style=wx.BORDER_SUNKEN)
 
         # Layout
         self._layout_done = False
@@ -1654,7 +1655,7 @@ class KeyBindingPanel(wx.Panel):
     """Keybinding configration options"""
     def __init__(self, parent):
         """Create the panel"""
-        wx.Panel.__init__(self, parent)
+        super(KeyBindingPanel, self).__init__(parent)
 
         # Attributes
         self.menub = wx.GetApp().GetActiveWindow().GetMenuBar()
@@ -2118,7 +2119,7 @@ class ExChoice(wx.Choice):
         if len(choices) and isinstance(choices[0], int):
             choices = [ unicode(choice) for choice in choices ]
 
-        wx.Choice.__init__(self, parent, cid, choices=choices)
+        super(ExChoice, self).__init__(parent, cid, choices=choices)
 
         if default != None and isinstance(default, basestring):
             self.SetStringSelection(default)
