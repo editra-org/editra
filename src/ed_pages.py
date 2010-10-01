@@ -81,7 +81,7 @@ class EdPages(aui.AuiNotebook):
         self.frame = self.GetTopLevelParent() # MainWindow
         self._index = dict()          # image list index
         self._ses_load = False
-        self._menu = None
+        self._menu = ebmlib.ContextMenuManager()
 
         # Setup Tab Navigator
         ed_icon = ed_glob.CONFIG['SYSPIX_DIR'] + u"editra.png"
@@ -434,17 +434,13 @@ class EdPages(aui.AuiNotebook):
         @param evt: wx.MenuEvent
 
         """
-        if self._menu is not None:
-            ctab = self.GetCurrentPage()
-            handler = self._menu.GetHandler(evt.GetId())
-            if handler is not None:
-                handler(ctab, evt)
-            elif ctab is not None:
-                ctab.OnTabMenu(evt)
-            else:
-                evt.Skip()
+        ctab = self.GetCurrentPage()
+        handler = self._menu.GetHandler(evt.GetId())
+        if handler is not None:
+            handler(ctab, evt)
+        elif ctab is not None:
+            ctab.OnTabMenu(evt)
         else:
-            self.LOG("[ed_pages][warn] OnMenu: Menu is None!")
             evt.Skip()
 
     def OnDocPointerRequest(self, args):
@@ -537,8 +533,7 @@ class EdPages(aui.AuiNotebook):
 
     def OnTabMenu(self, evt):
         """Show the tab context menu"""
-        if self._menu is not None:
-            self._menu.Clear()
+        self._menu.Clear()
 
         # Construct the menu
         tab = evt.GetSelection()
@@ -547,17 +542,17 @@ class EdPages(aui.AuiNotebook):
 
         ctab = self.GetCurrentPage()
         if ctab is not None:
-            if self._menu is None:
-                self._menu = ebmlib.ContextMenuManager()
             menu = ctab.GetTabMenu()
+            if menu is None:
+                return # Tab has no menu
+
             self._menu.SetMenu(menu)
             self._menu.SetUserData("page", ctab)
 
             # Allow clients to customize the menu prior to showing it
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_TABMENU, self._menu)
 
-        # Show the menu
-        if self._menu is not None:
+            # Show the menu
             self.PopupMenu(self._menu.Menu)
 
     def OnThemeChanged(self, msg):
