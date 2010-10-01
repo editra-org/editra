@@ -323,12 +323,16 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         """
         win = self.GetTopWindow()
-        if getattr(win, '__name__', None) != u"MainWindow":
+        if not isinstance(win, ed_main.MainWindow):
             win = self.GetActiveWindow()
             if win is None:
-                return win
+                return None # UI dead?
 
-        return win.GetNotebook().GetCurrentCtrl()
+        if isinstance(win, ed_main.MainWindow):
+            nbook = win.GetNotebook()
+            if nbook:
+                return nbook.GetCurrentCtrl()
+        return None
 
     def GetMainWindows(self):
         """Returns a list of all open main windows
