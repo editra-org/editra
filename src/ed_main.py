@@ -1259,6 +1259,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                     if not paneInfo.IsShown():
                         paneInfo.Show()
                         self._mgr.Update()
+                        # Notify activation if the window supports it
+                        if hasattr(paneInfo.window, "OnShowAUIPane"):
+                            paneInfo.window.OnShowAUIPane()
                     paneInfo.window.SetFocus()
         else:
             evt.Skip()
