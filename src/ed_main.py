@@ -76,7 +76,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         hint = wx.aui.AUI_MGR_TRANSPARENT_HINT
         if wx.Platform == '__WXGTK__':
-            # Use venetian blinds style as trasparent can cause crashes
+            # Use venetian blinds style as transparent can cause crashes
             # on linux when desktop compositing is used.
             hint = wx.aui.AUI_MGR_VENETIAN_BLINDS_HINT
 
@@ -94,6 +94,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Attributes
         self._loaded = False
+        self._mlock = ebmlib.CallLock()
         self._last_save = u''
         self.LOG = wx.GetApp().GetLog()
         self._exiting = False
@@ -324,26 +325,18 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type evt: wx.ActivateEvent
 
         """
-        app = wx.GetApp()
-        active = evt.GetActive()
-
-        # Don't needlessly push and pop events if we only have one window open
-        if self._loaded and len(app.GetMainWindows()) == 1:
-            if active:
-                wx.GetApp().SetTopWindow(self)
-                wx.UpdateUIEvent.SetUpdateInterval(215)
-                wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_SPECIFIED)
-                self.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
-            else:
-                self.SetExtraStyle(0)
-                wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_ALL)
+        if self._mlock.IsLocked():
+            # Deactivated for popup, leave handlers hooked up
             evt.Skip()
             return
 
+        app = wx.GetApp()
+        active = evt.GetActive()
+
         # Add or remove handlers from the event stack
-        if active:
-            app.SetTopWindow(self)
+        if active and not self._loaded:
             self._loaded = True
+            app.SetTopWindow(self)
 
             # Slow the update interval to reduce overhead
             wx.UpdateUIEvent.SetUpdateInterval(215)
@@ -365,26 +358,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
                                    (nb, nb.GetSelection()))
         else:
-            self.SetExtraStyle(0)
-
-            # HACK set update ui events back to process all here in case
-            # opened dialog needs them. Not sure why this is necessary but it
-            # is the only solution I could find to fix the external find
-            # dialogs so that their buttons become enabled when typing in the
-            # text control.
-            #
-            # If the windows that took the active position is another mainwindow
-            # it will set the events back to UPDATE_UI_PROCESS_SPECIFIED to
-            # prevent all the toolbars/menu items of each window from updating
-            # when they dont need to.
-            wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_ALL)
-            for handler in self._handlers['menu']:
-                app.RemoveHandlerForID(handler[0])
-
-            for handler in self._handlers['ui']:
-                app.RemoveUIHandlerForID(handler[0])
-
             self._loaded = False
+            self.DeActivate()
 
         evt.Skip()
 
@@ -463,7 +438,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                 wx.OPEN | wx.MULTIPLE)
             dlg.SetFilterIndex(_PGET('FFILTER', 'int', 0))
 
-            if dlg.ShowModal() == wx.ID_OK:
+            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
                 _PSET('FFILTER', dlg.GetFilterIndex())
                 for path in dlg.GetPaths():
                     if _PGET('OPEN_NW', default=False):
@@ -486,6 +461,38 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 buff.GotoLine(lnum)
 
             self.Raise()
+
+    def DeActivate(self):
+        """Helper method for the App to tell this window to remove
+        all its event handlers.
+
+        """
+        self.SetExtraStyle(0)
+
+        # HACK set update ui events back to process all here in case
+        # opened dialog needs them. Not sure why this is necessary but it
+        # is the only solution I could find to fix the external find
+        # dialogs so that their buttons become enabled when typing in the
+        # text control.
+        #
+        # If the windows that took the active position is another mainwindow
+        # it will set the events back to UPDATE_UI_PROCESS_SPECIFIED to
+        # prevent all the toolbars/menu items of each window from updating
+        # when they dont need to.
+        wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_ALL)
+        self.FlushEventStack()
+
+    def FlushEventStack(self):
+        """Clear the Menu and UpdateUI event handler stack
+        @note: only unregisters this frames handlers from the app
+
+        """
+        app = wx.GetApp()
+        for handler in self._handlers['menu']:
+            app.RemoveHandlerForID(handler[0])
+
+        for handler in self._handlers['ui']:
+            app.RemoveUIHandlerForID(handler[0])
 
     def GetCommandbar(self):
         """Get this windows command bar
@@ -601,7 +608,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                     fname, _("File Not Found"),
                                     wx.OK | wx.ICON_WARNING)
             mdlg.CenterOnParent()
-            mdlg.ShowModal()
+            ebmlib.LockCall(self._mlock, mdlg.ShowModal)
             mdlg.Destroy()
             # Remove offending file from history
             self.filehistory.RemoveFileFromHistory(fnum)
@@ -691,7 +698,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                             u''.join(syntax.GenFileFilters()),
                             wx.SAVE | wx.OVERWRITE_PROMPT)
 
-        if dlg.ShowModal() == wx.ID_OK:
+        if ebmlib.LockCall(self.mlock, dlg.ShowModal) == wx.ID_OK:
             path = dlg.GetPath()
             dlg.Destroy()
 
@@ -725,7 +732,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                _("Profile") + " (*.ppb)|*.ppb",
                                 wx.SAVE | wx.OVERWRITE_PROMPT)
 
-            if dlg.ShowModal() == wx.ID_OK:
+            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
                 profiler.TheProfile.Write(dlg.GetPath())
                 self.PushStatusText(_("Profile Saved as: %s") % \
                                     dlg.GetFilename(), SB_INFO)
@@ -745,8 +752,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                 CONFIG['PROFILE_DIR'], "default.ppb",
                                 _("Profile") + " (*.ppb)|*.ppb", wx.OPEN)
 
-            result = dlg.ShowModal()
-            if result == wx.ID_OK:
+            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
                 profiler.TheProfile.Load(dlg.GetPath())
                 self.PushStatusText(_("Loaded Profile: %s") % \
                                     dlg.GetFilename(), SB_INFO)
@@ -770,7 +776,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                _("Session") + " (*.session)|*.session",
                                 wx.SAVE | wx.OVERWRITE_PROMPT)
 
-            if dlg.ShowModal() == wx.ID_OK:
+            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
                 fname = dlg.GetPath()
                 if fname is None or not len(fname):
                     return
@@ -796,7 +802,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                 CONFIG['SESSION_DIR'], u"",
                                 _("Session") + " (*.session)|*.session", wx.OPEN)
 
-            if dlg.ShowModal() == wx.ID_OK:
+            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
                 fname = dlg.GetPath()
                 nbook = self.GetNotebook()
                 rval = nbook.LoadSessionFile(fname)
@@ -948,6 +954,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # Finally close the window
         self.LOG("[ed_main][evt] OnClose: Closing Main Frame")
         wx.GetApp().UnRegisterWindow(repr(self))
+
+        # Ensure that event handlers have been un registered from the app
+        wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_ALL)
+
+        # Cleanup
         self.Destroy()
 
     #---- End File Menu Functions ----#
@@ -1024,7 +1035,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             fdata = wx.FontData()
             fdata.SetInitialFont(ctrl.GetDefaultFont())
             dlg = wx.FontDialog(self, fdata)
-            result = dlg.ShowModal()
+            result = ebmlib.LockCall(self._mlock, dlg.ShowModal)
             data = dlg.GetFontData()
             dlg.Destroy()
             if result == wx.ID_OK:
@@ -1044,14 +1055,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type evt: wxMenuEvent
 
         """
-        # NOTE: check self is still alive been getting
-        #       error reports when trying to open this dialog
-        #       about TypeError due to wrong type
-        if self and evt.GetId() == ID_STYLE_EDIT:
+        if evt.GetId() == ID_STYLE_EDIT:
             import style_editor
             dlg = style_editor.StyleEditor(self)
             dlg.CenterOnParent()
-            dlg.ShowModal()
+            ebmlib.LockCall(self._mlock, dlg.ShowModal)
             dlg.Destroy()
         else:
             evt.Skip()
@@ -1213,7 +1221,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 dlg.SetBitmap(bmp)
             dlg.CenterOnParent()
 
-            if dlg.ShowModal() == wx.ID_OK:
+            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
                 nenc = dlg.GetEncoding()
                 doc.SetEncoding(nenc)
                 success = ctrl.ReloadFile()[0]
@@ -1239,7 +1247,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self._paneNavi = eclib.AuiPaneNavigator(self, self._mgr, bmp,
                                                       _("Aui Pane Navigator"))
             self._paneNavi.SetReturnCode(wx.ID_OK)
-            self._paneNavi.ShowModal()
+            ebmlib.LockCall(self._mlock, self._paneNavi.ShowModal)
 
             sel = self._paneNavi.GetSelection()
             self._paneNavi.Destroy()
@@ -1446,7 +1454,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             dlg.SetInitialSize()
             dlg.CenterOnParent()
 
-            if dlg.ShowModal() == wx.ID_OK:
+            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
                 includes = dlg.GetIncludes()
                 includes.sort()
                 _PSET("LEXERMENU", includes)
