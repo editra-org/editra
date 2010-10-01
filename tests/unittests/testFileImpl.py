@@ -63,6 +63,16 @@ class FileImplTest(unittest.TestCase):
         """Test fetching last file op error"""
         self.assertEquals(self.file.GetLastError(), u"None")
 
+        # Test that errors come back as Unicode
+        self.file.SetLastError("OS CALL FAILED")
+        errmsg = self.file.GetLastError()
+        self.assertTrue(ebmlib.IsUnicode(errmsg), "Error not decoded properly!")
+
+        # Tests path for error message that is already Unicode
+        self.file.SetLastError(u"FAIL!")
+        errmsg = self.file.GetLastError()
+        self.assertEquals(errmsg, u"FAIL!")
+
     def testGetPath(self):
         """Test getting the files path"""
         self.assertTrue(self.file.GetPath() == self.path)
