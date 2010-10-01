@@ -66,7 +66,7 @@ class StyleEditor(wx.Dialog):
         @todo: rework the layout
 
         """
-        wx.Dialog.__init__(self, parent, id_, title, style=style)
+        super(StyleEditor, self).__init__(parent, id_, title, style=style)
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()
@@ -561,7 +561,7 @@ class SettingsPanel(wx.Panel):
     """
     def __init__(self, parent):
         """Create the settings panel"""
-        wx.Panel.__init__(self, parent)
+        super(SettingsPanel, self).__init__(parent)
 
         # Layout
         self.__DoLayout()
@@ -663,7 +663,7 @@ class SettingsPanel(wx.Panel):
 class PreviewPanel(eclib.ControlBox):
     """Panel to hold the preview window and selector"""
     def __init__(self, parent):
-        eclib.ControlBox.__init__(self, parent)
+        super(PreviewPanel, self).__init__(parent)
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()

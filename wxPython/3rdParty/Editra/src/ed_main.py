@@ -1044,7 +1044,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type evt: wxMenuEvent
 
         """
-        if evt.GetId() == ID_STYLE_EDIT:
+        # NOTE: check self is still alive been getting
+        #       error reports when trying to open this dialog
+        #       about TypeError due to wrong type
+        if self and evt.GetId() == ID_STYLE_EDIT:
             import style_editor
             dlg = style_editor.StyleEditor(self)
             dlg.CenterOnParent()
