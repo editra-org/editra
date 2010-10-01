@@ -580,6 +580,14 @@ class CodeBrowserTree(wx.TreeCtrl):
             # Start the oneshot timer for beginning the tag generator job
             self._timer.Start(300, True)
     
+    def OnShowAUIPane(self):
+        """Interface method that the main Editra window will call
+        When its auimanager does a Show when this window is contained
+        within an aui pane. Forces the tree to update.
+
+        """
+        self.OnUpdateTree(force=True)
+
     def OnShowBrowser(self, evt):
         """Show the browser pane
         @param evt: wx.MenuEvent
@@ -590,7 +598,7 @@ class CodeBrowserTree(wx.TreeCtrl):
             pane = mgr.GetPane(PANE_NAME)
             pane.Show(not pane.IsShown())
             mgr.Update()
-            self.OnUpdateTree(force=True)
+            self.OnShowAUIPane()
         else:
             evt.Skip()
 

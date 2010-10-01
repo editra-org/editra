@@ -9,6 +9,7 @@ Released:
 
 +Add configuration panel to plugin manager dialog
 +Add outline sorting options to sort either alphabetically or by line number
++Fix bug in not refreshing tree when activated via toggle pane function in Editra.
 
 #-----------------------------------------------------------------------------#
 
