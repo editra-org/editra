@@ -25,6 +25,7 @@ NEW: [features/enhancements]
 +Updated CodeBrowser plugin 1.2 (sort view by line number or alphabetically)
 
 BUG FIXES:
++Fix major error in handling events when more than one window has been opened.
 +Fix bug in style sheet parsing that was not properly setting undefined style
 tags to the default_style.
 +Fix encoding detection issue that could lead to unhanded exception error.
