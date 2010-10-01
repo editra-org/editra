@@ -78,13 +78,16 @@ class DropTargetFT(wx.PyDropTarget):
                 longest = ext
 
         cords = [ (0, x * longest[1]) for x in xrange(len(txt)) ]
-        mdc = wx.MemoryDC(wx.EmptyBitmap(longest[0] + 5,
-                                         longest[1] * len(txt), 32))
-        mdc.SetBackgroundMode(wx.TRANSPARENT)
-        mdc.SetTextForeground(stc.GetDefaultForeColour())
-        mdc.SetFont(stc.GetDefaultFont())
-        mdc.DrawTextList(txt, cords)
-        self._tmp = wx.DragImage(mdc.GetAsBitmap())
+        try:
+            mdc = wx.MemoryDC(wx.EmptyBitmap(longest[0] + 5,
+                                             longest[1] * len(txt), 32))
+            mdc.SetBackgroundMode(wx.TRANSPARENT)
+            mdc.SetTextForeground(stc.GetDefaultForeColour())
+            mdc.SetFont(stc.GetDefaultFont())
+            mdc.DrawTextList(txt, cords)
+            self._tmp = wx.DragImage(mdc.GetAsBitmap())
+        except wx.PyAssertionError, msg:
+            Log("[droptargetft][err] %s" % str(msg))
 
     def InitObjects(self):
         """Initializes the text and file data objects
@@ -149,6 +152,7 @@ class DropTargetFT(wx.PyDropTarget):
                 self.ScrollBuffer(stc, x_cord, y_cord)
             drag_result = wx.DragCopy
         else:
+            # A drag image was created
             if hasattr(stc, 'DoDragOver'):
                 point = wx.Point(x_cord, y_cord)
                 self._tmp.BeginDrag(point - self._lastp, stc)
