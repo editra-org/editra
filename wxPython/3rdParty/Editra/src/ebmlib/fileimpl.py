@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Editra Buisness Model Library: FileObjectImpl
+Editra Business Model Library: FileObjectImpl
 
 Implementation of a file object interface class. Objects and methods inside
 of this library expect a file object that derives from this interface.
@@ -21,8 +21,10 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Imports
 import os
+import sys
 
-# Editra Buisness Model Imports
+# Editra Business Model Imports
+import txtutil
 import fileutil
 
 #--------------------------------------------------------------------------#
@@ -111,11 +113,18 @@ class FileObjectImpl(object):
         return self._handle
 
     def GetLastError(self):
-        """Return the last error that occured when using this file
+        """Return the last error that occurred when using this file
         @return: err traceback or None
 
         """
-        return unicode(self.last_err).replace("u'", "'")
+        errstr = u"None"
+        if self.last_err:
+            if not txtutil.IsUnicode(self.last_err):
+                errstr = unicode(self.last_err, sys.getfilesystemencoding())
+                errstr = errstr.replace("u'", "'")
+            else:
+                errstr = self.last_err
+        return errstr
 
     def GetModtime(self):
         """Get the timestamp of this files last modification"""

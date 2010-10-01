@@ -184,7 +184,7 @@ class EdFile(ebmlib.FileObjectImpl):
                 ustr = self._HandleRawBytes(bytes)
         except (UnicodeDecodeError, LookupError), msg:
             Log("[ed_txt][err] Error while reading with %s" % self.encoding)
-            Log("[ed_txt][err] %s" % unicode(msg))
+            Log("[ed_txt][err] %s" % msg)
             self.SetLastError(unicode(msg))
             self.Close()
             # Decoding failed so convert to raw bytes for display
@@ -286,7 +286,7 @@ class EdFile(ebmlib.FileObjectImpl):
                 self.encoding = enc
             except UnicodeEncodeError, msg:
                 Log("[ed_txt][err] Failed to encode text with %s" % self.encoding)
-                Log("[ed_txt][err] %s" % str(msg))
+                Log("[ed_txt][err] %s" % msg)
                 self.SetLastError(unicode(msg))
             else:
                 break
