@@ -57,11 +57,14 @@ class EdStatBar(ProgressStatusBar):
         self.SetFieldsCount(6) # Info, vi stuff, line/progress
         self.SetStatusWidths([-1, 90, 40, 40, 40, 155])
         self._eolmenu.Append(ed_glob.ID_EOL_MAC, u"CR",
-                             _("Change line endings to %s") % u"CR")
+                             _("Change line endings to %s") % u"CR",
+                             kind=wx.ITEM_CHECK)
         self._eolmenu.Append(ed_glob.ID_EOL_WIN, u"CRLF",
-                             _("Change line endings to %s") % u"CRLF")
+                             _("Change line endings to %s") % u"CRLF",
+                             kind=wx.ITEM_CHECK)
         self._eolmenu.Append(ed_glob.ID_EOL_UNIX, u"LF",
-                             _("Change line endings to %s") % u"LF")
+                             _("Change line endings to %s") % u"LF",
+                             kind=wx.ITEM_CHECK)
 
         # Event Handlers
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)

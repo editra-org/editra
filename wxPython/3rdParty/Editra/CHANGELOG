@@ -37,6 +37,8 @@ paths on Windows.
 +Fix crash that could occur if text was dragged over PluginMgr ListBox.
 +Fix issue in Shelf tabs not being restored in correct order
 +Fix issue where context menu on editor tabs could refer to wrong tab.
++Fix error that could occur when showing statusbar popumenu for line endings
+caused by improper menu item type.
 
 #-----------------------------------------------------------------------------#
 
