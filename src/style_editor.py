@@ -671,6 +671,8 @@ class PreviewPanel(eclib.ControlBox):
                                                 style=wx.SUNKEN_BORDER)
 
         # Setup
+        self.preview.SetEdgeColumn(80)
+        self.preview.SetEdgeMode(wx.stc.STC_EDGE_LINE)
         self.preview.SetCaretLineVisible(True)
         self.__DoLayout()
 

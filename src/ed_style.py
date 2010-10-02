@@ -992,7 +992,10 @@ class StyleMgr(object):
         self.SetWhitespaceBackground(True, wspace.GetBack())
         self.SetWhitespaceForeground(True, wspace.GetFore())
 
-        self.SetCaretForeground(self.GetDefaultForeColour())
+        default_fore = self.GetDefaultForeColour()
+        edge_colour = self.GetItemByName('edge_style')
+        self.SetEdgeColour(edge_colour.GetFore())
+        self.SetCaretForeground(default_fore)
         self.SetCaretLineBack(self.GetItemByName('caret_line').GetBack())
         self.Colourise(0, -1)
 
@@ -1031,6 +1034,7 @@ DEF_STYLE_DICT = \
          'directive_style' : StyleItem("#0000FF", face="%(secondary)s",
                                        ex=["bold",]),
          'dockey_style' : StyleItem("#0000FF"),
+         'edge_style'   : StyleItem(), # inherit from default
          'error_style' : StyleItem("#DD0101", face="%(secondary)s",
                                     ex=["bold",]),
          'foldmargin_style' : StyleItem(back="#D1D1D1"),

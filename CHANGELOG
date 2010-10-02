@@ -23,6 +23,7 @@ NEW: [features/enhancements]
 +Support multiple views of the same file within the same window.
 +Add support for NONMEM Control Stream files (patch from Robert McLeay)
 +Updated CodeBrowser plugin 1.2 (sort view by line number or alphabetically)
++Edge guide color can be configured through Style Editor Dialog.
 
 BUG FIXES:
 +Fix major error in handling events when more than one window has been opened.
