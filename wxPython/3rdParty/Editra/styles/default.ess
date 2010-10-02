@@ -41,6 +41,10 @@ guide_style {
 		fore:#838383;
 }
 
+edge_style {
+		fore:#838383;
+}
+
 error_style {
 		fore:#DD0101;
 		face:%(secondary)s;
