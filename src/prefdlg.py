@@ -102,7 +102,7 @@ class PreferencesDialog(wx.Frame):
         @param id_: The id of this window
 
         """
-        super(PreferencesDialog, self).__init__(self, parent, id_,
+        super(PreferencesDialog, self).__init__(parent, id_,
                                                 _("Preferences - Editra"),
                                                 style=style)
         util.SetWindowIcon(self)
