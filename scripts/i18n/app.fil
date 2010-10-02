@@ -112,7 +112,9 @@
 ../../src/syntax/_matlab.py
 ../../src/syntax/_mssql.py
 ../../src/syntax/_nasm.py
+../../src/syntax/_nonmem.py
 ../../src/syntax/_nsis.py
+../../src/syntax/_ooc.py
 ../../src/syntax/_pascal.py
 ../../src/syntax/_perl.py
 ../../src/syntax/_php.py
@@ -145,6 +147,7 @@
 ../../plugins/site.py
 ../../plugins/codebrowser/codebrowser/IconFile.py
 ../../plugins/codebrowser/codebrowser/__init__.py
+../../plugins/codebrowser/codebrowser/cbconfig.py
 ../../plugins/codebrowser/codebrowser/cbrowser.py
 ../../plugins/codebrowser/codebrowser/tagload.py
 ../../plugins/filebrowser/filebrowser/Recycle.py
