@@ -105,6 +105,7 @@ _DEFAULTS = {
            'TOOLBAR'    : True,             # Show Toolbar
            'USETABS'    : False,            # Use tabs instead of spaces
            'USE_PROXY'  : False,            # Use Proxy server settings?
+           'VIEWVERTSPACE' : False,         # Allow extra virtual space in buffer
            'VI_EMU'     : False,            # Use Vi emulation mode
            'VI_NORMAL_DEFAULT' : False,     # Use Normal mode by default
            'WARN_EOL'   : True,             # Warn about mixed eol characters

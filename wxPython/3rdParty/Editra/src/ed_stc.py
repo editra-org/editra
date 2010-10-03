@@ -358,8 +358,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetViEmulationMode(_PGET('VI_EMU'), _PGET('VI_NORMAL_DEFAULT'))
         self.SetViewEdgeGuide(_PGET('SHOW_EDGE'))
         self.EnableAutoBackup(_PGET('AUTOBACKUP'))
-        # NOTE: disabled because it is more annoying than it is beneficial.
-#        self.SetEndAtLastLine(False)
+        self.SetEndAtLastLine(not _PGET('VIEWVERTSPACE', default=False))
 
     def ConvertCase(self, upper=False):
         """Converts the case of the selected text to either all lower

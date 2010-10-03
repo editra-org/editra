@@ -178,6 +178,7 @@ ID_PRINT_MODE    = wx.NewId()
 ID_TRANSPARENCY  = wx.NewId()
 ID_PREF_SPOS     = wx.NewId()
 ID_PREF_UPDATE_BAR = wx.NewId()
+ID_PREF_VIRT_SPACE = wx.NewId()
 ID_PREF_WARN_EOL = wx.NewId()
 ID_SESSION       = wx.NewId()
 
@@ -367,6 +368,7 @@ ID_2_PROF = {
              ID_PREF_TABW         : 'TABWIDTH',
              ID_VIEW_TOOL         : 'TOOLBAR',
              ID_PREF_TABS         : 'USETABS',
+             ID_PREF_VIRT_SPACE   : 'VIEWVERTSPACE',
              ID_VI_MODE           : 'VI_EMU',
              ID_VI_NORMAL_DEFAULT : 'VI_NORMAL_DEFAULT',
              ID_PREF_WARN_EOL     : 'WARN_EOL',

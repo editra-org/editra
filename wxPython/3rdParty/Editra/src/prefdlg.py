@@ -771,6 +771,10 @@ class DocGenPanel(wx.Panel):
         ww_cb = wx.CheckBox(self, ed_glob.ID_WORD_WRAP, _("Word Wrap"))
         ww_cb.SetValue(Profile_Get('WRAP'))
         ww_cb.SetToolTipString(_("Turn off for better performance"))
+        vs_cb = wx.CheckBox(self, ed_glob.ID_PREF_VIRT_SPACE,
+                            _("View Virtual Space After Last Line"))
+        vs_cb.SetValue(Profile_Get('VIEWVERTSPACE', default=False))
+        vs_cb.SetToolTipString(_("Adds extra scrolling room after last line"))
 
         # Font Options
         fnt = Profile_Get('FONT1', 'font', wx.Font(10, wx.FONTFAMILY_MODERN,
@@ -786,7 +790,7 @@ class DocGenPanel(wx.Panel):
                                   "regions when syntax highlighting is in use"))
 
         # Layout
-        sizer = wx.FlexGridSizer(19, 2, 5, 5)
+        sizer = wx.FlexGridSizer(20, 2, 5, 5)
         sizer.AddGrowableCol(1, 1)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Format") + u": "),
@@ -803,6 +807,7 @@ class DocGenPanel(wx.Panel):
                        ((5, 5), 0), (sln_cb, 0),
                        ((5, 5), 0), (sws_cb, 0),
                        ((5, 5), 0), (ww_cb, 0),
+                       ((5, 5), 0), (vs_cb, 0),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Primary Font") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL),
@@ -845,7 +850,7 @@ class DocGenPanel(wx.Panel):
         """
         # XXX Why when running on windows this and other imports randomly
         #     become None. I have been unable to reproduce this behavior myself
-        #     but have recieved enough error reports about it to beleive it.
+        #     but have received enough error reports about it to believe it.
         #     If they were actually NoneTypes the dialog would not be able to
         #     be shown so this is very strange!!
         global ed_glob
@@ -858,7 +863,8 @@ class DocGenPanel(wx.Panel):
                     ed_glob.ID_PREF_AALIAS, ed_glob.ID_SHOW_EOL,
                     ed_glob.ID_SHOW_LN, ed_glob.ID_SHOW_WS,
                     ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS,
-                    ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_AUTOTRIM ]:
+                    ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_AUTOTRIM,
+                    ed_glob.ID_PREF_VIRT_SPACE ]:
 
             e_value = evt.GetEventObject().GetValue()
             if e_id == ed_glob.ID_EOL_MODE:
@@ -866,7 +872,7 @@ class DocGenPanel(wx.Panel):
 
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_value)
 
-            # Do updates for everything but text encoding
+            # Do updates for everything but autotrim whitespace
             if e_id not in (ed_glob.ID_PREF_AUTOTRIM, ):
                 wx.CallLater(25, DoUpdates)
         else:
