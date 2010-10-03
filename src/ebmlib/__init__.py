@@ -34,3 +34,5 @@ from clipboard import *
 # Misc
 from miscutil import *
 from cmenumgr import *
+from osutil import *
+
