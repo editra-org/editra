@@ -41,6 +41,7 @@ paths on Windows.
 +Fix error that could occur when showing statusbar popumenu for line endings
 caused by improper menu item type.
 +Fix DeadObjectError in UpdateFileHistory
++Properly handle application exit when os is shutting down (patch from Eric Gaudet)
 
 #-----------------------------------------------------------------------------#
 
