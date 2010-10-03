@@ -357,7 +357,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 nb = self.GetNotebook()
                 ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
                                    (nb, nb.GetSelection()))
-        else:
+        elif not active:
             self._loaded = False
             self.DeActivate()
 
