@@ -700,7 +700,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                             u''.join(syntax.GenFileFilters()),
                             wx.SAVE | wx.OVERWRITE_PROMPT)
 
-        if ebmlib.LockCall(self.mlock, dlg.ShowModal) == wx.ID_OK:
+        if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
             path = dlg.GetPath()
             dlg.Destroy()
 
