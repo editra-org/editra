@@ -928,7 +928,7 @@ class DocCodePanel(wx.Panel):
         edge_cb = wx.CheckBox(self, ed_glob.ID_SHOW_EDGE, _("Edge Guide"))
         edge_cb.SetValue(Profile_Get('SHOW_EDGE'))
         edge_sp = wx.SpinCtrl(self, ed_glob.ID_PREF_EDGE,
-                              Profile_Get('EDGE', 'str'), min=0, max=120)
+                              Profile_Get('EDGE', 'str'), min=0, max=160)
         edge_sp.SetToolTipString(_("Guide Column"))
         edge_col = wx.BoxSizer(wx.HORIZONTAL)
         edge_col.AddMany([(edge_cb, 0, wx.ALIGN_CENTER_VERTICAL),
