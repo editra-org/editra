@@ -1147,6 +1147,9 @@ class EdPages(aui.AuiNotebook):
                                            SIMULATED_EVT_ID)
                 evt.SetSelection(idx)
                 self.OnPageClosed(evt)
+        except Exception:
+            # TODO: workaround for crash in base on destruction
+            pass
         finally:
             frame.Thaw()
 
