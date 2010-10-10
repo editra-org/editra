@@ -9,11 +9,14 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.xx
-DATE 0x/xx/2010
+VERSION 0.5.86
+DATE 10/10/2010
 37th Alpha Release
 
 NEWS:
+This release includes some important Unicode and file loading issues as well
+as some new features. See the included change summary below for more details
+on what has changed for this release.
 
 NEW: [features/enhancements]
 +Add Search in Current Directory option to Find/Replace Dialog
