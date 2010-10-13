@@ -80,11 +80,6 @@ class AuiPaneNavigator(wx.Dialog):
         self._listBox.Bind(wx.EVT_LISTBOX_DCLICK, self.OnItemSelected)
         self._listBox.Bind(wx.EVT_LISTBOX, lambda evt: self.HighlightPane())
 
-        # Set focus on the list box to avoid having to click on it to change
-        # the tab selection under GTK.
-        self._listBox.SetFocus()
-        self._listBox.SetSelection(0)
-
     def __del__(self):
         self._auimgr.HideHint()
 
@@ -227,3 +222,10 @@ class AuiPaneNavigator(wx.Dialog):
 
         """
         self._navi_keys = keylist
+
+    def ShowModal(self):
+        # Set focus on the list box to avoid having to click on it to change
+        # the tab selection under GTK.
+        self._listBox.SetFocus()
+        self._listBox.SetSelection(0)
+        return super(AuiPaneNavigator, self).ShowModal()
