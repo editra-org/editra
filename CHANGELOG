@@ -14,6 +14,21 @@ DATE 10/10/2010
 37th Alpha Release
 
 NEWS:
+
+NEW: [features/enhancements]
+
+BUG FIXES:
++Fix issue where using pane navigator would result in all event handlers being
+disconnected until main window recieved an deactivation followed by another
+activation event.
+
+#-----------------------------------------------------------------------------#
+
+VERSION 0.5.86
+DATE 10/10/2010
+37th Alpha Release
+
+NEWS:
 This release includes some important Unicode and file loading issues as well
 as some new features. See the included change summary below for more details
 on what has changed for this release.

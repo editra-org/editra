@@ -82,7 +82,7 @@ class StaticCallLock(CallLock):
 #-----------------------------------------------------------------------------#
 
 def LockCall(lock, callable, args=[], kwargs={}):
-    """Convinience function for locking an function call with
+    """Convenience function for locking an function call with
     the provided CallLock object.
 
     """
