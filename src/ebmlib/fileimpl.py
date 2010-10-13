@@ -32,7 +32,7 @@ import fileutil
 class FileObjectImpl(object):
     """File Object Interface implementation base class"""
     def __init__(self, path=u'', modtime=0):
-        object.__init__(self)
+        super(FileObjectImpl, self).__init__()
 
         # Attributes
         self._path = fileutil.GetPathFromURI(path)
@@ -82,7 +82,7 @@ class FileObjectImpl(object):
         try:
             file_h = open(self._path, mode)
         except (IOError, OSError), msg:
-            self.last_err = msg
+            self.SetLastError(unicode(msg))
             return False
         else:
             self._handle = file_h
@@ -120,8 +120,7 @@ class FileObjectImpl(object):
         errstr = u"None"
         if self.last_err:
             if not txtutil.IsUnicode(self.last_err):
-                errstr = unicode(self.last_err, sys.getfilesystemencoding())
-                errstr = errstr.replace("u'", "'")
+                errstr = unicode(self.last_err)
             else:
                 errstr = self.last_err
         return errstr
