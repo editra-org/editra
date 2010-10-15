@@ -1214,7 +1214,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @return: bool
 
         """
-        return self._loading is not None
+        # NOTE: keep the getattr check here some cases
+        #       are reporting a yet unexplainable AttributeError here
+        return getattr(self, '_loading', None) is not None
 
     def IsRecording(self):
         """Returns whether the control is in the middle of recording
