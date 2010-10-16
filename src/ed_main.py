@@ -1611,12 +1611,20 @@ class MainWindowAddOn(plugin.Plugin):
         handlers = list()
         for observer in self.observers:
             try:
+                items = None
                 if ui_evt:
-                    items = observer.GetUIHandlers()
+                    if hasattr(observer, 'GetUIHandlers'):
+                        items = observer.GetUIHandlers()
+                        assert isinstance(items, list), "Must be a list()!"
                 else:
-                    items = observer.GetMenuHandlers()
+                    if hasattr(observer, 'GetMenuHandlers'):
+                        items = observer.GetMenuHandlers()
+                        assert isinstance(items, list), "Must be a list()!"
             except Exception, msg:
-                util.Log("[ed_main][err] MainWindoAddOn.GetEventHandlers: %s" % str(msg))
+                util.Log("[ed_main][err] MainWindowAddOn.GetEventHandlers: %s" % str(msg))
                 continue
-            handlers.extend(items)
+
+            if items is not None:
+                handlers.extend(items)
+
         return handlers
