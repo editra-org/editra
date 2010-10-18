@@ -19,9 +19,10 @@ NEW: [features/enhancements]
 
 BUG FIXES:
 +Fix issue where using pane navigator would result in all event handlers being
-disconnected until main window recieved an deactivation followed by another
+disconnected until main window received an deactivation followed by another
 activation event.
 +Fix bug in reporting file errors under certain use cases.
++Fix incorrect highlighting for some css2 keywords.
 
 #-----------------------------------------------------------------------------#
 
