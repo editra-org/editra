@@ -86,7 +86,11 @@ class EdPages(aui.AuiNotebook):
 
         # Setup Tab Navigator
         ed_icon = ed_glob.CONFIG['SYSPIX_DIR'] + u"editra.png"
-        self.SetNavigatorIcon(wx.Bitmap(ed_icon, wx.BITMAP_TYPE_PNG))
+        bmp = wx.Bitmap(ed_icon, wx.BITMAP_TYPE_PNG)
+        if bmp.IsOk():
+            self.SetNavigatorIcon(bmp)
+        else:
+            util.Log("[ed_pages][warn] Bad bitmap: %s" % ed_icon)
 
         # Setup the ImageList and the default image
         imgl = wx.ImageList(16, 16)

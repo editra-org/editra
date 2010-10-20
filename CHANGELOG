@@ -9,9 +9,9 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.86
-DATE 10/10/2010
-37th Alpha Release
+VERSION 0.5.xx
+DATE xx/xx/2010
+38th Alpha Release
 
 NEWS:
 
@@ -23,6 +23,7 @@ disconnected until main window received an deactivation followed by another
 activation event.
 +Fix bug in reporting file errors under certain use cases.
 +Fix incorrect highlighting for some css2 keywords.
++Don't crash when bitmap resource for tab navigator fails to load correctly.
 
 #-----------------------------------------------------------------------------#
 
