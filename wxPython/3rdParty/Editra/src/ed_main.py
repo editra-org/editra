@@ -327,6 +327,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         if self._mlock.IsLocked():
             # Deactivated for popup, leave handlers hooked up
+            wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_ALL)
             evt.Skip()
             return
 

@@ -24,6 +24,7 @@ activation event.
 +Fix bug in reporting file errors under certain use cases.
 +Fix incorrect highlighting for some css2 keywords.
 +Don't crash when bitmap resource for tab navigator fails to load correctly.
++Fix issue where some UpdateUI events where not getting handled in modal dialogs.
 
 #-----------------------------------------------------------------------------#
 
