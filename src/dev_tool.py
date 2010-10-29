@@ -33,7 +33,7 @@ import wx
 import ed_glob
 import ed_msg
 import eclib
-from ebmlib import IsUnicode
+from ebmlib import IsUnicode, LogFile
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -89,15 +89,21 @@ def DEBUGP(statement):
 
     # Only print to stdout when DEBUG is active
     # Cant print to stdio if using pythonw
-    if ed_glob.DEBUG and not PYTHONW:
+    if ed_glob.DEBUG:
+        logfile = EdLogFile()
         mstr = unicode(msg)
-        print mstr.encode('utf-8', 'replace')
+        mstr = mstr.encode('utf-8', 'replace')
+        if not PYTHONW:
+            print(mstr)
+        # Write to log file
+        logfile.WriteMessage(mstr)
 
         # Check for trapped exceptions to print
         if ed_glob.VDEBUG and msg.Type in ('err', 'error'):
             traceback.print_exc()
+            logfile.WriteMessage(traceback.format_exc())
 
-    # Dispatch message to all interested parties
+    # Dispatch message to all observers
     if msg.Type in ('err', 'error'):
         mtype = ed_msg.EDMSG_LOG_ERROR
         if ed_glob.VDEBUG:
@@ -130,7 +136,7 @@ class LogMsg(object):
         @keyword level: Priority of the message
 
         """
-        object.__init__(self)
+        super(LogMsg, self).__init__()
 
         # Attributes
         self._msg = dict(mstr=msg, msrc=msrc, lvl=level, tstamp=time.time())
@@ -164,7 +170,7 @@ class LogMsg(object):
         """Returns a nice formatted string version of the message"""
         statement = DecodeString(self._msg['mstr'])
         s_lst = [u"[%s][%s][%s]%s" % (self.ClockTime, self._msg['msrc'],
-                                      self._msg['lvl'], msg) 
+                                      self._msg['lvl'], msg.rstrip()) 
                  for msg in statement.split(u"\n")
                  if len(msg.strip())]
         out = os.linesep.join(s_lst)
@@ -210,6 +216,13 @@ class LogMsg(object):
 
 #-----------------------------------------------------------------------------#
 
+class EdLogFile(LogFile):
+    """Transient log file object"""
+    def __init__(self):
+        super(EdLogFile, self).__init__("editra")
+
+#-----------------------------------------------------------------------------#
+
 def DecodeString(string, encoding=None):
     """Decode the given string to Unicode using the provided
     encoding or the DEFAULT_ENCODING if None is provided.
@@ -234,7 +247,7 @@ def DecodeString(string, encoding=None):
 
 class EdErrorDialog(eclib.ErrorDialog):
     def __init__(self, msg):
-        eclib.ErrorDialog.__init__(self, None, title="Error Report", message=msg)
+        super(EdErrorDialog, self).__init__(None, title="Error Report", message=msg)
 
         # Setup
         self.SetDescriptionLabel(_("Error: Something unexpected happend\n"

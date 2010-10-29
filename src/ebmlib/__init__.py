@@ -23,6 +23,7 @@ from fchecker import *
 from fileutil import *
 from fileimpl import *
 from txtutil import *
+from logfile import *
 
 from backupmgr import *
 from calllock import *

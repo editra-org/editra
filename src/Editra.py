@@ -97,6 +97,9 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         # Disable debug popups
         wx.Log.EnableLogging(False)
+        # Purge old logs
+        logfile = dev_tool.EdLogFile()
+        logfile.PurgeOldLogs(7)
 
         if ed_glob.SINGLE:
             # Setup the instance checker
