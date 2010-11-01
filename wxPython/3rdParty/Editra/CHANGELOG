@@ -20,6 +20,8 @@ NEW: [features/enhancements]
 temp directory and are kept for up to seven days.
 
 BUG FIXES:
++Fix issue with tab activation after tabs had been reorganized via user
+drag and drop.
 +Fix issue where using pane navigator would result in all event handlers being
 disconnected until main window received an deactivation followed by another
 activation event.
