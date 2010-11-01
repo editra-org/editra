@@ -115,6 +115,7 @@ class EdPages(aui.AuiNotebook):
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_MIDDLE_UP, self.OnMClickUp)
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_RIGHT_UP, self.OnTabMenu)
         self.Bind(aui.EVT_AUINOTEBOOK_ALLOW_DND, self.OnAllowDnD)
+        self.Bind(aui.EVT_AUINOTEBOOK_END_DRAG, self.OnDragFinished)
 
         self.Bind(wx.stc.EVT_STC_CHANGE, self.OnUpdatePageText)
         self.Bind(wx.EVT_MENU, self.OnMenu)
@@ -433,6 +434,10 @@ class EdPages(aui.AuiNotebook):
         dsource = evt.GetDragSource()
         if isinstance(dsource, EdPages):
             evt.Allow()
+
+    def OnDragFinished(self, evt):
+        self.UpdateIndexes()
+        evt.Skip()
 
     def OnMenu(self, evt):
         """Handle context menu events
