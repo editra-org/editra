@@ -20,7 +20,6 @@ __revision__ = "$Revision$"
 import os
 import sys
 import re
-import platform
 import traceback
 import time
 import urllib2
@@ -247,7 +246,8 @@ def DecodeString(string, encoding=None):
 
 class EdErrorDialog(eclib.ErrorDialog):
     def __init__(self, msg):
-        super(EdErrorDialog, self).__init__(None, title="Error Report", message=msg)
+        super(EdErrorDialog, self).__init__(None, title="Error Report",
+                                            message=msg)
 
         # Setup
         self.SetDescriptionLabel(_("Error: Something unexpected happend\n"
