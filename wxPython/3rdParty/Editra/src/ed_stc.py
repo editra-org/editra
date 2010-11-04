@@ -1535,6 +1535,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             lineNum = self.GetCurrentLine()
         super(EditraStc, self).ToggleFold(lineNum)
 
+    @jumpaction
     def WordLeft(self): # pylint: disable-msg=W0221
         """Move caret to beginning of previous word
         @note: override builtin to include extra characters in word
@@ -1559,6 +1560,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             super(EditraStc, self).WordLeftExtend()
         self.SetWordChars('')
 
+    @jumpaction
     def WordPartLeft(self): # pylint: disable-msg=W0221
         """Move the caret left to the next change in capitalization/punctuation
         @note: overrides default function to not count whitespace as words
@@ -1580,6 +1582,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
             super(EditraStc, self).WordPartLeftExtend()
 
+    @jumpaction
     def WordPartRight(self): # pylint: disable-msg=W0221
         """Move the caret to the start of the next word part to the right
         @note: overrides default function to exclude white space
@@ -1590,6 +1593,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
             super(EditraStc, self).WordPartRight()
 
+    @jumpaction
     def WordPartRightEnd(self): # pylint: disable-msg=W0221
         """Move caret to end of next change in capitalization/punctuation
         @postcondition: caret is moved
@@ -1623,6 +1627,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         if self.GetTextRange(cpos, cpos + 1) in SPACECHARS:
             super(EditraStc, self).WordPartRightExtend()
 
+    @jumpaction
     def WordRight(self): # pylint: disable-msg=W0221
         """Move caret to beginning of next word
         @note: override builtin to include extra characters in word
@@ -1635,6 +1640,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             super(EditraStc, self).WordRight()
         self.SetWordChars('')
 
+    @jumpaction
     def WordRightEnd(self): # pylint: disable-msg=W0221
         """Move caret to end of next change in word
         @note: override builtin to include extra characters in word
