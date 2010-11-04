@@ -215,7 +215,6 @@ class DocPositionMgr(object):
         """
         if pre:
             if cls._poscache.HasPrevious():
-                print "DO PREVIOUS!!"
                 return cls._poscache.PeekPrevious()
         else:
             if cls._poscache.HasNext():
