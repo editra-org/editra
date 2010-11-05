@@ -199,10 +199,13 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def _MacHandleKey(self, k_code, shift_down, alt_down, ctrl_down, cmd_down):
         """Handler for mac specific actions"""
+        if alt_down:
+            return False
+
         if (k_code == wx.WXK_BACK and shift_down) and \
-           not (alt_down or ctrl_down or cmd_down):
+           not (ctrl_down or cmd_down):
             self.DeleteForward()
-        elif cmd_down and True not in (alt_down, ctrl_down):
+        elif cmd_down and not ctrl_down:
             line = self.GetCurrentLine()
             if k_code == wx.WXK_RIGHT:
                 pos = self.GetLineStartPosition(line)
@@ -596,14 +599,15 @@ class EditraStc(ed_basestc.EditraBaseStc):
         cmd_down = evt.CmdDown()
 
         if self.key_handler.PreProcessKey(k_code, ctrl_down,
-                                          cmd_down, shift_down, alt_down):
+                                          cmd_down, shift_down,
+                                          alt_down):
             return
 
-        if wx.Platform == '__WXMAC__' and \
-           self._MacHandleKey(k_code, shift_down, alt_down, ctrl_down, cmd_down):
+        if wx.Platform == '__WXMAC__' and self._MacHandleKey(k_code, shift_down,
+                                                             alt_down, ctrl_down,
+                                                             cmd_down):
             pass
         elif k_code == wx.WXK_RETURN:
-
             if self._config['autoindent'] and not self.AutoCompActive():
                 if self.GetSelectedText():
                     self.CmdKeyExecute(wx.stc.STC_CMD_NEWLINE)
