@@ -178,7 +178,7 @@ class FileInfoDlg(wx.MiniFrame):
                      ((12, 12)), (lblsize, 0, wx.ALIGN_LEFT), ((5, 5))])
 
         # Central Info
-        center = wx.FlexGridSizer(5, 2, 3, 5)
+        center = wx.FlexGridSizer(6, 2, 3, 5)
         tlbl = wx.StaticText(self.panel, label=_("Kind") + ":")
 
         if self._ftype is None:
