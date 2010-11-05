@@ -20,7 +20,7 @@ __revision__ = "$Revision$"
 __all__ = [ 'GetAbsPath', 'GetFileExtension', 'GetFileModTime', 'GetFileName',
             'GetFileSize', 'GetPathName', 'GetPathFromURI', 'GetUniqueName', 
             'IsLink', 'MakeNewFile', 'MakeNewFolder', 'PathExists',
-            'ResolveRealPath']
+            'ResolveRealPath', 'IsExecutable', 'Which']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -171,6 +171,15 @@ def PathExists(path):
     return os.path.exists(path)
 
 @uri2path
+def IsExecutable(path):
+    """Is the file at the given path an executable file
+    @param path: file path
+    @return: bool
+
+    """
+    return os.path.isfile(path) and os.access(path, os.X_OK)
+
+@uri2path
 def ResolveRealPath(link):
     """Return the real path of the link file
     @param link: path of link file
@@ -186,6 +195,23 @@ def ResolveRealPath(link):
     else:
         realpath = os.path.realpath(link)
     return realpath
+
+def Which(program):
+    """Find the path of the given executable
+    @param program: executable name (i.e 'python')
+    @return: executable path or None
+
+    """
+    # Check local directory first
+    if IsExecutable(program):
+        return program
+    else:
+        # Start looking on the $PATH
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if IsExecutable(exe_file):
+                return exe_file        
+    return None
 
 #-----------------------------------------------------------------------------#
 

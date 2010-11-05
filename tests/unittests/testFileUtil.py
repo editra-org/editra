@@ -159,3 +159,13 @@ class FileUtilTest(unittest.TestCase):
         result2 = ebmlib.MakeNewFolder(self.tdir, u'test_new_folder')
         self.assertTrue(result2[1])
         self.assertTrue(result[1] != result2[1])
+
+    def testWhich(self):
+        """Test the Which function"""
+        # NOTE: this may produce false positives on some systems
+        if ISWINDOWS:
+            prog = 'ping.exe'
+        else:
+            prog = 'ping'
+        exe = ebmlib.Which(prog)
+        self.assertNotEqual(exe, None)
