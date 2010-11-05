@@ -515,8 +515,12 @@ class ControlBar(wx.PyPanel):
 
         """
         sizer = self.GetSizer()
-        sizer.GetItem(0).SetSpacer((top, top))
-        sizer.GetItem(2).SetSpacer((bottom, bottom))
+        if wx.VERSION < (2, 9, 0, 0, ''):
+            sizer.GetItem(0).SetSpacer((top, top))
+            sizer.GetItem(2).SetSpacer((bottom, bottom))
+        else:
+            sizer.GetItem(0).AssignSpacer((top, top))
+            sizer.GetItem(2).AssignSpacer((bottom, bottom))
         sizer.Layout()
 
     def SetWindowStyle(self, style):
