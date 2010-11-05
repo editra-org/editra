@@ -33,7 +33,6 @@ if not hasattr(sys, 'frozen') and 'wx' not in sys.modules:
 
 import base64
 import locale
-import time
 import getopt
 import shutil
 import wx
@@ -66,7 +65,6 @@ import ed_event
 import updater
 import plugin
 import ed_ipc
-import ed_msg
 import ebmlib
 from syntax import synglob
 
