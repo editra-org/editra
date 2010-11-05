@@ -128,7 +128,7 @@ class SearchController(object):
     def __del__(self):
         """Cleanup message handlers"""
         ed_msg.Unsubscribe(self._OnShowFindMsg)
-        if isinstance(self._finddlg, wx.Window):
+        if self._finddlg:
             self._finddlg.Destroy()
 
     def _CreateNewDialog(self, e_id):
