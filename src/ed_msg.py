@@ -207,6 +207,19 @@ EDMSG_UI_STC_CONTEXT_MENU = EDMSG_UI_STC_ALL + ('custommenu',)
 # msgdata == dict(ltype=int, text=string, stc=EditraStc)
 EDMSG_UI_STC_USERLIST_SEL = EDMSG_UI_STC_ALL + ('userlistsel',)
 
+# Mouse Dwell Start
+# mdata = dict(stc=self, pos=position,
+#              line=line_number,
+#              word=word_under_cursor
+#              rdata="")
+# If the handler for this method wants to show a calltip
+# it should set the rdata value
+EDMSG_UI_STC_DWELL_START = EDMSG_UI_STC_ALL + ('dwellstart',)
+
+# Mouse Dwell End
+# mdata = None
+EDMSG_UI_STC_DWELL_END = EDMSG_UI_STC_ALL + ('dwellend',)
+
 #---- End UI Action Messages ----#
 
 #---- Menu Messages ----#
