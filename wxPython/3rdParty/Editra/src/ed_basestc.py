@@ -508,17 +508,20 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.OnChanged(wx.stc.StyledTextEvent(wx.stc.wxEVT_STC_CHANGE,
                                               self.GetId()))
 
-    def GetCommandStr(self):
+    def GetCommandStr(self, line=None, col=None):
         """Gets the command string to the left of the autocomp
         activation character.
+        @keyword line: optional if None current cursor position used
+        @keyword col: optional if None current cursor position used
         @return: the command string to the left of the autocomp char
         @todo: fillups are currently disabled. See note in Configure.
 
         """
-        # NOTE: the column position returned by GetCurLine is not correct
-        #       for multibyte characters.
-        line, col = self.GetCurLine()
-        col = self.GetColumn(self.GetCurrentPos())
+        if None in (line, col):
+            # NOTE: the column position returned by GetCurLine is not correct
+            #       for multibyte characters.
+            line, col = self.GetCurLine()
+            col = self.GetColumn(self.GetCurrentPos())
         cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
                        self._code['compsvc'].GetAutoCompFillups())
         for key in self._code['compsvc'].GetAutoCompKeys():
@@ -668,6 +671,16 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             eline = self.LineFromPosition(sel[1])
             bMulti = sline != eline
         return bMulti
+
+    def CallTipShow(self, position, tip):
+        """Show a calltip at the given position in the control
+        @param position: int
+        @param tip: unicode
+
+        """
+        if self.CallTipActive():
+            self.CallTipCancel()
+        super(EditraBaseStc, self).CallTipShow(position, tip)
 
     def HidePopups(self):
         """Hide autocomp/calltip popup windows if any are active"""

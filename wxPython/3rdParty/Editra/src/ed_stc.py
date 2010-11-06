@@ -136,7 +136,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.UpdateBaseStyles()
 
         # Other Settings
-        self.SetMouseDwellTime(1000)
+        self.SetMouseDwellTime(750)
         self.UsePopUp(False)
 
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
@@ -849,14 +849,28 @@ class EditraStc(ed_basestc.EditraBaseStc):
         position = evt.Position
         if not self._dwellsent and position >= 0:
             dwellword = self.GetWordFromPosition(position)[0]
+            line_num = self.LineFromPosition(position) + 1
             mdata = dict(stc=self, pos=position,
-                         line=self.LineFromPosition(position)+1,
+                         line=line_num,
                          word=dwellword)
             ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_DWELL_START, mdata)
 
             tip = mdata.get('rdata', None)
             if tip:
                 self.CallTipShow(position, tip)
+            else:
+                # Fall back to built-in auto-comp
+                if not self.IsComment(position) and not self.IsString(position):
+                    endpos = self.WordEndPosition(position, True)
+                    col = self.GetColumn(endpos)
+                    line = self.GetLine(line_num-1)
+                    print col, repr(line)
+                    command = self.GetCommandStr(line, col)
+                    tip = self._code['compsvc'].GetCallTip(command)
+                    if len(tip):
+                        tip_pos = position - (len(dwellword.split('.')[-1]) + 1)
+                        fail_safe = position - self.GetColumn(position)
+                        self.CallTipShow(max(tip_pos, fail_safe), tip)
         evt.Skip()
 
     def OnDwellEnd(self, evt):
