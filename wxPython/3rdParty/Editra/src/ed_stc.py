@@ -117,6 +117,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.key_handler = KeyHandler(self)
         self._backup_done = True
         self._bktimer = wx.Timer(self)
+        self._dwellsent = False
 
         # Macro Attributes
         self._macro = list()
@@ -135,12 +136,15 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.UpdateBaseStyles()
 
         # Other Settings
+        self.SetMouseDwellTime(1000)
         self.UsePopUp(False)
 
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
         self.Bind(wx.stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         self.Bind(wx.stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
         self.Bind(wx.stc.EVT_STC_USERLISTSELECTION, self.OnUserListSel)
+        self.Bind(wx.stc.EVT_STC_DWELLSTART, self.OnDwellStart)
+        self.Bind(wx.stc.EVT_STC_DWELLEND, self.OnDwellEnd)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
@@ -838,6 +842,29 @@ class EditraStc(ed_basestc.EditraBaseStc):
                      stc=self)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_USERLIST_SEL, mdata,
                            context=self.GetTopLevelParent().GetId())
+        evt.Skip()
+
+    def OnDwellStart(self, evt):
+        """Callback hook for mouse dwell start"""
+        position = evt.Position
+        if not self._dwellsent and position >= 0:
+            dwellword = self.GetWordFromPosition(position)[0]
+            mdata = dict(stc=self, pos=position,
+                         line=self.LineFromPosition(position)+1,
+                         word=dwellword)
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_DWELL_START, mdata)
+
+            tip = mdata.get('rdata', None)
+            if tip:
+                self.CallTipShow(position, tip)
+        evt.Skip()
+
+    def OnDwellEnd(self, evt):
+        """Callback hook for mouse dwell end"""
+        self._dwellsent = False
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_DWELL_END)
+        if self.CallTipActive():
+            self.CallTipCancel()
         evt.Skip()
 
     def OnMarginClick(self, evt):

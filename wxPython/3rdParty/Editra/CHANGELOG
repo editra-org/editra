@@ -19,6 +19,9 @@ NEW: [features/enhancements]
 +When in DEBUG mode trace statements are dumped to a log file in the systems
 temp directory and are kept for up to seven days.
 
+LIBRARY:
++Add callback interface for mouse dwell events in buffer
+
 BUG FIXES:
 +Fix issue with tab activation after tabs had been reorganized via user
 drag and drop.
