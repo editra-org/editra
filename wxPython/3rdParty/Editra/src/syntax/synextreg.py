@@ -358,7 +358,7 @@ EXT_MAP = {
            'matlab'             : LANG_MATLAB,
            'mssql'              : LANG_MSSQL,
            'nasm'               : LANG_NASM,
-           'ctl'                : LANG_NONMEM,
+           'ctl nonmem'         : LANG_NONMEM,
            'nsi nsh'            : LANG_NSIS,
            'mm m'               : LANG_OBJC,
            'oct octave'         : LANG_OCTAVE,
