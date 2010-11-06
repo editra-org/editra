@@ -16,6 +16,7 @@ DATE xx/xx/2010
 NEWS:
 
 NEW: [features/enhancements]
++Show call tips on mouse over when available. 
 +When in DEBUG mode trace statements are dumped to a log file in the systems
 temp directory and are kept for up to seven days.
 
