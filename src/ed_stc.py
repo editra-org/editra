@@ -918,9 +918,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
             # Bookmarks ect...
             line_clicked = self.LineFromPosition(evt.GetPosition())
             if self.MarkerGet(line_clicked):
-                self.MarkerDelete(line_clicked, ed_basestc.MARK_MARGIN)
+                self.RemoveBookmark(line_clicked)
             else:
-                self.MarkerAdd(line_clicked, ed_basestc.MARK_MARGIN)
+                self.AddBookmark(line_clicked)
 
     def FoldAll(self):
         """Fold Tree In or Out
