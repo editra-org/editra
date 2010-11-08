@@ -150,19 +150,16 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_TIMER, self.OnBackupTimer)
-        self.Bind(wx.EVT_LISTBOX, self.OnLB)
 
         # Async file load events
         self.Bind(ed_txt.EVT_FILE_LOAD, self.OnLoadProgress)
 
        #---- End Init ----#
 
-    def OnLB(self, event):
-        print "HELLO", event.GetSelection()
-
     __name__ = u"EditraTextCtrl"
 
     #---- Protected Member Functions ----#
+
     def _BuildMacro(self):
         """Constructs a macro script from items in the macro
         record list.
