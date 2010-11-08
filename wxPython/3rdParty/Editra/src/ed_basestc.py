@@ -113,10 +113,21 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     #---- Public Methods ----#
 
-    def AddBookmark(self):
-        """Add a bookmark and return its handle"""
-        cline = self.GetCurrentLine()
-        return self.MarkerAdd(cline, MARK_MARGIN)
+    def AddBookmark(self, line=-1):
+        """Add a bookmark and return its handle
+        @keyword line: if < 0 bookmark will be added to current line
+
+        """
+        if line < 0:
+            line = self.GetCurrentLine()
+        return self.MarkerAdd(line, MARK_MARGIN)
+
+    def RemoveBookmark(self, line):
+        """Remove the book mark from the given line
+        @param line: int
+
+        """
+        self.MarkerDelete(line, MARK_MARGIN)
 
     def AddLine(self, before=False, indent=False):
         """Add a new line to the document
