@@ -338,7 +338,7 @@ class CodeBrowserTree(wx.TreeCtrl):
 
     def DeleteChildren(self, item):
         """Delete the children of a given node"""
-        wx.TreeCtrl.DeleteChildren(self, item)
+        super(CodeBrowserTree, self).DeleteChildren(item)
         for key in self.nodes.keys():
             self.nodes[key] = None
 
