@@ -150,11 +150,15 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_TIMER, self.OnBackupTimer)
+        self.Bind(wx.EVT_LISTBOX, self.OnLB)
 
         # Async file load events
         self.Bind(ed_txt.EVT_FILE_LOAD, self.OnLoadProgress)
 
        #---- End Init ----#
+
+    def OnLB(self, event):
+        print "HELLO", event.GetSelection()
 
     __name__ = u"EditraTextCtrl"
 
@@ -864,7 +868,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
                     endpos = self.WordEndPosition(position, True)
                     col = self.GetColumn(endpos)
                     line = self.GetLine(line_num-1)
-                    print col, repr(line)
                     command = self.GetCommandStr(line, col)
                     tip = self._code['compsvc'].GetCallTip(command)
                     if len(tip):
