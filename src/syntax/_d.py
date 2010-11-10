@@ -73,11 +73,16 @@ if wx.VERSION >= (2, 9, 0, 0, ''):
                       (stc.STC_D_NUMBER, 'number_style'),
                       (stc.STC_D_OPERATOR, 'operator_style'),
                       (stc.STC_D_STRING, 'string_style'),
+                      (stc.STC_D_STRINGB, 'string_style'), #TODO
                       (stc.STC_D_STRINGEOL, 'stringeol_style'),
+                      (stc.STC_D_STRINGR, 'string_style'), #TODO
                       (stc.STC_D_TYPEDEF, 'default_style'), # NEEDS STYLE
                       (stc.STC_D_WORD, 'keyword_style'),
                       (stc.STC_D_WORD2, 'keyword2_style'),
-                      (stc.STC_D_WORD3, 'keyword3_style') ]
+                      (stc.STC_D_WORD3, 'keyword3_style'),
+                      (stc.STC_D_WORD5, 'default_style'), #TODO
+                      (stc.STC_D_WORD6, 'default_style'), #TODO
+                      (stc.STC_D_WORD7, 'default_style')] #TODO
 else:
     SYNTAX_ITEMS = [ (stc.STC_C_DEFAULT, 'default_style'),
                      (stc.STC_C_COMMENT, 'comment_style'),

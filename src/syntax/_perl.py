@@ -19,6 +19,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx
 import wx.stc as stc
 
 # Local Imports
@@ -92,6 +93,11 @@ SYNTAX_ITEMS = [ (stc.STC_PL_DEFAULT, 'default_style'),
                  (stc.STC_PL_SYMBOLTABLE, 'default_style'), # STYLE ME
                  (stc.STC_PL_WORD, 'keyword_style') ]
 
+if wx.VERSION >= (2, 9, 0, 0, ''):
+    SYNTAX_ITEMS.append((stc.STC_PL_FORMAT, 'default_style')) #TODO
+    SYNTAX_ITEMS.append((stc.STC_PL_FORMAT_IDENT, 'default_style')) #TODO
+    SYNTAX_ITEMS.append((stc.STC_PL_SUB_PROTOTYPE, 'default_style')) #TODO
+
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
 FLD_COMPACT = ("fold.compact", "1")
@@ -104,7 +110,7 @@ FLD_PKG = ("fold.perl.package", "1")
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for Perl""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_PERL)
