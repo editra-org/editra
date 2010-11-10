@@ -22,7 +22,7 @@ __revision__ = "$Revision$"
 __all__ = ["ListRowHighlighter", "HIGHLIGHT_EVEN", "HIGHLIGHT_ODD"]
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import wx
 
 #--------------------------------------------------------------------------#

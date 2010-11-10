@@ -42,6 +42,7 @@ from platebtn import *
 from pstatbar import *
 from segmentbk import *
 from txtentry import *
+from elistctrl import *
 
 # TODO: Delete module entries once all plugins have been updated to not 
 #       import them separately.
