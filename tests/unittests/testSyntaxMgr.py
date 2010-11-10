@@ -80,7 +80,8 @@ class SyntaxMgrTest(unittest.TestCase):
             self.assertTrue(isinstance(spec, list))
             if len(spec):
                 self.assertTrue(isinstance(spec[0], tuple))
-                self.assertTrue(isinstance(spec[0][0], int))
+                self.assertTrue(isinstance(spec[0][0], int),
+                                "Found: %s(%s)" % (type(spec[0][0]), spec[0][0]))
 
             props = data.Properties
             self.assertTrue(isinstance(props, list))
