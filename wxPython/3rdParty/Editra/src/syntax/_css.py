@@ -19,6 +19,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx
 import wx.stc as stc
 
 # Local Imports
@@ -100,14 +101,23 @@ SYNTAX_ITEMS = [ (stc.STC_CSS_DEFAULT, 'default_style'),
                  (stc.STC_CSS_UNKNOWN_PSEUDOCLASS, 'unknown_style'),
                  (stc.STC_CSS_VALUE, 'char_style') ]
 
+# TODO: add styling and keywords for new style regions in 2.9
+if wx.VERSION >= (2, 9, 0, 0, ''):
+    SYNTAX_ITEMS.append((stc.STC_CSS_EXTENDED_IDENTIFIER, 'default_style'))
+    SYNTAX_ITEMS.append((stc.STC_CSS_EXTENDED_PSEUDOCLASS, 'default_style'))
+    SYNTAX_ITEMS.append((stc.STC_CSS_EXTENDED_PSEUDOELEMENT, 'default_style'))
+    SYNTAX_ITEMS.append((stc.STC_CSS_IDENTIFIER3, 'default_style'))
+    SYNTAX_ITEMS.append((stc.STC_CSS_PSEUDOELEMENT, 'default_style'))
+
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
+
 #------------------------------------------------------------------------------#
 
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for CSS""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_CSS)

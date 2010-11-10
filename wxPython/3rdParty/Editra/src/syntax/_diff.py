@@ -10,7 +10,6 @@
 FILE: diff.py
 AUTHOR: Cody Precord
 @summary: Lexer configuration module for Diff/Patch files
-@todo:
 
 """
 
@@ -20,6 +19,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx
 import wx.stc as stc
 
 # Local Imports
@@ -41,6 +41,9 @@ SYNTAX_ITEMS = [(stc.STC_DIFF_ADDED,    'global_style'),
                 (stc.STC_DIFF_HEADER,   'comment_style'),
                 (stc.STC_DIFF_POSITION, 'pre_style')]
 
+if wx.VERSION >= (2, 9, 0, 0, ''):
+    SYNTAX_ITEMS.append((stc.STC_DIFF_CHANGED,  'default_style')) #TODO
+
 #---- Extra Properties ----#
 FOLD = ('fold', '1')
 FOLD_COMPACT = ('fold.compact', '1')
@@ -50,7 +53,7 @@ FOLD_COMPACT = ('fold.compact', '1')
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for Diff files""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_DIFF)
