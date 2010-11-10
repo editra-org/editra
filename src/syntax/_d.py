@@ -59,29 +59,6 @@ DOC_KEYWORDS = (2, "TODO FIXME XXX \\author \\brief \\bug \\callgraph "
 #---- End Keyword Definitions ----#
 
 #---- Syntax Style Specs ----#
-SYNTAX_ITEMS = [ (stc.STC_C_DEFAULT, 'default_style'),
-                 (stc.STC_C_COMMENT, 'comment_style'),
-                 (stc.STC_C_COMMENTLINE, 'comment_style'),
-                 (stc.STC_C_COMMENTDOC, 'comment_style'),
-                 (stc.STC_C_COMMENTDOCKEYWORD, 'dockey_style'),
-                 (stc.STC_C_COMMENTDOCKEYWORDERROR, 'error_style'),
-                 (stc.STC_C_COMMENTLINE, 'comment_style'),
-                 (stc.STC_C_COMMENTLINEDOC, 'comment_style'),
-                 (stc.STC_C_CHARACTER, 'char_style'),
-                 (stc.STC_C_GLOBALCLASS, 'global_style'),
-                 (stc.STC_C_IDENTIFIER, 'default_style'),
-                 (stc.STC_C_NUMBER, 'number_style'),
-                 (stc.STC_C_OPERATOR, 'operator_style'),
-                 (stc.STC_C_PREPROCESSOR, 'pre_style'),
-                 (stc.STC_C_REGEX, 'pre_style'),
-                 (stc.STC_C_STRING, 'string_style'),
-                 (stc.STC_C_STRINGEOL, 'stringeol_style'),
-                 (stc.STC_C_UUID, 'pre_style'),
-                 (stc.STC_C_VERBATIM, 'number2_style'),
-                 (stc.STC_C_WORD, 'keyword_style'),
-                 (stc.STC_C_WORD2, 'keyword2_style') ]
-
-# For 2.9
 if wx.VERSION >= (2, 9, 0, 0, ''):
     SYNTAX_ITEMS2 = [ (stc.STC_D_CHARACTER, 'char_style'),
                       (stc.STC_D_COMMENT, 'comment_style'),
@@ -101,6 +78,28 @@ if wx.VERSION >= (2, 9, 0, 0, ''):
                       (stc.STC_D_WORD, 'keyword_style'),
                       (stc.STC_D_WORD2, 'keyword2_style'),
                       (stc.STC_D_WORD3, 'keyword3_style') ]
+else:
+    SYNTAX_ITEMS = [ (stc.STC_C_DEFAULT, 'default_style'),
+                     (stc.STC_C_COMMENT, 'comment_style'),
+                     (stc.STC_C_COMMENTLINE, 'comment_style'),
+                     (stc.STC_C_COMMENTDOC, 'comment_style'),
+                     (stc.STC_C_COMMENTDOCKEYWORD, 'dockey_style'),
+                     (stc.STC_C_COMMENTDOCKEYWORDERROR, 'error_style'),
+                     (stc.STC_C_COMMENTLINE, 'comment_style'),
+                     (stc.STC_C_COMMENTLINEDOC, 'comment_style'),
+                     (stc.STC_C_CHARACTER, 'char_style'),
+                     (stc.STC_C_GLOBALCLASS, 'global_style'),
+                     (stc.STC_C_IDENTIFIER, 'default_style'),
+                     (stc.STC_C_NUMBER, 'number_style'),
+                     (stc.STC_C_OPERATOR, 'operator_style'),
+                     (stc.STC_C_PREPROCESSOR, 'pre_style'),
+                     (stc.STC_C_REGEX, 'pre_style'),
+                     (stc.STC_C_STRING, 'string_style'),
+                     (stc.STC_C_STRINGEOL, 'stringeol_style'),
+                     (stc.STC_C_UUID, 'pre_style'),
+                     (stc.STC_C_VERBATIM, 'number2_style'),
+                     (stc.STC_C_WORD, 'keyword_style'),
+                     (stc.STC_C_WORD2, 'keyword2_style') ]
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
@@ -114,7 +113,7 @@ FOLD_ELSE = ("fold.at.else", "0")
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for D""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         if wx.VERSION >= (2, 9, 0, 0, ''):
