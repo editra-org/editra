@@ -220,6 +220,11 @@ EDMSG_UI_STC_DWELL_START = EDMSG_UI_STC_ALL + ('dwellstart',)
 # mdata = None
 EDMSG_UI_STC_DWELL_END = EDMSG_UI_STC_ALL + ('dwellend',)
 
+# Bookmark (added/deleted)
+# mdata = dict(stc=EditraStc, added=bool, line=line)
+# NOTE: if line < 0, then all bookmarks removed
+EDMSG_UI_STC_BOOKMARK = EDMSG_UI_STC_ALL + ('bookmark',)
+
 #---- End UI Action Messages ----#
 
 #---- Menu Messages ----#
