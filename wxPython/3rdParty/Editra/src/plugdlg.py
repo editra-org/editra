@@ -101,8 +101,8 @@ class PluginDialog(wx.Frame):
 
     """
     def __init__(self, parent, id=wx.ID_ANY, title=u'', size=wx.DefaultSize):
-        wx.Frame.__init__(self, parent, title=title, size=size,
-                              style=wx.DEFAULT_FRAME_STYLE)
+        super(PluginDialog, self).__init__(parent, title=title, size=size,
+                                           style=wx.DEFAULT_FRAME_STYLE)
         util.SetWindowIcon(self)
 
         # Attributes
