@@ -129,7 +129,12 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         self.MarkerDelete(line, MARK_MARGIN)
 
+    def RemoveAllBookmarks(self):
+        """Remove all the bookmarks in the buffer"""
+        self.MarkerDeleteAll(MARK_MARGIN)
+
     def AddLine(self, before=False, indent=False):
+
         """Add a new line to the document
         @keyword before: whether to add the line before current pos or not
         @keyword indent: autoindent the new line

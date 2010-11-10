@@ -232,6 +232,37 @@ class EditraStc(ed_basestc.EditraBaseStc):
         return True
 
     #---- Public Member Functions ----#
+
+    def AddBookmark(self, line=-1):
+        """Add a bookmark and return its handle
+        Sends notifications for bookmark added
+        @keyword line: if < 0 bookmark will be added to current line
+
+        """
+        rval = super(EditraStc, self).AddBookmark(line)
+        mdata = dict(stc=self, added=True, line=line)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_BOOKMARK, mdata)
+        return rval
+
+    def RemoveBookmark(self, line):
+        """Remove the book mark from the given line
+        Sends notifications for bookmark removal.
+        @param line: int
+
+        """
+        super(EditraStc, self).RemoveBookmark(line)
+        mdata = dict(stc=self, added=False, line=line)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_BOOKMARK, mdata)
+
+    def RemoveAllBookmarks(self):
+        """Remove all the bookmarks in the buffer
+        Sends notifications for bookmark removal.
+
+        """
+        super(EditraStc, self).RemoveAllBookmark()
+        mdata = dict(stc=self, added=False, line=-1)
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_BOOKMARK, mdata)
+
     def PlayMacro(self):
         """Send the list of built up macro messages to the editor
         to be played back.
@@ -260,11 +291,11 @@ class EditraStc(ed_basestc.EditraBaseStc):
         mark = -1
         if action == ed_glob.ID_ADD_BM:
             if self.MarkerGet(lnum):
-                self.MarkerDelete(lnum, ed_basestc.MARK_MARGIN)
+                self.RemoveBookmark(lnum)
             else:
-                self.MarkerAdd(lnum, ed_basestc.MARK_MARGIN)
+                self.AddBookmark(lnum)
         elif action == ed_glob.ID_DEL_ALL_BM:
-            self.MarkerDeleteAll(ed_basestc.MARK_MARGIN)
+            self.RemoveAllBookmarks()
         elif action == ed_glob.ID_NEXT_MARK:
             if self.MarkerGet(lnum):
                 lnum += 1
@@ -1745,7 +1776,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
                 self.SetText(self.File.Read())
                 self.SetModTime(ebmlib.GetFileModTime(cfile))
                 for mark in marks:
-                    self.MarkerAdd(mark, ed_basestc.MARK_MARGIN)
+                    self.AddBookmark(mark)
                 self.EndUndoAction()
                 self.SetSavePoint()
             except (AttributeError, OSError, IOError), msg:
