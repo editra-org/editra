@@ -484,7 +484,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         return dl_ok
 
     def _ResultNotifier(self, delayedResult):
-        """Recieves the return from the result of the worker thread and
+        """Receives the return from the result of the worker thread and
         notifies the interested party with the result.
         @param delayedResult:  value from worker thread
 
