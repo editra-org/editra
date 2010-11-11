@@ -32,6 +32,9 @@ from calllock import *
 from histcache import *
 from clipboard import *
 
+# Networking utilities
+from e_weblib import *
+
 # Misc
 from miscutil import *
 from cmenumgr import *
