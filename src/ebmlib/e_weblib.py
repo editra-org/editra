@@ -69,11 +69,16 @@ class SOAP12Message(object):
         self._action = action
         self._http = httplib.HTTP(self._host, 80)
 
+    @property
+    def MessageBody(self):
+        soapmsg = _SOAP_TPL % dict(msg=self._msg)
+        soapmsg = soapmsg.replace("\n", "\r\n")
+        return soapmsg
+
     def Send(self):
         """Send the message"""
         # Create the SOAP message
-        soapmsg = _SOAP_TPL % dict(msg=self._msg)
-        soapmsg = soapmsg.replace("\n", "\r\n")
+        soapmsg = self.MessageBody
 
         # Setup Headers
         self._http.putrequest("POST", self._request)
