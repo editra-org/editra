@@ -22,7 +22,7 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ["EBaseListCtrl", "ECheckListCtrl"]
+__all__ = ["EBaseListCtrl", "ECheckListCtrl", "EEditListCtrl"]
 
 #--------------------------------------------------------------------------#
 # Dependencies
@@ -51,3 +51,10 @@ class ECheckListCtrl(listmix.CheckListCtrlMixin,
      def __init__(self, parent, *args, **kwargs):
          EBaseListCtrl.__init__(self, parent, *args, **kwargs)
          listmix.CheckListCtrlMixin.__init__(self)
+
+class EEditListCtrl(listmix.TextEditMixin,
+                    EBaseListCtrl):
+    """ListCtrl with Editable cells"""
+    def __init__(self, parent, *args, **kwargs):
+        EBaseListCtrl.__init__(self, parent, *args, **kwargs)
+        listmix.TextEditMixin.__init__(self)
