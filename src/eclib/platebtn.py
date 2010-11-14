@@ -600,17 +600,18 @@ class PlateButton(wx.PyControl):
     def SetLabelColor(self, normal, hlight=wx.NullColour):
         """Set the color of the label. The optimal label color is usually
         automatically selected depending on the button color. In some
-        cases the colors that are choosen may not be optimal.
+        cases the colors that are chosen may not be optimal.
         
         The normal state must be specified, if the other two params are left
         Null they will be automatically guessed based on the normal color. To
         prevent this automatic color choices from happening either specify
         a color or None for the other params.
 
-        @param normal: Label color for normal state
+        @param normal: Label color for normal state (wx.Colour)
         @keyword hlight: Color for when mouse is hovering over
 
         """
+        assert isinstance(normal, wx.Colour), "Must supply a colour object"
         self._color['default'] = False
         self.SetForegroundColour(normal)
 
