@@ -1150,7 +1150,7 @@ class EdFindResults(plugin.Plugin):
         return self.__name__
 
     def IsStockable(self):
-        """EdLogViewer can be saved in the shelf preference stack"""
+        """EdFindResults can be saved in the shelf preference stack"""
         return False
 
     @classmethod
