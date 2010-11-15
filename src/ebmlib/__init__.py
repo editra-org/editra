@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Editra Buisness Model Library:
+Editra Business Model Library:
 
 """
 
