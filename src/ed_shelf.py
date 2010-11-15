@@ -163,6 +163,7 @@ class EdShelfBook(aui.AuiNotebook):
 
     def __del__(self):
         ed_msg.Unsubscribe(self.OnUpdateTabs)
+        super(EdShelfBook, self).__del__()
 
     @property
     def ImgIdx(self):
