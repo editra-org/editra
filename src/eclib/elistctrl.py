@@ -35,6 +35,7 @@ import elistmix
 #--------------------------------------------------------------------------#
 
 class EBaseListCtrl(elistmix.ListRowHighlighter,
+                    listmix.ListCtrlAutoWidthMixin,
                     wx.ListCtrl):
     """Base listctrl class that provides automatic row highlighting"""
     def __init__(self, parent, _id=wx.ID_ANY,
@@ -43,7 +44,8 @@ class EBaseListCtrl(elistmix.ListRowHighlighter,
                  name="EListCtrl"):
         wx.ListCtrl.__init__(self, parent, _id, pos, size,
                              style, validator, name)
-        elistmix.ListRowHighlighter.__init__()
+        elistmix.ListRowHighlighter.__init__(self)
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
 
 class ECheckListCtrl(listmix.CheckListCtrlMixin,
                      EBaseListCtrl):

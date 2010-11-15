@@ -280,6 +280,7 @@ ID_FORWARD           = wx.ID_FORWARD
 ID_HARDDISK          = wx.NewId()
 ID_KEY_PROFILES      = wx.NewId()
 ID_LOGGER            = wx.NewId()
+ID_BOOKMARK_MGR      = wx.NewId()
 ID_MOVE_TAB          = wx.NewId()
 ID_PACKAGE           = wx.NewId()
 ID_PYSHELL           = wx.NewId()
@@ -388,4 +389,4 @@ def EOLModeMap():
 # Default Plugins
 DEFAULT_PLUGINS = ("generator.Html", "generator.LaTeX", "generator.Rtf",
                    "iface.Shelf", "ed_theme.TangoTheme", "ed_log.EdLogViewer",
-                   "ed_search.EdFindResults")
+                   "ed_search.EdFindResults", "ed_bookmark.EdBookmarks")
