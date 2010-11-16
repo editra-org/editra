@@ -57,9 +57,8 @@ class EdBookmarks(plugin.Plugin):
         @return: wx.Bitmap
 
         """
-        return wx.NullBitmap
-#        bmp = wx.ArtProvider.GetBitmap(str(self.GetId()), wx.ART_MENU)
-#        return bmp
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
+        return bmp
 
     @staticmethod
     def GetId():
@@ -72,8 +71,12 @@ class EdBookmarks(plugin.Plugin):
         @param menu: the menu items parent menu
 
         """
-        return wx.MenuItem(menu, ed_glob.ID_BOOKMARK_MGR, _("Bookmarks"),
+        item = wx.MenuItem(menu, ed_glob.ID_BOOKMARK_MGR,
+                           _("Bookmarks"),
                            _("View all bookmarks"))
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
+        item.SetBitmap(bmp)
+        return item
 
     def GetName(self):
         """Return the name of this control"""
