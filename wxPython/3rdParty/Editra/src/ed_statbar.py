@@ -196,7 +196,13 @@ class EdStatBar(ProgressStatusBar):
             if dlg.ShowModal() == wx.ID_OK:
                 buff.SetEncoding(dlg.GetEncoding())
                 self.UpdateFields()
-            dlg.Destroy()
+
+            # NOTE: Got an error report about a PyDeadObject error here. The
+            #       error does not make any sense since the dialog is not
+            #       destroyed or deleted by anything before this. Add validity
+            #       check to ensure reference is still valid.
+            if dlg:
+                dlg.Destroy()
         else:
             evt.Skip()
 
