@@ -360,7 +360,7 @@ class EdPages(aui.AuiNotebook):
             try:
                 flist = cPickle.load(f_handle)
                 # TODO: Extend in future to support loading sessions
-                #       for mutiple windows.
+                #       for multiple windows.
                 flist = flist.get('win1', list()) 
                 for item in flist:
                     if type(item) not in (unicode, str):

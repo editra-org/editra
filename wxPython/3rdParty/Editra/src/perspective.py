@@ -17,7 +17,7 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import os
 import wx
 import util
@@ -53,7 +53,7 @@ class PerspectiveManager(object):
         @param base: path to configuration cache
 
         """
-        object.__init__(self)
+        super(PerspectiveManager, self).__init__()
 
         # Attributes
         self._window = auimgr.GetManagedWindow()    # Managed Window
@@ -93,13 +93,14 @@ class PerspectiveManager(object):
         is not set then the current view will be added with the given name.
         @param name: name for new perspective
         @keyword p_data: perspective data from auimgr
+        @return: bool (True == Added, False == Not Added)
 
         """
         # Don't allow empty keys or ones that override the automatic
         # settings to be added
         name = name.strip()
         if not len(name) or name == AUTO_PERSPECTIVE:
-            return
+            return False
 
         domenu = not self.HasPerspective(name)
         if p_data is None:
@@ -112,20 +113,23 @@ class PerspectiveManager(object):
             self.AddPerspectiveMenuEntry(name)
 
         self.SavePerspectives()
+        return True
 
     def AddPerspectiveMenuEntry(self, name):
-        """Adds an entry to list of perpectives in the menu for this manager.
+        """Adds an entry to list of perspectives in the menu for this manager.
         @param name: name of perspective to add to menu
+        @return: bool (added or not)
 
         """
         name = name.strip()
         if not len(name) or name == AUTO_PERSPECTIVE:
-            return
+            return False
 
         per_id = wx.NewId()
         self._ids.append(per_id)
         self._menu.InsertAlpha(per_id, name, _("Change view to \"%s\"") % name,
                                kind=wx.ITEM_CHECK, after=ID_AUTO_PERSPECTIVE)
+        return True
 
     def GetPerspectiveControls(self):
         """Returns the control menu for the manager
@@ -256,7 +260,7 @@ class PerspectiveManager(object):
                 # It may make sense to update all windows to use this
                 # perspective at this point but it may be an unexpected
                 # event to happen when there is many windows open. Will
-                # leave this to future concideration.
+                # leave this to future consideration.
                 for mainw in wx.GetApp().GetMainWindows():
                     mainw.AddPerspective(name, self._viewset[name])
 
@@ -310,7 +314,7 @@ class PerspectiveManager(object):
                 self._ids.remove(rem_id)
 
     def SetAutoPerspective(self):
-        """Set the current perspective mangagement into automatic mode
+        """Set the current perspective management into automatic mode
         @postcondition: window is set into
 
         """
@@ -321,7 +325,7 @@ class PerspectiveManager(object):
         """Writes the perspectives out to disk. Returns
         True if all data was written and False if there
         was an error.
-        @return: whether save was successfull
+        @return: whether save was successful
         @rtype: bool
 
         """
@@ -344,21 +348,20 @@ class PerspectiveManager(object):
     def SetPerspective(self, name):
         """Sets the perspective of the managed window, returns
         True on success and False on failure.
-        @param name: name of perspectve to set
+        @param name: name of perspective to set
         @return: whether perspective was set or not
         @rtype: bool
 
         """
         if name in self._viewset:
-
             if name == AUTO_PERSPECTIVE:
-                self._viewset[AUTO_PERSPECTIVE] = self._viewset[self._currview]
+                self.SetAutoPerspective()
+            else:
+                self._mgr.LoadPerspective(self._viewset[name])
+                self._mgr.Update()
 
-            self._mgr.LoadPerspective(self._viewset[name])
-            self._mgr.Update()
-
-            self._currview = name
-            self.SavePerspectives()
+                self._currview = name
+                self.SavePerspectives()
             return True
         else:
             # Fall back to automatic mode
@@ -373,7 +376,7 @@ class PerspectiveManager(object):
 
         """
         name = None
-        for pos in xrange(self._menu.GetMenuItemCount()):
+        for pos in range(self._menu.GetMenuItemCount()):
             item = self._menu.FindItemByPosition(pos)
             if per_id == item.GetId():
                 name = item.GetLabel()
