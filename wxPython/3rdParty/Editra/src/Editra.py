@@ -1117,7 +1117,7 @@ def _Main(opts, args):
     wx.CallAfter(frame.Raise)
 
     # Install handlers to exit app if os is shutting down/restarting
-    ebmlib.InstallTermHandler(editra_app.Exit, [], dict(force=True))
+    ebmlib.InstallTermHandler(editra_app.Exit, force=True)
 
     editra_app.MainLoop()
     dev_tool.DEBUGP("[main][info] MainLoop finished exiting application")
