@@ -536,7 +536,7 @@ class EdPages(aui.AuiNotebook):
                 self.control.SetCaretPos(pos)
         else:
             # Raise page to top and goto position
-            pages = [self.GetPage(page) for page in xrange(self.GetPageCount())]
+            pages = [self.GetPage(page) for page in range(self.GetPageCount())]
             idx = pages.index(ctrl)
             self.ChangePage(idx)
             ctrl.SetCaretPos(pos)
