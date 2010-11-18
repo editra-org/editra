@@ -108,6 +108,10 @@ class EdBookmarks(plugin.Plugin):
 
     @classmethod
     def GetHandles(cls):
+        """NOTE: handles don't seem to work as expected in 2.8.
+                 leaving functionality stubbed in incase it works
+                 better in future versions of scintilla.
+        """
         return cls._handles
 
     @classmethod
@@ -153,19 +157,22 @@ class BookmarkWindow(eclib.ControlBox):
         data = msg.GetData()
         line = data.get('line', -1)
         buf = data.get('stc', None)
+        name = buf.GetSelectedText()
         value = (buf.GetFileName(), line)
         wx.CallAfter(self.DoUpdateListCtrl,
                      value[0], unicode(value[1]+1),
-                     data.get('added', False))
+                     data.get('added', False),
+                     markname=name.strip())
 
-    def DoUpdateListCtrl(self, fname, lnum, added):
+    def DoUpdateListCtrl(self, fname, lnum, added, markname=None):
         """Update the listctrl for changes in the cache
         @param value: tuple(fname, linenum)
         @param added: bool (add or remove)
+        @keyword markname: custom bookmark name
 
         """
         if added:
-            self._list.AddBookmark(fname, lnum)
+            self._list.AddBookmark(fname, lnum, markname)
         else:
             self._list.DeleteBookmark(fname, lnum)
 
@@ -180,9 +187,9 @@ class BookmarkWindow(eclib.ControlBox):
         if index < len(handles):
             mark = marks[index]
             handle = handles[index]
-            self.GotoBookmark(mark[0], handle)
+            self.GotoBookmark(mark[0], int(mark[1]), handle)
 
-    def GotoBookmark(self, fname, handle):
+    def GotoBookmark(self, fname, lnum, handle):
         """Goto the bookmark in the editor
         @param fname: file name
         @param handle: stc bookmark handle
@@ -199,8 +206,9 @@ class BookmarkWindow(eclib.ControlBox):
                 buf = nb.GetCurrentPage()
 
             if buf:
+                # Ensure the tab is the current one
                 nb.GotoPage(fname)
-                lnum = buf.MarkerLineFromHandle(handle)
+                # Jump to the bookmark line
                 buf.GotoLine(lnum)
         else:
             util.Log("[ed_bookmark][err] Failed to locate mainwindow")
