@@ -31,7 +31,7 @@ import wx
 from wx.py import introspect
 
 # It would be nice to use cStringIO here for the better performance but it
-# doesn't work as uniformly across platfrom as the plain StringIO module. On
+# doesn't work as uniformly across platform as the plain StringIO module. On
 # Linux and python2.4 under all platforms the cStringIO module makes tokens out
 # of each character instead of each actual token which causes the parse to fail.
 from StringIO import StringIO
@@ -48,7 +48,7 @@ class Completer(completer.BaseCompleter):
         @param stc_buffer: buffer that contains code
 
         """
-        completer.BaseCompleter.__init__(self, stc_buffer)
+        super(Completer, self).__init__(stc_buffer)
 
         # Setup
         self.SetAutoCompKeys([ord('.'), ])

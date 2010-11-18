@@ -40,7 +40,7 @@ PSUEDO_SYMBOLS = completer.CreateSymbols([ u'active', u'focus', u'hover',
 class Completer(completer.BaseCompleter):
     """Code completer provider"""
     def __init__(self, stc_buffer):
-        completer.BaseCompleter.__init__(self, stc_buffer)
+        super(Completer, self).__init__(stc_buffer)
 
         # Setup
         self.SetAutoCompKeys([ord(':'), ord('.') ])
