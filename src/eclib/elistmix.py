@@ -47,14 +47,23 @@ class ListRowHighlighter:
         self._color = color
         self._defaultb = wx.SystemSettings.GetColour(wx.SYS_COLOUR_LISTBOX)
         self._mode = mode
+        self._refresh_timer = wx.Timer(self)
 
         # Event Handlers
-        self.Bind(wx.EVT_LIST_INSERT_ITEM, lambda evt: self.RefreshRows())
-        self.Bind(wx.EVT_LIST_DELETE_ITEM, lambda evt: self.RefreshRows())
+        self.Bind(wx.EVT_LIST_INSERT_ITEM, lambda evt: self._RestartTimer())
+        self.Bind(wx.EVT_LIST_DELETE_ITEM, lambda evt: self._RestartTimer())
+        self.Bind(wx.EVT_TIMER,
+                  lambda evt: self.RefreshRows(),
+                  self._refresh_timer)
 
+    def _RestartTimer(self):
+        if self._refresh_timer.IsRunning():
+            self._refresh_timer.Stop()
+        self._refresh_timer.Start(100, oneShot=True)
+            
     def RefreshRows(self):
         """Re-color all the rows"""
-        for row in xrange(self.GetItemCount()):
+        for row in range(self.GetItemCount()):
             if self._defaultb is None:
                 self._defaultb = self.GetItemBackgroundColour(row)
 
