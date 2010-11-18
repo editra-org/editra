@@ -141,7 +141,7 @@ class BookmarkWindow(eclib.ControlBox):
         # Populate the listctrl with anything already in the cache
         marks = EdBookmarks.GetMarks()
         for fname, linenum in marks:
-            self._list.Append((fname, unicode(linenum+1)))
+            self._list.AddBookmark(fname, unicode(linenum+1))
 
         # Message Handlers
         ed_msg.Subscribe(self.OnBookmark, ed_msg.EDMSG_UI_STC_BOOKMARK)
@@ -157,10 +157,16 @@ class BookmarkWindow(eclib.ControlBox):
         data = msg.GetData()
         line = data.get('line', -1)
         buf = data.get('stc', None)
-        name = buf.GetSelectedText()
-        value = (buf.GetFileName(), line)
+        # Try to add a helpful alias for the bookmark automatically
+        cline = buf.GetCurrentLine()
+        name = u""
+        if line == cline:
+            name = buf.GetSelectedText()
+        if not name:
+            name = buf.GetLine(line)
         wx.CallAfter(self.DoUpdateListCtrl,
-                     value[0], unicode(value[1]+1),
+                     buf.GetFileName(),
+                     unicode(line+1),
                      data.get('added', False),
                      markname=name.strip())
 
