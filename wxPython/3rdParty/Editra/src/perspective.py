@@ -282,7 +282,7 @@ class PerspectiveManager(object):
             for mainw in wx.GetApp().GetMainWindows():
                 mainw.LoadPerspectives()
 
-        elif e_id in self._ids:
+        elif e_id in self._ids + [ID_AUTO_PERSPECTIVE]:
             if e_id == ID_AUTO_PERSPECTIVE:
                 Profile_Set('DEFAULT_VIEW', AUTO_PERSPECTIVE)
                 self.SetAutoPerspective()
@@ -354,14 +354,11 @@ class PerspectiveManager(object):
 
         """
         if name in self._viewset:
-            if name == AUTO_PERSPECTIVE:
-                self.SetAutoPerspective()
-            else:
-                self._mgr.LoadPerspective(self._viewset[name])
-                self._mgr.Update()
+            self._mgr.LoadPerspective(self._viewset[name])
+            self._mgr.Update()
 
-                self._currview = name
-                self.SavePerspectives()
+            self._currview = name
+            self.SavePerspectives()
             return True
         else:
             # Fall back to automatic mode
