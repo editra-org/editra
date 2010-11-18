@@ -104,14 +104,13 @@ class EdBookmarks(plugin.Plugin):
                 cls._handles.append(data.get('handle'))
         else:
             if value in cls._marks:
-                cls._marks.remove(value)
+                idx = cls._marks.index(value)
+                cls._marks.pop(idx)
+                cls._handles.pop(idx)
 
     @classmethod
     def GetHandles(cls):
-        """NOTE: handles don't seem to work as expected in 2.8.
-                 leaving functionality stubbed in incase it works
-                 better in future versions of scintilla.
-        """
+        """Get the handles associated with the"""
         return cls._handles
 
     @classmethod
@@ -206,15 +205,19 @@ class BookmarkWindow(eclib.ControlBox):
         if mw:
             nb = mw.GetNotebook()
             buf = nb.FindBuffer(fname)
+            use_handle = True
             if not buf:
                 nb.OpenPage(ebmlib.GetPathName(fname),
                             ebmlib.GetFileName(fname))
                 buf = nb.GetCurrentPage()
+                use_handle = False # Handle is invalid so use line number
 
             if buf:
                 # Ensure the tab is the current one
                 nb.GotoPage(fname)
                 # Jump to the bookmark line
+                if use_handle:
+                    lnum = buf.MarkerLineFromHandle(handle)
                 buf.GotoLine(lnum)
         else:
             util.Log("[ed_bookmark][err] Failed to locate mainwindow")
