@@ -43,7 +43,7 @@ class AutoCompService(object):
     """
     def __init__(self):
         """Initializes the autocompletion service"""
-        object.__init__(self)
+        super(AutoCompService, self).__init__()
 
     @staticmethod
     def GetCompleter(buff, extended=False):

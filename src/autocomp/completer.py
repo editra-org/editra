@@ -50,7 +50,7 @@ class Symbol(object):
         @param Type: Symbol type, one of the TYPE_FUNCTION ... TYPE_UNKNOWN range
         
         """
-        object.__init__(self)
+        super(Symbol, self).__init__()
 
         # Attributes
         self.__name = unicode(name)
@@ -112,7 +112,7 @@ class BaseCompleter(object):
         @param parent: parent of this service object
 
         """
-        object.__init__(self)
+        super(BaseCompleter, self).__init__()
 
         # Attributes
         self._buffer = parent
@@ -139,7 +139,7 @@ class BaseCompleter(object):
 
     def GetCallTip(self, command):
         """Returns the calltip string for a command
-        @param command: command to get callip for (string)
+        @param command: command to get calltip for (string)
         @return: string
 
         """
@@ -173,7 +173,7 @@ class BaseCompleter(object):
         """Is it a key combination that should allow completions to be shown
         @param evt: wx.KeyEvent
         @return: bool
-        @todo: this shoud probably be handled in edstc
+        @todo: this should probably be handled in ed_stc
 
         """
         if evt.ControlDown() and evt.GetKeyCode() == wx.WXK_SPACE:
