@@ -240,7 +240,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         """
         rval = super(EditraStc, self).AddBookmark(line)
-        mdata = dict(stc=self, added=True, line=line)
+        mdata = dict(stc=self, added=True, line=line, handle=rval)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_BOOKMARK, mdata)
         return rval
 
