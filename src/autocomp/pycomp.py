@@ -44,7 +44,7 @@ import completer
 class Completer(completer.BaseCompleter):
     """Code completer provider"""
     def __init__(self, stc_buffer):
-        """Initiliazes the completer
+        """Initializes the completer
         @param stc_buffer: buffer that contains code
 
         """
@@ -148,7 +148,7 @@ class Completer(completer.BaseCompleter):
         alltext = self._GetCompletionInfo(command, calltip=True)
        
         # split the text into natural paragraphs (a blank line separated)
-        paratext = alltext.split("\n\n")
+        paratext = alltext.split(u"\n\n")
        
         # add text by paragraph until text limit or all paragraphs
         textlimit = 800
@@ -158,15 +158,15 @@ class Completer(completer.BaseCompleter):
             ii = 1
             while ii < numpara and \
                   (len(calltiptext) + len(paratext[ii])) < textlimit:
-                calltiptext = calltiptext + "\n\n" + paratext[ii]
+                calltiptext = calltiptext + u"\n\n" + paratext[ii]
                 ii = ii + 1
 
             # if not all texts are added, add "[...]"
             if ii < numpara:
-                calltiptext = calltiptext + "\n[...]"
+                calltiptext = calltiptext + u"\n[...]"
         # present the function signature only (first newline)
         else:
-            calltiptext = alltext.split("\n")[0]
+            calltiptext = alltext.split(u"\n")[0]
            
         return calltiptext
 
@@ -292,6 +292,7 @@ class PyCompleter(object):
                         tip = u""
                     return tip
                 else:
+                    # Alternate calltip code
                     result = eval(_sanitize(stmt[:-1]), self.compldict)
                     doc = max(getattr(result, '__doc__', ''), ' ')
                     return [{'word' : _cleanstr(self.get_arguments(result)), 
@@ -387,6 +388,8 @@ class Scope(object):
         @param indent: the indentation/level of this scope
 
         """
+        super(Scope, self).__init__()
+
         self.subscopes = []
         self.docstr = ''
         self.locals = []
@@ -507,7 +510,7 @@ class Class(Scope):
         @param indent: scope of indentation
 
         """
-        Scope.__init__(self, name, indent)
+        super(Class, self).__init__(name, indent)
         self.supers = supers
 
     def copy_decl(self, indent=0):
@@ -552,7 +555,7 @@ class Function(Scope):
         @param indent: indentation level of functions declaration (scope)
 
         """
-        Scope.__init__(self, name, indent)
+        super(Function, self).__init__(name, indent)
         self.params = params
 
     def copy_decl(self, indent=0):
@@ -578,10 +581,12 @@ class Function(Scope):
 #-----------------------------------------------------------------------------#
 # Main Parser
 
-class PyParser:
+class PyParser(object):
     """Python parsing class"""
     def __init__(self):
         """Initialize and create the PyParser"""
+        super(PyParser, self).__init__()
+
         # Attributes
         self.top = Scope('global', 0)
         self.scope = self.top
@@ -649,8 +654,14 @@ class PyParser:
         while True:
             token = self.next()[1]
             if token in (')', ',') and level == 1:
+                # Remove keyword assignments as they can
+                # cause eval breakage when using undefined
+                # vars.
+                if '=' in name:
+                    name = name.split('=')[0].strip()
                 names.append(name)
                 name = ''
+
             if token == '(':
                 level += 1
             elif token == ')':
