@@ -111,7 +111,7 @@ def CreateSymbols(arglst, symtype=TYPE_UNKNOWN):
 class BaseCompleter(object):
     """Base Autocomp provider class"""
     def __init__(self, parent):
-        """Initializes the autocompletion service
+        """Initializes the auto-completion service
         @param parent: parent of this service object
 
         """
