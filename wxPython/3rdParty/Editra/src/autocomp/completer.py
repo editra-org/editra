@@ -44,53 +44,56 @@ class Symbol(object):
     Symbol hash is based on symbol NAME
     
     """
-    def __init__(self, name, type):
+    # we create lots of these so use slots as a performance tweak
+    __slots__ = ('_name', '_type')
+
+    def __init__(self, name, symtype):
         """ Constructor
-        @param Name: Symbol name
-        @param Type: Symbol type, one of the TYPE_FUNCTION ... TYPE_UNKNOWN range
+        @param name: Symbol name
+        @param symtype: Symbol type, one of the TYPE_FUNCTION ... TYPE_UNKNOWN range
         
         """
         super(Symbol, self).__init__()
 
         # Attributes
-        self.__name = unicode(name)
-        self.__type = type
+        self._name = unicode(name)
+        self._type = symtype
     
     def __eq__(self, other):
-        return (self.__name == other.__name)
+        return (self.Name == other.Name)
 
     def __lt__(self, other):
-        return (self.__name < other.__name)
+        return (self.Name < other.Name)
 
     def __le__(self, other):
-        return (self.__name <= other.__name)
+        return (self.Name <= other.Name)
 
     def __ne__(self, other):
-        return (self.__name != other.__name)
+        return (self.Name != other.Name)
 
     def __gt__(self, other):
-        return (self.__name > other.__name)
+        return (self.Name > other.Name)
 
     def __ge__(self, other):
-        return (self.__name >= other.__name)
+        return (self.Name >= other.Name)
 
     # TODO: this task should probably be delegated to the ui
     def __str__(self):
-        if self.__type != TYPE_UNKNOWN:
-            return u'?'.join([self.__name, unicode(self.__type)])
+        if self.Type != TYPE_UNKNOWN:
+            return u'?'.join([self.Name, unicode(self.Type)])
         else:
             return self.Name
 
     def __hash__(self):
-        return self.__name.__hash__()
+        return hash(self.Name)
     
     @property
     def Name(self):
-        return self.__name
+        return self._name
 
     @property
     def Type(self):
-        return self.__type
+        return self._type
 
 #--------------------------------------------------------------------------#
 
