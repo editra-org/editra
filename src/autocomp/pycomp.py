@@ -23,6 +23,7 @@ __revision__ = "$Revision$"
 # Dependancies
 import os
 import sys
+import time
 import tokenize
 import types
 from token import NAME, DEDENT, STRING
@@ -88,8 +89,10 @@ class Completer(completer.BaseCompleter):
                 fpath = os.path.dirname(fname)
                 sys.path.insert(0, fpath)
 
+            t1 = time.time()
             cmpl.evalsource(self._buffer.GetText(),
                             self._buffer.GetCurrentLine())
+            dbg("[pycomp][info] Completion eval time: %f" % (time.time() - t1))
 
             if fname:
                 sys.path.pop(0)
@@ -441,8 +444,8 @@ class Scope(object):
         return Scope(self.name, indent)
 
     def _checkexisting(self, test):
-        """Convienance function... keep out duplicates
-        @param test: assignment statement to check for existance of
+        """Convenience function... keep out duplicates
+        @param test: assignment statement to check for existence of
                      variable in the scopes locals
 
         """
@@ -458,9 +461,12 @@ class Scope(object):
 
         """
         cstr = '"""' + self.docstr + '"""\n'
+        nonimport = list()
         for loc in self.locals:
             if loc.startswith('import') or loc.startswith('from'):
-                cstr += loc + '\n'
+                cstr += ("try:\n    %s\nexcept ImportError:\n    pass\n" % loc)
+            else:
+                nonimport.append(loc)
 
         # we need to start with this, to fix up broken completions
         # hopefully this name is unique enough...
@@ -469,9 +475,8 @@ class Scope(object):
         for sub in self.subscopes:
             cstr += sub.get_code()
 
-        for loc in self.locals:
-            if not loc.startswith('import'):
-                cstr += loc + '\n'
+        for loc in nonimport:
+            cstr += loc + '\n'
 
         return cstr
 
@@ -719,10 +724,6 @@ class PyParser(object):
 
         return Class(cname, super_cls, indent)
 
-    # TODO this returns invalid tokens for some assignment statements.
-    #      In order to avoid this from breaking the eval the statements
-    #      are currently compiled to check syntax and filter accordingly. 
-    #      Need to find why the parse is failing on valid code sometimes.
     def _parseassignment(self):
         """Parse a variable assignment to resolve the variables type
         for introspection.
@@ -766,10 +767,8 @@ class PyParser(object):
             # NOTE: This part of the parse is where the problem is happening
             assign += token
             level = 0
-#            tstack = list()
             while True:
                 tokentype, token = self.next()[:-1]
-#                tstack.append((assign, token, level))
                 if token in ('(', '{', '['):
                     level = level + 1
                 elif token in (']', '}', ')'):
@@ -778,26 +777,40 @@ class PyParser(object):
                         break
                 elif level == 0:
                     # end of line
-                    if token in (';', '\n'):
+                    if token in (';', '\n', '='):
                         break
-                    elif token == ',':
-                        assign = ''
+                    elif token in ('+', '*'):
+                        # Attempt simple type deduction based on 
+                        # operator statement.
+                        if assign.endswith('"') or assign.endswith("'"):
+                            assign = '""'
+                        else:
+                            assign = '0'
+                        break
+                    elif token in ('/', '-'):
+                        # assignment most likely returns an digit type
+                        # this is the best guess we can make
+                        assign = '0'
+                        break
+                    elif token in ('and', 'or', 'in', '==',
+                                   '<', '>', '!=', 'not', '>=', '<='):
+                        # right side of assignment likely evaluates to bool
+                        assign = 'bool'
+                        break
+#                    elif token == ',':
+#                        assign = ''
                     else:
-                        assign += token
+                        if token == '.' or assign.endswith('.'):
+                            assign += token
+                        else:
+                            assign += (" %s" % token)
 
         # Check syntax to filter out bad tokens
-        # NOTE: temporary till parser is improved more
         try:
             compile(assign, '_pycomp', 'eval')
         except:
-#            print ""
-#            for t in tstack:
-#                print t
-#            print assign
-#            print ""
-#            print ""
             dbg("[pycomp][err] parseassignment bad token: %s" % assign)
-            return None
+            return '_PyCmplNoType()'
         else:
             return assign
 
@@ -822,7 +835,7 @@ class PyParser(object):
             if type(scp) == Function:
                 cut = 0
 
-                #Handle 'self' params
+                # Handle 'self' params
                 if scp.parent != None and type(scp.parent) == Class:
                     cut = 1
                     params = scp.params[0]
@@ -916,9 +929,9 @@ class PyParser(object):
                         stmt = self._parseassignment()
                         dbg("[pycomp] parseassignment: %s = %s" % (name, stmt))
                         if stmt != None:
-                            # XXX Safety Check don't allow assigments to 
+                            # XXX Safety Check don't allow assignments to 
                             # item attributes unless the attribute is self
-                            if u'.' not in name or name.startswith(u'self'):
+                            if u'.' not in name or name.startswith('self.'):
                                 self.scope.local("%s = %s" % (name, stmt))
                     freshscope = False
         except StopIteration: #thrown on EOF
