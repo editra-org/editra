@@ -253,9 +253,15 @@ class LogBuffer(eclib.OutputBuffer):
         @param msg: Message Object containing a LogMsg
 
         """
+        if wx.Thread_IsMain():
+            self.DoUpdateLog(msg)
+        else:
+            # Delegate to main thread
+            wx.CallAfter(self.DoUpdateLog, msg)
+
+    def DoUpdateLog(self, msg):
         if not self.IsRunning():
-            if wx.Thread_IsMain():
-                self.Start(150)
+            self.Start(150)
 
         # Check filters
         logmsg = msg.GetData()
