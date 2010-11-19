@@ -136,12 +136,13 @@ class UpdateService(object):
         """
         page = self.GetPageText(ed_glob.HOME_PAGE + "/version.php?check=True")
         found = re.findall(RE_VERSION, page)
-        if len(found):
+        if False:#len(found):
             return found[0] # Should be the first/only match found
         else:
             util.Log("[updater][warn] UpdateService.GetCurrentVersionStr "
                      "Failed to get version info.")
-            return _("Unable to retrieve version info")
+            # TODO: GetTranslation is not threadsafe!!!
+            return "Unable to retrieve version info"
 
     def GetFileSize(self, url):
         """Gets the size of a file by address
@@ -475,7 +476,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
     #--- Protected Member Functions ---#
     def _DownloadThread(self, *args):
         """Processes the download and checks that the file has been downloaded
-        properly. Then returns either True if the download was succesfull or
+        properly. Then returns either True if the download was successful or
         False if it failed in some way.
         @return: success status of download
 

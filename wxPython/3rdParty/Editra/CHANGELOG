@@ -16,6 +16,8 @@ DATE xx/xx/2010
 NEWS:
 
 NEW: [features/enhancements]
++Improved consistency of Python autocompletion to provide results under more
+conditions.
 +Show call tips on mouse over when available. 
 +When in DEBUG mode trace statements are dumped to a log file in the systems
 temp directory and are kept for up to seven days.
@@ -35,6 +37,8 @@ activation event.
 +Fix issue where some UpdateUI events where not getting handled in modal dialogs.
 +Fix inconsistency that could lead to an un-handled exception when switching between
 different saved perspectives.
++Fix crash caused by thread safety issue that could occur when updater fails 
+to get version info from the network.
 
 #-----------------------------------------------------------------------------#
 
