@@ -74,7 +74,7 @@ class StyleItem(object):
             - ex            = bold underline italic eol
 
         """
-        object.__init__(self)
+        super(StyleItem, self).__init__()
 
         # Workaround for issue of using a list as a default parameter
         # was retaining values from previous calls for some yet to
@@ -353,7 +353,7 @@ class StyleMgr(object):
     modifying styles during run time.
 
     """
-    STYLES         = dict()         # Cache for loaded style set(s)
+    STYLES         = dict()         # Static cache for loaded style set(s)
     FONT_PRIMARY   = u"primary"
     FONT_SECONDARY = u"secondary"
     FONT_SIZE      = u"size"
@@ -365,7 +365,7 @@ class StyleMgr(object):
         @keyword custom: path to custom style sheet to use
 
         """
-        object.__init__(self)
+        super(StyleMgr, self).__init__()
 
         # Attributes
         self.fonts = self.GetFontDictionary()
