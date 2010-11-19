@@ -49,8 +49,7 @@ except (LookupError, TypeError):
 PYTHONW = 'pythonw' in sys.executable.lower()
 
 #-----------------------------------------------------------------------------#
-# General Debuging Helper Functions
-
+# General Debugging Helper Functions
 def DEBUGP(statement):
     """Prints debug messages and broadcasts them on the log message channel.
     Subscribing a listener with any of the EDMSG_LOG_* types will recieve its
