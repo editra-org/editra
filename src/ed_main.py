@@ -1494,7 +1494,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # It seems under some cases when running under windows the call to
         # subprocess in webbrowser will fail and raise an exception here. So
-        # simply trap and ingnore it.
+        # simply trap and ignore it.
         try:
             self.PushStatusText(_("Opening %s") % page, SB_INFO)
             webbrowser.open(page, 1)

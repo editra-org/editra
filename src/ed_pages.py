@@ -719,7 +719,7 @@ class EdPages(aui.AuiNotebook):
         # Check if file needs to be opened
         # TODO: these steps could be combined together with some
         #       refactoring of the _NeedOpen method. Requires extra
-        #       testing though to check for dependancies on current
+        #       testing though to check for dependencies on current
         #       behavior.
         if quiet and self.HasFileOpen(path2file):
             self.GotoPage(path2file)
@@ -827,6 +827,12 @@ class EdPages(aui.AuiNotebook):
 
     def DoPostLoad(self):
         """Perform post file open actions"""
+        # Ensure that document buffer is writable after an editable
+        # document is opened in the buffer.
+        doc = self.control.GetDocument()
+        if not doc.IsReadOnly() and not doc.IsRawBytes():
+            self.control.SetReadOnly(False)
+
         # Set last known caret position if the user setting is enabled
         # and the caret position has not been changed during a threaded
         # file loading operation.
