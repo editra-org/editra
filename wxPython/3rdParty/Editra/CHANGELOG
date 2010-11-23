@@ -39,6 +39,8 @@ activation event.
 different saved perspectives.
 +Fix crash caused by thread safety issue that could occur when updater fails 
 to get version info from the network.
++Fix bug where editor area would be readonly after a failed file load that
+required the user to select the proper encoding.
 
 #-----------------------------------------------------------------------------#
 
