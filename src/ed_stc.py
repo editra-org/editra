@@ -891,7 +891,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
             if tip:
                 self.CallTipShow(position, tip)
             else:
-                # Fall back to built-in auto-comp
+                # Clients did not need to make use of the calltip
+                # so check if auto-completion provider has anything to display.
                 if not self.IsComment(position) and not self.IsString(position):
                     endpos = self.WordEndPosition(position, True)
                     col = self.GetColumn(endpos)

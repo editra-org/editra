@@ -31,10 +31,6 @@ from token import NAME, DEDENT, STRING
 import wx
 from wx.py import introspect
 
-# It would be nice to use cStringIO here for the better performance but it
-# doesn't work as uniformly across platform as the plain StringIO module. On
-# Linux and python2.4 under all platforms the cStringIO module makes tokens out
-# of each character instead of each actual token which causes the parse to fail.
 from StringIO import StringIO
 
 # Local imports
@@ -119,8 +115,7 @@ class Completer(completer.BaseCompleter):
                     
                     sigs.append(completer.Symbol(word, type))
 
-#                sigs = [ sig['word'].rstrip('(.') for sig in complst ]
-                sigs.sort(lambda x, y: cmp(x.Name.upper(), y.Name.upper()))
+                sigs.sort(key=lambda x: x.Name.upper())
                 return sigs
 
         except BaseException, msg:
@@ -129,7 +124,7 @@ class Completer(completer.BaseCompleter):
             if calltip:
                 return u""
             else:
-                return []
+                return list()
         
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a 
@@ -378,7 +373,7 @@ class PyCompleter(object):
             dbg("[pycomp][err] get_completions: %s [stmt='%s']" % (msg, stmt))
             if ctip:
                 return u""
-            return []
+            return list()
 
 #-----------------------------------------------------------------------------#
 # Code objects
@@ -393,9 +388,9 @@ class Scope(object):
         """
         super(Scope, self).__init__()
 
-        self.subscopes = []
-        self.docstr = ''
-        self.locals = []
+        self.subscopes = list()
+        self.docstr = u''
+        self.locals = list()
         self.parent = None
         self.name = name
         self.indent = indent
@@ -472,9 +467,11 @@ class Scope(object):
         # hopefully this name is unique enough...
         cstr += 'class _PyCmplNoType:\n    def __getattr__(self,name):\n        return None\n'
 
+        # Get all subscopes (classes, functions, methods)
         for sub in self.subscopes:
             cstr += sub.get_code()
 
+        # Get remaining local variables
         for loc in nonimport:
             cstr += loc + '\n'
 
@@ -604,8 +601,8 @@ class PyParser(object):
         @return: tuple of (dottedname, nexttoken)
 
         """
-        name = []
-        if pre == None:
+        name = list()
+        if pre is None:
             tokentype, token = self.next()[:2]
             if tokentype != NAME and token != '*':
                 return ('', token)
@@ -751,7 +748,7 @@ class PyParser(object):
                    # String
                    tokenize.STRING : '""', 'str' : '""',
                    'repr' : '""', 'chr' : '""', 'unichr' : '""',
-                   'hex' : '""', 'oct' : '""',
+                   'hex' : '""', 'oct' : '""', "'" : '""', '"' : '""',
                    # Type
                    'type' : 'type(_PyCmplNoType)',
                    # Tuple
