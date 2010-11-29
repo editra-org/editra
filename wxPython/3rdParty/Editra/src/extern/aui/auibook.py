@@ -2055,9 +2055,12 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         if not event.LeftIsDown() or self._click_pt == wx.Point(-1, -1):
             return
 
+        if not self.HasCapture():
+            return
+        
         wnd = self.TabHitTest(pos.x, pos.y)
 
-        if not self._is_dragging and self.HasCapture():
+        if not self._is_dragging:
 
             drag_x_threshold = wx.SystemSettings.GetMetric(wx.SYS_DRAG_X)
             drag_y_threshold = wx.SystemSettings.GetMetric(wx.SYS_DRAG_Y)
