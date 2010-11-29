@@ -643,8 +643,9 @@ class StyleMgr(object):
         elif style_sheet not in StyleMgr.STYLES:
             self.LOG("[ed_style][warn] Style sheet %s does not exists" % style_sheet)
             # Reset to default style
-            Profile_Set('SYNTHEME', 'default')
-            self.SetStyles('default', DEF_STYLE_DICT)
+            if Profile_Get('SYNTHEME') != 'default':
+                Profile_Set('SYNTHEME', 'default')
+                self.SetStyles('default', DEF_STYLE_DICT)
             return False
         else:
             self.LOG("[ed_style][info] Using cached style data")

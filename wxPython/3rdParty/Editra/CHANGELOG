@@ -16,14 +16,15 @@ DATE xx/xx/2010
 NEWS:
 
 NEW: [features/enhancements]
-+Improved consistency of Python autocompletion to provide results under more
++Improved consistency of Python auto-completion to provide results under more
 conditions.
 +Show call tips on mouse over when available. 
 +When in DEBUG mode trace statements are dumped to a log file in the systems
 temp directory and are kept for up to seven days.
 
 LIBRARY:
-+Add callback interface for mouse dwell events in buffer
++Add observer interface for mouse dwell events in buffer.
++Add observer interface for when bookmarks are added or removed.
 
 BUG FIXES:
 +Fix issue with tab activation after tabs had been reorganized via user
@@ -41,6 +42,8 @@ different saved perspectives.
 to get version info from the network.
 +Fix bug where editor area would be readonly after a failed file load that
 required the user to select the proper encoding.
++Fix infinite recursion error that could occur when loading a non existent
+style set.
 
 #-----------------------------------------------------------------------------#
 
