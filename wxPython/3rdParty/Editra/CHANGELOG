@@ -9,8 +9,8 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.5.xx
-DATE xx/xx/2010
+VERSION 0.5.99
+DATE 12/05/2010
 38th Alpha Release
 
 NEWS:
@@ -21,6 +21,7 @@ conditions.
 +Show call tips on mouse over when available. 
 +When in DEBUG mode trace statements are dumped to a log file in the systems
 temp directory and are kept for up to seven days.
++Update Launch plugin to version 1.8 (bug fixes)
 
 LIBRARY:
 +Add observer interface for mouse dwell events in buffer.
