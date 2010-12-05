@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-02 17:20-0500\n"
+"POT-Creation-Date: 2010-12-05 17:02-0600\n"
 "PO-Revision-Date: 2010-04-19 12:00+0000\n"
 "Last-Translator: Bundo <bundo@bundo.biz>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-02 15:37+0000\n"
+"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../../src/ed_search.py:429
@@ -32,7 +32,7 @@ msgstr "%d 어울리는 것으로 대체되었다."
 msgid "%s Source File"
 msgstr "%s 소스파일"
 
-#: ../../src/ed_main.py:608
+#: ../../src/ed_main.py:609
 #, python-format
 msgid ""
 "%s could not be found.\n"
@@ -41,7 +41,7 @@ msgstr ""
 "%s 을(를) 찾을 수 없습니다.\n"
 "아마도 이것은 옮겨졌거나 삭제되었습니다."
 
-#: ../../src/ed_stc.py:1710
+#: ../../src/ed_stc.py:1794
 #, python-format
 msgid "%s does not exist"
 msgstr "%s 이것은 존재하지 않습니다."
@@ -160,7 +160,7 @@ msgstr "**새 값**"
 msgid "<< Remove"
 msgstr ""
 
-#: ../../src/eclib/errdlg.py:322 ../../plugins/Launch/launch/launch.py:595
+#: ../../src/eclib/errdlg.py:322 ../../plugins/Launch/launch/launch.py:596
 msgid "Abort"
 msgstr "중지"
 
@@ -193,6 +193,10 @@ msgstr "현재 행 앞에 신규 행 추가"
 msgid "Add and remove bookmarks"
 msgstr "북마크 추가 삭제"
 
+#: ../../src/prefdlg.py:777
+msgid "Adds extra scrolling room after last line"
+msgstr ""
+
 #: ../../src/prefdlg.py:197
 msgid "Advanced"
 msgstr "고급"
@@ -209,7 +213,7 @@ msgstr "전부"
 msgid "Alphabetically"
 msgstr ""
 
-#: ../../src/Editra.py:600
+#: ../../src/Editra.py:601
 #, python-format
 msgid ""
 "An updated version of Editra is available\n"
@@ -226,7 +230,7 @@ msgstr "안티알리아싱"
 msgid "Appearance"
 msgstr "모양"
 
-#: ../../src/prefdlg.py:1761
+#: ../../src/prefdlg.py:1768
 msgid "Apply"
 msgstr "적용"
 
@@ -244,11 +248,11 @@ msgstr ""
 "%s를 제거 하시겠습니까?\n"
 "이 작업은 취소할 수 없습니다."
 
-#: ../../plugins/Launch/launch/launch.py:193
+#: ../../plugins/Launch/launch/launch.py:192
 msgid "Arguments"
 msgstr ""
 
-#: ../../src/style_editor.py:604
+#: ../../src/style_editor.py:607
 msgid "Attributes"
 msgstr "속성"
 
@@ -256,7 +260,7 @@ msgstr "속성"
 msgid "Audible feedback when errors are detected"
 msgstr "에러들이 검출되면 피드백이 들릴것입니다."
 
-#: ../../src/ed_main.py:1250
+#: ../../src/ed_main.py:1251
 msgid "Aui Pane Navigator"
 msgstr "Aui 창 탐색기"
 
@@ -265,11 +269,11 @@ msgstr "Aui 창 탐색기"
 msgid "Author: %s"
 msgstr "저술자: %s"
 
-#: ../../src/ed_menu.py:778 ../../src/prefdlg.py:938
+#: ../../src/ed_menu.py:778 ../../src/prefdlg.py:944
 msgid "Auto-Completion"
 msgstr "자동 완성"
 
-#: ../../src/ed_menu.py:780 ../../src/prefdlg.py:948
+#: ../../src/ed_menu.py:780 ../../src/prefdlg.py:954
 msgid "Auto-Indent"
 msgstr "자동 들여쓰기"
 
@@ -297,7 +301,7 @@ msgstr "마지막 세션의 윈도우 상태 저장/사용하기"
 msgid "Automatically trim whitespace on save"
 msgstr "저장할 때 공백은 자동으로 정돈된다."
 
-#: ../../src/style_editor.py:593 ../../plugins/Launch/launch/cfgdlg.py:436
+#: ../../src/style_editor.py:596 ../../plugins/Launch/launch/cfgdlg.py:436
 msgid "Background"
 msgstr "배경"
 
@@ -313,15 +317,15 @@ msgstr ""
 msgid "Backup buffer to file periodically"
 msgstr "정기적인 파일 백업 버퍼"
 
-#: ../../src/style_editor.py:170
+#: ../../src/style_editor.py:171
 msgid "Base new theme on existing one"
 msgstr "기존에 존재하는 것을 기반으로한 새로운 테마"
 
-#: ../../src/prefdlg.py:1735
+#: ../../src/prefdlg.py:1742
 msgid "Binding"
 msgstr "바인딩"
 
-#: ../../src/prefdlg.py:2149
+#: ../../src/prefdlg.py:2156
 msgid "Black/White"
 msgstr "검정색/흰색"
 
@@ -333,7 +337,7 @@ msgstr "선택한 경로 북마크"
 msgid "Bookmarks"
 msgstr "북마크"
 
-#: ../../src/ed_menu.py:783 ../../src/prefdlg.py:918
+#: ../../src/ed_menu.py:783 ../../src/prefdlg.py:924
 msgid "Bracket Highlighting"
 msgstr "대괄호 강조"
 
@@ -351,11 +355,11 @@ msgid "Can't change directory to: %s"
 msgstr "디렉토리를 바꿀 수 없습니다: %s"
 
 #: ../../src/ed_search.py:1248 ../../src/style_editor.py:131
-#: ../../src/updater.py:567
+#: ../../src/updater.py:568
 msgid "Cancel"
 msgstr "취소"
 
-#: ../../src/updater.py:644
+#: ../../src/updater.py:645
 msgid "Canceled"
 msgstr "취소됨"
 
@@ -377,7 +381,7 @@ msgstr "선 교체가 끝나는%s"
 msgid "Change the encoding of the current document."
 msgstr ""
 
-#: ../../src/perspective.py:127
+#: ../../src/perspective.py:130
 #, python-format
 msgid "Change view to \"%s\""
 msgstr "뷰를 \"%s\"로 변경합니다"
@@ -390,7 +394,7 @@ msgstr "이 창에서 변경된 항목들이 현재 사용자의 프로파일에
 msgid "Changes will take affect once the program has been restarted"
 msgstr "변경된 항목들은 프로그램이 재시작된 후에 적용됩니다"
 
-#: ../../src/prefdlg.py:1527
+#: ../../src/prefdlg.py:1534
 msgid "Check"
 msgstr "확인"
 
@@ -414,11 +418,11 @@ msgstr "폴더를 선택합니다."
 msgid "Choose Search Folder"
 msgstr "폴더 검색을 선택합니다."
 
-#: ../../src/ed_main.py:697
+#: ../../src/ed_main.py:698
 msgid "Choose a Save Location"
 msgstr "저장 위치 선택"
 
-#: ../../src/ed_pages.py:169
+#: ../../src/ed_pages.py:175
 msgid "Choose an Encoding"
 msgstr "인코딩 선택"
 
@@ -431,7 +435,7 @@ msgid "Class Definitions"
 msgstr "클래스를 정의합니다."
 
 #: ../../src/ed_log.py:140 ../../src/ed_search.py:1257
-#: ../../plugins/Launch/launch/launch.py:211
+#: ../../plugins/Launch/launch/launch.py:210
 #: ../../plugins/PyShell/PyShell/__init__.py:114
 msgid "Clear"
 msgstr "완료됬습니다."
@@ -481,7 +485,7 @@ msgstr "규약"
 msgid "Code Browser"
 msgstr "코드 탐색기"
 
-#: ../../src/ed_menu.py:680 ../../src/ed_menu.py:785 ../../src/prefdlg.py:920
+#: ../../src/ed_menu.py:680 ../../src/ed_menu.py:785 ../../src/prefdlg.py:926
 msgid "Code Folding"
 msgstr "코드"
 
@@ -494,7 +498,7 @@ msgstr "코드 축소 전환"
 msgid "CodeBrowser"
 msgstr "코드탐색기"
 
-#: ../../src/style_editor.py:576
+#: ../../src/style_editor.py:579
 msgid "Color"
 msgstr "색상"
 
@@ -502,15 +506,15 @@ msgstr "색상"
 msgid "Color Highlight Code Syntax"
 msgstr "코드 구문을 강조 표시"
 
-#: ../../src/prefdlg.py:1093 ../../plugins/PyShell/PyShell/__init__.py:109
+#: ../../src/prefdlg.py:1100 ../../plugins/PyShell/PyShell/__init__.py:109
 msgid "Color Scheme"
 msgstr "스키마 색상"
 
-#: ../../src/prefdlg.py:2151
+#: ../../src/prefdlg.py:2158
 msgid "Colour/Default"
 msgstr "색/기본"
 
-#: ../../src/prefdlg.py:2150
+#: ../../src/prefdlg.py:2157
 msgid "Colour/White"
 msgstr "색/흰색"
 
@@ -526,7 +530,7 @@ msgstr "명령 실행"
 msgid "Commands that affect an entire line"
 msgstr "전체 줄에 영향을 미치는 명령들"
 
-#: ../../src/prefdlg.py:1337
+#: ../../src/prefdlg.py:1344
 msgid "Configuration"
 msgstr "환경설정"
 
@@ -578,7 +582,7 @@ msgstr "줄을 복사한다."
 msgid "Copy Selected Text to Clipboard"
 msgstr "선택한 텍스트 클립보드에 복사"
 
-#: ../../src/ed_main.py:1561
+#: ../../src/ed_main.py:1562
 msgid "Copyright"
 msgstr "저작권"
 
@@ -613,7 +617,7 @@ msgstr "현재 문서"
 msgid "Customize"
 msgstr "사용자 설정"
 
-#: ../../src/ed_main.py:1449
+#: ../../src/ed_main.py:1450
 msgid "Customize Menu"
 msgstr ""
 
@@ -661,15 +665,15 @@ msgstr "기본"
 msgid "Default EOL Mode"
 msgstr "기본 EOL 모드"
 
-#: ../../src/prefdlg.py:911
+#: ../../src/prefdlg.py:917
 msgid "Default Lexer"
 msgstr ""
 
-#: ../../src/prefdlg.py:1195
+#: ../../src/prefdlg.py:1202
 msgid "Default Perspective"
 msgstr "기본 관심 사항"
 
-#: ../../src/prefdlg.py:909
+#: ../../src/prefdlg.py:915
 msgid "Default highlighing for new documents"
 msgstr "새 문서에 기본 강조를 적용"
 
@@ -677,7 +681,7 @@ msgstr "새 문서에 기본 강조를 적용"
 msgid "Defines"
 msgstr "정의"
 
-#: ../../src/prefdlg.py:1704
+#: ../../src/prefdlg.py:1711
 msgid "Delete"
 msgstr "지우기"
 
@@ -693,7 +697,7 @@ msgstr ""
 msgid "Delete Line"
 msgstr "줄 삭제"
 
-#: ../../src/perspective.py:267
+#: ../../src/perspective.py:271
 msgid "Delete Perspective"
 msgstr "관심 사항을 제거"
 
@@ -722,7 +726,7 @@ msgstr ""
 msgid "Disable Error Reporter"
 msgstr ""
 
-#: ../../src/prefdlg.py:1237
+#: ../../src/prefdlg.py:1244
 msgid "Display Font"
 msgstr ""
 
@@ -730,7 +734,7 @@ msgstr ""
 msgid "Do you wish to exit?"
 msgstr ""
 
-#: ../../src/ed_pages.py:972
+#: ../../src/ed_pages.py:988
 #, python-format
 msgid ""
 "Do you wish to open all %d files in this directory?\n"
@@ -747,7 +751,7 @@ msgid "Down"
 msgstr ""
 
 #: ../../src/plugdlg.py:120 ../../src/plugdlg.py:460 ../../src/plugdlg.py:1108
-#: ../../src/prefdlg.py:1522
+#: ../../src/prefdlg.py:1529
 msgid "Download"
 msgstr "다운로드"
 
@@ -755,20 +759,20 @@ msgstr "다운로드"
 msgid "Downloaded"
 msgstr "완료된 다운로드"
 
-#: ../../src/plugdlg.py:595 ../../src/updater.py:603
+#: ../../src/plugdlg.py:595 ../../src/updater.py:604
 msgid "Downloading"
 msgstr "다운로드중"
 
-#: ../../src/updater.py:566
+#: ../../src/updater.py:567
 #, python-format
 msgid "Downloading To: %s"
 msgstr ""
 
-#: ../../src/Editra.py:606 ../../src/prefdlg.py:1563
+#: ../../src/Editra.py:607 ../../src/prefdlg.py:1570
 msgid "Downloading Update"
 msgstr ""
 
-#: ../../src/updater.py:564
+#: ../../src/updater.py:565
 #, python-format
 msgid "Downloading: %s"
 msgstr ""
@@ -797,17 +801,17 @@ msgstr "끝내기(&x)"
 msgid "EOL Mode"
 msgstr ""
 
-#: ../../src/ed_main.py:673
+#: ../../src/ed_main.py:674
 #, python-format
 msgid "ERROR: %s"
 msgstr "오류: %s"
 
-#: ../../src/ed_main.py:713
+#: ../../src/ed_main.py:714
 #, python-format
 msgid "ERROR: Failed to save %s"
 msgstr "오류: 저장 실패 %s"
 
-#: ../../src/prefdlg.py:922
+#: ../../src/prefdlg.py:928
 msgid "Edge Guide"
 msgstr ""
 
@@ -848,7 +852,7 @@ msgid ""
 "%(errormsg)s"
 msgstr ""
 
-#: ../../src/ed_main.py:1551
+#: ../../src/ed_main.py:1552
 msgid "Editra is a programmers text editor."
 msgstr ""
 
@@ -856,7 +860,7 @@ msgstr ""
 msgid "Editra translations project"
 msgstr ""
 
-#: ../../src/ed_main.py:438
+#: ../../src/ed_main.py:439
 msgid "Editra: Open"
 msgstr ""
 
@@ -864,7 +868,7 @@ msgstr ""
 msgid "Elements"
 msgstr ""
 
-#: ../../src/ed_pages.py:371
+#: ../../src/ed_pages.py:377
 msgid "Empty File"
 msgstr ""
 
@@ -872,7 +876,7 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-#: ../../src/prefdlg.py:950
+#: ../../src/prefdlg.py:956
 msgid "Enable Vi Emulation"
 msgstr ""
 
@@ -896,11 +900,11 @@ msgstr ""
 msgid "Enter a hex color value"
 msgstr ""
 
-#: ../../src/style_editor.py:259
+#: ../../src/style_editor.py:260
 msgid "Enter style sheet name"
 msgstr ""
 
-#: ../../src/prefdlg.py:1899
+#: ../../src/prefdlg.py:1906
 msgid "Enter the name of the new key profile"
 msgstr ""
 
@@ -916,7 +920,7 @@ msgstr "오류"
 msgid "Error Opening File"
 msgstr "파일 열기 오류"
 
-#: ../../src/ed_pages.py:321
+#: ../../src/ed_pages.py:327
 msgid "Error Saving Session File"
 msgstr ""
 
@@ -936,14 +940,14 @@ msgid ""
 "Error Message: %s"
 msgstr ""
 
-#: ../../src/dev_tool.py:240
+#: ../../src/dev_tool.py:252
 msgid ""
 "Error: Something unexpected happend\n"
 "Help improve Editra by clicking on Report Error\n"
 "to send the Error Traceback shown below."
 msgstr ""
 
-#: ../../src/ed_main.py:1501
+#: ../../src/ed_main.py:1502
 #, python-format
 msgid "Error: Unable to open %s"
 msgstr ""
@@ -960,7 +964,7 @@ msgstr ""
 msgid "Executables"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:747
+#: ../../plugins/Launch/launch/launch.py:749
 msgid "Exit Code"
 msgstr ""
 
@@ -976,15 +980,15 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: ../../src/style_editor.py:260
+#: ../../src/style_editor.py:261
 msgid "Export Style Sheet"
 msgstr ""
 
-#: ../../src/prefdlg.py:941
+#: ../../src/prefdlg.py:947
 msgid "Extended Auto-Comp"
 msgstr ""
 
-#: ../../src/prefdlg.py:2038
+#: ../../src/prefdlg.py:2045
 msgid "Extensions (space separated, no dots)"
 msgstr ""
 
@@ -992,7 +996,7 @@ msgstr ""
 msgid "F&ormat"
 msgstr ""
 
-#: ../../src/updater.py:682
+#: ../../src/updater.py:683
 msgid "Failed"
 msgstr ""
 
@@ -1016,7 +1020,7 @@ msgid ""
 "Error: %(errmsg)s"
 msgstr ""
 
-#: ../../src/ed_main.py:1231
+#: ../../src/ed_main.py:1232
 #, python-format
 msgid "Failed to reload the file with: %(encoding)s"
 msgstr ""
@@ -1046,7 +1050,7 @@ msgstr ""
 msgid "File History Length"
 msgstr ""
 
-#: ../../src/ed_main.py:610
+#: ../../src/ed_main.py:611
 msgid "File Not Found"
 msgstr "파일을 찾을 수 없습니다."
 
@@ -1062,16 +1066,16 @@ msgstr ""
 msgid "File Type"
 msgstr "파일 형식"
 
-#: ../../src/ed_stc.py:574
+#: ../../src/ed_stc.py:612
 #, python-format
 msgid "File backup performed: %s"
 msgstr ""
 
-#: ../../src/ed_stc.py:1757
+#: ../../src/ed_stc.py:1841
 msgid "File is Read Only and cannot be saved"
 msgstr ""
 
-#: ../../src/ed_pages.py:208
+#: ../../src/ed_pages.py:214
 msgid ""
 "File is already open in an existing page.\n"
 "Do you wish to open it again?"
@@ -1086,7 +1090,7 @@ msgstr ""
 msgid "Files Searched: %d"
 msgstr ""
 
-#: ../../src/prefdlg.py:1087
+#: ../../src/prefdlg.py:1094
 msgid "Filetype Associations"
 msgstr ""
 
@@ -1142,7 +1146,7 @@ msgstr ""
 msgid "Find/Replace"
 msgstr ""
 
-#: ../../src/updater.py:679
+#: ../../src/updater.py:680
 msgid "Finished"
 msgstr ""
 
@@ -1154,23 +1158,23 @@ msgstr ""
 msgid "Folder"
 msgstr "폴더"
 
-#: ../../src/style_editor.py:625
+#: ../../src/style_editor.py:628
 msgid "Font"
 msgstr "글꼴"
 
-#: ../../src/style_editor.py:620
+#: ../../src/style_editor.py:623
 msgid "Font Settings"
 msgstr "글꼴 설정"
 
-#: ../../src/style_editor.py:581 ../../plugins/Launch/launch/cfgdlg.py:433
+#: ../../src/style_editor.py:584 ../../plugins/Launch/launch/cfgdlg.py:433
 msgid "Foreground"
 msgstr "글자색"
 
-#: ../../src/prefdlg.py:792
+#: ../../src/prefdlg.py:796
 msgid "Format"
 msgstr ""
 
-#: ../../src/ed_stc.py:1111
+#: ../../src/ed_stc.py:1187
 msgid "Format EOL?"
 msgstr ""
 
@@ -1187,7 +1191,7 @@ msgstr ""
 msgid "Functions"
 msgstr ""
 
-#: ../../src/prefdlg.py:189 ../../src/prefdlg.py:675 ../../src/prefdlg.py:962
+#: ../../src/prefdlg.py:189 ../../src/prefdlg.py:675 ../../src/prefdlg.py:968
 #: ../../plugins/Launch/launch/cfgdlg.py:173
 msgid "General"
 msgstr ""
@@ -1261,7 +1265,7 @@ msgstr ""
 msgid "Goto the next match"
 msgstr ""
 
-#: ../../src/prefdlg.py:926
+#: ../../src/prefdlg.py:932
 msgid "Guide Column"
 msgstr ""
 
@@ -1269,7 +1273,7 @@ msgstr ""
 msgid "Highlight Brackets/Braces"
 msgstr ""
 
-#: ../../src/ed_menu.py:660 ../../src/prefdlg.py:931
+#: ../../src/ed_menu.py:660 ../../src/prefdlg.py:937
 msgid "Highlight Caret Line"
 msgstr ""
 
@@ -1281,15 +1285,15 @@ msgstr ""
 msgid "Home directory"
 msgstr ""
 
-#: ../../src/ed_main.py:1553
+#: ../../src/ed_main.py:1554
 msgid "Homepage"
 msgstr ""
 
-#: ../../src/prefdlg.py:1173
+#: ../../src/prefdlg.py:1180
 msgid "Icon Theme"
 msgstr "아이콘 테마"
 
-#: ../../src/prefdlg.py:1218
+#: ../../src/prefdlg.py:1225
 msgid "Icons"
 msgstr "아이콘"
 
@@ -1313,7 +1317,7 @@ msgstr "들여쓰기 너비"
 msgid "Indent the selected lines"
 msgstr ""
 
-#: ../../src/ed_menu.py:663 ../../src/prefdlg.py:934
+#: ../../src/ed_menu.py:663 ../../src/prefdlg.py:940
 msgid "Indentation Guides"
 msgstr ""
 
@@ -1325,7 +1329,7 @@ msgstr ""
 msgid "Info Text"
 msgstr ""
 
-#: ../../src/prefdlg.py:971
+#: ../../src/prefdlg.py:977
 msgid "Input Helpers"
 msgstr ""
 
@@ -1351,11 +1355,11 @@ msgstr ""
 msgid "Installation Error"
 msgstr "설치 오류"
 
-#: ../../src/prefdlg.py:1503
+#: ../../src/prefdlg.py:1510
 msgid "Installed Version"
 msgstr "설치된 버전"
 
-#: ../../src/ed_pages.py:350
+#: ../../src/ed_pages.py:356
 msgid "Invalid File"
 msgstr ""
 
@@ -1368,16 +1372,16 @@ msgstr ""
 msgid "Invalid expression \"%s\""
 msgstr ""
 
-#: ../../src/ed_pages.py:364
+#: ../../src/ed_pages.py:370
 msgid "Invalid file"
 msgstr ""
 
-#: ../../src/ed_pages.py:956
+#: ../../src/ed_pages.py:972
 #, python-format
 msgid "Invalid file: %s"
 msgstr ""
 
-#: ../../src/prefdlg.py:2152
+#: ../../src/prefdlg.py:2159
 msgid "Inverse"
 msgstr ""
 
@@ -1393,15 +1397,15 @@ msgstr ""
 msgid "Jump to Saved Path"
 msgstr ""
 
-#: ../../src/prefdlg.py:1731
+#: ../../src/prefdlg.py:1738
 msgid "Key"
 msgstr ""
 
-#: ../../src/prefdlg.py:1700
+#: ../../src/prefdlg.py:1707
 msgid "Key Profile"
 msgstr ""
 
-#: ../../src/prefdlg.py:1615
+#: ../../src/prefdlg.py:1622
 msgid "Keybindings"
 msgstr ""
 
@@ -1417,7 +1421,7 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: ../../src/prefdlg.py:1509
+#: ../../src/prefdlg.py:1516
 msgid "Latest Version"
 msgstr "최신 버젼"
 
@@ -1429,11 +1433,11 @@ msgstr ""
 msgid "Launch Configuration"
 msgstr ""
 
-#: ../../src/prefdlg.py:1223
+#: ../../src/prefdlg.py:1230
 msgid "Layout"
 msgstr ""
 
-#: ../../src/prefdlg.py:2036
+#: ../../src/prefdlg.py:2043
 msgid "Lexer"
 msgstr ""
 
@@ -1445,7 +1449,7 @@ msgstr ""
 msgid "Library Error"
 msgstr ""
 
-#: ../../src/ed_main.py:1555
+#: ../../src/ed_main.py:1556
 msgid "License: wxWindows (see COPYING.txt for full license)"
 msgstr ""
 
@@ -1458,7 +1462,7 @@ msgstr ""
 msgid "Line Number"
 msgstr "포트 번호"
 
-#: ../../src/ed_stc.py:713
+#: ../../src/ed_stc.py:752
 #, python-format
 msgid "Line: %(lnum)d  Column: %(cnum)d"
 msgstr ""
@@ -1475,11 +1479,11 @@ msgstr ""
 msgid "Load Session"
 msgstr ""
 
-#: ../../src/ed_main.py:753 ../../src/ed_menu.py:544
+#: ../../src/ed_main.py:754 ../../src/ed_menu.py:544
 msgid "Load a Custom Profile"
 msgstr ""
 
-#: ../../src/ed_main.py:803
+#: ../../src/ed_main.py:804
 msgid "Load a Session file"
 msgstr ""
 
@@ -1499,12 +1503,12 @@ msgstr ""
 msgid "Load files from last session on startup"
 msgstr ""
 
-#: ../../src/ed_main.py:759
+#: ../../src/ed_main.py:760
 #, python-format
 msgid "Loaded Profile: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:817
+#: ../../src/ed_main.py:818
 #, python-format
 msgid "Loaded Session: %s"
 msgstr ""
@@ -1513,7 +1517,7 @@ msgstr ""
 msgid "Locale Settings"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:183
+#: ../../plugins/Launch/launch/launch.py:182
 #, fuzzy
 msgid "Lock File"
 msgstr "%s 소스파일"
@@ -1538,7 +1542,7 @@ msgstr ""
 msgid "Macros"
 msgstr ""
 
-#: ../../src/prefdlg.py:1213
+#: ../../src/prefdlg.py:1220
 msgid "Main display font for various UI components"
 msgstr ""
 
@@ -1558,11 +1562,11 @@ msgstr ""
 msgid "Match case"
 msgstr ""
 
-#: ../../src/ed_main.py:1427 ../../src/ed_menu.py:686
+#: ../../src/ed_main.py:1428 ../../src/ed_menu.py:686
 msgid "Maximize Editor"
 msgstr ""
 
-#: ../../src/prefdlg.py:1713
+#: ../../src/prefdlg.py:1720
 msgid "Menu"
 msgstr "메뉴"
 
@@ -1570,11 +1574,11 @@ msgstr "메뉴"
 msgid "Misc"
 msgstr "기타"
 
-#: ../../src/ed_pages.py:385
+#: ../../src/ed_pages.py:391
 msgid "Missing session files"
 msgstr ""
 
-#: ../../src/ed_stc.py:1108
+#: ../../src/ed_stc.py:1184
 msgid ""
 "Mixed EOL characters detected.\n"
 "\n"
@@ -1585,11 +1589,11 @@ msgstr ""
 msgid "Modified"
 msgstr ""
 
-#: ../../src/prefdlg.py:1723
+#: ../../src/prefdlg.py:1730
 msgid "Modifier 1"
 msgstr ""
 
-#: ../../src/prefdlg.py:1727
+#: ../../src/prefdlg.py:1734
 msgid "Modifier 2"
 msgstr ""
 
@@ -1637,8 +1641,8 @@ msgstr "네임스페이스"
 msgid "Network"
 msgstr "네트워크"
 
-#: ../../src/ed_toolbar.py:74 ../../src/prefdlg.py:1703
-#: ../../src/style_editor.py:172
+#: ../../src/ed_toolbar.py:74 ../../src/prefdlg.py:1710
+#: ../../src/style_editor.py:173
 msgid "New"
 msgstr "새로 만들기"
 
@@ -1662,7 +1666,7 @@ msgstr ""
 msgid "New Line Before"
 msgstr ""
 
-#: ../../src/prefdlg.py:1898
+#: ../../src/prefdlg.py:1905
 msgid "New Profile"
 msgstr ""
 
@@ -1690,15 +1694,15 @@ msgstr ""
 msgid "No Suggestions"
 msgstr ""
 
-#: ../../src/ed_pages.py:966
+#: ../../src/ed_pages.py:982
 msgid "No Valid Files to Open"
 msgstr ""
 
-#: ../../src/prefdlg.py:1797
+#: ../../src/prefdlg.py:1804
 msgid "None"
 msgstr ""
 
-#: ../../src/prefdlg.py:2153
+#: ../../src/prefdlg.py:2160
 msgid "Normal"
 msgstr ""
 
@@ -1710,7 +1714,7 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
-#: ../../src/ed_glob.py:382 ../../src/ed_mdlg.py:137
+#: ../../src/ed_glob.py:385 ../../src/ed_mdlg.py:137
 msgid "Old Machintosh (\\r)"
 msgstr ""
 
@@ -1742,7 +1746,7 @@ msgstr "파이썬 쉘 열기"
 msgid "Open Code Browser Sidepanel"
 msgstr ""
 
-#: ../../src/ed_pages.py:977
+#: ../../src/ed_pages.py:993
 msgid "Open Directory?"
 msgstr ""
 
@@ -1750,7 +1754,7 @@ msgstr ""
 msgid "Open Documents"
 msgstr ""
 
-#: ../../src/ed_pages.py:210
+#: ../../src/ed_pages.py:216
 msgid "Open File"
 msgstr "파일 열기"
 
@@ -1770,12 +1774,12 @@ msgstr ""
 msgid "Open with "
 msgstr ""
 
-#: ../../src/ed_pages.py:997
+#: ../../src/ed_pages.py:1013
 #, python-format
 msgid "Opened file: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:1498
+#: ../../src/ed_main.py:1499
 #, python-format
 msgid "Opening %s"
 msgstr ""
@@ -1801,7 +1805,7 @@ msgstr ""
 msgid "Pane Navigator"
 msgstr ""
 
-#: ../../src/prefdlg.py:1403
+#: ../../src/prefdlg.py:1410
 msgid "Password"
 msgstr "비밀번호"
 
@@ -1829,11 +1833,11 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: ../../src/perspective.py:249
+#: ../../src/perspective.py:253
 msgid "Perspective Name"
 msgstr ""
 
-#: ../../src/perspective.py:266
+#: ../../src/perspective.py:270
 msgid "Perspective to Delete"
 msgstr ""
 
@@ -1845,23 +1849,23 @@ msgstr ""
 msgid "Plain Text"
 msgstr ""
 
-#: ../../src/ed_main.py:1554
+#: ../../src/ed_main.py:1555
 msgid "Platform Info"
 msgstr ""
 
-#: ../../src/Editra.py:901
+#: ../../src/Editra.py:902
 msgid "Please check the preferences dialog to check your preferences"
 msgstr ""
 
-#: ../../src/Editra.py:1110
+#: ../../src/Editra.py:1111
 msgid "Please check the preferences dialog to verify your preferences"
 msgstr ""
 
-#: ../../src/ed_main.py:1082 ../../src/ed_menu.py:806
+#: ../../src/ed_main.py:1083 ../../src/ed_menu.py:806
 msgid "Plugin Manager"
 msgstr "플러그인 관리자"
 
-#: ../../src/prefdlg.py:1388
+#: ../../src/prefdlg.py:1395
 msgid "Port Number"
 msgstr "포트 번호"
 
@@ -1877,7 +1881,7 @@ msgstr ""
 msgid "Preferences - Editra"
 msgstr ""
 
-#: ../../src/style_editor.py:689
+#: ../../src/style_editor.py:694
 #, fuzzy
 msgid "Preview File"
 msgstr "미리보기"
@@ -1898,7 +1902,7 @@ msgstr ""
 msgid "Previous Position"
 msgstr ""
 
-#: ../../src/prefdlg.py:807
+#: ../../src/prefdlg.py:812
 msgid "Primary Font"
 msgstr ""
 
@@ -1934,20 +1938,20 @@ msgstr ""
 msgid "Procedure Definitions"
 msgstr ""
 
-#: ../../src/ed_main.py:734 ../../src/ed_main.py:755 ../../src/ed_menu.py:545
+#: ../../src/ed_main.py:735 ../../src/ed_main.py:756 ../../src/ed_menu.py:545
 msgid "Profile"
 msgstr ""
 
-#: ../../src/ed_main.py:739
+#: ../../src/ed_main.py:740
 #, python-format
 msgid "Profile Saved as: %s"
 msgstr ""
 
-#: ../../src/Editra.py:903 ../../src/Editra.py:1112
+#: ../../src/Editra.py:904 ../../src/Editra.py:1113
 msgid "Profile Updated"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:177
+#: ../../plugins/Launch/launch/launch.py:176
 msgid "Program Executable Command"
 msgstr ""
 
@@ -1963,11 +1967,11 @@ msgstr ""
 msgid "Protocols"
 msgstr ""
 
-#: ../../src/prefdlg.py:1374
+#: ../../src/prefdlg.py:1381
 msgid "Proxy Settings"
 msgstr "프록시 설정"
 
-#: ../../src/prefdlg.py:1384
+#: ../../src/prefdlg.py:1391
 msgid "Proxy URL"
 msgstr "프록시 URL"
 
@@ -1983,7 +1987,7 @@ msgstr ""
 msgid "Put an item on the Shelf"
 msgstr ""
 
-#: ../../src/updater.py:672
+#: ../../src/updater.py:673
 #, python-format
 msgid "Rate: %.2f Kb/s"
 msgstr ""
@@ -1992,7 +1996,7 @@ msgstr ""
 msgid "Re-run the last run program"
 msgstr ""
 
-#: ../../src/ed_stc.py:1758
+#: ../../src/ed_stc.py:1842
 msgid "Read Only"
 msgstr ""
 
@@ -2004,11 +2008,11 @@ msgstr ""
 msgid "Recently Opened Files"
 msgstr ""
 
-#: ../../src/ed_stc.py:1379
+#: ../../src/ed_stc.py:1457
 msgid "Recording Finished"
 msgstr ""
 
-#: ../../src/ed_stc.py:1366
+#: ../../src/ed_stc.py:1444
 msgid "Recording Macro"
 msgstr ""
 
@@ -2041,7 +2045,7 @@ msgstr ""
 msgid "Reload the file with a specified encoding"
 msgstr ""
 
-#: ../../src/ed_main.py:1219
+#: ../../src/ed_main.py:1220
 msgid "Reload with Encoding"
 msgstr ""
 
@@ -2053,11 +2057,11 @@ msgstr ""
 msgid "Remember File Position"
 msgstr ""
 
-#: ../../src/prefdlg.py:1203
+#: ../../src/prefdlg.py:1210
 msgid "Remember Window Position on Exit"
 msgstr ""
 
-#: ../../src/prefdlg.py:1200
+#: ../../src/prefdlg.py:1207
 msgid "Remember Window Size on Exit"
 msgstr ""
 
@@ -2109,7 +2113,7 @@ msgstr "리포트 오류"
 msgid "Resave File?"
 msgstr ""
 
-#: ../../src/ed_main.py:1429
+#: ../../src/ed_main.py:1430
 msgid "Restore Editor"
 msgstr ""
 
@@ -2125,7 +2129,7 @@ msgstr ""
 msgid "Revert file to last save point"
 msgstr ""
 
-#: ../../src/prefdlg.py:1104 ../../src/prefdlg.py:1759
+#: ../../src/prefdlg.py:1111 ../../src/prefdlg.py:1766
 msgid "Revert to Default"
 msgstr ""
 
@@ -2134,8 +2138,8 @@ msgid "Revert to Saved"
 msgstr ""
 
 #: ../../plugins/Launch/launch/__init__.py:93
-#: ../../plugins/Launch/launch/launch.py:203
-#: ../../plugins/Launch/launch/launch.py:601
+#: ../../plugins/Launch/launch/launch.py:202
+#: ../../plugins/Launch/launch/launch.py:602
 msgid "Run"
 msgstr "실행"
 
@@ -2192,7 +2196,7 @@ msgstr ""
 msgid "Save Error"
 msgstr "저장 오류"
 
-#: ../../src/perspective.py:250
+#: ../../src/perspective.py:254
 msgid "Save Perspective"
 msgstr ""
 
@@ -2208,7 +2212,7 @@ msgstr ""
 msgid "Save Session"
 msgstr ""
 
-#: ../../src/style_editor.py:219
+#: ../../src/style_editor.py:220
 msgid "Save Styles"
 msgstr ""
 
@@ -2224,12 +2228,12 @@ msgstr ""
 msgid "Save the current window layout"
 msgstr ""
 
-#: ../../src/ed_main.py:716
+#: ../../src/ed_main.py:717
 #, python-format
 msgid "Saved File As: %s"
 msgstr ""
 
-#: ../../src/ed_main.py:670
+#: ../../src/ed_main.py:671
 #, python-format
 msgid "Saved File: %s"
 msgstr ""
@@ -2272,7 +2276,7 @@ msgstr ""
 msgid "Searching in: %s"
 msgstr ""
 
-#: ../../src/prefdlg.py:810
+#: ../../src/prefdlg.py:815
 msgid "Secondary Font"
 msgstr ""
 
@@ -2292,7 +2296,7 @@ msgstr "전체 선택"
 msgid "Select All Text in Document"
 msgstr ""
 
-#: ../../src/ed_main.py:1218
+#: ../../src/ed_main.py:1219
 msgid "Select an encoding to reload the file with"
 msgstr ""
 
@@ -2304,7 +2308,7 @@ msgstr ""
 msgid "Selected Text"
 msgstr ""
 
-#: ../../src/ed_pages.py:365
+#: ../../src/ed_pages.py:371
 msgid "Selected file is not a valid session file"
 msgstr ""
 
@@ -2312,20 +2316,20 @@ msgstr ""
 msgid "Send bug reports and suggestions"
 msgstr ""
 
-#: ../../src/ed_main.py:778 ../../src/ed_main.py:805
+#: ../../src/ed_main.py:779 ../../src/ed_main.py:806
 msgid "Session"
 msgstr ""
 
-#: ../../src/ed_main.py:793
+#: ../../src/ed_main.py:794
 #, python-format
 msgid "Session Saved as: %s"
 msgstr ""
 
-#: ../../src/ed_pages.py:350
+#: ../../src/ed_pages.py:356
 msgid "Session file doesn't exist."
 msgstr ""
 
-#: ../../src/ed_pages.py:371
+#: ../../src/ed_pages.py:377
 msgid "Session file is empty."
 msgstr ""
 
@@ -2337,19 +2341,19 @@ msgstr ""
 msgid "Set Font"
 msgstr ""
 
-#: ../../src/style_editor.py:692
+#: ../../src/style_editor.py:697
 msgid "Set the preview file type"
 msgstr ""
 
-#: ../../src/prefdlg.py:785
+#: ../../src/prefdlg.py:789
 msgid "Sets a secondary font used for special regions when syntax highlighting is in use"
 msgstr ""
 
-#: ../../src/prefdlg.py:780
+#: ../../src/prefdlg.py:784
 msgid "Sets the main/default font of the document"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:170
+#: ../../plugins/Launch/launch/launch.py:169
 msgid "Settings"
 msgstr ""
 
@@ -2369,7 +2373,7 @@ msgstr ""
 msgid "Show Hidden Files"
 msgstr "숨김 파일 표시"
 
-#: ../../src/prefdlg.py:1184
+#: ../../src/prefdlg.py:1191
 msgid "Show Icons on Tabs"
 msgstr "탭에 아이콘 보이기"
 
@@ -2385,7 +2389,7 @@ msgstr ""
 msgid "Show Line Numbers"
 msgstr ""
 
-#: ../../src/ed_shelf.py:368
+#: ../../src/ed_shelf.py:369
 msgid "Show Shelf"
 msgstr ""
 
@@ -2393,11 +2397,11 @@ msgstr ""
 msgid "Show Splash Screen"
 msgstr ""
 
-#: ../../src/ed_menu.py:705 ../../src/prefdlg.py:1205
+#: ../../src/ed_menu.py:705 ../../src/prefdlg.py:1212
 msgid "Show Status Bar"
 msgstr ""
 
-#: ../../src/ed_menu.py:707 ../../src/prefdlg.py:1207
+#: ../../src/ed_menu.py:707 ../../src/prefdlg.py:1214
 msgid "Show Toolbar"
 msgstr "도구 모음 보기"
 
@@ -2413,7 +2417,7 @@ msgstr ""
 msgid "Show output from"
 msgstr ""
 
-#: ../../src/ed_shelf.py:370
+#: ../../src/ed_shelf.py:371
 msgid "Show the Shelf"
 msgstr ""
 
@@ -2421,15 +2425,15 @@ msgstr ""
 msgid "Show the edge column guide"
 msgstr ""
 
-#: ../../src/style_editor.py:641 ../../src/eclib/infodlg.py:189
+#: ../../src/style_editor.py:644 ../../src/eclib/infodlg.py:189
 msgid "Size"
 msgstr ""
 
-#: ../../src/ed_pages.py:386
+#: ../../src/ed_pages.py:392
 msgid "Some files in saved session could not be found on disk:\n"
 msgstr ""
 
-#: ../../src/style_editor.py:217
+#: ../../src/style_editor.py:218
 msgid "Some styles have been changed would you like to save before exiting?"
 msgstr ""
 
@@ -2454,7 +2458,7 @@ msgstr ""
 msgid "Start a New File"
 msgstr ""
 
-#: ../../src/style_editor.py:173
+#: ../../src/style_editor.py:174
 msgid "Start a blank new style"
 msgstr ""
 
@@ -2466,7 +2470,7 @@ msgstr ""
 msgid "Start a new file in a new window"
 msgstr ""
 
-#: ../../src/prefdlg.py:953
+#: ../../src/prefdlg.py:959
 msgid "Start in Normal Mode"
 msgstr ""
 
@@ -2478,7 +2482,7 @@ msgstr ""
 msgid "Startup Settings"
 msgstr ""
 
-#: ../../src/updater.py:289
+#: ../../src/updater.py:290
 msgid "Status Unknown"
 msgstr ""
 
@@ -2486,7 +2490,7 @@ msgstr ""
 msgid "Style Editor"
 msgstr ""
 
-#: ../../src/style_editor.py:189
+#: ../../src/style_editor.py:190
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:54
 msgid "Style Tags"
 msgstr ""
@@ -2512,7 +2516,7 @@ msgstr ""
 msgid "Switch Lexer to %s"
 msgstr ""
 
-#: ../../src/ed_menu.py:787 ../../src/prefdlg.py:677 ../../src/prefdlg.py:1078
+#: ../../src/ed_menu.py:787 ../../src/prefdlg.py:677 ../../src/prefdlg.py:1084
 msgid "Syntax Highlighting"
 msgstr ""
 
@@ -2540,7 +2544,7 @@ msgstr ""
 msgid "Text Document"
 msgstr ""
 
-#: ../../src/ed_pages.py:159
+#: ../../src/ed_pages.py:165
 #, python-format
 msgid ""
 "The correct encoding of '%s' could not be determined.\n"
@@ -2557,7 +2561,7 @@ msgid ""
 "Would you like to save the changes?"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:733
+#: ../../plugins/Launch/launch/launch.py:735
 msgid "The requested command could not be executed."
 msgstr ""
 
@@ -2566,7 +2570,7 @@ msgstr ""
 msgid "The search term '%(term)s' was found %(count)d times."
 msgstr ""
 
-#: ../../src/ed_pages.py:964
+#: ../../src/ed_pages.py:980
 #, python-format
 msgid "There are no files that Editra can open in %s"
 msgstr ""
@@ -2649,7 +2653,7 @@ msgstr ""
 msgid "Toggle fold"
 msgstr ""
 
-#: ../../src/prefdlg.py:1178
+#: ../../src/prefdlg.py:1185
 msgid "Toolbar Icon Size"
 msgstr "툴바의 아이콘 크기"
 
@@ -2657,7 +2661,7 @@ msgstr "툴바의 아이콘 크기"
 msgid "Translate Editra..."
 msgstr "Editra 번역"
 
-#: ../../src/prefdlg.py:1231
+#: ../../src/prefdlg.py:1238
 msgid "Transparency"
 msgstr "투명성"
 
@@ -2690,10 +2694,6 @@ msgstr ""
 msgid "Unable to retrieve plugin list"
 msgstr "플러그인 목록을 검색할 수없습니다"
 
-#: ../../src/updater.py:144
-msgid "Unable to retrieve version info"
-msgstr "버전 정보를 검색할 수없습니다"
-
 #: ../../src/ed_editv.py:359 ../../src/ed_toolbar.py:80
 msgid "Undo"
 msgstr "되돌리기"
@@ -2718,7 +2718,7 @@ msgstr ""
 msgid "Uninstall Plugin"
 msgstr ""
 
-#: ../../src/ed_glob.py:383 ../../src/ed_mdlg.py:137 ../../src/ed_menu.py:759
+#: ../../src/ed_glob.py:386 ../../src/ed_mdlg.py:137 ../../src/ed_menu.py:759
 #: ../../src/ed_menu.py:761 ../../src/prefdlg.py:753
 msgid "Unix (\\n)"
 msgstr "유닉스"
@@ -2741,11 +2741,11 @@ msgstr "폴더_제목"
 msgid "Up"
 msgstr "위로"
 
-#: ../../src/prefdlg.py:1341
+#: ../../src/prefdlg.py:1348
 msgid "Update"
 msgstr "갱신"
 
-#: ../../src/Editra.py:602
+#: ../../src/Editra.py:603
 msgid "Update Available"
 msgstr "갱신 가능"
 
@@ -2757,7 +2757,7 @@ msgstr "대문자"
 msgid "Use Auto Completion when available"
 msgstr "자동 완성 사용 가능한 경우"
 
-#: ../../src/prefdlg.py:1379
+#: ../../src/prefdlg.py:1386
 msgid "Use Proxy"
 msgstr "프록시 사용"
 
@@ -2777,7 +2777,7 @@ msgstr ""
 msgid "User Directory"
 msgstr "사용자 디렉토리"
 
-#: ../../src/prefdlg.py:1396
+#: ../../src/prefdlg.py:1403
 msgid "Username"
 msgstr "사용자명"
 
@@ -2793,9 +2793,13 @@ msgstr "다음 책갈피의 줄 보기"
 msgid "View Line of Previous Bookmark"
 msgstr "이전 책갈피의 줄 보기"
 
-#: ../../src/prefdlg.py:800
+#: ../../src/prefdlg.py:804
 msgid "View Options"
 msgstr "보기 옵션"
+
+#: ../../src/prefdlg.py:775
+msgid "View Virtual Space After Last Line"
+msgstr ""
 
 #: ../../src/ed_script.py:202
 msgid "View and Edit Macros"
@@ -2810,7 +2814,7 @@ msgstr "선택 목록 창에서보기"
 msgid "Visit the project homepage %s"
 msgstr ""
 
-#: ../../src/prefdlg.py:916
+#: ../../src/prefdlg.py:922
 msgid "Visual Helpers"
 msgstr ""
 
@@ -2822,7 +2826,7 @@ msgstr ""
 msgid "Warning Text"
 msgstr "경고 텍스트"
 
-#: ../../src/prefdlg.py:944
+#: ../../src/prefdlg.py:950
 msgid "Warning suggestions will include context insensitive results"
 msgstr "감수성 결과 제안 경고 컨텍스트가 포함됩니다"
 
@@ -2830,11 +2834,11 @@ msgstr "감수성 결과 제안 경고 컨텍스트가 포함됩니다"
 msgid "Where"
 msgstr "장소"
 
-#: ../../src/ed_main.py:732
+#: ../../src/ed_main.py:733
 msgid "Where to Save Profile?"
 msgstr "프로필을 저장하는 장소?"
 
-#: ../../src/ed_main.py:776
+#: ../../src/ed_main.py:777
 msgid "Where to Save Session?"
 msgstr "세션 저장 장소?"
 
@@ -2854,7 +2858,7 @@ msgstr ""
 msgid "Whole word"
 msgstr "전체 단어"
 
-#: ../../src/ed_glob.py:384 ../../src/ed_mdlg.py:138 ../../src/ed_menu.py:762
+#: ../../src/ed_glob.py:387 ../../src/ed_mdlg.py:138 ../../src/ed_menu.py:762
 #: ../../src/ed_menu.py:764 ../../src/prefdlg.py:754
 msgid "Windows (\\r\\n)"
 msgstr "윈도우"
@@ -2871,7 +2875,7 @@ msgstr "줄넘김 수평"
 msgid "Wrap lines in output buffer"
 msgstr ""
 
-#: ../../src/ed_main.py:1552
+#: ../../src/ed_main.py:1553
 #, python-format
 msgid "Written in 100%% Python."
 msgstr ""
@@ -2880,7 +2884,7 @@ msgstr ""
 msgid "You must restart Editra before your changes will take full affect."
 msgstr "당신의 전체 변경 사항을 적용하기 전에 Editra 다시 시작해야합니다."
 
-#: ../../src/Editra.py:899 ../../src/Editra.py:1108
+#: ../../src/Editra.py:900 ../../src/Editra.py:1109
 msgid "Your profile has been updated to the latest version"
 msgstr "귀하의 프로파일을 최신 버전으로 업데이트 하였습니다"
 
@@ -2896,11 +2900,11 @@ msgstr "확대"
 msgid "Zoom Out"
 msgstr "축소"
 
-#: ../../plugins/Launch/launch/launch.py:190
+#: ../../plugins/Launch/launch/launch.py:189
 msgid "args"
 msgstr "함수의 독립 변수"
 
-#: ../../src/style_editor.py:608
+#: ../../src/style_editor.py:611
 msgid "bold"
 msgstr "굵게"
 
@@ -2908,27 +2912,30 @@ msgstr "굵게"
 msgid "cwd: "
 msgstr ""
 
-#: ../../src/style_editor.py:609
+#: ../../src/style_editor.py:612
 msgid "eol"
 msgstr ""
 
-#: ../../plugins/Launch/launch/launch.py:174
+#: ../../plugins/Launch/launch/launch.py:173
 msgid "exec"
 msgstr "실행 관리"
 
-#: ../../src/style_editor.py:610
+#: ../../src/style_editor.py:613
 msgid "italic"
 msgstr "기울임꼴"
 
-#: ../../src/style_editor.py:611
+#: ../../src/style_editor.py:614
 msgid "underline"
 msgstr "밑줄"
 
-#: ../../src/ed_pages.py:231
+#: ../../src/ed_pages.py:237
 msgid "untitled"
 msgstr ""
 
-#: ../../src/ed_pages.py:229
+#: ../../src/ed_pages.py:235
 #, python-format
 msgid "untitled %d"
 msgstr ""
+
+#~ msgid "Unable to retrieve version info"
+#~ msgstr "버전 정보를 검색할 수없습니다"
