@@ -228,7 +228,7 @@ ICON = { 'Win' : "pixmaps/editra.ico",
 
 # Explicitly include some libraries that are either loaded dynamically
 # or otherwise not able to be found by py2app/exe
-INCLUDES = ['syntax.*', 'ed_log', 'shutil', 'subprocess', 'zipfile',
+INCLUDES = ['syntax.*', 'ed_bookmark', 'ed_log', 'shutil', 'subprocess', 'zipfile',
             'pygments.*', 'pygments.lexers.*', 'pygments.formatters.*',
             'pygments.filters.*', 'pygments.styles.*', 'ftplib',
             'extern.flatnotebook'] # temporary till all references can be removed
