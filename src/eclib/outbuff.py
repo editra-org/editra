@@ -851,7 +851,20 @@ class ProcessThread(threading.Thread):
             # Windows as it will cause any gui app to not show on the
             # display!
             suinfo = subprocess.STARTUPINFO()
-            suinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            #TODO: move this into common library as it is needed
+            #      by most code that uses subprocess
+            if sys.platform.lower().startswith('win'):            
+                if hasattr(subprocess, 'STARTF_USESHOWWINDOW'):
+                    suinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+                else:
+                    try:
+                        from win32process import STARTF_USESHOWWINDOW
+                        suinfo.dwFlags |= STARTF_USESHOWWINDOW
+                    except ImportError:
+                        # Give up and try hard coded value from Windows.h
+                        suinfo.dwFlags |= 0x00000001
+            else:
+                suinfo = None
         else:
             suinfo = None
         
