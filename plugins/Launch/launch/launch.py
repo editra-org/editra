@@ -76,7 +76,7 @@ ed_msg.Subscribe(OnRegisterHandler, MSG_LAUNCH_REGISTER)
 class LaunchWindow(eclib.ControlBox):
     """Control window for showing and running scripts"""
     def __init__(self, parent):
-        eclib.ControlBox.__init__(self, parent)
+        super(LaunchWindow, self).__init__(parent)
 
         # Attributes
         self._log = wx.GetApp().GetLog()
@@ -489,6 +489,8 @@ class LaunchWindow(eclib.ControlBox):
                 ctrl.Enable()
 
             self._isready = True
+            if self._lockFile.IsChecked():
+                self._chFiles.Enable(False)
 
             if self._config['lang'] == self._config['prelang'] and len(csel):
                 exe_ch.SetStringSelection(csel)
@@ -623,11 +625,12 @@ class LaunchWindow(eclib.ControlBox):
             self._config['cfile'] = fname
             self._config['clang'] = lang_id
         else:
-            self.SetFile(fname)
-            self.SetLangId(lang_id)
+            if not self._lockFile.IsChecked():
+                self.SetFile(fname)
+                self.SetLangId(lang_id)
 
-            # Refresh the control bars view
-            self.RefreshControlBar()
+                # Refresh the control bars view
+                self.RefreshControlBar()
 
     def UpdateBufferColors(self):
         """Update the buffers colors"""

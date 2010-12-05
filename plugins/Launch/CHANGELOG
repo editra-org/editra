@@ -6,6 +6,12 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.8
+
++Fix compatibility issue with Python 2.6.4 and later
++Fix some issues with the Lock File feature not always locking the selected file.
+
+#-----------------------------------------------------------------------------#
 Version 1.7:
 
 +Fix crash that could occur when clicking on some hotspots where the pattern
