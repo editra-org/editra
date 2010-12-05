@@ -165,6 +165,7 @@ class StyleEditor(wx.Dialog):
         ss_lbl = wx.StaticText(self.ctrl_pane, wx.ID_ANY,
                                _("Style Theme") + u": ")
         ss_lst = util.GetResourceFiles(u'styles', get_all=True)
+        ss_lst = [sheet for sheet in ss_lst if not sheet.startswith('.')]
         ss_choice = wx.Choice(self.ctrl_pane, ed_glob.ID_PREF_SYNTHEME,
                               choices=sorted(ss_lst))
         ss_choice.SetToolTipString(_("Base new theme on existing one"))
@@ -275,7 +276,9 @@ class StyleEditor(wx.Dialog):
             else:
                 # Update Style Sheet Control
                 sheet = u".".join(os.path.basename(sheet_path).split(u'.')[:-1])
-                ss_c.SetItems(util.GetResourceFiles(u'styles', get_all=True))
+                ss_lst = util.GetResourceFiles(u'styles', get_all=True)
+                ss_lst = [sheet for sheet in ss_lst if not sheet.startswith('.')]
+                ss_c.SetItems(sorted(ss_lst))
                 ss_c.SetStringSelection(sheet)
                 ss_c.Enable()
                 self.FindWindowById(wx.ID_NEW).SetValue(False)
