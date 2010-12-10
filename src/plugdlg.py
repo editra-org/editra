@@ -367,7 +367,9 @@ class ConfigPanel(eclib.ControlBox):
 
             pdata = PluginData()
             pdata.SetName(item)
-            desc = getattr(mod, '__doc__', _("No Description Available"))
+            desc = getattr(mod, '__doc__', None)
+            if not isinstance(desc, basestring):
+                desc = _("No Description Available")
             pdata.SetDescription(desc.strip())
             pdata.SetAuthor(getattr(mod, '__author__', _("Unknown")))
             pdata.SetVersion(version)
