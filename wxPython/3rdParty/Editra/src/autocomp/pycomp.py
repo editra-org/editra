@@ -94,7 +94,7 @@ class Completer(completer.BaseCompleter):
                 sys.path.pop(0)
 
             if calltip:
-                return cmpl.get_completions(command + '(', '', calltip)
+                return cmpl.get_completions(command + u'(', u'', calltip)
             else:
                 # Get Auto-completion List
                 complst = cmpl.get_completions(command)
@@ -146,7 +146,7 @@ class Completer(completer.BaseCompleter):
         alltext = self._GetCompletionInfo(command, calltip=True)
        
         # split the text into natural paragraphs (a blank line separated)
-        paratext = alltext.split(u"\n\n")
+        paratext = alltext.split("\n\n")
        
         # add text by paragraph until text limit or all paragraphs
         textlimit = 800
@@ -156,16 +156,25 @@ class Completer(completer.BaseCompleter):
             ii = 1
             while ii < numpara and \
                   (len(calltiptext) + len(paratext[ii])) < textlimit:
-                calltiptext = calltiptext + u"\n\n" + paratext[ii]
+                calltiptext = calltiptext + "\n\n" + paratext[ii]
                 ii = ii + 1
 
             # if not all texts are added, add "[...]"
             if ii < numpara:
-                calltiptext = calltiptext + u"\n[...]"
+                calltiptext = calltiptext + "\n[...]"
         # present the function signature only (first newline)
         else:
-            calltiptext = alltext.split(u"\n")[0]
-           
+            calltiptext = alltext.split("\n")[0]
+
+        if type(calltiptext) != types.UnicodeType:
+            # Ensure it is unicode
+            try:
+                stcbuff = self.GetBuffer()
+                encoding = stcbuff.GetEncoding()
+                calltiptext = calltiptext.decode(encoding)
+            except Exception, msg:
+                dbg("%s" % msg)
+
         return calltiptext
 
 #-----------------------------------------------------------------------------#
@@ -289,12 +298,12 @@ class PyCompleter(object):
                     if not isinstance(tip, basestring):
                         tip = u""
                     return tip
-                else:
-                    # Alternate calltip code
-                    result = eval(_sanitize(stmt[:-1]), self.compldict)
-                    doc = max(getattr(result, '__doc__', ''), ' ')
-                    return [{'word' : _cleanstr(self.get_arguments(result)), 
-                             'info' : _cleanstr(doc)}]
+#                else:
+#                    # Alternate calltip code
+#                    result = eval(_sanitize(stmt[:-1]), self.compldict)
+#                    doc = max(getattr(result, '__doc__', ''), ' ')
+#                    return [{'word' : _cleanstr(self.get_arguments(result)), 
+#                             'info' : _cleanstr(doc)}]
             elif ridx == -1:
                 match = stmt
                 compdict = self.compldict

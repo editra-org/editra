@@ -18,6 +18,7 @@ NEW: [features/enhancements]
 
 BUG FIXES:
 +Fix Python 2.5 compatibility issue
++Fix Unicode handling issue in Python completer
 
 #-----------------------------------------------------------------------------#
 
