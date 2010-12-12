@@ -8,6 +8,18 @@ Change Log:
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
+VERSION 0.x.xx
+DATE xx/xx/2010
+39th Alpha Release
+
+NEWS:
+
+NEW: [features/enhancements]
+
+BUG FIXES:
++Fix Python 2.5 compatibility issue
+
+#-----------------------------------------------------------------------------#
 
 VERSION 0.5.99
 DATE 12/05/2010
