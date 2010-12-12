@@ -63,8 +63,14 @@ class LogFile(object):
         else:
             opencmd = "wb"
 
-        with open(logpath, opencmd) as handle:
+#        with open(logpath, opencmd) as handle:
+#            handle.write(msg.rstrip() + os.linesep)
+        try:
+            handle = open(logpath, opencmd)
             handle.write(msg.rstrip() + os.linesep)
+            handle.close()
+        except IOError:
+            pass
 
     def PurgeOldLogs(self, days):
         """Purge all log files older than n days
