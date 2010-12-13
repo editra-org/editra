@@ -847,24 +847,21 @@ class ProcessThread(threading.Thread):
         # TODO: See about supporting use_shell on Windows it causes lots of
         #       issues with gui apps and killing processes when it is True.
         if use_shell and subprocess.mswindows:
+            suinfo = subprocess.STARTUPINFO()
             # Don't set this flag if we are not using the shell on
             # Windows as it will cause any gui app to not show on the
             # display!
-            suinfo = subprocess.STARTUPINFO()
             #TODO: move this into common library as it is needed
             #      by most code that uses subprocess
-            if sys.platform.lower().startswith('win'):            
-                if hasattr(subprocess, 'STARTF_USESHOWWINDOW'):
-                    suinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-                else:
-                    try:
-                        from win32process import STARTF_USESHOWWINDOW
-                        suinfo.dwFlags |= STARTF_USESHOWWINDOW
-                    except ImportError:
-                        # Give up and try hard coded value from Windows.h
-                        suinfo.dwFlags |= 0x00000001
+            if hasattr(subprocess, 'STARTF_USESHOWWINDOW'):
+                suinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
             else:
-                suinfo = None
+                try:
+                    from win32process import STARTF_USESHOWWINDOW
+                    suinfo.dwFlags |= STARTF_USESHOWWINDOW
+                except ImportError:
+                    # Give up and try hard coded value from Windows.h
+                    suinfo.dwFlags |= 0x00000001
         else:
             suinfo = None
         
