@@ -17,8 +17,10 @@ NEWS:
 NEW: [features/enhancements]
 
 BUG FIXES:
-+Fix Python 2.5 compatibility issue
-+Fix Unicode handling issue in Python completer
++Fix Python 2.5 compatibility issue.
++Fix Unicode handling issue in Python completer.
++Fix issue with incorrect dwell events being sent causing the calltip popups
+to be shown when they shouldn't even after the mouse has left the window.
 
 #-----------------------------------------------------------------------------#
 

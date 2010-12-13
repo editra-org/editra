@@ -136,7 +136,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.UpdateBaseStyles()
 
         # Other Settings
-        self.SetMouseDwellTime(800)
+        self.SetMouseDwellTime(900)
         self.UsePopUp(False)
 
         #self.Bind(wx.stc.EVT_STC_MACRORECORD, self.OnRecordMacro)
@@ -652,8 +652,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             else:
                 evt.Skip()
 
-            if self.CallTipActive():
-                self.CallTipCancel()
+            self.CallTipCancel()
 
         elif self.VertEdit.Enabled:
             # XXX: handle column mode
@@ -723,8 +722,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         elif key_code in cmpl.GetCallTipCancel():
             evt.Skip()
-            if self.CallTipActive():
-                self.CallTipCancel()
+            self.CallTipCancel()
 #        elif key_code == wx.WXK_TAB and \
 #             True not in (evt.ControlDown(), evt.CmdDown(), 
 #                          evt.ShiftDown(), evt.AltDown()):
@@ -878,6 +876,13 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def OnDwellStart(self, evt):
         """Callback hook for mouse dwell start"""
+        # Workaround issue where this event in incorrectly sent
+        # when the mouse has not dwelled within the buffer area
+        mpoint = wx.GetMousePosition()
+        brect = self.GetScreenRect()
+        if not brect.Contains(mpoint):
+            return
+
         position = evt.Position
         if not self._dwellsent and position >= 0:
             dwellword = self.GetWordFromPosition(position)[0]
@@ -909,8 +914,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """Callback hook for mouse dwell end"""
         self._dwellsent = False
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_DWELL_END)
-        if self.CallTipActive():
-            self.CallTipCancel()
+        self.CallTipCancel()
         evt.Skip()
 
     def OnMarginClick(self, evt):
