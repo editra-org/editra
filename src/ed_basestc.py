@@ -75,6 +75,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         self.vert_edit = vertedit.VertEdit(self)
         self._line_num = True # Show line numbers
+        self._last_cwidth = 1 # one pixel
 
         # Set Up Margins
         ## Outer Left Margin Bookmarks
@@ -97,7 +98,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             for keys in _GetMacKeyBindings():
                 self.CmdKeyAssign(*keys)
 
-        # Setup Autocomp images
+        # Setup Auto-comp images
         # TODO: should be called on theme change messages
         self.RegisterImages()
 
@@ -688,14 +689,18 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             bMulti = sline != eline
         return bMulti
 
+    def CallTipCancel(self):
+        """Cancel any active calltip(s)"""
+        if self.CallTipActive():
+            super(EditraBaseStc, self).CallTipCancel()
+
     def CallTipShow(self, position, tip):
         """Show a calltip at the given position in the control
         @param position: int
         @param tip: unicode
 
         """
-        if self.CallTipActive():
-            self.CallTipCancel()
+        self.CallTipCancel()
         super(EditraBaseStc, self).CallTipShow(position, tip)
 
     def HidePopups(self):
@@ -703,8 +708,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if self.AutoCompActive():
             self.AutoCompCancel()
 
-        if self.CallTipActive():
-            self.CallTipCancel()
+        self.CallTipCancel()
 
     def InitCompleter(self):
         """(Re)Initialize a completer object for this buffer
@@ -1004,8 +1008,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @param command: command to  look for calltips for
 
         """
-        if self.CallTipActive():
-            self.CallTipCancel()
+        self.CallTipCancel()
 
         tip = self._code['compsvc'].GetCallTip(command)
         if len(tip):
