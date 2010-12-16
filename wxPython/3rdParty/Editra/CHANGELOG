@@ -15,6 +15,7 @@ DATE xx/xx/2010
 NEWS:
 
 NEW: [features/enhancements]
++Improve Python AutoIndenter to better handle brackets (patch from Jens)
 
 BUG FIXES:
 +Fix Python 2.5 compatibility issue.

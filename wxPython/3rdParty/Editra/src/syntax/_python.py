@@ -161,6 +161,11 @@ def AutoIndenter(estc, pos, ichar):
         elif rpos >= len(rval):
             rval = eolch
 
+    # In case of open bracket: Indent next to open bracket
+    pos = PosOpenBracket(text)
+    if pos > -1:
+        rval = eolch + (pos + 1) * u" "
+
     # Put text in the buffer
     estc.AddText(rval)
 
@@ -173,5 +178,40 @@ def KeywordString():
 
     """
     return PY_KW[1]
+
+def PosOpenBracket(text):
+    """Returns the position of the right most open bracket in text.
+    Brackets inside strings are ignored. In case of no open bracket
+    the returned value is -1
+    @param text: The line preceding the new line to be indented.
+    @return res: The position of right most open bracket.
+    @note: Used by AutoIndenter
+
+    """
+    # Store positions of '(', '[','{', ')', ']', '}'
+    brackets = [[], [], [], [], [], []]
+    quotes = u"'" + u'"'
+    in_string = False
+    for pos, char in enumerate(text):
+        if in_string:
+            in_string = not char == quote
+        else:
+            if char == u'#':
+                break
+            typ = u'([{)]}'.find(char)
+            if typ > -1:
+                brackets[typ].append(pos)
+            else:
+                typ = quotes.find(char)
+                if typ > -1:
+                    in_string = True
+                    quote = quotes[typ]
+    res = -1
+    for typ in range(3):
+        opn, cls = brackets[typ], brackets[typ+3]
+        nopn, ncls = len(opn), len(cls)
+        if nopn > ncls:
+            res = max(res, opn[nopn - ncls - 1])
+    return res
 
 #---- End Syntax Modules Internal Functions ----#
