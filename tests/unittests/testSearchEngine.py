@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 ###############################################################################
 # Name: testSearchEngine                                                      #
 # Purpose: Unittest for ebmlib.SearchEngine                                #
@@ -22,7 +23,7 @@ import ebmlib
 #-----------------------------------------------------------------------------#
 # Search Pool
 
-# NOTE: changeing this string requires changing the related tests that use it
+# NOTE: changing this string requires changing the related tests that use it
 POOL = ("Test string to use for the find tests. The find tests work on strings"
         " while the search methods work on files. Here is some more random"
         " strings to search in. def foo(param1, param2): print param1, param2"
@@ -116,6 +117,15 @@ class SearchEngineTest(unittest.TestCase):
         self._def_eng.SetFlags(wholeword=True)
         t3 = self._def_eng.FindAll()
         self.assertTrue(len(t3) == 1, "Found: %d Expected: 1" % len(t3))
+
+        # Find searching in a pool that is a string not Unicode
+        self._def_eng.SetFlags(wholeword=False)
+        self._def_eng.SetFlags(matchcase=False)
+        pool = u"Hello ä".encode('utf-8')
+        self._def_eng.SetSearchPool(pool)
+        self._def_eng.SetQuery(u'ä')
+        t4 = self._def_eng.FindAll()
+        self.assertTrue(len(t4) == 1, "Find Results %s" % repr(t4))
 
     def testWholeWordFind(self):
         """Test find procedure to see if it acuratly returns the correct
