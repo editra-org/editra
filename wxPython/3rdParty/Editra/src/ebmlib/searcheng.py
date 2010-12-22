@@ -57,7 +57,6 @@ class SearchEngine(object):
         self._next = down
         self._matchcase = matchcase
         self._wholeword = wholeword
-        self._unicode = False
         self._query = query
         self._regex = u''
         self._pool = u''
@@ -84,9 +83,18 @@ class SearchEngine(object):
         if not self._matchcase:
             flags |= re.IGNORECASE
 
-        if self._unicode:
+        if type(self._pool) is types.UnicodeType:
             flags |= re.UNICODE
-
+        else:
+            # If the pools is not Unicode also make sure that the
+            # query is a string too.
+            if type(tmp) is types.UnicodeType:
+                try:
+                    tmp = tmp.encode('utf-8')
+                except UnicodeEncodeError:
+                    # TODO: better error reporting about encoding issue?
+                    self._regex = None
+                    return
         try:
             self._regex = re.compile(tmp, flags)
         except:
@@ -378,9 +386,7 @@ class SearchEngine(object):
         """
         del self._pool
         self._pool = pool
-        if isinstance(self._pool, types.UnicodeType):
-            self._unicode = True
-            self._CompileRegex()
+        self._CompileRegex()
 
     def SetQuery(self, query):
         """Set the search query

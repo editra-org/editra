@@ -23,6 +23,7 @@ BUG FIXES:
 +Fix issue with incorrect dwell events being sent causing the calltip popups
 to be shown when they shouldn't even after the mouse has left the window.
 +Fix bug in RemoveAllBookmarks method when called from EditraStc instance.
++Fix Unicode handling issue in Replace All feature.
 
 #-----------------------------------------------------------------------------#
 
