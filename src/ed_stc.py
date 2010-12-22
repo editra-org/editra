@@ -259,7 +259,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         Sends notifications for bookmark removal.
 
         """
-        super(EditraStc, self).RemoveAllBookmark()
+        super(EditraStc, self).RemoveAllBookmarks()
         mdata = dict(stc=self, added=False, line=-1)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_BOOKMARK, mdata)
 
