@@ -24,6 +24,8 @@ BUG FIXES:
 to be shown when they shouldn't even after the mouse has left the window.
 +Fix bug in RemoveAllBookmarks method when called from EditraStc instance.
 +Fix Unicode handling issue in Replace All feature.
++Fix issue where cursor would still appear active in the text buffer even when
+it did not have the keyboard focus.
 
 #-----------------------------------------------------------------------------#
 

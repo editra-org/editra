@@ -79,6 +79,8 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         self._lprio = 0     # Idle event priority counter
         self._menu = ContextMenuManager()
         self._spell = STCSpellCheck(self, check_region=self.IsNonCode)
+        self._caret_w = 1
+        self._focused = True
         spref = Profile_Get('SPELLCHECK', default=dict())
         self._spell_data = dict(choices=list(),
                                 word=('', -1, -1),
@@ -135,6 +137,20 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         if self.IsLoading():
             return
 
+        # Handle hiding and showing the caret when the window gets loses focus
+        cfocus = self.FindFocus()
+        if not self._focused and cfocus is self:
+            # Focus has just returned to the window
+            self.SetCaretWidth(self._caret_w)
+            self._focused = True
+        elif self._focused and cfocus is not self:
+            cwidth = self.GetCaretWidth()
+            if cwidth > 0:
+                self._caret_w = cwidth
+            self.SetCaretWidth(0) # Hide the caret when not active
+            self._focused = False
+
+        # Check for changes to on disk file
         if not self._has_dlg and Profile_Get('CHECKMOD'):
             cfile = self.GetFileName()
             lmod = GetFileModTime(cfile)
