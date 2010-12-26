@@ -6,6 +6,11 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.9
+
++Ensure that process exit status is output to a new line in the output buffer
+
+#-----------------------------------------------------------------------------#
 Version 1.8
 
 +Fix compatibility issue with Python 2.6.4 and later
