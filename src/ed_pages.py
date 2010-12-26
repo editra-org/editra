@@ -1021,9 +1021,10 @@ class EdPages(aui.AuiNotebook):
 
         """
         if wx.GetApp().IsActive():
-            page = self.GetCurrentPage()
-            if page is not None:
-                page.DoOnIdle()
+            for idx in range(self.GetPageCount()):
+                page = self.GetPage(idx)
+                if page is not None and page.IsShown():
+                    page.DoOnIdle()
 
     def OnPageChanging(self, evt):
         """Page changing event handler.
