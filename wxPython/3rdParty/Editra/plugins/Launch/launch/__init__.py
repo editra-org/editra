@@ -8,7 +8,7 @@
 ###############################################################################
 # Plugin Metadata
 """Run the script in the current buffer"""
-__version__ = "1.8"
+__version__ = "1.9"
 
 __author__ = "Cody Precord"
 __svnid__ = "$Id$"
@@ -78,7 +78,7 @@ class Launch(plugin.Plugin):
         return item
 
     def GetMinVersion(self):
-        return "0.4.89"
+        return "0.6.0"
 
     def GetName(self):
         """The name of this plugin"""

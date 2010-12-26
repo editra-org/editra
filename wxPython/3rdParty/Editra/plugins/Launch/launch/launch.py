@@ -746,7 +746,21 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
 
     def DoProcessExit(self, code=0):
         """Do all that is needed to be done after a process has exited"""
-        self.AppendUpdate(">>> %s: %d%s" % (_("Exit Code"), code, os.linesep))
+        # Peek in the queue to see the last line before the exit line
+        queue = self.GetUpdateQueue()
+        prepend_nl = True
+        if len(queue):
+            line = queue[-1]
+        else:
+            line = self.GetLine(self.GetLineCount() - 1)
+        if line.endswith('\n') or line.endswith('\r'):
+            prepend_nl = False
+        final_line = u">>> %s: %d%s" % (_("Exit Code"), code, os.linesep)
+        # Add an extra line feed if necessary to make sure the final line
+        # is output on a new line.
+        if prepend_nl:
+            final_line = os.linesep + final_line
+        self.AppendUpdate(final_line)
         self.Stop()
         self.GetParent().SetProcessRunning(False)
 

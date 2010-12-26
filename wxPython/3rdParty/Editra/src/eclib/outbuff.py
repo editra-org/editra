@@ -307,6 +307,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.DoHotSpotClicked(pos, self.LineFromPosition(pos))
 
     #---- Public Member Functions ----#
+
     def AppendUpdate(self, value):
         """Buffer output before adding to window. This method can safely be
         called from non gui threads to add updates to the buffer, that will
@@ -424,6 +425,13 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
 
         """
         return wx.Colour(*self._colors['warnf'])
+
+    def GetUpdateQueue(self):
+        """Gets a copy of the current update queue"""
+        self._updating.acquire()
+        val = list(self._updates)
+        self._updating.release()
+        return val
 
     def IsRunning(self):
         """Return whether the buffer is running and ready for output
