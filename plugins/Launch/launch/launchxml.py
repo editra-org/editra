@@ -39,7 +39,6 @@ import xml.sax as sax
 import re
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../../src/'))
 
 # Editra Imports
 import syntax
@@ -256,20 +255,20 @@ class CommandList(syntax.EditraXml):
 #-----------------------------------------------------------------------------#
 
 # Test
-if __name__ == '__main__':
-    h = LaunchXml()
-#    sax.parseString(xml_spec, h)
-    f = open("launch.xml", 'rb')
-    txt = f.read()
-    f.close()
-    sax.parseString(txt, h)
-    hndlr = h.GetHandler('Python')
-    print hndlr.GetCommands()
-    print hndlr.GetErrorPattern()
-    print hndlr.GetDefaultCommand()
-    print hndlr.GetHotSpotPattern()
+#if __name__ == '__main__':
+#    h = LaunchXml()
+##    sax.parseString(xml_spec, h)
+#    f = open("launch.xml", 'rb')
+#    txt = f.read()
+#    f.close()
+#    sax.parseString(txt, h)
+#    hndlr = h.GetHandler('Python')
+#    print hndlr.GetCommands()
+#    print hndlr.GetErrorPattern()
+#    print hndlr.GetDefaultCommand()
+#    print hndlr.GetHotSpotPattern()
 
-    print h.GetHandlers()
+#    print h.GetHandlers()
 
-    hndlr = h.GetHandler('C')
-    print hndlr.GetCommands()
+#    hndlr = h.GetHandler('C')
+#    print hndlr.GetCommands()

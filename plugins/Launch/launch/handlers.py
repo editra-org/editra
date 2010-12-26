@@ -44,6 +44,7 @@ import sys
 import re
 
 # Editra Libraries
+import util
 import eclib.outbuff as outbuff
 import syntax.synglob as synglob
 
@@ -121,7 +122,13 @@ def InitCustomHandlers(path):
     if os.path.exists(path):
         lxml = launchxml.LaunchXml()
         lxml.SetPath(path)
-        loaded = lxml.LoadFromDisk()
+        loaded = False
+        try:
+            loaded = lxml.LoadFromDisk()
+        except AssertionError, msg:
+            # XML Parsing error
+            util.Log("[Launch][err] Failed to load custom Handlers")
+            util.Log("[Launch][err] XML Parsing Error: %s" % msg)
 
         if loaded:
             for hndlr in lxml.GetHandlers().values():
