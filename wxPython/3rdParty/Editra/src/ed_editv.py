@@ -31,7 +31,7 @@ import ed_tab
 from doctools import DocPositionMgr
 from profiler import Profile_Get
 from util import Log, SetClipboardText
-from ebmlib import GetFileModTime, ContextMenuManager
+from ebmlib import GetFileModTime, ContextMenuManager, GetFileName
 
 # External libs
 from extern.stcspellcheck import STCSpellCheck
@@ -247,6 +247,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         menu.Append(ed_glob.ID_CLOSE_OTHERS, _("Close Other Tabs"))
         menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
         menu.AppendSeparator()
+        menu.Append(ed_glob.ID_COPY_FILE, _("Copy Filename"))
         menu.Append(ed_glob.ID_COPY_PATH, _("Copy Full Path"))
         return menu
 
@@ -314,9 +315,11 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     def OnTabMenu(self, evt):
         """Tab menu event handler"""
         e_id = evt.GetId()
-        if e_id == ed_glob.ID_COPY_PATH:
+        if e_id in (ed_glob.ID_COPY_PATH, ed_glob.ID_COPY_FILE):
             path = self.GetFileName()
             if path is not None:
+                if e_id == ed_glob.ID_COPY_FILE:
+                    path = GetFileName(path)
                 SetClipboardText(path)
         elif e_id == ed_glob.ID_MOVE_TAB:
             frame = wx.GetApp().OpenNewWindow()

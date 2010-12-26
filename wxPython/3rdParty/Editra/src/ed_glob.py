@@ -268,6 +268,7 @@ ID_CDROM             = wx.NewId()
 ID_COMMAND_LINE_OPEN = wx.NewId()
 ID_COMPUTER          = wx.NewId()
 ID_COPY_PATH         = wx.NewId()
+ID_COPY_FILE         = wx.NewId()
 ID_DELETE            = wx.NewId()
 ID_DOCPROP           = wx.NewId()
 ID_DOWN              = wx.ID_DOWN
