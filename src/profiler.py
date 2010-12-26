@@ -421,6 +421,8 @@ def GetProfileStr():
     profile = reader.readline()
     profile = profile.split("\n")[0] # strip newline from end
     reader.close()
+    if not os.path.isabs(profile):
+        profile = CONFIG['PROFILE_DIR'] + profile
     return profile
 
 def ProfileIsCurrent():
@@ -484,8 +486,7 @@ def UpdateProfileLoader():
         Profile_Set('MYPROFILE', prof_name)
 
     # Use just the relative profile name for local(portable) config paths
-    if CONFIG['ISLOCAL']:
-        prof_name = os.path.basename(prof_name)
+    prof_name = os.path.basename(prof_name)
 
     writer.write(prof_name)
     writer.write(u"\nVERSION\t" + VERSION)
