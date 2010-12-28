@@ -437,6 +437,7 @@ class EdPages(aui.AuiNotebook):
         dsource = evt.GetDragSource()
         if isinstance(dsource, EdPages):
             evt.Allow()
+            wx.CallAfter(self.UpdateIndexes)
 
     def OnDragFinished(self, evt):
         self.UpdateIndexes()
