@@ -105,6 +105,7 @@ class EdPages(aui.AuiNotebook):
         self.SetMinMaxTabWidth(125, 135)
 
         # Notebook Events
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnPageClosing)
@@ -116,6 +117,7 @@ class EdPages(aui.AuiNotebook):
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_RIGHT_UP, self.OnTabMenu)
         self.Bind(aui.EVT_AUINOTEBOOK_ALLOW_DND, self.OnAllowDnD)
         self.Bind(aui.EVT_AUINOTEBOOK_END_DRAG, self.OnDragFinished)
+        self.Bind(aui.EVT_AUINOTEBOOK_DRAG_DONE, self.OnDragFinished)
 
         self.Bind(wx.stc.EVT_STC_CHANGE, self.OnUpdatePageText)
         self.Bind(wx.EVT_MENU, self.OnMenu)
@@ -134,10 +136,11 @@ class EdPages(aui.AuiNotebook):
 
     #---- End Init ----#
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnThemeChanged)
-        ed_msg.Unsubscribe(self.OnUpdatePosCache)
-        ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnThemeChanged)
+            ed_msg.Unsubscribe(self.OnUpdatePosCache)
+            ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
 
     #---- Function Definitions ----#
     
@@ -1248,7 +1251,7 @@ class EdPages(aui.AuiNotebook):
         """
         # If icons preference has been disabled then clear all icons
         if not Profile_Get('TABICONS'):
-            for page in xrange(self.GetPageCount()):
+            for page in range(self.GetPageCount()):
                 super(EdPages, self).SetPageImage(page, -1)
         else:
             # Reload the image list with new icons from the ArtProvider
@@ -1268,7 +1271,7 @@ class EdPages(aui.AuiNotebook):
 
     def UpdateIndexes(self):
         """Update all page indexes"""
-        pages = [self.GetPage(page) for page in xrange(self.GetPageCount())]
+        pages = [self.GetPage(page) for page in range(self.GetPageCount())]
         for idx, page in enumerate(pages):
             page.SetTabIndex(idx)
 
