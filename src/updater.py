@@ -295,19 +295,22 @@ class UpdateProgress(wx.Gauge, UpdateService):
             self.SetWindowVariant(wx.WINDOW_VARIANT_LARGE)
 
         #---- Bind Events ----#
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(wx.EVT_TIMER, self.OnUpdate, id = self.ID_TIMER)
 
         # Disable bar till caller is ready to use it
         self.Disable()
 
-    def __del__(self):
+    def OnDestroy(self, evt):
         """Cleans up when the control is destroyed
         @postcondition: if timer is running it is stopped before deletion
 
         """
-        if self._timer.IsRunning():
-            self.LOG("[updater][info]UpdateProgress: __del__, stopped timer")
-            self._timer.Stop()
+        if evt.GetId() == self.GetId():
+            if self._timer.IsRunning():
+                self.LOG("[updater][info]UpdateProgress: __del__, stopped timer")
+                self._timer.Stop()
+        evt.Skip()
 
     def Abort(self):
         """Overides the UpdateService abort function
@@ -606,16 +609,19 @@ class DownloadDialog(wx.Frame):
         #---- Bind Events ----#
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(wx.EVT_TIMER, self.OnUpdate, id=self.ID_TIMER)
 
-    def __del__(self):
+    def OnDestroy(self, evt):
         """Cleans up on exit
         @postcondition: if timer was running it is stopped
 
         """
-        if self._timer.IsRunning():
-            self.LOG('[updater][info] DownloadDialog: __del__ Timer Stopped')
-            self._timer.Stop()
+        if evt.GetId() == self.GetId():
+            if self._timer.IsRunning():
+                self.LOG('[updater][info] DownloadDialog: __del__ Timer Stopped')
+                self._timer.Stop()
+        evt.Skip()
 
     def CalcDownRate(self):
         """Calculates and returns the approximate download rate

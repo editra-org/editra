@@ -67,6 +67,7 @@ class EdStatBar(ProgressStatusBar):
                              kind=wx.ITEM_CHECK)
 
         # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_TIMER, self.OnExpireMessage,
@@ -81,12 +82,13 @@ class EdStatBar(ProgressStatusBar):
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnUpdateDoc, ed_msg.EDMSG_UI_STC_LEXER)
 
-    def __del__(self):
+    def OnDestroy(self, evt):
         """Unsubscribe from messages"""
-        ed_msg.Unsubscribe(self.OnProgress)
-        ed_msg.Unsubscribe(self.OnUpdateText)
-        ed_msg.Unsubscribe(self.OnUpdateDoc)
-        super(EdStatBar, self).__del__()
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnProgress)
+            ed_msg.Unsubscribe(self.OnUpdateText)
+            ed_msg.Unsubscribe(self.OnUpdateDoc)
+        evt.Skip()
 
     def __SetStatusText(self, txt, field):
         """Safe method to use for setting status text with CallAfter.

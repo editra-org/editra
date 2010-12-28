@@ -200,12 +200,15 @@ class PrefTools(eclib.SegmentBook):
         # Event Handlers
         self.Bind(eclib.EVT_SB_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(eclib.EVT_SB_PAGE_CHANGING, self.OnPageChanging)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
 
         # Message Handlers
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnThemeChange)
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnThemeChange)
+        evt.Skip()
 
     def __InitImgList(self):
         """Setup the image list for the SegmentBook"""

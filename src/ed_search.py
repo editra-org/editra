@@ -1219,6 +1219,7 @@ class SearchResultScreen(eclib.ControlBox):
         self._cancelb.Disable()
 
         # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(wx.EVT_BUTTON,
                   lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
         self.Bind(wx.EVT_BUTTON,
@@ -1229,8 +1230,10 @@ class SearchResultScreen(eclib.ControlBox):
         # Message Handlers
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnThemeChange)
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnThemeChange)
+        evt.Skip()
 
     def __DoLayout(self):
         """Layout and setup the results screen ui"""

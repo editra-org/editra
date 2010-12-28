@@ -107,6 +107,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         # TODO: decide on whether this belongs in base class or not
         self.Bind(wx.EVT_KILL_FOCUS, lambda evt: self.HidePopups())
         self.Bind(wx.EVT_LEFT_UP, self.OnSetFocus)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
 
         ed_msg.Subscribe(self.OnConfigMsg,
                          ed_msg.EDMSG_PROFILE_CHANGE + ('SPELLCHECK',))
@@ -117,9 +118,10 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         ed_msg.Subscribe(self.OnConfigMsg,
                          ed_msg.EDMSG_PROFILE_CHANGE + ('SYNTAX',))
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnConfigMsg)
-        super(EdEditorView, self).__del__()
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnConfigMsg)
+        evt.Skip()
 
     #---- EdTab Methods ----#
 

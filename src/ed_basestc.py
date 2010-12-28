@@ -103,14 +103,17 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         self.RegisterImages()
 
         # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(wx.stc.EVT_STC_CHANGE, self.OnChanged)
         self.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModified)
         self.Bind(wx.stc.EVT_STC_AUTOCOMP_SELECTION, self.OnAutoCompSel)
 
-    def __del__(self):
-        # Cleanup the file object callbacks
-        self.file.RemoveModifiedCallback(self.FireModified)
-        self.file.CleanUp()
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            # Cleanup the file object callbacks
+            self.file.RemoveModifiedCallback(self.FireModified)
+            self.file.CleanUp()
+        evt.Skip()
 
     #---- Public Methods ----#
 
