@@ -271,6 +271,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # Frame
         self.Bind(wx.EVT_ACTIVATE, self.OnActivate)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(ed_event.EVT_STATUS, self.OnStatus)
 
         # Find Dialog
@@ -313,8 +314,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     __name__ = u"MainWindow"
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnUpdateFileHistory)
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnUpdateFileHistory)
+        evt.Skip()
 
     #---- End Private Member Functions/Variables ----#
 

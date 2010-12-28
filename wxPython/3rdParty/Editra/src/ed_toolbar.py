@@ -47,20 +47,25 @@ class EdToolBar(wx.ToolBar):
         sstyle = wx.TB_HORIZONTAL | wx.NO_BORDER
         if wx.Platform == '__WXGTK__':
             sstyle = sstyle | wx.TB_DOCKABLE
-        wx.ToolBar.__init__(self, parent, style=sstyle)
+        super(EdToolBar, self).__init__(parent, style=sstyle)
 
         # Attributes
         self._theme = Profile_Get('ICONS')
         self.SetToolBitmapSize(Profile_Get('ICON_SZ', 'size_tuple'))
         self._PopulateTools()
 
+        # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
+
         # Message Handlers
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
         self.Realize()
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnThemeChange)
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnThemeChange)
+        evt.Skip()
 
     #---- End Init ----#
 

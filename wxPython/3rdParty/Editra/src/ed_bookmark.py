@@ -146,10 +146,13 @@ class BookmarkWindow(eclib.ControlBox):
         ed_msg.Subscribe(self.OnBookmark, ed_msg.EDMSG_UI_STC_BOOKMARK)
 
         # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnItemActivate, self._list)
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnBookmark)
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnBookmark)
+        evt.Skip()
 
     def OnBookmark(self, msg):
         """Bookmark added or removed callback"""

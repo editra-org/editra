@@ -304,6 +304,7 @@ class SearchBar(CommandBarBase):
             self.ctrl.SetSizeHints(180, 16, 180, 16)
 
         # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
@@ -314,9 +315,10 @@ class SearchBar(CommandBarBase):
         cfg = state.get(self.GetConfigKey(), dict())
         self.SetControlStates(cfg)
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnThemeChange)
-        self._sctrl.RemoveClient(self)
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnThemeChange)
+            self._sctrl.RemoveClient(self)
 
     def OnButton(self, evt):
         """Handle button clicks for the next/previous buttons
@@ -476,12 +478,17 @@ class CommandExecuter(eclib.CommandEntryBase):
         else:
             self._popup = PopupWinList(self)
 
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(ed_event.EVT_NOTIFY, self.OnPopupNotify)
+
+        # Message handlers
         ed_msg.Subscribe(self._UpdateCwd, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self._UpdateCwd, ed_msg.EDMSG_FILE_SAVED)
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self._UpdateCwd)
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self._UpdateCwd)
+        evt.Skip()
 
     def _AdjustSize(self):
         """Checks width of text as its added and dynamically resizes

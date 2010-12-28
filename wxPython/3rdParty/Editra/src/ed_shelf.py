@@ -158,12 +158,16 @@ class EdShelfBook(aui.AuiNotebook):
         self.SetImageList(self._imglst)
         self.SetSashDClickUnsplit(True)
 
+        # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
+
         # Message handlers
         ed_msg.Subscribe(self.OnUpdateTabs, ed_msg.EDMSG_THEME_NOTEBOOK)
 
-    def __del__(self):
-        ed_msg.Unsubscribe(self.OnUpdateTabs)
-        super(EdShelfBook, self).__del__()
+    def OnDestroy(self, evt):
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnUpdateTabs)
+        evt.Skip()
 
     @property
     def ImgIdx(self):

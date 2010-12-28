@@ -65,7 +65,7 @@ class EdPages(aui.AuiNotebook):
                 aui.AUI_NB_ORDER_BY_ACCESS
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
-        aui.AuiNotebook.__init__(self, parent, id_num, agwStyle=style)
+        super(EdPages, self).__init__(parent, id_num, agwStyle=style)
 
         # Notebook attributes
         self.LOG = wx.GetApp().GetLog()

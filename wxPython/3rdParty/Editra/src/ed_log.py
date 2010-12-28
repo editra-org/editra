@@ -111,13 +111,15 @@ class LogViewer(eclib.ControlBox):
         self.Bind(wx.EVT_BUTTON,
                   lambda evt: self._buffer.Clear(), id=wx.ID_CLEAR)
         self.Bind(wx.EVT_CHOICE, self.OnChoice, self._srcfilter)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
         # Message Handlers
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
-    def __del__(self):
+    def OnDestroy(self, evt):
         """Cleanup and unsubscribe from messages"""
-        ed_msg.Unsubscribe(self.OnThemeChange)
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.OnThemeChange)
 
     def __DoLayout(self):
         """Layout the log viewer window"""
@@ -199,13 +201,17 @@ class LogBuffer(eclib.OutputBuffer):
         self.StyleSetSpec(LogBuffer.ERROR_STYLE,
                           "face:%s,size:%d,fore:#FFFFFF,back:%s" % style)
 
+        # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
+
         # Subscribe to Editra's Log
         ed_msg.Subscribe(self.UpdateLog, ed_msg.EDMSG_LOG_ALL)
 
-    def __del__(self):
-        """Unregister from recieving any more log messages"""
-        ed_msg.Unsubscribe(self.UpdateLog, ed_msg.EDMSG_LOG_ALL)
-        super(LogBuffer, self).__del__()
+    def OnDestroy(self, evt):
+        """Unregister from receiving any more log messages"""
+        if evt.GetId() == self.GetId():
+            ed_msg.Unsubscribe(self.UpdateLog, ed_msg.EDMSG_LOG_ALL)
+        evt.Skip()
 
     def AddFilter(self, src):
         """Add a new filter source
