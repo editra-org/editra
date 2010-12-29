@@ -291,10 +291,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._handlers['menu'].extend(addons.GetEventHandlers())
         self._handlers['ui'].extend(addons.GetEventHandlers(ui_evt=True))
         shelf = ed_shelf.Shelf(plgmgr)
-        shelf.Init(self)
-        self._handlers['ui'].extend(shelf.GetUiHandlers())
-        self._shelf = ed_shelf.Shelf.delegate
-        ed_shelf.Shelf.delegate = None
+        self._shelf = shelf.Init(self)
+        self._handlers['ui'].extend(shelf.GetUiHandlers(self._shelf))
 
         self.LOG("[ed_main][info] Loading Generator plugins")
         generator.Generator(plgmgr).InstallMenu(menbar.GetMenuByName("tools"))

@@ -64,20 +64,21 @@ class Shelf(plugin.Plugin):
     """
     SHELF_NAME = u'Shelf'
     observers = plugin.ExtensionPoint(iface.ShelfI)
-    delegate = None
 
-    def GetUiHandlers(self):
+    def GetUiHandlers(self, delegate):
         """Gets the update ui handlers for the shelf's menu
+        @param delegate: L{EdShelfDelegate} instance
         @return: [(ID, handler),]
 
         """
-        handlers = [ (item.GetId(), Shelf.delegate.UpdateShelfMenuUI)
+        handlers = [ (item.GetId(), delegate.UpdateShelfMenuUI)
                      for item in self.observers ]
         return handlers
 
     def Init(self, parent):
         """Mixes the shelf into the parent window
         @param parent: Reference to MainWindow
+        @return: L{EdShelfDelegate}
 
         """
         # First check if the parent has an instance already
@@ -98,11 +99,7 @@ class Shelf(plugin.Plugin):
         mgr.Update()
 
         # Create the delegate
-        # Parent MUST take ownership and clear the class variable before
-        # another call to Init is made.
         delegate = EdShelfDelegate(shelf, self)
-        assert Shelf.delegate is None, "Delegate not cleared!"
-        Shelf.delegate = delegate
 
         # Install Shelf menu under View and bind event handlers
         view = parent.GetMenuBar().GetMenuByName("view")
@@ -131,6 +128,7 @@ class Shelf(plugin.Plugin):
                 observer.InstallComponents(parent)
 
         delegate.StockShelf(Profile_Get('SHELF_ITEMS', 'list', []))
+        return delegate
 
 #--------------------------------------------------------------------------#
 
@@ -145,7 +143,7 @@ class EdShelfBook(aui.AuiNotebook):
                 aui.AUI_NB_DRAW_DND_TAB
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
-        aui.AuiNotebook.__init__(self, parent, agwStyle=style)
+        super(EdShelfBook, self).__init__(parent, agwStyle=style)
 
         # Attributes
         self._parent = parent
@@ -296,7 +294,7 @@ class EdShelfDelegate(object):
         @param pobject: Reference to the plugin object
 
         """
-        object.__init__(self)
+        super(EdShelfDelegate, self).__init__()
 
         # Attributes
         self._log = wx.GetApp().GetLog()
