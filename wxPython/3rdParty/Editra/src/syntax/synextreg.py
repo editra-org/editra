@@ -352,7 +352,7 @@ EXT_MAP = {
            'lsp'                : LANG_NEWLISP,
            'lt'                 : LANG_LOUT,
            'lua'                : LANG_LUA,
-           'mak makefile'       : LANG_MAKE,
+           'mak makefile mk'    : LANG_MAKE,
            'mao mako'           : LANG_MAKO,
            'asm masm'           : LANG_MASM,
            'matlab'             : LANG_MATLAB,
