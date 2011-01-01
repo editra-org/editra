@@ -14,6 +14,7 @@ is the L{UpdateProgress} bar it displays the progress of the network action and
 provides a higher level interface into the L{UpdateService}.
 
 @summary: Utilities and controls for updating Editra
+@todo: This module could benefit from a bit of a re-write...
 
 """
 
@@ -22,7 +23,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import os
 import sys
 import stat
@@ -65,7 +66,7 @@ class UpdateService(object):
     def __GetUrlHandle(self, url):
         """Gets a file handle for the given url. The caller is responsible for
         closing the handle.
-        @requires: network conection
+        @requires: network connection
         @param url: url to get page from
         @return: all text from the given url
 
@@ -131,12 +132,12 @@ class UpdateService(object):
         """Parses the project website front page for the most
         recent version of the program.
         @requires: network connection
-        @return: verision number of latest available program
+        @return: version number of latest available program
 
         """
         page = self.GetPageText(ed_glob.HOME_PAGE + "/version.php?check=True")
         found = re.findall(RE_VERSION, page)
-        if False:#len(found):
+        if len(found):
             return found[0] # Should be the first/only match found
         else:
             util.Log("[updater][warn] UpdateService.GetCurrentVersionStr "
@@ -248,7 +249,7 @@ class UpdateThread(threading.Thread):
         @param jobId: job identification id will be set as event id on finish
 
         """
-        threading.Thread.__init__(self)
+        super(UpdateThread, self).__init__()
 
         # Attributes
         self.parent = parent
@@ -556,7 +557,7 @@ class DownloadDialog(wx.Frame):
         @param title: Title of dialog
 
         """
-        wx.Frame.__init__(self, parent, id_, title, style=style)
+        super(DownloadDialog, self).__init__(parent, id_, title, style=style)
         util.SetWindowIcon(self)
 
         #---- Attributes/Objects ----#
@@ -704,4 +705,4 @@ class DownloadDialog(wx.Frame):
         wx.GetApp().RegisterWindow(repr(self), self, True)
         self._timer.Start(1000) # One pulse every second
         self._progress.DownloadUpdates()
-        wx.Frame.Show(self)
+        super(DownloadDialog, self).Show()
