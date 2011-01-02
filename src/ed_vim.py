@@ -75,6 +75,7 @@ class EditraCommander(object):
 
     """
     def __init__(self, keyprocessor):
+        super(EditraCommander, self).__init__()
 
         # Attributes
         self.keyprocessor = keyprocessor
@@ -970,7 +971,7 @@ def Dot(editor, repeat, cmd):
     if editor.IsInsertMode():
         editor.NormalMode() # in case it was a 'c' command
 
-@vim_parser('hjkl', is_motion=True)
+@vim_parser('hjkl\r \x08', is_motion=True)
 def Arrows(editor, repeat, cmd):
     """Basic arrow movement in vim.
     @see: vim_parser
@@ -981,6 +982,9 @@ def Arrows(editor, repeat, cmd):
             u'j': editor.MoveDown,
             u'k': editor.MoveUp,
             u'l': editor.MoveRight,
+            u'\r': editor.MoveDown,
+            u' ' : editor.MoveRight,
+            u'\x08' : editor.MoveLeft
           }
     cmd_map[cmd](repeat)
 
