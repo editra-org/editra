@@ -1,6 +1,6 @@
 /* Editra Style Sheet
- * white_space style undefined
- * License: wxWindows License
+ * Name: Dessert
+ * Missing { }'s in the sheet for parser test
  */
 default_style {
         fore:#CCCCCC;
@@ -9,7 +9,7 @@ default_style {
         size:%(size)d;
 }
 
-number2_style {
+number2_style 
         fore:#CCCCCC;
 }
 
@@ -39,7 +39,7 @@ guide_style {
 
 keyword4_style {
         fore:#CCCCCC;
-}
+
 
 ideol_style {
         fore:#CCCCCC;

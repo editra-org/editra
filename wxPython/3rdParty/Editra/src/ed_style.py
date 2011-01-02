@@ -699,6 +699,7 @@ class StyleMgr(object):
         # Compact data into a contiguous string
         style_data = style_data.replace(u"\r\n", u"").replace(u"\n", u"")
         style_data = style_data.replace(u"\t", u"")
+        style_data = style_data.replace(u" ", u"")
 
         ## Build style data tree
         # Tree Level 1 split tag from data
@@ -715,7 +716,8 @@ class StyleMgr(object):
                 self.LOG("[ed_style][err] There was an error parsing "
                          "the syntax data from " + self.style_set)
                 self.LOG("[ed_style][err] Missing a { or } in Def: " + branch[0].split()[0])
-                ttree.remove(style)
+                ttree.remove(branch)
+                continue
 
             tmp2 = [leaf.strip().split(u":")
                     for leaf in branch[1].strip().split(u";")]
