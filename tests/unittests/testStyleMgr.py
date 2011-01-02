@@ -188,9 +188,25 @@ class StyleMgrTest(unittest.TestCase):
 
     def testParseStyleData(self):
         """Test parsing Editra Style Sheets"""
+        # Test valid style sheet
         data = common.GetFileContents(self.stylesheet)
         styledict = self.mgr.ParseStyleData(data)
         for tag, item in styledict.iteritems():
+            self.assertTrue(isinstance(tag, types.UnicodeType), "%s Is not Unicode!" % tag)
+            self.assertTrue(isinstance(item, ed_style.StyleItem))
+        # Test loading sheet with malformed data
+        sheet_path = common.GetDataFilePath('incorrect_syntax.ess')
+        data = common.GetFileContents(sheet_path)
+        styledict2 = self.mgr.ParseStyleData(data)
+        self.assertTrue(len(styledict) > len(styledict2))
+        for tag, item in styledict2.iteritems():
+            self.assertTrue(isinstance(tag, types.UnicodeType), "%s Is not Unicode!" % tag)
+            self.assertTrue(isinstance(item, ed_style.StyleItem))
+        # Test stylesheet that is all on one line
+        sheet_path = common.GetDataFilePath('one_liner.ess')
+        data = common.GetFileContents(sheet_path)
+        styledict3 = self.mgr.ParseStyleData(data)
+        for tag, item in styledict3.iteritems():
             self.assertTrue(isinstance(tag, types.UnicodeType), "%s Is not Unicode!" % tag)
             self.assertTrue(isinstance(item, ed_style.StyleItem))
 

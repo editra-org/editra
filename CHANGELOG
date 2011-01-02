@@ -31,6 +31,8 @@ it did not have the keyboard focus.
 +Fix incorrect tab activation that could occur after doing a tab drag and drop
 operation from an external notebook.
 +Fix bug in update checker that would cause the check for an update to fail.
++Fix bug in style sheet parser that could lead to a crash when loading a
+malformed Editra style sheet.
 
 #-----------------------------------------------------------------------------#
 
