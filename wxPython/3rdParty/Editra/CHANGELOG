@@ -17,6 +17,8 @@ NEWS:
 NEW: [features/enhancements]
 +Improve Python AutoIndenter to better handle brackets (patch from Jens)
 +Add Copy Filename option to tab menu (patch from Michael Rans)
++Extend Vi emulation mode to support motions for Enter, Space, and Backspace
+
 
 BUG FIXES:
 +Fix Python 2.5 compatibility issue.
