@@ -19,7 +19,6 @@ NEW: [features/enhancements]
 +Add Copy Filename option to tab menu (patch from Michael Rans)
 +Extend Vi emulation mode to support motions for Enter, Space, and Backspace
 
-
 BUG FIXES:
 +Fix Python 2.5 compatibility issue.
 +Fix Unicode handling issue in Python completer.
@@ -35,6 +34,7 @@ operation from an external notebook.
 +Fix bug in update checker that would cause the check for an update to fail.
 +Fix bug in style sheet parser that could lead to a crash when loading a
 malformed Editra style sheet.
++Fix Cut/Delete line commands for when the selection includes the last line.
 
 #-----------------------------------------------------------------------------#
 
