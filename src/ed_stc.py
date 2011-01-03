@@ -1307,10 +1307,16 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """
         return self.recording
 
-    def LineDelete(self): # pylint: disable-msg=W0221
-        """Delete the selected lines without modifying the clipboard"""
+    def GetSelectionLineStartEnd(self):
+        """Get the start and end positions of the lines in the current
+        fuzzy selection.
+        @return: tuple (int, int)
+
+        """
         sline = self.LineFromPosition(self.GetSelectionStart())
         eline = self.LineFromPosition(self.GetSelectionEnd())
+        last_line = self.GetLineCount() - 1
+        eol_len = len(self.GetEOLChar())
         if sline < eline:
             tstart = self.GetLineStartPosition(sline)
             tend = self.GetLineEndPosition(eline)
@@ -1318,8 +1324,26 @@ class EditraStc(ed_basestc.EditraBaseStc):
             tstart = self.GetLineStartPosition(eline)
             tend = self.GetLineEndPosition(sline)
 
-        self.SetTargetStart(tstart)
-        self.SetTargetEnd(tend + len(self.GetEOLChar()))
+        if eline == last_line and tstart != 0:
+            tstart -= eol_len
+        else:
+            tend += eol_len
+
+        return (max(tstart, 0), min(tend, self.GetLength()))
+
+    def LineCut(self): # pylint: disable-msg=W0221
+        """Cut the selected lines into the clipboard"""
+        start, end = self.GetSelectionLineStartEnd()
+        self.SetSelection(start, end)
+        self.BeginUndoAction()
+        self.Cut()
+        self.EndUndoAction()
+
+    def LineDelete(self): # pylint: disable-msg=W0221
+        """Delete the selected lines without modifying the clipboard"""
+        start, end = self.GetSelectionLineStartEnd()
+        self.SetTargetStart(start)
+        self.SetTargetEnd(end)
         self.BeginUndoAction()
         self.ReplaceTarget(u'')
         self.EndUndoAction()
