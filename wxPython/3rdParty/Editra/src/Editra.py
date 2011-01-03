@@ -820,6 +820,9 @@ def InitConfig():
         if wx.Platform == '__WXMSW__':
             profiler.Profile_Set('EOL_MODE', ed_glob.EOL_MODE_CRLF)
             profiler.Profile_Set('ICONSZ', (16, 16))
+        elif wx.Platform == '__WXMAC__':
+            # Default to 32x32 toolbar icons on OSX
+            profiler.Profile_Set('ICONSZ', (32, 32))
 
     #---- Profile Loaded / Installed ----#
 
