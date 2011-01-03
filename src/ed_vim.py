@@ -630,16 +630,19 @@ class EditraCommander(object):
         if not text:
             return
 
-        if self._IsLine(text):
+        bIsLine = self._IsLine(text)
+        if bIsLine:
             self.GotoLineStart()
             if not before:
                 self.MoveDown()
 
+        self.BeginUndoAction()
         if self.HasSelection():
             # paste over selection, if any
             self.stc.Clear()
+        elif not bIsLine:
+            self.stc.CharRight()
 
-        self.BeginUndoAction()
         for i in range(repeat):
             self.InsertText(text)
         self.EndUndoAction()
