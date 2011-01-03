@@ -123,15 +123,15 @@ Section "Editra Core" SEC01
 
   ; Add the shortcuts to the start menu and desktop
   CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Editra.lnk" "$INSTDIR\Editra.exe" "" "$INSTDIR\${MUI_ICON}"
-  CreateShortCut "$DESKTOP\Editra.lnk" "$INSTDIR\Editra.exe"  "" "$INSTDIR\${MUI_ICON}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\${MUI_ICON}"
+  CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe"  "" "$INSTDIR\${MUI_ICON}"
 SectionEnd
 
 ; Enabled if Add openwith entry is checked
 Section "Context Menus" SEC02
   SectionIn 1
   WriteRegStr HKCR "*\shell\OpenWithEditra" "" "Edit with ${PRODUCT_NAME}"
-  WriteRegStr HKCR "*\shell\OpenWithEditra\command" "" '$INSTDIR\Editra.exe "%1"'
+  WriteRegStr HKCR "*\shell\OpenWithEditra\command" "" '$INSTDIR\${PRODUCT_NAME}.exe "%1"'
 ;  WriteRegStr HKCR "*\shell\OpenWithEditra\DefaultIcon" "" "$INSTDIR\Editra.exe,1"
 
   ; Notify of the shell extension changes
@@ -141,7 +141,7 @@ SectionEnd
 ; Add QuickLaunch Icon (That small icon bar next to the start button)
 Section "Add Quick Launch Icon" SEC03
   SectionIn 1
-  CreateShortCut "$QUICKLAUNCH\Editra.lnk" "$INSTDIR\Editra.exe"
+  CreateShortCut "$QUICKLAUNCH\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe"
 SectionEnd
 
 ; Make/Install Shortcut links
@@ -155,7 +155,7 @@ SectionEnd
 Section -Post
   ;---- Write registry keys for uninstaller
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\Editra.exe"
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\${PRODUCT_NAME}.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\Editra.exe"
@@ -166,13 +166,13 @@ SectionEnd
 
 ; Called if Run Editra is checked on the last page of installer
 Function LaunchEditra
-  Exec '"$INSTDIR\Editra.exe" "$INSTDIR\CHANGELOG" '
+  Exec '"$INSTDIR\${PRODUCT_NAME}.exe" "$INSTDIR\CHANGELOG" '
 FunctionEnd
 
 ; Description Texts for Component page
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Required core program files"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Add context menu item 'Edit with Editra'"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Add context menu item 'Edit with ${PRODUCT_NAME}'"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Add shortcut to Quick Launch Bar"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;------------------------------- End Installer --------------------------------
@@ -193,8 +193,8 @@ Section Uninstall
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk"
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\Editra.lnk"
-  Delete "$DESKTOP\Editra.lnk"
-  Delete "$QUICKLAUNCH\Editra.lnk"
+  Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+  Delete "$QUICKLAUNCH\${PRODUCT_NAME}.lnk"
   RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
 
   ; Cleanup Registry
