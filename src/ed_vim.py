@@ -150,9 +150,14 @@ class EditraCommander(object):
         @param repeat: int
 
         """
+        cline = self.stc.GetCurrentLine()
+        lline = self.stc.GetLineCount() - 1
         self.GotoLineStart()
+        if cline == lline:
+            cpos = self.stc.GetCurrentPos() - len(self.stc.GetEOLChar())
+            cpos = max(0, cpos)
+            self.stc.GotoPos(cpos)
         self.PushCaret()
-        self.GotoLineStart()
         self.MoveDown(repeat)
         self.StartSelection()
         self.PopCaret()
@@ -244,7 +249,7 @@ class EditraCommander(object):
 
     def EndSelection(self):
         """Set the selection to start from the starting position as it was set
-        by StartSeletion to the current caret position
+        by StartSelection to the current caret position
 
         It doesn't matter whether the starting position is before or after the
         ending position
@@ -521,7 +526,7 @@ class EditraCommander(object):
         self._NextIdent(repeat)
 
     def PrevIdent(self, repeat=1):
-        """Find the previos occurance of identifier under cursor"""
+        """Find the previous occurrence of identifier under cursor"""
         self._NextIdent(repeat, back=True)
 
     def InsertText(self, text):
@@ -1122,9 +1127,11 @@ def Change(editor, repeat, cmd):
         cmd, motion = cmd[0], cmd[1:]
         if motion.isdigit():
             return ret(NeedMore)
+
         motion_repeat, motion_cmd = SplitRepeat(motion)
         if motion_repeat:
             repeat = repeat * motion_repeat
+
         if motion_cmd == cmd:
             # Operate on whole line
             line_motion = True
