@@ -497,7 +497,12 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if set_ext != u'':
             ext = set_ext.lower()
         else:
-            ext = self.file.GetExtension()
+            ext = self.file.GetExtension().lower()
+
+        if ext == u'':
+            fname = self.GetFileName()
+            ext = ebmlib.GetFileName(fname).lower()
+
         self.ClearDocumentStyle()
 
         # Configure Lexer from File Extension
@@ -510,12 +515,15 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             if interp != wx.EmptyString:
                 interp = interp.split(u"/")[-1]
                 interp = interp.strip().split()
-                if len(interp) and interp[-1][0] != "-":
+                if len(interp) and interp[-1][0] != u"-":
                     interp = interp[-1]
                 elif len(interp):
                     interp = interp[0]
                 else:
                     interp = u''
+                # TODO: should check user config to ensure the explict
+                #       extension is still associated with the expected
+                #       file type.
                 ex_map = { "python" : "py", "wish" : "tcl", "ruby" : "rb",
                            "bash" : "sh", "csh" : "csh", "perl" : "pl",
                            "ksh" : "ksh", "php" : "php", "booi" : "boo",
