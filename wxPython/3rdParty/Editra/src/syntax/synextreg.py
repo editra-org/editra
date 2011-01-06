@@ -84,6 +84,8 @@ ID_LANG_AS = _NewId()
 LANG_AS = u'ActionScript'
 ID_LANG_C = _NewId()
 LANG_C = u'C'
+ID_LANG_CILK = _NewId()
+LANG_CILK = u'Cilk'
 ID_LANG_CPP = _NewId()
 LANG_CPP = u'CPP'
 ID_LANG_CSHARP = _NewId()
@@ -318,6 +320,7 @@ EXT_MAP = {
            'boo'                : LANG_BOO,
            'c h'                : LANG_C,
            'ml mli'             : LANG_CAML,
+           'cilk cilkh'         : LANG_CILK,
            'cobra'              : LANG_COBRA,
            'cfm cfc cfml dbm'   : LANG_COLDFUSION,
            'cc c++ cpp cxx hh h++ hpp hxx' : LANG_CPP,
