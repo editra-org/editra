@@ -9,7 +9,7 @@
 """
 FILE: cpp.py                                                                
 @author: Cody Precord                                                       
-@summary: Lexer configuration file for C/C++/C#/Objective C/Vala source files.
+@summary: Lexer configuration file for C/C++/C#/Objective C/Vala/Cilk source files.
                                                                          
 """
 
@@ -96,6 +96,11 @@ VALA_TYPES = ("bool byte char class const decimal double enum explicit extern "
               "short static string struct uint ulong unichar unsafe ushort var "
               "volatile void virtual")
 
+# Cilk Keywords
+CILK_KEYWORDS = ("abort private shared spawn sync SYNCHED")
+
+CILK_TYPES = ("cilk inlet")
+
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [ (stc.STC_C_DEFAULT, 'default_style'),
                  (stc.STC_C_COMMENT, 'comment_style'),
@@ -155,6 +160,9 @@ class SyntaxData(syndata.SyntaxDataBase):
         elif self.LangId == synglob.ID_LANG_VALA:
             kw1_str = [VALA_KEYWORDS]
             kw2_str = [VALA_TYPES]
+        elif self.LangId == synglob.ID_LANG_CILK:
+            kw1_str.append(CILK_KEYWORDS)
+            kw2_str.append(CILK_TYPES)
         else:
             pass
 
