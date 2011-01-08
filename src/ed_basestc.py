@@ -550,6 +550,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             #       for multibyte characters.
             line, col = self.GetCurLine()
             col = self.GetColumn(self.GetCurrentPos())
+        line = line.expandtabs(self.GetTabWidth())
         cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
                        self._code['compsvc'].GetAutoCompFillups())
         for key in self._code['compsvc'].GetAutoCompKeys():

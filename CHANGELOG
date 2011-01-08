@@ -38,6 +38,7 @@ operation from an external notebook.
 malformed Editra style sheet.
 +Fix Cut/Delete line commands for when the selection includes the last line.
 +Fix Put command behavior in vi emulation to put it after the current carat position.
++Fix Python autocompletion for documents that have tabs in them.
 
 #-----------------------------------------------------------------------------#
 
