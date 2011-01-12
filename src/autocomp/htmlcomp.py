@@ -103,7 +103,7 @@ class Completer(completer.BaseCompleter):
         """Returns the list of possible completions for a
         command string. If namespace is not specified the lookup
         is based on the locals namespace
-        @param command: commadn lookup is done on
+        @param command: command lookup is done on
         @keyword namespace: namespace to do lookup in
 
         """
@@ -117,11 +117,14 @@ class Completer(completer.BaseCompleter):
         if buff.GetStyleAt(cpos) not in HTML_AREA:
             return list()
 
+        # Get current context
         cline = buff.GetCurrentLine()
-
+        ccol = buff.GetColumn(cpos)
         tmp = buff.GetLine(cline).rstrip()
+        if ccol < len(tmp):
+            tmp = tmp[:ccol].rstrip()
 
-        # Check if we are completing an open tag
+        # Check if we are completing an open tag (i.e < was typed)
         if tmp.endswith('<'):
             if buff.GetLexer() == wx.stc.STC_LEX_XML:
                 taglst = _FindXmlTags(buff.GetText())
@@ -129,8 +132,15 @@ class Completer(completer.BaseCompleter):
                 taglst = TAGS
             return completer.CreateSymbols(taglst, completer.TYPE_ELEMENT)
 
+        # Check for a self closing tag (i.e />)
+        endchk = tmp.strip().replace(u" ", u"").replace(u"\t", u"")
+        if endchk.endswith(u"/>"):
+            return list()
+
+        # Try to autocomplete a closing tag (if necessary)
         tmp = tmp.rstrip('>').rstrip()
         if len(tmp) and (tmp[-1] in '"\' \t' or tmp[-1].isalpha()):
+            # Walk backwards from the current line
             for line in range(cline, -1, -1):
                 txt = buff.GetLine(line)
                 if line == cline:
@@ -145,11 +155,6 @@ class Completer(completer.BaseCompleter):
                            tag not in ('img', 'br', '?php', '?xml', '?') and \
                            not tag[0] in ('!', '/'):
                             rtag = u"</" + tag + u">"
-                            if tag in NLINE_TAGS:
-                                buff.BeginUndoAction()
-                                buff.AutoIndent()
-                                buff.BackTab()
-                                buff.EndUndoAction()
 
                             if not parts[-1].endswith('>'):
                                 rtag = u">" + rtag
@@ -169,7 +174,6 @@ class Completer(completer.BaseCompleter):
             buff.SetCurrentPos(pos) # move caret back between the tags
             # HACK: SetCurrentPos causes text to be selected
             buff.SetSelection(pos, pos)
-            buff.AutoIndent()
 
 #--------------------------------------------------------------------------#
 
