@@ -109,7 +109,7 @@ class ConfigDialog(wx.Frame):
         @keyword: The filetype to set
 
         """
-        wx.Frame.__init__(self, parent, title=_("Launch Configuration"))
+        super(ConfigDialog, self).__init__(parent, title=_("Launch Configuration"))
 
         # Layout
         util.SetWindowIcon(self)
@@ -148,7 +148,7 @@ class ConfigDialog(wx.Frame):
 class ConfigNotebook(wx.Notebook):
     """Notebook for holding config pages"""
     def __init__(self, parent):
-        wx.Notebook.__init__(self, parent)
+        super(ConfigNotebook, self).__init__(parent)
 
         # Make sure config has been initialized
         prefs = Profile_Get(LAUNCH_PREFS, default=None)
@@ -171,17 +171,22 @@ class ConfigNotebook(wx.Notebook):
 
         # Setup
         self.AddPage(ConfigPanel(self), _("General"))
+        self.AddPage(OutputPanel(self), _("Output"))
         self.AddPage(MiscPanel(self), _("Misc"))
 
-    def __del__(self):
+        # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
+
+    def OnDestroy(self, event):
         ed_msg.PostMessage(EDMSG_LAUNCH_CFG_EXIT)
+        event.Skip()
 
 #-----------------------------------------------------------------------------#
 
 class ConfigPanel(wx.Panel):
     """Configuration panel that holds the controls for configuration"""
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+        super(ConfigPanel, self).__init__(parent)
 
         # Layout
         self.__DoLayout()
@@ -205,7 +210,7 @@ class ConfigPanel(wx.Panel):
         else:
             lang_ch.SetStringSelection(htypes[0])
 
-        lsizer.AddMany([(wx.StaticText(self, label=_("File Type") + ":"), 0,
+        lsizer.AddMany([(wx.StaticText(self, label=_("File Type") + u":"), 0,
                          wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                         (lang_ch, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
 
@@ -225,7 +230,7 @@ class ConfigPanel(wx.Panel):
         else:
             pass
 
-        dsizer.AddMany([(wx.StaticText(self, label=_("Default") + ":"), 0,
+        dsizer.AddMany([(wx.StaticText(self, label=_("Default") + u":"), 0,
                          wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
                         (def_ch, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)])
 
@@ -385,10 +390,10 @@ class ConfigPanel(wx.Panel):
 
 #-----------------------------------------------------------------------------#
 
-class MiscPanel(wx.Panel):
-    """Misc settings panel"""
+class OutputPanel(wx.Panel):
+    """Output buffer settings panel"""
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+        super(OutputPanel, self).__init__(parent)
 
         # Attributes
 
@@ -410,7 +415,7 @@ class MiscPanel(wx.Panel):
 
         # Actions Configuration
         clear_cb = wx.CheckBox(self, ID_AUTOCLEAR,
-                               _("Automatically clear buffer between runs"))
+                               _("Automatically clear output buffer between runs"))
         clear_cb.SetValue(cfg.get('autoclear', False))
         error_cb = wx.CheckBox(self, ID_ERROR_BEEP,
                                _("Audible feedback when errors are detected"))
@@ -500,6 +505,55 @@ class MiscPanel(wx.Panel):
             Profile_Get(LAUNCH_PREFS)[color] = evt.GetValue().Get()
         else:
             evt.Skip()
+
+#-----------------------------------------------------------------------------#
+
+class MiscPanel(wx.Panel):
+    """Misc settings panel"""
+    def __init__(self, parent):
+        super(MiscPanel, self).__init__(parent)
+
+        # Attributes
+        self.savecb = None
+        self.saveallcb = None
+
+        # Layout
+        self.__DoLayout()
+
+        # Event Handlers
+        self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
+
+    def __DoLayout(self):
+        """Layout the panel"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        cfg = Profile_Get(LAUNCH_PREFS, default=dict())
+
+        # Editor options
+        ebox = wx.StaticBox(self, label=_("Editor Options"))
+        eboxsz = wx.StaticBoxSizer(ebox, wx.VERTICAL)
+        lbl = _("Automatically save current file before running")
+        self.savecb = wx.CheckBox(self, label=lbl)
+        self.savecb.SetValue(cfg.get('autosave', False))
+        lbl = _("Automatically save all open files before running")
+        self.saveallcb = wx.CheckBox(self, label=lbl)
+        self.saveallcb.SetValue(cfg.get('autosaveall', False))
+        eboxsz.Add(self.savecb, 0, wx.ALL, 3)
+        eboxsz.Add(self.saveallcb, 0, wx.ALL, 3)
+        sizer.Add(eboxsz, 0, wx.EXPAND|wx.ALL, 5)
+
+        self.SetSizer(sizer)
+
+    def OnCheck(self, event):
+        """Update the configuration"""
+        e_obj = event.GetEventObject()
+        value = e_obj.GetValue()
+        cfg = Profile_Get(LAUNCH_PREFS, default=dict())
+        if e_obj is self.savecb:
+            cfg['autosave'] = value
+        elif e_obj is self.saveallcb:
+            cfg['autosaveall'] = value
+        else:
+            event.Skip()
 
 #-----------------------------------------------------------------------------#
 ID_BROWSE = wx.NewId()
