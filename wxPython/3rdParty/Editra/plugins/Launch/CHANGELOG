@@ -9,6 +9,7 @@
 Version 1.9
 
 +Add Auto Save buffer before running option.
++Add default handlers for C/C++ files.
 +Ensure that process exit status is output to a new line in the output buffer
 +Trap and log XML parsing assertions instead of crashing when invalid Launch
 XML is encountered.

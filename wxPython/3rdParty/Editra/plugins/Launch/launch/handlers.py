@@ -181,7 +181,9 @@ class FileTypeHandler(object):
 
     """
     def __init__(self):
-        object.__init__(self)
+        super(FileTypeHandler, self).__init__()
+
+        # Attributes
         self.commands = dict()
         self.default = ''
 
@@ -308,7 +310,7 @@ class FileTypeHandler(object):
 class AdaHandler(FileTypeHandler):
     """FileTypeHandler for Ada"""
     def __init__(self):
-        FileTypeHandler.__init__(self)
+        super(AdaHandler, self).__init__()
         self.commands = {'gcc -c' : 'gcc -c'}
         self.default = 'gcc -c'
 
@@ -321,7 +323,7 @@ class BashHandler(FileTypeHandler):
     RE_BASH_ERROR = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
 
     def __init__(self):
-        FileTypeHandler.__init__(self)
+        super(BashHandler, self).__init__()
         self.commands = dict(bash='bash')
         self.default = 'bash'
 
@@ -369,7 +371,7 @@ class BashHandler(FileTypeHandler):
 class BatchHandler(FileTypeHandler):
     """FileTypeHandler for Dos batch files"""
     def __init__(self):
-        FileTypeHandler.__init__(self)
+        super(BatchHandler, self).__init__()
         self.commands = dict(cmd='cmd /c')
         self.default = 'cmd'
 
@@ -380,11 +382,31 @@ class BatchHandler(FileTypeHandler):
 class BooHandler(FileTypeHandler):
     """FileTypeHandler for Boo"""
     def __init__(self):
-        FileTypeHandler.__init__(self)
+        super(BooHandler, self).__init__()
         self.commands = dict(booi='booi')
         self.default = 'booi'
 
     __name__ = 'boo'
+
+#-----------------------------------------------------------------------------#
+
+class CHandler(FileTypeHandler):
+    """FileTypeHandler for C Files"""
+    def __init__(self):
+        super(CHandler, self).__init__()
+        self.commands = {'gcc -c' : 'gcc -c'}
+        self.default = 'gcc -c'
+
+    __name__ = 'c'
+
+class CPPHandler(FileTypeHandler):
+    """FileTypeHandler for C++ Files"""
+    def __init__(self):
+        super(CPPHandler, self).__init__()
+        self.commands = {'g++ -c' : 'g++ -c'}
+        self.default = 'g++ -c'
+
+    __name__ = 'cpp'
 
 #-----------------------------------------------------------------------------#
 
@@ -393,7 +415,7 @@ class CamlHandler(FileTypeHandler):
     RE_CAML_ERROR = re.compile(r'File "(.+)", line (.+), characters .+:')
 
     def __init__(self):
-        FileTypeHandler.__init__(self)
+        super(CamlHandler, self).__init__()
         self.commands = dict(ocaml='ocaml')
         self.default = 'ocaml'
 
@@ -998,7 +1020,9 @@ HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
             synglob.ID_LANG_BASH    : BashHandler(),
             synglob.ID_LANG_BATCH   : BatchHandler(),
             synglob.ID_LANG_BOO     : BooHandler(),
+            synglob.ID_LANG_C       : CHandler(),
             synglob.ID_LANG_CAML    : CamlHandler(),
+            synglob.ID_LANG_CPP     : CPPHandler(),
             synglob.ID_LANG_CSH     : CSHHandler(),
             synglob.ID_LANG_D       : DHandler(),
             synglob.ID_LANG_FERITE  : FeriteHandler(),
