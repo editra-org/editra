@@ -539,9 +539,17 @@ class LaunchWindow(eclib.ControlBox):
 
     def StartStopProcess(self):
         """Run or abort the context of the current process if possible"""
-        if self._prefs.get('autoclear'):
+        if self._prefs.get('autoclear', False):
             self._buffer.Clear()
 
+        # Check Auto-save preferences
+        if not self._busy:
+            if self._prefs.get('autosaveall', False):
+                self._mw.SaveAllBuffers()
+            elif self._prefs.get('autosave', False):
+                self._mw.SaveCurrentBuffer()
+
+        # Start or stop the process
         self.SetProcessRunning(not self._busy)
         if self._busy:
             util.Log("[Launch][info] Starting process")
