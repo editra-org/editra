@@ -637,6 +637,39 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         else:
             evt.Skip()
 
+    def SaveFile(self, tablbl, buf):
+        """Save the given page in the notebook
+        @param tablbl: main notebook tab label
+        @param buf: EdEditView instance
+        @note: intended for internal use! method signature may change
+
+        """
+        fname = ebmlib.GetFileName(buf.GetFileName())
+        if fname != u'':
+            fpath = buf.GetFileName()
+            result = buf.SaveFile(fpath)
+            self._last_save = fpath
+            if result:
+                self.PushStatusText(_("Saved File: %s") % fname, SB_INFO)
+            else:
+                err = buf.GetDocument().GetLastError()
+                self.PushStatusText(_("ERROR: %s") % err, SB_INFO)
+                ed_mdlg.SaveErrorDlg(self, fname, err)
+                buf.GetDocument().ResetAll()
+        else:
+            self.OnSaveAs(ID_SAVEAS, tablbl, buf)
+
+    def SaveCurrentBuffer(self):
+        """Save the file in the currently selected editor buffer"""
+        page = self.nb.GetSelection()
+        self.SaveFile(self.nb.GetPageText(page), self.nb.GetCurrentCtrl())
+
+    def SaveAllBuffers(self):
+        """Save all open editor buffers"""
+        for page in xrange(self.nb.GetPageCount()):
+            if isinstance(self.nb.GetPage(page), wx.stc.StyledTextCtrl):
+                self.SaveFile(self.nb.GetPageText(page), self.nb.GetPage(page))
+
     def OnSave(self, evt):
         """Save Current or All Buffers
         @param evt: Event fired that called this handler
@@ -644,39 +677,13 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         e_id = evt.GetId()
-        ctrls = list()
         if e_id == ID_SAVE:
-            page = self.nb.GetSelection()
-            ctrls = [(self.nb.GetPageText(page),
-                      self.nb.GetCurrentCtrl(), page)]
+            self.SaveCurrentBuffer()
         elif e_id == ID_SAVEALL:
-            # Collect all open editor buffers
-            for page in xrange(self.nb.GetPageCount()):
-                if issubclass(self.nb.GetPage(page).__class__,
-                                           wx.stc.StyledTextCtrl):
-                    ctrls.append((self.nb.GetPageText(page),
-                                  self.nb.GetPage(page), page))
+            self.SaveAllBuffers()
         else:
             evt.Skip()
             return
-
-        # TODO: detect when save fails due to encoding and prompt to
-        #       request an encoding from the user.
-        for ctrl in ctrls:
-            fname = ebmlib.GetFileName(ctrl[1].GetFileName())
-            if fname != '':
-                fpath = ctrl[1].GetFileName()
-                result = ctrl[1].SaveFile(fpath)
-                self._last_save = fpath
-                if result:
-                    self.PushStatusText(_("Saved File: %s") % fname, SB_INFO)
-                else:
-                    err = ctrl[1].GetDocument().GetLastError()
-                    self.PushStatusText(_("ERROR: %s") % err, SB_INFO)
-                    ed_mdlg.SaveErrorDlg(self, fname, err)
-                    ctrl[1].GetDocument().ResetAll()
-            else:
-                self.OnSaveAs(ID_SAVEAS, ctrl[0], ctrl[1])
 
     def OnSaveAs(self, evt, title=u'', page=None):
         """Save File Using a new/different name
