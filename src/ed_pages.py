@@ -132,7 +132,7 @@ class EdPages(aui.AuiNotebook):
 
         # Add a blank page
         self.NewPage()
-        self._idletimer.Start(333) # Do idle checks 3 times a second
+        self._idletimer.Start(400)
 
     #---- End Init ----#
 
@@ -501,6 +501,7 @@ class EdPages(aui.AuiNotebook):
 
         """
         sel = evt.GetSelection()
+        self.LOG("[ed_pages][evt] OnMClickUp: %d" % sel)
         if sel == self.mdown:
             self.ClosePage()
         self.mdown = -1
@@ -855,12 +856,9 @@ class EdPages(aui.AuiNotebook):
 
         """
         current_page = self.GetSelection()
-        if current_page < 0:
-            return current_page
-
-        control = self.GetPage(current_page)
-#        control.SetFocus()
-        self.control = control
+        if current_page >= 0:
+            control = self.GetPage(current_page)
+            self.control = control
         return current_page
 
     def GotoPage(self, fname):
@@ -1061,7 +1059,6 @@ class EdPages(aui.AuiNotebook):
 
         # Get the window that is the current page
         window = self.GetPage(pg_num)
-#        window.SetFocus()
         self.control = window
 
         # Update Frame Title
