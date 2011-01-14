@@ -4341,9 +4341,6 @@ class AuiNotebook(wx.PyPanel):
         dest_tabs = self.GetTabCtrlFromPoint(client_pt)
         
         if dest_tabs == src_tabs:
-            if src_tabs:
-                src_tabs.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
-            
             # always hide the hint for inner-tabctrl drag
             self._mgr.HideHint()
 
@@ -4436,9 +4433,6 @@ class AuiNotebook(wx.PyPanel):
         if not self._agwFlags & AUI_NB_TAB_SPLIT:
             return
 
-        if src_tabs:
-            src_tabs.SetCursor(wx.StockCursor(wx.CURSOR_SIZING))
-        
         if dest_tabs:
             
             hint_rect = dest_tabs.GetRect()
@@ -4481,8 +4475,6 @@ class AuiNotebook(wx.PyPanel):
         src_tabs = event.GetEventObject()
         if not src_tabs:
             raise Exception("no source object?")
-
-        src_tabs.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
 
         # get the mouse position, which will be used to determine the drop point
         mouse_screen_pt = wx.GetMousePosition()
@@ -4696,9 +4688,6 @@ class AuiNotebook(wx.PyPanel):
         src_tabs = event.GetEventObject()
         if not src_tabs:
             raise Exception("no source object?")
-
-        src_tabs.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
-
 
     def IsMouseWellOutsideWindow(self):
         """ Returns whether the mouse is well outside the L{AuiNotebook} screen rectangle. """
