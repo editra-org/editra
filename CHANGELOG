@@ -41,6 +41,7 @@ malformed Editra style sheet.
 +Fix Python autocompletion for documents that have tabs in them.
 +Fix some issues in the Xml/Html autocompleter that would incorrectly insert
 closing tags for tags that didn't require them.
++Fix bug in displaying errors for plugins that couldn't load.
 
 #-----------------------------------------------------------------------------#
 
