@@ -421,14 +421,14 @@ class ConfigPanel(eclib.ControlBox):
                 item = dist.project_name
                 version = dist.version
             else:
-                version = str(getattr(mod, '__version__', _("Unknown")))
+                version = unicode(getattr(mod, '__version__', _("Unknown")))
 
             pin = PluginData()
             pin.SetName(item)
             pin.SetAuthor(getattr(mod, '__author__', _("Unknown")))
             pin.SetVersion(version)
             pin.SetDist(dist)
-            pbi = PluginErrorItem(self._list, pin, bmp, item)
+            pbi = PluginErrorItem(self._list, pin, msg, bmp=bmp)
 
             self._list.AppendItem(pbi)
             self._list.Thaw()
@@ -1117,21 +1117,22 @@ class PBDownloadItem(PBPluginItem):
 
 class PluginErrorItem(eclib.PanelBoxItemBase):
     """PanelBox Item to display configuration information about a plugin."""
-    def __init__(self, parent, bmp,
-                 title=u'Plugin Name', version=u'0.0',
-                 msg=u'Description', auth='John Doe'):
+    def __init__(self, parent, pdata, msg, bmp):
         """Create the PanelBoxItem
         @param parent: L{PanelBox}
+        @param pdata: PluginData
+        @param msg: error msg
+        @param bmp: Bitmap
 
         """
         super(PluginErrorItem, self).__init__(parent)
 
         # Attributes
         self._bmp = bmp
-        self._title = wx.StaticText(self, label=title)
-        self._version = wx.StaticText(self, label=version)
+        self._title = wx.StaticText(self, label=pdata.GetName())
+        self._version = wx.StaticText(self, label=pdata.GetVersion())
         self._msg = wx.StaticText(self, label=msg)
-        self._auth = wx.StaticText(self, label=_("Author: %s") % auth)
+        self._auth = wx.StaticText(self, label=_("Author: %s") % pdata.GetAuthor())
 
         # Setup
         font = self._title.GetFont()
