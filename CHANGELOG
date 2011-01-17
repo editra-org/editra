@@ -18,6 +18,7 @@ NEW: [features/enhancements]
 
 BUG FIXES:
 +Fix issue that could result in crash when rapidly clicking on notebook buttons.
++Fix minor display issue in update checker gauge.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
