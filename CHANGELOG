@@ -8,8 +8,20 @@ Change Log:
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
+VERSION 0.6.xx
+DATE 0x/xx/2011
+40th Alpha Release
+
+NEWS:
+
+NEW: [features/enhancements]
+
+BUG FIXES:
++Fix issue that could result in crash when rapidly clicking on notebook buttons.
+
+#-----------------------------------------------------------------------------#
 VERSION 0.6.00
-DATE 01/15/2010
+DATE 01/15/2011
 39th Alpha Release
 
 NEWS:
