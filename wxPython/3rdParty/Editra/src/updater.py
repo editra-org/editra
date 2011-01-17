@@ -59,7 +59,7 @@ class UpdateService(object):
     """Defines an updater service object for Editra"""
     def __init__(self):
         """Initializes the Updater Object"""
-        object.__init__(self)
+        super(UpdateService, self).__init__()
         self._abort = False
         self._progress = (0, 100)
 
@@ -266,7 +266,7 @@ class UpdateThread(threading.Thread):
 
         evt = ed_event.NotificationEvent(ed_event.edEVT_NOTIFY,
                                          self.id, (isupdate, result))
-        wx.CallAfter(wx.PostEvent, self.parent, evt)
+        wx.PostEvent(self.parent, evt)
 
 #-----------------------------------------------------------------------------#
 
@@ -322,6 +322,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         UpdateService.Abort(self)
         if self._timer.IsRunning():
             self._timer.Stop()
+        self.SetValue(0)
 
     def CheckForUpdates(self):
         """Checks for updates and activates the bar. In order to keep the
@@ -425,6 +426,9 @@ class UpdateProgress(wx.Gauge, UpdateService):
 
         """
         mode = self.GetMode()
+        if mode not in (self.ID_CHECKING, self.ID_DOWNLOADING):
+            return
+
         progress = self.GetProgress()
         prange = self.GetRange()
         if mode == self.ID_CHECKING:
@@ -459,6 +463,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         if not self._timer.IsRunning():
             self.LOG('[updater][info] UpdateProgress: Starting Timer')
             self.Enable()
+            self.SetValue(0)
             self._timer.Start(msec)
         else:
             pass
@@ -472,10 +477,15 @@ class UpdateProgress(wx.Gauge, UpdateService):
             self.LOG('[updater][info] UpdateProgress: Stopping Clock')
             self._timer.Stop()
             self._mode = 0
+            self.SetValue(self.GetRange())
         else:
             pass
-        self.SetValue(0)
-        self.Disable()
+        self.Enable(False)
+
+    def Pulse(self):
+        if self._mode == 0:
+            return
+        super(UpdateProgress, self).Pulse()
 
     #--- Protected Member Functions ---#
     def _DownloadThread(self, *args):
@@ -485,7 +495,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
         @return: success status of download
 
         """
-        dl_ok = self.GetUpdateFiles("".join(args))
+        dl_ok = self.GetUpdateFiles(u"".join(args))
         return dl_ok
 
     def _ResultNotifier(self, delayedResult):
@@ -495,7 +505,6 @@ class UpdateProgress(wx.Gauge, UpdateService):
 
         """
         jid = delayedResult.getJobID()
-
         try:
             self.LOG("[updater][info] UpdateProgress: Worker thread exited. ID = %d" % jid)
             self._checking = self._downloading = False # Work has finished
@@ -507,6 +516,7 @@ class UpdateProgress(wx.Gauge, UpdateService):
                 mevt = ed_event.UpdateTextEvent(ed_event.edEVT_UPDATE_TEXT, \
                                                 self.ID_CHECKING)
                 wx.PostEvent(self.GetParent(), mevt)
+                self.SetValue(self.GetRange())
             elif jid == self.ID_DOWNLOADING:
                 result = delayedResult.get()
                 self._dl_result = result

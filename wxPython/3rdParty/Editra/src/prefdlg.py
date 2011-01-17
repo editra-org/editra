@@ -1519,7 +1519,7 @@ class UpdatePage(wx.Panel):
         upd_box = wx.StaticBox(self, label=_("Latest Version"))
         upd_bsz = wx.StaticBoxSizer(upd_box, wx.HORIZONTAL)
         upd_bsz.SetMinSize(wx.Size(150, 40))
-        upd_bsz.Add(wx.StaticText(self, ID_UPDATE_MSG, _(e_update.GetStatus())),
+        upd_bsz.Add(wx.StaticText(self, ID_UPDATE_MSG, _("Status Unknown")),
                     0, wx.ALIGN_CENTER_HORIZONTAL)
         upd_bsz.Layout()
 
@@ -1560,6 +1560,7 @@ class UpdatePage(wx.Panel):
         if e_id == ID_CHECK_UPDATE:
             util.Log("[prefdlg][evt] Update Page: Check Update Clicked")
             e_obj.Disable()
+            self.FindWindowById(ID_UPDATE_MSG).SetLabel(_("Checking..."))
             prog_bar = self.FindWindowById(ed_glob.ID_PREF_UPDATE_BAR)
             # Note this function returns right away but its result is
             # handled on a separate thread. This window is then notified
@@ -1593,6 +1594,10 @@ class UpdatePage(wx.Panel):
         nbevt = wx.NotebookEvent(wx.wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED,
                                  0, curr_pg, curr_pg)
         wx.PostEvent(self.GetParent(), nbevt)
+        gauge = self.FindWindowById(ed_glob.ID_PREF_UPDATE_BAR)
+        if gauge:
+            gauge.Stop()
+            gauge.SetValue(100)
         self.Refresh()
 
 #-----------------------------------------------------------------------------#
