@@ -19,6 +19,8 @@ NEW: [features/enhancements]
 BUG FIXES:
 +Fix issue that could result in crash when rapidly clicking on notebook buttons.
 +Fix minor display issue in update checker gauge.
++Fix behavior of left/right arrow key motions in vim emulation mode to better
+emulate vi.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00

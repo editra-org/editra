@@ -120,6 +120,18 @@ class EditraCommander(object):
             self.RepeatChangeCommand(self.InsertRepeat - 1)
             self.InsertRepeat = 1
 
+    def IsAtLineEnd(self):
+        lnum = self.stc.GetCurrentLine()
+        epos = self.stc.GetLineEndPosition(lnum)
+        return epos == self._GetPos()
+
+    def IsAtLineStart(self):
+        """Is the cursor currently at the start of a line
+        @return: bool
+
+        """
+        return self._GetCol() == 0
+
     def Undo(self, repeat):
         """Undo actions in the buffer
         @param repeat: int
@@ -979,7 +991,7 @@ def Dot(editor, repeat, cmd):
     if editor.IsInsertMode():
         editor.NormalMode() # in case it was a 'c' command
 
-@vim_parser('hjkl\r \x08', is_motion=True)
+@vim_parser(u'hjkl\r \x08\u013c\u013a', is_motion=True)
 def Arrows(editor, repeat, cmd):
     """Basic arrow movement in vim.
     @see: vim_parser
@@ -994,7 +1006,16 @@ def Arrows(editor, repeat, cmd):
             u' ' : editor.MoveRight,
             u'\x08' : editor.MoveLeft
           }
-    cmd_map[cmd](repeat)
+    if cmd in cmd_map:
+        cmd_map[cmd](repeat)
+    else:
+        # Handle motion for actual arrow keys
+        if cmd == u'\u013c' and not editor.IsAtLineEnd():
+            # Right arrow
+            editor.MoveRight()
+        elif cmd == u'\u013a' and not editor.IsAtLineStart():
+            # Left Arrow
+            editor.MoveLeft()
 
 @vim_parser('wbeWBE[]', is_motion=True)
 def Words(editor,repeat, cmd):
