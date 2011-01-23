@@ -284,8 +284,12 @@ class EdFile(ebmlib.FileObjectImpl):
             try:
                 stxt = txt.encode(enc)
                 self.encoding = enc
+            except LookupError, msg:
+                Log("[ed_txt][err] Invalid encoding: %s" % enc)
+                Log("[ed_txt][err] %s" % msg)
+                self.SetLastError(unicde(msg))
             except UnicodeEncodeError, msg:
-                Log("[ed_txt][err] Failed to encode text with %s" % self.encoding)
+                Log("[ed_txt][err] Failed to encode text with %s" % enc)
                 Log("[ed_txt][err] %s" % msg)
                 self.SetLastError(unicode(msg))
             else:
