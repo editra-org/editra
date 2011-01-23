@@ -31,6 +31,7 @@ if not hasattr(sys, 'frozen') and 'wx' not in sys.modules:
     import wxversion
     wxversion.ensureMinimal('2.8')
 
+import codecs
 import base64
 import locale
 import getopt
@@ -206,8 +207,18 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             self.locale = None
 
         # Check and set encoding if necessary
-        if not profiler.Profile_Get('ENCODING'):
-            profiler.Profile_Set('ENCODING', locale.getpreferredencoding())
+        d_enc = profiler.Profile_Get('ENCODING')
+        if not d_enc:
+            profiler.Profile_Set('ENCODING', ed_txt.DEFAULT_ENCODING)
+        else:
+            # Ensure the default encoding is valid
+            # Fixes up older installs on some systems that may have an
+            # invalid encoding set.
+            try:
+                codecs.lookup(d_enc)
+            except (LookupError, TypeError):
+                self._log("[app][err] Resetting bad encoding: %s" % d_enc)
+                profiler.Profile_Set('ENCODING', ed_txt.DEFAULT_ENCODING)
 
         # Setup the Error Reporter
         if profiler.Profile_Get('REPORTER', 'bool', True):

@@ -21,6 +21,8 @@ BUG FIXES:
 +Fix minor display issue in update checker gauge.
 +Fix behavior of left/right arrow key motions in vim emulation mode to better
 emulate vi.
++Fix issue where an invalid encoding would be detected as the default encoding
+on some systems.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00

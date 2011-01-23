@@ -39,6 +39,7 @@ import updater
 import util
 import syntax.syntax as syntax
 import ed_msg
+import ed_txt
 import eclib
 import extern.stcspellcheck as stcspellcheck
 
@@ -485,7 +486,7 @@ class GeneralFilePanel(wx.Panel):
         # Encoding options
         d_encoding = Profile_Get('ENCODING',
                                  'str',
-                                 default=locale.getpreferredencoding())
+                                 default=ed_txt.DEFAULT_ENCODING)
         if d_encoding is None:
             d_encoding = 'utf-8'
             Profile_Set('ENCODING', d_encoding)
