@@ -204,7 +204,9 @@ class ViKeyHandler(KeyHandler):
         elif (ctrldown or cmddown) and key_code == ord('['):
             self.NormalMode()
             return True
-        elif key_code in (wx.WXK_RETURN, wx.WXK_BACK) and not self.IsInsertMode():
+        elif key_code in (wx.WXK_RETURN, wx.WXK_BACK,
+                          wx.WXK_RIGHT, wx.WXK_LEFT) and \
+             not self.IsInsertMode():
             # swallow enter key in normal and visual modes
             # HACK: we have to do it form here because ProcessKey
             #       is only called on Char events, not Key events,
