@@ -920,6 +920,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Save Shelf contents
         _PSET('SHELF_ITEMS', self._shelf.GetItemStack())
+        _PSET('SHELF_LAYOUT', self._shelf.GetPerspective())
+        _PSET('SHELF_SELECTION', self._shelf.GetSelection())
 
         # Save Window Size/Position for next launch
         self.UpdateAutoPerspective()
