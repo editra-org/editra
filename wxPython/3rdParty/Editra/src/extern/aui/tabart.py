@@ -566,7 +566,7 @@ class AuiDefaultTabArt(object):
 
         # draw focus rectangle
         if (agwFlags & AUI_NB_NO_TAB_FOCUS) == 0:
-            self.DrawFocusRectangle(dc, page, wnd, draw_text, offset_focus, bitmap_offset, drawn_tab_yoff, drawn_tab_height, textx, texty)
+            self.DrawFocusRectangle(dc, page, wnd, draw_text, offset_focus, bitmap_offset, drawn_tab_yoff, drawn_tab_height, rectx, recty)
         
         out_button_rect = wx.Rect()
         
@@ -1813,7 +1813,7 @@ class VC71TabArt(AuiDefaultTabArt):
         # draw focus rectangle
         if (agwFlags & AUI_NB_NO_TAB_FOCUS) == 0:
             self.DrawFocusRectangle(dc, page, wnd, draw_text, offset_focus, bitmap_offset, drawn_tab_yoff+shift,
-                                    drawn_tab_height+shift, textx, texty)
+                                    drawn_tab_height+shift, rectx, recty)
                 
         # draw 'x' on tab (if enabled)
         if close_button_state != AUI_BUTTON_STATE_HIDDEN:
@@ -2049,7 +2049,7 @@ class FF2TabArt(AuiDefaultTabArt):
         # draw focus rectangle
         if (agwFlags & AUI_NB_NO_TAB_FOCUS) == 0:
             self.DrawFocusRectangle(dc, page, wnd, draw_text, offset_focus, bitmap_offset, drawn_tab_yoff+shift,
-                                    drawn_tab_height, textx, texty)
+                                    drawn_tab_height, rectx, recty)
         
         out_button_rect = wx.Rect()
         # draw 'x' on tab (if enabled)
@@ -2380,7 +2380,7 @@ class VC8TabArt(AuiDefaultTabArt):
         # draw focus rectangle
         if (agwFlags & AUI_NB_NO_TAB_FOCUS) == 0:
             self.DrawFocusRectangle(dc, page, wnd, draw_text, offset_focus, bitmap_offset, drawn_tab_yoff+shift,
-                                    drawn_tab_height+shift, textx, texty)
+                                    drawn_tab_height+shift, rectx, recty)
         
         out_button_rect = wx.Rect()
         # draw 'x' on tab (if enabled)
