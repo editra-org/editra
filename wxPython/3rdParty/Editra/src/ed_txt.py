@@ -520,7 +520,7 @@ class FileReadThread(threading.Thread):
         @param task: generator method to call
 
         """
-        threading.Thread.__init__(self)
+        super(FileReadThread, self).__init__()
 
         # Attributes
         self.cancel = False
@@ -561,7 +561,7 @@ class FileLoadEvent(wx.PyEvent):
     """Event to signal that a chunk of text haes been read"""
     def __init__(self, etype, eid, value=None, state=FL_STATE_READING):
         """Creates the event object"""
-        wx.PyEvent.__init__(self, eid, etype)
+        super(FileLoadEvent, self).__init__(eid, etype)
 
         # Attributes
         self._state = state
