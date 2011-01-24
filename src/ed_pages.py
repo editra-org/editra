@@ -62,7 +62,8 @@ class EdPages(aui.AuiNotebook):
                 aui.AUI_NB_USE_IMAGES_DROPDOWN | \
                 aui.AUI_NB_TAB_EXTERNAL_MOVE | \
                 aui.AUI_NB_TAB_FIXED_WIDTH | \
-                aui.AUI_NB_ORDER_BY_ACCESS
+                aui.AUI_NB_ORDER_BY_ACCESS | \
+                aui.AUI_NB_NO_TAB_FOCUS
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
         super(EdPages, self).__init__(parent, id_num, agwStyle=style)
