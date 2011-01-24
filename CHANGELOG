@@ -15,6 +15,7 @@ DATE 0x/xx/2011
 NEWS:
 
 NEW: [features/enhancements]
++Remember Shelf layout and selected tab when application is restarted.
 
 BUG FIXES:
 +Fix issue that could result in crash when rapidly clicking on notebook buttons.

@@ -128,6 +128,8 @@ class Shelf(plugin.Plugin):
                 observer.InstallComponents(parent)
 
         delegate.StockShelf(Profile_Get('SHELF_ITEMS', 'list', []))
+        delegate.SetPerspective(Profile_Get('SHELF_LAYOUT', 'str', u""))
+        delegate.SetSelection(Profile_Get('SHELF_SELECTION', 'int', -1))
         return delegate
 
 #--------------------------------------------------------------------------#
@@ -140,7 +142,8 @@ class EdShelfBook(aui.AuiNotebook):
                 aui.AUI_NB_SCROLL_BUTTONS | \
                 aui.AUI_NB_CLOSE_ON_ACTIVE_TAB | \
                 aui.AUI_NB_TAB_MOVE | \
-                aui.AUI_NB_DRAW_DND_TAB
+                aui.AUI_NB_DRAW_DND_TAB | \
+                aui.AUI_NB_NO_TAB_FOCUS
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
         super(EdShelfBook, self).__init__(parent, agwStyle=style)
@@ -362,6 +365,28 @@ class EdShelfDelegate(object):
                             self._shelf.GetPageText(page), 1))
         return rval
 
+    def GetSelection(self):
+        """Get the index of the currently selected tab"""
+        if self._shelf:
+            return self._shelf.GetSelection()
+        return -1
+
+    def GetPerspective(self):
+        """Get the auinotebook perspective data
+        @return: string
+
+        """
+        return self._shelf.SavePerspective()
+
+    def SetPerspective(self, pdata):
+        """Set the aui notebooks perspective and layout
+        @param pdata: perspective data string
+
+        """
+        if pdata:
+            self._shelf.LoadPerspective(pdata)
+            self._shelf.Update()
+
     def GetMenu(self):
         """Return the menu of this object
         @return: ed_menu.EdMenu()
@@ -503,6 +528,14 @@ class EdShelfDelegate(object):
                 return ctrl
         else:
             return None
+
+    def SetSelection(self, index):
+        """Select an item in the Shelf window
+        @param index: shelf tab index
+
+        """
+        if self._shelf and index > 0 and index < self._shelf.GetPageCount():
+            self._shelf.SetSelection(index)
 
     def StockShelf(self, i_list):
         """Fill the shelf by opening an ordered list of items
