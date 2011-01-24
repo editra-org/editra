@@ -129,8 +129,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             MainWindow.PRINTER = ed_print.EdPrinter(self)
 
         #---- Setup Toolbar ----#
-        self.SetToolBar(ed_toolbar.EdToolBar(self))
-        self.GetToolBar().Show(_PGET('TOOLBAR'))
+        self.SetupToolBar()
         #---- End Toolbar Setup ----#
 
         #---- Menus ----#
@@ -313,6 +312,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     __name__ = u"MainWindow"
 
     def OnDestroy(self, evt):
+        """Disconnect Message Handlers"""
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnUpdateFileHistory)
         evt.Skip()
@@ -1529,6 +1529,15 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if len(title):
             name = " - " + name
         wx.Frame.SetTitle(self, title + name)
+
+    def SetupToolBar(self):
+        """Setup or reinitialize the windows ToolBar"""
+        tb = self.GetToolBar()
+        if tb:
+            tb.Destroy()
+        self.SetToolBar(ed_toolbar.EdToolBar(self))
+        self.GetToolBar().Show(_PGET('TOOLBAR'))
+        self.Layout()
 
     @classmethod
     def UpdateClipboardRing(cls):

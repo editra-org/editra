@@ -134,7 +134,13 @@ class EdToolBar(wx.ToolBar):
         """
         self._theme = Profile_Get('ICONS')
         csize = self.GetToolBitmapSize()
-        self.SetToolBitmapSize(Profile_Get('ICON_SZ', 'size_tuple'))
+        nsize = Profile_Get('ICON_SZ', 'size_tuple')
+        if nsize != csize:
+            # Size changed must recreate toolbar
+            wx.CallAfter(self.GetParent().SetupToolBar)
+            return
+
+        # Change Bitmaps
         if self.GetToolBitmapSize() == (16, 16):
             client = wx.ART_MENU
         else:
@@ -143,10 +149,3 @@ class EdToolBar(wx.ToolBar):
         for tool_id in TOOL_ID:
             bmp = wx.ArtProvider.GetBitmap(str(tool_id), client)
             self.SetToolNormalBitmap(tool_id, bmp)
-
-        # HACK: to make toolbar resize properly when icon size changes
-        if csize != self.GetToolBitmapSize():
-            self.GetParent().Freeze()
-            self.Hide()
-            self.Show()
-            self.GetParent().Thaw()
