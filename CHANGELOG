@@ -23,6 +23,8 @@ BUG FIXES:
 emulate vi.
 +Fix issue where an invalid encoding would be detected as the default encoding
 on some systems.
++Fix issue where ToolBar would not resize properly when appearance settings
+where changed to use different size icons.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
