@@ -378,7 +378,7 @@ class ControlBar(wx.PyPanel):
         e_id = evt.GetId()
         if e_id in self._tools['simple']:
             cb_evt = ControlBarEvent(edEVT_CTRLBAR, e_id)
-            wx.PostEvent(self.GetParent(), cb_evt)
+            self.GetEventHandler().ProcessEvent(cb_evt)
         else:
             evt.Skip()
 
