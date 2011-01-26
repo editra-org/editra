@@ -1241,6 +1241,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 if not success:
                     msg = _("Failed to reload the file with: %(encoding)s") % dict(encoding=nenc)
                     wx.MessageBox(msg, style=wx.OK|wx.ICON_ERROR)
+                    # Revert to previous encoding
                     doc.SetEncoding(cenc)
                     ctrl.ReloadFile()
             dlg.Destroy()
