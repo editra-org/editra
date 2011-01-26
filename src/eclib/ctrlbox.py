@@ -22,6 +22,7 @@ Styles:
   - CTRLBAR_STYLE_GRADIENT: Draw the bar with a vertical gradient.
   - CTRLBAR_STYLE_BORDER_BOTTOM: add a border to the bottom
   - CTRLBAR_STYLE_BORDER: add a border to the top
+  - CTRLBAR_STYLE_VERTICAL = Vertical ControlBar tool layout
 
 Class ControlBox:
 
@@ -52,6 +53,7 @@ __all__ = ["ControlBox", "CTRLBOX_NAME_STR",
            "ControlBar", "ControlBarEvent",
            "CTRLBAR_STYLE_DEFAULT", "CTRLBAR_STYLE_GRADIENT",
            "CTRLBAR_STYLE_BORDER_TOP", "CTRLBAR_STYLE_BORDER_BOTTOM",
+           "CTRLBAR_STYLE_VERTICAL",
            "EVT_CTRLBAR", "edEVT_CTRLBAR", "CTRLBAR_NAME_STR",
 
            "SegmentBar", "SegmentBarEvent",
@@ -64,8 +66,7 @@ __all__ = ["ControlBox", "CTRLBOX_NAME_STR",
 ]
 
 #--------------------------------------------------------------------------#
-# Dependancies
-import math
+# Dependencies
 import wx
 
 # Local Imports
@@ -88,6 +89,7 @@ CTRLBAR_STYLE_BORDER_BOTTOM = 2     # Add a border to the bottom
 CTRLBAR_STYLE_BORDER_TOP    = 4     # Add a border to the top
 CTRLBAR_STYLE_LABELS        = 8     # Draw labels under the icons (SegmentBar)
 CTRLBAR_STYLE_NO_DIVIDERS   = 16    # Don't draw dividers between segments
+CTRLBAR_STYLE_VERTICAL      = 32    # Control bar in vertical orientation
 
 # Segment Button Options
 SEGBTN_OPT_NONE          = 1     # No options set.
@@ -173,14 +175,25 @@ class ControlBox(wx.PyPanel):
         super(ControlBox, self).__init__(parent, id, pos, size, style, name)
 
         # Attributes
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
-        self._topb = None
+        self._vsizer = wx.BoxSizer(wx.VERTICAL)
+        self._hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        self._cbars = dict()
         self._main = None
-        self._botb = None
 
         # Layout
-        self.SetSizer(self._sizer)
-        self.SetAutoLayout(True)
+        self._hsizer.Add(self._vsizer, 1, wx.EXPAND)
+        self.SetSizer(self._hsizer)
+
+    def _GetCtrlBarSizer(self, pos):
+        """Get the correct sizer for the ControlBar at the given pos
+        @param pos: wx.TOP/LEFT/RIGHT/BOTTOM
+
+        """
+        if pos in (wx.TOP, wx.BOTTOM):
+            sizer = self._vsizer
+        else:
+            sizer = self._hsizer
+        return sizer
 
     def ChangeWindow(self, window):
         """Change the main window area, and return the current window
@@ -191,7 +204,8 @@ class ControlBox(wx.PyPanel):
         rwindow = None
         if self.GetWindow() is None or not isinstance(self._main, wx.Window):
             del self._main
-            if self._topb is None:
+            topb = self.GetControlBar(wx.TOP)
+            if topb is None:
                 self._sizer.Add(window, 1, wx.EXPAND)
             else:
                 self._sizer.Insert(1, window, 1, wx.EXPAND)
@@ -205,30 +219,30 @@ class ControlBox(wx.PyPanel):
     def CreateControlBar(self, pos=wx.TOP):
         """Create a ControlBar at the given position if one does not
         already exist.
-        @keyword pos: wx.TOP (default) or wx.BOTTOM
+        @keyword pos: wx.TOP (default), BOTTOM, LEFT, RIGHT
         @postcondition: A top aligned L{ControlBar} is created.
         @return: ControlBar
 
         """
         cbar = self.GetControlBar(pos)
         if cbar is None:
-            cbar = ControlBar(self, size=(-1, 24),
-                              style=CTRLBAR_STYLE_GRADIENT)
-
+            dsize = (-1, 24)
+            style=CTRLBAR_STYLE_GRADIENT
+            if pos in (wx.LEFT, wx.RIGHT):
+                dsize = (24, -1)
+                style |= CTRLBAR_STYLE_VERTICAL
+            cbar = ControlBar(self, size=dsize, style=style)
             self.SetControlBar(cbar, pos)
         return cbar
 
     def GetControlBar(self, pos=wx.TOP):
         """Get the L{ControlBar} used by this window
-        @param pos: wx.TOP or wx.BOTTOM
+        @param pos: wx.TOP, BOTTOM, LEFT, RIGHT
         @return: ControlBar or None
 
         """
-        if pos == wx.TOP:
-            cbar = self._topb
-        else:
-            cbar = self._botb
-
+        assert pos in (wx.TOP, wx.LEFT, wx.BOTTOM, wx.RIGHT)
+        cbar = self._cbars.get(pos, None)
         return cbar
 
     def GetWindow(self):
@@ -243,62 +257,50 @@ class ControlBox(wx.PyPanel):
         with the given ctrlbar and return the bar that was
         replaced or None.
         @param ctrlbar: L{ControlBar}
-        @keyword pos: Postion
+        @keyword pos: Position
         @return: L{ControlBar} or None
 
         """
+        assert isinstance(ctrlbar, ControlBar)
+        assert pos in (wx.TOP, wx.BOTTOM, wx.LEFT, wx.RIGHT)
         tbar = self.GetControlBar(pos)
         rbar = None
-        if pos == wx.TOP:
-            if tbar is None:
-                self._sizer.Insert(0, ctrlbar, 0, wx.EXPAND)
-            else:
-                self._sizer.Replace(self._topb, ctrlbar)
-                rbar = self._topb
-
-            self._topb = ctrlbar
+        sizer = self._GetCtrlBarSizer(pos)
+        if tbar is None and pos in (wx.TOP, wx.LEFT):
+            sizer.Insert(0, ctrlbar, 0, wx.EXPAND)
+        elif tbar is None and pos in (wx.BOTTOM, wx.RIGHT):
+            sizer.Add(ctrlbar, 0, wx.EXPAND)
         else:
-            if tbar is None:
-                self._sizer.Add(ctrlbar, 0, wx.EXPAND)
-            else:
-                self._sizer.Replace(self._botb, ctrlbar)
-                rbar = self._botb
+            sizer.Replace(tbar, ctrlbar)
+            rbar = tbar
 
-            self._botb = ctrlbar
+        self._cbars[pos] = ctrlbar
 
         return rbar
 
     def SetControlBar(self, ctrlbar, pos=wx.TOP):
         """Set the ControlBar used by this ControlBox
         @param ctrlbar: L{ControlBar}
-        @keyword pos: wx.TOP/wx.BOTTOM
+        @keyword pos: wx.TOP/wx.BOTTOM/wx.LEFT/wx.RIGHT
 
         """
+        assert isinstance(ctrlbar, ControlBar)
+        assert pos in (wx.TOP, wx.BOTTOM, wx.LEFT, wx.RIGHT)
         tbar = self.GetControlBar(pos)
-        if pos == wx.TOP:
-            if tbar is None:
-                self._sizer.Insert(0, ctrlbar, 0, wx.EXPAND)
-            else:
-                self._sizer.Replace(self._topb, ctrlbar)
-
-                try:
-                    self._topb.Destroy()
-                except wx.PyDeadObjectError:
-                    pass
-
-            self._topb = ctrlbar
+        sizer = self._GetCtrlBarSizer(pos)
+        if tbar is None and pos in (wx.TOP, wx.LEFT):
+            sizer.Insert(0, ctrlbar, 0, wx.EXPAND)
+        elif tbar is None and pos in (wx.BOTTOM, wx.RIGHT):
+            sizer.Add(ctrlbar, 0, wx.EXPAND)
         else:
-            if tbar is None:
-                self._sizer.Add(ctrlbar, 0, wx.EXPAND)
-            else:
-                self._sizer.Replace(self._botb, ctrlbar)
+            sizer.Replace(tbar, ctrlbar)
 
-                try:
-                    self._botb.Destroy()
-                except wx.PyDeadObjectError:
-                    pass
+            try:
+                tbar.Destroy()
+            except wx.PyDeadObjectError:
+                pass
 
-            self._botb = ctrlbar
+        self._cbars[pos] = ctrlbar
 
     def SetWindow(self, window):
         """Set the main window control portion of the box. This will be the
@@ -307,15 +309,16 @@ class ControlBox(wx.PyPanel):
 
         """
         if self.GetWindow() is None:
-            if (self._topb and self._botb is None) or \
-               (self._topb is None and self._botb is None):
-                self._sizer.Add(window, 1, wx.EXPAND)
-            elif self._botb and self._topb is None:
-                self._sizer.Insert(0, window, 1, wx.EXPAND)
+            topb = self.GetControlBar(wx.TOP)
+            botb = self.GetControlBar(wx.BOTTOM)
+            if (topb and botb is None) or (topb is None and botb is None):
+                self._vsizer.Add(window, 1, wx.EXPAND)
+            elif botb and topb is None:
+                self._vsizer.Insert(0, window, 1, wx.EXPAND)
             else:
-                self._sizer.Insert(1, window, 1, wx.EXPAND)
+                self._vsizer.Insert(1, window, 1, wx.EXPAND)
         else:
-            self._sizer.Replace(self._main, window)
+            self._vsizer.Replace(self._main, window)
 
             try:
                 self._main.Destroy()
@@ -339,9 +342,15 @@ class ControlBar(wx.PyPanel):
         super(ControlBar, self).__init__(parent, id, pos, size,
                                          wx.TAB_TRAVERSAL|wx.NO_BORDER, name)
 
+        tsz_orient = wx.HORIZONTAL
+        msz_orient = wx.VERTICAL
+        if style & CTRLBAR_STYLE_VERTICAL:
+            tsz_orient = wx.VERTICAL
+            msz_orient = wx.HORIZONTAL
+
         # Attributes
         self._style = style
-        self._sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self._sizer = wx.BoxSizer(tsz_orient)
         self._tools = dict(simple=list())
         self._spacing = (5, 5)
 
@@ -358,13 +367,12 @@ class ControlBar(wx.PyPanel):
         self._pen = wx.Pen(pcolor, 1)
 
         # Setup
-        msizer = wx.BoxSizer(wx.VERTICAL)
+        msizer = wx.BoxSizer(msz_orient)
         spacer = (0, 0)
         msizer.Add(spacer, 0)
         msizer.Add(self._sizer, 1, wx.EXPAND)
         msizer.Add(spacer, 0)
         self.SetSizer(msizer)
-        self.SetAutoLayout(True)
 
         # Event Handlers
         self.Bind(wx.EVT_PAINT, self.OnPaint)
@@ -380,12 +388,25 @@ class ControlBar(wx.PyPanel):
             cb_evt = ControlBarEvent(edEVT_CTRLBAR, e_id)
             self.GetEventHandler().ProcessEvent(cb_evt)
         else:
+            # Allow to propagate
             evt.Skip()
 
-    def AddControl(self, control, align=wx.ALIGN_LEFT, stretch=0):
+    def _GetAlignment(self, align):
+        """Verify and get the proper secondary alignment based on the
+        control bar alignment.
+        @param align: tool alignment flag
+
+        """
+        if not self.IsVerticalMode():
+            align2 = wx.ALIGN_CENTER_VERTICAL
+        else:
+            align2 = wx.ALIGN_CENTER_HORIZONTAL
+        return align2
+
+    def AddControl(self, control, align=-1, stretch=0):
         """Add a control to the bar
         @param control: The control to add to the bar
-        @keyword align: wx.ALIGN_LEFT or wx.ALIGN_RIGHT
+        @keyword align: wx.ALIGN_**
         @keyword stretch: The controls proportions 0 for normal, 1 for expand
 
         """
@@ -393,11 +414,20 @@ class ControlBar(wx.PyPanel):
             if hasattr(control, 'SetWindowVariant'):
                 control.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
-        if align == wx.ALIGN_LEFT:
+        # Default to proper alignment when -1 specified
+        if align not in (wx.ALIGN_LEFT, wx.ALIGN_RIGHT,
+                         wx.ALIGN_BOTTOM, wx.ALIGN_TOP):
+            if self.IsVerticalMode():
+                align = wx.ALIGN_TOP
+            else:
+                align = wx.ALIGN_LEFT
+
+        align2 = self._GetAlignment(align)
+        if align in (wx.ALIGN_LEFT, wx.ALIGN_TOP):
             self._sizer.Add(self._spacing, 0)
-            self._sizer.Add(control, stretch, align|wx.ALIGN_CENTER_VERTICAL)
+            self._sizer.Add(control, stretch, align|align2)
         else:
-            self._sizer.Add(control, stretch, align|wx.ALIGN_CENTER_VERTICAL)
+            self._sizer.Add(control, stretch, align|align2)
             self._sizer.Add(self._spacing, 0)
 
         self.Layout()
@@ -417,12 +447,12 @@ class ControlBar(wx.PyPanel):
         """
         self._sizer.AddStretchSpacer(2)
 
-    def AddTool(self, tid, bmp, help='', align=wx.ALIGN_LEFT):
+    def AddTool(self, tid, bmp, help='', align=-1):
         """Add a simple bitmap button tool to the control bar
         @param tid: Tool Id
         @param bmp: Tool bitmap
         @keyword help: Short help string
-        @keyword align: wx.ALIGN_LEFT or wx.ALIGN_RIGHT
+        @keyword align: wx.ALIGN_**
 
         """
         tool = wx.BitmapButton(self, tid, bmp, style=wx.NO_BORDER)
@@ -433,13 +463,22 @@ class ControlBar(wx.PyPanel):
             spacer = self._spacing
         tool.SetToolTipString(help)
 
+        # Default to proper alignment when unknown is specified
+        if align not in (wx.ALIGN_LEFT, wx.ALIGN_RIGHT,
+                         wx.ALIGN_BOTTOM, wx.ALIGN_TOP):
+            if self.IsVerticalMode():
+                align = wx.ALIGN_TOP
+            else:
+                align = wx.ALIGN_LEFT
+
+        align2 = self._GetAlignment(align)
         self._tools['simple'].append(tool.GetId())
-        if align == wx.ALIGN_LEFT:
+        if align in (wx.ALIGN_TOP, wx.ALIGN_LEFT):
             self._sizer.Add(spacer, 0)
-            self._sizer.Add(tool, 0, align|wx.ALIGN_CENTER_VERTICAL)
+            self._sizer.Add(tool, 0, align|align2)
         else:
             self._sizer.Add(spacer, 0)
-            self._sizer.Add(tool, 0, align|wx.ALIGN_CENTER_VERTICAL)
+            self._sizer.Add(tool, 0, align|align2)
 
     def GetControlSizer(self):
         """Get the sizer that is used to layout the contols (horizontal sizer)
@@ -454,6 +493,13 @@ class ControlBar(wx.PyPanel):
 
         """
         return self._spacing
+
+    def IsVerticalMode(self):
+        """Is the ControlBar in vertical orientation
+        @return: bool
+
+        """
+        return self._style & CTRLBAR_STYLE_VERTICAL
 
     def DoPaintBackground(self, dc, rect, color, color2):
         """Paint the background of the given rect based on the style of
@@ -470,21 +516,33 @@ class ControlBar(wx.PyPanel):
                 gc = dc.GetGraphicsContext()
             else:
                 gc = wx.GraphicsContext.Create(dc)
-            grad = gc.CreateLinearGradientBrush(rect.x, .5, rect.x, rect.GetHeight(),
-                                                color2, color)
+
+            if not self.IsVerticalMode():
+                grad = gc.CreateLinearGradientBrush(rect.x, rect.y, rect.x,
+                                                    rect.x+rect.height,
+                                                    color2, color)
+            else:
+                grad = gc.CreateLinearGradientBrush(rect.x, rect.y,
+                                                    rect.x+rect.width,
+                                                    rect.y,
+                                                    color2, color)
 
             gc.SetPen(gc.CreatePen(self._pen))
             gc.SetBrush(grad)
             gc.DrawRectangle(rect.x, 0, rect.GetWidth() - 0.5, rect.GetHeight() - 0.5)
 
         dc.SetPen(wx.Pen(color, 1))
-        # Add a border to the bottom
-        if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
-            dc.DrawLine(rect.x, rect.GetHeight() - 1, rect.GetWidth(), rect.GetHeight() - 1)
 
-        # Add a border to the top
-        if self._style & CTRLBAR_STYLE_BORDER_TOP:
-            dc.DrawLine(rect.x, 1, rect.GetWidth(), 1)
+        # TODO: handle vertical mode
+        if not self.IsVerticalMode():
+            # Add a border to the bottom
+            if self._style & CTRLBAR_STYLE_BORDER_BOTTOM:
+                dc.DrawLine(rect.x, rect.GetHeight() - 1,
+                            rect.GetWidth(), rect.GetHeight() - 1)
+
+            # Add a border to the top
+            if self._style & CTRLBAR_STYLE_BORDER_TOP:
+                dc.DrawLine(rect.x, 1, rect.GetWidth(), 1)
 
     def OnPaint(self, evt):
         """Paint the background to match the current style
@@ -508,19 +566,27 @@ class ControlBar(wx.PyPanel):
         self._spacing = (px, px)
 
     def SetVMargin(self, top, bottom):
-        """Set the Vertical margin used for spacing controls from the
-        top and bottom of the bars edges.
+        """WARNING this method is Deprecated use SetMargins instead!!
         @param top: Top margin in pixels
-        @param bottom: Bottom maring in pixels
+        @param bottom: Bottom margin in pixels
+
+        """
+        # TODO: Remove all usage of this method
+        self.SetMargins(top, bottom)
+
+    def SetMargins(self, param1, param2):
+        """Setup the margins on the edges of the ControlBar
+        @param param1: left/top margin depending on orientation
+        @param param2: right/bottom margin depending on orientation
 
         """
         sizer = self.GetSizer()
         if wx.VERSION < (2, 9, 0, 0, ''):
-            sizer.GetItem(0).SetSpacer((top, top))
-            sizer.GetItem(2).SetSpacer((bottom, bottom))
+            sizer.GetItem(0).SetSpacer((param1, param1))
+            sizer.GetItem(2).SetSpacer((param2, param2))
         else:
-            sizer.GetItem(0).AssignSpacer((top, top))
-            sizer.GetItem(2).AssignSpacer((bottom, bottom))
+            sizer.GetItem(0).AssignSpacer((param1, param1))
+            sizer.GetItem(2).AssignSpacer((param2, param2))
         sizer.Layout()
 
     def SetWindowStyle(self, style):
@@ -528,7 +594,14 @@ class ControlBar(wx.PyPanel):
         @param style: long
 
         """
+        if self.IsVerticalMode() and not (CTRLBAR_STYLE_VERTICAL & style):
+            # Switching from vertical to HORIZONTAL
+            self._sizer.SetOrientation(wx.HORIZONTAL)
+        elif not self.IsVerticalMode() and (CTRLBAR_STYLE_VERTICAL & style):
+            # Switching from horizontal to vertical
+            self._sizer.SetOrientation(wx.VERTICAL)
         self._style = style
+        self.Layout()
         self.Refresh()
 
 #--------------------------------------------------------------------------#
