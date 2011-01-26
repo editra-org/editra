@@ -206,11 +206,11 @@ class ControlBox(wx.PyPanel):
             del self._main
             topb = self.GetControlBar(wx.TOP)
             if topb is None:
-                self._sizer.Add(window, 1, wx.EXPAND)
+                self._vsizer.Add(window, 1, wx.EXPAND)
             else:
-                self._sizer.Insert(1, window, 1, wx.EXPAND)
+                self._vsizer.Insert(1, window, 1, wx.EXPAND)
         else:
-            self._sizer.Replace(self._main, window)
+            self._vsizer.Replace(self._main, window)
             rwindow = self._main
 
         self._main = window
