@@ -1145,9 +1145,6 @@ class EdPages(aui.AuiNotebook):
         @return bool: was page deleted?
 
         """
-        frame = self.GetTopLevelParent()
-
-        frame.Freeze()
         try:
             page = self.GetPage(idx)
             result = page.CanCloseTab()
@@ -1168,8 +1165,6 @@ class EdPages(aui.AuiNotebook):
         except Exception:
             # TODO: workaround for crash in base on destruction
             pass
-        finally:
-            frame.Thaw()
 
         return result
 

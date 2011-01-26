@@ -29,6 +29,8 @@ emulate vi.
 on some systems.
 +Fix issue where ToolBar would not resize properly when appearance settings
 where changed to use different size icons.
++Fix screen refresh issue in tab control where it wouldn't get repainted properly
+in some cases.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
