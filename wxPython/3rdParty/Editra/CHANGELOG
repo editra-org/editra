@@ -17,6 +17,9 @@ NEWS:
 NEW: [features/enhancements]
 +Remember Shelf layout and selected tab when application is restarted.
 
+LIBRARY:
++Support ControlBars in on left and right side of ControlBox.
+
 BUG FIXES:
 +Fix issue that could result in crash when rapidly clicking on notebook buttons.
 +Fix minor display issue in update checker gauge.
