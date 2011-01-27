@@ -862,7 +862,7 @@ class SegmentBar(ControlBar):
                 sevt = SegmentBarEvent(edEVT_SEGMENT_SELECTED, button['id'])
                 sevt.SetSelections(pre, index)
                 sevt.SetEventObject(self)
-                wx.PostEvent(self.GetParent(), sevt)
+                self.GetEventHandler().ProcessEvent(sevt)
 
         self._x_clicked_before = False
 
@@ -918,15 +918,13 @@ class SegmentBar(ControlBar):
         # If the hover state over a segments close button
         # has changed redraw the close button to reflect the
         # proper state.
-        
         bRedrawX = button['x_state'] != x_state
         if bRedrawX:
-            dc = wx.ClientDC(self) # TODO: this has poor results on msw
             crect = self.GetClientRect()
             brect = wx.Rect(button['bx1'], 0,
                             button['bx2'] - (button['bx1'] - 2),
                             crect.GetHeight())
-            self.DoDrawCloseBtn(dc, button, brect)
+            self.Refresh(False, brect)
 
         evt.Skip()
 
