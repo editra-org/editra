@@ -34,6 +34,8 @@ in some cases.
 +Fix crash in reload with encoding when the encoding fails to decode the text.
 +Fix pipe character not being accepted in keybindings editor.
 +Fix angle brackets not being handled properly in keybindings editor.
++Fix issue with window not being brought to front in all cases when opening
+file with "Edit with Editra..." shortcut on Windows.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
