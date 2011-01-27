@@ -31,6 +31,7 @@ on some systems.
 where changed to use different size icons.
 +Fix screen refresh issue in tab control where it wouldn't get repainted properly
 in some cases.
++Fix crash in reload with encoding when the encoding fails to decode the text.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00

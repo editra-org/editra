@@ -1802,13 +1802,23 @@ class EditraStc(ed_basestc.EditraBaseStc):
                 marks = self.GetBookmarks()
                 cpos = self.GetCurrentPos()
                 # TODO: Handle async re-loads of large files
-                self.SetText(self.File.Read())
+                txt = self.File.Read()
+                self.SetReadOnly(False)
+                if txt is not None:
+                    if self.File.IsRawBytes() and not ebmlib.IsUnicode(txt):
+                        self.AddStyledText(txt)
+                        self.SetReadOnly(True) # Don't allow editing of raw bytes
+                    else:
+                        self.SetText(txt)
+                else:
+                    return False, _("Failed to reload: %s") % cfile
+
                 self.SetModTime(ebmlib.GetFileModTime(cfile))
                 for mark in marks:
                     self.AddBookmark(mark)
                 self.EndUndoAction()
                 self.SetSavePoint()
-            except (AttributeError, OSError, IOError), msg:
+            except (UnicodeDecodeError, AttributeError, OSError, IOError), msg:
                 self.LOG("[ed_stc][err] Failed to Reload %s" % cfile)
                 return False, msg
             else:
