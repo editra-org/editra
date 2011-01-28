@@ -79,7 +79,7 @@ TIMMY = ("tab.timmy.whinge.level", "1") # Mark Inconsistent indentation
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for Python""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_PYTHON)
@@ -126,13 +126,28 @@ def AutoIndenter(estc, pos, ichar):
         estc.AddText(eolch)
         return
 
-    # Ignore empty lines and backtrace to find the previous line that we can
-    # get the indent position from
-#    while text.isspace():
-#        line -= 1
-#        if line < 0:
-#            return u''
-#        text = stc.GetTextRange(stc.PositionFromLine(line), pos)
+    # In case of open bracket: Indent next to open bracket
+    def BackTrack(tmp_text, tline):
+        bcount = [ tmp_text.count(brac) for brac in u")}]({[" ]
+        bRecurse = False
+        for idx, val in enumerate(bcount[:3]):
+            if val > bcount[idx+3]:
+                bRecurse = True
+                break
+        if bRecurse:
+            tline = tline - 1
+            if tline < 0:
+                return tmp_text
+            spos = estc.PositionFromLine(tline)
+            tmp_text = estc.GetTextRange(spos, pos)
+            BackTrack(tmp_text, tline)
+        return tmp_text
+    text = BackTrack(text, line)
+    pos = PosOpenBracket(text)
+    if pos > -1:
+        rval = eolch + (pos + 1) * u" "
+        estc.AddText(rval)
+        return
 
     indent = estc.GetLineIndentation(line)
     if ichar == u"\t":
@@ -150,6 +165,15 @@ def AutoIndenter(estc, pos, ichar):
                 i_space += 1
         elif tokens[-1].endswith(u"\\"):
             i_space += 1
+        elif len(tokens[-1]) and tokens[-1][-1] in u"}])":
+            ptok = tokens[-1][-1]
+            paren_pos = pos - (len(text) - text.rfind(ptok))
+            oparen, cparen = estc.GetBracePair(paren_pos)
+            if cparen >= 0: # Found matching bracket
+                line = estc.LineFromPosition(cparen)
+                indent = estc.GetLineIndentation(line)
+                i_space = indent / tabw
+                end_spaces = ((indent - (tabw * i_space)) * u" ")
         elif tokens[0] in UNINDENT_KW:
             i_space = max(i_space - 1, 0)
 
@@ -160,11 +184,6 @@ def AutoIndenter(estc, pos, ichar):
             rval = rval[:-rpos]
         elif rpos >= len(rval):
             rval = eolch
-
-    # In case of open bracket: Indent next to open bracket
-    pos = PosOpenBracket(text)
-    if pos > -1:
-        rval = eolch + (pos + 1) * u" "
 
     # Put text in the buffer
     estc.AddText(rval)

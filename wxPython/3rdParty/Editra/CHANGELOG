@@ -16,6 +16,8 @@ NEWS:
 
 NEW: [features/enhancements]
 +Remember Shelf layout and selected tab when application is restarted.
++Improve Python autoindenter to better handle more conditions in regards to
+brackets and parens.
 
 LIBRARY:
 +Support ControlBars in on left and right side of ControlBox.
