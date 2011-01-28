@@ -166,23 +166,6 @@ class BaseCompleter(object):
         """
         return self._autocomp_keys
 
-    def IsCallTipEvent(self, evt):
-        """Should a calltip be shown for the given key combo"""
-        if evt.ControlDown() and evt.GetKeyCode() == ord('9'):
-            return True
-        return False
-
-    def IsAutoCompEvent(self, evt):
-        """Is it a key combination that should allow completions to be shown
-        @param evt: wx.KeyEvent
-        @return: bool
-        @todo: this should probably be handled in ed_stc
-
-        """
-        if evt.ControlDown() and evt.GetKeyCode() == wx.WXK_SPACE:
-            return True
-        return False
-
     def SetAutoCompKeys(self, key_list):
         """Set the keys to provide completions on
         @param key_list: List of key codes
