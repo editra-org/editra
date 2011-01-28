@@ -36,6 +36,7 @@ in some cases.
 +Fix angle brackets not being handled properly in keybindings editor.
 +Fix issue with window not being brought to front in all cases when opening
 file with "Edit with Editra..." shortcut on Windows.
++Fix issue with showing calltips for buffers that are not visible.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
