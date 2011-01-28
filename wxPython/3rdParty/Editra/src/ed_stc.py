@@ -699,31 +699,14 @@ class EditraStc(ed_basestc.EditraBaseStc):
             if self._config['autocomp']:
                 self.ShowAutoCompOpt(command)
 
-        elif cmpl.IsAutoCompEvent(evt):
-            if self.AutoCompActive():
-                self.AutoCompCancel()
-
-            command = self.GetCommandStr()
-            if self._config['autocomp']:
-                self.ShowAutoCompOpt(command)
-
         elif key_code in cmpl.GetCallTipKeys():
-            if self.AutoCompActive():
-                self.AutoCompCancel()
-
-            command = self.GetCommandStr()
+            self.HidePopups()
             uchr = unichr(key_code)
+            command = self.GetCommandStr() + uchr
             self.PutText(uchr)
 
             if self._config['autocomp']:
                 self.ShowCallTip(command)
-
-        elif cmpl.IsCallTipEvent(evt):
-            if self.AutoCompActive():
-                self.AutoCompCancel()
-            command = self.GetCommandStr()
-            if self._config['autocomp']:
-                self.ShowCallTip(command[:command.rfind('(')])
 
         elif key_code in cmpl.GetCallTipCancel():
             evt.Skip()
@@ -735,6 +718,21 @@ class EditraStc(ed_basestc.EditraBaseStc):
         else:
 #            print "IS TAB", key_code, wx.WXK_TAB
             evt.Skip()
+
+    def DoAutoComplete(self):
+        """Atempt to perform an autocompletion event."""
+        self.HidePopups()
+        if self._config['autocomp']:
+            command = self.GetCommandStr()
+            self.ShowAutoCompOpt(command)
+
+    def DoCallTip(self):
+        """Attempt to show a calltip for the current cursor position"""
+        self.HidePopups()
+        if self._config['autocomp']:
+            command = self.GetCommandStr()
+            # TODO: GetCommandStr seems to be inadquate under some cases
+            self.ShowCallTip(command)
 
     def OnKeyUp(self, evt):
         """Update status bar of window
@@ -1090,7 +1088,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
                   ed_glob.ID_MACRO_START : self.StartRecord,
                   ed_glob.ID_MACRO_STOP : self.StopRecord,
                   ed_glob.ID_MACRO_PLAY : self.PlayMacro,
-                  ed_glob.ID_GOTO_MBRACE : self.GotoBraceMatch
+                  ed_glob.ID_GOTO_MBRACE : self.GotoBraceMatch,
+                  ed_glob.ID_SHOW_AUTOCOMP : self.DoAutoComplete,
+                  ed_glob.ID_SHOW_CALLTIP : self.DoCallTip
         }
 
         e_idmap = { ed_glob.ID_ZOOM_OUT : self.DoZoom,

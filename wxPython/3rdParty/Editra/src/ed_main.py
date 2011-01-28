@@ -179,6 +179,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_COLUMN_MODE, self.DispatchToControl),
                                        (ID_TOGGLE_FOLD, self.DispatchToControl),
                                        (ID_TOGGLE_ALL_FOLDS, self.DispatchToControl),
+                                       (ID_SHOW_AUTOCOMP, self.DispatchToControl),
+                                       (ID_SHOW_CALLTIP, self.DispatchToControl),
                                        (ID_QUICK_FIND, self.OnCommandBar),
                                        (ID_PREF, OnPreferences),
 
@@ -1138,7 +1140,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                         ID_PASTE, ID_LINE_BEFORE, ID_LINE_AFTER, ID_DUP_LINE,
                         ID_PASTE_AFTER, ID_COLUMN_MODE, ID_TOGGLE_FOLD,
                         ID_CYCLE_CLIPBOARD,
-                        ID_TOGGLE_ALL_FOLDS, ID_DELETE_LINE ]
+                        ID_TOGGLE_ALL_FOLDS, ID_DELETE_LINE,
+                        ID_SHOW_AUTOCOMP, ID_SHOW_CALLTIP ]
 
         # Special handling for common clipboard related actions
         has_focus = self.FindFocus()

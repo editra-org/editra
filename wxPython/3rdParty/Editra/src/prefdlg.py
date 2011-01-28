@@ -1654,7 +1654,7 @@ KEYS = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+', '/', ',',
         '.', '[', ']', '{', '}', '>', '<', ':', '|', 'Left', 'Right', 'Down',
-        'Up', 'Home', 'End', 'Enter', 'Tab', '"', "'"]
+        'Up', 'Home', 'End', 'Enter', 'Tab', 'Space', '"', "'"]
 KEYS.extend(["F" + str(x) for x in range(1, 13)]) # Add function keys
 
 if wx.Platform == '__WXMSW__':

@@ -589,7 +589,7 @@ class EdMenuBar(wx.MenuBar):
         editmenu.AppendSeparator()
         editmenu.AppendEx(ed_glob.ID_SELECTALL, _("Select &All"),
                         _("Select All Text in Document"))
-        editmenu.AppendEx(ed_glob.ID_COLUMN_MODE, _("Column Mode"),
+        editmenu.AppendEx(ed_glob.ID_COLUMN_MODE, _("Column Edit Mode"),
                         _("Enable column edit mode."), wx.ITEM_CHECK)
         editmenu.AppendSeparator()
         linemenu = EdMenu()
@@ -625,6 +625,12 @@ class EdMenuBar(wx.MenuBar):
                         _("Remove all bookmarks from the current document"))
         editmenu.AppendMenu(ed_glob.ID_BOOKMARK, _("Bookmarks"),  bookmenu,
                             _("Add and remove bookmarks"))
+        editmenu.AppendSeparator()
+        # Autocompletion shortcuts
+        editmenu.AppendEx(ed_glob.ID_SHOW_AUTOCOMP, _("Word Completion"),
+                          _("Show autocompletion hints."))
+        editmenu.AppendEx(ed_glob.ID_SHOW_CALLTIP, _("Show Calltip"),
+                          _("Show a calltip for the current word."))
         editmenu.AppendSeparator()
         editmenu.AppendEx(ed_glob.ID_FIND, _("&Find"), _("Find Text"))
         editmenu.AppendEx(ed_glob.ID_FIND_REPLACE, _("Find/R&eplace"),
@@ -994,6 +1000,8 @@ _DEFAULT_BINDING = { # File Menu
                      ed_glob.ID_LINE_MOVE_UP : (u"Ctrl", u"Shift", u"Up"),
                      ed_glob.ID_LINE_MOVE_DOWN : (u"Ctrl", u"Shift", u"Down"),
                      ed_glob.ID_ADD_BM : (u"Ctrl", u"B"),
+                     ed_glob.ID_SHOW_AUTOCOMP : (u"Ctrl", u"Space"),
+                     ed_glob.ID_SHOW_CALLTIP : (u"Ctrl", u"9"),
                      ed_glob.ID_FIND : (u"Ctrl", u"Shift", u"F"),
                      ed_glob.ID_FIND_PREVIOUS : (u"Shift", u"F3"),
                      ed_glob.ID_FIND_NEXT : (u"F3",),
