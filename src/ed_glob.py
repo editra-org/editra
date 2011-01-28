@@ -44,7 +44,8 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_COLUMN_MODE', 'ID_PANELIST', 'ID_MAXIMIZE_EDITOR',
             'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS',
             'ID_SAVE_SESSION', 'ID_LOAD_SESSION', 'ID_NEXT_POS', 'ID_PRE_POS',
-            'ID_CYCLE_CLIPBOARD', 'ID_LEXER_CUSTOM']
+            'ID_CYCLE_CLIPBOARD', 'ID_LEXER_CUSTOM', 'ID_SHOW_AUTOCOMP',
+            'ID_SHOW_CALLTIP' ]
 
 #---- Project Info ----#
 # The project info was moved to another module so it could be accessed
@@ -136,6 +137,8 @@ ID_JOIN_LINES    = wx.NewId()
 ID_TRANSPOSE     = wx.NewId()
 ID_LINE_MOVE_UP  = wx.NewId()
 ID_LINE_MOVE_DOWN= wx.NewId()
+ID_SHOW_AUTOCOMP = wx.NewId()
+ID_SHOW_CALLTIP  = wx.NewId()
 ID_FIND          = wx.ID_FIND
 ID_FIND_PREVIOUS = wx.NewId()
 ID_FIND_NEXT     = wx.NewId()
