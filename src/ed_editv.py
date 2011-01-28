@@ -151,6 +151,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                 self._caret_w = cwidth
             self.SetCaretWidth(0) # Hide the caret when not active
             self._focused = False
+            self.CallTipCancel()
 
         # Check for changes to on disk file
         if not self._has_dlg and Profile_Get('CHECKMOD'):
@@ -191,8 +192,12 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             # Do spell checking
             # TODO: Add generic subscriber hook and move spell checking and
             #       and other low priority idle handling there
-            if self._spell_data['enabled']:
-                self._spell.processCurrentlyVisibleBlock()
+            if self.IsShown():
+                if self._spell_data['enabled']:
+                    self._spell.processCurrentlyVisibleBlock()
+            else:
+                # Ensure calltips are not shown when this is a background tab.
+                self.CallTipCancel()
 
     @modalcheck
     def DoReloadFile(self):

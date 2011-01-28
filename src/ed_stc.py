@@ -341,17 +341,22 @@ class EditraStc(ed_basestc.EditraBaseStc):
         else:
             wx.CallAfter(self.BraceHighlight, brace_at_caret, brace_opposite)
 
-    def GetBracePair(self):
+    def GetBracePair(self, pos=-1):
         """Get a tuple of the positions in the buffer where the brace at the
         current caret position and its match are. if a brace doesn't have a
         match it will return -1 for the missing brace.
+        @keyword pos: -1 to use current cursor pos, else use to specify brace pos
         @return: tuple (brace_at_caret, brace_opposite)
 
         """
         brace_at_caret = -1
         brace_opposite = -1
         char_before = None
-        caret_pos = self.GetCurrentPos()
+        if pos < 0:
+            # use current position
+            caret_pos = self.GetCurrentPos()
+        else:
+            caret_pos = pos
 
         if caret_pos > 0:
             char_before = self.GetCharAt(caret_pos - 1)
@@ -880,7 +885,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         # when the mouse has not dwelled within the buffer area
         mpoint = wx.GetMousePosition()
         brect = self.GetScreenRect()
-        if not brect.Contains(mpoint):
+        if not brect.Contains(mpoint) or not self.IsShown():
             return
 
         position = evt.Position
