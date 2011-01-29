@@ -196,6 +196,7 @@ class BitmapProvider(plugin.Plugin):
 #-----------------------------------------------------------------------------#
 # Default theme data maps
 ART = { ed_glob.ID_ABOUT  : u'about.png',
+        ed_glob.ID_ADD    : u'add.png',
         ed_glob.ID_ADD_BM : u'bmark_add.png',
         ed_glob.ID_ADVANCED : u'advanced.png',
         ed_glob.ID_BACKWARD : u'backward.png',
@@ -239,6 +240,7 @@ ART = { ed_glob.ID_ABOUT  : u'about.png',
         ed_glob.ID_PYSHELL : u'pyshell.png',
         ed_glob.ID_REDO    : u'redo.png',
         ed_glob.ID_REFRESH : u'refresh.png',
+        ed_glob.ID_REMOVE  : u'remove.png',
         ed_glob.ID_RTF_GEN : u'rtf_gen.png',
         ed_glob.ID_SAVE    : u'save.png',
         ed_glob.ID_SAVEALL : u'saveall.png',

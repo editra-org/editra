@@ -81,7 +81,7 @@ class EditraArt(wx.ArtProvider):
     """
     def __init__(self):
         """Initializes Editra's art provider"""
-        wx.ArtProvider.__init__(self)
+        super(EditraArt, self).__init__()
         self._library = ed_theme.BitmapProvider(wx.GetApp().GetPluginManager())
 
     def CreateBitmap(self, art_id, client, size):
