@@ -32,7 +32,7 @@ class expose(object):
     """
     def __init__(self, cls):
         """@param cls: class to expose the method to"""
-        object.__init__(self)
+        super(expose, self).__init__()
         self.cls = cls
 
     def __call__(self, funct):
@@ -63,9 +63,8 @@ class ECBaseDlg(wx.Dialog):
         # Setup
         self.SetSizer(self._sizer)
 
-    @property
-    def Panel(self):
-        return self._panel
+    Panel = property(lambda self: self._panel,
+                     lambda self, val: setattr(self, '_panel', val))
 
     def GetPanel(self):
         """Get the dialogs main panel"""
@@ -78,4 +77,3 @@ class ECBaseDlg(wx.Dialog):
             self._panel.Destroy()
         self._panel = panel
         self._sizer.Add(self._panel, 1, wx.EXPAND)
-

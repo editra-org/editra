@@ -19,7 +19,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import os
 import sys
 import time
@@ -106,7 +106,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         #---- Status bar on bottom of window ----#
         self.SetStatusBar(ed_statbar.EdStatBar(self))
         self.GetStatusBar().Show(_PGET('STATBAR', default=True))
-
         #---- End Statusbar Setup ----#
 
         #---- Notebook that contains the editing buffers ----#
