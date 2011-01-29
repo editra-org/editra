@@ -263,6 +263,7 @@ ID_CONTACT       = wx.NewId()
 ID_BUG_TRACKER   = wx.NewId()
 
 # Misc IDs
+ID_ADD               = wx.ID_ADD
 ID_ADVANCED          = wx.NewId()
 ID_APP_SPLASH        = wx.NewId()
 ID_BACKWARD          = wx.ID_BACKWARD
@@ -289,6 +290,7 @@ ID_MOVE_TAB          = wx.NewId()
 ID_PACKAGE           = wx.NewId()
 ID_PYSHELL           = wx.NewId()
 ID_REFRESH           = wx.ID_REFRESH
+ID_REMOVE            = wx.ID_REMOVE
 ID_REPORTER          = wx.NewId()
 ID_STOP              = wx.ID_STOP
 ID_THEME             = wx.NewId()
