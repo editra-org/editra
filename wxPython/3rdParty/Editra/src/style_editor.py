@@ -34,6 +34,7 @@ from ed_style import StyleItem
 import util
 import syntax.syntax as syntax
 import eclib
+import ed_basewin
 
 # Function Aliases
 _ = wx.GetTranslation
@@ -53,7 +54,7 @@ SETTINGS_IDS = [ ID_FORE_COLOR, ID_BACK_COLOR, ID_BOLD, ID_ITALIC,
                  ID_EOL, ID_ULINE, ID_FONT, ID_FONT_SIZE ]
 #--------------------------------------------------------------------------#
 
-class StyleEditor(wx.Dialog):
+class StyleEditor(ed_basewin.EdBaseDialog):
     """This class creates the window that contains the controls
     for editing/configuring the syntax highlighting styles it acts
     as a graphical way to interact with the L{ed_style.StyleMgr}.

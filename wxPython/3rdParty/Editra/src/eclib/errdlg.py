@@ -26,7 +26,7 @@ def ExceptionHook(exctype, value, trace):
     # Ensure that error gets raised to console as well
     print ftrace
 
-    # If abort has been set and we get here again do a more forcefull shutdown
+    # If abort has been set and we get here again do a more forceful shutdown
     if ErrorDialog.ABORT:
         os._exit(1)
 
@@ -58,9 +58,11 @@ import time
 import traceback
 import wx
 
+# Local Imports
+import ecbasewin
+
 #----------------------------------------------------------------------------#
 # Globals
-
 _ = wx.GetTranslation
 
 #----------------------------------------------------------------------------#
@@ -80,7 +82,7 @@ class ErrorReporter(object):
         """
         # Ensure init only happens once
         if self._first:
-            object.__init__(self)
+            super(ErrorReporter, self).__init__()
             self._first = False
             self._sessionerr = list()
         else:
@@ -120,7 +122,7 @@ class ErrorReporter(object):
         
 #-----------------------------------------------------------------------------#
 
-class ErrorDialog(wx.Dialog):
+class ErrorDialog(ecbasewin.ECBaseDlg):
     """Dialog for showing errors and and notifying Editra.org should the
     user choose so.
 
@@ -150,8 +152,7 @@ class ErrorDialog(wx.Dialog):
                                         "#---- End Traceback Info ----#"))
 
         # Layout
-        self._panel = ErrorPanel(self, self.err_msg)
-        self._DoLayout()
+        self.SetPanel(ErrorPanel(self, self.err_msg))
         self.SetMinSize(wx.Size(450, 300))
 
         # Event Handlers
@@ -160,16 +161,6 @@ class ErrorDialog(wx.Dialog):
 
         # Auto show at end of init
         self.CenterOnParent()
-
-    def _DoLayout(self):
-        """Layout the dialog and prepare it to be shown
-        @note: Do not call this method in your code
-
-        """
-        msizer = wx.BoxSizer(wx.VERTICAL)
-        msizer.Add(self._panel, 1, wx.EXPAND)
-        self.SetSizer(msizer)
-        self.SetInitialSize()
 
     #---- Override in Subclass ----#
 
@@ -181,7 +172,7 @@ class ErrorDialog(wx.Dialog):
         raise NotImplementedError("Abort must be implemented!")
 
     def GetEnvironmentInfo(self):
-        """Get the enviromental info / Header of error report
+        """Get the environmental info / Header of error report
         @return: string
 
         """

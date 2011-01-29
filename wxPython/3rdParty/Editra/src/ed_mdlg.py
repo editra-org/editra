@@ -119,8 +119,8 @@ class EdFileInfoDlg(eclib.FileInfoDlg):
         @param fname: file path
 
         """
-        eclib.FileInfoDlg.__init__(self, parent, fname=fname,
-                                     ftype=None, bmp=FileIcon.GetBitmap())
+        super(EdFileInfoDlg, self).__init__(parent, fname=fname, ftype=None, 
+                                            bmp=FileIcon.GetBitmap())
 
         # Setup
         self.SetFileTypeLabel(util.GetFileType(fname))
@@ -138,9 +138,9 @@ class EdFormatEOLDlg(eclib.ChoiceDialog):
                    _("Windows (\\r\\n)")]
         self._eol = [wx.stc.STC_EOL_CR, wx.stc.STC_EOL_LF, wx.stc.STC_EOL_CRLF]
         idx = self._eol.index(selection)
-        eclib.ChoiceDialog.__init__(self, parent, msg=msg, title=title,
-                                        choices=choices,
-                                        style=wx.YES_NO|wx.YES_DEFAULT)
+        super(EdFormatEOLDlg, self).__init__(parent, msg=msg, title=title,
+                                             choices=choices,
+                                             style=wx.YES_NO|wx.YES_DEFAULT)
         self.SetSelection(idx)
 
         # Setup

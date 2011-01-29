@@ -27,8 +27,8 @@ import handlers
 # Editra Libraries
 import ed_glob
 import eclib
-import util
 import ed_msg
+import ed_basewin
 from profiler import Profile_Get, Profile_Set
 
 #-----------------------------------------------------------------------------#
@@ -68,7 +68,7 @@ _ = wx.GetTranslation
 
 #----------------------------------------------------------------------
 
-class ConfigDialog(wx.Frame):
+class ConfigDialog(ed_basewin.EdBaseFrame):
     """Configuration dialog for configuring what executables are available
     for a filetype and what the preferred one is.
 
@@ -82,14 +82,10 @@ class ConfigDialog(wx.Frame):
         super(ConfigDialog, self).__init__(parent, title=_("Launch Configuration"))
 
         # Layout
-        util.SetWindowIcon(self)
         self.__DoLayout()
 
         # Event Handlers
         self.Bind(wx.EVT_CLOSE, self.OnClose)
-
-        # Register with app
-        wx.GetApp().RegisterWindow(repr(self), self)
 
     def __DoLayout(self):
         """Layout the dialog"""
@@ -107,11 +103,6 @@ class ConfigDialog(wx.Frame):
         self.SetAutoLayout(True)
         self.SetInitialSize()
         self.SetMinSize((420, 345))
-
-    def OnClose(self, evt):
-        """Unregister the window when its closed"""
-        wx.GetApp().UnRegisterWindow(repr(self))
-        evt.Skip()
 
 #-----------------------------------------------------------------------------#
 
