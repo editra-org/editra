@@ -25,6 +25,7 @@ import zlib
 import handlers
 
 # Editra Libraries
+import ed_glob
 import eclib
 import util
 import ed_msg
@@ -64,37 +65,6 @@ COLOR_MAP = { ID_DEF_BACK : 'defaultb', ID_DEF_FORE : 'defaultf',
 EDMSG_LAUNCH_CFG_EXIT = ed_msg.EDMSG_ALL + ('launch', 'cfg', 'exit')
 
 _ = wx.GetTranslation
-#-----------------------------------------------------------------------------#
-
-def GetMinusData():
-    return zlib.decompress(
-"x\xda\xeb\x0c\xf0s\xe7\xe5\x92\xe2b``\xe0\xf5\xf4p\t\x02\xd2< \xcc\xc1\x06$\
-\xc3Jc\x9e\x03)\x96b'\xcf\x10\x0e \xa8\xe1H\xe9\x00\xf2\x9d<]\x1cC4&&\xa7\
-\xa4$\xa5)\xb0\x1aL\\RU\x90\x95\xe0\xf8,\xc6\xaa\xf0\xcf\xffr\x13\xd69\x87\
-\xb8x\xaaVM\xea\x890\xf512N\x9e\xb1v\xf5\xe9\x05\xdc\xc2;jf:\x96\xdf\xd2\x14\
-a\x96pO\xda\xc0\xc4\xa0\xf4\x8a\xab\xcau\xe2|\x1d\xa0i\x0c\x9e\xae~.\xeb\x9c\
-\x12\x9a\x00Ij($" )
-
-def GetMinusBitmap():
-    stream = cStringIO.StringIO(GetMinusData())
-    return wx.BitmapFromImage(wx.ImageFromStream(stream))
-
-#----------------------------------------------------------------------
-def GetPlusData():
-    return zlib.decompress(
-"x\xda\xeb\x0c\xf0s\xe7\xe5\x92\xe2b``\xe0\xf5\xf4p\t\x02\xd2< \xcc\xc1\x06$\
-\xc3Jc\x9e\x03)\x96b'\xcf\x10\x0e \xa8\xe1H\xe9\x00\xf2{<]\x1cC4&&'Hp\x1c\
-\xd8\xb9\xcf\xe6U\xfd\xefi\xbb\xffo\xf44J\x14L\xae\xde\x97+yx\xd3\xe9\xfc\
-\x8d\xb3\xda|\x99\x99g\x1b07\x1b\xd8k\x87\xf1\xea\x18\x1c{\xaa\xec\xfe\xaf>%\
-!\xf9A\xda\xef\x03\x06\xf67{\x1f\x1e\xf8\xf9\x98g\xf9\xb9\xf9\xbf\xfe\xbf~\
-\xad\xcf\x96'h\xca\xe6\xcck\xe8&2\xb7\x8e\x87\xe7\xbfdAB\xfb\xbf\xe0\x88\xbf\
-\xcc\xcc\x7f.\xcbH\xfc{\xfd(\xa0\xe5*\xff\xfd\xff\x06\x06\x1f\xfe\xffh\xbaj\
-\xf2f^ZB\xc2\x83\xe4\xc3\xef2o13<r\xd5y\xc0\xb9\xc2\xfa\x0e\xd0]\x0c\x9e\xae\
-~.\xeb\x9c\x12\x9a\x00\xcf9S\xc6" )
-
-def GetPlusBitmap():
-    stream = cStringIO.StringIO(GetPlusData())
-    return wx.BitmapFromImage(wx.ImageFromStream(stream))
 
 #----------------------------------------------------------------------
 
@@ -243,9 +213,11 @@ class ConfigPanel(wx.Panel):
 #        exelist.InsertColumn(0, _("Alias"))
 #        exelist.InsertColumn(1, _("Executable Commands"))
         self.SetListItems(chandler.GetCommands())
-        addbtn = wx.BitmapButton(self, wx.ID_ADD, GetPlusBitmap())
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD), wx.ART_MENU)
+        addbtn = wx.BitmapButton(self, wx.ID_ADD, bmp)
         addbtn.SetToolTipString(_("Add a new executable"))
-        delbtn = wx.BitmapButton(self, wx.ID_REMOVE, GetMinusBitmap())
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_REMOVE), wx.ART_MENU)
+        delbtn = wx.BitmapButton(self, wx.ID_REMOVE, bmp)
         delbtn.SetToolTipString(_("Remove selection from list"))
         btnsz = wx.BoxSizer(wx.HORIZONTAL)
         btnsz.AddMany([(addbtn, 0), ((2, 2), 0), (delbtn, 0)])
