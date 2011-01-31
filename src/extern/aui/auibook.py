@@ -1077,7 +1077,7 @@ class AuiTabContainer(object):
 
 
     def SetNoneActive(self):
-        """ Sets all the tabs as incative (non-selected). """
+        """ Sets all the tabs as inactive (non-selected). """
 
         for page in self._pages:
             page.active = False
@@ -2886,7 +2886,8 @@ class AuiNotebook(wx.PyPanel):
 
                 tab_idx = int(tab)
                 if tab_idx >= self.GetPageCount():
-                    continue
+                    to_break1 = True
+                    break
 
                 # Move tab to pane
                 page = self._tabs.GetPage(tab_idx)
@@ -5660,6 +5661,9 @@ class AuiNotebook(wx.PyPanel):
         """
         Called by L{TabTextCtrl}, to accept the changes and to send the
         `EVT_AUINOTEBOOK_END_LABEL_EDIT` event.
+
+        :param `page_index`: the page index in the notebook;
+        :param `value`: the new label for the tab.
         """
 
         evt = AuiNotebookEvent(wxEVT_COMMAND_AUINOTEBOOK_END_LABEL_EDIT, self.GetId())
