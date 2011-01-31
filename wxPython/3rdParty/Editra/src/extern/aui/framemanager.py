@@ -13,7 +13,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 23 Dec 2005
-# Latest Revision: 23 Jan 2011, 10.00 GMT
+# Latest Revision: 26 Jan 2011, 15.00 GMT
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
 # Write To Me At:
@@ -10325,7 +10325,7 @@ class AuiManager_DCP(AuiManager):
     
     def __init__(self, *args, **keys):
 
-        aui.AuiManager.__init__(self, *args, **keys)
+        AuiManager.__init__(self, *args, **keys)
         self.hasDummyPane = False
         
 
@@ -10337,7 +10337,7 @@ class AuiManager_DCP(AuiManager):
 
         self.hasDummyPane = True
         dummy = wx.Panel(self.GetManagedWindow())
-        info = aui.AuiPaneInfo().CenterPane().NotebookDockable(True).Name('dummyCenterPane').DestroyOnClose(True)
+        info = AuiPaneInfo().CenterPane().NotebookDockable(True).Name('dummyCenterPane').DestroyOnClose(True)
         self.AddPane(dummy, info)
 
 
@@ -10363,11 +10363,11 @@ class AuiManager_DCP(AuiManager):
         the whole layout at one time.
         """
         
-        aui.AuiManager.Update(self)
+        AuiManager.Update(self)
 
         # check if there's already a center pane (except our dummy pane)
         dummyCenterPane = self.GetPane('dummyCenterPane')
-        haveCenterPane = any((pane != dummyCenterPane) and (pane.dock_direction == aui.AUI_DOCK_CENTER) and
+        haveCenterPane = any((pane != dummyCenterPane) and (pane.dock_direction == AUI_DOCK_CENTER) and
                              not pane.IsFloating() and pane.IsShown() for pane in self.GetAllPanes())
         if haveCenterPane:
             if self.hasDummyPane:
