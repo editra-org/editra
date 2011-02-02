@@ -19,6 +19,7 @@ NEW: [features/enhancements]
 +Improve Python autoindenter to better handle more conditions in regards to
 brackets and parens.
 +Autocomp and calltip shortcuts are now customizable.
++Add Bookmark manager window to Shelf
 
 LIBRARY:
 +Support ControlBars in on left and right side of ControlBox.

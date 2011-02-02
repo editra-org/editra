@@ -47,6 +47,15 @@ class EBaseListCtrl(elistmix.ListRowHighlighter,
         elistmix.ListRowHighlighter.__init__(self)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
 
+    def GetSelections(self):
+        """Get a list of all the selected items in the list
+        @return: list of ints
+
+        """
+        items = [ idx for idx in range(self.GetItemCount())
+                  if self.IsSelected(idx) ]
+        return items
+
 class ECheckListCtrl(listmix.CheckListCtrlMixin,
                      EBaseListCtrl):
      """ListCtrl with CheckBoxes in the first column"""
