@@ -437,16 +437,20 @@ def GetFileManagerCmd():
         else:
             return 'nautilus'
 
+def GetUserConfigBase():
+    """Get the base user configuration directory path"""
+    cbase = ed_glob.CONFIG['CONFIG_BASE']
+    if cbase is None:
+        cbase = wx.StandardPaths_Get().GetUserDataDir()
+    return cbase + os.sep
+
 def HasConfigDir(loc=u""):
     """ Checks if the user has a config directory and returns True
     if the config directory exists or False if it does not.
     @return: whether config dir in question exists on an expected path
 
     """
-    cbase = ed_glob.CONFIG['CONFIG_BASE']
-    if cbase is None:
-        cbase = wx.StandardPaths_Get().GetUserDataDir() + os.sep
-
+    cbase = GetUserConfigBase()
     to_check = os.path.join(cbase, loc)
     return os.path.exists(to_check)
 
@@ -455,12 +459,9 @@ def MakeConfigDir(name):
     @param name: name of config directory to make in user config dir
 
     """
-    cbase = ed_glob.CONFIG['CONFIG_BASE']
-    if cbase is None:
-        cbase = wx.StandardPaths_Get().GetUserDataDir()
-
+    cbase = GetUserConfigBase()
     try:
-        os.mkdir(cbase + os.sep + name)
+        os.mkdir(cbase + name)
     except (OSError, IOError):
         pass
 
@@ -485,10 +486,7 @@ def CreateConfigDir():
 
     """
     #---- Resolve Paths ----#
-    config_dir = ed_glob.CONFIG['CONFIG_BASE']
-    if config_dir is None:
-        config_dir = wx.StandardPaths_Get().GetUserDataDir() + os.sep
-
+    config_dir = GetUserConfigBase()
     profile_dir = os.path.join(config_dir, u"profiles")
     dest_file = os.path.join(profile_dir, u"default.ppb")
     ext_cfg = [u"cache", u"styles", u"plugins"]
@@ -527,10 +525,7 @@ def ResolvConfigDir(config_dir, sys_only=False):
 
     # Try to get a User config directory
     if not sys_only:
-        user_config = ed_glob.CONFIG['CONFIG_BASE']
-        if user_config is None:
-            user_config = stdpath.GetUserDataDir() + os.sep
-
+        user_config = GetUserConfigBase()
         user_config = os.path.join(user_config, config_dir)
 
         if os.path.exists(user_config):
