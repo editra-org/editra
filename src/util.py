@@ -448,7 +448,7 @@ def GetUserConfigBase():
                 base, cfgdir = os.path.split(cbase)
                 tmp_path = os.path.join(base, '.config')
                 if os.path.exists(tmp_path):
-                    cbase = os.path.join(tmp_path, cfgdir)
+                    cbase = os.path.join(tmp_path, cfgdir.lstrip(u'.'))
     return cbase + os.sep
 
 def HasConfigDir(loc=u""):
