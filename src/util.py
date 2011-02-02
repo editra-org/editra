@@ -442,6 +442,13 @@ def GetUserConfigBase():
     cbase = ed_glob.CONFIG['CONFIG_BASE']
     if cbase is None:
         cbase = wx.StandardPaths_Get().GetUserDataDir()
+        if wx.Platform == '__WXGTK__':
+            if u'.config' not in cbase and not os.path.exists(cbase):
+                # If no existing configuration return xdg config path
+                base, cfgdir = os.path.split(cbase)
+                tmp_path = os.path.join(base, '.config')
+                if os.path.exists(tmp_path):
+                    cbase = os.path.join(tmp_path, cfgdir)
     return cbase + os.sep
 
 def HasConfigDir(loc=u""):
@@ -521,8 +528,6 @@ def ResolvConfigDir(config_dir, sys_only=False):
            the code has proven itself.
 
     """
-    stdpath = wx.StandardPaths_Get()
-
     # Try to get a User config directory
     if not sys_only:
         user_config = GetUserConfigBase()
@@ -565,25 +570,25 @@ def ResolvConfigDir(config_dir, sys_only=False):
     # Tokenize path
     pieces = path.split(os.sep)
 
-    if os.sys.platform == 'win32':
+    if wx.Platform == u'__WXMSW__':
         # On Windows the exe is in same dir as config directories
         pro_path = os.sep.join(pieces[:-1])
 
         if os.path.isabs(pro_path):
             pass
-        elif pro_path == "":
+        elif pro_path == u"":
             pro_path = os.getcwd()
             pieces = pro_path.split(os.sep)
             pro_path = os.sep.join(pieces[:-1])
         else:
             pro_path = os.path.abspath(pro_path)
-    elif os.sys.platform == "darwin":
+    elif wx.Platform == u'__WXMAC__':
         # On OS X the config directories are in the applet under Resources
+        stdpath = wx.StandardPaths_Get()
         pro_path = stdpath.GetResourcesDir()
         pro_path = os.path.join(pro_path, config_dir)
     else:
         pro_path = os.sep.join(pieces[:-2])
-
         if pro_path.startswith(os.sep):
             pass
         elif pro_path == u"":
@@ -594,7 +599,7 @@ def ResolvConfigDir(config_dir, sys_only=False):
         else:
             pro_path = os.path.abspath(pro_path)
 
-    if os.sys.platform != "darwin":
+    if wx.Platform != u'__WXMAC__':
         pro_path = pro_path + os.sep + config_dir + os.sep
 
     path = os.path.normpath(pro_path) + os.sep
