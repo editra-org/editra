@@ -97,7 +97,7 @@ class LogViewer(eclib.ControlBox):
 
     """
     def __init__(self, parent):
-        eclib.ControlBox.__init__(self, parent)
+        super(LogViewer, self).__init__(parent)
 
         # Attributes
         self._buffer = LogBuffer(self)
@@ -142,7 +142,7 @@ class LogViewer(eclib.ControlBox):
         clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
                                      cbmp, style=eclib.PB_STYLE_NOBG)
         ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
-        ctrlbar.SetVMargin(1, 1)
+        ctrlbar.SetVMargin(0, 0)
         self.SetControlBar(ctrlbar)
         
     def OnChoice(self, evt):
@@ -185,7 +185,7 @@ class LogBuffer(eclib.OutputBuffer):
     ERROR_STYLE = eclib.OPB_STYLE_MAX + 1
 
     def __init__(self, parent):
-        eclib.OutputBuffer.__init__(self, parent)
+        super(LogBuffer, self).__init__(parent)
 
         # Attributes
         self._filter = SHOW_ALL_MSG
