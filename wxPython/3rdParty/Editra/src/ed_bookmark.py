@@ -161,7 +161,7 @@ class BookmarkWindow(eclib.ControlBox):
         #Setup
         self.SetWindow(self._list)
         ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
-        ctrlbar.SetVMargin(2, 2)
+        ctrlbar.SetVMargin(0, 0)
         if wx.Platform == '__WXGTK__':
             ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
         self.SetControlBar(ctrlbar)
