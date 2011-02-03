@@ -364,7 +364,7 @@ def AddFileHistoryToProfile(file_history):
 
     """
     files = list()
-    for fnum in xrange(file_history.GetNoHistoryFiles()):
+    for fnum in range(file_history.GetNoHistoryFiles()):
         files.append(file_history.GetHistoryFile(fnum))
     Profile_Set('FHIST', files)
 
@@ -399,12 +399,8 @@ def GetLoader():
            should be.
 
     """
-    cbase = CONFIG['CONFIG_BASE']
-    if cbase is None:
-        cbase = wx.StandardPaths_Get().GetUserDataDir()
-
+    cbase = util.GetUserConfigBase()
     loader = os.path.join(cbase, u"profiles", u".loader2")
-
     return loader
 
 def GetProfileStr():
