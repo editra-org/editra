@@ -72,8 +72,8 @@ ID_REGEX = wx.NewId()
 class CommandBarBase(eclib.ControlBar):
     """Base class for control bars"""
     def __init__(self, parent):
-        eclib.ControlBar.__init__(self, parent,
-                                    style=eclib.CTRLBAR_STYLE_GRADIENT)
+        super(CommandBarBase, self).__init__(parent,
+                                             style=eclib.CTRLBAR_STYLE_GRADIENT)
 
         if wx.Platform == '__WXGTK__':
             self.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
@@ -250,7 +250,7 @@ class CommandBarBase(eclib.ControlBar):
 class SearchBar(CommandBarBase):
     """Commandbar for searching text in the current buffer."""
     def __init__(self, parent):
-        CommandBarBase.__init__(self, parent)
+        super(SearchBar, self).__init__(parent)
 
         # Attributes
         self.SetControl(ed_search.EdSearchCtrl(self, wx.ID_ANY,
@@ -400,7 +400,7 @@ class SearchBar(CommandBarBase):
 class CommandEntryBar(CommandBarBase):
     """Commandbar for editor command entry and execution."""
     def __init__(self, parent):
-        CommandBarBase.__init__(self, parent)
+        super(CommandEntryBar, self).__init__(parent)
 
         # Attributes
         self.SetControl(CommandExecuter(self, wx.ID_ANY, size=(150, -1)))
@@ -427,7 +427,7 @@ class CommandEntryBar(CommandBarBase):
 class GotoLineBar(CommandBarBase):
     """Commandbar for Goto Line function"""
     def __init__(self, parent):
-        CommandBarBase.__init__(self, parent)
+        super(GotoLineBar, self).__init__(parent)
 
         # Attributes
         self.SetControl(LineCtrl(self, wx.ID_ANY,
@@ -461,8 +461,8 @@ class CommandExecuter(eclib.CommandEntryBase):
 
     def __init__(self, parent, id_, size=wx.DefaultSize):
         """Initializes the CommandExecuter"""
-        eclib.CommandEntryBase.__init__(self, parent, id_, size=size,
-                                           style=wx.TE_PROCESS_ENTER|wx.WANTS_CHARS)
+        super(CommandExecuter, self).__init__(parent, id_, size=size,
+                                              style=wx.TE_PROCESS_ENTER|wx.WANTS_CHARS)
 
         # Attributes
         self._history = dict(cmds=[''], index=-1, lastval='')
@@ -964,9 +964,9 @@ class LineCtrl(eclib.CommandEntryBase):
                         current document.
 
         """
-        eclib.CommandEntryBase.__init__(self, parent, id_, "", size=size,
-                                        style=wx.TE_PROCESS_ENTER,
-                                        validator=util.IntValidator(0, 65535))
+        super(LineCtrl, self).__init__(parent, id_, u"", size=size,
+                                       style=wx.TE_PROCESS_ENTER,
+                                       validator=util.IntValidator(0, 65535))
 
         # Attributes
         self._last = 0

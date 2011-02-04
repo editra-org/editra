@@ -102,7 +102,7 @@ class SearchController(object):
         self._stc      = getstc
         self._finddlg  = None
         self._posinfo  = dict(scroll=0, start=0, found=0, ldir=None)
-        self._data     = wx.FindReplaceData(eclib.AFR_RECURSIVE)
+        self._data     = self._InitFindData()
         self._li_choices = list()
         self._li_sel   = 0
         self._filters  = None
@@ -223,6 +223,43 @@ class SearchController(object):
         # Update the text that should be shown in the find replace fields
         self._finddlg.RefreshFindReplaceFields()
         self._finddlg.SetFocus()
+
+    def _InitFindData(self):
+        """Get the intial find data
+        @return: wx.FindReplaceData
+
+        """
+        fdata = Profile_Get('SEARCH_SETTINGS', default=None)
+        if fdata is not None:
+            fmap = dict(matchcase=eclib.AFR_MATCHCASE,
+                        wholeword=eclib.AFR_WHOLEWORD,
+                        regex=eclib.AFR_REGEX,
+                        recurse=eclib.AFR_RECURSIVE)
+            flags = 0
+            for flag in fdata:
+                if fdata.get(flag, False):
+                    flags |= fmap.get(flag, 0)
+            fdata = wx.FindReplaceData(flags)
+        else:
+            fdata = wx.FindReplaceData(eclib.AFR_RECURSIVE)
+        return fdata
+
+    def _StoreFindData(self):
+        """Serialize the find/replace settings into the user profile"""
+        fmap = dict(matchcase=eclib.AFR_MATCHCASE,
+                    wholeword=eclib.AFR_WHOLEWORD,
+                    regex=eclib.AFR_REGEX,
+                    recurse=eclib.AFR_RECURSIVE)
+        tostore = dict()
+        flags = self._data.GetFlags()
+        for fname in fmap:
+            flag = fmap[fname]
+            tostore[fname] = False
+            if flags & flag:
+                tostore[fname] = True
+        Profile_Set('SEARCH_SETTINGS', tostore)
+
+    #---- Public Interface ----#
 
     def GetClientString(self, multiline=False):
         """Get the selected text in the current client buffer. By default
@@ -517,11 +554,13 @@ class SearchController(object):
             # Save the most recent choices of search locations
             Profile_Set('SEARCH_LOC', choices)
             Profile_Set('SEARCH_FILTER', self._filters)
+            self._StoreFindData()
         evt.Skip()
         self._parent.SetFocus()
 
     def OnOptionChanged(self, evt):
         """Handle when the find options are changed in the dialog"""
+        self._StoreFindData() # Persist new search settings from find dialog
         dead = list()
         for idx, client in enumerate(self._clients):
             try:
@@ -762,11 +801,13 @@ class SearchController(object):
         self._data.SetFlags(flags)
         if self._finddlg is not None:
             self._finddlg.SetData(self._data)
+        self._StoreFindData() # Update persistence
 
     def RefreshControls(self):
         """Refresh controls that are associated with this controllers data."""
         if self._finddlg is not None:
             self._finddlg.RefreshFindOptions()
+        self._StoreFindData() # Update persistence
 
 #-----------------------------------------------------------------------------#
 
