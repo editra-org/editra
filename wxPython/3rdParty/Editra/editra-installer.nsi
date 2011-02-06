@@ -26,6 +26,7 @@ SetCompressor lzma
 !define MUI_ABORTWARNING
 !define MUI_ICON "pixmaps\editra.ico"
 !define MUI_UNICON "pixmaps\editra.ico"
+!define MUI_FILEICON "pixmaps\editra_doc.png"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -69,6 +70,8 @@ InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
+
+RequestExecutionLevel admin 
 
 ;---- !defines for use with SHChangeNotify
 !ifdef SHCNE_ASSOCCHANGED
@@ -122,6 +125,7 @@ Section "Editra Core" SEC01
   File /r ".\*.*"
 
   ; Add the shortcuts to the start menu and desktop
+  SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\${MUI_ICON}"
   CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe"  "" "$INSTDIR\${MUI_ICON}"
@@ -132,7 +136,7 @@ Section "Context Menus" SEC02
   SectionIn 1
   WriteRegStr HKCR "*\shell\OpenWithEditra" "" "Edit with ${PRODUCT_NAME}"
   WriteRegStr HKCR "*\shell\OpenWithEditra\command" "" '$INSTDIR\${PRODUCT_NAME}.exe "%1"'
-;  WriteRegStr HKCR "*\shell\OpenWithEditra\DefaultIcon" "" "$INSTDIR\Editra.exe,1"
+;  WriteRegStr HKCR "*\shell\OpenWithEditra\DefaultIcon" "" "${MUI_FILEICON}"
 
   ; Notify of the shell extension changes
   System::Call 'Shell32::SHChangeNotify(i ${SHCNE_ASSOCCHANGED}, i ${SHCNF_FLUSH}, i 0, i 0)'
@@ -147,8 +151,9 @@ SectionEnd
 ; Make/Install Shortcut links
 Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  SetShellVarContext all
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\uninst.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\uninst.exe" "" "$INSTDIR\${MUI_UNICON}"
 SectionEnd
 
 ; Post installation setup
@@ -158,7 +163,7 @@ Section -Post
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\${PRODUCT_NAME}.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\Editra.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\${MUI_UNICON}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
@@ -175,8 +180,8 @@ FunctionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Add context menu item 'Edit with ${PRODUCT_NAME}'"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Add shortcut to Quick Launch Bar"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
-;------------------------------- End Installer --------------------------------
 
+;------------------------------- End Installer --------------------------------
 
 ;----------------------------- Start Uninstaller ------------------------------
 
@@ -186,23 +191,27 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
-  ; Remove all Files
-  RmDir /r "$INSTDIR\"
 
-  ; Remove all shortcuts
-  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
-  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk"
-  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Editra.lnk"
+  ; Ensure shortcuts are removed from user directory as well
+  RmDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
   Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
   Delete "$QUICKLAUNCH\${PRODUCT_NAME}.lnk"
-  RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
+
+  ; Remove all shortcuts from All Users directory
+  SetShellVarContext all
+  RmDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
+  Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+  Delete "$QUICKLAUNCH\${PRODUCT_NAME}.lnk"
 
   ; Cleanup Registry
   DeleteRegKey HKCR "*\shell\OpenWithEditra"
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
 
-  SetAutoClose true
+  ; Remove all Files
+  RmDir /r "$INSTDIR\"
+
+  SetAutoClose false
 SectionEnd
 
 Function un.onUninstSuccess

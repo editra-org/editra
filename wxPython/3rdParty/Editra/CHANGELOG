@@ -46,6 +46,7 @@ file with "Edit with Editra..." shortcut on Windows.
 +Handle OverflowError that could occur when too large a value was passed to the
 busy indicator.
 +Fix display inconsistencies in recently opened file menu.
++Fix some issues with the binary installer and uninstaller on Windows Vista/7
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
