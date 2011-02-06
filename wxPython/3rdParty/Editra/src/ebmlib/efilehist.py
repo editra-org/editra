@@ -14,8 +14,8 @@ Enhanced File History - Provides more consistent behavior than wxFileHistory
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__svnid__ = "$Id:  $"
-__revision__ = "$Revision:  $"
+__svnid__ = "$Id: $"
+__revision__ = "$Revision: $"
 
 __all__ = ['EFileHistory',]
 
