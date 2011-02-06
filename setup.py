@@ -342,6 +342,7 @@ def BuildPy2Exe():
         url = URL,
         data_files = DATA_FILES,
         )
+    shutil.copy2(".\\editra-installer.nsi", ".\\dist\\editra-installer.nsi")
 
 def BuildOSXApp():
     """Build the OSX Applet"""
