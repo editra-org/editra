@@ -45,6 +45,7 @@ file with "Edit with Editra..." shortcut on Windows.
 +Fix issue with showing calltips for buffers that are not visible.
 +Handle OverflowError that could occur when too large a value was passed to the
 busy indicator.
++Fix display inconsistencies in recently opened file menu.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00

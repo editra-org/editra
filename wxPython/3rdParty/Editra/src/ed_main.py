@@ -101,7 +101,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._handlers = dict(menu=list(), ui=list())
 
         #---- Setup File History ----#
-        self.filehistory = wx.FileHistory(_PGET('FHIST_LVL', 'int', 9))
+        self.filehistory = ebmlib.EFileHistory(_PGET('FHIST_LVL', 'int', 9))
 
         #---- Status bar on bottom of window ----#
         self.SetStatusBar(ed_statbar.EdStatBar(self))
@@ -561,18 +561,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             hist_list = _PGET('FHIST', default=list())
             if len(hist_list) > size:
                 hist_list = hist_list[:size]
-
-            for fname in hist_list:
-                if isinstance(fname, basestring) and fname:
-                    # TODO: find out why these errors are happening
-                    #       when loading the pickled strings on some systems
-                    #       The pickled strings are not in unicode format.
-                    try:
-                        self.filehistory.AddFileToHistory(fname)
-                    except wx.PyAssertionError:
-                        pass
+            self.filehistory.History = hist_list
         except UnicodeEncodeError, msg:
-            self.LOG("[ed_main][err] Filehistory load failed: %s" % str(msg))
+            self.LOG("[ed_main][err] Filehistory load failed: %s" % msg)
 
     def OnNew(self, evt):
         """Start a New File in a new tab
@@ -948,8 +939,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # TODO: Find out why filehistory can be undefined by this point
         #       sometimes.
         try:
-            profiler.AddFileHistoryToProfile(self.filehistory)
-            del self.filehistory
+            _PSET('FHIST', self.filehistory.History)
         except AttributeError:
             self.LOG("[ed_main][err] OnClose: Trapped AttributeError OnExit")
 
