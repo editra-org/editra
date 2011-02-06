@@ -356,17 +356,6 @@ def _ToObject(index, val, fmt):
     return rval
 
 #---- Begin Function Definitions ----#
-def AddFileHistoryToProfile(file_history):
-    """Manages work of adding a file from the profile in order
-    to allow the top files from the history to be available
-    the next time the user opens the program.
-    @param file_history: add saved files to history list
-
-    """
-    files = list()
-    for fnum in range(file_history.GetNoHistoryFiles()):
-        files.append(file_history.GetHistoryFile(fnum))
-    Profile_Set('FHIST', files)
 
 def CalcVersionValue(ver_str="0.0.0"):
     """Calculates a version value from the provided dot-formated string

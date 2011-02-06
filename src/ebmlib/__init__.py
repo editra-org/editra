@@ -38,5 +38,6 @@ from e_weblib import *
 # Misc
 from miscutil import *
 from cmenumgr import *
+from efilehist import *
 from osutil import *
 
