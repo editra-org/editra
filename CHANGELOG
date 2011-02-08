@@ -47,6 +47,7 @@ file with "Edit with Editra..." shortcut on Windows.
 busy indicator.
 +Fix display inconsistencies in recently opened file menu.
 +Fix some issues with the binary installer and uninstaller on Windows Vista/7
++Fix behavior of change word command to better emulate vi.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00

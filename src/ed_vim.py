@@ -89,6 +89,10 @@ class EditraCommander(object):
         self.LastFindChar = None
         self._Bookmarks = {}
 
+    @property
+    def STC(self):
+        return self.stc
+
     def InsertMode(self):
         """Put editor in insert mode"""
         self.keyprocessor.InsertMode()
@@ -154,7 +158,7 @@ class EditraCommander(object):
 
     def _SetPos(self, pos):
         """Set caret position"""
-        return self.stc.GotoPos(pos)
+        self.stc.GotoPos(pos)
 
     def SelectLines(self, repeat):
         """Select specified number of lines starting with current line
@@ -197,7 +201,6 @@ class EditraCommander(object):
 
     def PopColumn(self, restore=True):
         """Pop caret position, and optionally discard it
-
         @keyword restore: if set to False, column will be discarded
 
         """
@@ -355,11 +358,11 @@ class EditraCommander(object):
         self.stc.MoveCaretPos(-repeat)
 
     def MoveForward(self, repeat=1):
-        # TODO: move left for RTL mode
+        """Move the caret position to the right"""
         self.MoveRight(repeat)
 
     def MoveBack(self, repeat=1):
-        # TODO: move right for RTL mode
+        """Move the caret position to the left"""
         self.MoveLeft(repeat)
 
     def NextWord(self, repeat=1):
@@ -619,12 +622,25 @@ class EditraCommander(object):
     def DeleteSelection(self):
         """Yank selection and delete it"""
         start, end = self._GetSelectionRange()
+        self.stc.BeginUndoAction()
         self.YankSelection()
         self.stc.Clear()
         self._SetPos(start)
+        self.stc.EndUndoAction()
 
     def ChangeSelection(self):
         """Yank selection, delete it, and enter insert mode"""
+        # HACK: need to adjust selection behavior for change command
+        #       to better match vi behavior by not including trailing
+        #       whitespace in the selection from the motion.
+        stext = self.STC.GetSelectedText()
+        clen = len(stext)
+        slen = len(stext.rstrip())
+        if slen < clen and slen > 0:
+            start, end = self._GetSelectionRange()
+            new_end = end - (clen - slen)
+            self.STC.SetSelectionStart(start)
+            self.STC.SetSelectionEnd(new_end)
         self.DeleteSelection()
         self.InsertMode()
 
@@ -755,6 +771,7 @@ class EditraCommander(object):
         """Goto the position of the bookmark associated with the given
         character label.
         @param mark: the character label of the book mark
+        @todo: hook into Bookmark Manager ed_bookmark?
 
         """
         if not mark in self._Bookmarks:
@@ -1195,13 +1212,11 @@ def Change(editor, repeat, cmd):
     restore_x = cmd in (u'y', u'<', u'>') or cmd == u'd' and line_motion
     editor.PopColumn(restore_x)
 
-    # XXX:Some special case handling
-    #     Not the most elegant way though ..
+    # XXX: Some special case handling
+    #      Not the most elegant way though ..
     if cmd == u'c':
-        if line_motion:
-            editor.OpenLineUp()
-
-    if cmd not in u'c':
+        pass
+    else:
         # Repeating delete/yank/indent commands doesn't insert any text
         editor.SetLastInsertedText(u'')
         # Applying them in visual mode ends visual mode
@@ -1211,7 +1226,7 @@ def Change(editor, repeat, cmd):
         # Remember this command as last change
         # However, if we're operating on a selection, then remembering
         # doesn't make much sense
-        editor.SetLastChangeCommand(lambda: Change(editor, repeat, cmd+motion))
+        editor.SetLastChangeCommand(lambda : Change(editor, repeat, cmd+motion))
 
 @vim_parser(u'pP')
 def Put(editor, repeat, cmd):
