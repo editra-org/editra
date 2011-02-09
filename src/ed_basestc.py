@@ -1102,7 +1102,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             sback = sback.GetBack()
         else:
             sback = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-        self.vert_edit.SetBlockColor(sback)
+        self.VertEdit.SetBlockColor(sback)
         self.DefineMarkers()
 
 #-----------------------------------------------------------------------------#
