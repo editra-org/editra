@@ -219,6 +219,12 @@ class EdLogFile(LogFile):
     def __init__(self):
         super(EdLogFile, self).__init__("editra")
 
+    def PurgeOldLogs(self, days):
+        try:
+            super(EdLogFile, self).PurgeOldLogs(days)
+        except OSError, msg:
+            DEBUGP("[dev_tool][err] PurgeOldLogs: %s" % msg)
+
 #-----------------------------------------------------------------------------#
 
 def DecodeString(string, encoding=None):

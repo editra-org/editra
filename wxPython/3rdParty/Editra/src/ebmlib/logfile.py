@@ -49,6 +49,13 @@ class LogFile(object):
         if self.logdir is None:
             self.logdir = tempfile.gettempdir()
 
+    #---- Properties ----#
+    LogDirectory = property(lambda self: self.logdir,
+                            lambda self, dname: setattr(self, 'logdir', dname))
+    Prefix = property(lambda self: self.prefix,
+                      lambda self, prefix: setattr(self, 'prefix', prefix))
+
+    #---- Public Interface ----#
     def WriteMessage(self, msg):
         """Append the message to the current log file
         @param msg: string object
@@ -89,6 +96,7 @@ class LogFile(object):
                     fpath = os.path.join(self.logdir, path)
                     paths.append(fpath)
 
+        # Attempt to cleanup the old files
         for log in paths:
             try:
                 os.remove(log)
