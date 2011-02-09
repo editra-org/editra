@@ -94,6 +94,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Attributes
         self._loaded = False
+        self._initialized = False # for GTK OnActivate HACK
         self._mlock = ebmlib.CallLock()
         self._last_save = u''
         self.LOG = wx.GetApp().GetLog()
@@ -356,7 +357,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             #      window doesn't get activated until later than it does on the
             #      other platforms. So for panels that depend on updating their
             #      initial state we need to send out a fake update message here.
-            if wx.Platform == '__WXGTK__':
+            if wx.Platform == '__WXGTK__' and not self._initialized:
+                self._initialized = True
                 nb = self.GetNotebook()
                 ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
                                    (nb, nb.GetSelection()))
