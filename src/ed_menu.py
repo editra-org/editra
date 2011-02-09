@@ -214,7 +214,7 @@ class KeyBinder(object):
 
     def __init__(self):
         """Create the KeyBinder object"""
-        object.__init__(self)
+        super(KeyBinder, self).__init__()
 
         # Attributes
         self.cache = ed_glob.CONFIG['CACHE_DIR'] # Resource Directory
@@ -392,7 +392,8 @@ class KeyBinder(object):
 
         """
         if isinstance(keys, basestring):
-            keys = [ key.strip() for key in keys.split('+') ]
+            keys = [ key.strip() for key in keys.split(u'+')
+                     if len(key.strip())]
 
         if len(keys):
             # Set the binding
@@ -434,7 +435,7 @@ class EdMenuBar(wx.MenuBar):
         @keyword style: style to set for menu bar
 
         """
-        wx.MenuBar.__init__(self, style)
+        super(EdMenuBar, self).__init__(style)
 
         # Setup
         if EdMenuBar.keybinder.GetCurrentProfile() is None:
@@ -913,26 +914,25 @@ class EdMenuBar(wx.MenuBar):
             for item in IterateMenuItems(menu[0]):
                 item_id = item.GetId()
                 binding = EdMenuBar.keybinder.GetBinding(item_id)
-                if not len(binding):
-                    continue
+                empty_binding = not len(binding)
+                if not empty_binding:
+                    # Verify binding and clear invalid ones from binder
+                    tmp = [key.title() for key in binding.strip().split(u'+')]
+                    nctrl = len([key for key in tmp
+                                if key not in (u'Ctrl', u'Alt', u'Shift')])
+                    if len(tmp) > 3 or not nctrl:
+                        EdMenuBar.keybinder.SetBinding(item_id, u'')
+                        continue
 
-                # Verify binding and clear invalid ones from binder
-                tmp = [key.title() for key in binding.strip().split(u'+')]
-                nctrl = len([key for key in tmp
-                            if key not in ('Ctrl', 'Alt', 'Shift')])
-                if len(tmp) > 3 or not nctrl:
-                    EdMenuBar.keybinder.SetBinding(item_id, '')
-                    continue
-
-                # Reset the binding in the binder to ensure it is
-                # correctly formatted.
-                binding = u"\t" + u"+".join(tmp)
-                EdMenuBar.keybinder.SetBinding(item_id, binding)
+                    # Reset the binding in the binder to ensure it is
+                    # correctly formatted.
+                    binding = u"\t" + u"+".join(tmp)
+                    EdMenuBar.keybinder.SetBinding(item_id, binding)
 
                 clbl = item.GetText()
                 # Update the item if the shortcut has changed
-                if ('\t' in clbl and not clbl.endswith(binding)) or \
-                   ('\t' not in clbl and len(binding)):
+                if ('\t' in clbl and (not clbl.endswith(binding) or empty_binding)) or \
+                   ('\t' not in clbl and not empty_binding):
                     # wxBug? Getting the text of a menuitem is supposed to
                     # return it with the accelerators but under gtk the string
                     # has underscores '_' where it was supposed to have '&'
