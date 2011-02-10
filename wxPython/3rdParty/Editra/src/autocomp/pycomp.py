@@ -203,12 +203,16 @@ class PyCompleter(object):
             exec src in self.compldict
         except Exception, msg:
             dbg("[pycomp][err] src exec: %s" % msg)
+        else:
+            dbg("[pycomp][info] Successfully executed source code")
 
         for loc in scope.locals:
             try: 
                 exec loc in self.compldict
             except Exception, msg:
                 dbg("[pycomp][err] local exec %s [%s]" % (msg, loc))
+            else:
+                dbg("[pycomp][info] Successfully executed: %s" % loc)
 
     def get_arguments(self, func_obj):
         """Get the arguments of a given function obj
