@@ -326,7 +326,6 @@ def BuildPy2Exe():
                                "optimize" : 1,
                                "bundle_files" : 2,
                                "includes" : INCLUDES,
-                               "excludes" : ["Tkinter",],
                                "dll_excludes": [ "MSVCP90.dll" ] }},
         windows = [{"script": "src/Editra.py",
                     "icon_resources": [(1, ICON['Win'])],
