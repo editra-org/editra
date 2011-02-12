@@ -220,6 +220,7 @@ class BookmarkWindow(eclib.ControlBox):
         # Refresh everything
         # XXX: if optimization is needed only refresh visible items
         self._list.RefreshItems(0, nMarks)
+        self._list.Refresh()
 
     def OnItemActivate(self, evt):
         """Handle double clicks on items to navigate to the
@@ -230,32 +231,33 @@ class BookmarkWindow(eclib.ControlBox):
         marks = EdBookmarks.GetMarks()
         if index < len(marks):
             mark = marks[index]
-            self.GotoBookmark(mark.FileName, mark.Line, mark.Handle)
+            self.GotoBookmark(mark)
 
-    def GotoBookmark(self, fname, lnum, handle):
+    def GotoBookmark(self, mark):
         """Goto the bookmark in the editor
-        @param fname: file name
-        @param handle: stc bookmark handle
+        @param mark: BookMark
 
         """
         app = wx.GetApp()
         mw = app.GetActiveWindow()
         if mw:
             nb = mw.GetNotebook()
-            buf = nb.FindBuffer(fname)
+            buf = nb.FindBuffer(mark.FileName)
             use_handle = True
             if not buf:
-                nb.OpenPage(ebmlib.GetPathName(fname),
-                            ebmlib.GetFileName(fname))
+                nb.OpenPage(ebmlib.GetPathName(mark.FileName),
+                            ebmlib.GetFileName(mark.FileName))
                 buf = nb.GetCurrentPage()
                 use_handle = False # Handle is invalid so use line number
 
             if buf:
                 # Ensure the tab is the current one
-                nb.GotoPage(fname)
+                nb.GotoPage(mark.FileName)
                 # Jump to the bookmark line
                 if use_handle:
-                    lnum = buf.MarkerLineFromHandle(handle)
+                    lnum = buf.MarkerLineFromHandle(mark.Handle)
+                else:
+                    lnum = mark.Line
                 buf.GotoLine(lnum)
         else:
             util.Log("[ed_bookmark][err] Failed to locate mainwindow")
@@ -271,43 +273,14 @@ class BookmarkList(eclib.EBaseListCtrl):
         super(BookmarkList, self).__init__(parent,
                                            style=wx.LC_REPORT|\
                                                  wx.LC_EDIT_LABELS|\
-                                                 wx.LC_SINGLE_SEL|\
                                                  wx.LC_VIRTUAL)
 
-        # Attributes
-        
         # Setup
         self.InsertColumn(BookmarkList.BOOKMARK, _("Bookmark"))
         self.InsertColumn(BookmarkList.FILE_NAME, _("File Location"))
         self.InsertColumn(BookmarkList.LINE_NUM, _("Line Number"))
         self.setResizeColumn(BookmarkList.FILE_NAME+1) #NOTE: +1 bug in mixin
         self.SetItemCount(len(EdBookmarks.GetMarks()))
-
-    def AddBookmark(self, fname, lnum, markname=None):
-        """Add a bookmark to the list
-        @param fname: file name
-        @param lnum: line number (unicode)
-        @keyword markname: custom bookmark alias
-
-        """
-        if not markname:
-            markname = _("Bookmark%d") % self.GetItemCount()
-        self.Append((markname, fname, lnum))
-
-    def DeleteBookmark(self, fname, lnum):
-        """Delete an entry from the list
-        @param fname: file name
-        @param lnum: Line number
-
-        """
-        count = self.GetItemCount()
-        for idx in range(count):
-            item_name = self.GetItem(idx, BookmarkList.FILE_NAME)
-            item_line = self.GetItem(idx, BookmarkList.LINE_NUM)
-            item_key = (item_name.Text, item_line.Text)
-            if item_key == (fname, lnum):
-                self.DeleteItem(idx)
-                break
 
     def OnGetItemText(self, item, column):
         """Override for virtual control"""
