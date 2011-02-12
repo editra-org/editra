@@ -46,7 +46,7 @@ class EdMenu(wx.Menu):
         @param style: type of menu to create
 
         """
-        wx.Menu.__init__(self, title, style)
+        super(EdMenu, self).__init__(title, style)
 
     def Append(self, id_, text=u'', helpstr=u'', \
                kind=wx.ITEM_NORMAL, use_bmp=True):
