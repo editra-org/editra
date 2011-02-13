@@ -311,6 +311,21 @@ class KeyBinder(object):
         return cls.keyprofile.get(item_id, None)
 
     @classmethod
+    def FindMenuId(cls, keyb):
+        """Find the menu item ID that the
+        keybinding is currently associated with.
+        @param keyb: tuple of unicode (u'Ctrl', u'C')
+        @return: int (-1 if not found)
+
+        """
+        menu_id = -1
+        for key, val in cls.keyprofile.iteritems():
+            if val == keyb:
+                menu_id = key
+                break
+        return menu_id
+
+    @classmethod
     def LoadDefaults(cls):
         """Load the default key profile"""
         cls.keyprofile = dict(_DEFAULT_BINDING)
@@ -394,8 +409,13 @@ class KeyBinder(object):
         if isinstance(keys, basestring):
             keys = [ key.strip() for key in keys.split(u'+')
                      if len(key.strip())]
+            keys = tuple(keys)
 
         if len(keys):
+            # Check for an existing binding
+            menu_id = cls.FindMenuId(keys)
+            if menu_id != -1:
+                del cls.keyprofile[menu_id]
             # Set the binding
             cls.keyprofile[item_id] = keys
         elif item_id in cls.keyprofile:
@@ -415,7 +435,7 @@ class KeyBinder(object):
     @classmethod
     def SetProfileDict(cls, keyprofile):
         """Set the keyprofile using a dictionary of id => bindings
-        @param keyprofile: { menu_id : 'binding' }
+        @param keyprofile: { menu_id : (u'Ctrl', u'C'), }
 
         """
         cls.keyprofile = keyprofile
