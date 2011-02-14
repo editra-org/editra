@@ -69,7 +69,7 @@ def AdjustColour(color, percent, alpha=wx.ALPHA_OPAQUE):
     @keyword alpha: amount to adjust alpha channel
 
     """
-    radj, gadj, badj = [ int(val * (abs(percent) / 100.))
+    radj, gadj, badj = [ int(val * (abs(percent) / 100.0))
                          for val in color.Get() ]
 
     if percent < 0:
@@ -88,7 +88,7 @@ def BestLabelColour(color):
     @param color: background color that text will be drawn on
 
     """
-    avg = sum(color.Get()) / 3
+    avg = sum(color.Get()) // 3
     if avg > 192:
         txt_color = wx.BLACK
     elif avg > 128:

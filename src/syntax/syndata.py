@@ -21,6 +21,7 @@ __all__ = ['SyntaxDataBase',]
 
 #-----------------------------------------------------------------------------#
 # Imports
+import collections
 import wx.stc as stc
 
 # Local Imports
@@ -122,7 +123,7 @@ class SyntaxDataBase(object):
         @param funct: callable
 
         """
-        assert callable(funct), "funct must be callable object"
+        assert isinstance(funct, collections.Callable), "funct must be callable object"
         self._features[name] = funct
 
     def SetLexer(self, lex):
