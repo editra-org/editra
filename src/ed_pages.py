@@ -19,6 +19,7 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Dependencies
 import os
+import sys
 import glob
 import cPickle
 import wx
@@ -348,7 +349,7 @@ class EdPages(aui.AuiNotebook):
 
         if os.path.exists(session):
             try:
-                f_handle = open(session)
+                f_handle = open(session, 'rb')
             except IOError:
                 f_handle = None
         else:
@@ -386,6 +387,11 @@ class EdPages(aui.AuiNotebook):
         missingfns = []
         for loadfn in flist:
             if os.path.exists(loadfn) and os.access(loadfn, os.R_OK):
+                if not ebmlib.IsUnicode(loadfn):
+                    try:
+                        loadfn = loadfn.decode(sys.getfilesystemencoding())
+                    except UnicodeDecodeError:
+                        self.LOG("[ed_pages][err] LoadSessionFile: Failed to decode file name")
                 self.OpenPage(os.path.dirname(loadfn),
                               os.path.basename(loadfn))
             else:
