@@ -1674,6 +1674,7 @@ class KeyBindingPanel(wx.Panel):
         super(KeyBindingPanel, self).__init__(parent)
 
         # Attributes
+        self._dirty = False
         self.menub = wx.GetApp().GetActiveWindow().GetMenuBar()
         self.binder = self.menub.GetKeyBinder()
         self.menumap = dict()
@@ -1693,6 +1694,9 @@ class KeyBindingPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_LISTBOX, self.OnListBox)
+        self.Bind(wx.EVT_UPDATE_UI,
+                  lambda evt: evt.Enable(self.Dirty),
+                  id=wx.ID_APPLY)
 
     def _DoLayout(self):
         """Layout the controls"""
@@ -1862,6 +1866,11 @@ class KeyBindingPanel(wx.Panel):
 
         self._UpdateBinding()
 
+    #---- Properties ----#
+
+    Dirty = property(lambda self: self._dirty,
+                     lambda self, bDirty: setattr(self, '_dirty', bDirty))
+
     def ClearKeyView(self):
         """Clear all selections in the keybinding controls"""
         self.FindWindowById(ID_MOD1).SetStringSelection('')
@@ -1996,8 +2005,10 @@ class KeyBindingPanel(wx.Panel):
                 mod2.SetItems(tmods)
                 mod2.SetStringSelection('')
             self._UpdateBinding()
+            self.Dirty = True
         elif e_id in [ID_MOD2, ID_KEYS]:
             self._UpdateBinding()
+            self.Dirty = True
         else:
             evt.Skip()
 
