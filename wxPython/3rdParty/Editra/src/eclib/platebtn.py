@@ -185,7 +185,7 @@ class PlateButton(wx.PyControl):
 
         if bmp is not None and bmp.IsOk():
             bw, bh = bmp.GetSize()
-            ypos = (self.GetSize()[1] - bh) / 2
+            ypos = (self.GetSize()[1] - bh) // 2
             gc.DrawBitmap(bmp, 6, ypos, bmp.GetMask() != None)
             return bw + 6
         else:
@@ -279,7 +279,7 @@ class PlateButton(wx.PyControl):
         # Calc Object Positions
         width, height = self.GetSize()
         tw, th = gc.GetTextExtent(self.GetLabel())
-        txt_y = max((height - th) / 2, 1)
+        txt_y = max((height - th) // 2, 1)
 
         if self._state['cur'] == PLATE_HIGHLIGHT:
             gc.SetTextForeground(self._color['htxt'])
@@ -297,7 +297,7 @@ class PlateButton(wx.PyControl):
             self.__DrawHighlight(gc, width, height)
             txt_x = self.__DrawBitmap(gc)
             gc.DrawText(self.GetLabel(), txt_x + 2, txt_y)
-            self.__DrawDropArrow(gc, txt_x + tw + 6, (height / 2) - 2)
+            self.__DrawDropArrow(gc, txt_x + tw + 6, (height // 2) - 2)
 
         else:
             if self.IsEnabled():
@@ -310,7 +310,7 @@ class PlateButton(wx.PyControl):
         if self._state['cur'] != PLATE_PRESSED:
             txt_x = self.__DrawBitmap(gc)
             gc.DrawText(self.GetLabel(), txt_x + 2, txt_y)
-            self.__DrawDropArrow(gc, txt_x + tw + 6, (height / 2) - 2)
+            self.__DrawDropArrow(gc, txt_x + tw + 6, (height // 2) - 2)
 
     def __InitColors(self):
         """Initialize the default colors"""

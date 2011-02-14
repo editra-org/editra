@@ -23,6 +23,7 @@ __all__ = ['InstallTermHandler', ]
 # Imports
 import wx
 import signal
+import collections
 
 HASWIN32 = False
 if wx.Platform == '__WXMSW__':
@@ -42,7 +43,7 @@ def InstallTermHandler(callback, *args, **kwargs):
     @return: bool (installed or not)
 
     """
-    assert callable(callback), "callback must be callable!"
+    assert isinstance(callback, collections.Callable), "callback must be callable!"
 
     installed = True
     if wx.Platform == '__WXMSW__':
