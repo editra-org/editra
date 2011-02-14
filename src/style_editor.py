@@ -254,7 +254,7 @@ class StyleEditor(ed_basewin.EdBaseDialog):
         ss_c = self.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
         new_cb = self.FindWindowById(wx.ID_NEW)
         if new_cb.GetValue():
-            name = ''
+            name = u''
         else:
             name = ss_c.GetStringSelection()
 
@@ -264,7 +264,7 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         if len(fname):
             sheet_path = os.path.join(ed_glob.CONFIG['STYLES_DIR'], fname)
-            if sheet_path.split(u'.')[-1] != u'ess':
+            if sheet_path.split(u".")[-1] != u"ess":
                 sheet_path += u".ess"
 
             try:
@@ -275,11 +275,14 @@ class StyleEditor(ed_basewin.EdBaseDialog):
                 self.LOG('[style_editor][err] Failed to export style sheet')
                 self.LOG('[style_editor][err] %s' % str(msg))
             else:
+                print "WROTE:", sheet_path
                 # Update Style Sheet Control
                 sheet = u".".join(os.path.basename(sheet_path).split(u'.')[:-1])
                 ss_lst = util.GetResourceFiles(u'styles', get_all=True)
-                ss_lst = [sheet for sheet in ss_lst if not sheet.startswith('.')]
+                ss_lst = [sname for sname in ss_lst if not sname.startswith('.')]
+                print "LIST:", repr(ss_lst)
                 ss_c.SetItems(sorted(ss_lst))
+                print "SET SEL:", sheet
                 ss_c.SetStringSelection(sheet)
                 ss_c.Enable()
                 self.FindWindowById(wx.ID_NEW).SetValue(False)

@@ -53,6 +53,8 @@ busy indicator.
 +Fix hard crash that could occur when processing auto-completion data for some
 Python modules with a py2exe version of Editra.
 +Clear existing keybinding when assigning to new action in keybinding editor.
++Fix issue with updating styles after overwriting or updating an existing
+style sheet with new settings.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
