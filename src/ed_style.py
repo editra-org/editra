@@ -36,8 +36,8 @@ from profiler import Profile_Get, Profile_Set
 import eclib
 
 # Globals
-STY_ATTRIBUTES     = u"face fore back size modifiers"
-STY_EX_ATTRIBUTES  = u"eol bold italic underline"
+STY_ATTRIBUTES     = (u"face", u"fore", u"back", u"size", u"modifiers")
+STY_EX_ATTRIBUTES  = (u"eol", u"bold", u"italic", u"underline")
 
 # Parser Values
 RE_ESS_COMMENT = re.compile("\/\*[^*]*\*+([^/][^*]*\*+)*\/")
@@ -47,13 +47,7 @@ RE_HEX_STR = re.compile("#[0-9a-fA-F]{3,6}")
 #--------------------------------------------------------------------------#
 
 class StyleItem(object):
-    """A storage class for holding styling information
-    @todo: The extra Attributes should be saved as a separate attribute in the
-           StyleItem. This currently causes problems when customizing values in
-           the StyleEditor. Changing this is fairly easy in this class but it
-           will require changes to the StyleMgr and Editor as well.
-
-    """
+    """A storage class for holding styling information """
     __slots__ = ('null', 'fore', 'face', 'back', 'size', '_exattr')
     def __init__(self, fore=u"", back=u"", face=u"", size=u"", ex=None):
         """Initializes the Style Object.
@@ -90,14 +84,18 @@ class StyleItem(object):
         self.size = size     # Font point size
         self._exattr = ex    # Extra attributes
 
-    def __eq__(self, si2):
+    def __eq__(self, other):
         """Defines the == operator for the StyleItem Class
         @param si2: style item to compare to
         @return: whether the two items are equal
         @rtype: bool
 
         """
-        return str(self) == str(si2)
+        return str(self) == str(other)
+
+    def __ne__(self, other):
+        """Defines != operator for the StyleItem Class"""
+        return str(self) != str(other)
 
     def __str__(self):
         """Converts StyleItem to a string
@@ -114,8 +112,8 @@ class StyleItem(object):
         if self.face:
             style_str.append(u"face:%s" % self.face)
         if self.size:
-            style_str.append(u"size:%s" % str(self.size))
-        if len(self._exattr): 
+            style_str.append(u"size:%s" % unicode(self.size))
+        if len(self._exattr):
             style_str.append(u"modifiers:" +  u','.join(self._exattr))
 
         style_str = u",".join(style_str)
@@ -180,7 +178,7 @@ class StyleItem(object):
         @return: string
 
         """
-        return ",".join(self.GetModifierList())
+        return u",".join(self.GetModifierList())
 
     def GetModifierList(self):
         """Get the list of modifiers
@@ -210,7 +208,7 @@ class StyleItem(object):
         @return: bool
 
         """
-        return len(self.__str__())
+        return len(str(self))
 
     def Nullify(self):
         """Clear all values and set item as Null
@@ -219,7 +217,7 @@ class StyleItem(object):
         """
         self.null = True
         for attr in ('fore', 'face', 'back', 'size'):
-            setattr(self, attr, '')
+            setattr(self, attr, u'')
         self._exattr = list()
 
     #---- Set Functions ----#

@@ -209,7 +209,7 @@ class StyleEditor(ed_basewin.EdBaseDialog):
         """
         diff = False
         for key in self.styles_orig:
-            if unicode(self.styles_orig[key]) != unicode(self.styles_new[key]):
+            if self.styles_orig[key] != self.styles_new[key]:
                 diff = True
                 break
 
@@ -275,14 +275,11 @@ class StyleEditor(ed_basewin.EdBaseDialog):
                 self.LOG('[style_editor][err] Failed to export style sheet')
                 self.LOG('[style_editor][err] %s' % str(msg))
             else:
-                print "WROTE:", sheet_path
                 # Update Style Sheet Control
                 sheet = u".".join(os.path.basename(sheet_path).split(u'.')[:-1])
                 ss_lst = util.GetResourceFiles(u'styles', get_all=True)
                 ss_lst = [sname for sname in ss_lst if not sname.startswith('.')]
-                print "LIST:", repr(ss_lst)
                 ss_c.SetItems(sorted(ss_lst))
-                print "SET SEL:", sheet
                 ss_c.SetStringSelection(sheet)
                 ss_c.Enable()
                 self.FindWindowById(wx.ID_NEW).SetValue(False)

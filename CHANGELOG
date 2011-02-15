@@ -55,6 +55,7 @@ Python modules with a py2exe version of Editra.
 +Clear existing keybinding when assigning to new action in keybinding editor.
 +Fix issue with updating styles after overwriting or updating an existing
 style sheet with new settings.
++Fix bug in style editor that would warn about changes when no changes have been made.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
