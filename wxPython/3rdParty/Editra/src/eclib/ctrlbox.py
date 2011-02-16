@@ -184,6 +184,9 @@ class ControlBox(wx.PyPanel):
         self._hsizer.Add(self._vsizer, 1, wx.EXPAND)
         self.SetSizer(self._hsizer)
 
+    #---- Properties ----#
+    Window = property(lambda self: self.GetWindow())
+
     def _GetCtrlBarSizer(self, pos):
         """Get the correct sizer for the ControlBar at the given pos
         @param pos: wx.TOP/LEFT/RIGHT/BOTTOM
