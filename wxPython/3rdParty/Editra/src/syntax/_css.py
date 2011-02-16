@@ -44,7 +44,8 @@ CSS1_KEYWORDS = (0, "font-family font-style font-variant font-weight font-size "
                     "border-bottom border-left border width height float clear "
                     "display white-space list-style-type list-style-image "
                     "list-style-position list-style margin-bottom "
-                    "text-decoration min-width min-height")
+                    "text-decoration min-width min-height "
+                    "background-attachment")
 
 # CSS Psuedo Classes
 CSS_PSUEDO_CLASS = (1, "link visited active hover focus before after left "
@@ -80,7 +81,7 @@ CSS2_KEYWORDS = (2, "ActiveBorder ActiveCaption AppWorkspace Background "
                     "solid square src static stemh stemv stress sub super teal "
                     "thick thin top topline underline uppercase visibility "
                     "visible volume wait wider widows width widths yellow "
-                    "z-index")
+                    "z-index outline left")
 
 #---- Syntax Style Specs ----#
 SYNTAX_ITEMS = [ (stc.STC_CSS_DEFAULT, 'default_style'),
