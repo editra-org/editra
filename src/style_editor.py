@@ -62,7 +62,7 @@ class StyleEditor(ed_basewin.EdBaseDialog):
     @see: ed_style.StyleMgr
     """
     def __init__(self, parent, id_=wx.ID_ANY, title=_("Style Editor"),
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RAISED_BORDER):
+                 style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER):
         """Initializes the Dialog
         @todo: rework the layout
 
@@ -71,59 +71,12 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()
-        self.preview = PreviewPanel(self)
-        self.prebuff = self.preview.GetPreviewBuffer() # TEMP HACK
-        self.styles_orig = self.prebuff.GetStyleSet()
-        self.styles_new = DuplicateStyleDict(self.styles_orig)
-        self.prebuff.SetStyles('preview', self.styles_new, True)
-        self.preview.OpenPreviewFile('cpp')
-        # XXX On Windows the settings pane must be made before the
-        #     sizer it is to be put in or it becomes unable to receive
-        #     focus. But is the exact opposite on mac/gtk. This is really
-        #     a pain or possibly a bug?
-        if wx.Platform == '__WXMSW__':
-            self._settings = SettingsPanel(self)
+        self._panel = StyleEditorBox(self) #TODO
+        self._editor = self._panel.GetWindow() #TODO
 
-        # Main Sizer
+        # Layout
         sizer = wx.BoxSizer(wx.VERTICAL)
-
-        # Control Panel
-        self.ctrl_pane = wx.Panel(self, wx.ID_ANY)
-        ctrl_sizer = wx.BoxSizer(wx.HORIZONTAL)  # Main Control Sizer
-        left_colum = wx.BoxSizer(wx.VERTICAL)    # Left Column
-        right_colum = wx.BoxSizer(wx.VERTICAL)   # Right Column
-
-        # XXX On Mac/GTK if panel is created before sizer all controls in
-        #     it become unable to receive focus from clicks, but it is the
-        #     exact opposite on windows!
-        if wx.Platform != '__WXMSW__':
-            self._settings = SettingsPanel(self)
-
-        # Control Panel Left Column
-        left_colum.AddMany([((10, 10), 0),
-                            (self.__StyleSheets(), 0, wx.ALIGN_LEFT),
-                            ((10, 10), 0),
-                            (self.__StyleTags(), 1, wx.ALIGN_LEFT|wx.EXPAND),
-                            ((10, 10), 0)])
-        ctrl_sizer.Add(left_colum, 0, wx.ALIGN_LEFT)
-
-        # Divider
-        ctrl_sizer.Add(wx.StaticLine(self.ctrl_pane, size=(-1, 2),
-                                     style=wx.LI_VERTICAL),
-                       0, wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND)
-        ctrl_sizer.Add((5, 5), 0)
-
-        # Control Panel Right Column
-        right_colum.Add(self._settings, 1, wx.ALIGN_LEFT | wx.EXPAND)
-        ctrl_sizer.AddMany([(right_colum, 1, wx.ALIGN_RIGHT | wx.EXPAND),
-                            ((5, 5), 0)])
-
-        # Finish Control Panel Setup
-        self.ctrl_pane.SetSizer(ctrl_sizer)
-        sizer.AddMany([((10, 10)), (self.ctrl_pane, 0, wx.ALIGN_CENTER)])
-
-        # Preview Area
-        sizer.AddMany([((5, 5), 0), (self.preview, 0, wx.EXPAND)])
+        sizer.Add(self._panel, 1, wx.EXPAND)
 
         # Create Buttons
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -138,66 +91,272 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         # Finish the Layout
         self.SetSizer(sizer)
-        self.SetAutoLayout(True)
-        sizer.Fit(self)
-        self.EnableSettings(False)
+        self.SetInitialSize()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnCancel, id=wx.ID_CANCEL)
         self.Bind(wx.EVT_BUTTON, self.OnOk, id=wx.ID_OK)
         self.Bind(wx.EVT_BUTTON, self.OnExport, id=wx.ID_SAVE)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+
+    #--- End Init ---#
+
+    def ExportStyleSheet(self):
+        """Writes the style sheet data out to a style sheet
+        @return: whether style sheet was exported properly or not
+
+        """
+        if ed_glob.CONFIG['STYLES_DIR'] == ed_glob.CONFIG['SYS_STYLES_DIR']:
+            stdpath = wx.StandardPaths_Get()
+            user_config = os.path.join(stdpath.GetUserDataDir(), 'styles')
+            if not os.path.exists(user_config):
+                try:
+                    os.mkdir(user_config)
+                except (OSError, IOError), msg:
+                    self.LOG("[style_editor][err] %s" % msg)
+                else:
+                    ed_glob.CONFIG['STYLES_DIR'] = user_config
+
+        result = wx.ID_CANCEL
+        fname = wx.GetTextFromUser(_("Enter style sheet name"),
+                                   _("Export Style Sheet"),
+                                   self._panel.StyleTheme, self)
+
+        if len(fname):
+            sheet_path = os.path.join(ed_glob.CONFIG['STYLES_DIR'], fname)
+            if sheet_path.split(u".")[-1] != u"ess":
+                sheet_path += u".ess"
+
+            try:
+                writer = util.GetFileWriter(sheet_path)
+                writer.write(self._editor.GenerateStyleSheet())
+                writer.close()
+            except (AttributeError, IOError), msg:
+                self.LOG('[style_editor][err] Failed to export style sheet')
+                self.LOG('[style_editor][err] %s' % str(msg))
+            else:
+                # Update Style Sheet Control
+                self._panel.RefreshStyleSheets()
+                sheet = u".".join(os.path.basename(sheet_path).split(u'.')[:-1])
+                self._panel.StyleTheme = sheet
+                self._editor.ResetTransientStyleData()
+                result = wx.ID_OK
+                self.LOG("[style_editor][info] Sucessfully exported: %s" % sheet)
+
+                if sheet_path.startswith(ed_glob.CONFIG['STYLES_DIR']) or \
+                   sheet_path.startswith(ed_glob.CONFIG['SYS_STYLES_DIR']):
+                    # Update editor windows/buffer to use new style sheet
+                    UpdateBufferStyles(sheet)
+
+        return result
+
+    def OnCancel(self, evt):
+        """Catches the cancel button clicks and checks if anything
+        needs to be done before closing the window.
+        @param evt: event that called this handler
+
+        """
+        self.LOG('[style_editor][evt] Cancel Clicked Closing Window')
+        evt.Skip()
+
+    def OnCheck(self, evt):
+        """Handles Checkbox events
+        @param evt: event that called this handler
+
+        """
+        e_id = evt.GetId()
+        e_obj = evt.GetEventObject()
+        if e_id == wx.ID_NEW:
+            val = e_obj.GetValue()
+            choice = self.ctrl_pane.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
+            choice.Enable(not val)
+            if val:
+                self.styles_orig = self.prebuff.BlankStyleDictionary()
+                self.styles_new = DuplicateStyleDict(self.styles_orig)
+                self.prebuff.SetStyles('preview', self.styles_new, nomerge=True)
+                self.prebuff.UpdateAllStyles('preview')
+
+                # For some reason this causes the text display to refresh
+                # properly when nothing else would work.
+                self.OnTextRegion()
+            else:
+                scheme = choice.GetStringSelection().lower()
+                self.prebuff.UpdateAllStyles(scheme)
+                self.styles_orig = self.prebuff.GetStyleSet()
+                self.styles_new = DuplicateStyleDict(self.styles_orig)
+        else:
+            evt.Skip()
+
+    def OnClose(self, evt):
+        """Handles the window closer event
+        @param evt: event that called this handler
+
+        """
+        self.LOG("[style_editor][evt] Dialog closing...")
+        self.OnOk(evt)
+
+    def OnOk(self, evt):
+        """Catches the OK button click and checks if any changes need to be
+        saved before the window closes.
+        @param evt: event that called this handler
+
+        """
+        self.LOG('[style_editor][evt] Ok Clicked Closing Window')
+
+        result = self._editor.DiffStyles()
+        if result == wx.ID_NO:
+            # Get Current Selection to update buffers
+            UpdateBufferStyles(self._panel.StyleTheme)
+            evt.Skip()
+        elif result == wx.ID_CANCEL:
+            self.LOG('[style_editor][info] canceled closing')
+        else:
+            result = self.ExportStyleSheet()
+            if result != wx.ID_CANCEL:
+                evt.Skip()
+
+    def OnExport(self, evt):
+        """Catches save button event
+        @param evt: event that called this handler
+
+        """
+        self.LOG('[style_editor][evt] Export Clicked')
+        self.ExportStyleSheet()
+
+#-----------------------------------------------------------------------------#
+
+class StyleEditorBox(eclib.ControlBox):
+    """StyleEditor main Panel"""
+    def __init__(self, parent):
+        super(StyleEditorBox, self).__init__(parent)
+
+        # Attributes
+        ctrlbar = self.CreateControlBar(wx.TOP)
+        ss_lst = util.GetResourceFiles(u'styles', get_all=True)
+        ss_lst = [sheet for sheet in ss_lst if not sheet.startswith('.')]
+        self._style_ch = wx.Choice(ctrlbar, ed_glob.ID_PREF_SYNTHEME,
+                                   choices=sorted(ss_lst))
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD), wx.ART_MENU)
+        self._addbtn = eclib.PlateButton(ctrlbar, label=_("New"),
+                                         bmp=bmp, style=eclib.PB_STYLE_NOBG)
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_REMOVE), wx.ART_MENU)
+        self._delbtn = eclib.PlateButton(ctrlbar, label=_("Remove"),
+                                         bmp=bmp, style=eclib.PB_STYLE_NOBG)
+
+        # Setup
+        ss_lbl = wx.StaticText(ctrlbar, label=_("Style Theme") + u": ")
+        ctrlbar.AddControl(ss_lbl, wx.ALIGN_LEFT)
+        self._style_ch.SetToolTipString(_("Base new theme on existing one"))
+        self._style_ch.SetStringSelection(Profile_Get('SYNTHEME', 'str'))
+        ctrlbar.AddControl(self._style_ch, wx.ALIGN_LEFT)
+        ctrlbar.AddControl(self._addbtn, wx.ALIGN_LEFT)
+        ctrlbar.AddControl(self._delbtn, wx.ALIGN_LEFT)
+        self.SetWindow(StyleEditorPanel(self))
+
+        # Events
+        self.Bind(wx.EVT_CHOICE,
+                  lambda evt: self.Window.ChangeStyleSheet(self.StyleTheme),
+                  self._style_ch)
+        self.Bind(wx.EVT_BUTTON, self.OnButton)
+
+    #--- Properties ----#
+    StyleTheme = property(lambda self: self._style_ch.GetStringSelection(),
+                          lambda self, val: self._style_ch.SetStringSelection(val))
+    SyntaxSheets = property(lambda self: self._style_ch.GetItems(),
+                            lambda self, val: self._style_ch.SetItems(sorted(val)))
+
+    #---- Public Api ----#
+    def RefreshStyleSheets(self):
+        """Update the list of style sheets"""
+        ss_lst = util.GetResourceFiles(u'styles', get_all=True)
+        ss_lst = [sname for sname in ss_lst if not sname.startswith('.')]
+        self.SyntaxSheets = ss_lst
+
+    #---- Event Handlers ----#
+    def OnButton(self, evt):
+        """Handle the Add/Remove Buttons"""
+        e_obj = evt.GetEventObject()
+        if e_obj is self._addbtn:
+            pass
+        elif e_obj is self._delbtn:
+            pass
+        else:
+            evt.Skip()
+
+#-----------------------------------------------------------------------------#
+
+class StyleEditorPanel(wx.Panel):
+    """Main panel for the editor portion of the StyleEditor"""
+    def __init__(self, parent):
+        super(StyleEditorPanel, self).__init__(parent)
+
+        # Attributes
+        self._tag_list = wx.ListBox(self, ID_STYLES,
+                                    style=wx.LB_SINGLE)
+        self._settings = SettingsPanel(self)
+        self.preview = PreviewPanel(self)
+        self.prebuff = self.preview.GetPreviewBuffer() # TEMP HACK
+        self.styles_orig = self.prebuff.GetStyleSet()
+        self.styles_new = DuplicateStyleDict(self.styles_orig)
+        self.prebuff.SetStyles('preview', self.styles_new, True)
+        self.preview.OpenPreviewFile('cpp')
+
+        # Setup
+        self.StyleTags = self.styles_orig.keys()
+        self.__DoLayout()
+        self.EnableSettings(False)
+
+        # Event Handlers
+        self.Bind(wx.EVT_LISTBOX, self.OnListBox, self._tag_list)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-        self.Bind(wx.EVT_LISTBOX, self.OnListBox)
         self.Bind(eclib.EVT_COLORSETTER, self.OnColor)
         self.prebuff.Bind(wx.EVT_LEFT_UP, self.OnTextRegion)
         self.prebuff.Bind(wx.EVT_KEY_UP, self.OnTextRegion)
 
-    #--- End Init ---#
+    def __DoLayout(self):
+        """Layout the window"""
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-    def __StyleSheets(self):
-        """Returns a sizer item that contains a choice control with
-        all the available style sheets listed in it.
-        @return: sizer item holding all installed style sheets
+        # Setup Left hand side with Style Tag List
+        ss_v = wx.BoxSizer(wx.VERTICAL)
+        style_lbl = wx.StaticText(self, label=_("Style Tags") + u": ")
+        ss_v.AddMany([(style_lbl, 0, wx.ALIGN_LEFT),
+                      (self._tag_list, 1, wx.EXPAND)])
+        hsizer.Add(ss_v, 0, wx.EXPAND|wx.ALL, 8)
+
+        # Add divider line
+        hsizer.Add(wx.StaticLine(self, size=(-1, 2), style=wx.LI_VERTICAL),
+                   0, wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND)
+        hsizer.Add((5, 5), 0)
+
+        # Setup Right hand side with the settings controls
+        hsizer.Add(self._settings, 0, wx.EXPAND|wx.ALL, 8)
+
+        # Finalize layout
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        vsizer.Add(hsizer, 1, wx.EXPAND)
+        vsizer.Add(self.preview, 1, wx.EXPAND)
+        self.SetSizer(vsizer)
+
+    #---- Properties ----#
+
+    StyleTags = property(lambda self: self._tag_list.GetItems(),
+                         lambda self, val: self._tag_list.SetItems(sorted(val)))
+    SettingsPanel = property(lambda self: self._settings)
+
+    #---- Public API ----#
+
+    def ChangeStyleSheet(self, sheet_name):
+        """Change the style sheet that is being edited
+        @param sheet_name: style sheet name (without extension)
 
         """
-        ss_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        ss_lbl = wx.StaticText(self.ctrl_pane, wx.ID_ANY,
-                               _("Style Theme") + u": ")
-        ss_lst = util.GetResourceFiles(u'styles', get_all=True)
-        ss_lst = [sheet for sheet in ss_lst if not sheet.startswith('.')]
-        ss_choice = wx.Choice(self.ctrl_pane, ed_glob.ID_PREF_SYNTHEME,
-                              choices=sorted(ss_lst))
-        ss_choice.SetToolTipString(_("Base new theme on existing one"))
-        ss_choice.SetStringSelection(Profile_Get('SYNTHEME', 'str'))
-        ss_new = wx.CheckBox(self.ctrl_pane, wx.ID_NEW, _("New"))
-        ss_new.SetToolTipString(_("Start a blank new style"))
-        ss_sizer.AddMany([((10, 10)), (ss_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                          ((5, 0)),
-                          (ss_choice, 0, wx.ALIGN_CENTER_VERTICAL), ((10, 0)),
-                          (ss_new, 0, wx.ALIGN_CENTER_VERTICAL), ((10, 10))])
-        return ss_sizer
-
-    def __StyleTags(self):
-        """Returns a sizer object containing a choice control with all
-        current style tags in it.
-        @return: sizer item containing list of all available style tags
-
-        """
-        style_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        style_sizer2 = wx.BoxSizer(wx.VERTICAL)
-
-        style_lbl = wx.StaticText(self.ctrl_pane, label=_("Style Tags") + u": ")
-        style_tags = self.styles_orig.keys()
-        style_lst = wx.ListBox(self.ctrl_pane, ID_STYLES,
-                               size=(-1, 130), # Need explicit size for MSW...
-                               choices=sorted(style_tags),
-                               style=wx.LB_SINGLE)
-        style_sizer2.AddMany([(style_lbl, 0, wx.ALIGN_LEFT),
-                             (style_lst, 0, wx.EXPAND)])
-        style_sizer.Add(style_sizer2, 1, wx.EXPAND|wx.LEFT|wx.RIGHT, 10)
-        return style_sizer
+        self.prebuff.UpdateAllStyles(sheet_name)
+        self.ResetTransientStyleData()
+        tag = self._tag_list.GetStringSelection()
+        if tag != wx.EmptyString:
+            self.UpdateSettingsPane(self.styles_new[tag])
 
     def DiffStyles(self):
         """Checks if the current style set is different from the
@@ -231,69 +390,8 @@ class StyleEditor(ed_basewin.EdBaseDialog):
         @keyword enable: whether to enable/disable settings controls
 
         """
-        for child in self._settings.GetChildren():
+        for child in self.SettingsPanel.GetChildren():
             child.Enable(enable)
-
-    def ExportStyleSheet(self):
-        """Writes the style sheet data out to a style sheet
-        @return: whether style sheet was exported properly or not
-
-        """
-        if ed_glob.CONFIG['STYLES_DIR'] == ed_glob.CONFIG['SYS_STYLES_DIR']:
-            stdpath = wx.StandardPaths_Get()
-            user_config = os.path.join(stdpath.GetUserDataDir(), 'styles')
-            if not os.path.exists(user_config):
-                try:
-                    os.mkdir(user_config)
-                except (OSError, IOError), msg:
-                    self.LOG("[style_editor][err] %s" % msg)
-                else:
-                    ed_glob.CONFIG['STYLES_DIR'] = user_config
-
-        result = wx.ID_CANCEL
-        ss_c = self.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
-        new_cb = self.FindWindowById(wx.ID_NEW)
-        if new_cb.GetValue():
-            name = u''
-        else:
-            name = ss_c.GetStringSelection()
-
-        fname = wx.GetTextFromUser(_("Enter style sheet name"),
-                                   _("Export Style Sheet"),
-                                   name, self)
-
-        if len(fname):
-            sheet_path = os.path.join(ed_glob.CONFIG['STYLES_DIR'], fname)
-            if sheet_path.split(u".")[-1] != u"ess":
-                sheet_path += u".ess"
-
-            try:
-                writer = util.GetFileWriter(sheet_path)
-                writer.write(self.GenerateStyleSheet())
-                writer.close()
-            except (AttributeError, IOError), msg:
-                self.LOG('[style_editor][err] Failed to export style sheet')
-                self.LOG('[style_editor][err] %s' % str(msg))
-            else:
-                # Update Style Sheet Control
-                sheet = u".".join(os.path.basename(sheet_path).split(u'.')[:-1])
-                ss_lst = util.GetResourceFiles(u'styles', get_all=True)
-                ss_lst = [sname for sname in ss_lst if not sname.startswith('.')]
-                ss_c.SetItems(sorted(ss_lst))
-                ss_c.SetStringSelection(sheet)
-                ss_c.Enable()
-                self.FindWindowById(wx.ID_NEW).SetValue(False)
-                self.styles_orig = self.styles_new
-                self.styles_new = DuplicateStyleDict(self.styles_orig)
-                result = wx.ID_OK
-                self.LOG("[style_editor][info] Sucessfully exported: %s" % sheet)
-
-                if sheet_path.startswith(ed_glob.CONFIG['STYLES_DIR']) or \
-                   sheet_path.startswith(ed_glob.CONFIG['SYS_STYLES_DIR']):
-                    # Update editor windows/buffer to use new style sheet
-                    UpdateBufferStyles(sheet)
-
-        return result
 
     def GenerateStyleSheet(self):
         """Generates a style sheet from the dialogs style data
@@ -339,144 +437,10 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         return u"".join(sty_sheet)
 
-    def OnCancel(self, evt):
-        """Catches the cancel button clicks and checks if anything
-        needs to be done before closing the window.
-        @param evt: event that called this handler
-
-        """
-        self.LOG('[style_editor][evt] Cancel Clicked Closing Window')
-        evt.Skip()
-
-    def OnCheck(self, evt):
-        """Handles Checkbox events
-        @param evt: event that called this handler
-
-        """
-        e_id = evt.GetId()
-        e_obj = evt.GetEventObject()
-        if e_id == wx.ID_NEW:
-            val = e_obj.GetValue()
-            choice = self.ctrl_pane.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
-            choice.Enable(not val)
-            if val:
-                self.styles_orig = self.prebuff.BlankStyleDictionary()
-                self.styles_new = DuplicateStyleDict(self.styles_orig)
-                self.prebuff.SetStyles('preview', self.styles_new, nomerge=True)
-                self.prebuff.UpdateAllStyles('preview')
-
-                # For some reason this causes the text display to refresh
-                # properly when nothing else would work.
-                self.OnTextRegion()
-            else:
-                scheme = choice.GetStringSelection().lower()
-                self.prebuff.UpdateAllStyles(scheme)
-                self.styles_orig = self.prebuff.GetStyleSet()
-                self.styles_new = DuplicateStyleDict(self.styles_orig)
-        elif e_id in [ID_BOLD, ID_EOL, ID_ULINE, ID_ITALIC]:
-            self.UpdateStyleSet(e_id)
-        else:
-            evt.Skip()
-
-    def OnChoice(self, evt):
-        """Handles the events generated from the choice controls
-        @param evt: event that called this handler
-
-        """
-        e_id = evt.GetId()
-        e_obj = evt.GetEventObject()
-        val = e_obj.GetStringSelection()
-        if e_id == ed_glob.ID_PREF_SYNTHEME:
-            # TODO Need to check for style changes before switching this
-            self.prebuff.UpdateAllStyles(val)
-            self.styles_new = self.prebuff.GetStyleSet()
-            self.styles_orig = DuplicateStyleDict(self.styles_new)
-            ctrl = self.FindWindowById(ID_STYLES)
-            tag = ctrl.GetStringSelection()
-            if tag != wx.EmptyString:
-                self.UpdateSettingsPane(self.styles_new[tag])
-        elif e_id in [ID_FONT, ID_FONT_SIZE]:
-            self.UpdateStyleSet(e_id)
-        else:
-            evt.Skip()
-
-    def OnClose(self, evt):
-        """Handles the window closer event
-        @param evt: event that called this handler
-
-        """
-        self.LOG("[style_editor][evt] Dialog closing...")
-        self.OnOk(evt)
-
-    def OnColor(self, evt):
-        """Handles color selection events
-        @param evt: event that called this handler
-
-        """
-        # Update The Style data for current tag
-        self.UpdateStyleSet(evt.GetId())
-
-    def OnTextRegion(self, evt=None):
-        """Processes clicks in the preview control and sets the style
-        selection in the style tags list to the style tag of the area
-        the cursor has moved into.
-        @param evt: event that called this handler
-
-        """
-        if evt is not None:
-            evt.Skip()
-
-        style_id = self.prebuff.GetStyleAt(self.prebuff.GetCurrentPos())
-        tag_lst = self.FindWindowById(ID_STYLES)
-        data = self.prebuff.FindTagById(style_id)
-        if data != wx.EmptyString and data in self.styles_new:
-            tag_lst.SetStringSelection(data)
-            if wx.Platform == '__WXGTK__':
-                tag_lst.SetFirstItemStr(data)
-            self.UpdateSettingsPane(self.styles_new[data])
-            self.EnableSettings()
-
-    def OnListBox(self, evt):
-        """Catches the selection of a style tag in the listbox
-        and updates the style window appropriately.
-        @param evt: event that called this handler
-
-        """
-        tag = evt.GetEventObject().GetStringSelection()
-        if tag != wx.EmptyString and tag in self.styles_new:
-            self.UpdateSettingsPane(self.styles_new[tag])
-            self.EnableSettings()
-        else:
-            self.EnableSettings(False)
-
-    def OnOk(self, evt):
-        """Catches the OK button click and checks if any changes need to be
-        saved before the window closes.
-        @param evt: event that called this handler
-
-        """
-        self.LOG('[style_editor][evt] Ok Clicked Closing Window')
-
-        result = self.DiffStyles()
-        if result == wx.ID_NO:
-            # Get Current Selection to update buffers
-            csheet = self.FindWindowById(ed_glob.ID_PREF_SYNTHEME).GetStringSelection()
-            UpdateBufferStyles(csheet)
-            evt.Skip()
-        elif result == wx.ID_CANCEL:
-            self.LOG('[style_editor][info] canceled closing')
-        else:
-            result = self.ExportStyleSheet()
-            if result != wx.ID_CANCEL:
-                evt.Skip()
-
-    def OnExport(self, evt):
-        """Catches save button event
-        @param evt: event that called this handler
-
-        """
-        self.LOG('[style_editor][evt] Export Clicked')
-        self.ExportStyleSheet()
+    def ResetTransientStyleData(self):
+        """Reset the transient style data to mark the changes as not dirty"""
+        self.styles_new = self.prebuff.GetStyleSet()
+        self.styles_orig = DuplicateStyleDict(self.styles_new)
 
     def UpdateSettingsPane(self, syntax_data):
         """Updates all the settings controls to hold the
@@ -556,6 +520,63 @@ class StyleEditor(ed_basewin.EdBaseDialog):
         self.prebuff.SetStyleTag(tag, self.styles_new[tag])
         self.prebuff.RefreshStyles()
 
+    #---- Event Handlers ----#
+
+    def OnCheck(self, evt):
+        e_id = evt.GetId()
+        if e_id in [ID_BOLD, ID_EOL, ID_ULINE, ID_ITALIC]:
+            self.UpdateStyleSet(e_id)
+        else:
+            evt.Skip()
+
+    def OnChoice(self, evt):
+        e_id = evt.GetId()
+        if e_id in [ID_FONT, ID_FONT_SIZE]:
+            self.UpdateStyleSet(e_id)
+        else:
+            evt.Skip()
+
+    def OnColor(self, evt):
+        """Handles color selection events
+        @param evt: event that called this handler
+
+        """
+        # Update The Style data for current tag
+        self.UpdateStyleSet(evt.GetId())
+
+    def OnListBox(self, evt):
+        """Catches the selection of a style tag in the listbox
+        and updates the style window appropriately.
+        @param evt: event that called this handler
+
+        """
+        tag = self._tag_list.GetStringSelection()
+        if tag != u"" and tag in self.styles_new:
+            self.UpdateSettingsPane(self.styles_new[tag])
+            self.EnableSettings()
+        else:
+            self.EnableSettings(False)
+
+    def OnTextRegion(self, evt=None):
+        """Processes clicks in the preview control and sets the style
+        selection in the style tags list to the style tag of the area
+        the cursor has moved into.
+        @param evt: event that called this handler
+
+        """
+        if evt is not None:
+            evt.Skip()
+
+        style_id = self.prebuff.GetStyleAt(self.prebuff.GetCurrentPos())
+        tag_lst = self.FindWindowById(ID_STYLES)
+        data = self.prebuff.FindTagById(style_id)
+        if data != wx.EmptyString and data in self.styles_new:
+            tag_lst.SetStringSelection(data)
+            if wx.Platform == '__WXGTK__':
+                tag_lst.SetFirstItemStr(data)
+            self.UpdateSettingsPane(self.styles_new[data])
+            self.EnableSettings()
+
 #-----------------------------------------------------------------------------#
 
 class SettingsPanel(wx.Panel):
@@ -576,8 +597,7 @@ class SettingsPanel(wx.Panel):
         setting_top = wx.BoxSizer(wx.HORIZONTAL)
 
         # Settings top
-        setting_sizer.Add((10, 10))
-        sbox = wx.StaticBox(self, label=_("Color") + u":")
+        sbox = wx.StaticBox(self, label=_("Color"))
         cbox_sizer = wx.StaticBoxSizer(sbox, wx.VERTICAL)
 
         # Foreground
@@ -586,7 +606,7 @@ class SettingsPanel(wx.Panel):
         fground_sel = eclib.ColorSetter(self, ID_FORE_COLOR, wx.BLACK)
         fground_sizer.AddMany([((5, 5)),
                                (fground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                               ((2, 2), 1, wx.EXPAND),
+                               ((2, 2), 0),
                                (fground_sel, 0, wx.ALIGN_CENTER_VERTICAL),
                                ((5, 5))])
         cbox_sizer.AddMany([(fground_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND),
@@ -598,14 +618,14 @@ class SettingsPanel(wx.Panel):
         bground_sel = eclib.ColorSetter(self, ID_BACK_COLOR, wx.WHITE)
         bground_sizer.AddMany([((5, 5)),
                                (bground_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                               ((2, 2), 1, wx.EXPAND),
+                               ((2, 2), 0),
                                (bground_sel, 0, wx.ALIGN_CENTER_VERTICAL),
                                ((5, 5))])
-        cbox_sizer.Add(bground_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND)
-        setting_top.AddMany([(cbox_sizer, 0, wx.ALIGN_TOP), ((10, 10))])
+        cbox_sizer.Add(bground_sizer, 0, wx.EXPAND)
+        setting_top.AddMany([(cbox_sizer, 0, wx.ALIGN_TOP), ((10, 10), 0)])
 
         # Attrib Box
-        attrib_box = wx.StaticBox(self, label=_("Attributes") + u":")
+        attrib_box = wx.StaticBox(self, label=_("Attributes"))
         abox_sizer = wx.StaticBoxSizer(attrib_box, wx.VERTICAL)
 
         # Attributes
@@ -613,15 +633,15 @@ class SettingsPanel(wx.Panel):
         eol_cb = wx.CheckBox(self, ID_EOL, _("eol"))
         ital_cb = wx.CheckBox(self, ID_ITALIC, _("italic"))
         uline_cb = wx.CheckBox(self, ID_ULINE, _("underline"))
-        abox_sizer.AddMany([(bold_cb, 0, wx.ALIGN_CENTER_VERTICAL),
-                            (eol_cb, 0, wx.ALIGN_CENTER_VERTICAL),
-                            (ital_cb, 0, wx.ALIGN_CENTER_VERTICAL),
-                            (uline_cb, 0, wx.ALIGN_CENTER_VERTICAL)])
+        abox_sizer.AddMany([(bold_cb, 0),
+                            (eol_cb, 0),
+                            (ital_cb, 0),
+                            (uline_cb, 0)])
         setting_top.Add(abox_sizer, 0, wx.ALIGN_TOP)
 
         # Font
         fh_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        font_box = wx.StaticBox(self, label=_("Font Settings") + u":")
+        font_box = wx.StaticBox(self, label=_("Font Settings"))
         fbox_sizer = wx.StaticBoxSizer(font_box, wx.VERTICAL)
 
         # Font Face Name
@@ -637,34 +657,32 @@ class SettingsPanel(wx.Panel):
         font_lst.extend(sorted(fontenum.GetFacenames()))
         fchoice = wx.Choice(self, ID_FONT, choices=font_lst)
         fsizer.AddMany([((5, 5), 0), (flbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                        (fchoice, 0, wx.ALIGN_CENTER_VERTICAL), ((5, 5))])
-        fbox_sizer.Add(fsizer, 0, wx.ALIGN_LEFT)
+                        (fchoice, 0, wx.ALIGN_CENTER_VERTICAL), ((5, 5),0)])
+        fbox_sizer.Add(fsizer, 0)
 
         # Font Size
         fsize_sizer = wx.BoxSizer(wx.HORIZONTAL)
         fsize_lbl = wx.StaticText(self, label=_("Size") + u": ")
         fsizes = [u"%(size)d", u"%(size2)d"]
-        fsizes.extend([ unicode(x) for x in xrange(4, 21) ])
+        fsizes.extend([ unicode(x) for x in range(4, 21) ])
         fs_choice = wx.Choice(self, ID_FONT_SIZE, choices=fsizes)
         fsize_sizer.AddMany([((5, 5), 0),
                              (fsize_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                             (fs_choice, 1, wx.EXPAND | wx.ALIGN_RIGHT),
+                             (fs_choice, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL),
                              ((5, 5), 0)])
-        fbox_sizer.AddMany([((5, 5)),
-                            (fsize_sizer, 0, wx.ALIGN_LEFT | wx.EXPAND)])
-        fh_sizer.AddMany([(fbox_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL),
-                          ((10, 10))])
+        fbox_sizer.AddMany([((5, 5), 0), (fsize_sizer, 0, wx.EXPAND)])
+        fh_sizer.AddMany([(fbox_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL), ((10, 10), 0)])
 
         # Build Section
         setting_sizer.AddMany([(setting_top, 0, wx.ALIGN_CENTER_HORIZONTAL),
-                               ((10, 10), 1, wx.EXPAND),
+                               ((10, 10), 0),
                                (fh_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)])
         self.SetSizer(setting_sizer)
-        self.SetAutoLayout(True)
+        self.SetInitialSize()
 
 #-----------------------------------------------------------------------------#
 
-class PreviewPanel(eclib.ControlBox):
+class PreviewPanel(ed_basewin.EdBaseCtrlBox):
     """Panel to hold the preview window and selector"""
     def __init__(self, parent):
         super(PreviewPanel, self).__init__(parent)
@@ -686,10 +704,7 @@ class PreviewPanel(eclib.ControlBox):
     def __DoLayout(self):
         """Layout the Panel"""
         # Create the ControlBar
-        cbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
-        if wx.Platform == '__WXGTK__':
-            cbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
-        self.SetControlBar(cbar)
+        cbar = self.CreateControlBar(wx.TOP)
 
         # Setup the ControlBar's controls
         lexer_lbl = wx.StaticText(cbar, label=_("Preview File") + u": ")
