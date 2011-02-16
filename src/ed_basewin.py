@@ -56,3 +56,18 @@ class EdBaseFrame(wx.Frame):
     def OnClose(self, event):
         wx.GetApp().UnRegisterWindow(repr(self))
         event.Skip()
+
+#--------------------------------------------------------------------------#
+
+class EdBaseCtrlBox(eclib.ControlBox):
+    def __init__(self, parent):
+        super(EdBaseCtrlBox, self).__init__(parent)
+    def CreateControlBar(self, pos=wx.TOP):
+        """Override for CreateControlBar to automatically set the
+        flat non-gradient version of the control under GTK.
+
+        """
+        cbar = super(EdBaseCtrlBox, self).CreateControlBar(pos)
+        if wx.Platform == '__WXGTK__':
+            cbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
+        return cbar

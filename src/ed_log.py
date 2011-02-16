@@ -124,9 +124,7 @@ class LogViewer(eclib.ControlBox):
     def __DoLayout(self):
         """Layout the log viewer window"""
         # Setup ControlBar
-        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
-        if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
+        ctrlbar = self.CreateControlBar(wx.TOP)
 
         # View Choice
         self._srcfilter = wx.Choice(ctrlbar, wx.ID_ANY, choices=[])
@@ -140,10 +138,9 @@ class LogViewer(eclib.ControlBox):
         if cbmp.IsNull() or not cbmp.IsOk():
             cbmp = None
         clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
-                                     cbmp, style=eclib.PB_STYLE_NOBG)
+                                  cbmp, style=eclib.PB_STYLE_NOBG)
         ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
         ctrlbar.SetVMargin(0, 0)
-        self.SetControlBar(ctrlbar)
         
     def OnChoice(self, evt):
         """Set the filter based on the choice controls value
@@ -210,7 +207,7 @@ class LogBuffer(eclib.OutputBuffer):
     def OnDestroy(self, evt):
         """Unregister from receiving any more log messages"""
         if evt.GetId() == self.GetId():
-            ed_msg.Unsubscribe(self.UpdateLog, ed_msg.EDMSG_LOG_ALL)
+            ed_msg.Unsubscribe(self.UpdateLog)
         evt.Skip()
 
     def AddFilter(self, src):

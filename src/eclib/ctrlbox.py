@@ -287,6 +287,8 @@ class ControlBox(wx.PyPanel):
         assert isinstance(ctrlbar, ControlBar)
         assert pos in (wx.TOP, wx.BOTTOM, wx.LEFT, wx.RIGHT)
         tbar = self.GetControlBar(pos)
+        if tbar is ctrlbar:
+            return # ignore setting same bar again
         sizer = self._GetCtrlBarSizer(pos)
         if tbar is None and pos in (wx.TOP, wx.LEFT):
             sizer.Insert(0, ctrlbar, 0, wx.EXPAND)

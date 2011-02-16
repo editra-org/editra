@@ -160,11 +160,8 @@ class BookmarkWindow(eclib.ControlBox):
 
         #Setup
         self.SetWindow(self._list)
-        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
+        ctrlbar = self.CreateControlBar(wx.TOP)
         ctrlbar.SetVMargin(0, 0)
-        if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
-        self.SetControlBar(ctrlbar)
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
         self._delbtn = eclib.PlateButton(ctrlbar, label=_("Delete"), bmp=bmp,
                                          style=eclib.PB_STYLE_NOBG)
