@@ -392,7 +392,7 @@ class StyleMgr(object):
                 sty_dict[key] = NullStyleItem()
             else:
                 sty_dict[key] = StyleItem("#000000", "#FFFFFF",
-                                          "%(primary)s", "%(size)d")#, ex=list())
+                                          "%(primary)s", "%(size)d")
         return sty_dict
 
     def FindTagById(self, style_id):
@@ -855,6 +855,7 @@ class StyleMgr(object):
 
         """
         if not isinstance(value, StyleItem):
+            self.LOG("[ed_style][warn] Bad data in SetStyleTag(%s)" % repr(value))
             return False
 
         StyleMgr.STYLES[self.style_set][style_tag] = value
@@ -888,7 +889,8 @@ class StyleMgr(object):
             defaultd = DEF_STYLE_DICT
             dstyle = style_dict.get('default_style', None)
             if dstyle is None:
-                style_dict['default_style'] = defaultd['default_style']
+                self.LOG("[ed_style][warn] default_style is undefined")
+                style_dict['default_style'] = defaultd['default_style'].Clone()
 
             # Set any undefined styles to match the default_style
             for tag, item in defaultd.iteritems():
@@ -896,7 +898,7 @@ class StyleMgr(object):
                     if tag in ('select_style',):
                         style_dict[tag] = NullStyleItem()
                     else:
-                        style_dict[tag] = style_dict['default_style']
+                        style_dict[tag] = style_dict['default_style'].Clone()
 
             StyleMgr.STYLES[name] = self.PackStyleSet(style_dict)
             return True
@@ -916,6 +918,7 @@ class StyleMgr(object):
         lexer = self.GetLexer()
         for syn in synlst:
             if len(syn) != 2:
+                self.LOG("[ed_style][warn] Bogus Syntax Spec %s" % repr(syn))
                 continue
             else:
                 self.StyleSetSpec(syn[0], self.GetStyleByName(syn[1]))
