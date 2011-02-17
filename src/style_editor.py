@@ -91,7 +91,7 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         # Finish the Layout
         self.SetSizer(sizer)
-        self.SetInitialSize((475,475))
+        self.SetInitialSize((460,450))
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnCancel, id=wx.ID_CANCEL)
@@ -406,7 +406,7 @@ class StyleEditorPanel(wx.Panel):
         # Finalize layout
         vsizer = wx.BoxSizer(wx.VERTICAL)
         vsizer.Add(hsizer, 1, wx.EXPAND)
-        vsizer.Add(self.preview, 1, wx.EXPAND)
+        vsizer.Add(self.preview, 2, wx.EXPAND)
         self.SetSizer(vsizer)
 
     #---- Properties ----#
