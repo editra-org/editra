@@ -2,7 +2,7 @@
 # Name: style_editor.py                                                       #
 # Purpose: Syntax Highlighting configuration dialog                           #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008-2011 Cody Precord <staff@editra.org>                    #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -68,10 +68,6 @@ class StyleEditor(ed_basewin.EdBaseDialog):
     """
     def __init__(self, parent, id_=wx.ID_ANY, title=_("Style Editor"),
                  style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER):
-        """Initializes the Dialog
-        @todo: rework the layout
-
-        """
         super(StyleEditor, self).__init__(parent, id_, title, style=style)
 
         # Attributes
@@ -357,11 +353,13 @@ class StyleEditorBox(eclib.ControlBox):
         """Handle the Add/Remove Buttons"""
         e_obj = evt.GetEventObject()
         if e_obj is self._addbtn:
+            # TODO: warn about unsaved changes
             fname = wx.GetTextFromUser(_("Enter style sheet name"),
                                        _("New Style Sheet"),
                                        parent=self)
             if fname:
-                if fname in self.SyntaxSheets:
+                # Case insensitive check
+                if fname.lower() in [name.lower() for name in self.SyntaxSheets]:
                     # Already exists
                     wx.MessageBox(_("The style %s already exists. Please choose a different name.") % fname,
                                   style=wx.OK|wx.CENTER|wx.ICON_INFORMATION)
