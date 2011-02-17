@@ -58,7 +58,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     """
     ED_STC_MASK_MARKERS = ~wx.stc.STC_MASK_FOLDERS
-    def __init__(self, parent, id_,
+    def __init__(self, parent, id_=wx.ID_ANY,
                  pos=wx.DefaultPosition, size=wx.DefaultSize, style=0):
         wx.stc.StyledTextCtrl.__init__(self, parent, id_, pos, size, style)
         ed_style.StyleMgr.__init__(self, self.GetStyleSheet())
