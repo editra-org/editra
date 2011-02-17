@@ -91,7 +91,10 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         # Finish the Layout
         self.SetSizer(sizer)
-        self.SetInitialSize((460,450))
+        if wx.Platform == '__WXMSW__':
+            self.SetInitialSize((460,450))
+        else:
+            self.SetInitialSize()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnCancel, id=wx.ID_CANCEL)
@@ -466,7 +469,10 @@ class StyleEditorPanel(wx.Panel):
         # Finalize layout
         vsizer = wx.BoxSizer(wx.VERTICAL)
         vsizer.Add(hsizer, 1, wx.EXPAND)
-        vsizer.Add(self.preview, 2, wx.EXPAND)
+        prop = 1
+        if wx.Platform == '__WXMSW__':
+            prop = 2
+        vsizer.Add(self.preview, prop, wx.EXPAND)
         self.SetSizer(vsizer)
 
     #---- Properties ----#
