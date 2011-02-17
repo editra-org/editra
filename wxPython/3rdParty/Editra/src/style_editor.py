@@ -40,7 +40,6 @@ import ed_basewin
 _ = wx.GetTranslation
 
 # Global Values
-ID_STYLES = wx.NewId()
 ID_FORE_COLOR = wx.NewId()
 ID_BACK_COLOR = wx.NewId()
 ID_BOLD = wx.NewId()
@@ -52,6 +51,12 @@ ID_FONT_SIZE = wx.NewId()
 
 SETTINGS_IDS = [ ID_FORE_COLOR, ID_BACK_COLOR, ID_BOLD, ID_ITALIC,
                  ID_EOL, ID_ULINE, ID_FONT, ID_FONT_SIZE ]
+
+# Modification Flags
+MOD_NONE           = 0
+MOD_DOESNT_EXIST   = 1
+MOD_CHANGE_PRESENT = 2
+
 #--------------------------------------------------------------------------#
 
 class StyleEditor(ed_basewin.EdBaseDialog):
@@ -72,7 +77,6 @@ class StyleEditor(ed_basewin.EdBaseDialog):
         # Attributes
         self.LOG = wx.GetApp().GetLog()
         self._panel = StyleEditorBox(self) #TODO
-        self._editor = self._panel.GetWindow() #TODO
 
         # Layout
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -106,18 +110,6 @@ class StyleEditor(ed_basewin.EdBaseDialog):
         @return: bool
 
         """
-        # Ensure user styles directory exists to save style sheet to
-        if ed_glob.CONFIG['STYLES_DIR'] == ed_glob.CONFIG['SYS_STYLES_DIR']:
-            path = util.GetUserConfigBase()
-            user_config = os.path.join(path, 'styles')
-            if not os.path.exists(user_config):
-                try:
-                    os.mkdir(user_config)
-                except (OSError, IOError), msg:
-                    self.LOG("[style_editor][err] %s" % msg)
-                else:
-                    ed_glob.CONFIG['STYLES_DIR'] = user_config
-
         saved = self._panel.SaveStyleSheet()
         return saved
 
@@ -129,34 +121,6 @@ class StyleEditor(ed_basewin.EdBaseDialog):
         """
         self.LOG('[style_editor][evt] Cancel Clicked Closing Window')
         evt.Skip()
-
-    def OnCheck(self, evt):
-        """Handles Checkbox events
-        @param evt: event that called this handler
-
-        """
-        e_id = evt.GetId()
-        e_obj = evt.GetEventObject()
-        if e_id == wx.ID_NEW:
-            val = e_obj.GetValue()
-            choice = self.ctrl_pane.FindWindowById(ed_glob.ID_PREF_SYNTHEME)
-            choice.Enable(not val)
-            if val:
-                self.styles_orig = self.prebuff.BlankStyleDictionary()
-                self.styles_new = DuplicateStyleDict(self.styles_orig)
-                self.prebuff.SetStyles('preview', self.styles_new, nomerge=True)
-                self.prebuff.UpdateAllStyles('preview')
-
-                # For some reason this causes the text display to refresh
-                # properly when nothing else would work.
-                self.OnTextRegion()
-            else:
-                scheme = choice.GetStringSelection().lower()
-                self.prebuff.UpdateAllStyles(scheme)
-                self.styles_orig = self.prebuff.GetStyleSet()
-                self.styles_new = DuplicateStyleDict(self.styles_orig)
-        else:
-            evt.Skip()
 
     def OnClose(self, evt):
         """Handles the window closer event
@@ -173,13 +137,17 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         """
         self.LOG('[style_editor][evt] Ok Clicked Closing Window')
-        diff = self._editor.DiffStyles()
+        modtype = self._panel.CheckForModifications()
         result = wx.ID_NO
-        if diff:
-            dlg = wx.MessageDialog(self,
-                                    _("Some styles have been changed would "
-                                      "you like to save before exiting?"),
-                                   _("Save Styles"),
+        msg = None
+        if modtype == MOD_CHANGE_PRESENT:
+            msg = _("Some styles have been changed would "
+                    "you like to save before exiting?")
+        elif modtype == MOD_DOESNT_EXIST:
+            msg = _("The new style sheet '%s' has not been saved "
+                    "would you like to save before exiting?") % self._panel.StyleTheme
+        if msg is not None:
+            dlg = wx.MessageDialog(self, msg, _("Save Styles"),
                                    style=wx.YES_NO | wx.YES_DEFAULT | \
                                          wx.CANCEL | wx.ICON_INFORMATION)
             dlg.CenterOnParent()
@@ -188,7 +156,10 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         if result == wx.ID_NO:
             # Get Current Selection to update buffers
-            UpdateBufferStyles(self._panel.StyleTheme)
+            sheet = self._panel.StyleTheme
+            path = self._panel.GetStyleSheetPath(sheet)
+            if os.path.exists(path):
+                UpdateBufferStyles(sheet)
             evt.Skip()
         elif result == wx.ID_CANCEL:
             self.LOG('[style_editor][info] canceled closing')
@@ -213,6 +184,7 @@ class StyleEditorBox(eclib.ControlBox):
         super(StyleEditorBox, self).__init__(parent)
 
         # Attributes
+        self._prevTheme = None
         ctrlbar = self.CreateControlBar(wx.TOP)
         ss_lst = util.GetResourceFiles(u'styles', get_all=True)
         ss_lst = [sheet for sheet in ss_lst if not sheet.startswith('.')]
@@ -228,7 +200,7 @@ class StyleEditorBox(eclib.ControlBox):
         # Setup
         ss_lbl = wx.StaticText(ctrlbar, label=_("Style Theme") + u": ")
         ctrlbar.AddControl(ss_lbl, wx.ALIGN_LEFT)
-        self._style_ch.SetStringSelection(Profile_Get('SYNTHEME', 'str'))
+        self.StyleTheme = Profile_Get('SYNTHEME', 'str')
         ctrlbar.AddControl(self._style_ch, wx.ALIGN_LEFT)
         ctrlbar.AddControl(self._addbtn, wx.ALIGN_LEFT)
         self._addbtn.SetToolTipString(_("Create a new style theme"))
@@ -237,28 +209,56 @@ class StyleEditorBox(eclib.ControlBox):
         self.SetWindow(StyleEditorPanel(self))
 
         # Events
-        self.Bind(wx.EVT_CHOICE,
-                  lambda evt: self.Window.ChangeStyleSheet(self.StyleTheme),
-                  self._style_ch)
+        self.Bind(wx.EVT_CHOICE, self.OnThemeChoice, self._style_ch)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_UPDATE_UI,
                   lambda evt: evt.Enable(not self.IsSystemStyleSheet()),
                   self._delbtn)
 
     #--- Properties ----#
+    def __setStyleTheme(self, theme):
+        self._prevTheme = theme # Tracking for choice change
+        self._style_ch.SetStringSelection(theme)
     StyleTheme = property(lambda self: self._style_ch.GetStringSelection(),
-                          lambda self, val: self._style_ch.SetStringSelection(val))
+                          lambda self, val: self.__setStyleTheme(val))
     SyntaxSheets = property(lambda self: self._style_ch.GetItems(),
                             lambda self, val: self._style_ch.SetItems(sorted(val)))
 
     #---- Public Api ----#
-    def GetStyleSheetPath(self, sheet):
+    def CheckForModifications(self, sheet_name=None):
+        """Check for any unsaved modifications to the styling information
+        @return: modification type
+
+        """
+        if sheet_name is None:
+            sheet_name = self.StyleTheme # currently selected
+        modtype = MOD_NONE
+        if self.Window.DiffStyles():
+            modtype = MOD_CHANGE_PRESENT
+        elif not self.SheetExistOnDisk(sheet_name):
+            modtype = MOD_DOESNT_EXIST
+        return modtype
+
+    def DoChangeStyleSheet(self, sheet_name):
+        """Change the StyleEditor for the given style sheet"""
+        if not self.SheetExistOnDisk(sheet_name):
+            # Changing to a fully transient style sheet that has
+            # not yet been written to disk.
+            self.SetDisplayForTransientSheet(sheet_name)
+        else:
+            self.Window.ChangeStyleSheet(sheet_name)
+            self.StyleTheme = sheet_name
+
+    def GetStyleSheetPath(self, sheet, syspath=False):
         """Get the on disk path to where the style sheet should
         be written to.
         @param sheet: sheet name
 
         """
-        sheet_path = os.path.join(ed_glob.CONFIG['STYLES_DIR'], sheet)
+        cfgdir = ed_glob.CONFIG['STYLES_DIR']
+        if syspath:
+            cfgdir = ed_glob.CONFIG['SYS_STYLES_DIR']
+        sheet_path = os.path.join(cfgdir, sheet)
         if not sheet_path.endswith(u"ess"):
             sheet_path += u".ess"
         return sheet_path
@@ -278,13 +278,27 @@ class StyleEditorBox(eclib.ControlBox):
         ss_lst = [sname for sname in ss_lst if not sname.startswith('.')]
         self.SyntaxSheets = ss_lst
 
-    def SaveStyleSheet(self):
+    def SaveStyleSheet(self, sheetname=None):
         """Save the changes to the currently selected StyleSheet
         @return: bool
 
         """
+        # Ensure user styles directory exists to save style sheet to
+        if ed_glob.CONFIG['STYLES_DIR'] == ed_glob.CONFIG['SYS_STYLES_DIR']:
+            path = util.GetUserConfigBase()
+            user_config = os.path.join(path, 'styles')
+            if not os.path.exists(user_config):
+                try:
+                    os.mkdir(user_config)
+                except (OSError, IOError), msg:
+                    self.LOG("[style_editor][err] %s" % msg)
+                else:
+                    ed_glob.CONFIG['STYLES_DIR'] = user_config
+
         rval = False
-        sheet_path = self.GetStyleSheetPath(self.StyleTheme)
+        if sheetname is None:
+            sheetname = self.StyleTheme
+        sheet_path = self.GetStyleSheetPath(sheetname)
         if self.WriteStyleSheet(sheet_path):
             # Update Style Sheet Control
             self.RefreshStyleSheets()
@@ -299,6 +313,26 @@ class StyleEditorBox(eclib.ControlBox):
                 UpdateBufferStyles(sheet)
             rval = True
         return rval
+
+    def SetDisplayForTransientSheet(self, sheet_name):
+        """Setup the display and editor data for a transient style sheet"""
+        self.Window.SetBlankStyle()
+        themes = self.SyntaxSheets
+        if sheet_name not in themes:
+            themes.append(sheet_name)
+            self.SyntaxSheets = themes
+        self.StyleTheme = sheet_name
+
+    def SheetExistOnDisk(self, sheet_name):
+        """Check if the given style sheet exists on disk
+        @param sheet_name: style sheet name
+        @return: bool
+
+        """
+        path = self.GetStyleSheetPath(sheet_name) # User path
+        syspath = self.GetStyleSheetPath(sheet_name, True) # System path
+        exists = os.path.exists(path) or os.path.exists(syspath)
+        return exists
 
     def WriteStyleSheet(self, path):
         """Write the current style data to the given path
@@ -324,8 +358,8 @@ class StyleEditorBox(eclib.ControlBox):
         e_obj = evt.GetEventObject()
         if e_obj is self._addbtn:
             fname = wx.GetTextFromUser(_("Enter style sheet name"),
-                                       _("Export Style Sheet"),
-                                       self.StyleTheme, self)
+                                       _("New Style Sheet"),
+                                       parent=self)
             if fname:
                 if fname in self.SyntaxSheets:
                     # Already exists
@@ -333,11 +367,7 @@ class StyleEditorBox(eclib.ControlBox):
                                   style=wx.OK|wx.CENTER|wx.ICON_INFORMATION)
                 else:
                     # Create it
-                    self.Window.SetBlankStyle()
-                    themes = self.SyntaxSheets
-                    themes.append(fname)
-                    self.SyntaxSheets = themes
-                    self.StyleTheme = fname
+                    self.SetDisplayForTransientSheet(fname)
         elif e_obj is self._delbtn:
             path = self.GetStyleSheetPath(self.StyleTheme)
             try:
@@ -347,10 +377,43 @@ class StyleEditorBox(eclib.ControlBox):
                               style=wx.OK|wx.CENTER|wx.ICON_ERROR)
             else:
                 self.RefreshStyleSheets()
-                self.StyleTheme = u"Default"
-                self.Window.ChangeStyleSheet(self.StyleTheme)
+                self.StyleTheme = u"Default" # select the default style
+                self.DoChangeStyleSheet(self.StyleTheme)
         else:
             evt.Skip()
+
+    def OnThemeChoice(self, evt):
+        """Check if current style sheet has been saved when switching sheets"""
+        oldTheme = self._prevTheme
+        newTheme = self.StyleTheme # newly selected theme
+        changeOk = False
+        msg = None
+        modtype = self.CheckForModifications(self._prevTheme)
+        if modtype == MOD_CHANGE_PRESENT:
+            # prompt to save before changing
+            msg = _("Would you like to save the changes to '%s' before changing themes?\n\n"
+                    "Selecting No will result in all changes being lost.")
+            msg = msg % oldTheme
+        elif modtype == MOD_DOESNT_EXIST:
+            # prompt to save unsaved sheet
+            msg = _("The new style theme '%s' has not been saved.\n\n"
+                    "Would you like to save it before changing themes?")
+            msg = msg % oldTheme
+
+        if msg is not None:
+            dlg = wx.MessageDialog(self, msg, _("Save Styles"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT | \
+                                         wx.ICON_INFORMATION)
+            dlg.CenterOnParent()
+            result = dlg.ShowModal()
+            dlg.Destroy()
+            if result == wx.YES:
+                # Save the style sheet
+                changeOk = True
+                self.SaveStyleSheet(oldTheme)
+
+        # Change the style sheet to the newly selected one
+        self.DoChangeStyleSheet(newTheme)
 
 #-----------------------------------------------------------------------------#
 
@@ -360,12 +423,11 @@ class StyleEditorPanel(wx.Panel):
         super(StyleEditorPanel, self).__init__(parent)
 
         # Attributes
-        self._tag_list = wx.ListBox(self, ID_STYLES,
-                                    style=wx.LB_SINGLE)
+        self._tag_list = wx.ListBox(self, style=wx.LB_SINGLE)
         self._settings = SettingsPanel(self)
         self.preview = PreviewPanel(self)
         self.prebuff = self.preview.GetPreviewBuffer() # TEMP HACK
-        self.styles_orig = self.prebuff.GetStyleSet()
+        self.styles_orig = DuplicateStyleDict(self.prebuff.GetStyleSet())
         self.styles_new = DuplicateStyleDict(self.styles_orig)
         self.prebuff.SetStyles('preview', self.styles_new, True)
         self.preview.OpenPreviewFile('cpp')
@@ -497,7 +559,7 @@ class StyleEditorPanel(wx.Panel):
 
     def ResetTransientStyleData(self):
         """Reset the transient style data to mark the changes as not dirty"""
-        self.styles_new = self.prebuff.GetStyleSet()
+        self.styles_new = DuplicateStyleDict(self.prebuff.GetStyleSet())
         self.styles_orig = DuplicateStyleDict(self.styles_new)
 
     def SetBlankStyle(self):
@@ -552,7 +614,7 @@ class StyleEditorPanel(wx.Panel):
 
         """
         # Get the tag that has been modified
-        tag = self.FindWindowById(ID_STYLES).GetStringSelection()
+        tag = self._tag_list.GetStringSelection()
         if not tag:
             return False
 
@@ -568,8 +630,8 @@ class StyleEditorPanel(wx.Panel):
             return False
 
         # Update the value of the modified tag
-        val_map = { ID_FONT       : u'face',
-                    ID_FONT_SIZE  : u'size',
+        val_map = { ID_FONT       : u"face",
+                    ID_FONT_SIZE  : u"size",
                     ID_BOLD       : u"bold",
                     ID_EOL        : u"eol",
                     ID_ITALIC     : u"italic",
@@ -637,12 +699,11 @@ class StyleEditorPanel(wx.Panel):
             evt.Skip()
 
         style_id = self.prebuff.GetStyleAt(self.prebuff.GetCurrentPos())
-        tag_lst = self.FindWindowById(ID_STYLES)
         data = self.prebuff.FindTagById(style_id)
         if data != wx.EmptyString and data in self.styles_new:
-            tag_lst.SetStringSelection(data)
+            self._tag_list.SetStringSelection(data)
             if wx.Platform == '__WXGTK__':
-                tag_lst.SetFirstItemStr(data)
+                self._tag_list.SetFirstItemStr(data)
             self.UpdateSettingsPane(self.styles_new[data])
             self.EnableSettings()
 
@@ -757,7 +818,7 @@ class PreviewPanel(ed_basewin.EdBaseCtrlBox):
 
         # Attributes
         self.LOG = wx.GetApp().GetLog()
-        self.preview = ed_basestc.EditraBaseStc(self, wx.ID_ANY, size=(-1, 200),
+        self.preview = ed_basestc.EditraBaseStc(self, size=(-1, 200),
                                                 style=wx.SUNKEN_BORDER)
 
         # Setup
@@ -832,10 +893,7 @@ def DuplicateStyleDict(style_dict):
     """
     new_dict = dict()
     for tag in style_dict:
-        new_dict[tag] = StyleItem()
-        is_ok = new_dict[tag].SetAttrFromStr(unicode(style_dict[tag]))
-        if not is_ok:
-            new_dict[tag].null = True
+        new_dict[tag] = style_dict[tag].Clone()
     return new_dict
 
 def UpdateBufferStyles(sheet):
