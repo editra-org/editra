@@ -84,31 +84,32 @@ class StyleEditor(ed_basewin.EdBaseDialog):
         ok_b.SetDefault()
         b_sizer.AddMany([(wx.Button(self, wx.ID_CANCEL, _("Cancel")), 0),
                          ((5, 5), 0),
-                         (wx.Button(self, wx.ID_SAVE, _("Export")), 0),
+                         (wx.Button(self, wx.ID_SAVE, _("Save")), 0),
                          ((5, 5), 0), (ok_b, 0)])
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT |
                   wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
 
         # Finish the Layout
         self.SetSizer(sizer)
-        self.SetInitialSize()
+        self.SetInitialSize((475,475))
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnCancel, id=wx.ID_CANCEL)
         self.Bind(wx.EVT_BUTTON, self.OnOk, id=wx.ID_OK)
-        self.Bind(wx.EVT_BUTTON, self.OnExport, id=wx.ID_SAVE)
+        self.Bind(wx.EVT_BUTTON, self.OnSave, id=wx.ID_SAVE)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     #--- End Init ---#
 
     def ExportStyleSheet(self):
         """Writes the style sheet data out to a style sheet
-        @return: whether style sheet was exported properly or not
+        @return: bool
 
         """
+        # Ensure user styles directory exists to save style sheet to
         if ed_glob.CONFIG['STYLES_DIR'] == ed_glob.CONFIG['SYS_STYLES_DIR']:
-            stdpath = wx.StandardPaths_Get()
-            user_config = os.path.join(stdpath.GetUserDataDir(), 'styles')
+            path = util.GetUserConfigBase()
+            user_config = os.path.join(path, 'styles')
             if not os.path.exists(user_config):
                 try:
                     os.mkdir(user_config)
@@ -117,38 +118,8 @@ class StyleEditor(ed_basewin.EdBaseDialog):
                 else:
                     ed_glob.CONFIG['STYLES_DIR'] = user_config
 
-        result = wx.ID_CANCEL
-        fname = wx.GetTextFromUser(_("Enter style sheet name"),
-                                   _("Export Style Sheet"),
-                                   self._panel.StyleTheme, self)
-
-        if len(fname):
-            sheet_path = os.path.join(ed_glob.CONFIG['STYLES_DIR'], fname)
-            if sheet_path.split(u".")[-1] != u"ess":
-                sheet_path += u".ess"
-
-            try:
-                writer = util.GetFileWriter(sheet_path)
-                writer.write(self._editor.GenerateStyleSheet())
-                writer.close()
-            except (AttributeError, IOError), msg:
-                self.LOG('[style_editor][err] Failed to export style sheet')
-                self.LOG('[style_editor][err] %s' % str(msg))
-            else:
-                # Update Style Sheet Control
-                self._panel.RefreshStyleSheets()
-                sheet = u".".join(os.path.basename(sheet_path).split(u'.')[:-1])
-                self._panel.StyleTheme = sheet
-                self._editor.ResetTransientStyleData()
-                result = wx.ID_OK
-                self.LOG("[style_editor][info] Sucessfully exported: %s" % sheet)
-
-                if sheet_path.startswith(ed_glob.CONFIG['STYLES_DIR']) or \
-                   sheet_path.startswith(ed_glob.CONFIG['SYS_STYLES_DIR']):
-                    # Update editor windows/buffer to use new style sheet
-                    UpdateBufferStyles(sheet)
-
-        return result
+        saved = self._panel.SaveStyleSheet()
+        return saved
 
     def OnCancel(self, evt):
         """Catches the cancel button clicks and checks if anything
@@ -202,8 +173,19 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         """
         self.LOG('[style_editor][evt] Ok Clicked Closing Window')
+        diff = self._editor.DiffStyles()
+        result = wx.ID_NO
+        if diff:
+            dlg = wx.MessageDialog(self,
+                                    _("Some styles have been changed would "
+                                      "you like to save before exiting?"),
+                                   _("Save Styles"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT | \
+                                         wx.CANCEL | wx.ICON_INFORMATION)
+            dlg.CenterOnParent()
+            result = dlg.ShowModal()
+            dlg.Destroy()
 
-        result = self._editor.DiffStyles()
         if result == wx.ID_NO:
             # Get Current Selection to update buffers
             UpdateBufferStyles(self._panel.StyleTheme)
@@ -215,7 +197,7 @@ class StyleEditor(ed_basewin.EdBaseDialog):
             if result != wx.ID_CANCEL:
                 evt.Skip()
 
-    def OnExport(self, evt):
+    def OnSave(self, evt):
         """Catches save button event
         @param evt: event that called this handler
 
@@ -246,11 +228,12 @@ class StyleEditorBox(eclib.ControlBox):
         # Setup
         ss_lbl = wx.StaticText(ctrlbar, label=_("Style Theme") + u": ")
         ctrlbar.AddControl(ss_lbl, wx.ALIGN_LEFT)
-        self._style_ch.SetToolTipString(_("Base new theme on existing one"))
         self._style_ch.SetStringSelection(Profile_Get('SYNTHEME', 'str'))
         ctrlbar.AddControl(self._style_ch, wx.ALIGN_LEFT)
         ctrlbar.AddControl(self._addbtn, wx.ALIGN_LEFT)
+        self._addbtn.SetToolTipString(_("Create a new style theme"))
         ctrlbar.AddControl(self._delbtn, wx.ALIGN_LEFT)
+        self._delbtn.SetToolTipString(_("Remove Style"))
         self.SetWindow(StyleEditorPanel(self))
 
         # Events
@@ -258,6 +241,9 @@ class StyleEditorBox(eclib.ControlBox):
                   lambda evt: self.Window.ChangeStyleSheet(self.StyleTheme),
                   self._style_ch)
         self.Bind(wx.EVT_BUTTON, self.OnButton)
+        self.Bind(wx.EVT_UPDATE_UI,
+                  lambda evt: evt.Enable(not self.IsSystemStyleSheet()),
+                  self._delbtn)
 
     #--- Properties ----#
     StyleTheme = property(lambda self: self._style_ch.GetStringSelection(),
@@ -266,20 +252,103 @@ class StyleEditorBox(eclib.ControlBox):
                             lambda self, val: self._style_ch.SetItems(sorted(val)))
 
     #---- Public Api ----#
+    def GetStyleSheetPath(self, sheet):
+        """Get the on disk path to where the style sheet should
+        be written to.
+        @param sheet: sheet name
+
+        """
+        sheet_path = os.path.join(ed_glob.CONFIG['STYLES_DIR'], sheet)
+        if not sheet_path.endswith(u"ess"):
+            sheet_path += u".ess"
+        return sheet_path
+
+    def IsSystemStyleSheet(self):
+        """Is the given style sheet a system provided one
+        @return: bool
+
+        """
+        # If it exists in user space it is not a system one
+        path = self.GetStyleSheetPath(self.StyleTheme)
+        return not os.path.exists(path)
+
     def RefreshStyleSheets(self):
         """Update the list of style sheets"""
         ss_lst = util.GetResourceFiles(u'styles', get_all=True)
         ss_lst = [sname for sname in ss_lst if not sname.startswith('.')]
         self.SyntaxSheets = ss_lst
 
+    def SaveStyleSheet(self):
+        """Save the changes to the currently selected StyleSheet
+        @return: bool
+
+        """
+        rval = False
+        sheet_path = self.GetStyleSheetPath(self.StyleTheme)
+        if self.WriteStyleSheet(sheet_path):
+            # Update Style Sheet Control
+            self.RefreshStyleSheets()
+            sheet = u".".join(os.path.basename(sheet_path).split(u'.')[:-1])
+            self.StyleTheme = sheet
+            self.Window.ResetTransientStyleData()
+            util.Log("[style_editor][info] Successfully exported: %s" % sheet)
+
+            if sheet_path.startswith(ed_glob.CONFIG['STYLES_DIR']) or \
+               sheet_path.startswith(ed_glob.CONFIG['SYS_STYLES_DIR']):
+                # Update editor windows/buffer to use new style sheet
+                UpdateBufferStyles(sheet)
+            rval = True
+        return rval
+
+    def WriteStyleSheet(self, path):
+        """Write the current style data to the given path
+        @param path: string
+        @return: bool
+
+        """
+        bOk = True
+        try:
+            writer = util.GetFileWriter(path)
+            writer.write(self.Window.GenerateStyleSheet())
+            writer.close()
+        except (AttributeError, IOError), msg:
+            util.Log('[style_editor][err] Failed to export style sheet')
+            util.Log('[style_editor][err] %s' % msg)
+            bOk = False
+        return bOk
+
     #---- Event Handlers ----#
+
     def OnButton(self, evt):
         """Handle the Add/Remove Buttons"""
         e_obj = evt.GetEventObject()
         if e_obj is self._addbtn:
-            pass
+            fname = wx.GetTextFromUser(_("Enter style sheet name"),
+                                       _("Export Style Sheet"),
+                                       self.StyleTheme, self)
+            if fname:
+                if fname in self.SyntaxSheets:
+                    # Already exists
+                    wx.MessageBox(_("The style %s already exists. Please choose a different name.") % fname,
+                                  style=wx.OK|wx.CENTER|wx.ICON_INFORMATION)
+                else:
+                    # Create it
+                    self.Window.SetBlankStyle()
+                    themes = self.SyntaxSheets
+                    themes.append(fname)
+                    self.SyntaxSheets = themes
+                    self.StyleTheme = fname
         elif e_obj is self._delbtn:
-            pass
+            path = self.GetStyleSheetPath(self.StyleTheme)
+            try:
+                os.remove(path)
+            except OSError, msg:
+                wx.MessageBox(_("Failed to delete style sheet:\nError:\n%s") % msg,
+                              style=wx.OK|wx.CENTER|wx.ICON_ERROR)
+            else:
+                self.RefreshStyleSheets()
+                self.StyleTheme = u"Default"
+                self.Window.ChangeStyleSheet(self.StyleTheme)
         else:
             evt.Skip()
 
@@ -327,11 +396,12 @@ class StyleEditorPanel(wx.Panel):
 
         # Add divider line
         hsizer.Add(wx.StaticLine(self, size=(-1, 2), style=wx.LI_VERTICAL),
-                   0, wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND)
-        hsizer.Add((5, 5), 0)
+                   0, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND|wx.TOP|wx.BOTTOM, 5)
 
         # Setup Right hand side with the settings controls
+        hsizer.AddStretchSpacer()
         hsizer.Add(self._settings, 0, wx.EXPAND|wx.ALL, 8)
+        hsizer.AddStretchSpacer()
 
         # Finalize layout
         vsizer = wx.BoxSizer(wx.VERTICAL)
@@ -371,19 +441,7 @@ class StyleEditorPanel(wx.Panel):
             if self.styles_orig[key] != self.styles_new[key]:
                 diff = True
                 break
-
-        result = wx.ID_NO
-        if diff:
-            dlg = wx.MessageDialog(self,
-                                    _("Some styles have been changed would "
-                                      "you like to save before exiting?"),
-                                   _("Save Styles"),
-                                   style=wx.YES_NO | wx.YES_DEFAULT | \
-                                         wx.CANCEL | wx.ICON_INFORMATION)
-            dlg.CenterOnParent()
-            result = dlg.ShowModal()
-            dlg.Destroy()
-        return result
+        return diff
 
     def EnableSettings(self, enable=True):
         """Enables/Disables all settings controls
@@ -441,6 +499,17 @@ class StyleEditorPanel(wx.Panel):
         """Reset the transient style data to mark the changes as not dirty"""
         self.styles_new = self.prebuff.GetStyleSet()
         self.styles_orig = DuplicateStyleDict(self.styles_new)
+
+    def SetBlankStyle(self):
+        """Clear all the transient style data to a blank style set"""
+        self.styles_orig = self.prebuff.BlankStyleDictionary()
+        self.styles_new = DuplicateStyleDict(self.styles_orig)
+        self.prebuff.SetStyles('preview', self.styles_new, nomerge=True)
+        self.prebuff.UpdateAllStyles('preview')
+
+        # For some reason this causes the text display to refresh
+        # properly when nothing else would work.
+        self.OnTextRegion()
 
     def UpdateSettingsPane(self, syntax_data):
         """Updates all the settings controls to hold the
@@ -678,7 +747,6 @@ class SettingsPanel(wx.Panel):
                                ((10, 10), 0),
                                (fh_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)])
         self.SetSizer(setting_sizer)
-        self.SetInitialSize()
 
 #-----------------------------------------------------------------------------#
 
