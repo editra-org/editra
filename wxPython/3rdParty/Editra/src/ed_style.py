@@ -91,17 +91,22 @@ class StyleItem(object):
         @rtype: bool
 
         """
-        return str(self) == str(other)
+        return unicode(self) == unicode(other)
 
     def __ne__(self, other):
         """Defines != operator for the StyleItem Class"""
-        return str(self) != str(other)
+        return unicode(self) != unicode(other)
 
     def __str__(self):
-        """Converts StyleItem to a string
+        """Convert StyleItem to string"""
+        uni = unicode(self)
+        return uni.encode('utf-8')
+
+    def __unicode__(self):
+        """Converts StyleItem to Unicode
         @note: This return string is in a format that can be accepted by
                Scintilla. No spaces may be in the string after the ':'.
-        @return: string representation of the StyleItem
+        @return: Unicode representation of the StyleItem
 
         """
         style_str = list()
@@ -208,7 +213,7 @@ class StyleItem(object):
         @return: bool
 
         """
-        return len(str(self))
+        return len(unicode(self))
 
     def Nullify(self):
         """Clear all values and set item as Null
@@ -236,7 +241,7 @@ class StyleItem(object):
             attrib = atom.split(u':')
             if len(attrib) == 2 and attrib[0] in STY_ATTRIBUTES:
                 last_set = attrib[0]
-                if last_set == "modifiers":
+                if last_set == u"modifiers":
                     self.SetExAttr(attrib[1])
                 else:
                     setattr(self, attrib[0], attrib[1])
@@ -296,7 +301,7 @@ class StyleItem(object):
         self.null = False
         if size is None:
             size = u''
-        self.size = str(size)
+        self.size = unicode(size)
         if ex and ex not in self._exattr:
             self._exattr.append(ex)
 
@@ -1082,7 +1087,7 @@ def MergeFonts(style_dict, font_dict):
 
     """
     for style in style_dict:
-        st_str = str(style_dict[style])
+        st_str = unicode(style_dict[style])
         if u'%' in st_str:
             style_dict[style].SetAttrFromStr(st_str % font_dict)
     return style_dict

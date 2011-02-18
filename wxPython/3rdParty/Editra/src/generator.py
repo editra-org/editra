@@ -730,15 +730,15 @@ class LaTeX(plugin.Plugin):
         if size == wx.EmptyString:
             size = self._dstyle.GetSize()
 
-        back = back_tmp % self.HexToRGB(back.split(',')[0])
-        fore = fore_tmp % (self.HexToRGB(fore.split(',')[0]), back)
-        if "bold" in str(s_item):
+        back = back_tmp % self.HexToRGB(back.split(u',')[0])
+        fore = fore_tmp % (self.HexToRGB(fore.split(u',')[0]), back)
+        if u"bold" in unicode(s_item):
             fore = bold_tmp % fore
-        if "underline" in str(s_item):
+        if u"underline" in unicode(s_item):
             fore = uline_tmp % fore
-        if "italic" in str(s_item):
+        if u"italic" in unicode(s_item):
             fore = ital_tmp % fore
-        cmd = cmd_tmp % (("\\" + cmd_name), "\\texttt{\\ttfamily{%s}}" % fore)
+        cmd = cmd_tmp % ((u"\\" + cmd_name), u"\\texttt{\\ttfamily{%s}}" % fore)
         self._cmds[cmd_name] = cmd
 
     def TransformText(self, txt):
