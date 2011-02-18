@@ -58,6 +58,7 @@ Python modules with a py2exe version of Editra.
 style sheet with new settings.
 +Fix bug in style editor that would warn about changes when no changes have been made.
 +Handle styling some additional CSS2 keywords (outline, left).
++Correct some Unicode handling issues in style sheet handling and RTF output generator.
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00
