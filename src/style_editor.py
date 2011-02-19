@@ -91,10 +91,7 @@ class StyleEditor(ed_basewin.EdBaseDialog):
 
         # Finish the Layout
         self.SetSizer(sizer)
-        if wx.Platform == '__WXMSW__':
-            self.SetInitialSize((460,450))
-        else:
-            self.SetInitialSize()
+        self.SetInitialSize()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON, self.OnCancel, id=wx.ID_CANCEL)
@@ -290,7 +287,7 @@ class StyleEditorBox(eclib.ControlBox):
                 try:
                     os.mkdir(user_config)
                 except (OSError, IOError), msg:
-                    self.LOG("[style_editor][err] %s" % msg)
+                    util.Log("[style_editor][err] %s" % msg)
                 else:
                     ed_glob.CONFIG['STYLES_DIR'] = user_config
 
@@ -387,7 +384,6 @@ class StyleEditorBox(eclib.ControlBox):
         """Check if current style sheet has been saved when switching sheets"""
         oldTheme = self._prevTheme
         newTheme = self.StyleTheme # newly selected theme
-        changeOk = False
         msg = None
         modtype = self.CheckForModifications(self._prevTheme)
         if modtype == MOD_CHANGE_PRESENT:
@@ -410,7 +406,6 @@ class StyleEditorBox(eclib.ControlBox):
             dlg.Destroy()
             if result == wx.YES:
                 # Save the style sheet
-                changeOk = True
                 self.SaveStyleSheet(oldTheme)
 
         # Change the style sheet to the newly selected one
@@ -424,7 +419,6 @@ class StyleEditorPanel(wx.Panel):
         super(StyleEditorPanel, self).__init__(parent)
 
         # Attributes
-        self._tag_list = wx.ListBox(self, style=wx.LB_SINGLE)
         self._settings = SettingsPanel(self)
         self.preview = PreviewPanel(self)
         self.prebuff = self.preview.GetPreviewBuffer() # TEMP HACK
@@ -439,7 +433,7 @@ class StyleEditorPanel(wx.Panel):
         self.EnableSettings(False)
 
         # Event Handlers
-        self.Bind(wx.EVT_LISTBOX, self.OnListBox, self._tag_list)
+        self.Bind(wx.EVT_LISTBOX, self.OnListBox)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
         self.Bind(eclib.EVT_COLORSETTER, self.OnColor)
@@ -448,37 +442,15 @@ class StyleEditorPanel(wx.Panel):
 
     def __DoLayout(self):
         """Layout the window"""
-        hsizer = wx.BoxSizer(wx.HORIZONTAL)
-
-        # Setup Left hand side with Style Tag List
-        ss_v = wx.BoxSizer(wx.VERTICAL)
-        style_lbl = wx.StaticText(self, label=_("Style Tags") + u": ")
-        ss_v.AddMany([(style_lbl, 0, wx.ALIGN_LEFT),
-                      (self._tag_list, 1, wx.EXPAND)])
-        hsizer.Add(ss_v, 0, wx.EXPAND|wx.ALL, 8)
-
-        # Add divider line
-        hsizer.Add(wx.StaticLine(self, size=(-1, 2), style=wx.LI_VERTICAL),
-                   0, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND|wx.TOP|wx.BOTTOM, 5)
-
-        # Setup Right hand side with the settings controls
-        hsizer.AddStretchSpacer()
-        hsizer.Add(self._settings, 0, wx.EXPAND|wx.ALL, 8)
-        hsizer.AddStretchSpacer()
-
-        # Finalize layout
         vsizer = wx.BoxSizer(wx.VERTICAL)
-        vsizer.Add(hsizer, 1, wx.EXPAND)
-        prop = 1
-        if wx.Platform == '__WXMSW__':
-            prop = 2
-        vsizer.Add(self.preview, prop, wx.EXPAND)
+        vsizer.Add(self._settings, 0, wx.EXPAND|wx.ALL, 5)
+        vsizer.Add(self.preview, 1, wx.EXPAND)
         self.SetSizer(vsizer)
 
     #---- Properties ----#
 
-    StyleTags = property(lambda self: self._tag_list.GetItems(),
-                         lambda self, val: self._tag_list.SetItems(sorted(val)))
+    StyleTags = property(lambda self: self._settings.TagList.GetItems(),
+                         lambda self, val: self._settings.TagList.SetItems(sorted(val)))
     SettingsPanel = property(lambda self: self._settings)
 
     #---- Public API ----#
@@ -490,7 +462,7 @@ class StyleEditorPanel(wx.Panel):
         """
         self.prebuff.UpdateAllStyles(sheet_name)
         self.ResetTransientStyleData()
-        tag = self._tag_list.GetStringSelection()
+        tag = self._settings.TagList.GetStringSelection()
         if tag != wx.EmptyString:
             self.UpdateSettingsPane(self.styles_new[tag])
 
@@ -515,7 +487,8 @@ class StyleEditorPanel(wx.Panel):
 
         """
         for child in self.SettingsPanel.GetChildren():
-            child.Enable(enable)
+            if not isinstance(child, wx.ListBox):
+                child.Enable(enable)
 
     def GenerateStyleSheet(self):
         """Generates a style sheet from the dialogs style data
@@ -618,7 +591,7 @@ class StyleEditorPanel(wx.Panel):
 
         """
         # Get the tag that has been modified
-        tag = self._tag_list.GetStringSelection()
+        tag = self._settings.TagList.GetStringSelection()
         if not tag:
             return False
 
@@ -685,7 +658,7 @@ class StyleEditorPanel(wx.Panel):
         @param evt: event that called this handler
 
         """
-        tag = self._tag_list.GetStringSelection()
+        tag = evt.GetEventObject().GetStringSelection()
         if tag != u"" and tag in self.styles_new:
             self.UpdateSettingsPane(self.styles_new[tag])
             self.EnableSettings()
@@ -705,9 +678,9 @@ class StyleEditorPanel(wx.Panel):
         style_id = self.prebuff.GetStyleAt(self.prebuff.GetCurrentPos())
         data = self.prebuff.FindTagById(style_id)
         if data != wx.EmptyString and data in self.styles_new:
-            self._tag_list.SetStringSelection(data)
+            self._settings.TagList.SetStringSelection(data)
             if wx.Platform == '__WXGTK__':
-                self._tag_list.SetFirstItemStr(data)
+                self._settings.TagList.SetFirstItemStr(data)
             self.UpdateSettingsPane(self.styles_new[data])
             self.EnableSettings()
 
@@ -722,11 +695,32 @@ class SettingsPanel(wx.Panel):
         """Create the settings panel"""
         super(SettingsPanel, self).__init__(parent)
 
+        # Attributes
+        self._tag_list = wx.ListBox(self,
+                                    size=(-1, 150),
+                                    style=wx.LB_SINGLE)
+
         # Layout
         self.__DoLayout()
 
+    TagList = property(lambda self: self._tag_list)
+
     def __DoLayout(self):
         """Layout the controls in the panel"""
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        # Setup Left hand side with Style Tag List
+        ss_v = wx.BoxSizer(wx.VERTICAL)
+        style_lbl = wx.StaticText(self, label=_("Style Tags") + u": ")
+        ss_v.AddMany([(style_lbl, 0, wx.ALIGN_LEFT),
+                      (self._tag_list, 0, wx.EXPAND)])
+        hsizer.Add(ss_v, 0, wx.EXPAND|wx.ALL, 5)
+
+        # Add divider line
+        hsizer.Add(wx.StaticLine(self, size=(-1, 2), style=wx.LI_VERTICAL),
+                   0, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND|wx.TOP|wx.BOTTOM, 5)
+        
+        # Setup the Right side
         setting_sizer = wx.BoxSizer(wx.VERTICAL)
         setting_top = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -811,7 +805,13 @@ class SettingsPanel(wx.Panel):
         setting_sizer.AddMany([(setting_top, 0, wx.ALIGN_CENTER_HORIZONTAL),
                                ((10, 10), 0),
                                (fh_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)])
-        self.SetSizer(setting_sizer)
+
+        # Setup Right hand side with the settings controls
+        hsizer.AddStretchSpacer()
+        hsizer.Add(setting_sizer, 0, wx.EXPAND|wx.ALL, 5)
+        hsizer.AddStretchSpacer()
+
+        self.SetSizer(hsizer)
 
 #-----------------------------------------------------------------------------#
 
