@@ -1167,7 +1167,9 @@ class EdPages(aui.AuiNotebook):
                                            SIMULATED_EVT_ID)
                 evt.SetSelection(idx)
                 self.OnPageClosing(evt)
+                self.TopLevelParent.Freeze() # prevent flashing on OSX
                 self.DeletePage(idx)
+                self.TopLevelParent.Thaw()
                 evt = aui.AuiNotebookEvent(aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED,
                                            SIMULATED_EVT_ID)
                 evt.SetSelection(idx)
