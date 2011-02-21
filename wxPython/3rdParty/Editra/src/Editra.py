@@ -96,6 +96,11 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         # Disable debug popups
         wx.Log.EnableLogging(False)
+        # XXX: Temporary - disable assertions on OSX to work around 
+        #      upstream bug in drawing code "couldnt draw the rotated text"
+        if wx.Platform == '__WXMAC__':
+            self.SetAssertMode(wx.PYAPP_ASSERT_SUPPRESS)
+
         # Purge old logs
         logfile = dev_tool.EdLogFile()
         logfile.PurgeOldLogs(7)
