@@ -396,10 +396,9 @@ class ControlBar(wx.PyPanel):
             # Allow to propagate
             evt.Skip()
 
-    def _GetAlignment(self, align):
+    def _GetAlignment(self):
         """Verify and get the proper secondary alignment based on the
         control bar alignment.
-        @param align: tool alignment flag
 
         """
         if not self.IsVerticalMode():
@@ -427,7 +426,7 @@ class ControlBar(wx.PyPanel):
             else:
                 align = wx.ALIGN_LEFT
 
-        align2 = self._GetAlignment(align)
+        align2 = self._GetAlignment()
         if align in (wx.ALIGN_LEFT, wx.ALIGN_TOP):
             self._sizer.Add(self._spacing, 0)
             self._sizer.Add(control, stretch, align|align2)
@@ -452,7 +451,7 @@ class ControlBar(wx.PyPanel):
         """
         self._sizer.AddStretchSpacer(2)
 
-    def AddTool(self, tid, bmp, help='', align=-1):
+    def AddTool(self, tid, bmp, help=u'', align=-1):
         """Add a simple bitmap button tool to the control bar
         @param tid: Tool Id
         @param bmp: Tool bitmap
@@ -462,7 +461,8 @@ class ControlBar(wx.PyPanel):
         """
         tool = wx.BitmapButton(self, tid, bmp, style=wx.NO_BORDER)
         if wx.Platform == '__WXGTK__':
-            tool.SetMargins(0, 0)
+            # SetMargins not available in wxPython 2.9+
+            getattr(tool, 'SetMargins', lambda x,y: False)(0, 0)
             spacer = (0, 0)
         else:
             spacer = self._spacing
@@ -476,7 +476,7 @@ class ControlBar(wx.PyPanel):
             else:
                 align = wx.ALIGN_LEFT
 
-        align2 = self._GetAlignment(align)
+        align2 = self._GetAlignment()
         self._tools['simple'].append(tool.GetId())
         if align in (wx.ALIGN_TOP, wx.ALIGN_LEFT):
             self._sizer.Add(spacer, 0)
@@ -709,7 +709,6 @@ class SegmentBar(ControlBar):
             tpen = wx.Pen(self._spen.GetColour())
             tpen.SetJoin(wx.JOIN_BEVEL)
             mpoint = height / 2
-            mlen = mpoint / 2
             dc.DrawLine(tmpx + 1, mpoint, tmpx, 0)
             dc.DrawLine(tmpx + 1, mpoint, tmpx, height)
             dc.DrawLine(trside - 1, mpoint, trside, 0)
@@ -956,8 +955,8 @@ class SegmentBar(ControlBar):
         use_labels = self._style & CTRLBAR_STYLE_LABELS
         for idx, button in enumerate(self._buttons):
             npos = self.DoDrawButton(gc, npos, idx,
-                                      self._selected == idx,
-                                      use_labels)
+                                     self._selected == idx,
+                                     use_labels)
 
     def RemoveSegment(self, index):
         """Remove a segment from the bar
