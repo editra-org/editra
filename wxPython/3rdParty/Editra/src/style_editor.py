@@ -631,6 +631,7 @@ class StyleEditorPanel(wx.Panel):
     #---- Event Handlers ----#
 
     def OnCheck(self, evt):
+        """Update Model for changes to styling settings"""
         e_id = evt.GetId()
         if e_id in [ID_BOLD, ID_EOL, ID_ULINE, ID_ITALIC]:
             self.UpdateStyleSet(e_id)
@@ -638,6 +639,7 @@ class StyleEditorPanel(wx.Panel):
             evt.Skip()
 
     def OnChoice(self, evt):
+        """Update Model for changes to styling settings"""
         e_id = evt.GetId()
         if e_id in [ID_FONT, ID_FONT_SIZE]:
             self.UpdateStyleSet(e_id)
