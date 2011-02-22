@@ -26,6 +26,7 @@ brackets and parens.
 
 LIBRARY:
 +Support ControlBars in on left and right side of ControlBox.
++Add ProcessThreadBase class to allow for customizing the creation of the Popen object.
 
 BUG FIXES:
 +Fix issue that could result in crash when rapidly clicking on notebook buttons.
