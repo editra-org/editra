@@ -60,6 +60,7 @@ style sheet with new settings.
 +Fix bug in style editor that would warn about changes when no changes have been made.
 +Handle styling some additional CSS2 keywords (outline, left).
 +Correct some Unicode handling issues in style sheet handling and RTF output generator.
++Fix refresh issue with button highlighting in PluginManager dialog (MSW).
 
 #-----------------------------------------------------------------------------#
 VERSION 0.6.00

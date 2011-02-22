@@ -956,10 +956,12 @@ class PBPluginItem(eclib.PanelBoxItemBase):
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
         self._uninstall = eclib.PlateButton(self, label=_("Uninstall"), bmp=bmp,
                                             style=eclib.PB_STYLE_NOBG)
+        self._uninstall.Unbind(wx.EVT_ERASE_BACKGROUND)
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF), wx.ART_MENU)
         self._config = eclib.PlateButton(self,
                                          label=_("Configure"), bmp=bmp,
                                          style=eclib.PB_STYLE_NOBG)
+        self._config.Unbind(wx.EVT_ERASE_BACKGROUND)
         self._config.Enable(enabled)
 
         # Setup
