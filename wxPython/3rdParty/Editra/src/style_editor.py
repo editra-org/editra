@@ -715,7 +715,7 @@ class SettingsPanel(wx.Panel):
         ss_v = wx.BoxSizer(wx.VERTICAL)
         style_lbl = wx.StaticText(self, label=_("Style Tags") + u": ")
         ss_v.AddMany([(style_lbl, 0, wx.ALIGN_LEFT),
-                      (self._tag_list, 0, wx.EXPAND)])
+                      (self._tag_list, 1, wx.EXPAND)])
         hsizer.Add(ss_v, 0, wx.EXPAND|wx.ALL, 5)
 
         # Add divider line
