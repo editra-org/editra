@@ -59,13 +59,13 @@ class EBaseListCtrl(elistmix.ListRowHighlighter,
 class ECheckListCtrl(listmix.CheckListCtrlMixin,
                      EBaseListCtrl):
      """ListCtrl with CheckBoxes in the first column"""
-     def __init__(self, parent, *args, **kwargs):
-         EBaseListCtrl.__init__(self, parent, *args, **kwargs)
+     def __init__(self, *args, **kwargs):
+         EBaseListCtrl.__init__(self, *args, **kwargs)
          listmix.CheckListCtrlMixin.__init__(self)
 
 class EEditListCtrl(listmix.TextEditMixin,
                     EBaseListCtrl):
     """ListCtrl with Editable cells"""
-    def __init__(self, parent, *args, **kwargs):
-        EBaseListCtrl.__init__(self, parent, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        EBaseListCtrl.__init__(self, *args, **kwargs)
         listmix.TextEditMixin.__init__(self)
