@@ -5378,6 +5378,10 @@ class AuiNotebook(wx.PyPanel):
         self.SetSelectedFont(selectedFont)
         self.SetMeasuringFont(selectedFont)
 
+        # Recalculate tab container size based on new font
+        self.UpdateTabCtrlHeight(force=False)
+        self.DoSizing()
+
         return True
 
 
