@@ -39,12 +39,33 @@ import plugin
 import iface
 import util
 
+from extern.embeddedimage import PyEmbeddedImage
+BreakPoint = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAAZiS0dE"
+    "AP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sCGAMVMT9tMisAAAJE"
+    "SURBVCjPZdPRSxRRFMfx7+bsdHVnZy+zY46x0RJbDFIR6YNkxBJB9RbiQ0/hHyAS0WP0F4hI"
+    "f0NEkIRPZSCx1Bo+SEiWDGKxkMUEY1xdt724g/bgMmrdx8P5XA7n/m5ql8d7HDpvXl9hfv4d"
+    "QRAQhhGe5+L7PkND17h5+8PhVlKH8eSERRCsUi6XAcjnXTY2IgAqlQq+f44HD7cTfOxfWJQ2"
+    "RWlTHuznwtnTlAf7k1oQrDI5YSXYAHg5fZGp++NcLZUQhQLhwiJ6YS1pUihEGLK9vs7U7CuK"
+    "008YHvm0j6vVKr6wkGGIWtcECwpXmAmO9A6aCGkofGFRrVYZxt4fe+7pM0oGuJEgq1JY8ZEd"
+    "YsV7dNe7cCNBydjvT8Y2tMKNC3R32OSyEldmMUQmwbFoEKk61IF4C0PXDrArLCSSXNamVzpk"
+    "pI0jcgn+o+ukSQPQ4hiusGC7jYWUpOu79J5yyEtJl8hyQtp0cRyAX7ojuWjzu0JICVEbW4UC"
+    "+nOTPWGSl5Ie4ZBKd5LOdIKO6QGQoNlF15pYhQKstd95ZGycZdEk1g2yIoMpbdL5bpAOSIkp"
+    "HbIiQ0NtsSyajIyNH4RESgfle8yEXwiDr7QarfaQJgiTVqOJqv3gRbiE8j2kdA4W5nkud0fv"
+    "EQQrPHo+y8D7GpdkEV94BDpkSdVYJOT86C3Kfh+e5x7N9sfFOwTBCrXaN6LoN3G8g9Y7CGFi"
+    "GCau61AsnsH3+7g8MPP/xwB4O1cmDH+i1GZSkzKH553k+o3KkfD8BZeW03dkWsHXAAAAAElF"
+    "TkSuQmCC")
+
 #-----------------------------------------------------------------------------#
 
 # Margins
 MARK_MARGIN = 0
 NUM_MARGIN  = 1
 FOLD_MARGIN = 2
+
+# Marker IDs
+MARKER_BOOKMARK   = 0
+MARKER_BREAKPOINT = 1
 
 # Key code additions
 ALT_SHIFT = wx.stc.STC_SCMOD_ALT|wx.stc.STC_SCMOD_SHIFT
@@ -80,9 +101,9 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Set Up Margins
         ## Outer Left Margin Bookmarks
         self.SetMarginType(MARK_MARGIN, wx.stc.STC_MARGIN_SYMBOL)
-        self.SetMarginMask(MARK_MARGIN, self.ED_STC_MASK_MARKERS)
+        self.SetMarginMask(MARK_MARGIN, EditraBaseStc.ED_STC_MASK_MARKERS)
         self.SetMarginSensitive(MARK_MARGIN, True)
-        self.SetMarginWidth(MARK_MARGIN, 12)
+        self.SetMarginWidth(MARK_MARGIN, 16)
 
         ## Middle Left Margin Line Number Indication
         self.SetMarginType(NUM_MARGIN, wx.stc.STC_MARGIN_NUMBER)
@@ -124,18 +145,26 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         if line < 0:
             line = self.GetCurrentLine()
-        return self.MarkerAdd(line, MARK_MARGIN)
+        return self.MarkerAdd(line, MARKER_BOOKMARK)
 
     def RemoveBookmark(self, line):
         """Remove the book mark from the given line
         @param line: int
 
         """
-        self.MarkerDelete(line, MARK_MARGIN)
+        self.MarkerDelete(line, MARKER_BOOKMARK)
 
     def RemoveAllBookmarks(self):
         """Remove all the bookmarks in the buffer"""
-        self.MarkerDeleteAll(MARK_MARGIN)
+        self.MarkerDeleteAll(MARKER_BOOKMARK)
+
+    def DeleteBreakpoint(self, line):
+        """Delete the breakpoint from the given line"""
+        self.MarkerDelete(line, MARKER_BREAKPOINT)
+
+    def SetBreakpoint(self, line):
+        """Set a breakpoint marker on the given line"""
+        self.MarkerAdd(line, MARKER_BREAKPOINT)
 
     def AddLine(self, before=False, indent=False):
 
@@ -420,7 +449,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           wx.stc.STC_MARK_BOXMINUSCONNECTED, fore, back)
         self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERMIDTAIL,
                           wx.stc.STC_MARK_TCORNER, fore, back)
-        self.MarkerDefine(0, wx.stc.STC_MARK_SHORTARROW, fore, back)
+        self.MarkerDefine(MARKER_BOOKMARK, wx.stc.STC_MARK_SHORTARROW, fore, back)
+        self.MarkerDefineBitmap(MARKER_BREAKPOINT, BreakPoint.Bitmap)
         self.SetFoldMarginHiColour(True, fore)
         self.SetFoldMarginColour(True, fore)
 
@@ -1079,6 +1109,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         return self.vert_edit
 
     #---- Style Function Definitions ----#
+
     def RefreshStyles(self):
         """Refreshes the colorization of the window by reloading any
         style tags that may have been modified.
