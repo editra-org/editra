@@ -23,6 +23,7 @@ brackets and parens.
 +Support storing/loading user configuration from XDG standard location on Linux.
 +Persist find settings between sessions.
 +Improvements to the Style Editor (ability to remove style sheets)
++Tab control now uses user Display Font setting for setting its Font.
 
 LIBRARY:
 +Support ControlBars in on left and right side of ControlBox.
