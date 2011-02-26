@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2951,8 +2951,57 @@ msgstr ""
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s не може да се пронађе\n"
+#~ "Можда је премештена или обрисана"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s је измењен у неком другом програму.\n"
+#~ "\n"
+#~ "Да ли желите да га наново учитате?"
+
+#~ msgid "&About"
+#~ msgstr "&О програму"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Промењена је колорна шема у%s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Изабери датотеку"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Да ли желите да отворите свих %d датотека из овог директоријума?\n"
+#~ "\n"
+#~ "Постоји опасност да се уређивач неочекивано понаша."
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Завршена је инсталација проширења"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Иди на страну поставки?"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Документација на мрежи"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Веб адреса пројекта"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Синтаксне датотеке"
+
+#~ msgid "Translate Editra"
+#~ msgstr "Преведи Editra-у"
 
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "грешка при добављању информација о верзији"

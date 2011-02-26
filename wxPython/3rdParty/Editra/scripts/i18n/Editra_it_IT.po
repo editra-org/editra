@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2972,8 +2972,82 @@ msgstr "senza nome"
 msgid "untitled %d"
 msgstr "senza titolo %d"
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s non trovato\n"
+#~ "Potrebbe essere stato spostato o rimosso"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s è stato modificato da un'altra applicazione\n"
+#~ "Vuoi ricaricarlo?"
+
+#~ msgid "&About"
+#~ msgstr "&Informazioni"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Cambia lo schema dei colori in %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Scegli il File"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Vuoi veramente aprire tutti %d file in questa cartella?\n"
+#~ "Attenzione: aprire molti file contemporaneamente potrebbe causare il blocco temporaneo dell'editor"
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Finestra di Errore/Crash"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Terminato di installare i Plugins"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Vai alla pagina delle configurazioni?"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "Vecchio Machintosh"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Documentazione Online"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Homepage del progetto"
+
 #~ msgid "Syntax Files"
 #~ msgstr "File di sintassi"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Traduzione Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Inpossibile trovare il numero di versione"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Senza Nome"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Senza Nome - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Finestre"
+
+#~ msgid "match case: %s"
+#~ msgstr "corrispondenze: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "espressione regolare: %s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "parola intera: %s"

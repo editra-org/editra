@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2948,5 +2948,54 @@ msgstr ""
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s kunne ikke findes\n"
+#~ "Er måske blevet flyttet eller slettet"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s er blevet ændret af et andet program.\n"
+#~ "\n"
+#~ "Vil du genindlæse den?"
+
+#~ msgid "&About"
+#~ msgstr "&Om"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Ændre farve skema til %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Vælg en fil"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Vil du åbne alle %d filer i denne mappe?\n"
+#~ "\n"
+#~ "Advarsel: Åbning af mange filer kan få editoren til at fryse midlertidigt."
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Fejl Report"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Har installerét plugins"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Gå til konfigurationssiden?"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Online dokumentation"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Kunne ikke hente versions info"
+
+#~ msgid "whole word: %s"
+#~ msgstr "hele ord %s"

@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2973,8 +2973,82 @@ msgstr "无标题"
 msgid "untitled %d"
 msgstr "无标题%d"
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s 没有找到\n"
+#~ "可能被移动或者删除"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s 被其它应用程序更改。\n"
+#~ "需要重新加载吗？"
+
+#~ msgid "&About"
+#~ msgstr "关于(&A)"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "颜色方案改为 \"%s\""
+
+#~ msgid "Choose a File"
+#~ msgstr "选择文件"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "要打开当前目录下的所有 %d 文件吗？\n"
+#~ "警告：同时打开多个文件编辑器可能为暂时停顿。"
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "错误/崩溃报告"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "完成插件安装"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "跳到设置页吗？"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "旧苹果机器"
+
+#~ msgid "Online Documentation"
+#~ msgstr "在线文档"
+
+#~ msgid "Project Homepage"
+#~ msgstr "工程主页"
+
 #~ msgid "Syntax Files"
 #~ msgstr "语法文件"
 
+#~ msgid "Translate Editra"
+#~ msgstr "翻译Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "无法检索版本信息"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "未命名文件"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "未命名文件 - %d"
+
+#~ msgid "Windows"
+#~ msgstr "窗口"
+
+#~ msgid "match case: %s"
+#~ msgstr "匹配状况：%s"
+
+#~ msgid "regex: %s"
+#~ msgstr "正则表达式：%s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "完整单词：%s"

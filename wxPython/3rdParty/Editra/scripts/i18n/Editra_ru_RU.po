@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -1092,7 +1092,9 @@ msgstr "Резервное копирование завершено: %s"
 
 #: ../../src/ed_stc.py:1841
 msgid "File is Read Only and cannot be saved"
-msgstr "сохранение не возможно"
+msgstr ""
+"Файл открыт для чтения,\r\n"
+"сохранение не возможно"
 
 #: ../../src/ed_pages.py:214
 msgid ""
@@ -2967,8 +2969,69 @@ msgstr ""
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s не может быть найден\n"
+#~ "Возможно он был перемещен или удален"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s был изменен другим приложением.\n"
+#~ "\n"
+#~ "Хотите перезагрузить его?"
+
+#~ msgid "&About"
+#~ msgstr "&О программе"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Цветовая схема изменена на %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Выбрать файл"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Вы хотите открыть все %d файлов(ы) в этом каталоге?\n"
+#~ "\n"
+#~ "Внимание: одновременное открытие множества файлов может стать причиной временного 'замерзания' редактора."
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Отчёт об ошибках/падениях программы"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Установка плагинов завершена"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Начать конфигурация страницы?"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Документация онлайн"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Проект домашней страницы"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Файлы синтаксиса"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Помочь в переводе"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Не удается получить информацию о версии"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Безымянный"
+
+#~ msgid "Windows"
+#~ msgstr "Окна"
