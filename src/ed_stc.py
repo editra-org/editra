@@ -926,7 +926,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @type evt: wx.stc.StyledTextEvent
 
         """
-        if evt.GetMargin() == ed_basestc.FOLD_MARGIN:
+        margin_num = evt.GetMargin()
+        if margin_num == ed_basestc.FOLD_MARGIN:
             if evt.GetShift() and \
                (evt.GetControl() or (wx.Platform == '__WXMAC__' and evt.GetAlt())):
                 self.FoldAll()
@@ -953,12 +954,17 @@ class EditraStc(ed_basestc.EditraBaseStc):
                             self.Expand(line_clicked, True, True, 100, level)
                     else:
                         self.ToggleFold(line_clicked)
-        elif evt.GetMargin() == ed_basestc.MARK_MARGIN:
+        elif margin_num == ed_basestc.MARK_MARGIN:
             # Bookmarks ect...
             line_clicked = self.LineFromPosition(evt.GetPosition())
-            if self.MarkerGet(line_clicked):
+            marker = self.MarkerGet(line_clicked)
+            if marker & (1<<ed_basestc.MARKER_BOOKMARK):
                 self.RemoveBookmark(line_clicked)
+            elif marker & (1<<ed_basestc.MARKER_BREAKPOINT):
+                # TODO: callback for plugins that set breakpoint?
+                self.DeleteBreakpoint(line_clicked)
             else:
+                # TODO: add callback to allow plugin to set callback
                 self.AddBookmark(line_clicked)
 
     def FoldAll(self):
@@ -970,7 +976,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         expanding = True
 
         # find out if we are folding or unfolding
-        for line_num in xrange(line_count):
+        for line_num in range(line_count):
             if self.GetFoldLevel(line_num) & wx.stc.STC_FOLDLEVELHEADERFLAG:
                 expanding = not self.GetFoldExpanded(line_num)
                 break
