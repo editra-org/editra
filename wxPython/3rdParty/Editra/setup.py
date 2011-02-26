@@ -230,7 +230,7 @@ ICON = { 'Win' : "pixmaps/editra.ico",
 # or otherwise not able to be found by py2app/exe
 INCLUDES = ['syntax.*', 'ed_bookmark', 'ed_log', 'shutil', 'subprocess', 'zipfile',
             'pygments.*', 'pygments.lexers.*', 'pygments.formatters.*',
-            'pygments.filters.*', 'pygments.styles.*', 'ftplib',
+            'pygments.filters.*', 'pygments.styles.*', 'ftplib', 'xmlrpclib',
             'extern.flatnotebook'] # temporary till all references can be removed
 if sys.platform.startswith('win'):
     INCLUDES.extend(['ctypes', 'ctypes.wintypes'])
@@ -326,7 +326,10 @@ def BuildPy2Exe():
                                "optimize" : 1,
                                "bundle_files" : 2,
                                "includes" : INCLUDES,
-                               "dll_excludes": [ "MSVCP90.dll" ] }},
+                               "excludes" : ["Tkinter", "Tkconstants", "tcl"],
+                               "dll_excludes": [ "MSVCP90.dll",
+                                                 "tk85.dll",
+                                                 "tcl85.dll" ] }},
         windows = [{"script": "src/Editra.py",
                     "icon_resources": [(1, ICON['Win'])],
                     "other_resources" : [(RT_MANIFEST, 1,

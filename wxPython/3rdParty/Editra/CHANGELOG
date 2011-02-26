@@ -8,11 +8,16 @@ Change Log:
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
-VERSION 0.6.xx
-DATE 0x/xx/2011
+VERSION 0.6.20
+DATE 02/26/2011
 40th Alpha Release
 
 NEWS:
+This release contains a number of fixes for long standing issues including a
+magor rework of the Style Editor dialog. The window layout of the Shelf's tabs
+are now saved and restored between running sessions of Editra. New shelf window
+for managing, navigaing, and viewing all set Bookmarks. See the changelog below
+for more details about this release.
 
 NEW: [features/enhancements]
 +Remember Shelf layout and selected tab when application is restarted.
@@ -23,11 +28,12 @@ brackets and parens.
 +Support storing/loading user configuration from XDG standard location on Linux.
 +Persist find settings between sessions.
 +Improvements to the Style Editor (ability to remove style sheets)
-+Tab control now uses user Display Font setting for setting its Font.
++Display Font setting now also applies to the font used by the tabs.
 
 LIBRARY:
 +Support ControlBars in on left and right side of ControlBox.
 +Add ProcessThreadBase class to allow for customizing the creation of the Popen object.
++Add support for displaying breakpoint markers in editor buffer.
 
 BUG FIXES:
 +Fix issue that could result in crash when rapidly clicking on notebook buttons.
