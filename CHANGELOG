@@ -14,9 +14,9 @@ DATE 02/26/2011
 
 NEWS:
 This release contains a number of fixes for long standing issues including a
-magor rework of the Style Editor dialog. The window layout of the Shelf's tabs
+major rework of the Style Editor dialog. The window layout of the Shelf's tabs
 are now saved and restored between running sessions of Editra. New shelf window
-for managing, navigaing, and viewing all set Bookmarks. See the changelog below
+for managing, navigating, and viewing all set Bookmarks. See the changelog below
 for more details about this release.
 
 NEW: [features/enhancements]
