@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2962,5 +2962,75 @@ msgstr ""
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s kunde inte hittas\n"
+#~ "Den har kanske flyttats eller raderats"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s har modifierats av en annan applikation.\n"
+#~ "\n"
+#~ "Vill du ladda om den?"
+
+#~ msgid "&About"
+#~ msgstr "&Om"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Ändrade färgschemat till %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Välj en Fil"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Vill du öppa alla %d filerna i den här mappen?\n"
+#~ "\n"
+#~ "Varning, att öppna många filer på en gång kan få redigeraren att frysa tillfälligt."
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Fel-/Krashrapporterare"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Slutfört att installera tillägg"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Gå till konfigurationssidan?"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Onlinedokumentation"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Projektets hemsida"
+
+#~ msgid "Translate Editra"
+#~ msgstr "Översätt Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Kunde inte hämta versionsinformation"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Namnlös"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Namnlös - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "match case: %s"
+#~ msgstr "matcha skiftläge: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "regex: %s"

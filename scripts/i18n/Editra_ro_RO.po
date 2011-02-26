@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 "Language: ro\n"
 
 #: ../../src/ed_search.py:429
@@ -2964,8 +2964,82 @@ msgstr ""
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s nu a fost găsit.\n"
+#~ "Probabil a fost mutat sau șters!"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s a fost modificat de o altă aplicație.\n"
+#~ "Doriți să îl reîncărcați?"
+
+#~ msgid "&About"
+#~ msgstr "&Despre"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Schema de culori a fost schimbată cu %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Selectează un fișier"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Vreți să deschideți toate fișierele %d de aici?\n"
+#~ "Atenție: deschiderea a prea multe fișiere poate duce la blocarea editorului!"
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Raport erori/eșecuri"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Am terminat instalarea adaosurilor"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Vă duceți la pagina 'Configurare' ?"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "Un Mac bătrân(fără opium)"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Documentaţie online"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Pagina proiectului"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Fișiere sintaxă"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Tradu Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Nu s-au putut obține informațiile despre versiune"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Fără titlu"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Neintitulat - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Ferestre"
+
+#~ msgid "match case: %s"
+#~ msgstr "potriviri: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "regex: %s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "cuvânt complet: %s"

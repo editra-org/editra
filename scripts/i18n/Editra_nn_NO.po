@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2949,6 +2949,52 @@ msgstr ""
 #, python-format
 msgid "untitled %d"
 msgstr ""
+
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s vart ikkje funnen\n"
+#~ "Kanskje ho har vorte flytta/sletta"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s har vorte endra av eit anna program.\n"
+#~ "\n"
+#~ "Vil do laste inn på ny?"
+
+#~ msgid "&About"
+#~ msgstr "&Om"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Endra fargesettet til %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Vel ei fil"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Vil du opne alle %d filene i denne mappa?\n"
+#~ "\n"
+#~ "Åtvaring opning av mange filer kan få programmet til å fryse midlertidig."
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Ferdig med instikkinstallasjon"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Gå til instillingssida?"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Dokumentasjon på nett"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Prosjektheimeside"
 
 #~ msgid "Syntax Files"
 #~ msgstr "Syntaksfiler"

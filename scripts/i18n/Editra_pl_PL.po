@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2969,8 +2969,72 @@ msgstr ""
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s nie został odnaleziony\n"
+#~ "Być może został przeniesiony albo skasowany"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s został zmodyfikowany przez inną aplikację.\n"
+#~ "\n"
+#~ "Czy chcesz go odświeżyć?"
+
+#~ msgid "&About"
+#~ msgstr "&O programie"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Zmień schemat kolorów na %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Wybierz plik"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Czy chcesz otworzyć wszystkie %d pliki z tego katalogu\n"
+#~ "\n"
+#~ "Ostrzeżenie: otwieranie wielu plików jednocześnie może tymczasowo zamrozić program"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Zakończono instalację wtyczek"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Przejść do strony konfiguracji?"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Dokumentacja w Internecie"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Strona WWW projektu"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Pliki składni"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Przetłumacz program Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Nie można odszukać informacji o wersji"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Bez tytułu"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Bez tytułu - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Okna"
+
+#~ msgid "whole word: %s"
+#~ msgstr "całe słowo: %s"

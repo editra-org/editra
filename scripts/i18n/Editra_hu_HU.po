@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2934,3 +2934,47 @@ msgstr ""
 #, python-format
 msgid "untitled %d"
 msgstr ""
+
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr "%s nem található"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr "%s -t egy másik alkalmazás módosította"
+
+#~ msgid "&About"
+#~ msgstr "&Névjegy"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Színséma megváltoztatása erre: \"%s\""
+
+#~ msgid "Choose a File"
+#~ msgstr "Megnyitás"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "Régi Machintosh"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Online documentáció"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Projekt honlapja"
+
+#~ msgid "Translate Editra"
+#~ msgstr "Editra fordítása"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Névtelen"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "whole word: %s"
+#~ msgstr "egész dszó: %s"

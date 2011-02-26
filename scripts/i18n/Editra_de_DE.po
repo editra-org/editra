@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 17:02-0600\n"
-"PO-Revision-Date: 2010-07-20 13:10+0000\n"
-"Last-Translator: Roland Kadner <Unknown>\n"
+"PO-Revision-Date: 2010-12-30 11:48+0000\n"
+"Last-Translator: Martin Schröder <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -25,7 +25,7 @@ msgstr "\"%s\" wurde nicht gefunden"
 #: ../../src/ed_search.py:638
 #, python-format
 msgid "%d matches were replaced."
-msgstr "%d Übereinstimmungen werden ersetzt"
+msgstr "%d Übereinstimmungen wurden ersetzt"
 
 #: ../../src/util.py:369
 #, python-format
@@ -61,11 +61,14 @@ msgid ""
 "%s has been modified by another application.\n"
 "\n"
 "Would you like to reload it?"
-msgstr "%s wurde von einer anderen Anwendung geändert."
+msgstr ""
+"%s wurde von einer anderen Anwendung geändert.\n"
+"\n"
+"Möchten Sie die Datei erneut laden?"
 
 #: ../../src/ed_menu.py:829
 msgid "&About..."
-msgstr "&Über..."
+msgstr "&Info..."
 
 #: ../../src/ed_menu.py:521
 msgid "&Close Tab"
@@ -153,7 +156,7 @@ msgstr "**Neuer Wert**"
 
 #: ../../src/eclib/filterdlg.py:76
 msgid "<< Remove"
-msgstr ""
+msgstr "<< Entfernen"
 
 #: ../../src/eclib/errdlg.py:322 ../../plugins/Launch/launch/launch.py:596
 msgid "Abort"
@@ -170,7 +173,7 @@ msgstr "Zugriff verweigert: %s"
 
 #: ../../src/eclib/filterdlg.py:75
 msgid "Add >>"
-msgstr ""
+msgstr "Hinzufügen >>"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:242
 msgid "Add a new executable"
@@ -232,7 +235,7 @@ msgstr "Anwenden"
 #: ../../src/eclib/filemgrdlg.py:167
 #, python-format
 msgid "Are you sure want to delete %s?"
-msgstr ""
+msgstr "Sind Sie sicher, dass Sie %s löschen wollen?"
 
 #: ../../src/plugdlg.py:1060
 #, python-format
@@ -361,7 +364,7 @@ msgstr "Abgebrochen"
 
 #: ../../src/ed_statbar.py:186
 msgid "Change Encoding"
-msgstr ""
+msgstr "Zeichencodierung ändern"
 
 #: ../../src/ed_menu.py:720
 msgid "Change Font Settings"
@@ -459,7 +462,7 @@ msgstr "Aktuellen Tab schließen"
 
 #: ../../src/ed_editv.py:231
 msgid "Close Other Tabs"
-msgstr ""
+msgstr "Andere Tabs schließen"
 
 #: ../../src/ed_menu.py:524
 msgid "Close Window"
@@ -611,19 +614,19 @@ msgstr "Aktuelles Dokument"
 
 #: ../../src/ed_cmdbar.py:116
 msgid "Customize"
-msgstr ""
+msgstr "Anpassen"
 
 #: ../../src/ed_main.py:1450
 msgid "Customize Menu"
-msgstr ""
+msgstr "Menü anpassen"
 
 #: ../../src/ed_menu.py:471
 msgid "Customize the items shown in this menu."
-msgstr ""
+msgstr "Menüeinträge anpassen"
 
 #: ../../src/ed_menu.py:470
 msgid "Customize..."
-msgstr ""
+msgstr "Anpassen..."
 
 #: ../../src/ed_editv.py:362 ../../src/ed_toolbar.py:83
 msgid "Cut"
@@ -687,7 +690,7 @@ msgstr ""
 
 #: ../../src/eclib/filemgrdlg.py:168
 msgid "Delete File?"
-msgstr ""
+msgstr "Datei löschen?"
 
 #: ../../src/ed_menu.py:603
 msgid "Delete Line"
@@ -1381,7 +1384,7 @@ msgstr "Ungültige Datei"
 
 #: ../../src/ed_cmdbar.py:776
 msgid "Invalid Path"
-msgstr ""
+msgstr "Ungültiger Pfad"
 
 #: ../../src/ed_search.py:349
 #, python-format
@@ -1513,7 +1516,7 @@ msgstr "Eigenes Profil laden und speichern"
 
 #: ../../src/ed_menu.py:555
 msgid "Load and save custom sessions."
-msgstr ""
+msgstr "Laden und Speichern von benutzerdefinierten Sitzungen"
 
 #: ../../src/prefdlg.py:403
 msgid "Load files from last session on startup"
@@ -1592,7 +1595,7 @@ msgstr "Sonstiges"
 
 #: ../../src/ed_pages.py:391
 msgid "Missing session files"
-msgstr ""
+msgstr "Fehlende Sitzungsdateien"
 
 #: ../../src/ed_stc.py:1184
 msgid ""
@@ -1999,7 +2002,7 @@ msgstr "Öffentliche Funktionen"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:57
 msgid "Public Subroutines"
-msgstr ""
+msgstr "Öffentliche Unterroutinen"
 
 #: ../../src/ed_shelf.py:117
 msgid "Put an item on the Shelf"
@@ -2117,7 +2120,7 @@ msgstr "Alle ersetzen"
 
 #: ../../src/ed_search.py:547 ../../src/ed_search.py:708
 msgid "Replace Error"
-msgstr ""
+msgstr "Fehler beim Ersetzen"
 
 #: ../../src/eclib/finddlg.py:778
 msgid "Replace with"
@@ -2279,7 +2282,7 @@ msgstr "Makierten Ausdruck suchen"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:420
 msgid "Search in directory"
-msgstr ""
+msgstr "Suche im Verzeichnis"
 
 #: ../../src/ed_search.py:408
 msgid "Search wrapped to bottom"
@@ -2883,7 +2886,7 @@ msgstr "Kommandos für Leerzeichenformatierung"
 
 #: ../../src/ed_cmdbar.py:290
 msgid "Whole Word"
-msgstr ""
+msgstr "Ganzes Wort"
 
 #: ../../src/eclib/finddlg.py:815
 msgid "Whole word"
@@ -2961,15 +2964,91 @@ msgstr "Unterstrichen"
 
 #: ../../src/ed_pages.py:237
 msgid "untitled"
-msgstr ""
+msgstr "Unbenannt"
 
 #: ../../src/ed_pages.py:235
 #, python-format
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s konnte nicht gefunden werden.\n"
+#~ "Vielleicht wurde es verschoben oder gelöscht."
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s ist von einer anderen Anwendung verändert worden.\n"
+#~ "\n"
+#~ "Möchten Sie die Datei neu laden?"
+
+#~ msgid "&About"
+#~ msgstr "Ü&ber"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Farbschema ändern zu %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Wähle eine Datei"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Möchten Sie alle %d Dateien in diesem Verzeichnis öffnen?\n"
+#~ "\n"
+#~ "Warnung: das gleichzeitige Öffnen vieler Dateien kann ein temporäres Einfrieren des Editors zur Folge haben."
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Fehler/Absturz Berichterstattung"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Installation der Plugins beendet"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Gehe zu Einstellungen?"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "Altes Macintosh"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Online-Dokumentation"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Projekt-Homepage"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Syntaxbeispiel"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Editra übersetzen"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Versionsinfo abfragen nicht möglich"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Unbenannt"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Unbenannt - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "match case: %s"
+#~ msgstr "Suchübereinstimmung: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "regex: %s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "ganzes Wort: %s"

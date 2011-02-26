@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 17:02-0600\n"
-"PO-Revision-Date: 2010-10-24 06:02+0000\n"
+"PO-Revision-Date: 2011-02-02 05:07+0000\n"
 "Last-Translator: janis.sl <Unknown>\n"
 "Language-Team: Latvian <lv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -1203,7 +1203,7 @@ msgstr "Vai formatēt rindas beigu marķierus?"
 #: ../../src/ed_menu.py:757 ../../src/ed_menu.py:760 ../../src/ed_menu.py:763
 #, python-format
 msgid "Format all EOL characters to %s Mode"
-msgstr "Formatēt visas rindas beigu rakstzīmes %s režīmā"
+msgstr "Visus rindas beigu marķierus formatēt %s režīmā"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Function Definitions"
@@ -2979,8 +2979,84 @@ msgstr "bez nosaukuma"
 msgid "untitled %d"
 msgstr "bez nosaukuma %d"
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "Nevar atrast %s\n"
+#~ "Tas, iespējams, ir pārvietots vai izdzēsts"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s ir modificēts, izmantojot citu lietojumprogrammu.\n"
+#~ "\n"
+#~ "Vai vēlaties to ielādēt atkārtoti?"
+
+#~ msgid "&About"
+#~ msgstr "&Par programmu"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Krāsu struktūra ir mainīta uz %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Faila izvēle"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Vai vēlaties atvērt visus %d šī direktorija failus?\n"
+#~ "\n"
+#~ "Pārāk liela failu skaita atvēršana vienlaikus var izraisīt īslaicīgu redaktora \"uzkāršanos\"."
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Kļūdu/avāriju ziņotājs"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Spraudmoduļu instalēšana pabeigta"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Vai pāriet uz konfigurācijas lapu?"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "Agrākais Macintosh"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Tiešsaistē pieejamā dokumentācija"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Projekta vietne"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Sintakses faili"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Tulkot Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Nevar iegūt informāciju par versiju"
+
+#~ msgid "Unix"
+#~ msgstr "UNIX"
+
+#~ msgid "Untitled"
+#~ msgstr "Bez nosaukuma"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Bez nosaukuma - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "match case: %s"
+#~ msgstr "saskaņot reģistru: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "regulārā izteiksme: %s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "pilns vārds: %s"

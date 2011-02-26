@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 17:02-0600\n"
-"PO-Revision-Date: 2010-11-29 18:28+0000\n"
-"Last-Translator: Ekrem Kocadere <ekocadere@hotmail.com>\n"
+"PO-Revision-Date: 2011-02-09 13:12+0000\n"
+"Last-Translator: Ozan HACIBEKIROGLU <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -528,7 +528,7 @@ msgstr "Komut"
 
 #: ../../src/ed_menu.py:620
 msgid "Commands that affect an entire line"
-msgstr "Tam bir satır komutlarını aktif yap"
+msgstr "Tüm satırı etkileyen komutlar"
 
 #: ../../src/prefdlg.py:1344
 msgid "Configuration"
@@ -536,7 +536,7 @@ msgstr "Yapılandırma"
 
 #: ../../src/plugdlg.py:192
 msgid "Configuration Changes Made"
-msgstr "Ayar Değişiklikleri Yapıldı"
+msgstr "Yapılandırma Değişiklikleri Yapıldı"
 
 #: ../../src/plugdlg.py:119 ../../src/plugdlg.py:956
 msgid "Configure"
@@ -548,19 +548,19 @@ msgstr "Yazıcı yapılandır"
 
 #: ../../src/ed_menu.py:734
 msgid "Convert selected text to all lowercase letters"
-msgstr "Seçili yazıyı küçük harflere çevir"
+msgstr "Seçili metni küçük harflere çevir"
 
 #: ../../src/ed_menu.py:732
 msgid "Convert selected text to all uppercase letters"
-msgstr "Seçili yazıyı büyük harflere çevir"
+msgstr "Seçili metni büyük harflere çevir"
 
 #: ../../src/ed_menu.py:746
 msgid "Convert spaces to tabs in selected/all text"
-msgstr "Seçili alanda/tüm text de boşlukları tab karakterine çevir"
+msgstr "Seçili alanda/tüm metin de boşlukları tab karakterine çevir"
 
 #: ../../src/ed_menu.py:748
 msgid "Convert tabs to spaces in selected/all text"
-msgstr "Seçili alanda/tüm text de tab ları boşluğa karakterine çevir"
+msgstr "Seçili alanda/tüm metinde tab ları boşluk karakterlerine çevir"
 
 #: ../../src/ed_editv.py:363 ../../src/ed_toolbar.py:85
 msgid "Copy"
@@ -580,7 +580,7 @@ msgstr "Satır kopyala"
 
 #: ../../src/ed_menu.py:582 ../../src/ed_toolbar.py:86
 msgid "Copy Selected Text to Clipboard"
-msgstr "Seçili texti panoya kopyala"
+msgstr "Seçili Metni Panoya Kopyala"
 
 #: ../../src/ed_main.py:1562
 msgid "Copyright"
@@ -588,13 +588,13 @@ msgstr "Telif Hakkı"
 
 #: ../../src/eclib/finddlg.py:845
 msgid "Count"
-msgstr "Sayı"
+msgstr "Say"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:429
 #: ../../plugins/filebrowser/filebrowser/browser.py:548
 #, python-format
 msgid "Create Archive of \"%s\""
-msgstr "\"%s\" den arşiv oluştur"
+msgstr "\"%s\" den Arşiv Oluştur"
 
 #: ../../src/eclib/infodlg.py:193
 msgid "Created"
@@ -635,15 +635,15 @@ msgstr "Kes"
 
 #: ../../src/ed_menu.py:602
 msgid "Cut Current Line"
-msgstr "Güncel satırı kes"
+msgstr "Güncel Satırı Kes"
 
 #: ../../src/ed_menu.py:601
 msgid "Cut Line"
-msgstr "Satırı kes"
+msgstr "Satırı Kes"
 
 #: ../../src/ed_menu.py:580 ../../src/ed_toolbar.py:84
 msgid "Cut Selected Text from File"
-msgstr "Dosyadaki seçili texti kes"
+msgstr "Dosyadaki seçili Metni Kes"
 
 #: ../../src/ed_menu.py:587
 msgid "Cycle Clipboard"
@@ -2954,8 +2954,55 @@ msgstr "isimsiz"
 msgid "untitled %d"
 msgstr "isimsiz %d"
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s bulunamadı\n"
+#~ "Dosya taşınmış veya silinmiş olabilir"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s başka bir uygulama tarafında değiştirildi\n"
+#~ "Dosyayı tekrar yüklemek istermisiniz?"
+
+#~ msgid "&About"
+#~ msgstr "H&akkında"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Renk şemasını %s göre değiş"
+
+#~ msgid "Choose a File"
+#~ msgstr "Dosya seç"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Bu klasördeki %d tüm dosyaları açmak istiyor musunuz?\n"
+#~ "Uyarı: Aynı anda birçok dosyanın açılması Editör ün geçici bir kilitlenmesine sebep olur."
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Eklenti - Plugin Kurulumu Tamalandı"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Ayarlar penceresine git"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Çevrimiçi Belgeler"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Projenin İnternet Sayfası"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Sentaks Dosyaları"
+
+#~ msgid "Translate Editra"
+#~ msgstr "Editra Tercüme Et"
 
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Versiyon biligisi mümkün değil"

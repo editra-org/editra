@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 22:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2950,8 +2950,57 @@ msgstr ""
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "無法找到 %s\n"
+#~ "也許檔案已被移除或搬移了"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s 已被其它應用程式更動過.\n"
+#~ "\n"
+#~ "要重新載入嗎?"
+
+#~ msgid "&About"
+#~ msgstr "關於(&A)"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "改變色彩配置為 %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "選擇檔案"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "要開啟此目錄下全部共 %d 個檔案嗎?\n"
+#~ "\n"
+#~ "開啟太多檔案的話, 會讓本程式暫時沒有回應."
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "已完成套件安裝"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "前往配置頁面?"
+
+#~ msgid "Online Documentation"
+#~ msgstr "線上文件"
+
+#~ msgid "Project Homepage"
+#~ msgstr "專案首頁"
+
 #~ msgid "Syntax Files"
 #~ msgstr "語法檔案"
+
+#~ msgid "Translate Editra"
+#~ msgstr "協助翻譯 Editra"
 
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "無法檢索版本信息"
