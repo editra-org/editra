@@ -22,7 +22,8 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ["EBaseListCtrl", "ECheckListCtrl", "EEditListCtrl"]
+__all__ = ["EBaseListCtrl", "ECheckListCtrl", "EEditListCtrl", 
+           "EToggleEditListCtrl"]
 
 #--------------------------------------------------------------------------#
 # Dependencies
@@ -69,3 +70,38 @@ class EEditListCtrl(listmix.TextEditMixin,
     def __init__(self, *args, **kwargs):
         EBaseListCtrl.__init__(self, *args, **kwargs)
         listmix.TextEditMixin.__init__(self)
+
+class EToggleEditListCtrl(listmix.CheckListCtrlMixin,
+                          listmix.TextEditMixin,
+                          EBaseListCtrl):
+    """ListCtrl with Editable cells and images that can be toggled in the
+    the first column.
+
+    """
+    def __init__(self, *args, **kwargs):
+        EBaseListCtrl.__init__(self, *args, **kwargs)
+        listmix.TextEditMixin.__init__(self)
+        listmix.CheckListCtrlMixin.__init__(self)
+
+    def GetCheckedItems(self):
+        """Get the list of checked indexes"""
+        count = self.GetItemCount()
+        return [item for item in range(count) if self.IsChecked(item)]
+
+    def SetCheckedBitmap(self, bmp):
+        """Set the bitmap to use for the Checked state
+        @param bmp: wx.Bitmap
+
+        """
+        assert isinstance(bmp, wx.Bitmap) and bmp.IsOk()
+        imgl = self.GetImageList(wx.IMAGE_LIST_SMALL)
+        imgl.Replace(self.check_image, bmp)
+
+    def SetUnCheckedBitmap(self, bmp):
+        """Set the bitmap to use for the un-Checked state
+        @param bmp: wx.Bitmap
+
+        """
+        assert isinstance(bmp, wx.Bitmap) and bmp.IsOk()
+        imgl = self.GetImageList(wx.IMAGE_LIST_SMALL)
+        imgl.Replace(self.uncheck_image, bmp)
