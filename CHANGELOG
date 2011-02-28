@@ -1,13 +1,30 @@
 # encoding: utf-8
 Editra
 Author: Cody Precord
-Copyright: (c) Cody Precord 2005-2010
+Copyright: (c) Cody Precord 2005-2011
 License: wxWindows
 
 Change Log:
 
 #-----------------------------------------------------------------------------#
+
 Changes since last release:
+
+VERSION 0.6.xx
+DATE 0x/xx/2011
+41st Alpha Release
+
+NEWS:
+
+NEW: [features/enhancements]
+
+LIBRARY:
+
+BUG FIXES:
+
+#-----------------------------------------------------------------------------#
+Changes since last release:
+
 VERSION 0.6.20
 DATE 02/26/2011
 40th Alpha Release
