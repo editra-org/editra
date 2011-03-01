@@ -38,23 +38,7 @@ from profiler import Profile_Get
 import plugin
 import iface
 import util
-
-from extern.embeddedimage import PyEmbeddedImage
-BreakPoint = PyEmbeddedImage(
-    "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAAZiS0dE"
-    "AP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sCGAMVMT9tMisAAAJE"
-    "SURBVCjPZdPRSxRRFMfx7+bsdHVnZy+zY46x0RJbDFIR6YNkxBJB9RbiQ0/hHyAS0WP0F4hI"
-    "f0NEkIRPZSCx1Bo+SEiWDGKxkMUEY1xdt724g/bgMmrdx8P5XA7n/m5ql8d7HDpvXl9hfv4d"
-    "QRAQhhGe5+L7PkND17h5+8PhVlKH8eSERRCsUi6XAcjnXTY2IgAqlQq+f44HD7cTfOxfWJQ2"
-    "RWlTHuznwtnTlAf7k1oQrDI5YSXYAHg5fZGp++NcLZUQhQLhwiJ6YS1pUihEGLK9vs7U7CuK"
-    "008YHvm0j6vVKr6wkGGIWtcECwpXmAmO9A6aCGkofGFRrVYZxt4fe+7pM0oGuJEgq1JY8ZEd"
-    "YsV7dNe7cCNBydjvT8Y2tMKNC3R32OSyEldmMUQmwbFoEKk61IF4C0PXDrArLCSSXNamVzpk"
-    "pI0jcgn+o+ukSQPQ4hiusGC7jYWUpOu79J5yyEtJl8hyQtp0cRyAX7ojuWjzu0JICVEbW4UC"
-    "+nOTPWGSl5Ie4ZBKd5LOdIKO6QGQoNlF15pYhQKstd95ZGycZdEk1g2yIoMpbdL5bpAOSIkp"
-    "HbIiQ0NtsSyajIyNH4RESgfle8yEXwiDr7QarfaQJgiTVqOJqv3gRbiE8j2kdA4W5nkud0fv"
-    "EQQrPHo+y8D7GpdkEV94BDpkSdVYJOT86C3Kfh+e5x7N9sfFOwTBCrXaN6LoN3G8g9Y7CGFi"
-    "GCau61AsnsH3+7g8MPP/xwB4O1cmDH+i1GZSkzKH553k+o3KkfD8BZeW03dkWsHXAAAAAElF"
-    "TkSuQmCC")
+import ed_marker
 
 #-----------------------------------------------------------------------------#
 
@@ -64,8 +48,12 @@ NUM_MARGIN  = 1
 FOLD_MARGIN = 2
 
 # Marker IDs
-MARKER_BOOKMARK   = 0
-MARKER_BREAKPOINT = 1
+MARKER_BOOKMARK             = 0
+MARKER_BREAKPOINT           = 1
+MARKER_BREAKPOINT_ACTIVE    = 2
+MARKER_BREAKPOINT_DISABLED  = 3
+MARKER_ACTIVE_LINE          = 4
+MARKER_MAX = 4
 
 # Key code additions
 ALT_SHIFT = wx.stc.STC_SCMOD_ALT|wx.stc.STC_SCMOD_SHIFT
@@ -94,7 +82,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           indenter=None,    # Auto indenter
                           lang_id=0)        # Language ID from syntax module
 
-        self.vert_edit = vertedit.VertEdit(self)
+        self.vert_edit = vertedit.VertEdit(self, markerNumber=MARKER_MAX+1)
         self._line_num = True # Show line numbers
         self._last_cwidth = 1 # one pixel
 
@@ -157,14 +145,53 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def RemoveAllBookmarks(self):
         """Remove all the bookmarks in the buffer"""
         self.MarkerDeleteAll(MARKER_BOOKMARK)
+ 
+    def DeleteAllBreakpoints(self):
+        """Delete all the breakpoints in the buffer"""
+        self.MarkerDeleteAll(MARKER_BREAKPOINT)
 
     def DeleteBreakpoint(self, line):
         """Delete the breakpoint from the given line"""
         self.MarkerDelete(line, MARKER_BREAKPOINT)
 
-    def SetBreakpoint(self, line):
-        """Set a breakpoint marker on the given line"""
-        self.MarkerAdd(line, MARKER_BREAKPOINT)
+    def _SetBreakpoint(self, line=-1, state=MARKER_BREAKPOINT):
+        """Set the breakpoint state
+        @return: int (-1 if already set)
+
+        """
+        handle = -1
+        if line < 0:
+            line = self.GetCurrentLine()
+        if not self.HasMarker(line, state):
+            for mode in (MARKER_BREAKPOINT, MARKER_BREAKPOINT_ACTIVE,
+                         MARKER_BREAKPOINT_DISABLED, MARKER_ACTIVE_LINE):
+                if self.HasMarker(line, mode):
+                    self.MarkerDelete(line, mode)
+            handle = self.MarkerAdd(line, state)
+            if state == MARKER_BREAKPOINT_ACTIVE:
+                handle = self.MarkerAdd(line, MARKER_ACTIVE_LINE)
+        return handle
+
+    def SetBreakpoint(self, line=-1):
+        """Set a breakpoint marker on the given line
+        @return: breakpoint handle
+
+        """
+        handle = self._SetBreakpoint(line, MARKER_BREAKPOINT)
+        return handle
+
+    def SetBreakpointDisabled(self, line=-1):
+        """Set a disabled breakpoint indicator."""
+        handle = self._SetBreakpoint(line, MARKER_BREAKPOINT_DISABLED)
+        return handle
+
+    def SetBreakpointTriggered(self, line=-1):
+        """Set the breakpoint triggered indicator to show
+        that the breakpoint is currently triggered.
+
+        """
+        handle = self._SetBreakpoint(line, MARKER_BREAKPOINT_ACTIVE)
+        return handle
 
     def AddLine(self, before=False, indent=False):
 
@@ -449,8 +476,14 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           wx.stc.STC_MARK_BOXMINUSCONNECTED, fore, back)
         self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERMIDTAIL,
                           wx.stc.STC_MARK_TCORNER, fore, back)
-        self.MarkerDefine(MARKER_BOOKMARK, wx.stc.STC_MARK_SHORTARROW, fore, back)
-        self.MarkerDefineBitmap(MARKER_BREAKPOINT, BreakPoint.Bitmap)
+        self.MarkerDefineBitmap(MARKER_BOOKMARK, ed_marker.BookMark.GetBitmap())
+        self.MarkerDefineBitmap(MARKER_BREAKPOINT, ed_marker.Breakpoint.GetBitmap())
+        self.MarkerDefineBitmap(MARKER_BREAKPOINT_ACTIVE,
+                                ed_marker.BreakpointTriggered.GetBitmap())
+        self.MarkerDefineBitmap(MARKER_BREAKPOINT_DISABLED,
+                                ed_marker.BreakpointDisabled.GetBitmap())
+        self.MarkerDefine(MARKER_ACTIVE_LINE, wx.stc.STC_MARK_BACKGROUND, 
+                          background=wx.RED) # TODO add customization
         self.SetFoldMarginHiColour(True, fore)
         self.SetFoldMarginColour(True, fore)
 
@@ -709,6 +742,15 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         pos = max(0, pos-1)
         return 'comment' in self.FindTagById(self.GetStyleAt(pos))
+
+    def HasMarker(self, line, marker):
+        """Check if the given line has the given marker set
+        @param line: line number
+        @param marker: marker id
+
+        """
+        mask = self.MarkerGet(line)
+        return bool(1<<marker & mask)
 
     def HasSelection(self):
         """Check if there is a selection in the buffer

@@ -957,10 +957,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
         elif margin_num == ed_basestc.MARK_MARGIN:
             # Bookmarks ect...
             line_clicked = self.LineFromPosition(evt.GetPosition())
-            marker = self.MarkerGet(line_clicked)
-            if marker & (1<<ed_basestc.MARKER_BOOKMARK):
+            if self.HasMarker(line_clicked, ed_basestc.MARKER_BOOKMARK):
                 self.RemoveBookmark(line_clicked)
-            elif marker & (1<<ed_basestc.MARKER_BREAKPOINT):
+            elif self.HasMarker(line_clicked, ed_basestc.MARKER_BREAKPOINT):
                 # TODO: callback for plugins that set breakpoint?
                 self.DeleteBreakpoint(line_clicked)
             else:

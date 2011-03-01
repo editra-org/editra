@@ -30,37 +30,11 @@ import ed_glob
 import util
 import eclib
 import ebmlib
+from ed_marker import BookMark
 
 #-----------------------------------------------------------------------------#
 # Globals
 _ = wx.GetTranslation
-
-#-----------------------------------------------------------------------------#
-
-class BookMark(object):
-    """Class to store bookmark data"""
-    def __init__(self, fname, line, handle=-1):
-        super(BookMark, self).__init__()
-
-        # Attributes
-        self._name = u""        # Bookmark alias name
-        self._fname = fname
-        self._line = line
-        self._handle = handle
-
-    def __eq__(self, other):
-        return (self.FileName, self.Line) == (other.FileName, other.Line)
-
-    #---- Properties ----#
-
-    Name = property(lambda self: self._name,
-                    lambda self, name: setattr(self, '_name', name))
-    FileName = property(lambda self: self._fname,
-                        lambda self, name: setattr(self, '_fname', name))
-    Line = property(lambda self: self._line,
-                    lambda self, line: setattr(self, '_line', line))
-    Handle = property(lambda self: self._handle,
-                      lambda self, handle: setattr(self, '_handle', handle))
 
 #-----------------------------------------------------------------------------#
 
