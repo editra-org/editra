@@ -440,9 +440,6 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 window.DoOpen(ed_glob.ID_COMMAND_LINE_OPEN, fname, line)
 
                 # Make sure the window is brought to the front
-                if wx.Platform == '__WXMSW__' and not window.IsIconized():
-                    # HACK to work around Raise not bring window to front
-                    window.Iconize(True)
                 if window.IsIconized():
                     window.Iconize(False)
                 window.Raise()
