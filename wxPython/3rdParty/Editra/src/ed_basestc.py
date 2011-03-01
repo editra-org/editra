@@ -149,10 +149,15 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def DeleteAllBreakpoints(self):
         """Delete all the breakpoints in the buffer"""
         self.MarkerDeleteAll(MARKER_BREAKPOINT)
+        self.MarkerDeleteAll(MARKER_BREAKPOINT_DISABLED)
+        self.MarkerDeleteAll(MARKER_BREAKPOINT_ACTIVE)
 
     def DeleteBreakpoint(self, line):
         """Delete the breakpoint from the given line"""
-        self.MarkerDelete(line, MARKER_BREAKPOINT)
+        for marker in (MARKER_BREAKPOINT, MARKER_BREAKPOINT_DISABLED,
+                       MARKER_BREAKPOINT_ACTIVE, MARKER_ACTIVE_LINE):
+            if self.HasMarker(line, marker):
+                self.MarkerDelete(line, marker)
 
     def _SetBreakpoint(self, line=-1, state=MARKER_BREAKPOINT):
         """Set the breakpoint state
