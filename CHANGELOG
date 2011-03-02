@@ -17,10 +17,12 @@ DATE 0x/xx/2011
 NEWS:
 
 NEW: [features/enhancements]
++New icon for showing bookmarks in the bookmark margin.
 
 LIBRARY:
 
 BUG FIXES:
++Fix crash when restoring Shelf layout if a some tabs are not reloaded.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:

@@ -127,9 +127,10 @@ class Shelf(plugin.Plugin):
                hasattr(observer, 'InstallComponents'):
                 observer.InstallComponents(parent)
 
-        delegate.StockShelf(Profile_Get('SHELF_ITEMS', 'list', []))
-        delegate.SetPerspective(Profile_Get('SHELF_LAYOUT', 'str', u""))
-        delegate.SetSelection(Profile_Get('SHELF_SELECTION', 'int', -1))
+        # Only Load Perspective if all items are loaded
+        if delegate.StockShelf(Profile_Get('SHELF_ITEMS', 'list', [])):
+            delegate.SetPerspective(Profile_Get('SHELF_LAYOUT', 'str', u""))
+            delegate.SetSelection(Profile_Get('SHELF_SELECTION', 'int', -1))
         return delegate
 
 #--------------------------------------------------------------------------#
@@ -384,8 +385,11 @@ class EdShelfDelegate(object):
 
         """
         if pdata:
-            self._shelf.LoadPerspective(pdata)
-            self._shelf.Update()
+            try:
+                self._shelf.LoadPerspective(pdata)
+                self._shelf.Update()
+            except IndexError, msg:
+                self._log("[shelf][err] Failed LoadPerspective: %s" % msg)
 
     def GetMenu(self):
         """Return the menu of this object
@@ -521,7 +525,7 @@ class EdShelfDelegate(object):
         @return: reference to the selected page or None if no instance is
 
         """
-        for page in xrange(self._shelf.GetPageCount()):
+        for page in range(self._shelf.GetPageCount()):
             ctrl = self._shelf.GetPage(page)
             if window == ctrl:
                 self._shelf.SetSelection(page)
@@ -541,13 +545,20 @@ class EdShelfDelegate(object):
         """Fill the shelf by opening an ordered list of items
         @param i_list: List of named L{ShelfI} instances
         @type i_list: list of strings
+        @return: bool (True if all loaded / False otherwise)
 
         """
+        bLoaded = True
         for item in i_list:
             if self.CanStockItem(item):
                 itemid = self.GetItemId(item)
                 if itemid:
                     self.PutItemOnShelf(itemid)
+                else:
+                    bLoaded = False
+            else:
+                bLoaded = False
+        return bLoaded
 
     def UpdateShelfMenuUI(self, evt):
         """Enable/Disable shelf items based on whether they support
