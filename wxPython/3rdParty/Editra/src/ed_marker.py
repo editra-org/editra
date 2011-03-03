@@ -12,8 +12,8 @@ Classes to represent Markers and associated data in a StyledTextCtrl
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__svnid__ = "$Id:  $"
-__revision__ = "$Revision:  $"
+__svnid__ = "$Id$"
+__revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 import wx
