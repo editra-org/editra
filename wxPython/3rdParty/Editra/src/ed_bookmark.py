@@ -30,7 +30,7 @@ import ed_glob
 import util
 import eclib
 import ebmlib
-from ed_marker import BookMark
+from ed_marker import Bookmark
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -97,7 +97,9 @@ class EdBookmarks(plugin.Plugin):
         data = msg.GetData()
         buf = data.get('stc')
         line = data.get('line')
-        mark = BookMark(buf.GetFileName(), line)
+        mark = Bookmark()
+        mark.Filename = buf.GetFileName()
+        mark.Line = line
         if data.get('added', False):
             if mark not in cls._marks:
                 # Store the stc bookmark handle
@@ -179,7 +181,7 @@ class BookmarkWindow(eclib.ControlBox):
                     mw = app.GetActiveWindow()
                     if mw:
                         nb = mw.GetNotebook()
-                        buf = nb.FindBuffer(mark.FileName)
+                        buf = nb.FindBuffer(mark.Filename)
                         if buf:
                             buf.MarkerDeleteHandle(mark.Handle)
             self.DoUpdateListCtrl()
@@ -213,17 +215,17 @@ class BookmarkWindow(eclib.ControlBox):
         mw = app.GetActiveWindow()
         if mw:
             nb = mw.GetNotebook()
-            buf = nb.FindBuffer(mark.FileName)
+            buf = nb.FindBuffer(mark.Filename)
             use_handle = True
             if not buf:
-                nb.OpenPage(ebmlib.GetPathName(mark.FileName),
-                            ebmlib.GetFileName(mark.FileName))
+                nb.OpenPage(ebmlib.GetPathName(mark.Filename),
+                            ebmlib.GetFileName(mark.Filename))
                 buf = nb.GetCurrentPage()
                 use_handle = False # Handle is invalid so use line number
 
             if buf:
                 # Ensure the tab is the current one
-                nb.GotoPage(mark.FileName)
+                nb.GotoPage(mark.Filename)
                 # Jump to the bookmark line
                 if use_handle:
                     lnum = buf.MarkerLineFromHandle(mark.Handle)
@@ -264,7 +266,7 @@ class BookmarkList(eclib.EBaseListCtrl):
                 if not val:
                     val = _("Bookmark%d") % item
             elif column == BookmarkList.FILE_NAME:
-                val = mark.FileName
+                val = mark.Filename
             elif column == BookmarkList.LINE_NUM:
                 val = mark.Line
         return val
