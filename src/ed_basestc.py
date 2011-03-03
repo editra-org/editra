@@ -47,13 +47,8 @@ MARK_MARGIN = 0
 NUM_MARGIN  = 1
 FOLD_MARGIN = 2
 
-# Marker IDs
-MARKER_BOOKMARK             = 0
-MARKER_BREAKPOINT           = 1
-MARKER_BREAKPOINT_ACTIVE    = 2
-MARKER_BREAKPOINT_DISABLED  = 3
-MARKER_ACTIVE_LINE          = 4
-MARKER_MAX = 4
+# Markers (3rd party)
+MARKER_VERT_EDIT = ed_marker.NewMarkerId()
 
 # Key code additions
 ALT_SHIFT = wx.stc.STC_SCMOD_ALT|wx.stc.STC_SCMOD_SHIFT
@@ -82,7 +77,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                           indenter=None,    # Auto indenter
                           lang_id=0)        # Language ID from syntax module
 
-        self.vert_edit = vertedit.VertEdit(self, markerNumber=MARKER_MAX+1)
+        self.vert_edit = vertedit.VertEdit(self, markerNumber=MARKER_VERT_EDIT)
         self._line_num = True # Show line numbers
         self._last_cwidth = 1 # one pixel
 
@@ -133,48 +128,49 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """
         if line < 0:
             line = self.GetCurrentLine()
-        return self.MarkerAdd(line, MARKER_BOOKMARK)
+        bmark = ed_marker.Bookmark()
+        bmark.Set(self, line)
+        return bmark.Handle
 
     def RemoveBookmark(self, line):
         """Remove the book mark from the given line
         @param line: int
 
         """
-        self.MarkerDelete(line, MARKER_BOOKMARK)
+        ed_marker.Bookmark().Set(self, line, delete=True)
 
     def RemoveAllBookmarks(self):
         """Remove all the bookmarks in the buffer"""
-        self.MarkerDeleteAll(MARKER_BOOKMARK)
+        ed_marker.Bookmark().DeleteAll(self)
  
     def DeleteAllBreakpoints(self):
         """Delete all the breakpoints in the buffer"""
-        self.MarkerDeleteAll(MARKER_BREAKPOINT)
-        self.MarkerDeleteAll(MARKER_BREAKPOINT_DISABLED)
-        self.MarkerDeleteAll(MARKER_BREAKPOINT_ACTIVE)
+        ed_marker.Breakpoint().DeleteAll(self)
+        ed_marker.BreakpointDisabled().DeleteAll(self)
+        ed_marker.BreakpointTriggered().DeleteAll(self)
 
     def DeleteBreakpoint(self, line):
         """Delete the breakpoint from the given line"""
-        for marker in (MARKER_BREAKPOINT, MARKER_BREAKPOINT_DISABLED,
-                       MARKER_BREAKPOINT_ACTIVE, MARKER_ACTIVE_LINE):
-            if self.HasMarker(line, marker):
-                self.MarkerDelete(line, marker)
+        ed_marker.Breakpoint().Set(self, line, delete=True)
+        ed_marker.BreakpointDisabled().Set(self, line, delete=True)
+        ed_marker.BreakpointTriggered().Set(self, line, delete=True)
 
-    def _SetBreakpoint(self, line=-1, state=MARKER_BREAKPOINT):
+    def _SetBreakpoint(self, mobj, line=-1):
         """Set the breakpoint state
+        @param mtype: Marker object
         @return: int (-1 if already set)
 
         """
         handle = -1
         if line < 0:
             line = self.GetCurrentLine()
-        if not self.HasMarker(line, state):
-            for mode in (MARKER_BREAKPOINT, MARKER_BREAKPOINT_ACTIVE,
-                         MARKER_BREAKPOINT_DISABLED, MARKER_ACTIVE_LINE):
-                if self.HasMarker(line, mode):
-                    self.MarkerDelete(line, mode)
-            handle = self.MarkerAdd(line, state)
-            if state == MARKER_BREAKPOINT_ACTIVE:
-                handle = self.MarkerAdd(line, MARKER_ACTIVE_LINE)
+        if not mobj.IsSet(self, line):
+            # Clear other set breakpoint marker states on same line
+            ed_marker.Breakpoint().Set(self, line, delete=True)
+            ed_marker.BreakpointDisabled().Set(self, line, delete=True)
+            ed_marker.BreakpointTriggered().Set(self, line, delete=True)
+            mobj.Set(self, line, delete=False)
+            handle = mobj.Handle
         return handle
 
     def SetBreakpoint(self, line=-1):
@@ -182,12 +178,12 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @return: breakpoint handle
 
         """
-        handle = self._SetBreakpoint(line, MARKER_BREAKPOINT)
+        handle = self._SetBreakpoint(ed_marker.Breakpoint(), line)
         return handle
 
     def SetBreakpointDisabled(self, line=-1):
         """Set a disabled breakpoint indicator."""
-        handle = self._SetBreakpoint(line, MARKER_BREAKPOINT_DISABLED)
+        handle = self._SetBreakpoint(ed_marker.BreakpointDisabled(), line)
         return handle
 
     def SetBreakpointTriggered(self, line=-1):
@@ -195,7 +191,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         that the breakpoint is currently triggered.
 
         """
-        handle = self._SetBreakpoint(line, MARKER_BREAKPOINT_ACTIVE)
+        handle = self._SetBreakpoint(ed_marker.BreakpointTriggered(), line)
         return handle
 
     def AddLine(self, before=False, indent=False):
@@ -467,30 +463,21 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         rgb = eclib.HexToRGB(fore[1:])
         fore = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
 
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPEN,
-                          wx.stc.STC_MARK_BOXMINUS, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDER,
-                          wx.stc.STC_MARK_BOXPLUS,  fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERSUB,
-                          wx.stc.STC_MARK_VLINE, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERTAIL,
-                          wx.stc.STC_MARK_LCORNER, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEREND,
-                          wx.stc.STC_MARK_BOXPLUSCONNECTED, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDEROPENMID,
-                          wx.stc.STC_MARK_BOXMINUSCONNECTED, fore, back)
-        self.MarkerDefine(wx.stc.STC_MARKNUM_FOLDERMIDTAIL,
-                          wx.stc.STC_MARK_TCORNER, fore, back)
-        self.MarkerDefineBitmap(MARKER_BOOKMARK, ed_marker.BookMark.GetBitmap())
-        self.MarkerDefineBitmap(MARKER_BREAKPOINT, ed_marker.Breakpoint.GetBitmap())
-        self.MarkerDefineBitmap(MARKER_BREAKPOINT_ACTIVE,
-                                ed_marker.BreakpointTriggered.GetBitmap())
-        self.MarkerDefineBitmap(MARKER_BREAKPOINT_DISABLED,
-                                ed_marker.BreakpointDisabled.GetBitmap())
-        self.MarkerDefine(MARKER_ACTIVE_LINE, wx.stc.STC_MARK_BACKGROUND, 
-                          background=wx.RED) # TODO add customization
-        self.SetFoldMarginHiColour(True, fore)
-        self.SetFoldMarginColour(True, fore)
+        # Code Folding markers
+        folder = ed_marker.FoldMarker()
+        folder.Foreground = fore
+        folder.Background = back
+        folder.RegisterWithStc(self)
+
+        # Bookmarks
+        ed_marker.Bookmark().RegisterWithStc(self)
+
+        # Breakpoints
+        ed_marker.Breakpoint().RegisterWithStc(self)
+        ed_marker.BreakpointDisabled().RegisterWithStc(self)
+        active = ed_marker.BreakpointTriggered()
+        active.Background = wx.RED #TODO customize from style sheet
+        active.RegisterWithStc(self)
 
     def DoZoom(self, mode):
         """Zoom control in or out

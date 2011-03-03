@@ -20,6 +20,7 @@ NEW: [features/enhancements]
 +New icon for showing bookmarks in the bookmark margin.
 
 LIBRARY:
++New api for setting breakpoint markers in editor buffer margin.
 
 BUG FIXES:
 +Fix crash when restoring Shelf layout if a some tabs are not reloaded.

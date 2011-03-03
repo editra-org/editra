@@ -78,61 +78,165 @@ _BreakpointDisabledBmp = PyEmbeddedImage(
 
 #-----------------------------------------------------------------------------#
 
+__markerId = -1
+def NewMarkerId():
+    """Get a new marker id
+    @note: limited by stc to 16 possible ids. will assert when this threshold
+           is passed.
+
+    """
+    global __markerId
+    __markerId += 1
+    assert __markerId < 16, "No more marker Ids available!"
+    return __markerId
+
+#-----------------------------------------------------------------------------#
+
 class Marker(object):
     """Marker Base class"""
-    def __init__(self, line, handle=-1):
+    _ids = list()
+    _symbols = list()
+    def __init__(self):
         super(Marker, self).__init__()
 
         # Attributes
-        self._line = line
-        self._handle = handle
+        self._line = -1
+        self._handle = -1
+        self._bmp = wx.NullBitmap
+        self._fore = wx.NullColour   # Foreground colour
+        self._back = wx.NullColour   # Background colour
 
     Line = property(lambda self: self._line,
                     lambda self, line: setattr(self, '_line', line))
     Handle = property(lambda self: self._handle,
                       lambda self, handle: setattr(self, '_handle', handle))
+    Bitmap = property(lambda self: self._bmp,
+                      lambda self, bmp: setattr(self, '_bmp', bmp))
+    Foreground = property(lambda self: self._fore,
+                          lambda self, fore: setattr(self, '_fore', fore))
+    Background = property(lambda self: self._back,
+                          lambda self, back: setattr(self, '_back', back))
 
-    @staticmethod
-    def GetBitmap():
-        return wx.NullBitmap
+    @classmethod
+    def AnySet(cls, stc, line):
+        """Is any breakpoint set on the line"""
+        if not cls().IsSet(stc, line):
+            for bpoint in cls.__subclasses__():
+                if bpoint().IsSet(stc, line):
+                    return True
+            return False
+        else:
+            return True
+
+    @classmethod
+    def GetIds(cls):
+        """Get the list of marker IDs."""
+        return cls._ids
+
+    @classmethod
+    def GetSymbols(cls):
+        """Get the list of symbols"""
+        return cls._symbols
+
+    def IsSet(self, stc, line):
+        """Is the marker set on the given line"""
+        mask = stc.MarkerGet(line)
+        return True in [ bool(1<<marker & mask) for marker in self.GetIds() ]
+
+    def Set(self, stc, line, delete=False):
+        """Add/Delete the marker to the stc at the given line"""
+        for marker in self.GetIds():
+            if delete:
+                mask = stc.MarkerGet(line)
+                if (1<<marker & mask):
+                    stc.MarkerDelete(line, marker)
+            else:
+                handle = stc.MarkerAdd(line, marker)
+                if self.Handle < 0:
+                    self.Line = line
+                    self.Handle = handle
+
+    def DeleteAll(self, stc):
+        """Remove all instances of this bookmark from the stc"""
+        for marker in self.GetIds():
+            stc.MarkerDeleteAll(marker)
+
+    def RegisterWithStc(self, stc):
+        """Setup the STC to use this marker"""
+        ids = self.GetIds()
+        if self.Bitmap.IsNull():
+            symbols = self.GetSymbols()
+            if len(ids) == len(symbols):
+                markers = zip(ids, symbols)
+                for marker, symbol in markers:
+                    stc.MarkerDefine(marker, symbol,
+                                     self.Foreground, self.Background)
+        elif len(ids) == 1 and not self.Bitmap.IsNull():
+            stc.MarkerDefineBitmap(ids[0], self.Bitmap)
+        else:
+            assert False, "Invalid Marker!"
 
 #-----------------------------------------------------------------------------#
 
-class BookMark(Marker):
+class Bookmark(Marker):
     """Class to store bookmark data"""
-    def __init__(self, fname, line, handle=-1):
-        super(BookMark, self).__init__(line, handle)
+    _ids = [NewMarkerId(),]
+    def __init__(self):
+        super(Bookmark, self).__init__()
 
         # Attributes
         self._name = u""        # Bookmark alias name
-        self._fname = fname
+        self._fname = u""       # Filename
+        self.Bitmap = _BookmarkBmp.Bitmap
 
     def __eq__(self, other):
-        return (self.FileName, self.Line) == (other.FileName, other.Line)
+        return (self.Filename, self.Line) == (other.Filename, other.Line)
 
     #---- Properties ----#
     Name = property(lambda self: self._name,
                     lambda self, name: setattr(self, '_name', name))
-    FileName = property(lambda self: self._fname,
+    Filename = property(lambda self: self._fname,
                         lambda self, name: setattr(self, '_fname', name))
-
-    @staticmethod
-    def GetBitmap():
-        return _BookmarkBmp.Bitmap
 
 #-----------------------------------------------------------------------------#
 
 class Breakpoint(Marker):
-    @staticmethod
-    def GetBitmap():
-        return _BreakpointBmp.Bitmap
+    _ids = [NewMarkerId(),]
+    def __init__(self):
+        super(Breakpoint, self).__init__()
+        self.Bitmap = _BreakpointBmp.Bitmap
 
 class BreakpointDisabled(Breakpoint):
-    @staticmethod
-    def GetBitmap():
-        return _BreakpointDisabledBmp.Bitmap
+    _ids = [NewMarkerId(),]
+    def __init__(self):
+        super(Breakpoint, self).__init__()
+        self.Bitmap = _BreakpointDisabledBmp.Bitmap
 
 class BreakpointTriggered(Breakpoint):
-    @staticmethod
-    def GetBitmap():
-        return _BreakpointActiveBmp.Bitmap
+    _ids = [NewMarkerId(), NewMarkerId()] # compound marker
+    def __init__(self):
+        super(Breakpoint, self).__init__()
+        self.Bitmap = _BreakpointActiveBmp.Bitmap
+
+    def RegisterWithStc(self, stc):
+        ids = self.GetIds()
+        stc.MarkerDefineBitmap(ids[0], self.Bitmap)
+        stc.MarkerDefine(ids[1], wx.stc.STC_MARK_BACKGROUND, 
+                         background=self.Background)
+
+#-----------------------------------------------------------------------------#
+
+class FoldMarker(Marker):
+    _ids = [wx.stc.STC_MARKNUM_FOLDEROPEN, wx.stc.STC_MARKNUM_FOLDER,
+            wx.stc.STC_MARKNUM_FOLDERSUB, wx.stc.STC_MARKNUM_FOLDERTAIL,
+            wx.stc.STC_MARKNUM_FOLDEREND, wx.stc.STC_MARKNUM_FOLDEROPENMID,
+            wx.stc.STC_MARKNUM_FOLDERMIDTAIL]
+    _symbols = [wx.stc.STC_MARK_BOXMINUS, wx.stc.STC_MARK_BOXPLUS, 
+                wx.stc.STC_MARK_VLINE, wx.stc.STC_MARK_LCORNER, 
+                wx.stc.STC_MARK_BOXPLUSCONNECTED, 
+                wx.stc.STC_MARK_BOXMINUSCONNECTED, wx.stc.STC_MARK_TCORNER]
+
+    def RegisterWithStc(self, stc):
+        super(FoldMarker, self).RegisterWithStc(stc)
+        stc.SetFoldMarginHiColour(True, self.Foreground)
+        stc.SetFoldMarginColour(True, self.Foreground)

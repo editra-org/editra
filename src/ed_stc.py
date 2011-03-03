@@ -34,6 +34,7 @@ from profiler import Profile_Get as _PGET
 from syntax import syntax
 import util
 import ed_basestc
+import ed_marker
 import ed_msg
 import ed_mdlg
 import ed_txt
@@ -957,9 +958,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
         elif margin_num == ed_basestc.MARK_MARGIN:
             # Bookmarks ect...
             line_clicked = self.LineFromPosition(evt.GetPosition())
-            if self.HasMarker(line_clicked, ed_basestc.MARKER_BOOKMARK):
+            if ed_marker.Bookmark().IsSet(self, line_clicked):
                 self.RemoveBookmark(line_clicked)
-            elif self.HasMarker(line_clicked, ed_basestc.MARKER_BREAKPOINT):
+            elif ed_marker.Breakpoint.AnySet(self, line_clicked):
                 # TODO: callback for plugins that set breakpoint?
                 self.DeleteBreakpoint(line_clicked)
             else:
