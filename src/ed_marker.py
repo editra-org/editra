@@ -17,6 +17,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 import wx
+import wx.stc
 from extern.embeddedimage import PyEmbeddedImage
 
 _BookmarkBmp = PyEmbeddedImage(
@@ -218,11 +219,28 @@ class BreakpointTriggered(Breakpoint):
         super(Breakpoint, self).__init__()
         self.Bitmap = _BreakpointActiveBmp.Bitmap
 
+    def DeleteAll(self, stc):
+        """Overrode to handle refresh issue"""
+        super(BreakpointTriggered, self).DeleteAll(stc)
+        stc.Colourise(0, stc.GetLength())
+
     def RegisterWithStc(self, stc):
         ids = self.GetIds()
         stc.MarkerDefineBitmap(ids[0], self.Bitmap)
         stc.MarkerDefine(ids[1], wx.stc.STC_MARK_BACKGROUND, 
                          background=self.Background)
+
+    def Set(self, stc, line, delete=False):
+        """Add/Delete the marker to the stc at the given line
+        @note: overrode to handle refresh issue.
+
+        """
+        super(BreakpointTriggered, self).Set(stc, line, delete)
+        start = stc.GetLineEndPosition(max(line-1, 0))
+        end = stc.GetLineEndPosition(line)
+        if start == end:
+            start = 0
+        stc.Colourise(start, end) # Refresh for background marker
 
 #-----------------------------------------------------------------------------#
 
