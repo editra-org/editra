@@ -158,9 +158,6 @@ class PreferencesDialog(wx.Frame):
 class PrefTools(eclib.SegmentBook):
     """Main sections of the configuration pages
     @note: implements the top level book control for the prefdlg
-    @todo: when using BK_BUTTONBAR style so that the icons have text
-           under them the icons get scaled to larger size on the Mac
-           causing them to look poor.
 
     """
     GENERAL_PG = 0
@@ -173,11 +170,6 @@ class PrefTools(eclib.SegmentBook):
         """Initializes the main book control of the preferences dialog
         @summary: Creates the top level notebook control for the prefdlg
                   a toolbar is used for changing pages.
-        @todo: There is some nasty dithering/icon rescaling happening on
-               osx. need to se why this is.
-        @note: Look into wxtoolbook source and see why images cant be changed
-               after they have been set. Because of this when the theme is
-               changed the toolbook icons cannont be updated instantly.
 
         """
         super(PrefTools, self).__init__(parent, wx.ID_ANY,
