@@ -663,8 +663,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     def SaveAllBuffers(self):
         """Save all open editor buffers"""
         for page in xrange(self.nb.GetPageCount()):
-            if isinstance(self.nb.GetPage(page), wx.stc.StyledTextCtrl):
-                self.SaveFile(self.nb.GetPageText(page), self.nb.GetPage(page))
+            buff = self.nb.GetPage(page)
+            if isinstance(buff, wx.stc.StyledTextCtrl):
+                if buff.GetModify():
+                    self.SaveFile(self.nb.GetPageText(page), buff)
 
     def OnSave(self, evt):
         """Save Current or All Buffers

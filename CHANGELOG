@@ -24,6 +24,7 @@ LIBRARY:
 
 BUG FIXES:
 +Fix crash when restoring Shelf layout if a some tabs are not reloaded.
++Only save buffers that have modifications when Save All is called.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
