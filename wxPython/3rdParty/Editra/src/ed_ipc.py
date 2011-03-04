@@ -37,7 +37,6 @@ Message Format:
    </arglist>
 </edipc>
 
-@example: SESSION_KEY;xml;MSGEND
 @summary: Editra's IPC Library
 
 """

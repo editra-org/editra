@@ -74,6 +74,7 @@ def MakeThemeTool(tool_id):
 #----------------------------------------------------------------------------#
 
 class PreferencesPanelBase(object):
+    """Base mixin class for preference panels"""
     def __init__(self):
         super(PreferencesPanelBase, self).__init__()
 
@@ -450,6 +451,7 @@ class GeneralStartupPanel(wx.Panel):
 #-----------------------------------------------------------------------------#
 
 class GeneralFilePanel(wx.Panel):
+    """Configuration panel for general file settings"""
     def __init__(self, parent):
         super(GeneralFilePanel, self).__init__(parent)
 

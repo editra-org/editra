@@ -38,7 +38,7 @@ PSUEDO_SYMBOLS = completer.CreateSymbols([ u'active', u'focus', u'hover',
 #--------------------------------------------------------------------------#
 
 class Completer(completer.BaseCompleter):
-    """Code completer provider"""
+    """CSS Code completion provider"""
     def __init__(self, stc_buffer):
         super(Completer, self).__init__(stc_buffer)
 

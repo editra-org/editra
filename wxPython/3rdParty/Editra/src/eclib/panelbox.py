@@ -52,6 +52,7 @@ class PanelBoxEventEvent(wx.PyCommandEvent):
 #--------------------------------------------------------------------------#
 
 class PanelBox(scrolled.ScrolledPanel):
+    """Scrolled container window for managing and displaying PanelBox items"""
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.HSCROLL|wx.VSCROLL,
                  name=u"PanelBox"):
@@ -181,7 +182,7 @@ class PanelBox(scrolled.ScrolledPanel):
             return -1
 
     def GetItemCount(self):
-        """Get the number of items in teh control
+        """Get the number of items in the control
         @return: int
 
         """
@@ -280,7 +281,7 @@ class PanelBoxItemBase(wx.PyPanel):
         """Update foreground colors when selection changes
         @param color: selection color
         @todo: should cache text's original color to restore
-               on deselection.
+               on de-selection.
 
         """
         if sum(color.Get()[:3]) < (127 * 3):
