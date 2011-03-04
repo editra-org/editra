@@ -202,18 +202,21 @@ class Bookmark(Marker):
 #-----------------------------------------------------------------------------#
 
 class Breakpoint(Marker):
+    """Marker object to represent a breakpoint in the EditraBaseStc"""
     _ids = [NewMarkerId(),]
     def __init__(self):
         super(Breakpoint, self).__init__()
         self.Bitmap = _BreakpointBmp.Bitmap
 
 class BreakpointDisabled(Breakpoint):
+    """Marker object to represent a disabled breakpoint in the EditraBaseStc"""
     _ids = [NewMarkerId(),]
     def __init__(self):
         super(Breakpoint, self).__init__()
         self.Bitmap = _BreakpointDisabledBmp.Bitmap
 
 class BreakpointTriggered(Breakpoint):
+    """Marker object to represent an active breakpoint in the EditraBaseStc"""
     _ids = [NewMarkerId(), NewMarkerId()] # compound marker
     def __init__(self):
         super(Breakpoint, self).__init__()
@@ -225,6 +228,7 @@ class BreakpointTriggered(Breakpoint):
         stc.Colourise(0, stc.GetLength())
 
     def RegisterWithStc(self, stc):
+        """Register this compound marker with the given StyledTextCtrl"""
         ids = self.GetIds()
         stc.MarkerDefineBitmap(ids[0], self.Bitmap)
         stc.MarkerDefine(ids[1], wx.stc.STC_MARK_BACKGROUND, 
@@ -245,6 +249,7 @@ class BreakpointTriggered(Breakpoint):
 #-----------------------------------------------------------------------------#
 
 class FoldMarker(Marker):
+    """Marker object class for managing the code folding markers"""
     _ids = [wx.stc.STC_MARKNUM_FOLDEROPEN, wx.stc.STC_MARKNUM_FOLDER,
             wx.stc.STC_MARKNUM_FOLDERSUB, wx.stc.STC_MARKNUM_FOLDERTAIL,
             wx.stc.STC_MARKNUM_FOLDEREND, wx.stc.STC_MARKNUM_FOLDEROPENMID,

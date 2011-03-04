@@ -250,6 +250,7 @@ def DecodeString(string, encoding=None):
 #-----------------------------------------------------------------------------#
 
 class EdErrorDialog(eclib.ErrorDialog):
+    """Error reporter dialog"""
     def __init__(self, msg):
         super(EdErrorDialog, self).__init__(None, title="Error Report",
                                             message=msg)

@@ -39,7 +39,7 @@ import completer
 #--------------------------------------------------------------------------#
 
 class Completer(completer.BaseCompleter):
-    """Code completer provider"""
+    """Python Code completion provider"""
     def __init__(self, stc_buffer):
         """Initializes the completer
         @param stc_buffer: buffer that contains code

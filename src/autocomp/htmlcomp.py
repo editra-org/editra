@@ -90,7 +90,7 @@ HTML_AREA = [wx.stc.STC_H_ASP, wx.stc.STC_H_ASPAT, wx.stc.STC_H_ATTRIBUTE,
 #--------------------------------------------------------------------------#
 
 class Completer(completer.BaseCompleter):
-    """Code completer provider"""
+    """HTML/XML Code completion provider"""
     def __init__(self, stc_buffer):
         super(Completer, self).__init__(stc_buffer)
 

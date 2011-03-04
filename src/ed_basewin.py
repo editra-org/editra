@@ -54,12 +54,14 @@ class EdBaseFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, event):
+        """Handle frame closure event"""
         wx.GetApp().UnRegisterWindow(repr(self))
         event.Skip()
 
 #--------------------------------------------------------------------------#
 
 class EdBaseCtrlBox(eclib.ControlBox):
+    """ControlBox base class to be used by all common components"""
     def __init__(self, parent):
         super(EdBaseCtrlBox, self).__init__(parent)
     def CreateControlBar(self, pos=wx.TOP):
