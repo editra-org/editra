@@ -187,9 +187,13 @@ class StyleEditorBox(eclib.ControlBox):
         self._style_ch = wx.Choice(ctrlbar, ed_glob.ID_PREF_SYNTHEME,
                                    choices=sorted(ss_lst))
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD), wx.ART_MENU)
+        if not bmp.IsOk():
+            bmp = None
         self._addbtn = eclib.PlateButton(ctrlbar, label=_("New"),
                                          bmp=bmp, style=eclib.PB_STYLE_NOBG)
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_REMOVE), wx.ART_MENU)
+        if not bmp.IsOk():
+            bmp = None
         self._delbtn = eclib.PlateButton(ctrlbar, label=_("Remove"),
                                          bmp=bmp, style=eclib.PB_STYLE_NOBG)
 
