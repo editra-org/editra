@@ -30,6 +30,15 @@ _BookmarkBmp = PyEmbeddedImage(
     "1LpzgQA5OWJmgMTp2sa3aXxFGD81Qu1BFzlqUzkIznY6K6NMgIvN/V/9gz9Qn2ObnTkNCjcr"
     "AAAAAElFTkSuQmCC")
 
+_ArrowBmp = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAQCAYAAADJViUEAAAAAXNSR0IArs4c6QAAAAZiS0dE"
+    "AP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sDAQEBO+Lj6asAAADR"
+    "SURBVCjPpZItEgIxDIUfTA+B3CNEItsbrOAQDIojLA6J4hSI3KDBIeOwOygEzOwNFgP7A/2B"
+    "Ia5pvte+eQH+qEmoycytqgIAiAhlWQbnpillEYGqgpnbn+GcgGHmtmmaUXN49n4H59adnaEF"
+    "o6oQkeTrMQEzHIgXwXv9EDDvQ2kBwLk+kRF8P+ezPewFi9XT8/DidsnDy62FtRZE1MPHTfzL"
+    "szlwPQGV9ODIcyU2CFZWgiAAGCJCURQfUF3XXYQhMLvbLzgEfrWeMTALp0AAeAAUy3GCxymX"
+    "vQAAAABJRU5ErkJggg==")
+
 _BreakpointBmp = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAAZiS0dE"
     "AP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sCGAMVMT9tMisAAAJE"
@@ -45,21 +54,6 @@ _BreakpointBmp = PyEmbeddedImage(
     "EQQrPHo+y8D7GpdkEV94BDpkSdVYJOT86C3Kfh+e5x7N9sfFOwTBCrXaN6LoN3G8g9Y7CGFi"
     "GCau61AsnsH3+7g8MPP/xwB4O1cmDH+i1GZSkzKH553k+o3KkfD8BZeW03dkWsHXAAAAAElF"
     "TkSuQmCC")
-
-_BreakpointActiveBmp = PyEmbeddedImage(
-    "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAAZiS0dE"
-    "AP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sDAQEEDskn2c0AAAIn"
-    "SURBVCjPjZNBSFRRFIa/qTfDFZ/TZXzRwwYawuoiOli6kAQZKqhwE+WijbRwqbmItrqZRS5E"
-    "hlYtXUQEibgREySGmCkXQw2N2WWwmEXFXYzxKsWHjtpCmdGC8F8eznf+c869J7DD6C4HND93"
-    "mWz2NVprjCnjug5KKbq7e7h+883BVAIH4YlxG62LJBIJABobHVZXywCk02mUOs+Dh2tV+Njf"
-    "YEyGickwia4O2s6dIdHVUY1pXWRi3D4MT0/FSaVSrK0UEcZgFnPoyTn05Bynt+OYxRzCGNZW"
-    "iqRSKaan4gBYAJlMBiVspDF4X330oocjQgBc7Yc7/Y8Y6b2ItDyUsMlkMtwmvOe88PQZzRY4"
-    "ZUGDF8CuHNohAMnZ9zhlQbO1l191tnwPpxIlmS3wPyWznxjpbcPyS7WZHWEjkRxFydkCjrBr"
-    "sJCS4O+dI8GPe7oRUtbatqNR/KUN5gcGuOA2cUpECATrCNbXcfz+vSqYHRzE336LHY3Cyr5z"
-    "39AwBbFBxV+nQdQTkmGCjSdBRqrganKMde8XBbFB39BwrW0pI3jKZcZ8xOjPbK1v7SN7z+WP"
-    "PcErfeOFyeMpF7lfNLDD6O7yUh/5/Ae0Xmbp+Us6cWmXMZRw0b4h75XIYWi9ewOlWmhvj9PS"
-    "OlX72+9yt9B6mVLpC+XyDyqVTXx/EyFCWFYIx4kQi51FqRYudc78exgArxYSGPMdz/tZjUl5"
-    "Atdt4sq19KHN/wHycs935XJd2QAAAABJRU5ErkJggg==")
 
 _BreakpointDisabledBmp = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAAZiS0dE"
@@ -212,19 +206,19 @@ class BreakpointDisabled(Breakpoint):
     """Marker object to represent a disabled breakpoint in the EditraBaseStc"""
     _ids = [NewMarkerId(),]
     def __init__(self):
-        super(Breakpoint, self).__init__()
+        super(BreakpointDisabled, self).__init__()
         self.Bitmap = _BreakpointDisabledBmp.Bitmap
 
-class BreakpointTriggered(Breakpoint):
-    """Marker object to represent an active breakpoint in the EditraBaseStc"""
-    _ids = [NewMarkerId(), NewMarkerId()] # compound marker
+class BreakpointStep(Breakpoint):
+    """Marker object to represent debugger step breakpoint in the EditraBaseStc"""
+    _ids = [NewMarkerId(), NewMarkerId()]
     def __init__(self):
-        super(Breakpoint, self).__init__()
-        self.Bitmap = _BreakpointActiveBmp.Bitmap
+        super(BreakpointStep, self).__init__()
+        self.Bitmap = _ArrowBmp.Bitmap
 
     def DeleteAll(self, stc):
         """Overrode to handle refresh issue"""
-        super(BreakpointTriggered, self).DeleteAll(stc)
+        super(BreakpointStep, self).DeleteAll(stc)
         stc.Colourise(0, stc.GetLength())
 
     def RegisterWithStc(self, stc):
@@ -236,10 +230,11 @@ class BreakpointTriggered(Breakpoint):
 
     def Set(self, stc, line, delete=False):
         """Add/Delete the marker to the stc at the given line
-        @note: overrode to handle refresh issue.
+        @note: overrode to ensure only one is set in a buffer at a time
 
         """
-        super(BreakpointTriggered, self).Set(stc, line, delete)
+        self.DeleteAll(stc)
+        super(BreakpointStep, self).Set(stc, line, delete)
         start = stc.GetLineEndPosition(max(line-1, 0))
         end = stc.GetLineEndPosition(line)
         if start == end:
