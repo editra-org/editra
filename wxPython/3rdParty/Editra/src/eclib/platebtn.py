@@ -135,13 +135,13 @@ class PlateButton(wx.PyControl):
 
         # Attributes
         self.InheritAttributes()
-        self._bmp = dict(enable=bmp)
+        self._bmp = dict(enable=None, disable=None)
         if bmp is not None:
+            assert isinstance(bmp, wx.Bitmap) and bmp.IsOk()
+            self._bmp['enable'] = bmp
             img = bmp.ConvertToImage()
             img = img.ConvertToGreyscale(.795, .073, .026) #(.634, .224, .143)
             self._bmp['disable'] = img.ConvertToBitmap()
-        else:
-            self._bmp['disable'] = None
 
         self._menu = None
         self.SetLabel(label)
