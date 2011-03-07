@@ -147,13 +147,12 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Delete all the breakpoints in the buffer"""
         ed_marker.Breakpoint().DeleteAll(self)
         ed_marker.BreakpointDisabled().DeleteAll(self)
-        ed_marker.BreakpointTriggered().DeleteAll(self)
+        ed_marker.BreakpointStep().DeleteAll(self)
 
     def DeleteBreakpoint(self, line):
         """Delete the breakpoint from the given line"""
         ed_marker.Breakpoint().Set(self, line, delete=True)
         ed_marker.BreakpointDisabled().Set(self, line, delete=True)
-        ed_marker.BreakpointTriggered().Set(self, line, delete=True)
 
     def _SetBreakpoint(self, mobj, line=-1):
         """Set the breakpoint state
@@ -168,7 +167,6 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             # Clear other set breakpoint marker states on same line
             ed_marker.Breakpoint().Set(self, line, delete=True)
             ed_marker.BreakpointDisabled().Set(self, line, delete=True)
-            ed_marker.BreakpointTriggered().Set(self, line, delete=True)
             mobj.Set(self, line, delete=False)
             handle = mobj.Handle
         return handle
@@ -186,16 +184,17 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         handle = self._SetBreakpoint(ed_marker.BreakpointDisabled(), line)
         return handle
 
-    def SetBreakpointTriggered(self, line=-1):
-        """Set the breakpoint triggered indicator to show
-        that the breakpoint is currently triggered.
-
-        """
-        handle = self._SetBreakpoint(ed_marker.BreakpointTriggered(), line)
-        return handle
+    def ShowStepMarker(self, line=-1, show=True):
+        """Show the step (arrow) marker to the given line."""
+        if line < 0:
+            line = self.GetCurrentLine()
+        mark = ed_marker.BreakpointStep()
+        if show:
+            mark.Set(self, line, delete=False)
+        else:
+            mark.DeleteAll()
 
     def AddLine(self, before=False, indent=False):
-
         """Add a new line to the document
         @keyword before: whether to add the line before current pos or not
         @keyword indent: autoindent the new line
@@ -451,10 +450,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: all margin markers are defined
 
         """
+        # Get the colours for the various markers
         style = self.GetItemByName('foldmargin_style')
-        # The foreground/background settings for the marker column seem to
-        # backwards from what the parameters take so use our Fore color for
-        # the stcs back and visa versa for our Back color.
         back = style.GetFore()
         rgb = eclib.HexToRGB(back[1:])
         back = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
@@ -462,6 +459,11 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         fore = style.GetBack()
         rgb = eclib.HexToRGB(fore[1:])
         fore = wx.Colour(red=rgb[0], green=rgb[1], blue=rgb[2])
+
+        # Buffer background highlight
+        caret_line = self.GetItemByName('caret_line').GetBack()
+        rgb = eclib.HexToRGB(caret_line[1:])
+        clback = wx.Colour(*rgb)
 
         # Code Folding markers
         folder = ed_marker.FoldMarker()
@@ -475,9 +477,9 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Breakpoints
         ed_marker.Breakpoint().RegisterWithStc(self)
         ed_marker.BreakpointDisabled().RegisterWithStc(self)
-        active = ed_marker.BreakpointTriggered()
-        active.Background = wx.RED #TODO customize from style sheet
-        active.RegisterWithStc(self)
+        step = ed_marker.BreakpointStep()
+        step.Background = clback
+        step.RegisterWithStc(self)
 
     def DoZoom(self, mode):
         """Zoom control in or out

@@ -20,7 +20,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #----------------------------------------------------------------------------#
-# Dependancies
+# Dependencies
 import wx
 import wx.lib.mixins.listctrl as listmix
 import locale
