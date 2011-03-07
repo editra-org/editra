@@ -20,7 +20,7 @@ __revision__ = "$Revision$"
 __all__ = [ 'GetAbsPath', 'GetFileExtension', 'GetFileModTime', 'GetFileName',
             'GetFileSize', 'GetPathName', 'GetPathFromURI', 'GetUniqueName', 
             'IsLink', 'MakeNewFile', 'MakeNewFolder', 'PathExists',
-            'ResolveRealPath', 'IsExecutable', 'Which']
+            'ResolveRealPath', 'IsExecutable', 'Which', 'ComparePaths']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -63,6 +63,20 @@ def uri2path(func):
     return WrapURI
 
 #-----------------------------------------------------------------------------#
+
+def ComparePaths(path1, path2):
+    """Determine whether the two given paths are equivalent
+    @param path1: unicode
+    @param path2: unicode
+    @return: bool
+
+    """
+    path1 = GetAbsPath(path1)
+    path2 = GetAbsPath(path2)
+    if WIN:
+        path1 = path1.lower()
+        path2 = path2.lower()
+    return path1 == path2
 
 @uri2path
 def GetAbsPath(path):
