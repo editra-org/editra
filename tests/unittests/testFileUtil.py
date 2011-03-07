@@ -43,6 +43,22 @@ class FileUtilTest(unittest.TestCase):
 
     #---- Tests ----#
 
+    def testComparePaths(self):
+        """Test functionality of ComparePaths function"""
+        # Test case sensitivity
+        if ISWINDOWS:
+            self.assertTrue(ebmlib.ComparePaths("C:\\Windows", "C:\\WINDOWS"))
+            self.assertTrue(ebmlib.ComparePaths("C:\\Windows", "C:\\Windows"))
+        else:
+            self.assertFalse(ebmlib.ComparePaths("/usr/bin", "/usr/BIN"))
+            self.assertTrue(ebmlib.ComparePaths("/usr/bin", "/usr/bin"))
+
+        # Test wacky path strings
+        if ISWINDOWS:
+            self.assertTrue(ebmlib.ComparePaths("C:\\Windows\\..\\", "C:\\"))
+        else:
+            self.assertTrue(ebmlib.ComparePaths("/usr/../", "/"))
+
     def testGetAbsPath(self):
         """Test getting a files absolute path"""
         path = os.path.join(u'.', u'data')
