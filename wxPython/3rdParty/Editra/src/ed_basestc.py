@@ -192,7 +192,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         if show:
             mark.Set(self, line, delete=False)
         else:
-            mark.DeleteAll()
+            mark.DeleteAll(self)
 
     def AddLine(self, before=False, indent=False):
         """Add a new line to the document
