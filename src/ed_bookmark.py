@@ -152,9 +152,11 @@ class BookmarkWindow(eclib.ControlBox):
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnItemActivate, self._list)
         self.Bind(wx.EVT_BUTTON, self.OnDelBm, self._delbtn)
-        self.Bind(wx.EVT_UPDATE_UI,
-                  lambda evt: evt.Enable(bool(len(self._list.GetSelections()))),
-                  self._delbtn)
+        # BUG in wxAUI UpdateUI events not processed when docked
+        # TODO: renable when switch to agw aui
+#        self.Bind(wx.EVT_UPDATE_UI,
+#                  lambda evt: evt.Enable(bool(len(self._list.GetSelections()))),
+#                  self._delbtn)
 
     def OnDestroy(self, evt):
         """Unsubscribe message handlers on delete"""

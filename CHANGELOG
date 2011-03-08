@@ -25,6 +25,7 @@ LIBRARY:
 BUG FIXES:
 +Fix crash when restoring Shelf layout if a some tabs are not reloaded.
 +Only save buffers that have modifications when Save All is called.
++Fix Delete Bookmark button being disabled while BookMarkMgr is docked.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
