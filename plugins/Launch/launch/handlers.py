@@ -45,7 +45,8 @@ import re
 
 # Editra Libraries
 import util
-import eclib.outbuff as outbuff
+import ebmlib
+import eclib
 import syntax.synglob as synglob
 
 # Local Imports
@@ -297,7 +298,7 @@ class FileTypeHandler(object):
             sty_s = start + info.start()
             sty_e = start + info.end()
             stc.StartStyling(sty_s, 0xff)
-            stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_INFO)
+            stc.SetStyling(sty_e - sty_s, eclib.OPB_STYLE_INFO)
             finfo = True
 
         if finfo:
@@ -1086,19 +1087,21 @@ def _OpenToLine(fname, line, mainw):
     @param mainw: MainWindow instance to open the file in
 
     """
+    fname = os.path.abspath(fname) # Normalize path
     nbook = mainw.GetNotebook()
     buffers = [ page.GetFileName() for page in nbook.GetTextControls() ]
-    if fname in buffers:
-        page = buffers.index(fname)
-        nbook.ChangePage(page)
-        nbook.GetPage(page).GotoLine(line)
+    for page, name in enumerate(buffers):
+        if ebmlib.ComparePaths(fname, name):
+            nbook.ChangePage(page)
+            nbook.GetPage(page).GotoLine(line)
+            break
     else:
         nbook.OnDrop([fname])
         nbook.GetPage(nbook.GetSelection()).GotoLine(line)
 
 def _StyleError(stc, start, txt, regex):
     """Style Error message groups
-    @param stc: outputbuffer reference
+    @param stc: OutputBuffer reference
     @param start: start of text just added to buffer
     @param txt: text that was just added
     @param regex: regular expression object for matching the errors
@@ -1112,7 +1115,7 @@ def _StyleError(stc, start, txt, regex):
         sty_s = start + group.start()
         sty_e = start + group.end()
         stc.StartStyling(sty_s, 0xff)
-        stc.SetStyling(sty_e - sty_s, outbuff.OPB_STYLE_ERROR)
+        stc.SetStyling(sty_e - sty_s, eclib.OPB_STYLE_ERROR)
         found_err = True
 
     if sty_e != start + len(txt):

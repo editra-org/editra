@@ -6,6 +6,11 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.10
+
++Fix issue in detecting files that are already open from hotspot links.
+
+#-----------------------------------------------------------------------------#
 Version 1.9
 
 +Add Auto Save buffer before running option.
