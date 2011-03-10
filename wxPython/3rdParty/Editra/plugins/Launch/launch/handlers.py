@@ -34,8 +34,7 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = ['GetHandlerById', 'GetHandlerByName', 'GetState',
-           'SetState', 'DEFAULT_HANDLER']
+__all__ = ['GetHandlerById', 'GetHandlerByName', 'GetState', 'DEFAULT_HANDLER']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -48,6 +47,7 @@ import util
 import ebmlib
 import eclib
 import syntax.synglob as synglob
+from profiler import Profile_Get, Profile_Set
 
 # Local Imports
 import launchxml
@@ -99,18 +99,23 @@ RE_PROC_SE = re.compile('>{3,3}.*' + os.linesep)
 # Public Handler Api for use outside this module
 def GetHandlerById(lang_id):
     """Get a handler for the specified language id"""
-    if lang_id in HANDLERS:
-        return HANDLERS[lang_id]
-    else:
-        return HANDLERS[0]
+    return FileTypeHandler.FactoryCreate(lang_id)
 
 def GetHandlerByName(name):
     """Get an output handler by name"""
-    for handler in HANDLERS.values():
-        if name.lower() == handler.GetName().lower():
-            return handler
-    else:
-        return HANDLERS[0]
+    lang_id = synglob.GetIdFromDescription(name)
+    return GetHandlerById(lang_id)
+
+def GetUserSettings(name):
+    """Get the user settings for a given file type
+    @param name: file type name
+
+    """
+    data = Profile_Get("Launch.Config", default=dict())
+    for key, val in data.iteritems():
+        if key.lower() == name.lower():
+            return val
+    return tuple()
 
 def InitCustomHandlers(path):
     """Init the custom handlers defined in the launch.xml file
@@ -133,7 +138,7 @@ def InitCustomHandlers(path):
 
         if loaded:
             for hndlr in lxml.GetHandlers().values():
-                HANDLERS[hndlr.GetLangId()] = XmlHandlerDelegate(hndlr)
+                FileTypeHandler.RegisterClass(XmlHandlerDelegate(hndlr))
     return loaded
 
 def LoadCustomHandler(xml_str):
@@ -146,79 +151,140 @@ def LoadCustomHandler(xml_str):
         lxml = launchxml.LaunchXml()
         lxml.LoadFromString(xml_str)
         for hndlr in lxml.GetHandlers().values():
-            HANDLERS[hndlr.GetLangId()] = XmlHandlerDelegate(hndlr)
+            FileTypeHandler.RegisterClass(XmlHandlerDelegate(hndlr))
     except:
         return False
     else:
         return True
 
-def GetState():
-    """Get a dictionary capturing the current state of all handlers
-    @return: dict { handlername : (default, [commands]) }
-
-    """
-    rdict = dict()
-    for handler in HANDLERS.values():
-        rdict[handler.GetName()] = (handler.GetDefault(), handler.GetCommands())
-    return rdict
-
-def SetState(state):
-    """Set the state of all handlers based on a dictionary of values
-    @param state: dict { handlername : (default, [(alias, command), ]) }
-
-    """
-    for ftype, vals in state.iteritems():
-        handler = GetHandlerByName(ftype)
-        handler.SetCommands(vals[1])
-        handler.SetDefault(vals)
-
 #-----------------------------------------------------------------------------#
 # Handler Base Class and Handler implementations
 #
+
+class Meta:
+    """Metadata namespace
+    @see: HandlerMeta
+
+    """
+    _defaults = {"typeid" : -1,
+                 "name" : DEFAULT_HANDLER,
+                 "commands" : dict(),
+                 "default" : u"",
+                 "error" : None,
+                 "hotspot" : None}
+    def __init__(self, meta_attrs):
+        for (attr,default) in self._defaults.items():
+            setattr(self,attr,meta_attrs.get(attr,default))
+
+class HandlerMeta(type):
+    """Metaclass for manipulating a handler classes metadata"""
+    def __new__(mcls,name,bases,attrs):
+        cls = super(HandlerMeta,mcls).__new__(mcls,name,bases,attrs)
+        meta_attrs = {}
+        if hasattr(cls, 'meta'):
+            for attr in dir(cls.meta):
+                if not attr.startswith("_"):
+                    meta_attrs[attr] = getattr(cls.meta,attr)
+        cls.meta = Meta(meta_attrs)
+        return cls
+
+#-----------------------------------------------------------------------------#
+
 class FileTypeHandler(object):
     """Base default Output handler all output handlers should derive from
     this class. This base class is used when an output handler is request
     but no special one exists.
 
     """
+    __metaclass__ = HandlerMeta
+    handler_cache = dict()
+
     def __init__(self):
         super(FileTypeHandler, self).__init__()
 
-        # Attributes
-        self.commands = dict()
-        self.default = ''
+    @staticmethod
+    def __ClassFactory(ftype):
+        """Generate a new class for ones that don't have a
+        specialized implementation.
+        @return: new FileTypeHandler class
 
-    __name__ = DEFAULT_HANDLER
+        """
+        class DynamicHandler(FileTypeHandler):
+            class meta:
+                langid = ftype
+                name = synglob.GetDescriptionFromId(ftype)
+        return DynamicHandler
 
-    def AppendCommand(self, cmd):
+    @classmethod
+    def FactoryCreate(cls, ftype):
+        """Create an instance of a FileTypeHandler for the given
+        file type. One of the two arguments must be provided. If
+        both are provided the ftype argument will take preference.
+        @keyword ftype: Editra file type ID
+        @keyword name: File type description string
+
+        """
+        obj = cls.handler_cache.get(ftype, None)
+        if obj is None:
+            for handler in cls.__subclasses__():
+                if ftype != -1 and handler.meta.typeid == ftype:
+                    obj = handler
+                    break
+            else:
+                obj = cls.__ClassFactory(ftype)
+            cls.RegisterClass(obj)
+        obj = obj()
+
+        # Load custom settings
+        data = GetUserSettings(obj.meta.name)
+        if len(data):
+            obj.SetCommands(data[1])
+            obj.SetDefault(data)
+        return obj
+
+    @classmethod
+    def AppendCommand(cls, cmd):
         """Add a command to the list of commands known to this handler
         @param cmd: Tuple of (Command alias, executable path or name)
 
         """
         if isinstance(cmd, tuple):
-            self.commands[cmd[0]] = cmd[1]
+            cls.meta.commands[cmd[0]] = cmd[1]
         else:
             # Bad data
             pass
 
-    def GetAliases(self):
+    @classmethod
+    def RegisterClass(cls, handler):
+        """Register a filetype handler in the handler
+        chain cache.
+        @param handler: FileTypeHandler
+
+        """
+        cls.handler_cache[handler.meta.typeid] = handler
+
+    @classmethod
+    def GetAliases(cls):
         """Get the list of command aliases"""
-        return sorted(self.commands.keys())
+        return sorted(cls.meta.commands.keys())
 
-    def GetCommand(self, alias):
+    @classmethod
+    def GetCommand(cls, alias):
         """Get the command for a given alias"""
-        return self.commands.get(alias, alias)
+        return cls.meta.commands.get(alias, alias)
 
-    def GetCommands(self):
+    @classmethod
+    def GetCommands(cls):
         """Get the set of commands available for this file type"""
-        return sorted(self.commands.items())
+        return sorted(cls.meta.commands.items())
 
-    def GetDefault(self):
+    @classmethod
+    def GetDefault(cls):
         """Get the preferred default command
         @return: string
 
         """
-        return self.default
+        return cls.meta.default
 
     def GetEnvironment(self):
         """Get the dictionary of environmental variables to run the
@@ -227,11 +293,13 @@ class FileTypeHandler(object):
         """
         return dict(os.environ)
 
-    def GetName(self):
+    @classmethod
+    def GetName(cls):
         """Get the name of this handler"""
-        return self.__name__
+        return cls.meta.name
 
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+    @classmethod
+    def HandleHotSpot(cls, mainw, outbuffer, line, fname):
         """Handle hotspot clicks. Called when a hotspot is clicked
         in an output buffer of this file type.
         @param mainw: MainWindow instance that created the launch instance
@@ -241,7 +309,10 @@ class FileTypeHandler(object):
                       contains the hotspot.
 
         """
-        pass
+        if cls.meta.hotspot is not None:
+            ifile, line = _FindFileLine(outbuffer, line, fname,
+                                        cls.meta.hotspot)
+            _OpenToLine(ifile, line, mainw)
 
     def FilterInput(self, text):
         """Filter incoming text return the text to be displayed
@@ -250,13 +321,14 @@ class FileTypeHandler(object):
         """
         return text
 
-    def SetCommands(self, cmds):
+    @classmethod
+    def SetCommands(cls, cmds):
         """Set the list of commands known by the handler
         @param cmds: list of command tuples
 
         """
         if not isinstance(cmds, list):
-            raise TypeError, "SetCommands expects a list of tuples"
+            raise TypeError("SetCommands expects a list of tuples: %s" % repr(cmds))
         else:
             sdict = dict()
             for cmd in cmds:
@@ -264,28 +336,52 @@ class FileTypeHandler(object):
                     sdict[cmd[0]] = cmd[1]
 
             if len(sdict.keys()):
-                self.commands.clear()
-                self.commands.update(sdict)
+                cls.meta.commands.clear()
+                cls.meta.commands.update(sdict)
 
             # Reset default if it has been removed
-            if self.default not in self.commands:
-                keys = self.commands.keys()
+            if cls.meta.default not in cls.meta.commands:
+                keys = cls.meta.commands.keys()
                 if len(keys):
-                    self.default = keys[0]
+                    cls.meta.default = keys[0]
 
-    def SetDefault(self, cmd):
-        """Set the prefered default command
+    @classmethod
+    def SetDefault(cls, cmd):
+        """Set the preferred default command
         @param cmd: Command alias/path tuple to set as the preferred one
         @postcondition: if cmd is not in the saved command list it will be
                         added to that list.
 
         """
         cmd = [ cmd[0].strip(), cmd[1] ]
-        if cmd[0] not in self.GetAliases():
-            self.AppendCommand(cmd)
-        self.default = cmd[0]
+        if cmd[0] not in cls.GetAliases():
+            cls.AppendCommand(cmd)
+        cls.meta.default = cmd[0]
 
-    def StyleText(self, stc, start, txt):
+    @classmethod
+    def StoreState(cls):
+        """Store the state of this handler"""
+        data = Profile_Get("Launch.Config", default=dict())
+        data[cls.meta.name.lower()] = (cls.meta.default, cls.meta.commands.items())
+        Profile_Set("Launch.Config", data)
+
+    @classmethod
+    def StyleText(cls, stc, start, txt):
+        """Style Information and Error messages from script output."""
+        if cls.meta.error is not None:
+            sty = STYLE_NORMAL
+            err, more = _StyleError(stc, start, txt, cls.meta.error)
+            if err:
+                err = STYLE_ERROR
+            if more:
+                sty = cls._StyleText(stc, start, txt)[0]
+            sty = max(err, sty)
+        else:
+            sty, more = cls._StyleText(stc, start, txt)
+        return sty, more
+
+    @classmethod
+    def _StyleText(cls, stc, start, txt):
         """Style the text in the given buffer
         @param stc: stc based buffer to apply styling to
         @param start: start of text that was just added to buffer
@@ -310,38 +406,37 @@ class FileTypeHandler(object):
 
 class AdaHandler(FileTypeHandler):
     """FileTypeHandler for Ada"""
-    def __init__(self):
-        super(AdaHandler, self).__init__()
-        self.commands = {'gcc -c' : 'gcc -c'}
-        self.default = 'gcc -c'
-
-    __name__ = 'ada'
+    class meta:
+        typeid = synglob.ID_LANG_ADA
+        name = 'ada'
+        commands = {'gcc -c' : 'gcc -c'}
+        default = 'gcc -c'
 
 #-----------------------------------------------------------------------------#
 
 class BashHandler(FileTypeHandler):
     """FileTypeHandler for Bash scripts"""
-    RE_BASH_ERROR = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
-
-    def __init__(self):
-        super(BashHandler, self).__init__()
-        self.commands = dict(bash='bash')
-        self.default = 'bash'
-
-    __name__ = 'bash shell'
+    class meta:
+        typeid = synglob.ID_LANG_BASH
+        name = 'bash shell'
+        commands = dict(bash='bash')
+        default = 'bash'
+        error = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
+        hotspot = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
 
     def FilterInput(self, txt):
         """Filter out ansi escape sequences from input"""
         txt = RE_ANSI_START.sub('', txt)
         return RE_ANSI_END.sub('', txt)
 
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+    @classmethod
+    def HandleHotSpot(cls, mainw, outbuffer, line, fname):
         """Hotspots are error messages, find the file/line of the
         error in question and open the file to that point in the buffer.
 
         """
         txt = outbuffer.GetLine(line)
-        match = BashHandler.RE_BASH_ERROR.findall(txt)
+        match = cls.meta.hotspot.findall(txt)
         ifile = None
         if len(match):
             ifile = match[0][0].split()[-1]
@@ -357,446 +452,272 @@ class BashHandler(FileTypeHandler):
 
         _OpenToLine(ifile, line, mainw)
 
-    def StyleText(self, stc, start, txt):
-        """Style NSIS output messages"""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, BashHandler.RE_BASH_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(BashHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
-
 #-----------------------------------------------------------------------------#
 
 class BatchHandler(FileTypeHandler):
     """FileTypeHandler for Dos batch files"""
-    def __init__(self):
-        super(BatchHandler, self).__init__()
-        self.commands = dict(cmd='cmd /c')
-        self.default = 'cmd'
-
-    __name__ = 'Batch'
+    class meta:
+        typeid = synglob.ID_LANG_BATCH
+        name = 'Batch'
+        commands = dict(cmd='cmd /c')
+        default = 'cmd'
 
 #-----------------------------------------------------------------------------#
 
 class BooHandler(FileTypeHandler):
     """FileTypeHandler for Boo"""
-    def __init__(self):
-        super(BooHandler, self).__init__()
-        self.commands = dict(booi='booi')
-        self.default = 'booi'
-
-    __name__ = 'boo'
+    class meta:
+        typeid = synglob.ID_LANG_BOO
+        name = 'boo'
+        commands = dict(booi='booi')
+        default = 'booi'
 
 #-----------------------------------------------------------------------------#
 
 class CHandler(FileTypeHandler):
     """FileTypeHandler for C Files"""
-    def __init__(self):
-        super(CHandler, self).__init__()
-        self.commands = {'gcc -c' : 'gcc -c'}
-        self.default = 'gcc -c'
-
-    __name__ = 'c'
+    class meta:
+        typeid = synglob.ID_LANG_C
+        name = 'c'
+        commands = {'gcc -c' : 'gcc -c'}
+        default = 'gcc -c'
 
 class CPPHandler(FileTypeHandler):
     """FileTypeHandler for C++ Files"""
-    def __init__(self):
-        super(CPPHandler, self).__init__()
-        self.commands = {'g++ -c' : 'g++ -c'}
-        self.default = 'g++ -c'
-
-    __name__ = 'cpp'
+    class meta:
+        typeid = synglob.ID_LANG_CPP
+        name = 'cpp'
+        commands = {'g++ -c' : 'g++ -c'}
+        default = 'g++ -c'
 
 #-----------------------------------------------------------------------------#
 
 class CamlHandler(FileTypeHandler):
     """FileTypeHandler for Caml"""
-    RE_CAML_ERROR = re.compile(r'File "(.+)", line (.+), characters .+:')
-
-    def __init__(self):
-        super(CamlHandler, self).__init__()
-        self.commands = dict(ocaml='ocaml')
-        self.default = 'ocaml'
-
-    __name__ = 'Caml'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    CamlHandler.RE_CAML_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style OCaml Information and Error messages from script output."""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, CamlHandler.RE_CAML_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(CamlHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+    class meta:
+        typeid = synglob.ID_LANG_CAML
+        name = 'Caml'
+        commands = dict(ocaml='ocaml')
+        default = 'ocaml'
+        error = re.compile(r'File "(.+)", line (.+), characters .+:')
+        hotspot = re.compile(r'File "(.+)", line (.+), characters .+:')
 
 #-----------------------------------------------------------------------------#
 
 class CSHHandler(FileTypeHandler):
     """FileTypeHandler for C-Shell"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(csh='csh')
-        self.default = 'csh'
-
-    __name__ = 'c shell'
+    class meta:
+        typeid = synglob.ID_LANG_CSH
+        name = 'c shell'
+        commands = dict(csh='csh')
+        default = 'csh'
 
 #-----------------------------------------------------------------------------#
 
 class DHandler(FileTypeHandler):
     """FileTypeHandler for D"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(dmd='dmd -run')
-        self.default = 'dmd'
-
-    __name__ = 'd'
+    class meta:
+        typeid = synglob.ID_LANG_D
+        name = 'd'
+        commands = dict(dmd='dmd -run')
+        default = 'dmd'
 
 #-----------------------------------------------------------------------------#
 
 class FeriteHandler(FileTypeHandler):
     """FileTypeHandler for Ferite"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(ferite='ferite')
-        self.default = 'ferite'
-
-    __name__ = 'ferite'
+    class meta:
+        typeid = synglob.ID_LANG_FERITE
+        name = 'ferite'
+        commands = dict(ferite='ferite')
+        default = 'ferite'
 
 #-----------------------------------------------------------------------------#
 
 class HaskellHandler(FileTypeHandler):
     """FileTypeHandler for Haskell"""
-    RE_HASKELL_ERROR = re.compile('(.+):(.+):[0-9]+:.+ error .+')
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = {'ghc --make' : 'ghc --make'}
-        self.default = 'ghc --make'
-
-    __name__ = 'haskell'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    HaskellHandler.RE_HASKELL_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style GHC Information and Error messages from script output."""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, HaskellHandler.RE_HASKELL_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(HaskellHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+    class meta:
+        typeid = synglob.ID_LANG_HASKELL
+        name = 'haskell'
+        commands = {'ghc --make' : 'ghc --make'}
+        default = 'ghc --make'
+        error = re.compile('(.+):(.+):[0-9]+:.+ error .+')
+        hotspot = re.compile('(.+):(.+):[0-9]+:.+ error .+')
 
 #-----------------------------------------------------------------------------#
 
 class HaxeHandler(FileTypeHandler):
     """FileTypeHandler for haXe"""
-    RE_HAXE_ERROR = re.compile('([a-zA-Z_.]+)\(([0-9]+)\):.*')
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(neko='neko', nekoc='nekoc')
-        self.default = 'nekoc'
-
-    __name__ = 'haxe'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    HaxeHandler.RE_HAXE_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style haXe output messages"""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, HaxeHandler.RE_HAXE_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(HaxeHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+    class meta:
+        typeid = synglob.ID_LANG_HAXE
+        name = 'haxe'
+        commands = dict(neko='neko', nekoc='nekoc')
+        default = 'nekoc'
+        error = re.compile('([a-zA-Z_.]+)\(([0-9]+)\):.*')
+        hotspot = re.compile('([a-zA-Z_.]+)\(([0-9]+)\):.*')
 
 #-----------------------------------------------------------------------------#
 
 class HTMLHandler(FileTypeHandler):
     """FileTypeHandler for HTML"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
+    class meta:
+        typeid = synglob.ID_LANG_HTML
+        name = 'html'
         if u'darwin' in sys.platform:
-            self.commands = dict(Safari='open -a Safari.app',
-                                 Camino='open -a Camino.app',
-                                 Firefox='open -a Firefox.app',
-                                 Opera='open -a Opera.app')
-            self.default = 'Safari'
+            commands = dict(Safari='open -a Safari.app',
+                            Camino='open -a Camino.app',
+                            Firefox='open -a Firefox.app',
+                            Opera='open -a Opera.app')
+            default = 'Safari'
         elif sys.platform.startswith('win'):
-            self.commands = dict(ie='iexplorer.exe',
-                                 firefox='firefox.exe',
-                                 opera='opera.exe')
-            self.default = 'ie'
+            commands = dict(ie='iexplorer.exe',
+                             firefox='firefox.exe',
+                             opera='opera.exe')
+            default = 'ie'
         else:
-            self.commands = dict(firefox='firefox',
-                                 opera='opera')
-            self.default = 'firefox'
-
-    __name__ = 'html'
+            commands = dict(firefox='firefox', opera='opera')
+            default = 'firefox'
 
 #-----------------------------------------------------------------------------#
 
 class InnoSetupHandler(FileTypeHandler):
     """FileTypeHandler for Inno Setup Scripts"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(iscc='iscc.exe', Compil32='Compil32.exe /cc')
-        self.default = 'iscc'
-
-    __name__ = 'inno setup script'
+    class meta:
+        typeid = synglob.ID_LANG_INNO
+        name = 'inno setup script'
+        commands = dict(iscc='iscc.exe', Compil32='Compil32.exe /cc')
+        default = 'iscc'
 
 #-----------------------------------------------------------------------------#
 
 class KornHandler(FileTypeHandler):
     """FileTypeHandler for Korn Shell scripts"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(ksh='ksh')
-        self.default = 'ksh'
-
-    __name__ = 'korn shell'
+    class meta:
+        typeid = synglob.ID_LANG_KSH
+        name = 'korn shell'
+        commands = dict(ksh='ksh')
+        default = 'ksh'
 
 #-----------------------------------------------------------------------------#
 
 class STATAHandler(FileTypeHandler):
     """FileTypeHandler for Stata"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(stata='stata', xstata='xstata')
-        self.default = 'stata'
-
-    __name__ = 'Stata'
+    class meta:
+        typeid = synglob.ID_LANG_STATA
+        name = 'Stata'
+        commands = dict(stata='stata', xstata='xstata')
+        default = 'stata'
 
 #-----------------------------------------------------------------------------#
 
 class LatexHandler(FileTypeHandler):
     """FileTypeHandler for LaTex"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(latex='latex', dvips='dvips',
-                             pdflatex='pdflatex', ps2pdf='ps2pdf',
-                             dvipng='dvipng', latex2html='latex2html')
-        self.default = 'latex'
-
-    __name__ = 'LaTex'
+    class meta:
+        typeid = synglob.ID_LANG_LATEX
+        name = 'LaTex'
+        commands = dict(latex='latex', dvips='dvips',
+                        pdflatex='pdflatex', ps2pdf='ps2pdf',
+                        dvipng='dvipng', latex2html='latex2html')
+        default = 'latex'
 
 #-----------------------------------------------------------------------------#
 
 class LuaHandler(FileTypeHandler):
     """FileTypeHandler for Lua"""
-    RE_LUA_ERROR = re.compile('.*: (.+):([0-9]+):.*')
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(lua='lua', luac='luac')
-        self.default = 'lua'
-
-    __name__ = 'lua'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    LuaHandler.RE_LUA_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style NSIS output messages"""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, LuaHandler.RE_LUA_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(LuaHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+    class meta:
+        typeid = synglob.ID_LANG_LUA
+        name = 'lua'
+        commands = dict(lua='lua', luac='luac')
+        default = 'lua'
+        error = re.compile('.*: (.+):([0-9]+):.*')
+        hotspot = re.compile('.*: (.+):([0-9]+):.*')
 
 #-----------------------------------------------------------------------------#
 
 class NewLispHandler(FileTypeHandler):
     """FileTypeHandler for newLisp"""
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(newlisp='newlisp')
-        self.default = 'newlisp'
-
-    __name__ = 'newlisp'
+    class meta:
+        typeid = synglob.ID_LANG_NEWLISP
+        name = 'newlisp'
+        commands = dict(newlisp='newlisp')
+        default = 'newlisp'
 
 #-----------------------------------------------------------------------------#
 
 class NSISHandler(FileTypeHandler):
     """FileTypeHandler for NSIS scripts"""
-    RE_NSIS_ERROR = re.compile(r'Error .* "(.+)" on line ([0-9]+) ')
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(makensis='makensis')
-        self.default = 'makensis'
-
-    __name__ = 'nsis'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    NSISHandler.RE_NSIS_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style NSIS output messages"""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, NSISHandler.RE_NSIS_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(NSISHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+    class meta:
+        typeid = synglob.ID_LANG_NSIS
+        name = 'nsis'
+        commands = dict(makensis='makensis')
+        default = 'makensis'
+        error = re.compile(r'Error .* "(.+)" on line ([0-9]+) ')
+        hotspot = re.compile(r'Error .* "(.+)" on line ([0-9]+) ')
 
 #-----------------------------------------------------------------------------#
 
 class PhpHandler(FileTypeHandler):
     """FileTypeHandler for Php"""
-    RE_PHP_ERROR = re.compile(r'[a-zA-Z]+ error: .* in (.+) on line ([0-9]+).*')
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(php='php -f')
-        self.default = 'php'
-
-    __name__ = 'php'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    PhpHandler.RE_PHP_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style php Information and Error messages from script
-        output.
-
-        """
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, PhpHandler.RE_PHP_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(PhpHandler, self).StyleText(stc, start, txt)[0]
-        return max(sty, err)
+    class meta:
+        typeid = synglob.ID_LANG_PHP
+        name = 'php'
+        commands = dict(php='php -f')
+        default = 'php'
+        error = re.compile(r'[a-zA-Z]+ error: .* in (.+) on line ([0-9]+).*')
+        hotspot = re.compile(r'[a-zA-Z]+ error: .* in (.+) on line ([0-9]+).*')
 
 #-----------------------------------------------------------------------------#
 
 class PikeHandler(FileTypeHandler):
     """FileTypeHandler for Pike"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(pike='pike')
-        self.default = 'pike'
-
-    __name__ = 'pike'
+    class meta:
+        typeid = synglob.ID_LANG_PIKE
+        name = 'pike'
+        commands = dict(pike='pike')
+        default = 'pike'
 
 #-----------------------------------------------------------------------------#
 
 class PerlHandler(FileTypeHandler):
     """FileTypeHandler for Perl scripts"""
-    RE_PERL_ERROR = re.compile(r'.+ at (.+) line ([0-9]+)[,\.].*')
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(perl='perl')
-        self.default = 'perl'
-
-    __name__ = 'perl'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    PerlHandler.RE_PERL_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style perl Information and Error messages from script
-        output.
-
-        """
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, PerlHandler.RE_PERL_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(PerlHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+    class meta:
+        typeid = synglob.ID_LANG_PERL
+        name = 'perl'
+        commands = dict(perl='perl')
+        default = 'perl'
+        hotspot = re.compile(r'.+ at (.+) line ([0-9]+)[,\.].*')
 
 #-----------------------------------------------------------------------------#
 
 class PostScriptHandler(FileTypeHandler):
     """FileTypeHandler for Post/GhostScript"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
+    class meta:
+        typeid = synglob.ID_LANG_PS
+        name = 'postscript'
         if sys.platform.startswith('win'):
-            self.commands = dict(gswin32c='gswin32c')
-            self.default = 'gs2in32c'
+            commands = dict(gswin32c='gswin32c')
+            default = 'gs2in32c'
         elif 'darwin' in sys.platform:
-            self.commands = dict(pstopdf='pstopdf')
-            self.default = 'pstopdf'
+            commands = dict(pstopdf='pstopdf')
+            default = 'pstopdf'
         else:
-            self.commands = dict(gs='gs')
-            self.default = 'gs'
-
-    __name__ = 'postscript'
+            commands = dict(gs='gs')
+            default = 'gs'
 
 #-----------------------------------------------------------------------------#
 
 class PythonHandler(FileTypeHandler):
     """FileTypeHandler for Python"""
-    RE_PY_ERROR = re.compile('File "(.+)", line ([0-9]+)') # Python Exceptions
     RE_PL_ERR = re.compile(r'\s*([REWCF]):\s*([0-9]+):.*') # Pylint Output
 
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(python='python -u', pylint='pylint',
+    class meta:
+        typeid = synglob.ID_LANG_PYTHON
+        name = 'python'
+        commands = dict(python='python -u', pylint='pylint',
                              pylinterr='pylint -e')
-        self.default = 'python'
-
-    __name__ = 'python'
+        default = 'python'
+        error = re.compile('File "(.+)", line ([0-9]+)')
+        hotspot = re.compile('File "(.+)", line ([0-9]+)')
 
     def GetEnvironment(self):
         """Get the environment to run the python script in"""
@@ -808,7 +729,8 @@ class PythonHandler(FileTypeHandler):
         proc_env['PYTHONUNBUFFERED'] = '1'
         return proc_env
 
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+    @classmethod
+    def HandleHotSpot(cls, mainw, outbuffer, line, fname):
         """Hotspots are error messages, find the file/line of the
         error in question and open the file to that point in the buffer.
 
@@ -818,95 +740,51 @@ class PythonHandler(FileTypeHandler):
             eline = max(0, int(match.group(2)) - 1)
             _OpenToLine(fname, eline, mainw)
         else:
-            ifile, line = _FindFileLine(outbuffer, line, fname,
-                                        PythonHandler.RE_PY_ERROR)
-            _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style python Information and Error messages from script
-        output.
-
-        """
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, PythonHandler.RE_PY_ERROR)
-        if more:
-            sty, more = _StyleError(stc, start, txt, PythonHandler.RE_PL_ERR)
-
-        if not err:
-            err = sty
-
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(PythonHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+            super(PythonHandler, cls).HandleHotSpot(mainw, outbuffer, line, fname)
 
 #-----------------------------------------------------------------------------#
 
 class RHandler(FileTypeHandler):
     """FileTypeHandler for R"""
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = {'r' : 'R',
-                         'Rterm' : 'Rterm',
-                         'Rgui' : 'Rgui',
-                         'Rscript' : 'Rscript'}
-        self.default = 'Rscript'
-
-    __name__ = 'R'
+    class meta:
+        typeid = synglob.ID_LANG_R
+        name = 'R'
+        commands = {'r' : 'R', 'Rterm' : 'Rterm', 
+                    'Rgui' : 'Rgui', 'Rscript' : 'Rscript'}
+        default = 'Rscript'
 
 #-----------------------------------------------------------------------------#
 
 class RubyHandler(FileTypeHandler):
     """FileTypeHandler for Ruby scripts"""
-    RE_RUBY_ERROR = re.compile('(.+):([0-9]+)[:]{0,1}.*')
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(ruby='ruby')
-        self.default = 'ruby'
-
-    __name__ = 'ruby'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    RubyHandler.RE_RUBY_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style NSIS output messages"""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, RubyHandler.RE_RUBY_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(RubyHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+    class meta:
+        typeid = synglob.ID_LANG_RUBY
+        name = 'ruby'
+        commands = dict(ruby='ruby')
+        default = 'ruby'
+        error = re.compile('(.+):([0-9]+)[:]{0,1}.*')
+        hotspot = re.compile('(.+):([0-9]+)[:]{0,1}.*')
 
 #-----------------------------------------------------------------------------#
 
 class TCLHandler(FileTypeHandler):
     """FileTypeHandler for TCL/TK"""
-    RE_TCL_ERROR = re.compile('\(file "(.+)" line ([0-9]+)\)')
+    class meta:
+        typeid = synglob.ID_LANG_TCL
+        name = 'tcl/tk'
+        commands = dict(wish='wish')
+        default = 'wish'
+        error = re.compile('\(file "(.+)" line ([0-9]+)\)')
+        hotspot = re.compile('\(file "(.+)" line ([0-9]+)\)')
 
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(wish='wish')
-        self.default = 'wish'
-
-    __name__ = 'tcl/tk'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
+    @classmethod
+    def HandleHotSpot(cls, mainw, outbuffer, line, fname):
         """Hotspots are error messages, find the file/line of the
         error in question and open the file to that point in the buffer.
 
         """
         txt = outbuffer.GetLine(line)
-        match = TCLHandler.RE_TCL_ERROR.findall(txt)
+        match = cls.meta.hotspot.findall(txt)
         ifile = None
         if len(match):
             ifile = match[0][0]
@@ -922,130 +800,34 @@ class TCLHandler(FileTypeHandler):
 
         _OpenToLine(ifile, line, mainw)
 
-    def StyleText(self, stc, start, txt):
-        """Style TCL output messages"""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, TCLHandler.RE_TCL_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(TCLHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
-
 #-----------------------------------------------------------------------------#
 
 class VBScriptHandler(FileTypeHandler):
     """FileTypeHandler for VBScript"""
-    RE_VBS_ERROR = re.compile('(.+)\(([0-9]+).*' + os.linesep)
-
-    def __init__(self):
-        FileTypeHandler.__init__(self)
-        self.commands = dict(cscript='CSCRIPT.exe', wscript='WSCRIPT.exe')
-        self.default = 'cscript'
-
-    __name__ = 'VBScript'
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Hotspots are error messages, find the file/line of the
-        error in question and open the file to that point in the
-        buffer.
-
-        """
-        ifile, line = _FindFileLine(outbuffer, line, fname,
-                                    VBScriptHandler.RE_VBS_ERROR)
-        _OpenToLine(ifile, line, mainw)
-
-    def StyleText(self, stc, start, txt):
-        """Style VBScript Information and Error messages from script output."""
-        sty = STYLE_NORMAL
-        err, more = _StyleError(stc, start, txt, VBScriptHandler.RE_VBS_ERROR)
-        if err:
-            err = STYLE_ERROR
-        if more:
-            sty = super(VBScriptHandler, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
+    class meta:
+        typeid = synglob.ID_LANG_VBSCRIPT
+        name = 'VBScript'
+        commands = dict(cscript='CSCRIPT.exe', wscript='WSCRIPT.exe')
+        default = 'cscript'
+        error = re.compile('(.+)\(([0-9]+).*' + os.linesep)
+        hotspot = re.compile('(.+)\(([0-9]+).*' + os.linesep)
 
 #-----------------------------------------------------------------------------#
 
-class XmlHandlerDelegate(FileTypeHandler):
-    """Delegate class for creating new filetype handlers from a Launch
+def XmlHandlerDelegate(xmlobj):
+    """Create delegate class for creating new filetype handlers from a Launch
     Xml object.
 
     """
-    def __init__(self, xmlobj):
-        """Create the object from the Launch XML Object"""
-        FileTypeHandler.__init__(self)
-
-        # Attributes
-        self._xml = xmlobj
-        self._errpat = self._xml.GetErrorPattern()
-        self._hotspot = self._xml.GetHotSpotPattern()
-
-        # FileTypeHandler implementation
-        self.commands = self._xml.GetCommands()
-        self.default = self._xml.GetDefaultCommand()
-        self._name = self._xml.GetLang()
-
-    @property
-    def __name__(self):
-        return self._name
-
-    def HandleHotSpot(self, mainw, outbuffer, line, fname):
-        """Handle hotspot navigation if it has been defined by the custom
-        handler.
-
-        """
-        if self._hotspot is not None:
-            ifile, line = _FindFileLine(outbuffer, line, fname, self._hotspot)
-            _OpenToLine(ifile, line, mainw)
-        else:
-            return None
-
-    def StyleText(self, stc, start, txt):
-        """Highlight text if an error pattern was defined."""
-        sty = STYLE_NORMAL
-        err = STYLE_NORMAL
-        if self._errpat is not None:
-            err, more = _StyleError(stc, start, txt, self._errpat)
-            if err:
-                err = STYLE_ERROR
-            if more:
-                sty = super(XmlHandlerDelegate, self).StyleText(stc, start, txt)[0]
-        return max(err, sty)
-
-#-----------------------------------------------------------------------------#
-# Handler Object Dictionary
-# Create an instance of each Handler to use as a persistent object
-HANDLERS = { 0                      : FileTypeHandler(), # Null Handler
-            synglob.ID_LANG_ADA     : AdaHandler(),
-            synglob.ID_LANG_BASH    : BashHandler(),
-            synglob.ID_LANG_BATCH   : BatchHandler(),
-            synglob.ID_LANG_BOO     : BooHandler(),
-            synglob.ID_LANG_C       : CHandler(),
-            synglob.ID_LANG_CAML    : CamlHandler(),
-            synglob.ID_LANG_CPP     : CPPHandler(),
-            synglob.ID_LANG_CSH     : CSHHandler(),
-            synglob.ID_LANG_D       : DHandler(),
-            synglob.ID_LANG_FERITE  : FeriteHandler(),
-            synglob.ID_LANG_KSH     : KornHandler(),
-            synglob.ID_LANG_HASKELL : HaskellHandler(),
-            synglob.ID_LANG_HAXE    : HaxeHandler(),
-            synglob.ID_LANG_HTML    : HTMLHandler(),
-            synglob.ID_LANG_INNO    : InnoSetupHandler(),
-            synglob.ID_LANG_LATEX   : LatexHandler(),
-            synglob.ID_LANG_STATA   : STATAHandler(),
-            synglob.ID_LANG_LUA     : LuaHandler(),
-            synglob.ID_LANG_NEWLISP : NewLispHandler(),
-            synglob.ID_LANG_NSIS    : NSISHandler(),
-            synglob.ID_LANG_PERL    : PerlHandler(),
-            synglob.ID_LANG_PHP     : PhpHandler(),
-            synglob.ID_LANG_PIKE    : PikeHandler(),
-            synglob.ID_LANG_PS      : PostScriptHandler(),
-            synglob.ID_LANG_PYTHON  : PythonHandler(),
-            synglob.ID_LANG_R       : RHandler(),
-            synglob.ID_LANG_RUBY    : RubyHandler(),
-            synglob.ID_LANG_TCL     : TCLHandler(),
-            synglob.ID_LANG_VBSCRIPT : VBScriptHandler() }
+    class XmlDelegateClass(FileTypeHandler):
+        class meta:
+            typeid = xmlobj.GetLangId()
+            name = xmlobj.GetLang()
+            commands = xmlobj.GetCommands()
+            default = xmlobj.GetDefaultCommand()
+            error = xmlobj.GetErrorPattern()
+            hotspot = xmlobj.GetHotSpotPattern()
+    return XmlDelegateClass
 
 #-----------------------------------------------------------------------------#
 # Local utility functions

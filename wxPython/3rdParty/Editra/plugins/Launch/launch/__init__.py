@@ -78,7 +78,7 @@ class Launch(plugin.Plugin):
         return item
 
     def GetMinVersion(self):
-        return "0.6.0"
+        return "0.6.20"
 
     def GetName(self):
         """The name of this plugin"""

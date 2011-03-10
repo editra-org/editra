@@ -8,6 +8,7 @@
 #-----------------------------------------------------------------------------#
 Version 1.10
 
++Major redesign - Adds support for all file types in Editra.
 +Fix issue in detecting files that are already open from hotspot links.
 
 #-----------------------------------------------------------------------------#
