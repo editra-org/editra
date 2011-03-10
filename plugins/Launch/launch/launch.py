@@ -55,10 +55,6 @@ REQUEST_RELAUNCH = 'Launch.CanRelaunch'
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
-def OnStoreConfig(msg):
-    Profile_Set(LAUNCH_KEY, handlers.GetState())
-ed_msg.Subscribe(OnStoreConfig, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
-
 def OnRegisterHandler(msg):
     """Register a custom handler
     @param msg: dict(xml=xml_str, loaded=bool)
@@ -100,9 +96,6 @@ class LaunchWindow(eclib.ControlBox):
         if not handlers.InitCustomHandlers(ed_glob.CONFIG['CACHE_DIR']):
             util.Log(u"[launch][warn] failed to load launch extensions")
 
-        hstate = Profile_Get(LAUNCH_KEY)
-        if hstate is not None:
-            handlers.SetState(hstate)
         if self._prefs is None:
             Profile_Set(cfgdlg.LAUNCH_PREFS,
                         dict(autoclear=False,
@@ -133,27 +126,28 @@ class LaunchWindow(eclib.ControlBox):
         self.Bind(wx.EVT_BUTTON, self.OnButton)
         self.Bind(wx.EVT_CHOICE, self.OnChoice)
         self.Bind(wx.EVT_CHECKBOX, self.OnCheck)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         ed_msg.Subscribe(self.OnPageChanged, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnFileOpened, ed_msg.EDMSG_FILE_OPENED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnLexerChange, ed_msg.EDMSG_UI_STC_LEXER)
-        ed_msg.Subscribe(self.OnConfigExit, cfgdlg.EDMSG_LAUNCH_CFG_EXIT)
+        ed_msg.Subscribe(self.OnConfigChange,
+                         ed_msg.EDMSG_PROFILE_CHANGE + (LAUNCH_KEY,))
         ed_msg.Subscribe(self.OnRunMsg, MSG_RUN_LAUNCH)
         ed_msg.Subscribe(self.OnRunLastMsg, MSG_RUN_LAST)
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
         ed_msg.RegisterCallback(self._CanReLaunch, REQUEST_RELAUNCH)
 
-    def __del__(self):
+    def OnDestroy(self, evt):
         ed_msg.Unsubscribe(self.OnPageChanged)
         ed_msg.Unsubscribe(self.OnFileOpened)
         ed_msg.Unsubscribe(self.OnThemeChanged)
         ed_msg.Unsubscribe(self.OnLexerChange)
-        ed_msg.Unsubscribe(self.OnConfigExit)
+        ed_msg.Unsubscribe(self.OnConfigChange)
         ed_msg.Unsubscribe(self.OnRunMsg)
         ed_msg.Unsubscribe(self.OnRunLastMsg)
         ed_msg.UnRegisterCallback(self._CanLaunch)
         ed_msg.UnRegisterCallback(self._CanReLaunch)
-        super(LaunchWindow, self).__del__()
 
     def __DoLayout(self):
         """Layout the window"""
@@ -331,14 +325,13 @@ class LaunchWindow(eclib.ControlBox):
         else:
             evt.Skip()
 
-    def OnConfigExit(self, msg):
-        """Update current state when the config dialog has been closed
+    def OnConfigChange(self, msg):
+        """Update current state when the configuration has been changed
         @param msg: Message Object
 
         """
         util.Log("[Launch][info] Saving config to profile")
         self.RefreshControlBar()
-        Profile_Set(LAUNCH_KEY, handlers.GetState()) # TODO is this necessary see other handler
         # Update wordwrapping
         mode = wx.stc.STC_WRAP_NONE
         if self._prefs.get('wrapoutput', False):
@@ -482,7 +475,7 @@ class LaunchWindow(eclib.ControlBox):
         if len(cmds):
             exe_ch.SetToolTipString(handler.GetCommand(cmds[0]))
 
-        util.Log("[Launch][info] Found commands %s" % str(cmds))
+        util.Log("[Launch][info] Found commands %s" % repr(cmds))
         if handler.GetName() != handlers.DEFAULT_HANDLER and len(self.GetFile()):
             for ctrl in (exe_ch, args_txt, run_btn,
                          self._chFiles, self._lockFile):

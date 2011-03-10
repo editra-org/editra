@@ -30,6 +30,7 @@ import eclib
 import ed_msg
 import ed_basewin
 from profiler import Profile_Get, Profile_Set
+import syntax.syntax as syntax
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -61,9 +62,6 @@ COLOR_MAP = { ID_DEF_BACK : 'defaultb', ID_DEF_FORE : 'defaultf',
               ID_INFO_BACK : 'infob',   ID_INFO_FORE : 'infof',
               ID_WARN_BACK : 'warnb',   ID_WARN_FORE : 'warnf'}
 
-# Message Types
-EDMSG_LAUNCH_CFG_EXIT = ed_msg.EDMSG_ALL + ('launch', 'cfg', 'exit')
-
 _ = wx.GetTranslation
 
 #----------------------------------------------------------------------
@@ -84,13 +82,9 @@ class ConfigDialog(ed_basewin.EdBaseFrame):
         # Layout
         self.__DoLayout()
 
-        # Event Handlers
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-
     def __DoLayout(self):
         """Layout the dialog"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         vsizer = wx.BoxSizer(wx.VERTICAL)
         panel = wx.Panel(self)
@@ -135,13 +129,6 @@ class ConfigNotebook(wx.Notebook):
         self.AddPage(OutputPanel(self), _("Output"))
         self.AddPage(MiscPanel(self), _("Misc"))
 
-        # Event Handlers
-        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
-
-    def OnDestroy(self, event):
-        ed_msg.PostMessage(EDMSG_LAUNCH_CFG_EXIT)
-        event.Skip()
-
 #-----------------------------------------------------------------------------#
 
 class ConfigPanel(wx.Panel):
@@ -164,7 +151,7 @@ class ConfigPanel(wx.Panel):
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         ftype = wx.GetApp().GetCurrentBuffer().GetLangId()
         ftype = handlers.GetHandlerById(ftype).GetName()
-        htypes = GetHandlerTypes()
+        htypes = sorted(syntax.SyntaxNames())
         lang_ch = wx.Choice(self, ID_LANGUAGE, choices=htypes)
         if ftype != handlers.DEFAULT_HANDLER:
             lang_ch.SetStringSelection(ftype)
@@ -237,6 +224,7 @@ class ConfigPanel(wx.Panel):
         def_ch = self.FindWindowById(wx.ID_DEFAULT)
         def_ch.SetItems(handler.GetAliases())
         def_ch.SetStringSelection(handler.GetDefault())
+        handler.StoreState()
 
     def GetCurrentHandler(self):
         """Get the currently selected file type handler
@@ -254,7 +242,7 @@ class ConfigPanel(wx.Panel):
         item_id = -1
         exes = list()
         elist = self.FindWindowById(ID_EXECUTABLES)
-        for item in xrange(elist.GetItemCount()):
+        for item in range(elist.GetItemCount()):
             item_id = elist.GetNextItem(item_id)
             if item_id == -1:
                 break
@@ -286,7 +274,6 @@ class ConfigPanel(wx.Panel):
                 elist.DeleteItem(item)
 
             wx.CallAfter(self.__DoUpdateHandler, self.GetCurrentHandler())
-
         else:
             evt.Skip()
 
@@ -306,6 +293,7 @@ class ConfigPanel(wx.Panel):
         elif e_id == wx.ID_DEFAULT:
             handler = self.GetCurrentHandler()
             handler.SetDefault((e_val, handler.GetCommand(e_val)))
+            handler.StoreState()
         else:
             evt.Skip()
 
@@ -331,13 +319,11 @@ class ConfigPanel(wx.Panel):
             else:
                 # Add a new item
                 # This should not happen
-                if col == 0:
-                    exes.append((nval, nval))
-                else:
-                    exes.append((nval, nval))
+                exes.append((nval, nval))
 
             # Store the new values
             handler.SetCommands(exes)
+            handler.StoreState()
             def_ch = self.FindWindowById(wx.ID_DEFAULT)
             def_ch.SetItems(handler.GetAliases())
             def_ch.SetStringSelection(handler.GetDefault())
@@ -357,8 +343,6 @@ class OutputPanel(wx.Panel):
     """Output buffer settings panel"""
     def __init__(self, parent):
         super(OutputPanel, self).__init__(parent)
-
-        # Attributes
 
         # Layout
         self.__DoLayout()
@@ -521,17 +505,10 @@ class MiscPanel(wx.Panel):
 #-----------------------------------------------------------------------------#
 ID_BROWSE = wx.NewId()
 
-class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
-                      listmix.TextEditMixin,
-                      eclib.ListRowHighlighter,
-#                      listmix.CheckListCtrlMixin,
-                      wx.ListCtrl):
+class CommandListCtrl(eclib.EEditListCtrl):
     """Auto-width adjusting list for showing editing the commands"""
     def __init__(self, *args, **kwargs):
-        wx.ListCtrl.__init__(self, *args, **kwargs)
-        listmix.ListCtrlAutoWidthMixin.__init__(self)
-#        listmix.CheckListCtrlMixin.__init__(self)
-        eclib.ListRowHighlighter.__init__(self)
+        super(CommandListCtrl, self).__init__(*args, **kwargs)
 
         # Attributes
         self._menu = None
@@ -544,8 +521,6 @@ class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
         self.InsertColumn(0, _("Alias"))
         self.InsertColumn(1, _("Executable Commands"))
 #        self.SetColumnWidth(0, self.GetTextExtent(pcol)[0] + 5)
-
-        listmix.TextEditMixin.__init__(self)
 
         # Event Handlers
         self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnContextClick)
@@ -620,19 +595,3 @@ class CommandListCtrl(listmix.ListCtrlAutoWidthMixin,
 #        """
 #        parent = self.GetParent()
 #        parent.UpdateCurrentHandler(index)
-
-#-----------------------------------------------------------------------------#
-
-def GetHandlerTypes():
-    """Get the language type handlers for each language that
-    has a handler defined.
-    @return: list of handler names
-
-    """
-    keys = handlers.HANDLERS.keys()
-    keys.remove(0)
-    rlist = list()
-    for key in keys:
-        handle = handlers.HANDLERS[key]
-        rlist.append(handle.GetName().title())
-    return sorted(rlist)
