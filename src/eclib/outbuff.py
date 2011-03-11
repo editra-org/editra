@@ -261,7 +261,11 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetReadOnly(False)
         txt = u''.join(self._updates[:])
         start = self.GetLength()
-        self.AppendText(txt)
+        if u'\0' in txt:
+            # HACK: handle displaying NULLs in the STC
+            self.AddStyledText('\0'.join(txt.encode('utf-8'))+'\0')
+        else:
+            self.AppendText(txt)
         self.GotoPos(self.GetLength())
         self._updates = list()
         self.ApplyStyles(start, txt)
