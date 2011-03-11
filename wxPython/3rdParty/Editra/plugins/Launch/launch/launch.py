@@ -31,6 +31,7 @@ import ed_txt
 import ed_msg
 import ebmlib
 import eclib
+import ed_basewin
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -69,7 +70,7 @@ ed_msg.Subscribe(OnRegisterHandler, MSG_LAUNCH_REGISTER)
 
 #-----------------------------------------------------------------------------#
 
-class LaunchWindow(eclib.ControlBox):
+class LaunchWindow(ed_basewin.EdBaseCtrlBox):
     """Control window for showing and running scripts"""
     def __init__(self, parent):
         super(LaunchWindow, self).__init__(parent)
@@ -152,9 +153,7 @@ class LaunchWindow(eclib.ControlBox):
     def __DoLayout(self):
         """Layout the window"""
         #-- Setup ControlBar --#
-        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
-        if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
+        ctrlbar = self.CreateControlBar(wx.TOP)
 
         # Preferences
         prefbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF), wx.ART_MENU)
@@ -204,9 +203,6 @@ class LaunchWindow(eclib.ControlBox):
         clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
                                   cbmp, style=eclib.PB_STYLE_NOBG)
         ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
-        ctrlbar.SetVMargin(1, 1)
-        self.SetControlBar(ctrlbar)
-
         self.SetWindow(self._buffer)
 
     def __FindMainWindow(self):
