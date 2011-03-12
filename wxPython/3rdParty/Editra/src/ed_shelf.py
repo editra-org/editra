@@ -105,7 +105,7 @@ class Shelf(plugin.Plugin):
         view = parent.GetMenuBar().GetMenuByName("view")
         menu = delegate.GetMenu()
         pos = 0
-        for pos in xrange(view.GetMenuItemCount()):
+        for pos in range(view.GetMenuItemCount()):
             mitem = view.FindItemByPosition(pos)
             if mitem.GetId() == ed_glob.ID_PERSPECTIVES:
                 break
@@ -417,7 +417,10 @@ class EdShelfDelegate(object):
         combo = 0
         for item in menu_items:
             combo += 1
-            item[1].SetText(item[1].GetText() + "\tCtrl+Alt+" + str(combo))
+            shortcut = u""
+            if combo < 10:
+                shortcut = u"\tCtrl+Alt+" + str(combo)
+            item[1].SetText(item[1].GetText() + shortcut)
             menu.AppendItem(item[1])
         return menu
 
