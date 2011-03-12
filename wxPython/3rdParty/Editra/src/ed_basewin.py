@@ -64,6 +64,29 @@ class EdBaseCtrlBox(eclib.ControlBox):
     """ControlBox base class to be used by all common components"""
     def __init__(self, parent):
         super(EdBaseCtrlBox, self).__init__(parent)
+    def AddPlateButton(self, lbl=u"", bmp=-1,
+                       align=wx.ALIGN_LEFT, cbarpos=wx.TOP):
+        """Add an eclib.PlateButton to the ControlBar specified by
+        cbarpos.
+        @keyword lbl: Button Label
+        @keyword bmp: Bitmap or EditraArtProvider ID
+        @keyword align: button alignment
+        @keyword cbarpos: ControlBar position
+        @return: PlateButton instance
+
+        """
+        ctrlbar = self.GetControlBar(cbarpos)
+        assert ctrlbar is not None, "No ControlBar at cbarpos"
+        if not isinstance(bmp, wx.Bitmap):
+            assert isinstance(bmp, int)
+            bmp = wx.ArtProvider.GetBitmap(str(bmp), wx.ART_MENU)
+        if bmp.IsNull() or not bmp.IsOk():
+            bmp = None
+        btn = eclib.PlateButton(ctrlbar, wx.ID_ANY, lbl, bmp,
+                                style=eclib.PB_STYLE_NOBG)
+        ctrlbar.AddControl(btn, align)
+        return btn
+
     def CreateControlBar(self, pos=wx.TOP):
         """Override for CreateControlBar to automatically set the
         flat non-gradient version of the control under GTK.

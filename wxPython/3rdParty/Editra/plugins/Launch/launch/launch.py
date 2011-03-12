@@ -35,10 +35,8 @@ import ed_basewin
 
 #-----------------------------------------------------------------------------#
 # Globals
-ID_SETTINGS = wx.NewId()
 ID_EXECUTABLE = wx.NewId()
 ID_ARGS = wx.NewId()
-ID_RUN = wx.NewId()
 
 # Profile Settings Key
 LAUNCH_KEY = 'Launch.Config'
@@ -80,8 +78,11 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         self._mw = self.__FindMainWindow()
         self._buffer = OutputDisplay(self)
         self._fnames = list()
-        self._lockFile = None # Created in __DoLayout
-        self._chFiles = None # Created in __DoLayout
+        self._run = None        # Created in __DoLayout
+        self._pbtn = None       # Created in __DoLayout
+        self._clear = None      # Created in __DoLayout
+        self._lockFile = None   # Created in __DoLayout
+        self._chFiles = None    # Created in __DoLayout
         self._worker = None
         self._busy = False
         self._isready = False
@@ -156,11 +157,8 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         ctrlbar = self.CreateControlBar(wx.TOP)
 
         # Preferences
-        prefbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF), wx.ART_MENU)
-        pref = eclib.PlateButton(ctrlbar, ID_SETTINGS, '', prefbmp,
-                                 style=eclib.PB_STYLE_NOBG)
-        pref.SetToolTipString(_("Settings"))
-        ctrlbar.AddControl(pref, wx.ALIGN_LEFT)
+        self._pbtn = self.AddPlateButton(u"", ed_glob.ID_PREF)
+        self._pbtn.SetToolTipString(_("Settings"))
 
         # Exe
         ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("exec") + ":"),
@@ -189,20 +187,12 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         ctrlbar.AddStretchSpacer()
         
         # Run Button
-        rbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_BIN_FILE), wx.ART_MENU)
-        if rbmp.IsNull() or not rbmp.IsOk():
-            rbmp = None
-        run = eclib.PlateButton(ctrlbar, ID_RUN, _("Run"), rbmp,
-                                style=eclib.PB_STYLE_NOBG)
-        ctrlbar.AddControl(run, wx.ALIGN_RIGHT)
+        self._run = self.AddPlateButton(_("Run"), ed_glob.ID_BIN_FILE, 
+                                        wx.ALIGN_LEFT)
 
         # Clear Button
-        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
-        if cbmp.IsNull() or not cbmp.IsOk():
-            cbmp = None
-        clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
-                                  cbmp, style=eclib.PB_STYLE_NOBG)
-        ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
+        self._clear = self.AddPlateButton(_("Clear"), ed_glob.ID_DELETE,
+                                          wx.ALIGN_RIGHT)
         self.SetWindow(self._buffer)
 
     def __FindMainWindow(self):
@@ -269,8 +259,8 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
     def OnButton(self, evt):
         """Handle events from the buttons on the control bar"""
-        e_id = evt.GetId()
-        if e_id == ID_SETTINGS:
+        e_obj = evt.GetEventObject()
+        if e_obj == self._pbtn:
             app = wx.GetApp()
             win = app.GetWindowInstance(cfgdlg.ConfigDialog)
             if win is None:
@@ -279,10 +269,10 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
                 config.Show()
             else:
                 win.Raise()
-        elif e_id == ID_RUN:
+        elif e_obj is self._run:
             # May be run or abort depending on current state
             self.StartStopProcess()
-        elif e_id == wx.ID_CLEAR:
+        elif e_obj == self._clear:
             self._buffer.Clear()
         else:
             evt.Skip()
@@ -443,18 +433,18 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         @param msg: Message Object
 
         """
-        ctrls = ((ID_SETTINGS, ed_glob.ID_PREF),
-                 (wx.ID_CLEAR, ed_glob.ID_DELETE))
+        ctrls = ((self._pbtn, ed_glob.ID_PREF),
+                 (self._clear, ed_glob.ID_DELETE))
         if self._busy:
-            ctrls += ((ID_RUN, ed_glob.ID_STOP),)
+            ctrls += ((self._run, ed_glob.ID_STOP),)
         else:
-            ctrls += ((ID_RUN, ed_glob.ID_BIN_FILE),)
+            ctrls += ((self._run, ed_glob.ID_BIN_FILE),)
 
-        for ctrl, art in ctrls:
-            btn = self.FindWindowById(ctrl)
+        for btn, art in ctrls:
             bmp = wx.ArtProvider.GetBitmap(str(art), wx.ART_MENU)
             btn.SetBitmap(bmp)
             btn.Refresh()
+        self.GetControlBar().Refresh()
 
     def RefreshControlBar(self):
         """Refresh the state of the control bar based on the current config"""
@@ -464,7 +454,6 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         # Get the controls
         exe_ch = self.FindWindowById(ID_EXECUTABLE)
         args_txt = self.FindWindowById(ID_ARGS)
-        run_btn = self.FindWindowById(ID_RUN)
 
         csel = exe_ch.GetStringSelection()
         exe_ch.SetItems(cmds)
@@ -473,7 +462,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         util.Log("[Launch][info] Found commands %s" % repr(cmds))
         if handler.GetName() != handlers.DEFAULT_HANDLER and len(self.GetFile()):
-            for ctrl in (exe_ch, args_txt, run_btn,
+            for ctrl in (exe_ch, args_txt, self._run,
                          self._chFiles, self._lockFile):
                 ctrl.Enable()
 
@@ -491,7 +480,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             self.GetControlBar().Layout()
         else:
             self._isready = False
-            for ctrl in (exe_ch, args_txt, run_btn,
+            for ctrl in (exe_ch, args_txt, self._run,
                          self._chFiles, self._lockFile):
                 ctrl.Disable()
             self._chFiles.Clear()
@@ -578,7 +567,6 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         @keyword running: Is a process running or not
 
         """
-        rbtn = self.FindWindowById(ID_RUN)
         self._busy = running
         if running:
             self._config['last'] = self._config['file']
@@ -589,14 +577,14 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             if abort.IsNull() or not abort.IsOk():
                 abort = wx.ArtProvider.GetBitmap(wx.ART_ERROR,
                                                  wx.ART_MENU, (16, 16))
-            rbtn.SetBitmap(abort)
-            rbtn.SetLabel(_("Abort"))
+            self._run.SetBitmap(abort)
+            self._run.SetLabel(_("Abort"))
         else:
             rbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_BIN_FILE), wx.ART_MENU)
             if rbmp.IsNull() or not rbmp.IsOk():
                 rbmp = None
-            rbtn.SetBitmap(rbmp)
-            rbtn.SetLabel(_("Run"))
+            self._run.SetBitmap(rbmp)
+            self._run.SetLabel(_("Run"))
             # If the buffer was changed while this was running we should
             # update to the new buffer now that it has stopped.
             self.SetFile(self._config['cfile'])
@@ -604,7 +592,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             self.RefreshControlBar()
 
         self.GetControlBar().Layout()
-        rbtn.Refresh()
+        self._run.Refresh()
 
     def SetupControlBar(self, ctrl):
         """Set the state of the controlbar based data found in the buffer
