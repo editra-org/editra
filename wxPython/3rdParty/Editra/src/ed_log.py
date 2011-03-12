@@ -32,6 +32,7 @@ import iface
 import plugin
 from profiler import Profile_Get
 import ed_glob
+import ed_basewin
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -91,7 +92,7 @@ class EdLogViewer(plugin.Plugin):
 #-----------------------------------------------------------------------------#
 
 # LogViewer Ui Implementation
-class LogViewer(eclib.ControlBox):
+class LogViewer(ed_basewin.EdBaseCtrlBox):
     """LogViewer is a control for displaying and working with output
     from Editra's log.
 
@@ -103,13 +104,14 @@ class LogViewer(eclib.ControlBox):
         self._buffer = LogBuffer(self)
         self.SetWindow(self._buffer)
         self._srcfilter = None
+        self._clear = None
 
         # Layout
         self.__DoLayout()
 
         # Event Handlers
         self.Bind(wx.EVT_BUTTON,
-                  lambda evt: self._buffer.Clear(), id=wx.ID_CLEAR)
+                  lambda evt: self._buffer.Clear(), self._clear)
         self.Bind(wx.EVT_CHOICE, self.OnChoice, self._srcfilter)
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
@@ -134,13 +136,8 @@ class LogViewer(eclib.ControlBox):
 
         # Clear Button
         ctrlbar.AddStretchSpacer()
-        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
-        if cbmp.IsNull() or not cbmp.IsOk():
-            cbmp = None
-        clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
-                                  cbmp, style=eclib.PB_STYLE_NOBG)
-        ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
-        ctrlbar.SetVMargin(0, 0)
+        self._clear = self.AddPlateButton(_("Clear"), ed_glob.ID_DELETE,
+                                          wx.ALIGN_RIGHT)
         
     def OnChoice(self, evt):
         """Set the filter based on the choice controls value
@@ -154,10 +151,9 @@ class LogViewer(eclib.ControlBox):
         @param msg: Message Object
 
         """
-        clear = self.FindWindowById(wx.ID_CLEAR)
         cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
-        clear.SetBitmap(cbmp)
-        clear.Refresh()
+        self._clear.SetBitmap(cbmp)
+        self._clear.Refresh()
 
     def SetSources(self, srclist):
         """Set the list of available log sources in the choice control
