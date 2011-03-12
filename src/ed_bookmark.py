@@ -30,6 +30,7 @@ import ed_glob
 import util
 import eclib
 import ebmlib
+import ed_basewin
 from ed_marker import Bookmark
 
 #-----------------------------------------------------------------------------#
@@ -126,7 +127,7 @@ ed_msg.Subscribe(EdBookmarks.OnStoreBM, ed_msg.EDMSG_UI_STC_BOOKMARK)
 
 #-----------------------------------------------------------------------------#
 
-class BookmarkWindow(eclib.ControlBox):
+class BookmarkWindow(ed_basewin.EdBaseCtrlBox):
     """Shelf window for managing bookmarks"""
     def __init__(self, parent):
         super(BookmarkWindow, self).__init__(parent)
@@ -137,13 +138,9 @@ class BookmarkWindow(eclib.ControlBox):
         #Setup
         self.SetWindow(self._list)
         ctrlbar = self.CreateControlBar(wx.TOP)
-        ctrlbar.SetVMargin(0, 0)
-        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
-        self._delbtn = eclib.PlateButton(ctrlbar, label=_("Delete"), bmp=bmp,
-                                         style=eclib.PB_STYLE_NOBG)
-        self._delbtn.SetToolTipString(_("Delete Bookmark"))
         ctrlbar.AddStretchSpacer()
-        ctrlbar.AddControl(self._delbtn, wx.ALIGN_RIGHT)
+        self._delbtn = self.AddPlateButton(_("Delete"), ed_glob.ID_DELETE)
+        self._delbtn.SetToolTipString(_("Delete Bookmark"))
 
         # Message Handlers
         ed_msg.Subscribe(self.OnBookmark, ed_msg.EDMSG_UI_STC_BOOKMARK)
