@@ -191,6 +191,7 @@ class SearchController(object):
                 self._finddlg = self._CreateNewDialog(ed_glob.ID_FIND)
                 if self._finddlg is None:
                     return
+                self._finddlg.CenterOnParent()
                 self._finddlg.SetTransparent(240)
     #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
             else:
@@ -210,6 +211,7 @@ class SearchController(object):
         """Update the state of the existing dialog"""
         if self._finddlg is None:
             self._finddlg = self._CreateNewDialog(e_id)
+            self._finddlg.CenterOnParent()
         else:
             mode = self._finddlg.GetDialogMode()
             if e_id == ed_glob.ID_FIND and mode != eclib.AFR_STYLE_FINDDIALOG:
@@ -695,6 +697,7 @@ class SearchController(object):
             if self._finddlg is None:
                 evt.Skip()
                 return
+            self._finddlg.CenterOnParent()
             self._finddlg.SetTransparent(240)
 #            self._finddlg.SetExtraStyle(wx.WS_EX_PROCESS_UI_UPDATES)
             self._finddlg.Show()
