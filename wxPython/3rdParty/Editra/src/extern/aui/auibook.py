@@ -1961,6 +1961,11 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         :param `event`: a `wx.MouseEvent` event to be processed.
         """
 
+        eventHandler = self.GetEventHandler()
+        if not isinstance(eventHandler, AuiTabCtrl):
+            event.Skip()
+            return
+
         x, y = event.GetX(), event.GetY()
         wnd = self.TabHitTest(x, y)
 
@@ -1982,6 +1987,11 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         :param `event`: a `wx.MouseEvent` event to be processed.
         """
 
+        eventHandler = self.GetEventHandler()
+        if not isinstance(eventHandler, AuiTabCtrl):
+            event.Skip()
+            return
+        
         x, y = event.GetX(), event.GetY()
         wnd = self.TabHitTest(x, y)
 

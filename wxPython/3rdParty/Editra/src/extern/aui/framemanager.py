@@ -13,7 +13,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 23 Dec 2005
-# Latest Revision: 26 Jan 2011, 15.00 GMT
+# Latest Revision: 10 Mar 2011, 15.00 GMT
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
 # Write To Me At:
@@ -4582,7 +4582,7 @@ class AuiManager(wx.EvtHandler):
         # bug in the library user's application
         already_exists = False
         if pane_info.name != "" and self.GetPane(pane_info.name).IsOk():
-            warnings.warn("A pane with that name already exists in the manager!")
+            warnings.warn("A pane with the name '%s' already exists in the manager!"%pane_info.name)
             already_exists = True
 
         # if the new pane is docked then we should undo maximize
@@ -9101,9 +9101,10 @@ class AuiManager(wx.EvtHandler):
         :param `event`: a `wx.MoveEvent` to be processed.
         """
 
+        if event is not None:
+            event.Skip()
+
         if isinstance(self._frame, AuiFloatingFrame) and self._frame.IsShownOnScreen():
-            if event is not None:
-                event.Skip()
             return
 
         docked, hAlign, vAlign, monitor = self._is_docked
