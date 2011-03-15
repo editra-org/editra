@@ -86,8 +86,8 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         self._worker = None
         self._busy = False
         self._isready = False
-        self._config = dict(file='', lang=0, cfile='', clang=0, last='', 
-                            lastlang=0, prelang=0, largs='', lcmd='')
+        self._state = dict(file='', lang=0, cfile='', clang=0, last='', 
+                           lastlang=0, prelang=0, largs='', lcmd='')
 
         # Setup
         self.__DoLayout()
@@ -111,8 +111,8 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         self.UpdateBufferColors()
         cbuffer = self.MainWindow.GetNotebook().GetCurrentCtrl()
         self.SetupControlBar(cbuffer)
-        self._config['lang'] = GetLangIdFromMW(self.MainWindow)
-        self.UpdateCurrentFiles(self._config['lang'])
+        self.State['lang'] = GetLangIdFromMW(self.MainWindow)
+        self.UpdateCurrentFiles(self.State['lang'])
         self.SetFile(GetTextBuffer(self.MainWindow).GetFileName())
 
         # Setup filetype settings
@@ -138,6 +138,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
     MainWindow = property(lambda self: self._mw)
     Preferences = property(lambda self: Profile_Get(cfgdlg.LAUNCH_PREFS, default=None),
                            lambda self, prefs: Profile_Set(cfgdlg.LAUNCH_PREFS, prefs))
+    State = property(lambda self: self._state)
 
     def OnDestroy(self, evt):
         ed_msg.Unsubscribe(self.OnPageChanged)
@@ -220,7 +221,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
     def _CanReLaunch(self):
         """Method to use with RegisterCallback for getting status"""
         val = self.CanLaunch()
-        if not val or not len(self._config['last']):
+        if not val or not len(self.State['last']):
             val = ed_msg.NullValue()
         return val
 
@@ -236,14 +237,14 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         @return: file path
 
         """
-        return self._config['file']
+        return self.State['file']
 
     def GetLastRun(self):
         """Get the last file that was run
         @return: (fname, lang_id)
 
         """
-        return (self._config['last'], self._config['lastlang'])
+        return (self.State['last'], self.State['lastlang'])
 
     def OnButton(self, evt):
         """Handle events from the buttons on the control bar"""
@@ -278,7 +279,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             self._chFiles.SetToolTipString(fname)
         elif e_id == ID_EXECUTABLE:
             e_obj = evt.GetEventObject()
-            handler = handlers.GetHandlerById(self._config['lang'])
+            handler = handlers.GetHandlerById(self.State['lang'])
             cmd = e_obj.GetStringSelection()
             e_obj.SetToolTipString(handler.GetCommand(cmd))
         else:
@@ -325,8 +326,8 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             return # Mode is locked ignore update
 
         # Update the file choice control
-        self._config['lang'] = GetLangIdFromMW(self.MainWindow)
-        self.UpdateCurrentFiles(self._config['lang'])
+        self.State['lang'] = GetLangIdFromMW(self.MainWindow)
+        self.UpdateCurrentFiles(self.State['lang'])
 
         fname = msg.GetData()
         self.SetFile(fname)
@@ -357,7 +358,6 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         # Update regardless of whether lexer has changed or not as the buffer
         # may have the lexer set before the file was saved to disk.
         if fname:
-            #if ftype != self._config['lang']:
             self.UpdateCurrentFiles(ftype)
             self.SetControlBarState(fname, ftype)
 
@@ -414,7 +414,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
             self.SetProcessRunning(True)
 
-            self.Run(fname, self._config['lcmd'], self._config['largs'], ftype)
+            self.Run(fname, self.State['lcmd'], self.State['largs'], ftype)
 
     def OnThemeChanged(self, msg):
         """Update icons when the theme has been changed
@@ -436,7 +436,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
     def RefreshControlBar(self):
         """Refresh the state of the control bar based on the current config"""
-        handler = handlers.GetHandlerById(self._config['lang'])
+        handler = handlers.GetHandlerById(self.State['lang'])
         cmds = handler.GetAliases()
 
         # Get the controls
@@ -458,7 +458,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             if self.Locked:
                 self._chFiles.Enable(False)
 
-            if self._config['lang'] == self._config['prelang'] and len(csel):
+            if self.State['lang'] == self.State['prelang'] and len(csel):
                 exe_ch.SetStringSelection(csel)
             else:
                 csel = handler.GetDefault()
@@ -519,13 +519,13 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         self.SetProcessRunning(not self._busy)
         if self._busy:
             util.Log("[Launch][info] Starting process")
-            handler = handlers.GetHandlerById(self._config['lang'])
+            handler = handlers.GetHandlerById(self.State['lang'])
             cmd = self.FindWindowById(ID_EXECUTABLE).GetStringSelection()
-            self._config['lcmd'] = cmd
+            self.State['lcmd'] = cmd
             cmd = handler.GetCommand(cmd)
             args = self.FindWindowById(ID_ARGS).GetValue().split()
-            self._config['largs'] = args
-            self.Run(self._config['file'], cmd, args, self._config['lang'])
+            self.State['largs'] = args
+            self.Run(self.State['file'], cmd, args, self.State['lang'])
         else:
             util.Log("[Launch][info] Aborting process")
             self._worker.Abort()
@@ -537,7 +537,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         """
         # Set currently selected file
-        self._config['file'] = fname
+        self.State['file'] = fname
         self._chFiles.SetStringSelection(os.path.split(fname)[1])
         self.GetControlBar().Layout()
 
@@ -546,8 +546,8 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         @param langid: syntax.synglob lang id
 
         """
-        self._config['prelang'] = self._config['lang']
-        self._config['lang'] = langid
+        self.State['prelang'] = self.State['lang']
+        self.State['lang'] = langid
 
     def SetProcessRunning(self, running=True):
         """Set the state of the window into either process running mode
@@ -557,10 +557,10 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         """
         self._busy = running
         if running:
-            self._config['last'] = self._config['file']
-            self._config['lastlang'] = self._config['lang']
-            self._config['cfile'] = self._config['file']
-            self._config['clang'] = self._config['lang']
+            self.State['last'] = self.State['file']
+            self.State['lastlang'] = self.State['lang']
+            self.State['cfile'] = self.State['file']
+            self.State['clang'] = self.State['lang']
             abort = wx.ArtProvider.GetBitmap(str(ed_glob.ID_STOP), wx.ART_MENU)
             if abort.IsNull() or not abort.IsOk():
                 abort = wx.ArtProvider.GetBitmap(wx.ART_ERROR,
@@ -575,8 +575,8 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             self._run.SetLabel(_("Run"))
             # If the buffer was changed while this was running we should
             # update to the new buffer now that it has stopped.
-            self.SetFile(self._config['cfile'])
-            self.SetLangId(self._config['clang'])
+            self.SetFile(self.State['cfile'])
+            self.SetLangId(self.State['clang'])
             self.RefreshControlBar()
 
         self.GetControlBar().Layout()
@@ -595,8 +595,8 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
     def SetControlBarState(self, fname, lang_id):
         # Don't update the bars status if the buffer is busy
         if self._buffer.IsRunning():
-            self._config['cfile'] = fname
-            self._config['clang'] = lang_id
+            self.State['cfile'] = fname
+            self.State['clang'] = lang_id
         else:
             if not self.Locked:
                 self.SetFile(fname)
