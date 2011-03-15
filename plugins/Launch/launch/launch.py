@@ -86,40 +86,34 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         self._worker = None
         self._busy = False
         self._isready = False
-        self._config = dict(file='', lang=0,
-                            cfile='', clang=0,
-                            last='', lastlang=0,
-                            prelang=0, largs='',
-                            lcmd='')
-        self._prefs = Profile_Get(cfgdlg.LAUNCH_PREFS, default=None)
+        self._config = dict(file='', lang=0, cfile='', clang=0, last='', 
+                            lastlang=0, prelang=0, largs='', lcmd='')
 
         # Setup
         self.__DoLayout()
         if not handlers.InitCustomHandlers(ed_glob.CONFIG['CACHE_DIR']):
             util.Log(u"[launch][warn] failed to load launch extensions")
 
-        if self._prefs is None:
-            Profile_Set(cfgdlg.LAUNCH_PREFS,
-                        dict(autoclear=False,
-                             errorbeep=False,
-                             wrapoutput=False,
-                             defaultf=self._buffer.GetDefaultForeground().Get(),
-                             defaultb=self._buffer.GetDefaultBackground().Get(),
-                             errorf=self._buffer.GetErrorForeground().Get(),
-                             errorb=self._buffer.GetErrorBackground().Get(),
-                             infof=self._buffer.GetInfoForeground().Get(),
-                             infob=self._buffer.GetInfoBackground().Get(),
-                             warnf=self._buffer.GetWarningForeground().Get(),
-                             warnb=self._buffer.GetWarningBackground().Get()))
-            self._prefs = Profile_Get(cfgdlg.LAUNCH_PREFS)
+        # Ensure preferences have been initialized
+        if self.Preferences is None:
+            self.Preferences = dict(autoclear=False,
+                                    errorbeep=False,
+                                    wrapoutput=False,
+                                    defaultf=self._buffer.GetDefaultForeground().Get(),
+                                    defaultb=self._buffer.GetDefaultBackground().Get(),
+                                    errorf=self._buffer.GetErrorForeground().Get(),
+                                    errorb=self._buffer.GetErrorBackground().Get(),
+                                    infof=self._buffer.GetInfoForeground().Get(),
+                                    infob=self._buffer.GetInfoBackground().Get(),
+                                    warnf=self._buffer.GetWarningForeground().Get(),
+                                    warnb=self._buffer.GetWarningBackground().Get())
 
-        self._buffer.SetPrefs(self._prefs)
         self.UpdateBufferColors()
-        cbuffer = self._mw.GetNotebook().GetCurrentCtrl()
+        cbuffer = self.MainWindow.GetNotebook().GetCurrentCtrl()
         self.SetupControlBar(cbuffer)
-        self._config['lang'] = GetLangIdFromMW(self._mw)
+        self._config['lang'] = GetLangIdFromMW(self.MainWindow)
         self.UpdateCurrentFiles(self._config['lang'])
-        self.SetFile(GetTextBuffer(self._mw).GetFileName())
+        self.SetFile(GetTextBuffer(self.MainWindow).GetFileName())
 
         # Setup filetype settings
         self.RefreshControlBar()
@@ -140,6 +134,11 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
         ed_msg.RegisterCallback(self._CanReLaunch, REQUEST_RELAUNCH)
 
+    Locked = property(lambda self: self._lockFile.IsChecked())
+    MainWindow = property(lambda self: self._mw)
+    Preferences = property(lambda self: Profile_Get(cfgdlg.LAUNCH_PREFS, default=None),
+                           lambda self, prefs: Profile_Set(cfgdlg.LAUNCH_PREFS, prefs))
+
     def OnDestroy(self, evt):
         ed_msg.Unsubscribe(self.OnPageChanged)
         ed_msg.Unsubscribe(self.OnFileOpened)
@@ -153,7 +152,6 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
     def __DoLayout(self):
         """Layout the window"""
-        #-- Setup ControlBar --#
         ctrlbar = self.CreateControlBar(wx.TOP)
 
         # Preferences
@@ -186,11 +184,9 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         # Spacer
         ctrlbar.AddStretchSpacer()
         
-        # Run Button
+        # Buttons
         self._run = self.AddPlateButton(_("Run"), ed_glob.ID_BIN_FILE, 
                                         wx.ALIGN_LEFT)
-
-        # Clear Button
         self._clear = self.AddPlateButton(_("Clear"), ed_glob.ID_DELETE,
                                           wx.ALIGN_RIGHT)
         self.SetWindow(self._buffer)
@@ -233,8 +229,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         @return: bool
 
         """
-        parent = self.GetParent()
-        return parent.GetParent().IsActive() and self._isready
+        return self.TopLevelParent.IsActive() and self._isready
 
     def GetFile(self):
         """Get the file that is currently set to be run
@@ -250,13 +245,6 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         """
         return (self._config['last'], self._config['lastlang'])
 
-    def GetMainWindow(self):
-        """Get the mainwindow that created this instance
-        @return: reference to MainWindow
-
-        """
-        return self._mw
-
     def OnButton(self, evt):
         """Handle events from the buttons on the control bar"""
         e_obj = evt.GetEventObject()
@@ -264,7 +252,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             app = wx.GetApp()
             win = app.GetWindowInstance(cfgdlg.ConfigDialog)
             if win is None:
-                config = cfgdlg.ConfigDialog(self._mw)
+                config = cfgdlg.ConfigDialog(self.MainWindow)
                 config.CentreOnParent()
                 config.Show()
             else:
@@ -300,11 +288,11 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         """CheckBox for Lock File was clicked"""
         e_obj = evt.GetEventObject()
         if e_obj is self._lockFile:
-            if self._lockFile.IsChecked():
+            if self.Locked:
                 self._chFiles.Disable()
             else:
                 self._chFiles.Enable()
-                cbuff = GetTextBuffer(self._mw)
+                cbuff = GetTextBuffer(self.MainWindow)
                 if isinstance(cbuff, ed_basestc.EditraBaseStc):
                     self.UpdateCurrentFiles(cbuff.GetLangId())
                     self.SetupControlBar(cbuff)
@@ -320,7 +308,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         self.RefreshControlBar()
         # Update wordwrapping
         mode = wx.stc.STC_WRAP_NONE
-        if self._prefs.get('wrapoutput', False):
+        if self.Preferences.get('wrapoutput', False):
             mode = wx.stc.STC_WRAP_WORD # should we do wrap char?
         wrapmode = self._buffer.GetWrapMode()
         if wrapmode != mode:
@@ -333,11 +321,11 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         @param msg: Message Object
 
         """
-        if self._lockFile.IsChecked():
+        if self.Locked:
             return # Mode is locked ignore update
 
         # Update the file choice control
-        self._config['lang'] = GetLangIdFromMW(self._mw)
+        self._config['lang'] = GetLangIdFromMW(self.MainWindow)
         self.UpdateCurrentFiles(self._config['lang'])
 
         fname = msg.GetData()
@@ -355,9 +343,9 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         """
         self._log("[launch][info] Lexer changed handler - context %d" %
-                  self._mw.GetId())
+                  self.MainWindow.GetId())
 
-        if self._lockFile.IsChecked():
+        if self.Locked:
             return # Mode is locked ignore update
 
         mdata = msg.GetData()
@@ -381,7 +369,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         """
         # The current mode is locked
-        if self._lockFile.IsChecked():
+        if self.Locked:
             return
 
         mval = msg.GetData()
@@ -400,7 +388,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         """
         if self.CanLaunch():
-            shelf = self._mw.GetShelf()
+            shelf = self.MainWindow.GetShelf()
             shelf.RaiseWindow(self)
             self.StartStopProcess()
 
@@ -415,13 +403,13 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             if not len(fname):
                 return
 
-            shelf = self._mw.GetShelf()
+            shelf = self.MainWindow.GetShelf()
             self.UpdateCurrentFiles(ftype)
             self.SetFile(fname)
             self.RefreshControlBar()
             shelf.RaiseWindow(self)
 
-            if self._prefs.get('autoclear'):
+            if self.Preferences.get('autoclear'):
                 self._buffer.Clear()
 
             self.SetProcessRunning(True)
@@ -467,7 +455,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
                 ctrl.Enable()
 
             self._isready = True
-            if self._lockFile.IsChecked():
+            if self.Locked:
                 self._chFiles.Enable(False)
 
             if self._config['lang'] == self._config['prelang'] and len(csel):
@@ -494,7 +482,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         """
         # Find and save the file if it is modified
-        nb = self._mw.GetNotebook()
+        nb = self.MainWindow.GetNotebook()
         for ctrl in nb.GetTextControls():
             tname = ctrl.GetFileName()
             if fname == tname:
@@ -517,15 +505,15 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
     def StartStopProcess(self):
         """Run or abort the context of the current process if possible"""
-        if self._prefs.get('autoclear', False):
+        if self.Preferences.get('autoclear', False):
             self._buffer.Clear()
 
         # Check Auto-save preferences
         if not self._busy:
-            if self._prefs.get('autosaveall', False):
-                self._mw.SaveAllBuffers()
-            elif self._prefs.get('autosave', False):
-                self._mw.SaveCurrentBuffer()
+            if self.Preferences.get('autosaveall', False):
+                self.MainWindow.SaveAllBuffers()
+            elif self.Preferences.get('autosave', False):
+                self.MainWindow.SaveCurrentBuffer()
 
         # Start or stop the process
         self.SetProcessRunning(not self._busy)
@@ -610,7 +598,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             self._config['cfile'] = fname
             self._config['clang'] = lang_id
         else:
-            if not self._lockFile.IsChecked():
+            if not self.Locked:
                 self.SetFile(fname)
                 self.SetLangId(lang_id)
 
@@ -622,7 +610,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         colors = dict()
         for color in ('defaultf', 'defaultb', 'errorf', 'errorb',
                       'infof', 'infob', 'warnf', 'warnb'):
-            val = self._prefs.get(color, None)
+            val = self.Preferences.get(color, None)
             if val is not None:
                 colors[color] = wx.Colour(*val)
             else:
@@ -642,7 +630,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         """
         self._fnames = list()
-        for txt_ctrl in self._mw.GetNotebook().GetTextControls():
+        for txt_ctrl in self.MainWindow.GetNotebook().GetTextControls():
             if lang_id == txt_ctrl.GetLangId():
                 self._fnames.append(txt_ctrl.GetFileName())
 
@@ -665,15 +653,17 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         eclib.ProcessBufferMixin.__init__(self)
 
         # Attributes
-        self._mw = parent.GetMainWindow()
+        self._mw = parent.MainWindow
         self._cfile = ''
-        self._prefs = dict()
 
         # Setup
         font = Profile_Get('FONT1', 'font', wx.Font(11, wx.FONTFAMILY_MODERN,
                                                     wx.FONTSTYLE_NORMAL,
                                                     wx.FONTWEIGHT_NORMAL))
         self.SetFont(font)
+
+    Preferences = property(lambda self: Profile_Get(cfgdlg.LAUNCH_PREFS, default=None),
+                           lambda self, prefs: Profile_Set(cfgdlg.LAUNCH_PREFS, prefs))
 
     def ApplyStyles(self, start, txt):
         """Apply any desired output formatting to the text in
@@ -686,7 +676,8 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         style = handler.StyleText(self, start, txt)
 
         # Ring the bell if there was an error and option is enabled
-        if style == handlers.STYLE_ERROR and self._prefs.get('errorbeep', False):
+        if style == handlers.STYLE_ERROR and \
+           self.Preferences.get('errorbeep', False):
             wx.Bell()
 
     def DoFilterInput(self, txt):
@@ -762,13 +753,6 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         lang_id = self.GetParent().GetLastRun()[1]
         handler = handlers.GetHandlerById(lang_id)
         return handler
-
-    def SetPrefs(self, prefs):
-        """Set the launch prefs
-        @param prefs: dict
-
-        """
-        self._prefs = prefs
 
 #-----------------------------------------------------------------------------#
 def GetLangIdFromMW(mainw):
