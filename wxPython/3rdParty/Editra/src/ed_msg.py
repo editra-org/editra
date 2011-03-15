@@ -340,8 +340,12 @@ def mwcontext(func):
         context of the main window or no context was specified.
 
         """
-        assert hasattr(self, 'GetMainWindow'), "Must declare a GetMainWindow method"
-        mw = self.GetMainWindow()
+        if hasattr(self, 'GetMainWindow'):
+            mw = self.GetMainWindow()
+        elif hasattr(self, 'MainWindow'):
+            mw = self.MainWindow
+        else:
+            assert False, "Must declare a GetMainWindow method"
         context = msg.GetContext()
         if context is None or mw.GetId() == context:
             func(self, msg)

@@ -44,9 +44,7 @@ class Launch(plugin.Plugin):
     INSTALLED = False
     SHELF = None
 
-    @property
-    def __name__(self):
-        return u'Launch'
+    __name__ = u'Launch'
 
     def AllowMultiple(self):
         """Launch allows multiple instances"""
@@ -68,11 +66,11 @@ class Launch(plugin.Plugin):
 
     def GetId(self):
         """The unique identifier of this plugin"""
-        return self.ID_LAUNCH
+        return Launch.ID_LAUNCH
 
     def GetMenuEntry(self, menu):
         """This plugins menu entry"""
-        item = wx.MenuItem(menu, self.ID_LAUNCH, self.__name__, 
+        item = wx.MenuItem(menu, Launch.ID_LAUNCH, Launch.__name__, 
                            _("Run script from current buffer"))
         item.SetBitmap(self.GetBitmap())
         return item
@@ -82,7 +80,7 @@ class Launch(plugin.Plugin):
 
     def GetName(self):
         """The name of this plugin"""
-        return self.__name__
+        return Launch.__name__
 
     def InstallComponents(self, mainw):
         """Install extra menu components
