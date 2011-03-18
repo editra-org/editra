@@ -55,6 +55,7 @@ import launchxml
 #-----------------------------------------------------------------------------#
 # Globals
 DEFAULT_HANDLER = 'handler'
+CONFIG_KEY = 'Launch.Config2'
 
 # Ansi escape sequence color table
 # For coloring shell script output
@@ -111,7 +112,7 @@ def GetUserSettings(name):
     @param name: file type name
 
     """
-    data = Profile_Get("Launch.Config", default=dict())
+    data = Profile_Get(CONFIG_KEY, default=dict())
     for key, val in data.iteritems():
         if key.lower() == name.lower(): # case insensitive match
             return val
@@ -364,12 +365,12 @@ class FileTypeHandler(object):
     @classmethod
     def StoreState(cls):
         """Store the state of this handler"""
-        data = Profile_Get("Launch.Config", default=dict())
+        data = Profile_Get(CONFIG_KEY, default=dict())
         cdata = data.get(cls.GetName().lower(), None)
         if data != cdata:
             util.Log("[Launch][info] Store config")
             data[cls.GetName().lower()] = (cls.meta.default, cls.meta.commands.items())
-            Profile_Set("Launch.Config", data)
+            Profile_Set(CONFIG_KEY, data)
 
     @classmethod
     def StyleText(cls, stc, start, txt):
