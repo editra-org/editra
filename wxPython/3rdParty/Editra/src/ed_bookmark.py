@@ -267,5 +267,5 @@ class BookmarkList(eclib.EBaseListCtrl):
             elif column == BookmarkList.FILE_NAME:
                 val = mark.Filename
             elif column == BookmarkList.LINE_NUM:
-                val = mark.Line
+                val = unicode(mark.Line + 1)
         return val
