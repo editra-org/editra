@@ -10,17 +10,23 @@ Change Log:
 
 Changes since last release:
 
-VERSION 0.6.xx
-DATE 0x/xx/2011
+VERSION 0.6.26
+DATE 03/18/2011
 41st Alpha Release
 
 NEWS:
+This is a quick bug fix for a critical issue that could cause Editra to not
+be able to properly start again after part of the profile settings became
+corrupted. If you were affected by this in the previous release this release
+should fix it. The other workaround is to delete your Editra user profile from
+the configuration directory and restarting Editra.
 
 NEW: [features/enhancements]
 +New icon for showing bookmarks in the bookmark margin.
 
 LIBRARY:
 +New api for setting breakpoint markers in editor buffer margin.
++Improved API documentation available on website.
 
 BUG FIXES:
 +Fix crash when restoring Shelf layout if a some tabs are not reloaded.
