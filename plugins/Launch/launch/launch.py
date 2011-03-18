@@ -445,11 +445,13 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         csel = exe_ch.GetStringSelection()
         exe_ch.SetItems(cmds)
-        if len(cmds):
+        ncmds = len(cmds)
+        if ncmds > 0:
             exe_ch.SetToolTipString(handler.GetCommand(cmds[0]))
 
         util.Log("[Launch][info] Found commands %s" % repr(cmds))
-        if handler.GetName() != handlers.DEFAULT_HANDLER and len(self.GetFile()):
+        if handler.GetName() != handlers.DEFAULT_HANDLER and \
+           ncmds > 0 and len(self.GetFile()):
             for ctrl in (exe_ch, args_txt, self._run,
                          self._chFiles, self._lockFile):
                 ctrl.Enable()

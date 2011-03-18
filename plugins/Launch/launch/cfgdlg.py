@@ -31,6 +31,7 @@ import ed_msg
 import ed_basewin
 from profiler import Profile_Get, Profile_Set
 import syntax.syntax as syntax
+import util
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -151,6 +152,7 @@ class ConfigPanel(wx.Panel):
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         ftype = wx.GetApp().GetCurrentBuffer().GetLangId()
         ftype = handlers.GetHandlerById(ftype).GetName()
+        util.Log("[Launch][info] ConfigPanel: %s" % ftype)
         htypes = sorted(syntax.SyntaxNames())
         lang_ch = wx.Choice(self, ID_LANGUAGE, choices=htypes)
         if ftype != handlers.DEFAULT_HANDLER:
@@ -259,7 +261,7 @@ class ConfigPanel(wx.Panel):
         e_id = evt.GetId()
         elist = self.FindWindowById(ID_EXECUTABLES)
         if e_id == wx.ID_ADD:
-            elist.Append([_("**Alias**"), _("**New Value**")])
+            elist.Append([_("**Alias**"), _("**New Commandline**")])
         elif e_id == wx.ID_REMOVE:
             item = -1
             items = []
@@ -323,6 +325,9 @@ class ConfigPanel(wx.Panel):
 
             # Store the new values
             handler.SetCommands(exes)
+            if len(exes) == 1:
+                # Make sure default is set
+                handler.SetDefault(exes[0])
             handler.StoreState()
             def_ch = self.FindWindowById(wx.ID_DEFAULT)
             def_ch.SetItems(handler.GetAliases())
