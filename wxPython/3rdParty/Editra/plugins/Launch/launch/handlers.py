@@ -113,7 +113,7 @@ def GetUserSettings(name):
     """
     data = Profile_Get("Launch.Config", default=dict())
     for key, val in data.iteritems():
-        if key.lower() == name.lower():
+        if key.lower() == name.lower(): # case insensitive match
             return val
     return tuple()
 
@@ -202,6 +202,9 @@ class FileTypeHandler(object):
     def __init__(self):
         super(FileTypeHandler, self).__init__()
 
+        if self.meta.typeid != -1:
+            self.meta.name = synglob.GetDescriptionFromId(self.meta.typeid)
+
     @staticmethod
     def __ClassFactory(ftype):
         """Generate a new class for ones that don't have a
@@ -236,7 +239,7 @@ class FileTypeHandler(object):
         obj = obj()
 
         # Load custom settings
-        data = GetUserSettings(obj.meta.name)
+        data = GetUserSettings(obj.GetName())
         if len(data):
             obj.SetCommands(data[1])
             obj.SetDefault(data)
@@ -362,8 +365,11 @@ class FileTypeHandler(object):
     def StoreState(cls):
         """Store the state of this handler"""
         data = Profile_Get("Launch.Config", default=dict())
-        data[cls.meta.name.lower()] = (cls.meta.default, cls.meta.commands.items())
-        Profile_Set("Launch.Config", data)
+        cdata = data.get(cls.GetName().lower(), None)
+        if data != cdata:
+            util.Log("[Launch][info] Store config")
+            data[cls.GetName().lower()] = (cls.meta.default, cls.meta.commands.items())
+            Profile_Set("Launch.Config", data)
 
     @classmethod
     def StyleText(cls, stc, start, txt):
@@ -408,7 +414,6 @@ class AdaHandler(FileTypeHandler):
     """FileTypeHandler for Ada"""
     class meta:
         typeid = synglob.ID_LANG_ADA
-        name = 'ada'
         commands = {'gcc -c' : 'gcc -c'}
         default = 'gcc -c'
 
@@ -418,9 +423,7 @@ class BashHandler(FileTypeHandler):
     """FileTypeHandler for Bash scripts"""
     class meta:
         typeid = synglob.ID_LANG_BASH
-        name = 'bash shell'
         commands = dict(bash='bash')
-        default = 'bash'
         error = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
         hotspot = re.compile('(.+): line ([0-9]+): .*' + os.linesep)
 
@@ -458,7 +461,6 @@ class BatchHandler(FileTypeHandler):
     """FileTypeHandler for Dos batch files"""
     class meta:
         typeid = synglob.ID_LANG_BATCH
-        name = 'Batch'
         commands = dict(cmd='cmd /c')
         default = 'cmd'
 
@@ -468,7 +470,6 @@ class BooHandler(FileTypeHandler):
     """FileTypeHandler for Boo"""
     class meta:
         typeid = synglob.ID_LANG_BOO
-        name = 'boo'
         commands = dict(booi='booi')
         default = 'booi'
 
@@ -478,7 +479,6 @@ class CHandler(FileTypeHandler):
     """FileTypeHandler for C Files"""
     class meta:
         typeid = synglob.ID_LANG_C
-        name = 'c'
         commands = {'gcc -c' : 'gcc -c'}
         default = 'gcc -c'
 
@@ -486,7 +486,6 @@ class CPPHandler(FileTypeHandler):
     """FileTypeHandler for C++ Files"""
     class meta:
         typeid = synglob.ID_LANG_CPP
-        name = 'cpp'
         commands = {'g++ -c' : 'g++ -c'}
         default = 'g++ -c'
 
@@ -496,9 +495,7 @@ class CamlHandler(FileTypeHandler):
     """FileTypeHandler for Caml"""
     class meta:
         typeid = synglob.ID_LANG_CAML
-        name = 'Caml'
         commands = dict(ocaml='ocaml')
-        default = 'ocaml'
         error = re.compile(r'File "(.+)", line (.+), characters .+:')
         hotspot = re.compile(r'File "(.+)", line (.+), characters .+:')
 
@@ -508,7 +505,6 @@ class CSHHandler(FileTypeHandler):
     """FileTypeHandler for C-Shell"""
     class meta:
         typeid = synglob.ID_LANG_CSH
-        name = 'c shell'
         commands = dict(csh='csh')
         default = 'csh'
 
@@ -518,7 +514,6 @@ class DHandler(FileTypeHandler):
     """FileTypeHandler for D"""
     class meta:
         typeid = synglob.ID_LANG_D
-        name = 'd'
         commands = dict(dmd='dmd -run')
         default = 'dmd'
 
@@ -528,7 +523,6 @@ class FeriteHandler(FileTypeHandler):
     """FileTypeHandler for Ferite"""
     class meta:
         typeid = synglob.ID_LANG_FERITE
-        name = 'ferite'
         commands = dict(ferite='ferite')
         default = 'ferite'
 
@@ -538,7 +532,6 @@ class HaskellHandler(FileTypeHandler):
     """FileTypeHandler for Haskell"""
     class meta:
         typeid = synglob.ID_LANG_HASKELL
-        name = 'haskell'
         commands = {'ghc --make' : 'ghc --make'}
         default = 'ghc --make'
         error = re.compile('(.+):(.+):[0-9]+:.+ error .+')
@@ -550,7 +543,6 @@ class HaxeHandler(FileTypeHandler):
     """FileTypeHandler for haXe"""
     class meta:
         typeid = synglob.ID_LANG_HAXE
-        name = 'haxe'
         commands = dict(neko='neko', nekoc='nekoc')
         default = 'nekoc'
         error = re.compile('([a-zA-Z_.]+)\(([0-9]+)\):.*')
@@ -562,7 +554,6 @@ class HTMLHandler(FileTypeHandler):
     """FileTypeHandler for HTML"""
     class meta:
         typeid = synglob.ID_LANG_HTML
-        name = 'html'
         if u'darwin' in sys.platform:
             commands = dict(Safari='open -a Safari.app',
                             Camino='open -a Camino.app',
@@ -584,7 +575,6 @@ class InnoSetupHandler(FileTypeHandler):
     """FileTypeHandler for Inno Setup Scripts"""
     class meta:
         typeid = synglob.ID_LANG_INNO
-        name = 'inno setup script'
         commands = dict(iscc='iscc.exe', Compil32='Compil32.exe /cc')
         default = 'iscc'
 
@@ -594,7 +584,6 @@ class KornHandler(FileTypeHandler):
     """FileTypeHandler for Korn Shell scripts"""
     class meta:
         typeid = synglob.ID_LANG_KSH
-        name = 'korn shell'
         commands = dict(ksh='ksh')
         default = 'ksh'
 
@@ -604,7 +593,6 @@ class STATAHandler(FileTypeHandler):
     """FileTypeHandler for Stata"""
     class meta:
         typeid = synglob.ID_LANG_STATA
-        name = 'Stata'
         commands = dict(stata='stata', xstata='xstata')
         default = 'stata'
 
@@ -614,7 +602,6 @@ class LatexHandler(FileTypeHandler):
     """FileTypeHandler for LaTex"""
     class meta:
         typeid = synglob.ID_LANG_LATEX
-        name = 'LaTex'
         commands = dict(latex='latex', dvips='dvips',
                         pdflatex='pdflatex', ps2pdf='ps2pdf',
                         dvipng='dvipng', latex2html='latex2html')
@@ -626,7 +613,6 @@ class LuaHandler(FileTypeHandler):
     """FileTypeHandler for Lua"""
     class meta:
         typeid = synglob.ID_LANG_LUA
-        name = 'lua'
         commands = dict(lua='lua', luac='luac')
         default = 'lua'
         error = re.compile('.*: (.+):([0-9]+):.*')
@@ -638,7 +624,6 @@ class NewLispHandler(FileTypeHandler):
     """FileTypeHandler for newLisp"""
     class meta:
         typeid = synglob.ID_LANG_NEWLISP
-        name = 'newlisp'
         commands = dict(newlisp='newlisp')
         default = 'newlisp'
 
@@ -648,7 +633,6 @@ class NSISHandler(FileTypeHandler):
     """FileTypeHandler for NSIS scripts"""
     class meta:
         typeid = synglob.ID_LANG_NSIS
-        name = 'nsis'
         commands = dict(makensis='makensis')
         default = 'makensis'
         error = re.compile(r'Error .* "(.+)" on line ([0-9]+) ')
@@ -660,7 +644,6 @@ class PhpHandler(FileTypeHandler):
     """FileTypeHandler for Php"""
     class meta:
         typeid = synglob.ID_LANG_PHP
-        name = 'php'
         commands = dict(php='php -f')
         default = 'php'
         error = re.compile(r'[a-zA-Z]+ error: .* in (.+) on line ([0-9]+).*')
@@ -672,7 +655,6 @@ class PikeHandler(FileTypeHandler):
     """FileTypeHandler for Pike"""
     class meta:
         typeid = synglob.ID_LANG_PIKE
-        name = 'pike'
         commands = dict(pike='pike')
         default = 'pike'
 
@@ -682,7 +664,6 @@ class PerlHandler(FileTypeHandler):
     """FileTypeHandler for Perl scripts"""
     class meta:
         typeid = synglob.ID_LANG_PERL
-        name = 'perl'
         commands = dict(perl='perl')
         default = 'perl'
         hotspot = re.compile(r'.+ at (.+) line ([0-9]+)[,\.].*')
@@ -693,7 +674,6 @@ class PostScriptHandler(FileTypeHandler):
     """FileTypeHandler for Post/GhostScript"""
     class meta:
         typeid = synglob.ID_LANG_PS
-        name = 'postscript'
         if sys.platform.startswith('win'):
             commands = dict(gswin32c='gswin32c')
             default = 'gs2in32c'
@@ -712,7 +692,6 @@ class PythonHandler(FileTypeHandler):
 
     class meta:
         typeid = synglob.ID_LANG_PYTHON
-        name = 'python'
         commands = dict(python='python -u', pylint='pylint',
                              pylinterr='pylint -e')
         default = 'python'
@@ -748,7 +727,6 @@ class RHandler(FileTypeHandler):
     """FileTypeHandler for R"""
     class meta:
         typeid = synglob.ID_LANG_R
-        name = 'R'
         commands = {'r' : 'R', 'Rterm' : 'Rterm', 
                     'Rgui' : 'Rgui', 'Rscript' : 'Rscript'}
         default = 'Rscript'
@@ -759,7 +737,6 @@ class RubyHandler(FileTypeHandler):
     """FileTypeHandler for Ruby scripts"""
     class meta:
         typeid = synglob.ID_LANG_RUBY
-        name = 'ruby'
         commands = dict(ruby='ruby')
         default = 'ruby'
         error = re.compile('(.+):([0-9]+)[:]{0,1}.*')
@@ -771,7 +748,6 @@ class TCLHandler(FileTypeHandler):
     """FileTypeHandler for TCL/TK"""
     class meta:
         typeid = synglob.ID_LANG_TCL
-        name = 'tcl/tk'
         commands = dict(wish='wish')
         default = 'wish'
         error = re.compile('\(file "(.+)" line ([0-9]+)\)')
@@ -806,7 +782,6 @@ class VBScriptHandler(FileTypeHandler):
     """FileTypeHandler for VBScript"""
     class meta:
         typeid = synglob.ID_LANG_VBSCRIPT
-        name = 'VBScript'
         commands = dict(cscript='CSCRIPT.exe', wscript='WSCRIPT.exe')
         default = 'cscript'
         error = re.compile('(.+)\(([0-9]+).*' + os.linesep)
