@@ -473,7 +473,6 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             for ctrl in (exe_ch, args_txt, self._run,
                          self._chFiles, self._lockFile):
                 ctrl.Disable()
-            self._chFiles.Clear()
 
     def Run(self, fname, cmd, args, ftype):
         """Run the given file

@@ -337,16 +337,16 @@ class FileTypeHandler(object):
             for cmd in cmds:
                 if len(cmd) == 2:
                     sdict[cmd[0]] = cmd[1]
-
-            if len(sdict.keys()):
-                cls.meta.commands.clear()
-                cls.meta.commands.update(sdict)
+            cls.meta.commands.clear()
+            cls.meta.commands.update(sdict)
 
             # Reset default if it has been removed
             if cls.meta.default not in cls.meta.commands:
                 keys = cls.meta.commands.keys()
                 if len(keys):
                     cls.meta.default = keys[0]
+                else:
+                    cls.meta.default = u""
 
     @classmethod
     def SetDefault(cls, cmd):
