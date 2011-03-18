@@ -39,7 +39,6 @@ ID_EXECUTABLE = wx.NewId()
 ID_ARGS = wx.NewId()
 
 # Profile Settings Key
-LAUNCH_KEY = 'Launch.Config'
 #LAUNCH_PREFS = 'Launch.Prefs' # defined in cfgdlg
 
 # Custom Messages
@@ -128,7 +127,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnLexerChange, ed_msg.EDMSG_UI_STC_LEXER)
         ed_msg.Subscribe(self.OnConfigChange,
-                         ed_msg.EDMSG_PROFILE_CHANGE + (LAUNCH_KEY,))
+                         ed_msg.EDMSG_PROFILE_CHANGE + (handlers.CONFIG_KEY,))
         ed_msg.Subscribe(self.OnRunMsg, MSG_RUN_LAUNCH)
         ed_msg.Subscribe(self.OnRunLastMsg, MSG_RUN_LAST)
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
