@@ -388,7 +388,7 @@ class EdShelfDelegate(object):
             try:
                 self._shelf.LoadPerspective(pdata)
                 self._shelf.Update()
-            except IndexError, msg:
+            except Exception, msg:
                 self._log("[shelf][err] Failed LoadPerspective: %s" % msg)
 
     def GetMenu(self):
@@ -542,7 +542,10 @@ class EdShelfDelegate(object):
 
         """
         if self._shelf and index > 0 and index < self._shelf.GetPageCount():
-            self._shelf.SetSelection(index)
+            try:
+                self._shelf.SetSelection(index)
+            except Exception, msg:
+                self._log("[shelf][err] Failed SetSelection: %s" % msg)
 
     def StockShelf(self, i_list):
         """Fill the shelf by opening an ordered list of items
