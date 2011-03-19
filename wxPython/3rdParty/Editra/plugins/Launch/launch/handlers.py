@@ -113,10 +113,8 @@ def GetUserSettings(name):
 
     """
     data = Profile_Get(CONFIG_KEY, default=dict())
-    for key, val in data.iteritems():
-        if key.lower() == name.lower(): # case insensitive match
-            return val
-    return tuple()
+    val = data.get(name, tuple())
+    return val
 
 def InitCustomHandlers(path):
     """Init the custom handlers defined in the launch.xml file
@@ -366,10 +364,10 @@ class FileTypeHandler(object):
     def StoreState(cls):
         """Store the state of this handler"""
         data = Profile_Get(CONFIG_KEY, default=dict())
-        cdata = data.get(cls.GetName().lower(), None)
+        cdata = data.get(cls.GetName(), None)
         if data != cdata:
-            util.Log("[Launch][info] Store config")
-            data[cls.GetName().lower()] = (cls.meta.default, cls.meta.commands.items())
+            util.Log("[Launch][info] Store config: %s" % cls.GetName())
+            data[cls.GetName()] = (cls.meta.default, cls.meta.commands.items())
             Profile_Set(CONFIG_KEY, data)
 
     @classmethod
