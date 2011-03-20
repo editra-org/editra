@@ -161,22 +161,28 @@ def LoadCustomHandler(xml_str):
 #
 
 class Meta:
-    """Metadata namespace
+    """Metadata namespace, acts as a container object for all FileTypeHandler
+    meta attributes.
     @see: HandlerMeta
 
     """
     _defaults = {"typeid" : -1,            # Editra Language ID
-                 "name" : DEFAULT_HANDLER, # Language Display Name (derived)
+                 "name" : DEFAULT_HANDLER, # Language Display Name (derived from ID)
                  "commands" : dict(),      # Commands alias -> commandline
                  "default" : u"",          # Default command alias
                  "error" : None,           # Error regular expression
-                 "hotspot" : None}         # Hotspot expression (line, filename)
+                 "hotspot" : None,         # Hotspot expression (line, filename)
+                 "transient" : False}      # Transient configuration (bool)
     def __init__(self, meta_attrs):
         for (attr,default) in self._defaults.items():
             setattr(self,attr,meta_attrs.get(attr,default))
 
 class HandlerMeta(type):
-    """Metaclass for manipulating a handler classes metadata"""
+    """Metaclass for manipulating a handler classes metadata converts
+    all user defined 'meta' classes to a Meta class with all unset attributes
+    initialized to the default setting.
+
+    """
     def __new__(mcls,name,bases,attrs):
         cls = super(HandlerMeta,mcls).__new__(mcls,name,bases,attrs)
         meta_attrs = {}
@@ -238,10 +244,11 @@ class FileTypeHandler(object):
         obj = obj()
 
         # Load custom settings
-        data = GetUserSettings(obj.GetName())
-        if len(data):
-            obj.SetCommands(data[1])
-            obj.SetDefault(data)
+        if not obj.meta.transient:
+            data = GetUserSettings(obj.GetName())
+            if len(data):
+                obj.SetCommands(data[1])
+                obj.SetDefault(data)
         return obj
 
     @classmethod
@@ -252,9 +259,6 @@ class FileTypeHandler(object):
         """
         if isinstance(cmd, tuple):
             cls.meta.commands[cmd[0]] = cmd[1]
-        else:
-            # Bad data
-            pass
 
     @classmethod
     def RegisterClass(cls, handler):
@@ -363,6 +367,10 @@ class FileTypeHandler(object):
     @classmethod
     def StoreState(cls):
         """Store the state of this handler"""
+        if cls.meta.transient:
+            util.Log("[Launch][info] Transient XML handler: settings will not persist")
+            # TODO: update XML configuration file?
+            return
         data = Profile_Get(CONFIG_KEY, default=dict())
         cdata = data.get(cls.GetName(), None)
         if data != cdata:
@@ -801,6 +809,7 @@ def XmlHandlerDelegate(xmlobj):
             default = xmlobj.GetDefaultCommand()
             error = xmlobj.GetErrorPattern()
             hotspot = xmlobj.GetHotSpotPattern()
+            transient = True
     return XmlDelegateClass
 
 #-----------------------------------------------------------------------------#

@@ -137,6 +137,11 @@ class ConfigPanel(wx.Panel):
     def __init__(self, parent):
         super(ConfigPanel, self).__init__(parent)
 
+        # Attributes
+        self.addbtn = None
+        self.delbtn = None
+        self.infotxt = None
+
         # Layout
         self.__DoLayout()
 
@@ -151,12 +156,13 @@ class ConfigPanel(wx.Panel):
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         ftype = wx.GetApp().GetCurrentBuffer().GetLangId()
-        ftype = handlers.GetHandlerById(ftype).GetName()
-        util.Log("[Launch][info] ConfigPanel: %s" % ftype)
+        ftype = handlers.GetHandlerById(ftype)
+        hname = ftype.GetName()
+        util.Log("[Launch][info] ConfigPanel: %s" % hname)
         htypes = sorted(syntax.SyntaxNames())
         lang_ch = wx.Choice(self, ID_LANGUAGE, choices=htypes)
         if ftype != handlers.DEFAULT_HANDLER:
-            lang_ch.SetStringSelection(ftype)
+            lang_ch.SetStringSelection(hname)
         else:
             lang_ch.SetStringSelection(htypes[0])
 
@@ -189,18 +195,18 @@ class ConfigPanel(wx.Panel):
                                   style=wx.LC_EDIT_LABELS|\
                                         wx.BORDER|wx.LC_REPORT|\
                                         wx.LC_SINGLE_SEL)
-#        exelist.SetToolTipString(_("Click on an item to edit"))
-#        exelist.InsertColumn(0, _("Alias"))
-#        exelist.InsertColumn(1, _("Executable Commands"))
         self.SetListItems(chandler.GetCommands())
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD), wx.ART_MENU)
-        addbtn = wx.BitmapButton(self, wx.ID_ADD, bmp)
-        addbtn.SetToolTipString(_("Add a new executable"))
+        self.addbtn = wx.BitmapButton(self, wx.ID_ADD, bmp)
+        self.addbtn.SetToolTipString(_("Add a new executable"))
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_REMOVE), wx.ART_MENU)
-        delbtn = wx.BitmapButton(self, wx.ID_REMOVE, bmp)
-        delbtn.SetToolTipString(_("Remove selection from list"))
+        self.delbtn = wx.BitmapButton(self, wx.ID_REMOVE, bmp)
+        self.delbtn.SetToolTipString(_("Remove selection from list"))
         btnsz = wx.BoxSizer(wx.HORIZONTAL)
-        btnsz.AddMany([(addbtn, 0), ((2, 2), 0), (delbtn, 0)])
+        self.infotxt = wx.StaticText(self, label=_("Transient XML Handler"))
+        self.infotxt.Hide()
+        btnsz.AddMany([(self.addbtn, 0), ((2, 2), 0), (self.delbtn, 0),
+                       ((5,2),0), (self.infotxt, 0, wx.ALIGN_CENTER_VERTICAL)])
 
         # Box Sizer Layout
         boxsz.AddMany([((5, 5), 0), (dsizer, 0, wx.ALIGN_CENTER|wx.EXPAND),
@@ -218,7 +224,8 @@ class ConfigPanel(wx.Panel):
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         hsizer.AddMany([((8, 8), 0), (msizer, 1, wx.EXPAND), ((8, 8), 0)])
         self.SetSizer(hsizer)
-        self.SetAutoLayout(True)
+
+        self.UpdateForHandler()
 
     def __DoUpdateHandler(self, handler):
         exes = self.GetListItems()
@@ -285,13 +292,7 @@ class ConfigPanel(wx.Panel):
         e_obj = evt.GetEventObject()
         e_val = e_obj.GetStringSelection()
         if e_id == ID_LANGUAGE:
-            handler = handlers.GetHandlerByName(e_val)
-            elist = self.FindWindowById(ID_EXECUTABLES)
-            elist.DeleteAllItems()
-            def_ch = self.FindWindowById(wx.ID_DEFAULT)
-            def_ch.SetItems(handler.GetAliases())
-            def_ch.SetStringSelection(handler.GetDefault())
-            self.SetListItems(handler.GetCommands())
+            self.UpdateForHandler()
         elif e_id == wx.ID_DEFAULT:
             handler = self.GetCurrentHandler()
             handler.SetDefault((e_val, handler.GetCommand(e_val)))
@@ -341,6 +342,23 @@ class ConfigPanel(wx.Panel):
         elist = self.FindWindowById(ID_EXECUTABLES)
         for exe in items:
             elist.Append(exe)
+
+    def UpdateForHandler(self):
+        handler = self.GetCurrentHandler()
+        elist = self.FindWindowById(ID_EXECUTABLES)
+        elist.DeleteAllItems()
+        def_ch = self.FindWindowById(wx.ID_DEFAULT)
+        def_ch.SetItems(handler.GetAliases())
+        def_ch.SetStringSelection(handler.GetDefault())
+        self.SetListItems(handler.GetCommands())
+        # Enable control states
+        transient = handler.meta.transient
+        def_ch.Enable(not transient)
+        elist.Enable(not transient)
+        self.addbtn.Enable(not transient)
+        self.delbtn.Enable(not transient)
+        if self.infotxt.Show(transient):
+            self.Layout()
 
 #-----------------------------------------------------------------------------#
 
