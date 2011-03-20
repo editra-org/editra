@@ -165,12 +165,12 @@ class Meta:
     @see: HandlerMeta
 
     """
-    _defaults = {"typeid" : -1,
-                 "name" : DEFAULT_HANDLER,
-                 "commands" : dict(),
-                 "default" : u"",
-                 "error" : None,
-                 "hotspot" : None}
+    _defaults = {"typeid" : -1,            # Editra Language ID
+                 "name" : DEFAULT_HANDLER, # Language Display Name (derived)
+                 "commands" : dict(),      # Commands alias -> commandline
+                 "default" : u"",          # Default command alias
+                 "error" : None,           # Error regular expression
+                 "hotspot" : None}         # Hotspot expression (line, filename)
     def __init__(self, meta_attrs):
         for (attr,default) in self._defaults.items():
             setattr(self,attr,meta_attrs.get(attr,default))
