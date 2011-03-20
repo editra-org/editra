@@ -205,7 +205,7 @@ class Handler(syntax.EditraXml):
         return self._lang
 
     def GetLangId(self):
-        """Get the language identifer
+        """Get the language identifier
         @return: int
 
         """
