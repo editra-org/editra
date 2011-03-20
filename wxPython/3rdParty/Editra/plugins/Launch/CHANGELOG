@@ -9,11 +9,13 @@
 Version 1.10
 
 Due to a change in the underlying datamodel this update will force any existing
-configuration to be reset.
+Launch configuration to be reset.
 
-+Major redesign - Adds support for all file types in Editra.
++Major framework redesign - Adds support for all file types in Editra.
 +Fix issue in detecting files that are already open from hotspot links.
 +Fix output display truncating on NULL bytes.
++When an XML configuration is present the handlers defined in it can only be
+edited in the XML file, since XML handlers are now transient.
 
 #-----------------------------------------------------------------------------#
 Version 1.9
