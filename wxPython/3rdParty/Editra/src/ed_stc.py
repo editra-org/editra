@@ -1167,14 +1167,14 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         """
         mixed = diff = False
-        eol_map = {"\n" : wx.stc.STC_EOL_LF,
-                   "\r\n" : wx.stc.STC_EOL_CRLF,
-                   "\r" : wx.stc.STC_EOL_CR}
+        eol_map = {u"\n" : wx.stc.STC_EOL_LF,
+                   u"\r\n" : wx.stc.STC_EOL_CRLF,
+                   u"\r" : wx.stc.STC_EOL_CR}
 
-        eol = chr(self.GetCharAt(self.GetLineEndPosition(0)))
-        if eol == "\r":
-            tmp = chr(self.GetCharAt(self.GetLineEndPosition(0) + 1))
-            if tmp == "\n":
+        eol = unichr(self.GetCharAt(self.GetLineEndPosition(0)))
+        if eol == u"\r":
+            tmp = unichr(self.GetCharAt(self.GetLineEndPosition(0) + 1))
+            if tmp == u"\n":
                 eol += tmp
 
         # Is the eol used in the document the same as what is currently set.
@@ -1182,12 +1182,14 @@ class EditraStc(ed_basestc.EditraBaseStc):
             diff = True
 
         # Check the lines to see if they are all matching or not.
+        LEPFunct = self.GetLineEndPosition
+        GCAFunct = self.GetCharAt
         for line in range(self.GetLineCount() - 1):
-            end = self.GetLineEndPosition(line)
-            tmp = chr(self.GetCharAt(end))
-            if tmp == "\r":
-                tmp2 = chr(self.GetCharAt(self.GetLineEndPosition(0) + 1))
-                if tmp2 == "\n":
+            end = LEPFunct(line)
+            tmp = unichr(GCAFunct(end))
+            if tmp == u"\r":
+                tmp2 = unichr(GCAFunct(LEPFunct(0) + 1))
+                if tmp2 == u"\n":
                     tmp += tmp2
             if tmp != eol:
                 mixed = True
