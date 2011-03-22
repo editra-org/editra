@@ -328,8 +328,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @return: list of line numbers
 
         """
-        return [mark for mark in xrange(self.GetLineCount())
-                if self.MarkerGet(mark)]
+        MarkIsSet = ed_marker.Bookmark.IsSet
+        return [line for line in range(self.GetLineCount())
+                if MarkIsSet(self, line)]
 
     def DoBraceHighlight(self):
         """Perform a brace matching highlight
