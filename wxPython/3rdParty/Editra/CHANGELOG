@@ -20,6 +20,7 @@ NEW: [features/enhancements]
 +New version of Launch v1.10 (now supports all filetypes)
 
 BUG FIXES:
++Fix bug in restoring bookmarks after a file reload.
 
 #-----------------------------------------------------------------------------#
 

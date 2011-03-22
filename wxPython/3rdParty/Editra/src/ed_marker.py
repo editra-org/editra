@@ -100,9 +100,10 @@ class Marker(object):
     @classmethod
     def AnySet(cls, stc, line):
         """Is any breakpoint set on the line"""
-        if not cls().IsSet(stc, line):
+        if not cls.IsSet(stc, line):
+            # Check subclasses
             for bpoint in cls.__subclasses__():
-                if bpoint().IsSet(stc, line):
+                if bpoint.IsSet(stc, line):
                     return True
             return False
         else:
@@ -118,10 +119,11 @@ class Marker(object):
         """Get the list of symbols"""
         return cls._symbols
 
-    def IsSet(self, stc, line):
+    @classmethod
+    def IsSet(cls, stc, line):
         """Is the marker set on the given line"""
         mask = stc.MarkerGet(line)
-        return True in [ bool(1<<marker & mask) for marker in self.GetIds() ]
+        return True in [ bool(1<<marker & mask) for marker in cls.GetIds() ]
 
     def Set(self, stc, line, delete=False):
         """Add/Delete the marker to the stc at the given line"""
