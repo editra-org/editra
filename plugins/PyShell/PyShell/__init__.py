@@ -9,7 +9,7 @@
 # Plugin Metadata
 """Adds a PyShell to the Shelf"""
 __author__ = "Cody Precord"
-__version__ = "0.8"
+__version__ = "0.9"
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -27,6 +27,7 @@ import plugin
 from profiler import Profile_Get, Profile_Set
 import syntax.syntax as syntax
 import eclib
+import ed_basewin
 
 #-----------------------------------------------------------------------------#
 # Globals
@@ -63,7 +64,7 @@ class PyShell(plugin.Plugin):
 
     def GetMenuEntry(self, menu):
         return wx.MenuItem(menu, ed_glob.ID_PYSHELL, self.__name__, 
-                                        _("Open A Python Shell"))
+                           _("Open A Python Shell"))
 
     def GetName(self):
         return self.__name__
@@ -73,21 +74,20 @@ class PyShell(plugin.Plugin):
 
 #-----------------------------------------------------------------------------#
 
-class EdPyShellBox(eclib.ControlBox):
+class EdPyShellBox(ed_basewin.EdBaseCtrlBox):
     """Control box for PyShell"""
     def __init__(self, parent):
-        eclib.ControlBox.__init__(self, parent)
+        super(EdPyShellBox, self).__init__(parent)
 
         # Attributes
         self._shell = EdPyShell(self)
-        self._styles = util.GetResourceFiles(u'styles', True,
-                                             True, title=False)
+        self._styles = util.GetResourceFiles(u'styles', True, True, title=False)
         self._choice = None
         self._clear = None
 
         # Setup
         self.__DoLayout()
-        style = self._shell.GetShellTheme()
+        style = self._shell.ShellTheme
         for sty in self._styles:
             if sty.lower() == style.lower():
                 self._choice.SetStringSelection(sty)
@@ -99,24 +99,18 @@ class EdPyShellBox(eclib.ControlBox):
 
     def __DoLayout(self):
         """Layout the control box"""
-        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
+        ctrlbar = self.CreateControlBar()
         if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
             ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_BORDER_BOTTOM)
 
         self._choice = wx.Choice(ctrlbar, wx.ID_ANY, choices=self._styles)
 
-        ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("Color Scheme") + u":"),
+        ctrlbar.AddControl(wx.StaticText(ctrlbar, label=_("Color Scheme:")),
                            wx.ALIGN_LEFT)
         ctrlbar.AddControl(self._choice, wx.ALIGN_LEFT)
-
-        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
-        self._clear = eclib.PlateButton(ctrlbar, label=_("Clear"), bmp=cbmp,
-                                        style=eclib.PB_STYLE_NOBG)
         ctrlbar.AddStretchSpacer()
-        ctrlbar.AddControl(self._clear, wx.ALIGN_RIGHT)
-
-        self.SetControlBar(ctrlbar)
+        self._clear = self.AddPlateButton(_("Clear"), ed_glob.ID_DELETE,
+                                          wx.ALIGN_RIGHT)
         self.SetWindow(self._shell)
 
     def OnButton(self, evt):
@@ -136,8 +130,7 @@ class EdPyShellBox(eclib.ControlBox):
 
         """
         e_obj = evt.GetEventObject()
-        val = e_obj.GetStringSelection()
-        self._shell.SetShellTheme(val)
+        self._shell.ShellTheme = e_obj.GetStringSelection()
 
 #-----------------------------------------------------------------------------#
 
@@ -163,14 +156,7 @@ class EdPyShell(shell.Shell, ed_style.StyleMgr):
         self.SetLexer(wx.stc.STC_LEX_PYTHON)
         self.SetSyntax(synspec)
 
-    def GetShellTheme(self):
-        """Get the theme currently used by the shell
-        @return: string
-
-        """
-        return self._shell_style
-
-    def SetShellTheme(self, style):
+    def __SetShellTheme(self, style):
         """Set the color scheme used by the shell
         @param style: style sheet name (string)
 
@@ -178,3 +164,7 @@ class EdPyShell(shell.Shell, ed_style.StyleMgr):
         self._shell_style = style
         Profile_Set(PYSHELL_STYLE, style)
         self.UpdateAllStyles(style)
+
+    ShellTheme = property(lambda self: self._shell_style,
+                          lambda self, style: self.__SetShellTheme(style))
+
