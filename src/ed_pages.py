@@ -424,8 +424,8 @@ class EdPages(aui.AuiNotebook):
         frame = self.GetTopLevelParent()
         frame.Freeze()
         try:
-            self.control = ed_editv.EdEditorView(self, wx.ID_ANY)
-            self.LOG("[ed_pages][evt] New Page Created ID: %d" % self.control.GetId())
+            self.control = ed_editv.EdEditorView(self)
+            self.LOG("[ed_pages][evt] New Page Created")
             self.control.Hide()
             self.AddPage(self.control)
             self.control.Show()
@@ -433,7 +433,7 @@ class EdPages(aui.AuiNotebook):
             frame.Thaw()
 
         # Set the control up the the preferred default lexer
-        dlexer = Profile_Get('DEFAULT_LEX', 'str', 'Plain Text')
+        dlexer = Profile_Get('DEFAULT_LEX', 'str', synglob.LANG_TXT)
         ext_reg = syntax.ExtensionRegister()
         ext_lst = ext_reg.get(dlexer, ['txt', ])
         self.control.FindLexer(ext_lst[0])
