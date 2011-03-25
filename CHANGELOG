@@ -20,6 +20,7 @@ NEW: [features/enhancements]
 +New version of Launch v1.10 (now supports all filetypes)
 
 BUG FIXES:
++Fix incorrect detection of UTF-32 BOM as UTF-16 BOM.
 +Fix bug in restoring bookmarks after a file reload.
 
 #-----------------------------------------------------------------------------#

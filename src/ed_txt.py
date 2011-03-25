@@ -44,6 +44,7 @@ except (LookupError, TypeError):
     DEFAULT_ENCODING = 'utf-8'
 
 # File Helper Functions
+# NOTE: keep in synch with CheckBom function
 BOM = { 'utf-8' : codecs.BOM_UTF8,
         'utf-16' : codecs.BOM,
         'utf-32' : codecs.BOM_UTF32 }
@@ -165,8 +166,8 @@ class EdFile(ebmlib.FileObjectImpl):
                 # other encodings.
                 if not self.encoding.startswith('utf') and '\0' in ustr:
                     Log("[ed_txt][info] NULL terminators found in decoded str")
-                    Log("[ed_txt][info] Attempting UTF-16 detection...")
-                    for utf_encoding in ('utf_16_le', 'utf_16_be'):
+                    Log("[ed_txt][info] Attempting UTF-16/32 detection...")
+                    for utf_encoding in ('utf_16_le', 'utf_16_be', 'utf_32'):
                         try:
                             tmpstr = bytes.decode(utf_encoding)
                         except UnicodeDecodeError:
@@ -177,7 +178,7 @@ class EdFile(ebmlib.FileObjectImpl):
                             Log("[ed_txt][info] %s detected" % utf_encoding)
                             break
                     else:
-                        Log("[ed_txt][info] No valid UTF-16 bytes detected")
+                        Log("[ed_txt][info] No valid UTF-16/32 bytes detected")
             else:
                 # Binary data was read
                 Log("[ed_txt][info] Binary bytes where read")
@@ -603,14 +604,16 @@ class FileLoadEvent(wx.PyEvent):
 #-----------------------------------------------------------------------------#
 # Utility Function
 def CheckBom(line):
-    """Try to look for a bom byte at the begining of the given line
+    """Try to look for a bom byte at the beginning of the given line
     @param line: line (first line) of a file
     @return: encoding or None
 
     """
     Log("[ed_txt][info] CheckBom called")
     has_bom = None
-    for enc, bom in BOM.iteritems():
+    # NOTE: MUST check UTF-32 BEFORE utf-16
+    for enc in ('utf-8', 'utf-32', 'utf-16'):
+        bom = BOM[enc]
         if line.startswith(bom):
             has_bom = enc
             break
