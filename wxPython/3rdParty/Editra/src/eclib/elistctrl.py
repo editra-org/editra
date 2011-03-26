@@ -48,6 +48,19 @@ class EBaseListCtrl(elistmix.ListRowHighlighter,
         elistmix.ListRowHighlighter.__init__(self)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
 
+    def GetRowData(self, idx):
+        """Get the values from each cell in the given row
+        @param idx: row index
+        @return: tuple
+
+        """
+        data = list()
+        if idx >= 0 and idx < self.GetItemCount():
+            for col in range(self.GetColumnCount()):
+                item = self.GetItem(idx, col)
+                data.append(item.Text)
+        return tuple(data)
+
     def GetSelections(self):
         """Get a list of all the selected items in the list
         @return: list of ints
@@ -56,6 +69,10 @@ class EBaseListCtrl(elistmix.ListRowHighlighter,
         items = [ idx for idx in range(self.GetItemCount())
                   if self.IsSelected(idx) ]
         return items
+
+    def HasSelection(self):
+        """Are any items selected in the list"""
+        return bool(len(self.GetSelections()))
 
 class ECheckListCtrl(listmix.CheckListCtrlMixin,
                      EBaseListCtrl):
