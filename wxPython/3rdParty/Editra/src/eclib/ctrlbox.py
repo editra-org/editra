@@ -534,7 +534,7 @@ class ControlBar(wx.PyPanel):
 
             gc.SetPen(gc.CreatePen(self._pen))
             gc.SetBrush(grad)
-            gc.DrawRectangle(rect.x, 0, rect.GetWidth() - 0.5, rect.GetHeight() - 0.5)
+            gc.DrawRectangle(rect.x, rect.y, rect.Width - 0.5, rect.Height - 0.5)
 
         dc.SetPen(wx.Pen(color, 1))
 
@@ -611,8 +611,46 @@ class ControlBar(wx.PyPanel):
 
 #--------------------------------------------------------------------------#
 
+class _SegmentButton(object):
+    """Class for managing segment button data"""
+    def __init__(self, id_, bmp, label, lbl_size):
+        super(_SegmentButton, self).__init__()
+
+        # Attributes
+        self._id = id_
+        self._bmp = bmp
+        self._lbl = label
+        self._lbl_size = lbl_size
+        self._bx1 = 0
+        self._bx2 = 0
+        self._opts = 0
+        self._selected = False
+        self._x_button = wx.Rect()
+        self._x_state = SEGMENT_STATE_NONE
+
+    Id = property(lambda self: self._id,
+                  lambda self, id_: setattr(self, '_id', id_))
+    Bitmap = property(lambda self: self._bmp,
+                      lambda self, bmp: setattr(self, '_bmp', bmp))
+    Label = property(lambda self: self._lbl,
+                     lambda self, label: setattr(self, '_lbl', label))
+    LabelSize = property(lambda self: self._lbl_size,
+                         lambda self, size: setattr(self, '_lbl_size', size))
+    Selected = property(lambda self: self._selected,
+                        lambda self, sel: setattr(self, '_selected', sel))
+    XState = property(lambda self: self._x_state,
+                      lambda self, state: setattr(self, '_x_state', state))
+    XButton = property(lambda self: self._x_button,
+                       lambda self, rect: setattr(self, '_x_button', rect))
+    BX1 = property(lambda self: self._bx1,
+                   lambda self, x1: setattr(self, '_bx1', x1))
+    BX2 = property(lambda self: self._bx2,
+                   lambda self, x2: setattr(self, '_bx2', x2))
+    Options = property(lambda self: self._opts,
+                       lambda self, opt: setattr(self, '_opts', opt))
+
 class SegmentBar(ControlBar):
-    """Simple toolbar like control that displays bitmaps and optionaly
+    """Simple toolbar like control that displays bitmaps and optionally
     labels below each bitmap. The bitmaps are turned into a toggle button
     where only one segment in the bar can be selected at one time.
 
@@ -626,7 +664,7 @@ class SegmentBar(ControlBar):
         super(SegmentBar, self).__init__(parent, id, pos, size, style, name)
 
         # Attributes
-        self._buttons = list()
+        self._buttons = list() # list of _SegmentButtons
         self._segsize = (0, 0)
         self._selected = -1
         self._scolor1 = AdjustColour(self._color, -20)
@@ -652,19 +690,15 @@ class SegmentBar(ControlBar):
         """
         assert bmp.IsOk()
         lsize = self.GetTextExtent(label)
-        # TODO: Refactor to a Segment Class to manage these data members
-        self._buttons.append(dict(id=id, bmp=bmp, label=label,
-                                  lsize=lsize, bsize=bmp.GetSize(),
-                                  bx1=0, bx2=0, opts=0,
-                                  selected=False,
-                                  x_state=SEGMENT_STATE_NONE))
+        segment = _SegmentButton(id, bmp, label, lsize)
+        self._buttons.append(segment)
         self.InvalidateBestSize()
         self.Refresh()
 
-    def DoDrawButton(self, dc, xpos, bidx, selected=False, draw_label=False):
+    def DoDrawButton(self, dc, pos, bidx, selected=False, draw_label=False):
         """Draw a button
         @param dc: DC to draw on
-        @param xpos: X coordinate
+        @param xpos: X coordinate (horizontal mode) / Y coordinate (vertical mode)
         @param bidx: button dict
         @keyword selected: is this the selected button (bool)
         @keyword draw_label: draw the label (bool)
@@ -672,57 +706,93 @@ class SegmentBar(ControlBar):
 
         """
         button = self._buttons[bidx]
-        rect = self.GetRect()
-        height = rect.GetHeight()
-        bsize = button['bsize']
+        height = self.Rect.height
+        bVertical = self.IsVerticalMode()
 
-        bxpos = ((self._segsize[0] / 2) - (bsize.GetWidth() / 2)) + xpos
-        bpos = (bxpos, SegmentBar.VPAD)
-        rside = xpos + self._segsize[0]
-        brect = wx.Rect(xpos, 0, rside - xpos, height)
+        # Draw the background of the button
+        if not bVertical:
+            rside = pos + self._segsize[0]
+            brect = wx.Rect(pos, 0, rside - pos, height)
+        else:
+            rside = pos + self._segsize[1]
+            brect = wx.Rect(0, pos, self.Rect.Width, rside - pos)
+
         if selected:
             self.DoPaintBackground(dc, brect, self._scolor1, self._scolor2)
 
-        bmp = button['bmp']
-        dc.DrawBitmap(bmp, bpos[0], bpos[1], bmp.GetMask() != None)
+        # Draw the bitmap
+        bmp = button.Bitmap
+        bsize = button.Bitmap.Size
+        if not bVertical:
+            bxpos = ((self._segsize[0] / 2) - (bsize.width / 2)) + pos
+            bpos = (bxpos, SegmentBar.VPAD)
+        else:
+            bxpos = ((self._segsize[0] / 2) - (bsize.width / 2))
+            bpos = (bxpos, pos + SegmentBar.VPAD)
+        dc.DrawBitmap(bmp, bpos[0], bpos[1], bmp.Mask != None)
 
         if draw_label:
             lcolor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
             dc.SetTextForeground(lcolor)
-            twidth, theight = button['lsize']
-            typos = height - theight - 2
-            trect = wx.Rect(xpos, typos, self._segsize[0], theight + 3)
-            dc.DrawLabel(button['label'], trect, wx.ALIGN_CENTER)
+            twidth, theight = button.LabelSize
+            if not bVertical:
+                lxpos = pos
+                typos = height - theight - 2
+            else:
+                lxpos = 0
+                typos = pos + (self._segsize[1] - theight - 2)
+            trect = wx.Rect(lxpos, typos, self._segsize[0], theight + 3)
+            dc.DrawLabel(button.Label, trect, wx.ALIGN_CENTER)
 
         if not selected:
             if not (self._style & CTRLBAR_STYLE_NO_DIVIDERS):
                 dc.SetPen(self._pen)
-                dc.DrawLine(xpos, 0, xpos, height)
-                dc.DrawLine(rside, 0, rside, height)
+                if not bVertical:
+                    dc.DrawLine(pos, 0, pos, height)
+                    dc.DrawLine(rside, 0, rside, height)
+                else:
+                    dc.DrawLine(0, pos, self.Rect.Width, pos)
+                    dc.DrawLine(0, rside, self.Rect.Width, rside)
         else:
             dc.SetPen(self._spen)
-            tmpx = xpos + 1
+            tmpx = pos + 1
             trside = rside - 1
-            dc.DrawLine(tmpx, 0, tmpx, height)
-            dc.DrawLine(trside, 0, trside, height)
+            if not bVertical:
+                dc.DrawLine(tmpx, 0, tmpx, height)
+                dc.DrawLine(trside, 0, trside, height)
+            else:
+                dc.DrawLine(0, tmpx, self.Rect.Width, tmpx)
+                dc.DrawLine(0, trside, self.Rect.Width, trside)
 
-            tpen = wx.Pen(self._spen.GetColour())
+            tpen = wx.Pen(self._spen.Colour)
             tpen.SetJoin(wx.JOIN_BEVEL)
-            mpoint = height / 2
-            dc.DrawLine(tmpx + 1, mpoint, tmpx, 0)
-            dc.DrawLine(tmpx + 1, mpoint, tmpx, height)
-            dc.DrawLine(trside - 1, mpoint, trside, 0)
-            dc.DrawLine(trside - 1, mpoint, trside, height)
+            if not bVertical:
+                mpoint = height / 2
+                dc.DrawLine(tmpx + 1, mpoint, tmpx, 0)
+                dc.DrawLine(tmpx + 1, mpoint, tmpx, height)
+                dc.DrawLine(trside - 1, mpoint, trside, 0)
+                dc.DrawLine(trside - 1, mpoint, trside, height)
+            else:
+                mpoint = self.Rect.Width / 2
+                dc.DrawLine(mpoint, tmpx + 1, 0, tmpx)
+                dc.DrawLine(mpoint, tmpx + 1, self.Rect.Width, tmpx)
+                dc.DrawLine(mpoint, trside - 1, 0, trside)
+                dc.DrawLine(mpoint, trside - 1, self.Rect.Width, trside)
 
-        button['bx1'] = xpos + 1
-        button['bx2'] = rside - 1
-        button['selected'] = selected
+        # Update derived button data
+        button.BX1 = pos + 1
+        button.BX2 = rside - 1
+        button.Selected = selected
 
+        # Draw delete button if button has one
         if self.SegmentHasCloseButton(bidx):
-            brect = wx.Rect(button['bx1'], 0, button['bx2'] - (xpos - 1), height)
+            if not bVertical:
+                brect = wx.Rect(button.BX1, 0, button.BX2 - (pos - 1), height)
+            else:
+                brect = wx.Rect(0, button.BX1, self.Rect.Width, 
+                                button.BX2 - (pos - 1))
             self.DoDrawCloseBtn(dc, button, brect)
-
-        return rside
+        return rside # right/bottom of button just drawn
 
     def DoDrawCloseBtn(self, gcdc, button, rect):
         """Draw the close button on the segment
@@ -731,18 +801,18 @@ class SegmentBar(ControlBar):
         @param rect: Segment Rect
 
         """
-        if button['opts'] & SEGBTN_OPT_CLOSEBTNL:
+        if button.Options & SEGBTN_OPT_CLOSEBTNL:
             x = rect.x + 8
             y = rect.y + 6
         else:
-            x = (rect.x + rect.GetWidth()) - 8
+            x = (rect.x + rect.Width) - 8
             y = rect.y + 6
 
         color = self._scolor2
-        if button['selected']:
+        if button.Selected:
             color = AdjustColour(color, -25)
 
-        if button['x_state'] == SEGMENT_STATE_X:
+        if button.XState == SEGMENT_STATE_X:
             color = AdjustColour(color, -20)
 
         gcdc.SetPen(wx.Pen(AdjustColour(color, -30)))
@@ -750,7 +820,7 @@ class SegmentBar(ControlBar):
         brect = wx.Rect(x-3, y-3, 8, 8)
         bmp = DrawCircleCloseBmp(color, wx.WHITE)
         gcdc.DrawBitmap(bmp, brect.x, brect.y)
-        button['xbtn'] = brect
+        button.XButton = brect
         return
     
         # Square style button
@@ -769,8 +839,8 @@ class SegmentBar(ControlBar):
         mwidth, mheight = 0, 0
         draw_label = self._style & CTRLBAR_STYLE_LABELS
         for btn in self._buttons:
-            bwidth, bheight = btn['bsize']
-            twidth = btn['lsize'][0]
+            bwidth, bheight = btn.Bitmap.Size
+            twidth = btn.LabelSize[0]
             if bheight > mheight:
                 mheight = bheight
 
@@ -783,11 +853,17 @@ class SegmentBar(ControlBar):
 
         # Adjust for label text
         if draw_label and len(self._buttons):
-            mheight += self._buttons[0]['lsize'][1]
+            mheight += self._buttons[0].LabelSize[1]
 
-        width = (mwidth + (SegmentBar.HPAD * 2)) * len(self._buttons)
+        if self.IsVerticalMode():
+            height = (mheight + (SegmentBar.VPAD * 2) * len(self._buttons))
+            width = mwidth
+        else:
+            width = (mwidth + (SegmentBar.HPAD * 2)) * len(self._buttons)
+            height = mheight
+
         size = wx.Size(width + (SegmentBar.HPAD * 2),
-                       mheight + (SegmentBar.VPAD * 2))
+                       height + (SegmentBar.VPAD * 2))
         self.CacheBestSize(size)
         self._segsize = (mwidth + (SegmentBar.HPAD * 2),
                          mheight + (SegmentBar.VPAD * 2))
@@ -795,10 +871,13 @@ class SegmentBar(ControlBar):
 
     def GetIndexFromPosition(self, pos):
         """Get the segment index closest to the given position"""
-        cur_x = pos[0]
+        if not self.IsVerticalMode():
+            cur_x = pos[0]
+        else:
+            cur_x = pos[1]
         for idx, button in enumerate(self._buttons):
-            xpos = button['bx1']
-            xpos2 = button['bx2']
+            xpos = button.BX1
+            xpos2 = button.BX2
             if cur_x >= xpos and cur_x <= xpos2 + 1:
                 return idx
         else:
@@ -817,7 +896,7 @@ class SegmentBar(ControlBar):
         @return: string
 
         """
-        return self._buttons[index]['label']
+        return self._buttons[index].Label
 
     def GetSelection(self):
         """Get the currently selected index"""
@@ -834,8 +913,8 @@ class SegmentBar(ControlBar):
         if index != wx.NOT_FOUND:
             button = self._buttons[index]
             if self.SegmentHasCloseButton(index):
-                brect = button['xbtn']
-                trect = wx.Rect(brect.x, brect.y, brect.GetWidth()+4, brect.GetHeight()+4)
+                brect = button.XButton
+                trect = wx.Rect(brect.x, brect.y, brect.Width+4, brect.Height+4)
                 if trect.Contains(pos):
                     where = SEGMENT_HT_X_BTN
                 else:
@@ -863,7 +942,7 @@ class SegmentBar(ControlBar):
 
             if self._selected != pre:
                 self.Refresh()
-                sevt = SegmentBarEvent(edEVT_SEGMENT_SELECTED, button['id'])
+                sevt = SegmentBarEvent(edEVT_SEGMENT_SELECTED, button.Id)
                 sevt.SetSelections(pre, index)
                 sevt.SetEventObject(self)
                 self.GetEventHandler().ProcessEvent(sevt)
@@ -905,15 +984,16 @@ class SegmentBar(ControlBar):
         if index == -1 or not self.SegmentHasCloseButton(index):
             return
 
+        # Update button state
         button = self._buttons[index]
-        x_state = button['x_state']
-        button['x_state'] = SEGMENT_STATE_NONE
+        x_state = button.XState
+        button.XState = SEGMENT_STATE_NONE
 
         if where != SEGMENT_HT_NOWHERE:
             if where == SEGMENT_HT_X_BTN:
-                button['x_state'] = SEGMENT_STATE_X
+                button.XState = SEGMENT_STATE_X
             elif where == SEGMENT_HT_SEG:
-                # TODO: add highligh option for hover on segment
+                # TODO: add highlight option for hover on segment
                 pass
         else:
             evt.Skip()
@@ -922,12 +1002,16 @@ class SegmentBar(ControlBar):
         # If the hover state over a segments close button
         # has changed redraw the close button to reflect the
         # proper state.
-        bRedrawX = button['x_state'] != x_state
-        if bRedrawX:
+        if button.XState != x_state:
             crect = self.GetClientRect()
-            brect = wx.Rect(button['bx1'], 0,
-                            button['bx2'] - (button['bx1'] - 2),
-                            crect.GetHeight())
+            if not self.IsVerticalMode():
+                brect = wx.Rect(button.BX1, 0,
+                                button.BX2 - (button.BX1 - 2),
+                                crect.Height)
+            else:
+                brect = wx.Rect(button.BX1, 0,
+                                crect.Width,
+                                button.BX2 - (button.BX1 - 2))
             self.Refresh(False, brect)
 
         evt.Skip()
@@ -951,7 +1035,9 @@ class SegmentBar(ControlBar):
         # Draw the buttons
         # TODO: would be more efficient to just redraw the buttons that
         #       need redrawing.
-        npos = 5
+        npos = SegmentBar.HPAD
+        if self.IsVerticalMode():
+            npos = SegmentBar.VPAD
         use_labels = self._style & CTRLBAR_STYLE_LABELS
         for idx, button in enumerate(self._buttons):
             npos = self.DoDrawButton(gc, npos, idx,
@@ -985,8 +1071,8 @@ class SegmentBar(ControlBar):
 
         """
         button = self._buttons[index]
-        if button['opts'] & SEGBTN_OPT_CLOSEBTNL or \
-           button['opts'] & SEGBTN_OPT_CLOSEBTNR:
+        if button.Options & SEGBTN_OPT_CLOSEBTNL or \
+           button.Options & SEGBTN_OPT_CLOSEBTNR:
             return True
         return False
 
@@ -998,11 +1084,10 @@ class SegmentBar(ControlBar):
         """
         assert bmp.IsOk()
         segment = self._buttons[index]
-        if segment['bmp'].IsOk():
-            segment['bmp'].Destroy()
-            del segment['bmp']
-        segment['bmp'] = bmp
-        segment['bsize'] = bmp.GetSize()
+        if segment.Bitmap.IsOk():
+            segment.Bitmap.Destroy()
+            segment.Bitmap = None
+        segment.Bitmap = bmp
         self.InvalidateBestSize()
         self.Refresh()
 
@@ -1014,8 +1099,8 @@ class SegmentBar(ControlBar):
         """
         segment = self._buttons[index]
         lsize = self.GetTextExtent(label)
-        segment['label'] = label
-        segment['lsize'] = lsize
+        segment.Label = label
+        segment.LabelSize = lsize
         self.InvalidateBestSize()
         self.Refresh()
 
@@ -1025,7 +1110,8 @@ class SegmentBar(ControlBar):
         @param option: option to set
 
         """
-        self._buttons[index]['opts'] |= option
+        button = self._buttons[index]
+        button.Options = button.Options|option
         self.Refresh()
 
     def SetSelection(self, index):
