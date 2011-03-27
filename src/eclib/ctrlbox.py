@@ -621,6 +621,7 @@ class _SegmentButton(object):
         self._bmp = bmp
         self._lbl = label
         self._lbl_size = lbl_size
+        self._rect = wx.Rect()
         self._bx1 = 0
         self._bx2 = 0
         self._opts = 0
@@ -636,6 +637,8 @@ class _SegmentButton(object):
                      lambda self, label: setattr(self, '_lbl', label))
     LabelSize = property(lambda self: self._lbl_size,
                          lambda self, size: setattr(self, '_lbl_size', size))
+    Rect = property(lambda self: self._rect,
+                    lambda self, rect: setattr(self, '_rect', rect))
     Selected = property(lambda self: self._selected,
                         lambda self, sel: setattr(self, '_selected', sel))
     XState = property(lambda self: self._x_state,
@@ -671,15 +674,37 @@ class SegmentBar(ControlBar):
         self._scolor2 = AdjustColour(self._color2, -20)
         self._spen = wx.Pen(AdjustColour(self._pen.GetColour(), -25))
         self._x_clicked_before = False
+        self._tip_timer = wx.Timer(self)
 
         if wx.Platform == '__WXMAC__':
             self.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
         # Event Handlers
+        self.Bind(wx.EVT_ENTER_WINDOW, self.OnEnter)
+        self.Bind(wx.EVT_ENTER_WINDOW, self.OnLeave)
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_MOTION, self.OnMouseMove)
+        self.Bind(wx.EVT_TIMER, self.OnTipTimer, self._tip_timer)
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
+
+    def _RestartTimer(self):
+        """Reset the tip timer for showing tooltips when
+        the segments have their labels hidden.
+
+        """
+        if not (self._style & CTRLBAR_STYLE_LABELS):
+            if self._tip_timer.IsRunning():
+                self._tip_timer.Stop()
+            self._tip_timer.Start(1000, True)
+
+    def OnDestroy(self, evt):
+        """Cleanup on Destroy"""
+        if evt.GetEventObject() is self:
+            if self._tip_timer.IsRunning():
+                self._tip_timer.Stop()
+        evt.Skip()
 
     def AddSegment(self, id, bmp, label=u''):
         """Add a segment to the bar
@@ -717,6 +742,7 @@ class SegmentBar(ControlBar):
             rside = pos + self._segsize[1]
             brect = wx.Rect(0, pos, self.Rect.Width, rside - pos)
 
+        button.Rect = brect
         if selected:
             self.DoPaintBackground(dc, brect, self._scolor1, self._scolor2)
 
@@ -977,11 +1003,24 @@ class SegmentBar(ControlBar):
 
         evt.Skip()
 
+    def OnEnter(self, evt):
+        """Mouse has entered the SegmentBar, update state info"""
+        evt.Skip()
+
+    def OnLeave(self, evt):
+        """Mouse has left the SegmentBar, update state info"""
+        if self._tip_timer.IsRunning():
+            self._tip_timer.Stop()
+        evt.Skip()
+
     def OnMouseMove(self, evt):
         """Handle when the mouse moves over the bar"""
         epos = evt.GetPosition()
         where, index = self.HitTest(epos)
-        if index == -1 or not self.SegmentHasCloseButton(index):
+        if index == -1:
+            return
+        if not self.SegmentHasCloseButton(index):
+            self._RestartTimer()
             return
 
         # Update button state
@@ -996,6 +1035,7 @@ class SegmentBar(ControlBar):
                 # TODO: add highlight option for hover on segment
                 pass
         else:
+            self._RestartTimer()
             evt.Skip()
             return
 
@@ -1013,8 +1053,21 @@ class SegmentBar(ControlBar):
                                 crect.Width,
                                 button.BX2 - (button.BX1 - 2))
             self.Refresh(False, brect)
-
+        self._RestartTimer()
         evt.Skip()
+
+    def OnTipTimer(self, evt):
+        """Show the tooltip for the current SegmentButton"""
+        pos = self.ScreenToClient(wx.GetMousePosition())
+        where, index = self.HitTest(pos)
+        if index != -1:
+            button = self._buttons[index]
+            if button.Label:
+                rect = button.Rect
+                x,y = self.ClientToScreenXY(rect.x, rect.y)
+                rect.x = x
+                rect.y = y
+                wx.TipWindow(self, button.Label, rectBound=rect) # Transient
 
     def OnPaint(self, evt):
         """Paint the control"""
