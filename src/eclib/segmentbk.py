@@ -38,6 +38,8 @@ __revision__ = "$Revision$"
 
 __all__ = ['SegmentBook', 'SegmentBookEvent', 'SEGBOOK_STYLE_DEFAULT',
            'SEGBOOK_STYLE_NO_DIVIDERS', 'SEGBOOK_STYLE_LABELS',
+           'SEGBOOK_STYLE_LEFT', 'SEGBOOK_STYLE_RIGHT',
+           'SEGBOOK_STYLE_TOP', 'SEGBOOK_STYLE_BOTTOM',
            'SEGBOOK_NAME_STR',
            'edEVT_SB_PAGE_CHANGING', 'EVT_SB_PAGE_CHANGING',
            'edEVT_SB_PAGE_CHANGED', 'EVT_SB_PAGE_CHANGED',
@@ -77,9 +79,13 @@ class SegmentBookEvent(wx.NotebookEvent):
 # Global constants
 
 # Styles
-SEGBOOK_STYLE_DEFAULT     = 0   # Default Style
 SEGBOOK_STYLE_NO_DIVIDERS = 1   # Don't put dividers between segments
 SEGBOOK_STYLE_LABELS      = 2   # Use labels below the icons
+SEGBOOK_STYLE_TOP         = 4   # Segments at top
+SEGBOOK_STYLE_BOTTOM      = 8   # Segments at top
+SEGBOOK_STYLE_LEFT        = 16  # Segments at top
+SEGBOOK_STYLE_RIGHT       = 32  # Segments at top
+SEGBOOK_STYLE_DEFAULT     = SEGBOOK_STYLE_TOP   # Default Style
 
 # Misc
 SEGBOOK_NAME_STR = u"EditraSegmentBook"
@@ -99,6 +105,7 @@ class SegmentBook(ctrlbox.ControlBox):
         self._pages = list()
         self._imglist = None
         self._use_pylist = False
+        self._style = style
 
         # Setup
         bstyle = ctrlbox.CTRLBAR_STYLE_BORDER_BOTTOM
@@ -107,19 +114,31 @@ class SegmentBook(ctrlbox.ControlBox):
         # to deal with various themes.
         if wx.Platform != '__WXGTK__':
             bstyle |= ctrlbox.CTRLBAR_STYLE_GRADIENT
-                 
+
         if style & SEGBOOK_STYLE_NO_DIVIDERS:
             bstyle |= ctrlbox.CTRLBAR_STYLE_NO_DIVIDERS
         if style & SEGBOOK_STYLE_LABELS:
             bstyle |= ctrlbox.CTRLBAR_STYLE_LABELS
+        if style & SEGBOOK_STYLE_LEFT or style & SEGBOOK_STYLE_RIGHT:
+            bstyle |= ctrlbox.CTRLBAR_STYLE_VERTICAL
 
         self._segbar = ctrlbox.SegmentBar(self, style=bstyle)
-        self.SetControlBar(self._segbar, wx.TOP)
+        self.SetControlBar(self._segbar, self._GetSegBarPos())
 
         # Event Handlers
         self.Bind(ctrlbox.EVT_SEGMENT_SELECTED, self._OnSegmentSel)
         self._segbar.Bind(wx.EVT_RIGHT_DOWN, self._OnRightDown)
         self._segbar.Bind(ctrlbox.EVT_SEGMENT_CLOSE, self._OnSegClose)
+
+    def _GetSegBarPos(self):
+        pos = wx.TOP
+        if self._style & SEGBOOK_STYLE_LEFT:
+            pos = wx.LEFT
+        elif self._style & SEGBOOK_STYLE_RIGHT:
+            pos = wx.RIGHT
+        elif self._style & SEGBOOK_STYLE_BOTTOM:
+            pos = wx.BOTTOM
+        return pos
 
     def _DoPageChange(self, psel, csel):
         """Change the page and post events
@@ -203,7 +222,7 @@ class SegmentBook(ctrlbox.ControlBox):
         """
         page.Hide()
         self._pages.append(dict(page=page, img=img_id))
-        segbar = self.GetControlBar(wx.TOP)
+        segbar = self.GetControlBar(self._GetSegBarPos())
         if self._use_pylist:
             bmp = self._imglist[img_id]
         else:
@@ -241,7 +260,7 @@ class SegmentBook(ctrlbox.ControlBox):
 
         self._pages[index]['page'].Destroy()
         del self._pages[index]
-        
+
     def CurrentPage(self):
         """Get the currently selected page
         @return: wxWindow or None
