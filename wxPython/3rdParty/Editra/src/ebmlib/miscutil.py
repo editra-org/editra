@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Editra Buisness Model Library: MiscUtil
+Editra Business Model Library: MiscUtil
 
 Various helper functions
 
@@ -17,10 +17,29 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = [ 'MinMax', ]
+__all__ = [ 'MinMax', 'Singleton']
 
 #-----------------------------------------------------------------------------#
 # Imports
+
+#-----------------------------------------------------------------------------#
+
+class Singleton(type):
+    """Singleton metaclass for creating singleton classes
+    @note: class being applied to must have a SetupWindow method
+
+    """
+    def __init__(cls, name, bases, dict):
+        super(Singleton, cls).__init__(name, bases, dict)
+        cls.instance = None
+
+    def __call__(cls, *args, **kw):
+        if not cls.instance:
+            # Not created or has been Destroyed
+            obj = super(Singleton, cls).__call__(*args, **kw)
+            cls.instance = obj
+
+        return cls.instance
 
 #-----------------------------------------------------------------------------#
 
