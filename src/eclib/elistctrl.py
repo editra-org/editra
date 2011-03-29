@@ -48,6 +48,20 @@ class EBaseListCtrl(elistmix.ListRowHighlighter,
         elistmix.ListRowHighlighter.__init__(self)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
 
+    def EnableRow(self, idx, enable=True):
+        """Enable/Disable a row in the ListCtrl
+        @param idx: row index
+
+        """
+        state = 0
+        txtcolour = wx.SYS_COLOUR_LISTBOXTEXT
+        if not enable:
+            state = wx.LIST_STATE_DISABLED
+            txtcolour = wx.SYS_COLOUR_GRAYTEXT
+        self.SetItemState(idx, state, wx.LIST_STATE_DONTCARE)
+        colour = wx.SystemSettings.GetColour(txtcolour)
+        self.SetItemTextColour(idx, colour)
+
     def GetRowData(self, idx):
         """Get the values from each cell in the given row
         @param idx: row index
@@ -99,6 +113,7 @@ class EToggleEditListCtrl(listmix.CheckListCtrlMixin,
         EBaseListCtrl.__init__(self, *args, **kwargs)
         listmix.TextEditMixin.__init__(self)
         listmix.CheckListCtrlMixin.__init__(self)
+        self.Unbind(wx.EVT_LEFT_DCLICK)
 
     def GetCheckedItems(self):
         """Get the list of checked indexes"""
