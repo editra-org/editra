@@ -28,7 +28,7 @@ import wx
 class ContextMenuManager(object):
     """Class for registering and managing context menu callbacks"""
     def __init__(self):
-        object.__init__(self)
+        super(ContextMenuManager, self).__init__()
 
         # Attributes
         self._menu = None       # Context Menu
@@ -36,13 +36,11 @@ class ContextMenuManager(object):
         self._handlers = dict() # {ID : callable(event)}
         self._userdata = dict()
 
-    @property
-    def Menu(self):
-        return self.GetMenu()
+    Menu = property(lambda self: self.GetMenu(), 
+                    lambda self, menu: self.SetMenu(menu))
 
-    @property
-    def Position(self):
-        return self.GetPosition()
+    Position = property(lambda self: self.GetPosition(),
+                        lambda self, pos: self.SetPosition(pos))
 
     def AddHandler(self, evt_id, handler):
         """Add an event handler
