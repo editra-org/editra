@@ -245,3 +245,41 @@ class FoldMarker(Marker):
         super(FoldMarker, self).RegisterWithStc(stc)
         stc.SetFoldMarginHiColour(True, self.Foreground)
         stc.SetFoldMarginColour(True, self.Foreground)
+
+#-----------------------------------------------------------------------------#
+
+class ErrorMarker(Marker):
+    """Marker object to indicate an error line in the EditraBaseStc"""
+    _ids = [NewMarkerId(), NewMarkerId()]
+    def __init__(self):
+        super(ErrorMarker, self).__init__()
+        self.Bitmap = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU)
+        self.Bitmap.SetDepth(24)
+#        self.Bitmap.SetMask(wx.Mask(self.Bitmap, wx.Colour(alpha=wx.ALPHA_TRANSPARENT)))
+#        print self.Bitmap.GetMask()
+#        print "TWO:", _ArrowBmp.Bitmap.GetMask()
+
+    def DeleteAll(self, stc):
+        """Overrode to handle refresh issue"""
+        super(ErrorMarker, self).DeleteAll(stc)
+        stc.Colourise(0, stc.GetLength())
+
+    def RegisterWithStc(self, stc):
+        """Register this compound marker with the given StyledTextCtrl"""
+        ids = self.GetIds()
+        stc.MarkerDefineBitmap(ids[0], self.Bitmap)
+        stc.MarkerDefine(ids[1], wx.stc.STC_MARK_BACKGROUND, 
+                         # foreground=self.Foreground, #TODO
+                         background=self.Foreground)
+
+    def Set(self, stc, line, delete=False):
+        """Add/Delete the marker to the stc at the given line
+        @note: overrode to ensure only one is set in a buffer at a time
+
+        """
+        super(ErrorMarker, self).Set(stc, line, delete)
+        start = stc.GetLineEndPosition(max(line-1, 0))
+        end = stc.GetLineEndPosition(line)
+        if start == end:
+            start = 0
+        stc.Colourise(start, end) # Refresh for background marker

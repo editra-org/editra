@@ -143,6 +143,24 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Remove all the bookmarks in the buffer"""
         ed_marker.Bookmark().DeleteAll(self)
  
+    def AddErrormark(self, line=-1):
+        """Add an error marker and return its handle
+        @keyword line: if < 0 error marker will be added to current line
+
+        """
+        if line < 0:
+            line = self.GetCurrentLine()
+        emark = ed_marker.ErrorMarker()
+        emark.Set(self, line)
+        return emark.Handle
+
+    def RemoveErrormark(self, line):
+        """Remove the error mark from the given line
+        @param line: int
+
+        """
+        ed_marker.ErrorMarker().Set(self, line, delete=True)
+
     def DeleteAllBreakpoints(self):
         """Delete all the breakpoints in the buffer"""
         ed_marker.Breakpoint().DeleteAll(self)
@@ -480,6 +498,15 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         step = ed_marker.BreakpointStep()
         step.Background = clback
         step.RegisterWithStc(self)
+
+        # Other markers
+        errmk = ed_marker.ErrorMarker()
+        errsty = self.GetItemByName('error_style')
+        rgb = eclib.HexToRGB(errsty.GetBack()[1:])
+        errmk.Background = wx.Colour(*rgb)
+        rgb = eclib.HexToRGB(errsty.GetFore()[1:])
+        errmk.Foreground = wx.Colour(*rgb)
+        errmk.RegisterWithStc(self)
 
     def DoZoom(self, mode):
         """Zoom control in or out
