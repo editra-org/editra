@@ -419,7 +419,7 @@ class EdShelfDelegate(object):
             combo += 1
             shortcut = u""
             if combo < 10:
-                shortcut = u"\tCtrl+Alt+" + str(combo)
+                shortcut = u"\tCtrl+Alt+" + unicode(combo)
             item[1].SetText(item[1].GetText() + shortcut)
             menu.AppendItem(item[1])
         return menu
