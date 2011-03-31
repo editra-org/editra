@@ -12,7 +12,7 @@ Provides a system for managing styles in the text control. Compiles the data
 in an Editra Style Sheet to a format that Scintilla can understand. The
 specification of Editra Style Sheets that this module implements can be found
 either in the _docs_ folder of the source distribution or on Editra's home page
-U{http://editra.org/?page=docs&doc=ess_spec}.
+U{http://editra.org/editra_style_sheets}.
 
 @summary: Style management system for managing the syntax highlighting of all
           buffers
@@ -24,7 +24,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 import os
 import re
 import wx
@@ -70,9 +70,6 @@ class StyleItem(object):
         """
         super(StyleItem, self).__init__()
 
-        # Workaround for issue of using a list as a default parameter
-        # was retaining values from previous calls for some yet to
-        # determine reasons.
         if ex is None:
             ex = list()
             
@@ -393,7 +390,7 @@ class StyleMgr(object):
         """
         sty_dict = dict()
         for key in DEF_STYLE_DICT.keys():
-            if key in ('select_style',):
+            if key in ('select_style',): # special styles
                 sty_dict[key] = NullStyleItem()
             else:
                 sty_dict[key] = StyleItem("#000000", "#FFFFFF",
@@ -402,16 +399,14 @@ class StyleMgr(object):
 
     def FindTagById(self, style_id):
         """Find the style tag that is associated with the given
-        Id. If not found it returns an empty string.
+        Id. Return value defaults to default_style .
         @param style_id: id of tag to look for
         @return: style tag string
-        @todo: change syntax modules to all use ids
 
         """
         for data in self.syntax_set:
             if style_id == data[0]:
                 return data[1]
-
         return 'default_style'
 
     def GetFontDictionary(self, default=True):
@@ -481,7 +476,7 @@ class StyleMgr(object):
 
         """
         fore = self.GetItemByName('default_style').GetFore()
-        if fore == wx.EmptyString:
+        if not fore:
             fore = u"#000000"
 
         if not as_hex:
@@ -507,7 +502,7 @@ class StyleMgr(object):
 
         """
         back = self.GetItemByName('default_style').GetBack()
-        if back == wx.EmptyString:
+        if not back:
             back = u"#FFFFFF"
 
         if not as_hex:
@@ -898,7 +893,7 @@ class StyleMgr(object):
                 style_dict['default_style'] = defaultd['default_style'].Clone()
 
             # Set any undefined styles to match the default_style
-            for tag, item in defaultd.iteritems():
+            for tag in defaultd:
                 if tag not in style_dict:
                     if tag in ('select_style',):
                         style_dict[tag] = NullStyleItem()
@@ -920,7 +915,6 @@ class StyleMgr(object):
         # Parses Syntax Specifications list, ignoring all bad values
         self.UpdateBaseStyles()
         valid_settings = list()
-        lexer = self.GetLexer()
         for syn in synlst:
             if len(syn) != 2:
                 self.LOG("[ed_style][warn] Bogus Syntax Spec %s" % repr(syn))
@@ -976,7 +970,7 @@ class StyleMgr(object):
         self.StyleSetSpec(wx.stc.STC_STYLE_INDENTGUIDE, \
                           self.GetStyleByName('guide_style'))
 
-        # wx.stc.STC_STYLE_CALLTIP doesnt seem to do anything
+        # wx.stc.STC_STYLE_CALLTIP doesn't seem to do anything
         calltip = self.GetItemByName('calltip')
         self.CallTipSetBackground(calltip.GetBack())
         self.CallTipSetForeground(calltip.GetFore())
