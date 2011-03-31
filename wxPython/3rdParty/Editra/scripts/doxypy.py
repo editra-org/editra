@@ -111,6 +111,9 @@ class Doxypy(object):
         self.multiline_defclass_start_re = re.compile("^(\s*)(def|class)(\s.*)?$")
         self.multiline_defclass_end_re = re.compile(":\s*$")
         
+        self.markup_re = re.compile(r"@[a-z]+:")
+        self.param_re = re.compile(r"@param\s+[a-zA-Z0-9_]+:")
+
         ## Transition list format
         #  ["FROM", "TO", condition, action]
         transitions = [
@@ -202,14 +205,34 @@ class Doxypy(object):
             return "\\brief " + line
         else:
             return line
-    
+
+    def postFilter(self, output, pattern):
+        """Do post processing filtering on output"""
+        ms = pattern.findall(output)
+        if len(ms):
+            ms = list(set(ms))
+            for m in ms:
+                output = output.replace(m, m.rstrip(':'))
+        return output
+
     def __flushBuffer(self):
         """Flushes the current outputbuffer to the outstream."""
         if self.output:
             try:
                 if options.debug:
                     print >>sys.stderr, "# OUTPUT: ", self.output
-                print >>self.outstream, "\n".join(self.output)
+                output = "\n".join(self.output)
+
+                # Do custom post processing to get clearer output by converting
+                # epydoc markup to doxygen compatible markup.
+                output = output.replace("@keyword", "@param")
+                output = output.replace("@summary", "@brief")
+                output = output.replace("@postcondition", "@post")
+                output = output.replace("@precondition", "@pre")
+                for p in (self.markup_re, self.param_re):
+                    output = self.postFilter(output, p)
+
+                print >> self.outstream, output
                 self.outstream.flush()
             except IOError:
                 # Fix for FS#33. Catches "broken pipe" when doxygen closes 
