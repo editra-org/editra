@@ -103,6 +103,8 @@ class DropTargetFT(wx.PyDropTarget):
 
     def OnEnter(self, x_cord, y_cord, drag_result):
         """Called when a drag starts
+        @keyword x_cord: x cord of enter point
+        @keyword y_cord: y cord of enter point
         @return: result of drop object entering window
 
         """
@@ -128,8 +130,8 @@ class DropTargetFT(wx.PyDropTarget):
 
     def OnDrop(self, x_cord=0, y_cord=0):
         """Gets the drop cords
-        @keyword x: x cord of drop object
-        @keyword y: y cord of drop object
+        @keyword x_cord: x cord of drop object
+        @keyword y_cord: y cord of drop object
         @todo: implement snapback when drop is out of range
 
         """
@@ -139,6 +141,8 @@ class DropTargetFT(wx.PyDropTarget):
 
     def OnDragOver(self, x_cord, y_cord, drag_result):
         """Called when the cursor is moved during a drag action
+        @keyword x_cord: x cord of mouse
+        @keyword y_cord: y cord of mouse
         @return: result of drag over
         @todo: For some reason the caret position changes which can be seen
                by the brackets getting highlighted. However the actual caret
