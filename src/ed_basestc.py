@@ -143,7 +143,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         """Remove all the bookmarks in the buffer"""
         ed_marker.Bookmark().DeleteAll(self)
  
-    def AddErrormark(self, line=-1):
+    def AddErrorMark(self, line=-1):
         """Add an error marker and return its handle
         @keyword line: if < 0 error marker will be added to current line
 
@@ -154,12 +154,38 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         emark.Set(self, line)
         return emark.Handle
 
-    def RemoveErrormark(self, line):
+    def RemoveErrorMark(self, line):
         """Remove the error mark from the given line
         @param line: int
 
         """
         ed_marker.ErrorMarker().Set(self, line, delete=True)
+
+    def RemoveAllErrorMarks(self):
+        """Remove all the error in the buffer"""
+        ed_marker.ErroMarker().DeleteAll(self)
+
+    def AddLintMark(self, line=-1):
+        """Add an lint marker and return its handle
+        @keyword line: if < 0 error marker will be added to current line
+
+        """
+        if line < 0:
+            line = self.GetCurrentLine()
+        emark = ed_marker.LintMarker()
+        emark.Set(self, line)
+        return emark.Handle
+
+    def RemoveLintMark(self, line):
+        """Remove the lint mark from the given line
+        @param line: int
+
+        """
+        ed_marker.LintMarker().Set(self, line, delete=True)
+
+    def RemoveAllLintMarks(self):
+        """Remove all the lint in the buffer"""
+        ed_marker.LintMarker().DeleteAll(self)
 
     def DeleteAllBreakpoints(self):
         """Delete all the breakpoints in the buffer"""
@@ -507,6 +533,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         rgb = eclib.HexToRGB(errsty.GetFore()[1:])
         errmk.Foreground = wx.Colour(*rgb)
         errmk.RegisterWithStc(self)
+        # Lint Marker
+        ed_marker.LintMarker().RegisterWithStc(self)
 
     def DoZoom(self, mode):
         """Zoom control in or out

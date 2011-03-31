@@ -69,6 +69,19 @@ _ErrorBmp = PyEmbeddedImage(
     "W43iD40GVr2uIYkSQKLE/DUM2TMKIjPK7+bmeLuxMQVJ9LrR4PzsjO+Pj+yNRzl3md5bFvfV"
     "Ki+urzOAb7e3nF9d8UkY08uUhqj/rLOIY5050V9UfNMzpyji5gAAAABJRU5ErkJggg==")
 
+_LintBmp = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAfxJ"
+    "REFUOI2dkjFoE1EYgL+XpF4IjeHQhh7BpATOuthTc1BMdHEILdJFh4I4uDq5BTs4OVTdAnZw"
+    "soJLCC4Ouogg2ogQ0eoUG24IhMA1eAihcqTxOdS8pEl08Ic3vJ//+/6f/z1EIMjfzoXyoszd"
+    "PydFIIh1+5S8Vl6RozUB/hFJ4oj0FNl1S07rERq4YzWHBLmSLRcKpuzf+0B4P8CJ1CwAl+6e"
+    "lcNMaNQYzcSUrJ/zTwaxIiYr8WUakTrtQkd+ebAjxgTS6ZJKJ+APfHPuOgDdbo+Nz5ssei3O"
+    "z1/kSPIN9sPTEiCUK9lya7UqACpr20KUphTccOsANL0W2ozGR98h4Roc9UK8vvNpMEGuZEv3"
+    "pUvMjpEkzuW5PA23TtNr0Q51IHQg7HZ7PHKeEhle4tZqVfT8HvHlONqMpuCvew7ftZ8ALCXz"
+    "vK+9VdBeCrLrlgQQIhBUSzvjp0joxqAzYEVNml4LADud5V55Y/Iz+ru+So7C7VCHhG5QdSoA"
+    "1IqOqBUdcWw2OniFsKHxofWNK7oxBltRkyevXgCgaUHVqLK2LdQE765WRdjQePzsOUvJvCqy"
+    "oiYAieMH/8P3ewx/NrWDfszfSks9EyNDmoRuHOo8rUfYrXkA7Gw2xEQBwELBlL7fU/dfP/YV"
+    "MBoTBZNktaLzfwIA80ZSDo89HL8BIIDCnUEmwvoAAAAASUVORK5CYII=")
+
 #-----------------------------------------------------------------------------#
 
 __markerId = -1
@@ -292,3 +305,13 @@ class ErrorMarker(Marker):
         if start == end:
             start = 0
         stc.Colourise(start, end) # Refresh for background marker
+
+#-----------------------------------------------------------------------------#
+
+class LintMarker(Marker):
+    """Marker object to represent a marker for coding issue in the EditraBaseStc"""
+    _ids = [NewMarkerId(),]
+    def __init__(self):
+        super(LintMarker, self).__init__()
+        self.Bitmap = _LintBmp.Bitmap
+
