@@ -20,6 +20,7 @@ import wx
 import wx.stc
 from extern.embeddedimage import PyEmbeddedImage
 
+# NOTE: Must be 1 char per pixel for Scintilla to display
 _BookmarkBmp = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dE"
     "AP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sDAQA0GON3MFgAAAEG"
@@ -56,6 +57,18 @@ _BreakpointDisabledBmp = PyEmbeddedImage(
     "whLQTAwUgoE3gOJAJCsaG3Xl/5OdkOq1FYlIjbqqmElZQ+l/uabMfxIzExMDw38GBgbGfzgz"
     "EyOl2RkAwXRPWcN07zMAAAAASUVORK5CYII=")
 
+_ErrorBmp = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAc5J"
+    "REFUOI11kzFP20AUx3/nEBGLRFUr5CEIieoGhkRtVJVI3uIROiBgYWLzxgco3SulysjIF8iC"
+    "UJaspjOtRIEODKZZihBClcABW0I5d2h8shP3P53e6f977929J4RRIK3PahQLIciTEcd8NAqZ"
+    "S5EGtNUorklJy3VzAccHB/z0/QxEA9Lm3ycnPPt+xjxvmpTX16cgxqR50O3mZr8LQ4a9Hk3b"
+    "piYlbTWKAYzJzEUpebm/T1FKbS5KidXvc1+tonyflutqiKGEoOW6DHs9nn2fhZUVAMzNTYpS"
+    "amASuwtDBt0uTdtGCcFMusTkod4sLlJyHEqOo6uIPI+HTmf6ZyYDS5UKD50Okedl4nnmXEDS"
+    "czo7wNL2tj4PggA1/qUMYN40Mz1HnqcredrZwarXGQQBszc32jMD8HRxAcCv01MWdne1OV12"
+    "yXGIVleZPTqirJSOiy8Q16Skadv4h4cAvFpb40+/D8DQMCgrhdza4sfYXFleJri85DiK/k1i"
+    "W43iD40GVr2uIYkSQKLE/DUM2TMKIjPK7+bmeLuxMQVJ9LrR4PzsjO+Pj+yNRzl3md5bFvfV"
+    "Ki+urzOAb7e3nF9d8UkY08uUhqj/rLOIY5050V9UfNMzpyji5gAAAABJRU5ErkJggg==")
+
 #-----------------------------------------------------------------------------#
 
 __markerId = -1
@@ -67,7 +80,7 @@ def NewMarkerId():
     """
     global __markerId
     __markerId += 1
-    assert __markerId < 16, "No more marker Ids available!"
+    assert __markerId < 24, "No more marker Ids available!"
     return __markerId
 
 #-----------------------------------------------------------------------------#
@@ -253,11 +266,7 @@ class ErrorMarker(Marker):
     _ids = [NewMarkerId(), NewMarkerId()]
     def __init__(self):
         super(ErrorMarker, self).__init__()
-        self.Bitmap = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU)
-        self.Bitmap.SetDepth(24)
-#        self.Bitmap.SetMask(wx.Mask(self.Bitmap, wx.Colour(alpha=wx.ALPHA_TRANSPARENT)))
-#        print self.Bitmap.GetMask()
-#        print "TWO:", _ArrowBmp.Bitmap.GetMask()
+        self.Bitmap = _ErrorBmp.Bitmap
 
     def DeleteAll(self, stc):
         """Overrode to handle refresh issue"""
