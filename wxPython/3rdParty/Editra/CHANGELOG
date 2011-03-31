@@ -23,6 +23,7 @@ LIBRARY:
 +SegmentBar supports being shown in a vertical orientation
 +SegmentBook adds styles SEGBOOK_STYLE_LEFT, SEGBOOK_STYLE_RIGHT, SEGBOOK_STYLE_BOTTOM
 +SegmentBar and SegmentBook, show tool tips when labels are hidden.
++Expanded buffer margin marker api, added Error and Lint markers.
 
 BUG FIXES:
 +Fix incorrect detection of UTF-32 BOM as UTF-16 BOM.
