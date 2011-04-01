@@ -959,14 +959,15 @@ class EditraStc(ed_basestc.EditraBaseStc):
         elif margin_num == ed_basestc.MARK_MARGIN:
             # Bookmarks ect...
             line_clicked = self.LineFromPosition(evt.GetPosition())
-            if ed_marker.Bookmark().IsSet(self, line_clicked):
-                self.RemoveBookmark(line_clicked)
-            elif ed_marker.Breakpoint.AnySet(self, line_clicked):
-                # TODO: callback for plugins that set breakpoint?
-                self.DeleteBreakpoint(line_clicked)
-            else:
-                # TODO: add callback to allow plugin to set callback
-                self.AddBookmark(line_clicked)
+            # Hook for client code to interact with margin clicks
+            data = dict(stc=self, line=line_clicked)
+            ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_MARGIN_CLICK, msgdata=data)
+            if not data.get('handled', False):
+                # Default to internal bookmark handling
+                if ed_marker.Bookmark().IsSet(self, line_clicked):
+                    self.RemoveBookmark(line_clicked)
+                else:
+                    self.AddBookmark(line_clicked)
 
     def FoldAll(self):
         """Fold Tree In or Out

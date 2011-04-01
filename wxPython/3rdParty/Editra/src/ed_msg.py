@@ -225,6 +225,12 @@ EDMSG_UI_STC_DWELL_END = EDMSG_UI_STC_ALL + ('dwellend',)
 # NOTE: if line < 0, then all bookmarks removed
 EDMSG_UI_STC_BOOKMARK = EDMSG_UI_STC_ALL + ('bookmark',)
 
+# Margin Click
+# mdata = dict(stc=EditraStc, line=line, handled=bool)
+# handled is an out param in the message data. Set to True
+# to indicate that the click was handled.
+EDMSG_UI_STC_MARGIN_CLICK = EDMSG_UI_STC_ALL + ('marginclick',)
+
 #---- End UI Action Messages ----#
 
 #---- Menu Messages ----#
