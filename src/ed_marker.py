@@ -57,6 +57,19 @@ _BreakpointDisabledBmp = PyEmbeddedImage(
     "whLQTAwUgoE3gOJAJCsaG3Xl/5OdkOq1FYlIjbqqmElZQ+l/uabMfxIzExMDw38GBgbGfzgz"
     "EyOl2RkAwXRPWcN07zMAAAAASUVORK5CYII=")
 
+_StackMarker = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAd1J"
+    "REFUOI2Fk09rE1EUxX930jSZJIaBkGJcKBilC0uxG+kkuIhKKdn5EfoREvwO7jprV+LahSuL"
+    "CKEQqCO6cJNFQ1qEFBJJKYSaPx1Br4sx00xG64EH79377rnnHe4TMWLMw66LChKKqSquo+Hg"
+    "H8iMwK6JrtxNkMvluJ3eJF9chqFF99sxrX6T06MffNj9FSERMWJB1+qjp+RzK2ANaU8aAGST"
+    "eQrGOnv7bxh0vIgSw9cI+TvLfO6+5dXrF3QPz1hNPQbg/OKU9qRBdWOHVDKDXRMNEZTqhooI"
+    "o5M4g46HqtLqN+kenpFN5i9vWkNu3c8iEn6FMds0nn8X11FxHZVBx6PVb1Iw1um1xwC0Jw0K"
+    "y/ciJhqqihJSheuojE7iANxYTQckZvxalADxPVjE1BuHzr322Dd4AUvuru+qXRNNJTPhwqFF"
+    "7+s4UlSqG0FLmR8kuyYqIlQePuHm9SIAe19eBvnqxg5AMBuDjhcmmFey+cDmeHrAdPgzyJlW"
+    "jLXsNvsH75lcjHAdFYMFuI7KxBvx8ZPLWnYb07psUDTLfrE3CgYqoiBQUhdNJTJUylu0zt9R"
+    "NMu+7COPmW9XEszMMhNpKuWtkOz5O1cSzHsy9cZ//UyIEfvvKj1b0n/lfgPWHMMhVFXV8gAA"
+    "AABJRU5ErkJggg==")
+
 _ErrorBmp = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAc5J"
     "REFUOI11kzFP20AUx3/nEBGLRFUr5CEIieoGhkRtVJVI3uIROiBgYWLzxgco3SulysjIF8iC"
@@ -253,6 +266,13 @@ class BreakpointStep(Breakpoint):
         if start == end:
             start = 0
         stc.Colourise(start, end) # Refresh for background marker
+
+class StackMarker(Marker):
+    """Marker object to mark a line in a callstack in the EditraBaseStc"""
+    _ids = [NewMarkerId(),]
+    def __init__(self):
+        super(StackMarker, self).__init__()
+        self.Bitmap = _StackMarker.Bitmap
 
 #-----------------------------------------------------------------------------#
 

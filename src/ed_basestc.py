@@ -121,72 +121,37 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     #---- Public Methods ----#
 
-    def AddBookmark(self, line=-1):
+    # General marker api
+    def AddMarker(self, marker, line=-1):
         """Add a bookmark and return its handle
+        @param marker: ed_marker.Marker instance
         @keyword line: if < 0 bookmark will be added to current line
 
         """
+        assert isinstance(marker, ed_marker.Marker)
         if line < 0:
             line = self.GetCurrentLine()
-        bmark = ed_marker.Bookmark()
-        bmark.Set(self, line)
-        return bmark.Handle
+        marker.Set(self, line)
+        return marker.Handle
 
-    def RemoveBookmark(self, line):
+    def RemoveMarker(self, marker, line):
         """Remove the book mark from the given line
+        @param marker: ed_marker.Marker instance
         @param line: int
 
         """
-        ed_marker.Bookmark().Set(self, line, delete=True)
+        assert isinstance(marker, ed_marker.Marker)
+        marker.Set(self, line, delete=True)
 
-    def RemoveAllBookmarks(self):
-        """Remove all the bookmarks in the buffer"""
-        ed_marker.Bookmark().DeleteAll(self)
- 
-    def AddErrorMark(self, line=-1):
-        """Add an error marker and return its handle
-        @keyword line: if < 0 error marker will be added to current line
+    def RemoveAllMarkers(self, marker):
+        """Remove all the bookmarks in the buffer
+        @param marker: ed_marker.Marker instance
 
         """
-        if line < 0:
-            line = self.GetCurrentLine()
-        emark = ed_marker.ErrorMarker()
-        emark.Set(self, line)
-        return emark.Handle
+        assert isinstance(marker, ed_marker.Marker)
+        marker.DeleteAll(self)
 
-    def RemoveErrorMark(self, line):
-        """Remove the error mark from the given line
-        @param line: int
-
-        """
-        ed_marker.ErrorMarker().Set(self, line, delete=True)
-
-    def RemoveAllErrorMarks(self):
-        """Remove all the error in the buffer"""
-        ed_marker.ErroMarker().DeleteAll(self)
-
-    def AddLintMark(self, line=-1):
-        """Add an lint marker and return its handle
-        @keyword line: if < 0 error marker will be added to current line
-
-        """
-        if line < 0:
-            line = self.GetCurrentLine()
-        emark = ed_marker.LintMarker()
-        emark.Set(self, line)
-        return emark.Handle
-
-    def RemoveLintMark(self, line):
-        """Remove the lint mark from the given line
-        @param line: int
-
-        """
-        ed_marker.LintMarker().Set(self, line, delete=True)
-
-    def RemoveAllLintMarks(self):
-        """Remove all the lint in the buffer"""
-        ed_marker.LintMarker().DeleteAll(self)
-
+    #-- Breakpoint marker api --#
     def DeleteAllBreakpoints(self):
         """Delete all the breakpoints in the buffer"""
         ed_marker.Breakpoint().DeleteAll(self)
@@ -215,17 +180,17 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             handle = mobj.Handle
         return handle
 
-    def SetBreakpoint(self, line=-1):
+    def SetBreakpoint(self, line=-1, disabled=False):
         """Set a breakpoint marker on the given line
+        @keyword line: line number
+        @keyword disabled: bool
         @return: breakpoint handle
 
         """
-        handle = self._SetBreakpoint(ed_marker.Breakpoint(), line)
-        return handle
-
-    def SetBreakpointDisabled(self, line=-1):
-        """Set a disabled breakpoint indicator."""
-        handle = self._SetBreakpoint(ed_marker.BreakpointDisabled(), line)
+        if not disabled:
+            handle = self._SetBreakpoint(ed_marker.Breakpoint(), line)
+        else:
+            handle = self._SetBreakpoint(ed_marker.BreakpointDisabled(), line)
         return handle
 
     def ShowStepMarker(self, line=-1, show=True):
