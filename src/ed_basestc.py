@@ -489,6 +489,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         step = ed_marker.BreakpointStep()
         step.Background = clback
         step.RegisterWithStc(self)
+        ed_marker.StackMarker().RegisterWithStc(self)
 
         # Other markers
         errmk = ed_marker.ErrorMarker()
