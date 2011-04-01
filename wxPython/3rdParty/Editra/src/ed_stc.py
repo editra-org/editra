@@ -240,7 +240,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @keyword line: if < 0 bookmark will be added to current line
 
         """
-        rval = super(EditraStc, self).AddBookmark(line)
+        rval = self.AddMarker(ed_marker.Bookmark(), line)
         mdata = dict(stc=self, added=True, line=line, handle=rval)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_BOOKMARK, mdata)
         return rval
@@ -251,7 +251,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @param line: int
 
         """
-        super(EditraStc, self).RemoveBookmark(line)
+        self.RemoveMarker(ed_marker.Bookmark(), line)
         mdata = dict(stc=self, added=False, line=line)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_BOOKMARK, mdata)
 
@@ -260,7 +260,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         Sends notifications for bookmark removal.
 
         """
-        super(EditraStc, self).RemoveAllBookmarks()
+        self.RemoveAllMarkers(ed_marker.Bookmark())
         mdata = dict(stc=self, added=False, line=-1)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_BOOKMARK, mdata)
 
