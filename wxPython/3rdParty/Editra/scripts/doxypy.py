@@ -231,7 +231,12 @@ class Doxypy(object):
                 output = output.replace("@precondition", "@pre")
                 for p in (self.markup_re, self.param_re):
                     output = self.postFilter(output, p)
-
+                epre = re.compile("[RL]\{(.+)\}")
+                ms = epre.findall(output)
+                if len(ms):
+                    for m in ms:
+                        output = output.replace("L{%s}" % m, m)
+                        output = output.replace("R{%s}" % m, m)
                 print >> self.outstream, output
                 self.outstream.flush()
             except IOError:
