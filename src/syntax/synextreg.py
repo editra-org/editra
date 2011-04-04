@@ -437,6 +437,7 @@ class ExtensionRegister(dict):
         and remove associations from older settings.
         @param i: key to set
         @param y: value to set
+        @throws: TypeError Only accepts list() objects
 
         """
         if not isinstance(y, list):
