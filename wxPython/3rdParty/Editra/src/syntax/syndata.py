@@ -103,6 +103,7 @@ class SyntaxDataBase(object):
     def GetSyntaxSpec(self):
         """Get the the syntax specification list
         @return: list of tuples [(int, 'style_tag'),]
+        @note: required override for subclasses
 
         """
         raise NotImplementedError

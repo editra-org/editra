@@ -361,6 +361,7 @@ class EdFile(ebmlib.FileObjectImpl):
         any decoding that may be needed.
         @keyword chunk: read size
         @return: unicode str
+        @throws: ReadError Failed to open file for reading
 
         """
         if self.DoOpen('rb'):
@@ -409,6 +410,7 @@ class EdFile(ebmlib.FileObjectImpl):
 
         @keyword chunk: read size
         @return: unicode str
+        @throws: ReadError Failed to open file for reading.
 
         """
         if self.DoOpen('rb'):
@@ -478,7 +480,8 @@ class EdFile(ebmlib.FileObjectImpl):
         """Write the given value to the file
         @param value: (Unicode) String of text to write to disk
         @note: exceptions are allowed to be raised for the writing
-               but 
+        @throws: WriteError Failed to open file for writing
+        @throws: UnicodeEncodeError Failed to encode text using set encoding
 
         """
         # Check if a magic comment was added or changed
