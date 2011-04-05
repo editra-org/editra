@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Editra Buisness Model Library: ThreadPool
+Editra Business Model Library: ThreadPool
 
 
 """

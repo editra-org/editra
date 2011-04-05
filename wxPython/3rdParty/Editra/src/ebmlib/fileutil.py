@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Editra Buisness Model Library: File Utilities
+Editra Business Model Library: File Utilities
 
 Utility functions for managing and working with files.
 

@@ -1,6 +1,6 @@
 ###############################################################################
 # Name: __init__.py                                                           #
-# Purpose: Editra Buisness Model Library                                      #
+# Purpose: Editra Business Model Library                                      #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2009 Cody Precord <staff@editra.org>                         #
 # Licence: wxWindows Licence                                                  #
