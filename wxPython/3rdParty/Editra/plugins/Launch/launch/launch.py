@@ -74,7 +74,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
 
         # Attributes
         self._log = wx.GetApp().GetLog()
-        self._mw = self.__FindMainWindow()
+        self._mw = ed_basewin.FindMainWindow(self)
         self._buffer = OutputDisplay(self)
         self._fnames = list()
         self._run = None        # Created in __DoLayout
@@ -108,11 +108,11 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
                                     warnb=self._buffer.GetWarningBackground().Get())
 
         self.UpdateBufferColors()
-        cbuffer = self.MainWindow.GetNotebook().GetCurrentCtrl()
+        cbuffer = GetTextBuffer(self.MainWindow)
         self.SetupControlBar(cbuffer)
         self.State['lang'] = GetLangIdFromMW(self.MainWindow)
         self.UpdateCurrentFiles(self.State['lang'])
-        self.SetFile(GetTextBuffer(self.MainWindow).GetFileName())
+        self.SetFile(cbuffer.GetFileName())
 
         # Setup filetype settings
         self.RefreshControlBar()
@@ -133,6 +133,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         ed_msg.RegisterCallback(self._CanLaunch, REQUEST_ACTIVE)
         ed_msg.RegisterCallback(self._CanReLaunch, REQUEST_RELAUNCH)
 
+    #---- Properties ----#
     Locked = property(lambda self: self._lockFile.IsChecked())
     MainWindow = property(lambda self: self._mw)
     Preferences = property(lambda self: Profile_Get(cfgdlg.LAUNCH_PREFS, default=None),
@@ -190,25 +191,6 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         self._clear = self.AddPlateButton(_("Clear"), ed_glob.ID_DELETE,
                                           wx.ALIGN_RIGHT)
         self.SetWindow(self._buffer)
-
-    def __FindMainWindow(self):
-        """Find the mainwindow of this control
-        @return: MainWindow or None
-
-        """
-        def IsMainWin(win):
-            """Check if the given window is a main window"""
-            return getattr(tlw, '__name__', '') == 'MainWindow'
-
-        tlw = self.GetTopLevelParent()
-        if IsMainWin(tlw):
-            return tlw
-        elif hasattr(tlw, 'GetParent'):
-            tlw = tlw.GetParent()
-            if IsMainWin(tlw):
-                return tlw
-
-        return None
 
     def _CanLaunch(self):
         """Method to use with RegisterCallback for getting status"""

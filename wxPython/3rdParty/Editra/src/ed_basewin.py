@@ -26,6 +26,30 @@ import util
 
 #--------------------------------------------------------------------------#
 
+def FindMainWindow(window):
+        """Find the MainWindow of the given window
+        @return: MainWindow or None
+
+        """
+        def IsMainWin(win):
+            """Check if the given window is a main window"""
+            return getattr(win, '__name__', '') == 'MainWindow'
+
+        if IsMainWin(window):
+            return window
+        # else start looking up the parent hierarchy
+        tlw = window.GetTopLevelParent()
+        if IsMainWin(tlw):
+            return tlw
+        elif hasattr(tlw, 'GetParent'):
+            tlw = tlw.GetParent()
+            if IsMainWin(tlw):
+                return tlw
+
+        return None
+
+#--------------------------------------------------------------------------#
+
 class EdBaseDialog(eclib.ECBaseDlg):
     """Editra Dialog Base Class"""
     def __init__(self, parent, id=wx.ID_ANY, title=u"",
