@@ -13,8 +13,8 @@ Editra.
 """
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__svnid__ = "$Id: $"
-__revision__ = "$Revision:  $"
+__svnid__ = "$Id$"
+__revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Imports
@@ -87,7 +87,8 @@ class EdBaseFrame(wx.Frame):
 class EdBaseCtrlBox(eclib.ControlBox):
     """ControlBox base class to be used by all common components"""
     def __init__(self, parent):
-        super(EdBaseCtrlBox, self).__init__(parent)
+        super(EdBaseCtrlBox, self).__init__(parent)
+
     def AddPlateButton(self, lbl=u"", bmp=-1,
                        align=wx.ALIGN_LEFT, cbarpos=wx.TOP):
         """Add an eclib.PlateButton to the ControlBar specified by
