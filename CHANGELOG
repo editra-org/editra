@@ -18,12 +18,14 @@ NEWS:
 
 NEW: [features/enhancements]
 +New version of Launch v1.10 (now supports all filetypes)
++Session saved more frequently for better restore after unexpected shutdowns.
 
 LIBRARY:
 +SegmentBar supports being shown in a vertical orientation
 +SegmentBook adds styles SEGBOOK_STYLE_LEFT, SEGBOOK_STYLE_RIGHT, SEGBOOK_STYLE_BOTTOM
 +SegmentBar and SegmentBook, show tool tips when labels are hidden.
 +Expanded buffer margin marker api, added Error and Lint markers.
++Add ThreadPool interface EdThreadPool.
 
 BUG FIXES:
 +Fix incorrect detection of UTF-32 BOM as UTF-16 BOM.

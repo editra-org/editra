@@ -149,7 +149,7 @@ class EdPages(aui.AuiNotebook):
             ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
 
     #---- Function Definitions ----#
-    
+
     def _HandleEncodingError(self, control):
         """Handle trying to reload the file the file with a different encoding
         Until it suceeds or gives up.
@@ -238,16 +238,20 @@ class EdPages(aui.AuiNotebook):
 
     def AddPage(self, page, text=u'', select=True, imgId=-1):
         """Add a page to the notebook"""
+        bNewPage = False
         if not len(text):
             self.pg_num += 1
             if self.pg_num != 0:
                 text = _("untitled %d") % self.pg_num
             else:
                 text = _("untitled")
+            bNewPage = True
         page.SetTabLabel(text)
         super(EdPages, self).AddPage(page, text, select)
         self.SetPageImage(self.GetPageCount()-1, str(page.GetLangId()))
         self.UpdateIndexes()
+        if not self._ses_load and not bNewPage:
+            self.SaveCurrentSession()
 
     def DocDuplicated(self, path):
         """Check for if the given path is open elsewhere and duplicate the
@@ -315,13 +319,22 @@ class EdPages(aui.AuiNotebook):
                 (ed_glob.ID_NEXT_POS, self.OnUpdateNaviUI),
                 (ed_glob.ID_PRE_POS, self.OnUpdateNaviUI)]
 
-    def InsertPage(self, index, page, text, select=False, 
+    def InsertPage(self, index, page, text, select=False,
                    bitmap=wx.NullBitmap, disabled_bitmap=wx.NullBitmap,
                    control=None):
         """Insert a page into the notebook"""
         super(EdPages, self).InsertPage(index, page, text, select,
                                         bitmap, disabled_bitmap, control)
         self.UpdateIndexes()
+
+    def SaveCurrentSession(self):
+        """Save the current session"""
+        session = Profile_Get('LAST_SESSION')
+        # Compatibility with older session data
+        if not isinstance(session, basestring) or not len(session):
+            session = os.path.join(CONFIG['SESSION_DIR'], u"__default.session")
+            _PSET('LAST_SESSION', session)
+        self.SaveSessionFile(session)
 
     def SaveSessionFile(self, session):
         """Save the current open files to the given session file
@@ -338,6 +351,8 @@ class EdPages(aui.AuiNotebook):
         try:
             sdata = dict(win1=self.GetFileNames())
             cPickle.dump(sdata, f_handle)
+        except Exception, msg:
+            self.LOG("[ed_pages][err] Failed to SaveSessionFile: %s" % msg)
         finally:
             f_handle.close()
 
@@ -370,7 +385,7 @@ class EdPages(aui.AuiNotebook):
                 flist = cPickle.load(f_handle)
                 # TODO: Extend in future to support loading sessions
                 #       for multiple windows.
-                flist = flist.get('win1', list()) 
+                flist = flist.get('win1', list())
                 for item in flist:
                     if type(item) not in (unicode, str):
                         raise TypeError("Invalid item in unpickled sequence")
@@ -400,7 +415,7 @@ class EdPages(aui.AuiNotebook):
                               os.path.basename(loadfn))
             else:
                 missingfns.append(loadfn)
-                
+
         if missingfns:
             rmsg = (_("Missing session files"),
                     _("Some files in saved session could not be found on disk:\n")+
@@ -1112,7 +1127,7 @@ class EdPages(aui.AuiNotebook):
         cpage = evt.GetSelection()
         self.ChangePage(cpage, old=evt.GetOldSelection())
         self.LOG("[ed_pages][evt] Page Changed to %d" % cpage)
-        
+
         # Call the tab specific selection handler
         page = self.GetCurrentPage()
         if page:
@@ -1149,7 +1164,7 @@ class EdPages(aui.AuiNotebook):
         frame = self.GetTopLevelParent()
         frame.Freeze()
         try:
-            cpage = evt.GetSelection() #self.GetSelection()
+            cpage = evt.GetSelection()
             evt.Skip()
             self.LOG("[ed_pages][evt] Closed Page: #%d" % cpage)
             self.UpdateIndexes()
@@ -1160,6 +1175,8 @@ class EdPages(aui.AuiNotebook):
             if not self.GetPageCount() and \
                hasattr(frame, 'IsExiting') and not frame.IsExiting():
                 self.NewPage()
+            elif not self.frame.IsExiting():
+                self.SaveCurrentSession()
         finally:
             frame.Thaw()
 

@@ -200,7 +200,9 @@ class CommandBarBase(eclib.ControlBar):
         super(CommandBarBase, self).Hide()
         self._parent.SendSizeEvent()
         nb = self._parent.GetNotebook()
-        nb.GetCurrentCtrl().SetFocus()
+        ctrl = nb.GetCurrentCtrl()
+        if ctrl:
+            ctrl.SetFocus()
         return True
 
     def ShowControl(self, ctrl_name, show=True):
