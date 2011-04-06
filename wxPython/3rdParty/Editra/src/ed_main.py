@@ -444,7 +444,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
             dlg = wx.FileDialog(self, _("Editra: Open"), fdir, "",
                                 ''.join(syntax.GenFileFilters()),
-                                wx.OPEN | wx.MULTIPLE)
+                                wx.OPEN | wx.MULTIPLE | wx.CHANGE_DIR)
             dlg.SetFilterIndex(_PGET('FFILTER', 'int', 0))
 
             if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
@@ -885,13 +885,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         # Save session files
-        session = _PGET('LAST_SESSION')
-        if not isinstance(session, basestring) or not len(session):
-            session = os.path.join(CONFIG['SESSION_DIR'], u"__default.session")
-        _PSET('LAST_SESSION', session)
-        result = self.nb.SaveSessionFile(session)
-        if result is not None:
-            pass # TODO: report error?
+        self.nb.SaveCurrentSession()
 
         # Cleanup Controls
         self._exiting = True
