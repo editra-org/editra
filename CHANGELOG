@@ -19,6 +19,7 @@ NEWS:
 NEW: [features/enhancements]
 +New version of Launch v1.10 (now supports all filetypes)
 +Session saved more frequently for better restore after unexpected shutdowns.
++Highlight php language constructs as keywords.
 
 LIBRARY:
 +SegmentBar supports being shown in a vertical orientation
