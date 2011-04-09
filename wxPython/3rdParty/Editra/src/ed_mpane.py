@@ -37,10 +37,10 @@ class MainPanel(eclib.ControlBox):
     """
     def __init__(self, parent):
         """Initialize the panel"""
-        eclib.ControlBox.__init__(self, parent)
+        super(MainPanel, self).__init__(parent)
 
         # Attributes
-        self.nb = ed_pages.EdPages(self, wx.ID_ANY)
+        self.nb = ed_pages.EdPages(self)
         self._search = None
         self._line = None
         self._cmd = None

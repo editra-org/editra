@@ -38,6 +38,7 @@ import ed_mdlg
 import ebmlib
 import eclib
 from extern import aui
+import ed_book
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -47,12 +48,12 @@ _ = wx.GetTranslation
 
 #--------------------------------------------------------------------------#
 
-class EdPages(aui.AuiNotebook):
+class EdPages(ed_book.EdBaseBook):
     """Editra's editor buffer notebook
     @todo: allow for tab styles to be configurable (maybe)
 
     """
-    def __init__(self, parent, id_num):
+    def __init__(self, parent):
         """Initialize a notebook with a blank text control in it
         @param parent: parent window of the notebook
         @param id_num: this notebooks id
@@ -64,11 +65,8 @@ class EdPages(aui.AuiNotebook):
                 aui.AUI_NB_USE_IMAGES_DROPDOWN | \
                 aui.AUI_NB_TAB_EXTERNAL_MOVE | \
                 aui.AUI_NB_TAB_FIXED_WIDTH | \
-                aui.AUI_NB_ORDER_BY_ACCESS | \
-                aui.AUI_NB_NO_TAB_FOCUS
-        if wx.Platform == '__WXMAC__':
-            style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
-        super(EdPages, self).__init__(parent, id_num, agwStyle=style)
+                aui.AUI_NB_ORDER_BY_ACCESS
+        super(EdPages, self).__init__(parent, style=style)
 
         # Notebook attributes
         self.LOG = wx.GetApp().GetLog()

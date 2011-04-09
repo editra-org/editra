@@ -22,18 +22,18 @@ __revision__ = "$Revision$"
 import re
 import wx
 
-# Editra Libraries
+# Editra Imports
 import ed_menu
 import ed_glob
 from profiler import Profile_Get
 import ed_msg
 import plugin
 import iface
-import extern.aui as aui
+from extern import aui
+import ed_book
 
 #--------------------------------------------------------------------------#
 # Globals
-
 PGNUM_PAT = re.compile(' - [0-9]+')
 _ = wx.GetTranslation
 
@@ -135,7 +135,7 @@ class Shelf(plugin.Plugin):
 
 #--------------------------------------------------------------------------#
 
-class EdShelfBook(aui.AuiNotebook):
+class EdShelfBook(ed_book.EdBaseBook):
     """Shelf notebook control"""
     def __init__(self, parent):
         style = aui.AUI_NB_BOTTOM | \
@@ -143,11 +143,8 @@ class EdShelfBook(aui.AuiNotebook):
                 aui.AUI_NB_SCROLL_BUTTONS | \
                 aui.AUI_NB_CLOSE_ON_ACTIVE_TAB | \
                 aui.AUI_NB_TAB_MOVE | \
-                aui.AUI_NB_DRAW_DND_TAB | \
-                aui.AUI_NB_NO_TAB_FOCUS
-        if wx.Platform == '__WXMAC__':
-            style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
-        super(EdShelfBook, self).__init__(parent, agwStyle=style)
+                aui.AUI_NB_DRAW_DND_TAB
+        super(EdShelfBook, self).__init__(parent, style=style)
 
         # Attributes
         self._parent = parent
