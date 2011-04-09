@@ -32,7 +32,7 @@ class ThreadPool(object):
     """
     def __init__(self, tcount, qsize=-1):
         """Create the ThreadPool
-        @param tcount: number of threads to keep in the pool
+        @param tcount: max number of threads to keep in the pool
         @keyword qsize: size of job queue (-1 for unlimited)
 
         """

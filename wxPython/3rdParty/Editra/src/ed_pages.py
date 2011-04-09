@@ -26,7 +26,7 @@ import wx
 
 # Editra Libraries
 import ed_glob
-from profiler import Profile_Get
+from profiler import Profile_Get, Profile_Set
 import ed_editv
 import syntax.synglob as synglob
 import syntax.syntax as syntax
@@ -44,6 +44,7 @@ from extern import aui
 ID_IDLE_TIMER = wx.NewId()
 SIMULATED_EVT_ID = -1
 _ = wx.GetTranslation
+
 #--------------------------------------------------------------------------#
 
 class EdPages(aui.AuiNotebook):
@@ -332,8 +333,9 @@ class EdPages(aui.AuiNotebook):
         session = Profile_Get('LAST_SESSION')
         # Compatibility with older session data
         if not isinstance(session, basestring) or not len(session):
-            session = os.path.join(CONFIG['SESSION_DIR'], u"__default.session")
-            _PSET('LAST_SESSION', session)
+            session = os.path.join(ed_glob.CONFIG['SESSION_DIR'], 
+                                   u"__default.session")
+            Profile_Set('LAST_SESSION', session)
         self.SaveSessionFile(session)
 
     def SaveSessionFile(self, session):
