@@ -31,6 +31,7 @@ LIBRARY:
 BUG FIXES:
 +Fix incorrect detection of UTF-32 BOM as UTF-16 BOM.
 +Fix bug in restoring bookmarks after a file reload.
++Fix some visibility issues with the tab controls with dark themes on gtk.
 
 #-----------------------------------------------------------------------------#
 
