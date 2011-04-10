@@ -1730,6 +1730,7 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
 
         self._click_pt = wx.Point(-1, -1)
         self._is_dragging = False
+        self._click_tab = None
         self._hover_button = None
         self._pressed_button = None
         self._drag_image = None
