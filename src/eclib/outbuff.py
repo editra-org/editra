@@ -321,6 +321,8 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
 
         """
         self._updating.acquire()
+        if not (type(value) is types.UnicodeType):
+            value = value.decode(sys.getfilesystemencoding())
         self._updates.append(value)
         self._updating.release()
 
