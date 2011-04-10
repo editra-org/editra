@@ -34,6 +34,7 @@ import iface
 from profiler import Profile_Get, Profile_Set
 import eclib
 import ebmlib
+import ed_basewin
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -557,8 +558,11 @@ class SearchController(object):
             Profile_Set('SEARCH_LOC', choices)
             Profile_Set('SEARCH_FILTER', self._filters)
             self._StoreFindData()
-        evt.Skip()
-        self._parent.SetFocus()
+            self._finddlg.Destroy()
+            self._finddlg = None
+        buff = wx.GetApp().GetCurrentBuffer()
+        if buff:
+            buff.SetFocus()
 
     def OnOptionChanged(self, evt):
         """Handle when the find options are changed in the dialog"""
@@ -1242,7 +1246,7 @@ class EdFindResults(plugin.Plugin):
 
 #-----------------------------------------------------------------------------#
 
-class SearchResultScreen(eclib.ControlBox):
+class SearchResultScreen(ed_basewin.EdBaseCtrlBox):
     """Screen for displaying search results and navigating to them"""
     def __init__(self, parent):
         """Create the result screen
@@ -1265,9 +1269,9 @@ class SearchResultScreen(eclib.ControlBox):
         # Event Handlers
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
         self.Bind(wx.EVT_BUTTON,
-                  lambda evt: self._list.Clear(), id=wx.ID_CLEAR)
+                  lambda evt: self._list.Clear(), self._clearb)
         self.Bind(wx.EVT_BUTTON,
-                  lambda evt: self.CancelSearch(), id=wx.ID_CANCEL)
+                  lambda evt: self.CancelSearch(), self._cancelb)
         self._list.Bind(eclib.EVT_TASK_START, self.OnTaskStart)
         self._list.Bind(eclib.EVT_TASK_COMPLETE, self.OnTaskComplete)
 
@@ -1281,33 +1285,17 @@ class SearchResultScreen(eclib.ControlBox):
 
     def __DoLayout(self):
         """Layout and setup the results screen ui"""
-        ctrlbar = eclib.ControlBar(self, style=eclib.CTRLBAR_STYLE_GRADIENT)
-        if wx.Platform == '__WXGTK__':
-            ctrlbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
-
+        ctrlbar = self.CreateControlBar(wx.TOP)
         ctrlbar.AddStretchSpacer()
 
         # Cancel Button
-        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_STOP), wx.ART_MENU)
-        if cbmp.IsNull() or not cbmp.IsOk():
-            cbmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR,
-                                            wx.ART_MENU, (16, 16))
-        cancel = eclib.PlateButton(ctrlbar, wx.ID_CANCEL, _("Cancel"),
-                                      cbmp, style=eclib.PB_STYLE_NOBG)
+        cancel = self.AddPlateButton(_("Cancel"), ed_glob.ID_STOP, wx.ALIGN_RIGHT)
         self._cancelb = cancel
-        ctrlbar.AddControl(cancel, wx.ALIGN_RIGHT)
 
         # Clear Button
-        cbmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DELETE), wx.ART_MENU)
-        if cbmp.IsNull() or not cbmp.IsOk():
-            cbmp = None
-        clear = eclib.PlateButton(ctrlbar, wx.ID_CLEAR, _("Clear"),
-                                     cbmp, style=eclib.PB_STYLE_NOBG)
+        clear = self.AddPlateButton(_("Clear"), ed_glob.ID_DELETE, wx.ALIGN_RIGHT)
         self._clearb = clear
-        ctrlbar.AddControl(clear, wx.ALIGN_RIGHT)
 
-        ctrlbar.SetVMargin(1, 1)
-        self.SetControlBar(ctrlbar)
         self.SetWindow(self._list)
 
     def GetDisplayedLines(self):
@@ -1340,8 +1328,8 @@ class SearchResultScreen(eclib.ControlBox):
         ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
                            (ed_glob.SB_INFO, _("Search complete")))
 
-        # Let the update buffer be flushed
-        wx.YieldIfNeeded()
+        # Flush any remaining text to the output buffer
+        self._list.FlushBuffer()
  
         # Add our end message
         lines = max(0, self._list.GetLineCount() - 2)
@@ -1418,7 +1406,7 @@ class SearchResultList(eclib.OutputBuffer):
         """
         if isinstance(value, basestring):
             # Regular search result
-            eclib.OutputBuffer.AppendUpdate(self, value)
+            super(SearchResultList, self).AppendUpdate(value)
         else:
             # Search in a new file has started
             self._files += 1

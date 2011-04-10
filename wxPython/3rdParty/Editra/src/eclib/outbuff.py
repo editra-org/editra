@@ -252,7 +252,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self.SetSelBackground(True, highlight)
         self.__SetupStyles()
 
-    def __FlushBuffer(self):
+    def FlushBuffer(self):
         """Flush the update buffer
         @postcondition: The update buffer is empty
 
@@ -453,9 +453,8 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
                return quickly to avoid blocking the ui.
 
         """
-        ind = len(self._updates)
-        if ind:
-            self.__FlushBuffer()
+        if len(self._updates):
+            self.FlushBuffer()
         elif evt is not None:
             self.DoUpdatesEmpty()
         else:
