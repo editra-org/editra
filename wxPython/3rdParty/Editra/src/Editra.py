@@ -125,12 +125,20 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                             p = ebmlib.GetAbsPath(p)
                         except:
                             pass
-                        nargs.append(p)
-                    exml.SetFiles(nargs)
-                exml.SetArgs(opts.items())
+                        fxml = ed_ipc.IPCFile()
+                        fxml.value = p
+                        nargs.append(fxml)
+                    exml.filelist = nargs
+                arglist = list()
+                for arg, val in opts.items():
+                    axml = ed_ipc.IPCArg()
+                    axml.name = arg
+                    axml.value = val
+                    arglist.append(axml)
+                exml.arglist = arglist
 
                 # TODO: need to process other command line options as well i.e) -g
-                self._log("[app][info] Sending: %s" % exml.GetXml())
+                self._log("[app][info] Sending: %s" % exml.Xml)
                 rval = ed_ipc.SendCommands(exml, profiler.Profile_Get('SESSION_KEY'))
                 # If sending the command failed then let the editor startup
                 # a new instance
@@ -547,23 +555,24 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._log("[app][info] IN OnCommandReceived")
         cmds = evt.GetCommands()
         if isinstance(cmds, ed_ipc.IPCCommand):
-            self._log("[app][info] OnCommandReceived %s" % cmds.GetXml())
-            if not len(cmds.GetFiles()):
+            self._log("[app][info] OnCommandReceived %s" % cmds.Xml)
+            if not len(cmds.filelist):
                 self.OpenNewWindow()
             else:
                 # TODO: change goto line handling to require one
                 #       arg per file specified on the command line
                 #       i.e) -g 23,44,100
                 line = -1
-                for arg, val in cmds.GetArgs():
+                for argobj in cmds.arglist:
+                    arg = argobj.name
                     if arg == '-g':
-                        line = val
+                        line = int(argobj.value)
                         if line > 0:
                             line -= 1
                         break
 
-                for fname in cmds.GetFiles():
-                    self.OpenFile(fname, line)
+                for fname in cmds.filelist:
+                    self.OpenFile(fname.value, line)
 
     def OnCloseWindow(self, evt):
         """Close the currently active window

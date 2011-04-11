@@ -27,6 +27,7 @@ LIBRARY:
 +SegmentBar and SegmentBook, show tool tips when labels are hidden.
 +Expanded buffer margin marker api, added Error and Lint markers.
 +Add ThreadPool interface EdThreadPool.
++New XML library ed_xml for easier XML management.
 
 BUG FIXES:
 +Fix incorrect detection of UTF-32 BOM as UTF-16 BOM.
