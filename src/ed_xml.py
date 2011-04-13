@@ -59,7 +59,7 @@ class EdXml(dexml.Model):
         """
         suceeded = True
         try:
-            xmlstr = self.getPrettyXml()
+            xmlstr = self.PrettyXml
             if isinstance(xmlstr, types.UnicodeType):
                 xmlstr = xmlstr.encode('utf-8')
             handle = open(path, 'wb')
