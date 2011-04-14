@@ -248,11 +248,17 @@ class BookmarkList(eclib.EBaseListCtrl):
                                                  wx.LC_VIRTUAL)
 
         # Setup
+        self._il = wx.ImageList(16,16)
+        self._idx = self._il.Add(Bookmark().Bitmap)
+        self.SetImageList(self._il, wx.IMAGE_LIST_SMALL)
         self.InsertColumn(BookmarkList.BOOKMARK, _("Bookmark"))
         self.InsertColumn(BookmarkList.FILE_NAME, _("File Location"))
         self.InsertColumn(BookmarkList.LINE_NUM, _("Line Number"))
         self.setResizeColumn(BookmarkList.FILE_NAME+1) #NOTE: +1 bug in mixin
         self.SetItemCount(len(EdBookmarks.GetMarks()))
+
+    def OnGetItemImage(self, item):
+        return 0
 
     def OnGetItemText(self, item, column):
         """Override for virtual control"""
