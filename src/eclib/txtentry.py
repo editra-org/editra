@@ -40,6 +40,7 @@ class CommandEntryBase(wx.SearchCtrl):
 
         # Attributes
         self._txtctrl = None  # For msw/gtk
+        self._enterhook = None
 
         # Hide the search button and text by default
         self.ShowSearchButton(False)
@@ -63,6 +64,9 @@ class CommandEntryBase(wx.SearchCtrl):
         # Event management
         self.Bind(wx.EVT_TEXT_ENTER, self.OnEnter)
 
+    EnterCallback = property(lambda self: self._enterhook,
+                             lambda self, cback: setattr(self, '_enterhook', cback))
+
     def GetTextControl(self):
         """Get the wx.TextCtrl window.
         @note: only for msw/gtk
@@ -80,7 +84,10 @@ class CommandEntryBase(wx.SearchCtrl):
 
     def OnEnter(self, evt):
         """Handle the Enter key event"""
-        evt.Skip()
+        if self.EnterCallback:
+            self.EnterCallback()
+        else:
+            evt.Skip()
 
     def SetFocus(self):
         """Set the focus and select the text in the field"""
