@@ -30,19 +30,14 @@ SetCompressor lzma
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
-
 ; License page (Read the Licence)
 !insertmacro MUI_PAGE_LICENSE "COPYING"
-
 ; Components Page (Select what parts to install)
 !insertmacro MUI_PAGE_COMPONENTS
-
 ; Directory page (Set Where to Install)
 !insertmacro MUI_PAGE_DIRECTORY
-
 ; Instfiles page (Do the installation)
 !insertmacro MUI_PAGE_INSTFILES
-
 ; Finish page (Post installation tasks)
 !define MUI_FINISHPAGE_RUN
 !define MUI_FINISHPAGE_RUN_TEXT "Run Editra"
@@ -50,7 +45,10 @@ SetCompressor lzma
 !insertmacro MUI_PAGE_FINISH
 
 ; Un-Installer pages
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_COMPONENTS
 !insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
 
 ; Language files
 !insertmacro MUI_LANGUAGE "English"
@@ -185,18 +183,18 @@ FunctionEnd
 
 ;----------------------------- Start Uninstaller ------------------------------
 
-Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
-  Abort
-FunctionEnd
+;Function un.onInit
+;FunctionEnd
 
-Section Uninstall
+; Cleans up registry, links, and main program files
+Section "un.Program Data" UNSEC01
+  SectionIn RO 1
 
   ; Ensure shortcuts are removed from user directory as well
   RmDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
   Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
   Delete "$QUICKLAUNCH\${PRODUCT_NAME}.lnk"
-
+  
   ; Remove all shortcuts from All Users directory
   SetShellVarContext all
   RmDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
@@ -214,9 +212,21 @@ Section Uninstall
   SetAutoClose false
 SectionEnd
 
-Function un.onUninstSuccess
-  HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer."
-FunctionEnd
+; Optionally cleans up user data/plugins
+Section /o "un.User settings and plugins" UNSEC02
+    SectionIn 1
+    SetShellVarContext current ; Current user only
+    RmDir /r "$APPDATA\${PRODUCT_NAME}" ; Remove app generated config data/plugins
+    RmDir /r "$LOCALAPPDATA\${PRODUCT_NAME}" ; Remove app generated config data/plugins
+SectionEnd
+
+;Function un.onUninstSuccess
+;FunctionEnd
+
+; Description Texts for Component page
+!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${UNSEC01} "Core program files"
+  !insertmacro MUI_DESCRIPTION_TEXT ${UNSEC02} "User settings and plugins"
+!insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
 ;------------------------------ End Uninstaller -------------------------------
