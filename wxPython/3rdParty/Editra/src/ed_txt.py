@@ -762,6 +762,11 @@ def GetEncodings():
     rlist = list()
     for enc in encodings:
         if enc is not None and len(enc) and enc not in rlist:
-            rlist.append(enc.lower())
+            try:
+                codecs.lookup(enc)
+            except LookupError:
+                pass
+            else:
+                rlist.append(enc.lower())
 
     return rlist
