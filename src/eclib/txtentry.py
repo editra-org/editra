@@ -58,6 +58,7 @@ class CommandEntryBase(wx.SearchCtrl):
                     child.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
                     break
         else:
+            self._txtctrl = self
             self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
             self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
 
