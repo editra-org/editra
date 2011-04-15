@@ -35,6 +35,7 @@ BUG FIXES:
 +Fix some visibility issues with the tab controls with dark themes on gtk.
 +Fix Unicode handling issue in OutputBuffer.
 +Fix window activation issue after canceling directory search job.
++Handle invalid encodings reported by system.
 
 #-----------------------------------------------------------------------------#
 
