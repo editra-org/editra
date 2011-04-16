@@ -508,7 +508,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             args = self.FindWindowById(ID_ARGS).GetValue().split()
             self.State['largs'] = args
             self.Run(self.State['file'], cmd, args, self.State['lang'])
-        else:
+        elif self._worker:
             util.Log("[Launch][info] Aborting process")
             self._worker.Abort()
             self._worker = None
