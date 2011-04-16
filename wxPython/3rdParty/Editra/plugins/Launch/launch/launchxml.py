@@ -35,240 +35,116 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
-import xml.sax as sax
 import re
-import os
 import sys
+#sys.path.insert(0, '../../../src/')
 
 # Editra Imports
-import syntax
-from syntax import synglob
+import ed_xml
 
 #-----------------------------------------------------------------------------#
 # Globals
 
-# Tags
-EXML_LAUNCH      = u"launch"
-EXML_HANDLER     = u"handler"
-EXML_COMMANDLIST = u"commandlist"
-EXML_COMMAND     = u"command"
-EXML_ERROR       = u"error"
-EXML_HOTSPOT     = u"hotspot"
-
-# Attributes
-EXML_DEFAULT = u"default"
-EXML_EXECUTE = u"execute"
-EXML_PATTERN = u"pattern"
-
 #-----------------------------------------------------------------------------#
 
-class LaunchXml(syntax.EditraXml):
-    """Launch Xml Handler"""
-    def __init__(self):
-        syntax.EditraXml.__init__(self)
+class ErrorPattern(ed_xml.EdXml):
+    class meta:
+        tagname = "error"
+    pattern = ed_xml.String(required=True)
 
-        # Attributes
-        self._current = None
-        self._handlers = dict()
+class HotspotPattern(ed_xml.EdXml):
+    class meta:
+        tagname = "hotspot"
+    pattern = ed_xml.String(required=True)
 
-        # Setup
-        self.SetName(EXML_LAUNCH)
+class Command(ed_xml.EdXml):
+    class meta:
+        tagname = "command"
+    name = ed_xml.String(required=True)
+    execute = ed_xml.String(required=True)
 
-    #---- Xml Implementation ----#
+class CommandList(ed_xml.EdXml):
+    class meta:
+        tagname = "commandlist"
+    default = ed_xml.String(required=True)
+    commands = ed_xml.List(Command)
 
-    def startElement(self, name, attrs):
-        if name == EXML_HANDLER:
-            lang = attrs.get(syntax.EXML_NAME, None)
-            assert lang is not None, "lang attribute must be defined"
-            id_ = attrs.get(syntax.EXML_ID, None)
-            assert id_ is not None, "lang id is not specified"
-            assert hasattr(synglob, id_), "Undefined language id: %s" % id_
-            self._current = Handler(lang, getattr(synglob, id_))
-            self._handlers[lang] = self._current
-        elif self._current is not None:
-            self._current.startElement(name, attrs)
-        else:
-            pass
+class Handler(ed_xml.EdXml):
+    class meta:
+        tagname = "handler"
+    name = ed_xml.String(required=True)
+    id = ed_xml.String(required=True)
+    # Sub elements
+    commandlist = ed_xml.Model(CommandList, required=False)
+    error = ed_xml.Model(ErrorPattern, required=False)
+    hotspot = ed_xml.Model(HotspotPattern, required=False)
 
-    def endElement(self, name):
-        if name == EXML_HANDLER:
-            self._current = None
-        elif self._current is not None:
-            self._current.endElement(name)
-        else:
-            pass
+    def GetCommands(self):
+        clist = dict()
+        if self.commandlist:
+            for cmd in self.commandlist.commands:
+                clist[cmd.name] = cmd.execute
+        return clist
 
-    #---- End Xml Implementation ----#
+    def GetErrorPattern(self):
+        if self.error and self.error.pattern:
+            return re.compile(self.error.pattern)
+        return None
 
-    #---- External Api ----#
-    
+    def GetHotspotPattern(self):
+        if self.hotspot and self.hotspot.pattern:
+            return re.compile(self.hotspot.pattern)
+        return None
+
+class LaunchXml(ed_xml.EdXml):
+    class meta:
+        tagname = "launch"
+    handlers = ed_xml.List(Handler, required=False)
+
     def GetHandler(self, name):
         """Get a handler by name
         @return: Handler instance or None
 
         """
-        return self._handlers.get(name, None)
+        rval = None
+        for handler in self.handlers:
+            if handler.name == name:
+                rval = handler
+                break
+        return handler
 
     def GetHandlers(self):
         """Get the whole dictionary of handlers
         @return: dict(name=Handler)
 
         """
-        return self._handlers
+        return self.handlers
 
     def HasHandler(self, name):
         """Is there a handler for the given file type
         @return: bool
 
         """
-        return name in self._handlers
+        for handler in self.handlers:
+            if handler.name == name:
+                return True
+        return False
 
 #-----------------------------------------------------------------------------#
-
-class Handler(syntax.EditraXml):
-    """Handler object data"""
-    def __init__(self, lang, id_):
-        """Create a new handler
-        @param lang: language name string
-        @param id_: language id (int)
-
-        """
-        syntax.EditraXml.__init__(self)
-
-        # Attributes
-        self._lang = lang
-        self._langid = id_
-        self._commands = CommandList()
-        self._errpat = None
-        self._hotspot = None
-
-        # Setup
-        self.SetName(EXML_HANDLER)
-        self.RegisterHandler(self._commands)
-
-    def startElement(self, name, attrs):
-        if name == EXML_ERROR:
-            pattern = attrs.get(EXML_PATTERN, None)
-            if pattern is not None:
-                self._errpat = re.compile(pattern)
-        elif name == EXML_HOTSPOT:
-            pattern = attrs.get(EXML_PATTERN, None)
-            if pattern is not None:
-                self._hotspot = re.compile(pattern)
-        else:
-            syntax.EditraXml.startElement(self, name, attrs)
-
-    #---- External Api ----#
-
-    def GetCommands(self):
-        """Get the dictionary of commands
-        @return: dict(alias="command string")
-
-        """
-        cmdxml = self.GetCommandsXml()
-        return cmdxml.GetCommands()
-
-    def GetCommandsXml(self):
-        """Get the CommandList Xml object
-        @return: CommandList
-
-        """
-        return self._commands
-
-    def GetDefaultCommand(self):
-        """Get the default command
-        @return: string
-
-        """
-        cmdxml = self.GetCommandsXml()
-        return cmdxml.GetDefault()
-
-    def GetErrorPattern(self):
-        """Get the error pattern object
-        @return: re object or None
-
-        """
-        return self._errpat
-
-    def GetHotSpotPattern(self):
-        """Get the hotspot pattern object
-        @return: re object or None
-
-        """
-        return self._hotspot
-
-    def GetLang(self):
-        """Get the language identifier string
-        @return: string
-
-        """
-        return self._lang
-
-    def GetLangId(self):
-        """Get the language identifier
-        @return: int
-
-        """
-        return self._langid
-
-#-----------------------------------------------------------------------------#
-
-class CommandList(syntax.EditraXml):
-    """Handler object data"""
-    def __init__(self):
-        syntax.EditraXml.__init__(self)
-
-        # Attributes
-        self._default = u''
-        self._commands = dict()
-
-        # Setup
-        self.SetName(EXML_COMMANDLIST)
-
-    def startElement(self, name, attrs):
-        if name == EXML_COMMAND:
-            alias = attrs.get(syntax.EXML_NAME, None)
-            cmd = attrs.get(EXML_EXECUTE, None)
-            if None not in (alias, cmd):
-                self._commands[alias] = cmd
-        elif name == EXML_COMMANDLIST:
-            default = attrs.get(EXML_DEFAULT, None)
-            assert default is not None, "Default attribute not specified!"
-            self._default = default
-
-    #---- External Api ----#
-
-    def GetCommands(self):
-        """Get the mapping of command aliases to commands
-        @return: dict
-
-        """
-        return self._commands
-
-    def GetDefault(self):
-        """Get the default command
-        @return: string
-
-        """
-        return self._default
-
-#-----------------------------------------------------------------------------#
-
 # Test
 #if __name__ == '__main__':
-#    h = LaunchXml()
-##    sax.parseString(xml_spec, h)
-#    f = open("launch.xml", 'rb')
-#    txt = f.read()
-#    f.close()
-#    sax.parseString(txt, h)
+#    h = LaunchXml.Load("launch.xml")
+#    print "CHECK Python Handler"
 #    hndlr = h.GetHandler('Python')
 #    print hndlr.GetCommands()
-#    print hndlr.GetErrorPattern()
-#    print hndlr.GetDefaultCommand()
-#    print hndlr.GetHotSpotPattern()
+#    print hndlr.error.pattern
+#    print hndlr.hotspot.pattern
+#    print hndlr.commandlist.default
 
 #    print h.GetHandlers()
 
+#    print "Check C Handler"
 #    hndlr = h.GetHandler('C')
 #    print hndlr.GetCommands()
+#    print hndlr.GetHotspotPattern()
+#    print hndlr.GetErrorPattern()
