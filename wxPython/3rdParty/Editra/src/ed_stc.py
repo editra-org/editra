@@ -885,7 +885,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
         # when the mouse has not dwelled within the buffer area
         mpoint = wx.GetMousePosition()
         brect = self.GetScreenRect()
-        if not brect.Contains(mpoint) or not self.IsShown():
+        if not brect.Contains(mpoint) or \
+           not self.IsShown() or \
+           not self.GetTopLevelParent().IsActive():
             return
 
         position = evt.Position
