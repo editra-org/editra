@@ -38,9 +38,6 @@ import util
 import eclib
 import ebmlib
 
-# Local Imports
-import Trash
-
 #-----------------------------------------------------------------------------#
 # Globals
 PANE_NAME = u'FileBrowser'
@@ -600,7 +597,7 @@ class FileBrowser(wx.GenericDirCtrl):
         elif e_id == ID_ARCHIVE:
             ok = MakeArchive(path)
         elif e_id == ID_DELETE:
-            Trash.moveToTrash(paths)
+            ebmlib.MoveToTrash(paths)
             ok = (True, os.path.dirname(path))
         else:
             evt.Skip()
