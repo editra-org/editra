@@ -125,18 +125,16 @@ def InitCustomHandlers(path):
     loaded = False
     path = os.path.join(path, u'launch.xml')
     if os.path.exists(path):
-        lxml = launchxml.LaunchXml()
-        lxml.SetPath(path)
-        loaded = False
+        lxml = None
         try:
-            loaded = lxml.LoadFromDisk()
-        except AssertionError, msg:
+            lxml = launchxml.LaunchXml.Load(path)
+        except Exception, msg:
             # XML Parsing error
             util.Log("[Launch][err] Failed to load custom Handlers")
             util.Log("[Launch][err] XML Parsing Error: %s" % msg)
 
-        if loaded:
-            for hndlr in lxml.GetHandlers().values():
+        if lxml:
+            for hndlr in lxml.GetHandlers():
                 FileTypeHandler.RegisterClass(XmlHandlerDelegate(hndlr))
     return loaded
 
@@ -148,8 +146,8 @@ def LoadCustomHandler(xml_str):
     """
     try:
         lxml = launchxml.LaunchXml()
-        lxml.LoadFromString(xml_str)
-        for hndlr in lxml.GetHandlers().values():
+        lxml.Xml = xml_str
+        for hndlr in lxml.GetHandlers():
             FileTypeHandler.RegisterClass(XmlHandlerDelegate(hndlr))
     except:
         return False
@@ -803,12 +801,12 @@ def XmlHandlerDelegate(xmlobj):
     """
     class XmlDelegateClass(FileTypeHandler):
         class meta:
-            typeid = xmlobj.GetLangId()
-            name = xmlobj.GetLang()
+            typeid = getattr(synglob, xmlobj.id, -1)
+            name = xmlobj.name
             commands = xmlobj.GetCommands()
-            default = xmlobj.GetDefaultCommand()
+            default = xmlobj.commandlist.default
             error = xmlobj.GetErrorPattern()
-            hotspot = xmlobj.GetHotSpotPattern()
+            hotspot = xmlobj.GetHotspotPattern()
             transient = True
     return XmlDelegateClass
 
