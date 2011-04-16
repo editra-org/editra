@@ -16,6 +16,7 @@ Launch configuration to be reset.
 +Fix output display truncating on NULL bytes.
 +When an XML configuration is present the handlers defined in it can only be
 edited in the XML file, since XML handlers are now transient.
++Fix crash that could occur from holding F5 down for a long time
 
 #-----------------------------------------------------------------------------#
 Version 1.9
