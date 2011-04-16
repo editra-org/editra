@@ -41,3 +41,4 @@ from cmenumgr import *
 from efilehist import *
 from osutil import *
 from _threads import *
+from _trash import *
