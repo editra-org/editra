@@ -167,6 +167,7 @@ def GenerateSrcPackageFiles():
              "Editra",
              "src/extern/*.py",
              "src/extern/aui/*.py",
+             "src/extern/dexml/*.py",
              "src/extern/pygments/*.py",
              "src/extern/pygments/formatters/*.py",
              "src/extern/pygments/filters/*.py",
