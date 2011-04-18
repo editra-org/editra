@@ -937,7 +937,7 @@ class ProcessThread(ProcessThreadBase):
         # TODO: if a file path to the exe has any spaces in it on Windows
         #       and use_shell is True then the command will fail. Must force
         #       to False under this condition.
-        use_shell = self._use_shell and not subprocess.mswindows
+        use_shell = self._use_shell
         # TODO: See about supporting use_shell on Windows it causes lots of
         #       issues with gui apps and killing processes when it is True.
         if use_shell and subprocess.mswindows:
