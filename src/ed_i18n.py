@@ -116,7 +116,7 @@ class LangListCombo(wx.combo.BitmapComboBox):
 #-----------------------------------------------------------------------------#
 if __name__ == '__main__':
     APP = wx.PySimpleApp(False)
-    # Print a list of Cannonical names usefull for seeing what codes to
+    # Print a list of Canonical names useful for seeing what codes to
     # use when naming po files
     OUT = list()
     for LANG in [x for x in dir(wx) if x.startswith("LANGUAGE")]:
