@@ -38,6 +38,7 @@ BUG FIXES:
 +Fix window activation issue after canceling directory search job.
 +Handle invalid encodings reported by system.
 +Fix numerous printing issues.
++Don't show command prompt when running programs through output buffer.
 
 #-----------------------------------------------------------------------------#
 
