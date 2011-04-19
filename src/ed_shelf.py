@@ -149,12 +149,9 @@ class EdShelfBook(ed_book.EdBaseBook):
         # Attributes
         self._parent = parent
         self._open = dict()
-        self._imgidx = dict()
-        self._imglst = wx.ImageList(16, 16)
         self._name2idx = dict() # For settings maintenance
 
         # Setup
-        self.SetImageList(self._imglst)
         self.SetSashDClickUnsplit(True)
 
         # Event Handlers
@@ -162,27 +159,23 @@ class EdShelfBook(ed_book.EdBaseBook):
 
         # Message handlers
         ed_msg.Subscribe(self.OnUpdateTabs, ed_msg.EDMSG_THEME_NOTEBOOK)
+        ed_msg.Subscribe(self.OnUpdateTabs, ed_msg.EDMSG_THEME_CHANGED)
 
     def OnDestroy(self, evt):
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnUpdateTabs)
         evt.Skip()
 
-    @property
-    def ImgIdx(self):
-        return self._imgidx
+    BitmapCallbacks = property(lambda self: self._name2idx)
 
-    @property
-    def ImageList(self):
-        return self._imglst
-
-    def AddItem(self, item, name, imgid=-1):
+    def AddItem(self, item, name, bmp=wx.NullBitmap):
         """Add an item to the shelf's notebook. This is useful for interacting
         with the Shelf from outside its interface. It may be necessary to
         call L{EnsureShelfVisible} before or after adding an item if you wish
         the shelf to be shown when the item is added.
         @param item: A panel like instance to add to the shelf's notebook
         @param name: Items name used for page text in notebook
+        @keyword bmp: Tab bitmap to display
 
         """
         self.AddPage(item, 
@@ -190,9 +183,8 @@ class EdShelfBook(ed_book.EdBaseBook):
                      select=True)
 
         # Set the tab icon
-        self._name2idx[repr(item.__class__)] = imgid
-        if imgid >= 0 and Profile_Get('TABICONS', default=True):
-            self.SetPageImage(self.GetPageCount()-1, imgid)
+        if Profile_Get('TABICONS', default=True):
+            self.SetPageBitmap(self.GetPageCount()-1, bmp)
         self._open[name] = self._open.get(name, 0) + 1
 
     @mainwinonly
@@ -274,13 +266,13 @@ class EdShelfBook(ed_book.EdBaseBook):
         """Update all tab images depending upon current settings"""
         if not Profile_Get('TABICONS', default=True):
             for page in range(self.GetPageCount()):
-                self.SetPageImage(page, -1)
+                self.SetPageBitmap(page, wx.NullBitmap)
         else:
             # Show the icons
             for pnum in range(self.GetPageCount()):
                 page = self.GetPage(pnum)
-                imgid = self._name2idx.get(repr(page.__class__), -1)
-                self.SetPageImage(pnum, imgid)
+                bmp = self.BitmapCallbacks.get(repr(page.__class__), lambda:wx.NullBitmap)()
+                self.SetPageBitmap(pnum, bmp)
 
 #--------------------------------------------------------------------------#
 
@@ -306,9 +298,9 @@ class EdShelfDelegate(object):
     def observers(self):
         return self._pin.observers
 
-    def AddItem(self, item, name, imgid=-1):
+    def AddItem(self, item, name, bmp=wx.NullBitmap):
         """Add an item to the shelf"""
-        self._shelf.AddItem(item, name, imgid)
+        self._shelf.AddItem(item, name, bmp)
 
     def CanStockItem(self, item_name):
         """See if a named item can be stocked or not, meaning if it
@@ -491,18 +483,14 @@ class EdShelfDelegate(object):
             return
         else:
             self.EnsureShelfVisible()
-            item_id = item.GetId()
-            index = -1
+            window = item.CreateItem(self._shelf)
+            bmp = wx.NullBitmap
             if hasattr(item, 'GetBitmap'):
-                if item_id in self._shelf.ImgIdx:
-                    index = self._shelf.ImgIdx[item_id]
-                else:
-                    bmp = item.GetBitmap()
-                    if bmp.IsOk():
-                        index = self._shelf.ImageList.Add(bmp)
-                        self._shelf.ImgIdx[item_id] = index
-
-            self.AddItem(item.CreateItem(self._shelf), name, index)
+                self._shelf.BitmapCallbacks[repr(window.__class__)] = item.GetBitmap
+                bmp = item.GetBitmap()
+            else:
+                self._shelf.BitmapCallbacks[repr(window.__class__)] = lambda:wx.NullBitmap
+            self.AddItem(window, name, bmp)
 
     def RaiseItem(self, item_name):
         """Set the selection in the notebook to be the that of the first
