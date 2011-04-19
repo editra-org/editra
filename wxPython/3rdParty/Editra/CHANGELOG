@@ -39,6 +39,7 @@ BUG FIXES:
 +Handle invalid encodings reported by system.
 +Fix numerous printing issues.
 +Don't show command prompt when running programs through output buffer.
++Fix Read Only tab image not updating when permissions change.
 
 #-----------------------------------------------------------------------------#
 

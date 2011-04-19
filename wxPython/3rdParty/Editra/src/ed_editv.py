@@ -31,6 +31,7 @@ import ed_tab
 from doctools import DocPositionMgr
 from profiler import Profile_Get
 from util import Log, SetClipboardText
+import syntax.synglob as synglob
 from ebmlib import GetFileModTime, ContextMenuManager, GetFileName
 
 # External libs
@@ -74,6 +75,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         ed_tab.EdTabBase.__init__(self)
 
         # Attributes
+        self._ro_img = False
         self._ignore_del = False
         self._has_dlg = False
         self._lprio = 0     # Idle event priority counter
@@ -170,18 +172,9 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                     wx.CallAfter(self.AskToReload, cfile)
 
         # Check for changes to permissions
-        readonly = self._nb.ImageIsReadOnly(self.GetTabIndex())
-        if self.File.IsReadOnly() != readonly:
-            if readonly:
-                # File is no longer read only
-                self._nb.SetPageImage(self.GetTabIndex(),
-                                      str(self.GetLangId()))
-            else:
-                # File has changed to be readonly
-                self._nb.SetPageImage(self.GetTabIndex(),
-                                      ed_glob.ID_READONLY)
+        if self.File.IsReadOnly() != self._ro_img:
+            self._nb.SetPageBitmap(self.GetTabIndex(), self.GetTabImage())
             self._nb.Refresh()
-
         else:
             pass
 
@@ -235,6 +228,22 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
         """
         return u"EditraTextCtrl"
+
+    def GetTabImage(self):
+        """Get the Bitmap to use for the tab
+        @return: wx.Bitmap (16x16)
+
+        """
+        if self.GetDocument().ReadOnly:
+            self._ro_img = True
+            bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_READONLY), wx.ART_MENU)
+        else:
+            self._ro_img = False
+            lang_id = str(self.GetLangId())
+            bmp = wx.ArtProvider.GetBitmap(lang_id, wx.ART_MENU)
+            if bmp.IsNull():
+                bmp = wx.ArtProvider.GetBitmap(str(synglob.ID_LANG_TXT), wx.ART_MENU)
+        return bmp
 
     def GetTabMenu(self):
         """Get the tab menu
