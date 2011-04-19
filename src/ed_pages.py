@@ -81,7 +81,6 @@ class EdPages(ed_book.EdBaseBook):
         self.mdown = -1
         self.control = None
         self.frame = self.GetTopLevelParent() # MainWindow
-        self._index = dict()          # image list index
         self._ses_load = False
         self._menu = ebmlib.ContextMenuManager()
 
@@ -92,14 +91,6 @@ class EdPages(ed_book.EdBaseBook):
             self.SetNavigatorIcon(bmp)
         else:
             util.Log("[ed_pages][warn] Bad bitmap: %s" % ed_icon)
-
-        # Setup the ImageList and the default image
-        imgl = wx.ImageList(16, 16)
-        txtbmp = wx.ArtProvider.GetBitmap(str(synglob.ID_LANG_TXT), wx.ART_MENU)
-        self._index[synglob.ID_LANG_TXT] = imgl.Add(txtbmp)
-        robmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_READONLY), wx.ART_MENU)
-        self._index[ed_glob.ID_READONLY] = imgl.Add(robmp)
-        self.SetImageList(imgl)
 
         # Set custom options
         self.SetSashDClickUnsplit(True)
@@ -246,8 +237,10 @@ class EdPages(ed_book.EdBaseBook):
                 text = _("untitled")
             bNewPage = True
         page.SetTabLabel(text)
-        super(EdPages, self).AddPage(page, text, select)
-        self.SetPageImage(self.GetPageCount()-1, str(page.GetLangId()))
+        bmp = wx.NullBitmap
+        if Profile_Get('TABICONS'):
+            bmp = page.GetTabImage()
+        super(EdPages, self).AddPage(page, text, select, bitmap=bmp)
         self.UpdateIndexes()
         if not self._ses_load and not bNewPage:
             self.SaveCurrentSession()
@@ -452,7 +445,7 @@ class EdPages(ed_book.EdBaseBook):
         ext_reg = syntax.ExtensionRegister()
         ext_lst = ext_reg.get(dlexer, ['txt', ])
         self.control.FindLexer(ext_lst[0])
-        self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
+        self.SetPageBitmap(self.GetSelection(), self.control.GetTabImage())
 
         # Set the modified callback notifier
         doc = self.control.GetDocument()
@@ -679,8 +672,7 @@ class EdPages(ed_book.EdBaseBook):
         self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
 
         # Set tab image
-        # TODO: Handle read only images
-        self.SetPageImage(self.GetSelection(), str(nbuff.GetLangId()))
+        self.SetPageBitmap(self.GetSelection(), nbuff.GetTabImage())
 
         # Refocus on selected page
         self.control = nbuff
@@ -724,11 +716,7 @@ class EdPages(ed_book.EdBaseBook):
 
         # Set tab image
         cpage = self.GetSelection()
-        if fileobj.ReadOnly:
-            super(EdPages, self).SetPageImage(cpage,
-                                              self._index[ed_glob.ID_READONLY])
-        else:
-            self.SetPageImage(cpage, str(self.control.GetLangId()))
+        self.SetPageBitmap(cpage, self.control.GetTabImage())
 
         self.GetTopLevelParent().Thaw()
 
@@ -852,11 +840,7 @@ class EdPages(ed_book.EdBaseBook):
 
         # Set tab image
         cpage = self.GetSelection()
-        if doc.ReadOnly:
-            super(EdPages, self).SetPageImage(cpage,
-                                              self._index[ed_glob.ID_READONLY])
-        else:
-            self.SetPageImage(cpage, str(self.control.GetLangId()))
+        self.SetPageBitmap(cpage, self.control.GetTabImage())
 
         if Profile_Get('WARN_EOL', default=True) and not doc.IsRawBytes():
             self.control.CheckEOL()
@@ -1259,54 +1243,19 @@ class EdPages(ed_book.EdBaseBook):
             return page.CanCloseTab()
         return False
 
-    def SetPageImage(self, pg_num, lang_id):
-        """Sets the page image by querying the ArtProvider based
-        on the language id associated with the type of open document.
-        Any unknown filetypes are associated with the plaintext page
-        image.
-        @param pg_num: page index to set image for
-        @param lang_id: language id of file type to get mime image for
-
-        """
-        # Only set icons when enabled in preferences
-        if not Profile_Get('TABICONS'):
-            return
-
-        imglst = self.GetImageList()
-        if lang_id not in self._index:
-            bmp = wx.ArtProvider.GetBitmap(lang_id, wx.ART_MENU)
-            if bmp.IsNull():
-                self._index.setdefault(lang_id, \
-                                       self._index[synglob.ID_LANG_TXT])
-            else:
-                self._index[lang_id] = imglst.Add(wx.ArtProvider.\
-                                              GetBitmap(lang_id, wx.ART_MENU))
-        super(EdPages, self).SetPageImage(pg_num, self._index[lang_id])
-
     def UpdateAllImages(self):
         """Reload and Reset all images in the notebook pages and
         the corresponding imagelist to match those of the current theme
         @postcondition: all images in control are updated
 
         """
-        # If icons preference has been disabled then clear all icons
-        if not Profile_Get('TABICONS'):
-            for page in range(self.GetPageCount()):
-                super(EdPages, self).SetPageImage(page, -1)
-        else:
-            # Reload the image list with new icons from the ArtProvider
-            imglst = self.GetImageList()
-            for lang, index in self._index.iteritems():
-                bmp = wx.ArtProvider.GetBitmap(str(lang), wx.ART_MENU)
-                if bmp.IsNull():
-                    self._index.setdefault(lang, \
-                                           self._index[synglob.ID_LANG_TXT])
-                else:
-                    imglst.Replace(index, bmp)
-
-            for page in xrange(self.GetPageCount()):
-                self.SetPageImage(page, str(self.GetPage(page).GetLangId()))
-
+        bUseIcons = Profile_Get('TABICONS')
+        for page in range(self.GetPageCount()):
+            if bUseIcons:
+                tab = self.GetPage(page)
+                self.SetPageBitmap(page, tab.GetTabImage())
+            else:
+                self.SetPageBitmap(page, wx.NullBitmap)
         self.Refresh()
 
     def UpdateIndexes(self):
@@ -1320,7 +1269,8 @@ class EdPages(ed_book.EdBaseBook):
         @postcondition: page image is updated to reflect any changes in ctrl
 
         """
-        self.SetPageImage(self.GetSelection(), str(self.control.GetLangId()))
+        tab = self.GetCurrentPage()
+        self.SetPageBitmap(self.GetSelection(), tab.GetTabImage())
 
     def OnUpdatePageText(self, evt):
         """Update the title text of the current page

@@ -20,7 +20,7 @@ __revision__ = "$Revision$"
 
 #--------------------------------------------------------------------------#
 # Imports
-
+import wx
 
 #--------------------------------------------------------------------------#
 
@@ -32,7 +32,7 @@ class EdTabBase(object):
     """
     def __init__(self):
         """Initialize the tab base class"""
-        object.__init__(self)
+        super(EdTabBase, self).__init__()
 
         # Attributes
         self._lbl = u''
@@ -74,6 +74,13 @@ class EdTabBase(object):
 
         """
         raise NotImplementedError, "GetName Must be implemented!!"
+
+    def GetTabImage(self):
+        """Get the Bitmap to use for the tab
+        @return: wx.Bitmap (16x16)
+
+        """
+        return wx.NullBitmap
 
     def GetTabMenu(self):
         """Get the context menu to show on the tab
