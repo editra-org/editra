@@ -747,9 +747,12 @@ class ProcessThreadBase(threading.Thread):
         except UnicodeDecodeError:
             result = os.linesep
 
-        evt = OutputBufferEvent(edEVT_UPDATE_TEXT, self._parent.GetId(), result)
-        wx.PostEvent(self._parent, evt)
-        return True
+        if self.Parent:
+            evt = OutputBufferEvent(edEVT_UPDATE_TEXT, self.Parent.GetId(), result)
+            wx.PostEvent(self.Parent, evt)
+            return True
+        else:
+            return False # Parent is dead no need to keep running
 
     def __KillPid(self, pid):
         """Kill a process by process id, causing the run loop to exit
@@ -823,15 +826,17 @@ class ProcessThreadBase(threading.Thread):
         except OSError, msg:
             # NOTE: throws WindowsError on Windows which is a subclass of
             #       OSError, so it will still get caught here.
-            err =  OutputBufferEvent(edEVT_PROCESS_ERROR,
-                                     self.Parent.GetId(),
-                                     OPB_ERROR_INVALID_COMMAND)
-            err.SetErrorMessage(msg)
+            if self.Parent:
+                err =  OutputBufferEvent(edEVT_PROCESS_ERROR,
+                                         self.Parent.GetId(),
+                                         OPB_ERROR_INVALID_COMMAND)
+                err.SetErrorMessage(msg)
 
-        evt = OutputBufferEvent(edEVT_PROCESS_START,
-                                self.Parent.GetId(),
-                                self.LastCommand)
-        wx.PostEvent(self.Parent, evt)
+        if self.Parent:
+            evt = OutputBufferEvent(edEVT_PROCESS_START,
+                                    self.Parent.GetId(),
+                                    self.LastCommand)
+            wx.PostEvent(self.Parent, evt)
 
         # Read from stdout while there is output from process
         while not err and True:
@@ -854,7 +859,8 @@ class ProcessThreadBase(threading.Thread):
 
         # Notify of error in running the process
         if err is not None:
-            wx.PostEvent(self.Parent, err)
+            if self.Parent:
+                wx.PostEvent(self.Parent, err)
             result = -1
         else:
             try:
@@ -864,8 +870,9 @@ class ProcessThreadBase(threading.Thread):
 
         # Notify that process has exited
         # Pack the exit code as the events value
-        evt = OutputBufferEvent(edEVT_PROCESS_EXIT, self.Parent.GetId(), result)
-        wx.PostEvent(self.Parent, evt)
+        if self.Parent:
+            evt = OutputBufferEvent(edEVT_PROCESS_EXIT, self.Parent.GetId(), result)
+            wx.PostEvent(self.Parent, evt)
 
 class ProcessThread(ProcessThreadBase):
     """Run a subprocess in a separate thread. Thread posts events back
