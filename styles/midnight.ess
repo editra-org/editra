@@ -74,7 +74,7 @@ dockey_style {
 }
 
 error_style {
-		fore: #DD0101;
+		fore: #FE5252;
 }
 
 funct_style {

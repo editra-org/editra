@@ -72,7 +72,7 @@ dockey_style {
 
 error_style {
 		fore:#000A87;
-		back:#FF0000;
+		back:#FE5252;
 }
 
 foldmargin_style {
