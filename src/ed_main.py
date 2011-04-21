@@ -89,7 +89,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                             CONFIG['CACHE_DIR'])
 
         # Setup app icon and title
-        self.SetTitle()
         util.SetWindowIcon(self)
 
         # Attributes
@@ -1523,10 +1522,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @type title: string
 
         """
-        name = "%s v%s" % (PROG_NAME, VERSION)
+        name = u"%s v%s" % (PROG_NAME, VERSION)
         if len(title):
-            name = " - " + name
-        wx.Frame.SetTitle(self, title + name)
+            name = u" - " + name
+        super(MainWindow, self).SetTitle(title + name)
 
     def SetupToolBar(self):
         """Setup or reinitialize the windows ToolBar"""

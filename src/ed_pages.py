@@ -668,7 +668,6 @@ class EdPages(ed_book.EdBaseBook):
         else:
             self.SetPageText(self.GetSelection(), filename)
 
-        self.frame.SetTitle(nbuff.GetTitleString())
         self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
 
         # Set tab image
@@ -709,7 +708,6 @@ class EdPages(ed_book.EdBaseBook):
         self.control.Show()
         self.AddPage(self.control, filename)
 
-        self.frame.SetTitle(self.control.GetTitleString())
         self.frame.AddFileToHistory(path)
         self.SetPageText(self.GetSelection(), filename)
         self.LOG("[ed_pages][evt] Opened Page: %s" % filename)
@@ -834,7 +832,6 @@ class EdPages(ed_book.EdBaseBook):
         if new_pg:
             self.AddPage(self.control, filename)
 
-        self.frame.SetTitle(self.control.GetTitleString())
         self.frame.AddFileToHistory(path2file)
         self.SetPageText(self.GetSelection(), filename)
 
