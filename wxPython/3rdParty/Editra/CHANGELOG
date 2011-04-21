@@ -16,6 +16,16 @@ DATE 0x/xx/2011
 
 NEWS:
 
+This version includes a new version of the Launch plugin that now supports all
+file types recognized by Editra and will automatically support all future filetypes
+and filetypes added by extensions. It also fixes a handful of other minor issues
+as well. Note however that due to the framework changes any Launch settings from
+previous versions will be lost with this upgrade as the underlying data model
+has changed.
+
+There has also been a number of API extensions and bug fixes during this release,
+see the changelog below for more details about the changes in this release.
+
 NEW: [features/enhancements]
 +New version of Launch v1.10 (now supports all filetypes)
 +Session saved more frequently for better restore after unexpected shutdowns.
