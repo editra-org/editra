@@ -7,7 +7,6 @@ default_style {
 		back:#2A211C;
 		face:%(primary)s;
 		size:%(size)d;
-
 }
 
 number2_style {

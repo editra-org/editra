@@ -46,7 +46,7 @@ edge_style {
 }
 
 error_style {
-		fore:#DD0101;
+		fore:#FE5252;
 		face:%(secondary)s;
 		modifiers:bold;
 }
