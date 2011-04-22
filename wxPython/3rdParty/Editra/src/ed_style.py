@@ -517,8 +517,8 @@ class StyleMgr(object):
         @rtype: L{StyleItem}
 
         """
-        if self.HasNamedStyle(name):
-            scheme = self.GetStyleSet()
+        scheme = self.GetStyleSet()
+        if name in scheme:
             item = scheme[name]
 
             # Set font value if need be
@@ -558,7 +558,7 @@ class StyleMgr(object):
             stystr = unicode(self.GetItemByName(name))
             return stystr.replace("modifiers:", "")
         else:
-            return wx.EmptyString
+            return u""
 
     def GetStyleSet(self):
         """Returns the current set of styles or the default set if

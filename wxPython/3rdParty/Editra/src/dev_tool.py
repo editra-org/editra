@@ -87,6 +87,7 @@ def DEBUGP(statement):
 
     # Only print to stdout when DEBUG is active
     # Cant print to stdio if using pythonw
+    msg_type = msg.Type
     if ed_glob.DEBUG:
         logfile = EdLogFile()
         mstr = unicode(msg)
@@ -97,19 +98,19 @@ def DEBUGP(statement):
         logfile.WriteMessage(mstr)
 
         # Check for trapped exceptions to print
-        if ed_glob.VDEBUG and msg.Type in ('err', 'error'):
+        if ed_glob.VDEBUG and msg_type in ('err', 'error'):
             traceback.print_exc()
             logfile.WriteMessage(traceback.format_exc())
 
     # Dispatch message to all observers
-    if msg.Type in ('err', 'error'):
+    if msg_type in ('err', 'error'):
         mtype = ed_msg.EDMSG_LOG_ERROR
         if ed_glob.VDEBUG:
             msg = LogMsg(msg.Value + os.linesep + traceback.format_exc(),
                          msg.Origin, msg.Type)
-    elif msg.Type in ('warn', 'warning'):
+    elif msg_type in ('warn', 'warning'):
         mtype = ed_msg.EDMSG_LOG_WARN
-    elif msg.Type in ('evt', 'event'):
+    elif msg_type in ('evt', 'event'):
         mtype = ed_msg.EDMSG_LOG_EVENT
     elif msg.Type in ('info', 'information'):
         mtype = ed_msg.EDMSG_LOG_INFO

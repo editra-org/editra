@@ -281,30 +281,9 @@ TheProfile = Profile()
 
 #-----------------------------------------------------------------------------#
 # Profile convenience functions
-def Profile_Del(item):
-    """Removes an item from the profile
-    @param item: items key name
-
-    """
-    TheProfile.DeleteItem(item)
-
-def Profile_Get(index, fmt=None, default=None):
-    """Convenience for Profile().Get()
-    @param index: profile index to retrieve
-    @keyword fmt: format to get value as
-    @keyword default: default value to return if not found
-
-    """
-    return TheProfile.Get(index, fmt, default)
-
-def Profile_Set(index, val, fmt=None):
-    """Convenience for Profile().Set()
-    @param index: profile index to set
-    @param val: value to set index to
-    @keyword fmt: format to convert object from
-
-    """
-    return TheProfile.Set(index, val, fmt)
+Profile_Del  = TheProfile.DeleteItem
+Profile_Get = TheProfile.Get
+Profile_Set = TheProfile.Set
 
 def _FromObject(val, fmt):
     """Convert the given value to a to a profile compatible value
