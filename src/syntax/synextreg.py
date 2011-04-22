@@ -407,12 +407,10 @@ class ExtensionRegister(dict):
 
     """
     instance = None
-    first = True
     config = u'synmap'
     def __init__(self):
         """Initializes the register"""
-        if self.first:
-            self.first = False
+        if not ExtensionRegister.instance:
             self.LoadDefault()
 
     def __new__(cls, *args, **kargs):

@@ -42,12 +42,13 @@ class EFileHistory(object):
 
     def _UpdateMenu(self):
         """Update the filehistory menu"""
-        assert self.Menu is not None
-        for item in self.Menu.GetMenuItems():
-            self.Menu.RemoveItem(item)
+        menu = self.Menu # optimization
+        assert menu is not None
+        for item in menu.GetMenuItems():
+            menu.RemoveItem(item)
         for index, histfile in enumerate(self.History):
             menuid = wx.ID_FILE1 + index
-            self.Menu.Append(menuid, histfile)
+            menu.Append(menuid, histfile)
 
     Count = property(lambda self: self.GetCount())
     History = property(lambda self: self._history,

@@ -30,7 +30,7 @@ __revision__ = "$Revision$"
 __all__ = ['PostMessage', 'Subscribe', 'Unsubscribe']
 
 #--------------------------------------------------------------------------#
-# Dependancies
+# Imports
 from wx import PyDeadObjectError
 from extern.pubsub import Publisher
 
@@ -283,6 +283,7 @@ EDMSG_ADD_FILE_HISTORY = EDMSG_ALL + ('filehistory',)
 
 #--------------------------------------------------------------------------#
 # Public Api
+_ThePublisher = Publisher()
 
 def PostMessage(msgtype, msgdata=None, context=None):
     """Post a message containing the msgdata to all listeners that are
@@ -294,7 +295,7 @@ def PostMessage(msgtype, msgdata=None, context=None):
     @keyword context: Context of the message.
 
     """
-    Publisher().sendMessage(msgtype, msgdata, context=context)
+    _ThePublisher.sendMessage(msgtype, msgdata, context=context)
             
 def Subscribe(callback, msgtype=EDMSG_ALL):
     """Subscribe your listener function to listen for an action of type msgtype.
@@ -318,7 +319,7 @@ def Subscribe(callback, msgtype=EDMSG_ALL):
     @keyword msgtype: Message to subscribe to (default to all)
 
     """
-    Publisher().subscribe(callback, msgtype)
+    _ThePublisher.subscribe(callback, msgtype)
 
 def Unsubscribe(callback, messages=None):
     """Remove a listener so that it doesn't get sent messages for msgtype. If

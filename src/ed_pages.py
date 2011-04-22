@@ -434,9 +434,7 @@ class EdPages(ed_book.EdBaseBook):
         try:
             self.control = ed_editv.EdEditorView(self)
             self.LOG("[ed_pages][evt] New Page Created")
-            self.control.Hide()
             self.AddPage(self.control)
-            self.control.Show()
         finally:
             frame.Thaw()
 
@@ -1197,7 +1195,7 @@ class EdPages(ed_book.EdBaseBook):
 
     def CloseAllPages(self):
         """Closes all open pages"""
-        for page in xrange(self.GetPageCount()):
+        for page in range(self.GetPageCount()):
             if not self.ClosePage():
                 break
 
