@@ -8,7 +8,7 @@
 
 """
 This file contains variables that are or may be used in multiple files and
-libraries within the project. Its pupose is to create a globally accessable
+libraries within the project. Its purpose is to create a globally accessible
 access point for all common variables in the project.
 
 """
