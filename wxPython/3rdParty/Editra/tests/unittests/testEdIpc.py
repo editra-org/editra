@@ -52,18 +52,27 @@ class EdIpcTest(unittest.TestCase):
 
     def testIpcCommand(self):
         xmlobj = ed_ipc.IPCCommand()
-        xmlobj.SetArgs([("-g", 22),]) # GOTO line is only supported now
-        xmlobj.SetFiles(["fileone.txt", "filetwo.txt"])
+        arg = ed_ipc.IPCArg()
+        arg.name = '-g'
+        arg.value = 22
+        xmlobj.arglist = [arg,] # GOTO line is only supported now
+        f1 = ed_ipc.IPCFile()
+        f1.value = "fileone.txt"
+        f2 = ed_ipc.IPCFile()
+        f2.value = "filetwo.txt"
+        xmlobj.filelist = [f1, f2]
         serialized = xmlobj.GetXml()
         self.assertTrue(isinstance(serialized, basestring))
 
-        newobj = ed_ipc.IPCCommand()
-        newobj.LoadFromString(serialized)
-        flist = newobj.GetFiles()
+        newobj = ed_ipc.IPCCommand.parse(serialized)
+        flist = newobj.filelist
         self.assertTrue(isinstance(flist, list))
-        self.assertEquals(xmlobj.GetFiles(), flist)
-        args = newobj.GetArgs()
-        self.assertEquals(args, xmlobj.GetArgs())
+        for f in xmlobj.filelist:
+            self.assertTrue(f.value in [f2.value for f2 in flist])
+        args = newobj.arglist
+        for a in xmlobj.arglist:
+            self.assertTrue(a.name in [a2.name for a2 in args])
+            self.assertTrue(unicode(a.value) in [a3.value for a3 in args])
 
     def testSendCommands(self):
         command = ed_ipc.IPCCommand()

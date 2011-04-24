@@ -130,14 +130,10 @@ def HexToRGB(hex_str):
     ldiff = 6 - len(hexval)
     hexval += ldiff * u"0"
     # Convert hex values to integer
-    rval = list()
-    for v in (hexval[0:2], hexval[2:4], hexval[4:]):
-        try:
-            value = int(v, 16)
-            rval.append(value)
-        except ValueError:
-            rval.append(0) # Error
-    return rval
+    red = int(hexval[0:2], 16)
+    green = int(hexval[2:4], 16)
+    blue = int(hexval[4:], 16)
+    return [red, green, blue]
 
 #-----------------------------------------------------------------------------#
 
