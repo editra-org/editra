@@ -194,7 +194,7 @@ scalar2_style {
 
 string_style { 
         fore: #FF3AFF;
-        modifiers: bold;
+        modifiers:bold;
 }
 
 stringeol_style { 
@@ -206,7 +206,7 @@ stringeol_style {
 unknown_style { 
         fore: #FFFFFF; 
         back: #DD0101; 
-        modifiers: bold eol;
+        modifiers:bold eol;
 }
 
 whitespace_style {

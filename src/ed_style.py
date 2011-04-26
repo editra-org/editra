@@ -697,7 +697,7 @@ class StyleMgr(object):
         # Compact data into a contiguous string
         style_data = style_data.replace(u"\r\n", u"").replace(u"\n", u"")
         style_data = style_data.replace(u"\t", u"")
-        style_data = style_data.replace(u" ", u"")
+#        style_data = style_data.replace(u" ", u"") # support old style
 
         ## Build style data tree
         # Tree Level 1 split tag from data
@@ -713,7 +713,7 @@ class StyleMgr(object):
             if len(branch) != 2:
                 self.LOG("[ed_style][err] There was an error parsing "
                          "the syntax data from " + self.style_set)
-                self.LOG("[ed_style][err] Missing a { or } in Def: " + branch[0].split()[0])
+                self.LOG("[ed_style][err] Missing a { or } in Def: " + repr(branch[0]))
                 ttree.remove(branch)
                 continue
 
@@ -753,28 +753,29 @@ class StyleMgr(object):
                 self.LOG("[ed_style][err] The style def %s is not a "
                          "valid name" % style_def[0])
             else:
-                style_str = wx.EmptyString
+                style_str = u""
                 # Check each definition and validate its items
                 for attrib in style_dict[style_def]:
                     values = [ val for val in attrib[1].split()
-                               if val != wx.EmptyString ]
+                               if val != u"" ]
 
                     v1ok = v2ok = False
                     # Check that colors are a hex string
-                    if len(values) and \
+                    n_values = len(values)
+                    if n_values and \
                        attrib[0] in "fore back" and RE_HEX_STR.match(values[0]):
                         v1ok = True
-                    elif len(values) and attrib[0] == "size":
+                    elif n_values and attrib[0] == "size":
                         if RE_ESS_SCALAR.match(values[0]) or values[0].isdigit():
                             v1ok = True
                         else:
                             self.LOG("[ed_style][warn] Bad value in %s"
                                      " the value %s is invalid." % \
                                      (attrib[0], values[0]))
-                    elif len(values) and attrib[0] == "face":
+                    elif n_values and attrib[0] == "face":
                         # Font names may have spaces in them so join the
                         # name of the font into one item.
-                        if len(values) > 1 and values[1] not in STY_EX_ATTRIBUTES:
+                        if n_values > 1 and values[1] not in STY_EX_ATTRIBUTES:
                             tmp = list()
                             for val in list(values):
                                 if val not in STY_EX_ATTRIBUTES:
@@ -784,7 +785,7 @@ class StyleMgr(object):
                                     break
                             values = [u' '.join(tmp),] + values
                         v1ok = True
-                    elif len(values) and attrib[0] == "modifiers":
+                    elif n_values and attrib[0] == "modifiers":
                         v1ok = True
 
                     # Check extra attributes

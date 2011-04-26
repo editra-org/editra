@@ -10,6 +10,20 @@ Change Log:
 
 Changes since last release:
 
+VERSION 0.6.xx
+DATE 0x/xx/2011
+43rd Alpha Release
+
+NEWS:
+
+NEW: [features/enhancements]:
++Expanded unittest suite to verify data in all bundled style sheets.
+
+BUG FIXES:
++Fix crash that could occur when loading old format style sheet
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.6.37
 DATE 04/24/2011
 42nd Alpha Release

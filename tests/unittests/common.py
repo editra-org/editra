@@ -113,6 +113,11 @@ def GetThemeDir():
     tpath = os.path.abspath(tpath)
     return tpath
 
+def GetStylesDir():
+    tpath = os.path.join(u"..", u"..", u"styles")
+    tpath = os.path.abspath(tpath)
+    return tpath
+
 def MakeTempFile(fname):
     """Make a new file in the temp directory with a give name
     @param fname: file name
