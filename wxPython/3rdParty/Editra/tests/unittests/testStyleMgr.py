@@ -14,6 +14,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import os
 import types
 import wx
 import unittest
@@ -230,9 +231,36 @@ class StyleMgrTest(unittest.TestCase):
         sheet_path = common.GetDataFilePath('old_format.ess')
         data = common.GetFileContents(sheet_path)
         styledict = self.mgr.ParseStyleData(data)
+        styledict = self.mgr.PackStyleSet(styledict)
         for tag, item in styledict.iteritems():
+            self.doValidateColourAttrs(tag, item)
+
+    def doValidateColourAttrs(self, tag, item):
+        """validate the colour attributes on an item"""
+        if not item.IsNull():
             try:
                 int(item.GetFore()[1:], 16)
                 int(item.GetBack()[1:], 16)
-            except:
-                self.assertFalse(True, "Bad data in style item: %s" % item)
+            except Exception, msg:
+                self.assertFalse(True, "Bad data in style item: %s:%s" % (tag,item))
+
+    def testValidateBuiltinStyleSheets(self):
+        """Validate formatting and parsing of all builtin style sheets"""
+        sdir = common.GetStylesDir()
+        for sheet in [os.path.join(sdir, f) for f in os.listdir(sdir)
+                      if f.endswith('.ess')]:
+            data = common.GetFileContents(sheet)
+            styledict = self.mgr.ParseStyleData(data)
+            styledict = self.mgr.PackStyleSet(styledict)
+            for tag, item in styledict.iteritems():
+                self.doValidateColourAttrs(tag, item)
+                mods = item.GetModifierList()
+                if len(mods):
+                    for mod in mods:
+                        self.assertTrue(mod in ('eol', 'bold', 'italic', 'underline'))
+                isize = item.GetSize()
+                if len(isize): # Null items such as select_style dont set this attr
+                    self.assertTrue(isize.isdigit() or 
+                                    (isize.startswith("%(") and isize.endswith(")d")),
+                                    "Bad font size specification %s:%s:%s" % (sheet, tag, repr(isize)))
+                # TODO: Fonts
