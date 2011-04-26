@@ -225,3 +225,14 @@ class StyleMgrTest(unittest.TestCase):
         self.assertTrue(whitestyle == default)
         ## END TEST 1
 
+    def testValidateColourData(self):
+        """Validate that colour data is getting parsed correctly"""
+        sheet_path = common.GetDataFilePath('old_format.ess')
+        data = common.GetFileContents(sheet_path)
+        styledict = self.mgr.ParseStyleData(data)
+        for tag, item in styledict.iteritems():
+            try:
+                int(item.GetFore()[1:], 16)
+                int(item.GetBack()[1:], 16)
+            except:
+                self.assertFalse(True, "Bad data in style item: %s" % item)
