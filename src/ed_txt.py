@@ -21,7 +21,6 @@ import sys
 import re
 import time
 import wx
-import threading
 import codecs
 import locale
 import types
@@ -32,6 +31,7 @@ from util import Log
 from profiler import Profile_Get
 import ed_msg
 import ebmlib
+import ed_thread
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -96,6 +96,7 @@ class EdFile(ebmlib.FileObjectImpl):
         self.__buffer = None
         self._raw = False           # Raw bytes?
         self._fuzzy_enc = False
+        self._job = None # async file read job
 
     def _HandleRawBytes(self, bytes):
         """Handle prepping raw bytes for return to the buffer
@@ -401,8 +402,8 @@ class EdFile(ebmlib.FileObjectImpl):
         pid = control.GetTopLevelParent().GetId()
         filesize = ebmlib.GetFileSize(self.GetPath())
         ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 1, filesize))
-        thread = FileReadThread(control, self.ReadGenerator, 4096)
-        thread.start()
+        self._job = FileReadJob(control, self.ReadGenerator, 4096)
+        ed_thread.EdThreadPool().QueueJob(self._job.run)
 
     def ReadGenerator(self, chunk=512):
         """Get the contents of the file as a string, automatically handling
@@ -516,15 +517,15 @@ class EdFile(ebmlib.FileObjectImpl):
 
 #-----------------------------------------------------------------------------#
 
-class FileReadThread(threading.Thread):
-    """Worker thread for reading text from a file"""
+class FileReadJob(object):
+    """Job for running an async file read in a background thread"""
     def __init__(self, reciever, task, *args, **kwargs):
         """Create the thread
-        @param reciever: Window to recieve events
+        @param receiver: Window to receive events
         @param task: generator method to call
 
         """
-        super(FileReadThread, self).__init__()
+        super(FileReadJob, self).__init__()
 
         # Attributes
         self.cancel = False
