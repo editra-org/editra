@@ -501,6 +501,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         errmk.RegisterWithStc(self)
         # Lint Marker
         ed_marker.LintMarker().RegisterWithStc(self)
+        ed_marker.LintMarkerWarning().RegisterWithStc(self)
+        ed_marker.LintMarkerError().RegisterWithStc(self)
 
     def DoZoom(self, mode):
         """Zoom control in or out
