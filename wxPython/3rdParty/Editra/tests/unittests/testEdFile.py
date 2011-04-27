@@ -135,6 +135,15 @@ class EdFileTest(unittest.TestCase):
         new_bytes = common.GetFileContents(out)
         self.assertEquals(raw_bytes, new_bytes)
 
+    def testReadUTF32Bom(self):
+        """Test reading a file that has a UTF32 BOM"""
+        fname = common.GetDataFilePath('test_read_utf32_bom.txt')
+        fileutf32 = ed_txt.EdFile(fname)
+        data = fileutf32.Read()
+        self.assertTrue(fileutf32.HasBom(), "UTF-32 BOM not detected!")
+        self.assertTrue(fileutf32.Encoding in ("utf-32", "utf_32"),
+                        "Incorrect Encoding detected: %s" % fileutf32.Encoding)
+
     def testGetEncoding(self):
         """Test the encoding detection"""
         txt = self.file.Read()
