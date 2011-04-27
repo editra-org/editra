@@ -82,18 +82,39 @@ _ErrorBmp = PyEmbeddedImage(
     "W43iD40GVr2uIYkSQKLE/DUM2TMKIjPK7+bmeLuxMQVJ9LrR4PzsjO+Pj+yNRzl3md5bFvfV"
     "Ki+urzOAb7e3nF9d8UkY08uUhqj/rLOIY5050V9UfNMzpyji5gAAAABJRU5ErkJggg==")
 
-_LintBmp = PyEmbeddedImage(
-    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAfxJ"
-    "REFUOI2dkjFoE1EYgL+XpF4IjeHQhh7BpATOuthTc1BMdHEILdJFh4I4uDq5BTs4OVTdAnZw"
-    "soJLCC4Ouogg2ogQ0eoUG24IhMA1eAihcqTxOdS8pEl08Ic3vJ//+/6f/z1EIMjfzoXyoszd"
-    "PydFIIh1+5S8Vl6RozUB/hFJ4oj0FNl1S07rERq4YzWHBLmSLRcKpuzf+0B4P8CJ1CwAl+6e"
-    "lcNMaNQYzcSUrJ/zTwaxIiYr8WUakTrtQkd+ebAjxgTS6ZJKJ+APfHPuOgDdbo+Nz5ssei3O"
-    "z1/kSPIN9sPTEiCUK9lya7UqACpr20KUphTccOsANL0W2ozGR98h4Roc9UK8vvNpMEGuZEv3"
-    "pUvMjpEkzuW5PA23TtNr0Q51IHQg7HZ7PHKeEhle4tZqVfT8HvHlONqMpuCvew7ftZ8ALCXz"
-    "vK+9VdBeCrLrlgQQIhBUSzvjp0joxqAzYEVNml4LADud5V55Y/Iz+ru+So7C7VCHhG5QdSoA"
-    "1IqOqBUdcWw2OniFsKHxofWNK7oxBltRkyevXgCgaUHVqLK2LdQE765WRdjQePzsOUvJvCqy"
-    "oiYAieMH/8P3ewx/NrWDfszfSks9EyNDmoRuHOo8rUfYrXkA7Gw2xEQBwELBlL7fU/dfP/YV"
-    "MBoTBZNktaLzfwIA80ZSDo89HL8BIIDCnUEmwvoAAAAASUVORK5CYII=")
+_LintBmpGreen = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAZNJ"
+    "REFUOI3Fk00ow2Ecxz/P/ogtYxNRaDIvlykvO4yThHJzUBx3lLujg6O75OQkB4lSJKSUVsMO"
+    "qI1lW15aJv5/85KXbX8na48R5eBbz+H5Pd/ft2/f3+8RwqDwFxj+1P2TQMd8q94y1qgDdM+5"
+    "9F8JOGeaJGKBw5SufYhlIudzoTjfhHPSoSev3jAm8njKecWWW0m/vZfVuw18BCS++CrED7tu"
+    "+yAAi8draIpKf0kfs3dLAOwM7AtJoHvOpd/4VQzPOpZmKz3l7QBEosG0sFcNk7x6wzceEFkZ"
+    "rA95RIHDhKXZits+SCQaxHvpJ5ZKYKuoo6OuCwClJk9yK4X4svtAcdLCxXWYWCoBQGeZi0g0"
+    "iKbGuT3SuPWq1A5XpcOUQkzlCzRFTd+d1no8IS9ms2DxZgVLoZG9iWOR2SM58I0HhPb8yHx4"
+    "k84yF4dnpziqa4nHdULbFwgla2jZe7DrPhAYBVsxD2azYHp5AX/ohNOpcwHQNtog7cKXY8wk"
+    "qvdPFJWapOQlCIPy47GP2PRv3//9N74DHQaLgsqg1M8AAAAASUVORK5CYII=")
+
+_LintBmpRed = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAXJJ"
+    "REFUOI3Fk79Lw0AYhp9LhA4tFIyQQSg2oq2zRTPYrtLJjpLRVf8AxVnwD9C1o4OTBcVdC42i"
+    "jtpWjCIVGq1xsYiEek4NptQf0MEPDj7uvve9l+c4IRSVQUoZSP2bQbmwILdnZ2S3/5PBQS4b"
+    "DLZcl1FFYcVI9hUDDPVuxIeHKWam5ZuqMqLrACzqOgnLothoyKWzc/F1XvSD2I2bsCwA7nd2"
+    "ANBMk6ejI7yXFwoVW4QMyoUFeVirAZBPpdBMk/fHR14dh5hh8Oo4tFyXh48Plk9OgxQBg7m9"
+    "kphPJsmnUiQsKxB3SzNNAMYikVDaEMTdahUAz7YDsWaaQe/5PsfNJsXMdAA1BDHe4x4zDJ5t"
+    "G4BaqcRNu81m/ToEMZRg46oq9i8vuatUgptjhkHLdfF8n06nQ2/1fYWDXFb6vs+IrlNvNLjw"
+    "PLacW7E6OSFVVWXjqip+NABYn0pLgPFolJt2OyQKR1DUX9daOi2/Pf/33/gJL9aOTtHLtUIA"
+    "AAAASUVORK5CYII=")
+
+_LintBmpYellow = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAblJ"
+    "REFUOI3FkzFIG2EUx39frmCStgpqIw0pJKGEpErViEIHoYtQcOjSTkJ1ky7irLM6ScVFbBeL"
+    "FBxEBAUHl6IirVMKFdseXE5yjSVGCzW53ImXr0Mh9DRiwaEPvuG9773/e/y+9wnhUbiOea5V"
+    "fZXA7FibHB6ISoD5yQ75TwLPntytJOpGEZ9PYag/Ik3LqdrkxvnA054gj5INMpM1CYduUiie"
+    "8eB+LV3dfYwYphyf+Sb+zhfVIM5PdkjTcnjc8wKAnc13AMQTrWxs7ZD/aTMxowqXwOxYm9xT"
+    "f1GWks6H9cQTrZxax2jpDIHGGgDefzikVHKYmtMqU1QYDI6mxL2gn+ZYHV3dfRwffkFLZwC4"
+    "dTtA/Z04AMaP0uUQ978X8XsV8sYGumFiWg6xeAuf93TK0kHVCyBg5GWsAtoF0SMEuSObaOSP"
+    "Hw75SaU+4fcqLK9uEwx4mX6bFnBQfYKpOU181U5YXd8l2Z4kl7dpSYTJHdmoegHLLl8AfmEP"
+    "Xi/sCzVdYGllk0BjDa/efCSTNVlcOxAAQ/0R10JVfUaA4YGoLEtJNmcRavK5yLtMeJQrz/Pe"
+    "kLz0/r//xt8H26DcJVZnmgAAAABJRU5ErkJggg==")
 
 #-----------------------------------------------------------------------------#
 
@@ -333,5 +354,24 @@ class LintMarker(Marker):
     _ids = [NewMarkerId(),]
     def __init__(self):
         super(LintMarker, self).__init__()
-        self.Bitmap = _LintBmp.Bitmap
+        self.Bitmap = _LintBmpGreen.Bitmap
 
+class LintMarkerWarning(Marker):
+    """Marker object to represent a marker for moderate severity 
+    coding issue in the EditraBaseStc
+
+    """
+    _ids = [NewMarkerId(),]
+    def __init__(self):
+        super(LintMarkerWarning, self).__init__()
+        self.Bitmap = _LintBmpYellow.Bitmap
+
+class LintMarkerError(Marker):
+    """Marker object to represent a marker for a high severity
+    coding issue in the EditraBaseStc
+
+    """
+    _ids = [NewMarkerId(),]
+    def __init__(self):
+        super(LintMarkerError, self).__init__()
+        self.Bitmap = _LintBmpRed.Bitmap

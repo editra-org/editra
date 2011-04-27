@@ -19,6 +19,9 @@ NEWS:
 NEW: [features/enhancements]:
 +Expanded unittest suite to verify data in all bundled style sheets.
 
+LIBRARY:
++Add LintError and LintWarning markers.
+
 BUG FIXES:
 +Fix crash that could occur when loading old format style sheet
 
