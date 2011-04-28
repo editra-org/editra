@@ -61,7 +61,7 @@ class CodeBrowser(plugin.Plugin):
         @note: overridden from Plugin
 
         """
-        return "0.4.89"
+        return "0.6.27"
 
     def GetUIHandlers(self):
         """Pass Ui handlers to main window for management"""

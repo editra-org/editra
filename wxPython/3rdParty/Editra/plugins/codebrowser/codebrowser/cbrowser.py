@@ -24,13 +24,13 @@ __revision__ = "$Revision$"
 #--------------------------------------------------------------------------#
 # Imports
 import StringIO
-import threading
 import wx
 
 # Editra Libraries
 import ed_glob
 from profiler import Profile_Get, Profile_Set
 import ed_msg
+import ed_thread
 
 # Local Imports
 import cbconfig
@@ -531,9 +531,9 @@ class CodeBrowserTree(wx.TreeCtrl):
                                (self._mw.GetId(), -1, -1))
 
             # Create and start the worker thread
-            thread = TagGenThread(self, self._cjob, genfun,
-                                  StringIO.StringIO(self._cpage.GetText()))
-            wx.CallLater(75, thread.start)
+            task = TagGenJob(self, self._cjob, genfun,
+                             StringIO.StringIO(self._cpage.GetText()))
+            ed_thread.EdThreadPool().QueueJob(task.DoTask)
         else:
             self._ClearTree()
             ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_SHOW,
@@ -635,8 +635,8 @@ class CodeBrowserTree(wx.TreeCtrl):
         self._SyncTree()
 
 #--------------------------------------------------------------------------#
-# Tag Generator Thread
-class TagGenThread(threading.Thread):
+# Tag Generator
+class TagGenJob(object):
     """Thread for running tag parser on and returning the results for
     display in the tree.
 
@@ -649,7 +649,7 @@ class TagGenThread(threading.Thread):
         @param buff: string buffer to pass to genfun
 
         """
-        threading.Thread.__init__(self)
+        super(TagGenJob, self).__init__()
 
         # Attributes
         self.reciever = reciever
@@ -657,7 +657,7 @@ class TagGenThread(threading.Thread):
         self.buff = buff
         self.task = genfun
 
-    def run(self):
+    def DoTask(self):
         """Run the generator function and return the docstruct to
         the main thread.
 
