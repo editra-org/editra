@@ -35,6 +35,7 @@ from profiler import Profile_Get, Profile_Set
 import eclib
 import ebmlib
 import ed_basewin
+import ed_thread
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -1368,8 +1369,8 @@ class SearchResultScreen(ed_basewin.EdBaseCtrlBox):
             self._job.Cancel()
 
         self._list.Clear()
-        self._job = eclib.TaskThread(self._list, searchmeth, *args, **kwargs)
-        self._job.start()
+        self._job = eclib.TaskObject(self._list, searchmeth, *args, **kwargs)
+        ed_thread.EdThreadPool().QueueJob(self._job.DoTask)
         self._cancelb.Enable()
 
 #-----------------------------------------------------------------------------#
