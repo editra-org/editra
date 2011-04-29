@@ -40,6 +40,7 @@ import ed_mdlg
 import ed_txt
 from ed_keyh import KeyHandler, ViKeyHandler
 import ebmlib
+import ed_thread
 
 #-------------------------------------------------------------------------#
 # Globals
@@ -611,15 +612,19 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
         if not self._backup_done and \
            (not bkupmgr.HasBackup(fname) or bkupmgr.IsBackupNewer(fname)):
-            writer = bkupmgr.GetBackupWriter(self.File)
-            try:
-                writer(self.GetText())
-            except:
-                return
             msg = _("File backup performed: %s") % fname
-            nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, self.GetId(),
-                                        msg, ed_glob.SB_INFO)
-            wx.PostEvent(self.GetTopLevelParent(), nevt)
+            idval = self.Id
+            target = self.TopLevelParent
+            def BackupJob(fobj, text):
+                writer = bkupmgr.GetBackupWriter(fobj)
+                try:
+                    writer(text)
+                except Exception, msg:
+                    return
+                nevt = ed_event.StatusEvent(ed_event.edEVT_STATUS, idval,
+                                            msg, ed_glob.SB_INFO)
+                wx.PostEvent(target, nevt)
+            ed_thread.EdThreadPool().QueueJob(BackupJob, self.File, self.GetText())
             self._backup_done = True
 
     def OnModified(self, evt):
