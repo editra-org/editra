@@ -85,3 +85,21 @@ class FileBackupMgrTest(unittest.TestCase):
         self.bkup.SetHeader("Hello World")
         self.assertEquals("Hello World", self.bkup.header)
         self.assertRaises(AssertionError, self.bkup.SetHeader, "\n\nHELLO")
+
+    def testBackupWithHeader(self):
+        """Tests using the backup file header identifier option"""
+        bkup = ebmlib.FileBackupMgr("SuperHeader", u"%s~")
+        path = common.MakeTempFile("test_header.txt")
+        self.assertTrue(bkup.MakeBackupCopy(path))
+        bkupf = bkup.GetBackupFilename(path)
+        self.assertTrue(os.path.exists(bkupf), "Invalid path: %s" % bkupf)
+        txt = common.GetFileContents(bkupf)
+        self.assertTrue(txt.startswith("SuperHeader"))
+
+    def testBackupCustomDirectory(self):
+        """"Test doing a backup to a custom directory"""
+        bkup = ebmlib.FileBackupMgr()
+        bkup.SetBackupDirectory(common.GetTempDir())
+        self.assertTrue(bkup.MakeBackupCopy(__file__))
+        path = bkup.GetBackupFilename(__file__)
+        self.assertTrue(os.path.exists(path), "Path Fail: %s" % path)
