@@ -24,6 +24,8 @@ LIBRARY:
 
 BUG FIXES:
 +Fix crash that could occur when loading old format style sheet
++Fix bug in threaded file load that could lead to modified marker being
+incorrectly shown on the tab for the file.
 
 #-----------------------------------------------------------------------------#
 

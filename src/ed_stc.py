@@ -839,6 +839,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 #                sb.ProcessPendingEvents()
                 self.SetReadOnly(False)
                 self.AppendText(evt.GetValue())
+                self.SetSavePoint()
                 self.SetReadOnly(True)
                 # wx.GetApp().Yield(True) # Too slow on windows...
         elif evt.GetState() == ed_txt.FL_STATE_END:
