@@ -1168,6 +1168,7 @@ class EdPages(ed_book.EdBaseBook):
         @return bool: was page deleted?
 
         """
+        result = True
         try:
             page = self.GetPage(idx)
             result = page.CanCloseTab()
