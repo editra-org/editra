@@ -543,7 +543,7 @@ def DoSourcePackage():
 
     setup(
         name = NAME,
-        scripts = ['Editra', 'Editra.pyw'],
+        scripts = ['editra',],
         version = VERSION,
         description = DESCRIPTION,
         long_description = LONG_DESCRIPT,
