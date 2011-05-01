@@ -18,6 +18,9 @@ NEWS:
 
 NEW: [features/enhancements]:
 +Improve Python autocompletion to better detect properties.
++Launch script for source installs is now a lower case 'editra'.
++Source install on Windows now overwrites launch script installed by wxPython
+for Editra to allow the separately installed version to be started.
 +Expanded unittest suite to verify data in all bundled style sheets.
 
 LIBRARY:
