@@ -2,7 +2,7 @@ include *.py *.pyw *.cfg
 include AUTHORS
 include CHANGELOG
 include COPYING
-include Editra
+include editra
 include FAQ
 include INSTALL
 include MANIFEST
