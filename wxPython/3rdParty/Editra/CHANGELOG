@@ -17,6 +17,7 @@ DATE 0x/xx/2011
 NEWS:
 
 NEW: [features/enhancements]:
++Improve Python autocompletion to better detect properties.
 +Expanded unittest suite to verify data in all bundled style sheets.
 
 LIBRARY:

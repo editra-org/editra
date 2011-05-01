@@ -457,10 +457,10 @@ class Scope(object):
                      variable in the scopes locals
 
         """
-        if test.find('=') > -1:
+        if '=' in test:
             var = test.split('=')[0].strip()
             for loc in self.locals:
-                if loc.find('=') > -1 and var == loc.split('=')[0].strip():
+                if '=' in loc and var == loc.split('=')[0].strip():
                     self.locals.remove(loc)
 
     def get_code(self):
@@ -537,6 +537,7 @@ class Class(Scope):
         cls = Class(self.name, self.supers, indent)
         for scope in self.subscopes:
             cls.add(scope.copy_decl(indent + 1))
+        cls.locals = self.locals
         return cls
 
     def get_code(self):
@@ -551,12 +552,24 @@ class Class(Scope):
         cstr += ':\n'
         if len(self.docstr) > 0:
             cstr += self.childindent() + '"""' + self.docstr + '"""\n'
-        if len(self.subscopes) > 0:
-            for sub in self.subscopes:
-                cstr += sub.get_code()
-        else:
+        need_pass = True
+        for local in self.locals:
+            need_pass = False
+            cstr += ('%s%s\n' % (self.childindent(), local))
+        for sub in self.subscopes:
+            need_pass = False
+            cstr += sub.get_code()
+        if need_pass:
             cstr += '%spass\n' % self.childindent()
         return cstr
+
+    def local(self, loc):
+        """Add an object to the scopes locals
+        @param loc: local object to add to locals
+
+        """
+        if loc and '.' not in loc:
+            super(Class, self).local(loc)
 
 class Function(Scope):
     """Create a function object for representing a python function
@@ -758,6 +771,8 @@ class PyParser(object):
                    tokenize.NUMBER : '0', 'ord' : '0', 'id' : '0',
                    'abs' : '0', 'sum' : '0', 'pow' : '0', 'len' : '0',
                    'hash' : '0',
+                   # Property
+                   'property' : 'property()',
                    # String
                    tokenize.STRING : '""', 'str' : '""',
                    'repr' : '""', 'chr' : '""', 'unichr' : '""',
