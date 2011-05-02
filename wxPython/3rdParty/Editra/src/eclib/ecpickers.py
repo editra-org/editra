@@ -145,8 +145,8 @@ class PyFontPicker(wx.Panel):
         fdata = wx.FontData()
         fdata.SetInitialFont(self._font)
         fdlg = wx.FontDialog(self.GetParent(), fdata)
-        fdlg.ShowModal()
-        fdata = fdlg.GetFontData()
+        if fdlg.ShowModal() == wx.ID_OK:
+            fdata = fdlg.GetFontData()
+            wx.PostEvent(self, wx.FontPickerEvent(self, self.GetId(),
+                                                  fdata.GetChosenFont()))
         fdlg.Destroy()
-        wx.PostEvent(self, wx.FontPickerEvent(self, self.GetId(),
-                                              fdata.GetChosenFont()))

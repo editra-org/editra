@@ -31,6 +31,8 @@ BUG FIXES:
 +Fix bug in threaded file load that could lead to modified marker being
 incorrectly shown on the tab for the file.
 +Fix crash that could occur under rare case when closing an editor page.
++Fix bug in preferences where clicking Cancel on changing the font could still
+result in the change being accepted.
 
 #-----------------------------------------------------------------------------#
 
