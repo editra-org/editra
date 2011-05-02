@@ -22,6 +22,7 @@ NEW: [features/enhancements]:
 +Source install on Windows now overwrites launch script installed by wxPython
 for Editra to allow the separately installed version to be started.
 +Expanded unittest suite to verify data in all bundled style sheets.
++Shelf window can now be maximized.
 
 LIBRARY:
 +Add LintError and LintWarning markers.
