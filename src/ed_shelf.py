@@ -91,7 +91,7 @@ class Shelf(plugin.Plugin):
         mgr.AddPane(shelf,
                     wx.aui.AuiPaneInfo().Name(Shelf.SHELF_NAME).\
                             Caption("Shelf").Bottom().Layer(0).\
-                            CloseButton(True).MaximizeButton(False).\
+                            CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(500,250)))
 
         # Hide the pane and let the perspective manager take care of it
