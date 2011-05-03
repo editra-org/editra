@@ -809,7 +809,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: event that called this handler
 
         """
-        statbar.SetStatusText(evt.GetMessage(), evt.GetSection())
+        self.SetStatusText(evt.GetMessage(), evt.GetSection())
 
     def OnPrint(self, evt):
         """Handles sending the current document to the printer,
