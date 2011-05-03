@@ -42,22 +42,31 @@ _ = wx.GetTranslation
 class PerspectiveManager(object):
     """Creates a perspective manager for the given aui managed window.
     It supports saving and loading of on disk perspectives as created by
-    calling SavePerspective from the AuiManager.
+    calling SavePerspective from the AuiManager. Mixin class for a wx.Frame.
 
     """
-    def __init__(self, auimgr, base):
+    def __init__(self, base):
         """Initializes the perspective manager. The auimgr parameter is
         a reference to the windows AuiManager instance, base is the base
         path to where perspectives should be loaded from and saved to.
-        @param auimgr: AuiManager to use
         @param base: path to configuration cache
 
         """
         super(PerspectiveManager, self).__init__()
 
+        hint = wx.aui.AUI_MGR_TRANSPARENT_HINT
+        if wx.Platform == '__WXGTK__':
+            # Use venetian blinds style as transparent can cause crashes
+            # on linux when desktop compositing is used.
+            hint = wx.aui.AUI_MGR_VENETIAN_BLINDS_HINT
+
+        self._mgr = wx.aui.AuiManager(flags=wx.aui.AUI_MGR_DEFAULT |
+                                      wx.aui.AUI_MGR_TRANSPARENT_DRAG |
+                                      hint |
+                                      wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE)
+        self._mgr.SetManagedWindow(self)
+
         # Attributes
-        self._window = auimgr.GetManagedWindow()    # Managed Window
-        self._mgr = auimgr                          # Window Manager
         self._ids = list()                          # List of menu ids
         self._base = os.path.join(base, DATA_FILE)  # Path to config
         self._viewset = dict()                      # Set of Views
@@ -83,10 +92,13 @@ class PerspectiveManager(object):
             # Ensure window is on screen
             if not self.IsPositionOnScreen(pos):
                 pos = self.GetPrimaryDisplayOrigin()
-            self._window.SetPosition(pos)
+            self.SetPosition(pos)
 
         # Event Handlers
-        self._window.Bind(wx.EVT_MENU, self.OnPerspectiveMenu)
+        self.Bind(wx.EVT_MENU, self.OnPerspectiveMenu)
+
+    #---- Properties ----#
+    PanelMgr = property(lambda self: self._mgr)
 
     def AddPerspective(self, name, p_data=None):
         """Add a perspective to the view set. If the p_data parameter
@@ -130,6 +142,13 @@ class PerspectiveManager(object):
         self._menu.InsertAlpha(per_id, name, _("Change view to \"%s\"") % name,
                                kind=wx.ITEM_CHECK, after=ID_AUTO_PERSPECTIVE)
         return True
+
+    def GetFrameManager(self):
+        """Returns the manager for this frame
+        @return: Reference to the AuiMgr of this window
+
+        """
+        return self._mgr
 
     def GetPerspectiveControls(self):
         """Returns the control menu for the manager
@@ -199,7 +218,7 @@ class PerspectiveManager(object):
         level = max(100, Profile_Get('ALPHA', default=255))
         # Only set the transparency if it is not opaque
         if level != 255:
-            self._window.SetTransparent(level)
+            self.SetTransparent(level)
 
     def IsPositionOnScreen(self, pos):
         """Check if the given position is on any of the connected displays
