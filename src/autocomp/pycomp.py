@@ -99,22 +99,15 @@ class Completer(completer.BaseCompleter):
                 # Get Auto-completion List
                 complst = cmpl.get_completions(command)
                 sigs = list()
-                type = completer.TYPE_UNKNOWN
+                tmap = {"function" : completer.TYPE_FUNCTION,
+                        "method" : completer.TYPE_METHOD,
+                        "class" : completer.TYPE_CLASS,
+                        "attribute" : completer.TYPE_ATTRIBUTE,
+                        "property" : completer.TYPE_PROPERTY}
                 for sig in complst:
                     word = sig['word'].rstrip(u'(.')
-                    if sig['type'] == "function":
-                        type = completer.TYPE_FUNCTION
-                    elif sig['type'] == "method":
-                        type = completer.TYPE_METHOD
-                    elif sig['type'] == "class":
-                        type = completer.TYPE_CLASS
-                    elif sig['type'] == "attribute":
-                        type = completer.TYPE_ATTRIBUTE
-                    elif sig['type'] == "property":
-                        type = completer.TYPE_PROPERTY
-                    
-                    sigs.append(completer.Symbol(word, type))
-
+                    tval = tmap.get(sig['type'], completer.TYPE_UNKNOWN)
+                    sigs.append(completer.Symbol(word, tval))
                 sigs.sort(key=lambda x: x.Name.upper())
                 return sigs
 
@@ -198,7 +191,11 @@ class PyCompleter(object):
         """
         scope = self.parser.parse(text.replace('\r\n', '\n'), line)
         src = scope.get_code()
-        dbg("[pycomp] Generated source: %s" % src)
+        # Test
+#        f = open('pycompout.py', 'w')
+#        f.write(src)
+#        f.close()
+        dbg("[pycomp][info] Generated source: %s" % src)
         try: 
             exec src in self.compldict
         except Exception, msg:
@@ -206,7 +203,7 @@ class PyCompleter(object):
         else:
             dbg("[pycomp][info] Successfully executed source code")
 
-        for loc in scope.locals:
+        for loc in [ l[1] for l in scope.locals]:
             try: 
                 exec loc in self.compldict
             except Exception, msg:
@@ -401,12 +398,36 @@ class Scope(object):
         """
         super(Scope, self).__init__()
 
+        # Attributes
         self.subscopes = list()
         self.docstr = u''
         self.locals = list()
         self.parent = None
         self.name = name
         self.indent = indent
+        self.objid = -1         # Tracks order of declaration
+
+    DocStr = property(lambda self: self.docstr,
+                      lambda self, dstr: setattr(self, 'docstr', dstr))
+    Locals = property(lambda self: self.locals,
+                      lambda self, loc: setattr(self, 'locals', loc))
+    Parent = property(lambda self: self.parent,
+                      lambda self, parent: setattr(self, 'parent', parent))
+
+    def Clone(self, indent=0):
+        """Clone this scope object"""
+        obj = Scope(self.name, indent)
+        obj.DocStr = self.DocStr
+        obj.Locals = list(self.Locals)
+        obj.Parent = self.Parent
+        for scope in self.subscopes:
+            obj.subscopes.append((scope[0], scope[1].Clone(indent + 1)))
+        obj.objid = self.objid
+        return obj
+
+    def NextObjId(self):
+        self.objid += 1
+        return self.objid
 
     def add(self, sub):
         """Push a subscope into this scope
@@ -414,7 +435,7 @@ class Scope(object):
 
         """
         sub.parent = self
-        self.subscopes.append(sub)
+        self.subscopes.append((self.NextObjId(), sub))
         return sub
 
     def doc(self, docstr):
@@ -441,15 +462,7 @@ class Scope(object):
 
         """
         self._checkexisting(loc)
-        self.locals.append(loc)
-
-    def copy_decl(self, indent=0):
-        """Copy a scope's declaration only, at the specified indent level 
-        - not local variables
-        @keyword indent: indent level of scope declaration
-
-        """
-        return Scope(self.name, indent)
+        self.locals.append((self.NextObjId(), loc))
 
     def _checkexisting(self, test):
         """Convenience function... keep out duplicates
@@ -460,7 +473,7 @@ class Scope(object):
         if '=' in test:
             var = test.split('=')[0].strip()
             for loc in self.locals:
-                if '=' in loc and var == loc.split('=')[0].strip():
+                if '=' in loc[1] and var == loc[1].split('=')[0].strip():
                     self.locals.remove(loc)
 
     def get_code(self):
@@ -471,8 +484,8 @@ class Scope(object):
         cstr = '"""' + self.docstr + '"""\n'
         nonimport = list()
         for loc in self.locals:
-            if loc.startswith('import') or loc.startswith('from'):
-                cstr += ("try:\n    %s\nexcept ImportError:\n    pass\n" % loc)
+            if loc[1].startswith('import') or loc[1].startswith('from'):
+                cstr += ("try:\n    %s\nexcept ImportError:\n    pass\n" % loc[1])
             else:
                 nonimport.append(loc)
 
@@ -480,13 +493,13 @@ class Scope(object):
         # hopefully this name is unique enough...
         cstr += 'class _PyCmplNoType:\n    def __getattr__(self,name):\n        return None\n'
 
-        # Get all subscopes (classes, functions, methods)
-        for sub in self.subscopes:
-            cstr += sub.get_code()
-
-        # Get remaining local variables
-        for loc in nonimport:
-            cstr += loc + '\n'
+        decls = self.subscopes + nonimport
+        decls.sort(key=lambda x: x[0])
+        for decl in [d[1] for d in decls]:
+            if isinstance(decl, Scope):
+                cstr += decl.get_code()
+            else:
+                cstr += decl + '\n'
 
         return cstr
 
@@ -528,17 +541,16 @@ class Class(Scope):
         super(Class, self).__init__(name, indent)
         self.supers = supers
 
-    def copy_decl(self, indent=0):
-        """Create a copy of the class object with a scope at the
-        given level of indentation.
-        @keyword indent: scope of indentation
-
-        """
-        cls = Class(self.name, self.supers, indent)
+    def Clone(self, indent=0):
+        """Create a clone of this object"""
+        obj = Class(self.name, self.supers, indent)
+        obj.DocStr = self.DocStr
+        obj.Locals = list(self.Locals)
+        obj.Parent = self.Parent
+        obj.objid = self.objid
         for scope in self.subscopes:
-            cls.add(scope.copy_decl(indent + 1))
-        cls.locals = self.locals
-        return cls
+            obj.subscopes.append((scope[0], scope[1].Clone(indent + 1)))
+        return obj
 
     def get_code(self):
         """Get the code string representation of the Class object
@@ -553,12 +565,15 @@ class Class(Scope):
         if len(self.docstr) > 0:
             cstr += self.childindent() + '"""' + self.docstr + '"""\n'
         need_pass = True
-        for local in self.locals:
+        decls = self.locals + self.subscopes
+        decls.sort(key=lambda x: x[0])
+        for decl in [d[1] for d in decls]:
             need_pass = False
-            cstr += ('%s%s\n' % (self.childindent(), local))
-        for sub in self.subscopes:
-            need_pass = False
-            cstr += sub.get_code()
+            if isinstance(decl, Scope):
+                cstr += decl.get_code()
+            else:
+                cstr += ('%s%s\n' % (self.childindent(), decl))
+
         if need_pass:
             cstr += '%spass\n' % self.childindent()
         return cstr
@@ -586,13 +601,20 @@ class Function(Scope):
         super(Function, self).__init__(name, indent)
         self.params = params
 
-    def copy_decl(self, indent=0):
+    def Clone(self, indent=0):
         """Create a copy of the functions declaration at the given
         scope of indentation.
         @keyword indent: indentation level of the declaration
 
         """
-        return Function(self.name, self.params, indent)
+        obj = Function(self.name, self.params, indent)
+        obj.DocStr = self.DocStr
+        obj.Locals = list(self.Locals)
+        obj.Parent = self.Parent
+        for scope in self.subscopes:
+            obj.subscopes.append((scope[0], scope[1].Clone(indent + 1)))
+        obj.objid = self.objid
+        return obj
 
     def get_code(self):
         """Get code string representation of the function object
@@ -711,16 +733,16 @@ class PyParser(object):
 
         """
         self.scope = self.scope.pop(indent)
-        tokentype, fname, indent = self.next()
+        tokentype, fname, findent = self.next()
         if tokentype != NAME:
             return None
 
-        tokentype, open_paren, indent = self.next()
+        tokentype, open_paren, tindent = self.next()
         if open_paren != '(':
             return None
 
         params = self._parenparse()
-        tokentype, colon, indent = self.next()
+        tokentype, colon, tindent = self.next()
         if colon != ':':
             return None
 
@@ -855,11 +877,16 @@ class PyParser(object):
 
         """
         newscope = Scope('result', 0)
-        scp = self.currentscope
-        while scp != None:
+        scopes = list()
+        tscp = self.currentscope.parent
+        while tscp != None:
+            scopes.append(tscp)
+            tscp = tscp.parent
+        scopes.append(self.currentscope)
+
+        for scp in scopes:
             if type(scp) == Function:
                 cut = 0
-
                 # Handle 'self' params
                 if scp.parent != None and type(scp.parent) == Class:
                     cut = 1
@@ -873,21 +900,20 @@ class PyParser(object):
                     ind = param.find('=')
                     if len(param) == 0:
                         continue
-
                     if ind == -1:
                         newscope.local('%s = _PyCmplNoType()' % param)
                     else:
                         newscope.local('%s = %s' % (param[:ind], 
                                                     _sanitize(param[ind+1:])))
 
-            for sub in scp.subscopes:
-                newscope.add(sub.copy_decl(0))
-
-            for loc in scp.locals:
-                newscope.local(loc)
-
-            scp = scp.parent
-
+            decls = scp.subscopes + scp.locals
+            decls.sort(key=lambda x: x[0])
+            for decl in [d[1] for d in decls]:
+                if isinstance(decl, Scope):
+                    newscope.add(decl.Clone(0))
+                else:
+                    newscope.local(decl)
+                
         self.currentscope = newscope
         return self.currentscope
 
@@ -912,14 +938,12 @@ class PyParser(object):
                 elif token == 'def':
                     func = self._parsefunction(indent)
                     if func == None:
-                        #print "function: syntax error..."
                         continue
                     freshscope = True
                     self.scope = self.scope.add(func)
                 elif token == 'class':
                     cls = self._parseclass(indent)
                     if cls == None:
-                        #print "class: syntax error..."
                         continue
                     freshscope = True
                     self.scope = self.scope.add(cls)
@@ -935,7 +959,6 @@ class PyParser(object):
                 elif token == 'from':
                     mod, token = self._parsedotname()
                     if not mod or token != "import":
-                        #print "from: syntax error..."
                         continue
                     names = self._parseimportlist()
                     for name, alias in names:
@@ -949,7 +972,7 @@ class PyParser(object):
                     if freshscope:
                         self.scope.doc(token)
                 elif tokentype == NAME:
-                    name, token = self._parsedotname(token) 
+                    name, token = self._parsedotname(token)
                     if token == '=':
                         stmt = self._parseassignment()
                         dbg("[pycomp] parseassignment: %s = %s" % (name, stmt))
