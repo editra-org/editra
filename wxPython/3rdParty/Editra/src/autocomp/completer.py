@@ -86,14 +86,11 @@ class Symbol(object):
 
     def __hash__(self):
         return hash(self.Name)
-    
-    @property
-    def Name(self):
-        return self._name
 
-    @property
-    def Type(self):
-        return self._type
+    Name = property(lambda self: self._name,
+                    lambda self, n: setattr(self, '_name', n))
+    Type = property(lambda self: self._type,
+                    lambda self, t: setattr(self, '_type', t))
 
 #--------------------------------------------------------------------------#
 
@@ -272,5 +269,4 @@ class BaseCompleter(object):
         if buff is not None:
             if buff.IsString(cpos) or buff.IsComment(cpos):
                 rval = False
-
         return rval

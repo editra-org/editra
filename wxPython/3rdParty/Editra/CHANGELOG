@@ -17,7 +17,8 @@ DATE 0x/xx/2011
 NEWS:
 
 NEW: [features/enhancements]:
-+Improve Python autocompletion to better detect properties.
++Improve Python autocompletion, better detect local variables, properties, and
+some minor performance improvements.
 +Launch script for source installs is now a lower case 'editra'.
 +Source install on Windows now overwrites launch script installed by wxPython
 for Editra to allow the separately installed version to be started.
