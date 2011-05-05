@@ -195,7 +195,7 @@ class PyCompleter(object):
 #        f = open('pycompout.py', 'w')
 #        f.write(src)
 #        f.close()
-        dbg("[pycomp][info] Generated source: %s" % src)
+#        dbg("[pycomp][info] Generated source: %s" % src)
         try: 
             exec src in self.compldict
         except Exception, msg:
@@ -292,19 +292,21 @@ class PyCompleter(object):
             ridx = stmt.rfind('.')
             if len(stmt) > 0 and stmt[-1] == '(':
                 if ctip:
-                    # Use introspect for calltips for now until some
-                    # issues are sorted out with the main parser
+                    # Try introspect.getCallTip since it is generally
+                    # better at getting tips for c modules
                     tip = introspect.getCallTip(_sanitize(stmt), 
                                                 self.compldict)[2]
                     if not isinstance(tip, basestring):
                         tip = u""
+                    if not tip:
+                        # Internal calltip code
+                        result = eval(_sanitize(stmt.rstrip('(')), self.compldict)
+                        doc = max(getattr(result, '__doc__', ''), ' ')
+                        argval = context + _cleanstr(self.get_arguments(result))
+                        tip = '\n'.join([argval, _cleanstr(doc)])
+                        dbg("[pycomp][info] Used internal calltips")
                     return tip
-#                else:
-#                    # Alternate calltip code
-#                    result = eval(_sanitize(stmt[:-1]), self.compldict)
-#                    doc = max(getattr(result, '__doc__', ''), ' ')
-#                    return [{'word' : _cleanstr(self.get_arguments(result)), 
-#                             'info' : _cleanstr(doc)}]
+
             elif ridx == -1:
                 match = stmt
                 compdict = self.compldict
@@ -443,18 +445,15 @@ class Scope(object):
         @param docstr: Docstring to format and set
 
         """
-        dstr = docstr.replace('\n', ' ')
-        dstr = dstr.replace('\t', ' ')
-        dstr = dstr.replace('  ', ' ')
-
+        dstr = docstr
         if len(dstr):
             while len(dstr) and dstr[0] in '"\' ':
                 dstr = dstr[1:]
 
             while len(dstr) and dstr[-1] in '"\' ':
                 dstr = dstr[:-1]
-
-        self.docstr = dstr
+        dstr = '\n'.join([d.lstrip() for d in dstr.split('\n')])
+        self.docstr = dstr.rstrip()
 
     def local(self, loc):
         """Add an object to the scopes locals
