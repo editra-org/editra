@@ -135,7 +135,11 @@ def InitCustomHandlers(path):
 
         if lxml:
             for hndlr in lxml.GetHandlers():
-                FileTypeHandler.RegisterClass(XmlHandlerDelegate(hndlr))
+                try:
+                    FileTypeHandler.RegisterClass(XmlHandlerDelegate(hndlr))
+                except Exception, msg:
+                    util.Log("[Launch][err] Unexpected error in creating xml delegate")
+                    util.Log("[Launch][err] %s" % msg)
     return loaded
 
 def LoadCustomHandler(xml_str):
@@ -797,6 +801,7 @@ class VBScriptHandler(FileTypeHandler):
 def XmlHandlerDelegate(xmlobj):
     """Create delegate class for creating new filetype handlers from a Launch
     Xml object.
+    @param xmlobj: launchxml.Handler
 
     """
     class XmlDelegateClass(FileTypeHandler):
@@ -804,7 +809,7 @@ def XmlHandlerDelegate(xmlobj):
             typeid = getattr(synglob, xmlobj.id, -1)
             name = xmlobj.name
             commands = xmlobj.GetCommands()
-            default = xmlobj.commandlist.default
+            default = xmlobj.GetDefaultCommand()
             error = xmlobj.GetErrorPattern()
             hotspot = xmlobj.GetHotspotPattern()
             transient = True
