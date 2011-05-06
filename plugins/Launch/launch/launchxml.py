@@ -79,7 +79,15 @@ class Handler(ed_xml.EdXml):
     error = ed_xml.Model(ErrorPattern, required=False)
     hotspot = ed_xml.Model(HotspotPattern, required=False)
 
+    def GetDefaultCommand(self):
+        """Get the default command"""
+        default = u""
+        if self.commandlist:
+            default = self.commandlist.default
+        return default
+
     def GetCommands(self):
+        """Get the list of commands"""
         clist = dict()
         if self.commandlist:
             for cmd in self.commandlist.commands:
@@ -87,11 +95,13 @@ class Handler(ed_xml.EdXml):
         return clist
 
     def GetErrorPattern(self):
+        """Get the handlers error pattern"""
         if self.error and self.error.pattern:
             return re.compile(self.error.pattern)
         return None
 
     def GetHotspotPattern(self):
+        """Get the handlers hotspot pattern"""
         if self.hotspot and self.hotspot.pattern:
             return re.compile(self.hotspot.pattern)
         return None
@@ -148,3 +158,5 @@ class LaunchXml(ed_xml.EdXml):
 #    print hndlr.GetCommands()
 #    print hndlr.GetHotspotPattern()
 #    print hndlr.GetErrorPattern()
+#    print hndlr.GetDefaultCommand()
+

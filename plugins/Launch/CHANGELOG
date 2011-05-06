@@ -6,6 +6,11 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.11
+
++Fix bug in handling launch xml file for handlers that have empty command lists.
+
+#-----------------------------------------------------------------------------#
 Version 1.10
 
 Due to a change in the underlying datamodel this update will force any existing
