@@ -28,6 +28,7 @@ import wx
 
 # Editra Libraries
 import ed_glob
+import ebmlib
 from profiler import Profile_Get, Profile_Set
 import ed_msg
 import ed_thread
@@ -44,6 +45,7 @@ ID_CODEBROWSER = wx.NewId()
 ID_BROWSER = wx.NewId()
 ID_GOTO_ELEMENT = wx.NewId()
 PANE_NAME = u"CodeBrowser"
+MSG_CODEBROWSER_MENU = ("CodeBrowser", "ContextMenu")
 _ = wx.GetTranslation
 
 # HACK for i18n scripts to pick up translation strings
@@ -68,7 +70,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         # Attributes
         self._log = wx.GetApp().GetLog()
         self._mw = parent
-        self._menu = None
+        self._menu = ebmlib.ContextMenuManager()
         self._selected = None
         self._cjob = 0
         self._lastjob = u'' # Name of file in last sent out job
@@ -104,6 +106,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         self.Bind(wx.EVT_MENU, self.OnMenu)
         self.Bind(wx.EVT_TIMER, self.OnStartJob, self._timer)
         self.Bind(wx.EVT_TIMER, lambda evt: self._SyncTree(), self._sync_timer)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
         self.Bind(EVT_JOB_FINISHED, self.OnTagsReady)
 
         # Editra Message Handlers
@@ -122,13 +125,15 @@ class CodeBrowserTree(wx.TreeCtrl):
             ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
             ed_msg.Subscribe(self.OnUpdateTree, ed_msg.EDMSG_UI_STC_LEXER)
 
-    def __del__(self):
-        """Unsubscribe from messages on del"""
-        ed_msg.Unsubscribe(self.OnUpdateTree)
-        ed_msg.Unsubscribe(self.OnThemeChange)
-        ed_msg.Unsubscribe(self.OnUpdateFont)
-        ed_msg.Unsubscribe(self.OnSyncTree)
-        ed_msg.Unsubscribe(self.OnEditorRestore)
+    def OnDestroy(self, event):
+        """Unsubscribe from messages on destroy"""
+        if self:
+            self._menu.Clear()
+            ed_msg.Unsubscribe(self.OnUpdateTree)
+            ed_msg.Unsubscribe(self.OnThemeChange)
+            ed_msg.Unsubscribe(self.OnUpdateFont)
+            ed_msg.Unsubscribe(self.OnSyncTree)
+            ed_msg.Unsubscribe(self.OnEditorRestore)
 
     def _GetCurrentCtrl(self):
         """Get the current buffer"""
@@ -372,18 +377,20 @@ class CodeBrowserTree(wx.TreeCtrl):
 
     def OnContext(self, evt):
         """Show the context menu when an item is clicked on"""
-        if self._menu is not None:
-            self._menu.Destroy()
-            self._menu = None
-
+        self._menu.Clear()
+        self._menu.Menu = wx.Menu()
         tree_id = evt.GetItem()
         data = self.GetPyData(tree_id)
+        # Add the Goto menu option
         if data is not None:
+            self._menu.SetUserData("object", data)
             self._selected = tree_id # Store the selected
-            self._menu = wx.Menu()
             txt = self.GetItemText(self._selected).split('[')[0].strip()
-            self._menu.Append(ID_GOTO_ELEMENT, _("Goto \"%s\"") % txt)
-            self.PopupMenu(self._menu)
+            self._menu.Menu.Append(ID_GOTO_ELEMENT, _("Goto \"%s\"") % txt)
+        # Let clients hook into the context menu
+        # Call AddHandler to add a callback handler callback(menu_id, itemdata)
+        ed_msg.PostMessage(MSG_CODEBROWSER_MENU, self._menu)
+        self.PopupMenu(self._menu.Menu)
 
     def OnCompareItems(self, item1, item2):
         """Compare two tree items for sorting.
@@ -427,7 +434,14 @@ class CodeBrowserTree(wx.TreeCtrl):
 
     def OnMenu(self, evt):
         """Handle the context menu events"""
-        if evt.GetId() == ID_GOTO_ELEMENT:
+        e_id  = evt.GetId()
+        handler = self._menu.GetHandler(e_id)
+        if handler:
+            data = None
+            if self._selected is not None:
+                data = self.GetPyData(self._selected)
+            handler(e_id, data)
+        elif e_id == ID_GOTO_ELEMENT:
             if self._selected is not None:
                 self.GotoElement(self._selected)
         else:
