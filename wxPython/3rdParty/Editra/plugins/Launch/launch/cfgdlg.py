@@ -36,9 +36,6 @@ import util
 #-----------------------------------------------------------------------------#
 # Globals
 
-# Profile Key
-LAUNCH_PREFS = 'Launch.Config2' # see handlers.LAUNC_CONFIG
-
 # General Panel
 ID_LANGUAGE = wx.NewId()
 ID_EXECUTABLES = wx.NewId()

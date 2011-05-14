@@ -4,7 +4,7 @@
 
 #-----------------------------------------------------------------------------#
 Version 1.3
-Released:
+Released: 05/14/2011
 
 +Add ed_msg callback interface "CodeBrowser.ContextMenu".
 +Use EdThreadPool for running parsing jobs.

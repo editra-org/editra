@@ -26,6 +26,8 @@ more objects.
 for Editra to allow the separately installed version to be started.
 +Expanded unittest suite to verify data in all bundled style sheets.
 +Shelf window can now be maximized.
++Updated Launch to version 1.11 (bug fixes)
++Update CodeBrowser to version 1.3 (minor enhancements)
 
 LIBRARY:
 +Add LintError and LintWarning markers.
