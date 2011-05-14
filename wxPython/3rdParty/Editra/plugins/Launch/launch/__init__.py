@@ -88,7 +88,7 @@ class Launch(plugin.Plugin):
 
         """
         # Delete obsolete configuration from older versions
-        profiler.Profile_Del('Launch.Config') # New config is Launch.Config2
+        profiler.Profile_Del('Launch.Prefs') # New config is Launch.Config2
         tmenu = mainw.GetMenuBar().GetMenuByName("tools")
         tmenu.Insert(0, ed_glob.ID_RUN_LAUNCH, _("Run") + \
                      EdMenuBar.keybinder.GetBinding(ed_glob.ID_RUN_LAUNCH),
