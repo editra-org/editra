@@ -37,7 +37,7 @@ import util
 # Globals
 
 # Profile Key
-LAUNCH_PREFS = 'Launch.Prefs'
+LAUNCH_PREFS = 'Launch.Config2' # see handlers.LAUNC_CONFIG
 
 # General Panel
 ID_LANGUAGE = wx.NewId()
@@ -107,11 +107,11 @@ class ConfigNotebook(wx.Notebook):
         super(ConfigNotebook, self).__init__(parent)
 
         # Make sure config has been initialized
-        prefs = Profile_Get(LAUNCH_PREFS, default=None)
+        prefs = Profile_Get(handlers.CONFIG_KEY, default=None)
         if prefs is None:
             buff = eclib.OutputBuffer(self)
             buff.Hide()
-            Profile_Set(LAUNCH_PREFS,
+            Profile_Set(handlers.CONFIG_KEY,
                         dict(autoclear=False,
                              errorbeep=False,
                              wrapoutput=False,
@@ -344,6 +344,7 @@ class ConfigPanel(wx.Panel):
             elist.Append(exe)
 
     def UpdateForHandler(self):
+        """Update the panel for the current filetype handler"""
         handler = self.GetCurrentHandler()
         elist = self.FindWindowById(ID_EXECUTABLES)
         elist.DeleteAllItems()
@@ -381,7 +382,7 @@ class OutputPanel(wx.Panel):
         boxsz = wx.StaticBoxSizer(sbox, wx.VERTICAL)
 
         # Launch Config
-        cfg = Profile_Get(LAUNCH_PREFS, default=dict())
+        cfg = Profile_Get(handlers.CONFIG_KEY, default=dict())
 
         # Actions Configuration
         clear_cb = wx.CheckBox(self, ID_AUTOCLEAR,
@@ -457,13 +458,16 @@ class OutputPanel(wx.Panel):
         """Handle checkbox events"""
         e_id = evt.GetId()
         e_val = evt.GetEventObject().GetValue()
-        cfg = Profile_Get(LAUNCH_PREFS, default=dict())
+        cfg = Profile_Get(handlers.CONFIG_KEY, default=dict())
         if e_id == ID_AUTOCLEAR:
             cfg['autoclear'] = e_val
+            Profile_Set(handlers.CONFIG_KEY, cfg)
         elif e_id == ID_ERROR_BEEP:
             cfg['errorbeep'] = e_val
+            Profile_Set(handlers.CONFIG_KEY, cfg)
         elif e_id == ID_WRAP_OUTPUT:
             cfg['wrapoutput'] = e_val
+            Profile_Set(handlers.CONFIG_KEY, cfg)
         else:
             evt.Skip()
 
@@ -471,8 +475,10 @@ class OutputPanel(wx.Panel):
         """Handle color change events"""
         e_id = evt.GetId()
         color = COLOR_MAP.get(e_id, None)
+        cfg = Profile_Get(handlers.CONFIG_KEY, default=dict())
         if color is not None:
-            Profile_Get(LAUNCH_PREFS)[color] = evt.GetValue().Get()
+            cfg[color] = evt.GetValue().Get()
+            Profile_Set(handlers.CONFIG_KEY, cfg)
         else:
             evt.Skip()
 
@@ -496,7 +502,7 @@ class MiscPanel(wx.Panel):
     def __DoLayout(self):
         """Layout the panel"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-        cfg = Profile_Get(LAUNCH_PREFS, default=dict())
+        cfg = Profile_Get(handlers.CONFIG_KEY, default=dict())
 
         # Editor options
         ebox = wx.StaticBox(self, label=_("Editor Options"))
@@ -517,11 +523,13 @@ class MiscPanel(wx.Panel):
         """Update the configuration"""
         e_obj = event.GetEventObject()
         value = e_obj.GetValue()
-        cfg = Profile_Get(LAUNCH_PREFS, default=dict())
+        cfg = Profile_Get(handlers.CONFIG_KEY, default=dict())
         if e_obj is self.savecb:
             cfg['autosave'] = value
+            Profile_Set(handlers.CONFIG_KEY, cfg)
         elif e_obj is self.saveallcb:
             cfg['autosaveall'] = value
+            Profile_Set(handlers.CONFIG_KEY, cfg)
         else:
             event.Skip()
 
@@ -558,7 +566,7 @@ class CommandListCtrl(eclib.EEditListCtrl):
         if self._menu is None:
             # Lazy init of menu
             self._menu = wx.Menu()
-            self._menu.Append(ID_BROWSE, _("Browse"))
+            self._menu.Append(ID_BROWSE, _("Browse..."))
 
         self._cindex = evt.GetIndex()
         self.PopupMenu(self._menu)

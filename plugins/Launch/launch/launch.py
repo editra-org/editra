@@ -136,20 +136,21 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
     #---- Properties ----#
     Locked = property(lambda self: self._lockFile.IsChecked())
     MainWindow = property(lambda self: self._mw)
-    Preferences = property(lambda self: Profile_Get(cfgdlg.LAUNCH_PREFS, default=None),
-                           lambda self, prefs: Profile_Set(cfgdlg.LAUNCH_PREFS, prefs))
+    Preferences = property(lambda self: Profile_Get(handlers.CONFIG_KEY, default=None),
+                           lambda self, prefs: Profile_Set(handlers.CONFIG_KEY, prefs))
     State = property(lambda self: self._state)
 
     def OnDestroy(self, evt):
-        ed_msg.Unsubscribe(self.OnPageChanged)
-        ed_msg.Unsubscribe(self.OnFileOpened)
-        ed_msg.Unsubscribe(self.OnThemeChanged)
-        ed_msg.Unsubscribe(self.OnLexerChange)
-        ed_msg.Unsubscribe(self.OnConfigChange)
-        ed_msg.Unsubscribe(self.OnRunMsg)
-        ed_msg.Unsubscribe(self.OnRunLastMsg)
-        ed_msg.UnRegisterCallback(self._CanLaunch)
-        ed_msg.UnRegisterCallback(self._CanReLaunch)
+        if self:
+            ed_msg.Unsubscribe(self.OnPageChanged)
+            ed_msg.Unsubscribe(self.OnFileOpened)
+            ed_msg.Unsubscribe(self.OnThemeChanged)
+            ed_msg.Unsubscribe(self.OnLexerChange)
+            ed_msg.Unsubscribe(self.OnConfigChange)
+            ed_msg.Unsubscribe(self.OnRunMsg)
+            ed_msg.Unsubscribe(self.OnRunLastMsg)
+            ed_msg.UnRegisterCallback(self._CanLaunch)
+            ed_msg.UnRegisterCallback(self._CanReLaunch)
 
     def __DoLayout(self):
         """Layout the window"""
@@ -288,13 +289,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         """
         util.Log("[Launch][info] Saving config to profile")
         self.RefreshControlBar()
-        # Update wordwrapping
-        mode = wx.stc.STC_WRAP_NONE
-        if self.Preferences.get('wrapoutput', False):
-            mode = wx.stc.STC_WRAP_WORD # should we do wrap char?
-        wrapmode = self._buffer.GetWrapMode()
-        if wrapmode != mode:
-            self._buffer.SetWrapMode(mode)
+        self._buffer.UpdateWrapMode()
         self.UpdateBufferColors()
 
     @ed_msg.mwcontext
@@ -643,9 +638,10 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
                                                     wx.FONTSTYLE_NORMAL,
                                                     wx.FONTWEIGHT_NORMAL))
         self.SetFont(font)
+        self.UpdateWrapMode()
 
-    Preferences = property(lambda self: Profile_Get(cfgdlg.LAUNCH_PREFS, default=None),
-                           lambda self, prefs: Profile_Set(cfgdlg.LAUNCH_PREFS, prefs))
+    Preferences = property(lambda self: Profile_Get(handlers.CONFIG_KEY, default=dict()),
+                           lambda self, prefs: Profile_Set(handlers.CONFIG_KEY, prefs))
 
     def ApplyStyles(self, start, txt):
         """Apply any desired output formatting to the text in
@@ -735,6 +731,14 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         lang_id = self.GetParent().GetLastRun()[1]
         handler = handlers.GetHandlerById(lang_id)
         return handler
+
+    def UpdateWrapMode(self):
+        """Update the word wrapping mode"""
+        mode = wx.stc.STC_WRAP_NONE
+        if self.Preferences.get('wrapoutput', False):
+            mode = wx.stc.STC_WRAP_WORD
+        self.SetWrapMode(mode)
+
 
 #-----------------------------------------------------------------------------#
 def GetLangIdFromMW(mainw):

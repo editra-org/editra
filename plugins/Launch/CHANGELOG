@@ -9,6 +9,7 @@
 Version 1.11
 
 +Fix bug in handling launch xml file for handlers that have empty command lists.
++Fix bug in configuration settings management.
 
 #-----------------------------------------------------------------------------#
 Version 1.10
