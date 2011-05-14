@@ -10,11 +10,23 @@ Change Log:
 
 Changes since last release:
 
-VERSION 0.6.xx
-DATE 0x/xx/2011
+VERSION 0.6.48
+DATE 05/14/2011
 43rd Alpha Release
 
 NEWS:
+
+This release contains some noteable improvements to the Python autocompletion
+support. It is more accurate and capabable of producing results under more
+scenarios then before. These improvements also extend to the the calltip
+support.
+
+Big change in source distributions in this release as well. The primary launch
+script is now all lower case. So where as before you would run 'Editra' it is
+now standardized on 'editra' to fix a number of long running issues and confusion
+with the script that is installed by the wxPython tools package.
+
+For the complete change history please refer to the below changelog.
 
 NEW: [features/enhancements]:
 +Improved Python autocompletion, better detect local variables, properties, and
