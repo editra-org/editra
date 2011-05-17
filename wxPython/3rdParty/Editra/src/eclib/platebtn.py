@@ -160,11 +160,11 @@ class PlateButton(wx.PyControl):
         self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
 
         # Mouse Events
+        self.Bind(wx.EVT_LEFT_DCLICK, lambda evt: self._ToggleState())
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
-        self.Bind(wx.EVT_LEFT_DCLICK, lambda evt: self.ToggleState())
         self.Bind(wx.EVT_ENTER_WINDOW,
-                  lambda evt: self.SetState(PLATE_HIGHLIGHT))
+                  lambda evt: self._SetState(PLATE_HIGHLIGHT))
         self.Bind(wx.EVT_LEAVE_WINDOW,
                   lambda evt: wx.CallLater(80, self.__LeaveWindow))
 
@@ -325,9 +325,10 @@ class PlateButton(wx.PyControl):
     def __LeaveWindow(self):
         """Handle updating the buttons state when the mouse cursor leaves"""
         if (self._style & PB_STYLE_TOGGLE) and self._pressed:
-            self.SetState(PLATE_PRESSED) 
+            self._SetState(PLATE_PRESSED) 
         else:
-            self.SetState(PLATE_NORMAL)
+            self._SetState(PLATE_NORMAL)
+            self._pressed = False
 
     #---- End Private Member Function ----#
 
@@ -475,7 +476,7 @@ class PlateButton(wx.PyControl):
     def OnFocus(self, evt):
         """Set the visual focus state if need be"""
         if self._state['cur'] == PLATE_NORMAL:
-            self.SetState(PLATE_HIGHLIGHT)
+            self._SetState(PLATE_HIGHLIGHT)
 
     def OnKeyUp(self, evt):
         """Execute a single button press action when the Return key is pressed
@@ -484,9 +485,9 @@ class PlateButton(wx.PyControl):
 
         """
         if evt.GetKeyCode() == wx.WXK_SPACE:
-            self.SetState(PLATE_PRESSED)
+            self._SetState(PLATE_PRESSED)
             self.__PostEvent()
-            wx.CallLater(100, self.SetState, PLATE_HIGHLIGHT)
+            wx.CallLater(100, self._SetState, PLATE_HIGHLIGHT)
         else:
             evt.Skip()
 
@@ -499,7 +500,7 @@ class PlateButton(wx.PyControl):
         #       handler to prevent ghost highlighting from happening when
         #       quickly changing focus and activating buttons
         if self._state['cur'] != PLATE_PRESSED:
-            self.SetState(PLATE_NORMAL)
+            self._SetState(PLATE_NORMAL)
 
     def OnLeftDown(self, evt):
         """Sets the pressed state and depending on the click position will
@@ -510,7 +511,7 @@ class PlateButton(wx.PyControl):
             self._pressed = not self._pressed
 
         pos = evt.GetPositionTuple()
-        self.SetState(PLATE_PRESSED)
+        self._SetState(PLATE_PRESSED)
         size = self.GetSizeTuple()
         if pos[0] >= size[0] - 16:
             if self._menu is not None:
@@ -535,9 +536,9 @@ class PlateButton(wx.PyControl):
                 self.__PostEvent()
 
         if self._pressed:
-            self.SetState(PLATE_PRESSED)
+            self._SetState(PLATE_PRESSED)
         else:
-            self.SetState(PLATE_HIGHLIGHT)
+            self._SetState(PLATE_HIGHLIGHT)
 
     def OnMenuClose(self, evt):
         """Refresh the control to a proper state after the menu has been
@@ -547,9 +548,9 @@ class PlateButton(wx.PyControl):
         """
         mpos = wx.GetMousePosition()
         if self.HitTest(self.ScreenToClient(mpos)) != wx.HT_WINDOW_OUTSIDE:
-            self.SetState(PLATE_HIGHLIGHT)
+            self._SetState(PLATE_HIGHLIGHT)
         else:
-            self.SetState(PLATE_NORMAL)
+            self._SetState(PLATE_NORMAL)
         evt.Skip()
 
     #---- End Event Handlers ----#
@@ -581,7 +582,7 @@ class PlateButton(wx.PyControl):
     def SetFocus(self):
         """Set this control to have the focus"""
         if self._state['cur'] != PLATE_PRESSED:
-            self.SetState(PLATE_HIGHLIGHT)
+            self._SetState(PLATE_HIGHLIGHT)
         super(PlateButton, self).SetFocus()
 
     def SetFont(self, font):
@@ -655,10 +656,11 @@ class PlateButton(wx.PyControl):
         self._color['htxt'] = BestLabelColour(self._color['hlight'])
         self.Refresh()
 
-    def SetState(self, state):
+    def _SetState(self, state):
         """Manually set the state of the button
         @param state: one of the PLATE_* values
         @note: the state may be altered by mouse actions
+        @note: Internal use only!
 
         """
         self._state['pre'] = self._state['cur']
@@ -702,11 +704,14 @@ class PlateButton(wx.PyControl):
 
             self.PopupMenu(self._menu, (xpos, size[1] + adj))
 
-    def ToggleState(self):
-        """Toggle button state"""
+    def _ToggleState(self):
+        """Toggle button state
+        @note: Internal Use Only!
+
+        """
         if self._state['cur'] != PLATE_PRESSED:
-            self.SetState(PLATE_PRESSED)
+            self._SetState(PLATE_PRESSED)
         else:
-            self.SetState(PLATE_HIGHLIGHT)
+            self._SetState(PLATE_HIGHLIGHT)
 
     #---- End Public Member Functions ----#
