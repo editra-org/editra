@@ -2,20 +2,21 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the editra package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# Ladislav "t€rist" Galadík <teristster@gamil.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 17:02-0600\n"
-"PO-Revision-Date: 2009-11-13 20:16+0000\n"
-"Last-Translator: Ladislav \"t€rist\" Galadik <Unknown>\n"
-"Language-Team: Slovak <sk@li.org>\n"
+"PO-Revision-Date: 2011-04-04 00:02+0000\n"
+"Last-Translator: Ladislav t€rist Galadík <Unknown>\n"
+"Language-Team: Slovak (Slovenský) <sk@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-02 15:36+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-05-21 18:52+0000\n"
+"X-Generator: Launchpad (build 13085)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -157,7 +158,7 @@ msgstr "**Nová hodnota**"
 
 #: ../../src/eclib/filterdlg.py:76
 msgid "<< Remove"
-msgstr ""
+msgstr "<< Odstrániť"
 
 #: ../../src/eclib/errdlg.py:322 ../../plugins/Launch/launch/launch.py:596
 msgid "Abort"
@@ -174,7 +175,7 @@ msgstr "Prístup zamietnutý: %s"
 
 #: ../../src/eclib/filterdlg.py:75
 msgid "Add >>"
-msgstr ""
+msgstr "Pridať >>"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:242
 msgid "Add a new executable"
@@ -236,7 +237,7 @@ msgstr "Použiť"
 #: ../../src/eclib/filemgrdlg.py:167
 #, python-format
 msgid "Are you sure want to delete %s?"
-msgstr ""
+msgstr "Naozaj chceš zmazať %s?"
 
 #: ../../src/plugdlg.py:1060
 #, python-format
@@ -279,7 +280,7 @@ msgstr "Auto-odsadzovanie"
 
 #: ../../src/perspective.py:73
 msgid "Automatic"
-msgstr ""
+msgstr "Autmaticky"
 
 #: ../../src/prefdlg.py:500
 msgid "Automatically Backup Files"
@@ -311,7 +312,7 @@ msgstr "Backspace ododsdzuje"
 
 #: ../../src/prefdlg.py:506
 msgid "Backup Path:"
-msgstr ""
+msgstr "Cesta pre zálohy:"
 
 #: ../../src/prefdlg.py:503
 msgid "Backup buffer to file periodically"
@@ -347,7 +348,7 @@ msgstr "Prehliadať"
 
 #: ../../src/ed_menu.py:838
 msgid "Bug Tracker..."
-msgstr ""
+msgstr "Bug Tracker..."
 
 #: ../../src/ed_cmdbar.py:559
 #, python-format
@@ -365,7 +366,7 @@ msgstr "Zrušené"
 
 #: ../../src/ed_statbar.py:186
 msgid "Change Encoding"
-msgstr ""
+msgstr "Zmena kódovania"
 
 #: ../../src/ed_menu.py:720
 msgid "Change Font Settings"
@@ -379,7 +380,7 @@ msgstr "Zmení znaky konca riadka na %s"
 
 #: ../../src/ed_statbar.py:185
 msgid "Change the encoding of the current document."
-msgstr ""
+msgstr "Zmení kódovanie aktuálneho dokumentu."
 
 #: ../../src/perspective.py:130
 #, python-format
@@ -463,7 +464,7 @@ msgstr "Zavrieť aktuálnu kartu"
 
 #: ../../src/ed_editv.py:231
 msgid "Close Other Tabs"
-msgstr ""
+msgstr "Zavrieť ostatné karty"
 
 #: ../../src/ed_menu.py:524
 msgid "Close Window"
@@ -619,15 +620,15 @@ msgstr "Prispôsobiť"
 
 #: ../../src/ed_main.py:1450
 msgid "Customize Menu"
-msgstr ""
+msgstr "Upraviť menu"
 
 #: ../../src/ed_menu.py:471
 msgid "Customize the items shown in this menu."
-msgstr ""
+msgstr "Uprav si položky v menu podľa seba."
 
 #: ../../src/ed_menu.py:470
 msgid "Customize..."
-msgstr ""
+msgstr "Upraviť..."
 
 #: ../../src/ed_editv.py:362 ../../src/ed_toolbar.py:83
 msgid "Cut"
@@ -687,11 +688,11 @@ msgstr "Zmazať"
 
 #: ../../src/eclib/filemgrdlg.py:175
 msgid "Delete Error"
-msgstr ""
+msgstr "Chyba pri mazaní"
 
 #: ../../src/eclib/filemgrdlg.py:168
 msgid "Delete File?"
-msgstr ""
+msgstr "Zmazať súbor?"
 
 #: ../../src/ed_menu.py:603
 msgid "Delete Line"
@@ -868,7 +869,7 @@ msgstr "Prekladací projek Editry"
 
 #: ../../src/ed_main.py:439
 msgid "Editra: Open"
-msgstr ""
+msgstr "Editra: Otvoriť"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:57
 msgid "Elements"
@@ -1322,7 +1323,7 @@ msgstr "Identity"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:57
 msgid "Imports"
-msgstr ""
+msgstr "Importy"
 
 #: ../../src/ed_menu.py:726
 msgid "Indent Lines"
@@ -1386,7 +1387,7 @@ msgstr "Chybný súbor"
 
 #: ../../src/ed_cmdbar.py:776
 msgid "Invalid Path"
-msgstr ""
+msgstr "Špatná cesta"
 
 #: ../../src/ed_search.py:349
 #, python-format
@@ -2595,7 +2596,7 @@ msgstr ""
 
 #: ../../plugins/Launch/launch/launch.py:735
 msgid "The requested command could not be executed."
-msgstr ""
+msgstr "Požadovaný príkaz sa nedá spustiť"
 
 #: ../../src/ed_search.py:308
 #, python-format
@@ -2725,7 +2726,7 @@ msgstr "Nemôžem akceptovať vložený súbor alebo text"
 #: ../../src/eclib/filemgrdlg.py:174
 #, python-format
 msgid "Unable to delete %s"
-msgstr ""
+msgstr "Nemôžem zmazať %s"
 
 #: ../../src/plugdlg.py:506
 msgid "Unable to retrieve plugin list"
@@ -2808,7 +2809,7 @@ msgstr "Použiť tabelátory namiesto medzier"
 
 #: ../../src/prefdlg.py:511
 msgid "Used to set a custom backup path. If not specified the backup will be put in the same directory as the file."
-msgstr ""
+msgstr "Umožňuje nastaviť vlastnú cestu pre zálohy. Ak necháš prázdne, použije sa adresár, v ktorom je daný súbor."
 
 #: ../../src/plugdlg.py:765
 msgid "User Directory"
@@ -2967,12 +2968,12 @@ msgstr "podčiarknuté"
 
 #: ../../src/ed_pages.py:237
 msgid "untitled"
-msgstr ""
+msgstr "bez mena"
 
 #: ../../src/ed_pages.py:235
 #, python-format
 msgid "untitled %d"
-msgstr ""
+msgstr "bez mena %d"
 
 #~ msgid ""
 #~ "%s could not be found\n"
@@ -3011,14 +3012,47 @@ msgstr ""
 #~ msgid "Error/Crash Reporter"
 #~ msgstr "Oznamovač chýb/pádov"
 
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Inštalácia doplnkov ukončená"
+
 #~ msgid "Go to configuration page?"
 #~ msgstr "Ísť na nastavovaciu stránku"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "Machintosh staré"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Online dokumentácia"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Domovská stránka"
 
 #~ msgid "Syntax Files"
 #~ msgstr "Vzorový súbor"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Preložiť Editru"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Nemôžem prijať informácii o verziách"
 
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Bez mena"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Bez mena - %d"
+
 #~ msgid "Windows"
 #~ msgstr "Windows"
+
+#~ msgid "match case: %s"
+#~ msgstr "rozlišovať veľkosť: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "reg. výraz: %s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "celé slová: %s"

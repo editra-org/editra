@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 17:02-0600\n"
-"PO-Revision-Date: 2010-09-18 22:40+0000\n"
+"PO-Revision-Date: 2011-02-25 16:34+0000\n"
 "Last-Translator: Javier Pico <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-02 15:37+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-05-21 18:52+0000\n"
+"X-Generator: Launchpad (build 13085)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -348,7 +348,7 @@ msgstr "Procurar"
 
 #: ../../src/ed_menu.py:838
 msgid "Bug Tracker..."
-msgstr ""
+msgstr "Rastrexador de Erros..."
 
 #: ../../src/ed_cmdbar.py:559
 #, python-format
@@ -2976,8 +2976,84 @@ msgstr "sen título"
 msgid "untitled %d"
 msgstr "%d sen título"
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s non se puido atopar\n"
+#~ "Pode que se movera ou borrase"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s foi modificado por outra aplicación\n"
+#~ "\n"
+#~ "Queres volver a cargalo?"
+
+#~ msgid "&About"
+#~ msgstr "&Acerca de"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Cambiou o esquema de cor a %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Escoller un Arquivo"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Quere abrir os %d arquivos deste directorio?\n"
+#~ "\n"
+#~ "Aviso, abrir moitos arquivos á vez pode causar que o editor se colgue temporalmente."
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Reporte de Erros"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Rematouse de instalar plugins"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Ir á páxina de configuración?"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "Macintosh antigo"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Documentación en liña"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Páxina principal do proxecto"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Arquivos de sintaxe"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Traducir de Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Non se puido obter a información de versión"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Sen título"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Sen título - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Windows (\\r\\n)"
+
+#~ msgid "match case: %s"
+#~ msgstr "Concordar maiúsculas/minúsculas: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "expresión regular: %s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "Palabra completa: %s"

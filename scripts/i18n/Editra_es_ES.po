@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 17:02-0600\n"
-"PO-Revision-Date: 2010-08-26 23:32+0000\n"
-"Last-Translator: JoseQ <Unknown>\n"
+"PO-Revision-Date: 2010-10-23 12:29+0000\n"
+"Last-Translator: DiegoJ <diegojromerolopez@gmail.com>\n"
 "Language-Team: Spanish<Spanish>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-02 15:36+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-05-21 18:52+0000\n"
+"X-Generator: Launchpad (build 13085)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -311,7 +311,7 @@ msgstr "Retroceso quita sangrado"
 
 #: ../../src/prefdlg.py:506
 msgid "Backup Path:"
-msgstr ""
+msgstr "Ruta de respaldos:"
 
 #: ../../src/prefdlg.py:503
 msgid "Backup buffer to file periodically"
@@ -347,7 +347,7 @@ msgstr "Navegar"
 
 #: ../../src/ed_menu.py:838
 msgid "Bug Tracker..."
-msgstr ""
+msgstr "Rastreador de errores..."
 
 #: ../../src/ed_cmdbar.py:559
 #, python-format
@@ -379,7 +379,7 @@ msgstr "Cambiar final de líneas a %s"
 
 #: ../../src/ed_statbar.py:185
 msgid "Change the encoding of the current document."
-msgstr ""
+msgstr "Cambiar la codificación del documento actual."
 
 #: ../../src/perspective.py:130
 #, python-format
@@ -619,11 +619,11 @@ msgstr "Personalizar"
 
 #: ../../src/ed_main.py:1450
 msgid "Customize Menu"
-msgstr ""
+msgstr "Personalizar menú"
 
 #: ../../src/ed_menu.py:471
 msgid "Customize the items shown in this menu."
-msgstr ""
+msgstr "Personalizar los elementos que se mostrarán en este menú."
 
 #: ../../src/ed_menu.py:470
 msgid "Customize..."
@@ -869,7 +869,7 @@ msgstr "Proyecto de traducciones de Editra"
 
 #: ../../src/ed_main.py:439
 msgid "Editra: Open"
-msgstr ""
+msgstr "Editra: Abrir"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:57
 msgid "Elements"
@@ -1324,7 +1324,7 @@ msgstr "Identidades"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:57
 msgid "Imports"
-msgstr ""
+msgstr "Importaciones"
 
 #: ../../src/ed_menu.py:726
 msgid "Indent Lines"
@@ -2596,7 +2596,7 @@ msgstr ""
 
 #: ../../plugins/Launch/launch/launch.py:735
 msgid "The requested command could not be executed."
-msgstr ""
+msgstr "La orden solicitada no pudo ejecutarse."
 
 #: ../../src/ed_search.py:308
 #, python-format
@@ -2809,7 +2809,7 @@ msgstr "Utilizar tabuladores en lugar de espacios"
 
 #: ../../src/prefdlg.py:511
 msgid "Used to set a custom backup path. If not specified the backup will be put in the same directory as the file."
-msgstr ""
+msgstr "Se usa para establecer una ruta de copias de respaldo personalizada. Si no se especifica, la copia de respaldo será el mismo directorio que el del archivo."
 
 #: ../../src/plugdlg.py:765
 msgid "User Directory"
@@ -2994,11 +2994,20 @@ msgstr "sin nombre %d"
 #~ msgid "&About"
 #~ msgstr "&Acerca de"
 
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Ha cambiado el esquema de color a %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Seleccione un archivo"
+
 #~ msgid ""
 #~ "Do you wish to open all %d files in this directory?\n"
 #~ "\n"
 #~ "Warning opening many files at once may cause the editor to temporarly  freeze."
 #~ msgstr "¿Quieres abrir los %d archivos del directorio?..."
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Informar de errores"
 
 #~ msgid "Finished Installing Plugins"
 #~ msgstr "Se terminó de instalar plugins"
@@ -3006,11 +3015,41 @@ msgstr "sin nombre %d"
 #~ msgid "Go to configuration page?"
 #~ msgstr "¿Ir a la página de configuración?"
 
+#~ msgid "Old Machintosh"
+#~ msgstr "Machintosh viejos"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Documentación en línea"
+
 #~ msgid "Project Homepage"
 #~ msgstr "Web del proyecto"
 
 #~ msgid "Syntax Files"
 #~ msgstr "Archivos de sintaxis"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Traducir Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "No se pudo obtener la información de versión"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Sin título"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Sin título - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Ventanas"
+
+#~ msgid "match case: %s"
+#~ msgstr "concordancia en capitalización: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "expreg: %s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "palabra completa: %s"

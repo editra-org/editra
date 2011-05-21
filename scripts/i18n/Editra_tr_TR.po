@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: editra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 17:02-0600\n"
-"PO-Revision-Date: 2011-02-09 13:12+0000\n"
-"Last-Translator: Ozan HACIBEKIROGLU <Unknown>\n"
+"PO-Revision-Date: 2011-03-24 23:53+0000\n"
+"Last-Translator: Necdet Yucel <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-26 20:32+0000\n"
-"X-Generator: Launchpad (build 12460)\n"
+"X-Launchpad-Export-Date: 2011-05-21 18:52+0000\n"
+"X-Generator: Launchpad (build 13085)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -39,12 +39,12 @@ msgid ""
 "Perhaps it's been moved or deleted."
 msgstr ""
 "%s bulunamadı.\n"
-"Perhaps it's been moved or deleted."
+"Muhtemelen taşındı veya silindi."
 
 #: ../../src/ed_stc.py:1794
 #, python-format
 msgid "%s does not exist"
-msgstr "%s bulunamıyor"
+msgstr "%s mevcut değil"
 
 #: ../../src/ed_editv.py:442
 #, python-format
@@ -347,12 +347,12 @@ msgstr "Gözat"
 
 #: ../../src/ed_menu.py:838
 msgid "Bug Tracker..."
-msgstr ""
+msgstr "Hata izleyicisi"
 
 #: ../../src/ed_cmdbar.py:559
 #, python-format
 msgid "Can't change directory to: %s"
-msgstr ""
+msgstr "%s dizinine geçilemedi"
 
 #: ../../src/ed_search.py:1248 ../../src/style_editor.py:131
 #: ../../src/updater.py:568
@@ -375,7 +375,7 @@ msgstr "Font ayarlarını degiştir"
 #: ../../src/ed_statbar.py:66
 #, python-format
 msgid "Change line endings to %s"
-msgstr ""
+msgstr "%s ile biten satırları değiştir"
 
 #: ../../src/ed_statbar.py:185
 msgid "Change the encoding of the current document."
@@ -416,7 +416,7 @@ msgstr "Klasör Seç"
 
 #: ../../src/eclib/finddlg.py:1118
 msgid "Choose Search Folder"
-msgstr ""
+msgstr "Arama Dizinini Seç"
 
 #: ../../src/ed_main.py:698
 msgid "Choose a Save Location"
@@ -428,7 +428,7 @@ msgstr "Kodlamayı Seç"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:555
 msgid "Choose and executable"
-msgstr ""
+msgstr "Seç ve Çalıştır"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:50
 msgid "Class Definitions"
@@ -496,7 +496,7 @@ msgstr ""
 #: ../../plugins/codebrowser/codebrowser/__init__.py:48
 #: ../../plugins/codebrowser/codebrowser/__init__.py:95
 msgid "CodeBrowser"
-msgstr ""
+msgstr "KodListeleyicisi"
 
 #: ../../src/style_editor.py:579
 msgid "Color"
@@ -647,15 +647,15 @@ msgstr "Dosyadaki seçili Metni Kes"
 
 #: ../../src/ed_menu.py:587
 msgid "Cycle Clipboard"
-msgstr ""
+msgstr "Panoyu Çevir"
 
 #: ../../src/ed_menu.py:588
 msgid "Cycle through recent clipboard text"
-msgstr ""
+msgstr "Son pano metinlerinden çevir"
 
 #: ../../src/ed_search.py:62 ../../src/ed_search.py:66
 msgid "DECODING ERROR"
-msgstr ""
+msgstr "KOD AÇMA HATASI"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:228
 msgid "Default"
@@ -887,7 +887,7 @@ msgstr "Vi-Emulation Aktif Yap"
 
 #: ../../src/ed_menu.py:593
 msgid "Enable column edit mode."
-msgstr ""
+msgstr "Sütun düzenleme kipini etkinleştir."
 
 #: ../../src/prefdlg.py:578
 msgid "Enchant Path"
@@ -915,7 +915,7 @@ msgstr "Yeni anahtar profil adını gir"
 
 #: ../../src/eclib/finddlg.py:823
 msgid "Enter wildcard shell patterns for matching files (*.txt)."
-msgstr ""
+msgstr "Özel sembol kabuk desenlerini eşleşen dosyalar için gir (*.txt)"
 
 #: ../../src/ed_editv.py:189 ../../src/plugdlg.py:838
 msgid "Error"
@@ -927,7 +927,7 @@ msgstr "Dosya Açılış Hatası"
 
 #: ../../src/ed_pages.py:327
 msgid "Error Saving Session File"
-msgstr ""
+msgstr "Oturum Dosyasını Kaydederken Hata"
 
 #: ../../plugins/Launch/launch/cfgdlg.py:446
 msgid "Error Text"
@@ -944,6 +944,9 @@ msgid ""
 "\n"
 "Error Message: %s"
 msgstr ""
+"Düzenli ifade uzatımında hata. Yer değiştirme işlemi tamamlanamıyor.\n"
+"\n"
+"Error Message:%s"
 
 #: ../../src/dev_tool.py:252
 msgid ""
@@ -951,6 +954,9 @@ msgid ""
 "Help improve Editra by clicking on Report Error\n"
 "to send the Error Traceback shown below."
 msgstr ""
+"Hata: Beklendik bir şey oldu\n"
+"Editra'yı iyileştirmede Hata Raporlamaya tıklayarak\n"
+"aşağıda gösterilen Hata Geri İzlemesini gönderin."
 
 #: ../../src/ed_main.py:1502
 #, python-format
@@ -1030,7 +1036,7 @@ msgstr ""
 #: ../../src/ed_main.py:1232
 #, python-format
 msgid "Failed to reload the file with: %(encoding)s"
-msgstr ""
+msgstr "Dosyayı yeniden yüklemede şu: %(encoding)s ile başarısız olundu"
 
 #: ../../src/ed_mdlg.py:104
 #, python-format
@@ -1040,6 +1046,10 @@ msgid ""
 "Error:\n"
 "%(errormsg)s"
 msgstr ""
+"Dosyayı kaydetmede hataÇ %(filename)s\n"
+"\n"
+"Hata:\n"
+"%(errormsg)s"
 
 #: ../../src/ed_menu.py:839
 msgid "Feedback"
@@ -1252,7 +1262,7 @@ msgstr "Satıra Numarasına Git"
 
 #: ../../src/ed_menu.py:691
 msgid "Goto Matching Brace"
-msgstr ""
+msgstr "Eşleşen Parenteze Git"
 
 #: ../../src/ed_menu.py:805
 msgid "Goto command buffer"
@@ -1284,7 +1294,7 @@ msgstr "Parantezleri/Parantezi Renkli Göster"
 
 #: ../../src/ed_menu.py:660 ../../src/prefdlg.py:937
 msgid "Highlight Caret Line"
-msgstr ""
+msgstr "İmleç Satırını Vurgula"
 
 #: ../../src/ed_menu.py:661
 msgid "Highlight the background of the current line"
@@ -1496,11 +1506,11 @@ msgstr "Özel bir profili yükle"
 
 #: ../../src/ed_main.py:804
 msgid "Load a Session file"
-msgstr ""
+msgstr "Bir Oturum Dosyası Yükle"
 
 #: ../../src/ed_menu.py:553
 msgid "Load a saved session."
-msgstr ""
+msgstr "Kaydedilmiş bir oturumu yükle"
 
 #: ../../src/ed_menu.py:546
 msgid "Load and save custom Profiles"
@@ -1508,7 +1518,7 @@ msgstr "Sahsi profili yükle ve kaydet"
 
 #: ../../src/ed_menu.py:555
 msgid "Load and save custom sessions."
-msgstr ""
+msgstr "Özel Oturumları yükle ve kaydet"
 
 #: ../../src/prefdlg.py:403
 msgid "Load files from last session on startup"
@@ -1522,7 +1532,7 @@ msgstr "%s: Profili Yüklendi"
 #: ../../src/ed_main.py:818
 #, python-format
 msgid "Loaded Session: %s"
-msgstr ""
+msgstr "Yüklenen Oturum: %s"
 
 #: ../../src/prefdlg.py:438
 msgid "Locale Settings"
@@ -1531,11 +1541,11 @@ msgstr "Yerel Ayarlar"
 #: ../../plugins/Launch/launch/launch.py:182
 #, fuzzy
 msgid "Lock File"
-msgstr "%s Kaynak Dosya"
+msgstr "İçinde ara"
 
 #: ../../src/eclib/finddlg.py:793
 msgid "Look in"
-msgstr ""
+msgstr "İçinde ara"
 
 #: ../../src/ed_menu.py:733
 msgid "Lowercase"
@@ -1547,7 +1557,7 @@ msgstr "Makro Tanımları"
 
 #: ../../src/ed_script.py:201 ../../src/ed_script.py:211
 msgid "Macro Manager"
-msgstr ""
+msgstr "Makro Yöneticisi"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:51
 msgid "Macros"
@@ -1555,7 +1565,7 @@ msgstr "Makrolar"
 
 #: ../../src/prefdlg.py:1220
 msgid "Main display font for various UI components"
-msgstr ""
+msgstr "Arayüz bileşenleri için ana görünüm yazı biçimi"
 
 #: ../../src/ed_menu.py:807
 msgid "Manage, Download, and Install plugins"
@@ -1571,11 +1581,11 @@ msgstr "Küçük/Büyük Harf Duyarlı"
 
 #: ../../src/eclib/finddlg.py:814
 msgid "Match case"
-msgstr ""
+msgstr "Eşleşme şartı"
 
 #: ../../src/ed_main.py:1428 ../../src/ed_menu.py:686
 msgid "Maximize Editor"
-msgstr ""
+msgstr "Düzenleyiciyi Büyüt"
 
 #: ../../src/prefdlg.py:1720
 msgid "Menu"
@@ -1587,7 +1597,7 @@ msgstr "Çeşitli"
 
 #: ../../src/ed_pages.py:391
 msgid "Missing session files"
-msgstr ""
+msgstr "Eksik oturum dosyaları"
 
 #: ../../src/ed_stc.py:1184
 msgid ""
@@ -1595,6 +1605,9 @@ msgid ""
 "\n"
 "Would you like to format them to all be the same?"
 msgstr ""
+"Karışık EOL (satır sonu) karakterleri bulundu.\n"
+"\n"
+"Bunların hepsinin aynı olması için biçimlendirmek ister misin?"
 
 #: ../../src/eclib/infodlg.py:163 ../../src/eclib/infodlg.py:195
 msgid "Modified"
@@ -1614,11 +1627,11 @@ msgstr "Modüller"
 
 #: ../../src/ed_menu.py:617
 msgid "Move Current Line Down"
-msgstr ""
+msgstr "Bu satırı bir aşağı taşı"
 
 #: ../../src/ed_menu.py:614
 msgid "Move Current Line Up"
-msgstr ""
+msgstr "Bu satırı yukarı taşı"
 
 #: ../../src/ed_editv.py:227
 msgid "Move Tab to New Window"
@@ -1626,15 +1639,15 @@ msgstr "Sekmeyi Yeni Pencereye Taşı"
 
 #: ../../src/ed_menu.py:692
 msgid "Move caret matching brace"
-msgstr ""
+msgstr "İmleci eşleşen parenteze götür"
 
 #: ../../src/ed_menu.py:618
 msgid "Move the current line down"
-msgstr ""
+msgstr "Bu satırı bir aşağı taşı"
 
 #: ../../src/ed_menu.py:615
 msgid "Move the current line up"
-msgstr ""
+msgstr "Bu satırı yukarı taşı"
 
 #: ../../plugins/filebrowser/filebrowser/browser.py:62
 msgid "Move to Recycle Bin"
@@ -1695,7 +1708,7 @@ msgstr "Sonraki Yer İmi"
 
 #: ../../src/ed_menu.py:694
 msgid "Next Position"
-msgstr ""
+msgstr "Bir sonraki konum"
 
 #: ../../src/plugdlg.py:370 ../../src/plugin.py:721
 msgid "No Description Available"
@@ -1727,15 +1740,15 @@ msgstr "Tamam"
 
 #: ../../src/ed_glob.py:385 ../../src/ed_mdlg.py:137
 msgid "Old Machintosh (\\r)"
-msgstr ""
+msgstr "Eski Machintosh (\\r)"
 
 #: ../../src/ed_menu.py:756 ../../src/ed_menu.py:758 ../../src/prefdlg.py:753
 msgid "Old Macintosh (\\r)"
-msgstr ""
+msgstr "Eski Machintosh (\\r)"
 
 #: ../../src/ed_menu.py:834
 msgid "Online Documentation..."
-msgstr ""
+msgstr "Çevrimiçi Belgelendirme..."
 
 #: ../../src/ed_menu.py:835
 msgid "Online project documentation and help guides"
@@ -1797,7 +1810,7 @@ msgstr "Açılan: %s"
 
 #: ../../src/ed_menu.py:585
 msgid "P&aste After"
-msgstr ""
+msgstr "Sonrasına Y&apıştır"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:52
 msgid "Packages"
@@ -1830,7 +1843,7 @@ msgstr "Metni panodan dosyaya yapıştır"
 
 #: ../../src/ed_menu.py:586
 msgid "Paste Text from Clipboard to File after the cursor"
-msgstr ""
+msgstr "Panodan Dosyaya imleçten sonrasına Metin yapıştır"
 
 #: ../../src/prefdlg.py:583 ../../src/prefdlg.py:584
 msgid "Path to libenchant"
@@ -1866,11 +1879,11 @@ msgstr "Platform Bilgisi"
 
 #: ../../src/Editra.py:902
 msgid "Please check the preferences dialog to check your preferences"
-msgstr ""
+msgstr "Tercihlerinizi kontol etmek için lütfen tercihler pencesine bakın"
 
 #: ../../src/Editra.py:1111
 msgid "Please check the preferences dialog to verify your preferences"
-msgstr ""
+msgstr "Tercihlerinizi doğrulamak için lütfen tercihler pencesine bakın"
 
 #: ../../src/ed_main.py:1083 ../../src/ed_menu.py:806
 msgid "Plugin Manager"
@@ -1886,7 +1899,7 @@ msgstr "Tercihler"
 
 #: ../../src/prefdlg.py:496
 msgid "Prefered Encoding"
-msgstr ""
+msgstr "Tercih Edilen Kodlama"
 
 #: ../../src/prefdlg.py:106
 msgid "Preferences - Editra"
@@ -1911,7 +1924,7 @@ msgstr "Önceki Yer İmi"
 
 #: ../../src/ed_menu.py:696
 msgid "Previous Position"
-msgstr ""
+msgstr "Önceki Pozisyon"
 
 #: ../../src/prefdlg.py:812
 msgid "Primary Font"
@@ -1972,7 +1985,7 @@ msgstr "Programlar"
 
 #: ../../src/ed_menu.py:831
 msgid "Project Homepage..."
-msgstr ""
+msgstr "Proje Anasayfası"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:53
 msgid "Protocols"
@@ -1988,11 +2001,11 @@ msgstr "Vekil Sunucu URL"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:56
 msgid "Public Functions"
-msgstr ""
+msgstr "Genel Fonksiyonlar"
 
 #: ../../plugins/codebrowser/codebrowser/cbrowser.py:57
 msgid "Public Subroutines"
-msgstr ""
+msgstr "Umumi Alt Yordamlar"
 
 #: ../../src/ed_shelf.py:117
 msgid "Put an item on the Shelf"
@@ -2005,7 +2018,7 @@ msgstr "Hız: %.2f Kb/s"
 
 #: ../../plugins/Launch/launch/__init__.py:100
 msgid "Re-run the last run program"
-msgstr ""
+msgstr "Son çalışan programı tekrar çalıştır"
 
 #: ../../src/ed_stc.py:1842
 msgid "Read Only"
@@ -2038,7 +2051,7 @@ msgstr "En son geri alınanı tekrarla"
 
 #: ../../src/ed_search.py:350
 msgid "Regex Compile Error"
-msgstr ""
+msgstr "Regex Derleme Hatası"
 
 #: ../../src/ed_cmdbar.py:294
 msgid "Regular Expression"
@@ -2054,15 +2067,15 @@ msgstr "Yeniden dosya yükle"
 
 #: ../../src/ed_menu.py:536
 msgid "Reload the file with a specified encoding"
-msgstr ""
+msgstr "Belirtilen kodlama ile dosyayı tekrar yükle"
 
 #: ../../src/ed_main.py:1220
 msgid "Reload with Encoding"
-msgstr ""
+msgstr "Kodlama ile Tekrar Yükle"
 
 #: ../../src/ed_menu.py:535
 msgid "Reload with Encoding..."
-msgstr ""
+msgstr "Kodlama ile Tekrar Yükle..."
 
 #: ../../src/prefdlg.py:524
 msgid "Remember File Position"
@@ -2110,7 +2123,7 @@ msgstr "Tümünü Değiştir"
 
 #: ../../src/ed_search.py:547 ../../src/ed_search.py:708
 msgid "Replace Error"
-msgstr ""
+msgstr "Hatayı Yer Değiştir"
 
 #: ../../src/eclib/finddlg.py:778
 msgid "Replace with"
@@ -2126,7 +2139,7 @@ msgstr "Dosyayı tekrar kaydet"
 
 #: ../../src/ed_main.py:1430
 msgid "Restore Editor"
-msgstr ""
+msgstr "Düzenleyiciyi Eski Haline Getir"
 
 #: ../../src/plugdlg.py:673
 msgid "Retrieving Plugin List"
@@ -2138,7 +2151,7 @@ msgstr "İçinde göster "
 
 #: ../../src/ed_menu.py:534
 msgid "Revert file to last save point"
-msgstr ""
+msgstr "Dosyayı son kayıt noktasına geri al"
 
 #: ../../src/prefdlg.py:1111 ../../src/prefdlg.py:1766
 msgid "Revert to Default"
@@ -2146,7 +2159,7 @@ msgstr "Eski duruma getir"
 
 #: ../../src/ed_menu.py:533
 msgid "Revert to Saved"
-msgstr ""
+msgstr "Kaydedilmişe Geri Al"
 
 #: ../../plugins/Launch/launch/__init__.py:93
 #: ../../plugins/Launch/launch/launch.py:202
@@ -2156,7 +2169,7 @@ msgstr "Çalıştır"
 
 #: ../../plugins/Launch/launch/__init__.py:98
 msgid "Run last executed"
-msgstr ""
+msgstr "Son çalıştırılanı çalıştır"
 
 #: ../../plugins/Launch/launch/__init__.py:76
 msgid "Run script from current buffer"
@@ -2173,7 +2186,7 @@ msgstr "Kaydet"
 #: ../../src/ed_editv.py:229
 #, python-format
 msgid "Save \"%s\""
-msgstr ""
+msgstr "\"%s\"'i Kaydet"
 
 #: ../../src/ed_menu.py:529
 msgid "Save &As"
@@ -2233,7 +2246,7 @@ msgstr "Tüm açık sayfaları kaydet"
 
 #: ../../src/ed_menu.py:551
 msgid "Save the current session."
-msgstr ""
+msgstr "Şimdiki oturumu kaydet."
 
 #: ../../src/perspective.py:70
 msgid "Save the current window layout"
@@ -2252,11 +2265,11 @@ msgstr "Dosya kaydedildiÇ %s"
 #: ../../src/ed_search.py:1301
 #, python-format
 msgid "Search Complete: %d matching lines where found."
-msgstr ""
+msgstr "Arama Tamamlandı: Uyuşan %d satır bulundu."
 
 #: ../../src/eclib/finddlg.py:817
 msgid "Search Recursively"
-msgstr ""
+msgstr "Özyinelemeli Şekilde Ara"
 
 #: ../../src/ed_search.py:1275
 msgid "Search Started"
@@ -2338,11 +2351,11 @@ msgstr "Oturum %s olarak kaydedildi"
 
 #: ../../src/ed_pages.py:356
 msgid "Session file doesn't exist."
-msgstr ""
+msgstr "Oturum dosyası yok."
 
 #: ../../src/ed_pages.py:377
 msgid "Session file is empty."
-msgstr ""
+msgstr "Oturum dosyası boş."
 
 #: ../../src/ed_menu.py:554
 msgid "Sessions"
@@ -2449,8 +2462,9 @@ msgid "Some styles have been changed would you like to save before exiting?"
 msgstr "Bazı stiller değişti, çıkmadan önce kaydetmek istermisiniz?"
 
 #: ../../src/ed_search.py:617
+#, fuzzy
 msgid "Sorry will be ready for future version"
-msgstr ""
+msgstr "Üzgünüz, bir sonraki sürüme hazır olacak"
 
 #: ../../plugins/codebrowser/codebrowser/cbconfig.py:40
 #, fuzzy
@@ -2733,7 +2747,7 @@ msgstr "Kaldır"
 
 #: ../../src/plugdlg.py:1062
 msgid "Uninstall Plugin"
-msgstr ""
+msgstr "Eklentiyi Kaldır"
 
 #: ../../src/ed_glob.py:386 ../../src/ed_mdlg.py:137 ../../src/ed_menu.py:759
 #: ../../src/ed_menu.py:761 ../../src/prefdlg.py:753
@@ -2800,7 +2814,7 @@ msgstr "Kullanıcı Adı"
 
 #: ../../src/ed_log.py:80
 msgid "View Editra's console log"
-msgstr ""
+msgstr "Editra'nın konsol kayıtlarını gör"
 
 #: ../../src/ed_menu.py:700
 msgid "View Line of Next Bookmark"
