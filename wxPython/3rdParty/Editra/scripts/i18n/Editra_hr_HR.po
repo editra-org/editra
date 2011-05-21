@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-02 15:37+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-05-21 18:52+0000\n"
+"X-Generator: Launchpad (build 13085)\n"
 
 #: ../../src/ed_search.py:429
 #, python-format
@@ -2975,8 +2975,84 @@ msgstr ""
 msgid "untitled %d"
 msgstr ""
 
+#~ msgid ""
+#~ "%s could not be found\n"
+#~ "Perhaps its been moved or deleted"
+#~ msgstr ""
+#~ "%s nije mogao biti pronađen\n"
+#~ "Možda je pomaknut ili obrisan"
+
+#~ msgid ""
+#~ "%s has been modified by another application.\n"
+#~ "\n"
+#~ "Would you like to Reload it?"
+#~ msgstr ""
+#~ "%s je modificiran od druge aplikacije.\n"
+#~ "\n"
+#~ "Hoćete li da ga ponovo učitate?"
+
+#~ msgid "&About"
+#~ msgstr "&O"
+
+#~ msgid "Changed color scheme to %s"
+#~ msgstr "Shema boja promijenjena na %s"
+
+#~ msgid "Choose a File"
+#~ msgstr "Odaberi Datoteku"
+
+#~ msgid ""
+#~ "Do you wish to open all %d files in this directory?\n"
+#~ "\n"
+#~ "Warning opening many files at once may cause the editor to temporarly  freeze."
+#~ msgstr ""
+#~ "Hoćete li da otvorite sve %d datoteke u ovom direktoriju?\n"
+#~ "\n"
+#~ "Upozorenje: otvaranje više datoteka istovrmeno može privremeno zamrznuti urednika."
+
+#~ msgid "Error/Crash Reporter"
+#~ msgstr "Izvjestitelj Greške/Kraha"
+
+#~ msgid "Finished Installing Plugins"
+#~ msgstr "Završeno instaliranje Priključaka"
+
+#~ msgid "Go to configuration page?"
+#~ msgstr "Idi na stranicu za konfiguriranje?"
+
+#~ msgid "Old Machintosh"
+#~ msgstr "Stari Macintosh"
+
+#~ msgid "Online Documentation"
+#~ msgstr "Dokumentacija na Internetu"
+
+#~ msgid "Project Homepage"
+#~ msgstr "Glavna stranica Projekta"
+
 #~ msgid "Syntax Files"
 #~ msgstr "Sintaksne Datoteke"
 
+#~ msgid "Translate Editra"
+#~ msgstr "Prevedi Editra"
+
 #~ msgid "Unable to retrieve version info"
 #~ msgstr "Nemoguće pronaći podatke o inačici"
+
+#~ msgid "Unix"
+#~ msgstr "Unix"
+
+#~ msgid "Untitled"
+#~ msgstr "Bez naslova"
+
+#~ msgid "Untitled - %d"
+#~ msgstr "Bez naslova - %d"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "match case: %s"
+#~ msgstr "slučaj podudarnosti: %s"
+
+#~ msgid "regex: %s"
+#~ msgstr "regex: %s"
+
+#~ msgid "whole word: %s"
+#~ msgstr "cijela riječ: %s"
