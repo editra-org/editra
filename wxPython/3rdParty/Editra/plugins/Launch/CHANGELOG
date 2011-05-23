@@ -6,6 +6,12 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.12
+Released:
+
++Fix bug with handling initialization of color preferences on new installs.
+
+#-----------------------------------------------------------------------------#
 Version 1.11
 Released: 05/14/2011
 

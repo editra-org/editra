@@ -94,18 +94,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
             util.Log(u"[launch][warn] failed to load launch extensions")
 
         # Ensure preferences have been initialized
-        if self.Preferences is None:
-            self.Preferences = dict(autoclear=False,
-                                    errorbeep=False,
-                                    wrapoutput=False,
-                                    defaultf=self._buffer.GetDefaultForeground().Get(),
-                                    defaultb=self._buffer.GetDefaultBackground().Get(),
-                                    errorf=self._buffer.GetErrorForeground().Get(),
-                                    errorb=self._buffer.GetErrorBackground().Get(),
-                                    infof=self._buffer.GetInfoForeground().Get(),
-                                    infob=self._buffer.GetInfoBackground().Get(),
-                                    warnf=self._buffer.GetWarningForeground().Get(),
-                                    warnb=self._buffer.GetWarningBackground().Get())
+        cfgdlg.InitConfig()
 
         self.UpdateBufferColors()
         cbuffer = GetTextBuffer(self.MainWindow)
@@ -738,7 +727,6 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         if self.Preferences.get('wrapoutput', False):
             mode = wx.stc.STC_WRAP_WORD
         self.SetWrapMode(mode)
-
 
 #-----------------------------------------------------------------------------#
 def GetLangIdFromMW(mainw):
