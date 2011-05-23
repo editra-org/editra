@@ -64,6 +64,25 @@ _ = wx.GetTranslation
 
 #----------------------------------------------------------------------
 
+def InitConfig():
+    """Initialize the Launch configuration"""
+    cfg = Profile_Get(handlers.CONFIG_KEY, default=dict())
+    bChanged = False
+    for key, val in (('autoclear', False), ('errorbeep', False),
+                     ('wrapout', False), ('defaultf', wx.BLACK),
+                     ('defaultb', wx.WHITE), ('errorf', wx.RED),
+                     ('errorb', wx.WHITE), ('infof', wx.BLUE),
+                     ('infob', wx.WHITE), ('warnf', wx.RED),
+                     ('warnb', wx.WHITE)):
+        # Set default value for any uninitialized preference
+        if key not in cfg:
+            cfg[key] = val
+            bChanged = True
+    if bChanged:
+        Profile_Set(handlers.CONFIG_KEY, cfg)
+
+#----------------------------------------------------------------------
+
 class ConfigDialog(ed_basewin.EdBaseFrame):
     """Configuration dialog for configuring what executables are available
     for a filetype and what the preferred one is.
@@ -104,23 +123,7 @@ class ConfigNotebook(wx.Notebook):
         super(ConfigNotebook, self).__init__(parent)
 
         # Make sure config has been initialized
-        prefs = Profile_Get(handlers.CONFIG_KEY, default=None)
-        if prefs is None:
-            buff = eclib.OutputBuffer(self)
-            buff.Hide()
-            Profile_Set(handlers.CONFIG_KEY,
-                        dict(autoclear=False,
-                             errorbeep=False,
-                             wrapoutput=False,
-                             defaultf=buff.GetDefaultForeground().Get(),
-                             defaultb=buff.GetDefaultBackground().Get(),
-                             errorf=buff.GetErrorForeground().Get(),
-                             errorb=buff.GetErrorBackground().Get(),
-                             infof=buff.GetInfoForeground().Get(),
-                             infob=buff.GetInfoBackground().Get(),
-                             warnf=buff.GetWarningForeground().Get(),
-                             warnb=buff.GetWarningBackground().Get()))
-            buff.Destroy()
+        InitConfig()
 
         # Setup
         self.AddPage(ConfigPanel(self), _("General"))
@@ -395,7 +398,7 @@ class OutputPanel(wx.Panel):
         # Colors
         colors = dict()
         for btn in COLOR_MAP.iteritems():
-            cbtn = eclib.ColorSetter(self, btn[0], color=cfg.get(btn[1]))
+            cbtn = eclib.ColorSetter(self, btn[0], color=cfg.get(btn[1], wx.WHITE))
             colors[btn[0]] = cbtn
 
         flexg = wx.FlexGridSizer(5, 5, 5, 5)

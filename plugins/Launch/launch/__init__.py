@@ -7,7 +7,7 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 # Plugin Metadata
-"""Run the script in the current buffer"""
+"""Run scripts and view output"""
 
 __author__ = "Cody Precord"
 __svnid__ = "$Id$"
@@ -130,6 +130,8 @@ class LaunchConfigObject(plugin.PluginConfigObject):
         @return: wxPanel
 
         """
+        # Ensure preferences are initialized
+        cfgdlg.InitConfig()
         return cfgdlg.ConfigNotebook(parent)
 
     def GetLabel(self):
