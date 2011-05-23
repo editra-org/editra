@@ -41,6 +41,7 @@ __all__ = ['GetHandlerById', 'GetHandlerByName', 'GetState', 'DEFAULT_HANDLER']
 import os
 import sys
 import re
+import copy
 
 # Editra Libraries
 import util
@@ -177,7 +178,8 @@ class Meta:
                  "transient" : False}      # Transient configuration (bool)
     def __init__(self, meta_attrs):
         for (attr,default) in self._defaults.items():
-            setattr(self,attr,meta_attrs.get(attr,default))
+            attr_val = meta_attrs.get(attr, default)
+            setattr(self, attr, copy.copy(attr_val))
 
 class HandlerMeta(type):
     """Metaclass for manipulating a handler classes metadata converts
@@ -236,16 +238,18 @@ class FileTypeHandler(object):
         """
         obj = cls.handler_cache.get(ftype, None)
         if obj is None:
+            # Check existing custom subclasses for a proper implementation
             for handler in cls.__subclasses__():
                 if ftype != -1 and handler.meta.typeid == ftype:
                     obj = handler
                     break
             else:
+                # Dynamically create a new class
                 obj = cls.__ClassFactory(ftype)
             cls.RegisterClass(obj)
         obj = obj()
 
-        # Load custom settings
+        # Load custom settings for non-transient filetypes
         if not obj.meta.transient:
             data = GetUserSettings(obj.GetName())
             if len(data):
