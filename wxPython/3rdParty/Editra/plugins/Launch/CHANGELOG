@@ -10,6 +10,8 @@ Version 1.12
 Released:
 
 +Fix bug with handling initialization of color preferences on new installs.
++Fix issue in class factory causing incorrect data display for handler classes
+that are generated dynamically on the fly.
 
 #-----------------------------------------------------------------------------#
 Version 1.11
