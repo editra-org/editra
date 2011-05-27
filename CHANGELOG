@@ -20,6 +20,7 @@ NEW: [features/improvements]
 +Updated all translations from launchpad site
 
 BUG FIXES:
++Fix crash in handling corrupt style sheet data
 
 #-----------------------------------------------------------------------------#
 

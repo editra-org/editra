@@ -3,7 +3,7 @@
 # Purpose: Editra's style management system. Implements the interpretation of #
 #          Editra Style Sheets to the StyledTextCtrl.                         #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008-2011 Cody Precord <staff@editra.org>                    #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -635,7 +635,13 @@ class StyleMgr(object):
             if reader == -1:
                 self.LOG("[ed_style][err] Failed to open style sheet: %s" % style_sheet)
                 return False
-            ret_val = self.SetStyles(style_sheet, self.ParseStyleData(reader.read()))
+            style_data = None
+            try:
+                style_data = self.ParseStyleData(reader.read())
+            except Exception, msg:
+                self.LOG("[ed_style][err] Failed to parse style data for %s:" % style_sheet)
+                return False
+            ret_val = self.SetStyles(style_sheet, style_data)
             reader.close()
             return ret_val
         elif style_sheet not in StyleMgr.STYLES:
