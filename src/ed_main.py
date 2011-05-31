@@ -1018,6 +1018,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                 font = data.GetChosenFont()
                 ctrl.SetGlobalFont(self.nb.control.FONT_PRIMARY, \
                                    font.GetFaceName(), font.GetPointSize())
+                ctrl.SetGlobalFont(self.nb.control.FONT_SECONDARY, \
+                                   font.GetFaceName(), font.GetPointSize())
                 ctrl.UpdateAllStyles()
         else:
             evt.Skip()
