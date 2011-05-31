@@ -948,9 +948,8 @@ class StyleMgr(object):
         @postcondition: style scheme is set to specified style
 
         """
-        if spec_style != self.style_set:
+        if spec_style and (spec_style != self.style_set):
             self.LoadStyleSheet(self.GetStyleSheet(spec_style), force=True)
-        self.UpdateBaseStyles()
         self.SetSyntax(self.GetSyntaxParams())
         self.Refresh()
 

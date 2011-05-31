@@ -380,7 +380,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         elif mtype == 'AUTOBACKUP':
             self.EnableAutoBackup(Profile_Get('AUTOBACKUP'))
         elif mtype == 'SYNTHEME':
-            self.UpdateAllStyles()
+            self.UpdateAllStyles(Profile_Get('SYNTHEME'))
         elif mtype == 'SYNTAX':
             self.SyntaxOnOff(Profile_Get('SYNTAX'))
         elif mtype == 'AUTO_COMP_EX':
