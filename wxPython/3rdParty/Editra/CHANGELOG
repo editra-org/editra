@@ -21,6 +21,7 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Fix crash in handling corrupt style sheet data
++Fix frame title not updating correctly when only one tab is open on Linux.
 
 #-----------------------------------------------------------------------------#
 

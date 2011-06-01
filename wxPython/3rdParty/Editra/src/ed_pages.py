@@ -829,6 +829,8 @@ class EdPages(ed_book.EdBaseBook):
         # Add the buffer to the notebook
         if new_pg:
             self.AddPage(self.control, filename)
+        else:
+            self.frame.SetTitle(self.control.GetTitleString())
 
         self.frame.AddFileToHistory(path2file)
         self.SetPageText(self.GetSelection(), filename)
