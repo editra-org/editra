@@ -28,6 +28,7 @@ BUG FIXES:
 +Partial fix for screen flashing issue on Linux when using dark syntax
 highlighting themes. Need to turn off code folding to stop the flashing.
 +Fix tab context menu option for Close and Close All not working on Linux.
++Fix minor defect in OSX document icon (patch from auria)
 
 #-----------------------------------------------------------------------------#
 
