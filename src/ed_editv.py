@@ -66,6 +66,8 @@ def modalcheck(func):
 class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     """Tab editor view for main notebook control."""
     ID_NO_SUGGEST = wx.NewId()
+    ID_CLOSE_TAB = wx.NewId()
+    ID_CLOSE_ALL_TABS = wx.NewId()
     DOCMGR = DocPositionMgr()
 
     def __init__(self, parent, id_=wx.ID_ANY, pos=wx.DefaultPosition,
@@ -259,9 +261,9 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         menu.Append(ed_glob.ID_MOVE_TAB, _("Move Tab to New Window"))
         menu.AppendSeparator()
         menu.Append(ed_glob.ID_SAVE, _("Save \"%s\"") % ptxt)
-        menu.Append(ed_glob.ID_CLOSE, _("Close \"%s\"") % ptxt)
+        menu.Append(EdEditorView.ID_CLOSE_TAB, _("Close \"%s\"") % ptxt)
         menu.Append(ed_glob.ID_CLOSE_OTHERS, _("Close Other Tabs"))
-        menu.Append(ed_glob.ID_CLOSEALL, _("Close All"))
+        menu.Append(EdEditorView.ID_CLOSE_ALL_TABS, _("Close All"))
         menu.AppendSeparator()
         menu.Append(ed_glob.ID_COPY_FILE, _("Copy Filename"))
         menu.Append(ed_glob.ID_COPY_PATH, _("Copy Full Path"))
@@ -350,10 +352,11 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             parent = self.GetParent()
             if hasattr(parent, 'CloseOtherPages'):
                 parent.CloseOtherPages()
-        elif wx.Platform == '__WXGTK__' and \
-             e_id in (ed_glob.ID_CLOSE, ed_glob.ID_CLOSEALL):
+        elif e_id in (EdEditorView.ID_CLOSE_TAB, EdEditorView.ID_CLOSE_ALL_TABS):
             # Need to relay events up to toplevel window on GTK for them to
-            # be processed. On other platforms the propagate by them selves.
+            # be processed. On other platforms the propagate by themselves.
+            evt.SetId({ EdEditorView.ID_CLOSE_TAB : ed_glob.ID_CLOSE,
+                        EdEditorView.ID_CLOSE_ALL_TABS : ed_glob.ID_CLOSEALL}.get(e_id))
             wx.PostEvent(self.GetTopLevelParent(), evt)
         else:
             evt.Skip()
