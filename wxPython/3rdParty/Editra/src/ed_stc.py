@@ -1579,6 +1579,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             self.LOG("[ed_stc][evt] Code Folding Turned On")
             self._config['folding'] = True
             self.SetMarginWidth(ed_basestc.FOLD_MARGIN, 12)
+            self.SetProperty("fold", "1")
         else:
             self.LOG("[ed_stc][evt] Code Folding Turned Off")
             self._config['folding'] = False
@@ -1587,6 +1588,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             self.ExpandAll()
 
             self.SetMarginWidth(ed_basestc.FOLD_MARGIN, 0)
+            self.SetProperty("fold", "0")
 
     def SyntaxOnOff(self, switch=None):
         """Turn Syntax Highlighting on and off
@@ -1935,10 +1937,12 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """
         super(EditraStc, self).ConfigureLexer(file_ext)
 
+        if not self._config['folding']:
+            self.SetProperty("fold", "0")
+
         # Notify that lexer has changed
-        self.LOG("[ed_stc][info] Lexer change notification for context %d" %
-                 self.GetTopLevelParent().GetId())
+        pid = self.TopLevelParent.Id
+        self.LOG("[ed_stc][info] Lexer change notification for context %d" % pid)
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER,
-                           (self.GetFileName(), self.GetLangId()),
-                           context=self.GetTopLevelParent().GetId())
+                           (self.GetFileName(), self.GetLangId()), pid)
         return True
