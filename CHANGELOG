@@ -22,6 +22,8 @@ NEW: [features/improvements]
 BUG FIXES:
 +Fix crash in handling corrupt style sheet data
 +Fix frame title not updating correctly when only one tab is open on Linux.
++Partial fix for screen flashing issue on Linux when using dark syntax
+highlighting themes. Need to turn off code folding to stop the flashing.
 
 #-----------------------------------------------------------------------------#
 
