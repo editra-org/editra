@@ -19,6 +19,9 @@ NEWS:
 NEW: [features/improvements]
 +Updated all translations from launchpad site
 
+LIBRARY:
++Fix PlateButton size being incorrectly calculated on GTK.
+
 BUG FIXES:
 +Fix crash in handling corrupt style sheet data
 +Fix frame title not updating correctly when only one tab is open on Linux.
