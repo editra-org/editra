@@ -365,17 +365,12 @@ class PlateButton(wx.PyControl):
         width = 4
         height = 6
         if self.GetLabel():
-            if wx.Platform == '__WXGTK__':
-                # Work around for GTK it uses different metrics between
-                # A GC and a DC - Window.GetTextExtent uses the regular
-                # DC metrics which will not be correct when applying
-                # aliasing with the GC when the button is drawn.
-                gc = wx.GraphicsContext.Create(self)
-                gc.SetFont(self.Font)
-                lsize = gc.GetFullTextExtent(self.GetLabel())
-                gc.Destroy()
-            else:
-                lsize = self.GetTextExtent(self.GetLabel())
+            # Need to use GraphicsContext to measure text so
+            # that it will be correct when it comes time to draw.
+            gc = wx.GraphicsContext.Create(self)
+            gc.SetFont(self.Font)
+            lsize = gc.GetFullTextExtent(self.GetLabel())
+            gc.Destroy()
             width += lsize[0]
             height += lsize[1]
             
