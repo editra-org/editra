@@ -31,6 +31,7 @@ import plugin
 import iface
 from extern import aui
 import ed_book
+import ebmlib
 
 #--------------------------------------------------------------------------#
 # Globals
@@ -150,11 +151,15 @@ class EdShelfBook(ed_book.EdBaseBook):
         self._parent = parent
         self._open = dict()
         self._name2idx = dict() # For settings maintenance
+        self._menu = ebmlib.ContextMenuManager()
+        self._mcback = None
 
         # Setup
         self.SetSashDClickUnsplit(True)
 
         # Event Handlers
+        self.Bind(aui.EVT_AUINOTEBOOK_TAB_RIGHT_UP, self.OnRightUp)
+        self.Bind(aui.EVT_AUINOTEBOOK_BG_RIGHT_UP, self.OnRightUp)
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
 
         # Message handlers
@@ -163,10 +168,20 @@ class EdShelfBook(ed_book.EdBaseBook):
 
     def OnDestroy(self, evt):
         if evt.GetId() == self.GetId():
+            self._menu.Clear()
             ed_msg.Unsubscribe(self.OnUpdateTabs)
         evt.Skip()
 
+    def OnRightUp(self, evt):
+        """Show context menu"""
+        self._menu.Clear()
+        if self.MenuCallback:
+            self._menu.Menu = self.MenuCallback()
+            self.PopupMenu(self._menu.Menu)
+
     BitmapCallbacks = property(lambda self: self._name2idx)
+    MenuCallback = property(lambda self: self._mcback,
+                            lambda self, funct: setattr(self, '_mcback', funct))
 
     def AddItem(self, item, name, bmp=wx.NullBitmap):
         """Add an item to the shelf's notebook. This is useful for interacting
@@ -294,6 +309,9 @@ class EdShelfDelegate(object):
         self._shelf = shelf
         self._pin = pobject
 
+        # Setup
+        self._shelf.MenuCallback = getattr(self, 'GetShelfObjectMenu')
+
     @property
     def observers(self):
         return self._pin.observers
@@ -380,16 +398,13 @@ class EdShelfDelegate(object):
             except Exception, msg:
                 self._log("[shelf][err] Failed LoadPerspective: %s" % msg)
 
-    def GetMenu(self):
-        """Return the menu of this object
-        @return: ed_menu.EdMenu()
+    def GetShelfObjectMenu(self):
+        """Get the minimal menu that lists all Shelf objects
+        without the 'Show Shelf' item.
+        @return: ed_menu.EdMenu
 
         """
         menu = ed_menu.EdMenu()
-        menu.Append(ed_glob.ID_SHOW_SHELF, _("Show Shelf") + \
-                    ed_menu.EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_SHELF), 
-                    _("Show the Shelf"))
-        menu.AppendSeparator()
         menu_items = list()
         open_items = self._shelf.GetOpen()
         for observer in self.observers:
@@ -411,6 +426,18 @@ class EdShelfDelegate(object):
                 shortcut = u"\tCtrl+Alt+" + unicode(combo)
             item[1].SetText(item[1].GetText() + shortcut)
             menu.AppendItem(item[1])
+        return menu
+
+    def GetMenu(self):
+        """Return the menu of this object
+        @return: ed_menu.EdMenu()
+
+        """
+        menu = self.GetShelfObjectMenu()
+        menu.Insert(0, wx.ID_SEPARATOR)
+        menu.Insert(0, ed_glob.ID_SHOW_SHELF, _("Show Shelf") + \
+                    ed_menu.EdMenuBar.keybinder.GetBinding(ed_glob.ID_SHOW_SHELF), 
+                    _("Show the Shelf"))
         return menu
 
     def GetOwnerWindow(self):
