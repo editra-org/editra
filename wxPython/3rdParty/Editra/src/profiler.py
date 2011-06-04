@@ -68,7 +68,7 @@ _DEFAULTS = {
            'GUIDES'     : False,            # Use Indentation guides
            'HLCARETLINE': False,            # Highlight Caret Line
            'ICONS'      : 'Tango',          # Icon Theme
-           'ICON_SZ'    : (24, 24),         # Toolbar Icon Size
+           'ICON_SZ'    : (16, 16),         # Toolbar Icon Size
            'INDENTWIDTH': 4,                # Default indent width
            'ISBINARY'   : False,            # Is this instance a binary
            'KEY_PROFILE': None,             # Keybinding profile
