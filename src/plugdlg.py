@@ -271,14 +271,7 @@ class ConfigPanel(eclib.ControlBox):
         else:
             self.PopulateErrors()
 
-#        cbar = self.CreateControlBar(wx.BOTTOM)
-#        cbar.SetVMargin(1, 2)
-#        cbar.AddStretchSpacer()
-#        btn = wx.Button(cbar, id=ConfigPanel.ID_UNINSTALL, label=_("Uninstall"))
-#        cbar.AddControl(btn, wx.ALIGN_RIGHT)
-
-        # Event handlers
-#        self.Bind(wx.EVT_BUTTON, self.OnUninstall, id=ConfigPanel.ID_UNINSTALL)
+        # Event Handlers
         self.Bind(ed_event.EVT_NOTIFY, self.OnNotify)
 
     def ConfigChanged(self):
