@@ -30,6 +30,7 @@ BUG FIXES:
 highlighting themes. Need to turn off code folding to stop the flashing.
 +Fix tab context menu option for Close and Close All not working on Linux.
 +Fix minor defect in OSX document icon (patch from auria)
++Fix GTK warning messages during startup on Linux.
 
 #-----------------------------------------------------------------------------#
 

@@ -91,7 +91,7 @@ class Shelf(plugin.Plugin):
         shelf = EdShelfBook(parent)
         mgr.AddPane(shelf,
                     wx.aui.AuiPaneInfo().Name(Shelf.SHELF_NAME).\
-                            Caption("Shelf").Bottom().Layer(0).\
+                            Caption(_("Shelf")).Bottom().Layer(0).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(500,250)))
 
@@ -202,7 +202,7 @@ class EdShelfBook(ed_book.EdBaseBook):
             self.SetPageBitmap(self.GetPageCount()-1, bmp)
         self._open[name] = self._open.get(name, 0) + 1
 
-    @mainwinonly
+#    @mainwinonly
     def EnsureShelfVisible(self):
         """Make sure the Shelf is visible
         @precondition: Shelf.Init has been called
@@ -241,7 +241,7 @@ class EdShelfBook(ed_book.EdBaseBook):
         """
         return self._open
 
-    @mainwinonly
+#    @mainwinonly
     def Hide(self):
         """Hide the shelf
         @postcondition: Shelf is hidden by aui manager
@@ -264,7 +264,7 @@ class EdShelfBook(ed_book.EdBaseBook):
                 return True
         return False
 
-    @mainwinonly
+#    @mainwinonly
     def IsShown(self):
         """Is the shelf visible?
         @return: bool
@@ -424,8 +424,10 @@ class EdShelfDelegate(object):
             shortcut = u""
             if combo < 10:
                 shortcut = u"\tCtrl+Alt+" + unicode(combo)
-            item[1].SetText(item[1].GetText() + shortcut)
-            menu.AppendItem(item[1])
+            nitem = menu.Append(item[1].Id, item[1].GetText() + shortcut)
+            if item[1].Bitmap.IsOk():
+                nitem.SetBitmap(item[1].Bitmap)
+            item[1].Destroy()
         return menu
 
     def GetMenu(self):
