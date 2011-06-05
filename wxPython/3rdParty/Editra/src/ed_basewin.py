@@ -21,6 +21,7 @@ __revision__ = "$Revision$"
 import wx
 
 # Local Imports
+import ed_msg
 import eclib
 import util
 
@@ -88,6 +89,24 @@ class EdBaseCtrlBox(eclib.ControlBox):
     """ControlBox base class to be used by all common components"""
     def __init__(self, parent):
         super(EdBaseCtrlBox, self).__init__(parent)
+
+        ed_msg.Subscribe(self._OnFontChange, ed_msg.EDMSG_DSP_FONT)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self._OnDestroy)
+
+    def _OnDestroy(self, evt):
+        if self and evt.GetEventObject is self:
+            ed_msg.Unsubscribe(self._OnFontChange)
+
+    def _OnFontChange(self, msg):
+        if not self:
+            return
+        font = msg.GetData()
+        if isinstance(font, wx.Font):
+            for pos in (wx.TOP, wx.BOTTOM, wx.LEFT, wx.RIGHT):
+                cbar = self.GetControlBar(pos)
+                if cbar:
+                    for child in cbar.GetChildren():
+                        child.SetFont(font)
 
     def AddPlateButton(self, lbl=u"", bmp=-1,
                        align=wx.ALIGN_LEFT, cbarpos=wx.TOP):

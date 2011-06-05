@@ -40,24 +40,6 @@ _ = wx.GetTranslation
 
 #-----------------------------------------------------------------------------#
 
-def mainwinonly(func):
-    """Decorator method to add guards for methods that require the parent
-    to be a MainWindow instance
-
-    """
-    def WrapMainWin(*args, **kwargs):
-        self = args[0]
-        if not hasattr(self._parent, 'GetFrameManager'):
-            return
-        else:
-            func(*args, **kwargs)
-
-    WrapMainWin.__name__ = func.__name__
-    WrapMainWin.__doc__ = func.__doc__
-    return WrapMainWin
-
-#-----------------------------------------------------------------------------#
-
 class Shelf(plugin.Plugin):
     """Plugin that creates a notebook for holding the various Shelf items
     implemented by L{ShelfI}.
@@ -202,7 +184,6 @@ class EdShelfBook(ed_book.EdBaseBook):
             self.SetPageBitmap(self.GetPageCount()-1, bmp)
         self._open[name] = self._open.get(name, 0) + 1
 
-#    @mainwinonly
     def EnsureShelfVisible(self):
         """Make sure the Shelf is visible
         @precondition: Shelf.Init has been called
@@ -241,7 +222,6 @@ class EdShelfBook(ed_book.EdBaseBook):
         """
         return self._open
 
-#    @mainwinonly
     def Hide(self):
         """Hide the shelf
         @postcondition: Shelf is hidden by aui manager
@@ -264,7 +244,6 @@ class EdShelfBook(ed_book.EdBaseBook):
                 return True
         return False
 
-#    @mainwinonly
     def IsShown(self):
         """Is the shelf visible?
         @return: bool

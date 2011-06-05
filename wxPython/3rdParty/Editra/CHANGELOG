@@ -19,6 +19,7 @@ NEWS:
 NEW: [features/improvements]
 +Updated all translations from launchpad site
 +Add right click menu to Shelf tab area to open Shelf items.
++UI Display font setting is now more uniformly applied across the interface.
 
 LIBRARY:
 +Fix PlateButton size being incorrectly calculated on GTK.
