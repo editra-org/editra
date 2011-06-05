@@ -636,7 +636,11 @@ class GeneralFilePanel(wx.Panel):
         sprefs = Profile_Get('SPELLCHECK', default=dict())
         cpath = sprefs.get('epath', u'')
         if path != cpath:
-            ok = stcspellcheck.STCSpellCheck.reloadEnchant(path)
+            try:
+                ok = stcspellcheck.STCSpellCheck.reloadEnchant(path)
+            except OSError:
+                ok = False
+
             if ok:
                 # Reload was successful
                 sprefs['epath'] = path
@@ -1304,8 +1308,6 @@ class AppearancePanel(wx.Panel, PreferencesPanelBase):
         font = evt.GetValue()
         if isinstance(font, wx.Font) and not font.IsNull():
             Profile_Set('FONT3', font, 'font')
-            # TODO: this callback is no longer necessary due to the
-            #       profile notifier callbacks.
             ed_msg.PostMessage(ed_msg.EDMSG_DSP_FONT, font)
 
     @staticmethod

@@ -284,8 +284,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # Set Perspective and other UI settings
         self.SetPerspective(_PGET('DEFAULT_VIEW'))
         self.PanelMgr.Update()
-        # TODO: this callback is no longer necessary due to the
-        #       profile notifier callbacks.
+        # Make sure all clients are updated to user specified display font.
         ed_msg.PostMessage(ed_msg.EDMSG_DSP_FONT,
                            _PGET('FONT3', 'font', wx.NORMAL_FONT))
 

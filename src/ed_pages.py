@@ -95,7 +95,6 @@ class EdPages(ed_book.EdBaseBook):
         # Set custom options
         self.SetSashDClickUnsplit(True)
         self.SetMinMaxTabWidth(125, 135)
-        self.UpdateFontSetting()
 
         # Notebook Events
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
@@ -122,8 +121,6 @@ class EdPages(ed_book.EdBaseBook):
         ed_msg.Subscribe(self.OnUpdatePosCache, ed_msg.EDMSG_UI_STC_POS_JUMPED)
         ed_msg.RegisterCallback(self.OnDocPointerRequest,
                                 ed_msg.EDREQ_DOCPOINTER)
-        ed_msg.Subscribe(self.OnConfigMsg,
-                         ed_msg.EDMSG_PROFILE_CHANGE + ('FONT3',))
 
         # Add a blank page
         self.NewPage()
@@ -135,7 +132,6 @@ class EdPages(ed_book.EdBaseBook):
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnThemeChanged)
             ed_msg.Unsubscribe(self.OnUpdatePosCache)
-            ed_msg.Unsubscribe(self.OnConfigMsg)
             ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
 
     #---- Function Definitions ----#
@@ -593,19 +589,6 @@ class EdPages(ed_book.EdBaseBook):
 
         """
         self.UpdateAllImages()
-
-    def OnConfigMsg(self, msg):
-        """Handle configuration change updates"""
-        mtype = msg.GetType()[-1]
-        if mtype == 'FONT3':
-            # UI display font has changed
-            self.UpdateFontSetting()
-
-    def UpdateFontSetting(self):
-        """Update font setting using latest profile data"""
-        font = Profile_Get('FONT3', 'font', None)
-        if font:
-            self.SetFont(font)
 
     def OnUpdatePosCache(self, msg):
         """Update the position cache for buffer position changes

@@ -23,6 +23,8 @@ import wx
 
 # Editra Imports
 import extern.aui as aui
+import ed_msg
+from profiler import Profile_Get
 
 #-----------------------------------------------------------------------------#
 
@@ -34,12 +36,35 @@ class EdBaseBook(aui.AuiNotebook):
         if wx.Platform == '__WXGTK__':
             self.SetArtProvider(GtkTabArt())
 
+        # Setup
+        self.UpdateFontSetting()
+
+        # Message Handlers
+        ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
+
+        # Event Handlers
+        self.Bind(wx.EVT_WINDOW_DESTROY, self._OnDestroy, self)
+
+    def _OnDestroy(self, evt):
+        if self and evt.GetEventObject() is self:
+            ed_msg.Unsubscribe(self.OnUpdateFont)
+        evt.Skip()
+
     @staticmethod
     def GetBaseStyles():
         style = aui.AUI_NB_NO_TAB_FOCUS
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
         return style
+
+    def OnUpdateFont(self, msg):
+        self.UpdateFontSetting()
+
+    def UpdateFontSetting(self):
+        """Update font setting using latest profile data"""
+        font = Profile_Get('FONT3', 'font', None)
+        if font:
+            self.SetFont(font)
 
 #-----------------------------------------------------------------------------#
 
