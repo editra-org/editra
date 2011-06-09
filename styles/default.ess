@@ -132,7 +132,7 @@ scalar_style {
 }
 
 operator_style {
-        modifiers:bold;
+        fore:#000000;
 }
 
 here_style {
@@ -169,8 +169,7 @@ funct_style {
 }
 
 brace_good {
-        fore:#FFFFFF;
-        back:#0000FF;
+        fore:#0000FF;
         modifiers:bold;
 }
 
@@ -194,7 +193,7 @@ number_style {
 }
 
 brace_bad {
-        back:#FF0000;
+        fore:#FF0000;
         modifiers:bold;
 }
 
