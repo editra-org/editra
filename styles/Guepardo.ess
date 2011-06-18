@@ -4,11 +4,15 @@
  * License: wxWindows License
  */
  
- default_style {
+default_style {
         fore:#000000;
         back:#FCFCFC;
         face:%(primary)s;
         size:%(size)d;
+}
+
+error_style {
+    fore:#FFD7D7;
 }
 
 stringeol_style {
