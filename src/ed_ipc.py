@@ -64,14 +64,14 @@ import ebmlib
 
 # Port choosing algorithm ;)
 EDPORT = (10 * int('ed', 16) + sum(ord(x) for x in "itr") + int('a', 16)) * 10
-MSGEND = u"*EDEND*"
+MSGEND = "*EDEND*"
 
 # Xml Implementation
-EDXML_IPC       = u"edipc"
-EDXML_FILELIST  = u"filelist"
-EDXML_FILE      = u"file"
-EDXML_ARGLIST   = u"arglist"
-EDXML_ARG       = u"arg"
+EDXML_IPC       = "edipc"
+EDXML_FILELIST  = "filelist"
+EDXML_FILE      = "file"
+EDXML_ARGLIST   = "arglist"
+EDXML_ARG       = "arg"
 
 #-----------------------------------------------------------------------------#
 
@@ -175,9 +175,9 @@ class EdIpcServer(threading.Thread):
                 # the input and dispatch to the app.
                 if recieved.startswith(self.__key) and recieved.endswith(MSGEND):
                     # Strip the key
-                    recieved = recieved.replace(self.__key, u'', 1)
+                    recieved = recieved.replace(self.__key, '', 1)
                     # Strip the end token
-                    xmlstr = recieved.rstrip(MSGEND).strip(u";")
+                    xmlstr = recieved.rstrip(MSGEND).strip(";")
 
                     # Parse the xml
                     exml = IPCCommand()
@@ -230,7 +230,7 @@ def SendCommands(xmlobj, key):
         client.connect(('127.0.0.1', EDPORT))
 
         # Server expects commands delimited by ;
-        message = u";".join(cmds)
+        message = ";".join(cmds)
         client.send(message)
         client.shutdown(socket.SHUT_RDWR)
         client.close()

@@ -17,7 +17,7 @@ __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
-__all__ = [ 'IsUnicode', ]
+__all__ = [ 'IsUnicode', 'DecodeString']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -32,3 +32,15 @@ def IsUnicode(txt):
 
     """
     return isinstance(txt, types.UnicodeType)
+
+def DecodeString(txt, enc):
+    """Decode the given string with the given encoding,
+    only attempts to decode if the given txt is not already Unicode
+    @param txt: string
+    @param enc: encoding 'utf-8'
+    @return: unicode
+
+    """
+    if IsUnicode(txt):
+        txt = txt.decode(enc)
+    return txt
