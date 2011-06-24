@@ -235,7 +235,7 @@ class KeyBinder(object):
 
     @classmethod
     def GetCurrentProfile(cls):
-        """Get the name of the currenly set key profile if one exists
+        """Get the name of the currently set key profile if one exists
         @return: string or None
 
         """
@@ -610,7 +610,7 @@ class EdMenuBar(wx.MenuBar):
         editmenu.AppendSeparator()
         editmenu.AppendEx(ed_glob.ID_SELECTALL, _("Select &All"),
                         _("Select All Text in Document"))
-        editmenu.AppendEx(ed_glob.ID_COLUMN_MODE, _("Column Edit Mode"),
+        editmenu.AppendEx(ed_glob.ID_COLUMN_MODE, _("Column Edit"),
                         _("Enable column edit mode."), wx.ITEM_CHECK)
         editmenu.AppendSeparator()
         linemenu = EdMenu()
