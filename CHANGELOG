@@ -35,6 +35,7 @@ highlighting themes. Need to turn off code folding to stop the flashing.
 +Fix GTK warning messages during startup on Linux.
 +Fix missing definition of error_style for Guepardo syntax theme.
 +Fix Unicode handling issue in xml handling for ipc server.
++Fix To Upper/Lower command not working with some characters.
 
 #-----------------------------------------------------------------------------#
 
