@@ -413,10 +413,12 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @keyword upper: Flag whether conversion is to upper case or not.
 
         """
+        sel = self.GetSelectedText()
         if upper:
-            self.UpperCase()
+            sel = sel.upper()
         else:
-            self.LowerCase()
+            sel = sel.lower()
+        self.ReplaceSelection(sel)
 
     def EnableAutoBackup(self, enable):
         """Enable automatic backups
