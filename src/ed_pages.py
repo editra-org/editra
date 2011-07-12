@@ -138,7 +138,7 @@ class EdPages(ed_book.EdBaseBook):
 
     def _HandleEncodingError(self, control):
         """Handle trying to reload the file the file with a different encoding
-        Until it suceeds or gives up.
+        Until it succeeds or gives up.
         @param control: stc
         @return: bool
 

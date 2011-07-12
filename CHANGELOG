@@ -37,6 +37,7 @@ highlighting themes. Need to turn off code folding to stop the flashing.
 +Fix Unicode handling issue in xml handling for ipc server.
 +Fix To Upper/Lower command not working with some characters.
 +Properly handle searches with precomposed and decomposed Unicode data.
++Fix tab icon setting not being applied after restart.
 
 #-----------------------------------------------------------------------------#
 
