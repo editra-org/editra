@@ -60,11 +60,27 @@ class EdBaseBook(aui.AuiNotebook):
     def OnUpdateFont(self, msg):
         self.UpdateFontSetting()
 
+    def SetPageBitmap(self, pg, bmp):
+        """Set a tabs bitmap
+        @param pg: page index
+        @param bmp: Bitmap
+        @note: no action if user prefs have turned off bmp
+
+        """
+        if not self.UseIcons():
+            bmp = wx.NullBitmap
+        super(EdBaseBook, self).SetPageBitmap(pg, bmp)
+
     def UpdateFontSetting(self):
         """Update font setting using latest profile data"""
         font = Profile_Get('FONT3', 'font', None)
         if font:
             self.SetFont(font)
+
+    def UseIcons(self):
+        """Is the book using tab icons?"""
+        bUseIcons = Profile_Get('TABICONS', default=True)
+        return bUseIcons
 
 #-----------------------------------------------------------------------------#
 

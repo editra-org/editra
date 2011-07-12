@@ -180,8 +180,7 @@ class EdShelfBook(ed_book.EdBaseBook):
                      select=True)
 
         # Set the tab icon
-        if Profile_Get('TABICONS', default=True):
-            self.SetPageBitmap(self.GetPageCount()-1, bmp)
+        self.SetPageBitmap(self.GetPageCount()-1, bmp)
         self._open[name] = self._open.get(name, 0) + 1
 
     def EnsureShelfVisible(self):
@@ -203,7 +202,7 @@ class EdShelfBook(ed_book.EdBaseBook):
 
         """
         count = 0
-        for page in xrange(self.GetPageCount()):
+        for page in range(self.GetPageCount()):
             if self.GetPageText(page).startswith(item_name):
                 count = count + 1
         return count
