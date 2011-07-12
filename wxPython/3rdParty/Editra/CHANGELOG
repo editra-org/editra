@@ -36,6 +36,7 @@ highlighting themes. Need to turn off code folding to stop the flashing.
 +Fix missing definition of error_style for Guepardo syntax theme.
 +Fix Unicode handling issue in xml handling for ipc server.
 +Fix To Upper/Lower command not working with some characters.
++Properly handle searches with precomposed and decomposed Unicode data.
 
 #-----------------------------------------------------------------------------#
 
