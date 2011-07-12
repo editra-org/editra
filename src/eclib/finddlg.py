@@ -16,11 +16,11 @@ configuration and presentation options.
 The following items are the options that the AdvancedFindReplaceDialog offers
 over the basic FindReplaceDialog.
 
-  * Hide/Show each option or section indvidually (basic dialog only disables them)
+  * Hide/Show each option or section individually (basic dialog only disables them)
   * Multi-Find/Replace event action for Find All / Replace All actions
   * Switch dialog from Find mode to Replace mode or visa-versa once its already
     been created.
-  * Options for specifiying the location to look in.
+  * Options for specifying the location to look in.
   * Regular Expression option
   * Use standard dialog or a floating MiniFrame (default)
 

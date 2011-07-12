@@ -7,7 +7,7 @@
 ###############################################################################
 
 """
-Editra Buisness Model Library: SearchEngine
+Editra Business Model Library: SearchEngine
 
 Text Search Engine for finding text and grepping files
 
@@ -25,6 +25,7 @@ import os
 import re
 import fnmatch
 import types
+import unicodedata
 from StringIO import StringIO
 
 # Local imports
@@ -50,7 +51,7 @@ class SearchEngine(object):
         @keyword wholeword: Match whole word
 
         """
-        object.__init__(self)
+        super(SearchEngine, self).__init__()
 
         # Attributes
         self._isregex = regex
@@ -72,33 +73,44 @@ class SearchEngine(object):
 
         """
         tmp = self._query
+
+        uquery = type(tmp) is types.UnicodeType
+        upool = type(self._pool) is types.UnicodeType
+        if uquery and upool:
+            tmp = unicodedata.normalize("NFD", tmp)
+
         if not self._isregex:
             tmp = re.escape(tmp)
 
         if self._wholeword:
-            tmp = "\\b%s\\b" % tmp
+            if uquery:
+                tmp = u"\\b%s\\b" % tmp
+            else:
+                tmp = "\\b%s\\b" % tmp
 
         flags = re.MULTILINE
-
         if not self._matchcase:
             flags |= re.IGNORECASE
 
-        if type(self._pool) is types.UnicodeType:
+        if upool:
             flags |= re.UNICODE
+            # Normalize
+            self._pool = unicodedata.normalize("NFD", self._pool)
         else:
             # If the pools is not Unicode also make sure that the
             # query is a string too.
-            if type(tmp) is types.UnicodeType:
+            if uquery:
                 try:
                     tmp = tmp.encode('utf-8')
                 except UnicodeEncodeError:
-                    # TODO: better error reporting about encoding issue?
+                    # TODO: better error reporting about encoding issue
                     self._regex = None
                     return
         try:
             self._regex = re.compile(tmp, flags)
         except:
-            self._regex = None
+                self._regex = None
+        self._data = (tmp, self._pool)
 
     def ClearPool(self):
         """Clear the search pool"""

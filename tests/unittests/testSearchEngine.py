@@ -128,7 +128,7 @@ class SearchEngineTest(unittest.TestCase):
         self.assertTrue(len(t4) == 1, "Find Results %s" % repr(t4))
 
     def testWholeWordFind(self):
-        """Test find procedure to see if it acuratly returns the correct
+        """Test find procedure to see if it accurately returns the correct
         positions in the search pool
 
         """
@@ -145,7 +145,7 @@ class SearchEngineTest(unittest.TestCase):
         self.assertTrue(t2 is not None, "Find next failed")
 
     def testMatchCaseFind(self):
-        """Test find procedure to see if it acuratly returns the correct
+        """Test find procedure to see if it accurately returns the correct
         positions in the search pool
 
         """
@@ -154,7 +154,7 @@ class SearchEngineTest(unittest.TestCase):
         self._mc_eng.SetQuery('test')
         t1 = self._mc_eng.Find(0)
         self.assertTrue(t1 is not None, "Find failed")
-        self.assertEquals(t1[0], 32, "Find got wrong postion")
+        self.assertEquals(t1[0], 32, "Find got wrong position")
         self.assertEquals(t1[1] - t1[0], 4, "Find returned wrong span")
 
         # Find Next
@@ -175,7 +175,7 @@ class SearchEngineTest(unittest.TestCase):
         self.assertTrue(self._def_eng.GetQuery() == u"test")
 
     def testRegexFind(self):
-        """Test find procedure to see if it acuratly returns the correct
+        """Test find procedure to see if it accurately returns the correct
         positions in the search pool
 
         """
@@ -196,6 +196,17 @@ class SearchEngineTest(unittest.TestCase):
         self.assertTrue(t3 is None)
 
         # Multiline 
+        # TODO
+
+    def testNormalizedFind(self):
+        """Test searching for normalized Unicode data"""
+        pool = unichr(0x00E9)
+        search = ebmlib.SearchEngine(u'e' + u'\u0301')
+        search.SetSearchPool(pool)
+        print search._data
+        val = search.Find()
+        self.assertTrue(val is not None)
+
 #-----------------------------------------------------------------------------#
 
 if __name__ == '__main__':
