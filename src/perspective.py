@@ -20,8 +20,12 @@ __revision__ = "$Revision$"
 # Dependencies
 import os
 import wx
+import wx.aui as aui
+
+# Editra Imports
 import util
 import ed_menu
+import ed_fmgr
 from profiler import Profile_Get, Profile_Set
 
 #--------------------------------------------------------------------------#
@@ -54,16 +58,16 @@ class PerspectiveManager(object):
         """
         super(PerspectiveManager, self).__init__()
 
-        hint = wx.aui.AUI_MGR_TRANSPARENT_HINT
+        hint = aui.AUI_MGR_TRANSPARENT_HINT
         if wx.Platform == '__WXGTK__':
             # Use venetian blinds style as transparent can cause crashes
             # on linux when desktop compositing is used.
-            hint = wx.aui.AUI_MGR_VENETIAN_BLINDS_HINT
+            hint = aui.AUI_MGR_VENETIAN_BLINDS_HINT
 
-        self._mgr = wx.aui.AuiManager(flags=wx.aui.AUI_MGR_DEFAULT |
-                                      wx.aui.AUI_MGR_TRANSPARENT_DRAG |
-                                      hint |
-                                      wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE)
+        self._mgr = ed_fmgr.EdFrameManager(flags=aui.AUI_MGR_DEFAULT |
+                                                 aui.AUI_MGR_TRANSPARENT_DRAG |
+                                                 hint |
+                                                 aui.AUI_MGR_ALLOW_ACTIVE_PANE)
         self._mgr.SetManagedWindow(self)
 
         # Attributes
