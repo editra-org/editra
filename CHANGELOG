@@ -38,6 +38,7 @@ highlighting themes. Need to turn off code folding to stop the flashing.
 +Fix To Upper/Lower command not working with some characters.
 +Properly handle searches with precomposed and decomposed Unicode data.
 +Fix tab icon setting not being applied after restart.
++Fix toolbar when running under wxPython2.9 on OSX.
 
 #-----------------------------------------------------------------------------#
 
