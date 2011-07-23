@@ -60,8 +60,6 @@ class EdToolBar(wx.ToolBar):
         # Message Handlers
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
-        self.Realize()
-
     def OnDestroy(self, evt):
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnThemeChange)

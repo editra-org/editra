@@ -1505,6 +1505,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if tb:
             tb.Destroy()
         self.SetToolBar(ed_toolbar.EdToolBar(self))
+        self.ToolBar.Realize()
         self.GetToolBar().Show(_PGET('TOOLBAR'))
         self.Layout()
 
