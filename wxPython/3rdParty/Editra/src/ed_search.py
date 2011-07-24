@@ -857,10 +857,12 @@ class EdSearchCtrl(wx.SearchCtrl):
             for child in self.GetChildren():
                 if isinstance(child, wx.TextCtrl):
                     child.Bind(wx.EVT_KEY_UP, self.ProcessEvent)
+                    child.Bind(wx.EVT_KEY_DOWN, self.ProcessEvent)
                     self._txtctrl = child
                     break
         else:
             self.Bind(wx.EVT_KEY_UP, self.ProcessEvent)
+            self.Bind(wx.EVT_KEY_DOWN, self.ProcessEvent)
         self.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.OnCancel)
         self.Bind(wx.EVT_MENU, self.OnHistMenu)
 
@@ -1071,11 +1073,19 @@ class EdSearchCtrl(wx.SearchCtrl):
         @param evt: the event that called this handler
 
         """
+        e_key = evt.GetKeyCode()
         if evt.GetEventType() != wx.wxEVT_KEY_UP:
-            evt.Skip()
+            if e_key in (wx.WXK_UP, wx.WXK_DOWN):
+                buff = wx.GetApp().GetCurrentBuffer()
+                if isinstance(buff, wx.stc.StyledTextCtrl):
+                    val = -1
+                    if e_key == wx.WXK_DOWN:
+                        val = 1
+                    buff.ScrollLines(val)
+            else:
+                evt.Skip()
             return
 
-        e_key = evt.GetKeyCode()
         if e_key == wx.WXK_ESCAPE:
             # TODO change to more safely determine the context
             # Currently control is only used in command bar
