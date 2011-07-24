@@ -71,7 +71,7 @@ FOLD_COMPACT = ("fold.compact", "1")
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for MS SQL""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_MSSQL)
@@ -82,7 +82,7 @@ class SyntaxData(syndata.SyntaxDataBase):
 
     def GetProperties(self):
         """Returns a list of Extra Properties to set """
-        return [FOLD]
+        return [FOLD, FOLD_COMPACT]
 
     def GetCommentPattern(self):
         """Returns a list of characters used to comment a block of code """
