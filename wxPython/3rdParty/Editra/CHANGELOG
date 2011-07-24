@@ -18,6 +18,7 @@ NEWS:
 
 NEW: [features/improvements]
 +Allow scrolling of the buffer from within the search bar with up/down keys.
++Can now change lexer from status bar context menu.
 
 BUG FIXES:
 

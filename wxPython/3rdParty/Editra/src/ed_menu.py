@@ -477,29 +477,35 @@ class EdMenuBar(wx.MenuBar):
         ed_msg.Subscribe(self.OnLoadProfile, ed_msg.EDMSG_MENU_LOADPROFILE)
         ed_msg.Subscribe(self.OnCreateLexerMenu, ed_msg.EDMSG_CREATE_LEXER_MENU)
 
-    def CreateLexerMenu(self):
+    def GenLexerMenu(self):
         """Create the Lexer menu"""
         settingsmenu = self._menus['settings']
         item = settingsmenu.FindItemById(ed_glob.ID_LEXER)
         if item:
             settingsmenu.Remove(ed_glob.ID_LEXER)
-        mconfig = profiler.Profile_Get('LEXERMENU', default=list())
-        mconfig.sort()
 
         # Create the menu
         langmenu = wx.Menu()
         langmenu.Append(ed_glob.ID_LEXER_CUSTOM, _("Customize..."),
                         _("Customize the items shown in this menu."))
         langmenu.AppendSeparator()
+        EdMenuBar.PopulateLexerMenu(langmenu)
+        settingsmenu.AppendMenu(ed_glob.ID_LEXER, _("Lexers"),
+                                langmenu,
+                                _("Manually Set a Lexer/Syntax"))
 
+    @staticmethod
+    def PopulateLexerMenu(langmenu):
+        """Create a menu with all the lexer options
+        @return: wx.Menu
+
+        """
+        mconfig = profiler.Profile_Get('LEXERMENU', default=list())
+        mconfig.sort()
         for label in mconfig:
             lid = synglob.GetIdFromDescription(label)
             langmenu.Append(lid, label,
                             _("Switch Lexer to %s") % label, wx.ITEM_CHECK)
-
-        settingsmenu.AppendMenu(ed_glob.ID_LEXER, _("Lexers"),
-                                langmenu,
-                                _("Manually Set a Lexer/Syntax"))
 
     @classmethod
     def DeleteKeyProfile(cls, pname):
@@ -820,7 +826,7 @@ class EdMenuBar(wx.MenuBar):
         self.Append(settingsmenu, _("&Settings"))
         self._menus['settings'] = settingsmenu
 
-        self.CreateLexerMenu()
+        self.GenLexerMenu()
 
     def GenToolsMenu(self):
         """Makes and attaches the tools menu
@@ -907,7 +913,7 @@ class EdMenuBar(wx.MenuBar):
 
     def OnCreateLexerMenu(self, msg):
         """Recreate the lexer menu"""
-        self.CreateLexerMenu()
+        self.GenLexerMenu()
 
     def OnLoadProfile(self, msg):
         """Load and set the current key profile
