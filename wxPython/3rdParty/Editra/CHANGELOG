@@ -21,6 +21,7 @@ NEW: [features/improvements]
 +Can now change lexer from status bar context menu.
 
 BUG FIXES:
++Fix PyDeadObject error when opening new window from tab menu.
 
 #-----------------------------------------------------------------------------#
 

@@ -58,7 +58,8 @@ class EdBaseBook(aui.AuiNotebook):
         return style
 
     def OnUpdateFont(self, msg):
-        self.UpdateFontSetting()
+        if self:
+            self.UpdateFontSetting()
 
     def SetPageBitmap(self, pg, bmp):
         """Set a tabs bitmap
