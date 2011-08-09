@@ -97,7 +97,7 @@ class EclibDemoFrame(wx.Frame):
 class EclibDemoBook(wx.Notebook):
     """Main Window display panel"""
     def __init__(self, parent):
-        wx.Notebook.__init__(self, parent, size=(450, 400))
+        super(EclibDemoBook, self).__init__(parent, size=(450, 400))
 
         # Attributes
         self.doc = html.HtmlWindow(self)
