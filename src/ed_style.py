@@ -997,9 +997,10 @@ class StyleMgr(object):
             self.SetSelForeground(False, wx.BLACK)
         self.SetSelBackground(True, sback)
 
-        wspace = self.GetItemByName('whitespace_style')
-        self.SetWhitespaceBackground(True, wspace.GetBack())
-        self.SetWhitespaceForeground(True, wspace.GetFore())
+        # Causes issues with selecting text when view whitespace is on
+#        wspace = self.GetItemByName('whitespace_style')
+#        self.SetWhitespaceBackground(True, wspace.GetBack())
+#        self.SetWhitespaceForeground(True, wspace.GetFore())
 
         default_fore = self.GetDefaultForeColour()
         edge_colour = self.GetItemByName('edge_style')
@@ -1074,8 +1075,7 @@ DEF_STYLE_DICT = \
          'stringeol_style' : StyleItem("#000000", "#EEC0EE",
                                        "%(secondary)s", ex=["bold", "eol"]),
          'unknown_style' : StyleItem("#FFFFFF", "#DD0101", ex=["bold", "eol"]),
-         'userkw_style' : StyleItem(),
-         'whitespace_style' : StyleItem('#838383')
+         'userkw_style' : StyleItem()
          }
 
 def MergeFonts(style_dict, font_dict):
