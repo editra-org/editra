@@ -21,10 +21,6 @@ caret_line {
         back: #3F3F3F;
 }
 
-comment_style {
-        fore:#999999;
-}
-
 keyword_style {
         fore:#F0E68C;
 }

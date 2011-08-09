@@ -22,6 +22,8 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Fix PyDeadObject error when opening new window from tab menu.
++Fix selection background not being shown when selecting whitespace when the
+buffers show whitespace option is turned on.
 
 #-----------------------------------------------------------------------------#
 

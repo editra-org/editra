@@ -203,7 +203,6 @@ class SearchEngineTest(unittest.TestCase):
         pool = unichr(0x00E9)
         search = ebmlib.SearchEngine(u'e' + u'\u0301')
         search.SetSearchPool(pool)
-        print search._data
         val = search.Find()
         self.assertTrue(val is not None)
 

@@ -34,7 +34,7 @@ class StyleMgrTest(unittest.TestCase):
         self.dd = dict(ed_style.DEF_STYLE_DICT)
         self.bstr = ["fore:#000000", "back:#FFFFFF",
                      "face:%(primary)s", "size:%(size)d"]
-        self.stylesheet = common.GetDataFilePath('no_whitespace_style.ess')
+        self.stylesheet = common.GetDataFilePath('no_comment_style.ess')
 
     def tearDown(self):
         pass
@@ -213,16 +213,16 @@ class StyleMgrTest(unittest.TestCase):
 
     def testPackStyleSet(self):
         """Test packing an incomplete style set"""
-        ## TEST 1 - loading and packing sheet that does not define whitespace_style
+        ## TEST 1 - loading and packing sheet that does not define comment_style
         data = common.GetFileContents(self.stylesheet)
         styledict = self.mgr.ParseStyleData(data)
-        self.assertTrue('whitespace_style' not in styledict)
+        self.assertTrue('comment_style' not in styledict)
         default = styledict.get('default_style')
         self.assertTrue(isinstance(default, ed_style.StyleItem))
         # Pack the Style Set
         styledict = self.mgr.PackStyleSet(styledict)
-        self.assertTrue('whitespace_style' in styledict)
-        whitestyle = styledict.get('whitespace_style')
+        self.assertTrue('comment_style' in styledict)
+        whitestyle = styledict.get('comment_style')
         self.assertTrue(whitestyle == default)
         ## END TEST 1
 
