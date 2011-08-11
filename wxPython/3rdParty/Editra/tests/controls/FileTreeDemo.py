@@ -36,15 +36,45 @@ class TestPanel(wx.Panel):
         # Attributes
         self.ftree = eclib.FileTree(self)
         self.ftree.AddWatchDirectory(wx.GetUserHome())
+        self.selbtn = wx.Button(self, label="Selected Files")
+        self.addbtn = wx.DirPickerCtrl(self, message="Add Watch",
+                                       style=wx.DIRP_CHANGE_DIR)
+        self.rmbtn = wx.Button(self, label="Remove Watch")
+        self.addbtn.PickerCtrl.SetLabel("Add Watch")
         self.log = log
 
         # Layout
         self.__DoLayout()
 
+        # Event Handlers
+        self.Bind(wx.EVT_BUTTON, self.OnGetSelected, self.selbtn)
+        self.Bind(wx.EVT_DIRPICKER_CHANGED, self.OnAddWatch, self.addbtn)
+        self.Bind(wx.EVT_BUTTON, self.OnRemoveWatch, self.rmbtn)
+
     def __DoLayout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.ftree, 1, wx.EXPAND)
+        btnsz = wx.BoxSizer(wx.HORIZONTAL)
+        btnsz.Add(self.addbtn)
+        btnsz.Add(self.rmbtn)
+        btnsz.Add(self.selbtn)
+        sizer.Add(btnsz)
         self.SetSizer(sizer)
+
+    def OnAddWatch(self, evt):
+        val = self.addbtn.GetPath()
+        self.log.write("Add new watch: %s" % val)
+        self.ftree.AddWatchDirectory(val)
+
+    def OnRemoveWatch(self, evt):
+        ch = wx.GetSingleChoice("Select watch dir to remove", "Remove Watch",
+                                self.ftree.WatchDirs, self)
+        if ch:
+            self.ftree.RemoveWatchDirectory(ch)
+
+    def OnGetSelected(self, evt):
+        sel = self.ftree.GetSelectedFiles()
+        self.log.write(repr(sel))
 
 #-----------------------------------------------------------------------------#
 

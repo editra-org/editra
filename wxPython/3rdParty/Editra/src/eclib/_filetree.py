@@ -7,9 +7,9 @@
 ###############################################################################
 
 """
-Editra Control Library: DirectoryTree
+Editra Control Library: FileTree
 
-TreeCtrl for displaying a directory structure
+Base class control for displaying a file system in a hierarchical manor.
 
 """
 
@@ -30,10 +30,11 @@ class FileTree(wx.TreeCtrl):
     """Control for displaying directories and files"""
     def __init__(self, parent):
         super(FileTree, self).__init__(parent,
-                                       style=wx.TR_HIDE_ROOT|\
-                                             wx.TR_FULL_ROW_HIGHLIGHT|\
+                                       style=wx.TR_HIDE_ROOT|
+                                             wx.TR_FULL_ROW_HIGHLIGHT|
                                              wx.TR_LINES_AT_ROOT|
-                                             wx.TR_HAS_BUTTONS)
+                                             wx.TR_HAS_BUTTONS|
+                                             wx.TR_MULTIPLE)
 
         # Attributes
         self._watch = list() # Root directories to watch
@@ -113,7 +114,7 @@ class FileTree(wx.TreeCtrl):
         if d and os.path.exists(d):
             contents = FileTree.GetDirContents(d)
             for p in contents:
-                self.AppendChildNode(item, p)
+                self.AppendFileNode(item, p)
 
     def DoShowMenu(self, item):
         """Context menu has been requested for the given item.
@@ -141,19 +142,38 @@ class FileTree(wx.TreeCtrl):
 
     #---- End Overrides ----#
 
+    #---- Properties ----#
+
+    WatchDirs = property(lambda self: self._watch)
+
     #---- FileTree Api ---#
 
     def AddWatchDirectory(self, dname):
-        """Add a directory to the control
+        """Add a directory to the controls top level view
         @param dname: directory path
 
         """
         assert os.path.exists(dname)
         if dname not in self._watch:
             self._watch.append(dname)
-            self.AppendChildNode(self.RootItem, dname)
+            self.AppendFileNode(self.RootItem, dname)
 
-    def AppendChildNode(self, item, path):
+    def RemoveWatchDirectory(self, dname):
+        """Remove a directory from the watch list
+        @param dname: directory path
+
+        """
+        assert os.path.exists(dname)
+        if dname in self._watch:
+            self._watch.remove(dname)
+            nodes = self.GetChildNodes(self.RootItem)
+            for node in nodes:
+                data = self.GetPyData(node)
+                if dname == data:
+                    self.Delete(node)
+                    break
+
+    def AppendFileNode(self, item, path):
         """Append a child node to the tree
         @param item: TreeItem parent node
         @param path: path to add to node
@@ -165,6 +185,50 @@ class FileTree(wx.TreeCtrl):
         self.SetPyData(child, path)
         if os.path.isdir(path):
             self.SetItemHasChildren(child, True)
+
+    def FindFileNode(self, path):
+        """Find the file node for the given path
+        @param path: string
+        @return: TreeItem or None
+
+        """
+        raise NotImplementedError
+
+    def GetChildNodes(self, parent):
+        """Get all the TreeItemIds under the given parent
+        @param parent: TreeItem
+        @return: list of TreeItems
+
+        """
+        rlist = list()
+        child, cookie = self.GetFirstChild(parent)
+        if not child or not child.IsOk():
+            return rlist
+
+        rlist.append(child)
+        while True:
+            child, cookie = self.GetNextChild(parent, cookie)
+            if not child or not child.IsOk():
+                return rlist
+            rlist.append(child)
+        return rlist
+
+    def GetSelectedFiles(self):
+        """Get a list of the selected files
+        @return: list of strings
+
+        """
+        nodes = self.GetSelections()
+        files = [ self.GetPyData(node) for node in nodes ]
+        return files
+
+    def SelectFile(self, path):
+        """Select the given path
+        @param path: full path to select
+        @return: bool
+
+        """
+        raise NotImplementedError
 
     #---- Static Methods ----#
 
@@ -181,6 +245,7 @@ class FileTree(wx.TreeCtrl):
         return files
 
 #-----------------------------------------------------------------------------#
+# Test
 if __name__ == '__main__':
     app = wx.App(False)
     f = wx.Frame(None)

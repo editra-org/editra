@@ -20,6 +20,9 @@ NEW: [features/improvements]
 +Allow scrolling of the buffer from within the search bar with up/down keys.
 +Can now change lexer from status bar context menu.
 
+LIBRARY:
++Add FileTree class to eclib.
+
 BUG FIXES:
 +Fix PyDeadObject error when opening new window from tab menu.
 +Fix selection background not being shown when selecting whitespace when the
