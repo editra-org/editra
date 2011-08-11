@@ -81,7 +81,7 @@ class EclibDemoFrame(wx.Frame):
 
         self.CenterOnParent()
 
-        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnTreeSel)
+        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnTreeSel, self.tree)
 
     def OnTreeSel(self, evt):
         self.Freeze()
