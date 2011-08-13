@@ -1161,6 +1161,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             elif e_id == ID_UNDO and hasattr(has_focus, 'Undo'):
                 has_focus.Undo()
                 return
+            elif e_id == ID_SELECTALL and hasattr(has_focus, 'SelectAll'):
+                has_focus.SelectAll()
+                return
 
         menu_ids = list(syntax.SYNTAX_IDS)
         menu_ids.extend([ID_SHOW_EOL, ID_SHOW_WS, ID_INDENT_GUIDES, ID_SYNTAX,
