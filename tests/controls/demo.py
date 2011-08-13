@@ -323,6 +323,7 @@ def FindDemoModules(path):
 
 def Main():
     app = EclibDemoApp(False)
+    print wx.version()
     app.MainLoop()
 
 #-----------------------------------------------------------------------------#

@@ -27,7 +27,10 @@ import wx
 #-----------------------------------------------------------------------------#
 
 class FileTree(wx.TreeCtrl):
-    """Control for displaying directories and files"""
+    """Simple base control for displaying directories and files in a
+    hierarchical view.
+
+    """
     def __init__(self, parent):
         super(FileTree, self).__init__(parent,
                                        style=wx.TR_HIDE_ROOT|
@@ -177,6 +180,7 @@ class FileTree(wx.TreeCtrl):
         """Append a child node to the tree
         @param item: TreeItem parent node
         @param path: path to add to node
+        @return: new node
 
         """
         img = self.GetFileImage(path)
@@ -185,14 +189,7 @@ class FileTree(wx.TreeCtrl):
         self.SetPyData(child, path)
         if os.path.isdir(path):
             self.SetItemHasChildren(child, True)
-
-    def FindFileNode(self, path):
-        """Find the file node for the given path
-        @param path: string
-        @return: TreeItem or None
-
-        """
-        raise NotImplementedError
+        return child
 
     def GetChildNodes(self, parent):
         """Get all the TreeItemIds under the given parent
@@ -222,13 +219,41 @@ class FileTree(wx.TreeCtrl):
         files = [ self.GetPyData(node) for node in nodes ]
         return files
 
-    def SelectFile(self, path):
+    def SelectFile(self, filename):
         """Select the given path
         @param path: full path to select
         @return: bool
 
         """
-        raise NotImplementedError
+        bSelected = False
+        # Find the root
+        for node in self.GetChildNodes(self.RootItem):
+            dname = self.GetPyData(node)
+            if not os.path.isdir(dname):
+                dname = os.path.dirname(dname)
+            if not dname.endswith(os.sep):
+                dname += os.sep
+            if filename.startswith(dname):
+                filename = filename[len(dname):].split(os.sep)
+                if not self.IsExpanded(node):
+                    self.Expand(node)
+                folder = node
+                try:
+                    while filename:
+                        name = filename.pop(0)
+                        for item in self.GetChildNodes(folder):
+                            if self.GetItemText(item) == name:
+                                if not self.IsExpanded(item):
+                                    self.Expand(item)
+                                folder = item
+                                continue
+                except:
+                    pass
+
+                self.UnselectAll()
+                self.EnsureVisible(folder)
+                self.SelectItem(folder)
+                break
 
     #---- Static Methods ----#
 

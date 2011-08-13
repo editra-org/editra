@@ -39,8 +39,9 @@ class TestPanel(wx.Panel):
         self.selbtn = wx.Button(self, label="Selected Files")
         self.addbtn = wx.DirPickerCtrl(self, message="Add Watch",
                                        style=wx.DIRP_CHANGE_DIR)
-        self.rmbtn = wx.Button(self, label="Remove Watch")
         self.addbtn.PickerCtrl.SetLabel("Add Watch")
+        self.rmbtn = wx.Button(self, label="Remove Watch")
+        self.setselbtn = wx.Button(self, label="Select a File")
         self.log = log
 
         # Layout
@@ -50,6 +51,7 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.OnGetSelected, self.selbtn)
         self.Bind(wx.EVT_DIRPICKER_CHANGED, self.OnAddWatch, self.addbtn)
         self.Bind(wx.EVT_BUTTON, self.OnRemoveWatch, self.rmbtn)
+        self.Bind(wx.EVT_BUTTON, self.OnSelectFile, self.setselbtn)
 
     def __DoLayout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -58,6 +60,7 @@ class TestPanel(wx.Panel):
         btnsz.Add(self.addbtn)
         btnsz.Add(self.rmbtn)
         btnsz.Add(self.selbtn)
+        btnsz.Add(self.setselbtn)
         sizer.Add(btnsz)
         self.SetSizer(sizer)
 
@@ -75,6 +78,18 @@ class TestPanel(wx.Panel):
     def OnGetSelected(self, evt):
         sel = self.ftree.GetSelectedFiles()
         self.log.write(repr(sel))
+
+    def OnSelectFile(self, evt):
+        ddir = ""
+        if len(self.ftree.WatchDirs):
+            ddir = self.ftree.WatchDirs[0]
+        dlg = wx.FileDialog(self, "Select a file", ddir,
+                            style=wx.FD_OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+            fname = dlg.GetPath()
+            self.log.write("SelectFile(%s)" % fname)
+            self.ftree.SelectFile(fname)
+        dlg.Destroy()
 
 #-----------------------------------------------------------------------------#
 
