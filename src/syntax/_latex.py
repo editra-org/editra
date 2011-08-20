@@ -70,7 +70,7 @@ SYNTAX_ITEMS2 = [(stc.STC_L_DEFAULT, 'default_style'),
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for LaTeX/TeX""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         # TODO: change to LEX_TEX for TeX?

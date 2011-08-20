@@ -73,7 +73,7 @@ SYNTAX_ITEMS = [ (stc.STC_HJ_COMMENT, 'comment_style'),
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for JavaScript""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_CPP)

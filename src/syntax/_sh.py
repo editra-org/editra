@@ -91,7 +91,7 @@ FLD_COMPACT = ("fold.compact", "0")
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for various shell scripting languages""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_BASH)

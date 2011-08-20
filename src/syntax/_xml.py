@@ -39,7 +39,7 @@ XML_KEYWORDS = ("rss atom pubDate channel version title link description "
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for XML""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_XML)
