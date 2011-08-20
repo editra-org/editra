@@ -133,7 +133,7 @@ FOLD_COMP = ("fold.compact", "1")
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for Fortran 77/95""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         if self.LangId == synglob.ID_LANG_F77:

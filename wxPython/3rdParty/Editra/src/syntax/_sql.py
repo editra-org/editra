@@ -361,7 +361,7 @@ SQL_BACKTICKS_IDENTIFIER = ("lexer.sql.backticks.identifier", "0")
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for PL/SQL""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_SQL)

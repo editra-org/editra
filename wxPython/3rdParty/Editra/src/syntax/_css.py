@@ -30,7 +30,7 @@ import syndata
 
 #---- Keyword Specifications ----#
 
-# CSS1 Keywords (Idenifiers)
+# CSS1 Keywords (Identifiers)
 CSS1_KEYWORDS = (0, "font-family font-style font-variant font-weight font-size "
                     "font color background-color background-image "
                     "background-repeat background-position background "
@@ -51,7 +51,7 @@ CSS1_KEYWORDS = (0, "font-family font-style font-variant font-weight font-size "
 CSS_PSUEDO_CLASS = (1, "link visited active hover focus before after left "
                        "right lang first-letter first-line first-child")
 
-# CSS2 Keywords (Identifers2)
+# CSS2 Keywords (Identifiers)
 # This is meant for css2 specific keywords, but in order to get a better
 # coloring effect this will contain special css properties as well.
 CSS2_KEYWORDS = (2, "ActiveBorder ActiveCaption AppWorkspace Background "

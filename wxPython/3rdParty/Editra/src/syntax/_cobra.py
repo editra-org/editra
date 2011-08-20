@@ -74,7 +74,7 @@ TIMMY = ("tab.timmy.whinge.level", "1") # Mark Inconsistant indentation
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for Cobra""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_PYTHON)

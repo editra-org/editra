@@ -45,7 +45,7 @@ FERITE_TYPES = (1, "boolean string number array object void XML Unix Sys "
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for Ferite""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_CPP)

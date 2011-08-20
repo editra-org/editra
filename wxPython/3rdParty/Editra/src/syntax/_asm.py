@@ -62,7 +62,7 @@ SYNTAX_ITEMS = [ (stc.STC_ASM_DEFAULT, 'default_style'),
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for Assembly files""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         # synglob.ID_LANG_ASM

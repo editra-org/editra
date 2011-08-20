@@ -56,7 +56,7 @@ FOLD = ('fold', '1')
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for MatLab and Octave""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         if self.LangId == synglob.ID_LANG_MATLAB:

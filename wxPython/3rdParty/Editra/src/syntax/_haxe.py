@@ -42,7 +42,7 @@ HAXE_TYPES = (1, "Bool Enum false Float Int null String true Void ")
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for HaXe""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_CPP)

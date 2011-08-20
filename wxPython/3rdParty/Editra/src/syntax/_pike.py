@@ -44,7 +44,7 @@ PIKE_TYPE = (1, "private protected public static "
 class SyntaxData(_cpp.SyntaxData):
     """SyntaxData object for Pike""" 
     def __init__(self, langid):
-        _cpp.SyntaxData.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
     def GetKeywords(self):
         """Returns Specified Keywords List """

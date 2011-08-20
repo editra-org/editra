@@ -63,7 +63,7 @@ AS_TYPES = ("AS3 flash_proxy object_proxy flash accessibility display errors "
 class SyntaxData(syndata.SyntaxDataBase):
     """ActionScript SyntaxData"""
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_CPP)

@@ -123,7 +123,7 @@ FOLD_COMP = ("fold.compact", "1")
 class SyntaxData(syndata.SyntaxDataBase):
     """SyntaxData object for Gui4Cli""" 
     def __init__(self, langid):
-        syndata.SyntaxDataBase.__init__(self, langid)
+        super(SyntaxData, self).__init__(langid)
 
         # Setup
         self.SetLexer(stc.STC_LEX_GUI4CLI)
