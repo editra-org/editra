@@ -6,7 +6,7 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
-"""Unittest cases for teh Syntax Xml Library"""
+"""Unittest cases for the Syntax Xml Library"""
 
 __author__ = "Cody Precord <cprecord@editra.org>"
 __svnid__ = "$Id$"
