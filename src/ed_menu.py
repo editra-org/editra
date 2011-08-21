@@ -332,7 +332,8 @@ class KeyBinder(object):
         cls.cprofile = None
 
     def LoadKeyProfile(self, pname):
-        """Load a key profile into the binder
+        """Load a key profile from profile directory into the binder
+        by name.
         @param pname: name of key profile to load
 
         """
@@ -340,12 +341,23 @@ class KeyBinder(object):
             ppath = None
         else:
             ppath = self.GetProfilePath(pname)
+        self.LoadKeyProfileFile(ppath)
 
+    def LoadKeyProfileFile(self, path):
+        """Load a key profile from the given path
+        @param path: full path to file
+
+        """
         keydict = dict()
-        if ppath is not None and os.path.exists(ppath):
-            reader = util.GetFileReader(ppath)
+        pname = None
+        if path:
+            pname = os.path.basename(path)
+            pname = pname.rsplit('.', 1)[0]
+
+        if pname is not None and os.path.exists(path):
+            reader = util.GetFileReader(path)
             if reader != -1:
-                util.Log("[keybinder][info] Loading KeyProfile: %s" % ppath)
+                util.Log("[keybinder][info] Loading KeyProfile: %s" % path)
                 for line in reader:
                     parts = line.split(u'=', 1)
                     # Check that the line was formatted properly
@@ -361,9 +373,15 @@ class KeyBinder(object):
                             nctrl = len([key for key in tmp
                                          if key not in (u'Ctrl', u'Alt', u'Shift')])
                             if nctrl:
-                                keydict[item_id] = tmp
                                 if parts[1].strip().endswith(u'++'):
-                                    keydict[item_id].append(u'+')
+                                    tmp.append(u'+')
+                                kb = tuple(tmp)
+                                if kb in keydict.values():
+                                    for mid, b in keydict.iteritems():
+                                        if kb == b:
+                                            del keydict[mid]
+                                            break
+                                keydict[item_id] = tuple(tmp)
                             else:
                                 # Invalid key binding
                                 continue
@@ -373,7 +391,7 @@ class KeyBinder(object):
                 KeyBinder.cprofile = pname
                 return
             else:
-                util.Log("[keybinder][err] Couldn't read %s" % ppath)
+                util.Log("[keybinder][err] Couldn't read %s" % path)
         elif pname is not None:
             # Fallback to default keybindings
             util.Log("[keybinder][err] Failed to load bindings from %s" % pname)

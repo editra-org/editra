@@ -29,6 +29,7 @@ BUG FIXES:
 buffers show whitespace option is turned on.
 +Fix Select All not working in search bar.
 +Fix issue during shutdown when IPC server isn't running.
++Fix loading custom key profiles that have duplicate entries.
 
 #-----------------------------------------------------------------------------#
 
