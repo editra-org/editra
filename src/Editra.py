@@ -280,7 +280,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._pluginmgr.WritePluginConfig()
         profiler.TheProfile.Write(profiler.Profile_Get('MYPROFILE'))
         if not self._lock or force:
-            if hasattr(self, '_server'):
+            if getattr(self, '_server', None):
                 self._server.Shutdown()
 
             try:
