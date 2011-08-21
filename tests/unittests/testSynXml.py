@@ -105,6 +105,10 @@ class SynXmlTest(unittest.TestCase):
                           "val was: %s" % spec[0][0])
         self.assertEquals(spec[0][1], "default_style",
                           "val was: %s" % spec[0][1])
+        self.assertEquals(spec[1][0], wx.stc.STC_P_WORD,
+                          "val was: %s" % spec[0][0])
+        self.assertEquals(spec[1][1], "keyword_style",
+                          "val was: %s" % spec[0][1])
 
     def testIsOk(self):
         """Test IsOk method"""

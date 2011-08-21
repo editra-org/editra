@@ -689,6 +689,7 @@ class SyntaxSpecList(EditraXml):
                 # Scintilla Value
                 style_id = getattr(stc, lid, None)
                 assert style_id is not None, "Invalid STC Value: %s" % lid
+                assert isinstance(style_id, int), "Invalid ID: %s" % lid
 
             self._specs.append((style_id, attrs.get(EXML_TAG, 'default_style')))
         else:
