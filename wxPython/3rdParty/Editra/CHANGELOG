@@ -28,6 +28,7 @@ BUG FIXES:
 +Fix selection background not being shown when selecting whitespace when the
 buffers show whitespace option is turned on.
 +Fix Select All not working in search bar.
++Fix issue during shutdown when IPC server isn't running.
 
 #-----------------------------------------------------------------------------#
 
