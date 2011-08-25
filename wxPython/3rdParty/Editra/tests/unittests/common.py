@@ -59,6 +59,10 @@ def CleanTempDir():
         else:
             os.remove(fpath)
 
+def CopyToTempDir(path):
+    """Copy a file to the temp directory"""
+    shutil.copy2(path, GetTempDir())
+
 def GetDataDir():
     """Get the path to the test data directory
     @return: string
