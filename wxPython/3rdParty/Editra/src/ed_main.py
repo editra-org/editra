@@ -991,11 +991,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         paneInfo = self.PanelMgr.GetPane("EditPane")
-        if paneInfo.IsMaximized():
+        if self.PanelMgr.IsEditorMaximized():
             self.PanelMgr.RestorePane(paneInfo)
             ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_RESTORE, context=self.GetId())
         else:
-            self.PanelMgr.RestoreMaximizedPane()
             self.PanelMgr.MaximizePane(paneInfo)
         self.PanelMgr.Update()
         
@@ -1407,11 +1406,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         elif e_id == ID_INDENT_GUIDES:
             evt.Check(bool(ctrl.GetIndentationGuides()))
         elif e_id == ID_MAXIMIZE_EDITOR:
-            paneInfo = self.PanelMgr.GetPane("EditPane")
             binder = self.MenuBar.GetKeyBinder()
             binding = binder.GetBinding(ID_MAXIMIZE_EDITOR)
             txt = _("Maximize Editor")
-            if paneInfo.IsMaximized():
+            if self.PanelMgr.IsEditorMaximized():
                 txt = _("Restore Editor")
             evt.SetText(txt + binding)
         else:
