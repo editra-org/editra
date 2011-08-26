@@ -92,7 +92,7 @@ class EdSessionMgr(object):
                         raise TypeError("Invalid item in unpickled sequence")
             except (cPickle.UnpicklingError, TypeError, EOFError), e:
                 util.Log("[ed_session][err] %s" % e)
-                flist = list()
+                raise e # Re throw
         return flist
 
     def SaveSession(self, name, paths):

@@ -44,6 +44,7 @@ import syntax.syntax as syntax
 import generator
 import plugin
 import perspective as viewmgr
+import ed_session
 import iface
 import ebmlib
 import eclib
@@ -754,41 +755,44 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         if evt.GetId() == ID_SAVE_SESSION:
-            # TODO: set current profile as default
-            dlg = wx.FileDialog(self, _("Where to Save Session?"), \
-                               CONFIG['SESSION_DIR'], u"", \
-                               _("Session") + " (*.session)|*.session",
-                                wx.SAVE | wx.OVERWRITE_PROMPT)
-
-            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
-                fname = dlg.GetPath()
-                if fname is None or not len(fname):
-                    return
-
-                if not fname.endswith('.session'):
-                    fname = fname.rstrip(u'.') + u'.session'
+            mgr = ed_session.EdSessionMgr(CONFIG['SESSION_DIR'])
+            cses = _PGET('LAST_SESSION')
+            if cses == mgr.DefaultSession:
+                cses = u""
+            fname = ebmlib.LockCall(self._mlock, wx.GetTextFromUser, 
+                                    (_("Session Name"), _("Save Session"), cses))
+            fname = fname.strip()
+            if fname:
                 rval = self.nb.SaveSessionFile(fname)
                 if rval is not None:
                     wx.MessageBox(rval[1], rval[0], wx.OK|wx.ICON_ERROR)
                     return
 
-                self.PushStatusText(_("Session Saved as: %s") % fname, SB_INFO)
                 _PSET('LAST_SESSION', fname)
-            dlg.Destroy()
+                self.PushStatusText(_("Session Saved as: %s") % fname, SB_INFO)
         else:
             evt.Skip()
 
     def OnLoadSession(self, evt):
         """Load a saved session."""
         if evt.GetId() == ID_LOAD_SESSION:
-            # TODO: set current file as default
-            dlg = wx.FileDialog(self, _("Load a Session file"),
-                                CONFIG['SESSION_DIR'], u"",
-                                _("Session") + " (*.session)|*.session", wx.OPEN)
-
-            if ebmlib.LockCall(self._mlock, dlg.ShowModal) == wx.ID_OK:
-                fname = dlg.GetPath()
+            mgr = ed_session.EdSessionMgr(CONFIG['SESSION_DIR'])
+            sessions = mgr.GetSavedSessions()
+            cses = _PGET('LAST_SESSION')
+            if cses in sessions:
+                sessions.remove(cses)
+            if len(sessions) and (sessions[0] == mgr.DefaultSession):
+                sessions[0] = _("Default")
+            if cses == mgr.DefaultSession:
+                cses = _("Default")
+            fname = ebmlib.LockCall(self._mlock, wx.GetSingleChoice, 
+                                    (_("Session to Load:\nCurrent Session: '%s'") % cses,
+                                     _("Load Session"),
+                                    sessions))
+            if fname:
                 nbook = self.GetNotebook()
+                if fname == _("Default"):
+                    fname = mgr.DefaultSession
                 rval = nbook.LoadSessionFile(fname)
 
                 # Check for an error during load
@@ -796,10 +800,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                     wx.MessageBox(rval[1], rval[0], wx.OK|wx.ICON_WARNING)
                     return
                 
-                self.PushStatusText(_("Loaded Session: %s") % fname, SB_INFO)
                 _PSET('LAST_SESSION', fname)
-
-            dlg.Destroy()
+                if fname == mgr.DefaultSession:
+                    fname = _("Default")
+                self.PushStatusText(_("Loaded Session: %s") % fname, SB_INFO)
         else:
             evt.Skip()
 
@@ -852,8 +856,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @return: None on destroy, or True on cancel
 
         """
-        # Save session files
-        self.nb.SaveCurrentSession()
+        # Only auto-save session file if not using default session
+        mgr = ed_session.EdSessionMgr(CONFIG['SESSION_DIR'])
+        if _PGET('LAST_SESSION') == mgr.DefaultSession:
+            self.nb.SaveCurrentSession()
 
         # Cleanup Controls
         self._exiting = True
