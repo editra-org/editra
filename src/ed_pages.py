@@ -21,7 +21,6 @@ __revision__ = "$Revision$"
 import os
 import sys
 import glob
-import cPickle
 import wx
 
 # Editra Libraries
@@ -35,6 +34,7 @@ import util
 import ed_msg
 import ed_txt
 import ed_mdlg
+import ed_session
 import ebmlib
 import eclib
 from extern import aui
@@ -239,7 +239,10 @@ class EdPages(ed_book.EdBaseBook):
         super(EdPages, self).AddPage(page, text, select, bitmap=bmp)
         self.UpdateIndexes()
         if not self._ses_load and not bNewPage:
-            self.SaveCurrentSession()
+            # Only auto save session when using default session
+            mgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+            if Profile_Get('LAST_SESSION') == mgr.DefaultSession:
+                self.SaveCurrentSession()
 
     def DocDuplicated(self, path):
         """Check for if the given path is open elsewhere and duplicate the
@@ -317,11 +320,14 @@ class EdPages(ed_book.EdBaseBook):
 
     def SaveCurrentSession(self):
         """Save the current session"""
+        if self._ses_load:
+            return
+
         session = Profile_Get('LAST_SESSION')
         # Compatibility with older session data
         if not isinstance(session, basestring) or not len(session):
-            session = os.path.join(ed_glob.CONFIG['SESSION_DIR'], 
-                                   u"__default.session")
+            mgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+            session = mgr.DefaultSession
             Profile_Set('LAST_SESSION', session)
         self.SaveSessionFile(session)
 
@@ -331,20 +337,15 @@ class EdPages(ed_book.EdBaseBook):
         @return: tuple (error desc, error msg) or None
 
         """
-        try:
-            f_handle = open(session, 'wb')
-        except (IOError, OSError), msg:
-            smsg = str(msg)
-            return (_("Error Saving Session File"),  ed_txt.DecodeString(smsg))
+        if self._ses_load:
+            return
 
         try:
-            sdata = dict(win1=self.GetFileNames())
-            cPickle.dump(sdata, f_handle)
+            mgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+            flist = self.GetFileNames()
+            bSaved = mgr.SaveSession(session, flist)
         except Exception, msg:
-            self.LOG("[ed_pages][err] Failed to SaveSessionFile: %s" % msg)
-        finally:
-            f_handle.close()
-
+            self.LOG("[ed_pages][err] SaveSession error %s" % msg)
         return None
 
     def LoadSessionFile(self, session):
@@ -355,35 +356,14 @@ class EdPages(ed_book.EdBaseBook):
         """
         self._ses_load = True
 
-        if os.path.exists(session):
-            try:
-                f_handle = open(session, 'rb')
-            except IOError:
-                f_handle = None
-        else:
-            f_handle = None
-
-        # Invalid file
-        if f_handle is None:
-            self._ses_load = False
-            return (_("Invalid File"), _("Session file doesn't exist."))
-
-        # Load and validate file
+        mgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+        flist = list()
         try:
-            try:
-                flist = cPickle.load(f_handle)
-                # TODO: Extend in future to support loading sessions
-                #       for multiple windows.
-                flist = flist.get('win1', list())
-                for item in flist:
-                    if type(item) not in (unicode, str):
-                        raise TypeError("Invalid item in unpickled sequence")
-            except (cPickle.UnpicklingError, TypeError, EOFError), e:
-                self._ses_load = False
-                return (_("Invalid file"),
-                        _("Selected file is not a valid session file"))
-        finally:
-            f_handle.close()
+            flist = mgr.LoadSession(session)
+        except Exception, msg:
+            self._ses_load = False
+            return (_("Session Load Error"),
+                    _("Failed to load the session: %s\n\nError: %s") % (session, msg))
 
         if not len(flist):
             self._ses_load = False

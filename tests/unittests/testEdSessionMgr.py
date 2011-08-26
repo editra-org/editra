@@ -57,3 +57,19 @@ class EdSessionMgrTest(unittest.TestCase):
         self.assertEquals(len(loaded), 2)
         self.assertTrue('foo.py' in loaded)
         self.assertTrue('bar.py' in loaded)
+        sessions = self._mgr.GetSavedSessions()
+        self.assertTrue('foobar' in sessions)
+        self.assertTrue('__default' in sessions)
+
+    def testPathFromSessionName(self):
+        path = self._mgr.PathFromSessionName('foobar')
+        self.assertTrue(path.endswith(self._mgr.SessionExtension))
+        self.assertTrue(path.startswith(self._mgr.SessionDir))
+
+    def testSessionNameFromPath(self):
+        path = common.GetTempFilePath('__default.session')
+        name = self._mgr.SessionNameFromPath(path)
+        self.assertEquals(name, '__default')
+        # Test missing extension
+        self.assertRaises(AssertionError,
+                          self._mgr.SessionNameFromPath, path.rsplit('.', 1)[0])

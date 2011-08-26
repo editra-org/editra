@@ -19,6 +19,10 @@ NEWS:
 NEW: [features/improvements]
 +Allow scrolling of the buffer from within the search bar with up/down keys.
 +Can now change lexer from status bar context menu.
++Session management feature behavior has been changed in this release. When using
+custom sessions they will not automatically be saved as new files are opened or
+when the editor is closed. They must now be saved manually. Only the builtin
+'Default' session will retain the automatic behavior.
 
 LIBRARY:
 +Add FileTree class to eclib.
