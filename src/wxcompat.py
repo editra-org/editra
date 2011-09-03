@@ -17,6 +17,7 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import os
 import wx
 
 #-----------------------------------------------------------------------------#
@@ -38,6 +39,9 @@ if wx.Platform == '__WXMAC__':
         wx.MacThemeColour = MacThemeColour
 
     wx.SystemOptions.SetOptionInt("mac.textcontrol-use-spell-checker", 1)
+
+elif wx.Platform == '__WXGTK__':
+    os.environ['LIBOVERLAY_SCROLLBAR'] = '0'
 
 # GetText is not available in 2.9 but GetItemLabel is not available pre 2.8.6
 if wx.VERSION < (2, 8, 6, 0, ''):
