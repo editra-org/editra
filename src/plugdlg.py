@@ -546,8 +546,14 @@ class DownloadPanel(eclib.ControlBox):
         to_clean = list()
         for pin in p_list:
             cfg_id = config_pg.GetItemIdentifier(pin.lower())
-            if cfg_id is not None and cfg_id[1] >= p_list[pin].GetVersion():
-                to_clean.append(pin)
+            if cfg_id is not None:
+                try:
+                    cur_id = [int(v) for v in cfg_id[1].split(".")]
+                    dl_id = [int(v) for v in p_list[pin].GetVersion().split(".")]
+                except:
+                    continue
+                if cur_id >= dl_id: # Installed version is >= avail dl
+                    to_clean.append(pin)
 
         for item in to_clean:
             del p_list[item]

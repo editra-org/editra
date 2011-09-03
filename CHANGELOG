@@ -37,6 +37,7 @@ buffers show whitespace option is turned on.
 +Fix handling the toggling of Maximize/Restore editor for some workflows so that
 the view is correctly toggled back and forth for all cases.
 +Fix display issues when scrolling on GTK caused by overlay scrollbars.
++Fix issue with some obsolete plugins being shown in plugin manager download window.
 
 #-----------------------------------------------------------------------------#
 
