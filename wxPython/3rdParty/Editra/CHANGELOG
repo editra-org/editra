@@ -68,6 +68,7 @@ highlighting themes. Need to turn off code folding to stop the flashing.
 +Properly handle searches with precomposed and decomposed Unicode data.
 +Fix tab icon setting not being applied after restart.
 +Fix toolbar when running under wxPython2.9 on OSX.
++Fix display issues when scrolling on GTK caused by overlay scrollbars.
 
 #-----------------------------------------------------------------------------#
 
