@@ -72,6 +72,8 @@ SYNTAX_ITEMS = [ (stc.STC_P_DEFAULT, 'default_style'),
 
 #---- Extra Properties ----#
 FOLD = ("fold", "1")
+FOLD_QUOTES = ("fold.quotes.python", "1")
+FOLD_COMMENTS = ("fold.comment.python", "1")
 TIMMY = ("tab.timmy.whinge.level", "1") # Mark Inconsistent indentation
 
 #-----------------------------------------------------------------------------#
@@ -95,7 +97,7 @@ class SyntaxData(syndata.SyntaxDataBase):
 
     def GetProperties(self):
         """Returns a list of Extra Properties to set """
-        return [FOLD, TIMMY]
+        return [FOLD, TIMMY, FOLD_QUOTES, FOLD_COMMENTS]
 
     def GetCommentPattern(self):
         """Returns a list of characters used to comment a block of code """
