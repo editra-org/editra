@@ -23,6 +23,7 @@ NEW: [features/improvements]
 custom sessions they will not automatically be saved as new files are opened or
 when the editor is closed. They must now be saved manually. Only the builtin
 'Default' session will retain the automatic behavior.
++Support folding docstrings in Python source code.
 
 LIBRARY:
 +Add FileTree class to eclib.
