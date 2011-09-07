@@ -9,8 +9,8 @@
 """Unittest cases for testing ebmlib.FactoryMixin"""
 
 __author__ = "Cody Precord <cprecord@editra.org>"
-__svnid__ = "$Id: testCycleCache.py  $"
-__revision__ = "$Revision: $"
+__svnid__ = "$Id$"
+__revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
