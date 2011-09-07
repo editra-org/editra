@@ -100,7 +100,6 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                               Name("EditPane").Center().Layer(1).Dockable(False). \
                               CloseButton(False).MaximizeButton(False). \
                               CaptionVisible(False))
-        self._mpane.InitCommandBar() # <- required due to nb dependencies...
 
         #---- Command Bar ----#
         self._mpane.HideCommandBar()
