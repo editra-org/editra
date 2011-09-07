@@ -69,7 +69,8 @@ ID_REGEX = wx.NewId()
 
 #-----------------------------------------------------------------------------#
 
-class CommandBarBase(eclib.ControlBar):
+class CommandBarBase(eclib.ControlBar,
+                     ebmlib.FactoryMixin):
     """Base class for control bars"""
     def __init__(self, parent):
         super(CommandBarBase, self).__init__(parent,
@@ -96,6 +97,17 @@ class CommandBarBase(eclib.ControlBar):
         self.Bind(wx.EVT_BUTTON, self.OnClose, self.close_b)
         self.Bind(wx.EVT_CONTEXT_MENU, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnContextMenu)
+
+    @classmethod
+    def GetMetaDefaults(cls):
+        return dict(id=-1)
+
+    #---- Properties ----#
+
+    MainControl = property(lambda self: self.ctrl,
+                           lambda self, ctrl: self.SetControl(ctrl))
+
+    #---- Implementation ----#
 
     def OnClose(self, evt):
         """Handles events from the buttons on the bar
@@ -244,13 +256,16 @@ class CommandBarBase(eclib.ControlBar):
     def SetFocus(self):
         """Set the focus to the bar and its main control"""
         super(CommandBarBase, self).SetFocus()
-        if self.ctrl is not None:
-            self.ctrl.SetFocus()
+        if self.MainControl:
+            self.MainControl.SetFocus()
 
 #-----------------------------------------------------------------------------#
 
 class SearchBar(CommandBarBase):
     """Commandbar for searching text in the current buffer."""
+    class meta:
+        id = ed_glob.ID_QUICK_FIND
+
     def __init__(self, parent):
         super(SearchBar, self).__init__(parent)
 
@@ -401,6 +416,9 @@ class SearchBar(CommandBarBase):
 
 class CommandEntryBar(CommandBarBase):
     """Commandbar for editor command entry and execution."""
+    class meta:
+        id = ed_glob.ID_COMMAND
+
     def __init__(self, parent):
         super(CommandEntryBar, self).__init__(parent)
 
@@ -428,6 +446,9 @@ class CommandEntryBar(CommandBarBase):
 
 class GotoLineBar(CommandBarBase):
     """Commandbar for Goto Line function"""
+    class meta:
+        id = ed_glob.ID_GOTO_LINE
+
     def __init__(self, parent):
         super(GotoLineBar, self).__init__(parent)
 
