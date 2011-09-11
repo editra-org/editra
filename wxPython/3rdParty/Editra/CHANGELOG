@@ -45,6 +45,10 @@ buffers show whitespace option is turned on.
 the view is correctly toggled back and forth for all cases.
 +Fix display issues when scrolling on GTK caused by overlay scrollbars.
 +Fix issue with some obsolete plugins being shown in plugin manager download window.
++Fix issue with initial search from Find dialog always beginning at position 
+zero instead of the current caret position.
++Fix some inconsistencies with doing incremental searches and behavior when
+the search direction is changed for a find next action.
 
 #-----------------------------------------------------------------------------#
 
