@@ -18,7 +18,7 @@ __svnid__ = "$Id$"
 __revision__ = "$Revision$"
 
 __all__ = ['AdjustAlpha', 'AdjustColour', 'BestLabelColour', 'HexToRGB',
-           'GetHighlightColour', 'EmptyBitmapRGBA',
+           'GetHighlightColour', 'EmptyBitmapRGBA', 'Freezer',
 
            'DRAW_CIRCLE_SMALL', 'DRAW_CIRCLE_NORMAL', 'DRAW_CIRCLE_LARGE',
            'DrawCircleCloseBmp' ]
@@ -143,6 +143,22 @@ def EmptyBitmapRGBA(width, height):
     if hasattr(bmp, 'UseAlpha'):
         bmp.UseAlpha()
     return bmp
+
+#-----------------------------------------------------------------------------#
+
+class Freezer(object):
+    """Context manager for freezing window redraws"""
+    def __init__(self, window):
+        super(Freezer, self).__init__()
+
+        # Attributes
+        self.window = window
+
+    def __enter__(self):
+        self.window.Freeze()
+
+    def __exit__( self, type, value, tb):
+        self.window.Thaw()
 
 #-----------------------------------------------------------------------------#
 # Drawing helpers
