@@ -275,6 +275,7 @@ ID_COMPUTER          = wx.NewId()
 ID_COPY_PATH         = wx.NewId()
 ID_COPY_FILE         = wx.NewId()
 ID_DELETE            = wx.NewId()
+ID_DELETE_ALL        = wx.NewId()
 ID_DOCPROP           = wx.NewId()
 ID_DOWN              = wx.ID_DOWN
 ID_DOWNLOAD_DLG      = wx.NewId()

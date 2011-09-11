@@ -24,9 +24,14 @@ custom sessions they will not automatically be saved as new files are opened or
 when the editor is closed. They must now be saved manually. Only the builtin
 'Default' session will retain the automatic behavior.
 +Support folding docstrings in Python source code.
++Add Command Bar for managing editing sessions, default key binding of Ctrl+K.
++Add Delete All button to Bookmark manager Shelf window.
 
 LIBRARY:
 +Add FileTree class to eclib.
++Add FactoryMixin mixin class to ebmlib to simplify implementing factories for
+classes.
++Add new icon resource for Delete All (ID_DELETE_ALL).
 
 BUG FIXES:
 +Fix PyDeadObject error when opening new window from tab menu.
