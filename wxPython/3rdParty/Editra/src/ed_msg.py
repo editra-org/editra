@@ -268,6 +268,25 @@ EDMSG_START_SEARCH = EDMSG_FIND_ALL + ('results',)
 
 #---- End Find Actions ----#
 
+#---- Session Related Actions ----#
+
+# Root Session Message
+EDMSG_SESSION_ALL = ('session',)
+
+# Initiate a Session Save to save current session under new name.
+# Note: This invokes a UI action to prompt the user on what to name
+#       the session. DO NOT call from background threads.
+#      send(msgdata == None) | context - MainWindow
+EDMSG_SESSION_DO_SAVE = EDMSG_SESSION_ALL + ('dosave',)
+
+# Initiate loading a session
+# Causes all currently open files to be closed and the files from the
+# specified session to be loaded. Not thread safe.
+# send(msgdata == session_name)
+EDMSG_SESSION_DO_LOAD = EDMSG_SESSION_ALL + ('doload',)
+
+#---- End Session Related Actions ----#
+
 #---- Misc Messages ----#
 # Signal that the icon theme has changed. Respond to this to update icon
 # resources from the ArtProvider.

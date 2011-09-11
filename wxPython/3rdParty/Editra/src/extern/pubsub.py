@@ -836,6 +836,12 @@ class Message:
         self.data  = data
         self.context = context
 
+    Data = property(lambda self: self.data,
+                    lambda self, data: setattr(self, 'data', data))
+    Context = property(lambda self: self.context,
+                       lambda self, ctx: setattr(self, 'context', value))
+    Type = property(lambda self: self.topic)
+
     def __str__(self):
         return '[Topic: '+`self.topic`+',  Data: '+`self.data`+']'
 

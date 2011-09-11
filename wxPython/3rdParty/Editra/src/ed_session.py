@@ -222,6 +222,9 @@ class EdSessionBar(ed_cmdbar.CommandBarBase):
     def OnChangeSession(self, evt):
         """Current session changed in choice control"""
         util.Log(u"[ed_session][info] OnChangeSession: %s" % self._sch.StringSelection)
+        ed_msg.PostMessage(ed_msg.EDMSG_SESSION_DO_LOAD, 
+                           self.GetSelectedSession(),
+                           self.TopLevelParent.Id)
 
     def OnConfigMsg(self, msg):
         """Configuration update callback"""
@@ -230,13 +233,16 @@ class EdSessionBar(ed_cmdbar.CommandBarBase):
     def OnSaveSession(self, evt):
         """Save the current session"""
         ofiles = list()
-        ed_msg.PostMessage(ed_msg.EDMSG_FILE_GET_OPENED, ofiles,
-                           self.TopLevelParent.Id)
-        util.Log("[ed_session][info] OnSaveSession: %d files" % len(ofiles))
+        util.Log("[ed_session][info] OnSaveSession")
         if evt.EventObject is self._saveb:
+            ed_msg.PostMessage(ed_msg.EDMSG_FILE_GET_OPENED, ofiles,
+                               self.TopLevelParent.Id)
+            util.Log("[ed_session][info] OnSaveSession: %d files" % len(ofiles))
             EdSessionMgr().SaveSession(self.GetSelectedSession(), ofiles)
         elif evt.EventObject is self._saveasb:
-            pass
+            ed_msg.PostMessage(ed_msg.EDMSG_SESSION_DO_SAVE,
+                               context=self.TopLevelParent.Id)
+            # Bar will be updated by config change if the save succeeds
         else:
             evt.Skip()
 
@@ -246,6 +252,7 @@ class EdSessionBar(ed_cmdbar.CommandBarBase):
             ses = self.GetSelectedSession()
             if ses != EdSessionMgr().DefaultSession:
                 EdSessionMgr().DeleteSession(ses)
+                # Switch back to default session
                 profiler.Profile_Set('LAST_SESSION',
                                      EdSessionMgr().DefaultSession)
         else:
@@ -272,6 +279,7 @@ class EdSessionBar(ed_cmdbar.CommandBarBase):
             self._sch.Items = sessions
             self.UpdateSelectedSession()
             self.Layout()
+            self.Refresh()
 
     def UpdateSelectedSession(self):
         """Select the currently configured session"""
