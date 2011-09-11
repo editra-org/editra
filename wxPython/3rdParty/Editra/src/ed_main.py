@@ -185,6 +185,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                        (ID_COMMAND, self.OnCommandBar),
                                        (ID_STYLE_EDIT, self.OnStyleEdit),
                                        (ID_PLUGMGR, self.OnPluginMgr),
+                                       (ID_SESSION_BAR, self.OnCommandBar),
 
                                        # Help Menu
                                        (ID_ABOUT, OnAbout),
@@ -749,12 +750,9 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Skip()
 
     def OnSaveSession(self, evt):
-        """Save the current session of open files.
-        @todo: Save all windows and what the active tabs are as well
-
-        """
+        """Save the current session of open files."""
         if evt.GetId() == ID_SAVE_SESSION:
-            mgr = ed_session.EdSessionMgr(CONFIG['SESSION_DIR'])
+            mgr = ed_session.EdSessionMgr()
             cses = _PGET('LAST_SESSION')
             if cses == mgr.DefaultSession:
                 cses = u""
@@ -775,7 +773,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     def OnLoadSession(self, evt):
         """Load a saved session."""
         if evt.GetId() == ID_LOAD_SESSION:
-            mgr = ed_session.EdSessionMgr(CONFIG['SESSION_DIR'])
+            mgr = ed_session.EdSessionMgr()
             sessions = mgr.GetSavedSessions()
             cses = _PGET('LAST_SESSION')
             if cses in sessions:
@@ -856,7 +854,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         # Only auto-save session file if not using default session
-        mgr = ed_session.EdSessionMgr(CONFIG['SESSION_DIR'])
+        mgr = ed_session.EdSessionMgr()
         if _PGET('LAST_SESSION') == mgr.DefaultSession:
             self.nb.SaveCurrentSession()
 
@@ -1421,7 +1419,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         e_id = evt.GetId()
-        if e_id in (ID_QUICK_FIND, ID_GOTO_LINE, ID_COMMAND):
+        if e_id in (ID_QUICK_FIND, ID_GOTO_LINE, ID_COMMAND, ID_SESSION_BAR):
             self._mpane.ShowCommandControl(e_id)
         else:
             evt.Skip()

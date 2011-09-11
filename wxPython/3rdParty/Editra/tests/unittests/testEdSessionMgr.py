@@ -27,13 +27,26 @@ import ed_session
 
 class EdSessionMgrTest(unittest.TestCase):
     def setUp(self):
-        self._mgr = ed_session.EdSessionMgr(common.GetTempDir())
+        self._mgr = ed_session.SessionManager(common.GetTempDir())
         common.CopyToTempDir(common.GetDataFilePath('__default.session'))
 
     def tearDown(self):
         common.CleanTempDir()
 
     #---- Tests ----#
+
+    def testDeleteSession(self):
+        """Test deleting a session file"""
+        # 1. Create a session to delete
+        files = ['foo.py', 'bar.py']
+        rval = self._mgr.SaveSession('testdelete', files)
+        path = self._mgr.PathFromSessionName('testdelete')
+        self.assertTrue(os.path.exists(path))
+        # 2. Delete it
+        bDeleted = self._mgr.DeleteSession('testdelete')
+        # 3. Make sure its been deleted
+        self.assertTrue(bDeleted)
+        self.assertTrue(not os.path.exists(path))
 
     def testGetSavedSessions(self):
         """Test retrieving the list of saved sessions"""

@@ -119,6 +119,7 @@ class EdPages(ed_book.EdBaseBook):
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_NOTEBOOK)
         ed_msg.Subscribe(self.OnUpdatePosCache, ed_msg.EDMSG_UI_STC_POS_JUMPED)
+        ed_msg.Subscribe(self.OnGetOpenFiles, ed_msg.EDMSG_FILE_GET_OPENED)
         ed_msg.RegisterCallback(self.OnDocPointerRequest,
                                 ed_msg.EDREQ_DOCPOINTER)
 
@@ -128,13 +129,14 @@ class EdPages(ed_book.EdBaseBook):
 
     #---- End Init ----#
 
+    #---- Implementation ----#
+
     def OnDestroy(self, evt):
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnThemeChanged)
             ed_msg.Unsubscribe(self.OnUpdatePosCache)
+            ed_msg.Unsubscribe(self.OnGetOpenFilesOnGetOpenFiles)
             ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
-
-    #---- Function Definitions ----#
 
     def _HandleEncodingError(self, control):
         """Handle trying to reload the file the file with a different encoding
@@ -240,7 +242,7 @@ class EdPages(ed_book.EdBaseBook):
         self.UpdateIndexes()
         if not self._ses_load and not bNewPage:
             # Only auto save session when using default session
-            mgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+            mgr = ed_session.EdSessionMgr()
             if Profile_Get('LAST_SESSION') == mgr.DefaultSession:
                 self.SaveCurrentSession()
 
@@ -326,7 +328,7 @@ class EdPages(ed_book.EdBaseBook):
         session = Profile_Get('LAST_SESSION')
         # Compatibility with older session data
         if not isinstance(session, basestring) or not len(session):
-            mgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+            mgr = ed_session.EdSessionMgr()
             session = mgr.DefaultSession
             Profile_Set('LAST_SESSION', session)
         self.SaveSessionFile(session)
@@ -341,7 +343,7 @@ class EdPages(ed_book.EdBaseBook):
             return
 
         try:
-            mgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+            mgr = ed_session.EdSessionMgr()
             flist = self.GetFileNames()
             bSaved = mgr.SaveSession(session, flist)
         except Exception, msg:
@@ -356,7 +358,7 @@ class EdPages(ed_book.EdBaseBook):
         """
         self._ses_load = True
 
-        mgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+        mgr = ed_session.EdSessionMgr()
         flist = list()
         try:
             flist = mgr.LoadSession(session)
@@ -562,6 +564,15 @@ class EdPages(ed_book.EdBaseBook):
 
             # Show the menu
             self.PopupMenu(self._menu.Menu)
+
+    @ed_msg.mwcontext
+    def OnGetOpenFiles(self, msg):
+        """Report all opened files"""
+        data = msg.GetData()
+        if not isinstance(data, list):
+            return
+        flist = self.GetFileNames()
+        data.extend(flist)
 
     def OnThemeChanged(self, msg):
         """Update icons when the theme has changed

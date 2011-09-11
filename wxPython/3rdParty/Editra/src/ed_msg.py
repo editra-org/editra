@@ -93,6 +93,10 @@ EDMSG_FILE_OPENING = EDMSG_FILE_ALL + ('opening',)
 # context == MainWindows ID
 EDMSG_FILE_OPENED = EDMSG_FILE_ALL + ('opened',)
 
+# Get a list of all opened files
+# msgdata == list of file paths (out param)
+EDMSG_FILE_GET_OPENED = EDMSG_FILE_ALL + ('allopened',)
+
 # TODO: using MainWindow as context for now, but may make more sense to use
 #       the buffer instead.
 

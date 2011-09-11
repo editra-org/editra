@@ -37,6 +37,7 @@ import ed_event
 import ed_msg
 import ebmlib
 import eclib
+import ed_basewin
 from profiler import Profile_Get, Profile_Set
 
 _ = wx.GetTranslation
@@ -69,7 +70,7 @@ ID_REGEX = wx.NewId()
 
 #-----------------------------------------------------------------------------#
 
-class CommandBarBase(eclib.ControlBar,
+class CommandBarBase(ed_basewin.EdBaseCtrlBar,
                      ebmlib.FactoryMixin):
     """Base class for control bars"""
     def __init__(self, parent):
@@ -100,7 +101,7 @@ class CommandBarBase(eclib.ControlBar,
 
     @classmethod
     def GetMetaDefaults(cls):
-        return dict(id=-1)
+        return dict(id=-1, config_key=None)
 
     #---- Properties ----#
 
@@ -114,8 +115,7 @@ class CommandBarBase(eclib.ControlBar,
         @param evt: Event that called this handler
 
         """
-        e_id = evt.GetId()
-        if e_id == ID_CLOSE_BUTTON:
+        if evt.Id == ID_CLOSE_BUTTON:
             self.Hide()
         else:
             evt.Skip()
@@ -127,8 +127,9 @@ class CommandBarBase(eclib.ControlBar,
                 # Lazy init the menu
                 self._menu = wx.Menu(_("Customize"))
                 # Ensure the label is disabled (wxMSW Bug)
-                item = self._menu.GetMenuItems()[0]
-                self._menu.Enable(item.GetId(), False)
+                if len(self._menu.MenuItems):
+                    item = self._menu.MenuItems[0]
+                    self._menu.Enable(item.GetId(), False)
 
                 to_menu = list()
                 for child in self.GetChildren():
@@ -141,10 +142,10 @@ class CommandBarBase(eclib.ControlBar,
                         if not item.GetLabel():
                             continue
 
-                        self._menu.Append(item.GetId(),
+                        self._menu.Append(item.Id,
                                           item.GetLabel(),
                                           kind=wx.ITEM_CHECK)
-                        self._menu.Check(item.GetId(), item.IsShown())
+                        self._menu.Check(item.Id, item.IsShown())
 
             self.PopupMenu(self._menu)
         else:
@@ -152,8 +153,7 @@ class CommandBarBase(eclib.ControlBar,
 
     def OnContextMenu(self, evt):
         """Hide and Show controls"""
-        e_id = evt.GetId()
-        ctrl = self.FindWindowById(e_id)
+        ctrl = self.FindWindowById(evt.Id)
         if ctrl is not None:
             self.ShowControl(ctrl.GetName(), not ctrl.IsShown())
             self.Layout()
@@ -181,7 +181,7 @@ class CommandBarBase(eclib.ControlBar,
         @note: override in subclasses
 
         """
-        return None
+        return self.meta.config_key
 
     def GetControlStates(self):
         """Get the map of control name id's to their shown state True/False
@@ -205,7 +205,7 @@ class CommandBarBase(eclib.ControlBar,
 
     def Hide(self):
         """Hides the control and notifies the parent
-        @postcondition: commandbar is hidden
+        @postcondition: CommandBar is hidden
         @todo: don't reference nb directly here
 
         """
@@ -265,6 +265,7 @@ class SearchBar(CommandBarBase):
     """Commandbar for searching text in the current buffer."""
     class meta:
         id = ed_glob.ID_QUICK_FIND
+        config_key = 'SearchBar'
 
     def __init__(self, parent):
         super(SearchBar, self).__init__(parent)
@@ -404,13 +405,6 @@ class SearchBar(CommandBarBase):
             pre.SetBitmapHover(t_bmp)
             pre.Update()
             pre.Refresh()
-
-    def GetConfigKey(self):
-        """Get the key to use for the layout config persistence.
-        @return: string
-
-        """
-        return 'SearchBar'
 
 #-----------------------------------------------------------------------------#
 

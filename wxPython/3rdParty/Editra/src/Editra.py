@@ -813,7 +813,7 @@ def InitConfig():
             # After 0.4.65 LAST_SESSION now points a session file and not
             # to a list of files to open.
             ed_glob.CONFIG['SESSION_DIR'] = util.ResolvConfigDir(u"sessions")
-            smgr = ed_session.EdSessionMgr(ed_glob.CONFIG['SESSION_DIR'])
+            smgr = ed_session.EdSessionMgr()
             sess = profiler.Profile_Get('LAST_SESSION')
             if isinstance(sess, list):
                 profiler.Profile_Set('LAST_SESSION', smgr.DefaultSession)

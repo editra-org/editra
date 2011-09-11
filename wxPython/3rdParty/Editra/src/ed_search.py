@@ -49,7 +49,7 @@ class EdSearchEngine(ebmlib.SearchEngine):
                  matchcase=True, wholeword=False):
         super(EdSearchEngine, self).__init__(query, regex, down,
                                              matchcase, wholeword)
-        # Atttributes
+        # Attributes
         self._offset = 0
 
     def FormatResult(self, fname, lnum, match):
