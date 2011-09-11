@@ -103,7 +103,7 @@ class SearchController(object):
         self._parent   = owner
         self._stc      = getstc
         self._finddlg  = None
-        self._posinfo  = dict(scroll=0, start=0, found=0, ldir=None)
+        self._posinfo  = dict(scroll=0, start=0, found=-1, ldir=None)
         self._data     = self._InitFindData()
         self._li_choices = list()
         self._li_sel   = 0
@@ -350,7 +350,7 @@ class SearchController(object):
                       _("Find Count"),
                       wx.ICON_INFORMATION|wx.OK)
 
-    def OnFind(self, evt, findnext=False):
+    def OnFind(self, evt, findnext=False, incremental=False):
         """Do an incremental search in the currently buffer
         @param evt: EVT_FIND, EVT_FIND_NEXT
         @keyword findnext: force a find next action
@@ -396,24 +396,24 @@ class SearchController(object):
         #      that are large.
         self._engine.SetSearchPool(stc.GetTextRaw())
 
-        # Check if the direction changed
-        ldir = self._posinfo['ldir']
-        if isdown:
-            self._posinfo['ldir'] = 'down'
-        else:
-            self._posinfo['ldir'] = 'up'
-
         # Get the search start position
         if evt.GetEventType() == eclib.edEVT_FIND:
-            spos = self._posinfo['found']
+            if not incremental:
+                spos = stc.CurrentPos
+            else:
+                # For incremental search redo search starting from last found
+                # position.
+                spos = self._posinfo['found']
+                if spos < 0:
+                    spos = stc.CurrentPos
         else:
-            spos = stc.GetCurrentPos()
-            if ldir != self._posinfo['ldir']:
-                start, end = stc.GetSelection()
-                if ldir == 'down':
-                    spos = start
+            spos = stc.CurrentPos
+            start, end = stc.GetSelection()
+            if start != end:
+                if isdown:
+                    spos = max(start, end)
                 else:
-                    spos = end
+                    spos = min(start, end)
 
         # Do the find
         match = self._engine.Find(spos)
@@ -425,7 +425,7 @@ class SearchController(object):
                 end = end + spos
                 stc.SetSelection(start, end)
             else:
-                stc.SetSelection(end, start)
+                stc.SetSelection(start, end)
 
             # Ensure caret and the line its in is exposed
             stc.EnsureCaretVisible()
@@ -453,14 +453,11 @@ class SearchController(object):
 
                 self._posinfo['found'] = start
 
-                match = list(match)
-                if not isdown:
-                    match.reverse()
-                stc.SetSelection(match[0], match[1])
+                stc.SetSelection(start, end)
                 
                 # Ensure caret and the line its in is exposed
                 stc.EnsureCaretVisible()
-                line = stc.LineFromPosition(match[0])
+                line = stc.LineFromPosition(start)
                 stc.EnsureVisible(line)
             else:
                 self._posinfo['found'] = -1
@@ -893,9 +890,10 @@ class EdSearchCtrl(wx.SearchCtrl):
         evt.SetFindString(self.GetValue())
         self.FindService.OnFindAll(evt)
 
-    def DoSearch(self, next=True):
+    def DoSearch(self, next=True, incremental=False):
         """Do the search and move the selection
         @keyword next: search next or previous
+        @keyword incremental: is this an incremental search
 
         """
         s_cmd = eclib.edEVT_FIND
@@ -911,7 +909,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         evt = eclib.FindEvent(s_cmd, flags=self._flags)
         self._last = self.GetValue()
         evt.SetFindString(self.GetValue())
-        self.FindService.OnFind(evt)
+        self.FindService.OnFind(evt, incremental=incremental)
 
         # Give feedback on whether text was found or not
         if self.FindService.GetLastFound() < 0 and len(self.GetValue()) > 0:
@@ -1122,7 +1120,7 @@ class EdSearchCtrl(wx.SearchCtrl):
             # Don't do incremental searches when the RegEx flag is set in order
             # to avoid errors in compiling the expression
             if not self.IsRegEx():
-                self.DoSearch(next=True)
+                self.DoSearch(next=True, incremental=True)
 
     def OnCancel(self, evt):
         """Cancels the Search Query

@@ -1665,7 +1665,7 @@ else:
 MODIFIERS.sort()
 
 class KeyBindingPanel(wx.Panel):
-    """Keybinding configration options"""
+    """Keybinding configuration options"""
     def __init__(self, parent):
         """Create the panel"""
         super(KeyBindingPanel, self).__init__(parent)
