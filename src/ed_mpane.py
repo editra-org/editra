@@ -96,4 +96,3 @@ class MainPanel(eclib.ControlBox):
             cbar.SetFocus()
 
         self.Layout()
-

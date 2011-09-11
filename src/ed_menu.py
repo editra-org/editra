@@ -854,6 +854,8 @@ class EdMenuBar(wx.MenuBar):
         toolsmenu = EdMenu()
         toolsmenu.AppendEx(ed_glob.ID_COMMAND, _("Editor Command"),
                          _("Goto command buffer"))
+        toolsmenu.AppendEx(ed_glob.ID_SESSION_BAR, _("Session Manager"),
+                         _("Show the session manager bar"))
         toolsmenu.AppendEx(ed_glob.ID_PLUGMGR, _("Plugin Manager"),
                          _("Manage, Download, and Install plugins"))
         toolsmenu.AppendEx(ed_glob.ID_STYLE_EDIT, _("Style Editor"),
@@ -1076,6 +1078,7 @@ _DEFAULT_BINDING = { # File Menu
 
                      # Tools Menu
                      ed_glob.ID_COMMAND : (u"Ctrl", u"E"),
+                     ed_glob.ID_SESSION_BAR : (u"Ctrl", u"K"),
                      ed_glob.ID_RUN_LAUNCH : (u"F5",),
                      ed_glob.ID_LAUNCH_LAST : (u"Shift", u"F5")
                      }

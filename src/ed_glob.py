@@ -45,7 +45,7 @@ __all__ = [ 'CONFIG', 'SB_INFO', 'VERSION', 'PROG_NAME', 'ID_NEW', 'ID_OPEN',
             'ID_NEW_WINDOW', 'ID_TOGGLE_FOLD', 'ID_TOGGLE_ALL_FOLDS',
             'ID_SAVE_SESSION', 'ID_LOAD_SESSION', 'ID_NEXT_POS', 'ID_PRE_POS',
             'ID_CYCLE_CLIPBOARD', 'ID_LEXER_CUSTOM', 'ID_SHOW_AUTOCOMP',
-            'ID_SHOW_CALLTIP' ]
+            'ID_SHOW_CALLTIP', 'ID_SESSION_BAR' ]
 
 #---- Project Info ----#
 # The project info was moved to another module so it could be accessed
@@ -107,6 +107,7 @@ ID_SAVE_PROFILE  = wx.NewId()
 ID_LOAD_PROFILE  = wx.NewId()
 ID_SAVE_SESSION  = wx.NewId()
 ID_LOAD_SESSION  = wx.NewId()
+ID_SESSION_BAR   = wx.NewId()
 ID_PRINT         = wx.ID_PRINT
 ID_PRINT_PRE     = wx.ID_PREVIEW
 ID_PRINT_SU      = wx.NewId()
