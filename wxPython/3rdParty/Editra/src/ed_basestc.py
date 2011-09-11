@@ -1175,11 +1175,10 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @postcondition: all style settings are refreshed in the control
 
         """
-        self.Freeze()
-        self.StyleClearAll()
-        self.SetSyntax(self.GetSyntaxParams())
-        self.DefineMarkers()
-        self.Thaw()
+        with eclib.Freezer(self) as _tmp:
+            self.StyleClearAll()
+            self.SetSyntax(self.GetSyntaxParams())
+            self.DefineMarkers()
         self.Refresh()
 
     def UpdateBaseStyles(self):

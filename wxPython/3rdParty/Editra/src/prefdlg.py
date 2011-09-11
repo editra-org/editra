@@ -247,11 +247,10 @@ class PrefTools(eclib.SegmentBook):
         if tbsz[0] > width:
             width = tbsz[0]
 
-        page.Freeze()
-        parent.SetClientSize((width, psz.GetHeight() + tbsz[1]))
-        parent.SendSizeEvent()
-        parent.Layout()
-        page.Thaw()
+        with eclib.Freezer(page) as _tmp:
+            parent.SetClientSize((width, psz.GetHeight() + tbsz[1]))
+            parent.SendSizeEvent()
+            parent.Layout()
         if evt is not None:
             evt.Skip()
 

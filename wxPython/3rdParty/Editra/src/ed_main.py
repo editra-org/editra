@@ -891,20 +891,18 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         self._exiting = True
         controls = self.nb.GetPageCount()
         self.LOG("[ed_main][evt] OnClose: Number of controls: %d" % controls)
-        self.Freeze()
-        while controls:
-            if controls <= 0:
-                self.Close(True) # Force exit since there is a problem
+        with eclib.Freezer(self) as _tmp:
+            while controls:
+                if controls <= 0:
+                    self.Close(True) # Force exit since there is a problem
 
-            self.LOG("[ed_main][evt] OnClose: Requesting Page Close")
-            if not self.nb.ClosePage():
-                self.Thaw()
-                self._exiting = False
-                ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
-                                   (self.nb, self.nb.GetSelection()))
-                return True
-            controls -= 1
-        self.Thaw()
+                self.LOG("[ed_main][evt] OnClose: Requesting Page Close")
+                if not self.nb.ClosePage():
+                    self._exiting = False
+                    ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
+                                       (self.nb, self.nb.GetSelection()))
+                    return True
+                controls -= 1
 
         ### If we get to here there is no turning back so cleanup
         ### additional items and save user settings

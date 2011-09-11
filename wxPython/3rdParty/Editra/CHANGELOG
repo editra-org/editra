@@ -32,6 +32,7 @@ LIBRARY:
 +Add FactoryMixin mixin class to ebmlib to simplify implementing factories for
 classes.
 +Add new icon resource for Delete All (ID_DELETE_ALL).
++Add Freezer context manager class to eclib.
 
 BUG FIXES:
 +Fix PyDeadObject error when opening new window from tab menu.
