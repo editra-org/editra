@@ -291,6 +291,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         # Message Handlers
         ed_msg.Subscribe(self.OnUpdateFileHistory, ed_msg.EDMSG_ADD_FILE_HISTORY)
+        ed_msg.Subscribe(self.OnDoSessionSave, ed_msg.EDMSG_SESSION_DO_SAVE)
+        ed_msg.Subscribe(self.OnDoSessionLoad, ed_msg.EDMSG_SESSION_DO_LOAD)
 
         # HACK: for gtk as most linux window managers manage the windows alpha
         #       and set it when its created.
@@ -302,6 +304,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """Disconnect Message Handlers"""
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnUpdateFileHistory)
+            ed_msg.Unsubscribe(self.OnDoSessionSave)
+            ed_msg.Unsubscribe(self.OnDoSessionLoad)
         evt.Skip()
 
     #---- End Private Member Functions/Variables ----#
@@ -749,26 +753,42 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         else:
             evt.Skip()
 
+    def OnDoSessionSave(self, msg):
+        """ed_msg interface for initiating a session save"""
+        if msg.Context == self.Id:
+            self.DoSaveSessionAs()
+
     def OnSaveSession(self, evt):
         """Save the current session of open files."""
         if evt.GetId() == ID_SAVE_SESSION:
-            mgr = ed_session.EdSessionMgr()
-            cses = _PGET('LAST_SESSION')
-            if cses == mgr.DefaultSession:
-                cses = u""
-            fname = ebmlib.LockCall(self._mlock, wx.GetTextFromUser, 
-                                    (_("Session Name"), _("Save Session"), cses))
-            fname = fname.strip()
-            if fname:
-                rval = self.nb.SaveSessionFile(fname)
-                if rval is not None:
-                    wx.MessageBox(rval[1], rval[0], wx.OK|wx.ICON_ERROR)
-                    return
-
-                _PSET('LAST_SESSION', fname)
-                self.PushStatusText(_("Session Saved as: %s") % fname, SB_INFO)
+            self.DoSaveSessionAs()
         else:
             evt.Skip()
+
+    def DoSaveSessionAs(self):
+        """Prompt the user to save the current session"""
+        mgr = ed_session.EdSessionMgr()
+        cses = _PGET('LAST_SESSION')
+        if cses == mgr.DefaultSession:
+            cses = u""
+        fname = ebmlib.LockCall(self._mlock, wx.GetTextFromUser, 
+                                (_("Session Name"), _("Save Session"), cses))
+        fname = fname.strip()
+        if fname:
+            rval = self.nb.SaveSessionFile(fname)
+            if rval is not None:
+                wx.MessageBox(rval[1], rval[0], wx.OK|wx.ICON_ERROR)
+                return
+
+            _PSET('LAST_SESSION', fname)
+            self.PushStatusText(_("Session Saved as: %s") % fname, SB_INFO)
+
+    def OnDoSessionLoad(self, msg):
+        """Initiate the loading of a session"""
+        if msg.Context == self.Id:
+            ses = msg.GetData()
+            if ses:
+                self.DoLoadSession(ses)
 
     def OnLoadSession(self, evt):
         """Load a saved session."""
@@ -787,22 +807,31 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                                      _("Load Session"),
                                     sessions))
             if fname:
-                nbook = self.GetNotebook()
-                if fname == _("Default"):
-                    fname = mgr.DefaultSession
-                rval = nbook.LoadSessionFile(fname)
-
-                # Check for an error during load
-                if rval is not None:
-                    wx.MessageBox(rval[1], rval[0], wx.OK|wx.ICON_WARNING)
-                    return
-                
-                _PSET('LAST_SESSION', fname)
-                if fname == mgr.DefaultSession:
-                    fname = _("Default")
-                self.PushStatusText(_("Loaded Session: %s") % fname, SB_INFO)
+                self.DoLoadSession(fname)
         else:
             evt.Skip()
+
+    def DoLoadSession(self, fname):
+        """Load the specified session
+        @param fname: session name
+
+        """
+        if fname:
+            mgr = ed_session.EdSessionMgr()
+            if fname == _("Default"):
+                fname = mgr.DefaultSession
+            nbook = self.GetNotebook()
+            rval = nbook.LoadSessionFile(fname)
+
+            # Check for an error during load
+            if rval is not None:
+                wx.MessageBox(rval[1], rval[0], wx.OK|wx.ICON_WARNING)
+                return
+            
+            _PSET('LAST_SESSION', fname)
+            if fname == mgr.DefaultSession:
+                fname = _("Default")
+            self.PushStatusText(_("Loaded Session: %s") % fname, SB_INFO)
 
     def OnStatus(self, evt):
         """Update status text with messages from other controls

@@ -150,7 +150,7 @@ class EdStatBar(ProgressStatusBar):
 
     def GetMainWindow(self):
         """Method required for L{ed_msg.mwcontext}"""
-        return self.GetParent()
+        return self.TopLevelParent
 
     def OnExpireMessage(self, evt):
         """Handle Expiring the status message when the oneshot timer

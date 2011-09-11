@@ -565,6 +565,9 @@ class EdPages(ed_book.EdBaseBook):
             # Show the menu
             self.PopupMenu(self._menu.Menu)
 
+    def GetMainWindow(self):
+        return self.TopLevelParent
+
     @ed_msg.mwcontext
     def OnGetOpenFiles(self, msg):
         """Report all opened files"""
@@ -651,7 +654,7 @@ class EdPages(ed_book.EdBaseBook):
         self.GetTopLevelParent().Thaw()
         ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED,
                            nbuff.GetFileName(),
-                           context=self.frame.GetId())
+                           context=self.frame.Id)
 
     def OpenFileObject(self, fileobj):
         """Open a new text editor page with the given file object. The file
@@ -660,7 +663,7 @@ class EdPages(ed_book.EdBaseBook):
 
         """
         # Create the control
-        self.GetTopLevelParent().Freeze()
+        self.TopLevelParent.Freeze()
         control = ed_editv.EdEditorView(self, wx.ID_ANY)
         control.Hide()
 
@@ -688,13 +691,13 @@ class EdPages(ed_book.EdBaseBook):
         cpage = self.GetSelection()
         self.SetPageBitmap(cpage, self.control.GetTabImage())
 
-        self.GetTopLevelParent().Thaw()
+        self.TopLevelParent.Thaw()
 
         # Refocus on selected page
         self.GoCurrentPage()
         ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED,
                            self.control.GetFileName(),
-                           context=self.frame.GetId())
+                           context=self.frame.Id)
 
         if Profile_Get('WARN_EOL', default=True) and not fileobj.IsRawBytes():
             self.control.CheckEOL()
@@ -842,7 +845,7 @@ class EdPages(ed_book.EdBaseBook):
 
         ed_msg.PostMessage(ed_msg.EDMSG_FILE_OPENED,
                            self.control.GetFileName(),
-                           context=self.frame.GetId())
+                           context=self.frame.Id)
 
     def GoCurrentPage(self):
         """Move Focus to Currently Selected Page.
@@ -1043,7 +1046,7 @@ class EdPages(ed_book.EdBaseBook):
 
         ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGING,
                            (self,) + pages,
-                           context=self.frame.GetId())
+                           context=self.frame.Id)
 
     def ChangePage(self, pg_num, old=-2):
         """Change the page and focus to the the given page id
@@ -1071,7 +1074,7 @@ class EdPages(ed_book.EdBaseBook):
         if not self.frame.IsExiting() and cpage != pg_num:
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CHANGED,
                                (self, pg_num),
-                               context=self.frame.GetId())
+                               context=self.frame.Id)
 
     def OnPageChanged(self, evt):
         """Actions to do after a page change
@@ -1106,7 +1109,7 @@ class EdPages(ed_book.EdBaseBook):
             evt.Skip()
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSING,
                                (self, sel),
-                               context=self.frame.GetId())
+                               context=self.frame.Id)
         else:
             evt.Veto()
 
@@ -1125,7 +1128,7 @@ class EdPages(ed_book.EdBaseBook):
             self.UpdateIndexes()
             ed_msg.PostMessage(ed_msg.EDMSG_UI_NB_CLOSED,
                                (self, cpage),
-                               context=self.frame.GetId())
+                               context=self.frame.Id)
 
             if not self.GetPageCount() and \
                hasattr(frame, 'IsExiting') and not frame.IsExiting():
