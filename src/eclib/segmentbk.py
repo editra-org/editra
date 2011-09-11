@@ -53,6 +53,7 @@ import wx
 
 # Local Imports
 import ctrlbox
+from eclutil import Freezer
 
 #-----------------------------------------------------------------------------#
 # Events
@@ -153,9 +154,8 @@ class SegmentBook(ctrlbox.ControlBox):
         handler = self.GetEventHandler()
         if not handler.ProcessEvent(event) or event.IsAllowed():
             # Do the actual page change
-            self.Freeze()
-            self.ChangePage(csel)
-            self.Thaw()
+            with Freezer(self) as _tmp:
+                self.ChangePage(csel)
 
             # Post page changed event
             event.SetEventType(edEVT_SB_PAGE_CHANGED)
