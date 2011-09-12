@@ -135,7 +135,7 @@ class EdPages(ed_book.EdBaseBook):
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnThemeChanged)
             ed_msg.Unsubscribe(self.OnUpdatePosCache)
-            ed_msg.Unsubscribe(self.OnGetOpenFilesOnGetOpenFiles)
+            ed_msg.Unsubscribe(self.OnGetOpenFiles)
             ed_msg.UnRegisterCallback(self.OnDocPointerRequest)
 
     def _HandleEncodingError(self, control):
