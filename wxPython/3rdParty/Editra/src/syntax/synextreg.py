@@ -498,13 +498,15 @@ class ExtensionRegister(dict):
 
     def FileTypeFromExt(self, ext):
         """Returns the file type that is associated with
-        the extension. If no association is found Plain Text
+        the extension. Matching is done with a case insensitive search.
+        If no association is found Plain Text
         will be returned by default.
         @param ext: extension to lookup
 
         """
+        ext = ext.lower()
         for key, val in self.iteritems():
-            if ext in val:
+            if ext in [ext2.lower() for ext2 in val]:
                 return key
         return LANG_TXT
 

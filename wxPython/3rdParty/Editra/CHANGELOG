@@ -49,6 +49,8 @@ the view is correctly toggled back and forth for all cases.
 zero instead of the current caret position.
 +Fix some inconsistencies with doing incremental searches and behavior when
 the search direction is changed for a find next action.
++Fix failure to detect correct syntax highlighting when extension manager
+had mappings with upper or mixed case letter.
 
 #-----------------------------------------------------------------------------#
 
