@@ -136,9 +136,6 @@ class EdShelfBook(ed_book.EdBaseBook):
         self._menu = ebmlib.ContextMenuManager()
         self._mcback = None
 
-        # Setup
-        self.SetSashDClickUnsplit(True)
-
         # Event Handlers
         self.Bind(aui.EVT_AUINOTEBOOK_TAB_RIGHT_UP, self.OnRightUp)
         self.Bind(aui.EVT_AUINOTEBOOK_BG_RIGHT_UP, self.OnRightUp)
@@ -238,7 +235,7 @@ class EdShelfBook(ed_book.EdBaseBook):
         @param item_name: name of Item to look for
 
         """
-        for page in xrange(self.GetPageCount()):
+        for page in range(self.GetPageCount()):
             if self.GetPageText(page).startswith(item_name):
                 return True
         return False
@@ -346,7 +343,7 @@ class EdShelfDelegate(object):
         """
         rval = list()
         if self._shelf is not None:
-            for page in xrange(self._shelf.GetPageCount()):
+            for page in range(self._shelf.GetPageCount()):
                 rval.append(re.sub(PGNUM_PAT, u'', 
                             self._shelf.GetPageText(page), 1))
         return rval
@@ -506,7 +503,7 @@ class EdShelfDelegate(object):
         @return: reference to the selected page or None if no instance is
 
         """
-        for page in xrange(self._shelf.GetPageCount()):
+        for page in range(self._shelf.GetPageCount()):
             if self._shelf.GetPageText(page).startswith(item_name):
                 self._shelf.SetSelection(page)
                 return self._shelf.GetPage(page)
