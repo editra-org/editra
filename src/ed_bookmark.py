@@ -1,6 +1,6 @@
 ###############################################################################
 # Name: Cody Precord                                                          #
-# Purpose:                                    #
+# Purpose: Bookmark Manager window and plugin interface                       #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2010 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
