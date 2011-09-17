@@ -700,7 +700,7 @@ class TabNavigatorWindow(wx.Dialog):
 
     def OnItemSelected(self, event):
         """
-        Handles the ``wx.EVT_LISTBOX_DCLICK`` event for the wx.ListBox inside L{TabNavigatorWindow}.
+        Handles the ``wx.EVT_LISTBOX_DCLICK`` event for the `wx.ListBox` inside L{TabNavigatorWindow}.
 
         :param `event`: a `wx.ListEvent` event to be processed.
         """
@@ -786,7 +786,7 @@ class AuiTabContainer(object):
     the L{AuiManager}, where it is disadvantageous to have separate
     windows for each tab control in the case of "docked tabs".
 
-    A derived class, L{AuiTabCtrl}, is an actual `wx.Window`-derived window
+    A derived class, L{AuiTabCtrl}, is an actual `wx.Window` - derived window
     which can be used as a tab control in the normal sense.
     """
 
@@ -795,7 +795,7 @@ class AuiTabContainer(object):
         Default class constructor.
         Used internally, do not call it in your code!
 
-        :param `auiNotebook`: the parent L{AuiNotebook} window.        
+        :param `auiNotebook`: the parent L{AuiNotebook} window.
         """
 
         self._tab_offset = 0
@@ -1202,6 +1202,30 @@ class AuiTabContainer(object):
         button.cur_state = AUI_BUTTON_STATE_NORMAL
 
         self._buttons.append(button)
+
+
+    def CloneButtons(self):
+        """
+        Clones the tab area buttons when the L{AuiNotebook} is being split.
+
+        :see: L{AddButton}
+
+        :note: Standard buttons for L{AuiNotebook} are not cloned, only custom ones.
+        """
+
+        singleton_list = [AUI_BUTTON_CLOSE, AUI_BUTTON_WINDOWLIST, AUI_BUTTON_LEFT, AUI_BUTTON_RIGHT]
+        clones = []
+
+        for button in self._buttons:
+            if button.id not in singleton_list:
+                new_button = AuiTabContainerButton()
+                new_button.id = button.id
+                new_button.bitmap = button.bitmap
+                new_button.dis_bitmap = button.dis_bitmap
+                new_button.location = button.location
+                clones.append(new_button)
+
+        return clones
 
 
     def RemoveButton(self, id):
@@ -1706,7 +1730,7 @@ class AuiTabContainer(object):
 
 class AuiTabCtrl(wx.PyControl, AuiTabContainer):
     """
-    This is an actual `wx.Window`-derived window which can be used as a tab
+    This is an actual `wx.Window` - derived window which can be used as a tab
     control in the normal sense.
     """
 
@@ -1730,7 +1754,6 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
 
         self._click_pt = wx.Point(-1, -1)
         self._is_dragging = False
-        self._click_tab = None
         self._hover_button = None
         self._pressed_button = None
         self._drag_image = None
@@ -1992,7 +2015,7 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         if not isinstance(eventHandler, AuiTabCtrl):
             event.Skip()
             return
-        
+
         x, y = event.GetX(), event.GetY()
         wnd = self.TabHitTest(x, y)
 
@@ -2683,6 +2706,7 @@ class AuiNotebook(wx.PyPanel):
         self._requested_tabctrl_height = -1
         self._textCtrl = None
         self._tabBounds = (-1, -1)
+        self._click_tab = None
 
         wx.PyPanel.__init__(self, parent, id, pos, size, style|wx.BORDER_NONE|wx.TAB_TRAVERSAL)
         self._mgr = framemanager.AuiManager()
@@ -3618,12 +3642,15 @@ class AuiNotebook(wx.PyPanel):
         """
 
         if page >= self._tabs.GetPageCount():
-            return False
+            return wx.NOT_FOUND
 
         bitmap = self.GetPageBitmap(page)
+        bmpData1 = bitmap.ConvertToImage().GetData()
+
         for indx in xrange(self._imageList.GetImageCount()):
             imgListBmp = self._imageList.GetBitmap(indx)
-            if imgListBmp == bitmap:
+            bmpData2 = imgListBmp.ConvertToImage().GetData()
+            if bmpData1 == bmpData2:
                 return indx
 
         return wx.NOT_FOUND
@@ -4120,6 +4147,9 @@ class AuiNotebook(wx.PyPanel):
         if page_info.control:
             self.ReparentControl(page_info.control, dest_tabs)
 
+        cloned_buttons = self.CloneTabAreaButtons()
+        for clone in cloned_buttons:
+            dest_tabs.AddButton(clone.id, clone.location, clone.bitmap, clone.dis_bitmap)
         # create a pane info structure with the information
         # about where the pane should be added
         pane_info = framemanager.AuiPaneInfo().Bottom().CaptionVisible(False)
@@ -4717,6 +4747,9 @@ class AuiNotebook(wx.PyPanel):
                 self._mgr.Update()
                 dest_tabs = new_tabs._tabs
 
+                cloned_buttons = self.CloneTabAreaButtons()
+                for clone in cloned_buttons:
+                    dest_tabs.AddButton(clone.id, clone.location, clone.bitmap, clone.dis_bitmap)
             # remove the page from the source tabs
             page_info = src_tabs.GetPage(event.GetSelection())
 
@@ -5538,6 +5571,21 @@ class AuiNotebook(wx.PyPanel):
 
         active_tabctrl = self.GetActiveTabCtrl()
         active_tabctrl.RemoveButton(id)
+
+
+    def CloneTabAreaButtons(self):
+        """
+        Clones the tab area buttons when the L{AuiNotebook} is being split.
+
+        :see: L{AddTabAreaButton}
+
+        :note: Standard buttons for L{AuiNotebook} are not cloned, only custom ones.
+        """
+
+        active_tabctrl = self.GetActiveTabCtrl()
+        clones = active_tabctrl.CloneButtons()
+
+        return clones
 
 
     def HasMultiplePages(self):
