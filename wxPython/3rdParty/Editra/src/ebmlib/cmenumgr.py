@@ -42,6 +42,10 @@ class ContextMenuManager(object):
     Position = property(lambda self: self.GetPosition(),
                         lambda self, pos: self.SetPosition(pos))
 
+    def __del__(self):
+        """Cleanup when it goes out of scope"""
+        self.Clear()
+
     def AddHandler(self, evt_id, handler):
         """Add an event handler
         @param evt_id: int
