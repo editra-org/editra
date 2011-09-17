@@ -93,7 +93,6 @@ class EdPages(ed_book.EdBaseBook):
             util.Log("[ed_pages][warn] Bad bitmap: %s" % ed_icon)
 
         # Set custom options
-        self.SetSashDClickUnsplit(True)
         self.SetMinMaxTabWidth(125, 135)
 
         # Notebook Events

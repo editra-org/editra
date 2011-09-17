@@ -39,6 +39,8 @@ class EdBaseBook(aui.AuiNotebook):
         # Setup
         self.UpdateFontSetting()
 
+        self.SetSashDClickUnsplit(True)
+
         # Message Handlers
         ed_msg.Subscribe(self.OnUpdateFont, ed_msg.EDMSG_DSP_FONT)
 
