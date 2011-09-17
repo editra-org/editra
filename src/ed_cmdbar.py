@@ -98,6 +98,7 @@ class CommandBarBase(ed_basewin.EdBaseCtrlBar,
         self.Bind(wx.EVT_BUTTON, self.OnClose, self.close_b)
         self.Bind(wx.EVT_CONTEXT_MENU, self.OnContext)
         self.Bind(wx.EVT_MENU, self.OnContextMenu)
+        self.Bind(wx.EVT_SHOW, self.OnShowBar)
 
     @classmethod
     def GetMetaDefaults(cls):
@@ -165,6 +166,20 @@ class CommandBarBase(ed_basewin.EdBaseCtrlBar,
                 state = self.GetControlStates()
                 cfg[key] = state
 
+    def OnShowBar(self, evt):
+        """Update the session list"""
+        if evt.IsShown():
+            if self and evt.EventObject is self:
+                self.OnBarShown()
+        evt.Skip()
+
+    def OnBarShown(self):
+        """virtual override for subclasses that wish to receive window show
+        event callbacks.
+
+        """
+        pass
+
     def EnableMenu(self, enable=True):
         """Enable the popup customization menu
         @keyword enable: bool
@@ -176,9 +191,9 @@ class CommandBarBase(ed_basewin.EdBaseCtrlBar,
             self._menu = None
 
     def GetConfigKey(self):
-        """Get the key to use for the layout config persistence.
+        """Get the key to use for the layout config persistence. This value
+        is set in the class definitions meta class.
         @return: string
-        @note: override in subclasses
 
         """
         return self.meta.config_key

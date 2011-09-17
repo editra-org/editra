@@ -192,7 +192,6 @@ class EdSessionBar(ed_cmdbar.CommandBarBase):
         self._delb.Bind(wx.EVT_BUTTON, self.OnDeleteSession)
         self._sch.Bind(wx.EVT_CHOICE, self.OnChangeSession)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, self._delb)
-        self.Bind(wx.EVT_SHOW, self.OnShowBar)
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
         # Message Handlers
@@ -228,7 +227,8 @@ class EdSessionBar(ed_cmdbar.CommandBarBase):
 
     def OnConfigMsg(self, msg):
         """Configuration update callback"""
-        self.UpdateSessionList()
+        if self:
+            self.UpdateSessionList()
 
     def OnSaveSession(self, evt):
         """Save the current session"""
@@ -258,11 +258,9 @@ class EdSessionBar(ed_cmdbar.CommandBarBase):
         else:
             evt.Skip()
 
-    def OnShowBar(self, evt):
+    def OnBarShown(self):
         """Update the session list"""
-        if evt.EventObject is self:
-            self.UpdateSessionList()
-        evt.Skip()
+        self.UpdateSessionList()
 
     def OnUpdateUI(self, evt):
         """Handle UpdateUI events"""
