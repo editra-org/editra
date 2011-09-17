@@ -867,7 +867,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         if force:
-            return wx.Frame.Close(self, True)
+            return super(MainWindow, self).Close(True)
         else:
             result = self.OnClose()
             return not result
