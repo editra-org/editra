@@ -2116,6 +2116,21 @@ class AuiToolBar(wx.PyControl):
         return None
 
 
+    def HitTest(self, x, y):
+        """
+        Finds a tool for the given mouse position.
+
+        :param `x`: mouse `x` position;
+        :param `y`: mouse `y` position.
+
+        :returns: a pointer to a L{AuiToolBarItem} if a tool is found, or ``None`` otherwise.
+
+        :note: This method is similar to L{FindToolForPosition} but it works with absolute coordinates.
+        """
+        
+        return self.FindToolForPosition(*self.ScreenToClient((x,y)))
+
+
     def FindToolForPositionWithPacking(self, x, y):
         """
         Finds a tool for the given mouse position, taking into account also the

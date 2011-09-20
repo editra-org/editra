@@ -484,6 +484,8 @@ class CommandNotebookEvent(wx.PyCommandEvent):
         self.label = label
 
 
+    Selection = property(lambda self: self.GetSelection(), lambda self, sel: self.SetSelection(sel))
+
 # ----------------------------------------------------------------------
 
 class AuiNotebookEvent(CommandNotebookEvent):
