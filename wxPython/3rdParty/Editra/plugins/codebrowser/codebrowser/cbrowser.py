@@ -164,6 +164,7 @@ class CodeBrowserTree(wx.TreeCtrl):
         """Clear the tree and caches"""
         self._cdoc = None
         self._ds_flat = list()
+        self.Unselect() # XXX: workaround focus issue in 2.9
         self.DeleteChildren(self.root)
 
     def _FindNodeForLine(self, line):
