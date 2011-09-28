@@ -68,7 +68,8 @@ class FileUtilTest(unittest.TestCase):
         if ISWINDOWS:
             path = "c:\\documents and settings"
             spath = "C:\\DOCUME~1"
-            self.assertEquals(path, ebmlib.GetAbsPath(spath).lower())
+            self.assertEquals(path, ebmlib.GetAbsPath(spath).lower(), 
+                              "Missing win32api extension modules?")
 
     def testGetFileExtension(self):
         """Test getting a files extension"""
