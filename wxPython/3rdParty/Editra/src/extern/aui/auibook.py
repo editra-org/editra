@@ -557,12 +557,15 @@ class TabNavigatorProps(object):
         # Attributes
         self._icon = wx.NullBitmap
         self._font = wx.NullFont
+        self._minsize = wx.DefaultSize
 
     # Accessors
     Icon = property(lambda self: self._icon,
                     lambda self, icon: setattr(self, '_icon', icon))
     Font = property(lambda self: self._font,
                     lambda self, font: setattr(self, '_font', font))
+    MinSize = property(lambda self: self._minsize,
+                       lambda self, size: setattr(self, '_minsize', size))
 
 # ---------------------------------------------------------------------------- #
 # Class TabNavigatorWindow
@@ -582,7 +585,7 @@ class TabNavigatorWindow(wx.Dialog):
         :param `props`: the L{TabNavigatorProps} object.
         """
 
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, "", style=0)
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, "", size=props.MinSize, style=0)
 
         self._selectedItem = -1
         self._indexMap = []
@@ -601,7 +604,10 @@ class TabNavigatorWindow(wx.Dialog):
 
         sz = wx.BoxSizer(wx.VERTICAL)
 
-        self._listBox = wx.ListBox(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(200, 150), [], wx.LB_SINGLE | wx.NO_BORDER)
+        self._listBox = wx.ListBox(self, wx.ID_ANY, 
+                                   wx.DefaultPosition, 
+                                   wx.Size(200, 150), [], 
+                                   wx.LB_SINGLE | wx.NO_BORDER)
 
         mem_dc = wx.MemoryDC()
         mem_dc.SelectObject(wx.EmptyBitmap(1,1))
@@ -616,9 +622,10 @@ class TabNavigatorWindow(wx.Dialog):
         if panelHeight < 24:
             panelHeight = 24
 
-        self._panel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(200, panelHeight))
+        self._panel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, 
+                               wx.Size(-1, panelHeight))
 
-        sz.Add(self._panel)
+        sz.Add(self._panel, 0, wx.EXPAND)
         sz.Add(self._listBox, 1, wx.EXPAND)
 
         self.SetSizer(sz)
@@ -636,9 +643,7 @@ class TabNavigatorWindow(wx.Dialog):
         self._listBox.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE))
         self.PopulateListControl(parent)
 
-        self.GetSizer().Fit(self)
-        self.GetSizer().SetSizeHints(self)
-        self.GetSizer().Layout()
+        self.SetInitialSize(props.MinSize)
         self.Centre()
 
         # Set focus on the list box to avoid having to click on it to change

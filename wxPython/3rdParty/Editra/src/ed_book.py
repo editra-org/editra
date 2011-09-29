@@ -38,7 +38,10 @@ class EdBaseBook(aui.AuiNotebook):
 
         # Setup
         self.UpdateFontSetting()
-
+        font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        font.PointSize += 2
+        self.NavigatorProps.Font = font
+        self.NavigatorProps.MinSize = wx.Size(300,250)
         self.SetSashDClickUnsplit(True)
 
         # Message Handlers
