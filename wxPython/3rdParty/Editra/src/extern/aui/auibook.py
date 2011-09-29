@@ -548,10 +548,13 @@ class AuiNotebookEvent(CommandNotebookEvent):
 
 class TabNavigatorProps(object):
     """
-    Data storage class for managing and providing access to TabNavigatorWindow
+    Data storage class for managing and providing access to L{TabNavigatorWindow}
     properties.
     """
+
     def __init__(self):
+        """ Default class constructor. """
+        
         super(TabNavigatorProps, self).__init__()
 
         # Attributes
