@@ -543,6 +543,28 @@ class AuiNotebookEvent(CommandNotebookEvent):
 
 
 # ---------------------------------------------------------------------------- #
+# Class TabNavigatorProps
+# ---------------------------------------------------------------------------- #
+
+class TabNavigatorProps(object):
+    """
+    Data storage class for managing and providing access to TabNavigatorWindow
+    properties.
+    """
+    def __init__(self):
+        super(TabNavigatorProps, self).__init__()
+
+        # Attributes
+        self._icon = wx.NullBitmap
+        self._font = wx.NullFont
+
+    # Accessors
+    Icon = property(lambda self: self._icon,
+                    lambda self, icon: setattr(self, '_icon', icon))
+    Font = property(lambda self: self._font,
+                    lambda self, font: setattr(self, '_font', font))
+
+# ---------------------------------------------------------------------------- #
 # Class TabNavigatorWindow
 # ---------------------------------------------------------------------------- #
 
@@ -552,28 +574,30 @@ class TabNavigatorWindow(wx.Dialog):
     similar to what you would get by hitting ``Alt`` + ``Tab`` on Windows.
     """
 
-    def __init__(self, parent=None, icon=None):
+    def __init__(self, parent, props):
         """
         Default class constructor. Used internally.
 
         :param `parent`: the L{TabNavigatorWindow} parent;
-        :param `icon`: the L{TabNavigatorWindow} icon.
+        :param `props`: the L{TabNavigatorProps} object.
         """
 
         wx.Dialog.__init__(self, parent, wx.ID_ANY, "", style=0)
 
         self._selectedItem = -1
         self._indexMap = []
+        self._props = props
 
-        if icon is None:
-            self._bmp = Mondrian.GetBitmap()
-        else:
-            self._bmp = icon
+        if not self._props.Icon.IsOk():
+            self._props.Icon = Mondrian.GetBitmap()
 
-        if self._bmp.GetSize() != (16, 16):
-            img = self._bmp.ConvertToImage()
+        if props.Icon.GetSize() != (16, 16):
+            img = self._props.Icon.ConvertToImage()
             img.Rescale(16, 16, wx.IMAGE_QUALITY_HIGH)
-            self._bmp = wx.BitmapFromImage(img)
+            self._props.Icon = wx.BitmapFromImage(img)
+
+        if self._props.Font.IsOk():
+            self.Font = self._props.Font
 
         sz = wx.BoxSizer(wx.VERTICAL)
 
@@ -746,9 +770,9 @@ class TabNavigatorWindow(wx.Dialog):
         # Draw the caption title and place the bitmap
         # get the bitmap optimal position, and draw it
         bmpPt, txtPt = wx.Point(), wx.Point()
-        bmpPt.y = (rect.height - self._bmp.GetHeight())/2
+        bmpPt.y = (rect.height - self._props.Icon.GetHeight())/2
         bmpPt.x = 3
-        mem_dc.DrawBitmap(self._bmp, bmpPt.x, bmpPt.y, True)
+        mem_dc.DrawBitmap(self._props.Icon, bmpPt.x, bmpPt.y, True)
 
         # get the text position, and draw it
         font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
@@ -756,7 +780,7 @@ class TabNavigatorWindow(wx.Dialog):
         mem_dc.SetFont(font)
         fontHeight = mem_dc.GetCharHeight()
 
-        txtPt.x = bmpPt.x + self._bmp.GetWidth() + 4
+        txtPt.x = bmpPt.x + self._props.Icon.GetWidth() + 4
         txtPt.y = (rect.height - fontHeight)/2
         mem_dc.SetTextForeground(wx.WHITE)
         mem_dc.DrawText("Opened tabs:", txtPt.x, txtPt.y)
@@ -2716,6 +2740,7 @@ class AuiNotebook(wx.PyPanel):
 
         self.InitNotebook(agwStyle)
 
+    NavigatorProps = property(lambda self: self._navProps)
 
     def GetTabContainer(self):
         """ Returns the instance of L{AuiTabContainer}. """
@@ -2736,8 +2761,8 @@ class AuiNotebook(wx.PyPanel):
         self._agwFlags = agwStyle
 
         self._popupWin = None
-        self._naviIcon = None
         self._imageList = None
+        self._navProps = TabNavigatorProps()
         self._last_drag_x = 0
 
         self._normal_font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
@@ -5095,12 +5120,7 @@ class AuiNotebook(wx.PyPanel):
         """
 
         if isinstance(bmp, wx.Bitmap) and bmp.IsOk():
-            # Make sure image is proper size
-            if bmp.GetSize() != (16, 16):
-                img = bmp.ConvertToImage()
-                img.Rescale(16, 16, wx.IMAGE_QUALITY_HIGH)
-                bmp = wx.BitmapFromImage(img)
-            self._naviIcon = bmp
+            self.NavigatorProps.Icon = bmp
         else:
             raise TypeError, "SetNavigatorIcon requires a valid bitmap"
 
@@ -5115,7 +5135,7 @@ class AuiNotebook(wx.PyPanel):
         if event.IsWindowChange():
             if self._agwFlags & AUI_NB_SMART_TABS:
                 if not self._popupWin:
-                    self._popupWin = TabNavigatorWindow(self, self._naviIcon)
+                    self._popupWin = TabNavigatorWindow(self, self.NavigatorProps)
                     self._popupWin.SetReturnCode(wx.ID_OK)
                     self._popupWin.ShowModal()
                     idx = self._popupWin.GetSelectedPage()
