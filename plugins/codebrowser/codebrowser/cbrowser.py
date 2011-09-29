@@ -695,7 +695,7 @@ class TagGenEvent(wx.PyCommandEvent):
     """
     def __init__(self, etype, eid, value=taglib.DocStruct()):
         """Creates the event object"""
-        wx.PyCommandEvent.__init__(self, etype, eid)
+        super(TagGenEvent, self).__init__(etype, eid)
         self._value = value
 
     def GetValue(self):
