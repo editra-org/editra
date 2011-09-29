@@ -665,7 +665,6 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         fname, lang_id = self.GetParent().GetLastRun()
         handler = handlers.GetHandlerById(lang_id)
         handler.HandleHotSpot(self._mw, self, line, fname)
-        self.GetParent().SetupControlBar(GetTextBuffer(self._mw))
 
     def DoProcessError(self, code, excdata=None):
         """Handle notifications of when an error occurs in the process

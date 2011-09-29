@@ -12,6 +12,8 @@ Released:
 +Fix bug with handling initialization of color preferences on new installs.
 +Fix issue in class factory causing incorrect data display for handler classes
 that are generated dynamically on the fly.
++Fix issue with lock file failing to keep file locked after clicking on an error
+hotspot in the buffer.
 
 #-----------------------------------------------------------------------------#
 Version 1.11
