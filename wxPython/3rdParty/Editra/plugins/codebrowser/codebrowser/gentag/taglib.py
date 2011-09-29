@@ -151,13 +151,22 @@ class Scope(Code):
         self.elements = dict()
         self.descript = dict()
         self.prio = dict()
+        self._lscope = self
+
+    #---- Properties ----#
+    LastScope = property(lambda self: self._lscope)
+    #---- End Properties ----#
 
     def AddElement(self, obj, element):
         """Add an element to this scope
-        @param obj: object indentifier string
+        @param obj: object identifier string
         @param element: L{Code} object to add to this scope
 
         """
+        if isinstance(element, Scope):
+            self._lscope = element
+        else:
+            self._lscope = self
         if obj not in self.elements:
             self.elements[obj] = list()
         self.elements[obj].append(element)
