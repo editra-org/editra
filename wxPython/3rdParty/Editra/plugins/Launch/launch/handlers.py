@@ -179,7 +179,13 @@ class Meta:
     def __init__(self, meta_attrs):
         for (attr,default) in self._defaults.items():
             attr_val = meta_attrs.get(attr, default)
-            setattr(self, attr, copy.copy(attr_val))
+            try:
+                if attr in ('error', 'hotspot'):
+                    setattr(self, attr, attr_val)
+                else:
+                    setattr(self, attr, copy.copy(attr_val))
+            except Exception, msg:
+                util.Log("[Launch][err] Metadata copy error")
 
 class HandlerMeta(type):
     """Metaclass for manipulating a handler classes metadata converts
