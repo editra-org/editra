@@ -144,6 +144,7 @@ class PluginDialog(wx.Frame):
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
     def OnDestroy(self, evt):
+        """Cleanup message handlers on delete"""
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnThemeChange)
         evt.Skip()
@@ -316,7 +317,7 @@ class ConfigPanel(eclib.ControlBox):
             else:
                 imglst = parent.GetImageList()
                 imglst.append(bmp)
-                idx = len(imgst) - 1
+                idx = len(imglst) - 1
 
             label = cfg_obj.GetLabel()
             panel = cfg_obj.GetConfigPanel(parent)
@@ -608,7 +609,6 @@ class DownloadPanel(eclib.ControlBox):
         @type evt: ed_event.NotificationEvent
 
         """
-        index = evt.GetId()
         pin, enable = evt.GetValue()
         self._dl_list[pin] = enable
 

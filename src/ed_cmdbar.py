@@ -25,7 +25,6 @@ __revision__ = "$Revision$"
 # Imports
 import os
 import sys
-import glob
 import re
 import wx
 
@@ -38,7 +37,7 @@ import ed_msg
 import ebmlib
 import eclib
 import ed_basewin
-from profiler import Profile_Get, Profile_Set
+from profiler import Profile_Get
 
 _ = wx.GetTranslation
 #--------------------------------------------------------------------------#
@@ -239,16 +238,16 @@ class CommandBarBase(ed_basewin.EdBaseCtrlBar,
 
         """
         sizer = self.GetControlSizer()
-        next = False
+        gonext = False
         for item in sizer.GetChildren():
-            if next:
+            if gonext:
                 if item.IsSpacer():
                     item.Show(show)
                 break
 
             if item.Window and item.Window.GetName() == ctrl_name:
                 item.Show(show)
-                next = True
+                gonext = True
 
     def IsCustomizable(self, ctrl):
         """Is the control of a type that can be customized
@@ -349,6 +348,7 @@ class SearchBar(CommandBarBase):
         self.SetControlStates(cfg)
 
     def OnDestroy(self, evt):
+        """Cleanup message handlers on destroy"""
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnThemeChange)
             self._sctrl.RemoveClient(self)
@@ -405,21 +405,21 @@ class SearchBar(CommandBarBase):
         @param msg: Message Object
 
         """
-        next = self.FindWindowById(ID_SEARCH_NEXT)
-        if next:
+        next_btn = self.FindWindowById(ID_SEARCH_NEXT)
+        if next_btn:
             t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_DOWN), wx.ART_MENU)
-            next.SetBitmapLabel(t_bmp)
-            next.SetBitmapHover(t_bmp)
-            next.Update()
-            next.Refresh()
+            next_btn.SetBitmapLabel(t_bmp)
+            next_btn.SetBitmapHover(t_bmp)
+            next_btn.Update()
+            next_btn.Refresh()
 
-        pre = self.FindWindowById(ID_SEARCH_PRE)
-        if pre:
+        pre_btn = self.FindWindowById(ID_SEARCH_PRE)
+        if pre_btn:
             t_bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_UP), wx.ART_MENU)
-            pre.SetBitmapLabel(t_bmp)
-            pre.SetBitmapHover(t_bmp)
-            pre.Update()
-            pre.Refresh()
+            pre_btn.SetBitmapLabel(t_bmp)
+            pre_btn.SetBitmapHover(t_bmp)
+            pre_btn.Update()
+            pre_btn.Refresh()
 
 #-----------------------------------------------------------------------------#
 
@@ -518,6 +518,7 @@ class CommandExecuter(eclib.CommandEntryBase):
         ed_msg.Subscribe(self._UpdateCwd, ed_msg.EDMSG_FILE_SAVED)
 
     def OnDestroy(self, evt):
+        """Clean up message handlers on destroy"""
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self._UpdateCwd)
         evt.Skip()
@@ -728,7 +729,7 @@ class CommandExecuter(eclib.CommandEntryBase):
 
         frame = self.GetTopLevelParent()
         numpage = frame.nb.GetPageCount()
-        for x in xrange(min(count, numpage)):
+        for x in range(min(count, numpage)):
             cpage = frame.nb.GetPageIndex(frame.nb.GetCurrentPage())
             if (cpage == 0 and cmd == 'N') or \
                (cpage + 1 == numpage and cmd == 'n'):
@@ -916,7 +917,7 @@ class CommandExecuter(eclib.CommandEntryBase):
                 wx.CallAfter(self.UpdateAutoComp)
         else:
             if self._popup.HasSuggestions():
-                    self._AdjustValue(self._popup.GetSelection())
+                self._AdjustValue(self._popup.GetSelection())
             self.ListDir()
         self._AdjustSize()
         evt.Skip()
