@@ -41,7 +41,7 @@ class EdBaseBook(aui.AuiNotebook):
         font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         font.PointSize += 2
         self.NavigatorProps.Font = font
-        self.NavigatorProps.MinSize = wx.Size(300,250)
+        self.NavigatorProps.MinSize = wx.Size(300, 250)
         self.SetSashDClickUnsplit(True)
 
         # Message Handlers
@@ -51,18 +51,27 @@ class EdBaseBook(aui.AuiNotebook):
         self.Bind(wx.EVT_WINDOW_DESTROY, self._OnDestroy, self)
 
     def _OnDestroy(self, evt):
+        """Unsubscribe message handlers on delete"""
         if self and evt.GetEventObject() is self:
             ed_msg.Unsubscribe(self.OnUpdateFont)
         evt.Skip()
 
     @staticmethod
     def GetBaseStyles():
+        """Get the common base style flags
+        @return: bitmask
+
+        """
         style = aui.AUI_NB_NO_TAB_FOCUS
         if wx.Platform == '__WXMAC__':
             style |= aui.AUI_NB_CLOSE_ON_TAB_LEFT
         return style
 
     def OnUpdateFont(self, msg):
+        """Update the font settings for the control in response to
+        user settings change.
+
+        """
         if self:
             self.UpdateFontSetting()
 
@@ -106,7 +115,6 @@ class GtkTabArt(aui.VC71TabArt):
         self._buttonRect = wx.Rect()
 
         # draw background
-        agwFlags = self.GetAGWFlags()
         r = wx.Rect(rect.x, rect.y, rect.width+2, rect.height)
 
         # draw base lines

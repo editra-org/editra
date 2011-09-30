@@ -23,7 +23,6 @@ __revision__ = "$Revision$"
 # Dependencies
 import wx
 import wx.lib.mixins.listctrl as listmix
-import locale
 import encodings
 import os
 import sys
@@ -200,6 +199,7 @@ class PrefTools(eclib.SegmentBook):
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
     def OnDestroy(self, evt):
+        """Cleanup message handlers when destroyed"""
         if evt.GetId() == self.GetId():
             ed_msg.Unsubscribe(self.OnThemeChange)
         evt.Skip()
@@ -224,6 +224,7 @@ class PrefTools(eclib.SegmentBook):
             self.Refresh()
 
     def OnPageChanging(self, evt):
+        """Handle notebook page change notifications"""
         sel = evt.GetSelection()
         page = self.GetPage(sel)
         if hasattr(page, 'DoSelected'):
@@ -271,7 +272,7 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
+        wx.Panel.__init__(self, parent, style=style)
         PreferencesPanelBase.__init__(self)
 
         # Attributes
@@ -375,6 +376,7 @@ class GeneralStartupPanel(wx.Panel):
         self._DoLayout()
 
     def _DoLayout(self):
+        """Do the panels layout"""
         msizer = wx.BoxSizer(wx.HORIZONTAL)
         msizer.AddMany([(wx.StaticText(self, label=_("Editor Mode") + u": "),
                          0, wx.ALIGN_CENTER_VERTICAL), ((5, 5), 0),
@@ -466,6 +468,7 @@ class GeneralFilePanel(wx.Panel):
                   id=ID_PREF_ENCHANT_PATH)
 
     def _DoLayout(self):
+        """Layout the panel"""
         # File settings
         fhsizer = wx.BoxSizer(wx.HORIZONTAL)
         fhsizer.AddMany([(wx.StaticText(self,
@@ -566,7 +569,7 @@ class GeneralFilePanel(wx.Panel):
         sdh_sz.AddMany([(dlbl, 0, wx.ALIGN_CENTER_VERTICAL),
                          ((5, 5), 0),
                          (dict_ch, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)])
-        sboxsz.AddMany([(auto_cb, 0), ((5,5),0), (sdh_sz, 0, wx.EXPAND)])
+        sboxsz.AddMany([(auto_cb, 0), ((5, 5), 0), (sdh_sz, 0, wx.EXPAND)])
 
         if not stcspellcheck.STCSpellCheck.isEnchantOk():
             for ctrl in (auto_cb, dict_ch, dlbl):
@@ -575,8 +578,10 @@ class GeneralFilePanel(wx.Panel):
         liblbl = wx.StaticText(self, label=_("Enchant Path") + u":")
         libpath = os.environ.get('PYENCHANT_LIBRARY_PATH', '')
         prefpath = sprefs.get('epath', libpath)
+        if not prefpath:
+            prefpath = u""
         libpicker = wx.FilePickerCtrl(self, ID_PREF_ENCHANT_PATH,
-                                      path=libpath,
+                                      path=prefpath,
                                       message=_("Path to libenchant"))
         libpicker.SetToolTipString(_("Path to libenchant"))
         lib_hsz = wx.BoxSizer(wx.HORIZONTAL)
@@ -587,8 +592,8 @@ class GeneralFilePanel(wx.Panel):
 
         vsizer = wx.BoxSizer(wx.VERTICAL)
         vsizer.AddMany([(sizer, 1, wx.EXPAND),
-                        ((5,5),0), (sboxsz, 0, wx.EXPAND),
-                        ((10,10),0)])
+                        ((5, 5), 0), (sboxsz, 0, wx.EXPAND),
+                        ((10, 10), 0)])
 
         msizer = wx.BoxSizer(wx.HORIZONTAL)
         msizer.AddMany([((10, 10), 0), (vsizer, 1, wx.EXPAND), ((10, 10), 0)])
@@ -615,12 +620,12 @@ class GeneralFilePanel(wx.Panel):
     def OnCustomBackupPath(self, evt):
         """Enable the use of a custom backup path"""
         e_obj = evt.GetEventObject()
-        eval = e_obj.GetValue()
+        event_val = e_obj.GetValue()
         dpick = self.FindWindowById(ID_PREF_BKUP_PATH)
-        if not eval:
+        if not event_val:
             dpick.SetPath(u"")
             Profile_Set('AUTOBACKUP_PATH', u"")
-        dpick.Enable(eval)
+        dpick.Enable(event_val)
 
     def OnDirChange(self, evt):
         """Update the backup directory path"""
@@ -663,7 +668,7 @@ class DocumentPanel(wx.Panel, PreferencesPanelBase):
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
+        wx.Panel.__init__(self, parent, style=style)
         PreferencesPanelBase.__init__(self)
 
     def _DoLayout(self):
@@ -1158,7 +1163,7 @@ class AppearancePanel(wx.Panel, PreferencesPanelBase):
         @param parent: Parent window of this panel
 
         """
-        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
+        wx.Panel.__init__(self, parent, style=style)
         PreferencesPanelBase.__init__(self)
 
         # Event Handlers
@@ -1332,7 +1337,7 @@ class NetworkPanel(wx.Panel, PreferencesPanelBase):
     """Network related configration options"""
     def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel"""
-        wx.Panel.__init__(self, parent, style=wx.BORDER_SUNKEN)
+        wx.Panel.__init__(self, parent, style=style)
         PreferencesPanelBase.__init__(self)
 
     def _DoLayout(self):
@@ -1613,7 +1618,7 @@ class AdvancedPanel(wx.Panel):
         @param parent: Parent window of this panel
 
         """
-        super(AdvancedPanel, self).__init__(parent, style=wx.BORDER_SUNKEN)
+        super(AdvancedPanel, self).__init__(parent, style=style)
 
         # Layout
         self._layout_done = False

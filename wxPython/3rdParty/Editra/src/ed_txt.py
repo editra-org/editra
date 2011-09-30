@@ -23,7 +23,6 @@ import time
 import wx
 import codecs
 import locale
-import types
 from StringIO import StringIO
 
 # Local Imports
@@ -289,7 +288,7 @@ class EdFile(ebmlib.FileObjectImpl):
             except LookupError, msg:
                 Log("[ed_txt][err] Invalid encoding: %s" % enc)
                 Log("[ed_txt][err] %s" % msg)
-                self.SetLastError(unicde(msg))
+                self.SetLastError(unicode(msg))
             except UnicodeEncodeError, msg:
                 Log("[ed_txt][err] Failed to encode text with %s" % enc)
                 Log("[ed_txt][err] %s" % msg)
@@ -720,7 +719,7 @@ def GuessEncoding(fname, sample):
         try:
             handle = open(fname, 'rb')
             reader = codecs.getreader(enc)(handle)
-            txt = reader.read(sample)
+            reader.read(sample)
             reader.close()
         except Exception, msg:
             handle.close()
@@ -745,7 +744,8 @@ def GetEncodings():
     encodings.append('utf-8')
 
     try:
-        encodings.append(locale.nl_langinfo(locale.CODESET))
+        if hasattr(locale, 'nl_langinfo'):
+            encodings.append(locale.nl_langinfo(locale.CODESET))
     except:
         pass
     try:
