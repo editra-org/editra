@@ -139,9 +139,12 @@ def HexToRGB(hex_str):
 
 def EmptyBitmapRGBA(width, height):
     """Create an empty bitmap with an alpha channel"""
-    bmp = wx.EmptyBitmap(width, height, 32)
-    if hasattr(bmp, 'UseAlpha'):
-        bmp.UseAlpha()
+    if hasattr(wx, 'EmptyBitmapRGBA'):
+        bmp = wx.EmptyBitmapRGBA(width, height, alpha=0)
+    else:
+        bmp = wx.EmptyBitmap(width, height, -1)
+        if hasattr(bmp, 'UseAlpha'):
+            bmp.UseAlpha()
     return bmp
 
 #-----------------------------------------------------------------------------#
@@ -184,9 +187,10 @@ def DrawCircleCloseBmp(colour, backColour=None, option=DRAW_CIRCLE_SMALL):
     radius = float(diameter) / 2.0
     xpath = defs['xpath']
 
-    bmp = EmptyBitmapRGBA(*size)
+    bmp = EmptyBitmapRGBA(size[0], size[1])
     dc = wx.MemoryDC()
     dc.SelectObject(bmp)
+    dc.Clear()
 
     gc = wx.GraphicsContext.Create(dc)
     gc.SetBrush(wx.Brush(colour))
