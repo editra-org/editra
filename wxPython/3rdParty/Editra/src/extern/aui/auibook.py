@@ -382,7 +382,7 @@ class CommandNotebookEvent(wx.PyCommandEvent):
         self.dispatched = 0
         self.label = ""
         self.editCancelled = False
-
+        self.page = None
 
     def SetSelection(self, s):
         """
@@ -484,6 +484,8 @@ class CommandNotebookEvent(wx.PyCommandEvent):
         self.label = label
 
 
+    Page      = property(lambda self: self.page,
+                         lambda self, page: setattr(self, 'page', page))
     Selection = property(lambda self: self.GetSelection(), lambda self, sel: self.SetSelection(sel))
 
 # ----------------------------------------------------------------------
@@ -2077,7 +2079,8 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         if wnd:
             e = AuiNotebookEvent(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, self.GetId())
             e.SetEventObject(self)
-            e.SetSelection(self.GetIdxFromWindow(wnd))
+            e.Selection = self.GetIdxFromWindow(wnd)
+            e.Page = wnd
             self.GetEventHandler().ProcessEvent(e)
         elif not self.ButtonHitTest(x, y):
             e = AuiNotebookEvent(wxEVT_COMMAND_AUINOTEBOOK_BG_RIGHT_UP, self.GetId())
