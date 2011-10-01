@@ -440,7 +440,7 @@ class EdPages(ed_book.EdBaseBook):
 
         """
         ctab = self.GetCurrentPage()
-        handler = self._menu.GetHandler(evt.GetId())
+        handler = self._menu.GetHandler(evt.Id)
         if handler is not None:
             handler(ctab, evt)
         elif ctab is not None:
@@ -542,9 +542,9 @@ class EdPages(ed_book.EdBaseBook):
         self._menu.Clear()
 
         # Construct the menu
-        tab = evt.GetSelection()
+        tab = self.GetPageIndex(evt.Page)
         if tab != self.GetSelection():
-            self.SetSelection(evt.GetSelection())
+            self.SetSelection(tab)
 
         ctab = self.GetCurrentPage()
         if ctab is not None:
@@ -1272,7 +1272,7 @@ class EdPages(ed_book.EdBaseBook):
         except wx.PyDeadObjectError:
             pass
 
-    def UpdateTextControls(self, meth=None, args=list()):
+    def UpdateTextControls(self):
         """Updates all text controls to use any new settings that have
         been changed since initialization.
         @postcondition: all stc controls in the notebook are reconfigured
@@ -1280,10 +1280,7 @@ class EdPages(ed_book.EdBaseBook):
 
         """
         for control in self.GetTextControls():
-            if meth is not None:
-                getattr(control, meth)(*args)
-            else:
-                control.UpdateAllStyles()
-                control.Configure()
+            control.UpdateAllStyles()
+            control.Configure()
 
 #---- End Function Definitions ----#
