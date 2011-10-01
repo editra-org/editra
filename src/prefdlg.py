@@ -40,6 +40,7 @@ import syntax.syntax as syntax
 import ed_msg
 import ed_txt
 import eclib
+import ed_menu
 import extern.stcspellcheck as stcspellcheck
 
 #----------------------------------------------------------------------------#
@@ -863,7 +864,7 @@ class DocGenPanel(wx.Panel):
         if ed_glob is None:
             import ed_glob
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         if e_id in [ed_glob.ID_PREF_TABS, ed_glob.ID_PREF_TABW,
                     ed_glob.ID_PREF_UNINDENT, ed_glob.ID_EOL_MODE,
                     ed_glob.ID_PREF_AALIAS, ed_glob.ID_SHOW_EOL,
@@ -872,15 +873,11 @@ class DocGenPanel(wx.Panel):
                     ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_AUTOTRIM,
                     ed_glob.ID_PREF_VIRT_SPACE ]:
 
-            e_value = evt.GetEventObject().GetValue()
+            e_value = evt.EventObject.GetValue()
             if e_id == ed_glob.ID_EOL_MODE:
-                e_value = evt.GetEventObject().GetSelection()
+                e_value = evt.EventObject.GetSelection()
 
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_value)
-
-            # Do updates for everything but autotrim whitespace
-            if e_id not in (ed_glob.ID_PREF_AUTOTRIM, ):
-                wx.CallLater(25, DoUpdates)
         else:
             evt.Skip()
 
@@ -1005,7 +1002,7 @@ class DocCodePanel(wx.Panel):
                     ed_glob.ID_PREF_DLEXER, ed_glob.ID_HLCARET_LINE,
                     ed_glob.ID_PREF_AUTOCOMPEX):
 
-            e_val = evt.GetEventObject().GetValue()
+            e_val = evt.EventObject.GetValue()
 
             # Update Profile
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_val)
@@ -1025,12 +1022,6 @@ class DocCodePanel(wx.Panel):
                 cbox = self.FindWindowById(ed_glob.ID_VI_NORMAL_DEFAULT)
                 if cbox is not None:
                     cbox.Enable(e_val)
-
-            if e_id == ed_glob.ID_PREF_AUTOCOMPEX:
-                return
-
-            # Inform views of preference changes
-            wx.CallLater(25, DoUpdates, meth, args)
         else:
             evt.Skip()
 
@@ -1678,7 +1669,7 @@ class KeyBindingPanel(wx.Panel):
         # Attributes
         self._dirty = False
         self.menub = wx.GetApp().GetActiveWindow().GetMenuBar()
-        self.binder = self.menub.GetKeyBinder()
+        self.binder = ed_menu.KeyBinder()
         self.menumap = dict()
 
         # Load the Menu Map
@@ -1794,7 +1785,6 @@ class KeyBindingPanel(wx.Panel):
                 self.FindWindowById(item).SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
         self.SetSizer(msizer)
-        self.SetAutoLayout(True)
 
         # Setup control status
         self.ClearKeyView()
@@ -2180,8 +2170,3 @@ def GetPrintModeStrings():
             _('Colour/Default'),    # PRINT_COLOR_DEF
             _('Inverse'),           # PRINT_INVERSE
             _('Normal')]            # PRINT_NORMAL
-
-def DoUpdates(meth=None, args=list()):
-    """Update all open text controls"""
-    for mainw in wx.GetApp().GetMainWindows():
-        mainw.nb.UpdateTextControls(meth, args)
