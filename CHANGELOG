@@ -26,6 +26,7 @@ when the editor is closed. They must now be saved manually. Only the builtin
 +Support folding docstrings in Python source code.
 +Add Command Bar for managing editing sessions, default key binding of Ctrl+K.
 +Add Delete All button to Bookmark manager Shelf window.
++Add close all option to shelf tab right click menu.
 
 LIBRARY:
 +Add FileTree class to eclib.
@@ -51,6 +52,7 @@ zero instead of the current caret position.
 the search direction is changed for a find next action.
 +Fix failure to detect correct syntax highlighting when extension manager
 had mappings with upper or mixed case letter.
++Fix some incorrect tab selection index issues when notebook was split.
 
 #-----------------------------------------------------------------------------#
 
