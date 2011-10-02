@@ -4,7 +4,7 @@
 
 #-----------------------------------------------------------------------------#
 Version 1.4
-Released: xx/xx/2011
+Released: 10/01/2011
 
 +Workaround focus issue in wxPython 2.9 TreeCtrl
 +Major improvements and fixes to Python scope handling.
