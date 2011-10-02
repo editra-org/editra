@@ -7,7 +7,7 @@
 
 #-----------------------------------------------------------------------------#
 Version 1.12
-Released:
+Released: 10/01/2011
 
 +Fix bug with handling initialization of color preferences on new installs.
 +Fix issue in class factory causing incorrect data display for handler classes

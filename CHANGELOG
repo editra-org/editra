@@ -10,11 +10,19 @@ Change Log:
 
 Changes since last release:
 
-VERSION 0.6.xx
-DATE 0x/xx/2011
+VERSION 0.6.76
+DATE 10/01/2011
 45th Alpha Release
 
 NEWS:
+
+New in this release is the new Session Manager bar for managing editing sessions.
+Along with the Session Manager the session feature has had a change to its
+behavior, only the Default session will automatically update. All other custom
+sessions require explicit saves to configure the set of files that belong in it.
+See the changelog below for details of other changes and bug fixes that are
+included in this release.
+
 
 NEW: [features/improvements]
 +Allow scrolling of the buffer from within the search bar with up/down keys.
@@ -27,6 +35,8 @@ when the editor is closed. They must now be saved manually. Only the builtin
 +Add Command Bar for managing editing sessions, default key binding of Ctrl+K.
 +Add Delete All button to Bookmark manager Shelf window.
 +Add close all option to shelf tab right click menu.
++New version of Launch Plugin (Bug fixes)
++New version of CodeBrowser (Python enhancements / wxPython 2.9 bug fixes)
 
 LIBRARY:
 +Add FileTree class to eclib.
