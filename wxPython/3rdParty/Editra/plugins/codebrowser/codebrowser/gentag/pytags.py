@@ -140,9 +140,11 @@ class PyFormatter(Formatter):
                 if len(line):
                     ltxt = u"".join([l[1].strip() for l in line])
                     if len(ltxt) and not ltxt.startswith(u"#"):
-                        self.pushPopScope(self._getLevel(line))
-                        if len(self._levels) == 1:
-                            container_list = [(0, u"", self.rtags)]
+                        if parselib.BeginsWithAnyOf(line, Token.Keyword,
+                                                    (u"def", u"class", u"if", u"else")):
+                            self.pushPopScope(self._getLevel(line))
+                            if len(self._levels) == 1:
+                                container_list = [(0, u"", self.rtags)]
 
                 # FUNCTION
                 #
