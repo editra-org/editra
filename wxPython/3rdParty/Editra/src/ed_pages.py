@@ -482,20 +482,21 @@ class EdPages(ed_book.EdBaseBook):
         @param evt: aui.EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN
 
         """
-        self.mdown = evt.GetSelection()
-        self.SetSelection(self.mdown)
-        self.LOG("[ed_pages][evt] OnMClickDown: %d" % self.mdown)
+        self.mdown = evt.Page
+        idx = self.GetPageIndex(self.mdown)
+        self.SetSelection(idx)
+        self.LOG("[ed_pages][evt] OnMClickDown: %d" % idx)
 
     def OnMClickUp(self, evt):
         """Handle tab middle click event
         @param evt: aui.EVT_AUINOTEBOOK_TAB_MIDDLE_UP
 
         """
-        sel = evt.GetSelection()
+        sel = self.GetPageIndex(evt.Page)
         self.LOG("[ed_pages][evt] OnMClickUp: %d" % sel)
-        if sel == self.mdown:
+        if evt.Page is self.mdown:
             self.ClosePage()
-        self.mdown = -1
+        self.mdown = None
 
     def OnNavigateToPos(self, evt):
         """Handle buffer position history navigation events"""
