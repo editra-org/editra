@@ -7,8 +7,18 @@ License: wxWindows
 Change Log:
 
 #-----------------------------------------------------------------------------#
-
 Changes since last release:
+
+VERSION 0.6.77
+DATE 10/02/2011
+46th Alpha Release
+
+NEWS:
+
+Just a rebuild of 0.6.76 to fix some system compatibility issues that some ran
+in to while using the new Windows binaries.
+
+#-----------------------------------------------------------------------------#
 
 VERSION 0.6.76
 DATE 10/01/2011
