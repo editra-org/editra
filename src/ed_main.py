@@ -768,7 +768,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     def DoSaveSessionAs(self):
         """Prompt the user to save the current session"""
         mgr = ed_session.EdSessionMgr()
-        cses = _PGET('LAST_SESSION')
+        cses = _PGET('LAST_SESSION', default=u"")
         if cses == mgr.DefaultSession:
             cses = u""
         fname = ebmlib.LockCall(self._mlock, wx.GetTextFromUser, 
