@@ -357,14 +357,15 @@ def BuildOSXApp():
     from setuptools import setup
 
     CleanBuild()
-
+    fextents = synextreg.GetFileExtensions()
+    fextents.append("*")
     PLIST = dict(CFBundleName = info.PROG_NAME,
              CFBundleIconFile = 'Editra.icns',
              CFBundleShortVersionString = info.VERSION,
              CFBundleGetInfoString = info.PROG_NAME + " " + info.VERSION,
              CFBundleExecutable = info.PROG_NAME,
              CFBundleIdentifier = "org.editra.%s" % info.PROG_NAME.title(),
-             CFBundleDocumentTypes = [dict(CFBundleTypeExtensions=synextreg.GetFileExtensions(),
+             CFBundleDocumentTypes = [dict(CFBundleTypeExtensions=fextents,
                                            CFBundleTypeIconFile='editra_doc',
                                            CFBundleTypeRole="Editor"
                                           ),
