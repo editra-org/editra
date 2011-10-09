@@ -126,7 +126,7 @@ class FileTree(wx.TreeCtrl):
         """
         pass
 
-    def GetFileImage(self, path):
+    def DoGetFileImage(self, path):
         """Get the index of the image from the image list to use
         for the file.
         @param path: Absolute path of file
@@ -183,7 +183,7 @@ class FileTree(wx.TreeCtrl):
         @return: new node
 
         """
-        img = self.GetFileImage(path)
+        img = self.DoGetFileImage(path)
         name = os.path.basename(path)
         child = self.AppendItem(item, name, img)
         self.SetPyData(child, path)
