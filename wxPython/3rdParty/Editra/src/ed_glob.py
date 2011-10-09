@@ -302,6 +302,7 @@ ID_VI_MODE           = wx.NewId()
 ID_VI_NORMAL_DEFAULT = wx.NewId()
 ID_WEB               = wx.NewId()
 ID_READONLY          = wx.NewId()
+ID_NEW_FOLDER        = wx.NewId()
 
 # Code Elements (ids for art provider)
 ID_CLASS_TYPE = wx.NewId()
