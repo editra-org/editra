@@ -17,6 +17,9 @@ NEWS:
 
 NEW: [features/improvements]
 
+LIBRARY:
++Add new themed art resource for New Folder
+
 BUG FIXES:
 +Fix middle mouse button not closing correct tab when notebook view has been split.
 +Fix some Unicode handling issues related to startup paths.
