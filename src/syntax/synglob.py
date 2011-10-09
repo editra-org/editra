@@ -153,7 +153,7 @@ def GetDescriptionFromId(lang_id):
 def GetIdFromDescription(desc):
     """Get the language identifier for the given file type string. The search
     is case insensitive.
-    @param desc: string (i.e "Python")
+    @param desc: unicode (i.e u"Python")
     @note: if lookup fails ID_LANG_TXT is returned
 
     """
@@ -162,8 +162,8 @@ def GetIdFromDescription(desc):
     # Guard against async code that may be modifying globals
     globs = dict(globals())
     for key, val in globs.iteritems():
-        if isinstance(val, basestring) and \
-           val.lower() == desc and key.startswith('LANG_'):
-            rval = globs.get(u"ID_" + key, ID_LANG_TXT)
-            break
+        if isinstance(val, unicode):
+            if val.lower() == desc and key.startswith('LANG_'):
+                rval = globs.get("ID_" + key, ID_LANG_TXT)
+                break
     return rval

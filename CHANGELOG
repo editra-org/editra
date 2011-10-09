@@ -19,6 +19,7 @@ NEW: [features/improvements]
 
 BUG FIXES:
 +Fix middle mouse button not closing correct tab when notebook view has been split.
++Fix some Unicode handling issues related to startup paths.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
