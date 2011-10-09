@@ -554,6 +554,8 @@ def ResolvConfigDir(config_dir, sys_only=False):
     # running as as a built package.
     if not hasattr(sys, 'frozen'):
         path = __file__
+        if not ebmlib.IsUnicode(path):
+            path = path.decode(sys.getfilesystemencoding())
         path = os.sep.join(path.split(os.sep)[:-2])
         path =  path + os.sep + config_dir + os.sep
         if os.path.exists(path):
@@ -561,7 +563,7 @@ def ResolvConfigDir(config_dir, sys_only=False):
                 path = unicode(path, sys.getfilesystemencoding())
             return path
 
-    # If we get here we need to do some platform dependant lookup
+    # If we get here we need to do some platform dependent lookup
     # to find everything.
     path = sys.argv[0]
     if not ebmlib.IsUnicode(path):

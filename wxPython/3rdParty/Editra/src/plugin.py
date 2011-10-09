@@ -693,7 +693,7 @@ class PluginManager(object):
                 self.LOG("[pluginmgr][info] %s is already loaded" % name)
                 continue
 
-            egg = pkg_env[name][0]  # egg is of type Distrobution
+            egg = pkg_env[name][0]  # egg is of type Distribution
             egg.activate()
             editra_version = CalcVersionValue(ed_glob.VERSION)
             for name in egg.get_entry_map(ENTRYPOINT):
