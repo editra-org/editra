@@ -41,16 +41,10 @@ class FileTree(wx.TreeCtrl):
 
         # Attributes
         self._watch = list() # Root directories to watch
-        self._il = wx.ImageList(16, 16)
-        
+        self._il = None
+
         # Setup
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_FOLDER, wx.ART_MENU, (16,16))
-        self._il.Add(bmp)
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_MENU, (16,16))
-        self._il.Add(bmp)
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16,16))
-        self._il.Add(bmp)
-        self.SetImageList(self._il)
+        self.SetupImageList()
         self.AddRoot('root')
         self.SetPyData(self.RootItem, "root")
 
@@ -126,6 +120,19 @@ class FileTree(wx.TreeCtrl):
         """
         pass
 
+    def DoSetupImageList(self):
+        """Add the images to the control's ImageList. It is gauranteed
+        that self.ImageList is valid and empty when this is called.
+
+        """
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_FOLDER, wx.ART_MENU, (16,16))
+        self.ImageList.Add(bmp)
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_MENU, (16,16))
+        self.ImageList.Add(bmp)
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16,16))
+        self.ImageList.Add(bmp)
+
+
     def DoGetFileImage(self, path):
         """Get the index of the image from the image list to use
         for the file.
@@ -175,6 +182,18 @@ class FileTree(wx.TreeCtrl):
                 if dname == data:
                     self.Delete(node)
                     break
+
+    def SetupImageList(self):
+        """Setup/Refresh the control's ImageList.
+        Override DoSetupImageList to customize the behavior of this method.
+
+        """
+        if self._il:
+            self._il.Destroy()
+            self._il = None
+        self._il = wx.ImageList(16, 16)
+        self.SetImageList(self._il)
+        self.DoSetupImageList()
 
     def AppendFileNode(self, item, path):
         """Append a child node to the tree
