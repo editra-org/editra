@@ -195,6 +195,8 @@ class PyCompleter(object):
 #        f = open('pycompout.py', 'w')
 #        f.write(src)
 #        f.close()
+        # NOTE: keep commented out in production code can cause slow down
+        #       when running in editra with DEBUG output.
 #        dbg("[pycomp][info] Generated source: %s" % src)
         try: 
             exec src in self.compldict
@@ -651,6 +653,8 @@ class PyParser(object):
         name = list()
         if pre is None:
             tokentype, token = self.next()[:2]
+            if token == '(':
+                self._parenparse()
             if tokentype != NAME and token != '*':
                 return ('', token)
         else:
@@ -659,6 +663,11 @@ class PyParser(object):
         name.append(token)
         while True:
             tokentype, token = self.next()[:2]
+            if token == '(':
+                # Handle 'self.foo(a,b,c)'
+                self._parenparse()
+                break
+
             if token != '.':
                 break
 
@@ -893,16 +902,16 @@ class PyParser(object):
                     ind = params.find('=')
                     if ind != -1:
                         params = params[:ind]
-                    newscope.local('%s = %s' % (scp.params[0], scp.parent.name))
+                    newscope.local('%s = %s' % (_sanitizeParam(scp.params[0]), scp.parent.name))
 
                 for param in scp.params[cut:]:
                     ind = param.find('=')
                     if len(param) == 0:
                         continue
                     if ind == -1:
-                        newscope.local('%s = _PyCmplNoType()' % param)
+                        newscope.local('%s = _PyCmplNoType()' % _sanitizeParam(param))
                     else:
-                        newscope.local('%s = %s' % (param[:ind], 
+                        newscope.local('%s = %s' % (_sanitizeParam(param[:ind]), 
                                                     _sanitize(param[ind+1:])))
 
             decls = scp.subscopes + scp.locals
@@ -931,7 +940,6 @@ class PyParser(object):
             freshscope = True
             while True:
                 tokentype, token, indent = self.next()
-
                 if tokentype == DEDENT or token == "pass":
                     self.scope = self.scope.pop(indent)
                 elif token == 'def':
@@ -1012,3 +1020,16 @@ def _sanitize(cstr):
         elif level == 0:
             val += char
     return val
+
+def _sanitizeParam(param):
+    """Cleanup a value string
+    value = foo
+    to ensure that 'value' is syntactically correct.
+
+    """
+    for i, c in enumerate(param):
+        if c.isalpha() or c == '_':
+            return param[i:]
+    else:
+        return param # something is wrong so let it bomb
+
