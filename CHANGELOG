@@ -16,6 +16,7 @@ DATE xx/xx/2011
 NEWS:
 
 NEW: [features/improvements]
++Improved Python autocompletion
 
 LIBRARY:
 +Add new themed art resource for New Folder
