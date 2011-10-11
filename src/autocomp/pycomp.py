@@ -84,6 +84,7 @@ class Completer(completer.BaseCompleter):
             if fname:
                 fpath = os.path.dirname(fname)
                 sys.path.insert(0, fpath)
+            snapshot = list(sys.modules.keys())
 
             t1 = time.time()
             cmpl.evalsource(self._buffer.GetText(),
@@ -92,6 +93,14 @@ class Completer(completer.BaseCompleter):
 
             if fname:
                 sys.path.pop(0)
+
+            # Dump any other modules that got brought in during eval
+            # so that they get properly updated on next pass through.
+            nsnapshot = sys.modules.keys()
+            if len(nsnapshot) != len(snapshot):
+                for k in nsnapshot:
+                    if k not in snapshot:
+                        del sys.modules[k]
 
             if calltip:
                 return cmpl.get_completions(command + u'(', u'', calltip)
