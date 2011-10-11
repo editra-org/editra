@@ -97,10 +97,9 @@ class Completer(completer.BaseCompleter):
             # Dump any other modules that got brought in during eval
             # so that they get properly updated on next pass through.
             nsnapshot = sys.modules.keys()
-            if len(nsnapshot) != len(snapshot):
-                for k in nsnapshot:
-                    if k not in snapshot:
-                        del sys.modules[k]
+            nimport = list(set(nsnapshot).difference(set(snapshot)))
+            for k in nimport:
+                del sys.modules[k]
 
             if calltip:
                 return cmpl.get_completions(command + u'(', u'', calltip)
