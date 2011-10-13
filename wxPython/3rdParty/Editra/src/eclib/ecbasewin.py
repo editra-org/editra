@@ -58,13 +58,12 @@ class ECBaseDlg(wx.Dialog):
 
         # Attributes
         self._panel = None
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
 
         # Setup
-        self.SetSizer(self._sizer)
+        self.SetSizer(wx.BoxSizer(wx.VERTICAL))
 
-    Panel = property(lambda self: self._panel,
-                     lambda self, val: setattr(self, '_panel', val))
+    Panel = property(lambda self: self.GetPanel(),
+                     lambda self, val: self.SetPanel(val))
 
     def GetPanel(self):
         """Get the dialogs main panel"""
@@ -76,4 +75,4 @@ class ECBaseDlg(wx.Dialog):
         if self._panel is not None:
             self._panel.Destroy()
         self._panel = panel
-        self._sizer.Add(self._panel, 1, wx.EXPAND)
+        self.Sizer.Add(self._panel, 1, wx.EXPAND)
