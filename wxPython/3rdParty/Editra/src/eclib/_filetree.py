@@ -161,12 +161,15 @@ class FileTree(wx.TreeCtrl):
     def AddWatchDirectory(self, dname):
         """Add a directory to the controls top level view
         @param dname: directory path
+        @return: TreeItem or None
+        @todo: add additional api for getting already existing nodes based
+               on path.
 
         """
         assert os.path.exists(dname)
         if dname not in self._watch:
             self._watch.append(dname)
-            self.AppendFileNode(self.RootItem, dname)
+            return self.AppendFileNode(self.RootItem, dname)
 
     def RemoveWatchDirectory(self, dname):
         """Remove a directory from the watch list
