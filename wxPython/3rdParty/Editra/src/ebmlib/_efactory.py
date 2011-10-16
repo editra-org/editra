@@ -111,6 +111,8 @@ class FactoryMixin:
             if scls.meta.id == identifier:
                 obj = scls(*args, **kwargs)
                 break
+        else:
+            obj = cls(*args, **kwargs) # Return base class
         return obj
 
     @classmethod
