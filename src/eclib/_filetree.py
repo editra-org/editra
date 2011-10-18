@@ -176,7 +176,6 @@ class FileTree(wx.TreeCtrl):
         @param dname: directory path
 
         """
-        assert os.path.exists(dname)
         if dname in self._watch:
             self._watch.remove(dname)
             nodes = self.GetChildNodes(self.RootItem)
