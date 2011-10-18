@@ -819,7 +819,7 @@ def InitConfig():
                 profiler.Profile_Set('LAST_SESSION', smgr.DefaultSession)
             else:
                 # After 0.6.58 session is reduced to a name instead of path
-                if os.path.sep in sess:
+                if sess and os.path.sep in sess:
                     name = smgr.SessionNameFromPath(sess)
                     profiler.Profile_Set('LAST_SESSION', name)
 
