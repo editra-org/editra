@@ -37,7 +37,7 @@ class FactoryTest(unittest.TestCase):
         self.assertTrue(isinstance(obj, BarWidget))
         self.assertTrue(obj.meta.data == 'NULL')
         obj = BaseWidget.FactoryCreate('junk')
-        self.assertTrue(obj is None)
+        self.assertTrue(type(obj) is BaseWidget)
 
 #-----------------------------------------------------------------------------#
 
