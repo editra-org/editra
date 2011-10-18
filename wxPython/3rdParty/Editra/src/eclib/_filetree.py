@@ -60,19 +60,23 @@ class FileTree(wx.TreeCtrl):
         tt = self.DoGetToolTip(item)
         if tt:
             evt.ToolTip = tt
-        evt.Skip()
+        else:
+            evt.Skip()
 
     def _OnItemActivated(self, evt):
         item = evt.GetItem()
         self.DoItemActivated(item)
+        evt.Skip()
 
     def _OnItemCollapsed(self, evt):
         item = evt.GetItem()
         self.DoItemCollapsed(item)
+        evt.Skip()
 
     def _OnItemExpanding(self, evt):
         item = evt.GetItem()
         self.DoItemExpanding(item)
+        evt.Skip()
 
     def _OnMenu(self, evt):
         item = evt.GetItem()
