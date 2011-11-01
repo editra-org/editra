@@ -1044,9 +1044,12 @@ class FindPanel(wx.Panel):
             else:
                 evt.SetReplaceString(None)
 
+            if stype >= LOCATION_IN_FILES or stype == LOCATION_IN_CURRENT_DIR:
+                evt.SetFileFilters(self.GetFileFilters())
             if stype >= LOCATION_IN_FILES:
+                # For IN_CURRENT_DIR it is up to client to determine directory
+                # based on what current means to the application.
                 evt.SetDirectory(self._paths.get(lookin_idx, u''))
-                evt.SetFileFilters(self._filters.GetValue())
 
             wx.PostEvent(self.GetParent(), evt)
             return True
