@@ -820,7 +820,7 @@ class FindPanel(wx.Panel):
         # File Filters
         self._sizers['filter'] = wx.BoxSizer(wx.VERTICAL)
         self._filters = wx.TextCtrl(self)
-        tt_txt = _("Enter wildcard shell patterns for matching files (*.txt).")
+        tt_txt = _("Wildcard shell patterns for matching files (*.txt *.html).")
         self._filters.SetToolTipString(tt_txt)
 
         # Disable spell checking on mac for this control
