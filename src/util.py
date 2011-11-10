@@ -756,7 +756,7 @@ class IntValidator(wx.PyValidator):
         self._min = min_
         self._max = max_
 
-        # Event managment
+        # Event management
         self.Bind(wx.EVT_CHAR, self.OnChar)
 
     def Clone(self):

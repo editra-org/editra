@@ -6,6 +6,12 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.13
+Released: xx/xx/2011
+
++Add configuration for number of lines to buffer in the output display.
+
+#-----------------------------------------------------------------------------#
 Version 1.12
 Released: 10/01/2011
 
