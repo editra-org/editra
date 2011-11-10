@@ -279,6 +279,7 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         util.Log("[Launch][info] Saving config to profile")
         self.RefreshControlBar()
         self._buffer.UpdateWrapMode()
+        self._buffer.UpdateBuffering()
         self.UpdateBufferColors()
 
     @ed_msg.mwcontext
@@ -628,6 +629,7 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
                                                     wx.FONTWEIGHT_NORMAL))
         self.SetFont(font)
         self.UpdateWrapMode()
+        self.UpdateBuffering()
 
     Preferences = property(lambda self: Profile_Get(handlers.CONFIG_KEY, default=dict()),
                            lambda self, prefs: Profile_Set(handlers.CONFIG_KEY, prefs))
@@ -719,6 +721,10 @@ class OutputDisplay(eclib.OutputBuffer, eclib.ProcessBufferMixin):
         lang_id = self.GetParent().GetLastRun()[1]
         handler = handlers.GetHandlerById(lang_id)
         return handler
+
+    def UpdateBuffering(self):
+        """Update line buffering settings"""
+        self.SetLineBuffering(self.Preferences.get('linebuffer', 1000))
 
     def UpdateWrapMode(self):
         """Update the word wrapping mode"""

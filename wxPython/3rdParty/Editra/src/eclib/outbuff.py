@@ -270,6 +270,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         self._updates = list()
         self.ApplyStyles(start, txt)
         self.SetReadOnly(True)
+        self.RefreshBufferedLines()
         self._updating.release()
 
     def __SetupStyles(self, font=None):
@@ -470,12 +471,11 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         if self._line_buffer < 0:
             return
 
+        self.SetReadOnly(False)
         while self.GetLineCount() > self._line_buffer:
             self.SetCurrentPos(0)
-            self.SetReadOnly(False)
             self.LineDelete()
-            self.SetReadOnly(True)
-
+        self.SetReadOnly(True)
         self.SetCurrentPos(self.GetLength())
 
     def SetDefaultColor(self, fore=None, back=None):
