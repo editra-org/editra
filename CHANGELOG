@@ -26,6 +26,7 @@ BUG FIXES:
 +Fix some Unicode handling issues related to startup paths.
 +Fix error case in updating session storage schema from older versions of application.
 +Fix file filters not working with find in current directory option.
++Fix text selection foreground color in OutputBuffer derived windows.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
