@@ -10,6 +10,8 @@ Version 1.13
 Released: xx/xx/2011
 
 +Add configuration for number of lines to buffer in the output display.
++Fix incorrect behavior of Clear Between Runs feature that was clearing the
+buffer when the abort button was clicked instead of right before next launch.
 
 #-----------------------------------------------------------------------------#
 Version 1.12
