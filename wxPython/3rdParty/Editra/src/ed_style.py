@@ -994,7 +994,7 @@ class StyleMgr(object):
         if sum(sback.Get()) < 384:
             self.SetSelForeground(True, wx.WHITE)
         else:
-            self.SetSelForeground(False, wx.BLACK)
+            self.SetSelForeground(True, wx.BLACK)
         self.SetSelBackground(True, sback)
 
         # Causes issues with selecting text when view whitespace is on

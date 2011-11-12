@@ -158,6 +158,12 @@ class OutputBufferEvent(wx.PyCommandEvent):
         self._value = value
         self._errmsg = None
 
+    #---- Properties ----#
+    Value = property(lambda self: self.GetValue(),
+                     lambda self, v: setattr(self, '_value', v))
+    ErrorMessage = property(lambda self: self.GetErrorMessage(),
+                            lambda self, msg: self.SetErrorMessage(msg))
+
     def GetValue(self):
         """Returns the value from the event.
         @return: the value of this event
@@ -189,7 +195,7 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
     """OutputBuffer is a general purpose output display for showing text. It
     provides an easy interface for the buffer to interact with multiple threads
     that may all be sending updates to the buffer at the same time. Methods for
-    styleing and filtering output are also available.
+    styling and filtering output are also available.
 
     """
     def __init__(self, parent, id=wx.ID_ANY,
@@ -250,6 +256,10 @@ class OutputBuffer(wx.stc.StyledTextCtrl):
         # Define Styles
         highlight = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
         self.SetSelBackground(True, highlight)
+        if sum(highlight.Get()) < 384:
+            self.SetSelForeground(True, wx.WHITE)
+        else:
+            self.SetSelForeground(True, wx.BLACK)
         self.__SetupStyles()
 
     def FlushBuffer(self):
