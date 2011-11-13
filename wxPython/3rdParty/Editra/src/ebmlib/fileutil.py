@@ -20,7 +20,8 @@ __revision__ = "$Revision$"
 __all__ = [ 'GetAbsPath', 'GetFileExtension', 'GetFileModTime', 'GetFileName',
             'GetFileSize', 'GetPathName', 'GetPathFromURI', 'GetUniqueName', 
             'IsLink', 'MakeNewFile', 'MakeNewFolder', 'PathExists',
-            'ResolveRealPath', 'IsExecutable', 'Which', 'ComparePaths']
+            'ResolveRealPath', 'IsExecutable', 'Which', 'ComparePaths',
+            'AddFileExtension']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -63,6 +64,19 @@ def uri2path(func):
     return WrapURI
 
 #-----------------------------------------------------------------------------#
+
+def AddFileExtension(path, ext):
+    """Add a file extension to a path if it doesn't already exist
+    @param path: file path
+    @param ext: file extension
+
+    """
+    assert isinstance(ext, basestring)
+    if not ext.startswith('.'):
+        ext = '.' + ext
+    if not path.endswith(ext):
+        path = path + ext
+    return path
 
 def ComparePaths(path1, path2):
     """Determine whether the two given paths are equivalent
