@@ -43,6 +43,15 @@ class FileUtilTest(unittest.TestCase):
 
     #---- Tests ----#
 
+    def testAddFileExtension(self):
+        """Test adding file extension to a filename"""
+        name = ebmlib.AddFileExtension('foo', 'py')
+        self.assertEquals('foo.py', name)
+        name = ebmlib.AddFileExtension('bar', '.py')
+        self.assertEquals('bar.py', name)
+        name = ebmlib.AddFileExtension('foobar.py', 'py')
+        self.assertEquals('foobar.py', name)
+
     def testComparePaths(self):
         """Test functionality of ComparePaths function"""
         # Test case sensitivity
