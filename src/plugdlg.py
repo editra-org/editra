@@ -35,6 +35,7 @@ import ed_msg
 import util
 import ed_txt
 from profiler import Profile_Get, Profile_Set
+import ed_basewin
 import eclib
 
 #-----------------------------------------------------------------------------#
@@ -430,7 +431,7 @@ class ConfigPanel(eclib.ControlBox):
 
 #-----------------------------------------------------------------------------#
 
-class DownloadPanel(eclib.ControlBox):
+class DownloadPanel(ed_basewin.EdBaseCtrlBox):
     """Creates a panel with controls for downloading plugins."""
     ID_DOWNLOAD = wx.NewId()
     EGG_PATTERN = re.compile(r"(?P<name>[^-]+)"
@@ -438,9 +439,9 @@ class DownloadPanel(eclib.ControlBox):
     re.VERBOSE | re.IGNORECASE
     ).match
 
-    def __init__(self, parent, style=wx.NO_BORDER):
+    def __init__(self, parent):
         """Initializes the panel"""
-        eclib.ControlBox.__init__(self, parent, style=style)
+        super(DownloadPanel, self).__init__(parent)
 
         # Attributes
         self._p_list = dict()           # list of available plugins/meta
@@ -450,9 +451,7 @@ class DownloadPanel(eclib.ControlBox):
         self._list = eclib.PanelBox(self)
 
         # Layout Panel
-        self.CreateControlBar(wx.BOTTOM)
-        cbar = self.GetControlBar(wx.BOTTOM)
-        cbar.SetVMargin(1, 2)
+        cbar = self.CreateControlBar(wx.BOTTOM)
         cbar.AddStretchSpacer()
         self._downlb = wx.Button(cbar, DownloadPanel.ID_DOWNLOAD, _("Download"))
         self._downlb.Disable()
@@ -735,19 +734,19 @@ def _DownloadPlugin(*args):
 
 #-----------------------------------------------------------------------------#
 
-class InstallPanel(eclib.ControlBox):
+class InstallPanel(ed_basewin.EdBaseCtrlBox):
     """Creates a panel for installing plugins."""
     ID_INSTALL = wx.NewId()
     ID_USER = wx.NewId()
     ID_SYS = wx.NewId()
     ID_REMOVE_ITEM = wx.NewId()
 
-    def __init__(self, parent, style=wx.NO_BORDER):
+    def __init__(self, parent):
         """Initializes the panel"""
-        eclib.ControlBox.__init__(self, parent, style=style)
+        super(InstallPanel, self).__init__(parent)
 
         # Attributes
-        self.CreateControlBar(wx.BOTTOM)
+        bbar = self.CreateControlBar(wx.BOTTOM)
         toolt = wx.ToolTip(_("To add a new item drag and drop the plugin file "
                              "into the list.\n\nTo remove an item select it "
                              "and hit Delete or Backspace."))
@@ -757,8 +756,6 @@ class InstallPanel(eclib.ControlBox):
         self._install.SetDropTarget(util.DropTargetFT(self._install,
                                                       None, self.OnDrop))
 
-        bbar = self.GetControlBar(wx.BOTTOM)
-        bbar.SetVMargin(1, 2)
         self._instb = wx.Button(bbar, self.ID_INSTALL, _("Install"))
         self._instb.Disable()
         self._usercb = wx.CheckBox(bbar, self.ID_USER, _("User Directory"))

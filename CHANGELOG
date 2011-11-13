@@ -30,6 +30,7 @@ BUG FIXES:
 +Fix text selection foreground color in OutputBuffer derived windows.
 +Fix issue with some style sheets not being able to be loaded in StyleEditor on
 case sensitive file systems.
++Fix some minor cosmetic issues when running under GTK.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
