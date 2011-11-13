@@ -1080,7 +1080,7 @@ class DocSyntaxPanel(wx.Panel):
         # Syntax Settings
         syn_cb = wx.CheckBox(self, ed_glob.ID_SYNTAX, _("Syntax Highlighting"))
         syn_cb.SetValue(Profile_Get('SYNTAX'))
-        ss_lst = util.GetResourceFiles(u'styles', get_all=True)
+        ss_lst = util.GetResourceFiles(u'styles', get_all=True, title=False)
         ss_lst = [sheet for sheet in ss_lst if not sheet.startswith('.')]
         syntheme = ExChoice(self, ed_glob.ID_PREF_SYNTHEME,
                             choices=sorted(ss_lst),

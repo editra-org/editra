@@ -20,6 +20,7 @@ NEW: [features/improvements]
 
 LIBRARY:
 +Add new themed art resource for New Folder
++Minor extensions to file utility functions (AddFileExtension)
 
 BUG FIXES:
 +Fix middle mouse button not closing correct tab when notebook view has been split.
@@ -27,6 +28,8 @@ BUG FIXES:
 +Fix error case in updating session storage schema from older versions of application.
 +Fix file filters not working with find in current directory option.
 +Fix text selection foreground color in OutputBuffer derived windows.
++Fix issue with some style sheets not being able to be loaded in StyleEditor on
+case sensitive file systems.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
