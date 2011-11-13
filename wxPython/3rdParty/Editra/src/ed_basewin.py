@@ -132,7 +132,10 @@ class EdBaseCtrlBox(eclib.ControlBox):
         cbar = super(EdBaseCtrlBox, self).CreateControlBar(pos)
         cbar.__class__ = EdBaseCtrlBar
         if wx.Platform == '__WXGTK__':
-            cbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT)
+            cbar.SetWindowStyle(eclib.CTRLBAR_STYLE_DEFAULT|\
+                                eclib.CTRLBAR_STYLE_BORDER_TOP|\
+                                eclib.CTRLBAR_STYLE_BORDER_BOTTOM)
+        cbar.SetMargins(2,2)
         return cbar
 
 class EdBaseCtrlBar(eclib.ControlBar):
