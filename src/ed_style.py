@@ -34,6 +34,7 @@ import ed_glob
 import util
 from profiler import Profile_Get, Profile_Set
 import eclib
+import ebmlib
 
 # Globals
 STY_ATTRIBUTES     = (u"face", u"fore", u"back", u"size", u"modifiers")
@@ -581,16 +582,14 @@ class StyleMgr(object):
         """
         if sheet_name:
             style = sheet_name
-            if sheet_name.split(u'.')[-1] != u"ess":
-                style += u".ess"
-        elif Profile_Get('SYNTHEME', 'str').split(u'.')[-1] != u"ess":
-            style = (Profile_Get('SYNTHEME', 'str') + u".ess").lower()
         else:
-            style = Profile_Get('SYNTHEME', 'str').lower()
+            style = Profile_Get('SYNTHEME', 'str')
+        style = ebmlib.AddFileExtension(style, u'.ess').lower()
 
         # Get Correct Filename if it exists
-        for sheet in util.GetResourceFiles(u'styles', False, True, title=False):
-            if sheet.lower() == style.lower():
+        for sheet in util.GetResourceFiles(u'styles', trim=False, 
+                                           get_all=True, title=False):
+            if sheet.lower() == style:
                 style = sheet
                 break
 
