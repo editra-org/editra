@@ -67,7 +67,6 @@ global_style {
 
 line_num {
         back:#C0C0C0;
-        size:%(size3)d;
 }
 
 pre2_style {
