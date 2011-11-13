@@ -127,7 +127,6 @@ keyword4_style {
 line_num {
         fore:#FFEEDD;
         back:#242787;
-        size:%(size3)d;
 }
 
 margin_style {
