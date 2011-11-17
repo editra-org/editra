@@ -21,7 +21,7 @@ __all__ = [ 'GetAbsPath', 'GetFileExtension', 'GetFileModTime', 'GetFileName',
             'GetFileSize', 'GetPathName', 'GetPathFromURI', 'GetUniqueName', 
             'IsLink', 'MakeNewFile', 'MakeNewFolder', 'PathExists',
             'ResolveRealPath', 'IsExecutable', 'Which', 'ComparePaths',
-            'AddFileExtension']
+            'AddFileExtension', 'GetDirectoryObject', 'File', 'Directory']
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -240,6 +240,62 @@ def Which(program):
             if IsExecutable(exe_file):
                 return exe_file        
     return None
+
+def GetDirectoryObject(path, recurse=True, includedot=False):
+    """Gets a L{Directory} object representing the filesystem of the
+    given path.
+    @param path: base path to list
+    @keyword recurse: recurse into subdirectories
+    @keyword includedot: include '.' files
+    @return: L{Directory} object instance
+
+    """
+    assert os.path.isdir(path)
+    pjoin = os.path.join
+    def _BuildDir(thedir):
+        for fname in os.listdir(thedir.Path):
+            if not includedot and fname.startswith('.'):
+                continue
+            fpath = pjoin(thedir.Path, fname)
+            if os.path.isdir(fpath):
+                newobj = Directory(fpath)
+                if recurse:
+                    _BuildDir(newobj)
+            else:
+                newobj = File(fpath)
+            thedir.Files.append(newobj)
+    dobj = Directory(path)
+    _BuildDir(dobj)
+    return dobj
+
+#-----------------------------------------------------------------------------#
+
+class File(object):
+    """Basic file data structure"""
+    __slots__ = ('path',)
+    def __init__(self, path):
+        super(File, self).__init__()
+
+        self.path = path
+
+    Path = property(lambda self: self.path)
+
+    def __str__(self):
+        return self.Path
+
+class Directory(File):
+    """Basic directory data structure.
+    Is a container class that provides a simple in memory representation of
+    a file system.
+
+    """
+    __slots__ = ('files',)
+    def __init__(self, path):
+        super(Directory, self).__init__(path)
+
+        self.files = list()
+
+    Files = property(lambda self: self.files)
 
 #-----------------------------------------------------------------------------#
 
