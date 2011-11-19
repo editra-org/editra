@@ -66,6 +66,9 @@ def modalcheck(func):
 class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
     """Tab editor view for main notebook control."""
     ID_NO_SUGGEST = wx.NewId()
+    ID_ADD_TO_DICT = wx.NewId()
+    ID_IGNORE = wx.NewId()
+    ID_SPELLING_MENU = wx.NewId()
     ID_CLOSE_TAB = wx.NewId()
     ID_CLOSE_ALL_TABS = wx.NewId()
     DOCMGR = DocPositionMgr()
@@ -320,17 +323,37 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         @param evt: MenuEvent
 
         """
-        e_id = evt.GetId()
-        replace = None
-        for choice in self._spell_data['choices']:
-            if e_id == choice[0]:
-                replace = choice[1]
-                break
+        e_id = evt.Id
+        spelld = self._spell.getSpellingDictionary()
+        if e_id == EdEditorView.ID_ADD_TO_DICT:
+            # Permanently add to users spelling dictionary
+            if spelld:
+                spelld.add(self._spell_data['word'][0])
+                self.RefreshSpellcheck()
+        elif e_id == EdEditorView.ID_IGNORE:
+            # Ignore spelling for this session
+            if spelld:
+                spelld.add_to_session(self._spell_data['word'][0])
+                self.RefreshSpellcheck()
+        else:
+            replace = None
+            for choice in self._spell_data['choices']:
+                if e_id == choice[0]:
+                    replace = choice[1]
+                    break
 
-        if replace is not None:
-            buff.SetTargetStart(self._spell_data['word'][1])
-            buff.SetTargetEnd(self._spell_data['word'][2])
-            buff.ReplaceTarget(replace)
+            if replace is not None:
+                buff.SetTargetStart(self._spell_data['word'][1])
+                buff.SetTargetEnd(self._spell_data['word'][2])
+                buff.ReplaceTarget(replace)
+
+    def RefreshSpellcheck(self):
+        """Refresh the visible text area for spellchecking"""
+        fline = self.GetFirstVisibleLine()
+        first = self.GetLineStartPosition(fline)
+        lline = self.GetLastVisibleLine()
+        last = self.GetLineEndPosition(lline)
+        self._spell.addDirtyRange(first, last, 0, False)
 
     def OnTabMenu(self, evt):
         """Tab menu event handler"""
@@ -448,7 +471,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_CONTEXT_MENU,
                            self._menu, self.GetId())
 
-        # Spell checking
+        #### Spell checking ####
         # TODO: de-couple to the forthcoming buffer service interface
         menu.InsertSeparator(0)
         words = self.GetWordFromPosition(bpos)
@@ -467,11 +490,24 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
             ids = (ID_SPELL_1, ID_SPELL_2, ID_SPELL_3)
             del self._spell_data['choices']
             self._spell_data['choices'] = list()
+            pos = 0
             for idx, sug in enumerate(sugg):
                 id_ = ids[idx] 
                 self._menu.AddHandler(id_, self.OnSpelling)
                 self._spell_data['choices'].append((id_, sug))
                 menu.Insert(0, id_, sug)
+                pos += 1
+            # Add spelling settings menu
+            smenu = wx.Menu()
+            smenu.Append(EdEditorView.ID_IGNORE, _("Ignore"))
+            self._menu.AddHandler(EdEditorView.ID_IGNORE, self.OnSpelling)
+            smenu.Append(EdEditorView.ID_ADD_TO_DICT,
+                         _("Add '%s' to dictionary") % self._spell_data['word'][0])
+            self._menu.AddHandler(EdEditorView.ID_ADD_TO_DICT, self.OnSpelling)
+            menu.InsertSeparator(pos)
+            menu.InsertMenu(pos+1, EdEditorView.ID_SPELLING_MENU,
+                            _("Spelling"), smenu)
+        #### End Spell Checking ####
 
         self.PopupMenu(self._menu.Menu)
         evt.Skip()

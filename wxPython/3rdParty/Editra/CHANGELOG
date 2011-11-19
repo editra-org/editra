@@ -17,6 +17,8 @@ NEWS:
 
 NEW: [features/improvements]
 +Improved Python autocompletion
++Add ability to customize spelling dictionary and behavior. Can now Ignore
+spellings (per session) or Add words to the dictionary (permanent).
 
 LIBRARY:
 +Add new themed art resource for New Folder
