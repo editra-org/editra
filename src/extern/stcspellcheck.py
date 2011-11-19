@@ -223,7 +223,15 @@ class STCSpellCheck(object):
         """
         cls._spelling_lang = lang
         cls._spelling_dict = cls._getDict(lang)
-    
+
+    @classmethod
+    def getSpellingDictionary(cls):
+        """Get the currently used spelling dictionary
+        @return: enchant.Dict instance or None
+
+        """
+        return cls._spelling_dict
+
     def setLanguage(self, lang):
         """Set the language for spelling check for this class, if different than
         the default.
