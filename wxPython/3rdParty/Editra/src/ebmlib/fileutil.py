@@ -272,16 +272,23 @@ def GetDirectoryObject(path, recurse=True, includedot=False):
 
 class File(object):
     """Basic file data structure"""
-    __slots__ = ('path',)
+    __slots__ = ('path', 'modtime')
     def __init__(self, path):
         super(File, self).__init__()
 
         self.path = path
+        self.modtime = GetFileModTime(self.path)
 
     Path = property(lambda self: self.path)
+    ModTime = property(lambda self: self.modtime,
+                       lambda self, mod: setattr(self, 'modtime', mod))
 
     def __str__(self):
         return self.Path
+
+    def __eq__(self, other):
+        assert isinstance(other, File)
+        return ComparePaths(self.Path, other.Path)
 
 class Directory(File):
     """Basic directory data structure.

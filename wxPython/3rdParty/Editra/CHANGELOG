@@ -23,6 +23,8 @@ spellings (per session) or Add words to the dictionary (permanent).
 LIBRARY:
 +Add new themed art resource for New Folder
 +Minor extensions to file utility functions (AddFileExtension)
++Add DirectoryMonitor class to ebmlib to provide notifications to changes to
+files in a directory.
 
 BUG FIXES:
 +Fix middle mouse button not closing correct tab when notebook view has been split.
