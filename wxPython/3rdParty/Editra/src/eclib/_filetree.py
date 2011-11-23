@@ -37,11 +37,13 @@ class FileTree(wx.TreeCtrl):
                                              wx.TR_FULL_ROW_HIGHLIGHT|
                                              wx.TR_LINES_AT_ROOT|
                                              wx.TR_HAS_BUTTONS|
-                                             wx.TR_MULTIPLE)
+                                             wx.TR_MULTIPLE|
+                                             wx.TR_EDIT_LABELS)
 
         # Attributes
         self._watch = list() # Root directories to watch
         self._il = None
+        self._editlabels = True
 
         # Setup
         self.SetupImageList()
@@ -54,6 +56,27 @@ class FileTree(wx.TreeCtrl):
         self.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self._OnItemCollapsed)
         self.Bind(wx.EVT_TREE_ITEM_EXPANDING, self._OnItemExpanding)
         self.Bind(wx.EVT_TREE_ITEM_MENU, self._OnMenu)
+        self.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._OnBeginEdit)
+        self.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._OnEndEdit)
+
+    def _OnBeginEdit(self, evt):
+        if not self._editlabels:
+            evt.Veto()
+        else:
+            item = evt.GetItem()
+            if self.DoBeginEdit(item):
+                evt.Skip()
+            else:
+                evt.Veto()
+
+    def _OnEndEdit(self, evt):
+        if self._editlabels:
+            item = evt.GetItem()
+            newlabel = evt.GetLabel()
+            if self.DoEndEdit(item, newlabel):
+                evt.Skip()
+                return
+        evt.Veto()
 
     def _OnGetToolTip(self, evt):
         item = evt.GetItem()
@@ -83,6 +106,25 @@ class FileTree(wx.TreeCtrl):
         self.DoShowMenu(item)
 
     #---- Overridable methods ----#
+
+    def DoBeginEdit(self, item):
+        """Overridable method that will be called when
+        a user has started to edit an item.
+        @param item: TreeItem
+        return: bool (True == Allow Edit)
+
+        """
+        return False
+
+    def DoEndEdit(self, item, newlabel):
+        """Overridable method that will be called when
+        a user has finished editing an item.
+        @param item: TreeItem
+        @param newlabel: unicode (newly entered value)
+        return: bool (True == Change Accepted)
+
+        """
+        return False
 
     def DoGetToolTip(self, item):
         """Get the tooltip to show for an item
@@ -266,6 +308,14 @@ class FileTree(wx.TreeCtrl):
         nodes = self.GetSelections()
         files = [ self.GetPyData(node) for node in nodes ]
         return files
+
+    def EnableLabelEditing(self, enable=True):
+        """Enable/Disable label editing. This functionality is
+        enabled by default.
+        @keyword enable: bool
+
+        """
+        self._editlabels = enable
 
     def SelectFile(self, filename):
         """Select the given path
