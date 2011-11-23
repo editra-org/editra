@@ -235,6 +235,29 @@ class FileTree(wx.TreeCtrl):
             rlist.append(child)
         return rlist
 
+    def GetExpandedNodes(self):
+        """Get all nodes that are currently expanded in the view
+        this logically corresponds to all parent directory nodes which
+        are expanded.
+        @return: list of TreeItems
+
+        """
+        def NodeWalker(parent, rlist):
+            """Recursively find expanded nodes
+            @param parent: parent node
+            @param rlist: list (outparam)
+
+            """
+            children = self.GetChildNodes(parent)
+            for node in children:
+                if self.IsExpanded(node):
+                    rlist.append(node)
+                    NodeWalker(node, rlist)
+
+        nodes = list()
+        NodeWalker(self.RootItem, nodes)
+        return nodes
+
     def GetSelectedFiles(self):
         """Get a list of the selected files
         @return: list of strings
