@@ -420,26 +420,8 @@ def GetFileWriter(file_name, enc='utf-8'):
         writer = file_h
     return writer
 
-def GetFileManagerCmd():
-    """Get the file manager open command for the current os. Under linux
-    it will check for xdg-open, nautilus, konqueror, and Thunar, it will then
-    return which one it finds first or 'nautilus' it finds nothing.
-    @return: string
-
-    """
-    if wx.Platform == '__WXMAC__':
-        return 'open'
-    elif wx.Platform == '__WXMSW__':
-        return 'explorer'
-    else:
-        # Check for common linux filemanagers returning first one found
-        #          Gnome/ubuntu KDE/kubuntu  xubuntu
-        for cmd in ('xdg-open', 'nautilus', 'konqueror', 'Thunar'):
-            result = os.system("which %s > /dev/null" % cmd)
-            if result == 0:
-                return cmd
-        else:
-            return 'nautilus'
+# TODO: DEPRECATED - remove once callers migrate to ebmlib
+GetFileManagerCmd = ebmlib.GetFileManagerCmd
 
 def GetUserConfigBase():
     """Get the base user configuration directory path"""

@@ -21,14 +21,17 @@ __all__ = [ 'GetAbsPath', 'GetFileExtension', 'GetFileModTime', 'GetFileName',
             'GetFileSize', 'GetPathName', 'GetPathFromURI', 'GetUniqueName', 
             'IsLink', 'MakeNewFile', 'MakeNewFolder', 'PathExists',
             'ResolveRealPath', 'IsExecutable', 'Which', 'ComparePaths',
-            'AddFileExtension', 'GetDirectoryObject', 'File', 'Directory']
+            'AddFileExtension', 'GetDirectoryObject', 'File', 'Directory',
+            'GetFileManagerCmd', 'OpenWithFileManager']
 
 #-----------------------------------------------------------------------------#
 # Imports
+import wx
 import os
 import platform
 import urllib2
 import stat
+import subprocess
 
 UNIX = WIN = False
 if platform.system().lower() in ['windows', 'microsoft']:
@@ -223,6 +226,35 @@ def ResolveRealPath(link):
     else:
         realpath = os.path.realpath(link)
     return realpath
+
+def GetFileManagerCmd():
+    """Get the file manager open command for the current os. Under linux
+    it will check for xdg-open, nautilus, konqueror, and Thunar, it will then
+    return which one it finds first or 'nautilus' it finds nothing.
+    @return: string
+
+    """
+    if wx.Platform == '__WXMAC__':
+        return 'open'
+    elif wx.Platform == '__WXMSW__':
+        return 'explorer'
+    else:
+        # Check for common linux filemanagers returning first one found
+        #          Gnome/ubuntu KDE/kubuntu  xubuntu
+        for cmd in ('xdg-open', 'nautilus', 'konqueror', 'Thunar'):
+            result = os.system("which %s > /dev/null" % cmd)
+            if result == 0:
+                return cmd
+        else:
+            return 'nautilus'
+
+def OpenWithFileManager(path):
+    """Open the given path with the systems file manager
+    @param path: file/directory path
+
+    """
+    cmd = GetFileManagerCmd()
+    subprocess.call([cmd, path])
 
 def Which(program):
     """Find the path of the given executable
