@@ -280,6 +280,7 @@ class File(object):
         self.modtime = GetFileModTime(self.path)
 
     Path = property(lambda self: self.path)
+    Name = property(lambda self: os.path.basename(self.Path))
     ModTime = property(lambda self: self.modtime,
                        lambda self, mod: setattr(self, 'modtime', mod))
 
