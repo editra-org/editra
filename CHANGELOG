@@ -20,6 +20,7 @@ NEW: [features/improvements]
 +Add ability to customize spelling dictionary and behavior. Can now Ignore
 spellings (per session) or Add words to the dictionary (permanent).
 +Add partial support for CSS3 highlighting.
++Add support for GLSL programming language (patch from Auria)
 
 LIBRARY:
 +Add new themed art resource for New Folder

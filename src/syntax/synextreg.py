@@ -98,6 +98,8 @@ ID_LANG_EDJE = _NewId()
 LANG_EDJE = u'Edje'
 ID_LANG_FERITE = _NewId()
 LANG_FERITE = u'Ferite'
+ID_LANG_GLSL = _NewId()
+LANG_GLSL = u'GLSL'
 ID_LANG_HAXE = _NewId()
 LANG_HAXE = u'HaXe'
 ID_LANG_JAVA = _NewId()
@@ -340,6 +342,7 @@ EXT_MAP = {
            'fe'                 : LANG_FERITE,
            'fth 4th fs seq'     : LANG_FORTH,
            'prg'                : LANG_FLAGSHIP,
+           'frag vert glsl'     : LANG_GLSL,
            'gc gui'             : LANG_GUI4CLI,
            'hs'                 : LANG_HASKELL,
            'hx hxml'            : LANG_HAXE,
