@@ -19,6 +19,7 @@ NEW: [features/improvements]
 +Improved Python autocompletion
 +Add ability to customize spelling dictionary and behavior. Can now Ignore
 spellings (per session) or Add words to the dictionary (permanent).
++Add partial support for CSS3 highlighting.
 
 LIBRARY:
 +Add new themed art resource for New Folder
