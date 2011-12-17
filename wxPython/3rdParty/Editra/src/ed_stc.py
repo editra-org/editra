@@ -732,17 +732,15 @@ class EditraStc(ed_basestc.EditraBaseStc):
     def DoAutoComplete(self):
         """Atempt to perform an autocompletion event."""
         self.HidePopups()
-        if self._config['autocomp']:
-            command = self.GetCommandStr()
-            self.ShowAutoCompOpt(command)
+        command = self.GetCommandStr()
+        self.ShowAutoCompOpt(command)
 
     def DoCallTip(self):
         """Attempt to show a calltip for the current cursor position"""
         self.HidePopups()
-        if self._config['autocomp']:
-            command = self.GetCommandStr()
-            # TODO: GetCommandStr seems to be inadquate under some cases
-            self.ShowCallTip(command)
+        command = self.GetCommandStr()
+        # TODO: GetCommandStr seems to be inadequate under some cases
+        self.ShowCallTip(command)
 
     def OnKeyUp(self, evt):
         """Update status bar of window
