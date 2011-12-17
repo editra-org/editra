@@ -179,7 +179,7 @@ class SearchController(object):
 
         """
         data = msg.GetData()
-        if data.get('mainw', None) == self._parent.GetTopLevelParent():
+        if data.get('mainw', None) == self._parent.TopLevelParent:
 
             if 'findtxt' in data:
                 self.SetQueryString(data.get('findtxt'))
@@ -740,11 +740,12 @@ class SearchController(object):
 
         """
         stc.BeginUndoAction()
+        rstring_utf8 = rstring.encode('utf-8')
         for match in reversed(matches):
             start, end = match.span()
             if isregex:
                 try:
-                    value = match.expand(rstring.encode('utf-8')).decode('utf-8')
+                    value = match.expand(rstring_utf8).decode('utf-8')
                 except re.error, err:
                     msg = _("Error in regular expression expansion."
                             "The replace action cannot be completed.\n\n"
