@@ -9,14 +9,26 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.6.xx
-DATE xx/xx/2011
+VERSION 0.6.89
+DATE 12/17/2011
 47th Alpha Release
 
 NEWS:
 
+This release adds support for highlighting some new file types and some minor
+improvements to the auto-completions support. The Python auto-completion has been
+improved to better handle updating when external modules that are analyzed
+from import statements have changed during runtime as well as improvements to
+the handling of properties and member attributes.
+
+In addition to the features listed above there has been some library and 
+framework enhancements to help support future plugin development.
+
+For details about additional changes and bug fixes please see the complete
+changelog below.
+
 NEW: [features/improvements]
-+Improved Python autocompletion
++Improved Python auto-completion
 +Add ability to customize spelling dictionary and behavior. Can now Ignore
 spellings (per session) or Add words to the dictionary (permanent). Optional
 feature only available when pyenchant is installed.
@@ -25,6 +37,7 @@ feature only available when pyenchant is installed.
 +Auto-completion configuration (on/off) now only applies to completions that
 are provided automatically. Completions can always be requested with the
 auto-completion shortcut keys.
++Add partial Catalan, Eseranto, Farsi, Georgian, and Maylay translations.
 
 LIBRARY:
 +Add new themed art resource for New Folder
