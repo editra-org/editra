@@ -95,6 +95,14 @@ def ComparePaths(path1, path2):
         path2 = path2.lower()
     return path1 == path2
 
+def CopyFile(orig, dest):
+    """Copy the given file to the destination
+    @param orig: file to copy (full path)
+    @param dest: where to copy to
+
+    """
+    raise NotImplementedError
+
 @uri2path
 def GetAbsPath(path):
     """Get the absolute path of a file of a file.
