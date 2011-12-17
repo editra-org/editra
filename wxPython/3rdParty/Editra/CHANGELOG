@@ -18,7 +18,8 @@ NEWS:
 NEW: [features/improvements]
 +Improved Python autocompletion
 +Add ability to customize spelling dictionary and behavior. Can now Ignore
-spellings (per session) or Add words to the dictionary (permanent).
+spellings (per session) or Add words to the dictionary (permanent). Optional
+feature only available when pyenchant is installed.
 +Add partial support for CSS3 highlighting.
 +Add support for GLSL programming language (patch from Auria)
 +Auto-completion configuration (on/off) now only applies to completions that
@@ -40,6 +41,8 @@ BUG FIXES:
 +Fix issue with some style sheets not being able to be loaded in StyleEditor on
 case sensitive file systems.
 +Fix some minor cosmetic issues when running under GTK.
++Fix crash that could occur during shutdown under some cases when a find dialog
+was open.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:

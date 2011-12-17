@@ -388,9 +388,8 @@ class FindReplaceDlgBase:
         self.Bind(_EVT_MODE_CHANGE, self._OnModeChange)
         self.Bind(_EVT_DO_CLOSE_DLG, lambda evt: self._SendCloseEvent())
         self.Bind(wx.EVT_MENU, lambda evt: self._SendCloseEvent(), id=wx.ID_CLOSE)
-        self.Bind(wx.EVT_SET_FOCUS,
-                  lambda evt: self._panel.SetFocus() and evt.Skip())
-        self.Bind(wx.EVT_SHOW, lambda evt: self._panel.SetFocus())
+        self.Bind(wx.EVT_SET_FOCUS, self._OnSetFocus)
+        self.Bind(wx.EVT_SHOW, self._OnShow)
 
     def __DoLayout(self):
         """Layout the dialog"""
@@ -416,6 +415,15 @@ class FindReplaceDlgBase:
         if self.GetDialogMode() != AFR_STYLE_FINDDIALOG:
             title = self._rtitle
         self.SetTitle(title)
+
+    def _OnSetFocus(self, evt):
+        if self and self._panel:
+            self._panel.SetFocus()
+            evt.Skip()
+
+    def _OnShow(self, evt):
+        if self and self._panel:
+            self._panel.SetFocus()
 
     def GetData(self):
         """Get the FindReplaceData used by this dialog"""
