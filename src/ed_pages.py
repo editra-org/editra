@@ -363,8 +363,9 @@ class EdPages(ed_book.EdBaseBook):
             flist = mgr.LoadSession(session)
         except Exception, msg:
             self._ses_load = False
+            errdict = dict(sessionname=session, error=msg)
             return (_("Session Load Error"),
-                    _("Failed to load the session: %s\n\nError: %s") % (session, msg))
+                    _("Failed to load the session: %(sessionname)s\n\nError: %(error)s") % errdict)
 
         if not len(flist):
             self._ses_load = False
