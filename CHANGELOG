@@ -21,6 +21,9 @@ NEW: [features/improvements]
 spellings (per session) or Add words to the dictionary (permanent).
 +Add partial support for CSS3 highlighting.
 +Add support for GLSL programming language (patch from Auria)
++Auto-completion configuration (on/off) now only applies to completions that
+are provided automatically. Completions can always be requested with the
+auto-completion shortcut keys.
 
 LIBRARY:
 +Add new themed art resource for New Folder
