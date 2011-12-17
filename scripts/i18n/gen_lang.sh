@@ -97,6 +97,7 @@ make_mo () {
 
 if [ "$ARG" = "-po" ]
 then
+    gen_appfile
     gen_po
     exit 0
 elif [ "$ARG" = "-mo" ]
