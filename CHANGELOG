@@ -9,6 +9,21 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.x.xx
+DATE xx/xx/201x
+48th Alpha Release
+
+NEWS:
+
+NEW: [features/improvements]
+
+BUG FIXES:
++Fix minor control sizing issue in ControlBars created by ControlBox.CreateControlBar
+on GTK/MSW.
+
+#-----------------------------------------------------------------------------#
+Changes since last release:
+
 VERSION 0.6.89
 DATE 12/17/2011
 47th Alpha Release

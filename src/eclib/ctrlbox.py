@@ -229,12 +229,10 @@ class ControlBox(wx.PyPanel):
         """
         cbar = self.GetControlBar(pos)
         if cbar is None:
-            dsize = (-1, 24)
             style=CTRLBAR_STYLE_GRADIENT
             if pos in (wx.LEFT, wx.RIGHT):
-                dsize = (24, -1)
                 style |= CTRLBAR_STYLE_VERTICAL
-            cbar = ControlBar(self, size=dsize, style=style)
+            cbar = ControlBar(self, style=style)
             self.SetControlBar(cbar, pos)
         return cbar
 
