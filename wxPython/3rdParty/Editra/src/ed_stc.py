@@ -95,6 +95,11 @@ class EditraStc(ed_basestc.EditraBaseStc):
                  style=0, use_dt=True):
         """Initializes a control and sets the default objects for
         Tracking events that occur in the control.
+        @param parent: Parent Window
+        @param id_: Control ID
+        @keyword pos: Control position
+        @keyword size: Control size
+        @keyword style: Control style bitmask
         @keyword use_dt: whether to use a drop target or not
 
         """

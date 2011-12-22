@@ -384,7 +384,7 @@ def mwcontext(func):
     ContextWrap.__doc__ = func.__doc__
     return ContextWrap
 
-def wincontext(func):
+def wincontext(funct):
     """Decorator to filter messages based on a window. Class must declare
     a GetWindow method that returns the window that the messages context
     should be filtered on.

@@ -84,7 +84,7 @@ class StyleItem(object):
 
     def __eq__(self, other):
         """Defines the == operator for the StyleItem Class
-        @param si2: style item to compare to
+        @param other: style item to compare to
         @return: whether the two items are equal
         @rtype: bool
 
@@ -496,10 +496,8 @@ class StyleMgr(object):
         """Gets the background color of the default style and returns
         a Colour object. Otherwise returns white if the default
         style is not found.
-        @keyword hex: return a hex string or colour object
-        @type hex: bool
+        @keyword as_hex: return a hex string or colour object
         @return: wx.Colour of default style background or hex value
-        @rtype: wx.Colour or string
 
         """
         back = self.GetItemByName('default_style').GetBack()
@@ -515,7 +513,6 @@ class StyleMgr(object):
         """Gets and returns a style item using its name for the search
         @param name: tag name of style item to get
         @return: style item (may be empty/null style item)
-        @rtype: L{StyleItem}
 
         """
         scheme = self.GetStyleSet()
