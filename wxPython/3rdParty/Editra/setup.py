@@ -553,7 +553,7 @@ def DoSourcePackage():
         maintainer = AUTHOR,
         maintainer_email = AUTHOR_EMAIL,
         url = URL,
-        download_url = "http://editra.org/?page=download",
+        download_url = "http://editra.org/download",
         license = LICENSE,
         platforms = [ "Many" ],
         packages = [ NAME ],
