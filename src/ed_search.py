@@ -737,6 +737,7 @@ class SearchController(object):
         @param stc: StyledTextCtrl
         @param matches: list of match objects
         @param rstring: Replace string
+        @keyword isregex: Is it a regular expression operation (bool)
 
         """
         stc.BeginUndoAction()
@@ -828,7 +829,13 @@ class EdSearchCtrl(wx.SearchCtrl):
                  pos=wx.DefaultPosition, size=wx.DefaultSize, \
                  style=wx.TE_RICH2|wx.TE_PROCESS_ENTER):
         """Initializes the Search Control
-        @param menulen: max length of history menu
+        @param parent: parent window
+        @param id_: control id
+        @keyword value: default value
+        @keyword menulen: max length of history menu
+        @keyword pos: control position (tuple)
+        @keyword size: control size (tuple)
+        @keyword style: control style bitmask
 
         """
         super(EdSearchCtrl, self).__init__(parent, id_, value, pos, size, style)
@@ -1370,6 +1377,8 @@ class SearchResultScreen(ed_basewin.EdBaseCtrlBox):
     def StartSearch(self, searchmeth, *args, **kwargs):
         """Start a search with the given method and display the results
         @param searchmeth: callable
+        @param *args: positional arguments to pass to searchmeth
+        @param **kwargs: keyword arguments to pass to searchmeth
 
         """
         self._meth = searchmeth

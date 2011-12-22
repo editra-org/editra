@@ -123,6 +123,7 @@ class SessionManager(object):
     def SaveSession(self, name, paths):
         """Save the given list of files as a session with the given name
         @param name: session name
+        @param paths: list of file paths
         @return: bool
 
         """
