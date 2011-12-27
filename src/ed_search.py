@@ -23,6 +23,7 @@ __revision__ = "$Revision$"
 import os
 import sys
 import re
+import unicodedata
 import wx
 
 # Local imports
@@ -82,10 +83,24 @@ class EdSearchEngine(ebmlib.SearchEngine):
 
     def SetQuery(self, query):
         """Set the query string"""
+        if not ebmlib.IsUnicode(query):
+            query = query.decode('utf-8')
+
         if ebmlib.IsUnicode(query):
+            query = unicodedata.normalize('NFD', query)
             # Encode to UTF-8 as used internally by the stc
             query = query.encode('utf-8')
         super(EdSearchEngine, self).SetQuery(query)
+
+    def SetSearchPool(self, pool):
+        """Set the search pool using utf-8 in order to get correct offsets"""
+        if not ebmlib.IsUnicode(pool):
+            pool = pool.decode('utf-8')
+
+        if ebmlib.IsUnicode(pool):
+            pool = unicodedata.normalize('NFD', pool)
+            pool = pool.encode('utf-8')
+        super(EdSearchEngine, self).SetSearchPool(pool)
 
 #--------------------------------------------------------------------------#
 
@@ -330,9 +345,9 @@ class SearchController(object):
                                      True, evt.IsMatchCase(), evt.IsWholeWord())
 
         if mode == eclib.LOCATION_CURRENT_DOC:
-            engine.SetSearchPool(stc.GetTextRaw())
+            engine.SetSearchPool(stc.GetText())
         elif mode == eclib.LOCATION_IN_SELECTION:
-            engine.SetSearchPool(stc.GetSelectedTextRaw())
+            engine.SetSearchPool(stc.GetSelectedText())
         else:
             # TODO: report that this is not supported yet
             #       this case should not happen as the count button is currently
@@ -394,7 +409,7 @@ class SearchController(object):
 
         # XXX: may be inefficient to copy whole buffer each time for files
         #      that are large.
-        self._engine.SetSearchPool(stc.GetTextRaw())
+        self._engine.SetSearchPool(stc.GetText())
 
         # Get the search start position
         if evt.GetEventType() == eclib.edEVT_FIND:
@@ -490,7 +505,7 @@ class SearchController(object):
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                    (engine.SearchInFile, [fname,], dict()))
             else:
-                engine.SetSearchPool(stc.GetTextRaw())
+                engine.SetSearchPool(stc.GetText())
                 ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                    (engine.FindAllLines,))
         if smode == eclib.LOCATION_IN_SELECTION:
@@ -498,7 +513,7 @@ class SearchController(object):
             sel_s = min(stc.GetSelection())
             offset = stc.LineFromPosition(sel_s)
             engine.SetOffset(offset)
-            engine.SetSearchPool(stc.GetSelectedTextRaw())
+            engine.SetSearchPool(stc.GetSelectedText())
             ed_msg.PostMessage(ed_msg.EDMSG_START_SEARCH,
                                (engine.FindAllLines,))
         elif smode == eclib.LOCATION_OPEN_DOCS:
@@ -623,14 +638,14 @@ class SearchController(object):
         results = 0
         if smode == eclib.LOCATION_CURRENT_DOC:
             stc = self._stc()
-            engine.SetSearchPool(stc.GetTextRaw())
+            engine.SetSearchPool(stc.GetText())
             matches = engine.FindAll()
             if matches is not None:
                 self.ReplaceInStc(stc, matches, rstring, evt.IsRegEx())
                 results = len(matches)
         elif smode == eclib.LOCATION_IN_SELECTION:
             stc = self._stc()
-            engine.SetSearchPool(stc.GetSelectedTextRaw())
+            engine.SetSearchPool(stc.GetSelectedText())
             matches = engine.FindAll()
             if matches is not None:
                 self.ReplaceInStcSelection(stc, matches, rstring, evt.IsRegEx())
@@ -650,7 +665,7 @@ class SearchController(object):
                 pass # TODO: notify of no matches?
         elif smode == eclib.LOCATION_OPEN_DOCS:
             for ctrl in self._parent.GetTextControls():
-                engine.SetSearchPool(ctrl.GetTextRaw())
+                engine.SetSearchPool(ctrl.GetText())
                 matches = engine.FindAll()
                 if matches is not None:
                     self.ReplaceInStc(ctrl, matches, rstring, evt.IsRegEx())

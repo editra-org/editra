@@ -16,6 +16,7 @@ __revision__ = "$Revision$"
 #-----------------------------------------------------------------------------#
 # Imports
 import unittest
+import unicodedata
 
 # Module to test
 import ebmlib
@@ -200,9 +201,19 @@ class SearchEngineTest(unittest.TestCase):
 
     def testNormalizedFind(self):
         """Test searching for normalized Unicode data"""
-        pool = unichr(0x00E9)
-        search = ebmlib.SearchEngine(u'e' + u'\u0301')
+        pool = unicodedata.normalize('NFC', u"école")
+        query = unicodedata.normalize('NFD', u"école")
+        self.assertTrue(pool != query)
+        search = ebmlib.SearchEngine(query)
         search.SetSearchPool(pool)
+        val = search.Find()
+        self.assertTrue(val is not None)
+
+        pool = unichr(0x00E9)
+        query = u'e' + u'\u0301'
+        self.assertTrue(pool != query)
+        search = ebmlib.SearchEngine(query)
+        search.SetSearchPool(u"foobar " + pool)
         val = search.Find()
         self.assertTrue(val is not None)
 
