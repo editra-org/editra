@@ -20,6 +20,7 @@ NEW: [features/improvements]
 BUG FIXES:
 +Fix minor control sizing issue in ControlBars created by ControlBox.CreateControlBar
 on GTK/MSW.
++Fix issue with Unicode normalization in search.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
