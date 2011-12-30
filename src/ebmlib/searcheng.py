@@ -77,7 +77,7 @@ class SearchEngine(object):
         uquery = type(tmp) is types.UnicodeType
         upool = type(self._pool) is types.UnicodeType
         if uquery and upool:
-            tmp = unicodedata.normalize("NFD", tmp)
+            tmp = unicodedata.normalize("NFC", tmp)
 
         if not self._isregex:
             tmp = re.escape(tmp)
@@ -95,7 +95,7 @@ class SearchEngine(object):
         if upool:
             flags |= re.UNICODE
             # Normalize
-            self._pool = unicodedata.normalize("NFD", self._pool)
+            self._pool = unicodedata.normalize("NFC", self._pool)
         else:
             # If the pools is not Unicode also make sure that the
             # query is a string too.

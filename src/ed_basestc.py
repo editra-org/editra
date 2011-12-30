@@ -1076,6 +1076,33 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     self.SetProperty(prop[0], prop[1])
         return True
 
+    def SetSelection(self, start, end):
+        """Override base method to make it work correctly using
+        Unicode character positions instead of UTF-8.
+
+        """
+        # STC HELL - some methods require UTF-8 offsets while others work
+        #            with Unicode...
+        # Calculate UTF-8 offsets in buffer
+        unicode_txt = self.GetText()
+        if start != 0:
+            start = len(unicode_txt[0:start].encode('utf-8'))
+        if end != 0:
+            end = len(unicode_txt[0:end].encode('utf-8'))
+        super(EditraBaseStc, self).SetSelection(start, end)
+
+    def GetSelection(self):
+        """Get the selection positions in Unicode instead of UTF-8"""
+        # STC HELL
+        # Translate the UTF8 byte offsets to unicode
+        start, end = super(EditraBaseStc, self).GetSelection()
+        utf8_txt = self.GetTextUTF8()
+        if start != 0:
+            start = len(utf8_txt[0:start].decode('utf-8'))
+        if end != 0:
+            end = len(utf8_txt[0:end].decode('utf-8'))
+        return start, end
+
     def ShowAutoCompOpt(self, command):
         """Shows the autocompletion options list for the command
         @param command: command to look for autocomp options for
