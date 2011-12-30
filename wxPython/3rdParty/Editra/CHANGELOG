@@ -21,6 +21,9 @@ BUG FIXES:
 +Fix minor control sizing issue in ControlBars created by ControlBox.CreateControlBar
 on GTK/MSW.
 +Fix issue with Unicode normalization in search.
++Fix in buffer search operations to work better for Unicode by working around
+issues where StyledTextCtrl expects UTF-8 byte offsets for some methods (SetSelection,
+GetSelection, ...)
 
 #-----------------------------------------------------------------------------#
 Changes since last release:

@@ -85,21 +85,14 @@ class EdSearchEngine(ebmlib.SearchEngine):
         """Set the query string"""
         if not ebmlib.IsUnicode(query):
             query = query.decode('utf-8')
-
-        if ebmlib.IsUnicode(query):
-            query = unicodedata.normalize('NFD', query)
-            # Encode to UTF-8 as used internally by the stc
-            query = query.encode('utf-8')
+        query = unicodedata.normalize('NFC', query)
         super(EdSearchEngine, self).SetQuery(query)
 
     def SetSearchPool(self, pool):
-        """Set the search pool using utf-8 in order to get correct offsets"""
+        """Set the search pool"""
         if not ebmlib.IsUnicode(pool):
             pool = pool.decode('utf-8')
-
-        if ebmlib.IsUnicode(pool):
-            pool = unicodedata.normalize('NFD', pool)
-            pool = pool.encode('utf-8')
+        pool = unicodedata.normalize('NFC', pool)
         super(EdSearchEngine, self).SetSearchPool(pool)
 
 #--------------------------------------------------------------------------#
@@ -434,7 +427,6 @@ class SearchController(object):
         match = self._engine.Find(spos)
         if match is not None:
             start, end = match
-
             if isdown:
                 start = start + spos
                 end = end + spos
@@ -465,9 +457,7 @@ class SearchController(object):
 
             if match is not None:
                 start, end = match
-
                 self._posinfo['found'] = start
-
                 stc.SetSelection(start, end)
                 
                 # Ensure caret and the line its in is exposed
@@ -755,10 +745,37 @@ class SearchController(object):
         @keyword isregex: Is it a regular expression operation (bool)
 
         """
-        stc.BeginUndoAction()
+        with eclib.Freezer(stc) as _tmp:
+            rstring_utf8 = rstring.encode('utf-8')
+            value = rstring_utf8
+            stc.BeginUndoAction()
+            for match in reversed(matches):
+                start, end = match.span()
+                if isregex:
+                    try:
+                        value = match.expand(rstring_utf8).decode('utf-8')
+                    except re.error, err:
+                        msg = _("Error in regular expression expansion."
+                                "The replace action cannot be completed.\n\n"
+                                "Error Message: %s") % err.message
+                        wx.MessageBox(msg, _("Replace Error"), wx.OK|wx.ICON_ERROR)
+                        break
+                stc.SetTargetStart(start)
+                stc.SetTargetEnd(end)
+                stc.ReplaceTarget(value)
+            stc.EndUndoAction()
+
+    @staticmethod
+    def ReplaceInStcSelection(stc, matches, rstring, isregex=True):
+        """Replace all the matches in the selection"""
+        sel_s = min(stc.GetSelection())
         rstring_utf8 = rstring.encode('utf-8')
+        value = rstring_utf8
+        stc.BeginUndoAction()
         for match in reversed(matches):
             start, end = match.span()
+            start += sel_s
+            end += sel_s
             if isregex:
                 try:
                     value = match.expand(rstring_utf8).decode('utf-8')
@@ -768,26 +785,6 @@ class SearchController(object):
                             "Error Message: %s") % err.message
                     wx.MessageBox(msg, _("Replace Error"), wx.OK|wx.ICON_ERROR)
                     break
-            else:
-                value = rstring
-            stc.SetTargetStart(start)
-            stc.SetTargetEnd(end)
-            stc.ReplaceTarget(value)
-        stc.EndUndoAction()
-
-    @staticmethod
-    def ReplaceInStcSelection(stc, matches, rstring, isregex=True):
-        """Replace all the matches in the selection"""
-        sel_s = min(stc.GetSelection())
-        stc.BeginUndoAction()
-        for match in reversed(matches):
-            start, end = match.span()
-            start += sel_s
-            end += sel_s
-            if isregex:
-                value = match.expand(rstring.encode('utf-8')).decode('utf-8')
-            else:
-                value = rstring
             stc.SetTargetStart(start)
             stc.SetTargetEnd(end)
             stc.ReplaceTarget(value)
