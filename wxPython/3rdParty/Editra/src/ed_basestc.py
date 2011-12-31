@@ -622,7 +622,6 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @keyword line: optional if None current cursor position used
         @keyword col: optional if None current cursor position used
         @return: the command string to the left of the autocomp char
-        @todo: fillups are currently disabled. See note in Configure.
 
         """
         if None in (line, col):
@@ -630,27 +629,8 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             #       for multibyte characters.
             line, col = self.GetCurLine()
             col = self.GetColumn(self.GetCurrentPos())
-        line = line.expandtabs(self.GetTabWidth())
-        cmd_lmt = list(self._code['compsvc'].GetAutoCompStops() + \
-                       self._code['compsvc'].GetAutoCompFillups())
-        for key in self._code['compsvc'].GetAutoCompKeys():
-            kval = unichr(key)
-            if kval in cmd_lmt:
-                cmd_lmt.remove(kval)
-
-        curr_pos = col - 1
-        cmd = u''
-        while curr_pos > -1:
-            cmd = line[curr_pos:col]
-            if len(cmd) and cmd[0] not in cmd_lmt:
-                curr_pos -= 1
-            else:
-                break
-
-        for char in cmd_lmt:
-            cmd = cmd.replace(char, u'')
-
-        return cmd.strip()
+        cmd = self._code['compsvc'].GetCommandString(self, line, col)
+        return cmd
 
     def GetCommentChars(self):
         """Return the list of characters used to comment a string in the
@@ -760,6 +740,23 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         pos = max(0, pos-1)
         return 'comment' in self.FindTagById(self.GetStyleAt(pos))
 
+    def IsString(self, pos):
+        """Is the given position in a string region of the current buffer
+        @param pos: int position in buffer
+        @return: bool
+
+        """
+        style = self.GetStyleAt(pos)
+        return self.FindTagById(style) in ('string_style', 'char_style')
+
+    def IsNonCode(self, pos):
+        """Is the passed in position in a non code region
+        @param pos: buffer position
+        @return: bool
+
+        """
+        return self.IsComment(pos) or self.IsString(pos)
+
     def HasMarker(self, line, marker):
         """Check if the given line has the given marker set
         @param line: line number
@@ -825,15 +822,6 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         else:
             extend = Profile_Get('AUTO_COMP_EX') # Using extended autocomp?
             self._code['compsvc'] = autocomp.AutoCompService.GetCompleter(self, extend)
-
-    def IsString(self, pos):
-        """Is the given position in a string region of the current buffer
-        @param pos: int position in buffer
-        @return: bool
-
-        """
-        style = self.GetStyleAt(pos)
-        return self.FindTagById(style) in ('string_style', 'char_style')
 
     def LoadFile(self, path):
         """Load the file at the given path into the buffer. Returns

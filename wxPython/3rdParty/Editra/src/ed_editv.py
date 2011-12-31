@@ -388,14 +388,6 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
 
     #---- End EdTab Methods ----#
 
-    def IsNonCode(self, pos):
-        """Is the passed in position in a non code region
-        @param pos: buffer position
-        @return: bool
-
-        """
-        return self.IsComment(pos) or self.IsString(pos)
-
     def OnConfigMsg(self, msg):
         """Update config based on profile changes"""
         mtype = msg.GetType()[-1]
