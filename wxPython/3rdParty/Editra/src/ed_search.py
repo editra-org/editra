@@ -856,7 +856,6 @@ class EdSearchCtrl(wx.SearchCtrl):
         self._parent     = parent
         # TEMP HACK
         self.FindService = self.GetTopLevelParent().GetNotebook()._searchctrl
-        self._flags      = 0
         self._recent     = list()        # The History List
         self._last       = None
         self.rmenu       = wx.Menu()
@@ -883,6 +882,20 @@ class EdSearchCtrl(wx.SearchCtrl):
         self.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.OnCancel)
         self.Bind(wx.EVT_MENU, self.OnHistMenu)
 
+    #---- Properties ----#
+    def __GetFlags(self):
+        flags = 0
+        data = self.GetSearchData()
+        if data:
+            flags = data.GetFlags()
+        return flags
+    def __SetFlags(self, flags):
+        data = self.GetSearchData()
+        if data:
+            data.SetFlags(flags)
+    SearchFlags = property(lambda self: self.__GetFlags(),
+                           lambda self, flags: self.__SetFlags(flags))
+
     #---- Functions ----#
     def AutoSetQuery(self, multiline=False):
         """Autoload a selected string from the controls client buffer"""
@@ -900,13 +913,12 @@ class EdSearchCtrl(wx.SearchCtrl):
         if data is not None:
             c_flags = data.GetFlags()
             c_flags ^= flag
-            self._flags = c_flags
-            data.SetFlags(self._flags)
+            self.SearchFlags = c_flags
             self.FindService.RefreshControls()
 
     def FindAll(self):
         """Fire off a FindAll job in the current buffer"""
-        evt = eclib.FindEvent(eclib.edEVT_FIND_ALL, flags=self._flags)
+        evt = eclib.FindEvent(eclib.edEVT_FIND_ALL, flags=self.SearchFlags)
         evt.SetFindString(self.GetValue())
         self.FindService.OnFindAll(evt)
 
@@ -920,13 +932,13 @@ class EdSearchCtrl(wx.SearchCtrl):
         if not next:
             self.SetSearchFlag(eclib.AFR_UP)
         else:
-            if eclib.AFR_UP & self._flags:
+            if eclib.AFR_UP & self.SearchFlags:
                 self.ClearSearchFlag(eclib.AFR_UP)
 
         if self.GetValue() == self._last:
             s_cmd = eclib.edEVT_FIND_NEXT
 
-        evt = eclib.FindEvent(s_cmd, flags=self._flags)
+        evt = eclib.FindEvent(s_cmd, flags=self.SearchFlags)
         self._last = self.GetValue()
         evt.SetFindString(self.GetValue())
         self.FindService.OnFind(evt, incremental=incremental)
@@ -1079,8 +1091,7 @@ class EdSearchCtrl(wx.SearchCtrl):
         if data is not None:
             c_flags = data.GetFlags()
             c_flags |= flags
-            self._flags = c_flags
-            data.SetFlags(self._flags)
+            self.SearchFlags = c_flags
             self.FindService.RefreshControls()
 
     #---- End Functions ----#

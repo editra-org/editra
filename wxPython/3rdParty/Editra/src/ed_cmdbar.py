@@ -287,7 +287,7 @@ class SearchBar(CommandBarBase):
         # Attributes
         self.SetControl(ed_search.EdSearchCtrl(self, wx.ID_ANY,
                                                menulen=5, size=(180, -1)))
-        self._sctrl = self.ctrl.GetSearchController()
+        self._sctrl = self.MainControl.GetSearchController()
 
         # Setup
         f_lbl = wx.StaticText(self, label=_("Find") + u": ")

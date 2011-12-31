@@ -24,6 +24,7 @@ on GTK/MSW.
 +Fix in buffer search operations to work better for Unicode by working around
 issues where StyledTextCtrl expects UTF-8 byte offsets for some methods (SetSelection,
 GetSelection, ...)
++Fix saved search flags not being propagated properly after application restart.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
