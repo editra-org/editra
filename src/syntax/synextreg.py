@@ -404,9 +404,7 @@ EXT_MAP = {
 
 class ExtensionRegister(dict):
     """A data storage class for managing mappings of
-    file types to file extensions. The register is created
-    as a singleton.
-    @status: initial implementation
+    file types to file extensions. The register is created as a singleton.
 
     """
     instance = None

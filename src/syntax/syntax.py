@@ -299,8 +299,7 @@ class SynExtensionDelegate(syndata.SyntaxDataBase):
 
 def GenLexerMenu():
     """Generates a menu of available syntax configurations
-    @return: alphabetically ordered menu of of all lexer settings
-    @rtype: wx.Menu
+    @return: wx.Menu
 
     """
     lex_menu = wx.Menu()
@@ -389,7 +388,6 @@ def GetExtFromId(ext_id):
     """Takes a language ID and fetches an appropriate file extension string
     @param ext_id: language id to get extension for
     @return: file extension
-    @rtype: string
 
     """
     extreg = ExtensionRegister()

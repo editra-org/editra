@@ -93,7 +93,7 @@ class ConfigDialog(ed_basewin.EdBaseFrame):
     def __init__(self, parent, ftype=0):
         """Create the ConfigDialog
         @param parent: The parent window
-        @keyword: The filetype to set
+        @keyword ftype: The filetype to set
 
         """
         super(ConfigDialog, self).__init__(parent, title=_("Launch Configuration"))

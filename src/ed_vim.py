@@ -599,14 +599,14 @@ class EditraCommander(object):
 
     def GetSelectedText(self):
         """Get the selected text
-        @rtype: string
+        @return: Unicode
 
         """
         return self.stc.GetSelectedText()
 
     def HasSelection(self):
         """Detects if there's anything selected
-        @rtype: bool
+        @return: bool
 
         """
         return len(self.GetSelectedText()) > 0

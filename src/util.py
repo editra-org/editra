@@ -46,6 +46,8 @@ class DropTargetFT(wx.PyDropTarget):
     def __init__(self, window, textcallback=None, filecallback=None):
         """Initializes the Drop target
         @param window: window to recieve drop objects
+        @keyword textcallback: Callback for when text is dropped
+        @keyword filecallback: Callback for when file(s) are dropped
 
         """
         super(DropTargetFT, self).__init__()
@@ -103,8 +105,9 @@ class DropTargetFT(wx.PyDropTarget):
 
     def OnEnter(self, x_cord, y_cord, drag_result):
         """Called when a drag starts
-        @keyword x_cord: x cord of enter point
-        @keyword y_cord: y cord of enter point
+        @param x_cord: x cord of enter point
+        @param y_cord: y cord of enter point
+        @param drag_result: wxDrag value
         @return: result of drop object entering window
 
         """
@@ -141,8 +144,9 @@ class DropTargetFT(wx.PyDropTarget):
 
     def OnDragOver(self, x_cord, y_cord, drag_result):
         """Called when the cursor is moved during a drag action
-        @keyword x_cord: x cord of mouse
-        @keyword y_cord: y cord of mouse
+        @param x_cord: x cord of mouse
+        @param y_cord: y cord of mouse
+        @param drag_result: Drag result value
         @return: result of drag over
         @todo: For some reason the caret position changes which can be seen
                by the brackets getting highlighted. However the actual caret
@@ -173,6 +177,9 @@ class DropTargetFT(wx.PyDropTarget):
 
     def OnData(self, x_cord, y_cord, drag_result):
         """Gets and processes the dropped data
+        @param x_cord: x coordinate 
+        @param y_cord: y coordinate
+        @param drag_result: wx Drag result value
         @postcondition: dropped data is processed
 
         """
@@ -273,7 +280,10 @@ class EdClipboard(ebmlib.CycleCache):
             return False
 
     def Put(self, txt):
-        """Put some text in the clipboard"""
+        """Put some text in the clipboard
+        @param txt: Text to put in the system clipboard
+
+        """
         pre = self.PeekPrev()
         next = self.PeekNext()
         if len(txt) and txt not in (pre, next):
@@ -730,8 +740,8 @@ class IntValidator(wx.PyValidator):
     """A Generic integer validator"""
     def __init__(self, min_=0, max_=0):
         """Initialize the validator
-        @keyword min: min value to accept
-        @keyword max: max value to accept
+        @keyword min_: min value to accept
+        @keyword max_: max value to accept
 
         """
         wx.PyValidator.__init__(self)

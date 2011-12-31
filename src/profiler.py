@@ -288,8 +288,7 @@ Profile_Set = TheProfile.Set
 def _FromObject(val, fmt):
     """Convert the given value to a to a profile compatible value
     @param val: value to convert
-    @param fmt: Format to convert to
-    @type fmt: string
+    @param fmt: Format to convert to (string)
 
     """
     if fmt == u'font' and isinstance(val, wx.Font):

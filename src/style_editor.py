@@ -254,6 +254,8 @@ class StyleEditorBox(ed_basewin.EdBaseCtrlBox):
         """Get the on disk path to where the style sheet should
         be written to.
         @param sheet: sheet name
+        @keyword syspath: look on the system install path
+        @return: path to the style sheet
 
         """
         if syspath:
@@ -476,7 +478,7 @@ class StyleEditorPanel(wx.Panel):
         original set. Used internally to check if a save prompt needs
         to be brought up. Returns True if the style sets are different.
         @return: whether style set has been modified or not
-        @rtype: bool
+        @return: bool
 
         """
         diff = False
