@@ -25,6 +25,8 @@ on GTK/MSW.
 issues where StyledTextCtrl expects UTF-8 byte offsets for some methods (SetSelection,
 GetSelection, ...)
 +Fix saved search flags not being propagated properly after application restart.
++Fix Calltip shortcut not working correctly due to incorrect lookup string being
+sent down to completer when character to left of cursor was a paren.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:

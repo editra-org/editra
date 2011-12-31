@@ -917,7 +917,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             else:
                 # Clients did not need to make use of the calltip
                 # so check if auto-completion provider has anything to display.
-                if not self.IsComment(position) and not self.IsString(position):
+                if not self.IsNonCode(position):
                     endpos = self.WordEndPosition(position, True)
                     col = self.GetColumn(endpos)
                     line = self.GetLine(line_num-1)

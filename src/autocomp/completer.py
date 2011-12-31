@@ -156,9 +156,41 @@ class BaseCompleter(object):
 
     #--- End override in subclass ----#
 
+    def GetCommandString(self, stc, line, col):
+        """Get the command string found at the current location to use
+        for lookups.
+        @param stc: EditraStc
+        @param line: line text
+        @param col: position in line (column)
+
+        """
+        line = line.expandtabs(stc.GetTabWidth())
+        line = line[:col]
+        if line and ord(line[-1]) in (self.GetAutoCompKeys() + self.GetCallTipKeys()):
+            line = line[:-1]
+        cmd_lmt = list(self.GetAutoCompStops() + self.GetAutoCompFillups())
+        for key in self.GetAutoCompKeys():
+            kval = unichr(key)
+            if kval in cmd_lmt:
+                cmd_lmt.remove(kval)
+
+        cmd = u''
+        curr_pos = len(line) - 1
+        while curr_pos > -1:
+            cmd = line[curr_pos:]
+            if len(cmd) and cmd[0] not in cmd_lmt:
+                curr_pos -= 1
+            else:
+                break
+
+        for char in cmd_lmt:
+            cmd = cmd.replace(char, u'')
+
+        return cmd.strip()
+
     def GetAutoCompKeys(self):
-        """Returns the list of key codes for activating the autocompletion.
-        @return: list of characters used for activating autocompletion
+        """Returns the list of key codes for activating the auto-completion.
+        @return: list of characters used for activating auto-completion
 
         """
         return self._autocomp_keys
@@ -172,14 +204,14 @@ class BaseCompleter(object):
 
     def GetAutoCompStops(self):
         """Returns a string of characters that should cancel
-        the autocompletion lookup.
+        the auto-completion lookup.
         @return: string of characters that will hide the autocomp/calltip
 
         """
         return self._autocomp_stop
 
     def SetAutoCompStops(self, stops):
-        """Set the keys to cancel autocompletions on.
+        """Set the keys to cancel auto-completions on.
         @param stops: string
 
         """
