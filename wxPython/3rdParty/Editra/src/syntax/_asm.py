@@ -69,10 +69,7 @@ class SyntaxData(syndata.SyntaxDataBase):
         self.SetLexer(stc.STC_LEX_ASM)
 
     def GetKeywords(self):
-        """Returns List of Keyword Specifications
-        @param lang_id: used to select specific subset of keywords
-
-        """
+        """Returns List of Keyword Specifications """
         return [ASM_CPU_INST, ASM_DIRECTIVES]
 
     def GetSyntaxSpec(self):

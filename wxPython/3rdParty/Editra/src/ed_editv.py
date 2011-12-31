@@ -427,7 +427,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                    'SHOW_EOL'   : self.SetViewEOL,
                    'SHOW_LN'    : self.ToggleLineNumbers,
                    'SHOW_WS'    : self.SetViewWhiteSpace,
-                   'WRAP'       : self.SetWrapMode                   }
+                   'WRAP'       : self.SetWrapMode }
         if mtype in cfgmap:
             cfgmap[mtype](Profile_Get(mtype))
             return

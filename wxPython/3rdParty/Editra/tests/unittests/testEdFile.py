@@ -47,9 +47,6 @@ class EdFileTest(unittest.TestCase):
         self.file_utf16 = ed_txt.EdFile(self.path_utf16)
         self.mtime_utf16 = ebmlib.GetFileModTime(self.path_utf16)
 
-        self.rpath = common.GetDataFilePath(u'embedded_nulls.txt')
-        self.rfile = ed_txt.EdFile(self.rpath)
-
         self.ipath = common.GetDataFilePath(u'image_test.png')
         self.img = ed_txt.EdFile(self.ipath)
 
@@ -58,7 +55,6 @@ class EdFileTest(unittest.TestCase):
 
     def tearDown(self):
         self.file.Close()
-        self.rfile.Close()
         common.CleanTempDir()
 
     #---- Tests ----#
@@ -149,7 +145,9 @@ class EdFileTest(unittest.TestCase):
         txt = self.file.Read()
         self.assertTrue(self.file.GetEncoding() == 'utf-8')
         txt = self.file_utf16.Read()
-        self.assertTrue(self.file_utf16.GetEncoding() in ('utf_16_le', 'utf-16-le'))
+        enc = self.file_utf16.GetEncoding() 
+        self.assertTrue(enc in ('utf_16_le', 'utf-16-le'),
+                        "Encoding Found: %s" % enc)
 
     def testGetExtension(self):
         """Test getting the file extension"""
@@ -186,9 +184,11 @@ class EdFileTest(unittest.TestCase):
         self.assertTrue(ebmlib.IsUnicode(txt))
         self.assertFalse(self.file.IsRawBytes())
 
-        txt = self.rfile.Read()
+        rpath = common.GetDataFilePath(u'embedded_nulls.txt')
+        rfile = ed_txt.EdFile(self.rpath)
+        txt = rfile.Read()
         self.assertTrue(ebmlib.IsUnicode(txt))
-        self.assertFalse(self.rfile.IsRawBytes())
+        self.assertFalse(rfile.IsRawBytes())
 
         bytes = self.img.Read()
         self.assertTrue(self.img.IsRawBytes())

@@ -101,7 +101,8 @@ class PreferencesDialog(wx.Frame):
                  style=wx.DEFAULT_DIALOG_STYLE | wx.TAB_TRAVERSAL):
         """Initializes the preference dialog
         @param parent: The parent window of this window
-        @param id_: The id of this window
+        @keyword id_: The id of this window
+        @keyword style: Window Style bitmask
 
         """
         super(PreferencesDialog, self).__init__(parent, id_,
@@ -271,6 +272,7 @@ class GeneralPanel(wx.Panel, PreferencesPanelBase):
     def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel
         @param parent: Parent window of this panel
+        @keyword style: Window Style bitmask
 
         """
         wx.Panel.__init__(self, parent, style=style)
@@ -667,6 +669,7 @@ class DocumentPanel(wx.Panel, PreferencesPanelBase):
     def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel
         @param parent: Parent window of this panel
+        @keyword style: Window Style bitmask
 
         """
         wx.Panel.__init__(self, parent, style=style)
@@ -1152,6 +1155,7 @@ class AppearancePanel(wx.Panel, PreferencesPanelBase):
     def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel
         @param parent: Parent window of this panel
+        @keyword style: Window Style bitmask
 
         """
         wx.Panel.__init__(self, parent, style=style)
@@ -1607,6 +1611,7 @@ class AdvancedPanel(wx.Panel):
     def __init__(self, parent, style=wx.BORDER_SUNKEN):
         """Create the panel
         @param parent: Parent window of this panel
+        @keyword style: Window Style bitmask
 
         """
         super(AdvancedPanel, self).__init__(parent, style=style)

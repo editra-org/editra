@@ -84,10 +84,7 @@ class SyntaxData(syndata.SyntaxDataBase):
         return [JS_KEYWORDS,]
 
     def GetSyntaxSpec(self):
-        """Syntax Specifications
-        @param lang_id: used for selecting a specific subset of syntax specs
-
-        """
+        """Syntax Specifications """
         if self.LangId == synglob.ID_LANG_HTML:
             return SYNTAX_ITEMS
         else:
@@ -104,7 +101,7 @@ class SyntaxData(syndata.SyntaxDataBase):
 #---- Syntax Modules Internal Functions ----#
 def KeywordString(option=0):
     """Returns the specified Keyword String
-    @param option: specific subset of keywords to get
+    @keyword option: specific subset of keywords to get
 
     """
     return JS_KEYWORDS[1]
