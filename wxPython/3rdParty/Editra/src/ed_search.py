@@ -745,50 +745,47 @@ class SearchController(object):
         @keyword isregex: Is it a regular expression operation (bool)
 
         """
+        if not len(matches):
+            return
+        def GetSub(match):
+            """replace substitution callable for re.sub"""
+            value = rstring
+            if isregex:
+                try:
+                    value = match.expand(rstring)
+                except:
+                    pass
+            return value
+        text = re.sub(matches[0].re, GetSub, stc.GetText())
+        # Update the view
         with eclib.Freezer(stc) as _tmp:
-            rstring_utf8 = rstring.encode('utf-8')
-            value = rstring_utf8
             stc.BeginUndoAction()
-            for match in reversed(matches):
-                start, end = match.span()
-                if isregex:
-                    try:
-                        value = match.expand(rstring_utf8).decode('utf-8')
-                    except re.error, err:
-                        msg = _("Error in regular expression expansion."
-                                "The replace action cannot be completed.\n\n"
-                                "Error Message: %s") % err.message
-                        wx.MessageBox(msg, _("Replace Error"), wx.OK|wx.ICON_ERROR)
-                        break
-                stc.SetTargetStart(start)
-                stc.SetTargetEnd(end)
-                stc.ReplaceTarget(value)
+            cpos = stc.CurrentPos
+            stc.ClearAll()
+            stc.SetText(text)
+            stc.GotoPos(cpos)
             stc.EndUndoAction()
 
     @staticmethod
     def ReplaceInStcSelection(stc, matches, rstring, isregex=True):
         """Replace all the matches in the selection"""
-        sel_s = min(stc.GetSelection())
-        rstring_utf8 = rstring.encode('utf-8')
-        value = rstring_utf8
-        stc.BeginUndoAction()
-        for match in reversed(matches):
-            start, end = match.span()
-            start += sel_s
-            end += sel_s
+        def GetSub(match):
+            """replace substitution callable for re.sub"""
+            value = rstring
             if isregex:
                 try:
-                    value = match.expand(rstring_utf8).decode('utf-8')
-                except re.error, err:
-                    msg = _("Error in regular expression expansion."
-                            "The replace action cannot be completed.\n\n"
-                            "Error Message: %s") % err.message
-                    wx.MessageBox(msg, _("Replace Error"), wx.OK|wx.ICON_ERROR)
-                    break
-            stc.SetTargetStart(start)
-            stc.SetTargetEnd(end)
-            stc.ReplaceTarget(value)
-        stc.EndUndoAction()
+                    value = match.expand(rstring)
+                except:
+                    pass
+            return value
+        text = re.sub(matches[0].re, GetSub, stc.GetSelectedText())
+        # Update the view
+        with eclib.Freezer(stc) as _tmp:
+            stc.BeginUndoAction()
+            start, end = stc.GetSelection()
+            stc.ReplaceSelection(text)
+            stc.SetSelection(start, start+len(text))
+            stc.EndUndoAction()
 
     def SetFileFilters(self, filters):
         """Set the file filter to use
