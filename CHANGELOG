@@ -16,6 +16,7 @@ DATE xx/xx/201x
 NEWS:
 
 NEW: [features/improvements]
++Major performance improvements to Replace All action
 
 BUG FIXES:
 +Fix minor control sizing issue in ControlBars created by ControlBox.CreateControlBar
