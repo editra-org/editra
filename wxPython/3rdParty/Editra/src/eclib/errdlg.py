@@ -135,6 +135,13 @@ class ErrorDialog(ecbasewin.ECBaseDlg):
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  name="ErrorReporterDlg", message=u''):
         """Initialize the dialog
+        @param parent: Parent Window
+        @keyword id: Dialog ID
+        @keyword title: Dialog Title
+        @keyword pos: Dialog Postion
+        @keyword size: Dialog Size
+        @keyword style: Dialog Style bitmask
+        @keyword name: Dialog Name
         @param message: Error message to display
 
         """
@@ -166,7 +173,7 @@ class ErrorDialog(ecbasewin.ECBaseDlg):
 
     def Abort(self):
         """Called to abort the application
-        @note: needs to be overidden in sublcasses
+        @note: needs to be overridden in subclasses
 
         """
         raise NotImplementedError("Abort must be implemented!")

@@ -74,24 +74,29 @@ class XmlTagsBuilder(object):
         the document DOM is invalid and the tree is adjusted trying 2 strategies:
         1) peek deeply into the stack (but not deeper than a constant otherwise some corner cases on
            big documents could bring performance penalties): if the start tag is found, the node is created
-           and everything in between is popped-off and reparented with the immediate preceding node.
+           and everything in between is popped-off and re-parented with the immediate preceding node.
            This should fixes the case when a cascade of unclosed tags "hides" a candidate start tag:
 
-           ex: <a><b><c><d></a> is transformed to <a><b><c><d></d></c></b></a>.
+           example:
+           @verbatim <a><b><c><d></a> is transformed to <a><b><c><d></d></c></b></a>. @endverbatim
 
         2) otherwise save the node treating as it were an empty-element tag and attaching it to its parent.
            If the stack is empty the node is pushed on the stack and treated as a start tag (the root).
 
-           ex: <a></b><c></c></a> is transformed to <a><b></b><c></c></a>.
-           ex: </a></b></c> is transformed to <a><b></b><c></c></a>
+           example: 
+           @verbatim <a></b><c></c></a> is transformed to <a><b></b><c></c></a>. @endverbatim
+           example: 
+           @verbatim </a></b></c> is transformed to <a><b></b><c></c></a> @endverbatim
 
         Start tag with no end tag and unrooted DOMs are handled by emptying the stack before leaving
         the procedure (3rd strategy).
 
-           ex: <a><b><c> is transformed to <a><b><c></c></b></a>
+           example: 
+           @verbatim <a><b><c> is transformed to <a><b><c></c></b></a> @endverbatim
 
-        @param lines: a list of tuples (line_num, [(token type, token value), ... ])
+        @param code_lines: a list of tuples (line_num, [(token type, token value), ... ])
         @return: the taglib.Scope root of the nodes defined into an XML document
+
         """
         node = None
         for num, line in code_lines:
@@ -147,7 +152,7 @@ class XmlTagsBuilder(object):
         """Return true if the given node value matches the node (opening tag)
         found in the stack at the given depth. Note that a value of '/>' always matches.
         @param value: closing node value
-        @param depth: stack depth
+        @keyword depth: stack depth
         @return True if value closes the tag found in the stack at the given depth
         """
         if depth > len(self.stack):

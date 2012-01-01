@@ -161,7 +161,7 @@ class FileTree(wx.TreeCtrl):
 
     def DoShowMenu(self, item):
         """Context menu has been requested for the given item.
-        @parm item: TreeItem
+        @param item: wx.TreeItem
 
         """
         pass
@@ -284,6 +284,7 @@ class FileTree(wx.TreeCtrl):
         @return: list of TreeItems
 
         """
+
         def NodeWalker(parent, rlist):
             """Recursively find expanded nodes
             @param parent: parent node

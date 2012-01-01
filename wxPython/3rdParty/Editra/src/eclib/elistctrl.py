@@ -51,6 +51,7 @@ class EBaseListCtrl(elistmix.ListRowHighlighter,
     def EnableRow(self, idx, enable=True):
         """Enable/Disable a row in the ListCtrl
         @param idx: row index
+        @keyword enable: bool
 
         """
         state = 0

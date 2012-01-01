@@ -150,7 +150,7 @@ class SegmentBarEvent(wx.PyCommandEvent):
     def SetSelections(self, previous=-1, current=-1):
         """Set the events selection
         @keyword previous: previously selected button index (int)
-        @keyword previous: currently selected button index (int)
+        @keyword current: currently selected button index (int)
 
         """
         self._pre = previous
@@ -721,7 +721,7 @@ class SegmentBar(ControlBar):
     def DoDrawButton(self, dc, pos, bidx, selected=False, draw_label=False):
         """Draw a button
         @param dc: DC to draw on
-        @param xpos: X coordinate (horizontal mode) / Y coordinate (vertical mode)
+        @param pos: X coordinate (horizontal mode) / Y coordinate (vertical mode)
         @param bidx: button dict
         @keyword selected: is this the selected button (bool)
         @keyword draw_label: draw the label (bool)

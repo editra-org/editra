@@ -62,7 +62,9 @@ class PyFontPicker(wx.Panel):
     """
     def __init__(self, parent, id_=wx.ID_ANY, default=wx.NullFont):
         """Initializes the PyFontPicker
-        @param default: The font to initialize as selected in the control
+        @param parent: Parent Window
+        @keyword id_: Control ID
+        @keyword default: The font to initialize as selected in the control
 
         """
         super(PyFontPicker, self).__init__(parent, id_, style=wx.NO_BORDER)

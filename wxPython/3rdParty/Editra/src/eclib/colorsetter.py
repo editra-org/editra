@@ -63,7 +63,9 @@ class ColorSetter(wx.Panel):
     def __init__(self, parent, id_, color=wx.NullColour):
         """Create the control, it is a composite of a colourSelect and
         and a text control.
-        @keyword label: the hex string value to go in the text portion
+        @param parent: Parent Window
+        @param id_: Control ID
+        @keyword color: Initial Colour
 
         """
         super(ColorSetter, self).__init__(parent, id_)
