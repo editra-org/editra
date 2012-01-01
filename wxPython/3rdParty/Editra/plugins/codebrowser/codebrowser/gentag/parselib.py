@@ -113,8 +113,8 @@ def GetFirstIdentifier(line):
 def GetTokenParenLeft(line, exchars='_'):
     """Get the first identifier token to the left of the first opening paren
     found in the given line.
+    Example: function myfunct(param1) => myfunct
     @param line: line to search
-    @example: function myfunct(param1) => myfunct
     @keyword exchars: Extra non-alphanumeric characters that can be in the token
     @return: string or None
 

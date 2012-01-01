@@ -773,6 +773,7 @@ class CommandExecuter(eclib.CommandEntryBase):
     def GetPaths(self, path, files=False):
         """Get a list of paths that are part of the given path by
         default it will only return directories.
+        @param path: Path to enumerate
         @keyword files: Get list of files too
 
         """
@@ -993,8 +994,11 @@ class LineCtrl(eclib.CommandEntryBase):
     """
     def __init__(self, parent, id_, get_doc, size=wx.DefaultSize):
         """Initializes the LineCtrl control and its attributes.
+        @param parent: Parent Window
+        @param id_: Control ID
         @param get_doc: callback method for retrieving a reference to the
                         current document.
+        @keyword size: Control Size (tuple)
 
         """
         super(LineCtrl, self).__init__(parent, id_, u"", size=size,
@@ -1007,8 +1011,7 @@ class LineCtrl(eclib.CommandEntryBase):
 
     def OnEnter(self, evt):
         """Processes the entered line number
-        @param evt: Event that called this handler
-        @type evt: wx.EVT_TEXT_ENTER
+        @param evt: wx.EVT_TEXT_ENTER
 
         """
         val = self.GetValue()
@@ -1047,7 +1050,6 @@ class PopupListBase(object):
     def AdvanceSelection(self, next=True):
         """Advance the list selection
         @keyword next: goto the next or previous selection
-        @type next: bool
 
         """
         sel = self._list.GetSelection()

@@ -356,7 +356,6 @@ class ErrorPanel(wx.Panel):
 def TimeStamp():
     """Create a formatted time stamp of current time
     @return: Time stamp of the current time (Day Month Date HH:MM:SS Year)
-    @rtype: string
 
     """
     now = time.localtime(time.time())

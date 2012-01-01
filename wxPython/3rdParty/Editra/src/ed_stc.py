@@ -453,7 +453,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
     def GetAutoIndent(self):
         """Returns whether auto-indent is being used
         @return: whether autoindent is active or not
-        @rtype: bool
 
         """
         return self._config['autoindent']
@@ -645,7 +644,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """Handles keydown events, currently only deals with
         auto indentation.
         @param evt: event that called this handler
-        @type evt: wx.KeyEvent
 
         """
         k_code = evt.GetKeyCode()
@@ -684,7 +682,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """Handles Char events that aren't caught by the
         KEY_DOWN event.
         @param evt: event that called this handler
-        @type evt: wx.EVT_CHAR
         @todo: autocomp/calltip lookup can be very cpu intensive it may
                be better to try and process it on a separate thread to
                prevent a slow down in the input of text into the buffer
@@ -772,8 +769,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def OnRecordMacro(self, evt):
         """Records macro events
-        @param evt: event that called this handler
-        @type evt: wx.stc.StyledTextEvent
+        @param evt: wx.stc.StyledTextEvent
 
         """
         if self.IsRecording():
@@ -869,8 +865,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def OnUpdateUI(self, evt):
         """Check for matching braces
-        @param evt: event that called this handler
-        @type evt: wx.stc.StyledTextEvent
+        @param evt: wx.stc.StyledTextEvent
 
         """
         # If disabled just skip the event
@@ -938,8 +933,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def OnMarginClick(self, evt):
         """Open and Close Folders as Needed
-        @param evt: event that called this handler
-        @type evt: wx.stc.StyledTextEvent
+        @param evt: wx.stc.StyledTextEvent
 
         """
         margin_num = evt.GetMargin()
@@ -1444,7 +1438,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
     def SetAutoComplete(self, value):
         """Turns Autocompletion on and off
         @param value: use autocomp or not
-        @type value: bool
 
         """
         if isinstance(value, bool):
@@ -1469,9 +1462,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
     def SetViEmulationMode(self, use_vi, use_normal=False):
         """Activate/Deactivate Vi emulation mode
         @param use_vi: Turn vi emulation on/off
-        @type use_vi: boolean
         @keyword use_normal: Start in normal mode
-        @type use_normal: boolean
 
         """
         self.key_handler.ClearMode()
@@ -1823,7 +1814,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """Reloads the current file, returns True on success and
         False if there is a failure.
         @return: whether file was reloaded or not
-        @rtype: bool
 
         """
         cfile = self.GetFileName()
@@ -1889,7 +1879,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
         """Save buffers contents to disk
         @param path: path of file to save
         @return: whether file was written or not
-        @rtype: bool
 
         """
         result = True

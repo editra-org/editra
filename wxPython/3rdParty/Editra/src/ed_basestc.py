@@ -507,7 +507,6 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def DoZoom(self, mode):
         """Zoom control in or out
         @param mode: either zoom in or out
-        @type mode: int id value
 
         """
         id_type = mode
@@ -695,7 +694,6 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def GetLangId(self):
         """Returns the language identifier of this control
         @return: language identifier of document
-        @rtype: int
 
         """
         return self._code['lang_id']
@@ -871,8 +869,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
     def OnChanged(self, evt):
         """Handles updates that need to take place after
         the control has been modified.
-        @param evt: event that called this handler
-        @type evt: wx.stc.StyledTextEvent
+        @param evt: wx.stc.StyledTextEvent
 
         """
         if self._line_num:

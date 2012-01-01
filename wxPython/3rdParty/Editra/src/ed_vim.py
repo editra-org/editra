@@ -467,10 +467,9 @@ class EditraCommander(object):
         self._Scroll(amt)
 
     def _Scroll(self, amt):
-        """Scroll to the current line
+        """Scroll to the current line. For example _Scroll(0.5) scrolls the 
+        current line to the middle of the screen
         @param amt: number between 0 and 1 signifying percentage
-        @example: _Scroll(0.5) scrolls the current line to the middle
-                 of the screen
 
         """
         lines = self.stc.LinesOnScreen() - 1

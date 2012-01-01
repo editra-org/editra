@@ -162,7 +162,6 @@ class DocPositionMgr(object):
         the entries are formated as key=value with one entry
         per line in the file.
         @return: whether book was loaded or not
-        @rtype: boolean
 
         """
         # If file does not exist create it and return

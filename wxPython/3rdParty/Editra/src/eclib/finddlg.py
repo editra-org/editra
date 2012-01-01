@@ -179,6 +179,8 @@ class FindEvent(wx.PyCommandEvent):
     """
     def __init__(self, etype, eid=wx.ID_ANY, flags=0):
         """Creates the event object
+        @param etype: Event Type
+        @keyword eid: Event ID
         @keyword flags: Find/Replace flags
 
         """

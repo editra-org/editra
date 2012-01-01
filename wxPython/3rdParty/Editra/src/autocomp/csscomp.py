@@ -50,11 +50,8 @@ class Completer(completer.BaseCompleter):
         self.SetCallTipCancel([ord(')'), wx.WXK_RETURN])
         
     def GetAutoCompList(self, command):
-        """Returns the list of possible completions for a
-        command string. If namespace is not specified the lookup
-        is based on the locals namespace
+        """Returns the list of possible completions for a command string.
         @param command: command lookup is done on
-        @keyword namespace: namespace to do lookup in
 
         """
         buff = self.GetBuffer()
@@ -97,10 +94,7 @@ class Completer(completer.BaseCompleter):
         return completer.CreateSymbols(keywords, completer.TYPE_UNKNOWN)
 
     def GetCallTip(self, command):
-        """Returns the formated calltip string for the command.
-        If the namespace command is unset the locals namespace is used.
-
-        """
+        """Returns the formated calltip string for the command."""
         if command == u'url':
             return u'url(\'../path\')'
         else:
@@ -137,6 +131,7 @@ def IsPsuedoClass(cmd, line):
 
 def GetWordLeft(line):
     """Get the first valid word to the left of the end of line
+    @param line: Line text
     @return: string
 
     """

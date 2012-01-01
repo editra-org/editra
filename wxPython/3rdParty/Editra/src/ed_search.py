@@ -6,7 +6,8 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
-"""
+"""@package Editra.src.ed_search
+
 Provides text searching services, utilities, and ui components for searching
 text documents and files.
 
@@ -312,7 +313,6 @@ class SearchController(object):
         if the last search resulted in nothing being found then the
         return value will -1.
         @return: position of last search operation
-        @rtype: int
 
         """
         return self._posinfo['found']
@@ -362,6 +362,7 @@ class SearchController(object):
         """Do an incremental search in the currently buffer
         @param evt: EVT_FIND, EVT_FIND_NEXT
         @keyword findnext: force a find next action
+        @keyword incremental: perform an incremental search
 
         """
         data = self.GetData()
@@ -967,8 +968,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
     def GetSearchData(self):
         """Gets the find data from the controls FindService
-        @return: search data
-        @rtype: wx.FindReplaceData
+        @return: wx.FindReplaceData
 
         """
         if hasattr(self.FindService, "GetData"):
@@ -1019,7 +1019,6 @@ class EdSearchCtrl(wx.SearchCtrl):
         """Returns True if the search control is set to search
         in Match Case mode.
         @return: whether search is using match case or not
-        @rtype: boolean
 
         """
         data = self.GetSearchData()
@@ -1031,7 +1030,6 @@ class EdSearchCtrl(wx.SearchCtrl):
         """Returns True if the search control is set to search
         in regular expression mode.
         @return: whether search is using regular expressions or not
-        @rtype: boolean
 
         """
         data = self.GetSearchData()
@@ -1042,8 +1040,7 @@ class EdSearchCtrl(wx.SearchCtrl):
     def IsSearchPrevious(self):
         """Returns True if the search control is set to search
         in Previous mode.
-        @return: whether search is searchin up or not
-        @rtype: boolean
+        @return: whether search is searching up or not
 
         """
         data = self.GetSearchData()
@@ -1055,7 +1052,6 @@ class EdSearchCtrl(wx.SearchCtrl):
         """Returns True if the search control is set to search
         in Whole Word mode.
         @return: whether search is using match whole word or not
-        @rtype: boolean
 
         """
         data = self.GetSearchData()
@@ -1152,7 +1148,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
     def OnCancel(self, evt):
         """Cancels the Search Query
-        @param evt: the event that called this handler
+        @param evt: SearchCtrl event
 
         """
         self.SetValue(u"")
@@ -1161,8 +1157,7 @@ class EdSearchCtrl(wx.SearchCtrl):
 
     def OnHistMenu(self, evt):
         """Sets the search controls value to the selected menu item
-        @param evt: the event that called this handler
-        @type evt: wx.MenuEvent
+        @param evt: wx.MenuEvent
 
         """
         item_id = evt.GetId()

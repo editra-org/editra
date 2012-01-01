@@ -86,7 +86,6 @@ class StyleItem(object):
         """Defines the == operator for the StyleItem Class
         @param other: style item to compare to
         @return: whether the two items are equal
-        @rtype: bool
 
         """
         return unicode(self) == unicode(other)
@@ -230,7 +229,6 @@ class StyleItem(object):
         overwrites values does not zero out previously set values.
         Returning True if value(s) are set or false otherwise.
         @param style_str: style information string (i.e fore:#888444)
-        @type style_str: string
 
         """
         self.null = False
@@ -292,7 +290,6 @@ class StyleItem(object):
     def SetSize(self, size, ex=wx.EmptyString):
         """Sets the Font Size Value
         @param size: font point size, or None to clear attribute
-        @type size: string or int
         @keyword ex: extra attribute (i.e bold, italic, underline)
 
         """
@@ -309,7 +306,6 @@ class StyleItem(object):
         add value is set to False the attribute will be removed from
         the StyleItem.
         @param ex_attr: extra style attribute (bold, eol, italic, underline)
-        @type ex_attr: string
         @keyword add: Add a style (True) or remove a style (False)
 
         """
@@ -415,7 +411,6 @@ class StyleMgr(object):
         ten point fonts as the standard size.
         @keyword default: return the default dictionary of fonts, else return
                           the current running dictionary of fonts if it exists.
-        @type default: bool
         @return: font dictionary (primary, secondary) + (size, size2)
 
         """
@@ -449,8 +444,7 @@ class StyleMgr(object):
     def GetDefaultFont(self):
         """Constructs and returns a wxFont object from the settings
         of the default_style object.
-        @return: font object of default style
-        @rtype: wx.Font
+        @return: wx.Font object of default style
 
         """
         if self.HasNamedStyle('default_style'):
@@ -471,9 +465,7 @@ class StyleMgr(object):
         a Colour object. Otherwise returns Black if the default
         style is not found.
         @keyword as_hex: return a hex string or colour object
-        @type as_hex: bool
         @return: wx.Colour of default style foreground or hex value
-        @rtype: wx.Colour or string
 
         """
         fore = self.GetItemByName('default_style').GetFore()
@@ -547,9 +539,7 @@ class StyleMgr(object):
     def GetStyleByName(self, name):
         """Gets and returns a style string using its name for the search
         @param name: tag name of style to get
-        @type name: string
         @return: style item in string form
-        @rtype: string
 
         """
         if self.HasNamedStyle(name):
@@ -562,7 +552,6 @@ class StyleMgr(object):
         """Returns the current set of styles or the default set if
         there is no current set.
         @return: current style set dictionary
-        @rtype: dict
 
         """
         return StyleMgr.STYLES.get(self.style_set, DEF_STYLE_DICT)
@@ -620,7 +609,6 @@ class StyleMgr(object):
         @keyword force: Force re-parse of style sheet, default is to use cached
                         data when available
         @return: whether style sheet was loaded or not
-        @rtype: bool
 
         """
         if isinstance(style_sheet, basestring) and \
@@ -688,9 +676,7 @@ class StyleMgr(object):
     def ParseStyleData(self, style_data):
         """Parses a string style definitions read from an Editra Style Sheet.
         @param style_data: style sheet data string
-        @type style_data: string
-        @return: dictionary of StyleItems constructed from the style sheet
-                 data.
+        @return: dictionary of StyleItems constructed from the style sheet data.
 
         """
         # Remove all comments
@@ -837,7 +823,7 @@ class StyleMgr(object):
             return False
 
     def SetStyleFont(self, wx_font, primary=True):
-        """Sets the\primary or secondary font and their respective
+        """Sets the primary or secondary font and their respective
         size values.
         @param wx_font: font object to set styles font info from
         @keyword primary: Set primary(default) or secondary font
@@ -870,7 +856,6 @@ class StyleMgr(object):
         @param style_dict: dictionary of style items to use as managers style
                            set.
         @keyword nomerge: merge against default set or not
-        @type nomerge: bool
 
         """
         if nomerge:

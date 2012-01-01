@@ -491,8 +491,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
     def OnActivate(self, evt):
         """Activation Event Handler
-        @param evt: event that called this handler
-        @type evt: wx.ActivateEvent
+        @param evt: wx.ActivateEvent
 
         """
         if evt.GetActive():
@@ -511,7 +510,8 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
     def OnExit(self, evt=None, force=False):
         """Handle application exit request
-        @param evt: event that called this handler
+        @keyword evt: event that called this handler
+        @keyword force: Force an exit
 
         """
         e_id = -1
@@ -592,6 +592,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
     def OpenNewWindow(self, fname=u'', caller=None):
         """Open a new window
         @keyword fname: Open a file in the new window
+        @keyword caller: MainWindow that called to open this one
         @return: the new window
 
         """
