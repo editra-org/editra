@@ -6,18 +6,21 @@
 # License: wxWindows License                                                  #
 ###############################################################################
 
-"""
+"""@package Editra.src.ed_ipc
+
 Classes and utilities for handling IPC between running instances of Editra. The
 IPC is done through sockets using the TCP protocol. Message packets have a
 specified format and authentication method that is described in L{EdIpcServer}.
 
-Remote Control Protocol:
+@section protocol Remote Control Protocol:
 
 This server and its relationship with the main application object allows for
 some limited remote control of Editra. The server's basic message protocol
 requirements are as follows.
 
+@verbatim
 SESSION_KEY;xml;MSGEND
+@endverbatim
 
 Where the SESSION_KEY is the unique authentication key created by the app that
 started the server. This key is stored in the user profile and only valid for
@@ -26,8 +29,8 @@ string defined in this file (*EDEND*). If both of these parts of the message
 are found and correct the server will forward the messages that are packed in
 between to the app.
 
-Message Format:
-
+@section format Message Format:
+@verbatim
 <edipc>
    <filelist>
       <file name="absolute_filepath"/>
@@ -36,8 +39,7 @@ Message Format:
       <arg name="g" value="2"/>
    </arglist>
 </edipc>
-
-@summary: Editra's IPC Library
+@endverbatim
 
 """
 
@@ -244,7 +246,7 @@ def SendCommands(xmlobj, key):
 
 class IPCFile(ed_xml.EdXml):
     """Xml object for holding the list of files
-    <file value="/path/to/file"/>
+    @verbatim <file value="/path/to/file"/> @endverbatim
 
     """
     class meta:
@@ -253,7 +255,7 @@ class IPCFile(ed_xml.EdXml):
 
 class IPCArg(ed_xml.EdXml):
     """Xml object for holding the list of args
-       <arg name="test" value="x"/>
+    @verbatim <arg name="test" value="x"/> @endverbatim
 
     """
     class meta:

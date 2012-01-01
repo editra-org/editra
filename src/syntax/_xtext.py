@@ -199,7 +199,7 @@ class XTextLexer(RegexLexer):
     def AltWords(words):
         """Makes lexer rule for alternative words from the given words list.
         @param words: string consisting of space separated words
-        @return: string in the form \bword1\b|\bword2\b|\bword3\b...
+        @return: string in the form \\bword1\\b|\\bword2\\b|\\bword3\b...
         """
         return "|".join([ "\\b%s\\b" % w for w in words.split()])
 

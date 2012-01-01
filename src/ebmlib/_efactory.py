@@ -90,7 +90,7 @@ class FactoryMixin:
     override GetMetaDefaults and return a dictionary object as follows.
     
     Example:
-        @classmethod
+        \@classmethod
         def GetMetaDefaults(cls):
             return dict(id=None, size=0)
 

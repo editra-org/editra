@@ -1,9 +1,9 @@
 ###############################################################################
 # Name: issuelist.py                                                          #
 # Purpose: Define IssueList syntax for highlighting and other features        #
-# Author: Torsten Mohr <none_yet>                                             #
-# Copyright: (c) 2008 Cody Precord <staff>                                    #
-#            (c) 2008 Torsten Mohr <none_yet>                                 #
+# Author: Torsten Mohr                                                        #
+# Copyright: (c) 2008 Cody Precord                                            #
+#            (c) 2008 Torsten Mohr                                            #
 # License: wxWindows License                                                  #
 ###############################################################################
 

@@ -101,10 +101,8 @@ class Completer(completer.BaseCompleter):
 
     def GetAutoCompList(self, command):
         """Returns the list of possible completions for a
-        command string. If namespace is not specified the lookup
-        is based on the locals namespace
+        command string.
         @param command: command lookup is done on
-        @keyword namespace: namespace to do lookup in
 
         """
         if command in [None, u'']:

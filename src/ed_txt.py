@@ -518,10 +518,12 @@ class EdFile(ebmlib.FileObjectImpl):
 
 class FileReadJob(object):
     """Job for running an async file read in a background thread"""
-    def __init__(self, reciever, task, *args, **kwargs):
+    def __init__(self, receiver, task, *args, **kwargs):
         """Create the thread
         @param receiver: Window to receive events
         @param task: generator method to call
+        @param *args: positional arguments to pass to task
+        @param **kwargs: keyword arguments to pass to task
 
         """
         super(FileReadJob, self).__init__()

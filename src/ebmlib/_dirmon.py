@@ -74,7 +74,7 @@ class DirectoryMonitor(object):
     def SubscribeCallback(self, callback):
         """Subscribe a callback method to be called when changes are
         detected in one of the watched directories.
-        @param callaback: callable([added,], [deleted,], [modified,])
+        @param callback: callable([added,], [deleted,], [modified,])
 
         """
         with self._cbackLock:

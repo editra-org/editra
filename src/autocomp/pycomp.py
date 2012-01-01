@@ -128,18 +128,14 @@ class Completer(completer.BaseCompleter):
                 return list()
         
     def GetAutoCompList(self, command):
-        """Returns the list of possible completions for a 
-        command string. If namespace is not specified the lookup
-        is based on the locals namespace
-        @param command: commadn lookup is done on
-        @keyword namespace: namespace to do lookup in
+        """Returns the list of possible completions for a command string.
+        @param command: command lookup is done on
 
         """
         return self._GetCompletionInfo(command)
 
     def GetCallTip(self, command):
         """Returns the formatted calltip string for the command.
-        If the namespace command is unset the locals namespace is used.
         @param command: command to get calltip for
 
         """

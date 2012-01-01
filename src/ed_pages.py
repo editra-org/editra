@@ -56,7 +56,6 @@ class EdPages(ed_book.EdBaseBook):
     def __init__(self, parent):
         """Initialize a notebook with a blank text control in it
         @param parent: parent window of the notebook
-        @param id_num: this notebooks id
 
         """
         style = aui.AUI_NB_DEFAULT_STYLE | \
@@ -1011,8 +1010,7 @@ class EdPages(ed_book.EdBaseBook):
 
     def OnIdle(self, evt):
         """Update tabs and check if files have been modified
-        @param evt: Event that called this handler
-        @type evt: wx.TimerEvent
+        @param evt: wx.TimerEvent
 
         """
         if wx.GetApp().IsActive():
@@ -1023,8 +1021,7 @@ class EdPages(ed_book.EdBaseBook):
 
     def OnPageChanging(self, evt):
         """Page changing event handler.
-        @param evt: event that called this handler
-        @type evt: aui.EVT_AUINOTEBOOK_PAGE_CHANGING
+        @param evt: aui.EVT_AUINOTEBOOK_PAGE_CHANGING
 
         """
         evt.Skip()
@@ -1070,8 +1067,7 @@ class EdPages(ed_book.EdBaseBook):
 
     def OnPageChanged(self, evt):
         """Actions to do after a page change
-        @param evt: event that called this handler
-        @type evt: aui.EVT_AUINOTEBOOK_PAGE_CHANGED
+        @param evt: aui.EVT_AUINOTEBOOK_PAGE_CHANGED
 
         """
         cpage = evt.GetSelection()
@@ -1086,8 +1082,7 @@ class EdPages(ed_book.EdBaseBook):
 
     def OnPageClosing(self, evt):
         """Checks page status to flag warnings before closing
-        @param evt: event that called this handler
-        @type evt: aui.EVT_AUINOTEBOOK_PAGE_CLOSE
+        @param evt: aui.EVT_AUINOTEBOOK_PAGE_CLOSE
 
         """
         page = self.GetPage(evt.GetSelection())
@@ -1107,8 +1102,7 @@ class EdPages(ed_book.EdBaseBook):
 
     def OnPageClosed(self, evt):
         """Handles Paged Closed Event
-        @param evt: event that called this handler
-        @type evt: aui.EVT_AUINOTEBOOK_PAGE_CLOSED
+        @param evt: aui.EVT_AUINOTEBOOK_PAGE_CLOSED
 
         """
         frame = self.TopLevelParent
@@ -1237,8 +1231,7 @@ class EdPages(ed_book.EdBaseBook):
 
     def OnUpdatePageText(self, evt):
         """Update the title text of the current page
-        @param evt: event that called this handler
-        @type evt: stc.EVT_STC_MODIFY (unused)
+        @param evt: stc.EVT_STC_MODIFY (unused)
         @note: this method must complete its work very fast it gets
                called every time a character is entered or removed from
                the document.

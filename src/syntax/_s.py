@@ -101,7 +101,7 @@ class SyntaxData(syndata.SyntaxDataBase):
 
 def StyleText(_stc, start, end):
     """Style the text
-    @param stc: Styled text control instance
+    @param _stc: Styled text control instance
     @param start: Start position
     @param end: end position
     @todo: performance improvements

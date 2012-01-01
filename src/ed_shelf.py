@@ -608,7 +608,6 @@ class EdShelfDelegate(object):
     def StockShelf(self, i_list):
         """Fill the shelf by opening an ordered list of items
         @param i_list: List of named L{ShelfI} instances
-        @type i_list: list of strings
         @return: bool (True if all loaded / False otherwise)
 
         """

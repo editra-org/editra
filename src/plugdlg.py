@@ -501,7 +501,6 @@ class DownloadPanel(ed_basewin.EdBaseCtrlBox):
         """Formats a list of plugin data served by the server into
         PluginData objects for usage in the list view.
         @return: PluginData of all available plugins
-        @rtype: dict
 
         """
         plugins = data
@@ -564,8 +563,7 @@ class DownloadPanel(ed_basewin.EdBaseCtrlBox):
     def IsDownloading(self):
         """Returns whether the panel has active download
         threads or not.
-        @return: status of downloading
-        @rtype: boolean
+        @return: bool
 
         """
         if self._eggcount:

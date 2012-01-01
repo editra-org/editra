@@ -164,8 +164,7 @@ class EdStatBar(ProgressStatusBar):
 
     def OnLeftDClick(self, evt):
         """Handlers mouse left double click on status bar
-        @param evt: Event fired that called this handler
-        @type evt: 
+        @param evt: wx.MouseEvent
         @note: Assumes parent is MainWindow instance
 
         """

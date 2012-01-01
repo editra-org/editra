@@ -150,9 +150,7 @@ class Profile(dict):
     #---- Begin Public Members ----#
     def DeleteItem(self, item):
         """Removes an entry from the profile
-
         @param item: items name
-        @type item: string
 
         """
         if item in self:
@@ -301,7 +299,6 @@ def _ToObject(index, val, fmt):
     @param index: fallback to retrieve item from defaults
     @param val: value to convert
     @param fmt: Format to convert to
-    @type fmt: string
     @todo: exception handling,
 
     """

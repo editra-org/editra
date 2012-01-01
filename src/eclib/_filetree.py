@@ -319,7 +319,7 @@ class FileTree(wx.TreeCtrl):
 
     def SelectFile(self, filename):
         """Select the given path
-        @param path: full path to select
+        @param filename: full path to select
         @return: bool
 
         """
