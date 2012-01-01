@@ -49,10 +49,16 @@ class EncodingDialog(choicedlg.ChoiceDialog):
                   size=wx.DefaultSize,
                   name=EncodingDialogNameStr):
         """Create the encoding dialog
+        @param parent: Parent Window
+        @keyword id: Dialog ID
         @keyword msg: Dialog Message
         @keyword title: Dialog Title
-        @keyword encodings: list of encodings to use or None to use all
+        @keyword elist: list of encodings to use or None to use all
         @keyword default: Default selected encoding
+        @keyword style: Dialog Style bitmask
+        @keyword pos: Dialog Postion
+        @keyword size: Dialog Size
+        @keyword name: Dialog Name
 
         """
         if not len(elist):
