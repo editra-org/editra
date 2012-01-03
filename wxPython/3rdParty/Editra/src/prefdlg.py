@@ -50,6 +50,7 @@ ID_DOWNLOAD     = wx.NewId()
 ID_UPDATE_MSG   = wx.NewId()
 
 ID_PREF_BKUP_PATH = wx.NewId()
+ID_PREF_BKUP_SUFFIX = wx.NewId()
 ID_PREF_BKUP_LBL = wx.NewId()
 ID_PREF_AUTO_SPELL = wx.NewId()
 ID_PREF_SPELL_DICT = wx.NewId()
@@ -452,6 +453,8 @@ class GeneralFilePanel(wx.Panel):
         super(GeneralFilePanel, self).__init__(parent)
 
         # Attributes
+        self.bsuffix = None
+        self.bsuffix_lbl = None
         
         # Setup
         self._DoLayout()
@@ -469,6 +472,7 @@ class GeneralFilePanel(wx.Panel):
         self.Bind(wx.EVT_FILEPICKER_CHANGED,
                   self.OnFileChange,
                   id=ID_PREF_ENCHANT_PATH)
+        self.bsuffix.Bind(wx.EVT_KILL_FOCUS, self.OnBackupSuffixLoseFocus)
 
     def _DoLayout(self):
         """Layout the panel"""
@@ -496,30 +500,9 @@ class GeneralFilePanel(wx.Panel):
                           default=d_encoding)
         enc_ch.SetToolTipString(_("Encoding to try when auto detection fails"))
         enc_sz = wx.BoxSizer(wx.HORIZONTAL)
-        enc_sz.AddMany([(wx.StaticText(self, label=_("Prefered Encoding") + u":"),
+        enc_sz.AddMany([(wx.StaticText(self, label=_("Preferred Encoding") + u":"),
                         0, wx.ALIGN_CENTER_VERTICAL), ((5, 5),), (enc_ch, 1)])
 
-        autobk_cb = wx.CheckBox(self, ed_glob.ID_PREF_AUTOBKUP,
-                             _("Automatically Backup Files"))
-        bAutoBkup = Profile_Get('AUTOBACKUP', default=False)
-        autobk_cb.SetValue(bAutoBkup)
-        autobk_cb.SetToolTipString(_("Backup buffer to file periodically"))
-        bdir = Profile_Get('AUTOBACKUP_PATH', default="")
-        bkup_path_lbl = wx.CheckBox(self, ID_PREF_BKUP_LBL,
-                                    label=_("Backup Path:"))
-        bkup_path_lbl.SetValue(bool(bdir))
-        bkup_path = wx.DirPickerCtrl(self, ID_PREF_BKUP_PATH,
-                                     path=bdir,
-                                     style=wx.DIRP_CHANGE_DIR|wx.DIRP_USE_TEXTCTRL)
-        bkup_path.SetToolTipString(_("Used to set a custom backup path. "
-                                     "If not specified the backup will be "
-                                     "put in the same directory as the file."))
-        bkup_path_lbl.Enable(bAutoBkup)
-        bkup_path.Enable(bAutoBkup)
-        bkup_p_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        bkup_p_sizer.AddMany([(bkup_path_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
-                              ((5, 5), 0),
-                              (bkup_path, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)])
         win_cb = wx.CheckBox(self, ed_glob.ID_NEW_WINDOW,
                              _("Open files in new windows by default"))
         win_cb.SetValue(Profile_Get('OPEN_NW'))
@@ -541,19 +524,56 @@ class GeneralFilePanel(wx.Panel):
         eolwarn_cb.SetValue(Profile_Get('WARN_EOL', default=True))
 
         # Layout items
-        sizer = wx.FlexGridSizer(11, 2, 5, 5)
+        sizer = wx.FlexGridSizer(9, 2, 5, 5)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("File Settings") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL), (enc_sz, 0),
                        ((5, 5),), (fhsizer, 0),
-                       ((5, 5),), (autobk_cb, 0),
-                       ((5, 5),), (bkup_p_sizer, 1, wx.EXPAND),
                        ((5, 5),), (win_cb, 0),
                        ((5, 5),), (pos_cb, 0),
                        ((5, 5),), (chkmod_cb, 0),
                        ((5, 5),), (autorl_cb, 0),
                        ((5, 5),), (eolwarn_cb, 0),
-                       ((10, 10), 0)])
+                       ((5, 5), 0)])
+
+        # Auto Backup
+        bksbox = wx.StaticBox(self, label=_("File Backups"))
+        bksboxsz = wx.StaticBoxSizer(bksbox, wx.VERTICAL)
+        autobk_cb = wx.CheckBox(self, ed_glob.ID_PREF_AUTOBKUP,
+                             _("Automatically Backup Files"))
+        bAutoBkup = Profile_Get('AUTOBACKUP', default=False)
+        autobk_cb.SetValue(bAutoBkup)
+        autobk_cb.SetToolTipString(_("Backup buffer to file periodically"))
+        bdir = Profile_Get('AUTOBACKUP_PATH', default="")
+        bkup_path_lbl = wx.CheckBox(self, ID_PREF_BKUP_LBL,
+                                    label=_("Backup Path:"))
+        bkup_path_lbl.SetValue(bool(bdir))
+        bkup_path = wx.DirPickerCtrl(self, ID_PREF_BKUP_PATH,
+                                     path=bdir,
+                                     style=wx.DIRP_CHANGE_DIR|wx.DIRP_USE_TEXTCTRL)
+        bkup_path.SetToolTipString(_("Used to set a custom backup path. "
+                                     "If not specified the backup will be "
+                                     "put in the same directory as the file."))
+        bkup_path_lbl.Enable(bAutoBkup)
+        bkup_path.Enable(bAutoBkup)
+        bkup_p_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        bkup_p_sizer.AddMany([(bkup_path_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                              ((5, 5), 0),
+                              (bkup_path, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)])
+        suffix = Profile_Get('AUTOBACKUP_SUFFIX', default=".edbkup")
+        self.bsuffix = wx.TextCtrl(self, ID_PREF_BKUP_SUFFIX, suffix)
+        self.bsuffix.SetToolTipString(_("Suffix for backup file names"))
+        self.bsuffix_lbl = wx.StaticText(self, label=_("Backup file suffix:"))
+        self.bsuffix_lbl.Enable(bAutoBkup)
+        self.bsuffix.Enable(bAutoBkup)
+        bkup_s_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        bkup_s_sizer.AddMany([(self.bsuffix_lbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                              ((5, 5), 0),
+                              (self.bsuffix, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)])
+        bksboxsz.AddMany([(autobk_cb, 0), 
+                          ((5, 5), 0), (bkup_p_sizer, 0, wx.EXPAND),
+                          ((5, 5), 0), (bkup_s_sizer, 0, wx.EXPAND)])
+        # End Auto-Backup
 
         # Spellchecking settings
         spell_dicts = stcspellcheck.STCSpellCheck.getAvailableLanguages()
@@ -568,7 +588,7 @@ class GeneralFilePanel(wx.Panel):
         if sdict in spell_dicts:
             dict_ch.SetStringSelection(sdict)
         sdh_sz = wx.BoxSizer(wx.HORIZONTAL)
-        dlbl = wx.StaticText(self, label=_("Dictionary") + u":")
+        dlbl = wx.StaticText(self, label=_("Dictionary:"))
         sdh_sz.AddMany([(dlbl, 0, wx.ALIGN_CENTER_VERTICAL),
                          ((5, 5), 0),
                          (dict_ch, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)])
@@ -578,7 +598,7 @@ class GeneralFilePanel(wx.Panel):
             for ctrl in (auto_cb, dict_ch, dlbl):
                 ctrl.Enable(False)
 
-        liblbl = wx.StaticText(self, label=_("Enchant Path") + u":")
+        liblbl = wx.StaticText(self, label=_("Enchant Path:"))
         libpath = os.environ.get('PYENCHANT_LIBRARY_PATH', '')
         prefpath = sprefs.get('epath', libpath)
         if not prefpath:
@@ -595,6 +615,7 @@ class GeneralFilePanel(wx.Panel):
 
         vsizer = wx.BoxSizer(wx.VERTICAL)
         vsizer.AddMany([(sizer, 1, wx.EXPAND),
+                        ((5, 5), 0), (bksboxsz, 0, wx.EXPAND),
                         ((5, 5), 0), (sboxsz, 0, wx.EXPAND),
                         ((10, 10), 0)])
 
@@ -607,17 +628,17 @@ class GeneralFilePanel(wx.Panel):
         The profile is updated by L{GeneralPanel} so the event must be skipped
 
         """
+        e_obj = evt.GetEventObject()
         blbl = self.FindWindowById(ID_PREF_BKUP_LBL)
-        if blbl:
-            e_obj = evt.GetEventObject()
-            val = e_obj.GetValue()
-            blbl.Enable(val)
+        blbl.Enable(e_obj.Value)
+        dpick = self.FindWindowById(ID_PREF_BKUP_PATH)
+        bpath = Profile_Get('AUTOBACKUP_PATH', default="")
+        dpick.SetPath(bpath)
+        if not e_obj.Value:
             dpick = self.FindWindowById(ID_PREF_BKUP_PATH)
-            bpath = Profile_Get('AUTOBACKUP_PATH', default="")
-            dpick.SetPath(bpath)
-            if not val:
-                dpick = self.FindWindowById(ID_PREF_BKUP_PATH)
-                dpick.Enable(False)
+            dpick.Enable(False)
+        self.bsuffix.Enable(e_obj.Value)
+        self.bsuffix_lbl.Enable(e_obj.Value)
         evt.Skip()
 
     def OnCustomBackupPath(self, evt):
@@ -656,6 +677,13 @@ class GeneralFilePanel(wx.Panel):
                 wx.MessageBox(_("Failed to load Enchant"),
                               _("Library Error"),
                               wx.OK|wx.ICON_ERROR)
+
+    def OnBackupSuffixLoseFocus(self, evt):
+        """Update the backup file name suffix"""
+        suffix = self.bsuffix.GetValue().strip()
+        old_suffix = Profile_Get('AUTOBACKUP_SUFFIX', default='')
+        if suffix != old_suffix:
+            Profile_Set('AUTOBACKUP_SUFFIX', suffix)
 
 #-----------------------------------------------------------------------------#
 
