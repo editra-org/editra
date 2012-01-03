@@ -17,6 +17,7 @@ NEWS:
 
 NEW: [features/improvements]
 +Major performance improvements to Replace All action
++Backup file suffix can be customized (patch from dkuhlman)
 
 BUG FIXES:
 +Fix minor control sizing issue in ControlBars created by ControlBox.CreateControlBar
