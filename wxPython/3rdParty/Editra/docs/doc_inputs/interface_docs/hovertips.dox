@@ -17,7 +17,7 @@ that have subscribed to EDMSG_UI_STC_DWELL_START. The ed_msg handler
 for this message will be sent an in/out data param that is a Python dictionary
 object with the following keys.
 
-@subsection in_params 'In' Data
+@subsection ctiphover_data 'In' Data
 @li @b stc - Reference to the EdEditorView that emitted the message
 @li @b pos - Position the mouse hovered over in the buffer (int)
 @li @b line - Line number that was hovered over (int)
