@@ -14,10 +14,8 @@ __revision__ = "$Revision$"
 
 #-----------------------------------------------------------------------------#
 # Imports
-import wx
 import os
 import codecs
-import locale
 import types
 import unittest
 
@@ -26,9 +24,7 @@ import common
 
 # Module(s) to test
 import ed_txt
-import util
 import ebmlib
-import profiler
 
 #-----------------------------------------------------------------------------#
 
@@ -185,12 +181,12 @@ class EdFileTest(unittest.TestCase):
         self.assertFalse(self.file.IsRawBytes())
 
         rpath = common.GetDataFilePath(u'embedded_nulls.txt')
-        rfile = ed_txt.EdFile(self.rpath)
+        rfile = ed_txt.EdFile(rpath)
         txt = rfile.Read()
         self.assertTrue(ebmlib.IsUnicode(txt))
         self.assertFalse(rfile.IsRawBytes())
 
-        bytes = self.img.Read()
+        bytes_value = self.img.Read()
         self.assertTrue(self.img.IsRawBytes())
 
     def testIsReadOnly(self):
