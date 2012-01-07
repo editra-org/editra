@@ -18,6 +18,7 @@ NEWS:
 NEW: [features/improvements]
 +Major performance improvements to Replace All action
 +Backup file suffix can be customized (patch from dkuhlman)
++Moderate improvements to performance of working with large files.
 
 BUG FIXES:
 +Fix minor control sizing issue in ControlBars created by ControlBox.CreateControlBar
@@ -29,6 +30,9 @@ GetSelection, ...)
 +Fix saved search flags not being propagated properly after application restart.
 +Fix Calltip shortcut not working correctly due to incorrect lookup string being
 sent down to completer when character to left of cursor was a paren.
++Fix bug that could result in data loss when saving a file when all encodings
+failed.
++Fix MemoryError that could occur when saving large files.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:

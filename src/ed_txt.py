@@ -97,9 +97,9 @@ class EdFile(ebmlib.FileObjectImpl):
         self._fuzzy_enc = False
         self._job = None # async file read job
 
-    def _HandleRawBytes(self, bytes):
+    def _HandleRawBytes(self, bytes_value):
         """Handle prepping raw bytes for return to the buffer
-        @param bytes: raw read bytes
+        @param bytes_value: raw read bytes
         @return: string
 
         """
@@ -108,7 +108,7 @@ class EdFile(ebmlib.FileObjectImpl):
             self._magic['bad'] = True
         # Return the raw bytes to put into the buffer
         self._raw = True
-        return '\0'.join(bytes)+'\0'
+        return '\0'.join(bytes_value)+'\0'
 
     def _ResetBuffer(self):
         Log("[ed_txt][info] Resetting buffer")
@@ -150,16 +150,16 @@ class EdFile(ebmlib.FileObjectImpl):
         assert self.__buffer is not None, "No buffer!"
         assert self.encoding is not None, "Encoding Not Set!"
 
-        bytes = self.__buffer.getvalue()
+        bytes_value = self.__buffer.getvalue()
         ustr = u""
         try:
-            if not self._fuzzy_enc or not EdFile._Checker.IsBinaryBytes(bytes):
+            if not self._fuzzy_enc or not EdFile._Checker.IsBinaryBytes(bytes_value):
                 if self.bom is not None:
                     Log("[ed_txt][info] Stripping %s BOM from text" % self.encoding)
-                    bytes = bytes.replace(self.bom, '', 1)
+                    bytes_value = bytes_value.replace(self.bom, '', 1)
 
                 Log("[ed_txt][info] Attempting to decode with: %s" % self.encoding)
-                ustr = bytes.decode(self.encoding)
+                ustr = bytes_value.decode(self.encoding)
                 # TODO: temporary...maybe
                 # Check for utf-16 encodings which use double bytes
                 # can result in NULLs in the string if decoded with
@@ -169,7 +169,7 @@ class EdFile(ebmlib.FileObjectImpl):
                     Log("[ed_txt][info] Attempting UTF-16/32 detection...")
                     for utf_encoding in ('utf_16_le', 'utf_16_be', 'utf_32'):
                         try:
-                            tmpstr = bytes.decode(utf_encoding)
+                            tmpstr = bytes_value.decode(utf_encoding)
                         except UnicodeDecodeError:
                             pass
                         else:
@@ -182,14 +182,14 @@ class EdFile(ebmlib.FileObjectImpl):
             else:
                 # Binary data was read
                 Log("[ed_txt][info] Binary bytes where read")
-                ustr = self._HandleRawBytes(bytes)
+                ustr = self._HandleRawBytes(bytes_value)
         except (UnicodeDecodeError, LookupError), msg:
             Log("[ed_txt][err] Error while reading with %s" % self.encoding)
             Log("[ed_txt][err] %s" % msg)
             self.SetLastError(unicode(msg))
             self.Close()
             # Decoding failed so convert to raw bytes for display
-            ustr = self._HandleRawBytes(bytes)
+            ustr = self._HandleRawBytes(bytes_value)
         else:
             # Log success
             if not self._raw:
@@ -203,7 +203,7 @@ class EdFile(ebmlib.FileObjectImpl):
         if not self._raw and '\0' in ustr:
             # Return the raw bytes to put into the buffer
             Log("[ed_txt][info] DecodeText - joining nul terminators")
-            ustr = '\0'.join(bytes)+'\0'
+            ustr = '\0'.join(bytes_value)+'\0'
             self._raw = True
 
         if self._raw:
@@ -260,31 +260,40 @@ class EdFile(ebmlib.FileObjectImpl):
         Log("[ed_txt][info] DetectEncoding - Set Encoding to %s" % enc)
         self.encoding = enc 
 
-    @property
-    def Encoding(self):
-        """File encoding property"""
-        return self.GetEncoding()
+    Encoding = property(lambda self: self.GetEncoding())
 
     def EncodeText(self):
         """Encode the buffered text to prepare it to be written to disk
-        @return: str
+        @return: bool
 
         """
+        bOk = True
         txt = self.__buffer.getvalue()
         if not ebmlib.IsUnicode(txt):
-            return txt # Already a string so just return it
+            # Already a string so nothing to do
+            del txt
+            self.__buffer.seek(0)
+            return bOk
 
-        stxt = ''
         encs = GetEncodings()
         if self.encoding is None:
             self.encoding = Profile_Get('ENCODING', default=DEFAULT_ENCODING)
         encs.insert(0, self.encoding)
         cenc = self.encoding
 
+        readsize = min(self.__buffer.len, 4096)
+        tempbuffer = StringIO()
         for enc in encs:
+            self.__buffer.seek(0)
+            tempbuffer.seek(0)
             try:
-                stxt = txt.encode(enc)
+                tmpbytes = self.__buffer.read(readsize)
+                while len(tmpbytes):
+                    tempbuffer.write(tmpbytes.encode(enc))
+                    tmpbytes = self.__buffer.read(readsize)
                 self.encoding = enc
+                self._ResetBuffer() # Free Unicode buffer
+                self.__buffer = tempbuffer # String buffer of bytes
             except LookupError, msg:
                 Log("[ed_txt][err] Invalid encoding: %s" % enc)
                 Log("[ed_txt][err] %s" % msg)
@@ -296,6 +305,7 @@ class EdFile(ebmlib.FileObjectImpl):
             else:
                 break
         else:
+            bOk = False
             raise
 
         # Log if the encoding changed due to encoding errors
@@ -303,7 +313,8 @@ class EdFile(ebmlib.FileObjectImpl):
             Log("[ed_txt][warn] Used encoding %s differs from original %s" %\
                 (self.encoding, cenc))
 
-        return stxt
+        self.__buffer.seek(0)
+        return bOk
 
     def FireModified(self):
         """Fire the modified callback(s)"""
@@ -496,19 +507,30 @@ class EdFile(ebmlib.FileObjectImpl):
             Log("[ed_txt][info] Write: found magic comment: %s" % enc)
             self.encoding = enc
 
+        # Encode to byte string
+        # Do before opening file so that encoding failures don't cause file
+        # data to get lost!
+        self.EncodeText()
+
         # Open and write the file
         if self.DoOpen('wb'):
-            txt = self.EncodeText() # Convert back to string
-
             Log("[ed_txt][info] Opened %s, writing as %s" % (self.GetPath(), self.encoding))
             
             if self.HasBom():
                 Log("[ed_txt][info] Adding BOM back to text")
                 self.Handle.write(self.bom)
 
-            self.Handle.write(txt)
-            self.Handle.flush()
-            self._ResetBuffer()
+            # Write the file to disk
+            chunk = min(self.__buffer.len, 4096)
+            bufferread = self.__buffer.read
+            filewrite = self.Handle.write
+            tmp = bufferread(chunk)
+            while len(tmp):
+                filewrite(tmp)
+                self.Handle.flush()
+                tmp = bufferread(chunk)
+
+            self._ResetBuffer() # Free buffer
             self.Close()
             Log("[ed_txt][info] %s was written successfully" % self.GetPath())
         else:
@@ -531,15 +553,15 @@ class FileReadJob(object):
         # Attributes
         self.cancel = False
         self._task = task
-        self.reciever = reciever
+        self.receiver = receiver
         self._args = args
         self._kwargs = kwargs
-        self.pid = reciever.GetTopLevelParent().GetId()
+        self.pid = receiver.GetTopLevelParent().GetId()
 
     def run(self):
         """Read the text"""
         evt = FileLoadEvent(edEVT_FILE_LOAD, wx.ID_ANY, None, FL_STATE_START)
-        wx.PostEvent(self.reciever, evt)
+        wx.PostEvent(self.receiver, evt)
         time.sleep(.75) # give ui a chance to get ready
 
         count = 1
@@ -549,11 +571,11 @@ class FileReadJob(object):
 
             evt = FileLoadEvent(edEVT_FILE_LOAD, wx.ID_ANY, txt)
             evt.SetProgress(count * self._args[0])
-            wx.PostEvent(self.reciever, evt)
+            wx.PostEvent(self.receiver, evt)
             count += 1
 
         evt = FileLoadEvent(edEVT_FILE_LOAD, wx.ID_ANY, None, FL_STATE_END)
-        wx.PostEvent(self.reciever, evt)
+        wx.PostEvent(self.receiver, evt)
 
     def Cancel(self):
         """Cancel the running task"""
