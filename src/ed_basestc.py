@@ -700,7 +700,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def GetModTime(self):
         """Get the value of the buffers file last modtime"""
-        return self.file.GetModtime()
+        return self.file.ModTime
 
     def GetPos(self):
         """Update Line/Column information

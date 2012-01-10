@@ -44,7 +44,7 @@ except (LookupError, TypeError):
 
 # File Helper Functions
 # NOTE: keep in synch with CheckBom function
-BOM = { 'utf-8' : codecs.BOM_UTF8,
+BOM = { 'utf-8'  : codecs.BOM_UTF8,
         'utf-16' : codecs.BOM,
         'utf-32' : codecs.BOM_UTF32 }
 
@@ -116,6 +116,8 @@ class EdFile(ebmlib.FileObjectImpl):
             del self.__buffer
         self.__buffer = StringIO()
 
+    Encoding = property(lambda self: self.GetEncoding())
+
     def AddModifiedCallback(self, callback):
         """Set modified callback method
         @param callback: callable
@@ -132,7 +134,7 @@ class EdFile(ebmlib.FileObjectImpl):
         @return: EdFile
 
         """
-        fileobj = EdFile(self.GetPath(), self.GetModtime())
+        fileobj = EdFile(self.Path, self.ModTime)
         fileobj.SetLastError(self.last_err)
         fileobj.SetEncoding(self.encoding)
         fileobj.bom = self.bom
@@ -260,8 +262,6 @@ class EdFile(ebmlib.FileObjectImpl):
         Log("[ed_txt][info] DetectEncoding - Set Encoding to %s" % enc)
         self.encoding = enc 
 
-    Encoding = property(lambda self: self.GetEncoding())
-
     def EncodeText(self):
         """Encode the buffered text to prepare it to be written to disk
         @return: bool
@@ -306,7 +306,7 @@ class EdFile(ebmlib.FileObjectImpl):
                 break
         else:
             bOk = False
-            raise
+            raise WriteError("Failed to encode text to byte string")
 
         # Log if the encoding changed due to encoding errors
         if self.encoding != cenc:
@@ -420,21 +420,18 @@ class EdFile(ebmlib.FileObjectImpl):
         any decoding that may be needed.
 
         @keyword chunk: read size
-        @return: unicode str
+        @return: unicode (generator)
         @throws: ReadError Failed to open file for reading.
 
         """
         if self.DoOpen('rb'):
             self.DetectEncoding()
-
             try:
-                reader = codecs.getreader(self.encoding)(self.Handle)
-                while 1:
-                    tmp = reader.read(chunk)
+                while True:
+                    tmp = self.Handle.read(chunk)
                     if not len(tmp):
                         break
-                    yield tmp
-                reader.close()
+                    yield tmp.decode(self.Encoding)
             except Exception, msg:
                 Log("[ed_txt][err] Error while reading with %s" % self.encoding)
                 Log("[ed_txt][err] %s" % msg)
@@ -524,16 +521,18 @@ class EdFile(ebmlib.FileObjectImpl):
             chunk = min(self.__buffer.len, 4096)
             bufferread = self.__buffer.read
             filewrite = self.Handle.write
+            fileflush = self.Handle.flush
             tmp = bufferread(chunk)
             while len(tmp):
                 filewrite(tmp)
-                self.Handle.flush()
+                fileflush()
                 tmp = bufferread(chunk)
 
             self._ResetBuffer() # Free buffer
             self.Close()
             Log("[ed_txt][info] %s was written successfully" % self.GetPath())
         else:
+            self._ResetBuffer()
             raise WriteError, self.GetLastError()
 
 #-----------------------------------------------------------------------------#
@@ -556,7 +555,7 @@ class FileReadJob(object):
         self.receiver = receiver
         self._args = args
         self._kwargs = kwargs
-        self.pid = receiver.GetTopLevelParent().GetId()
+        self.pid = receiver.TopLevelParent.Id
 
     def run(self):
         """Read the text"""
@@ -680,7 +679,7 @@ def DecodeString(string, encoding=None):
 
     if not ebmlib.IsUnicode(string):
         try:
-            rtxt = codecs.getdecoder(encoding)(string)[0]
+            rtxt = string.decode(encoding)
         except Exception, msg:
             Log("[ed_txt][err] DecodeString with %s failed" % encoding)
             Log("[ed_txt][err] %s" % msg)
@@ -704,7 +703,7 @@ def EncodeString(string, encoding=None):
 
     if ebmlib.IsUnicode(string):
         try:
-            rtxt = codecs.getencoder(encoding)(string)[0]
+            rtxt = string.encode(encoding)
         except LookupError:
             rtxt = string
         return rtxt
@@ -715,20 +714,19 @@ def FallbackReader(fname):
     """Guess the encoding of a file by brute force by trying one
     encoding after the next until something succeeds.
     @param fname: file path to read from
+    @todo: deprecate this method
 
     """
     txt = None
-    for enc in GetEncodings():
-        try:
-            handle = open(fname, 'rb')
-            reader = codecs.getreader(enc)(handle)
-            txt = reader.read()
-            reader.close()
-        except Exception, msg:
-            handle.close()
-            continue
-        else:
-            return (enc, txt)
+    with open(fname, 'rb') as handle:
+        byte_str = handle.read()
+        for enc in GetEncodings():
+            try:
+                txt = byte_str.decode(enc)
+            except Exception, msg:
+                continue
+            else:
+                return (enc, txt)
 
     return (None, None)
 
@@ -739,17 +737,17 @@ def GuessEncoding(fname, sample):
     @return: encoding or None
 
     """
-    for enc in GetEncodings():
-        try:
-            handle = open(fname, 'rb')
-            reader = codecs.getreader(enc)(handle)
-            reader.read(sample)
-            reader.close()
-        except Exception, msg:
-            handle.close()
-            continue
-        else:
-            return enc
+    with open(fname, 'rb') as handle:
+        sample_txt = handle.read(sample)
+        for enc in GetEncodings():
+            try:
+                value = sample_txt.decode(enc)
+                if str('\0') in value:
+                    continue
+            except Exception, msg:
+                continue
+            else:
+                return enc
     return None
 
 def GetEncodings():
@@ -781,17 +779,19 @@ def GetEncodings():
     except:
         pass
     encodings.append(sys.getfilesystemencoding())
+    encodings.append('utf-16')
     encodings.append('latin-1')
 
     # Clean the list for duplicates and None values
     rlist = list()
     for enc in encodings:
-        if enc is not None and len(enc) and enc not in rlist:
-            try:
-                codecs.lookup(enc)
-            except LookupError:
-                pass
-            else:
-                rlist.append(enc.lower())
-
+        if enc is not None and len(enc):
+            enc = enc.lower()
+            if enc not in rlist:
+                try:
+                    codecs.lookup(enc)
+                except LookupError:
+                    pass
+                else:
+                    rlist.append(enc)
     return rlist
