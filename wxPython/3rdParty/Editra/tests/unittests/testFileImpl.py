@@ -40,9 +40,9 @@ class FileImplTest(unittest.TestCase):
     def testClone(self):
         """Test cloning the file object"""
         fobj = self.file.Clone()
-        self.assertTrue(fobj.GetPath() == self.file.GetPath())
-        self.assertTrue(fobj.GetModtime() == self.file.GetModtime())
-        self.assertTrue(fobj.IsReadOnly() == self.file.IsReadOnly())
+        self.assertTrue(fobj.Path == self.file.Path)
+        self.assertTrue(fobj.ModTime == self.file.ModTime)
+        self.assertTrue(fobj.ReadOnly == self.file.ReadOnly)
 
     def testRead(self):
         """Test reading from the file and getting the text"""
@@ -79,10 +79,10 @@ class FileImplTest(unittest.TestCase):
 
     def testGetModTime(self):
         """Test getting the files last modification time"""
-        self.file.SetModTime(self.mtime)
-        mtime = self.file.GetModtime()
+        self.file.ModTime = self.mtime
+        mtime = self.file.ModTime
         self.assertTrue(mtime == self.mtime, "Modtime was: " + str(mtime))
-        self.assertTrue(mtime == self.file.Modtime)
+        self.assertTrue(mtime == self.file.ModTime)
 
     def testIsOpen(self):
         """Test checking the state of the file"""

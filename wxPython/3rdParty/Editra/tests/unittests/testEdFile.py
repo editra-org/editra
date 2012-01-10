@@ -40,7 +40,6 @@ class EdFileTest(unittest.TestCase):
         self.mtime = ebmlib.GetFileModTime(self.path)
 
         self.path_utf16 = common.GetDataFilePath(u'test_read_utf16.txt')
-        self.file_utf16 = ed_txt.EdFile(self.path_utf16)
         self.mtime_utf16 = ebmlib.GetFileModTime(self.path_utf16)
 
         self.ipath = common.GetDataFilePath(u'image_test.png')
@@ -112,16 +111,17 @@ class EdFileTest(unittest.TestCase):
 
     def testWriteUTF16File(self):
         """Test that input and output bytes match"""
-        txt = self.file_utf16.Read()
+        fobj = ed_txt.EdFile(self.path_utf16)
+        txt = fobj.Read()
         self.assertTrue(type(txt) == types.UnicodeType)
 
         # Get original raw bytes
-        raw_bytes = common.GetFileContents(self.file_utf16.GetPath())
+        raw_bytes = common.GetFileContents(fobj.GetPath())
         
         # Write the unicode back out to disk
         out = common.GetTempFilePath('utf_16_output.txt')
-        self.file_utf16.SetPath(out)
-        self.file_utf16.Write(txt)
+        fobj.SetPath(out)
+        fobj.Write(txt)
 
         # Get raw bytes that were just written
         new_bytes = common.GetFileContents(out)
@@ -140,9 +140,10 @@ class EdFileTest(unittest.TestCase):
         """Test the encoding detection"""
         txt = self.file.Read()
         self.assertTrue(self.file.GetEncoding() == 'utf-8')
-        txt = self.file_utf16.Read()
-        enc = self.file_utf16.GetEncoding() 
-        self.assertTrue(enc in ('utf_16_le', 'utf-16-le'),
+        fobj16 = ed_txt.EdFile(self.path_utf16)
+        txt = fobj16.Read()
+        enc = fobj16.GetEncoding() 
+        self.assertTrue(enc in ('utf-16', 'utf_16_le', 'utf-16-le'),
                         "Encoding Found: %s" % enc)
 
     def testGetExtension(self):
@@ -163,8 +164,8 @@ class EdFileTest(unittest.TestCase):
 
     def testGetModTime(self):
         """Test getting the files last modification time"""
-        self.file.SetModTime(self.mtime)
-        mtime = self.file.GetModtime()
+        self.file.ModTime = self.mtime
+        mtime = self.file.ModTime
         self.assertTrue(mtime == self.mtime, "Modtime was: " + str(mtime))
 
     def testHasBom(self):

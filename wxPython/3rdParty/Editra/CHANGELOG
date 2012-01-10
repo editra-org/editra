@@ -33,6 +33,7 @@ sent down to completer when character to left of cursor was a paren.
 +Fix bug that could result in data loss when saving a file when all encodings
 failed.
 +Fix MemoryError that could occur when saving large files.
++Fix some UTF-16 handling issues on Linux.
 
 #-----------------------------------------------------------------------------#
 Changes since last release:
