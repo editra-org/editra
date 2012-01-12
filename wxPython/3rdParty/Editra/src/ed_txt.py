@@ -434,17 +434,20 @@ class EdFile(ebmlib.FileObjectImpl):
                 # Must use codec reader to ensure correct number of
                 # bytes are read in to be decoded.
                 reader = codecs.getreader(self.Encoding)(self.Handle)
-                yield_txt = u""
+                buffered_data = StringIO()
                 while True:
                     tmp = reader.read(chunk)
                     if not len(tmp):
-                        if yield_txt:
-                            yield yield_txt
+                        if buffered_data.len:
+                            yield buffered_data.getvalue()
+                            buffered_data.close()
                         break
-                    yield_txt += tmp
-                    if len(yield_txt) >= throttle:
-                        yield yield_txt
-                        yield_txt = u""
+
+                    buffered_data.write(tmp)
+                    if buffered_data.len >= throttle:
+                        yield buffered_data.getvalue()
+                        buffered_data.close()
+                        buffered_data = StringIO()
             except Exception, msg:
                 Log("[ed_txt][err] Error while reading with %s" % self.Encoding)
                 Log("[ed_txt][err] %s" % msg)
