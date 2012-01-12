@@ -425,30 +425,36 @@ class EdFile(ebmlib.FileObjectImpl):
 
         """
         if self.DoOpen('rb'):
+            # Throttle yielded text to reduce event over head
+            filesize = ebmlib.GetFileSize(self.Path)
+            throttle = max(chunk, filesize/100)
+
             self.DetectEncoding()
             try:
+                # Must use codec reader to ensure correct number of
+                # bytes are read in to be decoded.
+                reader = codecs.getreader(self.Encoding)(self.Handle)
+                yield_txt = u""
                 while True:
-                    tmp = self.Handle.read(chunk)
+                    tmp = reader.read(chunk)
                     if not len(tmp):
+                        if yield_txt:
+                            yield yield_txt
                         break
-                    yield tmp.decode(self.Encoding)
+                    yield_txt += tmp
+                    if len(yield_txt) >= throttle:
+                        yield yield_txt
+                        yield_txt = u""
             except Exception, msg:
-                Log("[ed_txt][err] Error while reading with %s" % self.encoding)
+                Log("[ed_txt][err] Error while reading with %s" % self.Encoding)
                 Log("[ed_txt][err] %s" % msg)
                 self.SetLastError(unicode(msg))
                 self.Close()
                 if self._magic['comment']:
                     self._magic['bad'] = True
-            else:
 
-                # TODO: handle incremental mode for 
-#                enc, txt = FallbackReader(self.path)
-#                if enc is not None:
-#                    self.encoding = enc
-#                else:
-#                    raise UnicodeDecodeError, msg
-                Log("[ed_txt][info] Decoded %s with %s" % (self.GetPath(), self.encoding))
-                self.SetModTime(ebmlib.GetFileModTime(self.GetPath()))
+            Log("[ed_txt][info] Decoded %s with %s" % (self.Path, self.Encoding))
+            self.SetModTime(ebmlib.GetFileModTime(self.Path))
         else:
             raise ReadError, self.GetLastError()
 
@@ -738,10 +744,10 @@ def GuessEncoding(fname, sample):
 
     """
     with open(fname, 'rb') as handle:
-        sample_txt = handle.read(sample)
         for enc in GetEncodings():
             try:
-                value = sample_txt.decode(enc)
+                reader = codecs.getreader(enc)(handle)
+                value = reader.read(sample)
                 if str('\0') in value:
                     continue
             except Exception, msg:
