@@ -769,7 +769,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         @return: bool
 
         """
-        sel = self.GetSelection()
+        sel = super(EditraBaseStc, self).GetSelection()
         return sel[0] != sel[1]
 
     def HasMultilineSelection(self):
@@ -778,7 +778,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
         """
         bMulti = False
-        sel = self.GetSelection()
+        sel = super(EditraBaseStc, self).GetSelection()
         if sel[0] != sel[1]:
             sline = self.LineFromPosition(sel[0])
             eline = self.LineFromPosition(sel[1])
