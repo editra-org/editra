@@ -113,6 +113,7 @@ class EdFile(ebmlib.FileObjectImpl):
     def _ResetBuffer(self):
         Log("[ed_txt][info] Resetting buffer")
         if self.__buffer is not None:
+            self.__buffer.close()
             del self.__buffer
         self.__buffer = StringIO()
 
@@ -268,11 +269,10 @@ class EdFile(ebmlib.FileObjectImpl):
 
         """
         bOk = True
-        txt = self.__buffer.getvalue()
+        txt = self.__buffer.read(8)
+        self.__buffer.seek(0)
         if not ebmlib.IsUnicode(txt):
             # Already a string so nothing to do
-            del txt
-            self.__buffer.seek(0)
             return bOk
 
         encs = GetEncodings()
@@ -520,7 +520,7 @@ class EdFile(ebmlib.FileObjectImpl):
 
         # Open and write the file
         if self.DoOpen('wb'):
-            Log("[ed_txt][info] Opened %s, writing as %s" % (self.GetPath(), self.encoding))
+            Log("[ed_txt][info] Opened %s, writing as %s" % (self.Path, self.Encoding))
             
             if self.HasBom():
                 Log("[ed_txt][info] Adding BOM back to text")
@@ -539,7 +539,7 @@ class EdFile(ebmlib.FileObjectImpl):
 
             self._ResetBuffer() # Free buffer
             self.Close()
-            Log("[ed_txt][info] %s was written successfully" % self.GetPath())
+            Log("[ed_txt][info] %s was written successfully" % self.Path)
         else:
             self._ResetBuffer()
             raise WriteError, self.GetLastError()
