@@ -953,7 +953,7 @@ def PrintHelp(err=None):
         sys.stderr.write(err + os.linesep)
 
     print(("Editra - %s - Developers Text Editor\n"
-       "Cody Precord (2005-2010)\n\n"
+       "Cody Precord (2005-2012)\n\n"
        "usage: Editra [arguments] [files... ]\n\n"
        "Short Arguments:\n"
        "  -c    Set custom configuration directory at runtime\n"
