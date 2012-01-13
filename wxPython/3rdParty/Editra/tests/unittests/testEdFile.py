@@ -42,6 +42,8 @@ class EdFileTest(unittest.TestCase):
         self.path_utf16 = common.GetDataFilePath(u'test_read_utf16.txt')
         self.mtime_utf16 = ebmlib.GetFileModTime(self.path_utf16)
 
+        self.path_utf16_big = common.GetDataFilePath(u'test_read_utf16_big.txt')
+
         self.ipath = common.GetDataFilePath(u'image_test.png')
         self.img = ed_txt.EdFile(self.ipath)
 
@@ -114,6 +116,8 @@ class EdFileTest(unittest.TestCase):
         fobj = ed_txt.EdFile(self.path_utf16)
         txt = fobj.Read()
         self.assertTrue(type(txt) == types.UnicodeType)
+        self.assertTrue(fobj.Encoding in ('utf-16', 'utf_16'))
+        self.assertFalse(fobj.HasBom()) # test file has no BOM
 
         # Get original raw bytes
         raw_bytes = common.GetFileContents(fobj.GetPath())
@@ -121,6 +125,7 @@ class EdFileTest(unittest.TestCase):
         # Write the unicode back out to disk
         out = common.GetTempFilePath('utf_16_output.txt')
         fobj.SetPath(out)
+        self.assertFalse(fobj.HasBom()) # test file has no BOM
         fobj.Write(txt)
 
         # Get raw bytes that were just written
@@ -143,7 +148,7 @@ class EdFileTest(unittest.TestCase):
         fobj16 = ed_txt.EdFile(self.path_utf16)
         txt = fobj16.Read()
         enc = fobj16.GetEncoding() 
-        self.assertTrue(enc in ('utf-16', 'utf_16_le', 'utf-16-le'),
+        self.assertTrue(enc in ('utf-16', 'utf_16', 'utf_16_le', 'utf-16-le'),
                         "Encoding Found: %s" % enc)
 
     def testGetExtension(self):
