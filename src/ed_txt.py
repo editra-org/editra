@@ -264,7 +264,9 @@ class EdFile(ebmlib.FileObjectImpl):
         self.encoding = enc 
 
     def EncodeText(self):
-        """Encode the buffered text to prepare it to be written to disk
+        """Do a trial run of encoding all the text to ensure that we can
+        determine an encoding that will correctly be able to write the data
+        to disk.
         @return: bool
 
         """
@@ -282,18 +284,16 @@ class EdFile(ebmlib.FileObjectImpl):
         cenc = self.encoding
 
         readsize = min(self.__buffer.len, 4096)
-        tempbuffer = StringIO()
         for enc in encs:
             self.__buffer.seek(0)
-            tempbuffer.seek(0)
             try:
-                tmpbytes = self.__buffer.read(readsize)
-                while len(tmpbytes):
-                    tempbuffer.write(tmpbytes.encode(enc))
-                    tmpbytes = self.__buffer.read(readsize)
+                tmpchars = self.__buffer.read(readsize)
+                while len(tmpchars):
+                    tmpchars.encode(enc)
+                    tmpchars = self.__buffer.read(readsize)
                 self.encoding = enc
-                self._ResetBuffer() # Free Unicode buffer
-                self.__buffer = tempbuffer # String buffer of bytes
+                self.__buffer.seek(0)
+                self.ClearLastError()
             except LookupError, msg:
                 Log("[ed_txt][err] Invalid encoding: %s" % enc)
                 Log("[ed_txt][err] %s" % msg)
@@ -501,6 +501,9 @@ class EdFile(ebmlib.FileObjectImpl):
         @throws: UnicodeEncodeError Failed to encode text using set encoding
 
         """
+        ctime = time.time()
+        Log("[ed_txt][info] Write - Called: %s - Time: %d" % (self.Path, ctime))
+
         # Check if a magic comment was added or changed
         self._ResetBuffer()
         self.__buffer.write(value)
@@ -516,33 +519,38 @@ class EdFile(ebmlib.FileObjectImpl):
         # Encode to byte string
         # Do before opening file so that encoding failures don't cause file
         # data to get lost!
-        self.EncodeText()
+        if self.EncodeText():
+            Log("[ed_txt][info] Write Successful test encode with %s" % self.Encoding)
 
-        # Open and write the file
-        if self.DoOpen('wb'):
-            Log("[ed_txt][info] Opened %s, writing as %s" % (self.Path, self.Encoding))
-            
-            if self.HasBom():
-                Log("[ed_txt][info] Adding BOM back to text")
-                self.Handle.write(self.bom)
+            # Open and write the file
+            if self.DoOpen('wb'):
+                Log("[ed_txt][info] Opened %s, writing as %s" % (self.Path, self.Encoding))
+                
+                if self.HasBom():
+                    Log("[ed_txt][info] Adding BOM back to text")
+                    self.Handle.write(self.bom)
 
-            # Write the file to disk
-            chunk = min(self.__buffer.len, 4096)
-            bufferread = self.__buffer.read
-            filewrite = self.Handle.write
-            fileflush = self.Handle.flush
-            tmp = bufferread(chunk)
-            while len(tmp):
-                filewrite(tmp)
-                fileflush()
+                # Write the file to disk
+                writer = codecs.getwriter(self.Encoding)(self.Handle)
+                chunk = min(self.__buffer.len, 4096)
+                bufferread = self.__buffer.read
+                filewrite = writer.write
+                fileflush = writer.flush
                 tmp = bufferread(chunk)
+                while len(tmp):
+                    filewrite(tmp)
+                    fileflush()
+                    tmp = bufferread(chunk)
 
-            self._ResetBuffer() # Free buffer
-            self.Close()
-            Log("[ed_txt][info] %s was written successfully" % self.Path)
-        else:
-            self._ResetBuffer()
-            raise WriteError, self.GetLastError()
+                self._ResetBuffer() # Free buffer
+                self.Close()
+                Log("[ed_txt][info] %s was written successfully" % self.Path)
+            else:
+                self._ResetBuffer()
+                raise WriteError, self.GetLastError()
+
+        Log("[ed_txt][info] Write - Complete: %s - Time: %d" % 
+            (self.Path, time.time() - ctime))
 
 #-----------------------------------------------------------------------------#
 
