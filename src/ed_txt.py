@@ -97,6 +97,15 @@ class EdFile(ebmlib.FileObjectImpl):
         self._fuzzy_enc = False
         self._job = None # async file read job
 
+    def _SanitizeBOM(self, bstring):
+        """Remove byte order marks that get automatically added by some codecs"""
+        for enc in ('utf-8', 'utf-32', 'utf-16'):
+            bmark = BOM.get(enc)
+            if bstring.startswith(bmark):
+                bstring = bstring.lstrip(bmark)
+                break
+        return bstring
+
     def _HandleRawBytes(self, bytes_value):
         """Handle prepping raw bytes for return to the buffer
         @param bytes_value: raw read bytes
@@ -167,10 +176,10 @@ class EdFile(ebmlib.FileObjectImpl):
                 # Check for utf-16 encodings which use double bytes
                 # can result in NULLs in the string if decoded with
                 # other encodings.
-                if not self.encoding.startswith('utf') and '\0' in ustr:
+                if str('\0') in ustr:
                     Log("[ed_txt][info] NULL terminators found in decoded str")
                     Log("[ed_txt][info] Attempting UTF-16/32 detection...")
-                    for utf_encoding in ('utf_16_le', 'utf_16_be', 'utf_32'):
+                    for utf_encoding in ('utf_16', 'utf_32'):
                         try:
                             tmpstr = bytes_value.decode(utf_encoding)
                         except UnicodeDecodeError:
@@ -531,16 +540,17 @@ class EdFile(ebmlib.FileObjectImpl):
                     self.Handle.write(self.bom)
 
                 # Write the file to disk
-                writer = codecs.getwriter(self.Encoding)(self.Handle)
                 chunk = min(self.__buffer.len, 4096)
-                bufferread = self.__buffer.read
-                filewrite = writer.write
-                fileflush = writer.flush
-                tmp = bufferread(chunk)
+                buffer_read = self.__buffer.read
+                filewrite = self.Handle.write
+                fileflush = self.Handle.flush
+                sanitize = self._SanitizeBOM
+                tmp = buffer_read(chunk)
                 while len(tmp):
-                    filewrite(tmp)
+                    tmp_bytes = sanitize(tmp.encode(self.Encoding))
+                    filewrite(tmp_bytes)
                     fileflush()
-                    tmp = bufferread(chunk)
+                    tmp = buffer_read(chunk)
 
                 self._ResetBuffer() # Free buffer
                 self.Close()
