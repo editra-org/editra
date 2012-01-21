@@ -12,6 +12,7 @@ Released: xx/xx/2011
 +Add configuration for number of lines to buffer in the output display.
 +Fix incorrect behavior of Clear Between Runs feature that was clearing the
 buffer when the abort button was clicked instead of right before next launch.
++Add error highlighting and hotspot support for C/C++ compiler errors (patch from hradec).
 
 #-----------------------------------------------------------------------------#
 Version 1.12
