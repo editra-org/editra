@@ -535,6 +535,8 @@ class CHandler(FileTypeHandler):
         typeid = synglob.ID_LANG_C
         commands = {'gcc -c' : 'gcc -c'}
         default = 'gcc -c'
+        error = re.compile  ('(.+):([0-9]+): error:.+')
+        hotspot = re.compile('(.+):([0-9]+): error:.+')
 
 class CPPHandler(FileTypeHandler):
     """FileTypeHandler for C++ Files"""
@@ -542,6 +544,8 @@ class CPPHandler(FileTypeHandler):
         typeid = synglob.ID_LANG_CPP
         commands = {'g++ -c' : 'g++ -c'}
         default = 'g++ -c'
+        error = re.compile  ('(.+):([0-9]+): error:.+')
+        hotspot = re.compile('(.+):([0-9]+): error:.+')
 
 #-----------------------------------------------------------------------------#
 
