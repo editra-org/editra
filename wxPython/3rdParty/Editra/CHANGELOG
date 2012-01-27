@@ -21,6 +21,10 @@ NEW: [features/improvements]
 +Moderate improvements to performance of working with large files.
 +Improved support for R programming language.
 
+LIBRARY:
++Add InfoBar control for providing simple information messages without having to
+show a modal dialog.
+
 BUG FIXES:
 +Fix minor control sizing issue in ControlBars created by ControlBox.CreateControlBar
 on GTK/MSW.

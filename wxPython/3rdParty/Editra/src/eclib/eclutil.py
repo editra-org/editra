@@ -87,14 +87,10 @@ def BestLabelColour(color):
 
     """
     avg = sum(color.Get()) // 3
-    if avg > 192:
+    if avg > 128:
         txt_color = wx.BLACK
-    elif avg > 128:
-        txt_color = AdjustColour(color, -95)
-    elif avg < 64:
-        txt_color = wx.WHITE
     else:
-        txt_color = AdjustColour(color, 95)
+        txt_color = wx.WHITE
     return txt_color
 
 def GetHighlightColour():
