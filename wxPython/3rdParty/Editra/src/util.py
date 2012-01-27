@@ -40,12 +40,12 @@ _ = wx.GetTranslation
 class DropTargetFT(wx.PyDropTarget):
     """Drop target capable of accepting dropped files and text
     @todo: has some issues with the clipboard on windows under certain
-           conditions. They arent fatal but need fixing.
+           conditions. They are not fatal but need fixing.
 
     """
     def __init__(self, window, textcallback=None, filecallback=None):
         """Initializes the Drop target
-        @param window: window to recieve drop objects
+        @param window: window to receive drop objects
         @keyword textcallback: Callback for when text is dropped
         @keyword filecallback: Callback for when file(s) are dropped
 
@@ -68,7 +68,7 @@ class DropTargetFT(wx.PyDropTarget):
         @todo: generalize this to be usable by other widgets besides stc
 
         """
-        if not issubclass(self.window.__class__, wx.stc.StyledTextCtrl):
+        if not isinstance(self.window, wx.stc.StyledTextCtrl):
             return
 
         stc = self.window
@@ -79,7 +79,7 @@ class DropTargetFT(wx.PyDropTarget):
             if ext[0] > longest[0]:
                 longest = ext
 
-        cords = [ (0, x * longest[1]) for x in xrange(len(txt)) ]
+        cords = [ (0, x * longest[1]) for x in range(len(txt)) ]
         try:
             mdc = wx.MemoryDC(wx.EmptyBitmap(longest[0] + 5,
                                              longest[1] * len(txt), 32))
@@ -232,20 +232,23 @@ class DropTargetFT(wx.PyDropTarget):
         @param stc: StyledTextCtrl
         @param x_cord: int (x position)
         @param y_cord: int (y position)
-        @note: currenly does not work on wxMac
+        @note: currently does not work on wxMac
 
         """
-        cline = stc.PositionFromPoint(wx.Point(x_cord, y_cord))
-        if cline != wx.stc.STC_INVALID_POSITION:
-            cline = stc.LineFromPosition(cline)
-            fline = stc.GetFirstVisibleLine()
-            lline = stc.GetLastVisibleLine()
-            if (cline - fline) < 2:
-                stc.ScrollLines(-1)
-            elif lline - cline < 2:
-                stc.ScrollLines(1)
-            else:
-                pass
+        try:
+            cline = stc.PositionFromPoint(wx.Point(x_cord, y_cord))
+            if cline != wx.stc.STC_INVALID_POSITION:
+                cline = stc.LineFromPosition(cline)
+                fline = stc.GetFirstVisibleLine()
+                lline = stc.GetLastVisibleLine()
+                if (cline - fline) < 2:
+                    stc.ScrollLines(-1)
+                elif lline - cline < 2:
+                    stc.ScrollLines(1)
+                else:
+                    pass
+        except wx.PyAssertionError, msg:
+            Log("[droptargetft][err] ScrollBuffer: %s" % msg)
 
 #---- End FileDropTarget ----#
 
