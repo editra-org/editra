@@ -109,7 +109,8 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         if ed_glob.SINGLE:
             # Setup the instance checker
             instance_name = u"%s-%s" % (self.GetAppName(), wx.GetUserId())
-            self._instance = wx.SingleInstanceChecker(instance_name)
+            lockpath = wx.StandardPaths.Get().GetTempDir()
+            self._instance = wx.SingleInstanceChecker(instance_name, path=lockpath)
             if self._instance.IsAnotherRunning():
                 try:
                     opts, args = ProcessCommandLine()

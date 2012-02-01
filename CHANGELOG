@@ -20,6 +20,7 @@ NEW: [features/improvements]
 +Backup file suffix can be customized (patch from dkuhlman)
 +Moderate improvements to performance of working with large files.
 +Improved support for R programming language.
++SingleInstanceChecker temp file moved from home directory to system temp directory.
 
 LIBRARY:
 +Add InfoBar control for providing simple information messages without having to
