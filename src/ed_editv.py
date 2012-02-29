@@ -152,13 +152,10 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         cfocus = self.FindFocus()
         if not self._focused and cfocus is self:
             # Focus has just returned to the window
-            self.SetCaretWidth(self._caret_w)
+            self.RestoreCaret()
             self._focused = True
         elif self._focused and cfocus is not self:
-            cwidth = self.GetCaretWidth()
-            if cwidth > 0:
-                self._caret_w = cwidth
-            self.SetCaretWidth(0) # Hide the caret when not active
+            self.HideCaret() # Hide the caret when not active
             self._focused = False
             self.CallTipCancel()
 
@@ -401,6 +398,10 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         elif mtype == 'AUTO_COMP_EX':
             self.ConfigureAutoComp()
             return
+        elif mtype == 'CARETWIDTH':
+            if self.GetCaretWidth(): # check that it is not hidden
+                self.RestoreCaret()
+            return
         elif mtype in ('VI_EMU', 'VI_NORMAL_DEFAULT'):
             self.SetViEmulationMode(Profile_Get('VI_EMU'),
                                     Profile_Get('VI_NORMAL_DEFAULT'))
@@ -428,6 +429,7 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
                    'SHOW_LN'    : self.ToggleLineNumbers,
                    'SHOW_WS'    : self.SetViewWhiteSpace,
                    'WRAP'       : self.SetWrapMode }
+
         if mtype in cfgmap:
             cfgmap[mtype](Profile_Get(mtype))
             return

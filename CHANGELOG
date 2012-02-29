@@ -21,6 +21,8 @@ NEW: [features/improvements]
 +Moderate improvements to performance of working with large files.
 +Improved support for R programming language.
 +SingleInstanceChecker temp file moved from home directory to system temp directory.
++Add option to preferences for configuring the preferred caret width (1-4 pixels).
++Support Block caret for Vi emulation mode (requires wxPython 2.9)
 
 LIBRARY:
 +Add InfoBar control for providing simple information messages without having to
