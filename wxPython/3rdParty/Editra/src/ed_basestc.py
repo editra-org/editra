@@ -305,15 +305,20 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
 
     def SetBlockCaret(self):
         """Change caret style to block"""
-        # XXX: This doesn't seem to be working with this wxPython version.
-#        self.SendMsg(msg=2512, lp=2)
-        # Alternatively, just make the caret a bit thicker!
-        self.SetCaretWidth(3)
+        if hasattr(self, 'SetCaretStyle'): # wxPython 2.9 or greater
+            self.SetCaretStyle(wx.stc.STC_CARETSTYLE_BLOCK)
+        else:
+            # Alternatively, just make the caret a bit thicker!
+            # best we can do on 2.8
+            self.SetCaretWidth(3)
 
     def SetLineCaret(self):
         """Change caret style to line"""
-        self.SetCaretWidth(1)
-#        self.SendMsg(2512, 1)
+        if hasattr(self, 'SetCaretStyle'):
+            self.SetCaretStyle(wx.stc.STC_CARETSTYLE_LINE)
+        else:
+            pwidth = Profile_Get('CARETWIDTH', default=1)
+            self.SetCaretWidth(pwidth)
 
     def BraceBadLight(self, pos):
         """Highlight the character at the given position

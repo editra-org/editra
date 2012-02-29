@@ -813,6 +813,13 @@ class DocGenPanel(wx.Panel):
                             _("View Virtual Space After Last Line"))
         vs_cb.SetValue(Profile_Get('VIEWVERTSPACE', default=False))
         vs_cb.SetToolTipString(_("Adds extra scrolling room after last line"))
+        cursw_sz = wx.BoxSizer(wx.HORIZONTAL)
+        curlbl = wx.StaticText(self, label=_("Caret Width:"))
+        curw_ch = ExChoice(self, ed_glob.ID_PREF_CARET_WIDTH,
+                           choices=['1','2','3','4'],
+                           default=Profile_Get('CARETWIDTH', default=1)-1)
+        cursw_sz.AddMany([(curlbl, 0, wx.ALIGN_CENTER_VERTICAL),
+                          (curw_ch, 0, wx.LEFT, 5)])
 
         # Font Options
         fnt = Profile_Get('FONT1', 'font', wx.Font(10, wx.FONTFAMILY_MODERN,
@@ -828,7 +835,7 @@ class DocGenPanel(wx.Panel):
                                   "regions when syntax highlighting is in use"))
 
         # Layout
-        sizer = wx.FlexGridSizer(20, 2, 5, 5)
+        sizer = wx.FlexGridSizer(21, 2, 5, 5)
         sizer.AddGrowableCol(1, 1)
         sizer.AddMany([((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Format") + u": "),
@@ -846,6 +853,7 @@ class DocGenPanel(wx.Panel):
                        ((5, 5), 0), (sws_cb, 0),
                        ((5, 5), 0), (ww_cb, 0),
                        ((5, 5), 0), (vs_cb, 0),
+                       ((5, 5), 0), (cursw_sz, 0),
                        ((10, 10), 0), ((10, 10), 0),
                        (wx.StaticText(self, label=_("Primary Font") + u": "),
                         0, wx.ALIGN_CENTER_VERTICAL),
@@ -896,17 +904,22 @@ class DocGenPanel(wx.Panel):
             import ed_glob
 
         e_id = evt.Id
-        if e_id in [ed_glob.ID_PREF_TABS, ed_glob.ID_PREF_TABW,
+        if e_id in (ed_glob.ID_PREF_TABS, ed_glob.ID_PREF_TABW,
                     ed_glob.ID_PREF_UNINDENT, ed_glob.ID_EOL_MODE,
                     ed_glob.ID_PREF_AALIAS, ed_glob.ID_SHOW_EOL,
                     ed_glob.ID_SHOW_LN, ed_glob.ID_SHOW_WS,
                     ed_glob.ID_WORD_WRAP, ed_glob.ID_PREF_AALIAS,
                     ed_glob.ID_PREF_INDENTW, ed_glob.ID_PREF_AUTOTRIM,
-                    ed_glob.ID_PREF_VIRT_SPACE ]:
+                    ed_glob.ID_PREF_VIRT_SPACE, ed_glob.ID_PREF_CARET_WIDTH):
 
             e_value = evt.EventObject.GetValue()
             if e_id == ed_glob.ID_EOL_MODE:
                 e_value = evt.EventObject.GetSelection()
+            elif e_id == ed_glob.ID_PREF_CARET_WIDTH:
+                if e_value:
+                    e_value = int(e_value)
+                else:
+                    e_value = 1
 
             Profile_Set(ed_glob.ID_2_PROF[e_id], e_value)
         else:
@@ -2149,7 +2162,7 @@ class ExtListCtrl(wx.ListCtrl,
         @see: L{syntax.syntax.ExtensionRegister}
 
         """
-        for row in xrange(self.GetItemCount()):
+        for row in range(self.GetItemCount()):
             ftype = self.GetItem(row, ExtListCtrl.FILE_COL).GetText()
             self.SetStringItem(row, ExtListCtrl.EXT_COL, \
                                u'  ' + u' '.join(self._extreg[ftype]))

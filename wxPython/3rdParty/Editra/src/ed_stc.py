@@ -412,6 +412,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         self.SetViewEdgeGuide(_PGET('SHOW_EDGE'))
         self.EnableAutoBackup(_PGET('AUTOBACKUP'))
         self.SetEndAtLastLine(not _PGET('VIEWVERTSPACE', default=False))
+        self.SetCaretWidth(_PGET('CARETWIDTH', default=1))
 
     def ConvertCase(self, upper=False):
         """Converts the case of the selected text to either all lower
@@ -1939,3 +1940,15 @@ class EditraStc(ed_basestc.EditraBaseStc):
         ed_msg.PostMessage(ed_msg.EDMSG_UI_STC_LEXER,
                            (self.GetFileName(), self.GetLangId()), pid)
         return True
+
+    def HideCaret(self):
+        if hasattr(self, 'SetCaretStyle'):
+            self.SetCaretStyle(wx.stc.STC_CARETSTYLE_INVISIBLE)
+        else:
+            self.SetCaretWidth(0)
+
+    def RestoreCaret(self):
+        if self.key_handler.BlockMode:
+            self.SetBlockCaret()
+        else:
+            self.SetLineCaret()
