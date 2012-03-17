@@ -9,11 +9,16 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.x.xx
-DATE xx/xx/201x
+VERSION 0.6.99
+DATE 03/17/2012
 48th Alpha Release
 
 NEWS:
+Haven't had much time to work on Editra lately so though I would release the
+changes that have been integrated since previous release. Main improvements
+in this release are better handling of large files, improved Unicode handling,
+and improved find performance. See changelog below for more details.
+
 
 NEW: [features/improvements]
 +Major performance improvements to Replace All action
