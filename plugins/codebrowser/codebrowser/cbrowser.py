@@ -300,6 +300,9 @@ class CodeBrowserTree(wx.TreeCtrl):
                 self.SetItemHasChildren(item_id)
                 for elem in elements: # Ordered list of dict objects
                     for otype in elem[elem.keys()[0]]:
+                        if otype is cobj:
+                            # attempt to prevent infinite recursion with bad doc trees
+                            continue
                         img = self._GetIconIndex(otype)
                         # Make recursive call as Scope's may contain other
                         # Scopes.

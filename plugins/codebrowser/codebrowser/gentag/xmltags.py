@@ -136,7 +136,9 @@ class XmlTagsBuilder(object):
         if there was a parent on the stack
         """
         if len(self.stack) > 0:
-            self.stack[-1].AddElement(self.TAG_ID, node)
+            last = self.stack[-1]
+            if last is not node:
+                last.AddElement(self.TAG_ID, node)
             return True
         return False
 
