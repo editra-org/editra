@@ -22,6 +22,8 @@ BUG FIXES:
 +Fix error that could occur when selecting text in some environments under
 certain cases.
 +Fix crash that could occur during shutdown during page load.
++Fix crash that could occur when trying to retrieve binary data from clipboard to
+update clipboard ring.
 
 #-----------------------------------------------------------------------------#
 
