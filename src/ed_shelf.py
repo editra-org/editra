@@ -556,7 +556,15 @@ class EdShelfDelegate(object):
             return
         else:
             self.EnsureShelfVisible()
-            window = item.CreateItem(self._shelf)
+            # Guard against crashes in creating plugin derived objects
+            # log error to log and continue running.
+            window = None
+            try:
+                window = item.CreateItem(self._shelf)
+            except Exception, msg:
+                self._log("[shelf][err] CreateItem failed: %s" % msg)
+                return
+
             bmp = wx.NullBitmap
             if hasattr(item, 'GetBitmap'):
                 self._shelf.BitmapCallbacks[repr(window.__class__)] = item.GetBitmap
