@@ -520,6 +520,9 @@ class ControlBar(wx.PyPanel):
             else:
                 gc = wx.GraphicsContext.Create(dc)
 
+            if gc is None:
+                return
+
             if not self.IsVerticalMode():
                 grad = gc.CreateLinearGradientBrush(rect.x, rect.y, rect.x,
                                                     rect.x+rect.height,
