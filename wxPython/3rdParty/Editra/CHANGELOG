@@ -14,7 +14,13 @@ DATE 0x/xx/2012
 49th Alpha Release
 
 NEWS:
+
+NEW: [features/enhancements]
 +New version of CodeBrowser plugin (bug fixes)
+
+BUG FIXES:
++Fix error that could occur when selecting text in some environments under
+certain cases.
 
 #-----------------------------------------------------------------------------#
 

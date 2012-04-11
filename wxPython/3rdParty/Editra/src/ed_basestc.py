@@ -1076,9 +1076,9 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         # Calculate UTF-8 offsets in buffer
         unicode_txt = self.GetText()
         if start != 0:
-            start = len(unicode_txt[0:start].encode('utf-8'))
+            start = len(ed_txt.EncodeString(unicode_txt[0:start], 'utf-8'))
         if end != 0:
-            end = len(unicode_txt[0:end].encode('utf-8'))
+            end = len(ed_txt.EncodeString(unicode_txt[0:end], 'utf-8'))
         super(EditraBaseStc, self).SetSelection(start, end)
 
     def GetSelection(self):
@@ -1088,9 +1088,9 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
         start, end = super(EditraBaseStc, self).GetSelection()
         utf8_txt = self.GetTextUTF8()
         if start != 0:
-            start = len(utf8_txt[0:start].decode('utf-8'))
+            start = len(ed_txt.DecodeString(utf8_txt[0:start], 'utf-8'))
         if end != 0:
-            end = len(utf8_txt[0:end].decode('utf-8'))
+            end = len(ed_txt.DecodeString(utf8_txt[0:end], 'utf-8'))
         return start, end
 
     def ShowAutoCompOpt(self, command):
