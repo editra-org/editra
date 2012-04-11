@@ -30,6 +30,7 @@ another running instance due to zombie IPC thread.
 +Fix crash that could occur in vi emulation due to bad command mapping.
 +Fix crashes that could occur when loading plugins that throw errors during
 creation.
++Fix crash when system fails to return control reference when print is requested.
 
 #-----------------------------------------------------------------------------#
 

@@ -840,7 +840,14 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         """
         e_id = evt.GetId()
         printer = MainWindow.PRINTER
-        printer.SetStc(self.nb.GetCurrentCtrl())
+        ctrl = self.nb.GetCurrentCtrl()
+        if not ctrl:
+            util.Log("[ed_main][warn] invalid control reference for printing: %s" % repr(ctrl))
+            wx.MessageBox(_("Failed to get control reference for printing"),
+                          _("Print failure"), wx.CENTER|wx.ICON_ERROR|wx.OK)
+            return
+
+        printer.SetStc(ctrl)
         printer.SetColourMode(_PGET('PRINT_MODE'))
         if e_id == ID_PRINT:
             printer.Print()
