@@ -361,7 +361,12 @@ class CodeBrowserTree(wx.TreeCtrl):
         @param tree_id: Tree Id
 
         """
-        line = self.GetPyData(tree_id)
+        try:
+            line = self.GetPyData(tree_id)
+        except wx.PyAssertionError:
+            # Ignore unexplainable errors from wx...
+            line = None
+
         if line is not None:
             ctrl = self._mw.GetNotebook().GetCurrentCtrl()
             ctrl.GotoLine(line)

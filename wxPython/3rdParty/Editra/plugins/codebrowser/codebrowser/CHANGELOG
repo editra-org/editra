@@ -10,6 +10,7 @@ Released: xx/xx/2011
 are encountered.
 +Fix case the could lead to infinite recursion in the display of XML/HTML due
 to issue in XML parser.
++Don't crash on errors caused by bad TreeCtrl data/ID.
 
 #-----------------------------------------------------------------------------#
 Version 1.4
