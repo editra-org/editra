@@ -1527,7 +1527,11 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @note: for internal use only
 
         """
-        txt = util.GetClipboardText()
+        try:
+            txt = util.GetClipboardText()
+        except wx.PyAssertionError:
+            txt = None
+
         if txt is None or cls.CLIPBOARD.IsAtIndex(txt):
             return
 
