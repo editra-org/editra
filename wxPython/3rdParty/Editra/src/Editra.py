@@ -94,6 +94,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         self._log = dev_tool.DEBUGP
         self._lock = False
         self._windows = dict()
+        self._isexiting = False
 
         # Disable debug popups
         wx.Log.EnableLogging(False)
@@ -279,6 +280,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         @postcondition: Program may remain open if an open window is locking.
 
         """
+        self._isexiting = True
         self._pluginmgr.WritePluginConfig()
         profiler.TheProfile.Write(profiler.Profile_Get('MYPROFILE'))
         if not self._lock or force:
@@ -520,18 +522,21 @@ class Editra(wx.App, events.AppEventHandlerMixin):
             e_id = evt.GetId()
 
         if e_id == ed_glob.ID_EXIT:
+            self._isexiting = True
             # First loop is to ensure current top window is
             # closed first
             for win in self.GetMainWindows():
                 if win.IsActive():
                     result = win.Close()
                     if result:
+                        self._isexiting = False
                         break
                     return
             for win in self.GetMainWindows():
                 win.Raise()
                 result = win.Close()
                 if not result:
+                    self._isexiting = False
                     break
             self.Exit(force)
         else:
@@ -554,6 +559,11 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         @todo: move command processing into own module
 
         """
+        # Guard against events that come in after shutdown
+        # from server thread.
+        if not self or self._isexiting or not self.IsMainLoopRunning():
+            return
+
         self._log("[app][info] IN OnCommandReceived")
         cmds = evt.GetCommands()
         if isinstance(cmds, ed_ipc.IPCCommand):
