@@ -1051,7 +1051,7 @@ def Words(editor,repeat, cmd):
             u'[': editor.BackWordPart,
             u']': editor.WordPartEnd,
           }
-    cmd_map[cmd](repeat)
+    cmd_map.get(cmd, lambda x: None)(repeat)
 
 @vim_parser(u'$^0', is_motion=True)
 def Line(editor, repeat, cmd):
@@ -1060,10 +1060,10 @@ def Line(editor, repeat, cmd):
 
     """
     cmd_map = { u'0': editor.GotoLineStart,
-            u'^': editor.GotoIndentStart,
-            u'$': editor.GotoLineEnd,
-            }
-    cmd_map[cmd]()
+                u'^': editor.GotoIndentStart,
+                u'$': editor.GotoLineEnd,
+              }
+    cmd_map.get(cmd, lambda:None)()
 
 @vim_parser(u'{}', is_motion=True)
 def Para(editor, repeat, cmd):
@@ -1074,7 +1074,7 @@ def Para(editor, repeat, cmd):
     cmd_map = { u'{': editor.ParaUp,
             u'}': editor.ParaDown,
           }
-    cmd_map[cmd](repeat)
+    cmd_map.get(cmd, lambda x: None)(repeat)
 
 @vim_parser(u'uU')
 def Undo(editor, repeat, cmd):
@@ -1099,9 +1099,9 @@ def FindIdent(editor, repeat, cmd):
 
     """
     cmd_map = { u'#': editor.PrevIdent,
-            u'*': editor.NextIdent,
-          }
-    cmd_map[cmd](repeat)
+                u'*': editor.NextIdent,
+              }
+    cmd_map.get(cmd, lambda x: None)(repeat)
 
 @vim_parser(u'~')
 def Tilde(editor, repeat, cmd):
@@ -1134,7 +1134,8 @@ def Delete(editor, repeat, cmd):
         u's': u'cl', u'S': u'cc',
         u'C': u'c$', u'D': u'd$', u'Y': u'y$',
         }
-    Change(editor, repeat, cmd_map[cmd])
+    if cmd in cmd_map:
+        Change(editor, repeat, cmd_map[cmd])
 
 @vim_parser(u'cdy<>')
 def Change(editor, repeat, cmd):
@@ -1295,8 +1296,9 @@ def FindChar(editor, repeat, cmd):
             u't' : editor.FindTillNextChar,
             u'T' : editor.FindTillPrevChar,
           }
-    cmd_map[cmd](char, repeat)
-    editor.SetFindCharCmd(cmd, char)
+    if cmd in cmd_map:
+        cmd_map[cmd](char, repeat)
+        editor.SetFindCharCmd(cmd, char)
 
 @vim_parser(u',;', is_motion=True)
 def RepeatFindChar(editor, repeat, cmd):

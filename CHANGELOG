@@ -27,6 +27,7 @@ update clipboard ring.
 +Fix crash that could happen when replace in selection action finds no matches.
 +Fix crash that could occur when starting Editra again immediately after closing
 another running instance due to zombie IPC thread.
++Fix crash that could occur in vi emulation due to bad command mapping.
 
 #-----------------------------------------------------------------------------#
 
