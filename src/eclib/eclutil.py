@@ -152,10 +152,12 @@ class Freezer(object):
         self.window = window
 
     def __enter__(self):
-        self.window.Freeze()
+        if self.window:
+            self.window.Freeze()
 
     def __exit__( self, type, value, tb):
-        self.window.Thaw()
+        if self.window:
+            self.window.Thaw()
 
 #-----------------------------------------------------------------------------#
 # Drawing helpers
