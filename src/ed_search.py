@@ -770,6 +770,8 @@ class SearchController(object):
     @staticmethod
     def ReplaceInStcSelection(stc, matches, rstring, isregex=True):
         """Replace all the matches in the selection"""
+        if not len(matches):
+            return
         def GetSub(match):
             """replace substitution callable for re.sub"""
             value = rstring

@@ -24,6 +24,7 @@ certain cases.
 +Fix crash that could occur during shutdown during page load.
 +Fix crash that could occur when trying to retrieve binary data from clipboard to
 update clipboard ring.
++Fix crash that could happen when replace in selection action finds no matches.
 
 #-----------------------------------------------------------------------------#
 
