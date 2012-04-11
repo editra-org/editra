@@ -871,7 +871,7 @@ class EdPages(ed_book.EdBaseBook):
         # TODO: may not be necessary anymore
         try:
             txt = super(EdPages, self).GetPageText(pg_num)
-        except IndexError:
+        except Exception:
             txt = ''
 
         if not txt or txt[0] != u"*":
@@ -886,7 +886,7 @@ class EdPages(ed_book.EdBaseBook):
         """
         try:
             txt = super(EdPages, self).GetPageText(pg_num)
-        except IndexError:
+        except Exception:
             txt = ''
         return txt
 
