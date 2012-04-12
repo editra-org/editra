@@ -66,14 +66,22 @@ def GetLocaleDict(loc_list, opt=OPT_NO_OP):
 
     """
     lang_dict = dict()
-    for lang in [x for x in dir(wx) if x.startswith("LANGUAGE")]:
-        loc_i = wx.Locale.GetLanguageInfo(getattr(wx, lang))
-        if loc_i:
-            if loc_i.CanonicalName in loc_list:
-                if opt == OPT_DESCRIPT:
-                    lang_dict[loc_i.Description] = getattr(wx, lang)
-                else:
-                    lang_dict[loc_i.CanonicalName] = getattr(wx, lang)
+    for lang in [x for x in dir(wx) if x.startswith("LANGUAGE_")]:
+        langId = getattr(wx, lang)
+        langOk = False
+        try:
+            langOk = wx.Locale.IsAvailable(langId)
+        except wx.PyAssertionError:
+            continue
+
+        if langOk:
+            loc_i = wx.Locale.GetLanguageInfo(langId)
+            if loc_i:
+                if loc_i.CanonicalName in loc_list:
+                    if opt == OPT_DESCRIPT:
+                        lang_dict[loc_i.Description] = langId
+                    else:
+                        lang_dict[loc_i.CanonicalName] = langId
     return lang_dict
 
 def GetLangId(lang_n):
