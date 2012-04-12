@@ -214,12 +214,17 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
         # Setup Locale
         locale.setlocale(locale.LC_ALL, '')
-        self.locale = wx.Locale(ed_i18n.GetLangId(profiler.Profile_Get('LANG')))
-        if self.locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
-            self.locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
-            self.locale.AddCatalog(ed_glob.PROG_NAME)
+        langId = ed_i18n.GetLangId(profiler.Profile_Get('LANG'))
+        if wx.Locale.IsAvailable(langId):
+            self.locale = wx.Locale()
+            if self.locale.GetCanonicalName() in ed_i18n.GetAvailLocales():
+                self.locale.AddCatalogLookupPathPrefix(ed_glob.CONFIG['LANG_DIR'])
+                self.locale.AddCatalog(ed_glob.PROG_NAME)
+            else:
+                del self.locale
+                self.locale = None
         else:
-            del self.locale
+            self._log("[app][err] The locale %s is not available!" %  profiler.Profile_Get('LANG'))
             self.locale = None
 
         # Check and set encoding if necessary

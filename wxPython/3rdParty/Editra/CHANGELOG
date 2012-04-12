@@ -31,6 +31,7 @@ another running instance due to zombie IPC thread.
 +Fix crashes that could occur when loading plugins that throw errors during
 creation.
 +Fix crash when system fails to return control reference when print is requested.
++Ensure requested locale is available prior to trying to create it.
 
 #-----------------------------------------------------------------------------#
 
