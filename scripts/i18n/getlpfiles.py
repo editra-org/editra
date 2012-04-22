@@ -48,13 +48,13 @@ def CopyLPFiles(dname):
 
     """
     for f in os.listdir(dname):
-        if f.startswith('editra') and f.endswith('.po'):
+        if f.lower().startswith('editra') and f.endswith('.po'):
             newname = f.replace('editra', 'Editra')
             newname = newname.replace('-', '_')
             newname = NAMEMAP.get(newname, newname)
             source = os.path.join(dname, f)
             shutil.copy2(source, os.path.abspath("./%s" % newname))
-        elif f == 'editra':
+        elif f.lower() == 'editra':
             p = os.path.join(dname, f)
             if os.path.isdir(p):
                 CopyLPFiles(p) # recurse into subdir
