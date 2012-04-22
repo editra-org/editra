@@ -4,7 +4,7 @@
 
 #-----------------------------------------------------------------------------#
 Version 1.5
-Released: xx/xx/2011
+Released: 04/22/2011
 
 +Fix parsing issue in Python tag generator for when line continuation characters
 are encountered.
