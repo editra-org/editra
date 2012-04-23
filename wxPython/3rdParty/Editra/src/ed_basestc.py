@@ -1086,6 +1086,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             start = len(ed_txt.EncodeString(unicode_txt[0:start], 'utf-8'))
         if end != 0:
             end = len(ed_txt.EncodeString(unicode_txt[0:end], 'utf-8'))
+        del unicode_txt
         super(EditraBaseStc, self).SetSelection(start, end)
 
     def GetSelection(self):
@@ -1098,6 +1099,7 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             start = len(ed_txt.DecodeString(utf8_txt[0:start], 'utf-8'))
         if end != 0:
             end = len(ed_txt.DecodeString(utf8_txt[0:end], 'utf-8'))
+        del utf8_txt
         return start, end
 
     def ShowAutoCompOpt(self, command):
