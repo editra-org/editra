@@ -1358,17 +1358,17 @@ class EditraStc(ed_basestc.EditraBaseStc):
     def LineCut(self): # pylint: disable-msg=W0221
         """Cut the selected lines into the clipboard"""
         start, end = self.GetSelectionLineStartEnd()
-        self.SetSelection(start, end)
         self.BeginUndoAction()
+        self.BaseSetSelection(start, end)
         self.Cut()
         self.EndUndoAction()
 
     def LineDelete(self): # pylint: disable-msg=W0221
         """Delete the selected lines without modifying the clipboard"""
         start, end = self.GetSelectionLineStartEnd()
+        self.BeginUndoAction()
         self.SetTargetStart(start)
         self.SetTargetEnd(end)
-        self.BeginUndoAction()
         self.ReplaceTarget(u'')
         self.EndUndoAction()
 

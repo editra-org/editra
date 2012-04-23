@@ -1066,6 +1066,13 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
                     self.SetProperty(prop[0], prop[1])
         return True
 
+    def BaseSetSelection(self, start, end):
+        """Call base STC SetSelection method, for use with internal utf-8
+        indexes in use by derived classes, STC hell...
+
+        """
+        super(EditraBaseStc, self).SetSelection(start, end)
+
     def SetSelection(self, start, end):
         """Override base method to make it work correctly using
         Unicode character positions instead of UTF-8.

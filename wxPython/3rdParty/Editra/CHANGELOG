@@ -14,7 +14,7 @@ DATE 04/22/2012
 49th Alpha Release
 
 NEWS:
-This is a stabilzation and maintenance release targeting bugs that have been reported over the
+This is a stabilization and maintenance release targeting bugs that have been reported over the
 last several months. Biggest fix is to try to correct some utf-8 handling errors
 that were observed by some users of the 0.6.99 release. See release notes below
 for specific changes in this release.
@@ -22,6 +22,7 @@ for specific changes in this release.
 NEW: [features/enhancements]
 +New version of CodeBrowser plugin (bug fixes for Python / XML / HTML)
 +New version of Launch (configurable line buffering, bug fixes)
++Update all translations with current launchpad.
 
 BUG FIXES:
 +Fix error that could occur when selecting text in some environments under
@@ -37,6 +38,7 @@ another running instance due to zombie IPC thread.
 creation.
 +Fix crash when system fails to return control reference when print is requested.
 +Ensure requested locale is available prior to trying to create it.
++Fix incorrect line getting deleted by line delete action with some encodings.
 
 #-----------------------------------------------------------------------------#
 
