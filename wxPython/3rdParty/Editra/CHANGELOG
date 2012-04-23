@@ -9,6 +9,17 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.7.01
+DATE 04/23/2012
+50th Alpha Release
+
+NEWS:
+Update to fix issue with translations.
+
+BUG FIXES:
++Fix localizations not loading correctly.
+
+#-----------------------------------------------------------------------------#
 VERSION 0.7.00
 DATE 04/22/2012
 49th Alpha Release
