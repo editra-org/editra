@@ -3,7 +3,8 @@ import sys
 import os
 import shutil
 
-NAMEMAP = { "Editra_bg.po" : "Editra_bg_BG.po",
+NAMEMAP = { "Editra_be.po" : "Editra_be_BY.po",
+            "Editra_bg.po" : "Editra_bg_BG.po",
             "Editra_ca.po" : "Editra_ca_ES.po",
             "Editra_ca@valencia.po" : "Editra_ca_ES@valencia.po",
             "Editra_cs.po" : "Editra_cs_CZ.po",
@@ -11,6 +12,7 @@ NAMEMAP = { "Editra_bg.po" : "Editra_bg_BG.po",
             "Editra_de.po" : "Editra_de_DE.po",
             "Editra_el.po" : "Editra_el_GR.po",
             "Editra_es.po" : "Editra_es_ES.po",
+            "Editra_eu.po" : "Editra_eu_ES.po",
             "Editra_et.po" : "Editra_et_EE.po",
             "Editra_fa.po" : "Editra_fa_IR.po",
             "Editra_fi.po" : "Editra_fi_FI.po",
