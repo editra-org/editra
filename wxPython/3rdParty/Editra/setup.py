@@ -214,9 +214,9 @@ screenshots visit the projects homepage at `Editra.org
 <http://www.editra.org/>`_.
 
 ============
-Dependancies
+Dependencies
 ============
-  * Python 2.4+
+  * Python 2.6+
   * wxPython 2.8.3+ (Unicode build suggested)
   * setuptools 0.6+
 
