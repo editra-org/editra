@@ -9,6 +9,18 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.7.xx
+DATE 0x/xx/2012
+51st Alpha Release
+
+BUG FIXES:
++Fix major and apparently very long standing issue on Windows systems where
+application profiles were not getting updated correctly and settings would get
+lost between updates.
++Fix issues with sessions not getting updated properly under some use cases.
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.7.01
 DATE 04/23/2012
 50th Alpha Release

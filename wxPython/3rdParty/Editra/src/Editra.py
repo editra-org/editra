@@ -782,6 +782,7 @@ def InitConfig():
             if ed_glob.CONFIG['ISLOCAL']:
                 pstr = os.path.join(ed_glob.CONFIG['PROFILE_DIR'], pstr)
             pstr = util.RepairConfigState(pstr)
+            dev_tool.DEBUGP("[InitConfig][info] Loading profile: %s" % repr(pstr))
             profiler.TheProfile.Load(pstr)
         else:
             dev_tool.DEBUGP("[InitConfig][info] Updating Profile to current version")
@@ -834,7 +835,7 @@ def InitConfig():
             ed_glob.CONFIG['SESSION_DIR'] = util.ResolvConfigDir(u"sessions")
             smgr = ed_session.EdSessionMgr()
             sess = profiler.Profile_Get('LAST_SESSION')
-            if isinstance(sess, list):
+            if isinstance(sess, list) or not sess:
                 profiler.Profile_Set('LAST_SESSION', smgr.DefaultSession)
             else:
                 # After 0.6.58 session is reduced to a name instead of path
@@ -1121,12 +1122,13 @@ def _Main(opts, args):
     # Load Session Data
     # But not if there are command line args for files to open
     if profiler.Profile_Get('SAVE_SESSION', 'bool', False) and not len(args):
+        smgr = ed_session.EdSessionMgr()
         session = profiler.Profile_Get('LAST_SESSION', default=u'')
         if isinstance(session, list):
             # Check for format conversion from previous versions
-            profiler.Profile_Set('LAST_SESSION', u'')
-        else:
-            frame.GetNotebook().LoadSessionFile(session)
+            profiler.Profile_Set('LAST_SESSION', smgr.DefaultSession)
+            session = smgr.DefaultSession
+        frame.GetNotebook().LoadSessionFile(session)
         del session
 
     # Unlike wxMac/wxGTK Windows doesn't post an activate event when a window
