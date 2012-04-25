@@ -401,7 +401,7 @@ class GeneralStartupPanel(wx.Panel):
                                   _("Disable Error Reporter"))
         reporter_cb.SetValue(not Profile_Get('REPORTER'))
         sess_cb = wx.CheckBox(self, ed_glob.ID_SESSION, _("Load Last Session"))
-        sess_cb.SetValue(Profile_Get('SAVE_SESSION'))
+        sess_cb.SetValue(Profile_Get('SAVE_SESSION', default=False))
         sess_cb.SetToolTipString(_("Load files from last session on startup"))
         splash_cb = wx.CheckBox(self, ed_glob.ID_APP_SPLASH,
                                 _("Show Splash Screen"))

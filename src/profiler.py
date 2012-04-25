@@ -381,7 +381,7 @@ def GetProfileStr():
         return CONFIG['PROFILE_DIR'] + u"default.ppb"
 
     profile = reader.readline()
-    profile = profile.split("\n")[0] # strip newline from end
+    profile = profile.strip()
     reader.close()
     if not os.path.isabs(profile):
         profile = CONFIG['PROFILE_DIR'] + profile
