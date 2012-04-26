@@ -418,9 +418,10 @@ class EdFile(ebmlib.FileObjectImpl):
 
         """
         Log("[ed_txt][info] EdFile.ReadAsync()")
-        pid = control.GetTopLevelParent().GetId()
+        pid = control.GetTopLevelParent().Id
         filesize = ebmlib.GetFileSize(self.GetPath())
         ed_msg.PostMessage(ed_msg.EDMSG_PROGRESS_STATE, (pid, 1, filesize))
+        # Fork off async job to threadpool
         self._job = FileReadJob(control, self.ReadGenerator, 4096)
         ed_thread.EdThreadPool().QueueJob(self._job.run)
 
