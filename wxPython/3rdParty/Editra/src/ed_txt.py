@@ -22,6 +22,7 @@ import re
 import time
 import wx
 import codecs
+import encodings as enclib
 import locale
 from StringIO import StringIO
 
@@ -810,16 +811,25 @@ def GetEncodings():
     encodings.append('utf-16')
     encodings.append('latin-1')
 
+    # Normalize all names
+    normlist = [ enclib.normalize_encoding(enc) for enc in encodings ]
+
     # Clean the list for duplicates and None values
     rlist = list()
-    for enc in encodings:
+    codec_list = list()
+    for enc in normlist:
         if enc is not None and len(enc):
             enc = enc.lower()
             if enc not in rlist:
+                # Ascii is useless so ignore it (ascii, us_ascii, ...)
+                if 'ascii' in enc:
+                    continue
+
                 try:
-                    codecs.lookup(enc)
+                    ctmp = codecs.lookup(enc)
+                    if ctmp.name not in codec_list:
+                        codec_list.append(ctmp.name)
+                        rlist.append(enc)
                 except LookupError:
                     pass
-                else:
-                    rlist.append(enc)
     return rlist
