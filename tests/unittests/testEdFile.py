@@ -116,7 +116,7 @@ class EdFileTest(unittest.TestCase):
         fobj = ed_txt.EdFile(self.path_utf16)
         txt = fobj.Read()
         self.assertTrue(type(txt) == types.UnicodeType)
-        self.assertTrue(fobj.Encoding in ('utf-16', 'utf_16'))
+        self.assertTrue(fobj.Encoding in ('utf-16-le', 'utf_16_le', 'utf-16', 'utf_16'))
         self.assertFalse(fobj.HasBom()) # test file has no BOM
 
         # Get original raw bytes

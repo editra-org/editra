@@ -766,17 +766,17 @@ def GuessEncoding(fname, sample):
     @return: encoding or None
 
     """
-    with open(fname, 'rb') as handle:
-        for enc in GetEncodings():
-            try:
-                reader = codecs.getreader(enc)(handle)
-                value = reader.read(sample)
-                if str('\0') in value:
-                    continue
-            except Exception, msg:
-                continue
-            else:
-                return enc
+    for enc in GetEncodings():
+        try:
+            with open(fname, 'rb') as handle:
+                with codecs.getreader(enc)(handle) as reader:
+                    value = reader.read(sample)
+                    if str('\0') in value:
+                        continue
+                    else:
+                        return enc
+        except Exception, msg:
+            continue
     return None
 
 def GetEncodings():
@@ -809,6 +809,7 @@ def GetEncodings():
         pass
     encodings.append(sys.getfilesystemencoding())
     encodings.append('utf-16')
+    encodings.append('utf-16-le') # for files without BOM...
     encodings.append('latin-1')
 
     # Normalize all names

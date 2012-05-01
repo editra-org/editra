@@ -19,6 +19,9 @@ application profiles were not getting updated correctly and settings would get
 lost between updates.
 +Fix issues with sessions not getting updated properly under some use cases.
 +Fix crash condition that could occur when reload of file fails.
++Fix file encoding detection issue that some systems experienced.
++Fix UTF-16 decoding issues / regressions due to change in behavior between
+python2.6 and 2.7.
 
 #-----------------------------------------------------------------------------#
 
