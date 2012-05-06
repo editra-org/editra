@@ -3,8 +3,9 @@ Author: Cody Precord
 License: wxWindows
 
 Version 1.7:
-xx/xx/2011
+xx/xx/2012
    - Use common ebmlib functions
+   - Add option to disable browser synchronization
 
 Version 1.6:
 10/02/2010
