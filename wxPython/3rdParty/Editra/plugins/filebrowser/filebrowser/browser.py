@@ -38,6 +38,9 @@ import util
 import eclib
 import ebmlib
 
+# Local Modules
+import filebrowser.fbcfg as fbcfg
+
 #-----------------------------------------------------------------------------#
 # Globals
 PANE_NAME = u'FileBrowser'
@@ -636,6 +639,9 @@ class FileBrowser(wx.GenericDirCtrl):
         @todo: check if message is from a page closing and avoid updates
 
         """
+        if not fbcfg.GetFBOption(fbcfg.FB_SYNC_OPT, True):
+            return
+
         nbdata = msg.GetData()
         pg_count = nbdata[0].GetPageCount()
         if nbdata[1] > pg_count  or nbdata[1] < 0:

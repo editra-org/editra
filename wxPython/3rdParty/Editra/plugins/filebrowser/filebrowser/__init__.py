@@ -20,6 +20,7 @@ import plugin
 from profiler import Profile_Get, Profile_Set
 
 # Local imports
+import fbcfg
 import browser
 
 #-----------------------------------------------------------------------------#
@@ -58,3 +59,28 @@ class FileBrowserPanel(plugin.Plugin):
     def GetUIHandlers(self):
         """Pass Ui handlers to main window for management"""
         return [(browser.ID_FILEBROWSE, self._filebrowser.OnUpdateMenu)]
+
+#-----------------------------------------------------------------------------#
+
+class FBConfigObject(plugin.PluginConfigObject):
+    """Plugin configuration object for FileBrowser
+    Provides configuration panel for plugin dialog.
+
+    """
+    def GetConfigPanel(self, parent):
+        """Get the configuration panel for this plugin
+        @param parent: parent window for the panel
+        @return: wxPanel
+
+        """
+        return fbcfg.FBConfigPanel(parent)
+
+    def GetLabel(self):
+        """Get the label for this config panel
+        @return string
+
+        """
+        return _("FileBrowser")
+
+def GetConfigObject():
+    return FBConfigObject()
