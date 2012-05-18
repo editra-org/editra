@@ -373,25 +373,16 @@ class FBMimeMgr(object):
         tpath = os.path.basename(path)
         ext = ebmlib.GetFileExtension(tpath)
         etype = syntax.GetIdFromExt(ext)
-        if etype == synglob.ID_LANG_PYTHON:
-            self._ftype = FBMimeMgr.IMG_PYTHON
-        elif etype == synglob.ID_LANG_BOO:
-            self._ftype = FBMimeMgr.IMG_BOO
-        elif etype == synglob.ID_LANG_CSS:
-            self._ftype = FBMimeMgr.IMG_CSS
-        elif etype == synglob.ID_LANG_HTML:
-            self._ftype = FBMimeMgr.IMG_HTML
-        elif etype == synglob.ID_LANG_JAVA:
-            self._ftype = FBMimeMgr.IMG_JAVA
-        elif etype == synglob.ID_LANG_PHP:
-            self._ftype = FBMimeMgr.IMG_PHP
-        elif etype == synglob.ID_LANG_RUBY:
-            self._ftype = FBMimeMgr.IMG_RUBY
-        elif etype == synglob.ID_LANG_BASH:
-            self._ftype = FBMimeMgr.IMG_SHELL
-        else:
-            return False
-        return True
+        tmap = { synglob.ID_LANG_PYTHON : FBMimeMgr.IMG_PYTHON,
+                 synglob.ID_LANG_BOO : FBMimeMgr.IMG_BOO,
+                 synglob.ID_LANG_CSS : FBMimeMgr.IMG_CSS,
+                 synglob.ID_LANG_HTML : FBMimeMgr.IMG_HTML,
+                 synglob.ID_LANG_JAVA : FBMimeMgr.IMG_JAVA,
+                 synglob.ID_LANG_PHP : FBMimeMgr.IMG_PHP,
+                 synglob.ID_LANG_RUBY : FBMimeMgr.IMG_RUBY,
+                 synglob.ID_LANG_BASH : FBMimeMgr.IMG_SHELL }
+        self._ftype = tmap.get(etype, FBMimeMgr.IMG_FILE)
+        return self._ftype != FBMimeMgr.IMG_FILE
 
     def IsKnownBinType(self, path):
         """Is a known binary file type
@@ -522,7 +513,14 @@ class FileBrowser2(eclib.FileTree):
 
     def DoBeginEdit(self, item):
         """Handle when an item is requested to be edited"""
-        # TODO don't allow rename of drives
+        d = None
+        try:
+            d = self.GetPyData(item)
+        except wx.PyAssertionError:
+            util.Log("[FileBrowser][err] FileBrowser2.DoItemExpanding")
+            return False
+        if d and not os.access(d, os.W_OK) or os.path.ismount(d):
+            return False
         return True
 
     def DoEndEdit(self, item, newlabel):
