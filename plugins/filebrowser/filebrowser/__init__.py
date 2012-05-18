@@ -52,6 +52,9 @@ class FileBrowserPanel(plugin.Plugin):
                             BestSize(wx.Size(215, 350)))
             mgr.Update()
 
+    def GetMinVersion(self):
+        return "0.7.01"
+
     def GetMenuHandlers(self):
         """Pass even handler for menu item to main window for management"""
         return [(browser.ID_FILEBROWSE, self._filebrowser.OnShowBrowser)]
