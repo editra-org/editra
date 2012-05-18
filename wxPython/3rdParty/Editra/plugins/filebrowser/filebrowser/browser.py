@@ -503,10 +503,13 @@ class FileBrowser2(eclib.FileTree):
         if d and os.path.exists(d):
             contents = FileBrowser2.GetDirContents(d)
             showHidden = fbcfg.GetFBOption(fbcfg.FB_SHF_OPT, False)
-            for p in contents:
-                if not showHidden and ebmlib.IsHidden(p):
-                    continue
-                self.AppendFileNode(item, p)
+            isHidden = ebmlib.IsHidden
+            addNode = self.AppendFileNode
+            with eclib.Freezer(self) as _tmp:
+                for p in contents:
+                    if not showHidden and isHidden(p):
+                        continue
+                    addNode(item, p)
         self.SortChildren(item)
         if d and os.path.isdir(d):
             self._monitor.AddDirectory(d)
