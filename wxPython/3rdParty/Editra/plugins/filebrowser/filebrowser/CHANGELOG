@@ -2,8 +2,9 @@ FileBrowser Plugin for Editra
 Author: Cody Precord
 License: wxWindows
 
-Version 1.7:
+Version 2.0:
 xx/xx/2012
+   - Major re-write
    - Use common ebmlib functions
    - Add option to disable browser synchronization
 
