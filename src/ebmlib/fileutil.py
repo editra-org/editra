@@ -22,11 +22,12 @@ __all__ = [ 'GetAbsPath', 'GetFileExtension', 'GetFileModTime', 'GetFileName',
             'IsLink', 'MakeNewFile', 'MakeNewFolder', 'PathExists',
             'ResolveRealPath', 'IsExecutable', 'Which', 'ComparePaths',
             'AddFileExtension', 'GetDirectoryObject', 'File', 'Directory',
-            'GetFileManagerCmd', 'OpenWithFileManager']
+            'GetFileManagerCmd', 'OpenWithFileManager', 'IsHidden']
 
 #-----------------------------------------------------------------------------#
 # Imports
 import wx
+import ctypes
 import os
 import platform
 import urllib2
@@ -199,6 +200,27 @@ def IsLink(path):
         return path.endswith(".lnk") or os.path.islink(path)
     else:
         return os.path.islink(path)
+
+@uri2path
+def IsHidden(path):
+    """Is the path a hidden path
+    @param path: path to check
+    @return: bool
+
+    """
+    bHidden = False
+    if PathExists(path):
+        if WIN:
+            try:
+                attrs = ctypes.windll.kernel32.GetFileAttributesW(path)
+                assert attrs != -1
+                bHidden = bool(attrs & 2)
+            except (AttributeError, AssertionError):
+                bHidden = False
+        else:
+            dname = GetFileName(path)
+            bHidden = dname.startswith('.')
+    return bHidden
 
 @uri2path
 def PathExists(path):
