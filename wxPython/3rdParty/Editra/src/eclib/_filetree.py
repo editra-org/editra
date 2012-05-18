@@ -21,7 +21,9 @@ __all__ = ['FileTree',]
 
 #-----------------------------------------------------------------------------#
 # Imports
+import sys
 import os
+import types
 import wx
 
 #-----------------------------------------------------------------------------#
@@ -363,7 +365,10 @@ class FileTree(wx.TreeCtrl):
         files = list()
         try:
             for p in os.listdir(directory):
-                files.append(os.path.join(directory, p))
+                fullpath = os.path.join(directory, p)
+                if type(fullpath) != types.UnicodeType:
+                    fullpath = fullpath.decode(sys.getfilesystemencoding())
+                files.append(fullpath)
         except OSError:
             pass
         return files
