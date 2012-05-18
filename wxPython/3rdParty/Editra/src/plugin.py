@@ -669,7 +669,7 @@ class PluginManager(object):
         @postcondition: all plugins in the environment are initialized
 
         """
-        if pkg_resources == None:
+        if pkg_resources is None:
             return
 
         pkg_env = env
