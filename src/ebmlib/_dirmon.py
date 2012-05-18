@@ -124,6 +124,7 @@ class WatcherThread(threading.Thread):
 
         self._freq = 1000.0 # Monitoring frequency in milliseconds
         self._continue = True
+        self._changePending = False
         self._lock = threading.Lock()
         self._suspend = False
         self._suspendcond = threading.Condition()
@@ -146,6 +147,8 @@ class WatcherThread(threading.Thread):
                 for dobj in self._dirs:
                     if not self._continue:
                         return
+                    elif self._changePending:
+                        break
 
                     # Check if a watched directory has been deleted
                     if not os.path.exists(dobj.Path):
@@ -157,24 +160,30 @@ class WatcherThread(threading.Thread):
                                                            False, True)
 
                     # Check for deletions
-                    for tobj in dobj.Files:
+                    dobjFiles = dobj.Files # optimization
+                    dobjIndex = dobjFiles.index # optimization
+                    for tobj in dobjFiles:
                         if not self._continue:
                             return
+                        elif self._changePending:
+                            break
                         if tobj not in snapshot.Files:
                             deleted.append(tobj)
-                            dobj.Files.remove(tobj)
+                            dobjFiles.remove(tobj)
 
                     # Check for additions and modifications
                     for tobj in snapshot.Files:
                         if not self._continue:
                             return
-                        if tobj not in dobj.Files:
+                        elif self._changePending:
+                            break
+                        if tobj not in dobjFiles:
                             # new object was added
                             added.append(tobj)
-                            dobj.Files.append(tobj)
+                            dobjFiles.append(tobj)
                         else:
-                            idx = dobj.Files.index(tobj)
-                            existing = dobj.Files[idx]
+                            idx = dobjIndex(tobj)
+                            existing = dobjFiles[idx]
                             # object was modified
                             if existing.ModTime < tobj.ModTime:
                                 modified.append(tobj)
@@ -196,11 +205,13 @@ class WatcherThread(threading.Thread):
         """
         assert os.path.isdir(dpath)
         dobj = fileutil.Directory(dpath)
+        self._changePending = True
         with self._lock:
             if dobj not in self._dirs:
                 # Get current snapshot of the directory
                 dobj = fileutil.GetDirectoryObject(dpath, False, True)
                 self._dirs.append(dobj)
+        self._changePending = False
 
     def RemoveWatchDirectory(self, dpath):
         """Remove a directory from the watch
@@ -208,9 +219,11 @@ class WatcherThread(threading.Thread):
 
         """
         dobj = fileutil.Directory(dpath)
+        self._changePending = True
         with self._lock:
             if dobj in self._dirs:
                 self._dirs.remove(dobj)
+        self._changePending = False
 
     def SetFrequency(self, milli):
         """Set the update frequency
