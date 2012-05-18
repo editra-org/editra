@@ -257,12 +257,9 @@ class FileTree(wx.TreeCtrl):
 
         """
         img = self.DoGetFileImage(path)
-        if path == '/':
+        name = os.path.basename(path)
+        if not name:
             name = path
-        else:
-            name = os.path.basename(path)
-            if not name:
-                name = path
         child = self.AppendItem(item, name, img)
         self.SetPyData(child, path)
         if os.path.isdir(path):
@@ -373,11 +370,14 @@ class FileTree(wx.TreeCtrl):
         assert os.path.isdir(directory)
         files = list()
         try:
+            joinPath = os.path.join
+            fappend = files.append
+            fs_encoding = sys.getfilesystemencoding()
             for p in os.listdir(directory):
-                fullpath = os.path.join(directory, p)
+                fullpath = joinPath(directory, p)
                 if type(fullpath) != types.UnicodeType:
-                    fullpath = fullpath.decode(sys.getfilesystemencoding())
-                files.append(fullpath)
+                    fullpath = fullpath.decode(fs_encoding)
+                fappend(fullpath)
         except OSError:
             pass
         return files
