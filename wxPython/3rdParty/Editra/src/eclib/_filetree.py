@@ -261,6 +261,8 @@ class FileTree(wx.TreeCtrl):
             name = path
         else:
             name = os.path.basename(path)
+            if not name:
+                name = path
         child = self.AppendItem(item, name, img)
         self.SetPyData(child, path)
         if os.path.isdir(path):
