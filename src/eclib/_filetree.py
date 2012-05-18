@@ -107,6 +107,10 @@ class FileTree(wx.TreeCtrl):
         item = evt.GetItem()
         self.DoShowMenu(item)
 
+    #---- Properties ----#
+
+    SelectedFiles = property(lambda self: self.GetSelectedFiles())
+
     #---- Overridable methods ----#
 
     def DoBeginEdit(self, item):
@@ -253,7 +257,10 @@ class FileTree(wx.TreeCtrl):
 
         """
         img = self.DoGetFileImage(path)
-        name = os.path.basename(path)
+        if path == '/':
+            name = path
+        else:
+            name = os.path.basename(path)
         child = self.AppendItem(item, name, img)
         self.SetPyData(child, path)
         if os.path.isdir(path):
