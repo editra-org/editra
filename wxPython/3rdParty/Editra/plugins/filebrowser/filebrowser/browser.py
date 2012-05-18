@@ -33,7 +33,7 @@ import ed_msg
 import ed_menu
 import ed_mdlg
 import syntax.synglob as synglob
-import syntax.synextreg as synextreg
+import syntax.syntax as syntax
 import util as util
 import ed_thread
 import eclib
@@ -370,9 +370,9 @@ class FBMimeMgr(object):
         @param path: file path / name
 
         """
-        ext = ebmlib.GetFileExtension(path)
-        ereg = synextreg.ExtensionRegister()
-        etype = ereg.FileTypeFromExt(ext)
+        tpath = os.path.basename(path)
+        ext = ebmlib.GetFileExtension(tpath)
+        etype = syntax.GetIdFromExt(ext)
         if etype == synglob.ID_LANG_PYTHON:
             self._ftype = FBMimeMgr.IMG_PYTHON
         elif etype == synglob.ID_LANG_BOO:
@@ -407,16 +407,8 @@ class FBMimeMgr(object):
 
     def IsDevice(self, path):
         """Is the path some sort of device"""
-        if wx.Platform == '__WXGTK__':
-            if os.path.ismount(path):
-                self._ftype = FBMimeMgr.IMG_HARDDISK
-        elif wx.Platform == '__WXMAC__':
-            if os.path.ismount(path):
-                self._ftype = FBMimeMgr.IMG_HARDDISK
-        else:
-            tmp = path.rstrip('\\').upper()
-            if tmp in "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:W:Z:":
-                self._ftype = FBMimeMgr.IMG_HARDDISK
+        if os.path.ismount(path):
+            self._ftype = FBMimeMgr.IMG_HARDDISK
         rval = self._ftype != FBMimeMgr.IMG_FILE
         return rval
 
@@ -447,16 +439,22 @@ class FileBrowser2(eclib.FileTree):
         self._monitor = ebmlib.DirectoryMonitor()
         self._monitor.SubscribeCallback(self.OnFilesChanged)
         self._monitor.StartMonitoring()
+        self.isClosing = False
 
         # Setup
         self.SetupImageList()
-        self.AddWatchDirectory("/") # TODO: OS dependent
+        # TODO: OS dependent drive discovery
+        if wx.Platform == '__WXMSW__':
+            self.AddWatchDirectory("C:\\")
+        else:
+            self.AddWatchDirectory("/")
 
         # Event Handlers
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
         self.Bind(wx.EVT_MENU, self.OnMenu)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnPageChange, ed_msg.EDMSG_UI_NB_CHANGED)
+        ed_msg.Subscribe(self.OnPageClosing, ed_msg.EDMSG_UI_NB_CLOSING)
         ed_msg.Subscribe(self.OnConfig, ed_msg.EDMSG_PROFILE_CHANGE + (fbcfg.FB_PROF_KEY,))
 
     def OnDestroy(self, evt):
@@ -464,6 +462,7 @@ class FileBrowser2(eclib.FileTree):
         if self:
             self._menu.Clear()
             ed_msg.Unsubscribe(self.OnPageChange)
+            ed_msg.Unsubscribe(self.OnPageClosing)
             ed_msg.Unsubscribe(self.OnThemeChanged)
             ed_msg.Unsubscribe(self.OnConfig)
 
@@ -745,12 +744,20 @@ class FileBrowser2(eclib.FileTree):
         pass
 
     @ed_msg.mwcontext
+    def OnPageClosing(self, msg):
+        self.isClosing = True
+
+    @ed_msg.mwcontext
     def OnPageChange(self, msg):
         """Syncronize selection with the notebook page changes
         @param msg: MessageObject
         @todo: check if message is from a page closing and avoid updates
 
         """
+        if self.isClosing:
+            self.isClosing = False
+            return
+
         if not fbcfg.GetFBOption(fbcfg.FB_SYNC_OPT, True):
             return
 
