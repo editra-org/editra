@@ -12,11 +12,12 @@ __author__ = "Cody Precord"
 
 #-----------------------------------------------------------------------------#
 # Imports
-import wx.aui
+import wx
 
 # Libs from Editra
 import iface
 import plugin
+import ed_fmgr
 from profiler import Profile_Get, Profile_Set
 
 # Local imports
@@ -42,11 +43,10 @@ class FileBrowserPanel(plugin.Plugin):
             
             #---- Create File Browser ----#
             # TODO hook in saved filter from profile
-            self._filebrowser = browser.BrowserPane(self._mw, 
-                                                    browser.ID_BROWSERPANE)
+            self._filebrowser = browser.BrowserPane(self._mw)
             mgr = self._mw.GetFrameManager()
             mgr.AddPane(self._filebrowser, 
-                        wx.aui.AuiPaneInfo().Name(browser.PANE_NAME).\
+                        ed_fmgr.EdPaneInfo().Name(browser.PANE_NAME).\
                             Caption("File Browser").Left().Layer(1).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(215, 350)))
