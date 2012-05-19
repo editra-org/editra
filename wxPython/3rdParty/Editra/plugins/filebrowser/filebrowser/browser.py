@@ -21,6 +21,7 @@ __revision__ = "$Revision$"
 # Imports
 import os
 import sys
+import time
 import stat
 import zipfile
 import shutil
@@ -488,6 +489,34 @@ class FileBrowser2(eclib.FileTree):
         self._monitor.RemoveDirectory(d)
         super(FileBrowser2, self).DoItemCollapsed(item)
 
+    def ShouldDisplayFile(self, path):
+        """Check if the given file should be displayed based on configuration
+        @param path: file path
+        @return: bool
+
+        """
+        showHidden = fbcfg.GetFBOption(fbcfg.FB_SHF_OPT, False)
+        if not showHidden and ebmlib.IsHidden(path):
+            return False
+        return True
+
+    def FilterFileList(self, paths):
+        """Filter a list of files returning only the ones that are valid to
+        display in the tree. Optimized for large lists of paths.
+        @param paths: list of paths
+        @return: filtered list
+
+        """
+        showHidden = fbcfg.GetFBOption(fbcfg.FB_SHF_OPT, False)
+        isHidden = ebmlib.IsHidden
+        rval = list()
+        rAdd = rval.append
+        for path in paths:
+            if not showHidden and isHidden(path):
+                continue
+            rAdd(path)
+        return rval
+
     def DoItemExpanding(self, item):
         """Handle when an item is expanding to display the folder contents
         @param item: TreeItem
@@ -502,15 +531,11 @@ class FileBrowser2(eclib.FileTree):
 
         if d and os.path.exists(d):
             contents = FileBrowser2.GetDirContents(d)
-            showHidden = fbcfg.GetFBOption(fbcfg.FB_SHF_OPT, False)
-            isHidden = ebmlib.IsHidden
-            addNode = self.AppendFileNode
+            t1 = time.time()
             with eclib.Freezer(self) as _tmp:
-                for p in contents:
-                    if not showHidden and isHidden(p):
-                        continue
-                    addNode(item, p)
-        self.SortChildren(item)
+                self.AppendFileNodes(item, self.FilterFileList(contents))
+                self.SortChildren(item)
+            util.Log("[FileBrowser][info] Tree expand time: %f" % (time.time() - t1))
         if d and os.path.isdir(d):
             self._monitor.AddDirectory(d)
 
@@ -658,6 +683,9 @@ class FileBrowser2(eclib.FileTree):
         # Add any new file objects to the view
         needsort = list()
         for fobj in added:
+            # apply filters to any new files
+            if not self.ShouldDisplayFile(fobj.Path):
+                continue
             dpath = os.path.dirname(fobj.Path)
             for item in nodes:
                 path = self.GetPyData(item)
