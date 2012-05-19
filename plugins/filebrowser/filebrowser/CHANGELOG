@@ -5,6 +5,8 @@ License: wxWindows
 Version 2.0:
 xx/xx/2012
    - Major re-write
+   - View filter configuration
+   - View Hidden files option moved to configuration dialog
    - Use common ebmlib functions
    - Add option to disable browser synchronization
 
