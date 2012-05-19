@@ -444,6 +444,8 @@ class FileBrowser2(eclib.FileTree):
         self._monitor.SubscribeCallback(self.OnFilesChanged)
         self._monitor.StartMonitoring()
         self.isClosing = False
+        self.syncTimer = wx.Timer(self)
+        self._cpath = None
 
         # Setup
         self.SetupImageList()
@@ -456,6 +458,7 @@ class FileBrowser2(eclib.FileTree):
         # Event Handlers
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
         self.Bind(wx.EVT_MENU, self.OnMenu)
+        self.Bind(wx.EVT_TIMER, self.OnTimer)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
         ed_msg.Subscribe(self.OnPageChange, ed_msg.EDMSG_UI_NB_CHANGED)
         ed_msg.Subscribe(self.OnPageClosing, ed_msg.EDMSG_UI_NB_CLOSING)
@@ -469,6 +472,8 @@ class FileBrowser2(eclib.FileTree):
             ed_msg.Unsubscribe(self.OnPageClosing)
             ed_msg.Unsubscribe(self.OnThemeChanged)
             ed_msg.Unsubscribe(self.OnConfig)
+            if self.syncTimer.IsRunning():
+                self.syncTimer.Stop()
 
     #--- FileTree interface methods ----#
 
@@ -801,7 +806,7 @@ class FileBrowser2(eclib.FileTree):
 
     @ed_msg.mwcontext
     def OnPageChange(self, msg):
-        """Syncronize selection with the notebook page changes
+        """Synchronize selection with the notebook page changes
         @param msg: MessageObject
         @todo: check if message is from a page closing and avoid updates
 
@@ -827,7 +832,17 @@ class FileBrowser2(eclib.FileTree):
         if page:
             path = getattr(page, 'GetFileName', lambda: u"")()
             if len(path) and os.path.exists(path):
-                self.SelectFile(path)
+                # Delay selection for smoother operation when many
+                # page change events are received in a short time.
+                if self.syncTimer.IsRunning():
+                    self.syncTimer.Stop()
+                self._cpath = path
+                self.syncTimer.Start(500, True)
+
+    def OnTimer(self, evt):
+        """Handle tab synchronization"""
+        if self._cpath:
+            self.SelectFile(self._cpath)
 
     def GetMainWindow(self):
         """Get the main window, needed by L{ed_msg.mwcontext}"""
