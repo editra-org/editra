@@ -266,6 +266,30 @@ class FileTree(wx.TreeCtrl):
             self.SetItemHasChildren(child, True)
         return child
 
+    def AppendFileNodes(self, item, paths):
+        """Append a list of child node to the tree. This
+        method can be used instead of looping on AppendFileNode
+        to get slightly better performance for large sets.
+        @param item: TreeItem parent node
+        @param paths: list of file paths
+        @return: None
+
+        """
+        getBaseName = os.path.basename
+        isDir = os.path.isdir
+        getImg = self.DoGetFileImage
+        appendNode = self.AppendItem
+        setData = self.SetPyData
+        for path in paths:
+            img = getImg(path)
+            name = getBaseName(path)
+            if not name:
+                name = path
+            child = appendNode(item, name, img)
+            setData(child, path)
+            if isDir(path):
+                self.SetItemHasChildren(child, True)
+
     def GetChildNodes(self, parent):
         """Get all the TreeItemIds under the given parent
         @param parent: TreeItem
