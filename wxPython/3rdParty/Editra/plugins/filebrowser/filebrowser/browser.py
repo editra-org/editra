@@ -21,6 +21,7 @@ __revision__ = "$Revision$"
 # Imports
 import os
 import sys
+import fnmatch
 import time
 import stat
 import zipfile
@@ -94,6 +95,9 @@ class BrowserMenuBar(eclib.ControlBar):
         menu.AppendMenu(ID_REMOVE_MARK, _("Remove Saved Path"), self._rmpath)
 
         # Button
+        bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_PREF), wx.ART_MENU)
+        self.prefb = eclib.PlateButton(self, bmp=bmp,
+                                       style=eclib.PB_STYLE_NOBG)
         bmp = wx.ArtProvider.GetBitmap(str(ed_glob.ID_ADD_BM), wx.ART_MENU)
         self.menub = eclib.PlateButton(self, bmp=bmp,
                                        style=eclib.PB_STYLE_NOBG)
@@ -101,10 +105,12 @@ class BrowserMenuBar(eclib.ControlBar):
         self.menub.SetMenu(menu)
 
         # Layout bar
+        self.AddControl(self.prefb, wx.ALIGN_LEFT)
         self.AddControl(self.menub, wx.ALIGN_LEFT)
 
         # Event Handlers
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
+        self.Bind(wx.EVT_BUTTON, self.OnPref, self.prefb)
         self.Bind(wx.EVT_BUTTON, lambda evt: self.menub.ShowMenu(), self.menub)
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy, self)
 
@@ -115,6 +121,12 @@ class BrowserMenuBar(eclib.ControlBar):
         """Unsubscribe from messages"""
         if self:
             ed_msg.Unsubscribe(self.OnThemeChanged)
+
+    def OnPref(self, evt):
+        """Show the preferences dialog"""
+        dlg = fbcfg.FBConfigDlg(self.TopLevelParent)
+        dlg.ShowModal()
+        dlg.Destroy()
 
     # XXX maybe change to list the more recently added items near the top
     def AddItem(self, label):
@@ -498,6 +510,11 @@ class FileBrowser2(eclib.FileTree):
         showHidden = fbcfg.GetFBOption(fbcfg.FB_SHF_OPT, False)
         if not showHidden and ebmlib.IsHidden(path):
             return False
+        name = os.path.basename(name)
+        filters = fbcfg.GetFBOption(fbcfg.FB_FILTER_OPT,
+                                    fbcfg.FB_DEFAULT_FILTERS)
+        if filter(lambda x: fnmatch.fnmatchcase(name, x), filters):
+                return False
         return True
 
     def FilterFileList(self, paths):
@@ -508,11 +525,17 @@ class FileBrowser2(eclib.FileTree):
 
         """
         showHidden = fbcfg.GetFBOption(fbcfg.FB_SHF_OPT, False)
+        filters = fbcfg.GetFBOption(fbcfg.FB_FILTER_OPT,
+                                    fbcfg.FB_DEFAULT_FILTERS)
         isHidden = ebmlib.IsHidden
         rval = list()
         rAdd = rval.append
+        getBase = os.path.basename
         for path in paths:
             if not showHidden and isHidden(path):
+                continue
+            name = getBase(path)
+            if filter(lambda x: fnmatch.fnmatchcase(name, x), filters):
                 continue
             rAdd(path)
         return rval
