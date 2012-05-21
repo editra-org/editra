@@ -413,6 +413,12 @@ class FBMimeMgr(object):
         """Is the path some sort of device"""
         if os.path.ismount(path):
             self._ftype = FBMimeMgr.IMG_HARDDISK
+            if wx.Platform == '__WXMSW__':
+                dtype = ebmlib.GetWindowsDriveType(path)
+                if isinstance(dtype, ebmlib.RemovableDrive):
+                    self._ftype = FBMimeMgr.IMG_USB
+                elif isinstance(dtype, ebmlib.CDROMDrive):
+                    self._ftype = FBMimeMgr.IMG_CD
         rval = self._ftype != FBMimeMgr.IMG_FILE
         return rval
 
@@ -451,7 +457,9 @@ class FileBrowser2(eclib.FileTree):
         self.SetupImageList()
         # TODO: OS dependent drive discovery
         if wx.Platform == '__WXMSW__':
-            self.AddWatchDirectory("C:\\")
+            for dname in ebmlib.GetWindowsDrives():
+                if os.path.exists(dname.Name):
+                    self.AddWatchDirectory(dname.Name)
         else:
             self.AddWatchDirectory("/")
 

@@ -218,7 +218,7 @@ class FileTree(wx.TreeCtrl):
                on path.
 
         """
-        assert os.path.exists(dname)
+        assert os.path.exists(dname), "Path(%s) doesn't exist!" % dname
         if dname not in self._watch:
             self._watch.append(dname)
             return self.AppendFileNode(self.RootItem, dname)
