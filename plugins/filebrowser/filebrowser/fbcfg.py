@@ -42,7 +42,8 @@ FB_DEFAULT_FILTERS = ["*.pyc", "*.pyo", "*~", "*.bak", "*.a", "*.o",
 
 class FBConfigDlg(ed_basewin.EdBaseDialog):
     def __init__(self, parent):
-        super(FBConfigDlg, self).__init__(parent, title=_("FileBrowser Config"))
+        super(FBConfigDlg, self).__init__(parent, title=_("FileBrowser Config"),
+                                          style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
 
         # Attributes
         self.Panel = FBConfigPanel(self)
@@ -101,7 +102,7 @@ class FBConfigPanel(wx.Panel):
         bsizer = wx.BoxSizer(wx.HORIZONTAL)
         bsizer.Add(self._addb, 0, wx.ALL|wx.ALIGN_RIGHT, 5)
         bsizer.Add(self._rmb, 0, wx.ALL|wx.ALIGN_RIGHT, 5)
-        self._fsbs.Add(bsizer, 0, wx.ALL|wx.ALIGN_RIGHT, 5)
+        self._fsbs.Add(bsizer, 0, wx.ALIGN_RIGHT)
         sizer.Add(self._fsbs, 0, wx.EXPAND|wx.ALL, 5)
         sizer.Add((10, 10), 0)
         self.SetSizer(sizer)
