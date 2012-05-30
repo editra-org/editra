@@ -32,11 +32,12 @@ import fileutil
 
 class DirectoryMonitor(object):
     """Object to manage monitoring file system changes"""
-    def __init__(self):
+    def __init__(self, checkFreq=1000.0):
+        """@keyword checkFreq: check frequency in milliseconds"""
         super(DirectoryMonitor, self).__init__()
 
         # Attributes
-        self._watcher = WatcherThread(self._ThreadNotifier)
+        self._watcher = WatcherThread(self._ThreadNotifier, checkFreq=checkFreq)
         self._callbacks = list()
         self._cbackLock = threading.Lock()
         self._running = False
@@ -61,6 +62,8 @@ class DirectoryMonitor(object):
 
     # Is the monitor currently watching any directories
     Monitoring = property(lambda self: self._running)
+    Frequency = property(lambda self: self._watcher.GetFrequency(),
+                         lambda self, freq: self._watcher.SetFrequency(freq))
 
     #---- End Properties ----#
 
@@ -102,17 +105,28 @@ class DirectoryMonitor(object):
         self._running = True
         self._watcher.start()
 
+    def Suspend(self, pause=True):
+        """Suspend background processing
+        @keyword pause: True (suspend) False (resume)
+
+        """
+        if pause:
+            self._watcher.Suspend()
+        else:
+            self._watcher.Continue()
+
 #-----------------------------------------------------------------------------#
     
 class WatcherThread(threading.Thread):
     """Background thread to monitor a directory"""
-    def __init__(self, notifier):
+    def __init__(self, notifier, checkFreq=1000.0):
         """Create the WatcherThread. Provide a callback notifier method
         that will be called when changes are detected in the directory.
         The notifier will be called in the context of this thread. Notifier
         will be called with three lists of ebmlib.File objects to indicate
         the changes that have occurred.
         @param notifier: callable([added,], [deleted,], [modified,])
+        @keyword checkFreq: check frequency in milliseconds
 
         """
         super(WatcherThread, self).__init__()
@@ -122,7 +136,7 @@ class WatcherThread(threading.Thread):
         self._notifier = notifier
         self._dirs = list() # Directories being monitored
 
-        self._freq = 1000.0 # Monitoring frequency in milliseconds
+        self._freq = checkFreq # Monitoring frequency in milliseconds
         self._continue = True
         self._changePending = False
         self._lock = threading.Lock()
@@ -224,6 +238,13 @@ class WatcherThread(threading.Thread):
             if dobj in self._dirs:
                 self._dirs.remove(dobj)
         self._changePending = False
+
+    def GetFrequency(self):
+        """Get the update frequency
+        @return: int (milliseconds)
+
+        """
+        return self._freq
 
     def SetFrequency(self, milli):
         """Set the update frequency
