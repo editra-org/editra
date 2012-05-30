@@ -21,6 +21,12 @@ import wx
 import wx.aui as aui
 
 #--------------------------------------------------------------------------#
+# Events
+
+EVT_AUI_PANE_CLOSE = aui.EVT_AUI_PANE_CLOSE
+EVT_AUI_PANE_RESTORE = aui.EVT_AUI_PANE_RESTORE
+
+#--------------------------------------------------------------------------#
 
 class EdFrameManager(aui.AuiManager):
     """Frame manager for external components to abstract underlying manager"""
@@ -31,6 +37,24 @@ class EdFrameManager(aui.AuiManager):
 
         """
         super(EdFrameManager, self).__init__(wnd, flags)
+        self.Bind(aui.EVT_AUI_PANE_CLOSE, self.OnPaneClose)
+        self.Bind(aui.EVT_AUI_PANE_RESTORE, self.OnPaneRestore)
+
+    def OnPaneClose(self, evt):
+        """Notify pane it is being closed"""
+#        pane = evt.GetPane()
+#        print "Close", pane.window
+#        nevt = wx.ShowEvent(pane.window.Id, False)
+#        wx.PostEvent(pane.window, nevt)
+        evt.Skip()
+
+    def OnPaneRestore(self, evt):
+        """Notify pane it is being opened"""
+#        pane = evt.GetPane()
+#        print "Restore:", pane.window
+#        nevt = wx.ShowEvent(pane.window.Id, True)
+#        wx.PostEvent(pane.window, nevt)
+        evt.Skip()
 
     def AddPane(self, wnd, info=None, caption=None):
         return super(EdFrameManager, self).AddPane(wnd, info, caption)

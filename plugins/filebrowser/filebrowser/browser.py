@@ -214,6 +214,7 @@ class BrowserPane(eclib.ControlBox):
 
         # Event Handlers
         self.Bind(wx.EVT_MENU, self.OnMenu)
+        self.Bind(wx.EVT_SHOW, self.OnShow)
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
         # Messages
@@ -224,6 +225,10 @@ class BrowserPane(eclib.ControlBox):
         if self:
             self._config.Save()
             ed_msg.Unsubscribe(self.OnUpdateFont)
+
+    def OnShow(self, evt):
+        self._browser.SuspendChecks(not evt.IsShown())
+        evt.Skip()
 
     def GetMainWindow(self):
         """Get the MainWindow that owns this panel"""
@@ -446,7 +451,7 @@ class FileBrowser2(eclib.FileTree):
         # Attributes
         self._mw = None
         self._menu = ebmlib.ContextMenuManager()
-        self._monitor = ebmlib.DirectoryMonitor()
+        self._monitor = ebmlib.DirectoryMonitor(checkFreq=1500.0)
         self._monitor.SubscribeCallback(self.OnFilesChanged)
         self._monitor.StartMonitoring()
         self.isClosing = False
@@ -482,6 +487,10 @@ class FileBrowser2(eclib.FileTree):
             ed_msg.Unsubscribe(self.OnConfig)
             if self.syncTimer.IsRunning():
                 self.syncTimer.Stop()
+
+    def SuspendChecks(self, suspend=True):
+        """Suspend/Continue background monitoring"""
+        self._monitor.Suspend(suspend)
 
     #--- FileTree interface methods ----#
 
