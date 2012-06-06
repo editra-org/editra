@@ -1326,7 +1326,7 @@ class SearchResultScreen(ed_basewin.EdBaseCtrlBox):
         ed_msg.Subscribe(self.OnThemeChange, ed_msg.EDMSG_THEME_CHANGED)
 
     def OnDestroy(self, evt):
-        if evt.GetId() == self.GetId():
+        if evt.Id == self.Id:
             ed_msg.Unsubscribe(self.OnThemeChange)
         evt.Skip()
 
@@ -1464,9 +1464,9 @@ class SearchResultList(eclib.OutputBuffer):
             # of updating the status bar and to improve performance of search.
             if self._files == 1 or \
                ((self._files / 10) > ((self._files-1) / 10)): 
-                ed_msg.PostMessage(ed_msg.EDMSG_UI_SB_TXT,
-                                   (ed_glob.SB_INFO,
-                                   _("Searching in: %s") % value[1]))
+                wx.CallAfter(ed_msg.PostMessage, ed_msg.EDMSG_UI_SB_TXT,
+                             (ed_glob.SB_INFO,
+                              value[1])) # GetTranslation not thread safe (_("Searching in: %s") % )
 
     def ApplyStyles(self, start, txt):
         """Set a hotspot for each search result
