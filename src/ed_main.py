@@ -25,7 +25,6 @@ import os
 import sys
 import time
 import wx
-import wx.aui
 
 # Editra Libraries
 from ed_glob import *
@@ -44,6 +43,7 @@ import prefdlg
 import syntax.syntax as syntax
 import generator
 import plugin
+import ed_fmgr
 import perspective as viewmgr
 import ed_session
 import iface
@@ -97,7 +97,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         #---- Notebook that contains the editing buffers ----#
         self._mpane = ed_mpane.MainPanel(self)
         self.nb = self._mpane.GetWindow()
-        self.PanelMgr.AddPane(self._mpane, wx.aui.AuiPaneInfo(). \
+        self.PanelMgr.AddPane(self._mpane, ed_fmgr.EdPaneInfo(). \
                               Name("EditPane").Center().Layer(1).Dockable(False). \
                               CloseButton(False).MaximizeButton(False). \
                               CaptionVisible(False))

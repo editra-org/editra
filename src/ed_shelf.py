@@ -29,6 +29,7 @@ from profiler import Profile_Get
 import ed_msg
 import plugin
 import iface
+import ed_fmgr
 from extern import aui
 import ed_book
 import ebmlib
@@ -74,7 +75,7 @@ class Shelf(plugin.Plugin):
         wrapper = ShelfWrapper(parent)
         shelf = wrapper.GetShelf()
         mgr.AddPane(wrapper,
-                    wx.aui.AuiPaneInfo().Name(Shelf.SHELF_NAME).\
+                    ed_fmgr.EdPaneInfo().Name(Shelf.SHELF_NAME).\
                             Caption(_("Shelf")).Bottom().Layer(0).\
                             CloseButton(True).MaximizeButton(True).\
                             BestSize(wx.Size(500,250)))

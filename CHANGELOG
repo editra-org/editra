@@ -16,6 +16,7 @@ DATE 0x/xx/2012
 NEW: [features/enhancements]
 +Choose directory dialog from Find Dialog will now automatically expand to the directory of the
 current file.
++Update embedded aui
 
 BUG FIXES:
 +Fix major and apparently very long standing issue on Windows systems where
