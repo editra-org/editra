@@ -326,10 +326,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """
         self._log("[app][warn] Editra::GetMainWindow is deprecated")
         for window in self._windows:
-            if not hasattr(self._windows[window][0], '__name__'):
-                continue
-
-            if self._windows[window][0].__name__ == "MainWindow":
+            if isinstnace(self._windows[window][0], ed_main.MainWindow):
                 return self._windows[window][0]
         return None
 
@@ -378,7 +375,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         mainw = list()
         for window in self._windows:
             try:
-                if self._windows[window][0].__name__ == "MainWindow":
+                if isinstance(self._windows[window][0], ed_main.MainWindow):
                     mainw.append(self._windows[window][0])
             except AttributeError:
                 continue

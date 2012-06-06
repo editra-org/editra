@@ -544,7 +544,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             if len(hist_list) > size:
                 hist_list = hist_list[:size]
             self.filehistory.History = hist_list
-        except UnicodeEncodeError, msg:
+        except (Exception, wx.PyAssertionError), msg:
             self.LOG("[ed_main][err] Filehistory load failed: %s" % msg)
 
     def OnNew(self, evt):
