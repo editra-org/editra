@@ -1,7 +1,7 @@
 # encoding: utf-8
 Editra
 Author: Cody Precord
-Copyright: (c) Cody Precord 2005-2011
+Copyright: (c) Cody Precord 2005-2012
 License: wxWindows
 
 Change Log:
@@ -26,6 +26,8 @@ lost between updates.
 +Fix file encoding detection issue that some systems experienced.
 +Fix UTF-16 decoding issues / regressions due to change in behavior between
 python2.6 and 2.7.
++Fix error caused by empty file names getting into the file history which
+could cause startup failures.
 
 #-----------------------------------------------------------------------------#
 

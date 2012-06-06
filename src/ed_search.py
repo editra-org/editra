@@ -154,13 +154,12 @@ class SearchController(object):
         else:
             parent = self._parent
 
+        labels = (_("Find"), _("Find/Replace"))
         if e_id == ed_glob.ID_FIND_REPLACE:
-            dlg = eclib.AdvFindReplaceDlg(parent, self._data,
-                                          (_("Find"), _("Find/Replace")),
+            dlg = eclib.AdvFindReplaceDlg(parent, self._data, labels,
                                           eclib.AFR_STYLE_REPLACEDIALOG)
         elif e_id == ed_glob.ID_FIND:
-            dlg = eclib.AdvFindReplaceDlg(parent, self._data,
-                                          (_("Find"), _("Find/Replace")))
+            dlg = eclib.AdvFindReplaceDlg(parent, self._data, labels)
         else:
             dlg = None
 
