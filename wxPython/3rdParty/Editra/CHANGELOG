@@ -29,6 +29,7 @@ lost between updates.
 python2.6 and 2.7.
 +Fix error caused by empty file names getting into the file history which
 could cause startup failures.
++Fix crash in Find in Directory that could occur due to threaded access to GetTranslation.
 
 #-----------------------------------------------------------------------------#
 
