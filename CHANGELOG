@@ -13,6 +13,10 @@ VERSION 0.7.xx
 DATE 0x/xx/2012
 51st Alpha Release
 
+NEW: [features/enhancements]
++Choose directory dialog from Find Dialog will now automatically expand to the directory of the
+current file.
+
 BUG FIXES:
 +Fix major and apparently very long standing issue on Windows systems where
 application profiles were not getting updated correctly and settings would get

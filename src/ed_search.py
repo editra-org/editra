@@ -150,6 +150,7 @@ class SearchController(object):
         # TODO: find out why parent is not a Window in some cases...
         if not isinstance(self._parent, wx.Window):
             parent = wx.GetApp().GetActiveWindow()
+            self._parent = parent
         else:
             parent = self._parent
 
@@ -164,6 +165,7 @@ class SearchController(object):
             dlg = None
 
         # Change the icons to use ones from Editra's ArtProvider
+        # Customize current context / state
         if dlg is not None:
             find = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FIND), wx.ART_MENU)
             replace = wx.ArtProvider.GetBitmap(str(ed_glob.ID_FIND_REPLACE),
@@ -175,6 +177,18 @@ class SearchController(object):
                 dlg.SetReplaceBitmap(replace)
 
             # Set the persisted data from the last time the dialog was shown
+            def GetCurrentDir():
+                """Get current directory for dialog context
+                @return: unicode
+
+                """
+                fname = u""
+                if self:
+                    cbuff = self._stc()
+                    fname = getattr(cbuff, 'GetFileName', lambda: u"")()
+                return os.path.dirname(fname)
+
+            dlg.SetDirectoryGetter(GetCurrentDir)
             dlg.SetLookinChoices(self._li_choices)
             dlg.SetLookinSelection(self._li_sel)
             dlg.SetFileFilters(self._filters)
