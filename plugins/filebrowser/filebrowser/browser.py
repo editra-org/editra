@@ -532,7 +532,7 @@ class FileBrowser2(eclib.FileTree):
         showHidden = fbcfg.GetFBOption(fbcfg.FB_SHF_OPT, False)
         if not showHidden and ebmlib.IsHidden(path):
             return False
-        name = os.path.basename(name)
+        name = os.path.basename(path)
         filters = fbcfg.GetFBOption(fbcfg.FB_FILTER_OPT,
                                     fbcfg.FB_DEFAULT_FILTERS)
         if filter(lambda x: fnmatch.fnmatchcase(name, x), filters):
