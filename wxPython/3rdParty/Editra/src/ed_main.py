@@ -59,13 +59,12 @@ _PSET = profiler.Profile_Set
 
 class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
     """Editras Main Window"""
-    # Clipboard ring is limited to 25, why? Because any more is a waste of
-    # memory and an inefficient waste of your time to cycle through.
+    # Clipboard ring is limited to 25 entries
     CLIPBOARD = util.EdClipboard(25)
     PRINTER = None
 
     def __init__(self, parent, id_, wsize, title):
-        """Initialiaze the Frame and Event Handlers.
+        """Initialize the Frame and Event Handlers.
         @param wsize: Windows initial size
         @param title: Windows Title
 
@@ -599,7 +598,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Skip()
             return
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         if e_id == ID_CLOSE:
             self.nb.ClosePage()
         elif e_id == ID_CLOSEALL:
@@ -636,7 +635,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     def SaveAllBuffers(self):
         """Save all open editor buffers"""
-        for page in xrange(self.nb.GetPageCount()):
+        for page in range(self.nb.GetPageCount()):
             buff = self.nb.GetPage(page)
             if isinstance(buff, wx.stc.StyledTextCtrl):
                 if buff.GetModify():
@@ -647,7 +646,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        e_id = evt.GetId()
+        e_id = evt.Id
         if e_id == ID_SAVE:
             self.SaveCurrentBuffer()
         elif e_id == ID_SAVEALL:
@@ -706,7 +705,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        if evt.GetId() == ID_SAVE_PROFILE:
+        if evt.Id == ID_SAVE_PROFILE:
             dlg = wx.FileDialog(self, _("Where to Save Profile?"), \
                                CONFIG['PROFILE_DIR'], "default.ppb", \
                                _("Profile") + " (*.ppb)|*.ppb",
@@ -726,7 +725,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        if evt.GetId() == ID_LOAD_PROFILE:
+        if evt.Id == ID_LOAD_PROFILE:
             dlg = wx.FileDialog(self, _("Load a Custom Profile"),
                                 CONFIG['PROFILE_DIR'], "default.ppb",
                                 _("Profile") + " (*.ppb)|*.ppb", wx.OPEN)
@@ -750,7 +749,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     def OnSaveSession(self, evt):
         """Save the current session of open files."""
-        if evt.GetId() == ID_SAVE_SESSION:
+        if evt.Id == ID_SAVE_SESSION:
             self.DoSaveSessionAs()
         else:
             evt.Skip()
@@ -782,7 +781,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     def OnLoadSession(self, evt):
         """Load a saved session."""
-        if evt.GetId() == ID_LOAD_SESSION:
+        if evt.Id == ID_LOAD_SESSION:
             mgr = ed_session.EdSessionMgr()
             sessions = mgr.GetSavedSessions()
             cses = _PGET('LAST_SESSION')
@@ -838,7 +837,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wxMenuEvent
 
         """
-        e_id = evt.GetId()
+        e_id = evt.Id
         printer = MainWindow.PRINTER
         ctrl = self.nb.GetCurrentCtrl()
         if not ctrl:
@@ -970,7 +969,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wxMenuEvent
 
         """
-        if evt.GetId() == ID_SHOW_SB:
+        if evt.Id == ID_SHOW_SB:
             show = not self.GetStatusBar().IsShown()
             _PSET('STATBAR', show)
             self.GetStatusBar().Show(show)
@@ -983,7 +982,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wxMenuEvent
 
         """
-        if evt.GetId() == ID_VIEW_TOOL:
+        if evt.Id == ID_VIEW_TOOL:
             size = self.GetSize()
             toolbar = self.GetToolBar()
             if _PGET('TOOLBAR', 'bool', False) or toolbar.IsShown():
@@ -1028,7 +1027,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        if evt.GetId() == ID_FONT:
+        if evt.Id == ID_FONT:
             ctrl = self.nb.GetCurrentCtrl()
             fdata = wx.FontData()
             fdata.SetInitialFont(ctrl.GetDefaultFont())
@@ -1054,7 +1053,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        if evt.GetId() == ID_STYLE_EDIT:
+        if evt.Id == ID_STYLE_EDIT:
             import style_editor
             dlg = style_editor.StyleEditor(self)
             dlg.CenterOnParent()
@@ -1068,7 +1067,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        if evt.GetId() == ID_PLUGMGR:
+        if evt.Id == ID_PLUGMGR:
             import plugdlg
             win = wx.GetApp().GetWindowInstance(plugdlg.PluginDialog)
             if win is not None:
@@ -1089,9 +1088,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        e_id = evt.GetId()
         gen = generator.Generator(wx.GetApp().GetPluginManager())
-        doc = gen.GenerateText(e_id, self.nb.GetCurrentCtrl())
+        doc = gen.GenerateText(evt.Id, self.nb.GetCurrentCtrl())
         if doc:
             self.nb.NewPage()
             ctrl = self.nb.GetCurrentCtrl()
@@ -1111,7 +1109,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             evt.Skip()
             return
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         ctrl = self.nb.GetCurrentCtrl()
         active_only = [ ID_ZOOM_IN, ID_ZOOM_OUT, ID_ZOOM_NORMAL,
                         ID_JOIN_LINES, ID_CUT_LINE, ID_COPY_LINE, ID_INDENT,
@@ -1208,7 +1206,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        if evt.GetId() == ID_RELOAD_ENC:
+        if evt.Id == ID_RELOAD_ENC:
             ctrl = self.nb.GetCurrentCtrl()
             doc = ctrl.GetDocument()
             cenc = doc.GetEncoding()
@@ -1240,7 +1238,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: CommandEvent instance
 
         """
-        if evt.GetId() == ID_PANELIST:
+        if evt.Id == ID_PANELIST:
             if self._paneNavi is not None:
                 return
 
@@ -1276,7 +1274,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if not self.IsActive():
             return
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_REVERT_FILE:
             evt.Enable(ctrl.GetModify())
@@ -1293,7 +1291,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if not self.IsActive():
             return
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         focus = self.FindFocus()
         enable = False
         if e_id == ID_UNDO:
@@ -1333,7 +1331,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if not self.IsActive():
             return
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_USE_SOFTTABS:
             evt.Check(not bool(ctrl.GetUseTabs()))
@@ -1354,10 +1352,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if not self.IsActive():
             return
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         if e_id in syntax.SYNTAX_IDS:
             lang = self.nb.GetCurrentCtrl().GetLangId()
-            evt.Check(lang == evt.GetId())
+            evt.Check(lang == e_id)
         else:
             evt.Skip()
 
@@ -1369,7 +1367,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if not self.IsActive():
             return
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         ctrl = self.nb.GetCurrentCtrl()
         if e_id == ID_AUTOCOMP:
             evt.Check(ctrl.GetAutoComplete())
@@ -1392,7 +1390,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         if not self.IsActive():
             return
 
-        e_id = evt.GetId()
+        e_id = evt.Id
         ctrl = self.nb.GetCurrentCtrl()
         zoom = ctrl.GetZoom()
         if e_id == ID_ZOOM_NORMAL:
@@ -1434,7 +1432,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         @param evt: wx.MenuEvent
 
         """
-        e_id = evt.GetId()
+        e_id = evt.Id
         if e_id in (ID_QUICK_FIND, ID_GOTO_LINE, ID_COMMAND, ID_SESSION_BAR):
             self._mpane.ShowCommandControl(e_id)
         else:
@@ -1442,7 +1440,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     def OnCustomizeLangMenu(self, evt):
         """Show the lexer menu customization dialog"""
-        if evt.GetId() == ID_LEXER_CUSTOM:
+        if evt.Id == ID_LEXER_CUSTOM:
             dlg = eclib.FilterDialog(self, title=_("Customize Menu"),
                                      style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
             mconfig = _PGET("LEXERMENU", default=list())
@@ -1471,7 +1469,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
         """
         import webbrowser
-        e_id = evt.GetId()
+        e_id = evt.Id
         if e_id == ID_HOMEPAGE:
             page = HOME_PAGE
         elif e_id == ID_DOCUMENTATION:
@@ -1554,7 +1552,7 @@ def OnAbout(evt):
     @param evt: wx.MenuEvent
 
     """
-    if evt.GetId() == ID_ABOUT:
+    if evt.Id == ID_ABOUT:
         info = wx.AboutDialogInfo()
         year = time.localtime()
         desc = [_("Editra is a programmers text editor."),
@@ -1580,7 +1578,7 @@ def OnPreferences(evt):
     @param evt: wx.MenuEvent
 
     """
-    if evt.GetId() == ID_PREF:
+    if evt.Id == ID_PREF:
         cursor = wx.BusyCursor()
         win = wx.GetApp().GetWindowInstance(prefdlg.PreferencesDialog)
         if win is not None:
