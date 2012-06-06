@@ -175,8 +175,11 @@ class EdPages(ed_book.EdBaseBook):
                 dlg.SetBitmap(bmp)
             dlg.CenterOnParent()
             result = dlg.ShowModal()
-            enc = dlg.GetEncoding()
-            dlg.Destroy()
+            if dlg:
+                enc = dlg.GetEncoding()
+                dlg.Destroy()
+            else:
+                result = wx.ID_CANCEL
 
             # Don't want to open it in another encoding
             if result == wx.ID_CANCEL:
