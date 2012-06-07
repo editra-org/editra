@@ -142,15 +142,19 @@ class WatcherThread(threading.Thread):
         self._lock = threading.Lock()
         self._suspend = False
         self._suspendcond = threading.Condition()
+        self._listEmptyCond = threading.Condition()
 
     def run(self):
         """Run the watcher"""
-        # TODO: wait on condition/event when dir list is empty
-        #       instead of looping per frequency interval.
         while self._continue:
             deleted = list()
             added = list()
             modified = list()
+
+            # Watch is empty so wait on things to monitor before continuing
+            if not self._dirs:
+                with self._listEmptyCond:
+                    self._listEmptyCond.wait()
 
             # Suspend processing if requested
             if self._suspend:
@@ -226,6 +230,8 @@ class WatcherThread(threading.Thread):
                 # Get current snapshot of the directory
                 dobj = fileutil.GetDirectoryObject(dpath, False, True)
                 self._dirs.append(dobj)
+                with self._listEmptyCond:
+                    self._listEmptyCond.notify()
         self._changePending = False
 
     def RemoveWatchDirectory(self, dpath):
