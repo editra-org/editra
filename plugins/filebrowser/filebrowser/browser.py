@@ -804,9 +804,22 @@ class FileBrowser2(eclib.FileTree):
             item = self._menu.GetUserData('item_id')
             self.EditLabel(item)
         elif e_id == ID_NEW_FOLDER:
-            ebmlib.MakeNewFolder(path, _("Untitled_Folder"))
+            name = wx.GetTextFromUser(_("Enter folder name:"), _("New Folder"),
+                                      parent=self.TopLevelParent)
+            if name:
+                err, msg = ebmlib.MakeNewFolder(path, name)
+                if not err:
+                    wx.MessageBox(msg, _("Failed to create folder"),
+                                  style=wx.OK|wx.CENTER|wx.ICON_ERROR)
+            
         elif e_id == ID_NEW_FILE:
-            ebmlib.MakeNewFile(path, _("Untitled_File") + ".txt")
+            name = wx.GetTextFromUser(_("Enter file name:"), _("New File"),
+                                      parent=self.TopLevelParent)
+            if name:
+                err, msg = ebmlib.MakeNewFile(path, name)
+                if not err:
+                    wx.MessageBox(msg, _("Failed to create file"),
+                                  style=wx.OK|wx.CENTER|wx.ICON_ERROR)
         elif e_id == ID_DUPLICATE:
             for fname in paths:
                 DuplicatePath(fname)
