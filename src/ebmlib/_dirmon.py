@@ -238,6 +238,13 @@ class WatcherThread(threading.Thread):
         with self._lock:
             if dobj in self._dirs:
                 self._dirs.remove(dobj)
+            # Also remove any subpaths of dpath
+            toremove = list()
+            for d in self._dirs:
+                if fileutil.IsSubPath(d.Path, dpath):
+                    toremove.append(d)
+            for todel in toremove:
+                self._dirs.remove(todel)
         self._changePending = False
 
     def GetFrequency(self):
