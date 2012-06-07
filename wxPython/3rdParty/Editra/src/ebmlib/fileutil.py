@@ -22,7 +22,7 @@ __all__ = [ 'GetAbsPath', 'GetFileExtension', 'GetFileModTime', 'GetFileName',
             'IsLink', 'MakeNewFile', 'MakeNewFolder', 'PathExists',
             'ResolveRealPath', 'IsExecutable', 'Which', 'ComparePaths',
             'AddFileExtension', 'GetDirectoryObject', 'File', 'Directory',
-            'GetFileManagerCmd', 'OpenWithFileManager', 'IsHidden']
+            'GetFileManagerCmd', 'OpenWithFileManager', 'IsHidden', 'IsSubPath' ]
 
 #-----------------------------------------------------------------------------#
 # Imports
@@ -200,6 +200,19 @@ def IsLink(path):
         return path.endswith(".lnk") or os.path.islink(path)
     else:
         return os.path.islink(path)
+
+def IsSubPath(path1, path2):
+    """Is path1 a subpath of path2
+    i.e) /usr/bin/foo is a subpath of /usr/bin
+    @return: bool
+
+    """
+    if WIN:
+        path1 = path1.lower()
+        path2 = path2.lower()
+    path1 = GetAbsPath(path1)
+    path2 = GetAbsPath(path2)
+    return path1.startswith(path2)
 
 @uri2path
 def IsHidden(path):

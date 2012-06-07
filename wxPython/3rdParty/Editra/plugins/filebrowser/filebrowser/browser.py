@@ -299,7 +299,7 @@ class BrowserPane(eclib.ControlBox):
 
 class FBMimeMgr(object):
     """Manager class for managing known file types and icons"""
-    IMAGES = range(17)
+    IMAGES = range(18)
     IMG_COMPUTER, \
     IMG_FLOPPY, \
     IMG_HARDDISK, \
@@ -307,6 +307,7 @@ class FBMimeMgr(object):
     IMG_USB, \
     IMG_FOLDER, \
     IMG_FOLDER_OPEN, \
+    IMG_NO_ACCESS, \
     IMG_BIN, \
     IMG_FILE, \
     IMG_PYTHON, \
@@ -324,6 +325,7 @@ class FBMimeMgr(object):
                IMG_USB     : ed_glob.ID_USB,
                IMG_FOLDER  : ed_glob.ID_FOLDER,
                IMG_FOLDER_OPEN : ed_glob.ID_OPEN,
+               IMG_NO_ACCESS : ed_glob.ID_STOP,
                IMG_BIN     : ed_glob.ID_BIN_FILE,
                IMG_FILE    : ed_glob.ID_FILE,
                IMG_PYTHON  : synglob.ID_LANG_PYTHON,
@@ -368,7 +370,9 @@ class FBMimeMgr(object):
 
         """
         self._ftype = FBMimeMgr.IMG_FILE
-        if self.IsDevice(path):
+        if not os.access(path, os.R_OK):
+            self._ftype = FBMimeMgr.IMG_NO_ACCESS
+        elif self.IsDevice(path):
             pass
         elif os.path.isdir(path):
             if expanded:
@@ -567,6 +571,8 @@ class FileBrowser2(eclib.FileTree):
         @param item: TreeItem
 
         """
+        busy = wx.BusyCursor() # can take a few seconds
+
         d = None
         try:
             d = self.GetPyData(item)
@@ -574,15 +580,16 @@ class FileBrowser2(eclib.FileTree):
             util.Log("[FileBrowser][err] FileBrowser2.DoItemExpanding")
             return
 
-        if d and os.path.exists(d):
+        if d and os.path.exists(d) and os.access(d, os.R_OK):
             contents = FileBrowser2.GetDirContents(d)
             t1 = time.time()
             with eclib.Freezer(self) as _tmp:
                 self.AppendFileNodes(item, self.FilterFileList(contents))
                 self.SortChildren(item)
             util.Log("[FileBrowser][info] Tree expand time: %f" % (time.time() - t1))
-        if d and os.path.isdir(d):
-            self._monitor.AddDirectory(d)
+
+            if os.path.isdir(d):
+                self._monitor.AddDirectory(d)
 
         # Update tree image
         self.SetItemImage(item, self._mime.GetImageIndex(d, True))
