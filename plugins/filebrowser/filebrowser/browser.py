@@ -453,7 +453,7 @@ class FileBrowser2(eclib.FileTree):
         # Attributes
         self._mw = None
         self._menu = ebmlib.ContextMenuManager()
-        self._monitor = ebmlib.DirectoryMonitor(checkFreq=2000.0)
+        self._monitor = ebmlib.DirectoryMonitor(checkFreq=1750.0)
         self._monitor.SubscribeCallback(self.OnFilesChanged)
         self._monitor.StartMonitoring()
         self.isClosing = False

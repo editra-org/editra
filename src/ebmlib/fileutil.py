@@ -35,7 +35,7 @@ import stat
 import subprocess
 
 UNIX = WIN = False
-if platform.system().lower() in ['windows', 'microsoft']:
+if wx.Platform == '__WXMSW__':
     WIN = True
     try:
         # Check for if win32 extensions are available
