@@ -510,6 +510,8 @@ class FileBrowser2(eclib.FileTree):
 
         """
         # TODO: show tips?
+        if self.GetItemImage(item) == self._mime.IMG_NO_ACCESS:
+            return _("Access Denied")
         return None
 
     def DoItemActivated(self, item):
@@ -588,8 +590,9 @@ class FileBrowser2(eclib.FileTree):
                 self.SortChildren(item)
             util.Log("[FileBrowser][info] Tree expand time: %f" % (time.time() - t1))
 
-            if os.path.isdir(d):
-                self._monitor.AddDirectory(d)
+            if not self._monitor.AddDirectory(d):
+                self.SetItemImage(item, self._mime.IMG_NO_ACCESS)
+                return
 
         # Update tree image
         self.SetItemImage(item, self._mime.GetImageIndex(d, True))

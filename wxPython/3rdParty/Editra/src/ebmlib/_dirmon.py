@@ -70,9 +70,10 @@ class DirectoryMonitor(object):
     def AddDirectory(self, dname):
         """Add a directory to the monitor
         @param dname: directory path
+        @return: bool - True if added, False if failed to add
 
         """
-        self._watcher.AddWatchDirectory(dname)
+        return self._watcher.AddWatchDirectory(dname)
 
     def SubscribeCallback(self, callback):
         """Subscribe a callback method to be called when changes are
@@ -220,19 +221,25 @@ class WatcherThread(threading.Thread):
     def AddWatchDirectory(self, dpath):
         """Add a directory to the watch list
         @param dpath: directory path (unicode)
+        @return: bool - True means watch was added, False means unable to list directory
 
         """
         assert os.path.isdir(dpath)
         dobj = fileutil.Directory(dpath)
         self._changePending = True
         with self._lock:
-            if dobj not in self._dirs:
+            if dobj not in self._dirs and os.access(dobj.Path, os.R_OK):
                 # Get current snapshot of the directory
-                dobj = fileutil.GetDirectoryObject(dpath, False, True)
+                try:
+                    dobj = fileutil.GetDirectoryObject(dpath, False, True)
+                except OSError:
+                    self._changePending = False
+                    return False
                 self._dirs.append(dobj)
                 with self._listEmptyCond:
                     self._listEmptyCond.notify()
         self._changePending = False
+        return True
 
     def RemoveWatchDirectory(self, dpath):
         """Remove a directory from the watch
