@@ -234,8 +234,6 @@ class BrowserPane(eclib.ControlBox):
         """Get the MainWindow that owns this panel"""
         return self._mw
 
-    # TODO after a jump the window should be properly rescrolled
-    #      to have the jumped-to path at the top when possible
     def OnMenu(self, evt):
         """Handles the events associated with adding, opening,
         and removing paths in the menubars menus.
@@ -451,7 +449,7 @@ class FileBrowser2(eclib.FileTree):
         # Attributes
         self._mw = None
         self._menu = ebmlib.ContextMenuManager()
-        self._monitor = ebmlib.DirectoryMonitor(checkFreq=1500.0)
+        self._monitor = ebmlib.DirectoryMonitor(checkFreq=2000.0)
         self._monitor.SubscribeCallback(self.OnFilesChanged)
         self._monitor.StartMonitoring()
         self.isClosing = False
@@ -520,8 +518,10 @@ class FileBrowser2(eclib.FileTree):
     def DoItemCollapsed(self, item):
         """Handle when an item is collapsed"""
         d = self.GetPyData(item)
-        self._monitor.RemoveDirectory(d)
+        if d:
+            self._monitor.RemoveDirectory(d)
         super(FileBrowser2, self).DoItemCollapsed(item)
+        self.SetItemImage(item, self._mime.GetImageIndex(d, False))
 
     def ShouldDisplayFile(self, path):
         """Check if the given file should be displayed based on configuration
@@ -583,6 +583,9 @@ class FileBrowser2(eclib.FileTree):
             util.Log("[FileBrowser][info] Tree expand time: %f" % (time.time() - t1))
         if d and os.path.isdir(d):
             self._monitor.AddDirectory(d)
+
+        # Update tree image
+        self.SetItemImage(item, self._mime.GetImageIndex(d, True))
 
     def DoBeginEdit(self, item):
         """Handle when an item is requested to be edited"""

@@ -176,17 +176,18 @@ class WatcherThread(threading.Thread):
                     # Check for deletions
                     dobjFiles = dobj.Files # optimization
                     dobjIndex = dobjFiles.index # optimization
+                    snapFiles = snapshot.Files
                     for tobj in dobjFiles:
                         if not self._continue:
                             return
                         elif self._changePending:
                             break
-                        if tobj not in snapshot.Files:
+                        if tobj not in snapFiles:
                             deleted.append(tobj)
                             dobjFiles.remove(tobj)
 
                     # Check for additions and modifications
-                    for tobj in snapshot.Files:
+                    for tobj in snapFiles:
                         if not self._continue:
                             return
                         elif self._changePending:

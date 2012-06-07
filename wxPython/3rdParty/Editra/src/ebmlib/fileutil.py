@@ -313,19 +313,22 @@ def GetDirectoryObject(path, recurse=True, includedot=False):
 
     """
     assert os.path.isdir(path)
-    pjoin = os.path.join
     def _BuildDir(thedir):
+        dirAddFile = thedir.Files.append
+        isdir = os.path.isdir
+        pjoin = os.path.join
         for fname in os.listdir(thedir.Path):
             if not includedot and fname.startswith('.'):
                 continue
             fpath = pjoin(thedir.Path, fname)
-            if os.path.isdir(fpath):
+            if isdir(fpath):
                 newobj = Directory(fpath)
                 if recurse:
                     _BuildDir(newobj)
             else:
                 newobj = File(fpath)
-            thedir.Files.append(newobj)
+            dirAddFile(newobj)
+
     dobj = Directory(path)
     _BuildDir(dobj)
     return dobj
