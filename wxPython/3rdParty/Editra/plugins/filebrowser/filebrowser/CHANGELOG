@@ -3,7 +3,7 @@ Author: Cody Precord
 License: wxWindows
 
 Version 2.0:
-xx/xx/2012
+06/08/2012
    - Major re-write
    - View filter configuration
    - View Hidden files option moved to configuration dialog

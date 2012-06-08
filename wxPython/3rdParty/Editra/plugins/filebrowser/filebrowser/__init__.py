@@ -53,7 +53,7 @@ class FileBrowserPanel(plugin.Plugin):
             mgr.Update()
 
     def GetMinVersion(self):
-        return "0.7.01"
+        return "0.7.08" # all new file view controls and other interfaces needed
 
     def GetMenuHandlers(self):
         """Pass even handler for menu item to main window for management"""

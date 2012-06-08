@@ -9,11 +9,15 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
-VERSION 0.7.xx
+VERSION 0.7.08
 DATE 0x/xx/2012
 51st Alpha Release
 
 NEW: [features/enhancements]
++New version of FileBrowser Plugin version 2.0. Nearly a complete re-write of
+the main part of the plugin to use a new file view. Adds ability to turn editor
+tab synchronization on and off. Adds configuration for filtering files out of the
+view and new configuration for showing hidden files.
 +Choose directory dialog from Find Dialog will now automatically expand to the directory of the
 current file.
 +Update embedded aui
