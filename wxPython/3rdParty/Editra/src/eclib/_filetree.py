@@ -173,7 +173,7 @@ class FileTree(wx.TreeCtrl):
         pass
 
     def DoSetupImageList(self):
-        """Add the images to the control's ImageList. It is gauranteed
+        """Add the images to the control's ImageList. It is guaranteed
         that self.ImageList is valid and empty when this is called.
 
         """
@@ -183,7 +183,6 @@ class FileTree(wx.TreeCtrl):
         self.ImageList.Add(bmp)
         bmp = wx.ArtProvider.GetBitmap(wx.ART_ERROR, wx.ART_MENU, (16,16))
         self.ImageList.Add(bmp)
-
 
     def DoGetFileImage(self, path):
         """Get the index of the image from the image list to use
