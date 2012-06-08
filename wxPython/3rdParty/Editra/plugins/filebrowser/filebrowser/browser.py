@@ -40,6 +40,7 @@ import util as util
 import ed_thread
 import eclib
 import ebmlib
+import ed_basewin
 
 # Local Modules
 import filebrowser.fbcfg as fbcfg
@@ -443,7 +444,7 @@ ID_DELETE = wx.NewId()
 ID_DUPLICATE = wx.NewId()
 ID_ARCHIVE = wx.NewId()
 
-class FileBrowser2(eclib.FileTree):
+class FileBrowser2(ed_basewin.EDBaseFileTree):
     """File browser Tree"""
     def __init__(self, parent):
         self._mime = FBMimeMgr()
@@ -462,7 +463,6 @@ class FileBrowser2(eclib.FileTree):
 
         # Setup
         self.SetupImageList()
-        # TODO: OS dependent drive discovery
         if wx.Platform == '__WXMSW__':
             for dname in ebmlib.GetWindowsDrives():
                 if os.path.exists(dname.Name):
@@ -471,7 +471,6 @@ class FileBrowser2(eclib.FileTree):
             self.AddWatchDirectory("/")
 
         # Event Handlers
-        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
         self.Bind(wx.EVT_MENU, self.OnMenu)
         self.Bind(wx.EVT_TIMER, self.OnTimer)
         ed_msg.Subscribe(self.OnThemeChanged, ed_msg.EDMSG_THEME_CHANGED)
@@ -479,16 +478,27 @@ class FileBrowser2(eclib.FileTree):
         ed_msg.Subscribe(self.OnPageClosing, ed_msg.EDMSG_UI_NB_CLOSING)
         ed_msg.Subscribe(self.OnConfig, ed_msg.EDMSG_PROFILE_CHANGE + (fbcfg.FB_PROF_KEY,))
 
-    def OnDestroy(self, evt):
+    def DoOnActivate(self, active):
+        """Handle activation of main window that this
+        tree belongs too.
+        @param active: bool
+
+        """
+        # Suspend background checks when window is not active
+        if active and self.IsShown():
+            self.SuspendChecks(False) # Resume
+        elif not active:
+            self.SuspendChecks(True) # Suspend
+
+    def DoOnDestroy(self):
         """Clean up resources and message handlers"""
-        if self:
-            self._menu.Clear()
-            ed_msg.Unsubscribe(self.OnPageChange)
-            ed_msg.Unsubscribe(self.OnPageClosing)
-            ed_msg.Unsubscribe(self.OnThemeChanged)
-            ed_msg.Unsubscribe(self.OnConfig)
-            if self.syncTimer.IsRunning():
-                self.syncTimer.Stop()
+        self._menu.Clear()
+        ed_msg.Unsubscribe(self.OnPageChange)
+        ed_msg.Unsubscribe(self.OnPageClosing)
+        ed_msg.Unsubscribe(self.OnThemeChanged)
+        ed_msg.Unsubscribe(self.OnConfig)
+        if self.syncTimer.IsRunning():
+            self.syncTimer.Stop()
 
     def SuspendChecks(self, suspend=True):
         """Suspend/Continue background monitoring"""
