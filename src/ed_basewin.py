@@ -51,6 +51,48 @@ def FindMainWindow(window):
 
 #--------------------------------------------------------------------------#
 
+class EDBaseFileTree(eclib.FileTree):
+    """Base file view control. Contains some common functionality
+    that should not be included in the low level control.
+
+    """
+    def __init__(self, parent):
+        super(EDBaseFileTree, self).__init__(parent)
+
+        # Message Handlers
+        ed_msg.Subscribe(self.OnActivateMsg, ed_msg.EDMSG_UI_MW_ACTIVATE)
+
+        # Events
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
+
+    def OnDestroy(self, event):
+        """Cleanup message handlers"""
+        if self:
+            ed_msg.Unsubscribe(self.OnActivateMsg)
+            self.DoOnDestroy()
+        event.Skip()
+
+    def OnActivateMsg(self, msg):
+        """Handle activation messages"""
+        mw = FindMainWindow(self)
+        if mw and msg.Context == mw.Id:
+            self.DoOnActivate(msg.Data['active'])
+
+    #---- Interface ----#
+
+    def DoOnActivate(self, active):
+        """Handle activation event
+        @param active: bool - window active or inactive
+
+        """
+        pass
+
+    def DoOnDestroy(self):
+        """Handle window destruction"""
+        pass
+
+#--------------------------------------------------------------------------#
+
 class EdBaseDialog(eclib.ECBaseDlg):
     """Editra Dialog Base Class"""
     def __init__(self, parent, id=wx.ID_ANY, title=u"",

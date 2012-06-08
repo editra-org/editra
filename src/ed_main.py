@@ -354,6 +354,10 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
             self._loaded = False
             self.DeActivate()
 
+        # Notify that window has become active/inactive
+        ed_msg.PostMessage(ed_msg.EDMSG_UI_MW_ACTIVATE, 
+                           dict(active=active), self.Id)
+
         evt.Skip()
 
     def OnUpdateFileHistory(self, msg):

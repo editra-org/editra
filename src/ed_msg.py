@@ -118,8 +118,13 @@ EDMSG_FILE_SAVED = EDMSG_FILE_ALL + ('saved',)
 # Recieve notification of all ui typed messages
 EDMSG_UI_ALL = EDMSG_ALL + ('ui',)
 
-#- Recieve all Main Notebook Messages
+#- Receive all Main Notebook Messages
 EDMSG_UI_NB = EDMSG_UI_ALL + ('mnotebook',)
+
+# MainWindow Activated
+# msgdata == dict(active=bool)
+# context = MainWindow ID
+EDMSG_UI_MW_ACTIVATE = EDMSG_UI_ALL + ('mwactivate',)
 
 # Notebook page changing
 # msgdata == (ref to notebook, 
