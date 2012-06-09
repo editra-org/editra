@@ -163,6 +163,7 @@
 ../../plugins/codebrowser/codebrowser/tagload.py
 ../../plugins/filebrowser/filebrowser/__init__.py
 ../../plugins/filebrowser/filebrowser/browser.py
+../../plugins/filebrowser/filebrowser/fbcfg.py
 ../../plugins/Launch/launch/__init__.py
 ../../plugins/Launch/launch/cfgdlg.py
 ../../plugins/Launch/launch/handlers.py
