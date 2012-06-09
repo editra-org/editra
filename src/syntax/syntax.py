@@ -404,7 +404,10 @@ def GetIdFromExt(ext):
 
     """
     ftype = ExtensionRegister().FileTypeFromExt(ext)
-    return synglob.LANG_MAP[ftype][LANG_ID]
+    if ftype in synglob.LANG_MAP:
+        return synglob.LANG_MAP[ftype][LANG_ID]
+    else:
+        return synglob.ID_LANG_TXT
 
 def GetTypeFromExt(ext):
     """Get the filetype description string from the given extension.
