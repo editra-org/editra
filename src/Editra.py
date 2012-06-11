@@ -142,7 +142,10 @@ class Editra(wx.App, events.AppEventHandlerMixin):
 
                 # TODO: need to process other command line options as well i.e) -g
                 self._log("[app][info] Sending: %s" % exml.Xml)
-                rval = ed_ipc.SendCommands(exml, profiler.Profile_Get('SESSION_KEY'))
+                key = profiler.Profile_Get('SESSION_KEY')
+                if ebmlib.IsUnicode(key):
+                    key = key.encode(sys.getfilesystemencoding(), 'replace')
+                rval = ed_ipc.SendCommands(exml, key)
                 # If sending the command failed then let the editor startup
                 # a new instance
                 if not rval:
@@ -151,8 +154,11 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 self._log("[app][info] Starting Ipc server...")
                 # Set the session key and save it to the users profile so
                 # that other instances can access the server
-                key = unicode(base64.b64encode(os.urandom(8), 'zZ'))
-                key = wx.GetUserName() + key
+                key = base64.b64encode(os.urandom(8), 'zZ')
+                uname = wx.GetUserName()
+                if ebmlib.IsUnicode(uname):
+                    uname = uname.encode(sys.getfilesystemencoding(), 'replace')
+                key = uname + key
                 profiler.Profile_Set('SESSION_KEY', key)
                 profiler.Profile_Set('ISBINARY', hasattr(sys, 'frozen'))
                 path = profiler.Profile_Get('MYPROFILE')
@@ -326,7 +332,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
         """
         self._log("[app][warn] Editra::GetMainWindow is deprecated")
         for window in self._windows:
-            if isinstnace(self._windows[window][0], ed_main.MainWindow):
+            if isinstance(self._windows[window][0], ed_main.MainWindow):
                 return self._windows[window][0]
         return None
 
