@@ -225,7 +225,6 @@ def SendCommands(xmlobj, key):
     cmds.insert(0, key)
     cmds.append(xmlobj.GetXml())
     cmds.append(MSGEND)
-
     try:
         # Setup the client socket
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -237,6 +236,7 @@ def SendCommands(xmlobj, key):
         client.shutdown(socket.SHUT_RDWR)
         client.close()
     except Exception, msg:
+        util.Log("[ed_ipc][err] Failed in SendCommands: %s" % msg)
         return False
     else:
         return True
