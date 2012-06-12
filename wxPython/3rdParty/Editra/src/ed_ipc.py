@@ -167,7 +167,7 @@ class EdIpcServer(threading.Thread):
 
                 # Block for up to 2 seconds while reading
                 start = time.time()
-                recieved = u''
+                recieved = ''
                 while time.time() < start + 2:
                     recieved += client.recv(4096)
                     if recieved.endswith(MSGEND):
@@ -184,7 +184,9 @@ class EdIpcServer(threading.Thread):
                     # Parse the xml
                     exml = IPCCommand()
                     try:
-                        # Well formed xml must be utf-8 string not unicode
+                        # Well formed xml must be utf-8 string not Unicode
+                        if not ebmlib.IsUnicode(xmlstr):
+                            xmlstr = unicode(xmlstr, sys.getfilesystemencoding())
                         xmlstr = xmlstr.encode('utf-8')
                         exml = IPCCommand.parse(xmlstr)
                     except Exception, msg:

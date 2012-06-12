@@ -164,7 +164,7 @@ class Editra(wx.App, events.AppEventHandlerMixin):
                 path = profiler.Profile_Get('MYPROFILE')
                 profiler.TheProfile.Write(path)
                 try:
-                    self._server = ed_ipc.EdIpcServer(self, profiler.Profile_Get('SESSION_KEY'))
+                    self._server = ed_ipc.EdIpcServer(self, key)
                     self._server.start()
                 except Exception, msg:
                     self._log("[app][err] Failed to start ipc server")
