@@ -116,6 +116,15 @@ class DirectoryMonitor(object):
         else:
             self._watcher.Continue()
 
+    def Refresh(self):
+        """Force a recheck of the monitored directories. This method
+        is useful for doing manual control of the refresh cycle. It is
+        ignored and does nothing when WatcherThread is set up for automatic
+        refresh cycles.
+
+        """
+        self._watcher.Refresh()
+
 #-----------------------------------------------------------------------------#
     
 class WatcherThread(threading.Thread):
@@ -127,7 +136,9 @@ class WatcherThread(threading.Thread):
         will be called with three lists of ebmlib.File objects to indicate
         the changes that have occurred.
         @param notifier: callable([added,], [deleted,], [modified,])
-        @keyword checkFreq: check frequency in milliseconds
+        @keyword checkFreq: check frequency in milliseconds. If value is set
+                            to zero or less update checks must be manually
+                            controlled via the Refresh interface.
 
         """
         super(WatcherThread, self).__init__()
@@ -144,6 +155,7 @@ class WatcherThread(threading.Thread):
         self._suspend = False
         self._suspendcond = threading.Condition()
         self._listEmptyCond = threading.Condition()
+        self._refreshCond = threading.Condition()
 
     def run(self):
         """Run the watcher"""
@@ -214,7 +226,13 @@ class WatcherThread(threading.Thread):
                 self._notifier(added, deleted, modified)
 
             # Wait till next check
-            time.sleep(self._freq / 1000.0)
+            if self._freq > 0:
+                # Automatic updates
+                time.sleep(self._freq / 1000.0)
+            else:
+                # Manually controlled updates
+                with self._refreshCond:
+                    self._refreshCond.wait()
 
     #---- Implementation ----#
 
@@ -273,6 +291,14 @@ class WatcherThread(threading.Thread):
 
         """
         self._freq = float(milli)
+
+    def Refresh(self):
+        """Recheck the monitored directories
+        only useful when manually controlling refresh cycle of the monitor.
+
+        """
+        with self._refreshCond:
+            self._refreshCond.notify()
 
     def Shutdown(self):
         """Shut the thread down"""

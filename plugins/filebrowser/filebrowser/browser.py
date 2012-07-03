@@ -66,6 +66,20 @@ def TrashString():
     else:
         return _("Move to Trash")
 
+def refreshAfter(func):
+    """Do a file refresh after call. Helper decorator for
+    FileBrowser2 class
+
+    """
+    def callRefresh(*args, **kwds):
+      rval = func(*args, **kwds)
+      args[0].RefreshView()
+      return rval
+
+    callRefresh.__name__ = func.__name__
+    callRefresh.__doc__ = func.__doc__
+    return callRefresh
+
 _ = wx.GetTranslation
 #-----------------------------------------------------------------------------#
 
@@ -454,7 +468,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
         # Attributes
         self._mw = None
         self._menu = ebmlib.ContextMenuManager()
-        self._monitor = ebmlib.DirectoryMonitor(checkFreq=1750.0)
+        self._monitor = ebmlib.DirectoryMonitor(checkFreq=-1) # manual refresh...
         self._monitor.SubscribeCallback(self.OnFilesChanged)
         self._monitor.StartMonitoring()
         self.isClosing = False
@@ -619,6 +633,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
             return False
         return True
 
+    @refreshAfter
     def DoEndEdit(self, item, newlabel):
         """Handle after a user has made changes to a label"""
         path = self.GetPyData(item)
@@ -640,6 +655,8 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
             items = [(ID_EDIT, _("Edit"), None),
                      (ID_OPEN, _("Open with " + FILEMAN), ed_glob.ID_OPEN),
                      (ID_REVEAL, _("Reveal in " + FILEMAN), None),
+                     (wx.ID_SEPARATOR, '', None),
+                     (wx.ID_REFRESH, _("Refresh"), ed_glob.ID_REFRESH),
                      (wx.ID_SEPARATOR, '', None),
                      (ID_MARK_PATH, _("Bookmark Selected Path(s)"),
                       ed_glob.ID_ADD_BM),
@@ -767,6 +784,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
         for item in needsort:
             self.SortChildren(item)
 
+    @refreshAfter
     def OnMenu(self, evt):
         """Handle the context menu events for performing
         filesystem operations
@@ -792,6 +810,9 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
             dpaths = [os.path.dirname(fname) for fname in paths]
             dpaths = list(set(dpaths))
             ed_thread.EdThreadPool().QueueJob(Opener, dpaths)
+        elif e_id == wx.ID_REFRESH:
+            # Refresh the view
+            self.RefreshView()
         elif e_id == ID_SEARCH_DIR:
             if len(paths):
                 path = paths[0] # Go off of the first selected item
@@ -892,10 +913,15 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
                 self._cpath = path
                 self.syncTimer.Start(500, True)
 
+    @refreshAfter
     def OnTimer(self, evt):
         """Handle tab synchronization"""
         if self._cpath:
             self.SelectFile(self._cpath)
+
+    def RefreshView(self):
+        """Refresh file view of monitored directories"""
+        self._monitor.Refresh()
 
     def GetMainWindow(self):
         """Get the main window, needed by L{ed_msg.mwcontext}"""
