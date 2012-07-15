@@ -58,7 +58,9 @@ class EdBaseStcTest(unittest.TestCase):
 
     def testGetEOLChar(self):
         """Test that correct eol character is returned"""
-        eolchr = self.stc.GetEOLChar()
+        fresh_stc = ed_basestc.EditraBaseStc(self.frame)
+        eolchr = fresh_stc.GetEOLChar()
+        fresh_stc.Destroy()
         self.assertEquals(eolchr, os.linesep)
 
     def testLoadFile(self):
