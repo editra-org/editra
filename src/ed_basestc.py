@@ -102,6 +102,10 @@ class EditraBaseStc(wx.stc.StyledTextCtrl, ed_style.StyleMgr):
             for keys in _GetMacKeyBindings():
                 self.CmdKeyAssign(*keys)
 
+        # Set default EOL format
+        if wx.Platform != '__WXMSW__':
+            self.SetEOLMode(wx.stc.STC_EOL_LF)
+
         # Setup Auto-comp images
         # TODO: should be called on theme change messages
         self.RegisterImages()
