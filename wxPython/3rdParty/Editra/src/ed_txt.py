@@ -813,7 +813,7 @@ def GetEncodings():
     encodings.append('latin-1')
 
     # Normalize all names
-    normlist = [ enclib.normalize_encoding(enc) for enc in encodings ]
+    normlist = [ enclib.normalize_encoding(enc) for enc in encodings if enc]
 
     # Clean the list for duplicates and None values
     rlist = list()
