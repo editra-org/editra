@@ -589,7 +589,7 @@ class EdPages(ed_book.EdBaseBook):
         @param msg: message data
 
         """
-        if self._ses_load:
+        if not self or self._ses_load:
             return
 
         tlw = self.GetTopLevelParent()
