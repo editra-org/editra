@@ -35,7 +35,7 @@ class Completer(completer.BaseCompleter):
         # Setup
         self.SetAutoCompKeys([])
         self.SetAutoCompStops(' \'"\\`):')
-        self.SetAutoCompFillups('.,:;([]){}<>%^&+-=*/|$')
+        self.SetAutoCompFillups('.,:;([]){}<>%^&+-=*/|$@')
         self.SetCallTipKeys([])
         self.SetCallTipCancel([])
         self.SetCaseSensitive(False)
