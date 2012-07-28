@@ -19,6 +19,8 @@ BUG FIXES:
 +Fix unable to edit file extension associations on Linux systems (issue 745).
 +Fix issue with duplicated @ symbols inserted by generic completer (issue 743).
 +Fix some Unicode handling issues in log handler.
++Fix bug in Tango art provider fallback code which could end up looking in
+Default theme instead of Tango theme directory for mime icons.
 
 #-----------------------------------------------------------------------------#
 

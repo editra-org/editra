@@ -327,7 +327,7 @@ class TangoTheme(plugin.Plugin):
 
         if mime:
             path = os.path.join(ed_glob.CONFIG['THEME_DIR'],
-                                Profile_Get('ICONS'), u'mime')
+                                self.GetName(), u'mime')
         else:
             path = os.path.join(ed_glob.CONFIG['THEME_DIR'],
                                 self.GetName(),
