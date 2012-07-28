@@ -9,6 +9,17 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.7.xx
+DATE 0x/xx/2012
+52nd Alpha Release
+
+NEW: [features/enhancements]
+
+BUG FIXES:
++Fix unable to edit file extension associations on Linux systems (issue 745).
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.7.08
 DATE 07/15/2012
 51st Alpha Release
