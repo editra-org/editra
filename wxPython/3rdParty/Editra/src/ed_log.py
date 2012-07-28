@@ -214,7 +214,7 @@ class LogBuffer(eclib.OutputBuffer):
         """
         if src not in self._srcs:
             self._srcs.append(src)
-            self.GetParent().SetSources(self._srcs)
+            self.Parent.SetSources(self._srcs)
 
     def ApplyStyles(self, start, txt):
         """Apply coloring to error and warning messages
@@ -260,7 +260,7 @@ class LogBuffer(eclib.OutputBuffer):
 
     def DoUpdateLog(self, msg):
         if not self.IsRunning():
-            self.Start(150)
+            self.Start(200)
 
         # Check filters
         logmsg = msg.GetData()
@@ -269,9 +269,9 @@ class LogBuffer(eclib.OutputBuffer):
             self.AddFilter(org)
 
         if self._filter == SHOW_ALL_MSG:
-            self.AppendUpdate(unicode(logmsg) + os.linesep)
+            self.AppendUpdate(unicode(logmsg) + unicode(os.linesep))
         elif self._filter == logmsg.Origin:
             msg = u"[%s][%s]%s" % (logmsg.ClockTime, logmsg.Type, logmsg.Value)
-            self.AppendUpdate(msg + os.linesep)
+            self.AppendUpdate(msg + unicode(os.linesep))
         else:
             pass
