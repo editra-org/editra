@@ -302,7 +302,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
 
     def OnDestroy(self, evt):
         """Disconnect Message Handlers"""
-        if evt.GetId() == self.GetId():
+        if self and evt.Id == self.Id:
             ed_msg.Unsubscribe(self.OnUpdateFileHistory)
             ed_msg.Unsubscribe(self.OnDoSessionSave)
             ed_msg.Unsubscribe(self.OnDoSessionLoad)
@@ -921,7 +921,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         # XXX On wxMac the window size doesnt seem to take the toolbar
         #     into account so destroy it so that the window size is accurate.
         if wx.Platform == '__WXMAC__' and self.GetToolBar():
-            self.GetToolBar().Destroy()
+            self.ToolBar.Destroy()
 
         # Raise the window from being iconized so that the size and position is
         # correct for the next launch (msw).
@@ -963,6 +963,24 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         wx.UpdateUIEvent.SetMode(wx.UPDATE_UI_PROCESS_ALL)
 
         # Cleanup
+        mpane = None
+        for pane in self.PanelMgr.AllPanes:
+            if pane and pane.window:
+                win = pane.window
+                if isinstance(win, ed_mpane.MainPanel):
+                    mpane = win
+                    continue
+                elif self.PanelMgr.DetachPane(win):
+                    win.Destroy()
+
+        # NOTE: wxBUG? calling destroy on the center pane results in 
+        #       a pure virutal function call error. So just destroy
+        #       the child Notebook.
+        if mpane:
+            if mpane.Book:
+                mpane.Book.Destroy()
+
+        self.PanelMgr.UnInit()
         self.Destroy()
 
     #---- End File Menu Functions ----#

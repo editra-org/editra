@@ -130,7 +130,7 @@ class EdPages(ed_book.EdBaseBook):
     #---- Implementation ----#
 
     def OnDestroy(self, evt):
-        if evt.GetId() == self.GetId():
+        if self and evt.Id == self.Id:
             ed_msg.Unsubscribe(self.OnThemeChanged)
             ed_msg.Unsubscribe(self.OnUpdatePosCache)
             ed_msg.Unsubscribe(self.OnGetOpenFiles)
@@ -571,6 +571,9 @@ class EdPages(ed_book.EdBaseBook):
     @ed_msg.mwcontext
     def OnGetOpenFiles(self, msg):
         """Report all opened files"""
+        if not self:
+            return
+
         data = msg.GetData()
         if not isinstance(data, list):
             return
@@ -592,15 +595,14 @@ class EdPages(ed_book.EdBaseBook):
         if not self or self._ses_load:
             return
 
-        tlw = self.GetTopLevelParent()
-        if tlw.GetId() == msg.GetContext():
+        if self.TopLevelParent.Id == msg.GetContext():
             data = msg.GetData()
             self.DocMgr.AddNaviPosition(data['fname'], data['prepos'])
             self.DocMgr.AddNaviPosition(data['fname'], data['pos'])
 
     def OnUpdateNaviUI(self, evt):
         """UpdateUI handler for position navigator"""
-        e_id = evt.GetId()
+        e_id = evt.Id
         if e_id == ed_glob.ID_NEXT_POS:
             evt.Enable(self.DocMgr.CanNavigateNext())
         elif e_id == ed_glob.ID_PRE_POS:

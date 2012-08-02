@@ -21,6 +21,7 @@ BUG FIXES:
 +Fix some Unicode handling issues in log handler.
 +Fix bug in Tango art provider fallback code which could end up looking in
 Default theme instead of Tango theme directory for mime icons.
++Fix PyDeadObject errors related to failed destruction calls by AuiManger.
 
 #-----------------------------------------------------------------------------#
 
