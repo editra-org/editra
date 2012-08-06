@@ -242,7 +242,8 @@ class BrowserPane(eclib.ControlBox):
             ed_msg.Unsubscribe(self.OnUpdateFont)
 
     def OnShow(self, evt):
-        self._browser.SuspendChecks(not evt.IsShown())
+        if self and self._browser:
+            self._browser.SuspendChecks(not evt.IsShown())
         evt.Skip()
 
     def GetMainWindow(self):
