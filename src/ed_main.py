@@ -953,7 +953,8 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
         exit_evt = ed_event.MainWindowExitEvent(ed_event.edEVT_MAINWINDOW_EXIT,
                                                 wx.ID_ANY)
         for pane in panes:
-            wx.PostEvent(pane.window, exit_evt)
+            if pane.window:
+                wx.PostEvent(pane.window, exit_evt)
 
         # Finally close the window
         self.LOG("[ed_main][evt] OnClose: Closing Main Frame")
@@ -974,7 +975,7 @@ class MainWindow(wx.Frame, viewmgr.PerspectiveManager):
                     win.Destroy()
 
         # NOTE: wxBUG? calling destroy on the center pane results in 
-        #       a pure virutal function call error. So just destroy
+        #       a pure virtual function call error. So just destroy
         #       the child Notebook.
         if mpane:
             if mpane.Book:
