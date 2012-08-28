@@ -9,6 +9,18 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+
+VERSION 0.7.xx
+DATE xx/xx/2012
+53rd Alpha Release
+
+NEW: [features/enhancements]
+
+BUG FIXES:
++Handle error in style manager when default font face name is unknown.
+
+#-----------------------------------------------------------------------------#
+
 VERSION 0.7.12
 DATE 08/12/2012
 52nd Alpha Release

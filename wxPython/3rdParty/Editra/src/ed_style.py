@@ -450,7 +450,7 @@ class StyleMgr(object):
         if self.HasNamedStyle('default_style'):
             style_item = self.GetItemByName('default_style')
             face = style_item.GetFace()
-            if face[0] == u"%":
+            if face and face[0] == u"%":
                 face = face % self.fonts
             size = style_item.GetSize()
             if isinstance(size, basestring):
