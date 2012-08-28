@@ -105,7 +105,7 @@ class Completer(completer.BaseCompleter):
         @param command: command lookup is done on
 
         """
-        if command in [None, u'']:
+        if command in [None, u'', u'<']:
             return list()
 
         buff = self.GetBuffer()
