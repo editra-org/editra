@@ -15,6 +15,7 @@ DATE xx/xx/2012
 53rd Alpha Release
 
 NEW: [features/enhancements]
++Extended CSS highlighting support. Near complete support for CSS3.
 
 BUG FIXES:
 +Handle error in style manager when default font face name is unknown.
