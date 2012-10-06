@@ -50,7 +50,7 @@ PYTHONW = 'pythonw' in sys.executable.lower()
 
 #-----------------------------------------------------------------------------#
 # General Debugging Helper Functions
-def DEBUGP(statement):
+def DEBUGP(statement, *args):
     """Prints debug messages and broadcasts them on the log message channel.
     Subscribing a listener with any of the EDMSG_LOG_* types will recieve its
     messages from this method.
@@ -75,6 +75,13 @@ def DEBUGP(statement):
                       is used as the secondary means of filtering.
 
     """
+    # Check if formatting should be done here
+    if len(args):
+        try:
+            statement = statement % args
+        except:
+            pass
+
     # Create a LogMsg object from the statement string
     lbls = [lbl.strip() for lbl in RE_LOG_LBL.findall(statement)]
     info = RE_LOG_LBL.sub('', statement, 2).rstrip()

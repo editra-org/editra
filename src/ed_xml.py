@@ -22,6 +22,8 @@ from xml.dom import minidom
 import extern.dexml as dexml
 from extern.dexml.fields import *
 
+import util
+
 #-----------------------------------------------------------------------------#
 
 class EdXml(dexml.Model):
@@ -39,9 +41,13 @@ class EdXml(dexml.Model):
         @return: string
 
         """
-        txt = self.render()
-        txt = minidom.parseString(txt).toprettyxml()
-        txt = txt.replace('\t', '   ') # DeTabify
+        txt = ""
+        try:
+            txt = self.render()
+            txt = minidom.parseString(txt).toprettyxml()
+            txt = txt.replace('\t', '   ') # DeTabify
+        except UnicodeEncodeError, err:
+            util.Log("[EdXml][err] GetPrettyXml %s" % err)
         return txt
 
     def GetXml(self):
@@ -49,7 +55,12 @@ class EdXml(dexml.Model):
         @return: string
 
         """
-        return self.render()
+        xstr = ""
+        try:
+            xstr = self.render()
+        except UnicodeEncodeError, err:
+            util.Log("[EdXml][err] GetXml %s" % err)
+        return xstr
 
     def Write(self, path):
         """Write the xml to a file

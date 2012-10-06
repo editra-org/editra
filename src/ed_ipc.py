@@ -98,7 +98,7 @@ class IpcServerEvent(wx.PyCommandEvent):
 class EdIpcServer(threading.Thread):
     """Create an instance of IPC server for Editra. IPC is handled through
     a socket connection to an instance of this server listening on L{EDPORT}.
-    The server will recieve commands and dispatch them to the app.
+    The server will receive commands and dispatch them to the app.
     Messages sent to the server must be in the following format.
     
       AuthenticationKey;Message Data;MSGEND
