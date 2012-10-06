@@ -21,6 +21,7 @@ BUG FIXES:
 +Handle error in style manager when default font face name is unknown.
 +Fix unwanted/invalid completion issue in HTML autocompletion for open brackets
 on lines with tabs in them.
++Fix PyDeadObject that could occur during reload file request.
 
 #-----------------------------------------------------------------------------#
 
