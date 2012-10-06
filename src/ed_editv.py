@@ -574,6 +574,8 @@ class EdEditorView(ed_stc.EditraStc, ed_tab.EdTabBase):
         @param cfile: the file to prompt for a reload of
 
         """
+        if not self:
+            return
         mdlg = wx.MessageDialog(self,
                                 _("%s has been modified by another "
                                   "application.\n\nWould you like "
