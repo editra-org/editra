@@ -686,12 +686,17 @@ def GetAllEncodings():
     elist = [ enc for enc in elist if not enc.endswith('codec') ]
     return elist
 
-def Log(msg):
+def Log(msg, *args):
     """Push the message to the apps log
     @param msg: message string to log
+    @param args: optional positional arguments to use as a printf formatting
+                 to the message.
 
     """
-    wx.GetApp().GetLog()(msg)
+    try:
+        wx.GetApp().GetLog()(msg, args)
+    except:
+        pass
 
 def GetProxyOpener(proxy_set):
     """Get a urlopener for use with a proxy
