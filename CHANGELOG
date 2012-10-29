@@ -23,6 +23,7 @@ BUG FIXES:
 on lines with tabs in them.
 +Fix PyDeadObject that could occur during reload file request.
 +Fix crash that could occur during formatting of log messages.
++Handle PyDeadObject error that could occur when changing tab icons
 
 #-----------------------------------------------------------------------------#
 
