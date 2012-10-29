@@ -324,6 +324,9 @@ class EdShelfBook(ed_book.EdBaseBook):
 
     def OnUpdateTabs(self, msg):
         """Update all tab images depending upon current settings"""
+        if not self:
+            return
+        
         if not Profile_Get('TABICONS', default=True):
             for page in range(self.GetPageCount()):
                 self.SetPageBitmap(page, wx.NullBitmap)
