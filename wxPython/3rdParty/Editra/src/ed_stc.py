@@ -555,8 +555,11 @@ class EditraStc(ed_basestc.EditraBaseStc):
         @param pos: position to go to
 
         """
-        super(EditraStc, self).GotoPos(pos)
-        self.PostPositionEvent()
+        try:
+            super(EditraStc, self).GotoPos(pos)
+            self.PostPositionEvent()
+        except wx.PyAssertionError:
+            util.Log("[ed_stc][err] SetCaretPos - invalid position %s" % pos)
 
     def GotoIndentPos(self, line=None):
         """Move the caret to the end of the indentation
