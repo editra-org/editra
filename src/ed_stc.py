@@ -218,10 +218,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         if alt_down:
             return False
 
-        if (k_code == wx.WXK_BACK and shift_down) and \
-           not (ctrl_down or cmd_down):
-            self.DeleteForward()
-        elif cmd_down and not ctrl_down:
+        if cmd_down and not ctrl_down:
             line = self.GetCurrentLine()
             if k_code == wx.WXK_RIGHT:
                 pos = self.GetLineStartPosition(line)
