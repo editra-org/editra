@@ -643,6 +643,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
             newpath = os.path.join(os.path.dirname(path), newlabel)
             try:
                 os.rename(path, newpath)
+                self.SetPyData(item, newpath) # update stored data
             except OSError:
                 return False # TODO: notify user
             return True
@@ -650,6 +651,13 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
 
     def DoShowMenu(self, item):
         """Show context menu"""
+        # Check if click was in blank window area
+        activeNode = None
+        try:
+            activeNode = self.GetPyData(item)
+        except wx.PyAssertionError:
+            pass
+
         if not self._menu.Menu:
             self._menu.Menu = wx.Menu()
             # TODO: bother with theme changes ...?
@@ -686,7 +694,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
 
         # Set contextual data
         self._menu.SetUserData('item_id', item)
-        self._menu.SetUserData('active_node', self.GetPyData(item))
+        self._menu.SetUserData('active_node', activeNode)
         self._menu.SetUserData('selected_nodes', self.GetSelectedFiles())
 
         # Update Menu
@@ -697,7 +705,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
                           path.split(os.path.sep)[-1])
         for mitem in (ID_DUPLICATE,):
             self._menu.Menu.Enable(mitem, len(self.GetSelections()) == 1)
-        
+
         self.PopupMenu(self._menu.Menu)
 
     #---- End FileTree Interface Methods ----#
@@ -1028,6 +1036,9 @@ def DuplicatePath(path):
                 tmp.insert(-1, "_Copy.")
 
             tmp = ''.join(tmp)
+        elif '.' not in tail:
+            # file with no extension
+            tmp = tail + "_Copy"
         else:
             tmp = '.'.join(tmp[:-1]) + "_Copy." + tmp[-1]
 
