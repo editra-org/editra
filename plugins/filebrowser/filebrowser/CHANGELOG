@@ -5,6 +5,7 @@ License: wxWindows
 Version 2.1:
 08/12/2012
   - Handle PyDeadObject errors.
+  - Fix error when clicking in blank area.
 
 Version 2.0:
 06/08/2012

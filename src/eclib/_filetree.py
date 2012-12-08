@@ -104,8 +104,11 @@ class FileTree(wx.TreeCtrl):
         evt.Skip()
 
     def _OnMenu(self, evt):
-        item = evt.GetItem()
-        self.DoShowMenu(item)
+        try:
+            item = evt.GetItem()
+            self.DoShowMenu(item)
+        except:
+            pass
 
     #---- Properties ----#
 
