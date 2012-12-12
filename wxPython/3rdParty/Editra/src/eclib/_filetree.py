@@ -408,6 +408,30 @@ class FileTree(wx.TreeCtrl):
             pass
         return files
 
+    def GetNodePaths(self, dirNode):
+        """Get a list of paths contained below the given
+        directory node.
+        @param dirNode: wx.TreeItemId
+        @return: list of paths
+
+        """
+        paths = list()
+        if self.ItemHasChildren(dirNode):
+            append = paths.append
+            getData = self.GetPyData
+            for node in self.GetChildNodes(dirNode):
+                try:
+                    append(getData(node))
+                except wx.PyAssertionError:
+                    pass
+        return paths
+
+    def SortParentDirectory(self, item):
+        """Sort the parent directory of the given item"""
+        parent = self.GetItemParent(item)
+        if parent.IsOk():
+            self.SortChildren(parent)
+
 #-----------------------------------------------------------------------------#
 # Test
 if __name__ == '__main__':

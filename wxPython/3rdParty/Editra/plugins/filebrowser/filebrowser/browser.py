@@ -598,7 +598,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
         @param item: TreeItem
 
         """
-        busy = wx.BusyCursor() # can take a few seconds
+        busy = wx.BusyCursor() # can take a few seconds on big directories
 
         d = None
         try:
@@ -634,20 +634,26 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
             return False
         return True
 
-    @refreshAfter
     def DoEndEdit(self, item, newlabel):
         """Handle after a user has made changes to a label"""
+        editOk = False
         path = self.GetPyData(item)
         # TODO: check access rights and validate input
         if path:
             newpath = os.path.join(os.path.dirname(path), newlabel)
             try:
+                dobj = None
+                parent = self.GetItemParent(item)
+                if parent.IsOk():
+                    dpath = self.GetPyData(parent)
+                    dobj = ebmlib.GetDirectoryObject(dpath, False, True)
                 os.rename(path, newpath)
-                self.SetPyData(item, newpath) # update stored data
+                editOk = True
+                if dobj:
+                    self.RefreshView([dobj,])
             except OSError:
-                return False # TODO: notify user
-            return True
-        return False
+                editOk = False # TODO: notify user of error
+        return editOk
 
     def DoShowMenu(self, item):
         """Show context menu"""
@@ -775,6 +781,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
                     break
 
         # Add any new file objects to the view
+        pathCache = dict()
         needsort = list()
         for fobj in added:
             # apply filters to any new files
@@ -784,12 +791,18 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
             for item in nodes:
                 path = self.GetPyData(item)
                 if path == dpath:
+                    # prevent duplicates from being added
+                    if path not in pathCache:
+                        pathCache[path] = self.GetNodePaths(item)
+                        if fobj.Path in pathCache[path]:
+                            continue
+
                     self.AppendFileNode(item, fobj.Path)
                     if item not in needsort:
                         needsort.append(item)
                     break
 
-        # Resort display
+        # Re-sort display
         for item in needsort:
             self.SortChildren(item)
 
@@ -928,9 +941,9 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
         if self._cpath:
             self.SelectFile(self._cpath)
 
-    def RefreshView(self):
+    def RefreshView(self, paths=None):
         """Refresh file view of monitored directories"""
-        self._monitor.Refresh()
+        self._monitor.Refresh(paths)
 
     def GetMainWindow(self):
         """Get the main window, needed by L{ed_msg.mwcontext}"""
