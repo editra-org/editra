@@ -2,6 +2,11 @@ FileBrowser Plugin for Editra
 Author: Cody Precord
 License: wxWindows
 
+Version 2.2:
+xx/xx/20xx
+- Fix naming error in duplicate file
+- Fix various refresh issues
+
 Version 2.1:
 08/12/2012
   - Handle PyDeadObject errors.

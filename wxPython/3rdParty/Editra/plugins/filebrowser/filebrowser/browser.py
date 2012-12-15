@@ -642,15 +642,11 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
         if path:
             newpath = os.path.join(os.path.dirname(path), newlabel)
             try:
-                dobj = None
-                parent = self.GetItemParent(item)
-                if parent.IsOk():
-                    dpath = self.GetPyData(parent)
-                    dobj = ebmlib.GetDirectoryObject(dpath, False, True)
+                dobjs = TakeSnapshots([path,])
                 os.rename(path, newpath)
                 editOk = True
-                if dobj:
-                    self.RefreshView([dobj,])
+                if dobjs:
+                    self.RefreshView(dobjs)
             except OSError:
                 editOk = False # TODO: notify user of error
         return editOk
@@ -806,7 +802,6 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
         for item in needsort:
             self.SortChildren(item)
 
-    @refreshAfter
     def OnMenu(self, evt):
         """Handle the context menu events for performing
         filesystem operations
@@ -823,6 +818,7 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
             """
             for fname in paths:
                 subprocess.call([FILEMAN_CMD, fname])
+                time.sleep(.25)
 
         if e_id == ID_EDIT:
             self.OpenFiles(paths)
@@ -860,26 +856,37 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
             name = wx.GetTextFromUser(_("Enter folder name:"), _("New Folder"),
                                       parent=self.TopLevelParent)
             if name:
+                dobjs = TakeSnapshots([path,])
                 err, msg = ebmlib.MakeNewFolder(path, name)
                 if not err:
                     wx.MessageBox(msg, _("Failed to create folder"),
                                   style=wx.OK|wx.CENTER|wx.ICON_ERROR)
-            
+                else:
+                    self.RefreshView(dobjs)
         elif e_id == ID_NEW_FILE:
             name = wx.GetTextFromUser(_("Enter file name:"), _("New File"),
                                       parent=self.TopLevelParent)
             if name:
+                dobjs = TakeSnapshots([path,])
                 err, msg = ebmlib.MakeNewFile(path, name)
                 if not err:
                     wx.MessageBox(msg, _("Failed to create file"),
                                   style=wx.OK|wx.CENTER|wx.ICON_ERROR)
+                else:
+                    self.RefreshView(dobjs)
         elif e_id == ID_DUPLICATE:
+            dobjs = TakeSnapshots(paths)
             for fname in paths:
                 DuplicatePath(fname)
+            self.RefreshView(dobjs)
         elif e_id == ID_ARCHIVE:
+            dobjs = TakeSnapshots([path,])
             MakeArchive(path)
+            self.RefreshView(dobjs)
         elif e_id == ID_DELETE:
+            dobjs = TakeSnapshots(paths)
             ebmlib.MoveToTrash(paths)
+            self.RefreshView(dobjs)
         else:
             evt.Skip()
             return
@@ -1103,5 +1110,26 @@ def MakeArchive(path):
             os.chdir(cwd)
 
     return (ok, name)
+
+def TakeSnapshots(paths):
+    """Take snapshots of the given paths
+    @param paths: list of paths to snapshot
+    @return: list of DirectoryObjects or None
+
+    """
+    assert isinstance(paths, list)
+    rlist = list()
+    tpaths = list()
+    for path in paths:
+        path = os.path.dirname(path)
+        if os.path.exists(path) and path not in tpaths:
+            tpaths.append(path)
+    for dpath in tpaths:
+        dobj = ebmlib.GetDirectoryObject(dpath, False, True)
+        rlist.append(dobj)
+    if not len(rlist):
+        rlist = None
+
+    return rlist
 
 #-----------------------------------------------------------------------------#
