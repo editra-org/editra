@@ -475,16 +475,16 @@ class LaunchWindow(ed_basewin.EdBaseCtrlBox):
         # Start or stop the process
         self.SetProcessRunning(not self._busy)
         if self._busy:
+            # Starting new process
             # Check Auto-clear preference
             if self.Preferences.get('autoclear', False):
                 self._buffer.Clear()
 
             # Check Auto-save preferences
-            if not self._busy:
-                if self.Preferences.get('autosaveall', False):
-                    self.MainWindow.SaveAllBuffers()
-                elif self.Preferences.get('autosave', False):
-                    self.MainWindow.SaveCurrentBuffer()
+            if self.Preferences.get('autosaveall', False):
+                self.MainWindow.SaveAllBuffers()
+            elif self.Preferences.get('autosave', False):
+                self.MainWindow.SaveCurrentBuffer()
 
             util.Log("[Launch][info] Starting process")
             handler = handlers.GetHandlerById(self.State['lang'])

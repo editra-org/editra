@@ -6,8 +6,14 @@
 #
 
 #-----------------------------------------------------------------------------#
+Version 1.14
+Released: xx/xx/20xx
+
++Fix Save All prior to run option not saving all open buffers
+
+#-----------------------------------------------------------------------------#
 Version 1.13
-Released: 04/22/2011
+Released: 04/22/2011 
 
 +Add configuration for number of lines to buffer in the output display.
 +Fix incorrect behavior of Clear Between Runs feature that was clearing the
