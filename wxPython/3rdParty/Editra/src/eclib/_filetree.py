@@ -426,6 +426,20 @@ class FileTree(wx.TreeCtrl):
                     pass
         return paths
 
+    def GetPyData(self, item):
+        """Get data from given tree item
+        @param item: TreeItemId
+
+        """
+        data = None
+        # avoid assertions in base class when retrieving data...
+        if item and item.IsOk():
+            try:
+                data = super(FileTree, self).GetPyData(item)
+            except wx.PyAssertionError:
+                pass
+        return data
+
     def SortParentDirectory(self, item):
         """Sort the parent directory of the given item"""
         parent = self.GetItemParent(item)
