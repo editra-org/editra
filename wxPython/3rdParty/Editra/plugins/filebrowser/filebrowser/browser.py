@@ -3,7 +3,7 @@
 # Name: browser.py                                                            #
 # Purpose: UI portion of the FileBrowser Plugin                               #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008-2013 Cody Precord <staff@editra.org>                    #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -534,10 +534,12 @@ class FileBrowser2(ed_basewin.EDBaseFileTree):
         @return: string or None
 
         """
-        # TODO: show tips?
+        tip = None
         if self.GetItemImage(item) == self._mime.IMG_NO_ACCESS:
-            return _("Access Denied")
-        return None
+            tip = _("Access Denied")
+#        elif item: # Slightly annoying on GTK disable for now
+#            tip = self.GetPyData(item)
+        return tip
 
     def DoItemActivated(self, item):
         """Override to handle item activation
