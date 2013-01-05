@@ -207,9 +207,9 @@ class EditraStc(ed_basestc.EditraBaseStc):
             code_txt += "    ctrl.%s()\n" % fun
         code_txt += "    print \"Executed\""    #TEST
         code_txt = "def macro(ctrl):\n" + code_txt
-        self.GetParent().NewPage()
-        self.GetParent().GetCurrentPage().SetText(code_txt)
-        self.GetParent().GetCurrentPage().FindLexer('py')
+        self.Parent.NewPage()
+        self.Parent.GetCurrentPage().SetText(code_txt)
+        self.Parent.GetCurrentPage().FindLexer('py')
 #         code = compile(code_txt, self.__module__, 'exec')
 #         exec code in self.__dict__ # Inject new code into this namespace
 
@@ -219,19 +219,30 @@ class EditraStc(ed_basestc.EditraBaseStc):
             return False
 
         if cmd_down and not ctrl_down:
+            # Jump line/start end are special on OSX and need to be
+            # white space aware.
             line = self.GetCurrentLine()
             if k_code == wx.WXK_RIGHT:
                 pos = self.GetLineStartPosition(line)
-                txt = self.GetLine(line)
-                diff = len(txt.rstrip())
-                self.GotoPos(pos + diff)
-                if shift_down:
-                    self.SetSelection(pos, pos + diff)
+                # end pos is absolute end which includes NUL term
+                lpos = self.GetLineEndPosition(line) - 1
+                endsSpace = False
+                if lpos > 0:
+                    endsSpace = unichr(self.GetCharAt(lpos)).isspace()
+
+                if not shift_down:
+                    self.LineEnd()
+                    if endsSpace:
+                        self.WordLeftEnd()
+                else:
+                    self.LineEndExtend()
+                    if endsSpace:
+                        self.WordLeftEndExtend()
             elif k_code == wx.WXK_LEFT:
                 cpos = self.GetCurrentPos()
                 self.GotoIndentPos(line)
                 if shift_down:
-                    self.SetSelection(cpos, self.GetCurrentPos())
+                    self.SetSelection(cpos, self.CurrentPos)
             else:
                 return False
         else:
