@@ -2,7 +2,7 @@
 # Name: _dirtree.py                                                           #
 # Purpose: Directory Tree                                                     #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2011 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2011-2013 Cody Precord <staff@editra.org>                    #
 # Licence: wxWindows Licence                                                  #
 ###############################################################################
 

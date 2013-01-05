@@ -3,7 +3,7 @@
 # Name: setup.py                                                              #
 # Purpose: Setup/build script for Editra                                      #
 # Author: Cody Precord <cprecord@editra.org>                                  #
-# Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
+# Copyright: (c) 2008-2013 Cody Precord <staff@editra.org>                    #
 # License: wxWindows License                                                  #
 ###############################################################################
 
@@ -65,7 +65,7 @@ __platform__ = os.sys.platform
 APP = ['src/Editra.py']
 AUTHOR = "Cody Precord"
 AUTHOR_EMAIL = "staff@editra.org"
-YEAR = 2008
+YEAR = 2013
 
 CLASSIFIERS = [
             'Development Status :: 3 - Alpha',
@@ -209,7 +209,7 @@ Overview
 Editra is a multi-platform text editor with an implementation that focuses on
 creating an easy to use interface and features that aid in code development.
 Currently it supports syntax highlighting and variety of other useful features
-for over 60 programing languages. For a more complete list of features and
+for over 70 programing languages. For a more complete list of features and
 screenshots visit the projects homepage at `Editra.org
 <http://www.editra.org/>`_.
 
