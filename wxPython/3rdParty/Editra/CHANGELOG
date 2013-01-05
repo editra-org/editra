@@ -29,6 +29,7 @@ on lines with tabs in them.
 +Fix caret bouncing in TextCtrls on Windows (issue 664)
 +Fix PyDeadObject errors related to notebook in multiple windows.
 +Fix assertions caused by right clicks in certain areas of tree controls.
++Fix Line End command not working correctly in some cases on OSX.
 
 #-----------------------------------------------------------------------------#
 
