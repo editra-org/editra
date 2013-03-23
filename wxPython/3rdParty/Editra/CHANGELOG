@@ -17,6 +17,8 @@ NEW: [features/enhancements]
 
 BUG FIXES:
 +Fix some keyboard issues on OSX when Shift key has been held down.
++Fix issue with characters incorrectly getting inserted into buffer when
+invoking a Redo action with nothing left to redo left in stack (OSX).
 
 #-----------------------------------------------------------------------------#
 
