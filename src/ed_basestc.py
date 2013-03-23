@@ -1330,6 +1330,8 @@ def _GetMacKeyBindings():
             # tip our auto-completion display, and then implement forward
             # delete in OnKeyDown.
             #(wx.stc.STC_KEY_DELETE, 0, wx.stc.STC_CMD_CANCEL),
-            (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_SHIFT,
-             wx.stc.STC_CMD_CANCEL),
+            # Disabled as it breaks some keyboard functionality
+            # NOTE: forward delete on mac is Fn+Delete and works fine
+          #  (wx.stc.STC_KEY_BACK, wx.stc.STC_SCMOD_SHIFT,
+          #   wx.stc.STC_CMD_CANCEL),
             ]

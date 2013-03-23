@@ -9,6 +9,16 @@ Change Log:
 #-----------------------------------------------------------------------------#
 Changes since last release:
 
+VERSION 0.7.xx
+DATE xx/xx/2013
+54th Alpha Release
+
+NEW: [features/enhancements]
+
+BUG FIXES:
++Fix some keyboard issues on OSX when Shift key has been held down.
+
+#-----------------------------------------------------------------------------#
 
 VERSION 0.7.20
 DATE 01/05/2013

@@ -666,7 +666,6 @@ class EditraStc(ed_basestc.EditraBaseStc):
         alt_down = evt.AltDown()
         ctrl_down = evt.ControlDown()
         cmd_down = evt.CmdDown()
-
         if self.key_handler.PreProcessKey(k_code, ctrl_down,
                                           cmd_down, shift_down,
                                           alt_down):
@@ -747,7 +746,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
             evt.Skip()
 
     def DoAutoComplete(self):
-        """Atempt to perform an autocompletion event."""
+        """Attempt to perform an autocompletion event."""
         self.HidePopups()
         command = self.GetCommandStr()
         self.ShowAutoCompOpt(command)
@@ -758,6 +757,7 @@ class EditraStc(ed_basestc.EditraBaseStc):
         command = self.GetCommandStr()
         # TODO: GetCommandStr seems to be inadequate under some cases
         self.ShowCallTip(command)
+
 
     def OnKeyUp(self, evt):
         """Update status bar of window
