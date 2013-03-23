@@ -215,14 +215,16 @@ class EditraStc(ed_basestc.EditraBaseStc):
 
     def _MacHandleKey(self, k_code, shift_down, alt_down, ctrl_down, cmd_down):
         """Handler for mac specific actions"""
+        handled = False
         if alt_down:
-            return False
+            return handled
 
         if cmd_down and not ctrl_down:
             # Jump line/start end are special on OSX and need to be
             # white space aware.
             line = self.GetCurrentLine()
             if k_code == wx.WXK_RIGHT:
+                handled = True
                 pos = self.GetLineStartPosition(line)
                 # end pos is absolute end which includes NUL term
                 lpos = self.GetLineEndPosition(line) - 1
@@ -239,16 +241,13 @@ class EditraStc(ed_basestc.EditraBaseStc):
                     if endsSpace:
                         self.WordLeftEndExtend()
             elif k_code == wx.WXK_LEFT:
+                handled = True
                 cpos = self.GetCurrentPos()
                 self.GotoIndentPos(line)
                 if shift_down:
                     self.SetSelection(cpos, self.CurrentPos)
-            else:
-                return False
-        else:
-            return False
 
-        return True
+        return handled
 
     #---- Public Member Functions ----#
 
