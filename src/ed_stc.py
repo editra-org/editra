@@ -741,6 +741,8 @@ class EditraStc(ed_basestc.EditraBaseStc):
 #             True not in (evt.ControlDown(), evt.CmdDown(), 
 #                          evt.ShiftDown(), evt.AltDown()):
 #            self.Tab() # <- So action can be overridden
+        elif wx.Platform == '__WXMAC__' and evt.CmdDown():
+            pass # Hack for issue on OSX where char events are received here
         else:
 #            print "IS TAB", key_code, wx.WXK_TAB
             evt.Skip()
