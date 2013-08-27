@@ -19,6 +19,8 @@ BUG FIXES:
 +Fix some keyboard issues on OSX when Shift key has been held down.
 +Fix issue with characters incorrectly getting inserted into buffer when
 invoking a Redo action with nothing left to redo left in stack (OSX).
++Fix text alignment issue with PlateButton control when the button is expanded
+beyond its intended best size.
 
 #-----------------------------------------------------------------------------#
 
