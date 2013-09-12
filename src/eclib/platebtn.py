@@ -345,12 +345,13 @@ class PlateButton(wx.PyControl):
         @note: Internal use only!
 
         """
-        self._state['pre'] = self._state['cur']
-        self._state['cur'] = state
-        if wx.Platform == '__WXMSW__':
-            self.Parent.RefreshRect(self.Rect, False)
-        else:
-            self.Refresh()
+        if self:
+            self._state['pre'] = self._state['cur']
+            self._state['cur'] = state
+            if wx.Platform == '__WXMSW__':
+                self.Parent.RefreshRect(self.Rect, False)
+            else:
+                self.Refresh()
 
     def _ToggleState(self):
         """Toggle button state
