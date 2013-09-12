@@ -329,11 +329,14 @@ class PlateButton(wx.PyControl):
 
     def __LeaveWindow(self):
         """Handle updating the buttons state when the mouse cursor leaves"""
-        if (self._style & PB_STYLE_TOGGLE) and self._pressed:
-            self._SetState(PLATE_PRESSED) 
-        else:
-            self._SetState(PLATE_NORMAL)
-            self._pressed = False
+        # Invoked via CallLater so possible that the C++ object may
+        # may have been yanked out from under us in the meantime.
+        if self:
+            if (self._style & PB_STYLE_TOGGLE) and self._pressed:
+                self._SetState(PLATE_PRESSED) 
+            else:
+                self._SetState(PLATE_NORMAL)
+                self._pressed = False
 
     def _SetState(self, state):
         """Manually set the state of the button
